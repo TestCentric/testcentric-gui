@@ -1,0 +1,6 @@
+# Addins file for use when developing the gui - should not be distributed
+# Install any NUnit extensions into the project and it will be found
+# when running tests in the development environment, where the engine
+# is copied to the output directory.
+../../packages/NUnit.Extension.*/**/tools/     # nuget v2 layout
+../../../packages/NUnit.Extension.*/**/tools/  # nuget v3 layout

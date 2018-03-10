@@ -1,0 +1,10 @@
+The TestCentric NUnit Runner 1.0 is based in part on the NUnit 2.x GUI Runner, 
+with portions of the code...
+
+    Copyright (c) 2002-2014 Charlie Poole or 
+    Copyright (c) 2002-2004 James W. Newkirk, Michael C. Two, Alexei A. Vorontsov or 
+    Copyright (c) 2000-2002 Philip A. Craig
+
+The TestCentric NUnit Runner uses the NUnit 3 Test Engine to run tests...
+
+    Copyright (c) 2017-2018 Charlie Poole, Rob Prouse
