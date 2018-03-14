@@ -224,8 +224,7 @@ namespace TestCentric.Gui.SettingsPages
 
 		public override void LoadSettings()
 		{
-            string displayFormat = Settings.GetSetting("Gui.DisplayFormat", "Full");
-            switch (displayFormat)
+            switch (Settings.Gui.DisplayFormat)
             {
                 case "Full":
                     fullGuiRadioButton.Checked = true;
@@ -235,17 +234,16 @@ namespace TestCentric.Gui.SettingsPages
                     break;
             }
 
-            recentFilesCountTextBox.Text = Settings.GetSetting("Gui.RecentProjects.MaxFiles", MAX_RECENT_FILES).ToString();
-            checkFilesExistCheckBox.Checked = Settings.GetSetting("Gui.RecentProjects.CheckFilesExist", true);
-            loadLastProjectCheckBox.Checked = Settings.GetSetting("Options.LoadLastProject", true);
+            recentFilesCountTextBox.Text = Settings.Gui.RecentProjects.MaxFiles.ToString();
+            checkFilesExistCheckBox.Checked = Settings.Gui.RecentProjects.CheckFilesExist;
+            loadLastProjectCheckBox.Checked = Settings.Options.LoadLastProject;
         }
 
 		public override void ApplySettings()
 		{
-			string fmt = fullGuiRadioButton.Checked ? "Full" : "Mini";
-			Settings.SaveSetting( "Gui.DisplayFormat", fmt );
+			Settings.Gui.DisplayFormat = fullGuiRadioButton.Checked ? "Full" : "Mini";
             Settings.SaveSetting("Gui.RecentProjects.CheckFilesExist", checkFilesExistCheckBox.Checked);
-			Settings.SaveSetting( "Options.LoadLastProject", loadLastProjectCheckBox.Checked );
+			Settings.Options.LoadLastProject = loadLastProjectCheckBox.Checked;
 		}
 
 		private void recentFilesCountTextBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)

@@ -34,6 +34,7 @@ using NUnit.UiException.Controls;
 namespace TestCentric.Gui.Controls
 {
     using Model;
+    using Model.Settings;
 
 	/// <summary>
 	/// Summary description for ErrorDisplay.
@@ -41,8 +42,6 @@ namespace TestCentric.Gui.Controls
 	public class ErrorDisplay : UserControl, IViewControl
 	{
         private readonly Font DefaultFixedFont = new Font(FontFamily.GenericMonospace, 8.0F);
-
-        private ISettings _settings;
 
 		int hoverIndex = -1;
 		private System.Windows.Forms.Timer hoverTimer;
@@ -83,6 +82,9 @@ namespace TestCentric.Gui.Controls
 		}
 
 		#region Properties
+
+        private UserSettings UserSettings { get; set; }
+
 		private bool WordWrap
 		{
 			get { return wordWrap; }
@@ -95,6 +97,7 @@ namespace TestCentric.Gui.Controls
 				}
 			}
 		}
+
 		#endregion
 
 		#region Component Designer generated code
@@ -192,18 +195,19 @@ namespace TestCentric.Gui.Controls
 
         void sourceCode_SplitterDistanceChanged(object sender, EventArgs e)
         {
-            string distanceSetting = sourceCode.SplitOrientation == Orientation.Vertical
-                ? "Gui.ResultTabs.ErrorBrowser.VerticalPosition" : "Gui.ResultTabs.ErrorBrowser.HorizontalPosition";
-            _settings.SaveSetting(distanceSetting, sourceCode.SplitterDistance);
+            if (sourceCode.SplitOrientation == Orientation.Vertical)
+                UserSettings.Gui.ResultTabs.ErrorBrowser.VerticalPosition = sourceCode.SplitterDistance;
+            else
+                UserSettings.Gui.ResultTabs.ErrorBrowser.HorizontalPosition = sourceCode.SplitterDistance;
         }
 
         void sourceCode_SplitOrientationChanged(object sender, EventArgs e)
         {
-            _settings.SaveSetting("Gui.ResultTabs.ErrorBrowser.SplitterOrientation", sourceCode.SplitOrientation);
+            UserSettings.Gui.SaveSetting("ResultTabs.ErrorBrowser.SplitterOrientation", sourceCode.SplitOrientation);
 
-            string distanceSetting = sourceCode.SplitOrientation == Orientation.Vertical
-                ? "Gui.ResultTabs.ErrorBrowser.VerticalPosition" : "Gui.ResultTabs.ErrorBrowser.HorizontalPosition";
-            sourceCode.SplitterDistance = _settings.GetSetting(distanceSetting, 0.3f);
+            sourceCode.SplitterDistance = sourceCode.SplitOrientation == Orientation.Vertical
+                ? UserSettings.Gui.ResultTabs.ErrorBrowser.VerticalPosition
+                : UserSettings.Gui.ResultTabs.ErrorBrowser.HorizontalPosition;
         }
 
 		#endregion
@@ -220,9 +224,8 @@ namespace TestCentric.Gui.Controls
         #region UserSettings Events
         private void UserSettings_Changed(object sender, SettingsEventArgs args)
         {
-            this.WordWrap = _settings.GetSetting("Gui.ResultTabs.ErrorsTab.WordWrapEnabled", true);
-            Font newFont = this.stackTraceDisplay.Font = this.sourceCode.CodeDisplayFont
-                = _settings.GetSetting("Gui.FixedFont", DefaultFixedFont);
+            this.WordWrap = UserSettings.Gui.ResultTabs.ErrorsTab.WordWrapEnabled;
+            Font newFont = this.stackTraceDisplay.Font = this.sourceCode.CodeDisplayFont = UserSettings.Gui.FixedFont;
             if (newFont != this.detailList.Font)
             {
                 this.detailList.Font = newFont;
@@ -297,7 +300,7 @@ namespace TestCentric.Gui.Controls
 		{
 			//if ( tipWindow != null ) tipWindow.Close();
 
-			//if ( settings.GetSetting( "Gui.ResultTabs.ErrorsTab.ToolTipsEnabled", false ) && hoverIndex >= 0 && hoverIndex < detailList.Items.Count )
+			//if ( settings.Gui.GetSetting( "ResultTabs.ErrorsTab.ToolTipsEnabled", false ) && hoverIndex >= 0 && hoverIndex < detailList.Items.Count )
 			//{
 			//	Graphics g = Graphics.FromHwnd( detailList.Handle );
 
@@ -370,7 +373,7 @@ namespace TestCentric.Gui.Controls
 
 		private void tabSplitter_SplitterMoved( object sender, SplitterEventArgs e )
 		{
-			//settings.SaveSetting( "Gui.ResultTabs.ErrorsTabSplitterPosition", tabSplitter.SplitPosition );
+			//settings.Gui.SaveSetting( "ResultTabs.ErrorsTabSplitterPosition", tabSplitter.SplitPosition );
 		}
 
         #endregion
@@ -392,24 +395,22 @@ namespace TestCentric.Gui.Controls
 
         public void InitializeView(ITestModel model, TestCentricPresenter presenter)
         {
-            _settings = model.GetService<ISettings>();
+            UserSettings = model.Services.UserSettings;
 
             //settings.Changed += new SettingsEventHandler(UserSettings_Changed);
 
-            int splitPosition = _settings.GetSetting("Gui.ResultTabs.ErrorsTabSplitterPosition", tabSplitter.SplitPosition);
-            if (splitPosition >= tabSplitter.MinSize && splitPosition < this.ClientSize.Height)
+            int splitPosition = UserSettings.Gui.ResultTabs.ErrorsTabSplitterPosition;
+            if (splitPosition >= tabSplitter.MinSize && splitPosition < ClientSize.Height)
                 this.tabSplitter.SplitPosition = splitPosition;
 
-            this.WordWrap = _settings.GetSetting("Gui.ResultTabs.ErrorsTab.WordWrapEnabled", true);
+            WordWrap = UserSettings.Gui.ResultTabs.ErrorsTab.WordWrapEnabled;
 
-            this.detailList.Font = this.stackTraceDisplay.Font =
-                _settings.GetSetting("Gui.FixedFont", DefaultFixedFont);
+            detailList.Font = stackTraceDisplay.Font = UserSettings.Gui.FixedFont;
 
-            Orientation splitOrientation = (Orientation)_settings.GetSetting(
-                "Gui.ResultTabs.ErrorBrowser.SplitterOrientation", Orientation.Vertical);
+            Orientation splitOrientation = UserSettings.Gui.ResultTabs.ErrorBrowser.SplitterOrientation;
             float splitterDistance = splitOrientation == Orientation.Vertical
-                ? _settings.GetSetting("Gui.ResultTabs.ErrorBrowser.VerticalPosition", 0.3f)
-                : _settings.GetSetting("Gui.ResultTabs.ErrorBrowser.HorizontalPosition", 0.3f);
+                ? UserSettings.Gui.ResultTabs.ErrorBrowser.VerticalPosition
+                : UserSettings.Gui.ResultTabs.ErrorBrowser.HorizontalPosition;
 
             sourceCode.SplitOrientation = splitOrientation;
             sourceCode.SplitterDistance = splitterDistance;
@@ -417,7 +418,7 @@ namespace TestCentric.Gui.Controls
             sourceCode.SplitOrientationChanged += new EventHandler(sourceCode_SplitOrientationChanged);
             sourceCode.SplitterDistanceChanged += new EventHandler(sourceCode_SplitterDistanceChanged);
 
-            if (_settings.GetSetting("Gui.ResultTabs.ErrorBrowser.SourceCodeDisplay", false))
+            if (UserSettings.Gui.ResultTabs.ErrorBrowser.SourceCodeDisplay)
                 errorBrowser.SelectedDisplay = sourceCode;
             else
                 errorBrowser.SelectedDisplay = stackTraceDisplay;
@@ -438,8 +439,7 @@ namespace TestCentric.Gui.Controls
 
             errorBrowser.StackTraceDisplayChanged += (s, e) =>
             {
-                _settings.SaveSetting("Gui.ResultTabs.ErrorBrowser.SourceCodeDisplay",
-                    errorBrowser.SelectedDisplay == sourceCode);
+                UserSettings.Gui.ResultTabs.ErrorBrowser.SourceCodeDisplay = errorBrowser.SelectedDisplay == sourceCode;
             };
         }
 

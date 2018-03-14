@@ -32,8 +32,6 @@ namespace TestCentric.Gui.SettingsPages
 {
     public partial class ProjectEditorSettingsPage : SettingsPage
     {
-        private static readonly string EDITOR_PATH_SETTING = "Options.ProjectEditor.EditorPath";
-
         public ProjectEditorSettingsPage(string key) : base(key)
         {
             InitializeComponent();
@@ -41,26 +39,25 @@ namespace TestCentric.Gui.SettingsPages
 
         public override void LoadSettings()
         {
-            string editorPath = (string)Settings.GetSetting(EDITOR_PATH_SETTING);
+            string editorPath = Settings.Options.ProjectEditor.EditorPath;
 
-            if (editorPath != null)
-            {
-                useOtherEditorRadioButton.Checked = true;
-                editorPathTextBox.Text = editorPath;
-            }
-            else
+            if (editorPath == "nunit-editor.exe")
             {
                 useNUnitEditorRadioButton.Checked = true;
                 editorPathTextBox.Text = "";
+            }
+            else
+            {
+                useOtherEditorRadioButton.Checked = true;
+                editorPathTextBox.Text = editorPath;
             }
         }
 
         public override void ApplySettings()
         {
-            if (useNUnitEditorRadioButton.Checked)
-                Settings.RemoveSetting(EDITOR_PATH_SETTING);
-            else
-                Settings.SaveSetting(EDITOR_PATH_SETTING, editorPathTextBox.Text);
+            Settings.Options.ProjectEditor.EditorPath = useNUnitEditorRadioButton.Checked
+                ? editorPathTextBox.Text
+                : null;
         }
 
         private void editorPathTextBox_TextChanged(object sender, EventArgs e)

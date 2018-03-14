@@ -33,6 +33,8 @@ namespace TestCentric.Gui.Model
         private const string NUNIT_PROJECT_LOADER = "NUnit.Engine.Services.ProjectLoaders.NUnitProjectLoader";
         private const string VISUAL_STUDIO_PROJECT_LOADER = "NUnit.Engine.Services.ProjectLoaders.VisualStudioProjectLoader";
 
+        // Our event dispatcher. Events are exposed through the Events
+        // property. This is used when firing events from the model.
         private TestEventDispatcher _events;
 
         #region Constructor
@@ -40,9 +42,9 @@ namespace TestCentric.Gui.Model
         public TestModel(ITestEngine testEngine)
         {
             TestEngine = testEngine;
-            RecentFiles = GetService<IRecentFiles>();
+            Services = new TestServices(testEngine);
 
-            foreach (var node in GetService<IExtensionService>().GetExtensionNodes(PROJECT_LOADER_EXTENSION_PATH))
+            foreach (var node in Services.ExtensionService.GetExtensionNodes(PROJECT_LOADER_EXTENSION_PATH))
             {
                 if (node.TypeName == NUNIT_PROJECT_LOADER)
                     NUnitProjectSupport = true;
@@ -55,12 +57,15 @@ namespace TestCentric.Gui.Model
 
         #endregion
 
-        #region ITestModel Members
+        #region ITestModel Implementation
 
         #region General Properties
 
         // Event Dispatcher
         public ITestEvents Events { get { return _events; } }
+
+        // Services provided either by the model itself or by the engine
+        public ITestServices Services { get; }
 
         // Project Support
         public bool NUnitProjectSupport { get; }
@@ -88,7 +93,7 @@ namespace TestCentric.Gui.Model
                 if (_resultFormats == null)
                 {
                     _resultFormats = new List<string>();
-                    foreach (string format in GetService<IResultService>().Formats)
+                    foreach (string format in Services.ResultService.Formats)
                         _resultFormats.Add(format);
                 }
 
@@ -170,7 +175,7 @@ namespace TestCentric.Gui.Model
             _events.FireTestLoaded(Tests);
 
             foreach (var subPackage in TestPackage.SubPackages)
-                RecentFiles.SetMostRecent(subPackage.FullName);
+                Services.RecentFiles.SetMostRecent(subPackage.FullName);
         }
 
         public void UnloadTests()
@@ -235,8 +240,7 @@ namespace TestCentric.Gui.Model
 
         public void SaveResults(string filePath, string format = "nunit3")
         {
-            var resultService = GetService<IResultService>();
-            var resultWriter = resultService.GetResultWriter(format, new object[0]);
+            var resultWriter = Services.ResultService.GetResultWriter(format, new object[0]);
             var results = GetResultForTest(Tests);
             resultWriter.WriteResultFile(results.Xml, filePath);
         }
@@ -287,25 +291,6 @@ namespace TestCentric.Gui.Model
 
         #endregion
 
-        #region IServiceLocator Implementation
-
-        public T GetService<T>() where T: class
-        {
-            return TestEngine.Services.GetService<T>();
-        }
-
-        public object GetService(Type serviceType)
-        {
-            return TestEngine.Services.GetService(serviceType);
-        }
-
-        #endregion
-
-        #region ITestEventListener Implementation
-
-
-        #endregion
-
         #region IDisposable Implementation
 
         public void Dispose()
@@ -321,9 +306,7 @@ namespace TestCentric.Gui.Model
 
         #region Private Properties
 
-        private IRecentFiles RecentFiles { get; }
-
-        private ITestEngine TestEngine { get; set; }
+        private ITestEngine TestEngine { get; }
         
         private ITestRunner Runner { get; set; }
         
@@ -369,7 +352,7 @@ namespace TestCentric.Gui.Model
         {
             var runtimes = new List<IRuntimeFramework>();
 
-            foreach (var runtime in GetService<IAvailableRuntimes>().AvailableRuntimes)
+            foreach (var runtime in Services.GetService<IAvailableRuntimes>().AvailableRuntimes)
             {
                 // Nothing below 2.0
                 if (runtime.ClrVersion.Major < 2)

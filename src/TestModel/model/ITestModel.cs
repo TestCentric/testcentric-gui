@@ -27,12 +27,14 @@ using NUnit.Engine;
 
 namespace TestCentric.Gui.Model
 {
-    public interface ITestModel : IServiceLocator, IDisposable
+    public interface ITestModel : IDisposable
     {
         #region General Properties
 
         // Event Dispatcher
         ITestEvents Events { get; }
+
+        ITestServices Services { get; }
 
         // Project Support
         bool NUnitProjectSupport { get; }

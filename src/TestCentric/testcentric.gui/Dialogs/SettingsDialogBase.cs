@@ -31,6 +31,7 @@ using NUnit.Engine;
 namespace TestCentric.Gui
 {
     using Model;
+    using Model.Settings;
 
 	/// <summary>
 	/// Summary description for OptionsDialogBase.
@@ -59,7 +60,7 @@ namespace TestCentric.Gui
         public SettingsDialogBase(ITestModel model) : this()
         {
             Model = model;
-            Settings = model.GetService<ISettings>();
+            Settings = model.Services.UserSettings;
         }
 
         public SettingsDialogBase()
@@ -148,7 +149,7 @@ namespace TestCentric.Gui
 
         public ITestModel Model { get; }
 
-        public ISettings Settings { get; }
+        public UserSettings Settings { get; }
 
 		public SettingsPageCollection SettingsPages
 		{

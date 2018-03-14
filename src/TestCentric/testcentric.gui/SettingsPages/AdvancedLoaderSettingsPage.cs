@@ -265,28 +265,27 @@ namespace TestCentric.Gui.SettingsPages
 
 		public override void LoadSettings()
 		{
-            disableShadowCopyCheckBox.Checked = !Settings.GetSetting("Options.TestLoader.ShadowCopyFiles", true);
+            disableShadowCopyCheckBox.Checked = !Settings.Options.TestLoader.ShadowCopyFiles;
 
             principalPolicyCheckBox.Checked = principalPolicyListBox.Enabled =
-                Settings.GetSetting("Options.TestLoader.SetPrincipalPolicy", false);
-            principalPolicyListBox.SelectedIndex = (int)(PrincipalPolicy)Settings.GetSetting("Options.TestLoader.PrincipalPolicy", PrincipalPolicy.UnauthenticatedPrincipal);
+                Settings.Options.TestLoader.SetPrincipalPolicy;
+            principalPolicyListBox.SelectedIndex = (int)Settings.Options.TestLoader.PrincipalPolicy;
 
-            traceLevelComboBox.SelectedIndex = (int)(InternalTraceLevel)Settings.GetSetting("Options.InternalTraceLevel", InternalTraceLevel.Default);
+            traceLevelComboBox.SelectedIndex = (int)Settings.Options.InternalTraceLevel;
         }
 
         public override void ApplySettings()
 		{
-			Settings.SaveSetting( "Options.TestLoader.ShadowCopyFiles", !disableShadowCopyCheckBox.Checked );
+			Settings.Options.TestLoader.ShadowCopyFiles = !disableShadowCopyCheckBox.Checked;
 
-            Settings.SaveSetting("Options.TestLoader.SetPrincipalPolicy", principalPolicyCheckBox.Checked);
+            Settings.Options.TestLoader.SetPrincipalPolicy = principalPolicyCheckBox.Checked;
 
-            if (principalPolicyCheckBox.Checked)
-                Settings.SaveSetting("Options.TestLoader.PrincipalPolicy", (PrincipalPolicy)principalPolicyListBox.SelectedIndex);
-            else
-                Settings.RemoveSetting("Options.TestLoader.PrincipalPolicy");
+            Settings.Options.TestLoader.PrincipalPolicy = principalPolicyCheckBox.Checked
+                ? (PrincipalPolicy)principalPolicyListBox.SelectedIndex
+                : PrincipalPolicy.UnauthenticatedPrincipal;
 
             InternalTraceLevel level = (InternalTraceLevel)traceLevelComboBox.SelectedIndex;
-            Settings.SaveSetting("Options.InternalTraceLevel", level);
+            Settings.Options.InternalTraceLevel = level;
             //InternalTrace.Level = level;
         }
 
@@ -294,13 +293,9 @@ namespace TestCentric.Gui.SettingsPages
 		{
 			get
 			{
-				bool oldShadowCopyFiles = Settings.GetSetting( "Options.TestLoader.ShadowCopyFiles", true );
-                bool oldSetPrincipalPolicy = Settings.GetSetting("Options.TestLoader.SetPrincipalPolicy", false);
-                PrincipalPolicy oldPrincipalPolicy = (PrincipalPolicy)Settings.GetSetting("Options.TestLoader.PrincipalPolicy", PrincipalPolicy.UnauthenticatedPrincipal);
-
-                return disableShadowCopyCheckBox.Checked == oldShadowCopyFiles // Use == because the checkbox disables
-                    || principalPolicyCheckBox.Checked != oldSetPrincipalPolicy
-                    || principalPolicyListBox.SelectedIndex != (int)oldPrincipalPolicy;
+                return disableShadowCopyCheckBox.Checked == Settings.Options.TestLoader.ShadowCopyFiles // Use == because the checkbox disables
+                    || principalPolicyCheckBox.Checked != Settings.Options.TestLoader.SetPrincipalPolicy
+                    || principalPolicyListBox.SelectedIndex != (int)Settings.Options.TestLoader.PrincipalPolicy;
 
 			}
 		}
