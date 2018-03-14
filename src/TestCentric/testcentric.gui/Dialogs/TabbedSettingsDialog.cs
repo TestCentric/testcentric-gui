@@ -117,7 +117,7 @@ namespace TestCentric.Gui
 
 		private void TabbedSettingsDialog_Load(object sender, System.EventArgs e)
 		{
-            string initialPage = Settings.Gui.InitialSettingsPage;
+            string initialPage = Settings.TestCentric.InitialSettingsPage;
 
             foreach ( SettingsPage page in SettingsPages )
 			{
@@ -133,7 +133,7 @@ namespace TestCentric.Gui
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             var page = SettingsPages[tabControl1.SelectedIndex];
-            Settings.Gui.InitialSettingsPage = page.Name;
+            Settings.TestCentric.InitialSettingsPage = page.Name;
         }
     }
 }

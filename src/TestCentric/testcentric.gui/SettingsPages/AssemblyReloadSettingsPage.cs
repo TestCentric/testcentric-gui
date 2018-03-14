@@ -145,16 +145,16 @@ namespace TestCentric.Gui.SettingsPages
 
 		public override void LoadSettings()
 		{
-			reloadOnChangeCheckBox.Checked = Settings.Options.TestLoader.ReloadOnChange;
-			rerunOnChangeCheckBox.Checked = Settings.Options.TestLoader.RerunOnChange;
-			reloadOnRunCheckBox.Checked = Settings.Options.TestLoader.ReloadOnRun;
+			reloadOnChangeCheckBox.Checked = Settings.Engine.ReloadOnChange;
+			rerunOnChangeCheckBox.Checked = Settings.Engine.RerunOnChange;
+			reloadOnRunCheckBox.Checked = Settings.Engine.ReloadOnRun;
 		}
 
 		public override void ApplySettings()
 		{
-			Settings.Options.TestLoader.ReloadOnChange = reloadOnChangeCheckBox.Checked;
-			Settings.Options.TestLoader.RerunOnChange = rerunOnChangeCheckBox.Checked;
-			Settings.Options.TestLoader.ReloadOnRun = reloadOnRunCheckBox.Checked;
+			Settings.Engine.ReloadOnChange = reloadOnChangeCheckBox.Checked;
+			Settings.Engine.RerunOnChange = rerunOnChangeCheckBox.Checked;
+			Settings.Engine.ReloadOnRun = reloadOnRunCheckBox.Checked;
 		}
 
 

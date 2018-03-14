@@ -21,25 +21,23 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-using System.Security.Principal;
 using NUnit.Engine;
 
 namespace TestCentric.Gui.Model.Settings
 {
     public class UserSettings : SettingsGroup
     {
-        public UserSettings(ISettings engineSettings)
-            : base(engineSettings, string.Empty) { }
+        public UserSettings(ISettings settings)
+            : base(settings, string.Empty) { }
 
-        public GuiSettings Gui
+        public TestCentricSettings TestCentric
         {
-            get { return new GuiSettings(_settings); }
+            get { return new TestCentricSettings(_settings); }
         }
 
-        public OptionsSettings Options
+        public EngineSettings Engine
         {
-            get { return new OptionsSettings(_settings); }
+            get { return new EngineSettings(_settings); }
         }
     }
 }

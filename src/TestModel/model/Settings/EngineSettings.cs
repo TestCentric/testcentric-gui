@@ -21,22 +21,20 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
 using System.Security.Principal;
 using NUnit.Engine;
 
 namespace TestCentric.Gui.Model.Settings
 {
-    public class TestLoaderSettings : SettingsGroup
+    /// <summary>
+    /// We store settings used by the engine using the same
+    /// settings path that the console runner uses. We may
+    /// want to change this in the future.
+    /// </summary>
+    public class EngineSettings : SettingsGroup
     {
-        public TestLoaderSettings(ISettings settings)
+        public EngineSettings(ISettings settings)
             : base(settings, "Options.TestLoader") { }
-
-        public bool ClearResultsOnReload
-        {
-            get { return GetSetting("ClearResultsOnReload", false); }
-            set { SaveSetting("ClearResultsOnReload", value); }
-        }
 
         public bool ReloadOnChange
         {

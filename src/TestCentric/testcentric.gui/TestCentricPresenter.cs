@@ -99,7 +99,7 @@ namespace TestCentric.Gui
             // the most recent one if options call for it
             if (Options.InputFiles.Count != 0)
                 OpenProject(Options.InputFiles[0]);
-            else if (UserSettings.Options.LoadLastProject && !Options.NoLoad)
+            else if (UserSettings.TestCentric.LoadLastProject && !Options.NoLoad)
             {
                 foreach (string entry in RecentFiles.Entries)
                 {
@@ -128,16 +128,16 @@ namespace TestCentric.Gui
                 // TODO: Temporary fix to avoid problem when /run is used 
                 // with ReloadOnRun turned on. Refactor TestLoader so
                 // we can just do a run without reload.
-                bool reload = UserSettings.Options.TestLoader.ReloadOnRun;
+                bool reload = UserSettings.Engine.ReloadOnRun;
 
                 try
                 {
-                    UserSettings.Options.TestLoader.ReloadOnRun = false;
+                    UserSettings.Engine.ReloadOnRun = false;
                     RunAllTests();
                 }
                 finally
                 {
-                    UserSettings.Options.TestLoader.ReloadOnRun = reload;
+                    UserSettings.Engine.ReloadOnRun = reload;
                 }
             }
         }

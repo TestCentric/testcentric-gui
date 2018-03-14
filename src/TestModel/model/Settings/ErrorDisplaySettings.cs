@@ -22,40 +22,50 @@
 // ***********************************************************************
 
 using System;
-using System.Security.Principal;
+using System.Windows.Forms;
 using NUnit.Engine;
 
 namespace TestCentric.Gui.Model.Settings
 {
-    public class ResultTabsSettings : SettingsGroup
+    public class ErrorDisplaySettings : SettingsGroup
     {
-        public ResultTabsSettings(ISettings settings)
-             : base(settings, "Gui.ResultTabs") { }
+        public ErrorDisplaySettings(ISettings settings)
+             : base(settings, "Gui.ErrorDisplay") { }
 
-        public ErrorsTabSettings ErrorsTab
-        {
-            get { return new ErrorsTabSettings(_settings); }
-        }
-        public ErrorBrowserSettings ErrorBrowser
-        {
-            get { return new ErrorBrowserSettings(_settings); }
-        }
-
-        public TextOutputSettings TextOutput
-        {
-            get { return new TextOutputSettings(_settings); }
-        }
-
-        public int SelectedTab
-        {
-            get { return GetSetting("SelectedTab", 0); }
-            set { SaveSetting("SelectedTab", value); }
-        }
-
-        public int ErrorsTabSplitterPosition
+        public int SplitterPosition
         {
             get { return GetSetting("ErrorsTabSplitterPosition", 0); }
             set { SaveSetting("ErrorsTabSplitterPosition", value); }
+        }
+
+        public bool WordWrapEnabled
+        {
+           get { return GetSetting("WordWrapEnabled", true); }
+           set { SaveSetting("WordWrapEnabled", value); }
+        }
+
+        public bool SourceCodeDisplay
+        {
+            get { return GetSetting("SourceCodeDisplay", false); }
+            set { SaveSetting("SourceCodeDisplay", value); }
+        }
+
+        public Orientation SplitterOrientation
+        {
+            get { return GetSetting("SplitterOrientation", Orientation.Vertical); }
+            set { SaveSetting("SplitterOrientation", value); }
+        }
+
+        public float VerticalPosition
+        {
+            get { return GetSetting("VerticalPosition", 0.3f); }
+            set { SaveSetting("VerticalPosition", value); }
+        }
+
+        public float HorizontalPosition
+        {
+            get { return GetSetting("HorizontalPosition", 0.3f); }
+            set { SaveSetting("HorizontalPosition", value); }
         }
     }
 }

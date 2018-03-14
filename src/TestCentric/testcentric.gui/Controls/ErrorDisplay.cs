@@ -196,18 +196,18 @@ namespace TestCentric.Gui.Controls
         void sourceCode_SplitterDistanceChanged(object sender, EventArgs e)
         {
             if (sourceCode.SplitOrientation == Orientation.Vertical)
-                UserSettings.Gui.ResultTabs.ErrorBrowser.VerticalPosition = sourceCode.SplitterDistance;
+                UserSettings.TestCentric.ErrorDisplay.VerticalPosition = sourceCode.SplitterDistance;
             else
-                UserSettings.Gui.ResultTabs.ErrorBrowser.HorizontalPosition = sourceCode.SplitterDistance;
+                UserSettings.TestCentric.ErrorDisplay.HorizontalPosition = sourceCode.SplitterDistance;
         }
 
         void sourceCode_SplitOrientationChanged(object sender, EventArgs e)
         {
-            UserSettings.Gui.ResultTabs.ErrorBrowser.SplitterOrientation = sourceCode.SplitOrientation;
+            UserSettings.TestCentric.ErrorDisplay.SplitterOrientation = sourceCode.SplitOrientation;
 
             sourceCode.SplitterDistance = sourceCode.SplitOrientation == Orientation.Vertical
-                ? UserSettings.Gui.ResultTabs.ErrorBrowser.VerticalPosition
-                : UserSettings.Gui.ResultTabs.ErrorBrowser.HorizontalPosition;
+                ? UserSettings.TestCentric.ErrorDisplay.VerticalPosition
+                : UserSettings.TestCentric.ErrorDisplay.HorizontalPosition;
         }
 
 		#endregion
@@ -224,8 +224,8 @@ namespace TestCentric.Gui.Controls
         #region UserSettings Events
         private void UserSettings_Changed(object sender, SettingsEventArgs args)
         {
-            this.WordWrap = UserSettings.Gui.ResultTabs.ErrorsTab.WordWrapEnabled;
-            Font newFont = this.stackTraceDisplay.Font = this.sourceCode.CodeDisplayFont = UserSettings.Gui.FixedFont;
+            this.WordWrap = UserSettings.TestCentric.ErrorDisplay.WordWrapEnabled;
+            Font newFont = this.stackTraceDisplay.Font = this.sourceCode.CodeDisplayFont = UserSettings.TestCentric.FixedFont;
             if (newFont != this.detailList.Font)
             {
                 this.detailList.Font = newFont;
@@ -399,18 +399,18 @@ namespace TestCentric.Gui.Controls
 
             //settings.Changed += new SettingsEventHandler(UserSettings_Changed);
 
-            int splitPosition = UserSettings.Gui.ResultTabs.ErrorsTabSplitterPosition;
+            int splitPosition = UserSettings.TestCentric.ErrorDisplay.SplitterPosition;
             if (splitPosition >= tabSplitter.MinSize && splitPosition < ClientSize.Height)
                 this.tabSplitter.SplitPosition = splitPosition;
 
-            WordWrap = UserSettings.Gui.ResultTabs.ErrorsTab.WordWrapEnabled;
+            WordWrap = UserSettings.TestCentric.ErrorDisplay.WordWrapEnabled;
 
-            detailList.Font = stackTraceDisplay.Font = UserSettings.Gui.FixedFont;
+            detailList.Font = stackTraceDisplay.Font = UserSettings.TestCentric.FixedFont;
 
-            Orientation splitOrientation = UserSettings.Gui.ResultTabs.ErrorBrowser.SplitterOrientation;
+            Orientation splitOrientation = UserSettings.TestCentric.ErrorDisplay.SplitterOrientation;
             float splitterDistance = splitOrientation == Orientation.Vertical
-                ? UserSettings.Gui.ResultTabs.ErrorBrowser.VerticalPosition
-                : UserSettings.Gui.ResultTabs.ErrorBrowser.HorizontalPosition;
+                ? UserSettings.TestCentric.ErrorDisplay.VerticalPosition
+                : UserSettings.TestCentric.ErrorDisplay.HorizontalPosition;
 
             sourceCode.SplitOrientation = splitOrientation;
             sourceCode.SplitterDistance = splitterDistance;
@@ -418,7 +418,7 @@ namespace TestCentric.Gui.Controls
             sourceCode.SplitOrientationChanged += new EventHandler(sourceCode_SplitOrientationChanged);
             sourceCode.SplitterDistanceChanged += new EventHandler(sourceCode_SplitterDistanceChanged);
 
-            if (UserSettings.Gui.ResultTabs.ErrorBrowser.SourceCodeDisplay)
+            if (UserSettings.TestCentric.ErrorDisplay.SourceCodeDisplay)
                 errorBrowser.SelectedDisplay = sourceCode;
             else
                 errorBrowser.SelectedDisplay = stackTraceDisplay;
@@ -439,7 +439,7 @@ namespace TestCentric.Gui.Controls
 
             errorBrowser.StackTraceDisplayChanged += (s, e) =>
             {
-                UserSettings.Gui.ResultTabs.ErrorBrowser.SourceCodeDisplay = errorBrowser.SelectedDisplay == sourceCode;
+                UserSettings.TestCentric.ErrorDisplay.SourceCodeDisplay = errorBrowser.SelectedDisplay == sourceCode;
             };
         }
 

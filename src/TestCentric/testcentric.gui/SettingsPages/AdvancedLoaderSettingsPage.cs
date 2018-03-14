@@ -265,27 +265,27 @@ namespace TestCentric.Gui.SettingsPages
 
 		public override void LoadSettings()
 		{
-            disableShadowCopyCheckBox.Checked = !Settings.Options.TestLoader.ShadowCopyFiles;
+            disableShadowCopyCheckBox.Checked = !Settings.Engine.ShadowCopyFiles;
 
             principalPolicyCheckBox.Checked = principalPolicyListBox.Enabled =
-                Settings.Options.TestLoader.SetPrincipalPolicy;
-            principalPolicyListBox.SelectedIndex = (int)Settings.Options.TestLoader.PrincipalPolicy;
+                Settings.Engine.SetPrincipalPolicy;
+            principalPolicyListBox.SelectedIndex = (int)Settings.Engine.PrincipalPolicy;
 
-            traceLevelComboBox.SelectedIndex = (int)Settings.Options.InternalTraceLevel;
+            traceLevelComboBox.SelectedIndex = (int)Settings.TestCentric.InternalTraceLevel;
         }
 
         public override void ApplySettings()
 		{
-			Settings.Options.TestLoader.ShadowCopyFiles = !disableShadowCopyCheckBox.Checked;
+			Settings.Engine.ShadowCopyFiles = !disableShadowCopyCheckBox.Checked;
 
-            Settings.Options.TestLoader.SetPrincipalPolicy = principalPolicyCheckBox.Checked;
+            Settings.Engine.SetPrincipalPolicy = principalPolicyCheckBox.Checked;
 
-            Settings.Options.TestLoader.PrincipalPolicy = principalPolicyCheckBox.Checked
+            Settings.Engine.PrincipalPolicy = principalPolicyCheckBox.Checked
                 ? (PrincipalPolicy)principalPolicyListBox.SelectedIndex
                 : PrincipalPolicy.UnauthenticatedPrincipal;
 
             InternalTraceLevel level = (InternalTraceLevel)traceLevelComboBox.SelectedIndex;
-            Settings.Options.InternalTraceLevel = level;
+            Settings.TestCentric.InternalTraceLevel = level;
             //InternalTrace.Level = level;
         }
 
@@ -293,9 +293,9 @@ namespace TestCentric.Gui.SettingsPages
 		{
 			get
 			{
-                return disableShadowCopyCheckBox.Checked == Settings.Options.TestLoader.ShadowCopyFiles // Use == because the checkbox disables
-                    || principalPolicyCheckBox.Checked != Settings.Options.TestLoader.SetPrincipalPolicy
-                    || principalPolicyListBox.SelectedIndex != (int)Settings.Options.TestLoader.PrincipalPolicy;
+                return disableShadowCopyCheckBox.Checked == Settings.Engine.ShadowCopyFiles // Use == because the checkbox disables
+                    || principalPolicyCheckBox.Checked != Settings.Engine.SetPrincipalPolicy
+                    || principalPolicyListBox.SelectedIndex != (int)Settings.Engine.PrincipalPolicy;
 
 			}
 		}

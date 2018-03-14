@@ -295,10 +295,10 @@ namespace TestCentric.Gui.SettingsPages
 
 		public override void LoadSettings()
 		{
-			initialDisplayComboBox.SelectedIndex = Settings.Gui.TestTree.InitialTreeDisplay;
-			clearResultsCheckBox.Checked = Settings.Options.TestLoader.ClearResultsOnReload;
-			saveVisualStateCheckBox.Checked = Settings.Gui.TestTree.SaveVisualState;
-			showCheckBoxesCheckBox.Checked = Settings.Options.ShowCheckBoxes;
+			initialDisplayComboBox.SelectedIndex = Settings.TestCentric.TestTree.InitialTreeDisplay;
+			clearResultsCheckBox.Checked = Settings.TestCentric.ClearResultsOnReload;
+			saveVisualStateCheckBox.Checked = Settings.TestCentric.TestTree.SaveVisualState;
+			showCheckBoxesCheckBox.Checked = Settings.TestCentric.TestTree.ShowCheckBoxes;
 
             string[] altDirs = Directory.Exists(treeImageDir)
                 ? Directory.GetDirectories(treeImageDir)
@@ -306,20 +306,20 @@ namespace TestCentric.Gui.SettingsPages
 
             foreach (string altDir in altDirs)
                 imageSetListBox.Items.Add(Path.GetFileName(altDir));
-            string imageSet = Settings.Gui.TestTree.AlternateImageSet;
+            string imageSet = Settings.TestCentric.TestTree.AlternateImageSet;
             if (imageSetListBox.Items.Contains(imageSet))
                 imageSetListBox.SelectedItem = imageSet;
 		}
 
 		public override void ApplySettings()
 		{
-			Settings.Gui.TestTree.InitialTreeDisplay = initialDisplayComboBox.SelectedIndex;
-			Settings.Options.TestLoader.ClearResultsOnReload = clearResultsCheckBox.Checked;
-			Settings.Gui.TestTree.SaveVisualState = saveVisualStateCheckBox.Checked;
-			Settings.Options.ShowCheckBoxes = showCheckBoxesCheckBox.Checked;
+			Settings.TestCentric.TestTree.InitialTreeDisplay = initialDisplayComboBox.SelectedIndex;
+			Settings.TestCentric.ClearResultsOnReload = clearResultsCheckBox.Checked;
+			Settings.TestCentric.TestTree.SaveVisualState = saveVisualStateCheckBox.Checked;
+			Settings.TestCentric.TestTree.ShowCheckBoxes = showCheckBoxesCheckBox.Checked;
 
             if (imageSetListBox.SelectedIndex >= 0)
-                Settings.Gui.TestTree.AlternateImageSet = (string)imageSetListBox.SelectedItem;
+                Settings.TestCentric.TestTree.AlternateImageSet = (string)imageSetListBox.SelectedItem;
 		}
 
         private void imageSetListBox_SelectedIndexChanged(object sender, EventArgs e)

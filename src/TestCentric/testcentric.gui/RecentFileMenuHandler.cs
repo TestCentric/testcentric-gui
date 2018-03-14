@@ -37,7 +37,7 @@ namespace TestCentric.Gui
             Menu = menu;
             UserSettings = model.Services.UserSettings;
             RecentFiles = model.Services.RecentFiles;
-            CheckFilesExist = UserSettings.Gui.RecentProjects.CheckFilesExist;
+            CheckFilesExist = UserSettings.TestCentric.RecentProjects.CheckFilesExist;
             ShowNonRunnableFiles = false;
 		}
 

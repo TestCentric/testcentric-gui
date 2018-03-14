@@ -50,5 +50,11 @@ namespace TestCentric.Gui.Model.Settings
             get { return GetSetting("AlternateImageSet", "Default"); }
             set { SaveSetting("AlternateImageSet", value); }
         }
+
+        public bool ShowCheckBoxes
+        {
+            get { return GetSetting("ShowCheckBoxes", false); }
+            set { SaveSetting("ShowCheckBoxes", value); }
+        }
     }
 }

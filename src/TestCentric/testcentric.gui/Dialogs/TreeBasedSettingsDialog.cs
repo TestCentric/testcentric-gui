@@ -168,7 +168,7 @@ namespace TestCentric.Gui
 
         private void SelectInitialPage()
         {
-            string initialPage = Settings.Gui.InitialSettingsPage;
+            string initialPage = Settings.TestCentric.InitialSettingsPage;
 
             if (initialPage != null)
                 SelectPage(initialPage);

@@ -26,21 +26,18 @@ using NUnit.Engine;
 
 namespace TestCentric.Gui.Model.Settings
 {
-    public class GuiSettings : SettingsGroup
+    /// <summary>
+    /// Settings specific to TestCentric. Because we store settings in the
+    /// NUnit 3 settings file, we use our own unique prefix to avoid conflicts.
+    /// </summary>
+    public class TestCentricSettings : SettingsGroup
     {
-        private static readonly Font DefaultFixedFont = new Font(FontFamily.GenericMonospace, 8.0F);
-
-        public GuiSettings(ISettings settings)
-             : base(settings, "Gui") { }
+        public TestCentricSettings(ISettings settings)
+             : base(settings, "TestCentric") { }
 
         public TestTreeSettings TestTree
         {
             get { return new TestTreeSettings(_settings); }
-        }
-
-        public ResultTabsSettings ResultTabs
-        {
-            get { return new ResultTabsSettings(_settings); }
         }
 
         public RecentProjectsSettings RecentProjects
@@ -58,10 +55,32 @@ namespace TestCentric.Gui.Model.Settings
             get { return new MainFormSettings(_settings); }
         }
 
+        public ErrorDisplaySettings ErrorDisplay
+        {
+            get { return new ErrorDisplaySettings(_settings); }
+        }
+
+        public TextOutputSettings TextOutput
+        {
+            get { return new TextOutputSettings(_settings); }
+        }
+
         public string DisplayFormat
         {
             get { return GetSetting("DisplayFormat", "Full"); }
             set { SaveSetting("DisplayFormat", value); }
+        }
+
+        public bool LoadLastProject
+        {
+            get { return GetSetting("LoadLastProject", true); }
+            set { SaveSetting("LoadLastProject", value); }
+        }
+
+        public int SelectedTab
+        {
+            get { return GetSetting("SelectedTab", 0); }
+            set { SaveSetting("SelectedTab", value); }
         }
 
         public string InitialSettingsPage
@@ -70,10 +89,36 @@ namespace TestCentric.Gui.Model.Settings
             set { SaveSetting("Settings.InitialPage", value); } // TODO: Handle null
         }
 
+        public bool ClearResultsOnReload
+        {
+            get { return GetSetting("ClearResultsOnReload", false); }
+            set { SaveSetting("ClearResultsOnReload", value); }
+        }
+
+        private static readonly Font DefaultFont = new Font(FontFamily.GenericSansSerif, 8.25f);
+        public Font Font
+        {
+            get { return GetSetting("Font", DefaultFont); }
+            set { SaveSetting("Font", value); }
+        }
+
+        private static readonly Font DefaultFixedFont = new Font(FontFamily.GenericMonospace, 8.0F);
         public Font FixedFont
         {
             get { return GetSetting("FixedFont", DefaultFixedFont); }
             set { SaveSetting("FixedFont", value); }
+        }
+
+        public string ProjectEditorPath
+        {
+            get { return GetSetting("ProjectEditorPath", "nunit-editor.exe"); }
+            set { SaveSetting("ProjectEditorPath", value); } // TODO: Handle null
+        }
+
+        public InternalTraceLevel InternalTraceLevel
+        {
+            get { return GetSetting("InternalTraceLevel", InternalTraceLevel.Off); }
+            set { SaveSetting("InternalTraceLevel", value); }
         }
     }
 }

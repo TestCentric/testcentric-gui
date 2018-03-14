@@ -202,7 +202,7 @@ namespace TestCentric.Gui.Controls
 		{
             int index = tabControl.SelectedIndex;
             if (index >= 0 && index < tabControl.TabCount)
-                Settings.Gui.ResultTabs.SelectedTab = index;
+                Settings.TestCentric.SelectedTab = index;
         }
 
         private void tabControl_DrawItem(object sender, System.Windows.Forms.DrawItemEventArgs e)
@@ -239,7 +239,7 @@ namespace TestCentric.Gui.Controls
         {
             Settings = model.Services.UserSettings;
 
-            tabControl.SelectedIndex = Settings.Gui.ResultTabs.SelectedTab;
+            tabControl.SelectedIndex = Settings.TestCentric.SelectedTab;
 
             model.Events.TestLoaded += (TestNodeEventArgs e) =>
             {
@@ -253,7 +253,7 @@ namespace TestCentric.Gui.Controls
 
             model.Events.TestReloaded += (TestNodeEventArgs e) =>
             {
-            if (Settings.Options.TestLoader.ClearResultsOnReload)
+            if (Settings.TestCentric.ClearResultsOnReload)
                 this.Clear();
             };
 

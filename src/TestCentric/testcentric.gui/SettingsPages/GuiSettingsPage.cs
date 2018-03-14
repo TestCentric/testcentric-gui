@@ -224,7 +224,7 @@ namespace TestCentric.Gui.SettingsPages
 
 		public override void LoadSettings()
 		{
-            switch (Settings.Gui.DisplayFormat)
+            switch (Settings.TestCentric.DisplayFormat)
             {
                 case "Full":
                     fullGuiRadioButton.Checked = true;
@@ -234,16 +234,16 @@ namespace TestCentric.Gui.SettingsPages
                     break;
             }
 
-            recentFilesCountTextBox.Text = Settings.Gui.RecentProjects.MaxFiles.ToString();
-            checkFilesExistCheckBox.Checked = Settings.Gui.RecentProjects.CheckFilesExist;
-            loadLastProjectCheckBox.Checked = Settings.Options.LoadLastProject;
+            recentFilesCountTextBox.Text = Settings.TestCentric.RecentProjects.MaxFiles.ToString();
+            checkFilesExistCheckBox.Checked = Settings.TestCentric.RecentProjects.CheckFilesExist;
+            loadLastProjectCheckBox.Checked = Settings.TestCentric.LoadLastProject;
         }
 
 		public override void ApplySettings()
 		{
-			Settings.Gui.DisplayFormat = fullGuiRadioButton.Checked ? "Full" : "Mini";
-            Settings.Gui.RecentProjects.CheckFilesExist = checkFilesExistCheckBox.Checked;
-			Settings.Options.LoadLastProject = loadLastProjectCheckBox.Checked;
+			Settings.TestCentric.DisplayFormat = fullGuiRadioButton.Checked ? "Full" : "Mini";
+            Settings.TestCentric.RecentProjects.CheckFilesExist = checkFilesExistCheckBox.Checked;
+			Settings.TestCentric.LoadLastProject = loadLastProjectCheckBox.Checked;
 		}
 
 		private void recentFilesCountTextBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
@@ -286,7 +286,7 @@ namespace TestCentric.Gui.SettingsPages
 		private void recentFilesCountTextBox_Validated(object sender, System.EventArgs e)
 		{
 			int count = int.Parse( recentFilesCountTextBox.Text );
-			Settings.Gui.RecentProjects.MaxFiles = count;
+			Settings.TestCentric.RecentProjects.MaxFiles = count;
             if (count == 0)
                 loadLastProjectCheckBox.Checked = false;
 		}

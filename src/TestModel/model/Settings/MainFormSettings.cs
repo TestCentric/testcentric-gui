@@ -61,13 +61,6 @@ namespace TestCentric.Gui.Model.Settings
             set { SaveSetting("Maximized", value); }
         }
 
-        private static readonly Font DefaultFont = new Font(FontFamily.GenericSansSerif, 8.25f);
-        public Font Font
-        {
-            get { return GetSetting("Font", DefaultFont); }
-            set { SaveSetting("Font", value); }
-        }
-
         public int SplitPosition
         {
             get { return GetSetting("SplitPosition", 0); }

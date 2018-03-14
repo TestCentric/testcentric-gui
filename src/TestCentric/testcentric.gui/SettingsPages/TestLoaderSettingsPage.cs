@@ -231,7 +231,7 @@ namespace TestCentric.Gui.SettingsPages
 		
 		public override void LoadSettings()
 		{
-            switch( Settings.Options.TestLoader.ProcessModel )
+            switch( Settings.Engine.ProcessModel )
             {
                 case "Separate":
                     separateProcessRadioButton.Checked = true;
@@ -250,29 +250,29 @@ namespace TestCentric.Gui.SettingsPages
                     break;
             }
 
-            var agents = Settings.Options.TestLoader.Agents;
+            var agents = Settings.Engine.Agents;
             numberOfAgentsCheckBox.Enabled = multiProcessRadioButton.Checked;
             numberOfAgentsCheckBox.Checked = agents > 0;
             numberOfAgentsUpDown.Value = agents;
 
-			bool singleDomain = Settings.Options.TestLoader.DomainUsage == "Single";
+			bool singleDomain = Settings.Engine.DomainUsage == "Single";
 			multiDomainRadioButton.Checked = !singleDomain;
 			singleDomainRadioButton.Checked = singleDomain;
 		}
 
         public override void ApplySettings()
         {
-            Settings.Options.TestLoader.ProcessModel = sameProcessRadioButton.Checked
+            Settings.Engine.ProcessModel = sameProcessRadioButton.Checked
                 ? "Single"
                 : separateProcessRadioButton.Checked
                     ? "Separate"
                     : "Multiple";
 
-            Settings.Options.TestLoader.Agents = numberOfAgentsCheckBox.Checked
+            Settings.Engine.Agents = numberOfAgentsCheckBox.Checked
                 ? (int)numberOfAgentsUpDown.Value
                 : 0;
 
-            Settings.Options.TestLoader.DomainUsage = singleDomainRadioButton.Checked
+            Settings.Engine.DomainUsage = singleDomainRadioButton.Checked
                 ? "Single"
                 : "Multiple";
         }
@@ -302,8 +302,8 @@ namespace TestCentric.Gui.SettingsPages
 			get 
 			{
                 return
-                    Settings.Options.TestLoader.ProcessModel != SelectedProcessModel() ||
-                    Settings.Options.TestLoader.DomainUsage != SelectedDomainUsage();
+                    Settings.Engine.ProcessModel != SelectedProcessModel() ||
+                    Settings.Engine.DomainUsage != SelectedDomainUsage();
 			}
 		}
 
