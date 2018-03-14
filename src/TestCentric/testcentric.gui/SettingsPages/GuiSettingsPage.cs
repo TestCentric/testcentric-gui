@@ -242,7 +242,7 @@ namespace TestCentric.Gui.SettingsPages
 		public override void ApplySettings()
 		{
 			Settings.Gui.DisplayFormat = fullGuiRadioButton.Checked ? "Full" : "Mini";
-            Settings.SaveSetting("Gui.RecentProjects.CheckFilesExist", checkFilesExistCheckBox.Checked);
+            Settings.Gui.RecentProjects.CheckFilesExist = checkFilesExistCheckBox.Checked;
 			Settings.Options.LoadLastProject = loadLastProjectCheckBox.Checked;
 		}
 
@@ -286,7 +286,7 @@ namespace TestCentric.Gui.SettingsPages
 		private void recentFilesCountTextBox_Validated(object sender, System.EventArgs e)
 		{
 			int count = int.Parse( recentFilesCountTextBox.Text );
-			Settings.SaveSetting("Gui.RecentProjects.MaxFiles", count);
+			Settings.Gui.RecentProjects.MaxFiles = count;
             if (count == 0)
                 loadLastProjectCheckBox.Checked = false;
 		}

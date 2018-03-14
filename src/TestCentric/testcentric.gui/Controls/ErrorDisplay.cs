@@ -203,7 +203,7 @@ namespace TestCentric.Gui.Controls
 
         void sourceCode_SplitOrientationChanged(object sender, EventArgs e)
         {
-            UserSettings.Gui.SaveSetting("ResultTabs.ErrorBrowser.SplitterOrientation", sourceCode.SplitOrientation);
+            UserSettings.Gui.ResultTabs.ErrorBrowser.SplitterOrientation = sourceCode.SplitOrientation;
 
             sourceCode.SplitterDistance = sourceCode.SplitOrientation == Orientation.Vertical
                 ? UserSettings.Gui.ResultTabs.ErrorBrowser.VerticalPosition

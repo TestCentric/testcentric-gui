@@ -926,6 +926,10 @@ namespace TestCentric.Gui
             if (height < 32) height = 32;
             Size = new Size(width, height);
 
+            // Set to maximized if required
+            if (UserSettings.Gui.MiniForm.Maximized)
+                WindowState = FormWindowState.Maximized;
+
             // Set the font to use
             applyFont(UserSettings.Gui.MiniForm.Font);
         }
@@ -942,14 +946,14 @@ namespace TestCentric.Gui
 
         private void applyFont( Font font )
         {
-            Font = font;
+            if (_displayFormat == "Mini")
+                UserSettings.Gui.MiniForm.Font = Font = font;
+            else
+                UserSettings.Gui.MainForm.Font = Font = font;
+
             runCount.Font = font.FontFamily.IsStyleAvailable( FontStyle.Bold )
                 ? new Font( font, FontStyle.Bold )
                 : font;
-            TypeConverter converter = TypeDescriptor.GetConverter(typeof(Font));
-            UserSettings.SaveSetting(
-                _displayFormat == "Mini" ? "Gui.MiniForm.Font" : "Gui.MainForm.Font",
-                converter.ConvertToString(null, CultureInfo.InvariantCulture, font));
         }
 
         private void increaseFixedFontMenuItem_Click(object sender, System.EventArgs e)
@@ -1140,9 +1144,9 @@ namespace TestCentric.Gui
                 default:
                     if ( WindowState == FormWindowState.Normal )
                     {
-                        UserSettings.SaveSetting("Gui.MainForm.Left", Location.X);
-                        UserSettings.SaveSetting("Gui.MainForm.Top", Location.Y);
-                        UserSettings.SaveSetting("Gui.MainForm.Maximized", false);
+                        UserSettings.Gui.MainForm.Left = Location.X;
+                        UserSettings.Gui.MainForm.Top = Location.Y;
+                        UserSettings.Gui.MainForm.Maximized = false;
 
                         statusBar.SizingGrip = true;
                     }
@@ -1156,15 +1160,15 @@ namespace TestCentric.Gui
                 case "Mini":
                     if ( WindowState == FormWindowState.Normal )
                     {
-                        UserSettings.SaveSetting( "Gui.MiniForm.Left", Location.X );
-                        UserSettings.SaveSetting( "Gui.MiniForm.Top", Location.Y );
-                        UserSettings.SaveSetting( "Gui.MiniForm.Maximized", false );
+                        UserSettings.Gui.MiniForm.Left = Location.X;
+                        UserSettings.Gui.MiniForm.Top = Location.Y;
+                        UserSettings.Gui.MiniForm.Maximized = false;
 
                         statusBar.SizingGrip = true;
                     }
                     else if ( WindowState == FormWindowState.Maximized )
                     {
-                        UserSettings.SaveSetting( "Gui.MiniForm.Maximized", true );
+                        UserSettings.Gui.MiniForm.Maximized = true;
 
                         statusBar.SizingGrip = false;
                     }
@@ -1179,13 +1183,13 @@ namespace TestCentric.Gui
             {
                 if (_displayFormat == "Full")
                 {
-                    UserSettings.SaveSetting("Gui.MainForm.Width", Size.Width);
-                    UserSettings.SaveSetting("Gui.MainForm.Height", Size.Height);
+                    UserSettings.Gui.MainForm.Width = Size.Width;
+                    UserSettings.Gui.MainForm.Height = Size.Height;
                 }
                 else
                 {
-                    UserSettings.SaveSetting("Gui.MiniForm.Width", Size.Width);
-                    UserSettings.SaveSetting("Gui.MiniForm.Height", Size.Height);
+                    UserSettings.Gui.MiniForm.Width = Size.Width;
+                    UserSettings.Gui.MiniForm.Height = Size.Height;
                 }
             }
         }
@@ -1193,7 +1197,7 @@ namespace TestCentric.Gui
         // Splitter moved so save it's position
         private void treeSplitter_SplitterMoved( object sender, SplitterEventArgs e )
         {
-            UserSettings.SaveSetting( "Gui.MainForm.SplitPosition", treeSplitter.SplitPosition );
+            UserSettings.Gui.MainForm.SplitPosition = treeSplitter.SplitPosition;
         }
 
         /// <summary>

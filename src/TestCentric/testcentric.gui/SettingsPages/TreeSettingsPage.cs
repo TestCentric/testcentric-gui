@@ -319,7 +319,7 @@ namespace TestCentric.Gui.SettingsPages
 			Settings.Options.ShowCheckBoxes = showCheckBoxesCheckBox.Checked;
 
             if (imageSetListBox.SelectedIndex >= 0)
-                Settings.SaveSetting("Gui.TestTree.AlternateImageSet", imageSetListBox.SelectedItem);
+                Settings.Gui.TestTree.AlternateImageSet = (string)imageSetListBox.SelectedItem;
 		}
 
         private void imageSetListBox_SelectedIndexChanged(object sender, EventArgs e)
