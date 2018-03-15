@@ -66,10 +66,13 @@ namespace TestCentric.Gui
                 return 2;
             }
 
-            var traceLevel = options.InternalTraceLevel != null
-                ? (InternalTraceLevel)Enum.Parse(typeof(InternalTraceLevel), options.InternalTraceLevel)
-                : InternalTraceLevel.Off;
+            // Currently the InternalTraceLevel can only be set from the command-line.
+            // We can't use user settings to provide a default because the settings
+            // are an engine service and the engine have the internal trace level
+            // set as part of its initialization.
+            var traceLevel = options.InternalTraceLevel;
 
+            // This initializes the trace setting for the GUI itself.
             InternalTrace.Initialize($"InternalTrace.{Process.GetCurrentProcess().Id}.gui.log", traceLevel);
             log.Info($"Starting TestCentric Runner - InternalTraceLevel = {traceLevel}");
 
