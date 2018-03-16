@@ -351,7 +351,6 @@ namespace TestCentric.Gui.Model
 
             // Temp settings for testing
             package.AddSetting(EnginePackageSettings.ProcessModel, "Single");
-            package.AddSetting(EnginePackageSettings.InternalTraceLevel, "Debug");
 
             foreach (var entry in PackageSettings)
                 package.AddSetting(entry.Key, entry.Value);
