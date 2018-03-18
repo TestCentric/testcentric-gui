@@ -22,12 +22,8 @@
 // ***********************************************************************
 
 using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Drawing;
 using System.Security.Principal;
 using System.Windows.Forms;
-using NUnit.Engine;
 
 namespace TestCentric.Gui.SettingsPages
 {
@@ -44,10 +40,6 @@ namespace TestCentric.Gui.SettingsPages
         private GroupBox groupBox1;
         private ListBox principalPolicyListBox;
         private Label label1;
-        private ComboBox traceLevelComboBox;
-        private Label label4;
-        private Label label5;
-        private GroupBox groupBox2;
         private System.ComponentModel.IContainer components = null;
 
 		public AdvancedLoaderSettingsPage( string key ) : base( key )
@@ -92,10 +84,6 @@ namespace TestCentric.Gui.SettingsPages
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.principalPolicyListBox = new System.Windows.Forms.ListBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.traceLevelComboBox = new System.Windows.Forms.ComboBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.SuspendLayout();
             // 
             // label3
@@ -134,8 +122,8 @@ namespace TestCentric.Gui.SettingsPages
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(260, 59);
             this.label2.TabIndex = 6;
-            this.label2.Text = "Shadow copy should normally be enabled. If it is disabled, the TestCentric Gui may not " +
-    "function correctly.";
+            this.label2.Text = "Shadow copy should normally be enabled. If it is disabled, the TestCentric Gui ma" +
+    "y not function correctly.";
             // 
             // principalPolicyCheckBox
             // 
@@ -197,55 +185,8 @@ namespace TestCentric.Gui.SettingsPages
             this.label1.TabIndex = 12;
             this.label1.Text = "Warning:";
             // 
-            // traceLevelComboBox
-            // 
-            this.traceLevelComboBox.FormattingEnabled = true;
-            this.traceLevelComboBox.Items.AddRange(new object[] {
-            "Default",
-            "Off",
-            "Error",
-            "Warning",
-            "Info",
-            "Verbose"});
-            this.traceLevelComboBox.Location = new System.Drawing.Point(137, 298);
-            this.traceLevelComboBox.Name = "traceLevelComboBox";
-            this.traceLevelComboBox.Size = new System.Drawing.Size(89, 21);
-            this.traceLevelComboBox.TabIndex = 20;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(22, 301);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(67, 13);
-            this.label4.TabIndex = 19;
-            this.label4.Text = "Trace Level:";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 267);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(73, 13);
-            this.label5.TabIndex = 18;
-            this.label5.Text = "Internal Trace";
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Location = new System.Drawing.Point(139, 267);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(309, 8);
-            this.groupBox2.TabIndex = 17;
-            this.groupBox2.TabStop = false;
-            // 
             // AdvancedLoaderSettingsPage
             // 
-            this.Controls.Add(this.traceLevelComboBox);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.principalPolicyListBox);
             this.Controls.Add(this.principalPolicyCheckBox);
@@ -270,9 +211,7 @@ namespace TestCentric.Gui.SettingsPages
             principalPolicyCheckBox.Checked = principalPolicyListBox.Enabled =
                 Settings.Engine.SetPrincipalPolicy;
             principalPolicyListBox.SelectedIndex = (int)Settings.Engine.PrincipalPolicy;
-
-            traceLevelComboBox.SelectedIndex = (int)Settings.TestCentric.InternalTraceLevel;
-        }
+    }
 
         public override void ApplySettings()
 		{
@@ -283,13 +222,9 @@ namespace TestCentric.Gui.SettingsPages
             Settings.Engine.PrincipalPolicy = principalPolicyCheckBox.Checked
                 ? (PrincipalPolicy)principalPolicyListBox.SelectedIndex
                 : PrincipalPolicy.UnauthenticatedPrincipal;
+    }
 
-            InternalTraceLevel level = (InternalTraceLevel)traceLevelComboBox.SelectedIndex;
-            Settings.TestCentric.InternalTraceLevel = level;
-            //InternalTrace.Level = level;
-        }
-
-        public override bool HasChangesRequiringReload
+    public override bool HasChangesRequiringReload
 		{
 			get
 			{

@@ -24,8 +24,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using Mono.Options;
+using NUnit.Engine;
 
 namespace TestCentric.Gui
 {
@@ -77,7 +77,11 @@ namespace TestCentric.Gui
             //    v => RunSelectedTests = v != null);
 
             this.Add("trace=", "Set internal trace {LEVEL}.",
-                v => InternalTraceLevel = RequiredValue(v, "--trace", "Off", "Error", "Warning", "Info", "Verbose", "Debug"));
+                v =>
+                {
+                    var traceSetting = RequiredValue(v, "--trace", "Off", "Error", "Warning", "Info", "Verbose", "Debug");
+                    InternalTraceLevel = (InternalTraceLevel)Enum.Parse(typeof(InternalTraceLevel), v);
+                });
 
             this.Add("help|h", "Display this message and exit.", 
                 v => ShowHelp = v != null);
@@ -124,7 +128,7 @@ namespace TestCentric.Gui
 
         // Output GuiElement
 
-        public string InternalTraceLevel { get; private set; }
+        public InternalTraceLevel InternalTraceLevel { get; private set; }
 
         // Error Processing
 
@@ -150,7 +154,7 @@ namespace TestCentric.Gui
         public string GetHelpText()
         {
             var writer = new StringWriter();
-            writer.WriteLine("TC [inputfiles] [options]");
+            writer.WriteLine("TC-NUnit [inputfiles] [options]");
             writer.WriteLine();
             writer.WriteLine("Starts the TestCentric Runner, optionally loading and running a set of NUnit tests. You may specify any combination of assemblies and supported project files as arguments.");
             writer.WriteLine();
