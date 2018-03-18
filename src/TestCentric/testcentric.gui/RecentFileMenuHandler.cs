@@ -28,15 +28,16 @@ using NUnit.Engine;
 namespace TestCentric.Gui
 {
     using Model;
+    using Model.Settings;
 
 	public class RecentFileMenuHandler
 	{
 		public RecentFileMenuHandler( MenuItem menu, ITestModel model )
 		{
             Menu = menu;
-            UserSettings = model.GetService<ISettings>();
-            RecentFiles = model.GetService<IRecentFiles>();
-            CheckFilesExist = UserSettings.GetSetting("Gui.RecentProjects.CheckFilesExist", true);
+            UserSettings = model.Services.UserSettings;
+            RecentFiles = model.Services.RecentFiles;
+            CheckFilesExist = UserSettings.TestCentric.RecentProjects.CheckFilesExist;
             ShowNonRunnableFiles = false;
 		}
 
@@ -48,7 +49,7 @@ namespace TestCentric.Gui
 
         public IRecentFiles RecentFiles { get; }
 
-        public ISettings UserSettings { get; }
+        public UserSettings UserSettings { get; }
 
 		public string this[int index]
 		{

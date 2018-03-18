@@ -206,36 +206,31 @@ namespace TestCentric.Gui.SettingsPages
 
 		public override void LoadSettings()
 		{
-            disableShadowCopyCheckBox.Checked = !Settings.GetSetting("Options.TestLoader.ShadowCopyFiles", true);
+            disableShadowCopyCheckBox.Checked = !Settings.Engine.ShadowCopyFiles;
 
             principalPolicyCheckBox.Checked = principalPolicyListBox.Enabled =
-                Settings.GetSetting("Options.TestLoader.SetPrincipalPolicy", false);
-            principalPolicyListBox.SelectedIndex = (int)(PrincipalPolicy)Settings.GetSetting("Options.TestLoader.PrincipalPolicy", PrincipalPolicy.UnauthenticatedPrincipal);
-        }
+                Settings.Engine.SetPrincipalPolicy;
+            principalPolicyListBox.SelectedIndex = (int)Settings.Engine.PrincipalPolicy;
+    }
 
         public override void ApplySettings()
 		{
-			Settings.SaveSetting( "Options.TestLoader.ShadowCopyFiles", !disableShadowCopyCheckBox.Checked );
+			Settings.Engine.ShadowCopyFiles = !disableShadowCopyCheckBox.Checked;
 
-            Settings.SaveSetting("Options.TestLoader.SetPrincipalPolicy", principalPolicyCheckBox.Checked);
+            Settings.Engine.SetPrincipalPolicy = principalPolicyCheckBox.Checked;
 
-            if (principalPolicyCheckBox.Checked)
-                Settings.SaveSetting("Options.TestLoader.PrincipalPolicy", (PrincipalPolicy)principalPolicyListBox.SelectedIndex);
-            else
-                Settings.RemoveSetting("Options.TestLoader.PrincipalPolicy");
-        }
+            Settings.Engine.PrincipalPolicy = principalPolicyCheckBox.Checked
+                ? (PrincipalPolicy)principalPolicyListBox.SelectedIndex
+                : PrincipalPolicy.UnauthenticatedPrincipal;
+    }
 
-        public override bool HasChangesRequiringReload
+    public override bool HasChangesRequiringReload
 		{
 			get
 			{
-				bool oldShadowCopyFiles = Settings.GetSetting( "Options.TestLoader.ShadowCopyFiles", true );
-                bool oldSetPrincipalPolicy = Settings.GetSetting("Options.TestLoader.SetPrincipalPolicy", false);
-                PrincipalPolicy oldPrincipalPolicy = (PrincipalPolicy)Settings.GetSetting("Options.TestLoader.PrincipalPolicy", PrincipalPolicy.UnauthenticatedPrincipal);
-
-                return disableShadowCopyCheckBox.Checked == oldShadowCopyFiles // Use == because the checkbox disables
-                    || principalPolicyCheckBox.Checked != oldSetPrincipalPolicy
-                    || principalPolicyListBox.SelectedIndex != (int)oldPrincipalPolicy;
+                return disableShadowCopyCheckBox.Checked == Settings.Engine.ShadowCopyFiles // Use == because the checkbox disables
+                    || principalPolicyCheckBox.Checked != Settings.Engine.SetPrincipalPolicy
+                    || principalPolicyListBox.SelectedIndex != (int)Settings.Engine.PrincipalPolicy;
 
 			}
 		}

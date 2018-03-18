@@ -30,6 +30,7 @@ using NUnit.Engine;
 namespace TestCentric.Gui.Controls
 {
     using Model;
+    using Model.Settings;
 
 	public delegate void SelectedTestsChangedEventHandler(object sender, SelectedTestsChangedEventArgs e);
 
@@ -113,7 +114,7 @@ namespace TestCentric.Gui.Controls
 
         private ITestModel Model { get; set; }
 
-        private ISettings UserSettings { get; set; }
+        private UserSettings UserSettings { get; set; }
 
 		[Browsable(false)]
 		public bool ShowCheckBoxes
@@ -692,8 +693,7 @@ namespace TestCentric.Gui.Controls
 
         private void checkBoxesMenuItem_Click(object sender, System.EventArgs e)
 		{
-            UserSettings.SaveSetting("Options.ShowCheckBoxes",
-                ShowCheckBoxes = !checkBoxesMenuItem.Checked);
+            UserSettings.TestCentric.TestTree.ShowCheckBoxes = ShowCheckBoxes = !checkBoxesMenuItem.Checked;
         }
 
         private void UpdateCategorySelection()
@@ -728,10 +728,8 @@ namespace TestCentric.Gui.Controls
         public void InitializeView(ITestModel model, TestCentricPresenter presenter)
         {
             Model = model;
-            UserSettings = Model.GetService<ISettings>();
 
-            this.ShowCheckBoxes =
-                UserSettings.GetSetting("Options.ShowCheckBoxes", false);
+            ShowCheckBoxes = Model.Services.UserSettings.TestCentric.TestTree.ShowCheckBoxes;
 
             Model.Events.TestLoaded += (TestNodeEventArgs e) =>
             {

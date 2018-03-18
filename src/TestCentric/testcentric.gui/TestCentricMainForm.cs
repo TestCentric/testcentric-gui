@@ -36,6 +36,7 @@ namespace TestCentric.Gui
 {
     using Controls;
     using Model;
+    using Model.Settings;
 
     public class TestCentricMainForm : TestCentricFormBase
     {
@@ -136,8 +137,8 @@ namespace TestCentric.Gui
             Presenter = new TestCentricPresenter(this, model, options);
             Options = options;
 
-            UserSettings = Model.GetService<ISettings>();
-            RecentFiles = Model.GetService<IRecentFiles>();
+            UserSettings = Model.Services.UserSettings;
+            RecentFiles = Model.Services.RecentFiles;
         }
 
         protected override void Dispose(bool disposing)
@@ -201,6 +202,7 @@ namespace TestCentric.Gui
             this.testMenuSeparator = new System.Windows.Forms.MenuItem();
             this.stopRunMenuItem = new System.Windows.Forms.MenuItem();
             this.toolsMenu = new System.Windows.Forms.MenuItem();
+            this.projetEditorMenuItem = new System.Windows.Forms.MenuItem();
             this.saveResultsMenuItem = new System.Windows.Forms.MenuItem();
             this.toolsMenuSeparator1 = new System.Windows.Forms.MenuItem();
             this.extensionsMenuItem = new System.Windows.Forms.MenuItem();
@@ -222,7 +224,6 @@ namespace TestCentric.Gui
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.testTree = new TestCentric.Gui.Controls.TestTree();
             this.leftPanel = new System.Windows.Forms.Panel();
-            this.projetEditorMenuItem = new System.Windows.Forms.MenuItem();
             this.rightPanel.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.leftPanel.SuspendLayout();
@@ -500,6 +501,12 @@ namespace TestCentric.Gui
             this.settingsMenuItem});
             this.toolsMenu.Text = "T&ools";
             // 
+            // projetEditorMenuItem
+            // 
+            this.projetEditorMenuItem.Index = 0;
+            this.projetEditorMenuItem.Text = "Project Editor...";
+            this.projetEditorMenuItem.Click += new System.EventHandler(this.projectEditorMenuItem_Click);
+            // 
             // saveResultsMenuItem
             // 
             this.saveResultsMenuItem.Index = 1;
@@ -677,12 +684,6 @@ namespace TestCentric.Gui
             this.leftPanel.Size = new System.Drawing.Size(240, 407);
             this.leftPanel.TabIndex = 4;
             // 
-            // menuItem3
-            // 
-            this.projetEditorMenuItem.Index = 0;
-            this.projetEditorMenuItem.Text = "Project Editor...";
-            this.projetEditorMenuItem.Click += new System.EventHandler(this.projectEditorMenuItem_Click);
-            // 
             // TestCentricMainForm
             // 
             this.ClientSize = new System.Drawing.Size(744, 431);
@@ -726,7 +727,7 @@ namespace TestCentric.Gui
 
         private ITestModel Model { get; }
 
-        private ISettings UserSettings { get; }
+        private UserSettings UserSettings { get; }
 
         private IRecentFiles RecentFiles { get; }
 
@@ -867,7 +868,7 @@ namespace TestCentric.Gui
             miniGuiMenuItem.Checked = false;
 
             _displayFormat = "Full";
-            UserSettings.SaveSetting("Gui.DisplayFormat", "Full");
+            UserSettings.TestCentric.DisplayFormat = "Full";
 
             leftPanel.Visible = true;
             leftPanel.Dock = DockStyle.Left;
@@ -875,26 +876,26 @@ namespace TestCentric.Gui
             rightPanel.Visible = true;
             statusBar.Visible = true;
 
-            int x = UserSettings.GetSetting("Gui.MainForm.Left", 10);
-            int y = UserSettings.GetSetting("Gui.MainForm.Top", 10);
+            int x = UserSettings.TestCentric.MainForm.Left;
+            int y = UserSettings.TestCentric.MainForm.Top;
             Point location = new Point(x, y);
 
             if (!IsValidLocation(location))
                 location = new Point(10, 10);
             Location = location;
 
-            int width = UserSettings.GetSetting("Gui.MainForm.Width", Size.Width);
-            int height = UserSettings.GetSetting("Gui.MainForm.Height", Size.Height);
+            int width = UserSettings.TestCentric.MainForm.Width;
+            int height = UserSettings.TestCentric.MainForm.Height;
             if (width < 160) width = 160;
             if (height < 32) height = 32;
             Size = new Size(width, height);
 
             // Set to maximized if required
-            if (UserSettings.GetSetting("Gui.MainForm.Maximized", false))
+            if (UserSettings.TestCentric.MainForm.Maximized)
                 WindowState = FormWindowState.Maximized;
 
             // Set the font to use
-            applyFont(UserSettings.GetSetting("Gui.MainForm.Font", Form.DefaultFont));
+            applyFont(UserSettings.TestCentric.Font);
         }
 
         private void displayMiniGui()
@@ -903,7 +904,7 @@ namespace TestCentric.Gui
             fullGuiMenuItem.Checked = false;
             
             _displayFormat = "Mini";
-            UserSettings.SaveSetting("Gui.DisplayFormat", "Mini");
+            UserSettings.TestCentric.DisplayFormat = "Mini";
 
             leftPanel.Visible = true;
             leftPanel.Dock = DockStyle.Fill;
@@ -911,22 +912,26 @@ namespace TestCentric.Gui
             rightPanel.Visible = false;
             statusBar.Visible = false;
 
-            int x = UserSettings.GetSetting("Gui.MiniForm.Left", 10);
-            int y = UserSettings.GetSetting("Gui.MiniForm.Top", 10);
+            int x = UserSettings.TestCentric.MiniForm.Left;
+            int y = UserSettings.TestCentric.MiniForm.Top;
             Point location = new Point(x, y);
 
             if (!IsValidLocation(location))
                 location = new Point(10, 10);
             Location = location;
 
-            int width = UserSettings.GetSetting("Gui.MiniForm.Width", 300);
-            int height = UserSettings.GetSetting("Gui.MiniForm.Height", Size.Height);
+            int width = UserSettings.TestCentric.MiniForm.Width;
+            int height = UserSettings.TestCentric.MiniForm.Height;
             if (width < 160) width = 160;
             if (height < 32) height = 32;
             Size = new Size(width, height);
 
+            // Set to maximized if required
+            if (UserSettings.TestCentric.MiniForm.Maximized)
+                WindowState = FormWindowState.Maximized;
+
             // Set the font to use
-            applyFont(UserSettings.GetSetting("Gui.MiniForm.Font", Form.DefaultFont));
+            applyFont(UserSettings.TestCentric.Font);
         }
 
         private void increaseFontMenuItem_Click(object sender, System.EventArgs e)
@@ -941,14 +946,14 @@ namespace TestCentric.Gui
 
         private void applyFont( Font font )
         {
-            Font = font;
+            if (_displayFormat == "Mini")
+                UserSettings.TestCentric.Font = Font = font;
+            else
+                UserSettings.TestCentric.Font = Font = font;
+
             runCount.Font = font.FontFamily.IsStyleAvailable( FontStyle.Bold )
                 ? new Font( font, FontStyle.Bold )
                 : font;
-            TypeConverter converter = TypeDescriptor.GetConverter(typeof(Font));
-            UserSettings.SaveSetting(
-                _displayFormat == "Mini" ? "Gui.MiniForm.Font" : "Gui.MainForm.Font",
-                converter.ConvertToString(null, CultureInfo.InvariantCulture, font));
         }
 
         private void increaseFixedFontMenuItem_Click(object sender, System.EventArgs e)
@@ -968,9 +973,7 @@ namespace TestCentric.Gui
 
         private void applyFixedFont( Font font )
         {
-            _fixedFont = font;
-            TypeConverter converter = TypeDescriptor.GetConverter(typeof(Font));
-            UserSettings.SaveSetting( "Gui.FixedFont", converter.ConvertToString( null, CultureInfo.InvariantCulture, font ) );
+            UserSettings.TestCentric.FixedFont = _fixedFont = font;
         }
         #endregion
 
@@ -1001,12 +1004,9 @@ namespace TestCentric.Gui
 
         #region Tools Menu
 
-        private static readonly string EDITOR_PATH_SETTING = "Options.ProjectEditor.EditorPath";
-
         private void projectEditorMenuItem_Click(object sender, EventArgs e)
         {
-            string editorPath = (string)UserSettings.GetSetting(EDITOR_PATH_SETTING) ?? "nunit-editor.exe";
-            System.Diagnostics.Process.Start(editorPath);
+            System.Diagnostics.Process.Start(UserSettings.TestCentric.ProjectEditorPath);
         }
 
         private void saveResultsMenuItem_Click(object sender, System.EventArgs e)
@@ -1016,7 +1016,7 @@ namespace TestCentric.Gui
 
         private void extensionsMenuItem_Click(object sender, EventArgs e)
         {
-            using (var extensionsDialog = new ExtensionDialog(Model.GetService<IExtensionService>()))
+            using (var extensionsDialog = new ExtensionDialog(Model.Services.ExtensionService))
             {
                 Site.Container.Add(extensionsDialog);
                 extensionsDialog.ShowDialog();
@@ -1093,9 +1093,7 @@ namespace TestCentric.Gui
 
         private void LoadFormSettings()
         {
-            _displayFormat = UserSettings.GetSetting("Gui.DisplayFormat", "Full");
-
-            switch (_displayFormat)
+            switch (UserSettings.TestCentric.DisplayFormat)
             {
                 case "Full":
                     displayFullGui();
@@ -1112,7 +1110,7 @@ namespace TestCentric.Gui
             Resize += new System.EventHandler(NUnitForm_Resize);
 
             // Set the splitter position
-            int splitPosition = UserSettings.GetSetting("Gui.MainForm.SplitPosition", treeSplitter.SplitPosition);
+            int splitPosition = UserSettings.TestCentric.MainForm.SplitPosition;
             if (splitPosition >= treeSplitter.MinSize && splitPosition < ClientSize.Width)
                 treeSplitter.SplitPosition = splitPosition;
 
@@ -1120,7 +1118,7 @@ namespace TestCentric.Gui
             treeSplitter.SplitterMoved += new SplitterEventHandler( treeSplitter_SplitterMoved );
 
             // Get the fixed font used by result tabs
-            _fixedFont = UserSettings.GetSetting("Gui.FixedFont", new Font(FontFamily.GenericMonospace, 8.0f));
+            _fixedFont = UserSettings.TestCentric.FixedFont;
 
             // Handle changes in form settings
             //_userSettings.Changed += new SettingsEventHandler(userSettings_Changed);
@@ -1146,9 +1144,9 @@ namespace TestCentric.Gui
                 default:
                     if ( WindowState == FormWindowState.Normal )
                     {
-                        UserSettings.SaveSetting("Gui.MainForm.Left", Location.X);
-                        UserSettings.SaveSetting("Gui.MainForm.Top", Location.Y);
-                        UserSettings.SaveSetting("Gui.MainForm.Maximized", false);
+                        UserSettings.TestCentric.MainForm.Left = Location.X;
+                        UserSettings.TestCentric.MainForm.Top = Location.Y;
+                        UserSettings.TestCentric.MainForm.Maximized = false;
 
                         statusBar.SizingGrip = true;
                     }
@@ -1162,15 +1160,15 @@ namespace TestCentric.Gui
                 case "Mini":
                     if ( WindowState == FormWindowState.Normal )
                     {
-                        UserSettings.SaveSetting( "Gui.MiniForm.Left", Location.X );
-                        UserSettings.SaveSetting( "Gui.MiniForm.Top", Location.Y );
-                        UserSettings.SaveSetting( "Gui.MiniForm.Maximized", false );
+                        UserSettings.TestCentric.MiniForm.Left = Location.X;
+                        UserSettings.TestCentric.MiniForm.Top = Location.Y;
+                        UserSettings.TestCentric.MiniForm.Maximized = false;
 
                         statusBar.SizingGrip = true;
                     }
                     else if ( WindowState == FormWindowState.Maximized )
                     {
-                        UserSettings.SaveSetting( "Gui.MiniForm.Maximized", true );
+                        UserSettings.TestCentric.MiniForm.Maximized = true;
 
                         statusBar.SizingGrip = false;
                     }
@@ -1185,13 +1183,13 @@ namespace TestCentric.Gui
             {
                 if (_displayFormat == "Full")
                 {
-                    UserSettings.SaveSetting("Gui.MainForm.Width", Size.Width);
-                    UserSettings.SaveSetting("Gui.MainForm.Height", Size.Height);
+                    UserSettings.TestCentric.MainForm.Width = Size.Width;
+                    UserSettings.TestCentric.MainForm.Height = Size.Height;
                 }
                 else
                 {
-                    UserSettings.SaveSetting("Gui.MiniForm.Width", Size.Width);
-                    UserSettings.SaveSetting("Gui.MiniForm.Height", Size.Height);
+                    UserSettings.TestCentric.MiniForm.Width = Size.Width;
+                    UserSettings.TestCentric.MiniForm.Height = Size.Height;
                 }
             }
         }
@@ -1199,7 +1197,7 @@ namespace TestCentric.Gui
         // Splitter moved so save it's position
         private void treeSplitter_SplitterMoved( object sender, SplitterEventArgs e )
         {
-            UserSettings.SaveSetting( "Gui.MainForm.SplitPosition", treeSplitter.SplitPosition );
+            UserSettings.TestCentric.MainForm.SplitPosition = treeSplitter.SplitPosition;
         }
 
         /// <summary>
@@ -1235,7 +1233,7 @@ namespace TestCentric.Gui
         //{
         //    if ( args.SettingName == "Gui.DisplayFormat" )
         //    {
-        //        string newFormat = userSettings.GetSetting( "Gui.DisplayFormat", displayFormat );
+        //        string newFormat = userSettings.Gui.DisplayFormat;
         //        if ( newFormat != displayFormat )
         //            if ( newFormat == "Full" )
         //                displayFullGui();
@@ -1410,7 +1408,7 @@ namespace TestCentric.Gui
         //        longOpDisplay = null;
         //    }
 
-        //    if (UserSettings.GetSetting("Options.TestLoader.ClearResultsOnReload", false))
+        //    if (UserSettings.ClearResultsOnReload)
         //        runCount.Text = null;
 
         //    Presenter.EnableRunCommand( true );
@@ -1566,7 +1564,7 @@ namespace TestCentric.Gui
                     _longOpDisplay = null;
                 }
 
-                if (UserSettings.GetSetting("Options.TestLoader.ClearResultsOnReload", false))
+                if (UserSettings.TestCentric.ClearResultsOnReload)
                     runCount.Text = null;
 
                 EnableRunCommand(true);

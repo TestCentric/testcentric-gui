@@ -27,7 +27,7 @@ using NUnit.Engine;
 
 namespace TestCentric.Gui
 {
-    using Model;
+    using Model.Settings;
 
 	/// <summary>
 	/// SettingsPage is the base class for all pages used
@@ -107,7 +107,7 @@ namespace TestCentric.Gui
             get { return _messageDisplay; }
         }
 
-        protected ISettings Settings { get; private set; }
+        protected UserSettings Settings { get; private set; }
 
 		#endregion
 
@@ -143,7 +143,7 @@ namespace TestCentric.Gui
 
 			if ( !DesignMode )
 			{
-                Settings = (ParentForm as SettingsDialogBase)?.Settings;
+                Settings = new UserSettings((ParentForm as SettingsDialogBase)?.Settings);
 				LoadSettings();
 			}
 		}

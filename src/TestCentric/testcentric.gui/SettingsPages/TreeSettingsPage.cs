@@ -43,10 +43,6 @@ namespace TestCentric.Gui.SettingsPages
 		private System.Windows.Forms.CheckBox saveVisualStateCheckBox;
 		private System.Windows.Forms.CheckBox showCheckBoxesCheckBox;
 		private System.Windows.Forms.HelpProvider helpProvider1;
-		private System.Windows.Forms.RadioButton flatTestList;
-		private System.Windows.Forms.RadioButton autoNamespaceSuites;
-		private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.GroupBox groupBox2;
         private Label label6;
         private PictureBox successImage;
         private PictureBox failureImage;
@@ -98,10 +94,6 @@ namespace TestCentric.Gui.SettingsPages
             this.saveVisualStateCheckBox = new System.Windows.Forms.CheckBox();
             this.showCheckBoxesCheckBox = new System.Windows.Forms.CheckBox();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
-            this.flatTestList = new System.Windows.Forms.RadioButton();
-            this.autoNamespaceSuites = new System.Windows.Forms.RadioButton();
-            this.label3 = new System.Windows.Forms.Label();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label6 = new System.Windows.Forms.Label();
             this.successImage = new System.Windows.Forms.PictureBox();
             this.failureImage = new System.Windows.Forms.PictureBox();
@@ -119,8 +111,8 @@ namespace TestCentric.Gui.SettingsPages
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Location = new System.Drawing.Point(144, 0);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(304, 8);
@@ -176,7 +168,7 @@ namespace TestCentric.Gui.SettingsPages
             // 
             this.saveVisualStateCheckBox.AutoSize = true;
             this.helpProvider1.SetHelpString(this.saveVisualStateCheckBox, "If checked, the visual state of the project is saved on exit. This includes selec" +
-                    "ted tests, categories and the state of the tree itself.");
+        "ted tests, categories and the state of the tree itself.");
             this.saveVisualStateCheckBox.Location = new System.Drawing.Point(32, 155);
             this.saveVisualStateCheckBox.Name = "saveVisualStateCheckBox";
             this.helpProvider1.SetShowHelp(this.saveVisualStateCheckBox, true);
@@ -194,55 +186,6 @@ namespace TestCentric.Gui.SettingsPages
             this.showCheckBoxesCheckBox.Size = new System.Drawing.Size(116, 17);
             this.showCheckBoxesCheckBox.TabIndex = 36;
             this.showCheckBoxesCheckBox.Text = "Show CheckBoxes";
-            // 
-            // flatTestList
-            // 
-            this.flatTestList.AutoCheck = false;
-            this.flatTestList.AutoSize = true;
-            this.helpProvider1.SetHelpString(this.flatTestList, "If selected, the tree will consist of a flat list of fixtures, without any higher" +
-                    "-level structure beyond the assemblies.");
-            this.flatTestList.Location = new System.Drawing.Point(32, 269);
-            this.flatTestList.Name = "flatTestList";
-            this.helpProvider1.SetShowHelp(this.flatTestList, true);
-            this.flatTestList.Size = new System.Drawing.Size(129, 17);
-            this.flatTestList.TabIndex = 40;
-            this.flatTestList.Text = "Flat list of TestFixtures";
-            this.flatTestList.Click += new System.EventHandler(this.toggleTestStructure);
-            // 
-            // autoNamespaceSuites
-            // 
-            this.autoNamespaceSuites.AutoCheck = false;
-            this.autoNamespaceSuites.AutoSize = true;
-            this.autoNamespaceSuites.Checked = true;
-            this.helpProvider1.SetHelpString(this.autoNamespaceSuites, "If selected, the tree will follow the namespace structure of the tests, with suit" +
-                    "es automatically created at each level.");
-            this.autoNamespaceSuites.Location = new System.Drawing.Point(32, 243);
-            this.autoNamespaceSuites.Name = "autoNamespaceSuites";
-            this.helpProvider1.SetShowHelp(this.autoNamespaceSuites, true);
-            this.autoNamespaceSuites.Size = new System.Drawing.Size(162, 17);
-            this.autoNamespaceSuites.TabIndex = 39;
-            this.autoNamespaceSuites.TabStop = true;
-            this.autoNamespaceSuites.Text = "Automatic Namespace suites";
-            this.autoNamespaceSuites.Click += new System.EventHandler(this.toggleTestStructure);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(8, 218);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(74, 13);
-            this.label3.TabIndex = 38;
-            this.label3.Text = "Test Structure";
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Location = new System.Drawing.Point(144, 218);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(304, 8);
-            this.groupBox2.TabIndex = 37;
-            this.groupBox2.TabStop = false;
             // 
             // label6
             // 
@@ -331,10 +274,6 @@ namespace TestCentric.Gui.SettingsPages
             this.Controls.Add(this.failureImage);
             this.Controls.Add(this.successImage);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.flatTestList);
-            this.Controls.Add(this.autoNamespaceSuites);
-            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.showCheckBoxesCheckBox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.initialDisplayComboBox);
@@ -356,10 +295,10 @@ namespace TestCentric.Gui.SettingsPages
 
 		public override void LoadSettings()
 		{
-			initialDisplayComboBox.SelectedIndex = (int)(TestSuiteTreeView.DisplayStyle)Settings.GetSetting( "Gui.TestTree.InitialTreeDisplay", TestSuiteTreeView.DisplayStyle.Auto );
-			clearResultsCheckBox.Checked = Settings.GetSetting( "Options.TestLoader.ClearResultsOnReload", false );
-			saveVisualStateCheckBox.Checked = Settings.GetSetting( "Gui.TestTree.SaveVisualState", true );
-			showCheckBoxesCheckBox.Checked = Settings.GetSetting( "Options.ShowCheckBoxes", false );
+			initialDisplayComboBox.SelectedIndex = Settings.TestCentric.TestTree.InitialTreeDisplay;
+			clearResultsCheckBox.Checked = Settings.TestCentric.ClearResultsOnReload;
+			saveVisualStateCheckBox.Checked = Settings.TestCentric.TestTree.SaveVisualState;
+			showCheckBoxesCheckBox.Checked = Settings.TestCentric.TestTree.ShowCheckBoxes;
 
             string[] altDirs = Directory.Exists(treeImageDir)
                 ? Directory.GetDirectories(treeImageDir)
@@ -367,39 +306,20 @@ namespace TestCentric.Gui.SettingsPages
 
             foreach (string altDir in altDirs)
                 imageSetListBox.Items.Add(Path.GetFileName(altDir));
-            string imageSet = Settings.GetSetting("Gui.TestTree.AlternateImageSet", "Default");
+            string imageSet = Settings.TestCentric.TestTree.AlternateImageSet;
             if (imageSetListBox.Items.Contains(imageSet))
                 imageSetListBox.SelectedItem = imageSet;
-		
-			autoNamespaceSuites.Checked = Settings.GetSetting( "Options.TestLoader.AutoNamespaceSuites", true );
-			flatTestList.Checked = !autoNamespaceSuites.Checked;
 		}
 
 		public override void ApplySettings()
 		{
-			Settings.SaveSetting( "Gui.TestTree.InitialTreeDisplay", (TestSuiteTreeView.DisplayStyle)initialDisplayComboBox.SelectedIndex );
-			Settings.SaveSetting( "Options.TestLoader.ClearResultsOnReload", clearResultsCheckBox.Checked );
-			Settings.SaveSetting( "Gui.TestTree.SaveVisualState", saveVisualStateCheckBox.Checked );
-			Settings.SaveSetting( "Options.ShowCheckBoxes", showCheckBoxesCheckBox.Checked );
+			Settings.TestCentric.TestTree.InitialTreeDisplay = initialDisplayComboBox.SelectedIndex;
+			Settings.TestCentric.ClearResultsOnReload = clearResultsCheckBox.Checked;
+			Settings.TestCentric.TestTree.SaveVisualState = saveVisualStateCheckBox.Checked;
+			Settings.TestCentric.TestTree.ShowCheckBoxes = showCheckBoxesCheckBox.Checked;
 
             if (imageSetListBox.SelectedIndex >= 0)
-                Settings.SaveSetting("Gui.TestTree.AlternateImageSet", imageSetListBox.SelectedItem);
-
-			Settings.SaveSetting( "Options.TestLoader.AutoNamespaceSuites", autoNamespaceSuites.Checked );
-		}
-
-		private void toggleTestStructure(object sender, System.EventArgs e)
-		{
-			bool auto = autoNamespaceSuites.Checked = !autoNamespaceSuites.Checked;
-			flatTestList.Checked = !auto;
-		}
-	
-		public override bool HasChangesRequiringReload
-		{
-			get
-			{
-                return Settings.GetSetting("Options.TestLoader.AutoNamespaceSuites", true) != autoNamespaceSuites.Checked;
-			}
+                Settings.TestCentric.TestTree.AlternateImageSet = (string)imageSetListBox.SelectedItem;
 		}
 
         private void imageSetListBox_SelectedIndexChanged(object sender, EventArgs e)

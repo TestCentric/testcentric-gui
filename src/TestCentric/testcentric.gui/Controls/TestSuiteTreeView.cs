@@ -35,6 +35,7 @@ using NUnit.Engine;
 namespace TestCentric.Gui.Controls
 {
     using Model;
+    using Model.Settings;
 
     //public delegate void SelectedTestChangedHandler( ITest test );
     //public delegate void CheckedTestChangedHandler( ITest[] tests );
@@ -153,7 +154,7 @@ namespace TestCentric.Gui.Controls
 
         public TestCentricPresenter Presenter { get; private set; }
 
-        public ISettings UserSettings { get; private set; }
+        public UserSettings UserSettings { get; private set; }
 
         [Category("Appearance"), DefaultValue(false)]
         [Description("Indicates whether checkboxes are displayed beside test nodes")]
@@ -497,18 +498,6 @@ namespace TestCentric.Gui.Controls
             if (fileNames == null || fileNames.Length == 0)
                 return false;
 
-            //// We can't open more than one project at a time
-            //// so handle length of 1 separately.
-            //if ( fileNames.Length == 1 )
-            //{
-            //	string fileName = fileNames[0];
-            //	bool isProject = NUnitProject.IsNUnitProjectFile( fileName );
-            //	//if ( Services.UserSettings.GetSetting( "Options.TestLoader.VisualStudioSupport", false ) )
-            //	//	isProject |= Services.ProjectService.CanConvertFrom( fileName );
-
-            //	return isProject || PathUtils.IsAssemblyFileType( fileName );
-            //}
-
             // Multiple assemblies are allowed - we
             // assume they are all in the same directory
             // since they are being dragged together.
@@ -622,7 +611,7 @@ namespace TestCentric.Gui.Controls
                     this.Select();
                 }
 
-                if ( UserSettings.GetSetting( "Gui.TestTree.SaveVisualState", true ) )
+                if ( UserSettings.TestCentric.TestTree.SaveVisualState )
                 	RestoreVisualState();
             }
         }
@@ -664,7 +653,7 @@ namespace TestCentric.Gui.Controls
 
             visualState.Restore(this);
 
-            if (result != null && !UserSettings.GetSetting("Options.TestLoader.ClearResultsOnReload", false))
+            if (result != null && !UserSettings.TestCentric.ClearResultsOnReload)
                 RestoreResults(result);
         }
 
@@ -788,7 +777,7 @@ namespace TestCentric.Gui.Controls
         {
             Model = model;
             Presenter = presenter;
-            UserSettings = model.GetService<ISettings>();
+            UserSettings = model.Services.UserSettings;
 
             LoadAlternateImages();
 
@@ -808,7 +797,7 @@ namespace TestCentric.Gui.Controls
             {
                 ClosePropertiesDialog();
 
-                if (UserSettings.GetSetting("Gui.TestTree.SaveVisualState", true))
+                if (UserSettings.TestCentric.TestTree.SaveVisualState)
                     try
                     {
                         new VisualState(this).Save(VisualState.GetVisualStateFileName(Model.TestFiles[0]));
@@ -987,8 +976,7 @@ namespace TestCentric.Gui.Controls
         /// <returns>DisplayStyle to be used</returns>
         private DisplayStyle GetDisplayStyle()
 		{
-			DisplayStyle initialDisplay = (TestSuiteTreeView.DisplayStyle)
-				UserSettings.GetSetting( "Gui.TestTree.InitialTreeDisplay", DisplayStyle.Auto );
+			DisplayStyle initialDisplay = (DisplayStyle)UserSettings.TestCentric.TestTree.InitialTreeDisplay;
 
 			if ( initialDisplay != DisplayStyle.Auto )
 				return initialDisplay;

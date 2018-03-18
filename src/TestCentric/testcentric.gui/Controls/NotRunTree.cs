@@ -23,11 +23,11 @@
 
 using System;
 using System.Windows.Forms;
-using NUnit.Engine;
 
 namespace TestCentric.Gui.Controls
 {
     using Model;
+    using Model.Settings;
 
 	/// <summary>
 	/// Summary description for NotRunTree.
@@ -36,14 +36,12 @@ namespace TestCentric.Gui.Controls
 	{
         const string CHILD_IGNORED_MESSAGE = "One or more child tests were ignored";
 
-        private ISettings _userSettings;
+        private UserSettings _userSettings;
 
         #region IViewControl Implementation
 
         public void InitializeView(ITestModel model, TestCentricPresenter presenter)
         {
-            _userSettings = model.GetService<ISettings>();
-
             model.Events.TestLoaded += (TestNodeEventArgs e) =>
             {
                 Nodes.Clear();
@@ -56,7 +54,7 @@ namespace TestCentric.Gui.Controls
 
             model.Events.TestReloaded += (TestNodeEventArgs e) =>
             {
-                if (_userSettings.GetSetting("Options.TestLoader.ClearResultsOnReload", false))
+                if (model.Services.UserSettings.TestCentric.ClearResultsOnReload)
                     Nodes.Clear();
             };
 

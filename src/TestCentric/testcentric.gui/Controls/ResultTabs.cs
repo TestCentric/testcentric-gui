@@ -29,6 +29,7 @@ using NUnit.Engine;
 namespace TestCentric.Gui.Controls
 {
     using Model;
+    using Model.Settings;
 
 	/// <summary>
 	/// Summary description for ResultTabs.
@@ -186,7 +187,7 @@ namespace TestCentric.Gui.Controls
 
         #region Properties
 
-        private ISettings Settings { get; set; }
+        private UserSettings Settings { get; set; }
 
         #endregion
 
@@ -201,7 +202,7 @@ namespace TestCentric.Gui.Controls
 		{
             int index = tabControl.SelectedIndex;
             if (index >= 0 && index < tabControl.TabCount)
-                Settings.SaveSetting("Gui.ResultTabs.SelectedTab", index);
+                Settings.TestCentric.SelectedTab = index;
         }
 
         private void tabControl_DrawItem(object sender, System.Windows.Forms.DrawItemEventArgs e)
@@ -236,7 +237,9 @@ namespace TestCentric.Gui.Controls
 
         public void InitializeView(ITestModel model, TestCentricPresenter presenter)
         {
-            Settings = model.GetService<ISettings>();
+            Settings = model.Services.UserSettings;
+
+            tabControl.SelectedIndex = Settings.TestCentric.SelectedTab;
 
             model.Events.TestLoaded += (TestNodeEventArgs e) =>
             {
@@ -250,7 +253,7 @@ namespace TestCentric.Gui.Controls
 
             model.Events.TestReloaded += (TestNodeEventArgs e) =>
             {
-            if (Settings.GetSetting("Options.TestLoader.ClearResultsOnReload", false))
+            if (Settings.TestCentric.ClearResultsOnReload)
                 this.Clear();
             };
 

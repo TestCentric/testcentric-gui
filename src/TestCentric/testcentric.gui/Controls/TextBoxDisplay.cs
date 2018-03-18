@@ -30,6 +30,7 @@ using NUnit.Engine;
 namespace TestCentric.Gui.Controls
 {
     using Model;
+    using Model.Settings;
 
 	/// <summary>
 	/// TextBoxDisplay is an adapter that allows accessing a 
@@ -52,7 +53,7 @@ namespace TestCentric.Gui.Controls
 		private MenuItem decreaseFontMenuItem;
 		private MenuItem restoreFontMenuItem;
 
-        private ISettings _settings;
+        private UserSettings _settings;
 
         private string _labels;
         private bool _displayBeforeOutput = true;
@@ -174,13 +175,13 @@ namespace TestCentric.Gui.Controls
 
         public void InitializeView(ITestModel model, TestCentricPresenter presenter)
         {
-            _settings = model.GetService<ISettings>();
-            WordWrap = _settings.GetSetting("Gui.ResultTabs.TextOutput.WordWrapEnabled", true);
-            Font = _settings.GetSetting("Gui.FixedFont", DefaultFixedFont);
+            _settings = model.Services.UserSettings;
+            WordWrap = _settings.TestCentric.TextOutput.WordWrapEnabled;
+            Font = _settings.TestCentric.FixedFont;
 
             model.Events.RunStarting += (RunStartingEventArgs e) =>
             {
-                _labels = _settings.GetSetting("Gui.ResultTabs.TextOutput.Labels", "ON").ToUpper();
+                _labels = _settings.TestCentric.TextOutput.Labels;
                 _displayBeforeTest = _labels == "ALL" || _labels == "BEFORE";
                 _displayAfterTest = _labels == "AFTER";
                 _displayBeforeOutput = _displayBeforeTest || _displayAfterTest || _labels == "ON";
@@ -234,10 +235,7 @@ namespace TestCentric.Gui.Controls
 
         private void ApplyFont(Font font)
         {
-            this.Font = font;
-            TypeConverter converter = TypeDescriptor.GetConverter(typeof(Font));
-            _settings.SaveSetting("Gui.FixedFont",
-                converter.ConvertToString(null, System.Globalization.CultureInfo.InvariantCulture, font));
+            _settings.TestCentric.FixedFont = Font = font;
         }
 
         private void WriteLabelLine(string label)

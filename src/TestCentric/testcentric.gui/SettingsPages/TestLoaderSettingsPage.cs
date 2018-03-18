@@ -231,7 +231,7 @@ namespace TestCentric.Gui.SettingsPages
 		
 		public override void LoadSettings()
 		{
-            switch( GetSavedProcessModel() )
+            switch( Settings.Engine.ProcessModel )
             {
                 case "Separate":
                     separateProcessRadioButton.Checked = true;
@@ -250,34 +250,31 @@ namespace TestCentric.Gui.SettingsPages
                     break;
             }
 
-            var agents = Settings.GetSetting("Options.TestLoader.Agents", 0);
+            var agents = Settings.Engine.Agents;
             numberOfAgentsCheckBox.Enabled = multiProcessRadioButton.Checked;
             numberOfAgentsCheckBox.Checked = agents > 0;
             numberOfAgentsUpDown.Value = agents;
 
-			bool singleDomain = GetSavedDomainUsage() == "Single";
+			bool singleDomain = Settings.Engine.DomainUsage == "Single";
 			multiDomainRadioButton.Checked = !singleDomain;
 			singleDomainRadioButton.Checked = singleDomain;
 		}
 
         public override void ApplySettings()
         {
-            if (sameProcessRadioButton.Checked)
-                Settings.SaveSetting("Options.TestLoader.ProcessModel", "Single");
-            else if (separateProcessRadioButton.Checked)
-                Settings.SaveSetting("Options.TestLoader.ProcessModel", "Separate");
-            else
-                Settings.RemoveSetting("Options.TestLoader.ProcessModel");
+            Settings.Engine.ProcessModel = sameProcessRadioButton.Checked
+                ? "Single"
+                : separateProcessRadioButton.Checked
+                    ? "Separate"
+                    : "Multiple";
 
-            if (numberOfAgentsCheckBox.Checked)
-                Settings.SaveSetting("Options.TestLoader.Agents", numberOfAgentsUpDown.Value);
-            else
-                Settings.RemoveSetting("options.TestLoader.Agents");
+            Settings.Engine.Agents = numberOfAgentsCheckBox.Checked
+                ? (int)numberOfAgentsUpDown.Value
+                : 0;
 
-            if (singleDomainRadioButton.Checked)
-                Settings.SaveSetting("Options.TestLoader.DomainUsage", "Single");
-            else
-                Settings.RemoveSetting("Options.TestLoader.DomainUsage");
+            Settings.Engine.DomainUsage = singleDomainRadioButton.Checked
+                ? "Single"
+                : "Multiple";
         }
 
         private void toggleProcessUsage(object sender, EventArgs e)
@@ -305,22 +302,12 @@ namespace TestCentric.Gui.SettingsPages
 			get 
 			{
                 return
-                    GetSavedProcessModel() != GetSelectedProcessModel() ||
-                    GetSavedDomainUsage() != GetSelectedDomainUsage();
+                    Settings.Engine.ProcessModel != SelectedProcessModel() ||
+                    Settings.Engine.DomainUsage != SelectedDomainUsage();
 			}
 		}
 
-        private string GetSavedProcessModel()
-        {
-            return Settings.GetSetting("Options.TestLoader.ProcessModel", "Multiple");
-        }
-
-        private string GetSavedDomainUsage()
-        {
-            return Settings.GetSetting("Options.TestLoader.DomainUsage", "Multiple");
-        }
-
-        private string GetSelectedProcessModel()
+        private string SelectedProcessModel()
         {
             return sameProcessRadioButton.Checked
                 ? "Single"
@@ -329,7 +316,7 @@ namespace TestCentric.Gui.SettingsPages
                     : "Multiple";
         }
 
-        private string GetSelectedDomainUsage()
+        private string SelectedDomainUsage()
         {
             return multiDomainRadioButton.Checked
                 ? "Multiple"

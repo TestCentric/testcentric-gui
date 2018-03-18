@@ -44,12 +44,25 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Filters.cs" />
     <Compile Include="ITestEvents.cs" />
+    <Compile Include="ITestServices.cs" />
+    <Compile Include="Settings\ErrorDisplaySettings.cs" />
+    <Compile Include="Settings\MainFormSettings.cs" />
+    <Compile Include="Settings\MiniFormSettings.cs" />
+    <Compile Include="Settings\RecentProjectsSettings.cs" />
+    <Compile Include="Settings\TestTreeSettings.cs" />
+    <Compile Include="Settings\TextOutputSettings.cs" />
+    <Compile Include="Settings\SettingsGroup.cs" />
+    <Compile Include="Settings\TestCentricSettings.cs" />
+    <Compile Include="Settings\EngineSettings.cs" />
+    <Compile Include="Settings\UserSettings.cs" />
+    <Compile Include="TestServices.cs" />
     <Compile Include="TestEventDispatcher.cs" />
     <Compile Include="Properties\CommonAssemblyInfo.cs" />
     <Compile Include="EnginePackageSettings.cs" />

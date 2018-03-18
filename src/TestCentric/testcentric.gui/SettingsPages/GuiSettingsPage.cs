@@ -224,8 +224,7 @@ namespace TestCentric.Gui.SettingsPages
 
 		public override void LoadSettings()
 		{
-            string displayFormat = Settings.GetSetting("Gui.DisplayFormat", "Full");
-            switch (displayFormat)
+            switch (Settings.TestCentric.DisplayFormat)
             {
                 case "Full":
                     fullGuiRadioButton.Checked = true;
@@ -235,17 +234,16 @@ namespace TestCentric.Gui.SettingsPages
                     break;
             }
 
-            recentFilesCountTextBox.Text = Settings.GetSetting("Gui.RecentProjects.MaxFiles", MAX_RECENT_FILES).ToString();
-            checkFilesExistCheckBox.Checked = Settings.GetSetting("Gui.RecentProjects.CheckFilesExist", true);
-            loadLastProjectCheckBox.Checked = Settings.GetSetting("Options.LoadLastProject", true);
+            recentFilesCountTextBox.Text = Settings.TestCentric.RecentProjects.MaxFiles.ToString();
+            checkFilesExistCheckBox.Checked = Settings.TestCentric.RecentProjects.CheckFilesExist;
+            loadLastProjectCheckBox.Checked = Settings.TestCentric.LoadLastProject;
         }
 
 		public override void ApplySettings()
 		{
-			string fmt = fullGuiRadioButton.Checked ? "Full" : "Mini";
-			Settings.SaveSetting( "Gui.DisplayFormat", fmt );
-            Settings.SaveSetting("Gui.RecentProjects.CheckFilesExist", checkFilesExistCheckBox.Checked);
-			Settings.SaveSetting( "Options.LoadLastProject", loadLastProjectCheckBox.Checked );
+			Settings.TestCentric.DisplayFormat = fullGuiRadioButton.Checked ? "Full" : "Mini";
+            Settings.TestCentric.RecentProjects.CheckFilesExist = checkFilesExistCheckBox.Checked;
+			Settings.TestCentric.LoadLastProject = loadLastProjectCheckBox.Checked;
 		}
 
 		private void recentFilesCountTextBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
@@ -288,7 +286,7 @@ namespace TestCentric.Gui.SettingsPages
 		private void recentFilesCountTextBox_Validated(object sender, System.EventArgs e)
 		{
 			int count = int.Parse( recentFilesCountTextBox.Text );
-			Settings.SaveSetting("Gui.RecentProjects.MaxFiles", count);
+			Settings.TestCentric.RecentProjects.MaxFiles = count;
             if (count == 0)
                 loadLastProjectCheckBox.Checked = false;
 		}
