@@ -1,0 +1,24 @@
+﻿TestCentric Runner for NUnit 0.1 -
+
+General
+
+This is the initial release of the TestCentric Runner for NUnit. This is pre-alpha code we are releasing
+primarily for the purpose of getting feedback. It is not yet recommended for use in production work.
+
+Features
+
+This GUI runner resembles the NUnit V2 GUI, but since it runs NUnit 3 tests the internal implementation
+is entirely new. In addition, features not available or not easily supported in NUnit 3 have been
+removed. Some key differences from the V2 GUI are...
+
+ * Displaying tests as a flat list of fixtures is not supported.
+ * Merging tests in the same namespace across assemblies is not supported.
+ * The GUI no longer understands the layout of NUnit projectx files, which is taken care of by the 
+ NUnit test engine. Consequently, menu items relating to creating, editiong and saving such files 
+ are no longer present.
+ * The ability to open project files, including NUnit and VS projects, is dependent on the presence
+ of the approprate engine extensions, which are not bundled with the GUI.
+
+Issues Resolved
+
+ *
