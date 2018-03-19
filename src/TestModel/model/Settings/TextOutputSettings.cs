@@ -34,14 +34,14 @@ namespace TestCentric.Gui.Model.Settings
 
         public bool WordWrapEnabled
         {
-            get { return GetSetting("WordWrapEnabled", true); }
-            set { SaveSetting("WordWrapEnabled", value); }
+            get { return GetSetting(nameof(WordWrapEnabled), true); }
+            set { SaveSetting(nameof(WordWrapEnabled), value); }
         }
 
         public string Labels
         {
-            get { return GetSetting("Labels", "ON").ToUpper(); }
-            set { SaveSetting("Labels", value); }
+            get { return GetSetting(nameof(Labels), "ON").ToUpper(); }
+            set { SaveSetting(nameof(Labels), value); }
         }
     }
 }

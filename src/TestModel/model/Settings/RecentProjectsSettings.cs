@@ -33,14 +33,14 @@ namespace TestCentric.Gui.Model.Settings
 
         public int MaxFiles
         {
-            get { return GetSetting("MaxFiles", 24); }
-            set { SaveSetting("MaxFiles", value); } // TODO: Handle null
+            get { return GetSetting(nameof(MaxFiles), 24); }
+            set { SaveSetting(nameof(MaxFiles), value); }
         }
 
         public bool CheckFilesExist
         {
-            get { return GetSetting("CheckFilesExist", true); }
-            set { SaveSetting("CheckFIlesExist", value); }
+            get { return GetSetting(nameof(CheckFilesExist), true); }
+            set { SaveSetting(nameof(CheckFilesExist), value); }
         }
     }
 }

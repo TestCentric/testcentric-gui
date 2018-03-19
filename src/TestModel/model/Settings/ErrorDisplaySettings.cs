@@ -34,38 +34,38 @@ namespace TestCentric.Gui.Model.Settings
 
         public int SplitterPosition
         {
-            get { return GetSetting("ErrorsTabSplitterPosition", 0); }
-            set { SaveSetting("ErrorsTabSplitterPosition", value); }
+            get { return GetSetting(nameof(SplitterPosition), 0); }
+            set { SaveSetting(nameof(SplitterPosition), value); }
         }
 
         public bool WordWrapEnabled
         {
-           get { return GetSetting("WordWrapEnabled", true); }
-           set { SaveSetting("WordWrapEnabled", value); }
+           get { return GetSetting(nameof(WordWrapEnabled), true); }
+           set { SaveSetting(nameof(WordWrapEnabled), value); }
         }
 
         public bool SourceCodeDisplay
         {
-            get { return GetSetting("SourceCodeDisplay", false); }
-            set { SaveSetting("SourceCodeDisplay", value); }
+            get { return GetSetting(nameof(SourceCodeDisplay), false); }
+            set { SaveSetting(nameof(SourceCodeDisplay), value); }
         }
 
         public Orientation SplitterOrientation
         {
-            get { return GetSetting("SplitterOrientation", Orientation.Vertical); }
-            set { SaveSetting("SplitterOrientation", value); }
+            get { return GetSetting(nameof(SplitterOrientation), Orientation.Vertical); }
+            set { SaveSetting(nameof(SplitterOrientation), value); }
         }
 
         public float VerticalPosition
         {
-            get { return GetSetting("VerticalPosition", 0.3f); }
-            set { SaveSetting("VerticalPosition", value); }
+            get { return GetSetting(nameof(VerticalPosition), 0.3f); }
+            set { SaveSetting(nameof(VerticalPosition), value); }
         }
 
         public float HorizontalPosition
         {
-            get { return GetSetting("HorizontalPosition", 0.3f); }
-            set { SaveSetting("HorizontalPosition", value); }
+            get { return GetSetting(nameof(HorizontalPosition), 0.3f); }
+            set { SaveSetting(nameof(HorizontalPosition), value); }
         }
     }
 }

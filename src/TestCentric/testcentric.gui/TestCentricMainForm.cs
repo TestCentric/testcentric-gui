@@ -946,10 +946,7 @@ namespace TestCentric.Gui
 
         private void applyFont( Font font )
         {
-            if (_displayFormat == "Mini")
-                UserSettings.TestCentric.Font = Font = font;
-            else
-                UserSettings.TestCentric.Font = Font = font;
+            UserSettings.TestCentric.Font = Font = font;
 
             runCount.Font = font.FontFamily.IsStyleAvailable( FontStyle.Bold )
                 ? new Font( font, FontStyle.Bold )

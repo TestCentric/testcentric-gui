@@ -36,8 +36,6 @@ namespace TestCentric.Gui.Controls
 	{
         const string CHILD_IGNORED_MESSAGE = "One or more child tests were ignored";
 
-        private UserSettings _userSettings;
-
         #region IViewControl Implementation
 
         public void InitializeView(ITestModel model, TestCentricPresenter presenter)
