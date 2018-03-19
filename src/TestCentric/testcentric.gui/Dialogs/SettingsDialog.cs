@@ -21,7 +21,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-//#define TREE_BASED
+#define TREE_BASED
 
 using System;
 using System.Windows.Forms;
@@ -43,7 +43,7 @@ namespace TestCentric.Gui
             TreeBasedSettingsDialog.Display(owner, model,
             new GuiSettingsPage("Gui.General"),
             new TreeSettingsPage("Gui.Tree Display"),
-            //new TextOutputSettingsPage("Gui.Text Output"),
+            new TextOutputSettingsPage("Gui.Text Output"),
             new ProjectEditorSettingsPage("Gui.Project Editor"),
             new TestLoaderSettingsPage("Test Loader.Assembly Isolation"),
             new AssemblyReloadSettingsPage("Test Loader.Assembly Reload"),
