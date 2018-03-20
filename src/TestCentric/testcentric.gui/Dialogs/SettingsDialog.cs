@@ -41,13 +41,13 @@ namespace TestCentric.Gui
 		public static void Display( Form owner, ITestModel model )
 		{
             TreeBasedSettingsDialog.Display(owner, model,
-            new GuiSettingsPage("Gui.General"),
-            new TreeSettingsPage("Gui.Tree Display"),
-            new TextOutputSettingsPage("Gui.Text Output"),
-            new ProjectEditorSettingsPage("Gui.Project Editor"),
-            new TestLoaderSettingsPage("Test Loader.Assembly Isolation"),
-            new AssemblyReloadSettingsPage("Test Loader.Assembly Reload"),
-            new AdvancedLoaderSettingsPage("Test Loader.Advanced"));
+            new GuiSettingsPage("TestCentric.General"),
+            new TreeSettingsPage("TestCentric.Tree Display"),
+            new TextOutputSettingsPage("TestCentric.Text Output"),
+            new ProjectEditorSettingsPage("TestCentric.Project Editor"),
+            new TestLoaderSettingsPage("NUnit Engine.Assembly Isolation"),
+            new AssemblyReloadSettingsPage("NUnit Engine.Assembly Reload"),
+            new AdvancedLoaderSettingsPage("NUnit Engine.Advanced"));
         }
 #else
 		public static void Display( Form owner, ITestModel model )

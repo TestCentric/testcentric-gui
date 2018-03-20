@@ -250,7 +250,7 @@ namespace TestCentric.Gui
 		{
 			string key = e.Node.FullPath;
 			SettingsPage page = SettingsPages[key];
-            //Services.UserSettings.InitialSettingsPage = key;
+            Settings.TestCentric.InitialSettingsPage = key;
 
 			if ( page != null && page != current )
 			{
