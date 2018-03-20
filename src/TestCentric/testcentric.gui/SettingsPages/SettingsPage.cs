@@ -143,7 +143,15 @@ namespace TestCentric.Gui
 
 			if ( !DesignMode )
 			{
-                Settings = new UserSettings((ParentForm as SettingsDialogBase)?.Settings);
+                var dlg = ParentForm as SettingsDialogBase;
+
+                if (dlg == null)
+                    throw new InvalidOperationException("SettingsPage is only designed to be used in a Settings Dialog");
+                if (dlg.Settings == null)
+                    throw new InvalidOperationException("The Settings Dialog was not properly initialized");
+
+                Settings = new UserSettings(dlg.Settings);
+
 				LoadSettings();
 			}
 		}

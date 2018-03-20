@@ -38,56 +38,56 @@ namespace TestCentric.Gui.Model.Settings
 
         public bool ReloadOnChange
         {
-            get { return GetSetting("ReloadOnChange", true); }
-            set { SaveSetting("ReloadOnChange", value); }
+            get { return GetSetting(nameof(ReloadOnChange), true); }
+            set { SaveSetting(nameof(ReloadOnChange), value); }
         }
 
         public bool RerunOnChange
         {
-            get { return GetSetting("RerunOnChange", false); }
-            set { SaveSetting("RerunOnChange", value); }
+            get { return GetSetting(nameof(RerunOnChange), false); }
+            set { SaveSetting(nameof(RerunOnChange), value); }
         }
 
         public bool ReloadOnRun
         {
-            get { return GetSetting("ReloadOnRun", false); }
-            set { SaveSetting("ReloadOnRun", value); }
+            get { return GetSetting(nameof(ReloadOnRun), false); }
+            set { SaveSetting(nameof(ReloadOnRun), value); }
         }
 
         public bool ShadowCopyFiles
         {
-            get { return GetSetting("ShadowCopyFiles", true); }
-            set { SaveSetting("ShadowCopyFiles", value); }
+            get { return GetSetting(nameof(ShadowCopyFiles), true); }
+            set { SaveSetting(nameof(ShadowCopyFiles), value); }
         }
 
         public string ProcessModel
         {
-            get { return GetSetting("ProcessModel", "Multiple"); }
-            set { SaveSetting("ProcessModel", value); }
+            get { return GetSetting(nameof(ProcessModel), "Multiple"); }
+            set { SaveSetting(nameof(ProcessModel), value); }
         }
 
         public string DomainUsage
         {
-            get { return GetSetting("DomainUsage", "Multiple"); }
-            set { SaveSetting("DomainUsage", value); }
+            get { return GetSetting(nameof(DomainUsage), "Multiple"); }
+            set { SaveSetting(nameof(DomainUsage), value); }
         }
 
         public int Agents
         {
-            get { return GetSetting("Agents", 0); }
-            set { SaveSetting("Agents", value); }
+            get { return GetSetting(nameof(Agents), 0); }
+            set { SaveSetting(nameof(Agents), value); }
         }
 
         public bool SetPrincipalPolicy
         {
-            get { return GetSetting("SetPrincipalPolicy", false); }
-            set { SaveSetting("SetPrincipalPolicy", value); }
+            get { return GetSetting(nameof(SetPrincipalPolicy), false); }
+            set { SaveSetting(nameof(SetPrincipalPolicy), value); }
         }
 
         public PrincipalPolicy PrincipalPolicy
         {
-            get { return GetSetting("PrincipalPolicy", PrincipalPolicy.UnauthenticatedPrincipal); }
-            set { SaveSetting("PrincipalPolicy", value); }
+            get { return GetSetting(nameof(PrincipalPolicy), PrincipalPolicy.UnauthenticatedPrincipal); }
+            set { SaveSetting(nameof(PrincipalPolicy), value); }
         }
     }
 }

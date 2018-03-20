@@ -67,58 +67,58 @@ namespace TestCentric.Gui.Model.Settings
 
         public string DisplayFormat
         {
-            get { return GetSetting("DisplayFormat", "Full"); }
-            set { SaveSetting("DisplayFormat", value); }
+            get { return GetSetting(nameof(DisplayFormat), "Full"); }
+            set { SaveSetting(nameof(DisplayFormat), value); }
         }
 
         public bool LoadLastProject
         {
-            get { return GetSetting("LoadLastProject", true); }
-            set { SaveSetting("LoadLastProject", value); }
+            get { return GetSetting(nameof(LoadLastProject), true); }
+            set { SaveSetting(nameof(LoadLastProject), value); }
         }
 
         public int SelectedTab
         {
-            get { return GetSetting("SelectedTab", 0); }
-            set { SaveSetting("SelectedTab", value); }
+            get { return GetSetting(nameof(SelectedTab), 0); }
+            set { SaveSetting(nameof(SelectedTab), value); }
         }
 
         public string InitialSettingsPage
         {
-            get { return (string)GetSetting("Settings.InitialPage"); }
-            set { SaveSetting("Settings.InitialPage", value); } // TODO: Handle null
+            get { return (string)GetSetting(nameof(InitialSettingsPage)); }
+            set { SaveSetting(nameof(InitialSettingsPage), value); }
         }
 
         public bool ClearResultsOnReload
         {
-            get { return GetSetting("ClearResultsOnReload", false); }
-            set { SaveSetting("ClearResultsOnReload", value); }
+            get { return GetSetting(nameof(ClearResultsOnReload), false); }
+            set { SaveSetting(nameof(ClearResultsOnReload), value); }
         }
 
         private static readonly Font DefaultFont = new Font(FontFamily.GenericSansSerif, 8.25f);
         public Font Font
         {
-            get { return GetSetting("Font", DefaultFont); }
-            set { SaveSetting("Font", value); }
+            get { return GetSetting(nameof(Font), DefaultFont); }
+            set { SaveSetting(nameof(Font), value); }
         }
 
         private static readonly Font DefaultFixedFont = new Font(FontFamily.GenericMonospace, 8.0F);
         public Font FixedFont
         {
-            get { return GetSetting("FixedFont", DefaultFixedFont); }
-            set { SaveSetting("FixedFont", value); }
+            get { return GetSetting(nameof(FixedFont), DefaultFixedFont); }
+            set { SaveSetting(nameof(FixedFont), value); }
         }
 
         public string ProjectEditorPath
         {
-            get { return GetSetting("ProjectEditorPath", "nunit-editor.exe"); }
-            set { SaveSetting("ProjectEditorPath", value); } // TODO: Handle null
+            get { return GetSetting(nameof(ProjectEditorPath), "nunit-editor.exe"); }
+            set { SaveSetting(nameof(ProjectEditorPath), value); } // TODO: Handle null
         }
 
         public InternalTraceLevel InternalTraceLevel
         {
-            get { return GetSetting("InternalTraceLevel", InternalTraceLevel.Off); }
-            set { SaveSetting("InternalTraceLevel", value); }
+            get { return GetSetting(nameof(InternalTraceLevel), InternalTraceLevel.Off); }
+            set { SaveSetting(nameof(InternalTraceLevel), value); }
         }
     }
 }

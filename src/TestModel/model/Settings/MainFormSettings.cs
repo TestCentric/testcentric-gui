@@ -33,38 +33,38 @@ namespace TestCentric.Gui.Model.Settings
 
         public int Left
         {
-            get { return GetSetting("Left", 10); }
-            set { SaveSetting("Left", value); }
+            get { return GetSetting(nameof(Left), 10); }
+            set { SaveSetting(nameof(Left), value); }
         }
 
         public int Top
         {
-            get { return GetSetting("Top", 10); }
-            set { SaveSetting("Top", value); }
+            get { return GetSetting(nameof(Top), 10); }
+            set { SaveSetting(nameof(Top), value); }
         }
 
         public int Width
         {
-            get { return GetSetting("Width", 700); }
-            set { SaveSetting("Width", value); }
+            get { return GetSetting(nameof(Width), 700); }
+            set { SaveSetting(nameof(Width), value); }
         }
 
         public int Height
         {
-            get { return GetSetting("Height", 400); }
-            set { SaveSetting("Height", value); }
+            get { return GetSetting(nameof(Height), 400); }
+            set { SaveSetting(nameof(Height), value); }
         }
 
         public bool Maximized
         {
-            get { return GetSetting("Maximized", false); }
-            set { SaveSetting("Maximized", value); }
+            get { return GetSetting(nameof(Maximized), false); }
+            set { SaveSetting(nameof(Maximized), value); }
         }
 
         public int SplitPosition
         {
-            get { return GetSetting("SplitPosition", 0); }
-            set { SaveSetting("SplitPosition", value); }
+            get { return GetSetting(nameof(SplitPosition), 0); }
+            set { SaveSetting(nameof(SplitPosition), value); }
         }
     }
 }

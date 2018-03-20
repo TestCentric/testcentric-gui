@@ -28,33 +28,31 @@ namespace TestCentric.Gui.Model.Settings
 {
     public class TestTreeSettings : SettingsGroup
     {
-        private static readonly Font DefaultFixedFont = new Font(FontFamily.GenericMonospace, 8.0F);
-
         public TestTreeSettings(ISettings settings)
              : base(settings, "Gui.TestTree") { }
 
         public bool SaveVisualState
         {
-            get { return GetSetting("SaveVisualState", true); }
-            set { SaveSetting("SaveVisualState", value); }
+            get { return GetSetting(nameof(SaveVisualState), true); }
+            set { SaveSetting(nameof(SaveVisualState), value); }
         }
 
         public int InitialTreeDisplay
         {
-            get { return GetSetting("InitialTreeDisplay", 0); }
-            set { SaveSetting("InitialTreeDisplay", value); }
+            get { return GetSetting(nameof(InitialTreeDisplay), 0); }
+            set { SaveSetting(nameof(InitialTreeDisplay), value); }
         }
 
         public string AlternateImageSet
         {
-            get { return GetSetting("AlternateImageSet", "Default"); }
-            set { SaveSetting("AlternateImageSet", value); }
+            get { return GetSetting(nameof(AlternateImageSet), "Default"); }
+            set { SaveSetting(nameof(AlternateImageSet), value); }
         }
 
         public bool ShowCheckBoxes
         {
-            get { return GetSetting("ShowCheckBoxes", false); }
-            set { SaveSetting("ShowCheckBoxes", value); }
+            get { return GetSetting(nameof(ShowCheckBoxes), false); }
+            set { SaveSetting(nameof(ShowCheckBoxes), value); }
         }
     }
 }
