@@ -56,8 +56,8 @@ namespace TestCentric.Gui.SettingsPages
         public override void ApplySettings()
         {
             Settings.TestCentric.ProjectEditorPath = useNUnitEditorRadioButton.Checked
-                ? editorPathTextBox.Text
-                : null;
+                ? null
+                : editorPathTextBox.Text;
         }
 
         private void editorPathTextBox_TextChanged(object sender, EventArgs e)
