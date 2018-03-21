@@ -5,11 +5,17 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A65042E1-D8BC-48DD-8DE1-F0991F07EA77}"
 	ProjectSection(SolutionItems) = preProject
+		appveyor.yml = appveyor.yml
+		build.cake = build.cake
+		build.cmd = build.cmd
+		build.ps1 = build.ps1
+		build.sh = build.sh
+		CHANGES.txt = CHANGES.txt
 		LICENSE.txt = LICENSE.txt
 		NOTICES.txt = NOTICES.txt
 		src\nunit.snk = src\nunit.snk
 		README.md = README.md
-		test-centric-gui.sln.licenseheader = test-centric-gui.sln.licenseheader
+		testcentric-gui.sln.licenseheader = testcentric-gui.sln.licenseheader
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GuiException", "GuiException", "{35A92AA3-A1E6-426E-8D96-322F3EBF1C8D}"
@@ -37,6 +43,15 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCentric.Gui.Exe", "src\TestCentric\testcentric.exe\TestCentric.Gui.Exe.csproj", "{AAB186A4-FA3D-404D-AD78-7EB5BB861655}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCentric.Gui.Tests", "src\TestCentric\tests\TestCentric.Gui.Tests.csproj", "{AAD27267-DE1F-4F61-A1FB-D1680A5B8001}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "choco", "choco", "{7A082D44-4669-485E-AB71-5475978EE240}"
+	ProjectSection(SolutionItems) = preProject
+		choco\nunit-agent-x86.exe.ignore = choco\nunit-agent-x86.exe.ignore
+		choco\nunit-agent.exe.ignore = choco\nunit-agent.exe.ignore
+		choco\nunit.choco.addins = choco\nunit.choco.addins
+		choco\testcentric-gui.nuspec = choco\testcentric-gui.nuspec
+		choco\VERIFICATION.txt = choco\VERIFICATION.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -94,6 +109,7 @@ Global
 		{3FF340D5-D3B4-4DF0-BAF1-98B3C00B6148} = {26735BF4-848E-4B3D-BA4D-E1366986F5BD}
 		{AAB186A4-FA3D-404D-AD78-7EB5BB861655} = {26735BF4-848E-4B3D-BA4D-E1366986F5BD}
 		{AAD27267-DE1F-4F61-A1FB-D1680A5B8001} = {26735BF4-848E-4B3D-BA4D-E1366986F5BD}
+		{7A082D44-4669-485E-AB71-5475978EE240} = {A65042E1-D8BC-48DD-8DE1-F0991F07EA77}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = src\ConsoleRunner\nunit-console-exe\nunit-console.exe.csproj
