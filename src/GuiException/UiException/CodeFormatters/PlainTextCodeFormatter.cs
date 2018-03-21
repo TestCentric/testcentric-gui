@@ -70,6 +70,16 @@ namespace NUnit.UiException.CodeFormatters
             posLineStart = 0;
             posChar = 0;
 
+            Console.WriteLine("LineCount: " + text.LineCount);
+
+            int numNewLines = 0;
+            foreach (char c in sourceCode)
+            {
+                if (c == '\n')
+                    numNewLines++;
+            }
+            Console.WriteLine("numNewLines: " + numNewLines);
+
             foreach (char c in sourceCode)
             {
                 if (c == '\n')
