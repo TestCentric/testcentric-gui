@@ -121,7 +121,7 @@ namespace NUnit.UiException
             _lines.Clear();
             _maxLength = 0;
 
-            while ((newIndex = text.IndexOf("\n", textIndex, StringComparison.Ordinal)) > textIndex)
+            while ((newIndex = text.IndexOf("\n", textIndex, StringComparison.Ordinal)) >= textIndex)
             {
                 line = text.Substring(textIndex, newIndex - textIndex).TrimEnd();
                 _maxLength = Math.Max(_maxLength, line.Length);

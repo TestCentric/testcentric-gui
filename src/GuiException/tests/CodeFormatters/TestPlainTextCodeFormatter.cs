@@ -110,5 +110,28 @@ namespace NUnit.UiException.Tests.CodeFormatters
 
             return;
         }
+
+        [TestCase("\n\nStart")]
+        [TestCase("Start\n\nEnd")]
+        [TestCase("End\n\n")]
+        [TestCase("\n\n\nStart")]
+        [TestCase("Start\n\n\nEnd")]
+        [TestCase("End\n\n\n")]
+        public void Format_Lines_MultipleLinuxNewLines(string input)
+        {
+            Assert.DoesNotThrow(() => _formatter.Format(input));
+        }
+
+        [TestCase("\r\n\r\nStart")]
+        [TestCase("Start\r\n\r\nEnd")]
+        [TestCase("End\r\n\r\n")]
+        [TestCase("\r\n\r\n\r\nStart")]
+        [TestCase("Start\r\n\r\n\r\nEnd")]
+        [TestCase("End\r\n\r\n\r\n")]
+
+        public void Format_Lines_MultipleWindowsNewLines(string input)
+        {
+            Assert.DoesNotThrow(() => _formatter.Format(input));
+        }
     }    
 }
