@@ -57,6 +57,10 @@ namespace TestCentric.Gui
 
         public void Load()
         {
+            const int MAX_RECENT_FILES = 24;
+            int maxNumberOfFilesToShow =
+                UserSettings.GetSetting("Gui.RecentProjects.MaxFiles", MAX_RECENT_FILES);
+
             var entries = RecentFiles.Entries;
 
             if (entries.Count == 0)
@@ -65,9 +69,11 @@ namespace TestCentric.Gui
             {
                 Menu.Enabled = true;
                 Menu.MenuItems.Clear();
+                int maxEntriesToShow = Math.Min(entries.Count, maxNumberOfFilesToShow);
                 int index = 1;
-                foreach (string entry in entries)
+                for (int i = 0; i < maxEntriesToShow; i++)
                 {
+                    string entry = entries[i];
                     // The V2 GUI doesn't show non-existent files, but we do
                     MenuItem item = new MenuItem(String.Format("{0} {1}", index++, entry));
                     item.Click += new System.EventHandler(OnRecentFileClick);
