@@ -698,14 +698,14 @@ namespace TestCentric.Gui.Controls
         }
 
         public void ClearCheckedNodes() 
-		{
-			//Accept(new ClearCheckedNodesVisitor());
-		}
+        {
+            Accept(new ClearCheckedNodesVisitor());
+        }
 
-		public void CheckFailedNodes() 
-		{
-			//Accept(new CheckFailedNodesVisitor());
-		}
+        public void CheckFailedNodes()
+        {
+            Accept(new CheckFailedNodesVisitor());
+        }
 
         /// <summary>
         /// Add the result of a test to the tree
@@ -1102,39 +1102,37 @@ namespace TestCentric.Gui.Controls
 
     #region Helper Classes
 
-    #region ClearCheckedNodesVisitor
+        #region ClearCheckedNodesVisitor
 
-    //   internal class ClearCheckedNodesVisitor : TestSuiteTreeNodeVisitor
-    //{
-    //	public override void Visit(TestSuiteTreeNode node)
-    //	{
-    //		node.Checked = false;
-    //	}
-
-    //   }
-
-    #endregion
-
-    #region CheckFailedNodesVisitor
-
-    internal class CheckFailedNodesVisitor : TestSuiteTreeNodeVisitor
-    {
-        public override void Visit(TestSuiteTreeNode node)
+        internal class ClearCheckedNodesVisitor : TestSuiteTreeNodeVisitor
         {
-            if (!node.Test.IsSuite && node.HasResult &&
-                   (node.Result.Outcome == ResultState.Failure ||
-                    node.Result.Outcome == ResultState.Error))
+            public override void Visit(TestSuiteTreeNode node)
             {
-                node.Checked = true;
-                node.EnsureVisible();
-            }
-            else
                 node.Checked = false;
-
+            }
         }
-    }
 
-    #endregion
+        #endregion
+
+        #region CheckFailedNodesVisitor
+
+        internal class CheckFailedNodesVisitor : TestSuiteTreeNodeVisitor
+        {
+            public override void Visit(TestSuiteTreeNode node)
+            {
+                if (!node.Test.IsSuite && node.HasResult &&
+                       (node.Result.Outcome.Equals(ResultState.Failure) ||
+                        node.Result.Outcome.Equals(ResultState.Error)))
+                {
+                    node.Checked = true;
+                    node.EnsureVisible();
+                }
+                else
+                    node.Checked = false;
+            }
+        }
+
+        #endregion
 
     #region FailedTestsFilterVisitor
 
