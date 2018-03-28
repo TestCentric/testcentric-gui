@@ -1120,9 +1120,9 @@ namespace TestCentric.Gui.Controls
         {
             public override void Visit(TestSuiteTreeNode node)
             {
-                if (!node.Test.IsSuite && node.HasResult &&
-                       (node.Result.Outcome.Equals(ResultState.Failure) ||
-                        node.Result.Outcome.Equals(ResultState.Error)))
+                if (!node.Test.IsSuite &&
+                    node.HasResult &&
+                    node.Result.Outcome.Status == TestStatus.Failed)
                 {
                     node.Checked = true;
                     node.EnsureVisible();
