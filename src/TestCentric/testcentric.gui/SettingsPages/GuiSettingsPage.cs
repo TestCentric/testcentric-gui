@@ -45,7 +45,7 @@ namespace TestCentric.Gui.SettingsPages
         private Label label4;
         private System.ComponentModel.IContainer components = null;
 
-        private const int MIN_RECENT_FILES = 0;
+        private const int MIN_RECENT_FILES = 5;
         private const int MAX_RECENT_FILES = 24;
 
 		public GuiSettingsPage(string key) : base(key)
@@ -265,13 +265,13 @@ namespace TestCentric.Gui.SettingsPages
                     if (count < MIN_RECENT_FILES ||
                         count > MAX_RECENT_FILES)
                     {
-                        errmsg = string.Format("Number of files must be from {0} to {1}",
+                        errmsg = string.Format("Number of files must be from {0} to {1}.",
                             MIN_RECENT_FILES, MAX_RECENT_FILES);
                     }
                 }
 				catch
 				{
-					errmsg = "Number of files must be numeric";
+					errmsg = "Number of files must be numeric.";
 				}
 
 				if ( errmsg != null )
