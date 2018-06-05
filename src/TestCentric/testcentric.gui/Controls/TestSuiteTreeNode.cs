@@ -123,7 +123,7 @@ namespace TestCentric.Gui.Controls
 				this.ForeColor = _included ? SystemColors.WindowText : Color.LightBlue;
 			}
 		}
-        private bool _included;
+        private bool _included = true;
 
         public bool ShowFailedAssumptions
         {
