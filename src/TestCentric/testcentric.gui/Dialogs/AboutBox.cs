@@ -143,7 +143,7 @@ namespace TestCentric.Gui
             this.linkLabel1.LinkArea = new System.Windows.Forms.LinkArea(0, 21);
             this.linkLabel1.Location = new System.Drawing.Point(230, 92);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(80, 17);
+            this.linkLabel1.Size = new System.Drawing.Size(62, 17);
             this.linkLabel1.TabIndex = 5;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "TestCentric";
@@ -199,10 +199,10 @@ namespace TestCentric.Gui
             this.linkLabel2.AutoSize = true;
             this.linkLabel2.Location = new System.Drawing.Point(261, 123);
             this.linkLabel2.Name = "linkLabel2";
-            this.linkLabel2.Size = new System.Drawing.Size(115, 13);
+            this.linkLabel2.Size = new System.Drawing.Size(66, 13);
             this.linkLabel2.TabIndex = 15;
             this.linkLabel2.TabStop = true;
-            this.linkLabel2.Text = "GPL Version 3 License";
+            this.linkLabel2.Text = "MIT License";
             this.linkLabel2.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel2_LinkClicked);
             // 
             // label4
@@ -258,7 +258,7 @@ namespace TestCentric.Gui
 
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://opensource.org/licenses/GPL-3.0");
+            System.Diagnostics.Process.Start("https://opensource.org/licenses/MIT");
             linkLabel2.LinkVisited = true;
         }
     }
