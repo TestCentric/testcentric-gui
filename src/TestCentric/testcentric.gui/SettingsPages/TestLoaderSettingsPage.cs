@@ -258,6 +258,8 @@ namespace TestCentric.Gui.SettingsPages
 			bool singleDomain = Settings.Engine.DomainUsage == "Single";
 			multiDomainRadioButton.Checked = !singleDomain;
 			singleDomainRadioButton.Checked = singleDomain;
+
+            multiDomainRadioButton.Enabled = singleDomainRadioButton.Enabled = !multiProcessRadioButton.Checked;
 		}
 
         public override void ApplySettings()
@@ -303,7 +305,8 @@ namespace TestCentric.Gui.SettingsPages
 			{
                 return
                     Settings.Engine.ProcessModel != SelectedProcessModel() ||
-                    Settings.Engine.DomainUsage != SelectedDomainUsage();
+                    Settings.Engine.DomainUsage != SelectedDomainUsage() ||
+                    Settings.Engine.Agents != numberOfAgentsUpDown.Value;
 			}
 		}
 
