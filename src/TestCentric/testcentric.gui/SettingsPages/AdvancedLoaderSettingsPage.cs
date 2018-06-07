@@ -210,7 +210,7 @@ namespace TestCentric.Gui.SettingsPages
 
             principalPolicyCheckBox.Checked = principalPolicyListBox.Enabled =
                 Settings.Engine.SetPrincipalPolicy;
-            principalPolicyListBox.SelectedIndex = (int)Settings.Engine.PrincipalPolicy;
+            principalPolicyListBox.SelectedItem = Settings.Engine.PrincipalPolicy;
     }
 
         public override void ApplySettings()
@@ -220,8 +220,8 @@ namespace TestCentric.Gui.SettingsPages
             Settings.Engine.SetPrincipalPolicy = principalPolicyCheckBox.Checked;
 
             Settings.Engine.PrincipalPolicy = principalPolicyCheckBox.Checked
-                ? (PrincipalPolicy)principalPolicyListBox.SelectedIndex
-                : PrincipalPolicy.UnauthenticatedPrincipal;
+                ? (string)principalPolicyListBox.SelectedItem
+                : "UnauthenticatedPrincipal";
     }
 
     public override bool HasChangesRequiringReload
@@ -230,7 +230,7 @@ namespace TestCentric.Gui.SettingsPages
 			{
                 return disableShadowCopyCheckBox.Checked == Settings.Engine.ShadowCopyFiles // Use == because the checkbox disables
                     || principalPolicyCheckBox.Checked != Settings.Engine.SetPrincipalPolicy
-                    || principalPolicyListBox.SelectedIndex != (int)Settings.Engine.PrincipalPolicy;
+                    || (string)principalPolicyListBox.SelectedItem != Settings.Engine.PrincipalPolicy;
 
 			}
 		}
