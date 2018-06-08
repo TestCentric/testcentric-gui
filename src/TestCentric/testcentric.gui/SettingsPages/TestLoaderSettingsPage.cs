@@ -29,11 +29,11 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.SettingsPages
 {
-	public class TestLoaderSettingsPage : SettingsPage
-	{
-		private System.Windows.Forms.RadioButton singleDomainRadioButton;
-		private System.Windows.Forms.RadioButton multiDomainRadioButton;
-		private System.Windows.Forms.HelpProvider helpProvider1;
+    public class TestLoaderSettingsPage : SettingsPage
+    {
+        private System.Windows.Forms.RadioButton singleDomainRadioButton;
+        private System.Windows.Forms.RadioButton multiDomainRadioButton;
+        private System.Windows.Forms.HelpProvider helpProvider1;
         private Label label3;
         private GroupBox groupBox3;
         private RadioButton multiProcessRadioButton;
@@ -45,36 +45,36 @@ namespace TestCentric.Gui.SettingsPages
         private CheckBox numberOfAgentsCheckBox;
         private System.ComponentModel.IContainer components = null;
 
-		public TestLoaderSettingsPage(string key) : base(key)
-		{
-			// This call is required by the Windows Form Designer.
-			InitializeComponent();
+        public TestLoaderSettingsPage(string key) : base(key)
+        {
+            // This call is required by the Windows Form Designer.
+            InitializeComponent();
 
-			// TODO: Add any initialization after the InitializeComponent call
-		}
+            // TODO: Add any initialization after the InitializeComponent call
+        }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if (components != null) 
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if (components != null) 
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
-		#region Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.singleDomainRadioButton = new System.Windows.Forms.RadioButton();
             this.multiDomainRadioButton = new System.Windows.Forms.RadioButton();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
@@ -226,11 +226,11 @@ namespace TestCentric.Gui.SettingsPages
             this.ResumeLayout(false);
             this.PerformLayout();
 
-		}
-		#endregion
-		
-		public override void LoadSettings()
-		{
+        }
+        #endregion
+        
+        public override void LoadSettings()
+        {
             switch( Settings.Engine.ProcessModel )
             {
                 case "Separate":
@@ -255,12 +255,12 @@ namespace TestCentric.Gui.SettingsPages
             numberOfAgentsCheckBox.Checked = agents > 0;
             numberOfAgentsUpDown.Value = agents;
 
-			bool singleDomain = Settings.Engine.DomainUsage == "Single";
-			multiDomainRadioButton.Checked = !singleDomain;
-			singleDomainRadioButton.Checked = singleDomain;
+            bool singleDomain = Settings.Engine.DomainUsage == "Single";
+            multiDomainRadioButton.Checked = !singleDomain;
+            singleDomainRadioButton.Checked = singleDomain;
 
             multiDomainRadioButton.Enabled = singleDomainRadioButton.Enabled = !multiProcessRadioButton.Checked;
-		}
+        }
 
         public override void ApplySettings()
         {
@@ -294,21 +294,21 @@ namespace TestCentric.Gui.SettingsPages
         }
 
         private void toggleMultiDomain(object sender, System.EventArgs e)
-		{
-			bool multiDomain = multiDomainRadioButton.Checked = ! multiDomainRadioButton.Checked;
-			singleDomainRadioButton.Checked = !multiDomain;
-		}
+        {
+            bool multiDomain = multiDomainRadioButton.Checked = ! multiDomainRadioButton.Checked;
+            singleDomainRadioButton.Checked = !multiDomain;
+        }
 
-		public override bool HasChangesRequiringReload
-		{
-			get 
-			{
+        public override bool HasChangesRequiringReload
+        {
+            get 
+            {
                 return
                     Settings.Engine.ProcessModel != SelectedProcessModel() ||
                     Settings.Engine.DomainUsage != SelectedDomainUsage() ||
                     Settings.Engine.Agents != numberOfAgentsUpDown.Value;
-			}
-		}
+            }
+        }
 
         private string SelectedProcessModel()
         {

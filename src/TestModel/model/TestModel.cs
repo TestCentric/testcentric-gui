@@ -345,9 +345,6 @@ namespace TestCentric.Gui.Model
             // We use shadow copy so that the user may re-compile while the gui is running.
             package.AddSetting(EnginePackageSettings.ShadowCopyFiles, true);
 
-            //// Temp settings for testing
-            //package.AddSetting(EnginePackageSettings.ProcessModel, "Single");
-
             foreach (var entry in PackageSettings)
                 package.AddSetting(entry.Key, entry.Value);
 
