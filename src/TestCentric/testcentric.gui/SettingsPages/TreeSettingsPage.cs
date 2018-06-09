@@ -33,58 +33,58 @@ namespace TestCentric.Gui.SettingsPages
 {
     using Controls;
 
-	public class TreeSettingsPage : SettingsPage
-	{
-		private System.Windows.Forms.GroupBox groupBox1;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.ComboBox initialDisplayComboBox;
-		private System.Windows.Forms.CheckBox clearResultsCheckBox;
-		private System.Windows.Forms.CheckBox saveVisualStateCheckBox;
-		private System.Windows.Forms.CheckBox showCheckBoxesCheckBox;
-		private System.Windows.Forms.HelpProvider helpProvider1;
+    public class TreeSettingsPage : SettingsPage
+    {
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox initialDisplayComboBox;
+        private System.Windows.Forms.CheckBox clearResultsCheckBox;
+        private System.Windows.Forms.CheckBox saveVisualStateCheckBox;
+        private System.Windows.Forms.CheckBox showCheckBoxesCheckBox;
+        private System.Windows.Forms.HelpProvider helpProvider1;
         private Label label6;
         private PictureBox successImage;
         private PictureBox failureImage;
         private PictureBox ignoredImage;
         private PictureBox inconclusiveImage;
         private PictureBox skippedImage;
-		private System.ComponentModel.IContainer components = null;
+        private System.ComponentModel.IContainer components = null;
         private Label label4;
         private ListBox imageSetListBox;
 
         private static string treeImageDir = Path.Combine(Assembly.GetExecutingAssembly().Location, Path.Combine("Images", "Tree"));
 
-		public TreeSettingsPage(string key) : base(key)
-		{
-			// This call is required by the Windows Form Designer.
-			InitializeComponent();
+        public TreeSettingsPage(string key) : base(key)
+        {
+            // This call is required by the Windows Form Designer.
+            InitializeComponent();
 
-			// TODO: Add any initialization after the InitializeComponent call
-		}
+            // TODO: Add any initialization after the InitializeComponent call
+        }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if (components != null) 
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if (components != null) 
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
-		#region Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TreeSettingsPage));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -290,15 +290,15 @@ namespace TestCentric.Gui.SettingsPages
             this.ResumeLayout(false);
             this.PerformLayout();
 
-		}
-		#endregion
+        }
+        #endregion
 
-		public override void LoadSettings()
-		{
-			initialDisplayComboBox.SelectedIndex = Settings.TestCentric.TestTree.InitialTreeDisplay;
-			clearResultsCheckBox.Checked = Settings.TestCentric.ClearResultsOnReload;
-			saveVisualStateCheckBox.Checked = Settings.TestCentric.TestTree.SaveVisualState;
-			showCheckBoxesCheckBox.Checked = Settings.TestCentric.TestTree.ShowCheckBoxes;
+        public override void LoadSettings()
+        {
+            initialDisplayComboBox.SelectedIndex = Settings.TestCentric.TestTree.InitialTreeDisplay;
+            clearResultsCheckBox.Checked = Settings.TestCentric.ClearResultsOnReload;
+            saveVisualStateCheckBox.Checked = Settings.TestCentric.TestTree.SaveVisualState;
+            showCheckBoxesCheckBox.Checked = Settings.TestCentric.TestTree.ShowCheckBoxes;
 
             string[] altDirs = Directory.Exists(treeImageDir)
                 ? Directory.GetDirectories(treeImageDir)
@@ -309,18 +309,18 @@ namespace TestCentric.Gui.SettingsPages
             string imageSet = Settings.TestCentric.TestTree.AlternateImageSet;
             if (imageSetListBox.Items.Contains(imageSet))
                 imageSetListBox.SelectedItem = imageSet;
-		}
+        }
 
-		public override void ApplySettings()
-		{
-			Settings.TestCentric.TestTree.InitialTreeDisplay = initialDisplayComboBox.SelectedIndex;
-			Settings.TestCentric.ClearResultsOnReload = clearResultsCheckBox.Checked;
-			Settings.TestCentric.TestTree.SaveVisualState = saveVisualStateCheckBox.Checked;
-			Settings.TestCentric.TestTree.ShowCheckBoxes = showCheckBoxesCheckBox.Checked;
+        public override void ApplySettings()
+        {
+            Settings.TestCentric.TestTree.InitialTreeDisplay = initialDisplayComboBox.SelectedIndex;
+            Settings.TestCentric.ClearResultsOnReload = clearResultsCheckBox.Checked;
+            Settings.TestCentric.TestTree.SaveVisualState = saveVisualStateCheckBox.Checked;
+            Settings.TestCentric.TestTree.ShowCheckBoxes = showCheckBoxesCheckBox.Checked;
 
             if (imageSetListBox.SelectedIndex >= 0)
                 Settings.TestCentric.TestTree.AlternateImageSet = (string)imageSetListBox.SelectedItem;
-		}
+        }
 
         private void imageSetListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -355,6 +355,6 @@ namespace TestCentric.Gui.SettingsPages
                 }
             }
         }
-	}
+    }
 }
 

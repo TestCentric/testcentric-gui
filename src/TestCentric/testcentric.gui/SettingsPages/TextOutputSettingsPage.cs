@@ -30,9 +30,9 @@ using System.Diagnostics;
 
 namespace TestCentric.Gui.SettingsPages
 {
-	public class TextOutputSettingsPage : SettingsPage
-	{
-		private System.ComponentModel.IContainer components = null;
+    public class TextOutputSettingsPage : SettingsPage
+    {
+        private System.ComponentModel.IContainer components = null;
 
         private System.Windows.Forms.HelpProvider helpProvider1;
         private RadioButton labelsOnRadioButton;
@@ -41,34 +41,34 @@ namespace TestCentric.Gui.SettingsPages
         private RadioButton labelsOffRadioButton;
         private Label label3;
 
-		public TextOutputSettingsPage(string key) : base(key)
-		{
-			// This call is required by the Windows Form Designer.
-			InitializeComponent();
-		}
+        public TextOutputSettingsPage(string key) : base(key)
+        {
+            // This call is required by the Windows Form Designer.
+            InitializeComponent();
+        }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if (components != null) 
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if (components != null) 
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
-		#region Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.label3 = new System.Windows.Forms.Label();
             this.labelsOnRadioButton = new System.Windows.Forms.RadioButton();
@@ -142,12 +142,12 @@ namespace TestCentric.Gui.SettingsPages
             this.ResumeLayout(false);
             this.PerformLayout();
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		public override void LoadSettings()
-		{
+        public override void LoadSettings()
+        {
             var labels = Settings.TestCentric.TextOutput.Labels;
             switch (labels)
             {
@@ -163,10 +163,10 @@ namespace TestCentric.Gui.SettingsPages
                     labelsOffRadioButton.Checked = true;
                     break;
             }
-		}
+        }
 
-		public override void ApplySettings()
-		{
+        public override void ApplySettings()
+        {
             var labels = labelsOffRadioButton.Checked
                 ? "OFF"
                 : labelsBeforeRadioButton.Checked
@@ -174,7 +174,7 @@ namespace TestCentric.Gui.SettingsPages
                     : "ON";
 
             Settings.TestCentric.TextOutput.Labels = labels;
-		}
+        }
     }
 }
 
