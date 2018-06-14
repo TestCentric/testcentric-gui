@@ -337,7 +337,7 @@ namespace TestCentric.Gui.Model
                 package.AddSetting(EnginePackageSettings.MaxAgents, engineSettings.Agents);
 
             if (engineSettings.SetPrincipalPolicy)
-                package.AddSetting(EnginePackageSettings.PrincipalPolicy, engineSettings.PrincipalPolicy.ToString());
+                package.AddSetting(EnginePackageSettings.PrincipalPolicy, engineSettings.PrincipalPolicy);
 
             //if (Options.InternalTraceLevel != null)
             //    package.AddSetting(EnginePackageSettings.InternalTraceLevel, Options.InternalTraceLevel);

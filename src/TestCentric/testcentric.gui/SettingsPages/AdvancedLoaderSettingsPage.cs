@@ -27,13 +27,13 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.SettingsPages
 {
-	public class AdvancedLoaderSettingsPage : SettingsPage
-	{
-		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.GroupBox groupBox3;
+    public class AdvancedLoaderSettingsPage : SettingsPage
+    {
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.CheckBox disableShadowCopyCheckBox;
-		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.HelpProvider helpProvider1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.HelpProvider helpProvider1;
         private CheckBox principalPolicyCheckBox;
         private Label label7;
         private Label label6;
@@ -42,36 +42,36 @@ namespace TestCentric.Gui.SettingsPages
         private Label label1;
         private System.ComponentModel.IContainer components = null;
 
-		public AdvancedLoaderSettingsPage( string key ) : base( key )
-		{
-			// This call is required by the Windows Form Designer.
-			InitializeComponent();
+        public AdvancedLoaderSettingsPage( string key ) : base( key )
+        {
+            // This call is required by the Windows Form Designer.
+            InitializeComponent();
 
-			// TODO: Add any initialization after the InitializeComponent call
-		}
+            // TODO: Add any initialization after the InitializeComponent call
+        }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if (components != null) 
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if (components != null) 
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
-		#region Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdvancedLoaderSettingsPage));
             this.label3 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -201,11 +201,11 @@ namespace TestCentric.Gui.SettingsPages
             this.ResumeLayout(false);
             this.PerformLayout();
 
-		}
-		#endregion
+        }
+        #endregion
 
-		public override void LoadSettings()
-		{
+        public override void LoadSettings()
+        {
             disableShadowCopyCheckBox.Checked = !Settings.Engine.ShadowCopyFiles;
 
             principalPolicyCheckBox.Checked = principalPolicyListBox.Enabled =
@@ -214,31 +214,31 @@ namespace TestCentric.Gui.SettingsPages
     }
 
         public override void ApplySettings()
-		{
-			Settings.Engine.ShadowCopyFiles = !disableShadowCopyCheckBox.Checked;
+        {
+            Settings.Engine.ShadowCopyFiles = !disableShadowCopyCheckBox.Checked;
 
             Settings.Engine.SetPrincipalPolicy = principalPolicyCheckBox.Checked;
 
             Settings.Engine.PrincipalPolicy = principalPolicyCheckBox.Checked
                 ? (string)principalPolicyListBox.SelectedItem
-                : "UnauthenticatedPrincipal";
+                : nameof(PrincipalPolicy.UnauthenticatedPrincipal);
     }
 
     public override bool HasChangesRequiringReload
-		{
-			get
-			{
+        {
+            get
+            {
                 return disableShadowCopyCheckBox.Checked == Settings.Engine.ShadowCopyFiles // Use == because the checkbox disables
                     || principalPolicyCheckBox.Checked != Settings.Engine.SetPrincipalPolicy
                     || (string)principalPolicyListBox.SelectedItem != Settings.Engine.PrincipalPolicy;
 
-			}
-		}
+            }
+        }
 
         private void principalPolicyCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             principalPolicyListBox.Enabled = principalPolicyCheckBox.Checked;
         }
-	}
+    }
 }
 

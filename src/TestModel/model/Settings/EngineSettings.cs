@@ -86,7 +86,7 @@ namespace TestCentric.Gui.Model.Settings
 
         public string PrincipalPolicy
         {
-            get { return GetSetting(nameof(PrincipalPolicy), "UnauthenticatedPrincipal"); }
+            get { return GetSetting(nameof(PrincipalPolicy), nameof(System.Security.Principal.PrincipalPolicy.UnauthenticatedPrincipal)); }
             set { SaveSetting(nameof(PrincipalPolicy), value); }
         }
     }
