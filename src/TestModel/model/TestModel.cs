@@ -325,18 +325,28 @@ namespace TestCentric.Gui.Model
         public TestPackage MakeTestPackage(IList<string> testFiles)
         {
             var package = new TestPackage(testFiles);
+            var engineSettings = Services.UserSettings.Engine;
 
             // We use AddSetting rather than just setting the value because
             // it propagates the setting to all subprojects.
+
+            package.AddSetting(EnginePackageSettings.ProcessModel, engineSettings.ProcessModel);
+
+            // Don't set DomainUsage for Multiple to avoid engine error
+            if (engineSettings.ProcessModel != "Multiple")
+                package.AddSetting(EnginePackageSettings.DomainUsage, engineSettings.DomainUsage);
+            // Don't bother checking Agents unless we are running multiple processes
+            else if (engineSettings.Agents > 0)
+                package.AddSetting(EnginePackageSettings.MaxAgents, engineSettings.Agents);
+
+            if (engineSettings.SetPrincipalPolicy)
+                package.AddSetting(EnginePackageSettings.PrincipalPolicy, engineSettings.PrincipalPolicy);
 
             //if (Options.InternalTraceLevel != null)
             //    package.AddSetting(EnginePackageSettings.InternalTraceLevel, Options.InternalTraceLevel);
 
             // We use shadow copy so that the user may re-compile while the gui is running.
             package.AddSetting(EnginePackageSettings.ShadowCopyFiles, true);
-
-            // Temp settings for testing
-            package.AddSetting(EnginePackageSettings.ProcessModel, "Single");
 
             foreach (var entry in PackageSettings)
                 package.AddSetting(entry.Key, entry.Value);

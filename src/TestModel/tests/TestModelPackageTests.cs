@@ -48,9 +48,10 @@ namespace TestCentric.Gui.Model
             Assert.That(package.SubPackages.Select(p => p.Name), Is.EqualTo(assemblies));
         }
 
-        [TestCase("ProjectModel", "Single")]
-        [TestCase("DomainUsage", "Multiple")]
-        [TestCase("RuntimeFramework", "net-2.0")]
+        [TestCase(EnginePackageSettings.ProcessModel, "Single")]
+        [TestCase(EnginePackageSettings.DomainUsage, "Multiple")]
+        [TestCase(EnginePackageSettings.RuntimeFramework, "net-2.0")]
+        [TestCase(EnginePackageSettings.MaxAgents, 8)]
         public void PackageReflectsPackageSettings(string key , object value)
         {
             _model.PackageSettings[key] = value;
