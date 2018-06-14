@@ -39,7 +39,7 @@ namespace TestCentric.Gui.SettingsPages
 
         public override void LoadSettings()
         {
-            string editorPath = Settings.TestCentric.ProjectEditorPath;
+            string editorPath = Settings.Gui.ProjectEditorPath;
 
             if (editorPath == "nunit-editor.exe")
             {
@@ -55,7 +55,7 @@ namespace TestCentric.Gui.SettingsPages
 
         public override void ApplySettings()
         {
-            Settings.TestCentric.ProjectEditorPath = useNUnitEditorRadioButton.Checked
+            Settings.Gui.ProjectEditorPath = useNUnitEditorRadioButton.Checked
                 ? null
                 : editorPathTextBox.Text;
         }

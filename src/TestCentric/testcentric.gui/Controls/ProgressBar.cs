@@ -377,7 +377,7 @@ namespace TestCentric.Gui.Controls
 
             model.Events.TestReloaded += (TestNodeEventArgs e) =>
             {
-                if (model.Services.UserSettings.TestCentric.ClearResultsOnReload)
+                if (model.Services.UserSettings.Gui.ClearResultsOnReload)
                     Initialize(e.Test.TestCount);
                 else
                     Value = Maximum = e.Test.TestCount;

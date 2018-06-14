@@ -59,7 +59,7 @@
     <Compile Include="Settings\TestTreeSettings.cs" />
     <Compile Include="Settings\TextOutputSettings.cs" />
     <Compile Include="Settings\SettingsGroup.cs" />
-    <Compile Include="Settings\TestCentricSettings.cs" />
+    <Compile Include="Settings\GuiSettings.cs" />
     <Compile Include="Settings\EngineSettings.cs" />
     <Compile Include="Settings\UserSettings.cs" />
     <Compile Include="TestServices.cs" />

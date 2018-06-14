@@ -611,7 +611,7 @@ namespace TestCentric.Gui.Controls
                     this.Select();
                 }
 
-                if ( UserSettings.TestCentric.TestTree.SaveVisualState )
+                if ( UserSettings.Gui.TestTree.SaveVisualState )
                 	RestoreVisualState();
             }
         }
@@ -653,7 +653,7 @@ namespace TestCentric.Gui.Controls
 
             visualState.Restore(this);
 
-            if (result != null && !UserSettings.TestCentric.ClearResultsOnReload)
+            if (result != null && !UserSettings.Gui.ClearResultsOnReload)
                 RestoreResults(result);
         }
 
@@ -798,7 +798,7 @@ namespace TestCentric.Gui.Controls
             {
                 ClosePropertiesDialog();
 
-                if (UserSettings.TestCentric.TestTree.SaveVisualState)
+                if (UserSettings.Gui.TestTree.SaveVisualState)
                     try
                     {
                         new VisualState(this).Save(VisualState.GetVisualStateFileName(Model.TestFiles[0]));
@@ -977,7 +977,7 @@ namespace TestCentric.Gui.Controls
         /// <returns>DisplayStyle to be used</returns>
         private DisplayStyle GetDisplayStyle()
 		{
-			DisplayStyle initialDisplay = (DisplayStyle)UserSettings.TestCentric.TestTree.InitialTreeDisplay;
+			DisplayStyle initialDisplay = (DisplayStyle)UserSettings.Gui.TestTree.InitialTreeDisplay;
 
 			if ( initialDisplay != DisplayStyle.Auto )
 				return initialDisplay;

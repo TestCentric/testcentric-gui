@@ -33,9 +33,9 @@ namespace TestCentric.Gui
     using Model;
     using Model.Settings;
 
-	/// <summary>
-	/// NUnitPresenter does all file opening and closing that
-	/// involves interacting with the user.
+    /// <summary>
+    /// NUnitPresenter does all file opening and closing that
+    /// involves interacting with the user.
     /// 
     /// NOTE: This class originated as the static class
     /// TestLoaderUI and is slowly being converted to a
@@ -50,7 +50,7 @@ namespace TestCentric.Gui
     /// 
     /// 3. The presenter creates dialogs itself, which
     /// limits testability.
-	/// </summary>
+    /// </summary>
     public class TestCentricPresenter
     {
         #region Instance Variables
@@ -99,7 +99,7 @@ namespace TestCentric.Gui
             // the most recent one if options call for it
             if (Options.InputFiles.Count != 0)
                 OpenProject(Options.InputFiles[0]);
-            else if (UserSettings.TestCentric.LoadLastProject && !Options.NoLoad)
+            else if (UserSettings.Gui.LoadLastProject && !Options.NoLoad)
             {
                 foreach (string entry in RecentFiles.Entries)
                 {
@@ -128,16 +128,16 @@ namespace TestCentric.Gui
                 // TODO: Temporary fix to avoid problem when /run is used 
                 // with ReloadOnRun turned on. Refactor TestLoader so
                 // we can just do a run without reload.
-                bool reload = UserSettings.Engine.ReloadOnRun;
+                bool reload = UserSettings.Gui.ReloadOnRun;
 
                 try
                 {
-                    UserSettings.Engine.ReloadOnRun = false;
+                    UserSettings.Gui.ReloadOnRun = false;
                     RunAllTests();
                 }
                 finally
                 {
-                    UserSettings.Engine.ReloadOnRun = reload;
+                    UserSettings.Gui.ReloadOnRun = reload;
                 }
             }
         }

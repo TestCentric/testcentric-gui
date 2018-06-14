@@ -295,10 +295,10 @@ namespace TestCentric.Gui.SettingsPages
 
         public override void LoadSettings()
         {
-            initialDisplayComboBox.SelectedIndex = Settings.TestCentric.TestTree.InitialTreeDisplay;
-            clearResultsCheckBox.Checked = Settings.TestCentric.ClearResultsOnReload;
-            saveVisualStateCheckBox.Checked = Settings.TestCentric.TestTree.SaveVisualState;
-            showCheckBoxesCheckBox.Checked = Settings.TestCentric.TestTree.ShowCheckBoxes;
+            initialDisplayComboBox.SelectedIndex = Settings.Gui.TestTree.InitialTreeDisplay;
+            clearResultsCheckBox.Checked = Settings.Gui.ClearResultsOnReload;
+            saveVisualStateCheckBox.Checked = Settings.Gui.TestTree.SaveVisualState;
+            showCheckBoxesCheckBox.Checked = Settings.Gui.TestTree.ShowCheckBoxes;
 
             string[] altDirs = Directory.Exists(treeImageDir)
                 ? Directory.GetDirectories(treeImageDir)
@@ -306,20 +306,20 @@ namespace TestCentric.Gui.SettingsPages
 
             foreach (string altDir in altDirs)
                 imageSetListBox.Items.Add(Path.GetFileName(altDir));
-            string imageSet = Settings.TestCentric.TestTree.AlternateImageSet;
+            string imageSet = Settings.Gui.TestTree.AlternateImageSet;
             if (imageSetListBox.Items.Contains(imageSet))
                 imageSetListBox.SelectedItem = imageSet;
         }
 
         public override void ApplySettings()
         {
-            Settings.TestCentric.TestTree.InitialTreeDisplay = initialDisplayComboBox.SelectedIndex;
-            Settings.TestCentric.ClearResultsOnReload = clearResultsCheckBox.Checked;
-            Settings.TestCentric.TestTree.SaveVisualState = saveVisualStateCheckBox.Checked;
-            Settings.TestCentric.TestTree.ShowCheckBoxes = showCheckBoxesCheckBox.Checked;
+            Settings.Gui.TestTree.InitialTreeDisplay = initialDisplayComboBox.SelectedIndex;
+            Settings.Gui.ClearResultsOnReload = clearResultsCheckBox.Checked;
+            Settings.Gui.TestTree.SaveVisualState = saveVisualStateCheckBox.Checked;
+            Settings.Gui.TestTree.ShowCheckBoxes = showCheckBoxesCheckBox.Checked;
 
             if (imageSetListBox.SelectedIndex >= 0)
-                Settings.TestCentric.TestTree.AlternateImageSet = (string)imageSetListBox.SelectedItem;
+                Settings.Gui.TestTree.AlternateImageSet = (string)imageSetListBox.SelectedItem;
         }
 
         private void imageSetListBox_SelectedIndexChanged(object sender, EventArgs e)

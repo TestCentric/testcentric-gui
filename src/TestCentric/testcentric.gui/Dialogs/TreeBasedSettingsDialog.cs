@@ -168,7 +168,7 @@ namespace TestCentric.Gui
 
         private void SelectInitialPage()
         {
-            string initialPage = Settings.TestCentric.InitialSettingsPage;
+            string initialPage = Settings.Gui.InitialSettingsPage;
 
             if (initialPage != null)
                 SelectPage(initialPage);
@@ -250,7 +250,7 @@ namespace TestCentric.Gui
 		{
 			string key = e.Node.FullPath;
 			SettingsPage page = SettingsPages[key];
-            Settings.TestCentric.InitialSettingsPage = key;
+            Settings.Gui.InitialSettingsPage = key;
 
 			if ( page != null && page != current )
 			{

@@ -230,7 +230,7 @@ namespace TestCentric.Gui.Model
 
         private void RunTests(TestFilter filter)
         {
-            if (Services.UserSettings.Engine.ReloadOnRun)
+            if (Services.UserSettings.Gui.ReloadOnRun)
                 ReloadTests();
 
             Runner.RunAsync(_events, filter);

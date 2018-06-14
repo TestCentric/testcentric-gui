@@ -30,10 +30,10 @@ namespace TestCentric.Gui.Model.Settings
     /// Settings specific to TestCentric. Because we store settings in the
     /// NUnit 3 settings file, we use our own unique prefix to avoid conflicts.
     /// </summary>
-    public class TestCentricSettings : SettingsGroup
+    public class GuiSettings : SettingsGroup
     {
-        public TestCentricSettings(ISettings settings)
-             : base(settings, "TestCentric") { }
+        public GuiSettings(ISettings settings)
+             : base(settings, "Gui.Options") { }
 
         public TestTreeSettings TestTree
         {
@@ -87,6 +87,24 @@ namespace TestCentric.Gui.Model.Settings
         {
             get { return (string)GetSetting(nameof(InitialSettingsPage)); }
             set { SaveSetting(nameof(InitialSettingsPage), value); }
+        }
+
+        public bool ReloadOnChange
+        {
+            get { return GetSetting(nameof(ReloadOnChange), true); }
+            set { SaveSetting(nameof(ReloadOnChange), value); }
+        }
+
+        public bool RerunOnChange
+        {
+            get { return GetSetting(nameof(RerunOnChange), false); }
+            set { SaveSetting(nameof(RerunOnChange), value); }
+        }
+
+        public bool ReloadOnRun
+        {
+            get { return GetSetting(nameof(ReloadOnRun), false); }
+            set { SaveSetting(nameof(ReloadOnRun), value); }
         }
 
         public bool ClearResultsOnReload

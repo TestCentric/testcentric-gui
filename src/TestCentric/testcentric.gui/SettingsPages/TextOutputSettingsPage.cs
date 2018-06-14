@@ -148,7 +148,7 @@ namespace TestCentric.Gui.SettingsPages
 
         public override void LoadSettings()
         {
-            var labels = Settings.TestCentric.TextOutput.Labels;
+            var labels = Settings.Gui.TextOutput.Labels;
             switch (labels)
             {
                 case "ON":
@@ -173,7 +173,7 @@ namespace TestCentric.Gui.SettingsPages
                     ? "BEFORE"
                     : "ON";
 
-            Settings.TestCentric.TextOutput.Labels = labels;
+            Settings.Gui.TextOutput.Labels = labels;
         }
     }
 }
