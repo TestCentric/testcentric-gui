@@ -25,46 +25,46 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.SettingsPages
 {
-	public class AssemblyReloadSettingsPage : SettingsPage
-	{
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.GroupBox groupBox1;
-		private System.Windows.Forms.CheckBox rerunOnChangeCheckBox;
-		private System.Windows.Forms.CheckBox reloadOnRunCheckBox;
-		private System.Windows.Forms.CheckBox reloadOnChangeCheckBox;
-		private System.Windows.Forms.HelpProvider helpProvider1;
-		private System.ComponentModel.IContainer components = null;
+    public class AssemblyReloadSettingsPage : SettingsPage
+    {
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.CheckBox rerunOnChangeCheckBox;
+        private System.Windows.Forms.CheckBox reloadOnRunCheckBox;
+        private System.Windows.Forms.CheckBox reloadOnChangeCheckBox;
+        private System.Windows.Forms.HelpProvider helpProvider1;
+        private System.ComponentModel.IContainer components = null;
 
-		public AssemblyReloadSettingsPage(string key) : base(key)
-		{
-			// This call is required by the Windows Form Designer.
-			InitializeComponent();
+        public AssemblyReloadSettingsPage(string key) : base(key)
+        {
+            // This call is required by the Windows Form Designer.
+            InitializeComponent();
 
-			// TODO: Add any initialization after the InitializeComponent call
-		}
+            // TODO: Add any initialization after the InitializeComponent call
+        }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if (components != null) 
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if (components != null) 
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
-		#region Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.rerunOnChangeCheckBox = new System.Windows.Forms.CheckBox();
@@ -140,35 +140,35 @@ namespace TestCentric.Gui.SettingsPages
             this.ResumeLayout(false);
             this.PerformLayout();
 
-		}
-		#endregion
+        }
+        #endregion
 
-		public override void LoadSettings()
-		{
-			reloadOnChangeCheckBox.Checked = Settings.Engine.ReloadOnChange;
-			rerunOnChangeCheckBox.Checked = Settings.Engine.RerunOnChange;
-			reloadOnRunCheckBox.Checked = Settings.Engine.ReloadOnRun;
-		}
+        public override void LoadSettings()
+        {
+            reloadOnChangeCheckBox.Checked = Settings.Gui.ReloadOnChange;
+            rerunOnChangeCheckBox.Checked = Settings.Gui.RerunOnChange;
+            reloadOnRunCheckBox.Checked = Settings.Gui.ReloadOnRun;
+        }
 
-		public override void ApplySettings()
-		{
-			Settings.Engine.ReloadOnChange = reloadOnChangeCheckBox.Checked;
-			Settings.Engine.RerunOnChange = rerunOnChangeCheckBox.Checked;
-			Settings.Engine.ReloadOnRun = reloadOnRunCheckBox.Checked;
-		}
+        public override void ApplySettings()
+        {
+            Settings.Gui.ReloadOnChange = reloadOnChangeCheckBox.Checked;
+            Settings.Gui.RerunOnChange = rerunOnChangeCheckBox.Checked;
+            Settings.Gui.ReloadOnRun = reloadOnRunCheckBox.Checked;
+        }
 
 
 
-		private void reloadOnChangeCheckBox_CheckedChanged(object sender, System.EventArgs e)
-		{
-			rerunOnChangeCheckBox.Enabled = reloadOnChangeCheckBox.Checked;
-		}
+        private void reloadOnChangeCheckBox_CheckedChanged(object sender, System.EventArgs e)
+        {
+            rerunOnChangeCheckBox.Enabled = reloadOnChangeCheckBox.Checked;
+        }
 
-		protected override void OnHelpRequested(HelpEventArgs hevent)
-		{
-			System.Diagnostics.Process.Start( "http://nunit.com/?p=optionsDialog&r=2.4.5" );
-		}
+        protected override void OnHelpRequested(HelpEventArgs hevent)
+        {
+            System.Diagnostics.Process.Start( "http://nunit.com/?p=optionsDialog&r=2.4.5" );
+        }
 
-	}
+    }
 }
 

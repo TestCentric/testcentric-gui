@@ -30,9 +30,9 @@ namespace TestCentric.Gui.Model.Settings
         public UserSettings(ISettings settings)
             : base(settings, string.Empty) { }
 
-        public TestCentricSettings TestCentric
+        public GuiSettings Gui
         {
-            get { return new TestCentricSettings(_settings); }
+            get { return new GuiSettings(_settings); }
         }
 
         public EngineSettings Engine

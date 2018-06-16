@@ -31,36 +31,36 @@ namespace TestCentric.Gui
     using Model;
     using SettingsPages;
 
-	/// <summary>
-	/// Static class used to switch between the tree-based and tab-based
+    /// <summary>
+    /// Static class used to switch between the tree-based and tab-based
     /// versions of the actual SettingsDialog.
-	/// </summary>
-	public static class SettingsDialog
-	{
+    /// </summary>
+    public static class SettingsDialog
+    {
 #if TREE_BASED
-		public static void Display( Form owner, ITestModel model )
-		{
+        public static void Display( Form owner, ITestModel model )
+        {
             TreeBasedSettingsDialog.Display(owner, model,
-            new GuiSettingsPage("TestCentric.General"),
-            new TreeSettingsPage("TestCentric.Tree Display"),
-            new TextOutputSettingsPage("TestCentric.Text Output"),
-            new ProjectEditorSettingsPage("TestCentric.Project Editor"),
-            new TestLoaderSettingsPage("NUnit Engine.Assembly Isolation"),
-            new AssemblyReloadSettingsPage("NUnit Engine.Assembly Reload"),
-            new AdvancedLoaderSettingsPage("NUnit Engine.Advanced"));
+            new GuiSettingsPage("Gui.General"),
+            new TreeSettingsPage("Gui.Tree Display"),
+            new AssemblyReloadSettingsPage("Gui.Assembly Reload"),
+            new TextOutputSettingsPage("Gui.Text Output"),
+            new ProjectEditorSettingsPage("Gui.Project Editor"),
+            new TestLoaderSettingsPage("Engine.Assembly Isolation"),
+            new AdvancedLoaderSettingsPage("Engine.Advanced"));
         }
 #else
-		public static void Display( Form owner, ITestModel model )
-		{
-			TabbedSettingsDialog.Display( owner, model,
-				new GuiSettingsPage("General"),
-				new TreeSettingsPage("Tree"),
-				new TextOutputSettingsPage("Text Output"),
+        public static void Display( Form owner, ITestModel model )
+        {
+            TabbedSettingsDialog.Display( owner, model,
+                new GuiSettingsPage("General"),
+                new TreeSettingsPage("Tree"),
+                new TextOutputSettingsPage("Text Output"),
                 new ProjectEditorSettingsPage("Project Editor"),
-				new TestLoaderSettingsPage("Test Load"),
-				new AssemblyReloadSettingsPage("Reload"),
+                new TestLoaderSettingsPage("Test Load"),
+                new AssemblyReloadSettingsPage("Reload"),
                 new AdvancedLoaderSettingsPage("Advanced"));
-		}
+        }
 #endif
-	}
+    }
 }

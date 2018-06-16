@@ -176,12 +176,12 @@ namespace TestCentric.Gui.Controls
         public void InitializeView(ITestModel model, TestCentricPresenter presenter)
         {
             _settings = model.Services.UserSettings;
-            WordWrap = _settings.TestCentric.TextOutput.WordWrapEnabled;
-            Font = _settings.TestCentric.FixedFont;
+            WordWrap = _settings.Gui.TextOutput.WordWrapEnabled;
+            Font = _settings.Gui.FixedFont;
 
             model.Events.RunStarting += (RunStartingEventArgs e) =>
             {
-                _labels = _settings.TestCentric.TextOutput.Labels;
+                _labels = _settings.Gui.TextOutput.Labels;
                 _displayBeforeTest = _labels == "ALL" || _labels == "BEFORE";
                 _displayAfterTest = _labels == "AFTER";
                 _displayBeforeOutput = _displayBeforeTest || _displayAfterTest || _labels == "ON";
@@ -235,7 +235,7 @@ namespace TestCentric.Gui.Controls
 
         private void ApplyFont(Font font)
         {
-            _settings.TestCentric.FixedFont = Font = font;
+            _settings.Gui.FixedFont = Font = font;
         }
 
         private void WriteLabelLine(string label)

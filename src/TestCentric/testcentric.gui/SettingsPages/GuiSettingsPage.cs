@@ -29,16 +29,16 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.SettingsPages
 {
-	public class GuiSettingsPage : SettingsPage
-	{
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.GroupBox groupBox1;
-		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.GroupBox groupBox2;
-		private System.Windows.Forms.CheckBox loadLastProjectCheckBox;
-		private System.Windows.Forms.RadioButton fullGuiRadioButton;
-		private System.Windows.Forms.RadioButton miniGuiRadioButton;
-		private System.Windows.Forms.HelpProvider helpProvider1;
+    public class GuiSettingsPage : SettingsPage
+    {
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.CheckBox loadLastProjectCheckBox;
+        private System.Windows.Forms.RadioButton fullGuiRadioButton;
+        private System.Windows.Forms.RadioButton miniGuiRadioButton;
+        private System.Windows.Forms.HelpProvider helpProvider1;
         private CheckBox checkFilesExistCheckBox;
         private Label label3;
         private TextBox recentFilesCountTextBox;
@@ -48,36 +48,36 @@ namespace TestCentric.Gui.SettingsPages
         private const int MIN_RECENT_FILES = 5;
         private const int MAX_RECENT_FILES = 24;
 
-		public GuiSettingsPage(string key) : base(key)
-		{
-			// This call is required by the Windows Form Designer.
-			InitializeComponent();
+        public GuiSettingsPage(string key) : base(key)
+        {
+            // This call is required by the Windows Form Designer.
+            InitializeComponent();
 
-			// TODO: Add any initialization after the InitializeComponent call
-		}
+            // TODO: Add any initialization after the InitializeComponent call
+        }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if (components != null) 
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if (components != null) 
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
-		#region Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -219,12 +219,12 @@ namespace TestCentric.Gui.SettingsPages
             this.ResumeLayout(false);
             this.PerformLayout();
 
-		}
-		#endregion
+        }
+        #endregion
 
-		public override void LoadSettings()
-		{
-            switch (Settings.TestCentric.DisplayFormat)
+        public override void LoadSettings()
+        {
+            switch (Settings.Gui.DisplayFormat)
             {
                 case "Full":
                     fullGuiRadioButton.Checked = true;
@@ -234,33 +234,33 @@ namespace TestCentric.Gui.SettingsPages
                     break;
             }
 
-            recentFilesCountTextBox.Text = Settings.TestCentric.RecentProjects.MaxFiles.ToString();
-            checkFilesExistCheckBox.Checked = Settings.TestCentric.RecentProjects.CheckFilesExist;
-            loadLastProjectCheckBox.Checked = Settings.TestCentric.LoadLastProject;
+            recentFilesCountTextBox.Text = Settings.Gui.RecentProjects.MaxFiles.ToString();
+            checkFilesExistCheckBox.Checked = Settings.Gui.RecentProjects.CheckFilesExist;
+            loadLastProjectCheckBox.Checked = Settings.Gui.LoadLastProject;
         }
 
-		public override void ApplySettings()
-		{
-			Settings.TestCentric.DisplayFormat = fullGuiRadioButton.Checked ? "Full" : "Mini";
-            Settings.TestCentric.RecentProjects.CheckFilesExist = checkFilesExistCheckBox.Checked;
-			Settings.TestCentric.LoadLastProject = loadLastProjectCheckBox.Checked;
-		}
+        public override void ApplySettings()
+        {
+            Settings.Gui.DisplayFormat = fullGuiRadioButton.Checked ? "Full" : "Mini";
+            Settings.Gui.RecentProjects.CheckFilesExist = checkFilesExistCheckBox.Checked;
+            Settings.Gui.LoadLastProject = loadLastProjectCheckBox.Checked;
+        }
 
-		private void recentFilesCountTextBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-		{
-			if ( recentFilesCountTextBox.Text.Length == 0 )
-			{
-				recentFilesCountTextBox.Text = MAX_RECENT_FILES.ToString();
-				recentFilesCountTextBox.SelectAll();
-				e.Cancel = true;
-			}
-			else
-			{
-				string errmsg = null;
+        private void recentFilesCountTextBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if ( recentFilesCountTextBox.Text.Length == 0 )
+            {
+                recentFilesCountTextBox.Text = MAX_RECENT_FILES.ToString();
+                recentFilesCountTextBox.SelectAll();
+                e.Cancel = true;
+            }
+            else
+            {
+                string errmsg = null;
 
-				try
-				{
-					int count = int.Parse( recentFilesCountTextBox.Text );
+                try
+                {
+                    int count = int.Parse( recentFilesCountTextBox.Text );
 
                     if (count < MIN_RECENT_FILES ||
                         count > MAX_RECENT_FILES)
@@ -269,27 +269,27 @@ namespace TestCentric.Gui.SettingsPages
                             MIN_RECENT_FILES, MAX_RECENT_FILES);
                     }
                 }
-				catch
-				{
-					errmsg = "Number of files must be numeric.";
-				}
+                catch
+                {
+                    errmsg = "Number of files must be numeric.";
+                }
 
-				if ( errmsg != null )
-				{
-					recentFilesCountTextBox.SelectAll();
+                if ( errmsg != null )
+                {
+                    recentFilesCountTextBox.SelectAll();
                     MessageDisplay.Error(errmsg);
-					e.Cancel = true;
-				}
-			}
-		}
+                    e.Cancel = true;
+                }
+            }
+        }
 
-		private void recentFilesCountTextBox_Validated(object sender, System.EventArgs e)
-		{
-			int count = int.Parse( recentFilesCountTextBox.Text );
-			Settings.TestCentric.RecentProjects.MaxFiles = count;
+        private void recentFilesCountTextBox_Validated(object sender, System.EventArgs e)
+        {
+            int count = int.Parse( recentFilesCountTextBox.Text );
+            Settings.Gui.RecentProjects.MaxFiles = count;
             if (count == 0)
                 loadLastProjectCheckBox.Checked = false;
-		}
-	}
+        }
+    }
 }
 

@@ -29,78 +29,78 @@ namespace TestCentric.Gui
 {
     using Model.Settings;
 
-	/// <summary>
-	/// SettingsPage is the base class for all pages used
-	/// in a tabbed or tree-structured SettingsDialog.
-	/// </summary>
-	public class SettingsPage : UserControl
-	{
-		/// <summary> 
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
+    /// <summary>
+    /// SettingsPage is the base class for all pages used
+    /// in a tabbed or tree-structured SettingsDialog.
+    /// </summary>
+    public class SettingsPage : UserControl
+    {
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.Container components = null;
 
-		private string _key;
-		private string _title;
+        private string _key;
+        private string _title;
 
         private MessageDisplay _messageDisplay;
 
-		// Constructor used by the Windows.Forms Designer
-		public SettingsPage()
-		{
-			// This call is required by the Windows.Forms Form Designer.
-			InitializeComponent();
+        // Constructor used by the Windows.Forms Designer
+        public SettingsPage()
+        {
+            // This call is required by the Windows.Forms Form Designer.
+            InitializeComponent();
 
-			// TODO: Add any initialization after the InitializeComponent call
-		}
+            // TODO: Add any initialization after the InitializeComponent call
+        }
 
-		// Constructor we use in creating page for a Tabbed
-		// or TreeBased dialog.
-		public SettingsPage( string key) : this()
-		{
-			_key = key;
-			_title = key;
-			int dot = key.LastIndexOf( '.' );
-			if ( dot >= 0 ) _title = key.Substring(dot+1);
+        // Constructor we use in creating page for a Tabbed
+        // or TreeBased dialog.
+        public SettingsPage( string key) : this()
+        {
+            _key = key;
+            _title = key;
+            int dot = key.LastIndexOf( '.' );
+            if ( dot >= 0 ) _title = key.Substring(dot+1);
             _messageDisplay = new MessageDisplay("NUnit Settings");
-		}
+        }
 
-		/// <summary> 
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
-		#region Properties
+        #region Properties
 
-		public string Key
-		{
-			get { return _key; }
-		}
+        public string Key
+        {
+            get { return _key; }
+        }
 
-		public string Title
-		{
-			get { return _title; }
-		}
+        public string Title
+        {
+            get { return _title; }
+        }
 
-		public bool SettingsLoaded
-		{
-			get { return Settings != null; }
-		}
+        public bool SettingsLoaded
+        {
+            get { return Settings != null; }
+        }
 
-		public virtual bool HasChangesRequiringReload
-		{
-			get { return false; }
-		}
+        public virtual bool HasChangesRequiringReload
+        {
+            get { return false; }
+        }
 
         public IMessageDisplay MessageDisplay
         {
@@ -109,40 +109,40 @@ namespace TestCentric.Gui
 
         protected UserSettings Settings { get; private set; }
 
-		#endregion
+        #endregion
 
-		#region Public Methods
-		public virtual void LoadSettings()
-		{
-		}
+        #region Public Methods
+        public virtual void LoadSettings()
+        {
+        }
 
-		public virtual void ApplySettings()
-		{
-		}
-		#endregion
+        public virtual void ApplySettings()
+        {
+        }
+        #endregion
 
-		#region Component Designer generated code
-		/// <summary> 
-		/// Required method for Designer support - do not modify 
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
-			// 
-			// SettingsPage
-			// 
-			Name = "SettingsPage";
-			Size = new System.Drawing.Size(456, 336);
+        #region Component Designer generated code
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            // 
+            // SettingsPage
+            // 
+            Name = "SettingsPage";
+            Size = new System.Drawing.Size(456, 336);
 
-		}
-		#endregion
+        }
+        #endregion
 
-		protected override void OnLoad(EventArgs e)
-		{
-			base.OnLoad (e);
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad (e);
 
-			if ( !DesignMode )
-			{
+            if ( !DesignMode )
+            {
                 var dlg = ParentForm as SettingsDialogBase;
 
                 if (dlg == null)
@@ -152,8 +152,8 @@ namespace TestCentric.Gui
 
                 Settings = new UserSettings(dlg.Settings);
 
-				LoadSettings();
-			}
-		}
-	}
+                LoadSettings();
+            }
+        }
+    }
 }
