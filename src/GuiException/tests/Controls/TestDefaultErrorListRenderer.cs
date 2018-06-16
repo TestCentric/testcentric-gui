@@ -142,13 +142,13 @@ namespace NUnit.UiException.Tests.Controls
 
             // measure for a non empty list relies on the longest item
             // in that list
-			
-			foreach(ErrorItem item in _filled.Items)
-			{
-				SizeF sz = renderer.MeasureItem(_gr, item);
-				if (sz.Width > maxSize.Width)
-					maxSize = sz;
-			}
+            
+            foreach(ErrorItem item in _filled.Items)
+            {
+                SizeF sz = renderer.MeasureItem(_gr, item);
+                if (sz.Width > maxSize.Width)
+                    maxSize = sz;
+            }
 
             docSize = renderer.GetDocumentSize(_filled.Items, _gr);
             Assert.NotNull(docSize);
