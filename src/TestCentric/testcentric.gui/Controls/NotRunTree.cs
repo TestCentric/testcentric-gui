@@ -29,11 +29,11 @@ namespace TestCentric.Gui.Controls
     using Model;
     using Model.Settings;
 
-	/// <summary>
-	/// Summary description for NotRunTree.
-	/// </summary>
-	public class NotRunTree : TreeView, IViewControl
-	{
+    /// <summary>
+    /// Summary description for NotRunTree.
+    /// </summary>
+    public class NotRunTree : TreeView, IViewControl
+    {
         const string CHILD_IGNORED_MESSAGE = "One or more child tests were ignored";
 
         #region IViewControl Implementation

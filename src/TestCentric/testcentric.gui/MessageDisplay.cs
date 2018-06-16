@@ -27,12 +27,12 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui
 {
-	/// <summary>
-	/// Summary description for MessageDisplay.
-	/// </summary>
-	public class MessageDisplay : IMessageDisplay
-	{
-		private static readonly string DEFAULT_CAPTION = "TestCentric";
+    /// <summary>
+    /// Summary description for MessageDisplay.
+    /// </summary>
+    public class MessageDisplay : IMessageDisplay
+    {
+        private static readonly string DEFAULT_CAPTION = "TestCentric";
 
         private readonly string caption;
 
@@ -62,9 +62,9 @@ namespace TestCentric.Gui
         #region Error
 
         public DialogResult Error( string message )
-		{
+        {
             return Error(message, MessageBoxButtons.OK);
-		}
+        }
 
         public DialogResult Error(string message, MessageBoxButtons buttons)
         {
@@ -110,7 +110,7 @@ namespace TestCentric.Gui
         }
 
         public DialogResult Ask(string message, MessageBoxButtons buttons)
-		{
+        {
             return MessageBox.Show(message, caption, buttons, MessageBoxIcon.Question);
         }
 

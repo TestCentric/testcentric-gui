@@ -220,8 +220,8 @@ namespace TestCentric.Gui
         {
             if (clientWidth != this.ClientSize.Width)
             {
-				if (this._treeNode != null)
-                	this.DisplayProperties();
+                if (this._treeNode != null)
+                    this.DisplayProperties();
                 clientWidth = this.ClientSize.Width;
             }
         }

@@ -32,12 +32,12 @@ namespace TestCentric.Gui.Controls
     using Model;
     using Model.Settings;
 
-	/// <summary>
-	/// TextBoxDisplay is an adapter that allows accessing a 
-	/// System.Windows.Forms.TextBox using the TextDisplay interface.
-	/// </summary>
-	public class TextBoxDisplay : System.Windows.Forms.RichTextBox, IViewControl
-	{
+    /// <summary>
+    /// TextBoxDisplay is an adapter that allows accessing a 
+    /// System.Windows.Forms.TextBox using the TextDisplay interface.
+    /// </summary>
+    public class TextBoxDisplay : System.Windows.Forms.RichTextBox, IViewControl
+    {
         static readonly Font DefaultFixedFont = new Font(FontFamily.GenericMonospace, 8.0F);
 
         static readonly Color WarningColor = Color.Yellow;
@@ -46,12 +46,12 @@ namespace TestCentric.Gui.Controls
         static readonly Color OutputColor = Color.Black;
 
         private MenuItem copyMenuItem;
-		private MenuItem selectAllMenuItem;
-		private MenuItem wordWrapMenuItem;
-		private MenuItem fontMenuItem;
-		private MenuItem increaseFontMenuItem;
-		private MenuItem decreaseFontMenuItem;
-		private MenuItem restoreFontMenuItem;
+        private MenuItem selectAllMenuItem;
+        private MenuItem wordWrapMenuItem;
+        private MenuItem fontMenuItem;
+        private MenuItem increaseFontMenuItem;
+        private MenuItem decreaseFontMenuItem;
+        private MenuItem restoreFontMenuItem;
 
         private UserSettings _settings;
 
@@ -66,75 +66,75 @@ namespace TestCentric.Gui.Controls
         #region Constructor
 
         public TextBoxDisplay()
-		{
-			this.Multiline = true;
-			this.ReadOnly = true;
-			this.WordWrap = false;
+        {
+            this.Multiline = true;
+            this.ReadOnly = true;
+            this.WordWrap = false;
 
-			this.ContextMenu = new ContextMenu();
-			this.copyMenuItem = new MenuItem( "&Copy", new EventHandler( copyMenuItem_Click ) );
-			this.selectAllMenuItem = new MenuItem( "Select &All", new EventHandler( selectAllMenuItem_Click ) );
-			this.wordWrapMenuItem = new MenuItem( "&Word Wrap", new EventHandler( wordWrapMenuItem_Click ) );
-			this.fontMenuItem = new MenuItem( "Font" );
-			this.increaseFontMenuItem = new MenuItem( "Increase", new EventHandler( increaseFontMenuItem_Click ) );
-			this.decreaseFontMenuItem = new MenuItem( "Decrease", new EventHandler( decreaseFontMenuItem_Click ) );
-			this.restoreFontMenuItem = new MenuItem( "Restore", new EventHandler( restoreFontMenuItem_Click ) );
-			this.fontMenuItem.MenuItems.AddRange( new MenuItem[] { increaseFontMenuItem, decreaseFontMenuItem, new MenuItem("-"), restoreFontMenuItem } );
-			this.ContextMenu.MenuItems.AddRange( new MenuItem[] { copyMenuItem, selectAllMenuItem, wordWrapMenuItem, fontMenuItem } );
-			this.ContextMenu.Popup += new EventHandler(ContextMenu_Popup);
-		}
+            this.ContextMenu = new ContextMenu();
+            this.copyMenuItem = new MenuItem( "&Copy", new EventHandler( copyMenuItem_Click ) );
+            this.selectAllMenuItem = new MenuItem( "Select &All", new EventHandler( selectAllMenuItem_Click ) );
+            this.wordWrapMenuItem = new MenuItem( "&Word Wrap", new EventHandler( wordWrapMenuItem_Click ) );
+            this.fontMenuItem = new MenuItem( "Font" );
+            this.increaseFontMenuItem = new MenuItem( "Increase", new EventHandler( increaseFontMenuItem_Click ) );
+            this.decreaseFontMenuItem = new MenuItem( "Decrease", new EventHandler( decreaseFontMenuItem_Click ) );
+            this.restoreFontMenuItem = new MenuItem( "Restore", new EventHandler( restoreFontMenuItem_Click ) );
+            this.fontMenuItem.MenuItems.AddRange( new MenuItem[] { increaseFontMenuItem, decreaseFontMenuItem, new MenuItem("-"), restoreFontMenuItem } );
+            this.ContextMenu.MenuItems.AddRange( new MenuItem[] { copyMenuItem, selectAllMenuItem, wordWrapMenuItem, fontMenuItem } );
+            this.ContextMenu.Popup += new EventHandler(ContextMenu_Popup);
+        }
 
         #endregion
 
         #region Event Handlers
 
         private void copyMenuItem_Click(object sender, EventArgs e)
-		{
-			this.Copy();
-		}
+        {
+            this.Copy();
+        }
 
-		private void selectAllMenuItem_Click(object sender, EventArgs e)
-		{
-			this.SelectAll();
-		}
+        private void selectAllMenuItem_Click(object sender, EventArgs e)
+        {
+            this.SelectAll();
+        }
 
-		private void wordWrapMenuItem_Click(object sender, EventArgs e)
-		{
-			this.WordWrap = this.wordWrapMenuItem.Checked = !this.wordWrapMenuItem.Checked;
-		}
+        private void wordWrapMenuItem_Click(object sender, EventArgs e)
+        {
+            this.WordWrap = this.wordWrapMenuItem.Checked = !this.wordWrapMenuItem.Checked;
+        }
 
-		private void increaseFontMenuItem_Click(object sender, EventArgs e)
-		{
-			ApplyFont( new Font( this.Font.FontFamily, this.Font.SizeInPoints * 1.2f, this.Font.Style ) );
-		}
+        private void increaseFontMenuItem_Click(object sender, EventArgs e)
+        {
+            ApplyFont( new Font( this.Font.FontFamily, this.Font.SizeInPoints * 1.2f, this.Font.Style ) );
+        }
 
-		private void decreaseFontMenuItem_Click(object sender, EventArgs e)
-		{
-			ApplyFont( new Font( this.Font.FontFamily, this.Font.SizeInPoints / 1.2f, this.Font.Style ) );
-		}
+        private void decreaseFontMenuItem_Click(object sender, EventArgs e)
+        {
+            ApplyFont( new Font( this.Font.FontFamily, this.Font.SizeInPoints / 1.2f, this.Font.Style ) );
+        }
 
-		private void restoreFontMenuItem_Click(object sender, EventArgs e)
-		{
-			ApplyFont( new Font( FontFamily.GenericMonospace, 8.0f ) );
-		}
+        private void restoreFontMenuItem_Click(object sender, EventArgs e)
+        {
+            ApplyFont( new Font( FontFamily.GenericMonospace, 8.0f ) );
+        }
 
-		private void ContextMenu_Popup(object sender, EventArgs e)
-		{
-			this.copyMenuItem.Enabled = this.SelectedText != "";
-			this.selectAllMenuItem.Enabled = this.TextLength > 0;
-		}
+        private void ContextMenu_Popup(object sender, EventArgs e)
+        {
+            this.copyMenuItem.Enabled = this.SelectedText != "";
+            this.selectAllMenuItem.Enabled = this.TextLength > 0;
+        }
 
-		protected override void OnFontChanged(EventArgs e)
-		{
-			// Do nothing - this control uses it's own font
-		}
+        protected override void OnFontChanged(EventArgs e)
+        {
+            // Do nothing - this control uses it's own font
+        }
 
         #endregion
 
         #region TextDisplay Members
 
         public void Write( string text, bool bold = false )
-		{
+        {
             if (bold)
             {
                 SelectionStart = TextLength;
@@ -142,11 +142,11 @@ namespace TestCentric.Gui.Controls
                 SelectionFont = new Font(Font, FontStyle.Bold);
             }
 
-			AppendText( text );
+            AppendText( text );
 
             if (bold)
                 SelectionFont = Font;
-		}
+        }
 
         public void Write(string text, Color color)
         {
@@ -160,9 +160,9 @@ namespace TestCentric.Gui.Controls
         }
 
         public void WriteLine( string text, bool bold = false )
-		{
-			Write( text + Environment.NewLine, bold );
-		}
+        {
+            Write( text + Environment.NewLine, bold );
+        }
 
         public void WriteLine( string text, Color color)
         {

@@ -30,37 +30,37 @@ namespace TestCentric.Gui.Controls
     using Model;
 
     /// <summary>
-	/// Type safe TreeNode for use in the TestSuiteTreeView. 
-	/// NOTE: Hides some methods and properties of base class.
-	/// </summary>
-	public class TestSuiteTreeNode : TreeNode
-	{
-		#region Instance variables and constant definitions
+    /// Type safe TreeNode for use in the TestSuiteTreeView. 
+    /// NOTE: Hides some methods and properties of base class.
+    /// </summary>
+    public class TestSuiteTreeNode : TreeNode
+    {
+        #region Instance variables and constant definitions
 
-		/// <summary>
-		/// Image indices for various test states - the values 
-		/// must match the indices of the image list used
-		/// </summary>
-		public const int InitIndex = 0;
-		public const int SkippedIndex = 0; 
-		public const int FailureIndex = 1;
-		public const int SuccessIndex = 2;
-		public const int IgnoredIndex = 3;
+        /// <summary>
+        /// Image indices for various test states - the values 
+        /// must match the indices of the image list used
+        /// </summary>
+        public const int InitIndex = 0;
+        public const int SkippedIndex = 0; 
+        public const int FailureIndex = 1;
+        public const int SuccessIndex = 2;
+        public const int IgnoredIndex = 3;
         public const int WarningIndex = 3;
-	    public const int InconclusiveIndex = 4;
+        public const int InconclusiveIndex = 4;
 
-		#endregion
+        #endregion
 
-		#region Constructors
+        #region Constructors
 
-		/// <summary>
-		/// Construct a TestNode given a test
-		/// </summary>
-		public TestSuiteTreeNode( TestNode test ) : base(test.Name)
-		{
-			Test = test;
-			UpdateImageIndex();
-		}
+        /// <summary>
+        /// Construct a TestNode given a test
+        /// </summary>
+        public TestSuiteTreeNode( TestNode test ) : base(test.Name)
+        {
+            Test = test;
+            UpdateImageIndex();
+        }
 
         /// <summary>
         /// Construct a TestNode given a TestResult
@@ -102,27 +102,27 @@ namespace TestCentric.Gui.Controls
         }
 
         public string TestType
-		{
-			get { return Test.Type; }
-		}
+        {
+            get { return Test.Type; }
+        }
 
-		public string StatusText
-		{
-			get
-			{
+        public string StatusText
+        {
+            get
+            {
                 return HasResult ? Result.Outcome.ToString() : Test.RunState.ToString();
-			}
-		}
+            }
+        }
 
-		public bool Included
-		{
-			get { return _included; }
-			set
-			{ 
-				_included = value;
-				this.ForeColor = _included ? SystemColors.WindowText : Color.LightBlue;
-			}
-		}
+        public bool Included
+        {
+            get { return _included; }
+            set
+            { 
+                _included = value;
+                this.ForeColor = _included ? SystemColors.WindowText : Color.LightBlue;
+            }
+        }
         private bool _included = true;
 
         public bool ShowFailedAssumptions
@@ -161,24 +161,24 @@ namespace TestCentric.Gui.Controls
             }
         }
 
-		#endregion
+        #endregion
 
-		#region Methods
+        #region Methods
 
-		/// <summary>
-		/// UPdate the image index based on the result field
-		/// </summary>
-		public void UpdateImageIndex()
-		{
-			ImageIndex = SelectedImageIndex = CalcImageIndex();
-		}
+        /// <summary>
+        /// UPdate the image index based on the result field
+        /// </summary>
+        public void UpdateImageIndex()
+        {
+            ImageIndex = SelectedImageIndex = CalcImageIndex();
+        }
 
-		/// <summary>
-		/// Clear the result of this node and all its children
-		/// </summary>
-		public void ClearResults()
-		{
-			Result = null;
+        /// <summary>
+        /// Clear the result of this node and all its children
+        /// </summary>
+        public void ClearResults()
+        {
+            Result = null;
 
             foreach (TestSuiteTreeNode node in Nodes)
                 node.ClearResults();
@@ -222,11 +222,11 @@ namespace TestCentric.Gui.Controls
         }
 
         /// <summary>
-		/// Calculate the image index based on the node contents
-		/// </summary>
-		/// <returns>Image index for this node</returns>
-		private int CalcImageIndex()
-		{
+        /// Calculate the image index based on the node contents
+        /// </summary>
+        /// <returns>Image index for this node</returns>
+        private int CalcImageIndex()
+        {
             if (HasResult)
             {
                 switch (Result.Outcome.Status)
@@ -268,20 +268,20 @@ namespace TestCentric.Gui.Controls
         }
 
         internal void Accept(TestSuiteTreeNodeVisitor visitor) 
-		{
-			visitor.Visit(this);
-			foreach (TestSuiteTreeNode node in this.Nodes) 
-			{
-				node.Accept(visitor);
-			}
-		}
+        {
+            visitor.Visit(this);
+            foreach (TestSuiteTreeNode node in this.Nodes) 
+            {
+                node.Accept(visitor);
+            }
+        }
 
-		#endregion
-	}
+        #endregion
+    }
 
-	public abstract class TestSuiteTreeNodeVisitor 
-	{
-		public abstract void Visit(TestSuiteTreeNode node);
-	}
+    public abstract class TestSuiteTreeNodeVisitor 
+    {
+        public abstract void Visit(TestSuiteTreeNode node);
+    }
 }
 

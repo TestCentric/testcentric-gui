@@ -30,68 +30,68 @@ namespace TestCentric.Gui
 {
     using Controls;
 
-	/// <summary>
-	/// The VisualState class holds the latest visual state for a project.
-	/// </summary>
-	[Serializable]
-	public class VisualState
-	{
-		#region Fields
-		[XmlAttribute]
-		public bool ShowCheckBoxes;
+    /// <summary>
+    /// The VisualState class holds the latest visual state for a project.
+    /// </summary>
+    [Serializable]
+    public class VisualState
+    {
+        #region Fields
+        [XmlAttribute]
+        public bool ShowCheckBoxes;
 
-		public string TopNode;
+        public string TopNode;
 
-		public string SelectedNode;
+        public string SelectedNode;
 
-		public string[] SelectedCategories;
+        public string[] SelectedCategories;
 
-		public bool ExcludeCategories;
+        public bool ExcludeCategories;
 
-		[XmlArrayItem("Node")]
-		public List<VisualTreeNode> Nodes;
-		#endregion
+        [XmlArrayItem("Node")]
+        public List<VisualTreeNode> Nodes;
+        #endregion
 
-		#region Static Methods
+        #region Static Methods
 
-		public static string GetVisualStateFileName( string testFileName )
-		{
-			if ( testFileName == null )
-				return "VisualState.xml";
+        public static string GetVisualStateFileName( string testFileName )
+        {
+            if ( testFileName == null )
+                return "VisualState.xml";
 
-			string baseName = testFileName;
-			if ( baseName.EndsWith( ".nunit" ) )
-				baseName = baseName.Substring( 0, baseName.Length - 6 );
-			
-			return baseName + ".VisualState.xml";
-		}
+            string baseName = testFileName;
+            if ( baseName.EndsWith( ".nunit" ) )
+                baseName = baseName.Substring( 0, baseName.Length - 6 );
+            
+            return baseName + ".VisualState.xml";
+        }
 
-		public static VisualState LoadFrom( string fileName )
-		{
-			using ( StreamReader reader = new StreamReader( fileName ) )
-			{
-				return LoadFrom( reader );
-			}
-		}
+        public static VisualState LoadFrom( string fileName )
+        {
+            using ( StreamReader reader = new StreamReader( fileName ) )
+            {
+                return LoadFrom( reader );
+            }
+        }
 
-		public static VisualState LoadFrom( TextReader reader )
-		{
-			XmlSerializer serializer = new XmlSerializer( typeof( VisualState) );
-			return (VisualState)serializer.Deserialize( reader );
-		}
+        public static VisualState LoadFrom( TextReader reader )
+        {
+            XmlSerializer serializer = new XmlSerializer( typeof( VisualState) );
+            return (VisualState)serializer.Deserialize( reader );
+        }
 
-		#endregion
+        #endregion
 
-		#region Constructors
+        #region Constructors
 
-		public VisualState() { }
+        public VisualState() { }
 
-		public VisualState( TestSuiteTreeView treeView )
-		{
-			ShowCheckBoxes = treeView.CheckBoxes;
-			TopNode = ((TestSuiteTreeNode)treeView.TopNode).Test.Id;
-			SelectedNode = ((TestSuiteTreeNode)treeView.SelectedNode).Test.Id;
-			Nodes = new List<VisualTreeNode>();
+        public VisualState( TestSuiteTreeView treeView )
+        {
+            ShowCheckBoxes = treeView.CheckBoxes;
+            TopNode = ((TestSuiteTreeNode)treeView.TopNode).Test.Id;
+            SelectedNode = ((TestSuiteTreeNode)treeView.SelectedNode).Test.Id;
+            Nodes = new List<VisualTreeNode>();
             SelectedCategories = treeView.Model.SelectedCategories;
             ExcludeCategories = treeView.Model.ExcludeSelectedCategories;
 
@@ -112,23 +112,23 @@ namespace TestCentric.Gui
             return node.IsExpanded || node.Checked;
         }
 
-		#endregion
+        #endregion
 
-		#region Instance Methods
+        #region Instance Methods
 
-		public void Save( string fileName )
-		{
-			using ( StreamWriter writer = new StreamWriter( fileName ) )
-			{
-				Save( writer );
-			}
-		}
+        public void Save( string fileName )
+        {
+            using ( StreamWriter writer = new StreamWriter( fileName ) )
+            {
+                Save( writer );
+            }
+        }
 
-		public void Save( TextWriter writer )
-		{
-			XmlSerializer serializer = new XmlSerializer( GetType() );
-			serializer.Serialize( writer, this );
-		}
+        public void Save( TextWriter writer )
+        {
+            XmlSerializer serializer = new XmlSerializer( GetType() );
+            serializer.Serialize( writer, this );
+        }
 
         public void Restore(TestSuiteTreeView treeView)
         {
@@ -166,31 +166,31 @@ namespace TestCentric.Gui
             treeView.Select();
         }
 
-		#endregion
-	}
+        #endregion
+    }
 
-	[Serializable]
-	public class VisualTreeNode
-	{
-		[XmlAttribute]
-		public string Id;
+    [Serializable]
+    public class VisualTreeNode
+    {
+        [XmlAttribute]
+        public string Id;
 
-		[XmlAttribute,System.ComponentModel.DefaultValue(false)]
-		public bool Expanded;
+        [XmlAttribute,System.ComponentModel.DefaultValue(false)]
+        public bool Expanded;
 
-		[XmlAttribute,System.ComponentModel.DefaultValue(false)]
-		public bool Checked;
+        [XmlAttribute,System.ComponentModel.DefaultValue(false)]
+        public bool Checked;
 
-		[XmlArrayItem("Node")]
-		public VisualTreeNode[] Nodes;
+        [XmlArrayItem("Node")]
+        public VisualTreeNode[] Nodes;
 
-		public VisualTreeNode() { }
+        public VisualTreeNode() { }
 
-		public VisualTreeNode( TestSuiteTreeNode treeNode )
-		{
-			Id = treeNode.Test.Id;
-			Expanded = treeNode.IsExpanded;
-			Checked = treeNode.Checked;
-		}
+        public VisualTreeNode( TestSuiteTreeNode treeNode )
+        {
+            Id = treeNode.Test.Id;
+            Expanded = treeNode.IsExpanded;
+            Checked = treeNode.Checked;
+        }
     }
 }

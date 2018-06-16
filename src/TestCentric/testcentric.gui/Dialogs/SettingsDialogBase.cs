@@ -33,24 +33,24 @@ namespace TestCentric.Gui
     using Model;
     using Model.Settings;
 
-	/// <summary>
-	/// Summary description for OptionsDialogBase.
-	/// </summary>
+    /// <summary>
+    /// Summary description for OptionsDialogBase.
+    /// </summary>
     public class SettingsDialogBase : TestCentricFormBase
-	{
+    {
         #region Instance Fields
 
-		protected System.Windows.Forms.Button cancelButton;
-		protected System.Windows.Forms.Button okButton;
+        protected System.Windows.Forms.Button cancelButton;
+        protected System.Windows.Forms.Button okButton;
 
-		private SettingsPageCollection pageList;
+        private SettingsPageCollection pageList;
 
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.Container components = null;
 
-		private bool _reloadProjectOnClose;
+        private bool _reloadProjectOnClose;
 
         #endregion
 
@@ -65,40 +65,40 @@ namespace TestCentric.Gui
 
         public SettingsDialogBase()
         {
-			//
-			// Required for Windows Form Designer support
-			//
-			InitializeComponent();
+            //
+            // Required for Windows Form Designer support
+            //
+            InitializeComponent();
 
-			//
-			// TODO: Add any constructor code after InitializeComponent call
-			//
-			pageList = new SettingsPageCollection( );
-		}
+            //
+            // TODO: Add any constructor code after InitializeComponent call
+            //
+            pageList = new SettingsPageCollection( );
+        }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
-		#endregion
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
+        #endregion
 
-		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Windows Form Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsDialogBase));
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
@@ -142,41 +142,41 @@ namespace TestCentric.Gui
             this.Closed += new System.EventHandler(this.SettingsDialogBase_Closed);
             this.ResumeLayout(false);
 
-		}
-		#endregion
+        }
+        #endregion
 
-		#region Properties
+        #region Properties
 
         public ITestModel Model { get; }
 
         public UserSettings Settings { get; }
 
-		public SettingsPageCollection SettingsPages
-		{
-			get { return pageList; }
-		}
+        public SettingsPageCollection SettingsPages
+        {
+            get { return pageList; }
+        }
 
-		#endregion
+        #endregion
 
-		#region Public Methods
-		public void ApplySettings()
-		{
-			foreach( SettingsPage page in pageList )
-				if ( page.SettingsLoaded )
-					page.ApplySettings();
-		}
-		#endregion
+        #region Public Methods
+        public void ApplySettings()
+        {
+            foreach( SettingsPage page in pageList )
+                if ( page.SettingsLoaded )
+                    page.ApplySettings();
+        }
+        #endregion
 
-		#region Event Handlers
+        #region Event Handlers
 
-		private void SettingsDialogBase_Closed(object sender, System.EventArgs e)
-		{
-			if (_reloadProjectOnClose)
-				Model.ReloadTests();
-		}
+        private void SettingsDialogBase_Closed(object sender, System.EventArgs e)
+        {
+            if (_reloadProjectOnClose)
+                Model.ReloadTests();
+        }
 
-		private void okButton_Click(object sender, System.EventArgs e)
-		{
+        private void okButton_Click(object sender, System.EventArgs e)
+        {
             if (Model.IsPackageLoaded && HasChangesRequiringReload)
             {
                 DialogResult answer = MessageDisplay.Ask(
@@ -188,59 +188,59 @@ namespace TestCentric.Gui
 
             ApplySettings();
 
-			DialogResult = DialogResult.OK;
+            DialogResult = DialogResult.OK;
 
-			Close();
-		}
+            Close();
+        }
 
         #endregion
 
         #region Helper Methods
 
         private bool HasChangesRequiringReload
-		{
-			get
-			{
-				foreach( SettingsPage page in pageList )
-					if ( page.SettingsLoaded && page.HasChangesRequiringReload )
-						return true;
+        {
+            get
+            {
+                foreach( SettingsPage page in pageList )
+                    if ( page.SettingsLoaded && page.HasChangesRequiringReload )
+                        return true;
 
-				return false;
-			}
-		}
+                return false;
+            }
+        }
 
-		#endregion
+        #endregion
 
-		#region Nested SettingsPageCollection Class
-		public class SettingsPageCollection : CollectionBase
-		{
-			public void Add( SettingsPage page )
-			{
-				this.InnerList.Add( page );
-			}
+        #region Nested SettingsPageCollection Class
+        public class SettingsPageCollection : CollectionBase
+        {
+            public void Add( SettingsPage page )
+            {
+                this.InnerList.Add( page );
+            }
 
-			public void AddRange( params SettingsPage[] pages )
-			{
-				this.InnerList.AddRange( pages );
-			}
+            public void AddRange( params SettingsPage[] pages )
+            {
+                this.InnerList.AddRange( pages );
+            }
 
-			public SettingsPage this[int index]
-			{
-				get { return (SettingsPage)InnerList[index]; }
-			}
+            public SettingsPage this[int index]
+            {
+                get { return (SettingsPage)InnerList[index]; }
+            }
 
-			public SettingsPage this[string key]
-			{
-				get
-				{
-					foreach( SettingsPage page in InnerList )
-						if ( page.Key == key )
-							return page;
+            public SettingsPage this[string key]
+            {
+                get
+                {
+                    foreach( SettingsPage page in InnerList )
+                        if ( page.Key == key )
+                            return page;
 
-					return null;
-				}
-			}
-		}
-		#endregion
-	}
+                    return null;
+                }
+            }
+        }
+        #endregion
+    }
 }

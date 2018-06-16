@@ -30,12 +30,12 @@ using System.Reflection;
 
 namespace TestCentric.Gui
 {
-	public class AboutBox : Form
-	{
-		private Button OkButton;
-		private Label versionLabel;
-		private LinkLabel linkLabel1;
-		private Label copyright;
+    public class AboutBox : Form
+    {
+        private Button OkButton;
+        private Label versionLabel;
+        private LinkLabel linkLabel1;
+        private Label copyright;
         private Label label2;
         private PictureBox pictureBox1;
         private Label label1;
@@ -48,18 +48,18 @@ namespace TestCentric.Gui
         /// </summary>
         private Container components = null;
 
-		public AboutBox()
-		{
-			//
-			// Required for Windows Form Designer support
-			//
-			InitializeComponent();
+        public AboutBox()
+        {
+            //
+            // Required for Windows Form Designer support
+            //
+            InitializeComponent();
 
-			//
-			// TODO: Add any constructor code after InitializeComponent call
-			//
-			Assembly executingAssembly = Assembly.GetExecutingAssembly();
-			string versionText = $"Version {executingAssembly.GetName().Version}";
+            //
+            // TODO: Add any constructor code after InitializeComponent call
+            //
+            Assembly executingAssembly = Assembly.GetExecutingAssembly();
+            string versionText = $"Version {executingAssembly.GetName().Version}";
 
             object[] objectAttrs = executingAssembly.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false);
             if (objectAttrs.Length > 0)
@@ -79,31 +79,31 @@ namespace TestCentric.Gui
                 copyrightText = ((AssemblyCopyrightAttribute)objectAttrs[0]).Copyright;
 
             versionLabel.Text = versionText;
-			copyright.Text = copyrightText;
-		}
+            copyright.Text = copyrightText;
+        }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
-		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Windows Form Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutBox));
             this.OkButton = new System.Windows.Forms.Button();
             this.versionLabel = new System.Windows.Forms.Label();
@@ -242,16 +242,16 @@ namespace TestCentric.Gui
             this.ResumeLayout(false);
             this.PerformLayout();
 
-		}
-		#endregion
+        }
+        #endregion
 
-		private void OkButton_Click(object sender, System.EventArgs e)
-		{
-			this.Close();
-		}
+        private void OkButton_Click(object sender, System.EventArgs e)
+        {
+            this.Close();
+        }
 
-		private void linkLabel1_LinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
-		{
+        private void linkLabel1_LinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
+        {
             System.Diagnostics.Process.Start("http://nunitsoftware.com");
             linkLabel1.LinkVisited = true;
         }

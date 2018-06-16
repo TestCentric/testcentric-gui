@@ -29,50 +29,50 @@ namespace TestCentric.Gui.Controls
 {
     using Model;
 
-	public class StatusBar : System.Windows.Forms.StatusBar, IViewControl
-	{
-		private StatusBarPanel statusPanel = new StatusBarPanel();
-		private StatusBarPanel testCountPanel = new StatusBarPanel();
-		private StatusBarPanel testsRunPanel = new StatusBarPanel();
-		private StatusBarPanel errorsPanel = new StatusBarPanel();
-		private StatusBarPanel failuresPanel = new StatusBarPanel();
-		private StatusBarPanel timePanel = new StatusBarPanel();
+    public class StatusBar : System.Windows.Forms.StatusBar, IViewControl
+    {
+        private StatusBarPanel statusPanel = new StatusBarPanel();
+        private StatusBarPanel testCountPanel = new StatusBarPanel();
+        private StatusBarPanel testsRunPanel = new StatusBarPanel();
+        private StatusBarPanel errorsPanel = new StatusBarPanel();
+        private StatusBarPanel failuresPanel = new StatusBarPanel();
+        private StatusBarPanel timePanel = new StatusBarPanel();
 
-		private int testCount = 0;
-		private int testsRun = 0;
-		private int errors = 0;
-		private int failures = 0;
-		private double time = 0.0;
+        private int testCount = 0;
+        private int testsRun = 0;
+        private int errors = 0;
+        private int failures = 0;
+        private double time = 0.0;
 
-		private bool displayProgress = false;
+        private bool displayProgress = false;
 
-		public bool DisplayTestProgress
-		{
-			get { return displayProgress; }
-			set { displayProgress = value; }
-		}
+        public bool DisplayTestProgress
+        {
+            get { return displayProgress; }
+            set { displayProgress = value; }
+        }
 
-		public StatusBar()
-		{
-			Panels.Add( statusPanel );
-			Panels.Add( testCountPanel );
-			Panels.Add( testsRunPanel );
-			Panels.Add( errorsPanel );
-			Panels.Add( failuresPanel );
-			Panels.Add( timePanel );
+        public StatusBar()
+        {
+            Panels.Add( statusPanel );
+            Panels.Add( testCountPanel );
+            Panels.Add( testsRunPanel );
+            Panels.Add( errorsPanel );
+            Panels.Add( failuresPanel );
+            Panels.Add( timePanel );
 
-			statusPanel.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring;
-			statusPanel.BorderStyle = StatusBarPanelBorderStyle.None;
-			statusPanel.Text = "Status";
-			
-			testCountPanel.AutoSize = StatusBarPanelAutoSize.Contents;
-			testsRunPanel.AutoSize = StatusBarPanelAutoSize.Contents;
-			errorsPanel.AutoSize = StatusBarPanelAutoSize.Contents;
-			failuresPanel.AutoSize = StatusBarPanelAutoSize.Contents;
-			timePanel.AutoSize = StatusBarPanelAutoSize.Contents;
+            statusPanel.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring;
+            statusPanel.BorderStyle = StatusBarPanelBorderStyle.None;
+            statusPanel.Text = "Status";
+            
+            testCountPanel.AutoSize = StatusBarPanelAutoSize.Contents;
+            testsRunPanel.AutoSize = StatusBarPanelAutoSize.Contents;
+            errorsPanel.AutoSize = StatusBarPanelAutoSize.Contents;
+            failuresPanel.AutoSize = StatusBarPanelAutoSize.Contents;
+            timePanel.AutoSize = StatusBarPanelAutoSize.Contents;
 
-			ShowPanels = true;
-			InitPanels();
+            ShowPanels = true;
+            InitPanels();
         }
 
         // Kluge to keep VS from generating code that sets the Panels for
@@ -80,82 +80,82 @@ namespace TestCentric.Gui.Controls
         // to avoid this and shouldn't allow the panels to be set except
         // according to specific protocols.
         [System.ComponentModel.DesignerSerializationVisibility( 
-			 System.ComponentModel.DesignerSerializationVisibility.Hidden )]
-		public new System.Windows.Forms.StatusBar.StatusBarPanelCollection Panels
-		{
-			get 
-			{ 
-				return base.Panels;
-			}
-		}
+             System.ComponentModel.DesignerSerializationVisibility.Hidden )]
+        public new System.Windows.Forms.StatusBar.StatusBarPanelCollection Panels
+        {
+            get 
+            { 
+                return base.Panels;
+            }
+        }
 
-	
-		public override string Text
-		{
-			get { return statusPanel.Text; }
-			set { statusPanel.Text = value; }
-		}
+    
+        public override string Text
+        {
+            get { return statusPanel.Text; }
+            set { statusPanel.Text = value; }
+        }
 
-		public void Initialize( int testCount )
-		{
-			Initialize( testCount, testCount > 0 ? "Ready" : "" );
-		}
+        public void Initialize( int testCount )
+        {
+            Initialize( testCount, testCount > 0 ? "Ready" : "" );
+        }
 
-		public void Initialize( int testCount, string text )
-		{
-			this.statusPanel.Text = text;
+        public void Initialize( int testCount, string text )
+        {
+            this.statusPanel.Text = text;
 
-			this.testCount = testCount;
-			this.testsRun = 0;
-			this.errors = 0;
-			this.failures = 0;
-			this.time = 0.0;
+            this.testCount = testCount;
+            this.testsRun = 0;
+            this.errors = 0;
+            this.failures = 0;
+            this.time = 0.0;
 
-			InitPanels();
-		}
+            InitPanels();
+        }
 
-		private void InitPanels()
-		{
-			this.testCountPanel.MinWidth = 50;
-			DisplayTestCount();
+        private void InitPanels()
+        {
+            this.testCountPanel.MinWidth = 50;
+            DisplayTestCount();
 
-			this.testsRunPanel.MinWidth = 50;
-			this.testsRunPanel.Text = "";
+            this.testsRunPanel.MinWidth = 50;
+            this.testsRunPanel.Text = "";
 
-			this.errorsPanel.MinWidth = 50;
-			this.errorsPanel.Text = "";
-			
-			this.failuresPanel.MinWidth = 50;
-			this.failuresPanel.Text = "";
-			
-			this.timePanel.MinWidth = 50;
-			this.timePanel.Text = "";
-		}
+            this.errorsPanel.MinWidth = 50;
+            this.errorsPanel.Text = "";
+            
+            this.failuresPanel.MinWidth = 50;
+            this.failuresPanel.Text = "";
+            
+            this.timePanel.MinWidth = 50;
+            this.timePanel.Text = "";
+        }
 
-		private void DisplayTestCount()
-		{
+        private void DisplayTestCount()
+        {
             testCountPanel.Text = "Test Cases : " + testCount.ToString();
-		}
+        }
 
-		private void DisplayTestsRun()
-		{
+        private void DisplayTestsRun()
+        {
             testsRunPanel.Text = "Tests Run : " + testsRun.ToString();
-		}
+        }
 
-		private void DisplayErrors()
-		{
+        private void DisplayErrors()
+        {
             errorsPanel.Text = "Errors : " + errors.ToString();
-		}
+        }
 
-		private void DisplayFailures()
-		{
+        private void DisplayFailures()
+        {
             failuresPanel.Text = "Failures : " + failures.ToString();
-		}
+        }
 
-		private void DisplayTime()
-		{
+        private void DisplayTime()
+        {
             timePanel.Text = "Time : " + time.ToString();
-		}
+        }
 
         private void DisplayResult(ResultNode result)
         {
