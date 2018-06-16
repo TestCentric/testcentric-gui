@@ -27,25 +27,25 @@ using NUnit.Framework;
 
 namespace TestCentric.Gui.Tests
 {
-	[TestFixture]
-	public class LongRunningOperationDisplayTests
-	{
+    [TestFixture]
+    public class LongRunningOperationDisplayTests
+    {
         [Test]
         public void CreateDisplay()
-		{
-			Form form = new Form();
-			LongRunningOperationDisplay display = new LongRunningOperationDisplay( form, "Loading..." );
-			Assert.That( display.Owner, Is.EqualTo( form ) );
-			Assert.That( GetOperationText( display ), Is.EqualTo( "Loading..." ) );
-		}
+        {
+            Form form = new Form();
+            LongRunningOperationDisplay display = new LongRunningOperationDisplay( form, "Loading..." );
+            Assert.That( display.Owner, Is.EqualTo( form ) );
+            Assert.That( GetOperationText( display ), Is.EqualTo( "Loading..." ) );
+        }
 
-		private string GetOperationText( Control display )
-		{
-			foreach( Control control in display.Controls )
-				if ( control.Name == "operation" )
-					return control.Text;
+        private string GetOperationText( Control display )
+        {
+            foreach( Control control in display.Controls )
+                if ( control.Name == "operation" )
+                    return control.Text;
 
-			return null;
-		}
-	}
+            return null;
+        }
+    }
 }
