@@ -26,66 +26,66 @@ using NUnit.Framework;
 
 namespace TestCentric.Gui.Tests
 {
-	[TestFixture]
-	public class CommandLineTests
-	{
-		[Test]
-		public void NoParametersCount()
-		{
-			var options = new CommandLineOptions(new string[] {});
-			Assert.IsTrue(options.InputFiles.Count == 0);
-		}
+    [TestFixture]
+    public class CommandLineTests
+    {
+        [Test]
+        public void NoParametersCount()
+        {
+            var options = new CommandLineOptions(new string[] {});
+            Assert.IsTrue(options.InputFiles.Count == 0);
+        }
 
-		[Test]
-		public void Help()
-		{
-			var options = new CommandLineOptions(new string[] {"-help"});
-			Assert.IsTrue(options.ShowHelp);
-		}
+        [Test]
+        public void Help()
+        {
+            var options = new CommandLineOptions(new string[] {"-help"});
+            Assert.IsTrue(options.ShowHelp);
+        }
 
-		[Test]
-		public void ShortHelp()
-		{
-			var options = new CommandLineOptions(new string[] {"-h"});
-			Assert.IsTrue(options.ShowHelp);
-		}
+        [Test]
+        public void ShortHelp()
+        {
+            var options = new CommandLineOptions(new string[] {"-h"});
+            Assert.IsTrue(options.ShowHelp);
+        }
 
-		[Test]
-		public void AssemblyName()
-		{
-			string assemblyName = "nunit.tests.dll";
-			var options = new CommandLineOptions(new string[]{ assemblyName });
-			Assert.AreEqual(assemblyName, options.InputFiles[0]);
-		}
+        [Test]
+        public void AssemblyName()
+        {
+            string assemblyName = "nunit.tests.dll";
+            var options = new CommandLineOptions(new string[]{ assemblyName });
+            Assert.AreEqual(assemblyName, options.InputFiles[0]);
+        }
 
-		[Test]
-		public void ValidateSuccessful()
-		{
-			var options = new CommandLineOptions(new string[] { "nunit.tests.dll" });
-			Assert.IsTrue(options.Validate(), "command line should be valid");
-		}
+        [Test]
+        public void ValidateSuccessful()
+        {
+            var options = new CommandLineOptions(new string[] { "nunit.tests.dll" });
+            Assert.IsTrue(options.Validate(), "command line should be valid");
+        }
 
-		[Test]
-		public void InvalidArgs()
-		{
-			var options = new CommandLineOptions(new string[] { "-asembly:nunit.tests.dll" });
-			Assert.IsFalse(options.Validate());
-		}
+        [Test]
+        public void InvalidArgs()
+        {
+            var options = new CommandLineOptions(new string[] { "-asembly:nunit.tests.dll" });
+            Assert.IsFalse(options.Validate());
+        }
 
 
-		[Test] 
-		public void InvalidCommandLineParms()
-		{
-			var parser = new CommandLineOptions(new String[]{"-garbage:TestFixture", "-assembly:Tests.dll"});
-			Assert.IsFalse(parser.Validate());
-		}
+        [Test] 
+        public void InvalidCommandLineParms()
+        {
+            var parser = new CommandLineOptions(new String[]{"-garbage:TestFixture", "-assembly:Tests.dll"});
+            Assert.IsFalse(parser.Validate());
+        }
 
-		//[Test] 
-		//public void NoNameValuePairs()
-		//{
-		//	var parser = new CommandLineOptions(new String[]{"TestFixture", "Tests.dll"});
-		//	Assert.IsFalse(parser.Validate());
-		//}
-	}
+        //[Test] 
+        //public void NoNameValuePairs()
+        //{
+        //	var parser = new CommandLineOptions(new String[]{"TestFixture", "Tests.dll"});
+        //	Assert.IsFalse(parser.Validate());
+        //}
+    }
 }
 

@@ -183,7 +183,7 @@ namespace NUnit.Tests
         public class OneTestCase
         {
             public static readonly int Tests = 1;
-            public static readonly int Suites = 1;		
+            public static readonly int Suites = 1;
 
             [Test]
             public virtual void TestCase() 

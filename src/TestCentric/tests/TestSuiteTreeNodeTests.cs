@@ -153,7 +153,7 @@ namespace TestCentric.Gui.Tests
         //	node1.ClearResults();
 
         //	Assert.AreEqual( TestSuiteTreeNode.InitIndex, node1.ImageIndex );
-        //	Assert.AreEqual( TestSuiteTreeNode.InitIndex, node1.SelectedImageIndex );
+        //  Assert.AreEqual( TestSuiteTreeNode.InitIndex, node1.SelectedImageIndex );
         //	Assert.AreEqual( TestSuiteTreeNode.InitIndex, node2.ImageIndex );
         //	Assert.AreEqual( TestSuiteTreeNode.InitIndex, node2.SelectedImageIndex );
         //}
