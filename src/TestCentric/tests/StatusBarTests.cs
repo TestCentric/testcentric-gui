@@ -31,117 +31,117 @@ namespace TestCentric.Gui.Tests
 {
     using Controls;
 
-	/// <summary>
-	/// Summary description for StatusBarTests.
-	/// </summary>
-	[TestFixture]
-	public class StatusBarTests
-	{
-		private StatusBar statusBar;
-		//private MockTestEventSource mockEvents;
-		private static string testsDll = MockAssembly.AssemblyPath;
-		//TestSuite suite;
-	    int testCount = 0;
+    /// <summary>
+    /// Summary description for StatusBarTests.
+    /// </summary>
+    [TestFixture]
+    public class StatusBarTests
+    {
+        private StatusBar statusBar;
+        //private MockTestEventSource mockEvents;
+        private static string testsDll = MockAssembly.AssemblyPath;
+        //TestSuite suite;
+        int testCount = 0;
 
-		[SetUp]
-		public void Setup()
-		{
-			statusBar = new StatusBar();
+        [SetUp]
+        public void Setup()
+        {
+            statusBar = new StatusBar();
 
-			//TestSuiteBuilder builder = new TestSuiteBuilder();
-			//suite = builder.Build( new TestPackage( testsDll ) );
+            //TestSuiteBuilder builder = new TestSuiteBuilder();
+            //suite = builder.Build( new TestPackage( testsDll ) );
 
-			//mockEvents = new MockTestEventSource( suite );
-		}
+            //mockEvents = new MockTestEventSource( suite );
+        }
 
-		[Test]
-		public void TestConstruction()
-		{
-			Assert.AreEqual( "Status", statusBar.Panels[0].Text );
-			Assert.AreEqual( "Test Cases : 0", statusBar.Panels[1].Text );
-			Assert.AreEqual( "", statusBar.Panels[2].Text );
-			Assert.AreEqual( "", statusBar.Panels[3].Text );
-			Assert.AreEqual( "", statusBar.Panels[4].Text );
-		}
+        [Test]
+        public void TestConstruction()
+        {
+            Assert.AreEqual( "Status", statusBar.Panels[0].Text );
+            Assert.AreEqual( "Test Cases : 0", statusBar.Panels[1].Text );
+            Assert.AreEqual( "", statusBar.Panels[2].Text );
+            Assert.AreEqual( "", statusBar.Panels[3].Text );
+            Assert.AreEqual( "", statusBar.Panels[4].Text );
+        }
 
-		[Test]
-		public void TestInitialization()
-		{
-			statusBar.Initialize( 0 );
-			Assert.AreEqual( "", statusBar.Panels[0].Text );
-			Assert.AreEqual( "Test Cases : 0", statusBar.Panels[1].Text );
-			Assert.AreEqual( "", statusBar.Panels[2].Text );
-			Assert.AreEqual( "", statusBar.Panels[3].Text );
-			Assert.AreEqual( "", statusBar.Panels[4].Text );
+        [Test]
+        public void TestInitialization()
+        {
+            statusBar.Initialize( 0 );
+            Assert.AreEqual( "", statusBar.Panels[0].Text );
+            Assert.AreEqual( "Test Cases : 0", statusBar.Panels[1].Text );
+            Assert.AreEqual( "", statusBar.Panels[2].Text );
+            Assert.AreEqual( "", statusBar.Panels[3].Text );
+            Assert.AreEqual( "", statusBar.Panels[4].Text );
 
-			statusBar.Initialize( 50 );
-			Assert.AreEqual( "Ready", statusBar.Panels[0].Text );
-			Assert.AreEqual( "Test Cases : 50", statusBar.Panels[1].Text );
-			Assert.AreEqual( "", statusBar.Panels[2].Text );
-			Assert.AreEqual( "", statusBar.Panels[3].Text );
-			Assert.AreEqual( "", statusBar.Panels[4].Text );
-		}
+            statusBar.Initialize( 50 );
+            Assert.AreEqual( "Ready", statusBar.Panels[0].Text );
+            Assert.AreEqual( "Test Cases : 50", statusBar.Panels[1].Text );
+            Assert.AreEqual( "", statusBar.Panels[2].Text );
+            Assert.AreEqual( "", statusBar.Panels[3].Text );
+            Assert.AreEqual( "", statusBar.Panels[4].Text );
+        }
 
-		//[Test]
-		//public void TestFinalDisplay()
-		//{
-		//	Assert.AreEqual( false, statusBar.DisplayTestProgress );
-		//	statusBar.Subscribe( mockEvents );
+        //[Test]
+        //public void TestFinalDisplay()
+        //{
+        //	Assert.AreEqual( false, statusBar.DisplayTestProgress );
+        //	statusBar.Subscribe( mockEvents );
 
   //          mockEvents.SimulateTestRun();
   //          Assert.AreEqual( "Completed", statusBar.Panels[0].Text );
-		//	Assert.AreEqual( 
-		//		PanelMessage( "Test Cases", MockAssembly.Tests ), 
-		//		statusBar.Panels[1].Text );
-		//	Assert.AreEqual( 
-		//		PanelMessage( "Tests Run", MockAssembly.TestsRun ),
-		//		statusBar.Panels[2].Text );
-		//	Assert.AreEqual( 
-		//		PanelMessage( "Errors", MockAssembly.Errors ),
-		//		statusBar.Panels[3].Text );
-		//	Assert.AreEqual( 
-		//		PanelMessage( "Failures", MockAssembly.Failures ),
-		//		statusBar.Panels[4].Text );
-		//}
+        //	Assert.AreEqual( 
+        //		PanelMessage( "Test Cases", MockAssembly.Tests ), 
+        //		statusBar.Panels[1].Text );
+        //	Assert.AreEqual( 
+        //		PanelMessage( "Tests Run", MockAssembly.TestsRun ),
+        //		statusBar.Panels[2].Text );
+        //	Assert.AreEqual( 
+        //		PanelMessage( "Errors", MockAssembly.Errors ),
+        //		statusBar.Panels[3].Text );
+        //	Assert.AreEqual( 
+        //		PanelMessage( "Failures", MockAssembly.Failures ),
+        //		statusBar.Panels[4].Text );
+        //}
 
   //      // .NET 1.0 sometimes throws:
   //      // ExternalException : A generic error occurred in GDI+.
   //      [Test, Platform(Exclude = "Net-1.0")]
   //      public void TestProgressDisplay()
-		//{
-		//	statusBar.DisplayTestProgress = true;
-		//	statusBar.Subscribe( mockEvents );
+        //{
+        //	statusBar.DisplayTestProgress = true;
+        //	statusBar.Subscribe( mockEvents );
 
-		//	testCount = 0;
+        //	testCount = 0;
   //          testCount = 0;
-		//	mockEvents.TestFinished += new TestEventHandler( OnTestFinished );
+        //	mockEvents.TestFinished += new TestEventHandler( OnTestFinished );
 
-		//	//mockEvents.SimulateTestRun();
-		//	Assert.AreEqual( "Completed", statusBar.Panels[0].Text );
-		//	Assert.AreEqual( 
-		//		PanelMessage( "Test Cases", MockAssembly.Tests ), 
-		//		statusBar.Panels[1].Text );
-		//	Assert.AreEqual( 
-		//		PanelMessage( "Tests Run", MockAssembly.TestsRun ),
-		//		statusBar.Panels[2].Text );
-		//	Assert.AreEqual( 
-		//		PanelMessage( "Errors", MockAssembly.Errors ),
-		//		statusBar.Panels[3].Text );
-		//	Assert.AreEqual(
-		//		PanelMessage( "Failures", MockAssembly.Failures ),
-		//		statusBar.Panels[4].Text );
-		//}
+        //	//mockEvents.SimulateTestRun();
+        //	Assert.AreEqual( "Completed", statusBar.Panels[0].Text );
+        //	Assert.AreEqual( 
+        //		PanelMessage( "Test Cases", MockAssembly.Tests ), 
+        //		statusBar.Panels[1].Text );
+        //	Assert.AreEqual( 
+        //		PanelMessage( "Tests Run", MockAssembly.TestsRun ),
+        //		statusBar.Panels[2].Text );
+        //	Assert.AreEqual( 
+        //		PanelMessage( "Errors", MockAssembly.Errors ),
+        //		statusBar.Panels[3].Text );
+        //	Assert.AreEqual(
+        //		PanelMessage( "Failures", MockAssembly.Failures ),
+        //		statusBar.Panels[4].Text );
+        //}
 
-		private void OnTestFinished( TestResultEventArgs e )
-		{
-			Assert.AreEqual( 
-				PanelMessage( "Test Cases", MockAssembly.Tests ),
-				statusBar.Panels[1].Text );
+        private void OnTestFinished( TestResultEventArgs e )
+        {
+            Assert.AreEqual( 
+                PanelMessage( "Test Cases", MockAssembly.Tests ),
+                statusBar.Panels[1].Text );
 
             StringAssert.EndsWith( e.Result.Name, statusBar.Panels[0].Text );
             
-		    string runPanel = statusBar.Panels[2].Text;
-		    int testsRun = 0;
+            string runPanel = statusBar.Panels[2].Text;
+            int testsRun = 0;
             if (runPanel != "")
             {
                 StringAssert.StartsWith( "Tests Run : ", runPanel );
@@ -150,12 +150,12 @@ namespace TestCentric.Gui.Tests
 
             Assert.GreaterOrEqual( testsRun, testCount);
             Assert.LessOrEqual( testsRun, testCount + 1);
-		    testCount = testsRun;
-   		}
+            testCount = testsRun;
+        }
 
-		private static string PanelMessage( string text, int count )
-		{
-			return string.Format( "{0} : {1}", text, count );
-		}
-	}
+        private static string PanelMessage( string text, int count )
+        {
+            return string.Format( "{0} : {1}", text, count );
+        }
+    }
 }

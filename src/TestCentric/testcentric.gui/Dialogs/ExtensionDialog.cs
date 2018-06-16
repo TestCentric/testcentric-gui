@@ -34,20 +34,20 @@ namespace TestCentric.Gui
 {
     using Model;
 
-	/// <summary>
-	/// Summary description for AddinDialog.
-	/// </summary>
-	public class ExtensionDialog : System.Windows.Forms.Form
-	{
+    /// <summary>
+    /// Summary description for AddinDialog.
+    /// </summary>
+    public class ExtensionDialog : System.Windows.Forms.Form
+    {
         private IList<IExtensionPoint> _extensionPoints;
         private IList<IExtensionNode> _extensions;
 
-		private System.Windows.Forms.TextBox extensionPointDescriptionTextBox;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Button button1;
-		private System.Windows.Forms.ListView extensionListView;
-		private System.Windows.Forms.ColumnHeader extensionNameColumn;
-		private System.Windows.Forms.ColumnHeader extensionStatusColumn;
+        private System.Windows.Forms.TextBox extensionPointDescriptionTextBox;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ListView extensionListView;
+        private System.Windows.Forms.ColumnHeader extensionNameColumn;
+        private System.Windows.Forms.ColumnHeader extensionStatusColumn;
         private ListBox extensionPointsListBox;
         private GroupBox groupBox1;
         private GroupBox groupBox2;
@@ -63,42 +63,42 @@ namespace TestCentric.Gui
 
         private IExtensionService _extensionService;
 
-		public ExtensionDialog(IExtensionService extensionService)
-		{
+        public ExtensionDialog(IExtensionService extensionService)
+        {
             _extensionService = extensionService;
 
-			//
-			// Required for Windows Form Designer support
-			//
-			InitializeComponent();
+            //
+            // Required for Windows Form Designer support
+            //
+            InitializeComponent();
 
-			//
-			// TODO: Add any constructor code after InitializeComponent call
-			//
-		}
+            //
+            // TODO: Add any constructor code after InitializeComponent call
+            //
+        }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
-		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Windows Form Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ExtensionDialog));
             this.extensionListView = new System.Windows.Forms.ListView();
             this.extensionNameColumn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -264,11 +264,11 @@ namespace TestCentric.Gui
             this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
 
-		}
-		#endregion
+        }
+        #endregion
 
-		private void ExtensionDialog_Load(object sender, System.EventArgs e)
-		{
+        private void ExtensionDialog_Load(object sender, System.EventArgs e)
+        {
             if (!DesignMode)
             {
                 _extensionPoints = new List<IExtensionPoint>(_extensionService.ExtensionPoints);
@@ -280,12 +280,12 @@ namespace TestCentric.Gui
                 if (extensionPointsListBox.Items.Count > 0)
                     extensionPointsListBox.SelectedIndex = 0;
             }
-		}
+        }
 
-		private void button1_Click(object sender, System.EventArgs e)
-		{
-			this.Close();
-		}
+        private void button1_Click(object sender, System.EventArgs e)
+        {
+            this.Close();
+        }
 
         private void extensionPointsListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -313,11 +313,11 @@ namespace TestCentric.Gui
         }
 
         private void extensionListView_SelectedIndexChanged(object sender, System.EventArgs e)
-		{
-			if ( !DesignMode && extensionListView.SelectedIndices.Count > 0 )
-			{
-				int index = extensionListView.SelectedIndices[0];
-				var extension = _extensions[index];
+        {
+            if ( !DesignMode && extensionListView.SelectedIndices.Count > 0 )
+            {
+                int index = extensionListView.SelectedIndices[0];
+                var extension = _extensions[index];
                 extensionDescriptionTextBox.Text = extension.Description ?? "==None Provided==";
                 foreach (string prop in extension.PropertyNames)
                 {
@@ -327,20 +327,20 @@ namespace TestCentric.Gui
 
                     propertiesTextBox.AppendText(sb.ToString() + Environment.NewLine);
                 }
-			}
-		}
+            }
+        }
 
-		private void extensionListView_Resize(object sender, System.EventArgs e)
-		{
-			AutoSizeFirstColumnOfListView();
-		}
+        private void extensionListView_Resize(object sender, System.EventArgs e)
+        {
+            AutoSizeFirstColumnOfListView();
+        }
 
-		private void AutoSizeFirstColumnOfListView()
-		{
-			int width = extensionListView.ClientSize.Width;
-			for( int i = 1; i < extensionListView.Columns.Count; i++ )
-				width -= extensionListView.Columns[i].Width;
-			extensionListView.Columns[0].Width = width;
-		}
+        private void AutoSizeFirstColumnOfListView()
+        {
+            int width = extensionListView.ClientSize.Width;
+            for( int i = 1; i < extensionListView.Columns.Count; i++ )
+                width -= extensionListView.Columns[i].Width;
+            extensionListView.Columns[0].Width = width;
+        }
     }
 }

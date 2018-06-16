@@ -31,20 +31,20 @@ namespace TestCentric.Gui.Controls
     using Model;
     using Model.Settings;
 
-	/// <summary>
-	/// Summary description for ResultTabs.
-	/// </summary>
-	public class ResultTabs : UserControl, IViewControl
-	{
-		static Logger log = InternalTrace.GetLogger(typeof(ResultTabs));
+    /// <summary>
+    /// Summary description for ResultTabs.
+    /// </summary>
+    public class ResultTabs : UserControl, IViewControl
+    {
+        static Logger log = InternalTrace.GetLogger(typeof(ResultTabs));
 
-		private TabControl tabControl;
+        private TabControl tabControl;
 
-		private TabPage errorTab;
-		private ErrorDisplay errorDisplay;
+        private TabPage errorTab;
+        private ErrorDisplay errorDisplay;
 
-		private TabPage notRunTab;
-		private NotRunTree notRunTree;
+        private TabPage notRunTab;
+        private NotRunTree notRunTree;
 
         private TabPage outputTab;
         private TextBoxDisplay textBoxDisplay;
@@ -54,35 +54,35 @@ namespace TestCentric.Gui.Controls
         /// </summary>
         private System.ComponentModel.Container components = null;
 
-		public ResultTabs()
-		{
-			// This call is required by the Windows.Forms Form Designer.
-			InitializeComponent();
-		}
+        public ResultTabs()
+        {
+            // This call is required by the Windows.Forms Form Designer.
+            InitializeComponent();
+        }
 
-		/// <summary> 
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if(components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
-		#region Component Designer generated code
+        #region Component Designer generated code
 
-		/// <summary> 
-		/// Required method for Designer support - do not modify 
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.tabControl = new System.Windows.Forms.TabControl();
             this.errorTab = new System.Windows.Forms.TabPage();
             this.errorDisplay = new ErrorDisplay();
@@ -181,7 +181,7 @@ namespace TestCentric.Gui.Controls
             this.outputTab.ResumeLayout(false);
             this.ResumeLayout(false);
 
-		}
+        }
 
         #endregion
 
@@ -199,32 +199,32 @@ namespace TestCentric.Gui.Controls
         }
 
         private void tabControl_SelectedIndexChanged(object sender, System.EventArgs e)
-		{
+        {
             int index = tabControl.SelectedIndex;
             if (index >= 0 && index < tabControl.TabCount)
                 Settings.Gui.SelectedTab = index;
         }
 
         private void tabControl_DrawItem(object sender, System.Windows.Forms.DrawItemEventArgs e)
-		{
-			bool selected = e.Index == tabControl.SelectedIndex;
+        {
+            bool selected = e.Index == tabControl.SelectedIndex;
 
-			Font font = selected ? new Font( e.Font, FontStyle.Bold ) : e.Font;
-			Brush backBrush = new SolidBrush( selected ? SystemColors.Control : SystemColors.Window );
-			Brush foreBrush = new SolidBrush( SystemColors.ControlText );
+            Font font = selected ? new Font( e.Font, FontStyle.Bold ) : e.Font;
+            Brush backBrush = new SolidBrush( selected ? SystemColors.Control : SystemColors.Window );
+            Brush foreBrush = new SolidBrush( SystemColors.ControlText );
 
-			e.Graphics.FillRectangle( backBrush, e.Bounds );
-			Rectangle r = e.Bounds;
-			r.Y += 3; r.Height -= 3;
-			StringFormat sf = new StringFormat();
-			sf.Alignment = StringAlignment.Center;
-			e.Graphics.DrawString( tabControl.TabPages[e.Index].Text, font, foreBrush, r, sf );
+            e.Graphics.FillRectangle( backBrush, e.Bounds );
+            Rectangle r = e.Bounds;
+            r.Y += 3; r.Height -= 3;
+            StringFormat sf = new StringFormat();
+            sf.Alignment = StringAlignment.Center;
+            e.Graphics.DrawString( tabControl.TabPages[e.Index].Text, font, foreBrush, r, sf );
 
-			foreBrush.Dispose();
-			backBrush.Dispose();
-			if ( selected )
-				font.Dispose();
-		}
+            foreBrush.Dispose();
+            backBrush.Dispose();
+            if ( selected )
+                font.Dispose();
+        }
 
         protected override void OnFontChanged(EventArgs e)
         {
@@ -264,5 +264,5 @@ namespace TestCentric.Gui.Controls
         }
 
         #endregion
-	}
+    }
 }

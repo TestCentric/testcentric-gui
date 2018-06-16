@@ -30,25 +30,25 @@ namespace TestCentric.Gui.Tests
 {
     using Controls;
 
-	/// <summary>
-	/// Summary description for TestSuiteTreeNodeTests.
-	/// </summary>
-	[TestFixture]
-	public class TestSuiteTreeNodeTests
-	{
-		//TestSuite testSuite;
-		//Test testFixture;
-		//Test testCase;
+    /// <summary>
+    /// Summary description for TestSuiteTreeNodeTests.
+    /// </summary>
+    [TestFixture]
+    public class TestSuiteTreeNodeTests
+    {
+        //TestSuite testSuite;
+        //Test testFixture;
+        //Test testCase;
 
-		[SetUp]
-		public void SetUp()
-		{
-			//testSuite = new TestSuite("MyTestSuite");
-			//testFixture = TestFixtureBuilder.BuildFrom( typeof( MockTestFixture ) );
-			//testSuite.Add( testFixture );
+        [SetUp]
+        public void SetUp()
+        {
+            //testSuite = new TestSuite("MyTestSuite");
+            //testFixture = TestFixtureBuilder.BuildFrom( typeof( MockTestFixture ) );
+            //testSuite.Add( testFixture );
 
-			//testCase = TestFinder.Find("MockTest1", testFixture, false);
-		}
+            //testCase = TestFinder.Find("MockTest1", testFixture, false);
+        }
 
         [Test]
         public void CanConstructFromAssembly()
@@ -66,8 +66,8 @@ namespace TestCentric.Gui.Tests
             var testFixture = new TestNode("<test-suite id='123' type='TestFixture' name='SomeFixture' fullname='/A/B/C/mytest.dll' testcasecount='42' runstate='Runnable'/>");
             TestSuiteTreeNode node = new TestSuiteTreeNode(testFixture);
 
-			Assert.AreEqual( "SomeFixture", node.Text );
-			Assert.AreEqual( "TestFixture", node.TestType );
+            Assert.AreEqual( "SomeFixture", node.Text );
+            Assert.AreEqual( "TestFixture", node.TestType );
         }
 
         [Test]
@@ -76,9 +76,9 @@ namespace TestCentric.Gui.Tests
             var testCase = new TestNode("<test-case id='123' name='SomeTest' fullname='A.B.C.SomeTest' runstate='Ignored'/>");
             TestSuiteTreeNode node = new TestSuiteTreeNode( testCase );
 
-			Assert.AreEqual( "SomeTest", node.Text );
-			Assert.AreEqual( "TestCase", node.TestType );
-		}
+            Assert.AreEqual( "SomeTest", node.Text );
+            Assert.AreEqual( "TestCase", node.TestType );
+        }
 
         [TestCase("Unknown", TestSuiteTreeNode.InitIndex)]
         [TestCase("Ignored", TestSuiteTreeNode.IgnoredIndex)]
@@ -120,7 +120,7 @@ namespace TestCentric.Gui.Tests
         [TestCase("Ignored", TestSuiteTreeNode.IgnoredIndex)]
         [TestCase("NotRunnable", TestSuiteTreeNode.FailureIndex)]
         public void WhenResultIsCleared_IndexReflectsRunState(string runState, int expectedIndex)
-		{
+        {
             var result = new ResultNode($"<test-case id='123' name='SomeTest' fullname='A.B.C.SomeTest' runstate='{runState}' result='Failed'/>");
             TestSuiteTreeNode node = new TestSuiteTreeNode( result );
             Assert.AreEqual(TestSuiteTreeNode.FailureIndex, node.ImageIndex);
@@ -153,7 +153,7 @@ namespace TestCentric.Gui.Tests
         //	node1.ClearResults();
 
         //	Assert.AreEqual( TestSuiteTreeNode.InitIndex, node1.ImageIndex );
-        //	Assert.AreEqual( TestSuiteTreeNode.InitIndex, node1.SelectedImageIndex );
+        //  Assert.AreEqual( TestSuiteTreeNode.InitIndex, node1.SelectedImageIndex );
         //	Assert.AreEqual( TestSuiteTreeNode.InitIndex, node2.ImageIndex );
         //	Assert.AreEqual( TestSuiteTreeNode.InitIndex, node2.SelectedImageIndex );
         //}

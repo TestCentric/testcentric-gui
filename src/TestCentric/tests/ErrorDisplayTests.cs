@@ -30,33 +30,33 @@ namespace TestCentric.Gui.Tests
 {
     using Controls;
 
-	[TestFixture]
-	public class ErrorDisplayTests : ControlTester
-	{
-		[OneTimeSetUp]
-		public void CreateForm()
-		{
-			this.Control = new ErrorDisplay();
-		}
+    [TestFixture]
+    public class ErrorDisplayTests : ControlTester
+    {
+        [OneTimeSetUp]
+        public void CreateForm()
+        {
+            this.Control = new ErrorDisplay();
+        }
 
-		[OneTimeTearDown]
-		public void CloseForm()
-		{
-			this.Control.Dispose();
-		}
+        [OneTimeTearDown]
+        public void CloseForm()
+        {
+            this.Control.Dispose();
+        }
 
-		[Test]
-		public void ControlsExist()
-		{
-			AssertControlExists( "detailList", typeof( ListBox ) );
-			AssertControlExists( "tabSplitter", typeof( Splitter ) );
-			AssertControlExists( "errorBrowser", typeof( NUnit.UiException.Controls.ErrorBrowser ) );
-		}
+        [Test]
+        public void ControlsExist()
+        {
+            AssertControlExists( "detailList", typeof( ListBox ) );
+            AssertControlExists( "tabSplitter", typeof( Splitter ) );
+            AssertControlExists( "errorBrowser", typeof( NUnit.UiException.Controls.ErrorBrowser ) );
+        }
 
-		[Test]
-		public void ControlsArePositionedCorrectly()
-		{
-			AssertControlsAreStackedVertically( "detailList", "tabSplitter", "errorBrowser" );
-		}
-	}
+        [Test]
+        public void ControlsArePositionedCorrectly()
+        {
+            AssertControlsAreStackedVertically( "detailList", "tabSplitter", "errorBrowser" );
+        }
+    }
 }

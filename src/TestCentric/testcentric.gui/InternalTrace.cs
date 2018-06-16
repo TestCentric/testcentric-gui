@@ -27,14 +27,14 @@ using NUnit.Engine;
 namespace TestCentric.Gui
 {
     /// <summary>
-	/// Summary description for Logger.
-	/// </summary>
-	public class InternalTrace
-	{
+    /// Summary description for Logger.
+    /// </summary>
+    public class InternalTrace
+    {
         private readonly static string TIME_FMT = "HH:mm:ss.fff";
 
-		private static bool initialized;
-		private static InternalTraceLevel level;
+        private static bool initialized;
+        private static InternalTraceLevel level;
         private static string logName;
 
         private static InternalTraceWriter writer;
@@ -75,13 +75,13 @@ namespace TestCentric.Gui
 
         public static void Initialize(string logName, InternalTraceLevel level)
         {
-			if (!initialized)
-			{
+            if (!initialized)
+            {
                 LogName = logName;
-				Level = level;
+                Level = level;
 
-				initialized = true;
-			}
+                initialized = true;
+            }
         }
 
         public static void Flush()
@@ -99,14 +99,14 @@ namespace TestCentric.Gui
         }
 
         public static Logger GetLogger(string name)
-		{
-			return new Logger( name );
-		}
+        {
+            return new Logger( name );
+        }
 
-		public static Logger GetLogger( Type type )
-		{
-			return new Logger( type.FullName );
-		}
+        public static Logger GetLogger( Type type )
+        {
+            return new Logger( type.FullName );
+        }
 
         public static void Log(InternalTraceLevel level, string message, string category)
         {

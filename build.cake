@@ -111,12 +111,12 @@ Task("PackageZip")
         var zipFiles = new FilePath[]
         {
             BIN_DIR + "LICENSE.txt",
-			BIN_DIR + "NOTICES.txt",
+            BIN_DIR + "NOTICES.txt",
             BIN_DIR + "CHANGES.txt",
             BIN_DIR + "tc-nunit.exe",
             BIN_DIR + "tc-nunit.exe.config",
             BIN_DIR + "TestCentric.Gui.Runner.dll",
-			BIN_DIR + "nunit.uiexception.dll",
+            BIN_DIR + "nunit.uiexception.dll",
             BIN_DIR + "TestCentric.Gui.Model.dll",
             BIN_DIR + "nunit.engine.api.dll",
             BIN_DIR + "nunit.engine.dll",
@@ -150,11 +150,11 @@ Task("PackageChocolatey")
                     new ChocolateyNuSpecContent() { Source = PROJECT_DIR + "LICENSE.txt", Target="tools" },
                     new ChocolateyNuSpecContent() { Source = PROJECT_DIR + "NOTICES.txt", Target="tools" },
                     new ChocolateyNuSpecContent() { Source = PROJECT_DIR + "CHANGES.txt", Target="tools" },
-					new ChocolateyNuSpecContent() { Source = CHOCO_DIR + "VERIFICATION.txt", Target="tools" },
+                    new ChocolateyNuSpecContent() { Source = CHOCO_DIR + "VERIFICATION.txt", Target="tools" },
                     new ChocolateyNuSpecContent() { Source = BIN_DIR + "tc-nunit.exe", Target="tools" },
                     new ChocolateyNuSpecContent() { Source = BIN_DIR + "tc-nunit.exe.config", Target="tools" },
                     new ChocolateyNuSpecContent() { Source = BIN_DIR + "TestCentric.Gui.Runner.dll", Target="tools" },
-					new ChocolateyNuSpecContent() { Source = BIN_DIR + "nunit.uiexception.dll", Target="tools" },
+                    new ChocolateyNuSpecContent() { Source = BIN_DIR + "nunit.uiexception.dll", Target="tools" },
                     new ChocolateyNuSpecContent() { Source = BIN_DIR + "TestCentric.Gui.Model.dll", Target="tools" },
                     new ChocolateyNuSpecContent() { Source = BIN_DIR + "nunit.engine.dll", Target="tools" },
                     new ChocolateyNuSpecContent() { Source = BIN_DIR + "nunit.engine.api.dll", Target="tools" },
@@ -175,17 +175,17 @@ Task("PackageChocolatey")
 //////////////////////////////////////////////////////////////////////
 
 Task("Package")
-	.IsDependentOn("PackageZip")
-	.IsDependentOn("PackageChocolatey");
+    .IsDependentOn("PackageZip")
+    .IsDependentOn("PackageChocolatey");
 
 Task("Appveyor")
-	.IsDependentOn("Build")
-	.IsDependentOn("Test")
-	.IsDependentOn("Package");
+    .IsDependentOn("Build")
+    .IsDependentOn("Test")
+    .IsDependentOn("Package");
 
 Task("Travis")
-	.IsDependentOn("Build")
-	.IsDependentOn("Test");
+    .IsDependentOn("Build")
+    .IsDependentOn("Test");
 
 Task("Default")
     .IsDependentOn("Test");

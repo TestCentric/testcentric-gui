@@ -79,9 +79,9 @@ namespace TestCentric.Gui.Controls
         #region Instance Variables
 
         /// <summary>
-		/// Hashtable provides direct access to TestNodes
-		/// </summary>
-		private Hashtable treeMap = new Hashtable();
+        /// Hashtable provides direct access to TestNodes
+        /// </summary>
+        private Hashtable treeMap = new Hashtable();
 
         /// <summary>
         /// The TestNode on which a right click was done
@@ -436,10 +436,10 @@ namespace TestCentric.Gui.Controls
         }
 
         /// <summary>
-		/// When Run context menu item is clicked, run the test that
-		/// was selected when the right click was done.
-		/// </summary>
-		private void runMenuItem_Click(object sender, System.EventArgs e)
+        /// When Run context menu item is clicked, run the test that
+        /// was selected when the right click was done.
+        /// </summary>
+        private void runMenuItem_Click(object sender, System.EventArgs e)
         {
             //TODO: some sort of lock on these booleans?
             if (runCommandEnabled)
@@ -583,7 +583,7 @@ namespace TestCentric.Gui.Controls
         public void ClearAllResults()
         {
             foreach ( TestSuiteTreeNode rootNode in Nodes )
-            	rootNode.ClearResults();
+                rootNode.ClearResults();
         }
 
         /// <summary>
@@ -612,7 +612,7 @@ namespace TestCentric.Gui.Controls
                 }
 
                 if ( UserSettings.Gui.TestTree.SaveVisualState )
-                	RestoreVisualState();
+                    RestoreVisualState();
             }
         }
 
@@ -661,22 +661,22 @@ namespace TestCentric.Gui.Controls
         /// Clear all the info in the tree.
         /// </summary>
         public void Clear()
-		{
-			treeMap.Clear();
-			Nodes.Clear();
-		}
+        {
+            treeMap.Clear();
+            Nodes.Clear();
+        }
 
-		protected override void OnAfterCollapse(TreeViewEventArgs e)
-		{
-			if ( !suppressEvents )
-				base.OnAfterCollapse (e);
-		}
+        protected override void OnAfterCollapse(TreeViewEventArgs e)
+        {
+            if ( !suppressEvents )
+                base.OnAfterCollapse (e);
+        }
 
-		protected override void OnAfterExpand(TreeViewEventArgs e)
-		{
-			if ( !suppressEvents )
-				base.OnAfterExpand (e);
-		}
+        protected override void OnAfterExpand(TreeViewEventArgs e)
+        {
+            if ( !suppressEvents )
+                base.OnAfterExpand (e);
+        }
 
         public void Accept(TestSuiteTreeNodeVisitor visitor)
         {
@@ -720,12 +720,12 @@ namespace TestCentric.Gui.Controls
         }
 
         public void HideTests()
-		{
-			this.BeginUpdate();
+        {
+            this.BeginUpdate();
             foreach (TestSuiteTreeNode node in Nodes)
                 HideTestsUnderNode(node);
             this.EndUpdate();
-		}
+        }
 
         public void ShowPropertiesDialog(TestNode test)
         {
@@ -753,19 +753,19 @@ namespace TestCentric.Gui.Controls
         }
 
         private void ClosePropertiesDialog()
-		{
+        {
             if (propertiesDialog != null)
                 propertiesDialog.Close();
         }
 
-		private void CheckPropertiesDialog()
-		{
+        private void CheckPropertiesDialog()
+        {
             if (propertiesDialog != null && !propertiesDialog.Pinned)
                 propertiesDialog.Close();
         }
 
-		private void OnPropertiesDialogClosed( object sender, System.EventArgs e )
-		{
+        private void OnPropertiesDialogClosed( object sender, System.EventArgs e )
+        {
             propertiesDialog = null;
         }
 
@@ -819,9 +819,9 @@ namespace TestCentric.Gui.Controls
                 CheckPropertiesDialog();
 
 #if ACCUMULATE_RESULTS
-        			if ( runningTests != null )
-        				foreach( ITest test in runningTests )
-        					this[test].ClearResults();
+                    if ( runningTests != null )
+                        foreach( ITest test in runningTests )
+                            this[test].ClearResults();
 #else
                 ClearAllResults();
 #endif
@@ -976,41 +976,41 @@ namespace TestCentric.Gui.Controls
         /// </summary>
         /// <returns>DisplayStyle to be used</returns>
         private DisplayStyle GetDisplayStyle()
-		{
-			DisplayStyle initialDisplay = (DisplayStyle)UserSettings.Gui.TestTree.InitialTreeDisplay;
+        {
+            DisplayStyle initialDisplay = (DisplayStyle)UserSettings.Gui.TestTree.InitialTreeDisplay;
 
-			if ( initialDisplay != DisplayStyle.Auto )
-				return initialDisplay;
+            if ( initialDisplay != DisplayStyle.Auto )
+                return initialDisplay;
 
-			if ( VisibleCount >= GetNodeCount( true ) )
-				return DisplayStyle.Expand;
+            if ( VisibleCount >= GetNodeCount( true ) )
+                return DisplayStyle.Expand;
 
-			return DisplayStyle.HideTests;
-		}
+            return DisplayStyle.HideTests;
+        }
 
-		public void SetInitialExpansion()
-		{
-			CollapseAll();
-			
-			switch ( GetDisplayStyle() )
-			{
-				case DisplayStyle.Expand:
-					ExpandAll();
-					break;
-				case DisplayStyle.HideTests:
-					HideTests();
-					break;
-				case DisplayStyle.Collapse:
-				default:
-					break;
-			}
+        public void SetInitialExpansion()
+        {
+            CollapseAll();
+            
+            switch ( GetDisplayStyle() )
+            {
+                case DisplayStyle.Expand:
+                    ExpandAll();
+                    break;
+                case DisplayStyle.HideTests:
+                    HideTests();
+                    break;
+                case DisplayStyle.Collapse:
+                default:
+                    break;
+            }
 
             if (Nodes.Count > 0)
             {
                 SelectedNode = Nodes[0];
                 SelectedNode.EnsureVisible();
             }
-		}
+        }
 
         private TestSuiteTreeNode FindNode(TestNode test)
         {
@@ -1036,7 +1036,7 @@ namespace TestCentric.Gui.Controls
         }
 
         private void RestoreVisualState()
-		{
+        {
             string fileName = VisualState.GetVisualStateFileName(Model.TestFiles[0]);
             if (File.Exists(fileName))
             {

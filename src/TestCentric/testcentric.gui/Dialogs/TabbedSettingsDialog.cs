@@ -31,52 +31,52 @@ namespace TestCentric.Gui
 {
     using Model;
 
-	public class TabbedSettingsDialog : SettingsDialogBase
-	{
-		protected System.Windows.Forms.TabControl tabControl1;
-		private System.ComponentModel.IContainer components = null;
+    public class TabbedSettingsDialog : SettingsDialogBase
+    {
+        protected System.Windows.Forms.TabControl tabControl1;
+        private System.ComponentModel.IContainer components = null;
 
-		public static void Display( Form owner, ITestModel model, params SettingsPage[] pages )
-		{
-			using( TabbedSettingsDialog dialog = new TabbedSettingsDialog(model) )
-			{
-				owner.Site.Container.Add( dialog );
-				dialog.Font = owner.Font;
-				dialog.SettingsPages.AddRange( pages ); 
-				dialog.ShowDialog();
-			}
-		}
+        public static void Display( Form owner, ITestModel model, params SettingsPage[] pages )
+        {
+            using( TabbedSettingsDialog dialog = new TabbedSettingsDialog(model) )
+            {
+                owner.Site.Container.Add( dialog );
+                dialog.Font = owner.Font;
+                dialog.SettingsPages.AddRange( pages ); 
+                dialog.ShowDialog();
+            }
+        }
 
-		public TabbedSettingsDialog(ITestModel model) : base(model)
-		{
-			// This call is required by the Windows Form Designer.
-			InitializeComponent();
+        public TabbedSettingsDialog(ITestModel model) : base(model)
+        {
+            // This call is required by the Windows Form Designer.
+            InitializeComponent();
 
-			// TODO: Add any initialization after the InitializeComponent call
-		}
+            // TODO: Add any initialization after the InitializeComponent call
+        }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if (components != null) 
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose( bool disposing )
+        {
+            if( disposing )
+            {
+                if (components != null) 
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose( disposing );
+        }
 
-		#region Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.SuspendLayout();
             // 
@@ -112,23 +112,23 @@ namespace TestCentric.Gui
             this.Controls.SetChildIndex(this.tabControl1, 0);
             this.ResumeLayout(false);
 
-		}
-		#endregion
+        }
+        #endregion
 
-		private void TabbedSettingsDialog_Load(object sender, System.EventArgs e)
-		{
+        private void TabbedSettingsDialog_Load(object sender, System.EventArgs e)
+        {
             string initialPage = Settings.Gui.InitialSettingsPage;
 
             foreach ( SettingsPage page in SettingsPages )
-			{
-				TabPage tabPage = new TabPage(page.Title);
-				tabPage.Controls.Add( page );
-				page.Location = new Point(0, 16);
-				tabControl1.TabPages.Add( tabPage );
+            {
+                TabPage tabPage = new TabPage(page.Title);
+                tabPage.Controls.Add( page );
+                page.Location = new Point(0, 16);
+                tabControl1.TabPages.Add( tabPage );
                 if (page.Name == initialPage)
                     tabControl1.SelectedIndex = tabControl1.TabPages.Count - 1;
-			}
-		}
+            }
+        }
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
