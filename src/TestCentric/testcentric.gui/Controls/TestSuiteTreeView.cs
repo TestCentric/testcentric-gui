@@ -646,15 +646,14 @@ namespace TestCentric.Gui.Controls
         /// <param name="test">Test suite to be loaded</param>
         public void Reload(TestNode test)
         {
-            ResultNode result = ((TestSuiteTreeNode)Nodes[0]).Result;
             VisualState visualState = new VisualState(this);
 
             Load(test);
 
             visualState.Restore(this);
 
-            if (result != null && !UserSettings.Gui.ClearResultsOnReload)
-                RestoreResults(result);
+            if (!UserSettings.Gui.ClearResultsOnReload)
+                RestoreResults(test);
         }
 
         /// <summary>
@@ -1044,15 +1043,13 @@ namespace TestCentric.Gui.Controls
             }
         }
 
-        private void RestoreResults(ResultNode resultNode)
+        private void RestoreResults(TestNode testNode)
         {
-            foreach (TestNode child in resultNode.Children)
-            {
-                if (child is ResultNode)
-                    RestoreResults(child as ResultNode);
-            }
 
-            SetTestResult(resultNode);
+            foreach (TestNode child in testNode.Children)
+                RestoreResults(child);
+
+            SetTestResult(Model.GetResultForTest(testNode));
         }
 
         private void LoadAlternateImages()
