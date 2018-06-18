@@ -33,6 +33,7 @@ namespace TestCentric.Gui.SettingsPages
         private System.Windows.Forms.CheckBox reloadOnRunCheckBox;
         private System.Windows.Forms.CheckBox reloadOnChangeCheckBox;
         private System.Windows.Forms.HelpProvider helpProvider1;
+        private CheckBox clearResultsCheckBox;
         private System.ComponentModel.IContainer components = null;
 
         public AssemblyReloadSettingsPage(string key) : base(key)
@@ -71,6 +72,7 @@ namespace TestCentric.Gui.SettingsPages
             this.reloadOnRunCheckBox = new System.Windows.Forms.CheckBox();
             this.reloadOnChangeCheckBox = new System.Windows.Forms.CheckBox();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
+            this.clearResultsCheckBox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label1
@@ -84,8 +86,8 @@ namespace TestCentric.Gui.SettingsPages
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Location = new System.Drawing.Point(181, 4);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(259, 8);
@@ -97,7 +99,7 @@ namespace TestCentric.Gui.SettingsPages
             this.rerunOnChangeCheckBox.AutoSize = true;
             this.rerunOnChangeCheckBox.Enabled = false;
             this.helpProvider1.SetHelpString(this.rerunOnChangeCheckBox, "If checked, the last tests run will be re-run automatically whenever the assembly" +
-                    " changes.");
+        " changes.");
             this.rerunOnChangeCheckBox.Location = new System.Drawing.Point(48, 96);
             this.rerunOnChangeCheckBox.Name = "rerunOnChangeCheckBox";
             this.helpProvider1.SetShowHelp(this.rerunOnChangeCheckBox, true);
@@ -120,7 +122,7 @@ namespace TestCentric.Gui.SettingsPages
             // 
             this.reloadOnChangeCheckBox.AutoSize = true;
             this.helpProvider1.SetHelpString(this.reloadOnChangeCheckBox, "If checked, the assembly is reloaded whenever it changes. Changes to this setting" +
-                    " do not take effect until the next time an assembly is loaded.");
+        " do not take effect until the next time an assembly is loaded.");
             this.reloadOnChangeCheckBox.Location = new System.Drawing.Point(24, 64);
             this.reloadOnChangeCheckBox.Name = "reloadOnChangeCheckBox";
             this.helpProvider1.SetShowHelp(this.reloadOnChangeCheckBox, true);
@@ -129,8 +131,20 @@ namespace TestCentric.Gui.SettingsPages
             this.reloadOnChangeCheckBox.Text = "Reload when test assembly changes";
             this.reloadOnChangeCheckBox.CheckedChanged += new System.EventHandler(this.reloadOnChangeCheckBox_CheckedChanged);
             // 
+            // clearResultsCheckBox
+            // 
+            this.clearResultsCheckBox.AutoSize = true;
+            this.helpProvider1.SetHelpString(this.clearResultsCheckBox, "If checked, any prior results are cleared when reloading");
+            this.clearResultsCheckBox.Location = new System.Drawing.Point(24, 151);
+            this.clearResultsCheckBox.Name = "clearResultsCheckBox";
+            this.helpProvider1.SetShowHelp(this.clearResultsCheckBox, true);
+            this.clearResultsCheckBox.Size = new System.Drawing.Size(161, 17);
+            this.clearResultsCheckBox.TabIndex = 35;
+            this.clearResultsCheckBox.Text = "Clear results when reloading.";
+            // 
             // AssemblyReloadSettingsPage
             // 
+            this.Controls.Add(this.clearResultsCheckBox);
             this.Controls.Add(this.rerunOnChangeCheckBox);
             this.Controls.Add(this.reloadOnRunCheckBox);
             this.Controls.Add(this.reloadOnChangeCheckBox);
@@ -148,6 +162,7 @@ namespace TestCentric.Gui.SettingsPages
             reloadOnChangeCheckBox.Checked = Settings.Gui.ReloadOnChange;
             rerunOnChangeCheckBox.Checked = Settings.Gui.RerunOnChange;
             reloadOnRunCheckBox.Checked = Settings.Gui.ReloadOnRun;
+            clearResultsCheckBox.Checked = Settings.Gui.ClearResultsOnReload;
         }
 
         public override void ApplySettings()
@@ -155,6 +170,7 @@ namespace TestCentric.Gui.SettingsPages
             Settings.Gui.ReloadOnChange = reloadOnChangeCheckBox.Checked;
             Settings.Gui.RerunOnChange = rerunOnChangeCheckBox.Checked;
             Settings.Gui.ReloadOnRun = reloadOnRunCheckBox.Checked;
+            Settings.Gui.ClearResultsOnReload = clearResultsCheckBox.Checked;
         }
 
 

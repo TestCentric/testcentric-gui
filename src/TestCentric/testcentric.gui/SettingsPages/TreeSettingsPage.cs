@@ -39,7 +39,6 @@ namespace TestCentric.Gui.SettingsPages
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox initialDisplayComboBox;
-        private System.Windows.Forms.CheckBox clearResultsCheckBox;
         private System.Windows.Forms.CheckBox saveVisualStateCheckBox;
         private System.Windows.Forms.CheckBox showCheckBoxesCheckBox;
         private System.Windows.Forms.HelpProvider helpProvider1;
@@ -90,7 +89,6 @@ namespace TestCentric.Gui.SettingsPages
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.initialDisplayComboBox = new System.Windows.Forms.ComboBox();
-            this.clearResultsCheckBox = new System.Windows.Forms.CheckBox();
             this.saveVisualStateCheckBox = new System.Windows.Forms.CheckBox();
             this.showCheckBoxesCheckBox = new System.Windows.Forms.CheckBox();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
@@ -152,17 +150,6 @@ namespace TestCentric.Gui.SettingsPages
             this.helpProvider1.SetShowHelp(this.initialDisplayComboBox, true);
             this.initialDisplayComboBox.Size = new System.Drawing.Size(168, 21);
             this.initialDisplayComboBox.TabIndex = 33;
-            // 
-            // clearResultsCheckBox
-            // 
-            this.clearResultsCheckBox.AutoSize = true;
-            this.helpProvider1.SetHelpString(this.clearResultsCheckBox, "If checked, any prior results are cleared when reloading");
-            this.clearResultsCheckBox.Location = new System.Drawing.Point(32, 129);
-            this.clearResultsCheckBox.Name = "clearResultsCheckBox";
-            this.helpProvider1.SetShowHelp(this.clearResultsCheckBox, true);
-            this.clearResultsCheckBox.Size = new System.Drawing.Size(161, 17);
-            this.clearResultsCheckBox.TabIndex = 34;
-            this.clearResultsCheckBox.Text = "Clear results when reloading.";
             // 
             // saveVisualStateCheckBox
             // 
@@ -277,7 +264,6 @@ namespace TestCentric.Gui.SettingsPages
             this.Controls.Add(this.showCheckBoxesCheckBox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.initialDisplayComboBox);
-            this.Controls.Add(this.clearResultsCheckBox);
             this.Controls.Add(this.saveVisualStateCheckBox);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label1);
@@ -296,7 +282,6 @@ namespace TestCentric.Gui.SettingsPages
         public override void LoadSettings()
         {
             initialDisplayComboBox.SelectedIndex = Settings.Gui.TestTree.InitialTreeDisplay;
-            clearResultsCheckBox.Checked = Settings.Gui.ClearResultsOnReload;
             saveVisualStateCheckBox.Checked = Settings.Gui.TestTree.SaveVisualState;
             showCheckBoxesCheckBox.Checked = Settings.Gui.TestTree.ShowCheckBoxes;
 
@@ -314,7 +299,6 @@ namespace TestCentric.Gui.SettingsPages
         public override void ApplySettings()
         {
             Settings.Gui.TestTree.InitialTreeDisplay = initialDisplayComboBox.SelectedIndex;
-            Settings.Gui.ClearResultsOnReload = clearResultsCheckBox.Checked;
             Settings.Gui.TestTree.SaveVisualState = saveVisualStateCheckBox.Checked;
             Settings.Gui.TestTree.ShowCheckBoxes = showCheckBoxesCheckBox.Checked;
 
