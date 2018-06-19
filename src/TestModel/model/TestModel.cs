@@ -194,18 +194,11 @@ namespace TestCentric.Gui.Model
 
         public void ReloadTests()
         {
-            Runner.Unload();
-            Results.Clear();
-            Tests = null;
-
-            TestPackage = MakeTestPackage(TestFiles);
-
-            Runner = TestEngine.GetRunner(TestPackage);
-
             Tests = new TestNode(Runner.Explore(TestFilter.Empty));
             AvailableCategories = GetAvailableCategories();
 
-            Results.Clear();
+            if (Services.UserSettings.Gui.ClearResultsOnReload)
+                Results.Clear();
 
             _events.FireTestReloaded(Tests);
         }
