@@ -1045,7 +1045,6 @@ namespace TestCentric.Gui.Controls
 
         private void RestoreResults(TestNode testNode)
         {
-
             foreach (TestNode child in testNode.Children)
                 RestoreResults(child);
 
