@@ -61,8 +61,7 @@ namespace TestCentric.Gui.Model
                 sb.Append("<or>");
 
             foreach (TestNode test in testNodes)
-                if (test.RunState != RunState.Explicit)
-                    sb.AppendFormat("<id>{0}</id>", test.Id);
+                sb.AppendFormat("<id>{0}</id>", test.Id);
 
             if (testNodes.Length > 1)
                 sb.Append("</or>");
