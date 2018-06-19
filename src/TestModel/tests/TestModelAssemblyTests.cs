@@ -28,7 +28,6 @@ using NUnit.Tests.Assemblies;
 
 namespace TestCentric.Gui.Model
 {
-    [Explicit("Second TestEngine conflicts with main engine")]
     public class TestModelAssemblyTests
     {
         private const string MOCK_ASSEMBLY = "mock-assembly.dll";
@@ -44,6 +43,12 @@ namespace TestCentric.Gui.Model
             _model = new TestModel(engine);
 
             _model.LoadTests(new[] { Path.Combine(TestContext.CurrentContext.TestDirectory, MOCK_ASSEMBLY) });
+        }
+
+        [OneTimeTearDown]
+        public void ReleaseTestModel()
+        {
+            _model.Dispose();
         }
 
         [Test]
