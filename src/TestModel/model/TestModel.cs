@@ -303,6 +303,9 @@ namespace TestCentric.Gui.Model
 
             if (Runner != null)
                 Runner.Dispose();
+
+            if (TestEngine != null)
+                TestEngine.Dispose();
         }
 
         #endregion

@@ -31,6 +31,7 @@ namespace TestCentric.Gui.Model
     public class AvailableRuntimesTest
     {
         private IList<IRuntimeFramework> _availableRuntimes;
+        private TestModel _model;
 
         [OneTimeSetUp]
         public void CreateTestModel()
@@ -38,9 +39,15 @@ namespace TestCentric.Gui.Model
             var engine = TestEngineActivator.CreateInstance();
             Assert.NotNull(engine, "Unable to create engine instance for testing");
 
-            var model = new TestModel(engine);
-            _availableRuntimes = model.AvailableRuntimes;
+            _model = new TestModel(engine);
+            _availableRuntimes = _model.AvailableRuntimes;
             Assert.NotNull(_availableRuntimes);
+        }
+
+        [OneTimeTearDown]
+        public void DisposeTestModel()
+        {
+            _model.Dispose();
         }
 
         [Test]
