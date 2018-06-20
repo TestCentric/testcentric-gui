@@ -54,7 +54,7 @@ namespace TestCentric.Gui.Model
         public void AtLeastOneRuntimeIsAvailable()
         {
             Assert.That(_availableRuntimes.Count, Is.GreaterThan(0));
-            foreach (var runtime in _availableRuntimes)
+            foreach (IRuntimeFramework runtime in _availableRuntimes)
                 Console.WriteLine("Available: " + runtime.DisplayName);
         }
     }

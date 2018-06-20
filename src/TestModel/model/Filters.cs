@@ -98,7 +98,7 @@ namespace TestCentric.Gui.Model
         {
             StringBuilder sb = new StringBuilder("<filter><and>");
 
-            foreach (var filter in filters)
+            foreach (TestFilter filter in filters)
                 sb.Append(filter.ToXml().InnerXml);
 
             sb.Append("</and></filter>");

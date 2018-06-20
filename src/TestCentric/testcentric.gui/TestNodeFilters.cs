@@ -59,7 +59,7 @@ namespace TestCentric.Gui
                 return false;
 
             var parentNode = new TestNode(parentXmlNode);
-            
+
             return Match(parentNode) || MatchParent(parentNode);
         }
 
@@ -68,7 +68,7 @@ namespace TestCentric.Gui
             if (testNode.Children == null)
                 return false;
 
-            foreach (var child in testNode.Children)
+            foreach (TestNode child in testNode.Children)
             {
                 if (Match(child) || MatchDescendant(child))
                     return true;

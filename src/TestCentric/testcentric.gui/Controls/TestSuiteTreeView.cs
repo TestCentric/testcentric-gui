@@ -123,9 +123,9 @@ namespace TestCentric.Gui.Controls
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TestSuiteTreeView));
             this.treeImages = new System.Windows.Forms.ImageList(this.components);
             this.SuspendLayout();
-            // 
+            //
             // treeImages
-            // 
+            //
             this.treeImages.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("treeImages.ImageStream")));
             this.treeImages.TransparentColor = System.Drawing.Color.White;
             this.treeImages.Images.SetKeyName(0, "Skipped.png");
@@ -133,9 +133,9 @@ namespace TestCentric.Gui.Controls
             this.treeImages.Images.SetKeyName(2, "Success.png");
             this.treeImages.Images.SetKeyName(3, "Ignored.png");
             this.treeImages.Images.SetKeyName(4, "Inconclusive.png");
-            // 
+            //
             // TestSuiteTreeView
-            // 
+            //
             this.ImageIndex = 0;
             this.ImageList = this.treeImages;
             this.SelectedImageIndex = 0;
@@ -599,7 +599,7 @@ namespace TestCentric.Gui.Controls
 
                 try
                 {
-                    foreach (var child in topLevelNode.Children)
+                    foreach (TestNode child in topLevelNode.Children)
                         AddTreeNodes(Nodes, child, false);
 
                     SetInitialExpansion();
@@ -685,7 +685,7 @@ namespace TestCentric.Gui.Controls
             }
         }
 
-        public void ClearCheckedNodes() 
+        public void ClearCheckedNodes()
         {
             Accept(new ClearCheckedNodesVisitor());
         }
@@ -990,7 +990,7 @@ namespace TestCentric.Gui.Controls
         public void SetInitialExpansion()
         {
             CollapseAll();
-            
+
             switch ( GetDisplayStyle() )
             {
                 case DisplayStyle.Expand:
