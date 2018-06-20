@@ -116,10 +116,10 @@ namespace TestCentric.Gui
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // extensionListView
-            // 
-            this.extensionListView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.extensionListView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.extensionListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.extensionNameColumn,
@@ -136,38 +136,38 @@ namespace TestCentric.Gui
             this.extensionListView.View = System.Windows.Forms.View.Details;
             this.extensionListView.SelectedIndexChanged += new System.EventHandler(this.extensionListView_SelectedIndexChanged);
             this.extensionListView.Resize += new System.EventHandler(this.extensionListView_Resize);
-            // 
+            //
             // extensionNameColumn
-            // 
+            //
             this.extensionNameColumn.Text = "Extension";
             this.extensionNameColumn.Width = 357;
-            // 
+            //
             // extensionStatusColumn
-            // 
+            //
             this.extensionStatusColumn.Text = "Status";
             this.extensionStatusColumn.Width = 71;
-            // 
+            //
             // extensionPointDescriptionTextBox
-            // 
-            this.extensionPointDescriptionTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.extensionPointDescriptionTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.extensionPointDescriptionTextBox.Location = new System.Drawing.Point(9, 128);
             this.extensionPointDescriptionTextBox.Multiline = true;
             this.extensionPointDescriptionTextBox.Name = "extensionPointDescriptionTextBox";
             this.extensionPointDescriptionTextBox.Size = new System.Drawing.Size(432, 31);
             this.extensionPointDescriptionTextBox.TabIndex = 1;
-            // 
+            //
             // label1
-            // 
+            //
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.Location = new System.Drawing.Point(6, 109);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(211, 16);
             this.label1.TabIndex = 2;
             this.label1.Text = "Description:";
-            // 
+            //
             // button1
-            // 
+            //
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.button1.Location = new System.Drawing.Point(192, 420);
             this.button1.Name = "button1";
@@ -175,18 +175,18 @@ namespace TestCentric.Gui
             this.button1.TabIndex = 3;
             this.button1.Text = "OK";
             this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
+            //
             // extensionPointsListBox
-            // 
+            //
             this.extensionPointsListBox.FormattingEnabled = true;
             this.extensionPointsListBox.Location = new System.Drawing.Point(9, 19);
             this.extensionPointsListBox.Name = "extensionPointsListBox";
             this.extensionPointsListBox.Size = new System.Drawing.Size(432, 82);
             this.extensionPointsListBox.TabIndex = 6;
             this.extensionPointsListBox.SelectedIndexChanged += new System.EventHandler(this.extensionPointsListBox_SelectedIndexChanged);
-            // 
+            //
             // groupBox1
-            // 
+            //
             this.groupBox1.Controls.Add(this.extensionPointDescriptionTextBox);
             this.groupBox1.Controls.Add(this.extensionPointsListBox);
             this.groupBox1.Controls.Add(this.label1);
@@ -196,9 +196,9 @@ namespace TestCentric.Gui
             this.groupBox1.TabIndex = 7;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Extension Points";
-            // 
+            //
             // groupBox2
-            // 
+            //
             this.groupBox2.Controls.Add(this.propertiesTextBox);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.extensionDescriptionTextBox);
@@ -210,45 +210,45 @@ namespace TestCentric.Gui
             this.groupBox2.TabIndex = 8;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Installed Extensions";
-            // 
+            //
             // propertiesTextBox
-            // 
+            //
             this.propertiesTextBox.Location = new System.Drawing.Point(7, 179);
             this.propertiesTextBox.Multiline = true;
             this.propertiesTextBox.Name = "propertiesTextBox";
             this.propertiesTextBox.Size = new System.Drawing.Size(432, 41);
             this.propertiesTextBox.TabIndex = 6;
-            // 
+            //
             // label3
-            // 
+            //
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(7, 157);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(54, 13);
             this.label3.TabIndex = 5;
             this.label3.Text = "Properties";
-            // 
+            //
             // extensionDescriptionTextBox
-            // 
-            this.extensionDescriptionTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.extensionDescriptionTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.extensionDescriptionTextBox.Location = new System.Drawing.Point(7, 115);
             this.extensionDescriptionTextBox.Multiline = true;
             this.extensionDescriptionTextBox.Name = "extensionDescriptionTextBox";
             this.extensionDescriptionTextBox.Size = new System.Drawing.Size(432, 31);
             this.extensionDescriptionTextBox.TabIndex = 4;
-            // 
+            //
             // label2
-            // 
+            //
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2.Location = new System.Drawing.Point(6, 94);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(211, 16);
             this.label2.TabIndex = 3;
             this.label2.Text = "Description:";
-            // 
+            //
             // ExtensionDialog
-            // 
+            //
             this.ClientSize = new System.Drawing.Size(464, 449);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -274,7 +274,7 @@ namespace TestCentric.Gui
                 _extensionPoints = new List<IExtensionPoint>(_extensionService.ExtensionPoints);
                 _extensions = new List<IExtensionNode>(_extensionService.Extensions);
 
-                foreach (var ep in _extensionPoints)
+                foreach (IExtensionPoint ep in _extensionPoints)
                     extensionPointsListBox.Items.Add(ep.Path);
 
                 if (extensionPointsListBox.Items.Count > 0)
@@ -297,7 +297,7 @@ namespace TestCentric.Gui
                 extensionPointDescriptionTextBox.Text = ep.Description ?? "==None Provided==";
 
                 extensionListView.Items.Clear();
-                foreach (var extension in ep.Extensions)
+                foreach (IExtensionNode extension in ep.Extensions)
                 {
                     ListViewItem item = new ListViewItem(
                         new string[] { extension.TypeName, extension.Enabled ? "Enabled" : "Disabled" });

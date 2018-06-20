@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Engine;
+using NUnit.Engine.Extensibility;
 
 namespace TestCentric.Gui.Model
 {
@@ -44,7 +45,7 @@ namespace TestCentric.Gui.Model
             TestEngine = testEngine;
             Services = new TestServices(testEngine);
 
-            foreach (var node in Services.ExtensionService.GetExtensionNodes(PROJECT_LOADER_EXTENSION_PATH))
+            foreach (IExtensionNode node in Services.ExtensionService.GetExtensionNodes(PROJECT_LOADER_EXTENSION_PATH))
             {
                 if (node.TypeName == NUNIT_PROJECT_LOADER)
                     NUnitProjectSupport = true;
@@ -174,7 +175,7 @@ namespace TestCentric.Gui.Model
 
             _events.FireTestLoaded(Tests);
 
-            foreach (var subPackage in TestPackage.SubPackages)
+            foreach (TestPackage subPackage in TestPackage.SubPackages)
                 Services.RecentFiles.SetMostRecent(subPackage.FullName);
         }
 
@@ -306,9 +307,9 @@ namespace TestCentric.Gui.Model
         #region Private Properties
 
         private ITestEngine TestEngine { get; }
-        
+
         private ITestRunner Runner { get; set; }
-        
+
         private TestPackage TestPackage { get; set; }
 
         internal IDictionary<string, ResultNode> Results { get; } = new Dictionary<string, ResultNode>();
@@ -344,7 +345,7 @@ namespace TestCentric.Gui.Model
             // We use shadow copy so that the user may re-compile while the gui is running.
             package.AddSetting(EnginePackageSettings.ShadowCopyFiles, true);
 
-            foreach (var entry in PackageSettings)
+            foreach (KeyValuePair<string, object> entry in PackageSettings)
                 package.AddSetting(entry.Key, entry.Value);
 
             return package;
@@ -360,7 +361,7 @@ namespace TestCentric.Gui.Model
         {
             var runtimes = new List<IRuntimeFramework>();
 
-            foreach (var runtime in Services.GetService<IAvailableRuntimes>().AvailableRuntimes)
+            foreach (IRuntimeFramework runtime in Services.GetService<IAvailableRuntimes>().AvailableRuntimes)
             {
                 // Nothing below 2.0
                 if (runtime.ClrVersion.Major < 2)
@@ -372,7 +373,7 @@ namespace TestCentric.Gui.Model
 
                 // Skip duplicates
                 var duplicate = false;
-                foreach (var rt in runtimes)
+                foreach (IRuntimeFramework rt in runtimes)
                     if (rt.DisplayName == runtime.DisplayName)
                     {
                         duplicate = true;
