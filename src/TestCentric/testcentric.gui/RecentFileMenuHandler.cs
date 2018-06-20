@@ -22,6 +22,7 @@
 // ***********************************************************************
 
 using System;
+using System.IO;
 using System.Windows.Forms;
 using NUnit.Engine;
 
@@ -61,6 +62,8 @@ namespace TestCentric.Gui
             const int MAX_RECENT_FILES = 24;
             int maxNumberOfFilesToShow =
                 UserSettings.GetSetting("Gui.RecentProjects.MaxFiles", MAX_RECENT_FILES);
+            bool checkFilesExist =
+                UserSettings.GetSetting("Gui.RecentProjects.CheckFilesExist", true);
 
             var entries = RecentFiles.Entries;
 
@@ -72,13 +75,15 @@ namespace TestCentric.Gui
                 Menu.MenuItems.Clear();
                 int maxEntriesToShow = Math.Min(entries.Count, maxNumberOfFilesToShow);
                 int index = 1;
-                for (int i = 0; i < maxEntriesToShow; i++)
+                for (int i = 0; index <= maxEntriesToShow && i < entries.Count; i++)
                 {
                     string entry = entries[i];
-                    // The V2 GUI doesn't show non-existent files, but we do
-                    MenuItem item = new MenuItem(String.Format("{0} {1}", index++, entry));
-                    item.Click += new System.EventHandler(OnRecentFileClick);
-                    Menu.MenuItems.Add(item);
+                    if (!checkFilesExist || File.Exists(entry))
+                    {
+                        MenuItem item = new MenuItem(String.Format("{0} {1}", index++, entry));
+                        item.Click += new EventHandler(OnRecentFileClick);
+                        Menu.MenuItems.Add(item);
+                    }
                 }
             }
         }
