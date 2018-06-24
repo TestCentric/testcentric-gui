@@ -1072,7 +1072,7 @@ namespace TestCentric.Gui
                 EnableRunCommand( false );
                 EnableStopCommand( false );
 
-                _recentProjectsMenuHandler = new RecentFileMenuHandler(recentProjectsMenu, Model);
+                _recentProjectsMenuHandler = new RecentFileMenuHandler(recentProjectsMenu, Model, File.Exists);
 
                 LoadFormSettings();
 

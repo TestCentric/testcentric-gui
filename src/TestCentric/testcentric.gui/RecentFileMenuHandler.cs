@@ -22,6 +22,7 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using NUnit.Engine;
 
@@ -32,18 +33,15 @@ namespace TestCentric.Gui
 
     public class RecentFileMenuHandler
     {
-        public RecentFileMenuHandler(MenuItem menu, ITestModel model)
+        private readonly Func<string, bool> fileExists;
+
+        public RecentFileMenuHandler(MenuItem menu, ITestModel model, Func<string, bool> fileExists)
         {
             Menu = menu;
             UserSettings = model.Services.UserSettings;
             RecentFiles = model.Services.RecentFiles;
-            CheckFilesExist = UserSettings.Gui.RecentProjects.CheckFilesExist;
-            ShowNonRunnableFiles = false;
+            this.fileExists = fileExists;
         }
-
-        public bool CheckFilesExist { get; }
-
-        public bool ShowNonRunnableFiles { get; }
 
         public MenuItem Menu { get; }
 
@@ -58,29 +56,51 @@ namespace TestCentric.Gui
 
         public void Load()
         {
-            const int MAX_RECENT_FILES = 24;
-            int maxNumberOfFilesToShow =
-                UserSettings.GetSetting("Gui.RecentProjects.MaxFiles", MAX_RECENT_FILES);
+            int maxNumberOfFilesToShow = UserSettings.Gui.RecentProjects.MaxFiles;
+            bool checkFilesExist = UserSettings.Gui.RecentProjects.CheckFilesExist;
 
             var entries = RecentFiles.Entries;
+            var entriesToShow = GetEntries(entries, maxNumberOfFilesToShow, checkFilesExist, fileExists);
 
-            if (entries.Count == 0)
+            if (entriesToShow.Count == 0)
                 Menu.Enabled = false;
             else
             {
                 Menu.Enabled = true;
                 Menu.MenuItems.Clear();
-                int maxEntriesToShow = Math.Min(entries.Count, maxNumberOfFilesToShow);
-                int index = 1;
-                for (int i = 0; i < maxEntriesToShow; i++)
+                for (int i = 0; i < entriesToShow.Count; i++)
                 {
-                    string entry = entries[i];
-                    // The V2 GUI doesn't show non-existent files, but we do
-                    MenuItem item = new MenuItem(String.Format("{0} {1}", index++, entry));
-                    item.Click += new System.EventHandler(OnRecentFileClick);
+                    var entry = entriesToShow[i];
+                    MenuItem item = new MenuItem(String.Format("{0} {1}", i+1, entry));
+                    item.Click += new EventHandler(OnRecentFileClick);
                     Menu.MenuItems.Add(item);
                 }
             }
+        }
+
+        internal static IList<string> GetEntries(
+            IList<string> entries,
+            int maxNumberOfFilesToShow,
+            bool checkFilesExist,
+            Func<string, bool> predicate)
+        {
+            var result = new List<string>(entries.Count);
+
+            int maxEntriesToShow = Math.Min(entries.Count, maxNumberOfFilesToShow);
+            int index = 1;
+            foreach (var entry in entries)
+            {
+                if (!checkFilesExist || predicate(entry))
+                {
+                    result.Add(entry);
+                    index++;
+                }
+
+                if (index > maxEntriesToShow)
+                    break;
+            }
+
+            return result;
         }
 
         private void OnRecentFileClick(object sender, EventArgs e)
