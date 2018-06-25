@@ -24,25 +24,36 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Engine;
-using NUnit.Framework;
-using NUnit.TestUtilities.Fakes;
 
-namespace TestCentric.Gui.Model
+namespace NUnit.TestUtilities.Fakes
 {
-    public class AvailableRuntimesTest
+    public class RecentFilesService : IRecentFiles
     {
-        [Test]
-        public void RuntimesSupportedByEngineAreAvailable()
+        private List<string> files = new List<string>();
+        private int maxFiles = 24;
+
+        public int MaxFiles
         {
-            var mockEngine = new MockTestEngine().WithRuntimes(
-                new RuntimeFramework("net-4.5", new Version(4, 5)),
-                new RuntimeFramework("net-4.0", new Version(4, 0)));
+            get { return maxFiles; }
+            set { maxFiles = value; }
+        }
 
-            var model = new TestModel(mockEngine);
+        public void SetMostRecent(string fileName)
+        {
+            files.Insert(0, fileName);
+        }
 
-            Assert.That(model.AvailableRuntimes.Count, Is.EqualTo(2));
-            Assert.That(model.AvailableRuntimes, Has.One.Property("Id").EqualTo("net-4.5"));
-            Assert.That(model.AvailableRuntimes, Has.One.Property("Id").EqualTo("net-4.0"));
+        public IList<string> Entries
+        {
+            get { return files; }
+        }
+
+        public void Remove(string fileName)
+        {
+            files.Remove(fileName);
         }
     }
+
+    // TODO: Need mock loader to test clicking
 }
+

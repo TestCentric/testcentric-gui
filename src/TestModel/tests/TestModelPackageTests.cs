@@ -25,6 +25,7 @@ using System.Linq;
 using NSubstitute;
 using NUnit.Engine;
 using NUnit.Framework;
+using NUnit.TestUtilities.Fakes;
 
 namespace TestCentric.Gui.Model
 {
@@ -35,8 +36,7 @@ namespace TestCentric.Gui.Model
         [SetUp]
         public void CreateModel()
         {
-            var engine = Substitute.For<ITestEngine>();
-            _model = new TestModel(engine);
+            _model = new TestModel(new MockTestEngine());
         }
 
         [TestCase("my.test.assembly.dll")]

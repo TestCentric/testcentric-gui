@@ -80,6 +80,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.engine.api, Version=3.0.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\NUnit.Engine.Api.3.8.0\lib\nunit.engine.api.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="nunit.framework, Version=3.9.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\NUnit.3.9.0\lib\net45\nunit.framework.dll</HintPath>
       <Private>True</Private>
@@ -101,6 +105,14 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Fakes\ExtensionService.cs" />
+    <Compile Include="Fakes\RecentFilesService.cs" />
+    <Compile Include="Fakes\AvailableRuntimesService.cs" />
+    <Compile Include="Fakes\ResultService.cs" />
+    <Compile Include="Fakes\ServiceLocator.cs" />
+    <Compile Include="Fakes\SettingsService.cs" />
+    <Compile Include="Fakes\MockTestEngine.cs" />
+    <Compile Include="Fakes\RuntimeFramework.cs" />
     <Compile Include="FormTester.cs" />
     <Compile Include="TempResourceFile.cs" />
   </ItemGroup>
