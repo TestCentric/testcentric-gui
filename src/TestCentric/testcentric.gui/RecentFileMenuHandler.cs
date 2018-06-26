@@ -111,7 +111,7 @@ namespace TestCentric.Gui
             // TODO: Figure out a better way
             TestCentricMainForm form = item.GetMainMenu().GetForm() as TestCentricMainForm;
             if (form != null)
-                form.Presenter.OpenProject(testFileName);
+                form.Presenter.LoadTests(testFileName);
         }
     }
 }

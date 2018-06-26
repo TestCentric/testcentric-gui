@@ -22,6 +22,7 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
@@ -98,14 +99,14 @@ namespace TestCentric.Gui
             // Load test specified on command line or
             // the most recent one if options call for it
             if (Options.InputFiles.Count != 0)
-                OpenProject(Options.InputFiles[0]);
+                LoadTests(Options.InputFiles);
             else if (UserSettings.Gui.LoadLastProject && !Options.NoLoad)
             {
                 foreach (string entry in RecentFiles.Entries)
                 {
                     if (entry != null && File.Exists(entry))
                     {
-                        OpenProject(entry);
+                        LoadTests(entry);
                         break;
                     }
                 }
@@ -149,7 +150,7 @@ namespace TestCentric.Gui
             OpenFileDialog dlg = CreateOpenFileDialog("Open Project", true, true);
 
             if (dlg.ShowDialog(Form) == DialogResult.OK)
-                OpenProject(dlg.FileName);
+                LoadTests(dlg.FileNames);
         }
 
         //public void WatchProject(string projectPath)
@@ -179,28 +180,35 @@ namespace TestCentric.Gui
             //if (Form.MessageDisplay.Ask(message) == DialogResult.Yes)
             //    ReloadProject();
         }
+        
+        // Keeping this old code from V2 for now as a reminder of how we may need to
+        // handle opening of NUnit projects when a config is specified.
+        // TODO: Delete when no longer relevant
+        //public void OpenProject(string testFileName, string configName, string testName)
+        //{
+        //    _model.LoadTests(testFileName, configName);
+        //    if (_model.IsPackageLoaded)
+        //    {
+        //        NUnitProject testProject = loader.TestProject;
+        //        if (testProject.Configs.Count == 0)
+        //            Form.MessageDisplay.Info("Loaded project contains no configuration data");
+        //        else if (testProject.ActiveConfig == null)
+        //            Form.MessageDisplay.Info("Loaded project has no active configuration");
+        //        else if (testProject.ActiveConfig.Assemblies.Count == 0)
+        //            Form.MessageDisplay.Info("Active configuration contains no assemblies");
+        //        else
+        //            loader.LoadTest(testName);
+        //    }
+        //}
 
-        public void OpenProject(string testFileName, string configName, string testName)
+        public void LoadTests(string testFileName)
         {
-            Model.LoadTests(new[] { testFileName });
-            //_model.LoadTests(testFileName, configName);
-            //	if (_model.IsPackageLoaded )
-            //	{	
-            //		NUnitProject testProject = loader.TestProject;
-            //		if ( testProject.Configs.Count == 0 )
-            //                  Form.MessageDisplay.Info("Loaded project contains no configuration data");
-            //		else if ( testProject.ActiveConfig == null )
-            //                  Form.MessageDisplay.Info("Loaded project has no active configuration");
-            //		else if ( testProject.ActiveConfig.Assemblies.Count == 0 )
-            //                  Form.MessageDisplay.Info("Active configuration contains no assemblies");
-            //		else
-            //			loader.LoadTest( testName );
-            //	}
+            LoadTests(new[] { testFileName });
         }
 
-        public void OpenProject(string testFileName)
+        public void LoadTests(IList<string> testFileNames)
         {
-            OpenProject(testFileName, null, null);
+            Model.LoadTests(testFileNames);
         }
 
         //		public static void OpenResults( Form owner )
@@ -439,6 +447,7 @@ namespace TestCentric.Gui
             dlg.Filter = DialogFilter(includeProjects, includeAssemblies);
             dlg.FilterIndex = 1;
             dlg.FileName = "";
+            dlg.Multiselect = true;
             return dlg;
         }
 
