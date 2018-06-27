@@ -1479,6 +1479,7 @@ namespace TestCentric.Gui
                 //suiteName.Text = e.Name;
                 EnableRunCommand(false);
                 EnableStopCommand(true);
+                saveResultsMenuItem.Enabled = false;
             };
 
             Model.Events.RunFinished += (TestResultEventArgs e) =>
@@ -1508,6 +1509,7 @@ namespace TestCentric.Gui
                 //}
 
                 EnableRunCommand(true);
+                saveResultsMenuItem.Enabled = true;
 
                 if (e.Result.Outcome.Status == TestStatus.Failed)
                     Activate();
@@ -1516,6 +1518,7 @@ namespace TestCentric.Gui
             Model.Events.TestsLoading += (TestEventArgs e) =>
             {
                 EnableRunCommand(false);
+                saveResultsMenuItem.Enabled = false;
                 _longOpDisplay = new LongRunningOperationDisplay(this, "Loading...");
             };
 
@@ -1528,6 +1531,7 @@ namespace TestCentric.Gui
                 }
 
                 EnableRunCommand(true);
+                saveResultsMenuItem.Enabled = false;
 
                 //if ( TestLoader.TestCount == 0 )
                 //{
@@ -1546,6 +1550,7 @@ namespace TestCentric.Gui
                 suiteName.Text = null;
                 runCount.Text = null;
                 EnableRunCommand(false);
+                saveResultsMenuItem.Enabled = false;
                 Refresh();
             };
 
@@ -1565,6 +1570,7 @@ namespace TestCentric.Gui
                     runCount.Text = null;
 
                 EnableRunCommand(true);
+                saveResultsMenuItem.Enabled = false;
             };
         }
 
