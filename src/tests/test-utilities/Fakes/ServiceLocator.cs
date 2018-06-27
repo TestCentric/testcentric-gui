@@ -24,25 +24,28 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Engine;
-using NUnit.Framework;
-using NUnit.TestUtilities.Fakes;
 
-namespace TestCentric.Gui.Model
+namespace NUnit.TestUtilities.Fakes
 {
-    public class AvailableRuntimesTest
+    public class ServiceLocator : IServiceLocator
     {
-        [Test]
-        public void RuntimesSupportedByEngineAreAvailable()
+        private Dictionary<Type, object> _services = new Dictionary<Type, object>();
+
+        public void AddService<T>(T service)
         {
-            var mockEngine = new MockTestEngine().WithRuntimes(
-                new RuntimeFramework("net-4.5", new Version(4, 5)),
-                new RuntimeFramework("net-4.0", new Version(4, 0)));
+            _services.Add(typeof(T), service);
+        }
 
-            var model = new TestModel(mockEngine);
+        public object GetService(Type serviceType)
+        {
+            return _services.ContainsKey(serviceType)
+                ? _services[serviceType]
+                : null;
+        }
 
-            Assert.That(model.AvailableRuntimes.Count, Is.EqualTo(2));
-            Assert.That(model.AvailableRuntimes, Has.One.Property("Id").EqualTo("net-4.5"));
-            Assert.That(model.AvailableRuntimes, Has.One.Property("Id").EqualTo("net-4.0"));
+        public T GetService<T>() where T : class
+        {
+           return (T)GetService(typeof(T));
         }
     }
 }

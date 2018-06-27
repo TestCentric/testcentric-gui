@@ -24,25 +24,21 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Engine;
-using NUnit.Framework;
-using NUnit.TestUtilities.Fakes;
 
-namespace TestCentric.Gui.Model
+namespace NUnit.TestUtilities.Fakes
 {
-    public class AvailableRuntimesTest
+    public class AvailableRuntimesService : IAvailableRuntimes
     {
-        [Test]
-        public void RuntimesSupportedByEngineAreAvailable()
+        private List<IRuntimeFramework> _availableRuntimes = new List<IRuntimeFramework>();
+
+        public void AddRuntimes(params IRuntimeFramework[] runtimes)
         {
-            var mockEngine = new MockTestEngine().WithRuntimes(
-                new RuntimeFramework("net-4.5", new Version(4, 5)),
-                new RuntimeFramework("net-4.0", new Version(4, 0)));
+            _availableRuntimes.AddRange(runtimes);
+        }
 
-            var model = new TestModel(mockEngine);
-
-            Assert.That(model.AvailableRuntimes.Count, Is.EqualTo(2));
-            Assert.That(model.AvailableRuntimes, Has.One.Property("Id").EqualTo("net-4.5"));
-            Assert.That(model.AvailableRuntimes, Has.One.Property("Id").EqualTo("net-4.0"));
+        public IList<IRuntimeFramework> AvailableRuntimes
+        {
+            get { return _availableRuntimes; }
         }
     }
 }

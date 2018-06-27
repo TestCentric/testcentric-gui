@@ -24,25 +24,44 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Engine;
-using NUnit.Framework;
-using NUnit.TestUtilities.Fakes;
 
-namespace TestCentric.Gui.Model
+namespace NUnit.TestUtilities.Fakes
 {
-    public class AvailableRuntimesTest
+    public class SettingsService : ISettings
     {
-        [Test]
-        public void RuntimesSupportedByEngineAreAvailable()
+        private Dictionary<string, object> _storage = new Dictionary<string, object>();
+
+        public event SettingsEventHandler Changed;
+
+        public object GetSetting(string settingName)
         {
-            var mockEngine = new MockTestEngine().WithRuntimes(
-                new RuntimeFramework("net-4.5", new Version(4, 5)),
-                new RuntimeFramework("net-4.0", new Version(4, 0)));
+            return _storage.ContainsKey(settingName)
+                ? _storage[settingName]
+                : null;
+        }
 
-            var model = new TestModel(mockEngine);
+        public T GetSetting<T>(string settingName, T defaultValue)
+        {
+            return _storage.ContainsKey(settingName)
+                ? (T)_storage[settingName]
+                : defaultValue;
+        }
 
-            Assert.That(model.AvailableRuntimes.Count, Is.EqualTo(2));
-            Assert.That(model.AvailableRuntimes, Has.One.Property("Id").EqualTo("net-4.5"));
-            Assert.That(model.AvailableRuntimes, Has.One.Property("Id").EqualTo("net-4.0"));
+        public void RemoveGroup(string groupName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveSetting(string settingName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SaveSetting(string settingName, object settingValue)
+        {
+            _storage[settingName] = settingValue;
+
+            Changed?.Invoke(this, new SettingsEventArgs(settingName));
         }
     }
 }

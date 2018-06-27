@@ -29,15 +29,19 @@ using System.Security.Principal;
 using System.Windows.Forms;
 using NUnit.Framework;
 using NUnit.Engine;
+using NUnit.TestUtilities.Fakes;
 
 namespace TestCentric.Gui.Model.Settings
 {
-    public abstract class SettingsTests<TSettings> : ISettings where TSettings : SettingsGroup
+    public abstract class SettingsTests<TSettings> where TSettings : SettingsGroup
     {
-        protected object _settings;
-        protected Dictionary<string, object> _storage;
+        protected UserSettings _userSettings;
+        protected SettingsEventArgs _changeEvent;
+        protected TSettings _settingsGroup;
 
-        private readonly string _prefix;
+        protected abstract TSettings GetSettingsGroup();
+
+        protected string _prefix;
 
         public SettingsTests(string prefix)
         {
@@ -50,74 +54,38 @@ namespace TestCentric.Gui.Model.Settings
         [SetUp]
         public void SetUp()
         {
-            _storage = new Dictionary<string, object>();
-            _settings = Activator.CreateInstance(typeof(TSettings), this);
+            _userSettings = new TestModel(new MockTestEngine()).Services.UserSettings;
+            _userSettings.Changed += (object s, SettingsEventArgs e) => { _changeEvent = e; };
+            _settingsGroup = GetSettingsGroup();
         }
 
         [TestCaseSource("TestCases")]
         public void CheckSetting<TValue>(string propertyName, TValue defaultValue, TValue testValue)
         {
-            // Check that the property exists
-            var propInfo = GetProperty(propertyName);
+            // Ensure that the property exists
+            var propInfo = typeof(TSettings).GetProperty(propertyName);
 
             // Check the default value
-            Assert.That(propInfo.GetValue(_settings), Is.EqualTo(defaultValue), "Incorrect default value");
+            Assert.That(propInfo.GetValue(_settingsGroup), Is.EqualTo(defaultValue), "Incorrect default value");
 
             // Set the property and verify that it changed
-            propInfo.SetValue(_settings, testValue);
-            Assert.That(propInfo.GetValue(_settings), Is.EqualTo(testValue), "Value did not change");
+            propInfo.SetValue(_settingsGroup, testValue);
+            Assert.That(propInfo.GetValue(_settingsGroup), Is.EqualTo(testValue), "Value did not change");
 
-            // Check that correct storage key was used
-            Assert.That(_storage[_prefix + propertyName], Is.EqualTo(testValue), "Incorrect storage key");
+            // Check that a Changed event was received with the correct storage key
+            Assert.That(_changeEvent, Is.Not.Null, "No event received");
+            Assert.That(_changeEvent.SettingName, Is.EqualTo(_prefix + propertyName));
         }
-
-        protected PropertyInfo GetProperty(string propertyName)
-        {
-            var propInfo = _settings.GetType().GetProperty(propertyName);
-            Assert.NotNull(propInfo, $"Property {propertyName} not found.");
-
-            return propInfo;
-        }
-
-        #region ISettings Implementation
-
-        public event SettingsEventHandler Changed;
-
-        public object GetSetting(string settingName)
-        {
-            return _storage.ContainsKey(settingName)
-                ? _storage[settingName]
-                : null;
-        }
-
-        public T GetSetting<T>(string settingName, T defaultValue)
-        {
-            return _storage.ContainsKey(settingName)
-                ? (T)_storage[settingName]
-                : defaultValue;
-        }
-
-        public void RemoveGroup(string groupName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveSetting(string settingName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SaveSetting(string settingName, object settingValue)
-        {
-            _storage[settingName] = settingValue;
-        }
-
-        #endregion
     }
 
     public class EngineSettingsTests : SettingsTests<EngineSettings>
     {
         public EngineSettingsTests() : base("Engine.Options") { }
+
+        protected override EngineSettings GetSettingsGroup()
+        {
+            return _userSettings.Engine;
+        }
 
         public static TestCaseData[] TestCases = new TestCaseData[]
         {
@@ -133,6 +101,11 @@ namespace TestCentric.Gui.Model.Settings
     public class ErrorDisplaySettingsTests : SettingsTests<ErrorDisplaySettings>
     {
         public ErrorDisplaySettingsTests() : base("Gui.ErrorDisplay") { }
+
+        protected override ErrorDisplaySettings GetSettingsGroup()
+        {
+            return _userSettings.Gui.ErrorDisplay;
+        }
 
         public static TestCaseData[] TestCases = new TestCaseData[]
         {
@@ -154,6 +127,11 @@ namespace TestCentric.Gui.Model.Settings
 
         private static readonly Font TEST_FONT = new Font(FontFamily.GenericSerif, 10.0f);
         private static readonly Font TEST_FIXED_FONT = new Font(FontFamily.GenericMonospace, 10.0f);
+
+        protected override GuiSettings GetSettingsGroup()
+        {
+            return _userSettings.Gui;
+        }
 
         public static TestCaseData[] TestCases = new TestCaseData[]
         {
@@ -180,7 +158,7 @@ namespace TestCentric.Gui.Model.Settings
         public void CheckNestedSettingGroups(string propertyName, Type expectedType)
         {
             // Check that the property exists and returns the expected type
-            var propInfo = GetProperty(propertyName);
+            var propInfo = typeof(GuiSettings).GetProperty(propertyName);
             Assert.That(propInfo.PropertyType, Is.EqualTo(expectedType));
         }
     }
@@ -188,6 +166,11 @@ namespace TestCentric.Gui.Model.Settings
     public class MainFormSettingsTests : SettingsTests<MainFormSettings>
     {
         public MainFormSettingsTests() : base("Gui.MainForm") { }
+
+        protected override MainFormSettings GetSettingsGroup()
+        {
+            return _userSettings.Gui.MainForm;
+        }
 
         public static TestCaseData[] TestCases = new TestCaseData[]
         {
@@ -204,6 +187,11 @@ namespace TestCentric.Gui.Model.Settings
     {
         public MiniFormSettingsTests() : base("Gui.MiniForm") { }
 
+        protected override MiniFormSettings GetSettingsGroup()
+        {
+            return _userSettings.Gui.MiniForm;
+        }
+
         public static TestCaseData[] TestCases = new TestCaseData[]
         {
             new TestCaseData("Left", 10, 0),
@@ -218,6 +206,11 @@ namespace TestCentric.Gui.Model.Settings
     {
         public RecentProjectsSettingsTests() : base("Gui.RecentProjects") { }
 
+        protected override RecentProjectsSettings GetSettingsGroup()
+        {
+            return _userSettings.Gui.RecentProjects;
+        }
+
         public static TestCaseData[] TestCases = new TestCaseData[]
         {
             new TestCaseData("MaxFiles", 24, 12),
@@ -228,6 +221,11 @@ namespace TestCentric.Gui.Model.Settings
     public class TestTreeSettingsTests : SettingsTests<TestTreeSettings>
     {
         public TestTreeSettingsTests() : base("Gui.TestTree") { }
+
+        protected override TestTreeSettings GetSettingsGroup()
+        {
+            return _userSettings.Gui.TestTree;
+        }
 
         public static TestCaseData[] TestCases = new TestCaseData[]
         {
@@ -241,6 +239,11 @@ namespace TestCentric.Gui.Model.Settings
     public class TextOutputSettingsTests : SettingsTests<TextOutputSettings>
     {
         public TextOutputSettingsTests() : base("Gui.ResultTabs.TextOutput") { }
+
+        protected override TextOutputSettings GetSettingsGroup()
+        {
+            return _userSettings.Gui.TextOutput;
+        }
 
         public static TestCaseData[] TestCases = new TestCaseData[]
         {

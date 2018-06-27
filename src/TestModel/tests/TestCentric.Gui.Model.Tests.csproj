@@ -96,6 +96,10 @@
       <Project>{2e368281-3ba8-4050-b05e-0e0e43f8f446}</Project>
       <Name>mock-assembly</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\tests\test-utilities\test-utilities.csproj">
+      <Project>{3e63ad0f-24d4-46be-bee4-5a3299847d86}</Project>
+      <Name>test-utilities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\model\TestCentric.Gui.Model.csproj">
       <Project>{e978a8d7-e4a4-4de9-94df-d82bd764936b}</Project>
       <Name>TestCentric.Gui.Model</Name>
