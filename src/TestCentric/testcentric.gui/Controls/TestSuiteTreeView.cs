@@ -1045,10 +1045,15 @@ namespace TestCentric.Gui.Controls
 
         private void RestoreResults(TestNode testNode)
         {
-            foreach (TestNode child in testNode.Children)
-                RestoreResults(child);
+            var result = Model.GetResultForTest(testNode);
 
-            SetTestResult(Model.GetResultForTest(testNode));
+            if (result != null)
+            {
+                SetTestResult(result);
+
+                foreach (TestNode child in testNode.Children)
+                    RestoreResults(child);
+            }
         }
 
         private void LoadAlternateImages()
