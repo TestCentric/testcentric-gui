@@ -54,13 +54,40 @@ namespace TestCentric.Gui.Model
         public TestNode(XmlNode xmlNode)
         {
             Xml = xmlNode;
-            IsSuite = Xml.Name == "test-suite" || Xml.Name == "test-run";
             Id = Xml.GetAttribute("id");
-            Name = Xml.GetAttribute("name");
-            FullName = Xml.GetAttribute("fullname");
-            Type = IsSuite ? GetAttribute("type") : "TestCase";
-            TestCount = IsSuite ? GetAttribute("testcasecount", 0) : 1;
-            RunState = GetRunState();
+
+            switch (Xml.Name)
+            {
+                case "test-run":
+                    IsSuite = true;
+                    Name = FullName = Type = "TestRun";
+                    TestCount = GetAttribute("testcasecount", 0);
+                    RunState = RunState.Runnable;
+                    break;
+                case "test-suite":
+                    IsSuite = true;
+                    Name = Xml.GetAttribute("name");
+                    FullName = Xml.GetAttribute("fullname") ?? Name;
+                    Type = Xml.GetAttribute("type");
+                    TestCount = GetAttribute("testcasecount", 0);
+                    RunState = GetRunState();
+                    break;
+                default:
+                    IsSuite = false;
+                    Name = Xml.GetAttribute("name");
+                    FullName = Xml.GetAttribute("fullname") ?? Name;
+                    Type = "TestCase";
+                    TestCount = 1;
+                    RunState = GetRunState();
+                    break;
+            }
+
+            //IsSuite = Xml.Name == "test-suite" || Xml.Name == "test-run";
+            //Name = Xml.GetAttribute("name");
+            //FullName = Xml.GetAttribute("fullname") ?? Name;
+            //Type = IsSuite ? GetAttribute("type") : "TestCase";
+            //TestCount = IsSuite ? GetAttribute("testcasecount", 0) : 1;
+            //RunState = GetRunState();
         }
 
         public TestNode(string xmlText) : this(XmlHelper.CreateXmlNode(xmlText)) { }

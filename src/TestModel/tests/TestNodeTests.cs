@@ -58,11 +58,11 @@ namespace TestCentric.Gui.Model
         [Test]
         public void CreateTestRun()
         {
-            var testNode = new TestNode("<test-run id='123' name='mytest.dll' fullname='/A/B/C/mytest.dll' testcasecount='99'/>");
+            var testNode = new TestNode("<test-run id='123' testcasecount='99'/>");
 
             Assert.That(testNode.Id, Is.EqualTo("123"));
-            Assert.That(testNode.Name, Is.EqualTo("mytest.dll"));
-            Assert.That(testNode.FullName, Is.EqualTo("/A/B/C/mytest.dll"));
+            Assert.That(testNode.Name, Is.EqualTo("TestRun"));
+            Assert.That(testNode.FullName, Is.EqualTo("TestRun"));
             Assert.That(testNode.TestCount, Is.EqualTo(99));
             Assert.That(testNode.IsSuite);
         }

@@ -59,8 +59,7 @@ namespace TestCentric.Gui.Model
             Assert.False(_model.HasResults, "HasResults");
 
             var testRun = _model.Tests;
-            // A quirk of the engine: test-run does not have a runstate attribute
-            Assert.That(testRun.RunState, Is.EqualTo(RunState.Unknown), "RunState of test-run");
+            Assert.That(testRun.RunState, Is.EqualTo(RunState.Runnable), "RunState of test-run");
             Assert.That(testRun.TestCount, Is.EqualTo(MockAssembly.Tests), "TestCount of test-run");
             Assert.That(testRun.Children.Count, Is.EqualTo(1), "Child count of test-run");
 

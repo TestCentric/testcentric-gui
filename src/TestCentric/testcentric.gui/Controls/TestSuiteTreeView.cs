@@ -599,8 +599,9 @@ namespace TestCentric.Gui.Controls
 
                 try
                 {
-                    foreach (var child in topLevelNode.Children)
-                        AddTreeNodes(Nodes, child, false);
+                    //foreach (var child in topLevelNode.Children)
+                    //    AddTreeNodes(Nodes, child, false);
+                    AddTreeNodes(Nodes, topLevelNode, false);
 
                     SetInitialExpansion();
                 }
@@ -1261,6 +1262,10 @@ namespace TestCentric.Gui.Controls
 
         public TestFilter GetTestFilter()
         {
+            // HACK
+            if (Count == 1 && this[0].FullName == "TestRun")
+                return TestFilter.Empty;
+
             return Filters.MakeIdFilter(this.ToArray());
         }
     }

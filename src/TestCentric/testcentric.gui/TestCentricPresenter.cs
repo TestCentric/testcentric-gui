@@ -391,8 +391,7 @@ namespace TestCentric.Gui
 
         public void RunTests(TestNode test)
         {
-            EnableRunCommand(false);
-            Model.RunTests(test);
+            RunTests(new TestNode[] { test });
         }
 
         public void RunTests(TestNode[] tests)
