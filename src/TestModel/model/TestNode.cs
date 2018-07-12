@@ -60,6 +60,8 @@ namespace TestCentric.Gui.Model
             {
                 case "test-run":
                     IsSuite = true;
+                    // It's a quirk of the test engine that the test-run element does
+                    // not have attributes for Name, FullName, Type, or Runstate.
                     Name = FullName = Type = "TestRun";
                     TestCount = GetAttribute("testcasecount", 0);
                     RunState = RunState.Runnable;
@@ -81,25 +83,30 @@ namespace TestCentric.Gui.Model
                     RunState = GetRunState();
                     break;
             }
-
-            //IsSuite = Xml.Name == "test-suite" || Xml.Name == "test-run";
-            //Name = Xml.GetAttribute("name");
-            //FullName = Xml.GetAttribute("fullname") ?? Name;
-            //Type = IsSuite ? GetAttribute("type") : "TestCase";
-            //TestCount = IsSuite ? GetAttribute("testcasecount", 0) : 1;
-            //RunState = GetRunState();
         }
 
         public TestNode(string xmlText) : this(XmlHelper.CreateXmlNode(xmlText)) { }
 
         #endregion
 
-        #region Public Properties
+        #region ITestItem Implementation
+
+        public string Name { get; }
+
+        public TestFilter GetTestFilter()
+        {
+            return Xml.Name == "test-run"
+                ? TestFilter.Empty
+                : Filters.MakeIdFilter(this);
+        }
+
+        #endregion
+
+        #region Additonal Public Properties
 
         public XmlNode Xml { get; }
         public bool IsSuite { get; }
         public string Id { get; }
-        public string Name { get; }
         public string FullName  { get; }
         public string Type { get; }
         public int TestCount { get; }
@@ -124,12 +131,7 @@ namespace TestCentric.Gui.Model
 
         #endregion
 
-        #region Public Methods
-
-        public TestFilter GetTestFilter()
-        {
-            return Filters.MakeIdFilter(this);
-        }
+        #region Additional Public Methods
 
         public string GetAttribute(string name)
         {
@@ -198,6 +200,7 @@ namespace TestCentric.Gui.Model
             return items.ToArray();
         }
 
+#if NEW_GUI
         public TestSelection Select(TestNodePredicate predicate)
         {
             return Select(predicate, null);
@@ -223,10 +226,11 @@ namespace TestCentric.Gui.Model
                 foreach (TestNode child in testNode.Children)
                     Accumulate(selection, child, predicate);
         }
+#endif
 
-        #endregion
+#endregion
 
-        #region Helper Methods
+#region Helper Methods
 
         private static string FormatPropertyValue(string val)
         {
@@ -256,6 +260,6 @@ namespace TestCentric.Gui.Model
             }
         }
 
-        #endregion
+#endregion
     }
 }

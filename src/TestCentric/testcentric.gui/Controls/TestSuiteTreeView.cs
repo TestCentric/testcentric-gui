@@ -599,8 +599,6 @@ namespace TestCentric.Gui.Controls
 
                 try
                 {
-                    //foreach (var child in topLevelNode.Children)
-                    //    AddTreeNodes(Nodes, child, false);
                     AddTreeNodes(Nodes, topLevelNode, false);
 
                     SetInitialExpansion();
@@ -1240,33 +1238,6 @@ namespace TestCentric.Gui.Controls
         {
             foreach (TestSuiteTreeNode node in nodes)
                 FindCheckedNodes(node, topLevel);
-        }
-    }
-
-    #endregion
-
-    #region TestGroup
-
-    /// <summary>
-    /// A TestGroup is essentially a TestSelection with a
-    /// name and image index for use in the tree display.
-    /// Its TreeNode property is externally set and updated.
-    /// It can create a filter for running all the tests
-    /// in the group.
-    /// </summary>
-    public class TestNodeCollection : List<TestNode>, ITestItem
-    {
-        public TestNodeCollection(IEnumerable<TestNode> tests) : base(tests) { }
-
-        public string Name { get { return GetType().Name; } }
-
-        public TestFilter GetTestFilter()
-        {
-            // HACK
-            if (Count == 1 && this[0].FullName == "TestRun")
-                return TestFilter.Empty;
-
-            return Filters.MakeIdFilter(this.ToArray());
         }
     }
 

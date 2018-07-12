@@ -21,6 +21,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using NUnit.Engine;
@@ -52,21 +53,23 @@ namespace TestCentric.Gui.Model
         #endregion
 
         #region Methods to Create TestFilters
-
-        public static TestFilter MakeIdFilter(params TestNode[] testNodes)
+        
+        public static TestFilter MakeIdFilter(TestNode test)
         {
-            StringBuilder sb = new StringBuilder("<filter>");
+            return new TestFilter($"<filter><id>{test.Id}</id></filter>");
+        }
 
-            if (testNodes.Length > 1)
-                sb.Append("<or>");
+        public static TestFilter MakeIdFilter(IList<TestNode> testNodes)
+        {
+            if (testNodes.Count == 1)
+                return MakeIdFilter(testNodes[0]);
+
+            StringBuilder sb = new StringBuilder("<filter><or>");
 
             foreach (TestNode test in testNodes)
-                sb.AppendFormat("<id>{0}</id>", test.Id);
+                sb.Append($"<id>{test.Id}</id>");
 
-            if (testNodes.Length > 1)
-                sb.Append("</or>");
-
-            sb.Append("</filter>");
+            sb.Append("</or></filter>");
 
             return new TestFilter(sb.ToString());
         }
