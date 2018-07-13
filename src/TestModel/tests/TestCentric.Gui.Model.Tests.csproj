@@ -87,7 +87,6 @@
     <Compile Include="SettingsTests.cs" />
     <Compile Include="TestModelAssemblyTests.cs" />
     <Compile Include="TestModelPackageTests.cs" />
-    <Compile Include="TestSelectionTests.cs" />
     <Compile Include="TestNodeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
