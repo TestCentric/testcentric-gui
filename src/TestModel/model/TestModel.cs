@@ -161,7 +161,7 @@ namespace TestCentric.Gui.Model
 
             TestFiles.Clear();
             TestFiles.AddRange(files);
-            _events.FireTestsLoading();
+            _events.FireTestsLoading(files);
 
             TestPackage = MakeTestPackage(files);
 

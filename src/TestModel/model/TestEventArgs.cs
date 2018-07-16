@@ -92,4 +92,14 @@ namespace TestCentric.Gui.Model
         public string Stream { get; }
         public string Text { get; }
     }
+
+    public class TestFilesLoadingEventArgs : EventArgs
+    {
+        public TestFilesLoadingEventArgs(IList<string> testFilesLoading)
+        {
+            TestFilesLoading = testFilesLoading;
+        }
+
+        public IList<string> TestFilesLoading { get; }
+    }
 }

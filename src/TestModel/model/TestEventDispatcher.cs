@@ -22,6 +22,7 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Generic;
 using System.Xml;
 using NUnit.Engine;
 
@@ -38,9 +39,9 @@ namespace TestCentric.Gui.Model
 
         #region Public Methods to Fire Events
 
-        public void FireTestsLoading()
+        public void FireTestsLoading(IList<string> files)
         {
-            TestsLoading?.Invoke(new TestEventArgs());
+            TestsLoading?.Invoke(new TestFilesLoadingEventArgs(files));
         }
 
         public void FireTestsReloading()
@@ -83,7 +84,7 @@ namespace TestCentric.Gui.Model
        #region ITestEvents Implementation
 
         // Test loading events
-        public event TestEventHandler TestsLoading;
+        public event TestFilesLoadingEventHandler TestsLoading;
         public event TestEventHandler TestsReloading;
         public event TestEventHandler TestsUnloading;
 

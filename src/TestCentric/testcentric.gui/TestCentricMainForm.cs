@@ -1515,7 +1515,7 @@ namespace TestCentric.Gui
                     Activate();
             };
 
-            Model.Events.TestsLoading += (TestEventArgs e) =>
+            Model.Events.TestsLoading += (TestFilesLoadingEventArgs e) =>
             {
                 EnableRunCommand(false);
                 saveResultsMenuItem.Enabled = false;
