@@ -154,7 +154,7 @@ namespace TestCentric.Gui
         public string GetHelpText()
         {
             var writer = new StringWriter();
-            writer.WriteLine("TC-NUnit [inputfiles] [options]");
+            writer.WriteLine("TESTCENTRIC [inputfiles] [options]");
             writer.WriteLine();
             writer.WriteLine("Starts the TestCentric Runner, optionally loading and running a set of NUnit tests. You may specify any combination of assemblies and supported project files as arguments.");
             writer.WriteLine();
