@@ -64,6 +64,7 @@
             this.editorPathTextBox.Size = new System.Drawing.Size(298, 20);
             this.editorPathTextBox.TabIndex = 4;
             this.editorPathTextBox.TextChanged += new System.EventHandler(this.editorPathTextBox_TextChanged);
+            this.editorPathTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.editorPathTextBox_Validating);
             // 
             // editorPathBrowseButton
             // 

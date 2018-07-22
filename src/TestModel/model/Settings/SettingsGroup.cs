@@ -73,7 +73,10 @@ namespace TestCentric.Gui.Model.Settings
 
         public void SaveSetting(string settingName, object settingValue)
         {
-            _settings.SaveSetting(_prefix + settingName, settingValue);
+            if (settingValue != null)
+                _settings.SaveSetting(_prefix + settingName, settingValue);
+            else
+                RemoveSetting(settingName);
         }
 
         #endregion

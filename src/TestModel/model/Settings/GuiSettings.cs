@@ -129,8 +129,8 @@ namespace TestCentric.Gui.Model.Settings
 
         public string ProjectEditorPath
         {
-            get { return GetSetting(nameof(ProjectEditorPath), "nunit-editor.exe"); }
-            set { SaveSetting(nameof(ProjectEditorPath), value); } // TODO: Handle null
+            get { return (string)GetSetting(nameof(ProjectEditorPath)); }
+            set { SaveSetting(nameof(ProjectEditorPath), value); }
         }
 
         public InternalTraceLevel InternalTraceLevel

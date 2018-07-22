@@ -101,6 +101,11 @@ namespace TestCentric.Gui.Model
             }
         }
 
+        public string ProjectEditorPath
+        {
+            get { return Services.UserSettings.Gui.ProjectEditorPath ?? "nunit-editor.exe"; }
+        }
+
         #endregion
 
         #region Current State of the Model
