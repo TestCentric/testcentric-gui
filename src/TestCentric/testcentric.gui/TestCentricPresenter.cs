@@ -421,6 +421,17 @@ namespace TestCentric.Gui
 
         #endregion
 
+        #region Tools Methods
+
+        public void DisplayProjectEditor()
+        {
+            string editorPath = UserSettings.Gui.ProjectEditorPath;
+            if (editorPath != null && File.Exists(editorPath))
+                System.Diagnostics.Process.Start(editorPath);
+        }
+
+        #endregion
+
         #endregion
 
         #region Helper Methods

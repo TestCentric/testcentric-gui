@@ -122,7 +122,7 @@ namespace TestCentric.Gui
         private MenuItem addTestFileMenuItem;
         private MenuItem extensionsMenuItem;
         private MenuItem testCentricHelpMenuItem;
-        private MenuItem projetEditorMenuItem;
+        private MenuItem projectEditorMenuItem;
         private ExpandingLabel suiteName;
 
         #endregion
@@ -202,7 +202,7 @@ namespace TestCentric.Gui
             this.testMenuSeparator = new System.Windows.Forms.MenuItem();
             this.stopRunMenuItem = new System.Windows.Forms.MenuItem();
             this.toolsMenu = new System.Windows.Forms.MenuItem();
-            this.projetEditorMenuItem = new System.Windows.Forms.MenuItem();
+            this.projectEditorMenuItem = new System.Windows.Forms.MenuItem();
             this.saveResultsMenuItem = new System.Windows.Forms.MenuItem();
             this.toolsMenuSeparator1 = new System.Windows.Forms.MenuItem();
             this.extensionsMenuItem = new System.Windows.Forms.MenuItem();
@@ -494,18 +494,19 @@ namespace TestCentric.Gui
             // 
             this.toolsMenu.Index = 3;
             this.toolsMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.projetEditorMenuItem,
+            this.projectEditorMenuItem,
             this.saveResultsMenuItem,
             this.toolsMenuSeparator1,
             this.extensionsMenuItem,
             this.settingsMenuItem});
             this.toolsMenu.Text = "T&ools";
+            this.toolsMenu.Popup += new System.EventHandler(this.toolsMenu_Popup);
             // 
             // projetEditorMenuItem
             // 
-            this.projetEditorMenuItem.Index = 0;
-            this.projetEditorMenuItem.Text = "Project Editor...";
-            this.projetEditorMenuItem.Click += new System.EventHandler(this.projectEditorMenuItem_Click);
+            this.projectEditorMenuItem.Index = 0;
+            this.projectEditorMenuItem.Text = "Project Editor...";
+            this.projectEditorMenuItem.Click += new System.EventHandler(this.projectEditorMenuItem_Click);
             // 
             // saveResultsMenuItem
             // 
@@ -1001,9 +1002,15 @@ namespace TestCentric.Gui
 
         #region Tools Menu
 
+        private void toolsMenu_Popup(object sender, EventArgs e)
+        {
+            projectEditorMenuItem.Enabled = File.Exists(Model.ProjectEditorPath);
+
+        }
+
         private void projectEditorMenuItem_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start(UserSettings.Gui.ProjectEditorPath);
+            Presenter.DisplayProjectEditor();
         }
 
         private void saveResultsMenuItem_Click(object sender, System.EventArgs e)

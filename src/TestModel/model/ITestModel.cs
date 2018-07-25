@@ -77,6 +77,8 @@ namespace TestCentric.Gui.Model
 
         TestFilter CategoryFilter { get; }
 
+        string ProjectEditorPath { get; }
+
         #endregion
 
         #region Methods

@@ -145,7 +145,7 @@ namespace TestCentric.Gui.Model.Settings
             new TestCaseData("ClearResultsOnReload", false, true),
             new TestCaseData("Font", DEFAULT_FONT, TEST_FONT),
             new TestCaseData("FixedFont", DEFAULT_FIXED_FONT, TEST_FIXED_FONT),
-            new TestCaseData("ProjectEditorPath", "nunit-editor.exe", "/Some/Path/Editor.exe"),
+            new TestCaseData("ProjectEditorPath", null, "/Some/Path/Editor.exe"),
             new TestCaseData("InternalTraceLevel", InternalTraceLevel.Off, InternalTraceLevel.Verbose)
         };
 

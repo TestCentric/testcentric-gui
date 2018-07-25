@@ -25,6 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 
@@ -41,7 +42,7 @@ namespace TestCentric.Gui.SettingsPages
         {
             string editorPath = Settings.Gui.ProjectEditorPath;
 
-            if (editorPath == "nunit-editor.exe")
+            if (editorPath == null)
             {
                 useNUnitEditorRadioButton.Checked = true;
                 editorPathTextBox.Text = "";
@@ -80,6 +81,14 @@ namespace TestCentric.Gui.SettingsPages
 
             if ( dlg.ShowDialog( this ) == DialogResult.OK ) 
                 editorPathTextBox.Text = dlg.FileName;
+        }
+
+        private void editorPathTextBox_Validating(object sender, CancelEventArgs e)
+        {
+            var path = editorPathTextBox.Text;
+            if (!string.IsNullOrWhiteSpace(path) && !File.Exists(path))
+                if (MessageDisplay.Ask("The specified path does not exist. Do you want to continue anyway?") == DialogResult.Yes)
+                    e.Cancel = true;
         }
     }
 }
