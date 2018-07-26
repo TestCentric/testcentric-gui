@@ -502,7 +502,7 @@ namespace TestCentric.Gui
             this.toolsMenu.Text = "T&ools";
             this.toolsMenu.Popup += new System.EventHandler(this.toolsMenu_Popup);
             // 
-            // projetEditorMenuItem
+            // projectEditorMenuItem
             // 
             this.projectEditorMenuItem.Index = 0;
             this.projectEditorMenuItem.Text = "Project Editor...";
