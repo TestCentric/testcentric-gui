@@ -200,7 +200,6 @@ namespace TestCentric.Gui.Model
             return items.ToArray();
         }
 
-#if NEW_GUI
         public TestSelection Select(TestNodePredicate predicate)
         {
             return Select(predicate, null);
@@ -226,7 +225,6 @@ namespace TestCentric.Gui.Model
                 foreach (TestNode child in testNode.Children)
                     Accumulate(selection, child, predicate);
         }
-#endif
 
 #endregion
 

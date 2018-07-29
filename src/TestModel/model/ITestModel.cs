@@ -55,6 +55,8 @@ namespace TestCentric.Gui.Model
 
         List<string> TestFiles { get; }
 
+        TestSelection TestAssemblies { get; }
+
         IDictionary<string, object> PackageSettings { get; }
 
         // TestNode hierarchy representing the discovered tests

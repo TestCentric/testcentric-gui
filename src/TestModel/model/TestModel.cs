@@ -114,6 +114,8 @@ namespace TestCentric.Gui.Model
 
         public List<string> TestFiles { get; } = new List<string>();
 
+        public TestSelection TestAssemblies { get { return Tests.Select((tn) => tn.Type == "Assembly"); } }
+
         public IDictionary<string, object> PackageSettings { get; } = new Dictionary<string, object>();
 
         public TestNode Tests { get; private set; }

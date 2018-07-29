@@ -1540,6 +1540,10 @@ namespace TestCentric.Gui
                 EnableRunCommand(true);
                 saveResultsMenuItem.Enabled = false;
 
+                foreach (var assembly in Model.TestAssemblies)
+                    if (assembly.RunState == RunState.NotRunnable)
+                        MessageDisplay.Error(assembly.GetProperty("_SKIPREASON"));
+
                 //if ( TestLoader.TestCount == 0 )
                 //{
                 //    foreach( TestAssemblyInfo info in TestLoader.AssemblyInfo )
