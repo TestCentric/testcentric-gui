@@ -21,39 +21,39 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System.Linq;
 using NUnit.Framework;
 
 namespace TestCentric.Gui.Model
 {
     public class TestSelectionTests
     {
-        private TestSelection selection;
+        private TestSelection _selection;
 
         [SetUp]
         public void CreateSelection()
         {
-            selection = new TestSelection();
-            selection.Add(MakeTestNode("1", "Tom", "Passed"));
-            selection.Add(MakeTestNode("2", "Dick", "Failed"));
-            selection.Add(MakeTestNode("3", "Harry", "Passed"));
+            _selection = new TestSelection();
+            _selection.Add(MakeTestNode("1", "Tom", "Passed"));
+            _selection.Add(MakeTestNode("2", "Dick", "Failed"));
+            _selection.Add(MakeTestNode("3", "Harry", "Passed"));
         }
 
         [Test]
         public void SortByNameTest()
         {
-            var sorted = selection.SortBy((x, y) => x.Name.CompareTo(y.Name));
+            _selection.Sort((x, y) => x.Name.CompareTo(y.Name));
 
-            Assert.That(sorted, Is.SameAs(selection));
-            Assert.That(sorted[0].Name, Is.EqualTo("Dick"));
-            Assert.That(sorted[1].Name, Is.EqualTo("Harry"));
-            Assert.That(sorted[2].Name, Is.EqualTo("Tom"));
+            Assert.That(_selection[0].Name, Is.EqualTo("Dick"));
+            Assert.That(_selection[1].Name, Is.EqualTo("Harry"));
+            Assert.That(_selection[2].Name, Is.EqualTo("Tom"));
         }
 
         [Test]
         public void RemoveTestNode()
         {
-            selection.RemoveId("2");
-            Assert.That(selection.Count, Is.EqualTo(2));
+            _selection.RemoveId("2");
+            Assert.That(_selection.Count, Is.EqualTo(2));
         }
 
         private TestNode MakeTestNode(string id, string name, string result)

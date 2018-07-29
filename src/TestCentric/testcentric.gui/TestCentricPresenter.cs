@@ -398,7 +398,7 @@ namespace TestCentric.Gui
         {
             EnableRunCommand(false);
             if (tests != null && tests.Length > 0)
-                Model.RunTests(new TestNodeCollection(tests));
+                Model.RunTests(new TestSelection(tests));
         }
 
         delegate void VoidMethodTakingBooleanArg(bool b);

@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using NUnit.Engine;
 
 namespace TestCentric.Gui.Model
 {
@@ -34,16 +35,22 @@ namespace TestCentric.Gui.Model
     /// designed to run under the .NET 2.0 runtime or later,
     /// we can't use the extension methods for List.
     /// </summary>
-    public class TestSelection : List<TestNode>
+    public class TestSelection : List<TestNode>, ITestItem
     {
-        //private List<TestNode> _selection = new List<TestNode>();
+        public TestSelection() : base() { }
 
-        //public void Add(TestNode result)
-        //{
-        //    _selection.Add(result);
-        //}
+        public TestSelection(IEnumerable<TestNode> tests) : base(tests) { }
 
-        /// <summary>
+        public string Name { get { return GetType().Name; } }
+
+        public TestFilter GetTestFilter()
+        {
+            return Count == 1
+                ? this[0].GetTestFilter() // This allows nodes with special handling for filters to apply it.
+                : Filters.MakeIdFilter(this);
+        }
+
+        // <summary>
         /// Remove the test node with a specific id from the selection
         /// </summary>
         /// <param name="id"></param>
@@ -57,36 +64,36 @@ namespace TestCentric.Gui.Model
                 }
         }
 
-        public TestSelection SortBy(Comparison<TestNode> comparer)
-        {
-            Sort(comparer);
-            return this;
-        }
+        //public TestSelection SortBy(Comparison<TestNode> comparer)
+        //{
+        //    Sort(comparer);
+        //    return this;
+        //}
 
-        public IDictionary<string, TestSelection> GroupBy(GroupingFunction groupingFunction)
-        {
-            var groups = new Dictionary<string, TestSelection>();
+        //public IDictionary<string, TestSelection> GroupBy(GroupingFunction groupingFunction)
+        //{
+        //    var groups = new Dictionary<string, TestSelection>();
 
-            foreach (TestNode testNode in this)
-            {
-                var groupName = groupingFunction(testNode);
+        //    foreach (TestNode testNode in this)
+        //    {
+        //        var groupName = groupingFunction(testNode);
 
-                TestSelection group = null;
-                if (!groups.ContainsKey(groupName))
-                {
-                    group = new TestSelection();
-                    groups[groupName] = group;
-                }
-                else
-                {
-                    group = groups[groupName];
-                }
+        //        TestSelection group = null;
+        //        if (!groups.ContainsKey(groupName))
+        //        {
+        //            group = new TestSelection();
+        //            groups[groupName] = group;
+        //        }
+        //        else
+        //        {
+        //            group = groups[groupName];
+        //        }
 
-                group.Add(testNode);
-            }
+        //        group.Add(testNode);
+        //    }
 
-            return groups;
-        }
+        //    return groups;
+        //}
 
         //IEnumerator<TestNode> IEnumerable<TestNode>.GetEnumerator()
         //{

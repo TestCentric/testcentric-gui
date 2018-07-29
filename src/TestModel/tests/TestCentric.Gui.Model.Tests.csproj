@@ -92,6 +92,7 @@
     <Compile Include="TestModelPackageTests.cs" />
     <Compile Include="TestNodeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestSelectionTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\tests\mock-assembly\mock-assembly.csproj">

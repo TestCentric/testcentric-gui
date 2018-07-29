@@ -62,7 +62,7 @@
     <Compile Include="Settings\GuiSettings.cs" />
     <Compile Include="Settings\EngineSettings.cs" />
     <Compile Include="Settings\UserSettings.cs" />
-    <Compile Include="TestNodeCollection.cs" />
+    <Compile Include="TestSelection.cs" />
     <Compile Include="TestServices.cs" />
     <Compile Include="TestEventDispatcher.cs" />
     <Compile Include="Properties\CommonAssemblyInfo.cs" />
