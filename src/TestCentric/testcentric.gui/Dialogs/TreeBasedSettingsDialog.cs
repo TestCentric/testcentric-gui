@@ -41,9 +41,9 @@ namespace TestCentric.Gui
 
         private SettingsPage current;
 
-        public static void Display( Form owner, ITestModel model, params SettingsPage[] pages )
+        public static void Display( Form owner, TestCentricPresenter presenter, ITestModel model, params SettingsPage[] pages )
         {
-            using( TreeBasedSettingsDialog dialog = new TreeBasedSettingsDialog(model) )
+            using( TreeBasedSettingsDialog dialog = new TreeBasedSettingsDialog(presenter, model) )
             {
                 owner.Site.Container.Add( dialog );
                 dialog.Font = owner.Font;
@@ -52,7 +52,7 @@ namespace TestCentric.Gui
             }
         }
 
-        public TreeBasedSettingsDialog(ITestModel model) : base(model)
+        public TreeBasedSettingsDialog(TestCentricPresenter presenter, ITestModel model) : base(presenter, model)
         {
             // This call is required by the Windows Form Designer.
             InitializeComponent();

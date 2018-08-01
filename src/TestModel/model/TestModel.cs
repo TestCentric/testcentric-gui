@@ -201,6 +201,10 @@ namespace TestCentric.Gui.Model
 
         public void ReloadTests()
         {
+            _events.FireTestsReloading();
+
+            Runner.Unload();
+
             Tests = new TestNode(Runner.Explore(TestFilter.Empty));
             AvailableCategories = GetAvailableCategories();
 
@@ -258,6 +262,11 @@ namespace TestCentric.Gui.Model
             }
 
             return null;
+        }
+
+        public void ClearResults()
+        {
+            Results.Clear();
         }
 
         public void SelectCategories(string[] categories, bool exclude)

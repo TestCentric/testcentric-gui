@@ -38,9 +38,9 @@ namespace TestCentric.Gui
     public static class SettingsDialog
     {
 #if TREE_BASED
-        public static void Display( Form owner, ITestModel model )
+        public static void Display( Form owner, TestCentricPresenter presenter, ITestModel model )
         {
-            TreeBasedSettingsDialog.Display(owner, model,
+            TreeBasedSettingsDialog.Display(owner, presenter, model,
             new GuiSettingsPage("Gui.General"),
             new TreeSettingsPage("Gui.Tree Display"),
             new AssemblyReloadSettingsPage("Gui.Assembly Reload"),

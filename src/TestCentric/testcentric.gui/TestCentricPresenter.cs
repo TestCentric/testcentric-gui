@@ -372,10 +372,34 @@ namespace TestCentric.Gui
 
         #endregion
 
+        #region Reload Methods
+
+        public void ReloadTests()
+        {
+            Model.ReloadTests();
+            //NUnitProject project = loader.TestProject;
+
+            //bool wrapper = project.IsAssemblyWrapper;
+            //string projectPath = project.ProjectPath;
+            //string activeConfigName = project.ActiveConfigName;
+
+            //// Unload first to avoid message asking about saving
+            //loader.UnloadProject();
+
+            //if (wrapper)
+            //    OpenProject(projectPath);
+            //else
+            //    OpenProject(projectPath, activeConfigName, null);
+        }
+
+        #endregion
+
         #region Run Methods
 
         public void RunAllTests()
         {
+            EnableRunCommand(false);
+            Model.ClearResults();
             Model.RunAllTests();
         }
 
@@ -397,6 +421,10 @@ namespace TestCentric.Gui
         public void RunTests(TestNode[] tests)
         {
             EnableRunCommand(false);
+            
+            if (UserSettings.Gui.ReloadOnRun)
+                Model.ClearResults();
+
             if (tests != null && tests.Length > 0)
                 Model.RunTests(new TestSelection(tests));
         }
@@ -428,6 +456,11 @@ namespace TestCentric.Gui
             string editorPath = UserSettings.Gui.ProjectEditorPath;
             if (editorPath != null && File.Exists(editorPath))
                 System.Diagnostics.Process.Start(editorPath);
+        }
+
+        public void DisplaySettings()
+        {
+            SettingsDialog.Display(Form, this, Model);
         }
 
         #endregion

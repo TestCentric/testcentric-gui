@@ -57,8 +57,9 @@ namespace TestCentric.Gui
         #region Construction and Disposal
 
         // NOTE: We have to keep a default constructor for design mode
-        public SettingsDialogBase(ITestModel model) : this()
+        public SettingsDialogBase(TestCentricPresenter presenter, ITestModel model) : this()
         {
+            Presenter = presenter;
             Model = model;
             Settings = model.Services.UserSettings;
         }
@@ -147,6 +148,8 @@ namespace TestCentric.Gui
 
         #region Properties
 
+        public TestCentricPresenter Presenter { get; }
+
         public ITestModel Model { get; }
 
         public UserSettings Settings { get; }
@@ -172,7 +175,7 @@ namespace TestCentric.Gui
         private void SettingsDialogBase_Closed(object sender, System.EventArgs e)
         {
             if (_reloadProjectOnClose)
-                Model.ReloadTests();
+                Presenter.ReloadTests();
         }
 
         private void okButton_Click(object sender, System.EventArgs e)
