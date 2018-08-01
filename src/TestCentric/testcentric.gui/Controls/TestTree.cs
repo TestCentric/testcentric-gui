@@ -691,7 +691,7 @@ namespace TestCentric.Gui.Controls
 
         private void checkBoxesMenuItem_Click(object sender, System.EventArgs e)
         {
-            ShowCheckBoxes = !checkBoxesMenuItem.Checked;
+            Model.Services.UserSettings.Gui.TestTree.ShowCheckBoxes = ShowCheckBoxes = !checkBoxesMenuItem.Checked;
         }
 
         private void UpdateCategorySelection()
@@ -712,7 +712,7 @@ namespace TestCentric.Gui.Controls
 
         private void tests_CheckBoxesChanged(object sender, System.EventArgs e)
         {
-            ShowCheckBoxes = tests.CheckBoxes;
+            Model.Services.UserSettings.Gui.TestTree.ShowCheckBoxes = ShowCheckBoxes = tests.CheckBoxes;
         }
 
         //private void UserSettings_Changed(object sender, SettingsEventArgs args)
