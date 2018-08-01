@@ -807,7 +807,7 @@ namespace TestCentric.Gui
 
         private void reloadTestsMenuItem_Click(object sender, System.EventArgs e)
         {
-            Model.ReloadTests();
+            Presenter.ReloadTests();
         }
 
         private void exitMenuItem_Click(object sender, System.EventArgs e)
@@ -1029,7 +1029,7 @@ namespace TestCentric.Gui
 
         private void settingsMenuItem_Click(object sender, System.EventArgs e)
         {
-            SettingsDialog.Display( this, Model );
+            Presenter.DisplaySettings();
         }
 
         #endregion

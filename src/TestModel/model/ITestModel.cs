@@ -117,6 +117,9 @@ namespace TestCentric.Gui.Model
         // Get the result for a test if available
         ResultNode GetResultForTest(TestNode testNode);
 
+        // Clear the results for all tests
+        void ClearResults();
+
         // Broadcast event when SelectedTestItem changes
         void NotifySelectedItemChanged(ITestItem testItem);
 

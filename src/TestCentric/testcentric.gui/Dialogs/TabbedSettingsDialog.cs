@@ -36,9 +36,9 @@ namespace TestCentric.Gui
         protected System.Windows.Forms.TabControl tabControl1;
         private System.ComponentModel.IContainer components = null;
 
-        public static void Display( Form owner, ITestModel model, params SettingsPage[] pages )
+        public static void Display( Form owner, TestCentricPresenter presenter, ITestModel model, params SettingsPage[] pages )
         {
-            using( TabbedSettingsDialog dialog = new TabbedSettingsDialog(model) )
+            using( TabbedSettingsDialog dialog = new TabbedSettingsDialog(presenter, model) )
             {
                 owner.Site.Container.Add( dialog );
                 dialog.Font = owner.Font;
@@ -47,7 +47,7 @@ namespace TestCentric.Gui
             }
         }
 
-        public TabbedSettingsDialog(ITestModel model) : base(model)
+        public TabbedSettingsDialog(TestCentricPresenter presenter, ITestModel model) : base(presenter, model)
         {
             // This call is required by the Windows Form Designer.
             InitializeComponent();

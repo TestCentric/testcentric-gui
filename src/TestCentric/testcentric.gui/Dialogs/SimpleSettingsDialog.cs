@@ -37,9 +37,9 @@ namespace TestCentric.Gui
         private System.Windows.Forms.GroupBox groupBox1;
         private System.ComponentModel.IContainer components = null;
 
-        public static void Display( Form owner, ITestModel model, SettingsPage page )
+        public static void Display( Form owner, TestCentricPresenter presenter, ITestModel model, SettingsPage page )
         {
-            using( SimpleSettingsDialog dialog = new SimpleSettingsDialog(model) )
+            using( SimpleSettingsDialog dialog = new SimpleSettingsDialog(presenter, model) )
             {
                 owner.Site.Container.Add( dialog );
                 dialog.Font = owner.Font;
@@ -48,7 +48,7 @@ namespace TestCentric.Gui
             }
         }
 
-        public SimpleSettingsDialog(ITestModel model) : base(model)
+        public SimpleSettingsDialog(TestCentricPresenter presenter, ITestModel model) : base(presenter, model)
         {
             // This call is required by the Windows Form Designer.
             InitializeComponent();
