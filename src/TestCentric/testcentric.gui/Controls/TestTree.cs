@@ -435,7 +435,6 @@ namespace TestCentric.Gui.Controls
             this.tests.Name = "tests";
             this.tests.Size = new System.Drawing.Size(219, 448);
             this.tests.TabIndex = 0;
-            this.tests.CheckBoxesChanged += new System.EventHandler(this.tests_CheckBoxesChanged);
             // 
             // buttonPanel
             // 
@@ -691,7 +690,7 @@ namespace TestCentric.Gui.Controls
 
         private void checkBoxesMenuItem_Click(object sender, System.EventArgs e)
         {
-            Model.Services.UserSettings.Gui.TestTree.ShowCheckBoxes = ShowCheckBoxes = !checkBoxesMenuItem.Checked;
+            Model.Services.UserSettings.Gui.TestTree.ShowCheckBoxes = !checkBoxesMenuItem.Checked;
         }
 
         private void UpdateCategorySelection()
@@ -709,17 +708,6 @@ namespace TestCentric.Gui.Controls
 
             tests.TreeFilter = treeFilter;
         }
-
-        private void tests_CheckBoxesChanged(object sender, System.EventArgs e)
-        {
-            Model.Services.UserSettings.Gui.TestTree.ShowCheckBoxes = ShowCheckBoxes = tests.CheckBoxes;
-        }
-
-        //private void UserSettings_Changed(object sender, SettingsEventArgs args)
-        //{
-        //	//if ( args.SettingName == "Options.ShowCheckBoxes" )
-        //	//	this.ShowCheckBoxes = Services.UserSettings.GetSetting( args.SettingName, false );
-        //}
 
         #region IViewControl Implementation
 
@@ -802,7 +790,11 @@ namespace TestCentric.Gui.Controls
                 treeMenu.Visible = false;
             };
 
-            //Services.UserSettings.Changed += new SettingsEventHandler(UserSettings_Changed);
+            Model.Services.UserSettings.Changed += (object sender, SettingsEventArgs e) =>
+            {
+                if (e.SettingName == "Gui.TestTree.ShowCheckBoxes")
+                    this.ShowCheckBoxes = Model.Services.UserSettings.Gui.TestTree.ShowCheckBoxes;
+            };
         }
 
         #endregion

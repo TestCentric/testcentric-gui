@@ -169,9 +169,7 @@ namespace TestCentric.Gui.Controls
                         ? new VisualState(this)
                         : null;
 
-                    base.CheckBoxes = value;
-
-                    CheckBoxesChanged?.Invoke(this, new EventArgs());
+                    Model.Services.UserSettings.Gui.TestTree.ShowCheckBoxes = base.CheckBoxes = value;
 
                     if (visualState != null)
                     {
@@ -278,7 +276,6 @@ namespace TestCentric.Gui.Controls
 
         //public event SelectedTestChangedHandler SelectedTestChanged;
         //public event CheckedTestChangedHandler CheckedTestChanged;
-        public event EventHandler CheckBoxesChanged;
 
         public TestSuiteTreeNode this[string id]
         {
