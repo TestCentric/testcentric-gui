@@ -121,6 +121,7 @@ namespace TestCentric.Gui.SettingsPages
             // reloadOnChangeCheckBox
             // 
             this.reloadOnChangeCheckBox.AutoSize = true;
+            this.reloadOnChangeCheckBox.Enabled = false;
             this.helpProvider1.SetHelpString(this.reloadOnChangeCheckBox, "If checked, the assembly is reloaded whenever it changes. Changes to this setting" +
         " do not take effect until the next time an assembly is loaded.");
             this.reloadOnChangeCheckBox.Location = new System.Drawing.Point(24, 64);

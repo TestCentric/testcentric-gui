@@ -202,6 +202,7 @@ namespace TestCentric.Gui.SettingsPages
             // 
             // inconclusiveImage
             // 
+            this.inconclusiveImage.Enabled = false;
             this.inconclusiveImage.Image = ((System.Drawing.Image)(resources.GetObject("inconclusiveImage.Image")));
             this.inconclusiveImage.Location = new System.Drawing.Point(152, 92);
             this.inconclusiveImage.Name = "inconclusiveImage";
@@ -231,6 +232,7 @@ namespace TestCentric.Gui.SettingsPages
             // 
             // imageSetListBox
             // 
+            this.imageSetListBox.Enabled = false;
             this.imageSetListBox.FormattingEnabled = true;
             this.imageSetListBox.Location = new System.Drawing.Point(236, 61);
             this.imageSetListBox.Name = "imageSetListBox";
