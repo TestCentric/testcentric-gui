@@ -397,7 +397,7 @@ namespace TestCentric.Gui.Controls
         {
             UserSettings = model.Services.UserSettings;
 
-            //settings.Changed += new SettingsEventHandler(UserSettings_Changed);
+            UserSettings.Changed += new SettingsEventHandler(UserSettings_Changed);
 
             int splitPosition = UserSettings.Gui.ErrorDisplay.SplitterPosition;
             if (splitPosition >= tabSplitter.MinSize && splitPosition < ClientSize.Height)

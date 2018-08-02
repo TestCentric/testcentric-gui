@@ -139,6 +139,12 @@ namespace TestCentric.Gui
 
             UserSettings = Model.Services.UserSettings;
             RecentFiles = Model.Services.RecentFiles;
+
+            //UserSettings.Changed += (object sender, SettingsEventArgs e) =>
+            //{
+            //    if (e.SettingName == "Gui.Options.DisplayFormat")
+            //        LoadFormSettings();
+            //};
         }
 
         protected override void Dispose(bool disposing)
@@ -1119,13 +1125,27 @@ namespace TestCentric.Gui
                 treeSplitter.SplitPosition = splitPosition;
 
             // Handle changes in splitter positions
-            treeSplitter.SplitterMoved += new SplitterEventHandler( treeSplitter_SplitterMoved );
+            treeSplitter.SplitterMoved += new SplitterEventHandler(treeSplitter_SplitterMoved);
 
             // Get the fixed font used by result tabs
             _fixedFont = UserSettings.Gui.FixedFont;
 
-            // Handle changes in form settings
-            //_userSettings.Changed += new SettingsEventHandler(userSettings_Changed);
+            // Handle changes in settings
+            UserSettings.Changed += (object sender, SettingsEventArgs e) =>
+            {
+                if (e.SettingName == "Gui.Options.DisplayFormat")
+                {
+                    if (UserSettings.Gui.DisplayFormat == "Full")
+                        displayFullGui();
+                    else
+                        displayMiniGui();
+                }
+                //else if (args.SettingName.StartsWith("Gui.TextOutput.") && args.SettingName.EndsWith(".Content"))
+                //{
+                //    TestLoader.IsTracingEnabled = resultTabs.IsTracingEnabled;
+                //    TestLoader.LoggingThreshold = resultTabs.MaximumLogLevel;
+                //}
+            };
         }
 
         private bool IsValidLocation( Point location )
@@ -1233,23 +1253,6 @@ namespace TestCentric.Gui
             }
         }
 
-        //private void userSettings_Changed(object sender, SettingsEventArgs args)
-        //{
-        //    if ( args.SettingName == "Gui.DisplayFormat" )
-        //    {
-        //        string newFormat = userSettings.Gui.DisplayFormat;
-        //        if ( newFormat != displayFormat )
-        //            if ( newFormat == "Full" )
-        //                displayFullGui();
-        //            else
-        //                displayMiniGui();
-        //    }
-        //    else if (args.SettingName.StartsWith("Gui.TextOutput.") && args.SettingName.EndsWith(".Content"))
-        //    {
-        //        TestLoader.IsTracingEnabled = resultTabs.IsTracingEnabled;
-        //        TestLoader.LoggingThreshold = resultTabs.MaximumLogLevel;
-        //    }
-        //}
         #endregion
 
         #region Other UI Event Handlers
