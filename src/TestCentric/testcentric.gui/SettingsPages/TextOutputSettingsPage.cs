@@ -89,6 +89,7 @@ namespace TestCentric.Gui.SettingsPages
             // labelsOnRadioButton
             // 
             this.labelsOnRadioButton.AutoSize = true;
+            this.labelsOnRadioButton.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.labelsOnRadioButton.Location = new System.Drawing.Point(40, 53);
             this.labelsOnRadioButton.Name = "labelsOnRadioButton";
             this.labelsOnRadioButton.Size = new System.Drawing.Size(303, 43);
@@ -101,6 +102,7 @@ namespace TestCentric.Gui.SettingsPages
             // labelsBeforeRadioButton
             // 
             this.labelsBeforeRadioButton.AutoSize = true;
+            this.labelsBeforeRadioButton.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.labelsBeforeRadioButton.Location = new System.Drawing.Point(40, 106);
             this.labelsBeforeRadioButton.Name = "labelsBeforeRadioButton";
             this.labelsBeforeRadioButton.Size = new System.Drawing.Size(303, 43);
@@ -123,6 +125,7 @@ namespace TestCentric.Gui.SettingsPages
             // labelsOffRadioButton
             // 
             this.labelsOffRadioButton.AutoSize = true;
+            this.labelsOffRadioButton.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.labelsOffRadioButton.Location = new System.Drawing.Point(40, 159);
             this.labelsOffRadioButton.Name = "labelsOffRadioButton";
             this.labelsOffRadioButton.Size = new System.Drawing.Size(162, 17);
