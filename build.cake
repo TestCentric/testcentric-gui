@@ -10,8 +10,8 @@ var configuration = Argument("configuration", "Release");
 // SET PACKAGE VERSION
 //////////////////////////////////////////////////////////////////////
 
-var version = "0.1";
-var modifier = "";
+var version = "1.0";
+var modifier = "-alpha1";
 var dbgSuffix = configuration == "Debug" ? "-dbg" : "";
 
 //////////////////////////////////////////////////////////////////////

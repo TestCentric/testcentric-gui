@@ -49,6 +49,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Filters.cs" />
     <Compile Include="ITestEvents.cs" />
     <Compile Include="ITestServices.cs" />
@@ -65,7 +68,6 @@
     <Compile Include="TestSelection.cs" />
     <Compile Include="TestServices.cs" />
     <Compile Include="TestEventDispatcher.cs" />
-    <Compile Include="Properties\CommonAssemblyInfo.cs" />
     <Compile Include="EnginePackageSettings.cs" />
     <Compile Include="ITestItem.cs" />
     <Compile Include="ITestModel.cs" />

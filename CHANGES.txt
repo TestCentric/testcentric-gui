@@ -1,9 +1,9 @@
-﻿TestCentric Runner for NUnit 0.1 -
+﻿TestCentric Runner for NUnit 1.0.0-Alpha1 - August 3, 2018
 
 General
 
-This is the initial release of the TestCentric Runner for NUnit. This is pre-alpha code we are releasing
-primarily for the purpose of getting feedback. It is not yet recommended for use in production work.
+This is the initial alpha release of the TestCentric Runner for NUnit. It is not yet recommended
+for use in production work.
 
 Features
 
@@ -11,9 +11,12 @@ This GUI runner resembles the NUnit V2 GUI, but since it runs NUnit 3 tests the 
 is entirely new. In addition, features not available or not easily supported in NUnit 3 have been
 removed. Some key differences from the V2 GUI are...
 
+ * The GUI itself targets .NET 4.5, rather than 2.0.
+ * We use chocolatey as the primary distribution method for the GUI. This makes extensions that are
+ also installed through chocolatey available when running under the GUI. A zip file is also provided.
  * Displaying tests as a flat list of fixtures is not supported.
  * Merging tests in the same namespace across assemblies is not supported.
- * The GUI no longer understands the layout of NUnit projectx files, which is taken care of by the 
+ * The GUI no longer understands the layout of NUnit project files, which is taken care of by the 
  NUnit test engine. Consequently, menu items relating to creating, editiong and saving such files 
  are no longer present.
  * The ability to open project files, including NUnit and VS projects, is dependent on the presence
@@ -21,4 +24,35 @@ removed. Some key differences from the V2 GUI are...
 
 Issues Resolved
 
- *
+  1 Select Target Framework for the GUI
+  2 Review of Initial Upload
+  9 Update the About box
+ 10 Correct name for program in --help option
+ 13 Number of Recent Files has no effect
+ 14 Tree always cleared of results on reload
+ 16 Flat list of TestFixtures not working
+ 17 Reload on Run not working
+ 19 Principal Policy not working
+ 20 InternalTrace level not honored
+ 24 Setting number of agents has no effect
+ 26 Clear Results Setting is on wrong page
+ 27 Create CI Build Script
+ 28 "Clear All" and "Check Failed" has no effect
+ 29 "Run" context menu is never enabled
+ 32 Renaming test-centric to testcentric
+ 33 Restore Tree-based Setting Dialog
+ 39 Cannot run the tests in TestCentric.Gui.Model.Tests.dll more than once
+ 42 Not possible to run explicit tests using the GUI
+ 50 Review and reorganize Settings for NUnit 3
+ 52 Show CheckBoxes throws NRE
+ 61 Disable or remove non-functional elements on Settings pages
+ 62 Switching between full and mini gui display doesn't happen immediately
+ 63 Check files exist setting has no effect
+ 64 Better error message when an assembly is not found
+ 66 Project editor menu item not working.
+ 67 Show Checkboxes menu and settings elements are inconsistent
+ 68 Save results menu should be disabled when no test has been run
+ 71 Multiple files on command-line or in file open dialog not opened
+ 73 Multiple loaded files have no root in tree
+ 80 Standardize naming of TestCentric packages and executables
+ 83 Update tests to use NUnit 3.10.1
