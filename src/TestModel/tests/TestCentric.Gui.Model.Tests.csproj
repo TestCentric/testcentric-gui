@@ -81,7 +81,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Properties\CommonAssemblyInfo.cs" />
+    <Compile Include="..\..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="AvailableRuntimesTest.cs" />
     <Compile Include="ResultNodeTests.cs" />
     <Compile Include="ResultStateTests.cs" />
