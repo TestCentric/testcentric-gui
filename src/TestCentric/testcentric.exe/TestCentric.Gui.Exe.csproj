@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
     <ProductVersion>9.0.21022</ProductVersion>
@@ -25,7 +25,7 @@
     <IsWebBootstrapper>true</IsWebBootstrapper>
     <TargetZone>LocalIntranet</TargetZone>
     <GenerateManifests>false</GenerateManifests>
-    <NoWin32Manifest>true</NoWin32Manifest>
+    <ApplicationManifest>App.manifest</ApplicationManifest>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <PublishUrl>http://localhost/nunit/</PublishUrl>
     <Install>true</Install>
@@ -135,6 +135,7 @@
     <None Include="App.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="App.manifest" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.ico" />
