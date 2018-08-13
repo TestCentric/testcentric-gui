@@ -169,7 +169,9 @@ namespace TestCentric.Gui.Controls
                         ? new VisualState(this)
                         : null;
 
-                    Model.Services.UserSettings.Gui.TestTree.ShowCheckBoxes = base.CheckBoxes = value;
+                    // TODO: Get rid of updatimg model from the view. Till we do, this needs to be guarded.
+                    if (Model != null)
+                        Model.Services.UserSettings.Gui.TestTree.ShowCheckBoxes = base.CheckBoxes = value;
 
                     if (visualState != null)
                     {

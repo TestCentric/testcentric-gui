@@ -677,7 +677,6 @@ namespace TestCentric.Gui
             this.testTree.Dock = System.Windows.Forms.DockStyle.Fill;
             this.testTree.Location = new System.Drawing.Point(0, 0);
             this.testTree.Name = "testTree";
-            this.testTree.ShowCheckBoxes = false;
             this.testTree.Size = new System.Drawing.Size(240, 407);
             this.testTree.TabIndex = 0;
             this.testTree.SelectedTestsChanged += new TestCentric.Gui.Controls.SelectedTestsChangedEventHandler(this.testTree_SelectedTestsChanged);

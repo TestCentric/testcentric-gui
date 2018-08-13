@@ -114,19 +114,6 @@ namespace TestCentric.Gui.Controls
 
         private ITestModel Model { get; set; }
 
-        [Browsable(false)]
-        public bool ShowCheckBoxes
-        {
-            get { return tests.CheckBoxes; }
-            set 
-            { 
-                tests.CheckBoxes = value;
-                buttonPanel.Visible	= value;
-                clearAllButton.Visible = value;
-                checkFailedButton.Visible = value;
-                checkBoxesMenuItem.Checked = value;
-            }
-        }
         #endregion
 
         #region Construction and Initialization
@@ -709,15 +696,23 @@ namespace TestCentric.Gui.Controls
             tests.TreeFilter = treeFilter;
         }
 
+        private void EnableCheckBoxes(bool enable)
+        {
+            buttonPanel.Visible = enable;
+            clearAllButton.Visible = enable;
+            checkFailedButton.Visible = enable;
+            checkBoxesMenuItem.Checked = enable;
+        }
+
         #region IViewControl Implementation
 
         public void InitializeView(ITestModel model, TestCentricPresenter presenter)
         {
             Model = model;
 
-            ShowCheckBoxes = Model.Services.UserSettings.Gui.TestTree.ShowCheckBoxes;
+            EnableCheckBoxes(model.Services.UserSettings.Gui.TestTree.ShowCheckBoxes);
 
-            Model.Events.TestLoaded += (TestNodeEventArgs e) =>
+            model.Events.TestLoaded += (TestNodeEventArgs e) =>
             {
                 treeMenu.Visible = true;
 
@@ -725,7 +720,7 @@ namespace TestCentric.Gui.Controls
                 selectedList.Items.Clear();
 
                 availableList.SuspendLayout();
-                foreach (string category in Model.AvailableCategories)
+                foreach (string category in model.AvailableCategories)
                     availableList.Items.Add(category);
                 
                 // We need to ensure the tree loads first because that's
@@ -734,13 +729,13 @@ namespace TestCentric.Gui.Controls
                 tests.Load(e.Test);
 
                 // Reflect any changes in the controls
-                if (Model.SelectedCategories != null && Model.SelectedCategories.Length > 0)
+                if (model.SelectedCategories != null && model.SelectedCategories.Length > 0)
                 {
-                    selectedList.Items.AddRange(Model.SelectedCategories);
-                    excludeCheckbox.Checked = Model.ExcludeSelectedCategories;
+                    selectedList.Items.AddRange(model.SelectedCategories);
+                    excludeCheckbox.Checked = model.ExcludeSelectedCategories;
 
-                    foreach (string cat in Model.SelectedCategories)
-                        if (Model.AvailableCategories.Contains(cat))
+                    foreach (string cat in model.SelectedCategories)
+                        if (model.AvailableCategories.Contains(cat))
                         {
                             availableList.Items.Remove(cat);
                             excludeCheckbox.Enabled = true;
@@ -752,7 +747,7 @@ namespace TestCentric.Gui.Controls
                 availableList.ResumeLayout();
             };
 
-            Model.Events.TestReloaded += (TestNodeEventArgs e) =>
+            model.Events.TestReloaded += (TestNodeEventArgs e) =>
             {
                 // Remove any selected items that are no longer available
                 int index = selectedList.Items.Count;
@@ -760,7 +755,7 @@ namespace TestCentric.Gui.Controls
                 while (--index >= 0)
                 {
                     string category = selectedList.Items[index].ToString();
-                    if (!Model.AvailableCategories.Contains(category))
+                    if (!model.AvailableCategories.Contains(category))
                         selectedList.Items.RemoveAt(index);
                 }
                 selectedList.ResumeLayout();
@@ -772,7 +767,7 @@ namespace TestCentric.Gui.Controls
                 // Put any unselected available items on availableList
                 availableList.Items.Clear();
                 availableList.SuspendLayout();
-                foreach (string category in Model.AvailableCategories)
+                foreach (string category in model.AvailableCategories)
                     if (selectedList.FindStringExact(category) < 0)
                         availableList.Items.Add(category);
                 availableList.ResumeLayout();
@@ -781,7 +776,7 @@ namespace TestCentric.Gui.Controls
                 UpdateCategorySelection();
             };
 
-            Model.Events.TestUnloaded += (TestEventArgs e) =>
+            model.Events.TestUnloaded += (TestEventArgs e) =>
             {
                 availableList.Items.Clear();
                 selectedList.Items.Clear();
@@ -790,10 +785,10 @@ namespace TestCentric.Gui.Controls
                 treeMenu.Visible = false;
             };
 
-            Model.Services.UserSettings.Changed += (object sender, SettingsEventArgs e) =>
+            model.Services.UserSettings.Changed += (object sender, SettingsEventArgs e) =>
             {
                 if (e.SettingName == "Gui.TestTree.ShowCheckBoxes")
-                    this.ShowCheckBoxes = Model.Services.UserSettings.Gui.TestTree.ShowCheckBoxes;
+                    this.EnableCheckBoxes(model.Services.UserSettings.Gui.TestTree.ShowCheckBoxes);
             };
         }
 
