@@ -94,6 +94,9 @@ namespace TestCentric.Gui
             TestCentricMainForm form = new TestCentricMainForm(model, options);
             c.Add(form);
 
+            log.Info("Constructing presenters");
+            new Presenters.StatusBarPresenter(form.statusBar, model);
+
             try
             {
                 log.Info("Starting Gui Application");

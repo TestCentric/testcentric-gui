@@ -141,9 +141,9 @@
     <Compile Include="CommandLineTests.cs" />
     <Compile Include="ErrorDisplayTests.cs" />
     <Compile Include="LongRunningOperationDisplayTests.cs" />
+    <Compile Include="Presenters\StatusBarPresenterTests.cs" />
     <Compile Include="ProgressBarTests.cs" />
     <Compile Include="RecentFileMenuHandlerTests.cs" />
-    <Compile Include="StatusBarTests.cs" />
     <Compile Include="TestSuiteTreeNodeTests.cs" />
     <Compile Include="TestTreeTests.cs" />
     <Compile Include="VisualStateTests.cs" />
@@ -174,6 +174,7 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

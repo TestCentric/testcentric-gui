@@ -34,6 +34,7 @@ using NUnit.Engine;
 
 namespace TestCentric.Gui
 {
+    using Views;
     using Controls;
     using Model;
     using Model.Settings;
@@ -69,7 +70,7 @@ namespace TestCentric.Gui
 
         public ResultTabs resultTabs;
 
-        public StatusBar statusBar;
+        public StatusBarView statusBar;
 
         public System.Windows.Forms.ToolTip toolTip;
 
@@ -170,7 +171,7 @@ namespace TestCentric.Gui
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TestCentricMainForm));
-            this.statusBar = new TestCentric.Gui.Controls.StatusBar();
+            this.statusBar = new TestCentric.Gui.Views.StatusBarView();
             this.mainMenu = new System.Windows.Forms.MainMenu(this.components);
             this.fileMenu = new System.Windows.Forms.MenuItem();
             this.openMenuItem = new System.Windows.Forms.MenuItem();
@@ -237,13 +238,11 @@ namespace TestCentric.Gui
             // 
             // statusBar
             // 
-            this.statusBar.DisplayTestProgress = true;
+            this.statusBar.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.statusBar.Location = new System.Drawing.Point(0, 407);
             this.statusBar.Name = "statusBar";
-            this.statusBar.ShowPanels = true;
             this.statusBar.Size = new System.Drawing.Size(744, 24);
             this.statusBar.TabIndex = 0;
-            this.statusBar.Text = "Status";
             // 
             // mainMenu
             // 
@@ -1170,14 +1169,6 @@ namespace TestCentric.Gui
                         UserSettings.Gui.MainForm.Left = Location.X;
                         UserSettings.Gui.MainForm.Top = Location.Y;
                         UserSettings.Gui.MainForm.Maximized = false;
-
-                        statusBar.SizingGrip = true;
-                    }
-                    else if ( WindowState == FormWindowState.Maximized )
-                    {
-                        //userSettings.SaveSetting( "Gui.MainForm.Maximized", true );
-
-                        statusBar.SizingGrip = false;
                     }
                     break;
                 case "Mini":
@@ -1186,14 +1177,6 @@ namespace TestCentric.Gui
                         UserSettings.Gui.MiniForm.Left = Location.X;
                         UserSettings.Gui.MiniForm.Top = Location.Y;
                         UserSettings.Gui.MiniForm.Maximized = false;
-
-                        statusBar.SizingGrip = true;
-                    }
-                    else if ( WindowState == FormWindowState.Maximized )
-                    {
-                        UserSettings.Gui.MiniForm.Maximized = true;
-
-                        statusBar.SizingGrip = false;
                     }
                     break;
             }
@@ -1293,7 +1276,7 @@ namespace TestCentric.Gui
             if (!Model.IsTestRunning)
             {
                 suiteName.Text = e.TestName;
-                statusBar.Initialize(e.TestCount, e.TestName);
+                //statusBar.Initialize(e.TestCount, e.TestName);
             }
         }
 
