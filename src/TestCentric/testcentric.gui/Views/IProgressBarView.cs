@@ -23,17 +23,18 @@
 
 namespace TestCentric.Gui.Views
 {
-    // Interface is used by presenter and tests
-    public interface IStatusBarView
+    public enum ProgressBarStatus
     {
-        void Initialize(int count);
+        Success = 0,
+        Warning = 1,
+        Failure = 2
+    }
 
-        void DisplayText(string text);
-        void DisplayTestsRun(int count);
-        void DisplayPassed(int count);
-        void DisplayFailed(int count);
-        void DisplayWarnings(int count);
-        void DisplayInconclusive(int count);
-        void DisplayTime(double time);
+    public interface IProgressBarView
+    {
+        int Progress { get; set; }
+        ProgressBarStatus Status { get; set; }
+
+        void Initialize(int max);
     }
 }

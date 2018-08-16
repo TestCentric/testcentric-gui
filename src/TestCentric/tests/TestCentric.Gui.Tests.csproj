@@ -141,8 +141,8 @@
     <Compile Include="CommandLineTests.cs" />
     <Compile Include="ErrorDisplayTests.cs" />
     <Compile Include="LongRunningOperationDisplayTests.cs" />
+    <Compile Include="Presenters\ProgressBarPresenterTests.cs" />
     <Compile Include="Presenters\StatusBarPresenterTests.cs" />
-    <Compile Include="ProgressBarTests.cs" />
     <Compile Include="RecentFileMenuHandlerTests.cs" />
     <Compile Include="TestSuiteTreeNodeTests.cs" />
     <Compile Include="TestTreeTests.cs" />

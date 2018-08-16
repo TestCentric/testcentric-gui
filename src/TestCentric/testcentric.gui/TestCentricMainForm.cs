@@ -65,7 +65,7 @@ namespace TestCentric.Gui
         public System.Windows.Forms.GroupBox groupBox1;
         public System.Windows.Forms.Button runButton;
         private System.Windows.Forms.Button stopButton;
-        public TestProgressBar progressBar;
+        public ProgressBarView progressBar;
         private ExpandingLabel runCount;
 
         public ResultTabs resultTabs;
@@ -226,7 +226,7 @@ namespace TestCentric.Gui
             this.runCount = new TestCentric.Gui.Controls.ExpandingLabel();
             this.stopButton = new System.Windows.Forms.Button();
             this.runButton = new System.Windows.Forms.Button();
-            this.progressBar = new TestCentric.Gui.Controls.TestProgressBar();
+            this.progressBar = new TestCentric.Gui.Views.ProgressBarView();
             this.resultTabs = new TestCentric.Gui.Controls.ResultTabs();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.testTree = new TestCentric.Gui.Controls.TestTree();
@@ -652,14 +652,11 @@ namespace TestCentric.Gui
             this.progressBar.Enabled = false;
             this.progressBar.ForeColor = System.Drawing.SystemColors.Highlight;
             this.progressBar.Location = new System.Drawing.Point(8, 54);
-            this.progressBar.Maximum = 100;
-            this.progressBar.Minimum = 0;
             this.progressBar.Name = "progressBar";
-            this.progressBar.Segmented = true;
-            this.progressBar.Size = new System.Drawing.Size(480, 28);
-            this.progressBar.Step = 1;
+            this.progressBar.Progress = 0;
+            this.progressBar.Size = new System.Drawing.Size(480, 16);
+            this.progressBar.Status = TestCentric.Gui.Views.ProgressBarStatus.Success;
             this.progressBar.TabIndex = 0;
-            this.progressBar.Value = 0;
             // 
             // resultTabs
             // 
