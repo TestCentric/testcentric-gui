@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Copyright (c) 2016-2018 Charlie Poole
+// Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -21,67 +21,35 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
-    using Controls;
-
-    public partial class ProgressBarView : UserControlView, IProgressBarView
+    public partial class TestsNotRunView : UserControlView, ITestsNotRunView
     {
-        private int _maximum;
-        private int _progress;
-        private ProgressBarStatus _status;
-
-        public ProgressBarView()
+        public TestsNotRunView()
         {
             InitializeComponent();
         }
 
-        public void Initialize(int max)
+        public void Clear()
         {
-            Debug.Assert(max > 0, "Maximum value must be > 0");
-
-            _maximum = max;
-            _progress = 0;
-            _status = ProgressBarStatus.Success;
-
             InvokeIfRequired(() =>
             {
-                testProgressBar.Maximum = _maximum;
-                testProgressBar.Value = _progress;
-                testProgressBar.Display = (ProgressBarDisplay)_status;
+                treeView1.Nodes.Clear();
             });
         }
 
-        [Browsable(false)]
-        public int Progress
+        public void AddResult(string name, string reason)
         {
-            get { return _progress; }
-            set
+            TreeNode node = new TreeNode(name);
+            TreeNode reasonNode = new TreeNode("Reason: " + reason);
+            node.Nodes.Add(reasonNode);
+
+            InvokeIfRequired(() =>
             {
-                Debug.Assert(value <= _maximum, "Value must be <= maximum");
-
-                _progress = value;
-                InvokeIfRequired(() => { testProgressBar.Value = _progress; });
-            }
-        }
-
-        [Browsable(false)]
-        public ProgressBarStatus Status
-        {
-            get { return _status; }
-            set
-            {
-                _status = value;
-
-                InvokeIfRequired(() =>
-                {
-                    testProgressBar.Display = (ProgressBarDisplay)_status;
-                });
-            }
+                treeView1.Nodes.Add(node);
+            });
         }
     }
 }
