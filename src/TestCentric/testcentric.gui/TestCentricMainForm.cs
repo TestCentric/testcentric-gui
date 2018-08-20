@@ -733,6 +733,16 @@ namespace TestCentric.Gui
 
         private IRecentFiles RecentFiles { get; }
 
+        #region Subordinate Views contained in main form
+
+        public ProgressBarView ProgressBarView { get { return progressBar; } }
+
+        public StatusBarView StatusBarView { get { return statusBar; } }
+
+        public TestsNotRunView TestsNotRunView { get { return resultTabs.notRunTree; } }
+
+        #endregion
+
         #endregion
 
         #region Display Methods

@@ -25,7 +25,7 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
-    public partial class StatusBarView : UserControl, IStatusBarView
+    public partial class StatusBarView : UserControlView, IStatusBarView
     {
         public StatusBarView()
         {
@@ -108,17 +108,5 @@ namespace TestCentric.Gui.Views
                 timePanel.Visible = true;
             });
         }
-
-        #region Helper Methods
-
-        private void InvokeIfRequired(MethodInvoker _delegate)
-        {
-            if (statusStrip1.InvokeRequired)
-                statusStrip1.BeginInvoke(_delegate);
-            else
-                _delegate();
-        }
-
-        #endregion
     }
 }

@@ -30,6 +30,7 @@ namespace TestCentric.Gui.Controls
 {
     using Model;
     using Model.Settings;
+    using Views;
 
     /// <summary>
     /// Summary description for ResultTabs.
@@ -44,7 +45,7 @@ namespace TestCentric.Gui.Controls
         private ErrorDisplay errorDisplay;
 
         private TabPage notRunTab;
-        private NotRunTree notRunTree;
+        public TestsNotRunView notRunTree;
 
         private TabPage outputTab;
         private TextBoxDisplay textBoxDisplay;
@@ -87,7 +88,7 @@ namespace TestCentric.Gui.Controls
             this.errorTab = new System.Windows.Forms.TabPage();
             this.errorDisplay = new ErrorDisplay();
             this.notRunTab = new System.Windows.Forms.TabPage();
-            this.notRunTree = new NotRunTree();
+            this.notRunTree = new TestsNotRunView();
             this.outputTab = new System.Windows.Forms.TabPage();
             this.textBoxDisplay = new TextBoxDisplay();
             this.tabControl.SuspendLayout();
@@ -142,7 +143,6 @@ namespace TestCentric.Gui.Controls
             // notRunTree
             // 
             this.notRunTree.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.notRunTree.Indent = 19;
             this.notRunTree.Location = new System.Drawing.Point(0, 0);
             this.notRunTree.Name = "notRunTree";
             this.notRunTree.Size = new System.Drawing.Size(480, 254);
@@ -194,7 +194,7 @@ namespace TestCentric.Gui.Controls
         public void Clear()
         {
             errorDisplay.Clear();
-            notRunTree.Nodes.Clear();
+            notRunTree.Clear();
             textBoxDisplay.Clear();
         }
 

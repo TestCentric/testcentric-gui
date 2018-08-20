@@ -81,12 +81,11 @@ namespace TestCentric.Gui.Controls
         protected override void OnPaint(PaintEventArgs e)
         {
             Rectangle rec = this.ClientRectangle;
-            //rec.Inflate(-2, -2);
             if (ProgressBarRenderer.IsSupported)
                 ProgressBarRenderer.DrawHorizontalBar(e.Graphics, rec);
             rec.Inflate(-1, -1);
             rec.Width = (int)(rec.Width * ((double)Value / Maximum));
-            e.Graphics.FillRectangle(_brush, rec); //2, 2, rec.Width, rec.Height);
+            e.Graphics.FillRectangle(_brush, rec);
         }
 
         private void CreateNewBrush()
