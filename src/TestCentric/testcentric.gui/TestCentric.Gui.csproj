@@ -120,6 +120,9 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AppContainer.cs" />
+    <Compile Include="Controls\TestCentricProgressBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Dialogs\AboutBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -153,6 +156,8 @@
     <Compile Include="Controls\ExpandingTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Presenters\ProgressBarPresenter.cs" />
+    <Compile Include="Presenters\StatusBarPresenter.cs" />
     <Compile Include="TestNodeFilters.cs" />
     <Compile Include="IMessageDisplay.cs" />
     <Compile Include="InternalTrace.cs" />
@@ -170,9 +175,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="TestCentricPresenter.cs" />
-    <Compile Include="Controls\ProgressBar.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -210,9 +212,6 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="StackTraceFilter.cs" />
-    <Compile Include="Controls\StatusBar.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Dialogs\TestPropertiesDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -232,6 +231,20 @@
     </Compile>
     <Compile Include="Controls\TipWindow.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\IProgressBarView.cs" />
+    <Compile Include="Views\IStatusBarView.cs" />
+    <Compile Include="Views\ProgressBarView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\ProgressBarView.Designer.cs">
+      <DependentUpon>ProgressBarView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StatusBarView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\StatusBarView.Designer.cs">
+      <DependentUpon>StatusBarView.cs</DependentUpon>
     </Compile>
     <Compile Include="VisualState.cs" />
     <Compile Include="WaitCursor.cs" />
@@ -278,10 +291,6 @@
       <DependentUpon>TestCentricMainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\ProgressBar.resx">
-      <DependentUpon>ProgressBar.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -313,9 +322,6 @@
     <EmbeddedResource Include="SettingsPages\TreeSettingsPage.resx">
       <DependentUpon>TreeSettingsPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\StatusBar.resx">
-      <DependentUpon>StatusBar.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\TestPropertiesDialog.resx">
       <DependentUpon>TestPropertiesDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -328,6 +334,12 @@
     <EmbeddedResource Include="Controls\TipWindow.resx">
       <DependentUpon>TipWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\ProgressBarView.resx">
+      <DependentUpon>ProgressBarView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\StatusBarView.resx">
+      <DependentUpon>StatusBarView.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
