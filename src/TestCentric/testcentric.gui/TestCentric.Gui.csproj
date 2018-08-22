@@ -159,6 +159,7 @@
     <Compile Include="Presenters\TestsNotRunPresenter.cs" />
     <Compile Include="Presenters\ProgressBarPresenter.cs" />
     <Compile Include="Presenters\StatusBarPresenter.cs" />
+    <Compile Include="Presenters\TextOutputPresenter.cs" />
     <Compile Include="TestNodeFilters.cs" />
     <Compile Include="IMessageDisplay.cs" />
     <Compile Include="InternalTrace.cs" />
@@ -233,6 +234,7 @@
     <Compile Include="Views\ITestsNotRunView.cs" />
     <Compile Include="Views\IProgressBarView.cs" />
     <Compile Include="Views\IStatusBarView.cs" />
+    <Compile Include="Views\ITextOutputView.cs" />
     <Compile Include="Views\ProgressBarView.cs">
       <SubType>UserControl</SubType>
     </Compile>
