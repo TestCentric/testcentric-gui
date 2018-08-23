@@ -26,7 +26,6 @@ using NUnit.Framework;
 
 namespace TestCentric.Gui.Presenters
 {
-    using Views;
     using Model;
 
     /// <summary>
@@ -47,6 +46,31 @@ namespace TestCentric.Gui.Presenters
             _model.Services.UserSettings.Returns(_settings);
         }
 
+        protected void FireTestLoadedEvent(TestNode testNode)
+        {
+            _model.Events.TestLoaded += Raise.Event<TestNodeEventHandler>(new TestNodeEventArgs(testNode));
+        }
+
+        protected void FireTestReloadedEvent(TestNode testNode)
+        {
+            _model.Events.TestReloaded += Raise.Event<TestNodeEventHandler>(new TestNodeEventArgs(testNode));
+        }
+
+        protected void FireTestUnloadedEvent()
+        {
+            _model.Events.TestUnloaded += Raise.Event<TestEventHandler>(new TestEventArgs());
+        }
+
+        protected void FireRunStartingEvent(int testCount)
+        {
+            _model.Events.RunStarting += Raise.Event<RunStartingEventHandler>(new RunStartingEventArgs(testCount));
+        }
+
+        protected void FireRunFinishedEvent(ResultNode result)
+        {
+            _model.Events.RunFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(result));
+        }
+
         protected void FireTestStartingEvent(string testName)
         {
             var start = new TestNode($"<test-start fullname='{testName}'/>");
@@ -61,16 +85,23 @@ namespace TestCentric.Gui.Presenters
 
         protected void FireTestFinishedEvent(string testName, string result, string output = null)
         {
-            ResultNode resultNode = CreateResultNode("test-case", testName, result, output);
+            FireTestFinishedEvent( CreateResultNode("test-case", testName, result, output) );
 
-            _model.Events.TestFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(resultNode));
+        }
+
+        protected void FireTestFinishedEvent(ResultNode result)
+        {
+            _model.Events.TestFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(result));
         }
 
         protected void FireSuiteFinishedEvent(string testName, string result, string output = null)
         {
-            ResultNode resultNode = CreateResultNode("test-suite", testName, result, output);
+            FireSuiteFinishedEvent( CreateResultNode("test-suite", testName, result, output) );
+        }
 
-            _model.Events.SuiteFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(resultNode));
+        protected void FireSuiteFinishedEvent(ResultNode result)
+        {
+            _model.Events.SuiteFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(result));
         }
 
         private static ResultNode CreateResultNode(string element, string testName, string result, string output = null)

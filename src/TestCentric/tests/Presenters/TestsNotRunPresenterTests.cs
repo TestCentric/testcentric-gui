@@ -21,11 +21,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using NSubstitute;
 
@@ -34,51 +29,48 @@ namespace TestCentric.Gui.Presenters
     using Model;
     using Views;
 
-    public class TestsNotRunPresenterTests
+    public class TestsNotRunPresenterTests : PresenterTestBase<ITestsNotRunView>
     {
-        private ITestsNotRunView _view;
-        private ITestModel _model;
-        private TestsNotRunPresenter _presenter;
-
         private static readonly TestNode FAKE_TEST_RUN = new TestNode("<test-suite id='1' testcasecount='1234' />");
 
         [SetUp]
         public void CreatePresenter()
         {
-            _view = Substitute.For<ITestsNotRunView>();
-            _model = Substitute.For<ITestModel>();
-
-            _presenter = new TestsNotRunPresenter(_view, _model);
+            new TestsNotRunPresenter(_view, _model);
         }
 
         [Test]
         public void WhenTestIsLoaded_DisplayIsCleared()
         {
-            _model.Events.TestLoaded += Raise.Event<TestNodeEventHandler>(new TestNodeEventArgs(FAKE_TEST_RUN));
+            FireTestLoadedEvent(FAKE_TEST_RUN);
 
             _view.Received().Clear();
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void WhenTestIsReloaded_DisplayIsClearedDependingOnSetting(bool clear)
+        [Test]
+        public void WhenTestIsReloaded_IfClearResultsIsFalse_DisplayIsNotCleared()
         {
-            var fakeSettings = new FakeUserSettings();
-            fakeSettings.Gui.ClearResultsOnReload = clear;
+            _settings.Gui.ClearResultsOnReload = false;
 
-            _model.Services.UserSettings.Returns(fakeSettings);
-            _model.Events.TestReloaded += Raise.Event<TestNodeEventHandler>(new TestNodeEventArgs(FAKE_TEST_RUN));
+            FireTestReloadedEvent(FAKE_TEST_RUN);
 
-            if (clear)
-                _view.Received().Clear();
-            else
-                _view.DidNotReceive().Clear();
+            _view.DidNotReceive().Clear();
+        }
+
+        [Test]
+        public void WhenTestIsReloaded_IfClearResultsIfTrue_DisplayIsCleared()
+        {
+            _settings.Gui.ClearResultsOnReload = true;
+
+            FireTestReloadedEvent(FAKE_TEST_RUN);
+
+            _view.Received().Clear();
         }
 
         [Test]
         public void WhenTestIsUnloaded_DisplayIsCleared()
         {
-            _model.Events.TestUnloaded += Raise.Event<TestEventHandler>(new TestEventArgs());
+            FireTestUnloadedEvent();
 
             _view.Received().Clear();
         }
@@ -86,7 +78,7 @@ namespace TestCentric.Gui.Presenters
         [Test]
         public void WhenTestRunStarts_DisplayIsCleared()
         {
-            _model.Events.RunStarting += Raise.Event<RunStartingEventHandler>(new RunStartingEventArgs(1234));
+            FireRunStartingEvent(1234);
 
             _view.Received().Clear();
         }
@@ -101,8 +93,8 @@ namespace TestCentric.Gui.Presenters
         [TestCase("Inconclusive", "Test", false)]
         public void TestsCasesAreHandledCorrectly(string status, string site, bool shouldBeAdded)
         {
-            var result = new ResultNode($"<test-case id='1' name='NAME' result='{status}' site='{site}'><reason><message>REASON</message></reason></test-case>");
-            _model.Events.TestFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(result));
+            FireTestFinishedEvent( new ResultNode(
+                $"<test-case id='1' name='NAME' result='{status}' site='{site}'><reason><message>REASON</message></reason></test-case>"));
 
             if (shouldBeAdded)
                 _view.Received().AddResult("NAME", "REASON");
@@ -122,8 +114,8 @@ namespace TestCentric.Gui.Presenters
         [TestCase("Skipped", "Test", "One or more child tests were ignored", false)]
         public void TestSuitesAreHandledCorrectly(string status, string site, string reason, bool shouldBeAdded)
         {
-            var result = new ResultNode($"<test-suite id='1' name='NAME' result='{status}' site='{site}'><reason><message>{reason}</message></reason></test-suite>");
-            _model.Events.SuiteFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(result));
+            FireSuiteFinishedEvent( new ResultNode(
+                $"<test-suite id='1' name='NAME' result='{status}' site='{site}'><reason><message>{reason}</message></reason></test-suite>"));
 
             if (shouldBeAdded)
                 _view.Received().AddResult("NAME", "REASON");

@@ -29,7 +29,6 @@ using NSubstitute;
 namespace TestCentric.Gui.Presenters
 {
     using Views;
-    using Model;
 
     public class TextOutputPresenterTests : PresenterTestBase<ITextOutputView>
     {
