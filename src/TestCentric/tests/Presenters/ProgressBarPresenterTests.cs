@@ -31,35 +31,19 @@ namespace TestCentric.Gui.Presenters
     using Views;
     using Model;
 
-    public class ProgressBarPresenterTests
+    public class ProgressBarPresenterTests : PresenterTestBase<IProgressBarView>
     {
-        private IProgressBarView _view;
-        private ITestModel _model;
-        private ProgressBarPresenter _presenter;
-
         [SetUp]
         public void CreatePresenter()
         {
-            _view = Substitute.For<IProgressBarView>();
-            _model = Substitute.For<ITestModel>();
-
-            _presenter = new ProgressBarPresenter(_view, _model);
-        }
-
-        [TearDown]
-        public void RemovePresenter()
-        {
-            _presenter = null;
+            new ProgressBarPresenter(_view, _model);
         }
 
         [Test]
         public void WhenTestsAreLoaded_ProgressBar_IsInitialized()
         {
-            _model.HasTests.Returns(true);
-            _model.IsTestRunning.Returns(false);
-
             var testNode = new TestNode("<test-suite id='1' testcasecount='1234'/>");
-            _model.Events.TestLoaded += Raise.Event<TestNodeEventHandler>(new TestNodeEventArgs(testNode));
+            FireTestLoadedEvent(testNode);
 
             _view.Received().Initialize(100);
         }
@@ -67,9 +51,7 @@ namespace TestCentric.Gui.Presenters
         [Test]
         public void WhenTestsAreUnloaded_ProgressBar_IsInitialized()
         {
-            _model.HasTests.Returns(false);
-            _model.IsTestRunning.Returns(false);
-            _model.Events.TestUnloaded += Raise.Event<TestEventHandler>(new TestEventArgs());
+            FireTestUnloadedEvent();
 
             _view.Received().Initialize(100);
         }
@@ -77,11 +59,8 @@ namespace TestCentric.Gui.Presenters
         [Test]
         public void WhenTestsAreReloaded_ProgressBar_IsInitialized()
         {
-            _model.HasTests.Returns(true);
-            _model.IsTestRunning.Returns(false);
-
             var testNode = new TestNode("<test-suite id='1' testcasecount='1234'/>");
-            _model.Events.TestReloaded += Raise.Event<TestNodeEventHandler>(new TestNodeEventArgs(testNode));
+            FireTestReloadedEvent(testNode);
 
             _view.Received().Initialize(100);
         }
@@ -89,9 +68,7 @@ namespace TestCentric.Gui.Presenters
         [Test]
         public void WhenTestRunBegins_ProgressBar_IsInitialized()
         {
-            _model.HasTests.Returns(true);
-            _model.IsTestRunning.Returns(true);
-            _model.Events.RunStarting += Raise.Event<RunStartingEventHandler>(new RunStartingEventArgs(1234));
+            FireRunStartingEvent(1234);
 
             _view.Received().Initialize(1234);
         }
@@ -101,7 +78,7 @@ namespace TestCentric.Gui.Presenters
         {
             var result = new ResultNode("<test-case id='1'/>");
 
-            _model.Events.TestFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(result));
+            FireTestFinishedEvent(result);
 
             _view.Received().Progress++;
         }
@@ -111,7 +88,7 @@ namespace TestCentric.Gui.Presenters
         {
             var result = new ResultNode("<test-suite id='1'/>");
 
-            _model.Events.SuiteFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(result));
+            FireSuiteFinishedEvent(result);
 
             _view.DidNotReceive().Progress++;
         }
@@ -145,13 +122,7 @@ namespace TestCentric.Gui.Presenters
         {
             _view.Status = priorStatus;
 
-            var resultXml = resultState.Label == string.Empty
-                ? string.Format("<test-case id='1' result='{0}'/>", resultState.Status)
-                : string.Format("<test-case id='1' result='{0}' label='{1}'/>", resultState.Status, resultState.Label);
-
-            var result = new ResultNode(resultXml);
-
-            _model.Events.TestFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(result));
+            FireTestFinishedEvent("SomeTest", resultState.ToString());
 
             Assert.That(_view.Status, Is.EqualTo(expectedStatus));
         }

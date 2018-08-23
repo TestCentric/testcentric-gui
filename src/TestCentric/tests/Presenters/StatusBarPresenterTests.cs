@@ -29,32 +29,18 @@ namespace TestCentric.Gui.Presenters
     using Views;
     using Model;
 
-    public class StatusBarPresenterTests
+    public class StatusBarPresenterTests : PresenterTestBase<IStatusBarView>
     {
-        private IStatusBarView _view;
-        private ITestModel _model;
-        private StatusBarPresenter _presenter;
-
         [SetUp]
         public void CreatePresenter()
         {
-            _view = Substitute.For<IStatusBarView>();
-            _model = Substitute.For<ITestModel>();
-
-            _presenter = new StatusBarPresenter(_view, _model);
-        }
-
-        [TearDown]
-        public void RemovePresenter()
-        {
-            _presenter = null;
+            new StatusBarPresenter(_view, _model);
         }
 
         [Test]
         public void WhenTestsAreLoaded_StatusBar_IsInitialized()
         {
-            var testNode = new TestNode("<test-run id='2' testcasecount='123' />");
-            _model.Events.TestLoaded += Raise.Event<TestNodeEventHandler>(new TestNodeEventArgs(testNode));
+            FireTestLoadedEvent( new TestNode("<test-run id='2' testcasecount='123' />") );
 
             _view.Received().Initialize(123);
             _view.Received().DisplayText("Ready");
@@ -63,8 +49,7 @@ namespace TestCentric.Gui.Presenters
         [Test]
         public void WhenTestsArReloaded_StatusBar_IsInitialized()
         {
-            var testNode = new TestNode("<test-run id='2' testcasecount='123' />");
-            _model.Events.TestReloaded += Raise.Event<TestNodeEventHandler>(new TestNodeEventArgs(testNode));
+            FireTestReloadedEvent( new TestNode("<test-run id='2' testcasecount='123' />") );
 
             _view.Received().Initialize(123);
             _view.Received().DisplayText("Reloaded");
@@ -73,7 +58,7 @@ namespace TestCentric.Gui.Presenters
         [Test]
         public void WhenTestsAreUnloaded_StatusBar_IsInitialized()
         {
-            _model.Events.TestUnloaded += Raise.Event<TestEventHandler>(new TestEventArgs());
+            FireTestUnloadedEvent();
 
             _view.Received().Initialize(0);
             _view.Received().DisplayText("Unloaded");
@@ -82,7 +67,7 @@ namespace TestCentric.Gui.Presenters
         [Test]
         public void WhenTestRunBegins_StatusBar_IsInitialized()
         {
-            _model.Events.RunStarting += Raise.Event<RunStartingEventHandler>(new RunStartingEventArgs(1234));
+            FireRunStartingEvent(1234);
 
             _view.Received().Initialize(1234);
             _view.Received().DisplayTestsRun(0);
@@ -96,10 +81,9 @@ namespace TestCentric.Gui.Presenters
         [Test]
         public void WhenTestBegins_NameIsDisplayed()
         {
-            var testNode = new TestNode("<test-case id='1' name='NAME' fullname='FULLNAME' />");
-            _model.Events.TestStarting += Raise.Event<TestNodeEventHandler>(new TestNodeEventArgs(testNode));
+            FireTestStartingEvent("TestName");
 
-            _view.Received().DisplayText("FULLNAME");
+            _view.Received().DisplayText("TestName");
         }
 
         [Test]
@@ -108,12 +92,17 @@ namespace TestCentric.Gui.Presenters
             var result = new ResultNode("<test-case id='1' result='Passed' />");
 
             for (int i = 1; i <= 3; i++)
-            {
-                _model.Events.TestFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(result));
+                FireTestFinishedEvent(result);
 
-                _view.Received().DisplayTestsRun(i);
-                _view.Received().DisplayPassed(i);
-            }
+            Received.InOrder(() =>
+            {
+                _view.DisplayTestsRun(1);
+                _view.DisplayPassed(1);
+                _view.DisplayTestsRun(2);
+                _view.DisplayPassed(2);
+                _view.DisplayTestsRun(3);
+                _view.DisplayPassed(3);
+            });
         }
 
         [Test]
@@ -122,12 +111,17 @@ namespace TestCentric.Gui.Presenters
             var result = new ResultNode("<test-case id='1' result='Warning' />");
 
             for (int i = 1; i <= 3; i++)
-            {
-                _model.Events.TestFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(result));
+                FireTestFinishedEvent(result);
 
-                _view.Received().DisplayTestsRun(i);
-                _view.Received().DisplayWarnings(i);
-            }
+            Received.InOrder(() =>
+            {
+                _view.DisplayTestsRun(1);
+                _view.DisplayWarnings(1);
+                _view.DisplayTestsRun(2);
+                _view.DisplayWarnings(2);
+                _view.DisplayTestsRun(3);
+                _view.DisplayWarnings(3);
+            });
         }
 
         [Test]
@@ -136,12 +130,17 @@ namespace TestCentric.Gui.Presenters
             var result = new ResultNode("<test-case id='1' result='Inconclusive' />");
 
             for (int i = 1; i <= 3; i++)
-            {
-                _model.Events.TestFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(result));
+                FireTestFinishedEvent(result);
 
-                _view.Received().DisplayTestsRun(i);
-                _view.Received().DisplayInconclusive(i);
-            }
+            Received.InOrder(() =>
+            {
+                _view.DisplayTestsRun(1);
+                _view.DisplayInconclusive(1);
+                _view.DisplayTestsRun(2);
+                _view.DisplayInconclusive(2);
+                _view.DisplayTestsRun(3);
+                _view.DisplayInconclusive(3);
+            });
         }
 
         [Test]
@@ -150,19 +149,24 @@ namespace TestCentric.Gui.Presenters
             var result = new ResultNode("<test-case id='1' result='Failed' />");
 
             for (int i = 1; i <= 3; i++)
-            {
-                _model.Events.TestFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(result));
+                FireTestFinishedEvent(result);
 
-                _view.Received().DisplayTestsRun(i);
-                _view.Received().DisplayFailed(i);
-            }
+            Received.InOrder(() =>
+            {
+                _view.DisplayTestsRun(1);
+                _view.DisplayFailed(1);
+                _view.DisplayTestsRun(2);
+                _view.DisplayFailed(2);
+                _view.DisplayTestsRun(3);
+                _view.DisplayFailed(3);
+            });
         }
 
         [Test]
         public void WhenTestsFinish_DurationIsDisplayed()
         {
             var result = new ResultNode("<test-run duration='1.234' />");
-            _model.Events.RunFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(result));
+            FireRunFinishedEvent(result);
 
             _view.Received().DisplayText("Completed");
             _view.Received().DisplayTime(1.234);
