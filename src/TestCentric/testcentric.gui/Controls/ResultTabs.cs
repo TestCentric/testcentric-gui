@@ -42,13 +42,13 @@ namespace TestCentric.Gui.Controls
         private TabControl tabControl;
 
         private TabPage errorTab;
-        private ErrorDisplay errorDisplay;
+        public ErrorDisplay errorDisplay;
 
         private TabPage notRunTab;
         public TestsNotRunView notRunTree;
 
         private TabPage outputTab;
-        private TextBoxDisplay textBoxDisplay;
+        public TextOutputView textBoxDisplay;
 
         /// <summary> 
         /// Required designer variable.
@@ -90,7 +90,7 @@ namespace TestCentric.Gui.Controls
             this.notRunTab = new System.Windows.Forms.TabPage();
             this.notRunTree = new TestsNotRunView();
             this.outputTab = new System.Windows.Forms.TabPage();
-            this.textBoxDisplay = new TextBoxDisplay();
+            this.textBoxDisplay = new TextOutputView();
             this.tabControl.SuspendLayout();
             this.errorTab.SuspendLayout();
             this.notRunTab.SuspendLayout();
@@ -164,7 +164,6 @@ namespace TestCentric.Gui.Controls
             this.textBoxDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBoxDisplay.Location = new System.Drawing.Point(3, 3);
             this.textBoxDisplay.Name = "textBoxDisplay";
-            this.textBoxDisplay.ReadOnly = true;
             this.textBoxDisplay.Size = new System.Drawing.Size(474, 248);
             this.textBoxDisplay.TabIndex = 0;
             this.textBoxDisplay.Text = "";

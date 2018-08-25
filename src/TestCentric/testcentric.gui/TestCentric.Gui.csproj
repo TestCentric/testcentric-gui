@@ -225,9 +225,6 @@
     <Compile Include="Controls\TestTree.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Controls\TextBoxDisplay.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Controls\TipWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -252,6 +249,12 @@
     </Compile>
     <Compile Include="Views\TestsNotRunView.Designer.cs">
       <DependentUpon>TestsNotRunView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TextOutputView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\TextOutputView.Designer.cs">
+      <DependentUpon>TextOutputView.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\UserControlView.cs">
       <SubType>UserControl</SubType>
@@ -350,6 +353,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\TestsNotRunView.resx">
       <DependentUpon>TestsNotRunView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\TextOutputView.resx">
+      <DependentUpon>TextOutputView.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

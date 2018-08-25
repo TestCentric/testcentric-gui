@@ -741,6 +741,8 @@ namespace TestCentric.Gui
 
         public TestsNotRunView TestsNotRunView { get { return resultTabs.notRunTree; } }
 
+        public ITextOutputView TextOutputView { get { return resultTabs.textBoxDisplay; } }
+
         #endregion
 
         #endregion
