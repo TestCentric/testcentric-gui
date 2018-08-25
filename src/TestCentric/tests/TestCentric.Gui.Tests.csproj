@@ -150,6 +150,7 @@
     <Compile Include="RecentFileMenuHandlerTests.cs" />
     <Compile Include="TestSuiteTreeNodeTests.cs" />
     <Compile Include="TestTreeTests.cs" />
+    <Compile Include="TextOutputDisplayTests.cs" />
     <Compile Include="VisualStateTests.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -98,6 +98,7 @@ namespace TestCentric.Gui
             new Presenters.ProgressBarPresenter(form.ProgressBarView, model);
             new Presenters.StatusBarPresenter(form.StatusBarView, model);
             new Presenters.TestsNotRunPresenter(form.TestsNotRunView, model);
+            new Presenters.TextOutputPresenter(form.TextOutputView, model);
 
             try
             {

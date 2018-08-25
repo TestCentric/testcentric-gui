@@ -21,15 +21,27 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System.Drawing;
+using System;
+using NUnit.Framework;
 
-namespace TestCentric.Gui.Views
+namespace TestCentric.Gui.TextDisplay
 {
-    public interface ITextOutputView
+    [TestFixture]
+    public abstract class TextDisplayTests
     {
-        bool WordWrap { get; set; }
-        void Clear();
-        void Write(string text);
-        void Write(string text, Color color);
+        //[Test]
+        public void DisplayTest([Range(1, 5)] int num)
+        {
+            TestContext.Progress.WriteLine($"Immediate output from test {num}");
+            Console.WriteLine($"Result output from test {num}");
+            TestContext.Progress.WriteLine($"More immediate output from test {num}");
+        }
     }
+
+    public class SequentialTextDisplay : TextDisplayTests
+    { }
+
+    [Parallelizable(ParallelScope.Children)]
+    public class ParallelTextDispay : TextDisplayTests
+    { }
 }
