@@ -739,6 +739,8 @@ namespace TestCentric.Gui
 
         public StatusBarView StatusBarView { get { return statusBar; } }
 
+        public ErrorsAndFailuresView ErrorsAndFailuresView {  get { return resultTabs.errorDisplay; } }
+
         public TestsNotRunView TestsNotRunView { get { return resultTabs.notRunTree; } }
 
         public ITextOutputView TextOutputView { get { return resultTabs.textBoxDisplay; } }

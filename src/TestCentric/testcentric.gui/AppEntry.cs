@@ -97,6 +97,7 @@ namespace TestCentric.Gui
             log.Info("Constructing presenters");
             new Presenters.ProgressBarPresenter(form.ProgressBarView, model);
             new Presenters.StatusBarPresenter(form.StatusBarView, model);
+            new Presenters.ErrorsAndFailuresPresenter(form.ErrorsAndFailuresView, model);
             new Presenters.TestsNotRunPresenter(form.TestsNotRunView, model);
             new Presenters.TextOutputPresenter(form.TextOutputView, model);
 

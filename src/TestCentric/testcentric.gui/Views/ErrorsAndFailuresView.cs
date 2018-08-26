@@ -31,15 +31,16 @@ using System.Windows.Forms;
 using NUnit.Engine;
 using NUnit.UiException.Controls;
 
-namespace TestCentric.Gui.Controls
+namespace TestCentric.Gui.Views
 {
     using Model;
     using Model.Settings;
+    using Controls;
 
     /// <summary>
     /// Summary description for ErrorDisplay.
     /// </summary>
-    public class ErrorDisplay : UserControl, IViewControl
+    public class ErrorsAndFailuresView : UserControl, IViewControl, IErrorsAndFailuresView
     {
         private readonly Font DefaultFixedFont = new Font(FontFamily.GenericMonospace, 8.0F);
 
@@ -60,7 +61,7 @@ namespace TestCentric.Gui.Controls
         /// </summary>
         private System.ComponentModel.Container components = null;
 
-        public ErrorDisplay()
+        public ErrorsAndFailuresView()
         {
             // This call is required by the Windows.Forms Form Designer.
             InitializeComponent();

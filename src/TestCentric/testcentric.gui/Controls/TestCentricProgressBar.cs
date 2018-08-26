@@ -100,6 +100,8 @@ namespace TestCentric.Gui.Controls
                 new Point(0, this.ClientSize.Height - 3), 
                 colors[0], 
                 colors[1]);
+
+            Invalidate();
         }
 
         #endregion

@@ -26,17 +26,15 @@ using System.Windows.Forms;
 using NUnit.Framework;
 using NUnit.TestUtilities;
 
-namespace TestCentric.Gui.Tests
+namespace TestCentric.Gui.Views
 {
-    using Controls;
-
     [TestFixture]
-    public class ErrorDisplayTests : ControlTester
+    public class ErrorsAndFailuresViewTests : ControlTester
     {
         [OneTimeSetUp]
         public void CreateForm()
         {
-            this.Control = new ErrorDisplay();
+            this.Control = new ErrorsAndFailuresView();
         }
 
         [OneTimeTearDown]
