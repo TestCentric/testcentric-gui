@@ -28,11 +28,66 @@ using NSubstitute;
 
 namespace TestCentric.Gui.Presenters
 {
+    using Model;
     using Views;
 
     public class TextOutputPresenterTests : PresenterTestBase<ITextOutputView>
     {
+        private static readonly TestNode FAKE_TEST_RUN = new TestNode("<test-suite id='1' testcasecount='1234' />");
+
         static readonly string NL = Environment.NewLine;
+
+        [Test]
+        public void TestLoaded_ClearsDisplay()
+        {
+            new TextOutputPresenter(_view, _model);
+
+            FireTestLoadedEvent(FAKE_TEST_RUN);
+
+            _view.Received().Clear();
+        }
+
+        [Test]
+        public void TestUnloaded_ClearsDisplay()
+        {
+            new TextOutputPresenter(_view, _model);
+
+            FireTestUnloadedEvent();
+
+            _view.Received().Clear();
+        }
+
+        [Test]
+        public void TestReloaded_IfClearOnReloadIsFalse_DoesNotClearDisplay()
+        {
+            _settings.Gui.ClearResultsOnReload = false;
+            new TextOutputPresenter(_view, _model);
+
+            FireTestReloadedEvent(FAKE_TEST_RUN);
+
+            _view.DidNotReceive().Clear();
+        }
+
+        [Test]
+        public void TestReloaded_IfClearOnReloadIsTrue_ClearsDisplay()
+        {
+            _settings.Gui.ClearResultsOnReload = true;
+            new TextOutputPresenter(_view, _model);
+
+            FireTestReloadedEvent(FAKE_TEST_RUN);
+
+            _view.Received().Clear();
+        }
+
+        [Test]
+        public void TestRunStarting_ClearsDisplay()
+        {
+            new TextOutputPresenter(_view, _model);
+
+            FireRunStartingEvent(123);
+
+            _view.Received().Clear();
+        }
 
         [TestCaseSource(nameof(EveryLabel))]
         public void TestStarting_DisplaysCorrectly(string labels)

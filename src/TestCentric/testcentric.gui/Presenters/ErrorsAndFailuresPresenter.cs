@@ -67,6 +67,32 @@ namespace TestCentric.Gui.Presenters
             {
                 _view.Clear();
             };
+
+            _model.Events.TestFinished += (TestResultEventArgs e) =>
+            {
+                if (e.Result.Status == TestStatus.Failed || e.Result.Status == TestStatus.Warning)
+                    if (e.Result.Site != FailureSite.Parent)
+                        AddResult(e.Result);
+            };
+
+            _model.Events.SuiteFinished += (TestResultEventArgs e) =>
+            {
+                if (e.Result.Status == TestStatus.Failed || e.Result.Status == TestStatus.Warning)
+                    if (e.Result.Site != FailureSite.Parent && e.Result.Site != FailureSite.Child)
+                        AddResult(e.Result);
+            };
+        }
+
+        private void AddResult(ResultNode result)
+        {
+            var testName = result.FullName;
+            var message = result.Message;
+            var stackTrace = result.StackTrace;
+
+            if (result.IsSuite && result.Site == FailureSite.SetUp)
+                testName += " (TestFixtureSetUp)";
+
+            _view.AddResult(testName, message, stackTrace);
         }
     }
 }

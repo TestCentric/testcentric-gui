@@ -32,5 +32,7 @@ namespace TestCentric.Gui.Views
     public interface IErrorsAndFailuresView
     {
         void Clear();
+
+        void AddResult(string testName, string message, string stackTrace);
     }
 }

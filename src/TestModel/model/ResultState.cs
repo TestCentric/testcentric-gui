@@ -21,6 +21,8 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System.Text;
+
 namespace TestCentric.Gui.Model
 {
     /// <summary>
@@ -220,8 +222,14 @@ namespace TestCentric.Gui.Model
         /// </returns>
         public override string ToString()
         {
-            string s = Status.ToString();
-            return Label == null || Label.Length == 0 ? s : string.Format("{0}:{1}", s, Label);
+            var sb = new StringBuilder(Status.ToString());
+
+            if (!string.IsNullOrEmpty(Label))
+                sb.Append($":{Label}");
+            if (Site != FailureSite.Test)
+                sb.Append($"({Site})");
+
+            return sb.ToString();
         }
     }
 

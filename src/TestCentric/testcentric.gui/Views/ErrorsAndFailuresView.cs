@@ -1,5 +1,5 @@
 // ***********************************************************************
-// Copyright (c) 2018 Charlie Poole
+// Copyright (c) 2016-2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -40,10 +40,8 @@ namespace TestCentric.Gui.Views
     /// <summary>
     /// Summary description for ErrorDisplay.
     /// </summary>
-    public class ErrorsAndFailuresView : UserControl, IViewControl, IErrorsAndFailuresView
+    public class ErrorsAndFailuresView : UserControlView, IViewControl, IErrorsAndFailuresView
     {
-        private readonly Font DefaultFixedFont = new Font(FontFamily.GenericMonospace, 8.0F);
-
         int hoverIndex = -1;
         private System.Windows.Forms.Timer hoverTimer;
         TipWindow tipWindow;
@@ -122,7 +120,7 @@ namespace TestCentric.Gui.Views
             // 
             this.detailList.Dock = System.Windows.Forms.DockStyle.Top;
             this.detailList.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.detailList.Font = DefaultFixedFont;
+            this.detailList.Font = new Font(FontFamily.GenericMonospace, 8.0F);
             this.detailList.HorizontalExtent = 2000;
             this.detailList.HorizontalScrollbar = true;
             this.detailList.ItemHeight = 16;
@@ -165,7 +163,7 @@ namespace TestCentric.Gui.Views
             this.sourceCode.ListOrderPolicy = ErrorListOrderPolicy.ReverseOrder;
             this.sourceCode.SplitOrientation = Orientation.Vertical;
             this.sourceCode.SplitterDistance = 0.3f;
-            this.stackTraceDisplay.Font = DefaultFixedFont;
+            this.stackTraceDisplay.Font = new Font(FontFamily.GenericMonospace, 8.0F);
             this.errorBrowser.RegisterDisplay(sourceCode);
             this.errorBrowser.RegisterDisplay(stackTraceDisplay);
             //
@@ -214,12 +212,25 @@ namespace TestCentric.Gui.Views
         #endregion
 
         #region Public Methods
+
         public void Clear()
         {
-            detailList.Items.Clear();
-            detailList.ContextMenu = null;
-            errorBrowser.StackTraceSource = "";
+            InvokeIfRequired(() =>
+            {
+                detailList.Items.Clear();
+                detailList.ContextMenu = null;
+                errorBrowser.StackTraceSource = "";
+            });
         }
+
+        public void AddResult(string testName, string message, string stackTrace)
+        {
+            InvokeIfRequired(() =>
+            {
+                InsertTestResultItem(new TestResultItem(testName, message, stackTrace));
+            });
+        }
+
         #endregion
 
         #region UserSettings Events
@@ -424,19 +435,19 @@ namespace TestCentric.Gui.Views
             else
                 errorBrowser.SelectedDisplay = stackTraceDisplay;
 
-            model.Events.TestFinished += (TestResultEventArgs e) =>
-            {
-                if (e.Result.Status == TestStatus.Failed || e.Result.Status == TestStatus.Warning)
-                    if (e.Result.Site != FailureSite.Parent)
-                        InsertTestResultItem(e.Result);
-            };
+            //model.Events.TestFinished += (TestResultEventArgs e) =>
+            //{
+            //    if (e.Result.Status == TestStatus.Failed || e.Result.Status == TestStatus.Warning)
+            //        if (e.Result.Site != FailureSite.Parent)
+            //            InsertTestResultItem(e.Result);
+            //};
 
-            model.Events.SuiteFinished += (TestResultEventArgs e) =>
-            {
-                if (e.Result.Status == TestStatus.Failed || e.Result.Status == TestStatus.Warning)
-                    if (e.Result.Site == FailureSite.SetUp || e.Result.Site == FailureSite.Test || e.Result.Site == FailureSite.TearDown)
-                        InsertTestResultItem(e.Result);
-            };
+            //model.Events.SuiteFinished += (TestResultEventArgs e) =>
+            //{
+            //    if (e.Result.Status == TestStatus.Failed || e.Result.Status == TestStatus.Warning)
+            //        if (e.Result.Site == FailureSite.SetUp || e.Result.Site == FailureSite.Test || e.Result.Site == FailureSite.TearDown)
+            //            InsertTestResultItem(e.Result);
+            //};
 
             errorBrowser.StackTraceDisplayChanged += (s, e) =>
             {

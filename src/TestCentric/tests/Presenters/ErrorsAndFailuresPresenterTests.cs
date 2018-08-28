@@ -82,5 +82,60 @@ namespace TestCentric.Gui.Presenters
 
             _view.Received().Clear();
         }
+
+        [TestCase("Passed", FailureSite.Test, false)]
+        [TestCase("Failed", FailureSite.Test, true)]
+        [TestCase("Failed", FailureSite.SetUp, true)]
+        [TestCase("Failed", FailureSite.TearDown, true)]
+        [TestCase("Failed", FailureSite.Parent, false)]
+        [TestCase("Failed:Error", FailureSite.Test, true)]
+        [TestCase("Failed:Invalid", FailureSite.Test, true)]
+        [TestCase("Failed:Cancelled", FailureSite.Test, true)]
+        [TestCase("Warning", FailureSite.Test, true)]
+        [TestCase("Warning", FailureSite.SetUp, true)]
+        [TestCase("Warning", FailureSite.TearDown, true)]
+        [TestCase("Warning", FailureSite.Parent, false)]
+        [TestCase("Skipped", FailureSite.Test, false)]
+        [TestCase("Skipped:Ignored", FailureSite.Test, false)]
+        [TestCase("Inconclusive", FailureSite.Test, false)]
+        public void WhenTestCaseFinishes_FailuresAndErrorsAreDisplayed(string resultState, FailureSite site, bool shouldDisplay)
+        {
+            FireTestFinishedEvent("MyTest", resultState, site);
+
+            VerifyDisplay(shouldDisplay);
+        }
+
+        [TestCase("Passed", FailureSite.Test, false)]
+        [TestCase("Failed", FailureSite.Parent, false)]
+        [TestCase("Failed", FailureSite.SetUp, true)]
+        [TestCase("Failed", FailureSite.TearDown, true)]
+        [TestCase("Failed", FailureSite.Child, false)]
+        [TestCase("Failed", FailureSite.Test, true)]
+        [TestCase("Failed:Error", FailureSite.Test, true)]
+        [TestCase("Failed:Invalid", FailureSite.Test, true)]
+        [TestCase("Failed:Cancelled", FailureSite.Test, true)]
+        [TestCase("Warning", FailureSite.Test, true)]
+        [TestCase("Warning", FailureSite.SetUp, true)]
+        [TestCase("Warning", FailureSite.TearDown, true)]
+        [TestCase("Warning", FailureSite.Parent, false)]
+        [TestCase("Warning", FailureSite.Child, false)]
+        [TestCase("Skipped", FailureSite.Test, false)]
+        [TestCase("Skipped:Ignored", FailureSite.Test, false)]
+        [TestCase("Inconclusive", FailureSite.Test, false)]
+        public void WhenTestSuiteFinishes_FailuresAndErrorsAreDisplayed(string resultState, FailureSite site, bool shouldDisplay)
+        {
+            FireSuiteFinishedEvent("MyTest", resultState, site);
+
+            VerifyDisplay(shouldDisplay);
+        }
+
+        private void VerifyDisplay(bool shouldDisplay)
+        {
+            // NOTE: We only verify that somethings was sent, not the content
+            if (shouldDisplay)
+                _view.Received().AddResult(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>());
+            else
+                _view.DidNotReceiveWithAnyArgs().AddResult(null, null, null);
+        }
     }
 }
