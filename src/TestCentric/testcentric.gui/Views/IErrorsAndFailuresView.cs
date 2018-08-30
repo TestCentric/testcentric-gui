@@ -35,6 +35,7 @@ namespace TestCentric.Gui.Views
         event EventHandler SourceCodeDisplayChanged;
 
         bool WordWrap { get; set; } 
+        bool EnableToolTips { get; set; }
         Font Font { get; set; }
         int SplitterPosition { get; set; }
         float SourceCodeSplitterDistance { get; set; }

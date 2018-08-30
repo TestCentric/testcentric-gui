@@ -60,7 +60,7 @@ namespace TestCentric.Gui.Presenters
         }
 
         [Test]
-        public void WhenTestIsReloaded_IfClearResultsIfTrue_DisplayIsCleared()
+        public void WhenTestIsReloaded_IfClearResultsIsTrue_DisplayIsCleared()
         {
             _settings.Gui.ClearResultsOnReload = true;
 
@@ -174,6 +174,13 @@ namespace TestCentric.Gui.Presenters
         {
             bool enabled = _settings.Gui.ErrorDisplay.SourceCodeDisplay;
             _view.Received().SourceCodeDisplay = enabled;
+        }
+
+        [Test]
+        public void WhenPresenterIsCreated_EnableToolTipsIsSet()
+        {
+            bool enabled = _settings.Gui.ErrorDisplay.ToolTipsEnabled;
+            _view.Received().EnableToolTips = enabled;
         }
 
         [Test]

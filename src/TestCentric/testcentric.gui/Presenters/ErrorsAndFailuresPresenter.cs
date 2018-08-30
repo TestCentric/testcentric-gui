@@ -46,6 +46,7 @@ namespace TestCentric.Gui.Presenters
             _view.WordWrap = _settings.Gui.ErrorDisplay.WordWrapEnabled;
             _view.Font = _settings.Gui.FixedFont;
             _view.SplitterPosition = _settings.Gui.ErrorDisplay.SplitterPosition;
+            _view.EnableToolTips = _settings.Gui.ErrorDisplay.ToolTipsEnabled;
 
             var orientation = _settings.Gui.ErrorDisplay.SourceCodeSplitterOrientation;
             _view.SourceCodeSplitOrientation = orientation;

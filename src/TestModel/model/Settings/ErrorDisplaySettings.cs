@@ -40,8 +40,14 @@ namespace TestCentric.Gui.Model.Settings
 
         public bool WordWrapEnabled
         {
-           get { return GetSetting(nameof(WordWrapEnabled), true); }
-           set { SaveSetting(nameof(WordWrapEnabled), value); }
+            get { return GetSetting(nameof(WordWrapEnabled), true); }
+            set { SaveSetting(nameof(WordWrapEnabled), value); }
+        }
+
+        public bool ToolTipsEnabled
+        {
+            get { return GetSetting(nameof(ToolTipsEnabled), true); }
+            set { SaveSetting(nameof(ToolTipsEnabled), value); }
         }
 
         public bool SourceCodeDisplay

@@ -206,6 +206,8 @@ namespace TestCentric.Gui.Views
             }
         }
 
+        public bool EnableToolTips { get; set; }
+
         public override Font Font
         {
             get { return base.Font; }
@@ -360,32 +362,32 @@ namespace TestCentric.Gui.Views
 
         private void OnMouseHover(object sender, System.EventArgs e)
         {
-            //if ( tipWindow != null ) tipWindow.Close();
+            if (tipWindow != null) tipWindow.Close();
 
-            //if ( settings.Gui.GetSetting( "ResultTabs.ErrorsTab.ToolTipsEnabled", false ) && hoverIndex >= 0 && hoverIndex < detailList.Items.Count )
-            //{
-            //	Graphics g = Graphics.FromHwnd( detailList.Handle );
+            if (hoverIndex >= 0 && hoverIndex < detailList.Items.Count)
+            {
+                Graphics g = Graphics.FromHwnd(detailList.Handle);
 
-            //	Rectangle itemRect = detailList.GetItemRectangle( hoverIndex );
-            //	string text = detailList.Items[hoverIndex].ToString();
+                Rectangle itemRect = detailList.GetItemRectangle(hoverIndex);
+                string text = detailList.Items[hoverIndex].ToString();
 
-            //	SizeF sizeNeeded = g.MeasureString( text, detailList.Font );
-            //	bool expansionNeeded = 
-            //		itemRect.Width < (int)sizeNeeded.Width ||
-            //		itemRect.Height < (int)sizeNeeded.Height;
+                SizeF sizeNeeded = g.MeasureString(text, detailList.Font);
+                bool expansionNeeded =
+                    itemRect.Width < (int)sizeNeeded.Width ||
+                    itemRect.Height < (int)sizeNeeded.Height;
 
-            //	if ( expansionNeeded )
-            //	{
-            //		tipWindow = new TipWindow( detailList, hoverIndex );
-            //		tipWindow.ItemBounds = itemRect;
-            //		tipWindow.TipText = text;
-            //		tipWindow.Expansion = TipWindow.ExpansionStyle.Both;
-            //		tipWindow.Overlay = true;
-            //		tipWindow.WantClicks = true;
-            //		tipWindow.Closed += new EventHandler( tipWindow_Closed );
-            //		tipWindow.Show();
-            //	}
-            //}		
+                if (expansionNeeded)
+                {
+                    tipWindow = new TipWindow(detailList, hoverIndex);
+                    tipWindow.ItemBounds = itemRect;
+                    tipWindow.TipText = text;
+                    tipWindow.Expansion = TipWindow.ExpansionStyle.Both;
+                    tipWindow.Overlay = true;
+                    tipWindow.WantClicks = true;
+                    tipWindow.Closed += new EventHandler(tipWindow_Closed);
+                    tipWindow.Show();
+                }
+            }
         }
 
         private void tipWindow_Closed( object sender, System.EventArgs e )
