@@ -112,9 +112,9 @@ namespace TestCentric.Gui.Model.Settings
             new TestCaseData("SplitterPosition", 0, 12),
             new TestCaseData("WordWrapEnabled", true, false),
             new TestCaseData("SourceCodeDisplay", false, true),
-            new TestCaseData("SplitterOrientation", Orientation.Vertical, Orientation.Horizontal),
-            new TestCaseData("VerticalPosition", 0.3f, 0.5f),
-            new TestCaseData("HorizontalPosition", 0.3f, 0.5f)
+            new TestCaseData("SourceCodeSplitterOrientation", Orientation.Vertical, Orientation.Horizontal),
+            new TestCaseData("SourceCodeVerticalSplitterPosition", 0.3f, 0.5f),
+            new TestCaseData("SourceCodeHorizontalSplitterPosition", 0.3f, 0.5f)
         };
     }
 

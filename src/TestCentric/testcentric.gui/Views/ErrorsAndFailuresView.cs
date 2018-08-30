@@ -23,24 +23,18 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Windows.Forms;
-using NUnit.Engine;
 using NUnit.UiException.Controls;
 
 namespace TestCentric.Gui.Views
 {
-    using Model;
-    using Model.Settings;
     using Controls;
 
     /// <summary>
     /// Summary description for ErrorDisplay.
     /// </summary>
-    public class ErrorsAndFailuresView : UserControlView, IViewControl, IErrorsAndFailuresView
+    public class ErrorsAndFailuresView : UserControlView, IErrorsAndFailuresView
     {
         int hoverIndex = -1;
         private System.Windows.Forms.Timer hoverTimer;
@@ -54,15 +48,33 @@ namespace TestCentric.Gui.Views
         public System.Windows.Forms.Splitter tabSplitter;
         private System.Windows.Forms.ContextMenu detailListContextMenu;
         private System.Windows.Forms.MenuItem copyDetailMenuItem;
+
         /// <summary> 
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
 
+        #region Construction and Disposal
+
         public ErrorsAndFailuresView()
         {
             // This call is required by the Windows.Forms Form Designer.
             InitializeComponent();
+
+            sourceCode.SplitOrientationChanged += (s, e) =>
+            {
+                SourceCodeSplitOrientationChanged?.Invoke(this, new EventArgs());
+            };
+
+            sourceCode.SplitterDistanceChanged += (s, e) =>
+            {
+                SourceCodeSplitterDistanceChanged?.Invoke(this, new EventArgs());
+            };
+
+            errorBrowser.StackTraceDisplayChanged += (s, e) =>
+            {
+                SourceCodeDisplayChanged?.Invoke(this, new EventArgs());
+            };
         }
 
         /// <summary> 
@@ -78,23 +90,6 @@ namespace TestCentric.Gui.Views
                 }
             }
             base.Dispose( disposing );
-        }
-
-        #region Properties
-
-        private UserSettings UserSettings { get; set; }
-
-        private bool WordWrap
-        {
-            get { return wordWrap; }
-            set 
-            { 
-                if ( value != this.wordWrap )
-                {
-                    this.wordWrap = value; 
-                    RefillDetailList();
-                }
-            }
         }
 
         #endregion
@@ -170,7 +165,7 @@ namespace TestCentric.Gui.Views
             // detailListContextMenu
             // 
             this.detailListContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-                                                                                                  this.copyDetailMenuItem});
+                this.copyDetailMenuItem});
             // 
             // copyDetailMenuItem
             // 
@@ -190,28 +185,96 @@ namespace TestCentric.Gui.Views
         }
         #endregion
 
-        #region Form Level Events
+        #region IErrorsAndFailuresView Members
 
-        void sourceCode_SplitterDistanceChanged(object sender, EventArgs e)
+        public event EventHandler SplitterPositionChanged;
+        public event EventHandler SourceCodeSplitterDistanceChanged;
+        public event EventHandler SourceCodeSplitOrientationChanged;
+        public event EventHandler SourceCodeDisplayChanged;
+
+        public bool WordWrap
         {
-            if (sourceCode.SplitOrientation == Orientation.Vertical)
-                UserSettings.Gui.ErrorDisplay.VerticalPosition = sourceCode.SplitterDistance;
-            else
-                UserSettings.Gui.ErrorDisplay.HorizontalPosition = sourceCode.SplitterDistance;
+            get { return wordWrap; }
+            set
+            {
+                if (value != wordWrap)
+                    InvokeIfRequired(() =>
+                    {
+                        wordWrap = value;
+                        RefillDetailList();
+                    });
+            }
         }
 
-        void sourceCode_SplitOrientationChanged(object sender, EventArgs e)
+        public override Font Font
         {
-            UserSettings.Gui.ErrorDisplay.SplitterOrientation = sourceCode.SplitOrientation;
-
-            sourceCode.SplitterDistance = sourceCode.SplitOrientation == Orientation.Vertical
-                ? UserSettings.Gui.ErrorDisplay.VerticalPosition
-                : UserSettings.Gui.ErrorDisplay.HorizontalPosition;
+            get { return base.Font; }
+            set
+            {
+                if (value != base.Font)
+                    InvokeIfRequired(() =>
+                    {
+                        base.Font = value;
+                        detailList.Font = value;
+                        stackTraceDisplay.Font = value;
+                        sourceCode.CodeDisplayFont = value;
+                        RefillDetailList();
+                    });
+            }
         }
 
-        #endregion
+        public int SplitterPosition
+        {
+            get { return tabSplitter.SplitPosition; }
+            set
+            {
+                if (value >= tabSplitter.MinSize && value < ClientSize.Height)
+                    InvokeIfRequired(() =>
+                    {
+                        tabSplitter.SplitPosition = value;
+                    });
+            }
+        }
 
-        #region Public Methods
+        public float SourceCodeSplitterDistance
+        {
+            get { return sourceCode.SplitterDistance; }
+            set
+            {
+                InvokeIfRequired(() =>
+                {
+                    sourceCode.SplitterDistance = value;
+                });
+            }
+        }
+
+        public Orientation SourceCodeSplitOrientation
+        {
+            get { return sourceCode.SplitOrientation; }
+            set
+            {
+                InvokeIfRequired(() =>
+                {
+                    sourceCode.SplitOrientation = value;
+                });
+            }
+
+        }
+
+        public bool SourceCodeDisplay
+        {
+            get { return errorBrowser.SelectedDisplay == sourceCode; }
+            set
+            {
+                InvokeIfRequired(() =>
+                {
+                    if (value)
+                        errorBrowser.SelectedDisplay = sourceCode;
+                    else
+                        errorBrowser.SelectedDisplay = stackTraceDisplay;
+                });
+            }
+        }
 
         public void Clear()
         {
@@ -231,19 +294,6 @@ namespace TestCentric.Gui.Views
             });
         }
 
-        #endregion
-
-        #region UserSettings Events
-        private void UserSettings_Changed(object sender, SettingsEventArgs args)
-        {
-            this.WordWrap = UserSettings.Gui.ErrorDisplay.WordWrapEnabled;
-            Font newFont = this.stackTraceDisplay.Font = this.sourceCode.CodeDisplayFont = UserSettings.Gui.FixedFont;
-            if (newFont != this.detailList.Font)
-            {
-                this.detailList.Font = newFont;
-                RefillDetailList();
-            }
-        }
         #endregion
 
         #region DetailList Events
@@ -385,84 +435,12 @@ namespace TestCentric.Gui.Views
 
         private void tabSplitter_SplitterMoved( object sender, SplitterEventArgs e )
         {
-            //settings.Gui.SaveSetting( "ResultTabs.ErrorsTabSplitterPosition", tabSplitter.SplitPosition );
-        }
-
-        #endregion
-
-        #region Test Event Handlers
-
-        //private void OnTestException(object sender, TestEventArgs args)
-        //{
-        //	string msg = string.Format( "An unhandled {0} was thrown while executing this test : {1}",
-        //		args.Exception.GetType().FullName, args.Exception.Message );
-        //	TestResultItem item = new TestResultItem( args.Name, msg, args.Exception.StackTrace );
-
-        //	InsertTestResultItem( item );
-        //}
-
-        #endregion
-
-        #region IViewControl Implentation
-
-        public void InitializeView(ITestModel model, TestCentricPresenter presenter)
-        {
-            UserSettings = model.Services.UserSettings;
-
-            UserSettings.Changed += new SettingsEventHandler(UserSettings_Changed);
-
-            int splitPosition = UserSettings.Gui.ErrorDisplay.SplitterPosition;
-            if (splitPosition >= tabSplitter.MinSize && splitPosition < ClientSize.Height)
-                this.tabSplitter.SplitPosition = splitPosition;
-
-            WordWrap = UserSettings.Gui.ErrorDisplay.WordWrapEnabled;
-
-            detailList.Font = stackTraceDisplay.Font = UserSettings.Gui.FixedFont;
-
-            Orientation splitOrientation = UserSettings.Gui.ErrorDisplay.SplitterOrientation;
-            float splitterDistance = splitOrientation == Orientation.Vertical
-                ? UserSettings.Gui.ErrorDisplay.VerticalPosition
-                : UserSettings.Gui.ErrorDisplay.HorizontalPosition;
-
-            sourceCode.SplitOrientation = splitOrientation;
-            sourceCode.SplitterDistance = splitterDistance;
-
-            sourceCode.SplitOrientationChanged += new EventHandler(sourceCode_SplitOrientationChanged);
-            sourceCode.SplitterDistanceChanged += new EventHandler(sourceCode_SplitterDistanceChanged);
-
-            if (UserSettings.Gui.ErrorDisplay.SourceCodeDisplay)
-                errorBrowser.SelectedDisplay = sourceCode;
-            else
-                errorBrowser.SelectedDisplay = stackTraceDisplay;
-
-            //model.Events.TestFinished += (TestResultEventArgs e) =>
-            //{
-            //    if (e.Result.Status == TestStatus.Failed || e.Result.Status == TestStatus.Warning)
-            //        if (e.Result.Site != FailureSite.Parent)
-            //            InsertTestResultItem(e.Result);
-            //};
-
-            //model.Events.SuiteFinished += (TestResultEventArgs e) =>
-            //{
-            //    if (e.Result.Status == TestStatus.Failed || e.Result.Status == TestStatus.Warning)
-            //        if (e.Result.Site == FailureSite.SetUp || e.Result.Site == FailureSite.Test || e.Result.Site == FailureSite.TearDown)
-            //            InsertTestResultItem(e.Result);
-            //};
-
-            errorBrowser.StackTraceDisplayChanged += (s, e) =>
-            {
-                UserSettings.Gui.ErrorDisplay.SourceCodeDisplay = errorBrowser.SelectedDisplay == sourceCode;
-            };
+            SplitterPositionChanged?.Invoke(this, new EventArgs());
         }
 
         #endregion
 
         #region Helper Methods
-
-        private void InsertTestResultItem(ResultNode result)
-        {
-            InsertTestResultItem(new TestResultItem(result));
-        }
 
         private void InsertTestResultItem(TestResultItem item)
         {

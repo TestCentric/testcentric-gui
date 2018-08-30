@@ -22,17 +22,26 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
     public interface IErrorsAndFailuresView
     {
-        void Clear();
+        event EventHandler SplitterPositionChanged;
+        event EventHandler SourceCodeSplitterDistanceChanged;
+        event EventHandler SourceCodeSplitOrientationChanged;
+        event EventHandler SourceCodeDisplayChanged;
 
+        bool WordWrap { get; set; } 
+        Font Font { get; set; }
+        int SplitterPosition { get; set; }
+        float SourceCodeSplitterDistance { get; set; }
+        Orientation SourceCodeSplitOrientation { get; set; }
+        bool SourceCodeDisplay { get; set; }
+
+        void Clear();
         void AddResult(string testName, string message, string stackTrace);
     }
 }

@@ -50,22 +50,22 @@ namespace TestCentric.Gui.Model.Settings
             set { SaveSetting(nameof(SourceCodeDisplay), value); }
         }
 
-        public Orientation SplitterOrientation
+        public Orientation SourceCodeSplitterOrientation
         {
-            get { return GetSetting(nameof(SplitterOrientation), Orientation.Vertical); }
-            set { SaveSetting(nameof(SplitterOrientation), value); }
+            get { return GetSetting(nameof(SourceCodeSplitterOrientation), Orientation.Vertical); }
+            set { SaveSetting(nameof(SourceCodeSplitterOrientation), value); }
         }
 
-        public float VerticalPosition
+        public float SourceCodeVerticalSplitterPosition
         {
-            get { return GetSetting(nameof(VerticalPosition), 0.3f); }
-            set { SaveSetting(nameof(VerticalPosition), value); }
+            get { return GetSetting(nameof(SourceCodeVerticalSplitterPosition), 0.3f); }
+            set { SaveSetting(nameof(SourceCodeVerticalSplitterPosition), value); }
         }
 
-        public float HorizontalPosition
+        public float SourceCodeHorizontalSplitterPosition
         {
-            get { return GetSetting(nameof(HorizontalPosition), 0.3f); }
-            set { SaveSetting(nameof(HorizontalPosition), value); }
+            get { return GetSetting(nameof(SourceCodeHorizontalSplitterPosition), 0.3f); }
+            set { SaveSetting(nameof(SourceCodeHorizontalSplitterPosition), value); }
         }
     }
 }

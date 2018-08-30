@@ -21,6 +21,8 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System.Drawing;
+using System.Windows.Forms;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -129,9 +131,125 @@ namespace TestCentric.Gui.Presenters
             VerifyDisplay(shouldDisplay);
         }
 
+        [Test]
+        public void WhenPresenterIsCreated_WordWrapIsSetToDefault()
+        {
+            bool wordwrap = _settings.Gui.ErrorDisplay.WordWrapEnabled;
+            _view.Received().WordWrap = wordwrap;
+        }
+
+        [Test]
+        public void WhenPresenterIsCreated_FontIsSetToDefault()
+        {
+            var font = _settings.Gui.FixedFont;
+            _view.Received().Font = font;
+        }
+
+        [Test]
+        public void WhenPresenterIsCreated_SplitterPositionIsSet()
+        {
+            int split = _settings.Gui.ErrorDisplay.SplitterPosition;
+            _view.Received().SplitterPosition = split;
+        }
+
+        [Test]
+        public void WhenPresenterIsCreated_SourceCodeSplitterDistanceIsSet()
+        {
+            var orientation = _settings.Gui.ErrorDisplay.SourceCodeSplitterOrientation;
+            var distance = orientation == Orientation.Vertical
+                ? _settings.Gui.ErrorDisplay.SourceCodeVerticalSplitterPosition
+                : _settings.Gui.ErrorDisplay.SourceCodeHorizontalSplitterPosition;
+            _view.Received().SourceCodeSplitterDistance = distance;
+        }
+
+        [Test]
+        public void WhenPresenterIsCreated_SourceCodeSplitOrientationIsSet()
+        {
+            var orientation = _settings.Gui.ErrorDisplay.SourceCodeSplitterOrientation;
+            _view.Received().SourceCodeSplitOrientation = orientation;
+        }
+
+        [Test]
+        public void WhenPresenterIsCreated_SourceCodeDisplayIsSet()
+        {
+            bool enabled = _settings.Gui.ErrorDisplay.SourceCodeDisplay;
+            _view.Received().SourceCodeDisplay = enabled;
+        }
+
+        [Test]
+        public void WhenWordWrapSettingChanges_ViewIsUpdated()
+        {
+            _view.ClearReceivedCalls();
+            _settings.Gui.ErrorDisplay.WordWrapEnabled = true;
+            _view.Received().WordWrap = true;
+        }
+
+        [Test]
+        public void WhenFixedFontSettingChanges_ViewIsUpdated()
+        {
+            _view.ClearReceivedCalls();
+            var newFont = new Font(FontFamily.GenericMonospace, 12.0f);
+            _settings.Gui.FixedFont = newFont;
+            _view.Received().Font = newFont;
+        }
+
+        [Test]
+        public void WhenUserChangesSplitterPosition_SettingIsUpdated()
+        {
+            _view.SplitterPosition = 1234;
+            _view.SplitterPositionChanged += Raise.Event<System.EventHandler>(this, new System.EventArgs());
+
+            Assert.That(_settings.Gui.ErrorDisplay.SplitterPosition, Is.EqualTo(1234));
+        }
+
+        [Test]
+        public void WhenUserChangesSourceCodeSplitOrientation_SettingIsUpdated()
+        {
+            var orientation = _settings.Gui.ErrorDisplay.SourceCodeSplitterOrientation == Orientation.Vertical
+                ? Orientation.Horizontal
+                : Orientation.Vertical;
+
+            _view.SourceCodeSplitOrientation = orientation;
+            _view.SourceCodeSplitOrientationChanged += Raise.Event<System.EventHandler>(this, new System.EventArgs());
+
+            Assert.That(_settings.Gui.ErrorDisplay.SourceCodeSplitterOrientation, Is.EqualTo(orientation));
+        }
+
+        [Test]
+        public void WhenUserChangesSourceCodeHorizontalSplitterDistance_SettingIsUpdated()
+        {
+            _view.SourceCodeSplitOrientation.Returns(Orientation.Horizontal);
+            _view.SourceCodeSplitterDistance.Returns(0.35f);
+            _view.SourceCodeSplitterDistanceChanged += Raise.Event<System.EventHandler>(this, new System.EventArgs());
+
+            Assert.That(_settings.Gui.ErrorDisplay.SourceCodeHorizontalSplitterPosition, Is.EqualTo(0.35f));
+        }
+
+        [Test]
+        public void WhenUserChangesSourceCodeVerticalSplitterDistance_SettingIsUpdated()
+        {
+            _view.SourceCodeSplitOrientation.Returns(Orientation.Vertical);
+            _view.SourceCodeSplitterDistance.Returns(0.5f);
+            _view.SourceCodeSplitterDistanceChanged += Raise.Event<System.EventHandler>(this, new System.EventArgs());
+
+            Assert.That(_settings.Gui.ErrorDisplay.SourceCodeVerticalSplitterPosition, Is.EqualTo(0.5f));
+        }
+
+        [Test]
+        public void WhenUserChangesSourceCodeDisplay_SettingIsUpdated()
+        {
+            bool originalSetting = _settings.Gui.ErrorDisplay.SourceCodeDisplay;
+            bool newSetting = !originalSetting;
+
+            _view.SourceCodeDisplay.Returns(newSetting);
+            _view.SourceCodeDisplayChanged += Raise.Event<System.EventHandler>(this, new System.EventArgs());
+
+            Assert.That(_settings.Gui.ErrorDisplay.SourceCodeDisplay, Is.EqualTo(newSetting));
+        }
+
         private void VerifyDisplay(bool shouldDisplay)
         {
-            // NOTE: We only verify that somethings was sent, not the content
+            // NOTE: We only verify that something was sent, not the content
             if (shouldDisplay)
                 _view.Received().AddResult(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>());
             else

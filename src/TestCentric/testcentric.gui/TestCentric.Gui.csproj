@@ -215,7 +215,7 @@
     <Compile Include="Dialogs\TestPropertiesDialog.Designer.cs">
       <DependentUpon>TestPropertiesDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="TestResultItem.cs" />
+    <Compile Include="Views\TestResultItem.cs" />
     <Compile Include="Controls\TestSuiteTreeNode.cs" />
     <Compile Include="Controls\TestSuiteTreeView.cs">
       <SubType>Component</SubType>
