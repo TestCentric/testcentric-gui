@@ -147,15 +147,13 @@
     <Compile Include="Dialogs\TreeBasedSettingsDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Controls\ErrorDisplay.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="Controls\ExpandingLabel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\ExpandingTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Presenters\ErrorsAndFailuresPresenter.cs" />
     <Compile Include="Presenters\TestsNotRunPresenter.cs" />
     <Compile Include="Presenters\ProgressBarPresenter.cs" />
     <Compile Include="Presenters\StatusBarPresenter.cs" />
@@ -217,7 +215,7 @@
     <Compile Include="Dialogs\TestPropertiesDialog.Designer.cs">
       <DependentUpon>TestPropertiesDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="TestResultItem.cs" />
+    <Compile Include="Views\TestResultItem.cs" />
     <Compile Include="Controls\TestSuiteTreeNode.cs" />
     <Compile Include="Controls\TestSuiteTreeView.cs">
       <SubType>Component</SubType>
@@ -228,6 +226,10 @@
     <Compile Include="Controls\TipWindow.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Views\ErrorsAndFailuresView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\IErrorsAndFailuresView.cs" />
     <Compile Include="Views\ITestsNotRunView.cs" />
     <Compile Include="Views\IProgressBarView.cs" />
     <Compile Include="Views\IStatusBarView.cs" />
@@ -287,9 +289,6 @@
     <EmbeddedResource Include="Dialogs\TreeBasedSettingsDialog.resx">
       <DependentUpon>TreeBasedSettingsDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\ErrorDisplay.resx">
-      <DependentUpon>ErrorDisplay.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Controls\ExpandingLabel.resx">
       <DependentUpon>ExpandingLabel.cs</DependentUpon>
     </EmbeddedResource>
@@ -344,6 +343,9 @@
     <EmbeddedResource Include="Controls\TipWindow.resx">
       <DependentUpon>TipWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\ErrorsAndFailuresView.resx">
+      <DependentUpon>ErrorsAndFailuresView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\ProgressBarView.resx">
       <DependentUpon>ProgressBarView.cs</DependentUpon>

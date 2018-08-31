@@ -65,9 +65,24 @@ namespace TestCentric.Gui.Presenters
 
         private void WireUpEvents()
         {
+            _model.Events.TestLoaded += ((TestNodeEventArgs e) =>
+            {
+                Initialize(true);
+            });
+
+            _model.Events.TestUnloaded += ((TestEventArgs e) =>
+            {
+                Initialize(true);
+            });
+
+            _model.Events.TestReloaded += (TestNodeEventArgs e) =>
+            {
+                Initialize(_model.Services.UserSettings.Gui.ClearResultsOnReload);
+            };
+
             _model.Events.RunStarting += (RunStartingEventArgs e) =>
             {
-                Initialize();
+                Initialize(true);
             };
 
             _model.Events.TestStarting += (TestNodeEventArgs e) =>
@@ -117,7 +132,7 @@ namespace TestCentric.Gui.Presenters
             };
         }
 
-        private void Initialize()
+        private void Initialize(bool clearDisplay = false)
         {
             _labels = _model.Services.UserSettings.Gui.TextOutput.Labels;
             _displayBeforeTest = _labels == "ALL" || _labels == "BEFORE";
@@ -126,6 +141,9 @@ namespace TestCentric.Gui.Presenters
 
             _currentLabel = _lastTestOutput = null;
             _wantNewLine = false;
+
+            if (clearDisplay)
+                _view.Clear();
         }
 
         private void WriteLabelLine(string label)

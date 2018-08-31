@@ -21,6 +21,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System.Xml;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -89,6 +90,11 @@ namespace TestCentric.Gui.Presenters
 
         }
 
+        protected void FireTestFinishedEvent(string testName, string result, FailureSite site)
+        {
+            FireTestFinishedEvent(CreateResultNode("test-case", testName, result, site));
+        }
+
         protected void FireTestFinishedEvent(ResultNode result)
         {
             _model.Events.TestFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(result));
@@ -99,6 +105,11 @@ namespace TestCentric.Gui.Presenters
             FireSuiteFinishedEvent( CreateResultNode("test-suite", testName, result, output) );
         }
 
+        protected void FireSuiteFinishedEvent(string testName, string result, FailureSite site)
+        {
+            FireSuiteFinishedEvent(CreateResultNode("test-suite", testName, result, site));
+        }
+
         protected void FireSuiteFinishedEvent(ResultNode result)
         {
             _model.Events.SuiteFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(result));
@@ -106,24 +117,42 @@ namespace TestCentric.Gui.Presenters
 
         private static ResultNode CreateResultNode(string element, string testName, string result, string output = null)
         {
+            return new ResultNode(CreateResultXml(element, testName, result, output));
+        }
+
+        private static ResultNode CreateResultNode(string element, string testName, string result, FailureSite site)
+        {
+            return new ResultNode(CreateResultXml(element, testName, result, site));
+        }
+
+        private static XmlNode CreateResultXml(string element, string testName, string result, FailureSite site)
+        {
+            var xmlNode = CreateResultXml(element, testName, result);
+            xmlNode.AddAttribute("site", site.ToString());
+            return xmlNode;
+        }
+
+        private static XmlNode CreateResultXml(string element, string testName, string result, string output = null)
+        {
             int colon = result.IndexOf(':');
-            ResultNode resultNode;
+            string xml;
 
             if (colon > 0)
             {
                 string status = result.Substring(0, colon);
                 string label = result.Substring(colon + 1);
-                resultNode = new ResultNode($"<{element} fullname='{testName}' result='{status}' label='{label}'/>");
+                xml = $"<{element} fullname='{testName}' result='{status}' label='{label}'/>";
             }
             else
             {
-                resultNode = new ResultNode($"<{element} fullname='{testName}' result='{result}'/>");
+                xml = $"<{element} fullname='{testName}' result='{result}'/>";
             }
 
+            var xmlNode = XmlHelper.CreateXmlNode(xml);
             if (output != null)
-                resultNode.Xml.AddElementWithCDataSection("output", output);
+                xmlNode.AddElementWithCDataSection("output", output);
 
-            return resultNode;
+            return xmlNode;
         }
 
         protected void FireTestOutputEvent(string testName, string stream, string text)

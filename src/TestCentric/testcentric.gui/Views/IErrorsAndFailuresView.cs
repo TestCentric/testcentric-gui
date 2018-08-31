@@ -21,21 +21,28 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
-    /// <summary>
-    /// Base class for views implemented as a user control
-    /// </summary>
-    public class UserControlView : UserControl
+    public interface IErrorsAndFailuresView
     {
-        protected void InvokeIfRequired(MethodInvoker _delegate)
-        {
-            if (InvokeRequired)
-                BeginInvoke(_delegate);
-            else
-                _delegate();
-        }
+        event EventHandler SplitterPositionChanged;
+        event EventHandler SourceCodeSplitterDistanceChanged;
+        event EventHandler SourceCodeSplitOrientationChanged;
+        event EventHandler SourceCodeDisplayChanged;
+
+        bool WordWrap { get; set; } 
+        bool EnableToolTips { get; set; }
+        Font Font { get; set; }
+        int SplitterPosition { get; set; }
+        float SourceCodeSplitterDistance { get; set; }
+        Orientation SourceCodeSplitOrientation { get; set; }
+        bool SourceCodeDisplay { get; set; }
+
+        void Clear();
+        void AddResult(string testName, string message, string stackTrace);
     }
 }

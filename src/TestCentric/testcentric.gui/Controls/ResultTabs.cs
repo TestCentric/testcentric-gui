@@ -42,7 +42,7 @@ namespace TestCentric.Gui.Controls
         private TabControl tabControl;
 
         private TabPage errorTab;
-        public ErrorDisplay errorDisplay;
+        public ErrorsAndFailuresView errorDisplay;
 
         private TabPage notRunTab;
         public TestsNotRunView notRunTree;
@@ -86,7 +86,7 @@ namespace TestCentric.Gui.Controls
         {
             this.tabControl = new System.Windows.Forms.TabControl();
             this.errorTab = new System.Windows.Forms.TabPage();
-            this.errorDisplay = new ErrorDisplay();
+            this.errorDisplay = new ErrorsAndFailuresView();
             this.notRunTab = new System.Windows.Forms.TabPage();
             this.notRunTree = new TestsNotRunView();
             this.outputTab = new System.Windows.Forms.TabPage();
@@ -190,13 +190,6 @@ namespace TestCentric.Gui.Controls
 
         #endregion
 
-        public void Clear()
-        {
-            errorDisplay.Clear();
-            notRunTree.Clear();
-            textBoxDisplay.Clear();
-        }
-
         private void tabControl_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             int index = tabControl.SelectedIndex;
@@ -239,27 +232,6 @@ namespace TestCentric.Gui.Controls
             Settings = model.Services.UserSettings;
 
             tabControl.SelectedIndex = Settings.Gui.SelectedTab;
-
-            model.Events.TestLoaded += (TestNodeEventArgs e) =>
-            {
-                Clear();
-            };
-
-            model.Events.TestUnloaded += (TestEventArgs e) =>
-            {
-                Clear();
-            };
-
-            model.Events.TestReloaded += (TestNodeEventArgs e) =>
-            {
-            if (Settings.Gui.ClearResultsOnReload)
-                this.Clear();
-            };
-
-            model.Events.RunStarting += (RunStartingEventArgs e) =>
-            {
-                Clear();
-            };
         }
 
         #endregion

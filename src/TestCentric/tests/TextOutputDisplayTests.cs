@@ -29,7 +29,7 @@ namespace TestCentric.Gui.TextDisplay
     [TestFixture]
     public abstract class TextDisplayTests
     {
-        //[Test]
+        [Test]
         public void DisplayTest([Range(1, 5)] int num)
         {
             TestContext.Progress.WriteLine($"Immediate output from test {num}");
@@ -42,6 +42,6 @@ namespace TestCentric.Gui.TextDisplay
     { }
 
     [Parallelizable(ParallelScope.Children)]
-    public class ParallelTextDispay : TextDisplayTests
+    public class ParallelTextDisplay : TextDisplayTests
     { }
 }

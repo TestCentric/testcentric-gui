@@ -1,5 +1,5 @@
 // ***********************************************************************
-// Copyright (c) 2018 Charlie Poole
+// Copyright (c) 2016-2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -23,26 +23,19 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Windows.Forms;
-using NUnit.Engine;
 using NUnit.UiException.Controls;
 
-namespace TestCentric.Gui.Controls
+namespace TestCentric.Gui.Views
 {
-    using Model;
-    using Model.Settings;
+    using Controls;
 
     /// <summary>
     /// Summary description for ErrorDisplay.
     /// </summary>
-    public class ErrorDisplay : UserControl, IViewControl
+    public class ErrorsAndFailuresView : UserControlView, IErrorsAndFailuresView
     {
-        private readonly Font DefaultFixedFont = new Font(FontFamily.GenericMonospace, 8.0F);
-
         int hoverIndex = -1;
         private System.Windows.Forms.Timer hoverTimer;
         TipWindow tipWindow;
@@ -55,15 +48,33 @@ namespace TestCentric.Gui.Controls
         public System.Windows.Forms.Splitter tabSplitter;
         private System.Windows.Forms.ContextMenu detailListContextMenu;
         private System.Windows.Forms.MenuItem copyDetailMenuItem;
+
         /// <summary> 
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
 
-        public ErrorDisplay()
+        #region Construction and Disposal
+
+        public ErrorsAndFailuresView()
         {
             // This call is required by the Windows.Forms Form Designer.
             InitializeComponent();
+
+            sourceCode.SplitOrientationChanged += (s, e) =>
+            {
+                SourceCodeSplitOrientationChanged?.Invoke(this, new EventArgs());
+            };
+
+            sourceCode.SplitterDistanceChanged += (s, e) =>
+            {
+                SourceCodeSplitterDistanceChanged?.Invoke(this, new EventArgs());
+            };
+
+            errorBrowser.StackTraceDisplayChanged += (s, e) =>
+            {
+                SourceCodeDisplayChanged?.Invoke(this, new EventArgs());
+            };
         }
 
         /// <summary> 
@@ -79,23 +90,6 @@ namespace TestCentric.Gui.Controls
                 }
             }
             base.Dispose( disposing );
-        }
-
-        #region Properties
-
-        private UserSettings UserSettings { get; set; }
-
-        private bool WordWrap
-        {
-            get { return wordWrap; }
-            set 
-            { 
-                if ( value != this.wordWrap )
-                {
-                    this.wordWrap = value; 
-                    RefillDetailList();
-                }
-            }
         }
 
         #endregion
@@ -121,7 +115,7 @@ namespace TestCentric.Gui.Controls
             // 
             this.detailList.Dock = System.Windows.Forms.DockStyle.Top;
             this.detailList.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.detailList.Font = DefaultFixedFont;
+            this.detailList.Font = new Font(FontFamily.GenericMonospace, 8.0F);
             this.detailList.HorizontalExtent = 2000;
             this.detailList.HorizontalScrollbar = true;
             this.detailList.ItemHeight = 16;
@@ -164,14 +158,14 @@ namespace TestCentric.Gui.Controls
             this.sourceCode.ListOrderPolicy = ErrorListOrderPolicy.ReverseOrder;
             this.sourceCode.SplitOrientation = Orientation.Vertical;
             this.sourceCode.SplitterDistance = 0.3f;
-            this.stackTraceDisplay.Font = DefaultFixedFont;
+            this.stackTraceDisplay.Font = new Font(FontFamily.GenericMonospace, 8.0F);
             this.errorBrowser.RegisterDisplay(sourceCode);
             this.errorBrowser.RegisterDisplay(stackTraceDisplay);
             //
             // detailListContextMenu
             // 
             this.detailListContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-                                                                                                  this.copyDetailMenuItem});
+                this.copyDetailMenuItem});
             // 
             // copyDetailMenuItem
             // 
@@ -191,47 +185,117 @@ namespace TestCentric.Gui.Controls
         }
         #endregion
 
-        #region Form Level Events
+        #region IErrorsAndFailuresView Members
 
-        void sourceCode_SplitterDistanceChanged(object sender, EventArgs e)
+        public event EventHandler SplitterPositionChanged;
+        public event EventHandler SourceCodeSplitterDistanceChanged;
+        public event EventHandler SourceCodeSplitOrientationChanged;
+        public event EventHandler SourceCodeDisplayChanged;
+
+        public bool WordWrap
         {
-            if (sourceCode.SplitOrientation == Orientation.Vertical)
-                UserSettings.Gui.ErrorDisplay.VerticalPosition = sourceCode.SplitterDistance;
-            else
-                UserSettings.Gui.ErrorDisplay.HorizontalPosition = sourceCode.SplitterDistance;
-        }
-
-        void sourceCode_SplitOrientationChanged(object sender, EventArgs e)
-        {
-            UserSettings.Gui.ErrorDisplay.SplitterOrientation = sourceCode.SplitOrientation;
-
-            sourceCode.SplitterDistance = sourceCode.SplitOrientation == Orientation.Vertical
-                ? UserSettings.Gui.ErrorDisplay.VerticalPosition
-                : UserSettings.Gui.ErrorDisplay.HorizontalPosition;
-        }
-
-        #endregion
-
-        #region Public Methods
-        public void Clear()
-        {
-            detailList.Items.Clear();
-            detailList.ContextMenu = null;
-            errorBrowser.StackTraceSource = "";
-        }
-        #endregion
-
-        #region UserSettings Events
-        private void UserSettings_Changed(object sender, SettingsEventArgs args)
-        {
-            this.WordWrap = UserSettings.Gui.ErrorDisplay.WordWrapEnabled;
-            Font newFont = this.stackTraceDisplay.Font = this.sourceCode.CodeDisplayFont = UserSettings.Gui.FixedFont;
-            if (newFont != this.detailList.Font)
+            get { return wordWrap; }
+            set
             {
-                this.detailList.Font = newFont;
-                RefillDetailList();
+                if (value != wordWrap)
+                    InvokeIfRequired(() =>
+                    {
+                        wordWrap = value;
+                        RefillDetailList();
+                    });
             }
         }
+
+        public bool EnableToolTips { get; set; }
+
+        public override Font Font
+        {
+            get { return base.Font; }
+            set
+            {
+                if (value != base.Font)
+                    InvokeIfRequired(() =>
+                    {
+                        base.Font = value;
+                        detailList.Font = value;
+                        stackTraceDisplay.Font = value;
+                        sourceCode.CodeDisplayFont = value;
+                        RefillDetailList();
+                    });
+            }
+        }
+
+        public int SplitterPosition
+        {
+            get { return tabSplitter.SplitPosition; }
+            set
+            {
+                if (value >= tabSplitter.MinSize && value < ClientSize.Height)
+                    InvokeIfRequired(() =>
+                    {
+                        tabSplitter.SplitPosition = value;
+                    });
+            }
+        }
+
+        public float SourceCodeSplitterDistance
+        {
+            get { return sourceCode.SplitterDistance; }
+            set
+            {
+                InvokeIfRequired(() =>
+                {
+                    sourceCode.SplitterDistance = value;
+                });
+            }
+        }
+
+        public Orientation SourceCodeSplitOrientation
+        {
+            get { return sourceCode.SplitOrientation; }
+            set
+            {
+                InvokeIfRequired(() =>
+                {
+                    sourceCode.SplitOrientation = value;
+                });
+            }
+
+        }
+
+        public bool SourceCodeDisplay
+        {
+            get { return errorBrowser.SelectedDisplay == sourceCode; }
+            set
+            {
+                InvokeIfRequired(() =>
+                {
+                    if (value)
+                        errorBrowser.SelectedDisplay = sourceCode;
+                    else
+                        errorBrowser.SelectedDisplay = stackTraceDisplay;
+                });
+            }
+        }
+
+        public void Clear()
+        {
+            InvokeIfRequired(() =>
+            {
+                detailList.Items.Clear();
+                detailList.ContextMenu = null;
+                errorBrowser.StackTraceSource = "";
+            });
+        }
+
+        public void AddResult(string testName, string message, string stackTrace)
+        {
+            InvokeIfRequired(() =>
+            {
+                InsertTestResultItem(new TestResultItem(testName, message, stackTrace));
+            });
+        }
+
         #endregion
 
         #region DetailList Events
@@ -298,32 +362,32 @@ namespace TestCentric.Gui.Controls
 
         private void OnMouseHover(object sender, System.EventArgs e)
         {
-            //if ( tipWindow != null ) tipWindow.Close();
+            if (tipWindow != null) tipWindow.Close();
 
-            //if ( settings.Gui.GetSetting( "ResultTabs.ErrorsTab.ToolTipsEnabled", false ) && hoverIndex >= 0 && hoverIndex < detailList.Items.Count )
-            //{
-            //	Graphics g = Graphics.FromHwnd( detailList.Handle );
+            if (hoverIndex >= 0 && hoverIndex < detailList.Items.Count)
+            {
+                Graphics g = Graphics.FromHwnd(detailList.Handle);
 
-            //	Rectangle itemRect = detailList.GetItemRectangle( hoverIndex );
-            //	string text = detailList.Items[hoverIndex].ToString();
+                Rectangle itemRect = detailList.GetItemRectangle(hoverIndex);
+                string text = detailList.Items[hoverIndex].ToString();
 
-            //	SizeF sizeNeeded = g.MeasureString( text, detailList.Font );
-            //	bool expansionNeeded = 
-            //		itemRect.Width < (int)sizeNeeded.Width ||
-            //		itemRect.Height < (int)sizeNeeded.Height;
+                SizeF sizeNeeded = g.MeasureString(text, detailList.Font);
+                bool expansionNeeded =
+                    itemRect.Width < (int)sizeNeeded.Width ||
+                    itemRect.Height < (int)sizeNeeded.Height;
 
-            //	if ( expansionNeeded )
-            //	{
-            //		tipWindow = new TipWindow( detailList, hoverIndex );
-            //		tipWindow.ItemBounds = itemRect;
-            //		tipWindow.TipText = text;
-            //		tipWindow.Expansion = TipWindow.ExpansionStyle.Both;
-            //		tipWindow.Overlay = true;
-            //		tipWindow.WantClicks = true;
-            //		tipWindow.Closed += new EventHandler( tipWindow_Closed );
-            //		tipWindow.Show();
-            //	}
-            //}		
+                if (expansionNeeded)
+                {
+                    tipWindow = new TipWindow(detailList, hoverIndex);
+                    tipWindow.ItemBounds = itemRect;
+                    tipWindow.TipText = text;
+                    tipWindow.Expansion = TipWindow.ExpansionStyle.Both;
+                    tipWindow.Overlay = true;
+                    tipWindow.WantClicks = true;
+                    tipWindow.Closed += new EventHandler(tipWindow_Closed);
+                    tipWindow.Show();
+                }
+            }
         }
 
         private void tipWindow_Closed( object sender, System.EventArgs e )
@@ -373,84 +437,12 @@ namespace TestCentric.Gui.Controls
 
         private void tabSplitter_SplitterMoved( object sender, SplitterEventArgs e )
         {
-            //settings.Gui.SaveSetting( "ResultTabs.ErrorsTabSplitterPosition", tabSplitter.SplitPosition );
-        }
-
-        #endregion
-
-        #region Test Event Handlers
-
-        //private void OnTestException(object sender, TestEventArgs args)
-        //{
-        //	string msg = string.Format( "An unhandled {0} was thrown while executing this test : {1}",
-        //		args.Exception.GetType().FullName, args.Exception.Message );
-        //	TestResultItem item = new TestResultItem( args.Name, msg, args.Exception.StackTrace );
-
-        //	InsertTestResultItem( item );
-        //}
-
-        #endregion
-
-        #region IViewControl Implentation
-
-        public void InitializeView(ITestModel model, TestCentricPresenter presenter)
-        {
-            UserSettings = model.Services.UserSettings;
-
-            UserSettings.Changed += new SettingsEventHandler(UserSettings_Changed);
-
-            int splitPosition = UserSettings.Gui.ErrorDisplay.SplitterPosition;
-            if (splitPosition >= tabSplitter.MinSize && splitPosition < ClientSize.Height)
-                this.tabSplitter.SplitPosition = splitPosition;
-
-            WordWrap = UserSettings.Gui.ErrorDisplay.WordWrapEnabled;
-
-            detailList.Font = stackTraceDisplay.Font = UserSettings.Gui.FixedFont;
-
-            Orientation splitOrientation = UserSettings.Gui.ErrorDisplay.SplitterOrientation;
-            float splitterDistance = splitOrientation == Orientation.Vertical
-                ? UserSettings.Gui.ErrorDisplay.VerticalPosition
-                : UserSettings.Gui.ErrorDisplay.HorizontalPosition;
-
-            sourceCode.SplitOrientation = splitOrientation;
-            sourceCode.SplitterDistance = splitterDistance;
-
-            sourceCode.SplitOrientationChanged += new EventHandler(sourceCode_SplitOrientationChanged);
-            sourceCode.SplitterDistanceChanged += new EventHandler(sourceCode_SplitterDistanceChanged);
-
-            if (UserSettings.Gui.ErrorDisplay.SourceCodeDisplay)
-                errorBrowser.SelectedDisplay = sourceCode;
-            else
-                errorBrowser.SelectedDisplay = stackTraceDisplay;
-
-            model.Events.TestFinished += (TestResultEventArgs e) =>
-            {
-                if (e.Result.Status == TestStatus.Failed || e.Result.Status == TestStatus.Warning)
-                    if (e.Result.Site != FailureSite.Parent)
-                        InsertTestResultItem(e.Result);
-            };
-
-            model.Events.SuiteFinished += (TestResultEventArgs e) =>
-            {
-                if (e.Result.Status == TestStatus.Failed || e.Result.Status == TestStatus.Warning)
-                    if (e.Result.Site == FailureSite.SetUp || e.Result.Site == FailureSite.Test || e.Result.Site == FailureSite.TearDown)
-                        InsertTestResultItem(e.Result);
-            };
-
-            errorBrowser.StackTraceDisplayChanged += (s, e) =>
-            {
-                UserSettings.Gui.ErrorDisplay.SourceCodeDisplay = errorBrowser.SelectedDisplay == sourceCode;
-            };
+            SplitterPositionChanged?.Invoke(this, new EventArgs());
         }
 
         #endregion
 
         #region Helper Methods
-
-        private void InsertTestResultItem(ResultNode result)
-        {
-            InsertTestResultItem(new TestResultItem(result));
-        }
 
         private void InsertTestResultItem(TestResultItem item)
         {

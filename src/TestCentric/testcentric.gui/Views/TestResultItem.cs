@@ -23,28 +23,19 @@
 
 using System;
 
-namespace TestCentric.Gui
+namespace TestCentric.Gui.Views
 {
     using Model;
 
     /// <summary>
-    /// Summary description for TestResultItem.
+    /// TestResultItem is used by the ErrorsAndFailuresView to hold
+    /// all the information about a test result for display.
     /// </summary>
     public class TestResultItem
     {
         private string testName;
         private string message;
         private string stackTrace;
-
-        public TestResultItem(ResultNode result )
-        {
-            testName = result.FullName;
-            message = result.Message;
-            stackTrace = result.StackTrace;
-
-            if ( result.IsSuite && result.Site == FailureSite.SetUp )
-                testName += " (TestFixtureSetUp)";
-        }
 
         public TestResultItem( string testName, string message, string stackTrace )
         {

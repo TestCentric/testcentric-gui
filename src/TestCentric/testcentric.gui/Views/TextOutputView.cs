@@ -26,7 +26,7 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
-    public partial class TextOutputView : UserControl, ITextOutputView
+    public partial class TextOutputView : UserControlView, ITextOutputView
     {
         public TextOutputView()
         {
@@ -43,23 +43,32 @@ namespace TestCentric.Gui.Views
 
         public void Clear()
         {
-            richTextBox1.Clear();
+            InvokeIfRequired(() =>
+            {
+                richTextBox1.Clear();
+            });
         }
 
         public void Write(string text)
         {
-            richTextBox1.AppendText(text);
+            InvokeIfRequired(() =>
+            {
+                richTextBox1.Clear();
+            });
         }
 
         public void Write(string text, Color color)
         {
-            richTextBox1.SelectionStart = richTextBox1.TextLength;
-            richTextBox1.SelectionLength = 0;
-            richTextBox1.SelectionColor = color;
+            InvokeIfRequired(() =>
+            {
+                richTextBox1.SelectionStart = richTextBox1.TextLength;
+                richTextBox1.SelectionLength = 0;
+                richTextBox1.SelectionColor = color;
 
-            richTextBox1.AppendText(text);
+                richTextBox1.AppendText(text);
 
-            richTextBox1.SelectionColor = ForeColor;
+                richTextBox1.SelectionColor = ForeColor;
+            });
         }
 
         #region Context Menu Actions

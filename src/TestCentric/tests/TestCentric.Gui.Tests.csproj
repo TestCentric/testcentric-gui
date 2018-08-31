@@ -139,7 +139,8 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="CommandLineTests.cs" />
-    <Compile Include="ErrorDisplayTests.cs" />
+    <Compile Include="Presenters\ErrorsAndFailuresPresenterTests.cs" />
+    <Compile Include="Views\ErrorsAndFailuresViewTests.cs" />
     <Compile Include="Presenters\FakeUserSettings.cs" />
     <Compile Include="LongRunningOperationDisplayTests.cs" />
     <Compile Include="Presenters\PresenterTestBase.cs" />
