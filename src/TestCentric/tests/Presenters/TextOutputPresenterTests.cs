@@ -44,7 +44,7 @@ namespace TestCentric.Gui.Presenters
 
             FireTestLoadedEvent(FAKE_TEST_RUN);
 
-            _view.Received().Clear();
+            VerifyDisplayWasCleared();
         }
 
         [Test]
@@ -54,7 +54,7 @@ namespace TestCentric.Gui.Presenters
 
             FireTestUnloadedEvent();
 
-            _view.Received().Clear();
+            VerifyDisplayWasCleared();
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace TestCentric.Gui.Presenters
 
             FireTestReloadedEvent(FAKE_TEST_RUN);
 
-            _view.DidNotReceive().Clear();
+            VerifyDisplayWasNotCleared();
         }
 
         [Test]
@@ -76,7 +76,7 @@ namespace TestCentric.Gui.Presenters
 
             FireTestReloadedEvent(FAKE_TEST_RUN);
 
-            _view.Received().Clear();
+            VerifyDisplayWasCleared();
         }
 
         [Test]
@@ -86,7 +86,7 @@ namespace TestCentric.Gui.Presenters
 
             FireRunStartingEvent(123);
 
-            _view.Received().Clear();
+            VerifyDisplayWasCleared();
         }
 
         [TestCaseSource(nameof(EveryLabel))]
@@ -95,6 +95,8 @@ namespace TestCentric.Gui.Presenters
             CreatePresenter(labels);
 
             FireTestStartingEvent("SomeName");
+
+            VerifyDisplayWasNotCleared();
 
             if (labels == "ALL" || labels == "BEFORE")
                 VerifyLabelWasWritten("SomeName");
@@ -109,6 +111,7 @@ namespace TestCentric.Gui.Presenters
 
             FireSuiteStartingEvent("SomeName");
 
+            VerifyDisplayWasNotCleared();
             VerifyNothingWasWritten();
         }
 
@@ -130,6 +133,8 @@ namespace TestCentric.Gui.Presenters
             CreatePresenter(labels);
 
             FireTestFinishedEvent("SomeName", result);
+
+            VerifyDisplayWasNotCleared();
 
             if (labels == "AFTER")
                 VerifyLabelWasWritten("SomeName", result);
@@ -155,6 +160,8 @@ namespace TestCentric.Gui.Presenters
             CreatePresenter(labels);
 
             FireTestFinishedEvent("SomeName", result, "OUTPUT");
+
+            VerifyDisplayWasNotCleared();
 
             Received.InOrder(() =>
             {
@@ -183,6 +190,8 @@ namespace TestCentric.Gui.Presenters
 
             FireSuiteFinishedEvent("SomeName", result, "OUTPUT");
 
+            VerifyDisplayWasNotCleared();
+
             Received.InOrder(() =>
             {
                 Label("SomeName", labels != "OFF");
@@ -196,6 +205,7 @@ namespace TestCentric.Gui.Presenters
             CreatePresenter(labels);
             FireSuiteFinishedEvent("SomeName", "Passed");
 
+            VerifyDisplayWasNotCleared();
             VerifyNothingWasWritten();
         }
 
@@ -205,6 +215,8 @@ namespace TestCentric.Gui.Presenters
             CreatePresenter(labels);
 
             FireTestOutputEvent("SomeName", "Progress", "OUTPUT");
+
+            VerifyDisplayWasNotCleared();
 
             Received.InOrder(() =>
             {
@@ -220,6 +232,8 @@ namespace TestCentric.Gui.Presenters
 
             FireTestStartingEvent("TestName");
             FireTestFinishedEvent("TestName", "Passed", "OUTPUT");
+
+            VerifyDisplayWasNotCleared();
 
             Received.InOrder(() =>
             {
@@ -237,6 +251,8 @@ namespace TestCentric.Gui.Presenters
             FireTestStartingEvent("TEST1");
             FireTestOutputEvent("TEST1", "Progress", "IMMEDIATE");
             FireTestFinishedEvent("TEST1", "Passed", "OUTPUT");
+
+            VerifyDisplayWasNotCleared();
 
             Received.InOrder(() =>
             {
@@ -256,6 +272,8 @@ namespace TestCentric.Gui.Presenters
             FireTestFinishedEvent("TEST1", "Failed", "OUTPUT1");
             FireTestStartingEvent("TEST2");
             FireTestFinishedEvent("TEST2", "Passed", "OUTPUT2");
+
+            VerifyDisplayWasNotCleared();
 
             Received.InOrder(() =>
             {
@@ -280,6 +298,8 @@ namespace TestCentric.Gui.Presenters
             FireTestOutputEvent("TEST2", "Progress", "IMMEDIATE2");
             FireTestFinishedEvent("TEST1", "Failed", "OUTPUT1");
             FireTestFinishedEvent("TEST2", "Passed", "OUTPUT2");
+
+            VerifyDisplayWasNotCleared();
 
             Received.InOrder(() =>
             {
@@ -310,6 +330,8 @@ namespace TestCentric.Gui.Presenters
             FireTestOutputEvent("TEST2", "Progress", "IMMEDIATE2");
             FireTestFinishedEvent("TEST2", "Passed", "OUTPUT2");
             FireTestFinishedEvent("TEST1", "Failed", "OUTPUT1");
+
+            VerifyDisplayWasNotCleared();
 
             Received.InOrder(() =>
             {
@@ -401,6 +423,22 @@ namespace TestCentric.Gui.Presenters
         private void VerifyNothingWasWritten()
         {
             _view.DidNotReceiveWithAnyArgs().Write(Arg.Any<string>(), Arg.Any<Color>());
+        }
+
+        /// <summary>
+        /// Verify that the display was cleared
+        /// </summary>
+        private void VerifyDisplayWasCleared()
+        {
+            _view.Received().Clear();
+        }
+
+        /// <summary>
+        /// Verify that the display was not cleared unexpectedly
+        /// </summary>
+        private void VerifyDisplayWasNotCleared()
+        {
+            _view.DidNotReceive().Clear();
         }
 
         #endregion

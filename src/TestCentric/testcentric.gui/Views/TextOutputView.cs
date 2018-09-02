@@ -53,7 +53,7 @@ namespace TestCentric.Gui.Views
         {
             InvokeIfRequired(() =>
             {
-                richTextBox1.Clear();
+                richTextBox1.AppendText(text);
             });
         }
 

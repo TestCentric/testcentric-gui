@@ -68,7 +68,7 @@ namespace TestCentric.Gui
         public ProgressBarView progressBar;
         private ExpandingLabel runCount;
 
-        public ResultTabs resultTabs;
+        public TabControl tabControl;
 
         public StatusBarView statusBar;
 
@@ -124,6 +124,12 @@ namespace TestCentric.Gui
         private MenuItem extensionsMenuItem;
         private MenuItem testCentricHelpMenuItem;
         private MenuItem projectEditorMenuItem;
+        private TabPage errorTab;
+        private TabPage notrunTab;
+        private TabPage outputTab;
+        private ErrorsAndFailuresView errorsAndFailuresView1;
+        private TestsNotRunView testsNotRunView1;
+        private TextOutputView textOutputView1;
         private ExpandingLabel suiteName;
 
         #endregion
@@ -227,12 +233,22 @@ namespace TestCentric.Gui
             this.stopButton = new System.Windows.Forms.Button();
             this.runButton = new System.Windows.Forms.Button();
             this.progressBar = new TestCentric.Gui.Views.ProgressBarView();
-            this.resultTabs = new TestCentric.Gui.Controls.ResultTabs();
+            this.tabControl = new System.Windows.Forms.TabControl();
+            this.errorTab = new System.Windows.Forms.TabPage();
+            this.errorsAndFailuresView1 = new TestCentric.Gui.Views.ErrorsAndFailuresView();
+            this.notrunTab = new System.Windows.Forms.TabPage();
+            this.testsNotRunView1 = new TestCentric.Gui.Views.TestsNotRunView();
+            this.outputTab = new System.Windows.Forms.TabPage();
+            this.textOutputView1 = new TestCentric.Gui.Views.TextOutputView();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.testTree = new TestCentric.Gui.Controls.TestTree();
             this.leftPanel = new System.Windows.Forms.Panel();
             this.rightPanel.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.tabControl.SuspendLayout();
+            this.errorTab.SuspendLayout();
+            this.notrunTab.SuspendLayout();
+            this.outputTab.SuspendLayout();
             this.leftPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -583,7 +599,7 @@ namespace TestCentric.Gui
             // 
             this.rightPanel.BackColor = System.Drawing.SystemColors.Control;
             this.rightPanel.Controls.Add(this.groupBox1);
-            this.rightPanel.Controls.Add(this.resultTabs);
+            this.rightPanel.Controls.Add(this.tabControl);
             this.rightPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rightPanel.Location = new System.Drawing.Point(246, 0);
             this.rightPanel.Name = "rightPanel";
@@ -658,15 +674,80 @@ namespace TestCentric.Gui
             this.progressBar.Status = TestCentric.Gui.Views.ProgressBarStatus.Success;
             this.progressBar.TabIndex = 0;
             // 
-            // resultTabs
+            // tabControl
             // 
-            this.resultTabs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.resultTabs.Location = new System.Drawing.Point(0, 120);
-            this.resultTabs.Name = "resultTabs";
-            this.resultTabs.Size = new System.Drawing.Size(498, 284);
-            this.resultTabs.TabIndex = 2;
+            this.tabControl.Alignment = System.Windows.Forms.TabAlignment.Bottom;
+            this.tabControl.Controls.Add(this.errorTab);
+            this.tabControl.Controls.Add(this.notrunTab);
+            this.tabControl.Controls.Add(this.outputTab);
+            this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl.Location = new System.Drawing.Point(0, 0);
+            this.tabControl.Name = "tabControl";
+            this.tabControl.SelectedIndex = 0;
+            this.tabControl.Size = new System.Drawing.Size(498, 407);
+            this.tabControl.TabIndex = 2;
+            this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
+            // 
+            // errorTab
+            // 
+            this.errorTab.Controls.Add(this.errorsAndFailuresView1);
+            this.errorTab.Location = new System.Drawing.Point(4, 4);
+            this.errorTab.Name = "errorTab";
+            this.errorTab.Size = new System.Drawing.Size(490, 381);
+            this.errorTab.TabIndex = 0;
+            this.errorTab.Text = "Errors and Failures";
+            this.errorTab.UseVisualStyleBackColor = true;
+            // 
+            // errorsAndFailuresView1
+            // 
+            this.errorsAndFailuresView1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.errorsAndFailuresView1.EnableToolTips = false;
+            this.errorsAndFailuresView1.Location = new System.Drawing.Point(0, 123);
+            this.errorsAndFailuresView1.Name = "errorsAndFailuresView1";
+            this.errorsAndFailuresView1.Size = new System.Drawing.Size(490, 258);
+            this.errorsAndFailuresView1.SourceCodeDisplay = true;
+            this.errorsAndFailuresView1.SourceCodeSplitOrientation = System.Windows.Forms.Orientation.Vertical;
+            this.errorsAndFailuresView1.SourceCodeSplitterDistance = 0.3F;
+            this.errorsAndFailuresView1.SplitterPosition = 128;
+            this.errorsAndFailuresView1.TabIndex = 0;
+            this.errorsAndFailuresView1.WordWrap = false;
+            // 
+            // notrunTab
+            // 
+            this.notrunTab.Controls.Add(this.testsNotRunView1);
+            this.notrunTab.Location = new System.Drawing.Point(4, 4);
+            this.notrunTab.Name = "notrunTab";
+            this.notrunTab.Size = new System.Drawing.Size(490, 381);
+            this.notrunTab.TabIndex = 1;
+            this.notrunTab.Text = "Tests Not Run";
+            this.notrunTab.UseVisualStyleBackColor = true;
+            // 
+            // testsNotRunView1
+            // 
+            this.testsNotRunView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.testsNotRunView1.Location = new System.Drawing.Point(0, 0);
+            this.testsNotRunView1.Name = "testsNotRunView1";
+            this.testsNotRunView1.Size = new System.Drawing.Size(490, 381);
+            this.testsNotRunView1.TabIndex = 0;
+            // 
+            // outputTab
+            // 
+            this.outputTab.Controls.Add(this.textOutputView1);
+            this.outputTab.Location = new System.Drawing.Point(4, 4);
+            this.outputTab.Name = "outputTab";
+            this.outputTab.Size = new System.Drawing.Size(490, 381);
+            this.outputTab.TabIndex = 2;
+            this.outputTab.Text = "Text Output";
+            this.outputTab.UseVisualStyleBackColor = true;
+            // 
+            // textOutputView1
+            // 
+            this.textOutputView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textOutputView1.Location = new System.Drawing.Point(0, 0);
+            this.textOutputView1.Name = "textOutputView1";
+            this.textOutputView1.Size = new System.Drawing.Size(490, 381);
+            this.textOutputView1.TabIndex = 0;
+            this.textOutputView1.WordWrap = true;
             // 
             // testTree
             // 
@@ -704,6 +785,10 @@ namespace TestCentric.Gui
             this.rightPanel.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.tabControl.ResumeLayout(false);
+            this.errorTab.ResumeLayout(false);
+            this.notrunTab.ResumeLayout(false);
+            this.outputTab.ResumeLayout(false);
             this.leftPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -739,11 +824,11 @@ namespace TestCentric.Gui
 
         public StatusBarView StatusBarView { get { return statusBar; } }
 
-        public ErrorsAndFailuresView ErrorsAndFailuresView {  get { return resultTabs.errorDisplay; } }
+        public ErrorsAndFailuresView ErrorsAndFailuresView { get { return errorsAndFailuresView1; } }
 
-        public TestsNotRunView TestsNotRunView { get { return resultTabs.notRunTree; } }
+        public TestsNotRunView TestsNotRunView { get { return testsNotRunView1; } }
 
-        public ITextOutputView TextOutputView { get { return resultTabs.textBoxDisplay; } }
+        public ITextOutputView TextOutputView { get { return textOutputView1; } }
 
         #endregion
 
@@ -1139,6 +1224,9 @@ namespace TestCentric.Gui
             // Get the fixed font used by result tabs
             _fixedFont = UserSettings.Gui.FixedFont;
 
+            // Set the selected result tab
+            tabControl.SelectedIndex = UserSettings.Gui.SelectedTab;
+
             // Handle changes in settings
             UserSettings.Changed += (object sender, SettingsEventArgs e) =>
             {
@@ -1289,6 +1377,13 @@ namespace TestCentric.Gui
                 suiteName.Text = e.TestName;
                 //statusBar.Initialize(e.TestCount, e.TestName);
             }
+        }
+
+        private void tabControl_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+            int index = tabControl.SelectedIndex;
+            if (index >= 0 && index < tabControl.TabCount)
+                UserSettings.Gui.SelectedTab = index;
         }
 
         #endregion

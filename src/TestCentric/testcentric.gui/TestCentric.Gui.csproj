@@ -178,9 +178,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="RecentFileMenuHandler.cs" />
-    <Compile Include="Controls\ResultTabs.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="SettingsPages\AdvancedLoaderSettingsPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -303,9 +300,6 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\ResultTabs.resx">
-      <DependentUpon>ResultTabs.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsPages\AdvancedLoaderSettingsPage.resx">
       <DependentUpon>AdvancedLoaderSettingsPage.cs</DependentUpon>
