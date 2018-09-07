@@ -41,12 +41,11 @@ namespace TestCentric.Gui
 
         private SettingsPage current;
 
-        public static void Display( Form owner, TestCentricPresenter presenter, ITestModel model, params SettingsPage[] pages )
+        public static void Display( TestCentricPresenter presenter, ITestModel model, params SettingsPage[] pages )
         {
             using( TreeBasedSettingsDialog dialog = new TreeBasedSettingsDialog(presenter, model) )
             {
-                owner.Site.Container.Add( dialog );
-                dialog.Font = owner.Font;
+                dialog.Font = model.Services.UserSettings.Gui.Font;
                 dialog.SettingsPages.AddRange( pages ); 
                 dialog.ShowDialog();
             }

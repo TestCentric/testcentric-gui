@@ -36,12 +36,11 @@ namespace TestCentric.Gui
         protected System.Windows.Forms.TabControl tabControl1;
         private System.ComponentModel.IContainer components = null;
 
-        public static void Display( Form owner, TestCentricPresenter presenter, ITestModel model, params SettingsPage[] pages )
+        public static void Display( TestCentricPresenter presenter, ITestModel model, params SettingsPage[] pages )
         {
             using( TabbedSettingsDialog dialog = new TabbedSettingsDialog(presenter, model) )
             {
-                owner.Site.Container.Add( dialog );
-                dialog.Font = owner.Font;
+                dialog.Font = model.Services.UserSettings.Gui.Font;
                 dialog.SettingsPages.AddRange( pages ); 
                 dialog.ShowDialog();
             }

@@ -79,7 +79,7 @@ namespace TestCentric.Gui.SettingsPages
             dlg.FilterIndex = 1;
             dlg.FileName = "";
 
-            if ( dlg.ShowDialog( this ) == DialogResult.OK ) 
+            if ( dlg.ShowDialog() == DialogResult.OK ) 
                 editorPathTextBox.Text = dlg.FileName;
         }
 

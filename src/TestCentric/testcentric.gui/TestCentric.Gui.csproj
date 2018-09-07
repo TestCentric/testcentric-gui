@@ -119,7 +119,6 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AppContainer.cs" />
     <Compile Include="Controls\TestCentricProgressBar.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -1285,7 +1285,7 @@ namespace TestCentric.Gui
         {
             using (var extensionsDialog = new ExtensionDialog(Model.Services.ExtensionService))
             {
-                Site.Container.Add(extensionsDialog);
+                extensionsDialog.Font = Model.Services.UserSettings.Gui.Font;
                 extensionsDialog.ShowDialog();
             }
         }
