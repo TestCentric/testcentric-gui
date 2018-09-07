@@ -149,7 +149,7 @@ namespace TestCentric.Gui
         {
             OpenFileDialog dlg = CreateOpenFileDialog("Open Project", true, true);
 
-            if (dlg.ShowDialog(Form) == DialogResult.OK)
+            if (dlg.ShowDialog() == DialogResult.OK)
                 LoadTests(dlg.FileNames);
         }
 
@@ -214,15 +214,13 @@ namespace TestCentric.Gui
         //		public static void OpenResults( Form owner )
         //		{
         //			OpenFileDialog dlg = new OpenFileDialog();
-        //			System.ComponentModel.ISite site = owner == null ? null : owner.Site;
-        //			if ( site != null ) dlg.Site = site;
         //			dlg.Title = "Open Test Results";
         //
         //			dlg.Filter = "XML Files (*.xml)|*.xml|All Files (*.*)|*.*";
         //			dlg.FilterIndex = 1;
         //			dlg.FileName = "";
         //
-        //			if ( dlg.ShowDialog( owner ) == DialogResult.OK ) 
+        //			if ( dlg.ShowDialog() == DialogResult.OK ) 
         //				OpenProject( owner, dlg.FileName );
         //		}
 
@@ -276,7 +274,7 @@ namespace TestCentric.Gui
         //	dlg.FilterIndex = 1;
         //	dlg.FileName = "";
 
-        //	if ( dlg.ShowDialog( Form ) != DialogResult.OK )
+        //	if ( dlg.ShowDialog() != DialogResult.OK )
         //		return;
 
         //          if (PathUtils.IsAssemblyFileType(dlg.FileName))
@@ -330,7 +328,7 @@ namespace TestCentric.Gui
         {
             OpenFileDialog dlg = CreateOpenFileDialog("Add Test File", true, true);
 
-            if (dlg.ShowDialog(Form) == DialogResult.OK)
+            if (dlg.ShowDialog() == DialogResult.OK)
             {
                 Model.TestFiles.Add(dlg.FileName);
                 Model.ReloadTests();
@@ -353,7 +351,7 @@ namespace TestCentric.Gui
             dlg.ValidateNames = true;
             dlg.OverwritePrompt = true;
 
-            if (dlg.ShowDialog(Form) == DialogResult.OK)
+            if (dlg.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
@@ -460,7 +458,7 @@ namespace TestCentric.Gui
 
         public void DisplaySettings()
         {
-            SettingsDialog.Display(Form, this, Model);
+            SettingsDialog.Display(this, Model);
         }
 
         #endregion
@@ -484,8 +482,6 @@ namespace TestCentric.Gui
         private OpenFileDialog CreateOpenFileDialog(string title, bool includeProjects, bool includeAssemblies)
         {
             OpenFileDialog dlg = new OpenFileDialog();
-            System.ComponentModel.ISite site = Form == null ? null : Form.Site;
-            if (site != null) dlg.Site = site;
             dlg.Title = title;
             dlg.Filter = DialogFilter(includeProjects, includeAssemblies);
             dlg.FilterIndex = 1;

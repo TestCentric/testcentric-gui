@@ -76,13 +76,6 @@ namespace TestCentric.Gui
             InternalTrace.Initialize($"InternalTrace.{Process.GetCurrentProcess().Id}.gui.log", traceLevel);
             log.Info($"Starting TestCentric Runner - InternalTraceLevel = {traceLevel}");
 
-            // Create container in order to allow ambient properties
-            // to be shared across all top-level forms.
-            log.Info("Initializing AmbientProperties");
-            AppContainer c = new AppContainer();
-            AmbientProperties ambient = new AmbientProperties();
-            c.Services.AddService(typeof(AmbientProperties), ambient);
-
             log.Info("Creating TestEngine");
             ITestEngine testEngine = TestEngineActivator.CreateInstance();
             testEngine.InternalTraceLevel = traceLevel;
@@ -92,7 +85,6 @@ namespace TestCentric.Gui
 
             log.Info("Constructing Form");
             TestCentricMainForm form = new TestCentricMainForm(model, options);
-            c.Add(form);
 
             log.Info("Constructing presenters");
             new Presenters.ProgressBarPresenter(form.ProgressBarView, model);

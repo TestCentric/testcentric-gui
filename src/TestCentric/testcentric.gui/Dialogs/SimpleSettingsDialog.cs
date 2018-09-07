@@ -37,12 +37,11 @@ namespace TestCentric.Gui
         private System.Windows.Forms.GroupBox groupBox1;
         private System.ComponentModel.IContainer components = null;
 
-        public static void Display( Form owner, TestCentricPresenter presenter, ITestModel model, SettingsPage page )
+        public static void Display( TestCentricPresenter presenter, ITestModel model, SettingsPage page )
         {
             using( SimpleSettingsDialog dialog = new SimpleSettingsDialog(presenter, model) )
             {
-                owner.Site.Container.Add( dialog );
-                dialog.Font = owner.Font;
+                dialog.Font = model.Services.UserSettings.Gui.Font;
                 dialog.SettingsPages.Add( page ); 
                 dialog.ShowDialog();
             }
