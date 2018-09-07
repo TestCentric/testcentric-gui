@@ -129,6 +129,18 @@ namespace TestCentric.Gui
         private TabPage outputTab;
         private ErrorsAndFailuresView errorsAndFailuresView1;
         private TestsNotRunView testsNotRunView1;
+        private MenuItem treeMenuItem;
+        private MenuItem showCheckboxesMenuItem;
+        private MenuItem menuItem5;
+        private MenuItem expandMenuItem;
+        private MenuItem collapseMenuItem;
+        private MenuItem menuItem8;
+        private MenuItem expandAllMenuItem;
+        private MenuItem collapseAllMenuItem;
+        private MenuItem hideTestsMenuItem;
+        private MenuItem menuItem12;
+        private MenuItem propertiesMenuItem;
+        private MenuItem menuItem3;
         private TextOutputView textOutputView1;
         private ExpandingLabel suiteName;
 
@@ -194,6 +206,17 @@ namespace TestCentric.Gui
             this.fullGuiMenuItem = new System.Windows.Forms.MenuItem();
             this.miniGuiMenuItem = new System.Windows.Forms.MenuItem();
             this.viewMenuSeparator1 = new System.Windows.Forms.MenuItem();
+            this.treeMenuItem = new System.Windows.Forms.MenuItem();
+            this.showCheckboxesMenuItem = new System.Windows.Forms.MenuItem();
+            this.menuItem5 = new System.Windows.Forms.MenuItem();
+            this.expandMenuItem = new System.Windows.Forms.MenuItem();
+            this.collapseMenuItem = new System.Windows.Forms.MenuItem();
+            this.menuItem8 = new System.Windows.Forms.MenuItem();
+            this.expandAllMenuItem = new System.Windows.Forms.MenuItem();
+            this.collapseAllMenuItem = new System.Windows.Forms.MenuItem();
+            this.hideTestsMenuItem = new System.Windows.Forms.MenuItem();
+            this.menuItem12 = new System.Windows.Forms.MenuItem();
+            this.propertiesMenuItem = new System.Windows.Forms.MenuItem();
             this.viewMenuSeparator2 = new System.Windows.Forms.MenuItem();
             this.guiFontMenuItem = new System.Windows.Forms.MenuItem();
             this.increaseFontMenuItem = new System.Windows.Forms.MenuItem();
@@ -350,6 +373,7 @@ namespace TestCentric.Gui
             this.fullGuiMenuItem,
             this.miniGuiMenuItem,
             this.viewMenuSeparator1,
+            this.treeMenuItem,
             this.viewMenuSeparator2,
             this.guiFontMenuItem,
             this.fixedFontMenuItem,
@@ -377,14 +401,88 @@ namespace TestCentric.Gui
             this.viewMenuSeparator1.Index = 2;
             this.viewMenuSeparator1.Text = "-";
             // 
+            // treeMenuItem
+            // 
+            this.treeMenuItem.Index = 3;
+            this.treeMenuItem.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.showCheckboxesMenuItem,
+            this.menuItem5,
+            this.expandMenuItem,
+            this.collapseMenuItem,
+            this.menuItem8,
+            this.expandAllMenuItem,
+            this.collapseAllMenuItem,
+            this.hideTestsMenuItem,
+            this.menuItem12,
+            this.propertiesMenuItem});
+            this.treeMenuItem.Text = "Tree";
+            this.treeMenuItem.Popup += new System.EventHandler(this.treeMenuItem_Popup);
+            // 
+            // showCheckboxesMenuItem
+            // 
+            this.showCheckboxesMenuItem.Index = 0;
+            this.showCheckboxesMenuItem.Text = "Show Checkboxes";
+            this.showCheckboxesMenuItem.Click += new System.EventHandler(this.showCheckboxesMenuItem_Click);
+            // 
+            // menuItem5
+            // 
+            this.menuItem5.Index = 1;
+            this.menuItem5.Text = "-";
+            // 
+            // expandMenuItem
+            // 
+            this.expandMenuItem.Index = 2;
+            this.expandMenuItem.Text = "Expand";
+            this.expandMenuItem.Click += new System.EventHandler(this.expandMenuItem_Click);
+            // 
+            // collapseMenuItem
+            // 
+            this.collapseMenuItem.Index = 3;
+            this.collapseMenuItem.Text = "Collapse";
+            this.collapseMenuItem.Click += new System.EventHandler(this.collapseMenuItem_Click);
+            // 
+            // menuItem8
+            // 
+            this.menuItem8.Index = 4;
+            this.menuItem8.Text = "-";
+            // 
+            // expandAllMenuItem
+            // 
+            this.expandAllMenuItem.Index = 5;
+            this.expandAllMenuItem.Text = "Expand All";
+            this.expandAllMenuItem.Click += new System.EventHandler(this.expandAllMenuItem_Click);
+            // 
+            // collapseAllMenuItem
+            // 
+            this.collapseAllMenuItem.Index = 6;
+            this.collapseAllMenuItem.Text = "Collapse All";
+            this.collapseAllMenuItem.Click += new System.EventHandler(this.collapseAllMenuItem_Click);
+            // 
+            // hideTestsMenuItem
+            // 
+            this.hideTestsMenuItem.Index = 7;
+            this.hideTestsMenuItem.Text = "Hide Tests";
+            this.hideTestsMenuItem.Click += new System.EventHandler(this.hideTestsMenuItem_Click);
+            // 
+            // menuItem12
+            // 
+            this.menuItem12.Index = 8;
+            this.menuItem12.Text = "-";
+            // 
+            // propertiesMenuItem
+            // 
+            this.propertiesMenuItem.Index = 9;
+            this.propertiesMenuItem.Text = "Properties...";
+            this.propertiesMenuItem.Click += new System.EventHandler(this.propertiesMenuItem_Click);
+            // 
             // viewMenuSeparator2
             // 
-            this.viewMenuSeparator2.Index = 3;
+            this.viewMenuSeparator2.Index = 4;
             this.viewMenuSeparator2.Text = "-";
             // 
             // guiFontMenuItem
             // 
-            this.guiFontMenuItem.Index = 4;
+            this.guiFontMenuItem.Index = 5;
             this.guiFontMenuItem.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.increaseFontMenuItem,
             this.decreaseFontMenuItem,
@@ -424,7 +522,7 @@ namespace TestCentric.Gui
             // 
             // fixedFontMenuItem
             // 
-            this.fixedFontMenuItem.Index = 5;
+            this.fixedFontMenuItem.Index = 6;
             this.fixedFontMenuItem.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.increaseFixedFontMenuItem,
             this.decreaseFixedFontMenuItem,
@@ -457,13 +555,13 @@ namespace TestCentric.Gui
             // 
             // viewMenuSeparator3
             // 
-            this.viewMenuSeparator3.Index = 6;
+            this.viewMenuSeparator3.Index = 7;
             this.viewMenuSeparator3.Text = "-";
             // 
             // statusBarMenuItem
             // 
             this.statusBarMenuItem.Checked = true;
-            this.statusBarMenuItem.Index = 7;
+            this.statusBarMenuItem.Index = 8;
             this.statusBarMenuItem.Text = "&Status Bar";
             this.statusBarMenuItem.Click += new System.EventHandler(this.statusBarMenuItem_Click);
             // 
@@ -820,6 +918,8 @@ namespace TestCentric.Gui
 
         #region Subordinate Views contained in main form
 
+        public TestSuiteTreeView TreeView { get { return testTree.TreeView; } }
+
         public ProgressBarView ProgressBarView { get { return progressBar; } }
 
         public StatusBarView StatusBarView { get { return statusBar; } }
@@ -1069,10 +1169,73 @@ namespace TestCentric.Gui
             applyFixedFont( new Font( FontFamily.GenericMonospace, 8.0f ) );
         }
 
-        private void applyFixedFont( Font font )
+        private void applyFixedFont(Font font)
         {
             UserSettings.Gui.FixedFont = _fixedFont = font;
         }
+
+        private void treeMenuItem_Popup(object sender, EventArgs e)
+        {
+            TreeNode selectedNode = TreeView.SelectedNode;
+
+            showCheckboxesMenuItem.Checked = UserSettings.Gui.TestTree.ShowCheckBoxes;
+
+            if (selectedNode != null && selectedNode.Nodes.Count > 0)
+            {
+                bool isExpanded = selectedNode.IsExpanded;
+                collapseMenuItem.Enabled = isExpanded;
+                expandMenuItem.Enabled = !isExpanded;
+            }
+            else
+            {
+                collapseMenuItem.Enabled = expandMenuItem.Enabled = false;
+            }
+        }
+
+        private void showCheckboxesMenuItem_Click(object sender, EventArgs e)
+        {
+            UserSettings.Gui.TestTree.ShowCheckBoxes = !showCheckboxesMenuItem.Checked;
+        }
+
+        private void expandMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeView.SelectedNode.Expand();
+        }
+
+        private void collapseMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeView.SelectedNode.Collapse();
+        }
+
+        private void expandAllMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeView.BeginUpdate();
+            TreeView.ExpandAll();
+            TreeView.EndUpdate();
+        }
+
+        private void collapseAllMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeView.BeginUpdate();
+            TreeView.CollapseAll();
+            TreeView.EndUpdate();
+
+            // Compensate for a bug in the underlying control
+            if (TreeView.Nodes.Count > 0)
+                TreeView.SelectedNode = TreeView.Nodes[0];
+        }
+
+        private void hideTestsMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeView.HideTests();
+        }
+
+        private void propertiesMenuItem_Click(object sender, EventArgs e)
+        {
+            if (TreeView.SelectedTest != null)
+                TreeView.ShowPropertiesDialog(TreeView.SelectedTest);
+        }
+
         #endregion
 
         #region Test Menu
@@ -1173,9 +1336,6 @@ namespace TestCentric.Gui
         {
             if ( !DesignMode )
             {
-                // TODO: Can the controls add its own menu?
-                viewMenu.MenuItems.Add(3, testTree.TreeMenu);
-
                 EnableRunCommand( false );
                 EnableStopCommand( false );
 
