@@ -58,17 +58,6 @@ namespace TestCentric.Gui.Controls
         private System.Windows.Forms.Button removeCategory;
         private System.Windows.Forms.Button clearAllButton;
         private System.Windows.Forms.Button checkFailedButton;
-        private System.Windows.Forms.MenuItem treeMenu;
-        private System.Windows.Forms.MenuItem checkBoxesMenuItem;
-        private System.Windows.Forms.MenuItem treeMenuSeparatorItem1;
-        private System.Windows.Forms.MenuItem expandMenuItem;
-        private System.Windows.Forms.MenuItem collapseMenuItem;
-        private System.Windows.Forms.MenuItem treeMenuSeparatorItem2;
-        private System.Windows.Forms.MenuItem expandAllMenuItem;
-        private System.Windows.Forms.MenuItem collapseAllMenuItem;
-        private System.Windows.Forms.MenuItem hideTestsMenuItem;
-        private System.Windows.Forms.MenuItem treeMenuSeparatorItem3;
-        private System.Windows.Forms.MenuItem propertiesMenuItem;
         private System.Windows.Forms.CheckBox excludeCheckbox;
 
         /// <summary> 
@@ -83,11 +72,6 @@ namespace TestCentric.Gui.Controls
         public TestSuiteTreeView TreeView
         {
             get { return tests; }
-        }
-
-        public MenuItem TreeMenu 
-        {
-            get { return treeMenu; }
         }
 
         public string[] SelectedCategories
@@ -122,98 +106,6 @@ namespace TestCentric.Gui.Controls
         {
             // This call is required by the Windows.Forms Form Designer.
             InitializeComponent();
-            treeMenu = new MenuItem();
-            this.checkBoxesMenuItem = new System.Windows.Forms.MenuItem();
-            this.treeMenuSeparatorItem1 = new System.Windows.Forms.MenuItem();
-            this.expandMenuItem = new System.Windows.Forms.MenuItem();
-            this.collapseMenuItem = new System.Windows.Forms.MenuItem();
-            this.treeMenuSeparatorItem2 = new System.Windows.Forms.MenuItem();
-            this.expandAllMenuItem = new System.Windows.Forms.MenuItem();
-            this.collapseAllMenuItem = new System.Windows.Forms.MenuItem();
-            this.hideTestsMenuItem = new System.Windows.Forms.MenuItem();
-            this.treeMenuSeparatorItem3 = new System.Windows.Forms.MenuItem();
-            this.propertiesMenuItem = new System.Windows.Forms.MenuItem();
-
-            // 
-            // treeMenu
-            // 
-            this.treeMenu.MergeType = MenuMerge.Add;
-            this.treeMenu.MergeOrder = 1;
-            this.treeMenu.MenuItems.AddRange(
-                new System.Windows.Forms.MenuItem[] 
-                {
-                    this.checkBoxesMenuItem,
-                    this.treeMenuSeparatorItem1,
-                    this.expandMenuItem,
-                    this.collapseMenuItem,
-                    this.treeMenuSeparatorItem2,
-                    this.expandAllMenuItem,
-                    this.collapseAllMenuItem,
-                    this.hideTestsMenuItem,
-                    this.treeMenuSeparatorItem3,
-                    this.propertiesMenuItem 
-                } );
-            this.treeMenu.Text = "&Tree";
-            this.treeMenu.Visible = false;
-            this.treeMenu.Popup += new System.EventHandler(this.treeMenu_Popup);
-            // 
-            // checkBoxesMenuItem
-            // 
-            this.checkBoxesMenuItem.Index = 0;
-            this.checkBoxesMenuItem.Text = "Show Check&Boxes";
-            this.checkBoxesMenuItem.Click += new System.EventHandler(this.checkBoxesMenuItem_Click);
-            // 
-            // treeMenuSeparatorItem1
-            // 
-            this.treeMenuSeparatorItem1.Index = 1;
-            this.treeMenuSeparatorItem1.Text = "-";
-            // 
-            // expandMenuItem
-            // 
-            this.expandMenuItem.Index = 2;
-            this.expandMenuItem.Text = "&Expand";
-            this.expandMenuItem.Click += new System.EventHandler(this.expandMenuItem_Click);
-            // 
-            // collapseMenuItem
-            // 
-            this.collapseMenuItem.Index = 3;
-            this.collapseMenuItem.Text = "&Collapse";
-            this.collapseMenuItem.Click += new System.EventHandler(this.collapseMenuItem_Click);
-            // 
-            // treeMenuSeparatorItem2
-            // 
-            this.treeMenuSeparatorItem2.Index = 4;
-            this.treeMenuSeparatorItem2.Text = "-";
-            // 
-            // expandAllMenuItem
-            // 
-            this.expandAllMenuItem.Index = 5;
-            this.expandAllMenuItem.Text = "Expand All";
-            this.expandAllMenuItem.Click += new System.EventHandler(this.expandAllMenuItem_Click);
-            // 
-            // collapseAllMenuItem
-            // 
-            this.collapseAllMenuItem.Index = 6;
-            this.collapseAllMenuItem.Text = "Collapse All";
-            this.collapseAllMenuItem.Click += new System.EventHandler(this.collapseAllMenuItem_Click);
-            // 
-            // hideTestsMenuItem
-            // 
-            this.hideTestsMenuItem.Index = 7;
-            this.hideTestsMenuItem.Text = "Hide Tests";
-            this.hideTestsMenuItem.Click += new System.EventHandler(this.hideTestsMenuItem_Click);
-            // 
-            // treeMenuSeparatorItem3
-            // 
-            this.treeMenuSeparatorItem3.Index = 8;
-            this.treeMenuSeparatorItem3.Text = "-";
-            // 
-            // propertiesMenuItem
-            // 
-            this.propertiesMenuItem.Index = 9;
-            this.propertiesMenuItem.Text = "&Properties";
-            this.propertiesMenuItem.Click += new System.EventHandler(this.propertiesMenuItem_Click);
-
 
             //tests.SelectedTestChanged += new SelectedTestChangedHandler(tests_SelectedTestChanged);
             //tests.CheckedTestChanged += new CheckedTestChangedHandler(tests_CheckedTestChanged);
@@ -278,60 +170,6 @@ namespace TestCentric.Gui.Controls
         #endregion
 
         #region View Menu Handlers
-
-        private void treeMenu_Popup(object sender, System.EventArgs e)
-        {
-            TreeNode selectedNode = tests.SelectedNode;
-            if ( selectedNode != null && selectedNode.Nodes.Count > 0 )
-            {
-                bool isExpanded = selectedNode.IsExpanded;
-                collapseMenuItem.Enabled = isExpanded;
-                expandMenuItem.Enabled = !isExpanded;		
-            }
-            else
-            {
-                collapseMenuItem.Enabled = expandMenuItem.Enabled = false;
-            }
-        }
-
-        private void collapseMenuItem_Click(object sender, System.EventArgs e)
-        {
-            tests.SelectedNode.Collapse();
-        }
-
-        private void expandMenuItem_Click(object sender, System.EventArgs e)
-        {
-            tests.SelectedNode.Expand();
-        }
-
-        private void collapseAllMenuItem_Click(object sender, System.EventArgs e)
-        {
-            tests.BeginUpdate();
-            tests.CollapseAll();
-            tests.EndUpdate();
-
-            // Compensate for a bug in the underlying control
-            if ( tests.Nodes.Count > 0 )
-                tests.SelectedNode = tests.Nodes[0];	
-        }
-
-        private void hideTestsMenuItem_Click(object sender, System.EventArgs e)
-        {
-            tests.HideTests();
-        }
-
-        private void expandAllMenuItem_Click(object sender, System.EventArgs e)
-        {
-            tests.BeginUpdate();
-            tests.ExpandAll();
-            tests.EndUpdate();
-        }
-
-        private void propertiesMenuItem_Click(object sender, System.EventArgs e)
-        {
-            if (tests.SelectedTest != null)
-                tests.ShowPropertiesDialog(tests.SelectedTest);
-        }
 
         #endregion
 
@@ -675,11 +513,6 @@ namespace TestCentric.Gui.Controls
         //	}
         //}
 
-        private void checkBoxesMenuItem_Click(object sender, System.EventArgs e)
-        {
-            Model.Services.UserSettings.Gui.TestTree.ShowCheckBoxes = !checkBoxesMenuItem.Checked;
-        }
-
         private void UpdateCategorySelection()
         {
             Model.SelectCategories(SelectedCategories, excludeCheckbox.Checked);
@@ -701,7 +534,6 @@ namespace TestCentric.Gui.Controls
             buttonPanel.Visible = enable;
             clearAllButton.Visible = enable;
             checkFailedButton.Visible = enable;
-            checkBoxesMenuItem.Checked = enable;
         }
 
         #region IViewControl Implementation
@@ -714,8 +546,6 @@ namespace TestCentric.Gui.Controls
 
             model.Events.TestLoaded += (TestNodeEventArgs e) =>
             {
-                treeMenu.Visible = true;
-
                 availableList.Items.Clear();
                 selectedList.Items.Clear();
 
@@ -782,7 +612,6 @@ namespace TestCentric.Gui.Controls
                 selectedList.Items.Clear();
                 excludeCheckbox.Checked = false;
                 excludeCheckbox.Enabled = false;
-                treeMenu.Visible = false;
             };
 
             model.Services.UserSettings.Changed += (object sender, SettingsEventArgs e) =>
