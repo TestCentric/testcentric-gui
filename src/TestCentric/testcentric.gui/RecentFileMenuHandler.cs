@@ -30,6 +30,7 @@ namespace TestCentric.Gui
 {
     using Model;
     using Model.Settings;
+    using Views;
 
     public class RecentFileMenuHandler
     {
@@ -109,7 +110,7 @@ namespace TestCentric.Gui
             string testFileName = item.Text.Substring(2);
 
             // TODO: Figure out a better way
-            TestCentricMainForm form = item.GetMainMenu().GetForm() as TestCentricMainForm;
+            TestCentricMainView form = item.GetMainMenu().GetForm() as TestCentricMainView;
             if (form != null)
                 form.Presenter.LoadTests(testFileName);
         }

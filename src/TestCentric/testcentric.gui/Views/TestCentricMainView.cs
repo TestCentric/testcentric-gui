@@ -23,25 +23,20 @@
 
 using System;
 using System.Drawing;
-using System.Collections;
-using System.Configuration;
-using System.ComponentModel;
-using System.ComponentModel.Design;
-using System.Globalization;
 using System.Windows.Forms;
 using System.IO;
 using NUnit.Engine;
 
-namespace TestCentric.Gui
+namespace TestCentric.Gui.Views
 {
-    using Views;
     using Controls;
     using Model;
     using Model.Settings;
+    using Presenters;
 
-    public class TestCentricMainForm : TestCentricFormBase
+    public class TestCentricMainView : TestCentricFormBase
     {
-        static Logger log = InternalTrace.GetLogger(typeof(TestCentricMainForm));
+        static Logger log = InternalTrace.GetLogger(typeof(TestCentricMainView));
 
         #region Instance variables
 
@@ -148,13 +143,11 @@ namespace TestCentric.Gui
 
         #region Construction and Disposal
 
-        public TestCentricMainForm(ITestModel model, CommandLineOptions options) : base("NUnit")
+        public TestCentricMainView(ITestModel model) : base("NUnit")
         {
             InitializeComponent();
 
             Model = model;
-            Presenter = new TestCentricPresenter(this, model, options);
-            Options = options;
 
             UserSettings = Model.Services.UserSettings;
             RecentFiles = Model.Services.RecentFiles;
@@ -188,7 +181,7 @@ namespace TestCentric.Gui
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TestCentricMainForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TestCentricMainView));
             this.statusBar = new TestCentric.Gui.Views.StatusBarView();
             this.mainMenu = new System.Windows.Forms.MainMenu(this.components);
             this.fileMenu = new System.Windows.Forms.MenuItem();

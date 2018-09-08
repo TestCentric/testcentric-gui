@@ -23,14 +23,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Windows.Forms;
 using NUnit.Engine;
 
 namespace TestCentric.Gui.Controls
 {
     using Model;
-    using Model.Settings;
+    using Presenters;
 
     public delegate void SelectedTestsChangedEventHandler(object sender, SelectedTestsChangedEventArgs e);
 

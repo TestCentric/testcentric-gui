@@ -28,33 +28,40 @@ using System.Text;
 using System.Windows.Forms;
 using NUnit.Engine;
 
-namespace TestCentric.Gui
+namespace TestCentric.Gui.Presenters
 {
     using Controls;
     using Model;
     using Model.Settings;
+    using Views;
 
     /// <summary>
-    /// NUnitPresenter does all file opening and closing that
+    /// TestCentricPresenter does all file opening and closing that
     /// involves interacting with the user.
     /// 
     /// NOTE: This class originated as the static class
     /// TestLoaderUI and is slowly being converted to a
     /// true presenter. Current limitations include:
     /// 
-    /// 1. At this time, the presenter is created by
-    /// the form and interacts with it directly, rather
-    /// than through an interface. 
-    /// 
-    /// 2. Many functions, which should properly be in
+    /// 1. Many functions, which should properly be in
     /// the presenter, remain in the form.
     /// 
-    /// 3. The presenter creates dialogs itself, which
+    /// 2. The presenter creates dialogs itself, which
     /// limits testability.
     /// </summary>
     public class TestCentricPresenter
     {
         #region Instance Variables
+
+        private readonly TestCentricMainView _view;
+
+        private readonly ITestModel _model;
+
+        private readonly CommandLineOptions _options;
+
+        private readonly UserSettings _settings;
+
+        private readonly IRecentFiles _recentFiles;
 
         // Our nunit project watcher
         //private FileWatcher projectWatcher;
@@ -64,29 +71,17 @@ namespace TestCentric.Gui
         #region Constructor
 
         // TODO: Use an interface for view and model
-        public TestCentricPresenter(TestCentricMainForm form, ITestModel model, CommandLineOptions options)
+        public TestCentricPresenter(TestCentricMainView view, ITestModel model, CommandLineOptions options)
         {
-            Form = form;
-            Model = model;
-            Options = options;
+            _view = view;
+            _model = model;
+            _options = options;
 
-            UserSettings = Model.Services.UserSettings;
-            RecentFiles = Model.Services.RecentFiles;
+            _settings = _model.Services.UserSettings;
+            _recentFiles = _model.Services.RecentFiles;
+
+            view.Presenter = this;
         }
-
-        #endregion
-
-        #region Properties
-
-        private TestCentricMainForm Form { get; }
-
-        private ITestModel Model { get; }
-
-        private CommandLineOptions Options { get; }
-
-        private UserSettings UserSettings { get; }
-
-        private IRecentFiles RecentFiles { get; }
 
         #endregion
 
@@ -94,15 +89,15 @@ namespace TestCentric.Gui
 
         public void OnStartup()
         {
-            InitializeControls(Form);
+            InitializeControls(_view);
 
             // Load test specified on command line or
             // the most recent one if options call for it
-            if (Options.InputFiles.Count != 0)
-                LoadTests(Options.InputFiles);
-            else if (UserSettings.Gui.LoadLastProject && !Options.NoLoad)
+            if (_options.InputFiles.Count != 0)
+                LoadTests(_options.InputFiles);
+            else if (_settings.Gui.LoadLastProject && !_options.NoLoad)
             {
-                foreach (string entry in RecentFiles.Entries)
+                foreach (string entry in _recentFiles.Entries)
                 {
                     if (entry != null && File.Exists(entry))
                     {
@@ -124,21 +119,21 @@ namespace TestCentric.Gui
             //}
 
             // Run loaded test automatically if called for
-            if (Model.IsPackageLoaded && Options.RunAllTests)
+            if (_model.IsPackageLoaded && _options.RunAllTests)
             {
                 // TODO: Temporary fix to avoid problem when /run is used 
                 // with ReloadOnRun turned on. Refactor TestLoader so
                 // we can just do a run without reload.
-                bool reload = UserSettings.Gui.ReloadOnRun;
+                bool reload = _settings.Gui.ReloadOnRun;
 
                 try
                 {
-                    UserSettings.Gui.ReloadOnRun = false;
+                    _settings.Gui.ReloadOnRun = false;
                     RunAllTests();
                 }
                 finally
                 {
-                    UserSettings.Gui.ReloadOnRun = reload;
+                    _settings.Gui.ReloadOnRun = reload;
                 }
             }
         }
@@ -208,7 +203,7 @@ namespace TestCentric.Gui
 
         public void LoadTests(IList<string> testFileNames)
         {
-            Model.LoadTests(testFileNames);
+            _model.LoadTests(testFileNames);
         }
 
         //		public static void OpenResults( Form owner )
@@ -233,7 +228,7 @@ namespace TestCentric.Gui
             //DialogResult result = SaveProjectIfDirty();
 
             //if (result != DialogResult.Cancel)
-                Model.UnloadTests();
+                _model.UnloadTests();
 
             //return result;
             return DialogResult.OK;
@@ -330,8 +325,8 @@ namespace TestCentric.Gui
 
             if (dlg.ShowDialog() == DialogResult.OK)
             {
-                Model.TestFiles.Add(dlg.FileName);
-                Model.ReloadTests();
+                _model.TestFiles.Add(dlg.FileName);
+                _model.ReloadTests();
             }
         }
 
@@ -346,7 +341,7 @@ namespace TestCentric.Gui
             dlg.Title = "Save Test Results as XML";
             dlg.Filter = "XML Files (*.xml)|*.xml|All Files (*.*)|*.*";
             dlg.FileName = "TestResult.xml";
-            dlg.InitialDirectory = Path.GetDirectoryName(Model.TestFiles[0]);
+            dlg.InitialDirectory = Path.GetDirectoryName(_model.TestFiles[0]);
             dlg.DefaultExt = "xml";
             dlg.ValidateNames = true;
             dlg.OverwritePrompt = true;
@@ -357,13 +352,13 @@ namespace TestCentric.Gui
                 {
                     string fileName = dlg.FileName;
 
-                    Model.SaveResults(fileName);
+                    _model.SaveResults(fileName);
 
-                    Form.MessageDisplay.Info(String.Format($"Results saved in nunit3 format as {fileName}"));
+                    _view.MessageDisplay.Info(String.Format($"Results saved in nunit3 format as {fileName}"));
                 }
                 catch (Exception exception)
                 {
-                    Form.MessageDisplay.Error("Unable to Save Results", exception);
+                    _view.MessageDisplay.Error("Unable to Save Results", exception);
                 }
             }
         }
@@ -374,7 +369,7 @@ namespace TestCentric.Gui
 
         public void ReloadTests()
         {
-            Model.ReloadTests();
+            _model.ReloadTests();
             //NUnitProject project = loader.TestProject;
 
             //bool wrapper = project.IsAssemblyWrapper;
@@ -397,18 +392,18 @@ namespace TestCentric.Gui
         public void RunAllTests()
         {
             EnableRunCommand(false);
-            Model.ClearResults();
-            Model.RunAllTests();
+            _model.ClearResults();
+            _model.RunAllTests();
         }
 
         public void RunSelectedTests()
         {
-            RunTests(Form.SelectedTests);
+            RunTests(_view.SelectedTests);
         }
 
         public void RunFailedTests()
         {
-            RunTests(Form.FailedTests);
+            RunTests(_view.FailedTests);
         }
 
         public void RunTests(TestNode test)
@@ -420,29 +415,29 @@ namespace TestCentric.Gui
         {
             EnableRunCommand(false);
             
-            if (UserSettings.Gui.ReloadOnRun)
-                Model.ClearResults();
+            if (_settings.Gui.ReloadOnRun)
+                _model.ClearResults();
 
             if (tests != null && tests.Length > 0)
-                Model.RunTests(new TestSelection(tests));
+                _model.RunTests(new TestSelection(tests));
         }
 
         delegate void VoidMethodTakingBooleanArg(bool b);
 
         public void EnableRunCommand( bool enabled )
         {
-            if (Form.InvokeRequired)
-                Form.Invoke( new VoidMethodTakingBooleanArg(EnableRunCommand), new object[] { enabled } );
+            if (_view.InvokeRequired)
+                _view.Invoke( new VoidMethodTakingBooleanArg(EnableRunCommand), new object[] { enabled } );
             else
-                Form.EnableRunCommand(enabled);
+                _view.EnableRunCommand(enabled);
         }
 
         public void EnableStopCommand( bool enabled )
         {
-            if (Form.InvokeRequired)
-                Form.Invoke( new VoidMethodTakingBooleanArg(EnableStopCommand), new object[] { enabled } );
+            if (_view.InvokeRequired)
+                _view.Invoke( new VoidMethodTakingBooleanArg(EnableStopCommand), new object[] { enabled } );
             else
-                Form.EnableStopCommand(enabled);
+                _view.EnableStopCommand(enabled);
         }
 
         #endregion
@@ -451,14 +446,14 @@ namespace TestCentric.Gui
 
         public void DisplayProjectEditor()
         {
-            string editorPath = UserSettings.Gui.ProjectEditorPath;
+            string editorPath = _settings.Gui.ProjectEditorPath;
             if (editorPath != null && File.Exists(editorPath))
                 System.Diagnostics.Process.Start(editorPath);
         }
 
         public void DisplaySettings()
         {
-            SettingsDialog.Display(this, Model);
+            SettingsDialog.Display(this, _model);
         }
 
         #endregion
@@ -473,7 +468,7 @@ namespace TestCentric.Gui
             {
                 var view = control as IViewControl;
                 if (view != null)
-                    view.InitializeView(Model, this);
+                    view.InitializeView(_model, this);
                 
                 InitializeControls(control);
             }
@@ -493,8 +488,8 @@ namespace TestCentric.Gui
         private string DialogFilter(bool includeProjects, bool includeAssemblies)
         {
             StringBuilder sb = new StringBuilder();
-            bool nunit = includeProjects && Model.NUnitProjectSupport;
-            bool vs = includeProjects && Model.VisualStudioSupport;
+            bool nunit = includeProjects && _model.NUnitProjectSupport;
+            bool vs = includeProjects && _model.VisualStudioSupport;
 
             if (includeProjects && includeAssemblies)
             {

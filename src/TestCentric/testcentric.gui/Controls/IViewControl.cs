@@ -24,6 +24,7 @@
 namespace TestCentric.Gui.Controls
 {
     using Model;
+    using Presenters;
 
     /// <summary>
     /// IViewControl is implemented by any control that
