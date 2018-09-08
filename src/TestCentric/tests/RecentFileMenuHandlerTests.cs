@@ -31,7 +31,7 @@ using NUnit.TestUtilities.Fakes;
 using TestCentric.Gui.Model;
 using TestCentric.Gui.Model.Settings;
 
-namespace TestCentric.Gui.Tests
+namespace TestCentric.Gui.Views
 {
     [TestFixture]
     public class RecentFileMenuHandlerTests

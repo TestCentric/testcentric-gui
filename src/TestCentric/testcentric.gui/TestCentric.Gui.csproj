@@ -152,6 +152,12 @@
     <Compile Include="Controls\ExpandingTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Elements\ControlElement.cs" />
+    <Compile Include="Elements\IChecked.cs" />
+    <Compile Include="Elements\IControlElement.cs" />
+    <Compile Include="Elements\IMenuItem.cs" />
+    <Compile Include="Elements\IPopup.cs" />
+    <Compile Include="Elements\ButtonElement.cs" />
     <Compile Include="Presenters\ErrorsAndFailuresPresenter.cs" />
     <Compile Include="Presenters\TestsNotRunPresenter.cs" />
     <Compile Include="Presenters\ProgressBarPresenter.cs" />
@@ -164,13 +170,17 @@
     <Compile Include="Controls\IViewControl.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="MessageDisplay.cs" />
-    <Compile Include="TestCentricMainForm.cs">
+    <Compile Include="Elements\ICommand.cs" />
+    <Compile Include="Views\IMainView.cs" />
+    <Compile Include="Elements\IViewElement.cs" />
+    <Compile Include="Elements\MenuElement.cs" />
+    <Compile Include="Views\TestCentricMainView.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="TestCentricFormBase.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TestCentricPresenter.cs" />
+    <Compile Include="Presenters\TestCentricPresenter.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -292,8 +302,8 @@
       <DependentUpon>ExpandingTextBox.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="TestCentricMainForm.resx">
-      <DependentUpon>TestCentricMainForm.cs</DependentUpon>
+    <EmbeddedResource Include="Views\TestCentricMainView.resx">
+      <DependentUpon>TestCentricMainView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
