@@ -26,7 +26,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using NUnit.Engine;
 
-namespace TestCentric.Gui
+namespace TestCentric.Gui.Views
 {
     using Model;
     using Model.Settings;

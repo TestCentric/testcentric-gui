@@ -46,7 +46,9 @@ namespace TestCentric.Gui.Presenters
     /// 1. Many functions, which should properly be in
     /// the presenter, remain in the form.
     /// 
-    /// 2. The presenter creates dialogs itself, which
+    /// 2. The form has references to the model and presenter.
+    /// 
+    /// 3. The presenter creates dialogs itself, which
     /// limits testability.
     /// </summary>
     public class TestCentricPresenter
@@ -66,11 +68,14 @@ namespace TestCentric.Gui.Presenters
         // Our nunit project watcher
         //private FileWatcher projectWatcher;
 
+        // Current Long operation display, if any, or null
+        private LongRunningOperationDisplay _longOpDisplay;
+
         #endregion
 
         #region Constructor
 
-        // TODO: Use an interface for view and model
+        // TODO: Use an interface for view
         public TestCentricPresenter(TestCentricMainView view, ITestModel model, CommandLineOptions options)
         {
             _view = view;
@@ -81,6 +86,133 @@ namespace TestCentric.Gui.Presenters
             _recentFiles = _model.Services.RecentFiles;
 
             view.Presenter = this;
+
+            EnableRunCommand(false);
+            EnableStopCommand(false);
+
+            WireUpEvents();
+        }
+
+        private void WireUpEvents()
+        {
+            // Model Events
+            _model.Events.TestsLoading += (TestFilesLoadingEventArgs e) =>
+            {
+                EnableRunCommand(false);
+                _view.SaveResultsCommand.Enabled = false;
+                _longOpDisplay = new LongRunningOperationDisplay(_view, "Loading...");
+            };
+
+            _model.Events.TestLoaded += (TestNodeEventArgs e) =>
+            {
+                if (_longOpDisplay != null)
+                {
+                    _longOpDisplay.Dispose();
+                    _longOpDisplay = null;
+                }
+
+                EnableRunCommand(true);
+                _view.SaveResultsCommand.Enabled = false;
+            };
+
+            _model.Events.TestsUnloading += (TestEventArgse) =>
+            {
+                EnableRunCommand( false );
+            };
+
+            _model.Events.TestUnloaded += (TestEventArgs e) =>
+            {
+                EnableRunCommand(false);
+                _view.SaveResultsCommand.Enabled = false;
+            };
+
+            _model.Events.TestsReloading += (TestEventArgs e) =>
+            {
+                EnableRunCommand( false );
+                _longOpDisplay = new LongRunningOperationDisplay( _view, "Reloading..." );
+            };
+
+            _model.Events.TestReloaded += (TestNodeEventArgs e) =>
+            {
+                if (_longOpDisplay != null)
+                {
+                    _longOpDisplay.Dispose();
+                    _longOpDisplay = null;
+                }
+
+                EnableRunCommand(true);
+                _view.SaveResultsCommand.Enabled = false;
+            };
+
+            _model.Events.RunStarting += (RunStartingEventArgs e) =>
+            {
+                EnableRunCommand(false);
+                EnableStopCommand(true);
+
+                _view.SaveResultsCommand.Enabled = false;
+            };
+
+            _model.Events.RunFinished += (TestResultEventArgs e) =>
+            {
+                EnableStopCommand(false);
+                EnableRunCommand(true);
+
+                _view.SaveResultsCommand.Enabled = true;
+            };
+
+            // View Events
+
+            _view.Startup += () => OnStartup();
+
+            _view.FormClosing += (s, e) =>
+            {
+                if (_model.IsPackageLoaded)
+                {
+                    if (_model.IsTestRunning)
+                    {
+                        DialogResult dialogResult = _view.MessageDisplay.Ask(
+                            "A test is running, do you want to stop the test and exit?");
+
+                        if (dialogResult == DialogResult.No)
+                        {
+                            e.Cancel = true;
+                            return;
+                        }
+
+                        _model.CancelTestRun();
+                    }
+
+                    if (CloseProject() == DialogResult.Cancel)
+                        e.Cancel = true;
+                }
+            };
+
+            _view.RunButton.Execute += () => RunSelectedTests();
+            _view.StopButton.Execute += () => CancelRun();
+
+            _view.OpenCommand.Execute += () => OpenProject();
+            _view.CloseCommand.Execute += () => CloseProject();
+            _view.AddTestFileCommand.Execute += () => AddTestFile();
+            _view.ReloadTestsCommand.Execute += () => ReloadTests();
+
+            _view.RunAllCommand.Execute += () => RunAllTests();
+            _view.RunSelectedCommand.Execute += () => RunSelectedTests();
+            _view.RunFailedCommand.Execute += () => RunFailedTests();
+            _view.StopRunCommand.Execute += () => CancelRun();
+
+            _view.ProjectEditorCommand.Execute += () =>
+            {
+                string editorPath = _settings.Gui.ProjectEditorPath;
+                if (editorPath != null && File.Exists(editorPath))
+                    System.Diagnostics.Process.Start(editorPath);
+            };
+
+            _view.SaveResultsCommand.Execute += () => SaveResults();
+
+            _view.DisplaySettingsCommand.Execute += () =>
+            {
+                SettingsDialog.Display(this, _model);
+            };
         }
 
         #endregion
@@ -140,7 +272,7 @@ namespace TestCentric.Gui.Presenters
 
         #region Open Methods
 
-        public void OpenProject()
+        private void OpenProject()
         {
             OpenFileDialog dlg = CreateOpenFileDialog("Open Project", true, true);
 
@@ -148,76 +280,15 @@ namespace TestCentric.Gui.Presenters
                 LoadTests(dlg.FileNames);
         }
 
-        //public void WatchProject(string projectPath)
-        //{
-        //    this.projectWatcher = new FileWatcher(projectPath, 100);
-
-        //    this.projectWatcher.Changed += new FileChangedHandler(OnTestProjectChanged);
-        //    this.projectWatcher.Start();
-        //}
-
-        //public void RemoveWatcher()
-        //{
-        //    if (projectWatcher != null)
-        //    {
-        //        projectWatcher.Stop();
-        //        projectWatcher.Dispose();
-        //        projectWatcher = null;
-        //    }
-        //}
-
-        private void OnTestProjectChanged(string filePath)
-        {
-            //string message = filePath + Environment.NewLine + Environment.NewLine +
-            //    "This file has been modified outside of NUnit." + Environment.NewLine +
-            //    "Do you want to reload it?";
-
-            //if (Form.MessageDisplay.Ask(message) == DialogResult.Yes)
-            //    ReloadProject();
-        }
-        
-        // Keeping this old code from V2 for now as a reminder of how we may need to
-        // handle opening of NUnit projects when a config is specified.
-        // TODO: Delete when no longer relevant
-        //public void OpenProject(string testFileName, string configName, string testName)
-        //{
-        //    _model.LoadTests(testFileName, configName);
-        //    if (_model.IsPackageLoaded)
-        //    {
-        //        NUnitProject testProject = loader.TestProject;
-        //        if (testProject.Configs.Count == 0)
-        //            Form.MessageDisplay.Info("Loaded project contains no configuration data");
-        //        else if (testProject.ActiveConfig == null)
-        //            Form.MessageDisplay.Info("Loaded project has no active configuration");
-        //        else if (testProject.ActiveConfig.Assemblies.Count == 0)
-        //            Form.MessageDisplay.Info("Active configuration contains no assemblies");
-        //        else
-        //            loader.LoadTest(testName);
-        //    }
-        //}
-
         public void LoadTests(string testFileName)
         {
             LoadTests(new[] { testFileName });
         }
 
-        public void LoadTests(IList<string> testFileNames)
+        private void LoadTests(IList<string> testFileNames)
         {
             _model.LoadTests(testFileNames);
         }
-
-        //		public static void OpenResults( Form owner )
-        //		{
-        //			OpenFileDialog dlg = new OpenFileDialog();
-        //			dlg.Title = "Open Test Results";
-        //
-        //			dlg.Filter = "XML Files (*.xml)|*.xml|All Files (*.*)|*.*";
-        //			dlg.FilterIndex = 1;
-        //			dlg.FileName = "";
-        //
-        //			if ( dlg.ShowDialog() == DialogResult.OK ) 
-        //				OpenProject( owner, dlg.FileName );
-        //		}
 
         #endregion
 
@@ -422,38 +493,34 @@ namespace TestCentric.Gui.Presenters
                 _model.RunTests(new TestSelection(tests));
         }
 
-        delegate void VoidMethodTakingBooleanArg(bool b);
+        public void CancelRun()
+        {
+            EnableStopCommand(false);
+
+            if (_model.IsTestRunning)
+            {
+                DialogResult dialogResult = _view.MessageDisplay.Ask(
+                    "Do you want to cancel the running test?");
+
+                if (dialogResult == DialogResult.No)
+                    EnableStopCommand(true);
+                else
+                    _model.CancelTestRun();
+            }
+        }
 
         public void EnableRunCommand( bool enabled )
         {
-            if (_view.InvokeRequired)
-                _view.Invoke( new VoidMethodTakingBooleanArg(EnableRunCommand), new object[] { enabled } );
-            else
-                _view.EnableRunCommand(enabled);
+            _view.RunButton.Enabled = enabled;
+            _view.RunAllCommand.Enabled = enabled;
+            _view.RunSelectedCommand.Enabled = enabled;
+            _view.RunFailedCommand.Enabled = enabled && _model.HasResults && _view.FailedTests != null;
         }
 
-        public void EnableStopCommand( bool enabled )
+        public void EnableStopCommand(bool enabled)
         {
-            if (_view.InvokeRequired)
-                _view.Invoke( new VoidMethodTakingBooleanArg(EnableStopCommand), new object[] { enabled } );
-            else
-                _view.EnableStopCommand(enabled);
-        }
-
-        #endregion
-
-        #region Tools Methods
-
-        public void DisplayProjectEditor()
-        {
-            string editorPath = _settings.Gui.ProjectEditorPath;
-            if (editorPath != null && File.Exists(editorPath))
-                System.Diagnostics.Process.Start(editorPath);
-        }
-
-        public void DisplaySettings()
-        {
-            SettingsDialog.Display(this, _model);
+            _view.StopButton.Enabled = enabled;
+            _view.StopRunCommand.Enabled = enabled;
         }
 
         #endregion

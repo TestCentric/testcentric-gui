@@ -33,6 +33,7 @@ namespace TestCentric.Gui.Views
     using Model;
     using Model.Settings;
     using Presenters;
+    using Elements;
 
     public class TestCentricMainView : TestCentricFormBase
     {
@@ -44,8 +45,6 @@ namespace TestCentric.Gui.Views
         private RecentFileMenuHandler _recentProjectsMenuHandler;
 
         private string _displayFormat = "Full";
-
-        private LongRunningOperationDisplay _longOpDisplay;
 
         private System.Drawing.Font _fixedFont;
 
@@ -137,7 +136,6 @@ namespace TestCentric.Gui.Views
         private MenuItem propertiesMenuItem;
         private MenuItem menuItem3;
         private TextOutputView textOutputView1;
-        private ExpandingLabel suiteName;
 
         #endregion
 
@@ -151,6 +149,26 @@ namespace TestCentric.Gui.Views
 
             UserSettings = Model.Services.UserSettings;
             RecentFiles = Model.Services.RecentFiles;
+
+            RunButton = new ButtonElement(runButton);
+            StopButton = new ButtonElement(stopButton);
+
+            // Initialize File Menu Commands
+            OpenCommand = new MenuElement(openMenuItem);
+            CloseCommand = new MenuElement(closeMenuItem);
+            AddTestFileCommand = new MenuElement(addTestFileMenuItem);
+            ReloadTestsCommand = new MenuElement(reloadTestsMenuItem);
+
+            // Initialize Test Menu Commands
+            RunAllCommand = new MenuElement(runAllMenuItem);
+            RunSelectedCommand = new MenuElement(runSelectedMenuItem);
+            RunFailedCommand = new MenuElement(runFailedMenuItem);
+            StopRunCommand = new MenuElement(stopRunMenuItem);
+
+            // Initialize Tools Menu Comands
+            ProjectEditorCommand = new MenuElement(projectEditorMenuItem);
+            SaveResultsCommand = new MenuElement(saveResultsMenuItem);
+            DisplaySettingsCommand = new MenuElement(settingsMenuItem);
 
             //UserSettings.Changed += (object sender, SettingsEventArgs e) =>
             //{
@@ -244,7 +262,6 @@ namespace TestCentric.Gui.Views
             this.treeSplitter = new System.Windows.Forms.Splitter();
             this.rightPanel = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.suiteName = new TestCentric.Gui.Controls.ExpandingLabel();
             this.runCount = new TestCentric.Gui.Controls.ExpandingLabel();
             this.stopButton = new System.Windows.Forms.Button();
             this.runButton = new System.Windows.Forms.Button();
@@ -307,19 +324,16 @@ namespace TestCentric.Gui.Views
             this.openMenuItem.Index = 0;
             this.openMenuItem.Shortcut = System.Windows.Forms.Shortcut.CtrlO;
             this.openMenuItem.Text = "&Open...";
-            this.openMenuItem.Click += new System.EventHandler(this.openMenuItem_Click);
             // 
             // closeMenuItem
             // 
             this.closeMenuItem.Index = 1;
             this.closeMenuItem.Text = "&Close";
-            this.closeMenuItem.Click += new System.EventHandler(this.closeMenuItem_Click);
             // 
             // addTestFileMenuItem
             // 
             this.addTestFileMenuItem.Index = 2;
             this.addTestFileMenuItem.Text = "&Add Test File...";
-            this.addTestFileMenuItem.Click += new System.EventHandler(this.addTestFileMenuItem_Click);
             // 
             // fileMenuSeparator1
             // 
@@ -331,7 +345,6 @@ namespace TestCentric.Gui.Views
             this.reloadTestsMenuItem.Index = 4;
             this.reloadTestsMenuItem.Shortcut = System.Windows.Forms.Shortcut.CtrlR;
             this.reloadTestsMenuItem.Text = "&Reload Tests";
-            this.reloadTestsMenuItem.Click += new System.EventHandler(this.reloadTestsMenuItem_Click);
             // 
             // runtimeMenuItem
             // 
@@ -574,14 +587,12 @@ namespace TestCentric.Gui.Views
             this.runAllMenuItem.Index = 0;
             this.runAllMenuItem.Shortcut = System.Windows.Forms.Shortcut.F5;
             this.runAllMenuItem.Text = "&Run All";
-            this.runAllMenuItem.Click += new System.EventHandler(this.runAllMenuItem_Click);
             // 
             // runSelectedMenuItem
             // 
             this.runSelectedMenuItem.Index = 1;
             this.runSelectedMenuItem.Shortcut = System.Windows.Forms.Shortcut.F6;
             this.runSelectedMenuItem.Text = "Run &Selected";
-            this.runSelectedMenuItem.Click += new System.EventHandler(this.runSelectedMenuItem_Click);
             // 
             // runFailedMenuItem
             // 
@@ -589,7 +600,6 @@ namespace TestCentric.Gui.Views
             this.runFailedMenuItem.Index = 2;
             this.runFailedMenuItem.Shortcut = System.Windows.Forms.Shortcut.F7;
             this.runFailedMenuItem.Text = "Run &Failed";
-            this.runFailedMenuItem.Click += new System.EventHandler(this.runFailedMenuItem_Click);
             // 
             // testMenuSeparator
             // 
@@ -600,7 +610,6 @@ namespace TestCentric.Gui.Views
             // 
             this.stopRunMenuItem.Index = 4;
             this.stopRunMenuItem.Text = "S&top Run";
-            this.stopRunMenuItem.Click += new System.EventHandler(this.stopRunMenuItem_Click);
             // 
             // toolsMenu
             // 
@@ -618,13 +627,11 @@ namespace TestCentric.Gui.Views
             // 
             this.projectEditorMenuItem.Index = 0;
             this.projectEditorMenuItem.Text = "Project Editor...";
-            this.projectEditorMenuItem.Click += new System.EventHandler(this.projectEditorMenuItem_Click);
             // 
             // saveResultsMenuItem
             // 
             this.saveResultsMenuItem.Index = 1;
             this.saveResultsMenuItem.Text = "&Save Test Results...";
-            this.saveResultsMenuItem.Click += new System.EventHandler(this.saveResultsMenuItem_Click);
             // 
             // toolsMenuSeparator1
             // 
@@ -641,7 +648,6 @@ namespace TestCentric.Gui.Views
             // 
             this.settingsMenuItem.Index = 4;
             this.settingsMenuItem.Text = "&Settings...";
-            this.settingsMenuItem.Click += new System.EventHandler(this.settingsMenuItem_Click);
             // 
             // helpItem
             // 
@@ -699,7 +705,6 @@ namespace TestCentric.Gui.Views
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.suiteName);
             this.groupBox1.Controls.Add(this.runCount);
             this.groupBox1.Controls.Add(this.stopButton);
             this.groupBox1.Controls.Add(this.runButton);
@@ -710,16 +715,6 @@ namespace TestCentric.Gui.Views
             this.groupBox1.Size = new System.Drawing.Size(498, 120);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
-            // 
-            // suiteName
-            // 
-            this.suiteName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.suiteName.AutoEllipsis = true;
-            this.suiteName.Location = new System.Drawing.Point(145, 21);
-            this.suiteName.Name = "suiteName";
-            this.suiteName.Size = new System.Drawing.Size(343, 23);
-            this.suiteName.TabIndex = 1;
             // 
             // runCount
             // 
@@ -739,7 +734,6 @@ namespace TestCentric.Gui.Views
             this.stopButton.Size = new System.Drawing.Size(64, 31);
             this.stopButton.TabIndex = 4;
             this.stopButton.Text = "&Stop";
-            this.stopButton.Click += new System.EventHandler(this.stopButton_Click);
             // 
             // runButton
             // 
@@ -748,7 +742,6 @@ namespace TestCentric.Gui.Views
             this.runButton.Size = new System.Drawing.Size(64, 31);
             this.runButton.TabIndex = 3;
             this.runButton.Text = "&Run";
-            this.runButton.Click += new System.EventHandler(this.runButton_Click);
             // 
             // progressBar
             // 
@@ -858,7 +851,7 @@ namespace TestCentric.Gui.Views
             this.leftPanel.Size = new System.Drawing.Size(240, 407);
             this.leftPanel.TabIndex = 4;
             // 
-            // TestCentricMainForm
+            // TestCentricMainView
             // 
             this.ClientSize = new System.Drawing.Size(744, 431);
             this.Controls.Add(this.rightPanel);
@@ -868,10 +861,9 @@ namespace TestCentric.Gui.Views
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Menu = this.mainMenu;
             this.MinimumSize = new System.Drawing.Size(160, 32);
-            this.Name = "TestCentricMainForm";
+            this.Name = "TestCentricMainView";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "TestCentric Runner for NUnit";
-            this.Closing += new System.ComponentModel.CancelEventHandler(this.NUnitForm_Closing);
             this.Load += new System.EventHandler(this.NUnitForm_Load);
             this.rightPanel.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
@@ -887,9 +879,32 @@ namespace TestCentric.Gui.Views
 
         #endregion
 
+        #region Events
+
+        public event CommandHandler Startup;
+
+        #endregion
+
         #region Properties
 
         public TestCentricPresenter Presenter { get; set; }
+
+        public ICommand RunButton { get; }
+        public ICommand StopButton { get; }
+
+        public ICommand OpenCommand { get; }
+        public ICommand CloseCommand { get; }
+        public ICommand AddTestFileCommand { get; }
+        public ICommand ReloadTestsCommand { get; }
+
+        public ICommand RunAllCommand { get; }
+        public ICommand RunSelectedCommand { get; }
+        public ICommand RunFailedCommand { get; }
+        public ICommand StopRunCommand { get; }
+
+        public ICommand ProjectEditorCommand { get; }
+        public ICommand SaveResultsCommand { get; }
+        public ICommand DisplaySettingsCommand { get; }
 
         public TestNode[] SelectedTests
         {
@@ -978,29 +993,9 @@ namespace TestCentric.Gui.Views
             }
         }
 
-        private void openMenuItem_Click(object sender, System.EventArgs e)
-        {
-            Presenter.OpenProject();
-        }
-
-        private void closeMenuItem_Click(object sender, System.EventArgs e)
-        {
-            Presenter.CloseProject();
-        }
-
-        private void addTestFileMenuItem_Click(object sender, System.EventArgs e)
-        {
-            Presenter.AddTestFile();
-        }
-
         private void runtimeFrameworkMenuItem_Click(object sender, System.EventArgs e)
         {
             //Presenter.ReloadProject(((MenuItem)sender).Tag as RuntimeFramework);
-        }
-
-        private void reloadTestsMenuItem_Click(object sender, System.EventArgs e)
-        {
-            Presenter.ReloadTests();
         }
 
         private void exitMenuItem_Click(object sender, System.EventArgs e)
@@ -1231,47 +1226,12 @@ namespace TestCentric.Gui.Views
 
         #endregion
 
-        #region Test Menu
-
-        private void runAllMenuItem_Click(object sender, System.EventArgs e)
-        {
-            Presenter.RunAllTests();
-        }
-
-        private void runSelectedMenuItem_Click(object sender, System.EventArgs e)
-        {
-            Presenter.RunSelectedTests();
-        
-        }
-
-        private void runFailedMenuItem_Click(object sender, System.EventArgs e)
-        {
-            Presenter.RunFailedTests();
-        }
-
-        private void stopRunMenuItem_Click(object sender, System.EventArgs e)
-        {
-            CancelRun();
-        }
-
-        #endregion
-
         #region Tools Menu
 
         private void toolsMenu_Popup(object sender, EventArgs e)
         {
             projectEditorMenuItem.Enabled = File.Exists(Model.ProjectEditorPath);
 
-        }
-
-        private void projectEditorMenuItem_Click(object sender, EventArgs e)
-        {
-            Presenter.DisplayProjectEditor();
-        }
-
-        private void saveResultsMenuItem_Click(object sender, System.EventArgs e)
-        {
-            Presenter.SaveResults();
         }
 
         private void extensionsMenuItem_Click(object sender, EventArgs e)
@@ -1281,11 +1241,6 @@ namespace TestCentric.Gui.Views
                 extensionsDialog.Font = Model.Services.UserSettings.Gui.Font;
                 extensionsDialog.ShowDialog();
             }
-        }
-
-        private void settingsMenuItem_Click(object sender, System.EventArgs e)
-        {
-            Presenter.DisplaySettings();
         }
 
         #endregion
@@ -1311,7 +1266,6 @@ namespace TestCentric.Gui.Views
         {
             using( AboutBox aboutBox = new AboutBox() )
             {
-                Site.Container.Add( aboutBox );
                 aboutBox.ShowDialog();
             }
         }
@@ -1329,9 +1283,6 @@ namespace TestCentric.Gui.Views
         {
             if ( !DesignMode )
             {
-                EnableRunCommand( false );
-                EnableStopCommand( false );
-
                 _recentProjectsMenuHandler = new RecentFileMenuHandler(recentProjectsMenu, Model, File.Exists);
 
                 LoadFormSettings();
@@ -1344,7 +1295,7 @@ namespace TestCentric.Gui.Views
 
                 SubscribeToTestEvents();
 
-                Presenter.OnStartup();
+                Startup?.Invoke();
             }
         }
 
@@ -1458,76 +1409,14 @@ namespace TestCentric.Gui.Views
             UserSettings.Gui.MainForm.SplitPosition = treeSplitter.SplitPosition;
         }
 
-        /// <summary>
-        ///	Form is about to close, first see if we 
-        ///	have a test run going on and if so whether
-        ///	we should cancel it. Then unload the 
-        ///	test and save the latest form position.
-        /// </summary>
-        private void NUnitForm_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (Model.IsPackageLoaded)
-            {
-                if (Model.IsTestRunning) // TODO: Job for Presenter?
-                {
-                    DialogResult dialogResult = MessageDisplay.Ask(
-                        "A test is running, do you want to stop the test and exit?");
-
-                    if (dialogResult == DialogResult.No)
-                    {
-                        e.Cancel = true;
-                        return;
-                    }
-
-                    Model.CancelTestRun();
-                }
-
-                if (Presenter.CloseProject() == DialogResult.Cancel)
-                    e.Cancel = true;
-            }
-        }
-
         #endregion
 
         #region Other UI Event Handlers
-
-        /// <summary>
-        /// When the Run Button is clicked, run the selected test.
-        /// </summary>
-        private void runButton_Click(object sender, System.EventArgs e)
-        {
-            Presenter.RunSelectedTests();
-        }
-
-        /// <summary>
-        /// When the Stop Button is clicked, cancel running test
-        /// </summary>
-        private void stopButton_Click(object sender, System.EventArgs e)
-        {
-            CancelRun();
-        }
-
-        private void CancelRun()
-        {
-            EnableStopCommand( false );
-
-            if (Model.IsTestRunning)
-            {
-                DialogResult dialogResult = MessageDisplay.Ask(
-                    "Do you want to cancel the running test?");
-
-                if (dialogResult == DialogResult.No)
-                    EnableStopCommand(true);
-                else
-                    Model.CancelTestRun();
-            }
-        }
 
         private void testTree_SelectedTestsChanged(object sender, SelectedTestsChangedEventArgs e)
         {
             if (!Model.IsTestRunning)
             {
-                suiteName.Text = e.TestName;
                 //statusBar.Initialize(e.TestCount, e.TestName);
             }
         }
@@ -1590,22 +1479,6 @@ namespace TestCentric.Gui.Views
 
         #region Event Handlers for Test Load and Unload
 
-        //private void OnTestLoadStarting(TestFilesLoadingEventArgs e)
-        //{
-        //    Presenter.EnableRunCommand( false );
-        //    longOpDisplay = new LongRunningOperationDisplay( this, "Loading..." );
-        //}
-
-        //private void OnTestUnloadStarting( object sender, TestEventArgs e )
-        //{
-        //    Presenter.EnableRunCommand( false );
-        //}
-
-        //private void OnReloadStarting( object sender, TestEventArgs e )
-        //{
-        //    Presenter.EnableRunCommand( false );
-        //    longOpDisplay = new LongRunningOperationDisplay( this, "Reloading..." );
-        //}
 
         ///// <summary>
         ///// A test suite has been loaded, so update 
@@ -1613,13 +1486,6 @@ namespace TestCentric.Gui.Views
         ///// </summary>
         //private void OnTestLoaded( TestNodeEventArgs e )
         //{
-        //    if ( longOpDisplay != null )
-        //    {
-        //        longOpDisplay.Dispose();
-        //        longOpDisplay = null;
-        //    }
-        //    Presenter.EnableRunCommand( true );
-
         //    //if ( TestLoader.TestCount == 0 )
         //    //{
         //    //    foreach( TestAssemblyInfo info in TestLoader.AssemblyInfo )
@@ -1635,7 +1501,6 @@ namespace TestCentric.Gui.Views
         ///// </summary>
         //private void OnTestUnloaded( TestEventArgs e )
         //{
-        //    suiteName.Text = null;
         //    runCount.Text = null;
         //    Presenter.EnableRunCommand( false );
         //    Refresh();
@@ -1709,92 +1574,54 @@ namespace TestCentric.Gui.Views
                 : string.Format( "{0} - NUnit", Path.GetFileName( fileName ) );
         }
 
-        public void EnableRunCommand( bool enable )
-        {
-            runButton.Enabled = enable;
-            runAllMenuItem.Enabled = enable;
-            runSelectedMenuItem.Enabled = enable;
-            runFailedMenuItem.Enabled = enable && Model.HasResults && testTree.FailedTests != null;
-        }
-
-        public void EnableStopCommand( bool enable )
-        {
-            stopButton.Enabled = enable;
-            stopRunMenuItem.Enabled = enable;
-        }
-
         private void SubscribeToTestEvents()
         {
-            Model.Events.RunStarting += (RunStartingEventArgs e) =>
-            {
-                //suiteName.Text = e.Name;
-                EnableRunCommand(false);
-                EnableStopCommand(true);
-                saveResultsMenuItem.Enabled = false;
-            };
-
             Model.Events.RunFinished += (TestResultEventArgs e) =>
             {
-                EnableStopCommand(false);
+                //EnableStopCommand(false);
 
-                //if ( e.Exception != null )
-                //{
-                //    if ( ! ( e.Exception is System.Threading.ThreadAbortException ) )
-                //        MessageDisplay.Error("NUnit Test Run Failed", e.Exception);
-                //}
+                ////if ( e.Exception != null )
+                ////{
+                ////    if ( ! ( e.Exception is System.Threading.ThreadAbortException ) )
+                ////        MessageDisplay.Error("NUnit Test Run Failed", e.Exception);
+                ////}
 
                 ResultSummary summary = ResultSummaryCreator.FromResultNode(e.Result);
                 DisplaySummary(string.Format(
                     "Passed: {0}   Failed: {1}   Errors: {2}   Inconclusive: {3}   Invalid: {4}   Ignored: {5}   Skipped: {6}   Time: {7}",
                     summary.PassCount, summary.FailedCount, summary.ErrorCount, summary.InconclusiveCount, summary.InvalidCount, summary.IgnoreCount, summary.SkipCount, summary.Duration));
 
-                //string resultPath = Path.Combine(TestProject.BasePath, "TestResult.xml");
-                //try
-                //{
-                //    TestLoader.SaveLastResult(resultPath);
-                //    log.Debug("Saved result to {0}", resultPath);
-                //}
-                //catch (Exception ex)
-                //{
-                //    log.Warning("Unable to save result to {0}\n{1}", resultPath, ex.ToString());
-                //}
+                ////string resultPath = Path.Combine(TestProject.BasePath, "TestResult.xml");
+                ////try
+                ////{
+                ////    TestLoader.SaveLastResult(resultPath);
+                ////    log.Debug("Saved result to {0}", resultPath);
+                ////}
+                ////catch (Exception ex)
+                ////{
+                ////    log.Warning("Unable to save result to {0}\n{1}", resultPath, ex.ToString());
+                ////}
 
-                EnableRunCommand(true);
-                saveResultsMenuItem.Enabled = true;
+                //EnableRunCommand(true);
+                //saveResultsMenuItem.Enabled = true;
 
                 if (e.Result.Outcome.Status == TestStatus.Failed)
                     Activate();
             };
 
-            Model.Events.TestsLoading += (TestFilesLoadingEventArgs e) =>
-            {
-                EnableRunCommand(false);
-                saveResultsMenuItem.Enabled = false;
-                _longOpDisplay = new LongRunningOperationDisplay(this, "Loading...");
-            };
-
             Model.Events.TestLoaded += (TestNodeEventArgs e) =>
             {
-                if (_longOpDisplay != null)
-                {
-                    _longOpDisplay.Dispose();
-                    _longOpDisplay = null;
-                }
-
-                EnableRunCommand(true);
-                saveResultsMenuItem.Enabled = false;
-
                 foreach (var assembly in Model.TestAssemblies)
                     if (assembly.RunState == RunState.NotRunnable)
                         MessageDisplay.Error(assembly.GetProperty("_SKIPREASON"));
 
-                //if ( TestLoader.TestCount == 0 )
-                //{
-                //    foreach( TestAssemblyInfo info in TestLoader.AssemblyInfo )
-                //        if ( info.TestFrameworks.Count > 0 ) return;
+                ////if ( TestLoader.TestCount == 0 )
+                ////{
+                ////    foreach( TestAssemblyInfo info in TestLoader.AssemblyInfo )
+                ////        if ( info.TestFrameworks.Count > 0 ) return;
 
-                //    MessageDisplay.Error("This assembly was not built with any known testing framework.");
-                //}
+                ////    MessageDisplay.Error("This assembly was not built with any known testing framework.");
+                ////}
             };
 
             //Model.Events.TestLoadFailed += new TestEventHandler(OnTestLoadFailure);
@@ -1802,10 +1629,9 @@ namespace TestCentric.Gui.Views
 
             Model.Events.TestUnloaded += (TestEventArgs) =>
             {
-                suiteName.Text = null;
                 runCount.Text = null;
-                EnableRunCommand(false);
-                saveResultsMenuItem.Enabled = false;
+                //EnableRunCommand(false);
+                //saveResultsMenuItem.Enabled = false;
                 Refresh();
             };
 
@@ -1815,17 +1641,9 @@ namespace TestCentric.Gui.Views
             {
                 //SetTitleBar(TestProject.Name);
 
-                if (_longOpDisplay != null)
-                {
-                    _longOpDisplay.Dispose();
-                    _longOpDisplay = null;
-                }
-
                 if (UserSettings.Gui.ClearResultsOnReload)
                     runCount.Text = null;
 
-                EnableRunCommand(true);
-                saveResultsMenuItem.Enabled = false;
             };
         }
 
