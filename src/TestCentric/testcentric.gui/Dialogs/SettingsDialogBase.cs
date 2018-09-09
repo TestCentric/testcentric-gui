@@ -32,6 +32,7 @@ namespace TestCentric.Gui
 {
     using Model;
     using Model.Settings;
+    using Presenters;
 
     /// <summary>
     /// Summary description for OptionsDialogBase.

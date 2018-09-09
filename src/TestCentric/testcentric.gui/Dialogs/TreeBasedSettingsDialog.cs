@@ -30,6 +30,7 @@ using System.Windows.Forms;
 namespace TestCentric.Gui
 {
     using Model;
+    using Presenters;
 
     public class TreeBasedSettingsDialog : SettingsDialogBase
     {
@@ -45,8 +46,7 @@ namespace TestCentric.Gui
         {
             using( TreeBasedSettingsDialog dialog = new TreeBasedSettingsDialog(presenter, model) )
             {
-                owner.Site.Container.Add( dialog );
-                dialog.Font = owner.Font;
+                dialog.Font = model.Services.UserSettings.Gui.Font;
                 dialog.SettingsPages.AddRange( pages ); 
                 dialog.ShowDialog();
             }

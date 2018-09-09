@@ -30,6 +30,7 @@ namespace TestCentric.Gui
 {
     using Model;
     using SettingsPages;
+    using Presenters;
 
     /// <summary>
     /// Static class used to switch between the tree-based and tab-based

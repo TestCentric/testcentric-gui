@@ -30,6 +30,8 @@ using NUnit.Engine;
 namespace TestCentric.Gui
 {
     using Model;
+    using Views;
+    using Presenters;
 
     /// <summary>
     /// Class to manage application startup.
@@ -76,13 +78,6 @@ namespace TestCentric.Gui
             InternalTrace.Initialize($"InternalTrace.{Process.GetCurrentProcess().Id}.gui.log", traceLevel);
             log.Info($"Starting TestCentric Runner - InternalTraceLevel = {traceLevel}");
 
-            // Create container in order to allow ambient properties
-            // to be shared across all top-level forms.
-            log.Info("Initializing AmbientProperties");
-            AppContainer c = new AppContainer();
-            AmbientProperties ambient = new AmbientProperties();
-            c.Services.AddService(typeof(AmbientProperties), ambient);
-
             log.Info("Creating TestEngine");
             ITestEngine testEngine = TestEngineActivator.CreateInstance();
             testEngine.InternalTraceLevel = traceLevel;
@@ -91,15 +86,15 @@ namespace TestCentric.Gui
             ITestModel model = new TestModel(testEngine);
 
             log.Info("Constructing Form");
-            TestCentricMainForm form = new TestCentricMainForm(model, options);
-            c.Add(form);
+            TestCentricMainView form = new TestCentricMainView(model);
 
             log.Info("Constructing presenters");
-            new Presenters.ProgressBarPresenter(form.ProgressBarView, model);
-            new Presenters.StatusBarPresenter(form.StatusBarView, model);
-            new Presenters.ErrorsAndFailuresPresenter(form.ErrorsAndFailuresView, model);
-            new Presenters.TestsNotRunPresenter(form.TestsNotRunView, model);
-            new Presenters.TextOutputPresenter(form.TextOutputView, model);
+            new ProgressBarPresenter(form.ProgressBarView, model);
+            new StatusBarPresenter(form.StatusBarView, model);
+            new ErrorsAndFailuresPresenter(form.ErrorsAndFailuresView, model);
+            new TestsNotRunPresenter(form.TestsNotRunView, model);
+            new TextOutputPresenter(form.TextOutputView, model);
+            new TestCentricPresenter(form, model, options);
 
             try
             {

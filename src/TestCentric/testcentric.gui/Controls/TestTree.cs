@@ -31,6 +31,7 @@ namespace TestCentric.Gui.Controls
 {
     using Model;
     using Model.Settings;
+    using Presenters;
 
     public delegate void SelectedTestsChangedEventHandler(object sender, SelectedTestsChangedEventArgs e);
 

@@ -30,6 +30,7 @@ using System.Windows.Forms;
 namespace TestCentric.Gui
 {
     using Model;
+    using Presenters;
 
     public class SimpleSettingsDialog : SettingsDialogBase
     {
@@ -41,8 +42,7 @@ namespace TestCentric.Gui
         {
             using( SimpleSettingsDialog dialog = new SimpleSettingsDialog(presenter, model) )
             {
-                owner.Site.Container.Add( dialog );
-                dialog.Font = owner.Font;
+                dialog.Font = model.Services.UserSettings.Gui.Font;
                 dialog.SettingsPages.Add( page ); 
                 dialog.ShowDialog();
             }

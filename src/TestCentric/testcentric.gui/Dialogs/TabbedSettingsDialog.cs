@@ -30,6 +30,7 @@ using System.Windows.Forms;
 namespace TestCentric.Gui
 {
     using Model;
+    using Presenters;
 
     public class TabbedSettingsDialog : SettingsDialogBase
     {
@@ -40,8 +41,7 @@ namespace TestCentric.Gui
         {
             using( TabbedSettingsDialog dialog = new TabbedSettingsDialog(presenter, model) )
             {
-                owner.Site.Container.Add( dialog );
-                dialog.Font = owner.Font;
+                dialog.Font = model.Services.UserSettings.Gui.Font;
                 dialog.SettingsPages.AddRange( pages ); 
                 dialog.ShowDialog();
             }

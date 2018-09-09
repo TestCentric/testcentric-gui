@@ -36,6 +36,7 @@ namespace TestCentric.Gui.Controls
 {
     using Model;
     using Model.Settings;
+    using Presenters;
 
     //public delegate void SelectedTestChangedHandler( ITest test );
     //public delegate void CheckedTestChangedHandler( ITest[] tests );
