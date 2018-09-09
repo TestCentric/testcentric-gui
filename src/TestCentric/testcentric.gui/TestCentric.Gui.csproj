@@ -137,12 +137,6 @@
     <Compile Include="Dialogs\SettingsDialogBase.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Dialogs\SimpleSettingsDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\TabbedSettingsDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Dialogs\TreeBasedSettingsDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -285,12 +279,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\SettingsDialogBase.resx">
       <DependentUpon>SettingsDialogBase.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\SimpleSettingsDialog.resx">
-      <DependentUpon>SimpleSettingsDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\TabbedSettingsDialog.resx">
-      <DependentUpon>TabbedSettingsDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\TreeBasedSettingsDialog.resx">
       <DependentUpon>TreeBasedSettingsDialog.cs</DependentUpon>
