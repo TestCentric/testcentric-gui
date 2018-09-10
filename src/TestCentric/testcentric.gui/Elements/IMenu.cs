@@ -28,7 +28,7 @@ namespace TestCentric.Gui.Elements
     /// <summary>
     /// IMenu is implemented by MenuElements
     /// </summary>
-    public interface IMenuItem : ICommand, IPopup, IChecked
+    public interface IMenu : ICommand, IPopup, IChecked
     {
         Menu.MenuItemCollection MenuItems { get; }
     }

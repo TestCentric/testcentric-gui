@@ -51,41 +51,41 @@ namespace TestCentric.Gui.Views
         private System.ComponentModel.IContainer components;
 
         private System.Windows.Forms.Panel leftPanel;
-        public System.Windows.Forms.Splitter treeSplitter;
-        public System.Windows.Forms.Panel rightPanel;
+        private System.Windows.Forms.Splitter treeSplitter;
+        private System.Windows.Forms.Panel rightPanel;
 
         private TestTree testTree;
 
-        public System.Windows.Forms.GroupBox groupBox1;
-        public System.Windows.Forms.Button runButton;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button runButton;
         private System.Windows.Forms.Button stopButton;
-        public ProgressBarView progressBar;
+        private ProgressBarView progressBar;
         private ExpandingLabel runCount;
 
-        public TabControl tabControl;
+        private TabControl tabControl;
 
-        public StatusBarView statusBar;
+        private StatusBarView statusBar;
 
-        public System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.ToolTip toolTip;
 
-        public System.Windows.Forms.MainMenu mainMenu;
+        private System.Windows.Forms.MainMenu mainMenu;
 
-        public System.Windows.Forms.MenuItem fileMenu;
+        private System.Windows.Forms.MenuItem fileMenu;
         private System.Windows.Forms.MenuItem openMenuItem;
-        private System.Windows.Forms.MenuItem recentProjectsMenu;
+        private System.Windows.Forms.MenuItem recentFilesMenu;
         private System.Windows.Forms.MenuItem fileMenuSeparator1;
-        public System.Windows.Forms.MenuItem fileMenuSeparator4;
+        private System.Windows.Forms.MenuItem fileMenuSeparator4;
         private System.Windows.Forms.MenuItem closeMenuItem;
-        public System.Windows.Forms.MenuItem exitMenuItem;
+        private System.Windows.Forms.MenuItem exitMenuItem;
 
         private System.Windows.Forms.MenuItem toolsMenu;
         private System.Windows.Forms.MenuItem settingsMenuItem;
         private System.Windows.Forms.MenuItem saveResultsMenuItem;
 
-        public System.Windows.Forms.MenuItem nunitHelpMenuItem;
-        public System.Windows.Forms.MenuItem helpItem;
-        public System.Windows.Forms.MenuItem helpMenuSeparator1;
-        public System.Windows.Forms.MenuItem aboutMenuItem;
+        private System.Windows.Forms.MenuItem nunitHelpMenuItem;
+        private System.Windows.Forms.MenuItem helpItem;
+        private System.Windows.Forms.MenuItem helpMenuSeparator1;
+        private System.Windows.Forms.MenuItem aboutMenuItem;
         private System.Windows.Forms.MenuItem viewMenu;
         private System.Windows.Forms.MenuItem statusBarMenuItem;
         private System.Windows.Forms.MenuItem miniGuiMenuItem;
@@ -135,6 +135,7 @@ namespace TestCentric.Gui.Views
         private MenuItem menuItem12;
         private MenuItem propertiesMenuItem;
         private MenuItem menuItem3;
+        private MenuItem menuItem4;
         private TextOutputView textOutputView1;
 
         #endregion
@@ -148,16 +149,19 @@ namespace TestCentric.Gui.Views
             Model = model;
 
             UserSettings = Model.Services.UserSettings;
-            RecentFiles = Model.Services.RecentFiles;
 
             RunButton = new ButtonElement(runButton);
             StopButton = new ButtonElement(stopButton);
 
             // Initialize File Menu Commands
+            FileMenu = new MenuElement(fileMenu);
             OpenCommand = new MenuElement(openMenuItem);
             CloseCommand = new MenuElement(closeMenuItem);
             AddTestFileCommand = new MenuElement(addTestFileMenuItem);
             ReloadTestsCommand = new MenuElement(reloadTestsMenuItem);
+            RuntimeMenu = new MenuElement(runtimeMenuItem);
+            SelectedRuntime = new CheckedMenuGroup(runtimeMenuItem);
+            RecentFilesMenu = new MenuElement(recentFilesMenu);
 
             // Initialize Test Menu Commands
             RunAllCommand = new MenuElement(runAllMenuItem);
@@ -210,7 +214,8 @@ namespace TestCentric.Gui.Views
             this.reloadTestsMenuItem = new System.Windows.Forms.MenuItem();
             this.runtimeMenuItem = new System.Windows.Forms.MenuItem();
             this.menuItem2 = new System.Windows.Forms.MenuItem();
-            this.recentProjectsMenu = new System.Windows.Forms.MenuItem();
+            this.recentFilesMenu = new System.Windows.Forms.MenuItem();
+            this.menuItem4 = new System.Windows.Forms.MenuItem();
             this.fileMenuSeparator4 = new System.Windows.Forms.MenuItem();
             this.exitMenuItem = new System.Windows.Forms.MenuItem();
             this.viewMenu = new System.Windows.Forms.MenuItem();
@@ -313,11 +318,10 @@ namespace TestCentric.Gui.Views
             this.reloadTestsMenuItem,
             this.runtimeMenuItem,
             this.menuItem2,
-            this.recentProjectsMenu,
+            this.recentFilesMenu,
             this.fileMenuSeparator4,
             this.exitMenuItem});
             this.fileMenu.Text = "&File";
-            this.fileMenu.Popup += new System.EventHandler(this.fileMenu_Popup);
             // 
             // openMenuItem
             // 
@@ -356,10 +360,17 @@ namespace TestCentric.Gui.Views
             this.menuItem2.Index = 6;
             this.menuItem2.Text = "-";
             // 
-            // recentProjectsMenu
+            // recentFilesMenu
             // 
-            this.recentProjectsMenu.Index = 7;
-            this.recentProjectsMenu.Text = "Recent &Files";
+            this.recentFilesMenu.Index = 7;
+            this.recentFilesMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem4});
+            this.recentFilesMenu.Text = "Recent &Files";
+            // 
+            // menuItem4
+            // 
+            this.menuItem4.Index = 0;
+            this.menuItem4.Text = "Dummy Entry to force PopUp initially";
             // 
             // fileMenuSeparator4
             // 
@@ -892,10 +903,14 @@ namespace TestCentric.Gui.Views
         public ICommand RunButton { get; }
         public ICommand StopButton { get; }
 
+        public IMenu FileMenu { get; }
         public ICommand OpenCommand { get; }
         public ICommand CloseCommand { get; }
         public ICommand AddTestFileCommand { get; }
         public ICommand ReloadTestsCommand { get; }
+        public IMenu RuntimeMenu { get; }
+        public ISelection SelectedRuntime { get; }
+        public IMenu RecentFilesMenu { get; }
 
         public ICommand RunAllCommand { get; }
         public ICommand RunSelectedCommand { get; }
@@ -916,13 +931,9 @@ namespace TestCentric.Gui.Views
             get { return testTree.FailedTests; }
         }
 
-        private CommandLineOptions Options {  get; }
-
         private ITestModel Model { get; }
 
         private UserSettings UserSettings { get; }
-
-        private IRecentFiles RecentFiles { get; }
 
         #region Subordinate Views contained in main form
 
@@ -954,49 +965,6 @@ namespace TestCentric.Gui.Views
         #region Menu Handlers
 
         #region File Menu
-
-        private void fileMenu_Popup(object sender, System.EventArgs e)
-        {
-            openMenuItem.Enabled = !Model.IsTestRunning;
-            closeMenuItem.Enabled = Model.IsPackageLoaded && !Model.IsTestRunning;
-
-            reloadTestsMenuItem.Enabled = Model.IsPackageLoaded && !Model.IsTestRunning;
-
-            var frameworks = Model.AvailableRuntimes;
-
-            runtimeMenuItem.Visible = frameworks.Count > 1;
-
-            if (runtimeMenuItem.Visible && runtimeMenuItem.Enabled && runtimeMenuItem.MenuItems.Count == 0)
-            {
-                var defaultMenuItem = new MenuItem("Default");
-                defaultMenuItem.Name = "defaultMenuItem";
-                defaultMenuItem.Tag = "DEFAULT";
-                defaultMenuItem.Checked = true;
-                
-                runtimeMenuItem.MenuItems.Add(defaultMenuItem);
-
-                foreach (IRuntimeFramework framework in frameworks)
-                {
-                    MenuItem item = new MenuItem(framework.DisplayName);
-                    item.Tag = framework;
-                    item.Click += new EventHandler(runtimeFrameworkMenuItem_Click);
-
-                    runtimeMenuItem.MenuItems.Add(item);
-                }
-            }
-
-            recentProjectsMenu.Enabled = !Model.IsTestRunning;
-
-            if (!Model.IsTestRunning)
-            {
-                _recentProjectsMenuHandler.Load();
-            }
-        }
-
-        private void runtimeFrameworkMenuItem_Click(object sender, System.EventArgs e)
-        {
-            //Presenter.ReloadProject(((MenuItem)sender).Tag as RuntimeFramework);
-        }
 
         private void exitMenuItem_Click(object sender, System.EventArgs e)
         {
@@ -1283,7 +1251,7 @@ namespace TestCentric.Gui.Views
         {
             if ( !DesignMode )
             {
-                _recentProjectsMenuHandler = new RecentFileMenuHandler(recentProjectsMenu, Model, File.Exists);
+                _recentProjectsMenuHandler = new RecentFileMenuHandler(recentFilesMenu, Model, File.Exists);
 
                 LoadFormSettings();
 
