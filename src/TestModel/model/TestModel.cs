@@ -204,6 +204,12 @@ namespace TestCentric.Gui.Model
             _events.FireTestsReloading();
 
             Runner.Unload();
+            Results.Clear();
+            Tests = null;
+
+            TestPackage = MakeTestPackage(TestFiles);
+
+            Runner = TestEngine.GetRunner(TestPackage);
 
             Tests = new TestNode(Runner.Explore(TestFilter.Empty));
             AvailableCategories = GetAvailableCategories();

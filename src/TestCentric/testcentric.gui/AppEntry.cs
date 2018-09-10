@@ -86,20 +86,20 @@ namespace TestCentric.Gui
             ITestModel model = new TestModel(testEngine);
 
             log.Info("Constructing Form");
-            TestCentricMainView form = new TestCentricMainView(model);
+            TestCentricMainView view = new TestCentricMainView(model);
 
             log.Info("Constructing presenters");
-            new ProgressBarPresenter(form.ProgressBarView, model);
-            new StatusBarPresenter(form.StatusBarView, model);
-            new ErrorsAndFailuresPresenter(form.ErrorsAndFailuresView, model);
-            new TestsNotRunPresenter(form.TestsNotRunView, model);
-            new TextOutputPresenter(form.TextOutputView, model);
-            new TestCentricPresenter(form, model, options);
+            new ProgressBarPresenter(view.ProgressBarView, model);
+            new StatusBarPresenter(view.StatusBarView, model);
+            new ErrorsAndFailuresPresenter(view.ErrorsAndFailuresView, model);
+            new TestsNotRunPresenter(view.TestsNotRunView, model);
+            new TextOutputPresenter(view.TextOutputView, model);
+            new TestCentricPresenter(view, model, options);
 
             try
             {
                 log.Info("Starting Gui Application");
-                Application.Run(form);
+                Application.Run(view);
                 log.Info("Application Exit");
             }
             catch( Exception ex )

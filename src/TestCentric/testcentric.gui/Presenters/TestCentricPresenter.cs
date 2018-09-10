@@ -190,10 +190,80 @@ namespace TestCentric.Gui.Presenters
             _view.RunButton.Execute += () => RunSelectedTests();
             _view.StopButton.Execute += () => CancelRun();
 
+            _view.FileMenu.Popup += () =>
+            {
+                bool isPackageLoaded = _model.IsPackageLoaded;
+                bool isTestRunning = _model.IsTestRunning;
+
+                _view.OpenCommand.Enabled = !isTestRunning;
+                _view.CloseCommand.Enabled = isPackageLoaded && !isTestRunning;
+
+                _view.ReloadTestsCommand.Enabled = isPackageLoaded && !isTestRunning;
+
+                var frameworks = _model.AvailableRuntimes;
+                var runtimeMenu = _view.RuntimeMenu;
+
+                runtimeMenu.Visible = frameworks.Count > 1;
+
+                if (runtimeMenu.Visible && runtimeMenu.Enabled && runtimeMenu.MenuItems.Count == 0)
+                {
+                    var defaultMenuItem = new MenuItem("Default");
+                    defaultMenuItem.Name = "defaultMenuItem";
+                    defaultMenuItem.Tag = "DEFAULT";
+                    defaultMenuItem.Checked = true;
+
+                    runtimeMenu.MenuItems.Add(defaultMenuItem);
+
+                    // TODO: Disable selections that are not supported for the target?
+                    foreach (IRuntimeFramework framework in frameworks)
+                    {
+                        MenuItem item = new MenuItem(framework.DisplayName);
+                        item.Tag = framework.Id;
+                        runtimeMenu.MenuItems.Add(item);
+                    }
+
+                    _view.SelectedRuntime.Refresh();
+                }
+
+                _view.RecentFilesMenu.Enabled = !isTestRunning;
+
+                //if (!isTestRunning)
+                //{
+                //    _recentProjectsMenuHandler.Load();
+                //}
+            };
+
             _view.OpenCommand.Execute += () => OpenProject();
             _view.CloseCommand.Execute += () => CloseProject();
             _view.AddTestFileCommand.Execute += () => AddTestFile();
             _view.ReloadTestsCommand.Execute += () => ReloadTests();
+
+            _view.SelectedRuntime.SelectionChanged += () =>
+            {
+                ChangePackageSetting(EnginePackageSettings.RuntimeFramework, _view.SelectedRuntime.SelectedItem);
+            };
+
+            _view.RecentFilesMenu.Popup += () =>
+            {
+                var menuItems = _view.RecentFilesMenu.MenuItems;
+                // Test for null, in case we are running tests with a mock
+                if (menuItems == null)
+                    return;
+
+                menuItems.Clear();
+                int num = 0;
+                foreach (string entry in _model.Services.RecentFiles.Entries)
+                {
+                    var menuText = string.Format("{0} {1}", ++num, entry);
+                    var menuItem = new MenuItem(menuText);
+                    menuItem.Click += (sender, ea) =>
+                    {
+                        string path = ((MenuItem)sender).Text.Substring(2);
+                        _model.LoadTests(new[] { path });
+                    };
+                    menuItems.Add(menuItem);
+                }
+            };
 
             _view.RunAllCommand.Execute += () => RunAllTests();
             _view.RunSelectedCommand.Execute += () => RunSelectedTests();
@@ -591,6 +661,19 @@ namespace TestCentric.Gui.Presenters
         private static string Quoted(string s)
         {
             return "\"" + s + "\"";
+        }
+
+        private void ChangePackageSetting(string key, object setting)
+        {
+            if (setting == null || setting as string == "DEFAULT")
+                _model.PackageSettings.Remove(key);
+            else
+                _model.PackageSettings[key] = setting;
+
+            string message = string.Format("New {0} setting will not take effect until you reload.\r\n\r\n\t\tReload Now?", key);
+
+            if (_view.MessageDisplay.Ask(message) == DialogResult.Yes)
+                _model.ReloadTests();
         }
 
         #endregion
