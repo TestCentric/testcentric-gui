@@ -1314,11 +1314,10 @@ namespace TestCentric.Gui
         /// <summary>
         /// Display the about box when menu item is selected
         /// </summary>
-        private void aboutMenuItem_Click(object sender, System.EventArgs e)
+        private void aboutMenuItem_Click(object sender, EventArgs e)
         {
-            using( AboutBox aboutBox = new AboutBox() )
+            using(var aboutBox = new AboutBox())
             {
-                Site.Container.Add( aboutBox );
                 aboutBox.ShowDialog();
             }
         }
