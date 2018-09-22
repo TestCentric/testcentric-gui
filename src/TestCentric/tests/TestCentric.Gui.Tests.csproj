@@ -148,7 +148,6 @@
     <Compile Include="Presenters\StatusBarPresenterTests.cs" />
     <Compile Include="Presenters\TestsNotRunPresenterTests.cs" />
     <Compile Include="Presenters\TextOutputPresenterTests.cs" />
-    <Compile Include="RecentFileMenuHandlerTests.cs" />
     <Compile Include="TestSuiteTreeNodeTests.cs" />
     <Compile Include="TestTreeTests.cs" />
     <Compile Include="TextOutputDisplayTests.cs" />
