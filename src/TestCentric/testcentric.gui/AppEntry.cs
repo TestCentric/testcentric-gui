@@ -86,7 +86,7 @@ namespace TestCentric.Gui
             ITestModel model = new TestModel(testEngine);
 
             log.Info("Constructing Form");
-            TestCentricMainView view = new TestCentricMainView(model);
+            TestCentricMainView view = new TestCentricMainView();
 
             log.Info("Constructing presenters");
             new ProgressBarPresenter(view.ProgressBarView, model);
