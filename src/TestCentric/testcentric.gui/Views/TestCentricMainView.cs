@@ -704,8 +704,8 @@ namespace TestCentric.Gui.Views
             // rightPanel
             // 
             this.rightPanel.BackColor = System.Drawing.SystemColors.Control;
+			this.rightPanel.Controls.Add(this.tabControl);
             this.rightPanel.Controls.Add(this.groupBox1);
-            this.rightPanel.Controls.Add(this.tabControl);
             this.rightPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rightPanel.Location = new System.Drawing.Point(246, 0);
             this.rightPanel.Name = "rightPanel";
@@ -766,15 +766,16 @@ namespace TestCentric.Gui.Views
             this.progressBar.Size = new System.Drawing.Size(480, 16);
             this.progressBar.Status = TestCentric.Gui.Views.ProgressBarStatus.Success;
             this.progressBar.TabIndex = 0;
-            // 
-            // tabControl
-            // 
+			// 
+			// tabControl
+			// 
+			//this.tabControl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             this.tabControl.Alignment = System.Windows.Forms.TabAlignment.Bottom;
             this.tabControl.Controls.Add(this.errorTab);
             this.tabControl.Controls.Add(this.notrunTab);
             this.tabControl.Controls.Add(this.outputTab);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl.Location = new System.Drawing.Point(0, 0);
+            this.tabControl.Location = new System.Drawing.Point(0, 120);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(498, 407);
@@ -792,11 +793,11 @@ namespace TestCentric.Gui.Views
             // 
             // errorsAndFailuresView1
             // 
-            this.errorsAndFailuresView1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.errorsAndFailuresView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.errorsAndFailuresView1.EnableToolTips = false;
-            this.errorsAndFailuresView1.Location = new System.Drawing.Point(0, 123);
+            this.errorsAndFailuresView1.Location = new System.Drawing.Point(0,123);
             this.errorsAndFailuresView1.Name = "errorsAndFailuresView1";
-            this.errorsAndFailuresView1.Size = new System.Drawing.Size(490, 258);
+            this.errorsAndFailuresView1.Size = new System.Drawing.Size(490,381);
             this.errorsAndFailuresView1.SourceCodeDisplay = true;
             this.errorsAndFailuresView1.SourceCodeSplitOrientation = System.Windows.Forms.Orientation.Vertical;
             this.errorsAndFailuresView1.SourceCodeSplitterDistance = 0.3F;

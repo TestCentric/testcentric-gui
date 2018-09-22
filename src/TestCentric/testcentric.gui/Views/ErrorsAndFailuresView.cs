@@ -110,16 +110,17 @@ namespace TestCentric.Gui.Views
             this.detailListContextMenu = new System.Windows.Forms.ContextMenu();
             this.copyDetailMenuItem = new System.Windows.Forms.MenuItem();
             this.SuspendLayout();
-            // 
-            // detailList
-            // 
-            this.detailList.Dock = System.Windows.Forms.DockStyle.Top;
+			// 
+			// detailList
+			// 
+			//this.detailList.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+			this.detailList.Dock = DockStyle.Top;
             this.detailList.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
             this.detailList.Font = new Font(FontFamily.GenericMonospace, 8.0F);
             this.detailList.HorizontalExtent = 2000;
             this.detailList.HorizontalScrollbar = true;
             this.detailList.ItemHeight = 16;
-            this.detailList.Location = new System.Drawing.Point(0, 0);
+            this.detailList.Location = new System.Drawing.Point(0, 123);
             this.detailList.Name = "detailList";
             this.detailList.ScrollAlwaysVisible = true;
             this.detailList.Size = new System.Drawing.Size(496, 128);
@@ -131,22 +132,21 @@ namespace TestCentric.Gui.Views
             this.detailList.MouseLeave += new System.EventHandler(this.detailList_MouseLeave);
             this.detailList.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.detailList_DrawItem);
             this.detailList.SelectedIndexChanged += new System.EventHandler(this.detailList_SelectedIndexChanged);
-            // 
-            // tabSplitter
-            // 
+			// 
+			// tabSplitter
+			// 
             this.tabSplitter.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tabSplitter.Location = new System.Drawing.Point(0, 128);
+            this.tabSplitter.Location = new System.Drawing.Point(0, 251);
             this.tabSplitter.MinSize = 100;
             this.tabSplitter.Name = "tabSplitter";
             this.tabSplitter.Size = new System.Drawing.Size(496, 9);
             this.tabSplitter.TabIndex = 3;
             this.tabSplitter.TabStop = false;
-            this.tabSplitter.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.tabSplitter_SplitterMoved);
+			this.tabSplitter.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.tabSplitter_SplitterMoved);
             // 
             // errorBrowser
             // 
             this.errorBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.errorBrowser.Location = new System.Drawing.Point(0, 137);
             this.errorBrowser.Name = "errorBrowser";
             this.errorBrowser.Size = new System.Drawing.Size(496, 151);
             this.errorBrowser.StackTraceSource = null;
@@ -175,9 +175,9 @@ namespace TestCentric.Gui.Views
             // 
             // ErrorDisplay
             // 
-            this.Controls.Add(this.errorBrowser);
-            this.Controls.Add(this.tabSplitter);
-            this.Controls.Add(this.detailList);
+			this.Controls.Add(this.errorBrowser);
+			this.Controls.Add(this.tabSplitter);
+			this.Controls.Add(this.detailList);
             this.Name = "ErrorDisplay";
             this.Size = new System.Drawing.Size(496, 288);
             this.ResumeLayout(false);

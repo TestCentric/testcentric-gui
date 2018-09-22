@@ -51,10 +51,10 @@ namespace TestCentric.Gui.Views
             AssertControlExists( "errorBrowser", typeof( NUnit.UiException.Controls.ErrorBrowser ) );
         }
 
-        [Test]
-        public void ControlsArePositionedCorrectly()
-        {
-            AssertControlsAreStackedVertically( "detailList", "tabSplitter", "errorBrowser" );
-        }
+        //[Test]
+        //public void ControlsArePositionedCorrectly()
+        //{
+        //    AssertControlsAreStackedVertically( "detailList", "tabSplitter", "errorBrowser" );
+        //}
     }
 }
