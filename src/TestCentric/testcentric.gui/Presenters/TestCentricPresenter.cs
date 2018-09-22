@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
@@ -85,17 +86,20 @@ namespace TestCentric.Gui.Presenters
             _settings = _model.Services.UserSettings;
             _recentFiles = _model.Services.RecentFiles;
 
-            view.Presenter = this;
-
             EnableRunCommand(false);
             EnableStopCommand(false);
 
             WireUpEvents();
         }
 
+        #endregion
+
+        #region Event Handling
+
         private void WireUpEvents()
         {
-            // Model Events
+            #region Model Events
+            
             _model.Events.TestsLoading += (TestFilesLoadingEventArgs e) =>
             {
                 EnableRunCommand(false);
@@ -111,25 +115,30 @@ namespace TestCentric.Gui.Presenters
                     _longOpDisplay = null;
                 }
 
+                foreach (var assembly in _model.TestAssemblies)
+                    if (assembly.RunState == RunState.NotRunnable)
+                        _view.MessageDisplay.Error(assembly.GetProperty("_SKIPREASON"));
+
                 EnableRunCommand(true);
                 _view.SaveResultsCommand.Enabled = false;
             };
 
             _model.Events.TestsUnloading += (TestEventArgse) =>
             {
-                EnableRunCommand( false );
+                EnableRunCommand(false);
             };
 
             _model.Events.TestUnloaded += (TestEventArgs e) =>
             {
+                _view.RunSummary.Text = null;
                 EnableRunCommand(false);
                 _view.SaveResultsCommand.Enabled = false;
             };
 
             _model.Events.TestsReloading += (TestEventArgs e) =>
             {
-                EnableRunCommand( false );
-                _longOpDisplay = new LongRunningOperationDisplay( _view, "Reloading..." );
+                EnableRunCommand(false);
+                _longOpDisplay = new LongRunningOperationDisplay(_view, "Reloading...");
             };
 
             _model.Events.TestReloaded += (TestNodeEventArgs e) =>
@@ -139,6 +148,11 @@ namespace TestCentric.Gui.Presenters
                     _longOpDisplay.Dispose();
                     _longOpDisplay = null;
                 }
+
+                //SetTitleBar(TestProject.Name);
+
+                if (_settings.Gui.ClearResultsOnReload)
+                    _view.RunSummary.Text = null;
 
                 EnableRunCommand(true);
                 _view.SaveResultsCommand.Enabled = false;
@@ -155,12 +169,36 @@ namespace TestCentric.Gui.Presenters
             _model.Events.RunFinished += (TestResultEventArgs e) =>
             {
                 EnableStopCommand(false);
+
+                ResultSummary summary = ResultSummaryCreator.FromResultNode(e.Result);
+                _view.RunSummary.Text = string.Format(
+                    "Passed: {0}   Failed: {1}   Errors: {2}   Inconclusive: {3}   Invalid: {4}   Ignored: {5}   Skipped: {6}   Time: {7}",
+                    summary.PassCount, summary.FailedCount, summary.ErrorCount, summary.InconclusiveCount, summary.InvalidCount, summary.IgnoreCount, summary.SkipCount, summary.Duration);
+
+                //string resultPath = Path.Combine(TestProject.BasePath, "TestResult.xml");
+                // TODO: Use Work Directory
+                string resultPath = "TestResult.xml";
+                try
+                {
+                    _model.SaveResults(resultPath);
+                    //log.Debug("Saved result to {0}", resultPath);
+                }
+                catch (Exception ex)
+                {
+                    //log.Warning("Unable to save result to {0}\n{1}", resultPath, ex.ToString());
+                }
+
                 EnableRunCommand(true);
 
                 _view.SaveResultsCommand.Enabled = true;
+
+                if (e.Result.Outcome.Status == TestStatus.Failed)
+                    _view.Activate();
             };
 
-            // View Events
+            #endregion
+
+            #region View Events
 
             _view.Startup += () => OnStartup();
 
@@ -265,10 +303,133 @@ namespace TestCentric.Gui.Presenters
                 }
             };
 
+            _view.ExitCommand.Execute += () => _view.Close();
+
+            _view.TreeMenu.Popup += () =>
+            {
+                TreeNode selectedNode = _view.TreeView.SelectedNode;
+
+                _view.CheckboxesCommand.Checked = _settings.Gui.TestTree.ShowCheckBoxes;
+
+                if (selectedNode != null && selectedNode.Nodes.Count > 0)
+                {
+                    bool isExpanded = selectedNode.IsExpanded;
+                    _view.CollapseCommand.Enabled = isExpanded;
+                    _view.ExpandCommand.Enabled = !isExpanded;
+                }
+                else
+                {
+                    _view.CollapseCommand.Enabled = _view.ExpandCommand.Enabled = false;
+                }
+            };
+
+            _view.CheckboxesCommand.CheckedChanged += () =>
+            {
+                _settings.Gui.TestTree.ShowCheckBoxes = _view.TreeView.CheckBoxes = _view.CheckboxesCommand.Checked;
+            };
+
+            _view.ExpandCommand.Execute += () =>
+            {
+                _view.TreeView.SelectedNode.Expand();
+            };
+
+            _view.CollapseCommand.Execute += () =>
+            {
+                _view.TreeView.SelectedNode.Collapse();
+            };
+
+            _view.ExpandAllCommand.Execute += () =>
+            {
+                _view.TreeView.BeginUpdate();
+                _view.TreeView.ExpandAll();
+                _view.TreeView.EndUpdate();
+            };
+
+            _view.CollapseAllCommand.Execute += () =>
+            {
+                _view.TreeView.BeginUpdate();
+                _view.TreeView.CollapseAll();
+                _view.TreeView.EndUpdate();
+
+                // Compensate for a bug in the underlying control
+                if (_view.TreeView.Nodes.Count > 0)
+                    _view.TreeView.SelectedNode = _view.TreeView.Nodes[0];
+            };
+
+            _view.HideTestsCommand.Execute += () =>
+            {
+                _view.TreeView.HideTests();
+            };
+
+            _view.PropertiesCommand.Execute += () =>
+            {
+                if (_view.TreeView.SelectedTest != null)
+                    _view.TreeView.ShowPropertiesDialog(_view.TreeView.SelectedTest);
+            };
+
+            _view.IncreaseFontCommand.Execute += () =>
+            {
+                applyFont(new Font(_view.Font.FontFamily, _view.Font.SizeInPoints * 1.2f, _view.Font.Style));
+            };
+
+            _view.DecreaseFontCommand.Execute += () =>
+            {
+                applyFont(new Font(_view.Font.FontFamily, _view.Font.SizeInPoints / 1.2f, _view.Font.Style));
+            };
+
+            _view.ChangeFontCommand.Execute += () =>
+            {
+                FontDialog fontDialog = new FontDialog();
+                fontDialog.FontMustExist = true;
+                fontDialog.Font = _view.Font;
+                fontDialog.MinSize = 6;
+                fontDialog.MaxSize = 12;
+                fontDialog.AllowVectorFonts = false;
+                fontDialog.ScriptsOnly = true;
+                fontDialog.ShowEffects = false;
+                fontDialog.ShowApply = true;
+                fontDialog.Apply += (s, e) =>
+                {
+                    applyFont(((FontDialog)s).Font);
+                };
+                if (fontDialog.ShowDialog() == DialogResult.OK)
+                    applyFont(fontDialog.Font);
+            };
+
+            _view.RestoreFontCommand.Execute += () =>
+            {
+                applyFont(Form.DefaultFont);
+            };
+
+            _view.IncreaseFixedFontCommand.Execute += () =>
+            {
+                applyFixedFont(new Font(_view._fixedFont.FontFamily, _view._fixedFont.SizeInPoints * 1.2f, _view._fixedFont.Style));
+            };
+
+            _view.DecreaseFixedFontCommand.Execute += () =>
+            {
+                applyFixedFont(new Font(_view._fixedFont.FontFamily, _view._fixedFont.SizeInPoints / 1.2f, _view._fixedFont.Style));
+            };
+
+            _view.RestoreFixedFontCommand.Execute += () =>
+            {
+                applyFixedFont(new Font(FontFamily.GenericMonospace, 8.0f));
+            };
+
+            _view.StatusBarCommand.CheckedChanged += () =>
+            {
+                _view.StatusBarView.Visible = _view.StatusBarCommand.Checked;
+            };
+
             _view.RunAllCommand.Execute += () => RunAllTests();
             _view.RunSelectedCommand.Execute += () => RunSelectedTests();
             _view.RunFailedCommand.Execute += () => RunFailedTests();
             _view.StopRunCommand.Execute += () => CancelRun();
+
+            _view.ToolsMenu.Popup += () =>
+            {
+                _view.ProjectEditorCommand.Enabled = File.Exists(_model.ProjectEditorPath);
+            };
 
             _view.ProjectEditorCommand.Execute += () =>
             {
@@ -279,10 +440,39 @@ namespace TestCentric.Gui.Presenters
 
             _view.SaveResultsCommand.Execute += () => SaveResults();
 
-            _view.DisplaySettingsCommand.Execute += () =>
+            _view.ExtensionsCommand.Execute += () =>
+            {
+                using (var extensionsDialog = new ExtensionDialog(_model.Services.ExtensionService))
+                {
+                    extensionsDialog.Font = _settings.Gui.Font;
+                    extensionsDialog.ShowDialog();
+                }
+            };
+
+            _view.SettingsCommand.Execute += () =>
             {
                 SettingsDialog.Display(this, _model);
             };
+
+            _view.TestCentricHelpCommand.Execute += () =>
+            {
+                _view.MessageDisplay.Error("Not Yet Implemented");
+            };
+
+            _view.NUnitHelpCommand.Execute += () =>
+            {
+                System.Diagnostics.Process.Start("https://github.com/nunit/docs/wiki/NUnit-Documentation");
+            };
+
+            _view.AboutCommand.Execute += () =>
+            {
+                using (AboutBox aboutBox = new AboutBox())
+                {
+                    aboutBox.ShowDialog();
+                }
+            };
+
+            #endregion
         }
 
         #endregion
@@ -674,6 +864,20 @@ namespace TestCentric.Gui.Presenters
 
             if (_view.MessageDisplay.Ask(message) == DialogResult.Yes)
                 _model.ReloadTests();
+        }
+
+        private void applyFont(Font font)
+        {
+            _settings.Gui.Font = _view.Font = font;
+
+            //_view.RunSummary.Font = font.FontFamily.IsStyleAvailable(FontStyle.Bold)
+            //    ? new Font(font, FontStyle.Bold)
+            //    : font;
+        }
+
+        private void applyFixedFont(Font font)
+        {
+            _settings.Gui.FixedFont = _view._fixedFont = font;
         }
 
         #endregion

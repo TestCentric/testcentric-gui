@@ -26,10 +26,18 @@ using System.Windows.Forms;
 namespace TestCentric.Gui.Elements
 {
     /// <summary>
-    /// IMenu is implemented by MenuElements
+    /// The IMenu interface is implemented by a menu item,
+    /// which displays subordinate items.
     /// </summary>
-    public interface IMenu : ICommand, IPopup, IChecked
+    public interface IMenu : IViewElement
     {
+        /// <summary>
+        /// Popup event is raised to signal the presenter
+        /// that the menu items under this element are
+        /// about to be displayed.
+        /// </summary>
+        event CommandHandler Popup;
+
         Menu.MenuItemCollection MenuItems { get; }
     }
 }

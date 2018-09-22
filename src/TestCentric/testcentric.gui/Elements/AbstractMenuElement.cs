@@ -29,51 +29,20 @@ namespace TestCentric.Gui.Elements
     /// MenuElement is the implementation of ToolStripItem 
     /// used in the actual application.
     /// </summary>
-    public class MenuElement : IMenu
+    public abstract class AbstractMenuElement
     {
-        public event CommandHandler Execute;
-        public event CommandHandler Popup;
-        //public event CommandHandler CheckedChanged;
-
-        private MenuItem _menuItem;
+        protected MenuItem _menuItem;
         private Form _form;
 
-        public MenuElement(MenuItem menuItem)
+        public AbstractMenuElement(MenuItem menuItem)
         {
             _menuItem = menuItem;
             _form = menuItem.GetMainMenu().GetForm();
-
-            menuItem.Click += delegate { if (Execute != null) Execute(); };
-
-            menuItem.Popup += delegate { if (Popup != null) Popup(); };
-            //menuItem.CheckedChanged += delegate { if (CheckedChanged != null) CheckedChanged(); };
-        }
-
-        public MenuElement(string text) : this(new MenuItem(text)) { }
-
-        public MenuElement(string text, CommandHandler execute) : this(text)
-        {
-            this.Execute = execute;
         }
 
         public string Name
         {
             get { return _menuItem.Name; }
-        }
-
-        public bool Checked
-        {
-            get { return _menuItem.Checked; }
-            set
-            {
-                if (_menuItem.Checked != value)
-                {
-                    InvokeIfRequired(() =>
-                    {
-                        _menuItem.Checked = value;
-                    });
-                }
-            }
         }
 
         public bool Enabled
@@ -112,17 +81,66 @@ namespace TestCentric.Gui.Elements
             }
         }
 
-        public Menu.MenuItemCollection MenuItems
-        {
-            get { return _menuItem.MenuItems; }
-        }
-
-        private void InvokeIfRequired(MethodInvoker del)
+        protected void InvokeIfRequired(MethodInvoker del)
         {
             if (_form.InvokeRequired)
                 _form.BeginInvoke(del, new object[0]);
             else
                 del();
+        }
+    }
+
+    public class MenuCommand : AbstractMenuElement, ICommand
+    {
+        public event CommandHandler Execute;
+
+        public MenuCommand(MenuItem menuItem) : base(menuItem)
+        {
+            menuItem.Click += (s, e) => Execute?.Invoke();
+        }
+    }
+
+    public class PopupMenu : AbstractMenuElement, IMenu
+    {
+        public event CommandHandler Popup;
+
+        public PopupMenu(MenuItem menuItem) : base(menuItem)
+        {
+            menuItem.Popup += (s, e) => Popup?.Invoke();
+        }
+
+        public Menu.MenuItemCollection MenuItems
+        {
+            get { return _menuItem.MenuItems; }
+        }
+    }
+
+    public class CheckedMenuItem : AbstractMenuElement, IChecked
+    {
+        public event CommandHandler CheckedChanged;
+
+        public CheckedMenuItem(MenuItem menuItem) : base(menuItem)
+        {
+            menuItem.Click += (s, e) =>
+            {
+                menuItem.Checked = !menuItem.Checked;
+                CheckedChanged?.Invoke();
+            };
+        }
+
+        public bool Checked
+        {
+            get { return _menuItem.Checked; }
+            set
+            {
+                if (_menuItem.Checked != value)
+                {
+                    InvokeIfRequired(() =>
+                    {
+                        _menuItem.Checked = value;
+                    });
+                }
+            }
         }
     }
 }
