@@ -40,15 +40,14 @@ namespace TestCentric.Gui.Views
 
         #region Instance variables
 
-        private string _displayFormat = "Full";
-
-        // TEMPORARILY public
+        // TEMPORARILY public 
+        // TODO Do we need this or can each panel take care of its own?
         public System.Drawing.Font _fixedFont;
 
         private System.ComponentModel.IContainer components;
 
         private System.Windows.Forms.Panel leftPanel;
-        private System.Windows.Forms.Splitter treeSplitter;
+        public System.Windows.Forms.Splitter treeSplitter;
         private System.Windows.Forms.Panel rightPanel;
 
         private TestTree testTree;
@@ -59,7 +58,8 @@ namespace TestCentric.Gui.Views
         private ProgressBarView progressBar;
         private ExpandingLabel runCount;
 
-        private TabControl tabControl;
+        // Temporarily public
+        public TabControl tabControl;
 
         private StatusBarView statusBar;
 
@@ -139,11 +139,9 @@ namespace TestCentric.Gui.Views
 
         #region Construction and Disposal
 
-        public TestCentricMainView(ITestModel model) : base("TestCentric")
+        public TestCentricMainView() : base("TestCentric")
         {
             InitializeComponent();
-
-            UserSettings = model.Services.UserSettings;
 
             RunButton = new ButtonElement(runButton);
             StopButton = new ButtonElement(stopButton);
@@ -161,6 +159,7 @@ namespace TestCentric.Gui.Views
             ExitCommand = new MenuCommand(exitMenuItem);
 
             // Initialize View Menu Commands
+            DisplayFormat = new CheckedMenuGroup("DisplayFormat", fullGuiMenuItem, miniGuiMenuItem);
             TreeMenu = new PopupMenu(treeMenuItem);
             CheckboxesCommand = new CheckedMenuItem(showCheckboxesMenuItem);
             ExpandCommand = new MenuCommand(expandMenuItem);
@@ -423,15 +422,15 @@ namespace TestCentric.Gui.Views
             this.fullGuiMenuItem.Checked = true;
             this.fullGuiMenuItem.Index = 0;
             this.fullGuiMenuItem.RadioCheck = true;
+            this.fullGuiMenuItem.Tag = "Full";
             this.fullGuiMenuItem.Text = "&Full GUI";
-            this.fullGuiMenuItem.Click += new System.EventHandler(this.fullGuiMenuItem_Click);
             // 
             // miniGuiMenuItem
             // 
             this.miniGuiMenuItem.Index = 1;
             this.miniGuiMenuItem.RadioCheck = true;
+            this.miniGuiMenuItem.Tag = "Mini";
             this.miniGuiMenuItem.Text = "&Mini GUI";
-            this.miniGuiMenuItem.Click += new System.EventHandler(this.miniGuiMenuItem_Click);
             // 
             // viewMenuSeparator1
             // 
@@ -780,7 +779,6 @@ namespace TestCentric.Gui.Views
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(498, 407);
             this.tabControl.TabIndex = 2;
-            this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
             // 
             // errorTab
             // 
@@ -873,7 +871,6 @@ namespace TestCentric.Gui.Views
             this.Name = "TestCentricMainView";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "TestCentric Runner for NUnit";
-            this.Load += new System.EventHandler(this.NUnitForm_Load);
             this.rightPanel.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -885,12 +882,6 @@ namespace TestCentric.Gui.Views
             this.ResumeLayout(false);
 
         }
-
-        #endregion
-
-        #region Events
-
-        public event CommandHandler Startup;
 
         #endregion
 
@@ -910,6 +901,7 @@ namespace TestCentric.Gui.Views
         public IMenu RecentFilesMenu { get; }
         public ICommand ExitCommand { get; }
 
+        public ISelection DisplayFormat { get; }
         public IMenu TreeMenu { get; }
         public IChecked CheckboxesCommand { get; }
         public ICommand ExpandCommand { get; }
@@ -952,8 +944,6 @@ namespace TestCentric.Gui.Views
             get { return testTree.FailedTests; }
         }
 
-        private UserSettings UserSettings { get; }
-
         #region Subordinate Views contained in main form
 
         public TestSuiteTreeView TreeView { get { return testTree.TreeView; } }
@@ -972,249 +962,44 @@ namespace TestCentric.Gui.Views
 
         #endregion
 
-
         #region Menu Handlers
 
         #region View Menu
 
-        private void fullGuiMenuItem_Click(object sender, System.EventArgs e)
+        public void InitializeView(Point location, Size size, bool maximized)
         {
-            if ( !fullGuiMenuItem.Checked )
-                displayFullGui();
+            Location = location;
+            Size = size;
+            if (maximized)
+                WindowState = FormWindowState.Maximized;
         }
 
-        private void miniGuiMenuItem_Click(object sender, System.EventArgs e)
+        public void DisplayFullGui(Point location, Size size, int splitPosition, bool maximized)
         {
-            if ( !miniGuiMenuItem.Checked )
-                displayMiniGui();
-        }
-
-        private void displayFullGui()
-        {
-            fullGuiMenuItem.Checked = true;
-            miniGuiMenuItem.Checked = false;
-
-            _displayFormat = "Full";
-            UserSettings.Gui.DisplayFormat = "Full";
-
             leftPanel.Visible = true;
             leftPanel.Dock = DockStyle.Left;
             treeSplitter.Visible = true;
             rightPanel.Visible = true;
             statusBar.Visible = true;
 
-            int x = UserSettings.Gui.MainForm.Left;
-            int y = UserSettings.Gui.MainForm.Top;
-            Point location = new Point(x, y);
+            InitializeView(location, size, maximized);
 
-            if (!IsValidLocation(location))
-                location = new Point(10, 10);
-            Location = location;
-
-            int width = UserSettings.Gui.MainForm.Width;
-            int height = UserSettings.Gui.MainForm.Height;
-            if (width < 160) width = 160;
-            if (height < 32) height = 32;
-            Size = new Size(width, height);
-
-            // Set to maximized if required
-            if (UserSettings.Gui.MainForm.Maximized)
-                WindowState = FormWindowState.Maximized;
-
-            // Set the font to use
-            applyFont(UserSettings.Gui.Font);
+            if (splitPosition >= treeSplitter.MinSize && splitPosition < ClientSize.Width)
+                treeSplitter.SplitPosition = splitPosition;
         }
 
-        private void displayMiniGui()
+        public void DisplayMiniGui(Point location, Size size, bool maximized)
         {
-            miniGuiMenuItem.Checked = true;
-            fullGuiMenuItem.Checked = false;
-            
-            _displayFormat = "Mini";
-            UserSettings.Gui.DisplayFormat = "Mini";
-
             leftPanel.Visible = true;
             leftPanel.Dock = DockStyle.Fill;
             treeSplitter.Visible = false;
             rightPanel.Visible = false;
             statusBar.Visible = false;
 
-            int x = UserSettings.Gui.MiniForm.Left;
-            int y = UserSettings.Gui.MiniForm.Top;
-            Point location = new Point(x, y);
-
-            if (!IsValidLocation(location))
-                location = new Point(10, 10);
-            Location = location;
-
-            int width = UserSettings.Gui.MiniForm.Width;
-            int height = UserSettings.Gui.MiniForm.Height;
-            if (width < 160) width = 160;
-            if (height < 32) height = 32;
-            Size = new Size(width, height);
-
-            // Set to maximized if required
-            if (UserSettings.Gui.MiniForm.Maximized)
-                WindowState = FormWindowState.Maximized;
-
-            // Set the font to use
-            applyFont(UserSettings.Gui.Font);
+            InitializeView(location, size, maximized);
         }
-
-        private void applyFont( Font font )
-        {
-            UserSettings.Gui.Font = Font = font;
-
-            runCount.Font = font.FontFamily.IsStyleAvailable( FontStyle.Bold )
-                ? new Font( font, FontStyle.Bold )
-                : font;
-        }
-
+      
         #endregion
-
-        #endregion
-
-        #region Form Level Events
-
-        /// <summary>
-        /// Get saved options when form loads
-        /// </summary>
-        private void NUnitForm_Load(object sender, System.EventArgs e)
-        {
-            if ( !DesignMode )
-            {
-                LoadFormSettings();
-
-                // Force display  so that any "Loading..." or error 
-                // message overlays the main form.
-                Show();
-                Invalidate();
-                Update();
-
-                Startup?.Invoke();
-            }
-        }
-
-        private void LoadFormSettings()
-        {
-            switch (UserSettings.Gui.DisplayFormat)
-            {
-                case "Full":
-                    displayFullGui();
-                    break;
-                case "Mini":
-                    displayMiniGui();
-                    break;
-                default:
-                    throw new ApplicationException("Invalid Setting");
-            }
-
-            // Handle changes to form position
-            Move += new System.EventHandler(NUnitForm_Move);
-            Resize += new System.EventHandler(NUnitForm_Resize);
-
-            // Set the splitter position
-            int splitPosition = UserSettings.Gui.MainForm.SplitPosition;
-            if (splitPosition >= treeSplitter.MinSize && splitPosition < ClientSize.Width)
-                treeSplitter.SplitPosition = splitPosition;
-
-            // Handle changes in splitter positions
-            treeSplitter.SplitterMoved += new SplitterEventHandler(treeSplitter_SplitterMoved);
-
-            // Get the fixed font used by result tabs
-            _fixedFont = UserSettings.Gui.FixedFont;
-
-            // Set the selected result tab
-            tabControl.SelectedIndex = UserSettings.Gui.SelectedTab;
-
-            // Handle changes in settings
-            UserSettings.Changed += (object sender, SettingsEventArgs e) =>
-            {
-                if (e.SettingName == "Gui.Options.DisplayFormat")
-                {
-                    if (UserSettings.Gui.DisplayFormat == "Full")
-                        displayFullGui();
-                    else
-                        displayMiniGui();
-                }
-                //else if (args.SettingName.StartsWith("Gui.TextOutput.") && args.SettingName.EndsWith(".Content"))
-                //{
-                //    TestLoader.IsTracingEnabled = resultTabs.IsTracingEnabled;
-                //    TestLoader.LoggingThreshold = resultTabs.MaximumLogLevel;
-                //}
-            };
-        }
-
-        private bool IsValidLocation( Point location )
-        {
-            Rectangle myArea = new Rectangle( location, Size );
-            bool intersect = false;
-            foreach (System.Windows.Forms.Screen screen in System.Windows.Forms.Screen.AllScreens)
-            {
-                intersect |= myArea.IntersectsWith(screen.WorkingArea);
-            }
-            return intersect;
-        }
-
-        // Save settings changed by moving the form
-        private void NUnitForm_Move(object sender, System.EventArgs e)
-        {
-            switch( _displayFormat )
-            {
-                case "Full":
-                default:
-                    if ( WindowState == FormWindowState.Normal )
-                    {
-                        UserSettings.Gui.MainForm.Left = Location.X;
-                        UserSettings.Gui.MainForm.Top = Location.Y;
-                        UserSettings.Gui.MainForm.Maximized = false;
-                    }
-                    break;
-                case "Mini":
-                    if ( WindowState == FormWindowState.Normal )
-                    {
-                        UserSettings.Gui.MiniForm.Left = Location.X;
-                        UserSettings.Gui.MiniForm.Top = Location.Y;
-                        UserSettings.Gui.MiniForm.Maximized = false;
-                    }
-                    break;
-            }
-        }
-
-        // Save settings that change when window is resized
-        private void NUnitForm_Resize(object sender,System.EventArgs e)
-        {
-            if ( WindowState == FormWindowState.Normal )
-            {
-                if (_displayFormat == "Full")
-                {
-                    UserSettings.Gui.MainForm.Width = Size.Width;
-                    UserSettings.Gui.MainForm.Height = Size.Height;
-                }
-                else
-                {
-                    UserSettings.Gui.MiniForm.Width = Size.Width;
-                    UserSettings.Gui.MiniForm.Height = Size.Height;
-                }
-            }
-        }
-
-        // Splitter moved so save it's position
-        private void treeSplitter_SplitterMoved( object sender, SplitterEventArgs e )
-        {
-            UserSettings.Gui.MainForm.SplitPosition = treeSplitter.SplitPosition;
-        }
-
-        #endregion
-
-        #region Other UI Event Handlers
-
-        private void tabControl_SelectedIndexChanged(object sender, System.EventArgs e)
-        {
-            int index = tabControl.SelectedIndex;
-            if (index >= 0 && index < tabControl.TabCount)
-                UserSettings.Gui.SelectedTab = index;
-        }
 
         #endregion
 

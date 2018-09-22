@@ -55,7 +55,11 @@ namespace TestCentric.Gui.Elements
         {
             Name = name;
             foreach (var menuItem in menuItems)
+            {
                 MenuItems.Add(menuItem);
+                if (_form == null)
+                    _form = menuItem.GetMainMenu().GetForm();
+            }
 
             InitializeMenuItems();
         }

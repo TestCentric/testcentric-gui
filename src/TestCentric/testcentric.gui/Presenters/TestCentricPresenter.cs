@@ -86,6 +86,10 @@ namespace TestCentric.Gui.Presenters
             _settings = _model.Services.UserSettings;
             _recentFiles = _model.Services.RecentFiles;
 
+            _view.Font = _settings.Gui.Font;
+			_view._fixedFont = _settings.Gui.FixedFont;
+			_view.tabControl.SelectedIndex = _settings.Gui.SelectedTab;
+
             EnableRunCommand(false);
             EnableStopCommand(false);
 
@@ -178,29 +182,95 @@ namespace TestCentric.Gui.Presenters
                 //string resultPath = Path.Combine(TestProject.BasePath, "TestResult.xml");
                 // TODO: Use Work Directory
                 string resultPath = "TestResult.xml";
-                try
-                {
-                    _model.SaveResults(resultPath);
-                    //log.Debug("Saved result to {0}", resultPath);
-                }
-                catch (Exception ex)
-                {
-                    //log.Warning("Unable to save result to {0}\n{1}", resultPath, ex.ToString());
-                }
+				_model.SaveResults(resultPath);
+                //try
+                //{
+                //    _model.SaveResults(resultPath);
+                //    //log.Debug("Saved result to {0}", resultPath);
+                //}
+                //catch (Exception ex)
+                //{
+                //    //log.Warning("Unable to save result to {0}\n{1}", resultPath, ex.ToString());
+                //}
 
                 EnableRunCommand(true);
-
+                
                 _view.SaveResultsCommand.Enabled = true;
 
                 if (e.Result.Outcome.Status == TestStatus.Failed)
                     _view.Activate();
             };
 
+			_settings.Changed += (s, e) =>
+			{
+				if (e.SettingName == "Gui.Options.DisplayFormat")
+					InitializeDisplay();
+			};
+
             #endregion
 
             #region View Events
 
-            _view.Startup += () => OnStartup();
+            _view.Load += (s, e) =>
+            {
+                //_view.LoadFormSettings();
+                InitializeDisplay(_settings.Gui.DisplayFormat);
+
+                // Force display  so that any "Loading..." or error 
+                // message overlays the main form.
+                _view.Show();
+                _view.Invalidate();
+                _view.Update();
+
+                OnStartup();
+            };
+
+            _view.Move += (s, e) =>
+            {
+                if (_view.WindowState == FormWindowState.Normal)
+                {
+                    var location = _view.Location;
+
+                    switch (_view.DisplayFormat.SelectedItem)
+                    {
+                        case "Full":
+                        default:
+                            _settings.Gui.MainForm.Left = location.X;
+                            _settings.Gui.MainForm.Top = location.Y;
+                            _settings.Gui.MainForm.Maximized = false;
+                            break;
+                        case "Mini":
+                            _settings.Gui.MiniForm.Left = location.X;
+                            _settings.Gui.MiniForm.Top = location.Y;
+                            _settings.Gui.MiniForm.Maximized = false;
+                            break;
+                    }
+                }
+            };
+
+            _view.Resize += (s, e) =>
+            {
+                if (_view.WindowState == FormWindowState.Normal)
+                {
+                    var size = _view.Size;
+
+                    if (_view.DisplayFormat.SelectedItem == "Full")
+                    {
+                        _settings.Gui.MainForm.Width = size.Width;
+                        _settings.Gui.MainForm.Height = size.Height;
+                    }
+                    else
+                    {
+                        _settings.Gui.MiniForm.Width = size.Width;
+                        _settings.Gui.MiniForm.Height = size.Height;
+                    }
+                }
+            };
+
+			_view.treeSplitter.SplitterMoved += (s,e) =>
+			{
+				_settings.Gui.MainForm.SplitPosition = _view.treeSplitter.SplitPosition;
+			};
 
             _view.FormClosing += (s, e) =>
             {
@@ -304,6 +374,12 @@ namespace TestCentric.Gui.Presenters
             };
 
             _view.ExitCommand.Execute += () => _view.Close();
+
+            _view.DisplayFormat.SelectionChanged += () =>
+            {
+                _settings.Gui.DisplayFormat = _view.DisplayFormat.SelectedItem;
+                InitializeDisplay(_view.DisplayFormat.SelectedItem);
+            };
 
             _view.TreeMenu.Popup += () =>
             {
@@ -457,6 +533,7 @@ namespace TestCentric.Gui.Presenters
             _view.TestCentricHelpCommand.Execute += () =>
             {
                 _view.MessageDisplay.Error("Not Yet Implemented");
+
             };
 
             _view.NUnitHelpCommand.Execute += () =>
@@ -471,6 +548,14 @@ namespace TestCentric.Gui.Presenters
                     aboutBox.ShowDialog();
                 }
             };
+
+			// TODO: Should be an element
+			_view.tabControl.SelectedIndexChanged += (s, e) =>
+			{
+				int index = _view.tabControl.SelectedIndex;
+                if (index >= 0 && index < _view.tabControl.TabCount)
+                    _settings.Gui.SelectedTab = index;
+			};
 
             #endregion
         }
@@ -878,6 +963,69 @@ namespace TestCentric.Gui.Presenters
         private void applyFixedFont(Font font)
         {
             _settings.Gui.FixedFont = _view._fixedFont = font;
+        }
+
+        private void InitializeDisplay()
+        {
+            InitializeDisplay(_settings.Gui.DisplayFormat);
+        }
+
+        private void InitializeDisplay(string displayFormat)
+        {
+            _view.DisplayFormat.SelectedItem = displayFormat;
+
+            int x = 0, y = 0, width = 0, height = 0;
+            bool isMaximized = false;
+
+            switch (displayFormat)
+            {
+                case "Full":
+                    x = _settings.Gui.MainForm.Left;
+                    y = _settings.Gui.MainForm.Top;
+                    width = _settings.Gui.MainForm.Width;
+                    height = _settings.Gui.MainForm.Height;
+                    isMaximized = _settings.Gui.MainForm.Maximized;
+                    break;
+                case "Mini":
+                    x = _settings.Gui.MiniForm.Left;
+                    y = _settings.Gui.MiniForm.Top;
+                    width = _settings.Gui.MiniForm.Width;
+                    height = _settings.Gui.MiniForm.Height;
+                    isMaximized = _settings.Gui.MiniForm.Maximized;
+                    break;
+            }
+
+            Point location = new Point(x, y);
+            Size size = new Size(Math.Max(width, 160), Math.Max(height, 32));
+
+            if (!IsValidLocation(location, size))
+                location = new Point(10, 10);
+
+            if (displayFormat == "Mini")
+                _view.DisplayMiniGui(location, size, _settings.Gui.MiniForm.Maximized);
+            else
+                _view.DisplayFullGui(location, size, _settings.Gui.MainForm.SplitPosition, _settings.Gui.MainForm.Maximized);
+        }
+
+        private void DisplayFullGui()
+        {
+
+        }
+
+        private void DisplayMiniGui()
+        {
+
+        }
+
+        private bool IsValidLocation(Point location, Size size)
+        {
+            Rectangle myArea = new Rectangle(location, size);
+            bool intersect = false;
+            foreach (System.Windows.Forms.Screen screen in System.Windows.Forms.Screen.AllScreens)
+            {
+                intersect |= myArea.IntersectsWith(screen.WorkingArea);
+            }
+            return intersect;
         }
 
         #endregion
