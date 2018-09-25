@@ -40,11 +40,6 @@ namespace TestCentric.Gui.Elements
             _form = menuItem.GetMainMenu().GetForm();
         }
 
-        public string Name
-        {
-            get { return _menuItem.Name; }
-        }
-
         public bool Enabled
         {
             get { return _menuItem.Enabled; }

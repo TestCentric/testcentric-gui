@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Copyright (c) 2015-2018 Charlie Poole
+// Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -21,36 +21,49 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Elements
 {
-    /// <summary>
-    /// The IViewElement interface wraps an individual gui
-    /// item like a control or toolstrip item. It is generally
-    /// exposed by views and is the base of other interfaces
-    /// in the NUnit.UiKit.Elements namespace.
+	/// <summary>
+    /// A TabSelector represents which tab of a particular TabControl in
+	/// the view is selected.
     /// </summary>
-    public interface IViewElement
+	public class TabSelector : ControlElement<TabControl>, ISelection
     {
-        /// <summary>
-        /// Gets or sets the Enabled status of the element
-        /// </summary>
-        bool Enabled { get; set; }
+		public event CommandHandler SelectionChanged;
 
-        /// <summary>
-        /// Gets or sets the Visible status of the element
-        /// </summary>
-        bool Visible { get; set; }
+		public TabSelector(TabControl tabControl) : base(tabControl)
+        {
+			tabControl.SelectedIndexChanged += (s, e) =>
+			{
+				int index = tabControl.SelectedIndex;
+				if (index >= 0 && index < tabControl.TabCount)
+					SelectionChanged?.Invoke();			
+			};
+        }
 
-        /// <summary>
-        /// Gets or sets the Text of an element
-        /// </summary>
-        string Text { get; set; }
+        public int SelectedIndex
+		{
+			get { return Control.SelectedIndex; }
+			set { Control.SelectedIndex = value; }
+		}
 
-        ///// <summary>
-        ///// Invoke a delegate if necessary, otherwise just call it
-        ///// </summary>
-        //void InvokeIfRequired(MethodInvoker _delegate);
+        public string SelectedItem
+		{
+			get { return Control.SelectedTab.Text; }
+			set
+			{
+				foreach (TabPage tab in Control.TabPages)
+					if (tab.Text == value)
+						Control.SelectedTab = tab;
+			}
+		}
+
+        public void Refresh()
+		{
+			Control.Refresh();
+		}
     }
 }

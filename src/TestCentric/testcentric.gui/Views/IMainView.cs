@@ -22,14 +22,100 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
-    public interface IMainView
+	using Controls;
+	using Elements;
+	using Model; // TODO: We shouldn't need this, but we do for now
+
+	public interface IMainView
     {
+		// View Parameters
+		Point Location { get; set; }
+		Size Size { get; set; }
+		bool Maximized { get; set; }
+		IViewParameter<Font> FontSelector { get; }
+		IViewParameter<int> SplitterPosition { get; }
+
+        // UI Elements
+        ICommand RunButton { get; }
+        ICommand StopButton { get; }
+        IControlElement<ExpandingLabel> RunSummary { get; }
+        ISelection ResultTabs { get; }
+
+		// File Menu Items
+        IMenu FileMenu { get; }
+        ICommand OpenCommand { get; }
+        ICommand CloseCommand { get; }
+        ICommand AddTestFileCommand { get; }
+        ICommand ReloadTestsCommand { get; }
+        IMenu RuntimeMenu { get; }
+        ISelection SelectedRuntime { get; }
+        IMenu RecentFilesMenu { get; }
+        ICommand ExitCommand { get; }
+
+        // View Menu Items
+        ISelection DisplayFormat { get; }
+        IMenu TreeMenu { get; }
+        IChecked CheckboxesCommand { get; }
+        ICommand ExpandCommand { get; }
+        ICommand CollapseCommand { get; }
+        ICommand ExpandAllCommand { get; }
+        ICommand CollapseAllCommand { get; }
+        ICommand HideTestsCommand { get; }
+        ICommand PropertiesCommand { get; }
+        ICommand IncreaseFontCommand { get; }
+        ICommand DecreaseFontCommand { get; }
+        ICommand ChangeFontCommand { get; }
+        ICommand RestoreFontCommand { get; }
+        ICommand IncreaseFixedFontCommand { get; }
+        ICommand DecreaseFixedFontCommand { get; }
+        ICommand RestoreFixedFontCommand { get; }
+        IChecked StatusBarCommand { get; }
+
+		// Test Menu Items
+        ICommand RunAllCommand { get; }
+        ICommand RunSelectedCommand { get; }
+        ICommand RunFailedCommand { get; }
+        ICommand StopRunCommand { get; }
+
+        // Tools Menu Items
+        IMenu ToolsMenu { get; }
+        ICommand ProjectEditorCommand { get; }
+        ICommand SaveResultsCommand { get; }
+        ICommand ExtensionsCommand { get; }
+        ICommand SettingsCommand { get; }
+
+        // Help Menu Items
+        ICommand TestCentricHelpCommand { get; }
+        ICommand NUnitHelpCommand { get; }
+        ICommand AboutCommand { get; }
+	
+		// Test Selection
+		TestNode[] SelectedTests { get; }
+		TestNode[] FailedTests { get; }
+
+        // SubViews
+		TestSuiteTreeView TreeView { get; }
+		StatusBarView StatusBarView { get; }
+		IMessageDisplay MessageDisplay { get; }
+ 
+		// Methods used by Presenter
+		void Configure(bool useFullGui);
+		LongRunningOperationDisplay LongOperationDisplay(string text);
+
+        // Form methods that we have to use
+		void Activate();
+		void Close();
+
+		// Form Events that we use
+        event EventHandler Load;
+        event EventHandler Shown;
+        event EventHandler Move;
+        event EventHandler Resize;
+        event FormClosingEventHandler FormClosing;
     }
 }

@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Copyright (c) 2015-2018 Charlie Poole
+// Copyright (c) 2016 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -21,36 +21,41 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Reflection;
+using NUnit.Framework;
 
-namespace TestCentric.Gui.Elements
+namespace TestCentric.Gui.Views
 {
-    /// <summary>
-    /// The IViewElement interface wraps an individual gui
-    /// item like a control or toolstrip item. It is generally
-    /// exposed by views and is the base of other interfaces
-    /// in the NUnit.UiKit.Elements namespace.
-    /// </summary>
-    public interface IViewElement
+	using Elements;
+
+    [TestFixture(typeof(TestCentricMainView))]
+    //[TestFixture(typeof(TestTreeView))]
+    public class CommonViewTests<T> where T: new()
     {
-        /// <summary>
-        /// Gets or sets the Enabled status of the element
-        /// </summary>
-        bool Enabled { get; set; }
+        protected T View { get; private set; }
 
-        /// <summary>
-        /// Gets or sets the Visible status of the element
-        /// </summary>
-        bool Visible { get; set; }
+        [SetUp]
+        public void CreateView()
+        {
+            this.View = new T();
+        }
 
-        /// <summary>
-        /// Gets or sets the Text of an element
-        /// </summary>
-        string Text { get; set; }
+		[TestCaseSource("GetViewElementProperties")]
+		public void ViewElementsAreInitialized(PropertyInfo prop)
+		{
+			var element = prop.GetValue(View, new object[0]) as IViewElement;
 
-        ///// <summary>
-        ///// Invoke a delegate if necessary, otherwise just call it
-        ///// </summary>
-        //void InvokeIfRequired(MethodInvoker _delegate);
+			Assert.NotNull(element, $"Element {prop.Name} was not initialized");
+ 		}
+
+        static protected IEnumerable<PropertyInfo> GetViewElementProperties()
+        {
+            foreach (PropertyInfo prop in typeof(T).GetProperties())
+            {
+                if (typeof(IViewElement).IsAssignableFrom(prop.PropertyType))
+                    yield return prop;
+            }
+        }
     }
 }

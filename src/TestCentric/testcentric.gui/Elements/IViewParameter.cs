@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Copyright (c) 2015-2018 Charlie Poole
+// Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -21,36 +21,20 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System.Windows.Forms;
+using System;
 
 namespace TestCentric.Gui.Elements
 {
-    /// <summary>
-    /// The IViewElement interface wraps an individual gui
-    /// item like a control or toolstrip item. It is generally
-    /// exposed by views and is the base of other interfaces
-    /// in the NUnit.UiKit.Elements namespace.
+	/// <summary>
+    /// The IViewParameter interface is implemented by objects that
+	/// serve as some sort of parameter to a view, usually determining
+	/// how the view is displayed. They are not separate UI elements and
+	/// so do not have properties like Visible or Enabled.
     /// </summary>
-    public interface IViewElement
+    public interface IViewParameter<T>
     {
-        /// <summary>
-        /// Gets or sets the Enabled status of the element
-        /// </summary>
-        bool Enabled { get; set; }
+		T Value { get; set; }
 
-        /// <summary>
-        /// Gets or sets the Visible status of the element
-        /// </summary>
-        bool Visible { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Text of an element
-        /// </summary>
-        string Text { get; set; }
-
-        ///// <summary>
-        ///// Invoke a delegate if necessary, otherwise just call it
-        ///// </summary>
-        //void InvokeIfRequired(MethodInvoker _delegate);
+		event CommandHandler Changed;
     }
 }

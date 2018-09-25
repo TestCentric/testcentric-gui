@@ -25,29 +25,23 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
-using NUnit.Engine;
 
 namespace TestCentric.Gui.Views
 {
     using Controls;
     using Model;
-    using Model.Settings;
     using Elements;
 
-    public class TestCentricMainView : TestCentricFormBase
+    public class TestCentricMainView : TestCentricFormBase, IMainView
     {
         static Logger log = InternalTrace.GetLogger(typeof(TestCentricMainView));
 
         #region Instance variables
 
-        // TEMPORARILY public 
-        // TODO Do we need this or can each panel take care of its own?
-        public System.Drawing.Font _fixedFont;
-
         private System.ComponentModel.IContainer components;
 
         private System.Windows.Forms.Panel leftPanel;
-        public System.Windows.Forms.Splitter treeSplitter;
+        private System.Windows.Forms.Splitter treeSplitter;
         private System.Windows.Forms.Panel rightPanel;
 
         private TestTree testTree;
@@ -58,8 +52,7 @@ namespace TestCentric.Gui.Views
         private ProgressBarView progressBar;
         private ExpandingLabel runCount;
 
-        // Temporarily public
-        public TabControl tabControl;
+        private TabControl tabControl;
 
         private StatusBarView statusBar;
 
@@ -131,7 +124,6 @@ namespace TestCentric.Gui.Views
         private MenuItem hideTestsMenuItem;
         private MenuItem menuItem12;
         private MenuItem propertiesMenuItem;
-        private MenuItem menuItem3;
         private MenuItem menuItem4;
         private TextOutputView textOutputView1;
 
@@ -143,9 +135,15 @@ namespace TestCentric.Gui.Views
         {
             InitializeComponent();
 
+			// View Parameters
+			FontSelector = new FontSelector(this);
+			SplitterPosition = new SplitterPosition(treeSplitter);
+
+            // UI Elements on main form
             RunButton = new ButtonElement(runButton);
             StopButton = new ButtonElement(stopButton);
             RunSummary = new ControlElement<ExpandingLabel>(runCount);
+			ResultTabs = new TabSelector(tabControl);
 
             // Initialize File Menu Commands
             FileMenu = new PopupMenu(fileMenu);
@@ -159,7 +157,7 @@ namespace TestCentric.Gui.Views
             ExitCommand = new MenuCommand(exitMenuItem);
 
             // Initialize View Menu Commands
-            DisplayFormat = new CheckedMenuGroup("DisplayFormat", fullGuiMenuItem, miniGuiMenuItem);
+            DisplayFormat = new CheckedMenuGroup(fullGuiMenuItem, miniGuiMenuItem);
             TreeMenu = new PopupMenu(treeMenuItem);
             CheckboxesCommand = new CheckedMenuItem(showCheckboxesMenuItem);
             ExpandCommand = new MenuCommand(expandMenuItem);
@@ -193,12 +191,6 @@ namespace TestCentric.Gui.Views
             TestCentricHelpCommand = new MenuCommand(testCentricHelpMenuItem);
             NUnitHelpCommand = new MenuCommand(nunitHelpMenuItem);
             AboutCommand = new MenuCommand(aboutMenuItem);
-
-            //UserSettings.Changed += (object sender, SettingsEventArgs e) =>
-            //{
-            //    if (e.SettingName == "Gui.Options.DisplayFormat")
-            //        LoadFormSettings();
-            //};
         }
 
         protected override void Dispose(bool disposing)
@@ -884,14 +876,33 @@ namespace TestCentric.Gui.Views
 
         }
 
-        #endregion
+		#endregion
 
-        #region Properties
+		#region Properties
 
+        public bool Maximized
+		{
+			get { return WindowState == FormWindowState.Maximized; }
+			set
+			{
+				if (value)
+					WindowState = FormWindowState.Maximized;
+				else if (WindowState == FormWindowState.Maximized)
+					WindowState = FormWindowState.Normal;
+				// No actionif minimized
+			}
+		}
+		// View Parameters
+		public IViewParameter<Font> FontSelector { get; }
+		public IViewParameter<int> SplitterPosition { get; }
+
+        // UI Elements
         public ICommand RunButton { get; }
         public ICommand StopButton { get; }
         public IControlElement<ExpandingLabel> RunSummary { get; }
+		public ISelection ResultTabs { get; }
 
+        // File Menu Items
         public IMenu FileMenu { get; }
         public ICommand OpenCommand { get; }
         public ICommand CloseCommand { get; }
@@ -902,6 +913,7 @@ namespace TestCentric.Gui.Views
         public IMenu RecentFilesMenu { get; }
         public ICommand ExitCommand { get; }
 
+        // View Menu Items
         public ISelection DisplayFormat { get; }
         public IMenu TreeMenu { get; }
         public IChecked CheckboxesCommand { get; }
@@ -920,21 +932,25 @@ namespace TestCentric.Gui.Views
         public ICommand RestoreFixedFontCommand { get; }
         public IChecked StatusBarCommand { get; }
 
+        // Test Menu Items
         public ICommand RunAllCommand { get; }
         public ICommand RunSelectedCommand { get; }
         public ICommand RunFailedCommand { get; }
         public ICommand StopRunCommand { get; }
 
+        // Tools Menu Items
         public IMenu ToolsMenu { get; }
         public ICommand ProjectEditorCommand { get; }
         public ICommand SaveResultsCommand { get; }
         public ICommand ExtensionsCommand { get; }
         public ICommand SettingsCommand { get; }
 
+        // Help Menu Items
         public ICommand TestCentricHelpCommand { get; }
         public ICommand NUnitHelpCommand { get; }
         public ICommand AboutCommand { get; }
 
+        // Test Selection
         public TestNode[] SelectedTests
         {
             get { return testTree.SelectedTests; }
@@ -944,6 +960,11 @@ namespace TestCentric.Gui.Views
         {
             get { return testTree.FailedTests; }
         }
+
+        public LongRunningOperationDisplay LongOperationDisplay(string text)
+		{
+			return new LongRunningOperationDisplay(this, text);
+		}
 
         #region Subordinate Views contained in main form
 
@@ -967,39 +988,17 @@ namespace TestCentric.Gui.Views
 
         #region View Menu
 
-        public void InitializeView(Point location, Size size, bool maximized)
-        {
-            Location = location;
-            Size = size;
-            if (maximized)
-                WindowState = FormWindowState.Maximized;
-        }
-
-        public void DisplayFullGui(Point location, Size size, int splitPosition, bool maximized)
+		public void Configure(bool useFullGui)
         {
             leftPanel.Visible = true;
-            leftPanel.Dock = DockStyle.Left;
-            treeSplitter.Visible = true;
-            rightPanel.Visible = true;
-            statusBar.Visible = true;
-
-            InitializeView(location, size, maximized);
-
-            if (splitPosition >= treeSplitter.MinSize && splitPosition < ClientSize.Width)
-                treeSplitter.SplitPosition = splitPosition;
+            leftPanel.Dock = useFullGui
+				? DockStyle.Left
+				: DockStyle.Fill;
+            treeSplitter.Visible = useFullGui;
+            rightPanel.Visible = useFullGui;
+            statusBar.Visible = useFullGui;
         }
 
-        public void DisplayMiniGui(Point location, Size size, bool maximized)
-        {
-            leftPanel.Visible = true;
-            leftPanel.Dock = DockStyle.Fill;
-            treeSplitter.Visible = false;
-            rightPanel.Visible = false;
-            statusBar.Visible = false;
-
-            InitializeView(location, size, maximized);
-        }
-      
         #endregion
 
         #endregion

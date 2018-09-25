@@ -781,7 +781,7 @@ namespace TestCentric.Gui.Controls
             Model.Events.TestLoaded += (TestNodeEventArgs e) =>
             {
                 CheckPropertiesDialog();
-                Presenter.EnableRunCommand(true);
+                Presenter.EnableRunCommands(true);
                 runCommandEnabled = true;
             };
 

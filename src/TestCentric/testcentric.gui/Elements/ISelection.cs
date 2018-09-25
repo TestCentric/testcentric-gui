@@ -31,12 +31,12 @@ namespace TestCentric.Gui.Elements
     public interface ISelection : IViewElement
     {
         /// <summary>
-        /// Gets the index of the currently selected item
+        /// Gets or sets the index of the currently selected item
         /// </summary>
-        int SelectedIndex { get; }
+		int SelectedIndex { get; set; }
 
         /// <summary>
-        /// Gets the string value of the currently selected item
+        /// Gets or sets the string value of the currently selected item
         /// </summary>
         string SelectedItem { get; set; }
 

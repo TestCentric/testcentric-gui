@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Copyright (c) 2015-2018 Charlie Poole
+// Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -21,36 +21,36 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System;
+
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Elements
 {
-    /// <summary>
-    /// The IViewElement interface wraps an individual gui
-    /// item like a control or toolstrip item. It is generally
-    /// exposed by views and is the base of other interfaces
-    /// in the NUnit.UiKit.Elements namespace.
+	/// <summary>
+    /// A SplitterPosition element represents the position of
+	/// a particular Splitter that is part of the view.
     /// </summary>
-    public interface IViewElement
+	public class SplitterPosition : IViewParameter<int>
     {
-        /// <summary>
-        /// Gets or sets the Enabled status of the element
-        /// </summary>
-        bool Enabled { get; set; }
+		private Splitter _splitter;
 
-        /// <summary>
-        /// Gets or sets the Visible status of the element
-        /// </summary>
-        bool Visible { get; set; }
+		public event CommandHandler Changed;
 
-        /// <summary>
-        /// Gets or sets the Text of an element
-        /// </summary>
-        string Text { get; set; }
+        public SplitterPosition(Splitter splitter)
+        {
+			_splitter = splitter;
 
-        ///// <summary>
-        ///// Invoke a delegate if necessary, otherwise just call it
-        ///// </summary>
-        //void InvokeIfRequired(MethodInvoker _delegate);
+			_splitter.SplitterMoved += (s, e) =>
+			{
+				Changed?.Invoke();
+			};
+        }
+
+        public int Value
+		{
+			get { return _splitter.SplitPosition; }
+			set { _splitter.SplitPosition = value; }
+		}
     }
 }

@@ -14,7 +14,6 @@
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
-    <DelaySign>false</DelaySign>
     <OutputType>Library</OutputType>
     <RootNamespace>TestCentric.Gui</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
@@ -89,7 +88,6 @@
       <Project>{3ff340d5-d3b4-4df0-baf1-98b3c00b6148}</Project>
       <Name>TestCentric.Gui</Name>
     </ProjectReference>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="nunit.engine.api, Version=3.0.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\NUnit.Engine.Api.3.8.0\lib\nunit.engine.api.dll</HintPath>
       <Private>True</Private>
@@ -152,6 +150,17 @@
     <Compile Include="TestTreeTests.cs" />
     <Compile Include="TextOutputDisplayTests.cs" />
     <Compile Include="VisualStateTests.cs" />
+    <Compile Include="Views\CommonViewTests.cs" />
+    <Compile Include="Presenters\Main\CommandTests.cs" />
+    <Compile Include="Presenters\Main\MainPresenterTestBase.cs" />
+    <Compile Include="Presenters\Main\PackageSettingsTests.cs" />
+    <Compile Include="Presenters\Main\WhenPresenterIsCreated.cs" />
+    <Compile Include="Presenters\Main\WhenTestRunBegins.cs" />
+    <Compile Include="Presenters\Main\WhenTestRunCompletes.cs" />
+    <Compile Include="Presenters\Main\WhenTestsAreLoaded.cs" />
+    <Compile Include="Presenters\Main\WhenTestsAreLoading.cs" />
+    <Compile Include="Presenters\Main\WhenTestsAreReloaded.cs" />
+    <Compile Include="Presenters\Main\WhenTestsAreUnloaded.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="TestCentric.Gui.Tests.addins">
@@ -180,6 +189,9 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Presenters\Main\" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
