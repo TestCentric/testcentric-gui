@@ -125,7 +125,7 @@ namespace TestCentric.Gui.Model
 
         public bool IsTestRunning
         {
-            get { return Runner != null && Runner.IsTestRunning;  }
+            get { return Runner != null && Runner.IsTestRunning; }
         }
 
         public bool HasResults

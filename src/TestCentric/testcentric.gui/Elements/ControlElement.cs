@@ -33,7 +33,7 @@ namespace TestCentric.Gui.Elements
     {
         public ControlElement(T control)
         {
-            this.Control = control;
+            Control = control;
         }
 
         public T Control { get; private set; }
@@ -54,11 +54,6 @@ namespace TestCentric.Gui.Elements
         {
             get { return Control.ClientSize; }
             set { InvokeIfRequired(() => { Control.ClientSize = value; }); }
-        }
-
-        public string Name
-        {
-            get { return Control.Name; }
         }
 
         public bool Enabled

@@ -36,31 +36,33 @@ namespace TestCentric.Gui
     public class LongRunningOperationDisplay : System.Windows.Forms.Form
     {
         private System.Windows.Forms.Label operation;
-        private Cursor ownerCursor;
+        private Cursor _originalCursor;
+
         /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.Container components = null;
 
-        public LongRunningOperationDisplay( Form owner, string text )
-        {
-            //
-            // Required for Windows Form Designer support
-            //
-            InitializeComponent();
+		public LongRunningOperationDisplay(Form owner, string text)
+		{
+			InitializeComponent();
+            
+			// Save the owner
+			Owner = owner;
 
-            // Save the arguments
-            this.Owner = owner;
-            this.operation.Text = text;
-
-            // Save owner's current cursor and set it to the WaitCursor
-            this.ownerCursor = owner.Cursor;
+			// Save owner's current cursor and set it to the WaitCursor
+            _originalCursor = owner.Cursor;
             owner.Cursor = Cursors.WaitCursor;
 
+            // Display the text
+			this.operation.Text = text;
+
             // Force immediate display upon construction
-            this.Show();
-            this.Invalidate();
-            this.Update();
+            Show();
+            Invalidate();
+            Update();
+
+			Application.DoEvents();
         }
 
         /// <summary>
@@ -75,7 +77,7 @@ namespace TestCentric.Gui
                     components.Dispose();
                 }
 
-                Owner.Cursor = this.ownerCursor;
+				Owner.Cursor = _originalCursor;
             }
             base.Dispose( disposing );
         }

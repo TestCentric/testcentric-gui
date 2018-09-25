@@ -44,16 +44,14 @@ namespace TestCentric.Gui.Elements
         {
             TopMenu = topMenu;
             _form = topMenu.GetMainMenu().GetForm();
-            Name = topMenu.Name + "Group";
             foreach (MenuItem menuItem in topMenu.MenuItems)
                 MenuItems.Add(menuItem);
 
             InitializeMenuItems();
         }
 
-        public CheckedMenuGroup(string name, params MenuItem[] menuItems)
+        public CheckedMenuGroup(params MenuItem[] menuItems)
         {
-            Name = name;
             foreach (var menuItem in menuItems)
             {
                 MenuItems.Add(menuItem);
@@ -103,8 +101,6 @@ namespace TestCentric.Gui.Elements
                 SelectedIndex = 0;
             }
         }
-
-        public string Name { get; }
 
         public string Text { get; set; }
 

@@ -13,7 +13,6 @@
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
-    <DelaySign>false</DelaySign>
     <OutputType>Library</OutputType>
     <RootNamespace>TestCentric.Gui</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
@@ -350,6 +349,10 @@
     <EmbeddedResource Include="Views\TextOutputView.resx">
       <DependentUpon>TextOutputView.cs</DependentUpon>
     </EmbeddedResource>
+    <Compile Include="Elements\TabSelector.cs" />
+    <Compile Include="Elements\IViewParameter.cs" />
+    <Compile Include="Elements\SplitterPosition.cs" />
+    <Compile Include="Elements\FontSelector.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="nunit.snk" />
