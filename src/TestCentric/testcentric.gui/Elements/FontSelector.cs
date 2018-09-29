@@ -8,10 +8,10 @@
 // distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so, subject to
 // the following conditions:
-//
+// 
 // The above copyright notice and this permission notice shall be
 // included in all copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 // MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -21,24 +21,35 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-namespace TestCentric.Gui.Controls
-{
-    using Model;
-    using Presenters;
+using System;
+using System.Drawing;
+using System.Windows.Forms;
 
-    /// <summary>
-    /// IViewControl is implemented by any control that
-    /// functions as a view in the MVP architecture.
+namespace TestCentric.Gui.Elements
+{
+	/// <summary>
+    /// A FontSelector represents a particular font used for a view
+	/// or an individual control within a view.
     /// </summary>
-    public interface IViewControl
+	public class FontSelector : IViewParameter<Font>
     {
-        /// <summary>
-        /// InitializeView is used by forms and controls to gain access
-        /// to the model and presenter, which they may save for later use,
-        /// and to set up any event handling that is necessary.
-        /// </summary>
-        /// <param name="model"></param>
-        /// <param name="presenter"></param>
-        void InitializeView(ITestModel model, TestCentricPresenter presenter);
+		private Control _control;
+
+		public event CommandHandler Changed;
+
+        public FontSelector(Control control)
+        {
+			_control = control;
+        }
+
+		public Font Value
+		{
+			get { return _control.Font; }
+			set
+			{ 
+				_control.Font = value;
+				Changed?.Invoke();
+			}
+		}
     }
 }

@@ -13,7 +13,6 @@
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
-    <DelaySign>false</DelaySign>
     <OutputType>Library</OutputType>
     <RootNamespace>TestCentric.Gui</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
@@ -137,12 +136,6 @@
     <Compile Include="Dialogs\SettingsDialogBase.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Dialogs\SimpleSettingsDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\TabbedSettingsDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Dialogs\TreeBasedSettingsDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -152,6 +145,13 @@
     <Compile Include="Controls\ExpandingTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Elements\CheckedMenuGroup.cs" />
+    <Compile Include="Elements\ControlElement.cs" />
+    <Compile Include="Elements\IChecked.cs" />
+    <Compile Include="Elements\IControlElement.cs" />
+    <Compile Include="Elements\IMenu.cs" />
+    <Compile Include="Elements\ButtonElement.cs" />
+    <Compile Include="Elements\ISelection.cs" />
     <Compile Include="Presenters\ErrorsAndFailuresPresenter.cs" />
     <Compile Include="Presenters\TestsNotRunPresenter.cs" />
     <Compile Include="Presenters\ProgressBarPresenter.cs" />
@@ -164,19 +164,22 @@
     <Compile Include="Controls\IViewControl.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="MessageDisplay.cs" />
-    <Compile Include="TestCentricMainForm.cs">
+    <Compile Include="Elements\ICommand.cs" />
+    <Compile Include="Views\IMainView.cs" />
+    <Compile Include="Elements\IViewElement.cs" />
+    <Compile Include="Elements\AbstractMenuElement.cs" />
+    <Compile Include="Views\TestCentricMainView.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="TestCentricFormBase.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TestCentricPresenter.cs" />
+    <Compile Include="Presenters\TestCentricPresenter.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="RecentFileMenuHandler.cs" />
     <Compile Include="SettingsPages\AdvancedLoaderSettingsPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -276,12 +279,6 @@
     <EmbeddedResource Include="Dialogs\SettingsDialogBase.resx">
       <DependentUpon>SettingsDialogBase.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\SimpleSettingsDialog.resx">
-      <DependentUpon>SimpleSettingsDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\TabbedSettingsDialog.resx">
-      <DependentUpon>TabbedSettingsDialog.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\TreeBasedSettingsDialog.resx">
       <DependentUpon>TreeBasedSettingsDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -292,8 +289,8 @@
       <DependentUpon>ExpandingTextBox.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="TestCentricMainForm.resx">
-      <DependentUpon>TestCentricMainForm.cs</DependentUpon>
+    <EmbeddedResource Include="Views\TestCentricMainView.resx">
+      <DependentUpon>TestCentricMainView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -352,6 +349,10 @@
     <EmbeddedResource Include="Views\TextOutputView.resx">
       <DependentUpon>TextOutputView.cs</DependentUpon>
     </EmbeddedResource>
+    <Compile Include="Elements\TabSelector.cs" />
+    <Compile Include="Elements\IViewParameter.cs" />
+    <Compile Include="Elements\SplitterPosition.cs" />
+    <Compile Include="Elements\FontSelector.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="nunit.snk" />

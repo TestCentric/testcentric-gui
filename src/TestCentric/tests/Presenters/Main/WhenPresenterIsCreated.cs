@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Copyright (c) 2018 Charlie Poole
+// Copyright (c) 2016 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -8,10 +8,10 @@
 // distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so, subject to
 // the following conditions:
-//
+// 
 // The above copyright notice and this permission notice shall be
 // included in all copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 // MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -21,24 +21,39 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-namespace TestCentric.Gui.Controls
-{
-    using Model;
-    using Presenters;
+using NSubstitute;
+using NUnit.Framework;
 
-    /// <summary>
-    /// IViewControl is implemented by any control that
-    /// functions as a view in the MVP architecture.
-    /// </summary>
-    public interface IViewControl
-    {
-        /// <summary>
-        /// InitializeView is used by forms and controls to gain access
-        /// to the model and presenter, which they may save for later use,
-        /// and to set up any event handling that is necessary.
-        /// </summary>
-        /// <param name="model"></param>
-        /// <param name="presenter"></param>
-        void InitializeView(ITestModel model, TestCentricPresenter presenter);
-    }
+namespace TestCentric.Gui.Presenters.Main
+{
+	using Elements;
+
+	public class WhenPresenterIsCreated : MainPresenterTestBase
+	{
+#if NYI // Add after implementation of project or package saving
+        [TestCase("NewProjectCommand", true)]
+        [TestCase("OpenProjectCommand", true)]
+		[TestCase("SaveCommand", false)]
+        [TestCase("SaveAsCommand", false)]
+#endif
+
+		[TestCase("RunButton", false)]
+		[TestCase("StopButton", false)]
+		[TestCase("OpenCommand", true)]
+		[TestCase("CloseCommand", false)]
+		[TestCase("AddTestFileCommand", false)]
+		[TestCase("ReloadTestsCommand", false)]
+		[TestCase("RuntimeMenu", true)]
+		[TestCase("RecentFilesMenu", true)]
+		[TestCase("ExitCommand", true)]
+		[TestCase("RunAllCommand", false)]
+		[TestCase("RunSelectedCommand", false)]
+		[TestCase("RunFailedCommand", false)]
+		[TestCase("StopRunCommand", false)]
+		[TestCase("SaveResultsCommand", false)]
+        public void CheckCommandEnabled(string propName, bool enabled)
+		{
+			ViewElement(propName).Received().Enabled = enabled;
+		}
+	}
 }

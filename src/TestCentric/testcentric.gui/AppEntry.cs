@@ -30,6 +30,8 @@ using NUnit.Engine;
 namespace TestCentric.Gui
 {
     using Model;
+    using Views;
+    using Presenters;
 
     /// <summary>
     /// Class to manage application startup.
@@ -84,19 +86,20 @@ namespace TestCentric.Gui
             ITestModel model = new TestModel(testEngine);
 
             log.Info("Constructing Form");
-            TestCentricMainForm form = new TestCentricMainForm(model, options);
+            TestCentricMainView view = new TestCentricMainView();
 
             log.Info("Constructing presenters");
-            new Presenters.ProgressBarPresenter(form.ProgressBarView, model);
-            new Presenters.StatusBarPresenter(form.StatusBarView, model);
-            new Presenters.ErrorsAndFailuresPresenter(form.ErrorsAndFailuresView, model);
-            new Presenters.TestsNotRunPresenter(form.TestsNotRunView, model);
-            new Presenters.TextOutputPresenter(form.TextOutputView, model);
+            new ProgressBarPresenter(view.ProgressBarView, model);
+            new StatusBarPresenter(view.StatusBarView, model);
+            new ErrorsAndFailuresPresenter(view.ErrorsAndFailuresView, model);
+            new TestsNotRunPresenter(view.TestsNotRunView, model);
+            new TextOutputPresenter(view.TextOutputView, model);
+            new TestCentricPresenter(view, model, options);
 
             try
             {
                 log.Info("Starting Gui Application");
-                Application.Run(form);
+                Application.Run(view);
                 log.Info("Application Exit");
             }
             catch( Exception ex )

@@ -27,15 +27,17 @@ using NUnit.Framework;
 
 namespace TestCentric.Gui.Tests
 {
+	using Views;
+
     [TestFixture]
     public class LongRunningOperationDisplayTests
     {
         [Test]
         public void CreateDisplay()
         {
-            Form form = new Form();
-            LongRunningOperationDisplay display = new LongRunningOperationDisplay( form, "Loading..." );
-            Assert.That( display.Owner, Is.EqualTo( form ) );
+			var view = new TestCentricMainView();
+            LongRunningOperationDisplay display = view.LongOperationDisplay( "Loading..." );
+            Assert.That( display.Owner, Is.EqualTo( view ) );
             Assert.That( GetOperationText( display ), Is.EqualTo( "Loading..." ) );
         }
 

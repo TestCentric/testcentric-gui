@@ -30,12 +30,12 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.ComponentModel;
 using System.Reflection;
-using NUnit.Engine;
 
 namespace TestCentric.Gui.Controls
 {
     using Model;
     using Model.Settings;
+    using Presenters;
 
     //public delegate void SelectedTestChangedHandler( ITest test );
     //public delegate void CheckedTestChangedHandler( ITest[] tests );
@@ -781,7 +781,7 @@ namespace TestCentric.Gui.Controls
             Model.Events.TestLoaded += (TestNodeEventArgs e) =>
             {
                 CheckPropertiesDialog();
-                Presenter.EnableRunCommand(true);
+                Presenter.EnableRunCommands(true);
                 runCommandEnabled = true;
             };
 

@@ -21,24 +21,18 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-#define TREE_BASED
-
-using System;
-using System.Windows.Forms;
-
 namespace TestCentric.Gui
 {
     using Model;
     using SettingsPages;
+    using Presenters;
 
     /// <summary>
-    /// Static class used to switch between the tree-based and tab-based
-    /// versions of the actual SettingsDialog.
+    /// Static class used to display the tree-based SettingsDialog.
     /// </summary>
     public static class SettingsDialog
     {
-#if TREE_BASED
-        public static void Display( TestCentricPresenter presenter, ITestModel model )
+        public static void Display(TestCentricPresenter presenter, ITestModel model)
         {
             TreeBasedSettingsDialog.Display(presenter, model,
             new GuiSettingsPage("Gui.General"),
@@ -49,18 +43,5 @@ namespace TestCentric.Gui
             new TestLoaderSettingsPage("Engine.Assembly Isolation"),
             new AdvancedLoaderSettingsPage("Engine.Advanced"));
         }
-#else
-        public static void Display( ITestModel model )
-        {
-            TabbedSettingsDialog.Display( owner, model,
-                new GuiSettingsPage("General"),
-                new TreeSettingsPage("Tree"),
-                new TextOutputSettingsPage("Text Output"),
-                new ProjectEditorSettingsPage("Project Editor"),
-                new TestLoaderSettingsPage("Test Load"),
-                new AssemblyReloadSettingsPage("Reload"),
-                new AdvancedLoaderSettingsPage("Advanced"));
-        }
-#endif
     }
 }

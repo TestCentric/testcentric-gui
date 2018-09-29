@@ -23,7 +23,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Windows.Forms;
 using NUnit.Engine;
 
@@ -31,8 +30,7 @@ namespace TestCentric.Gui.Controls
 {
     using Model;
     using Model.Settings;
-
-    public delegate void SelectedTestsChangedEventHandler(object sender, SelectedTestsChangedEventArgs e);
+    using Presenters;
 
     /// <summary>
     /// Summary description for TestTree.
@@ -423,12 +421,6 @@ namespace TestCentric.Gui.Controls
         }
         #endregion
 
-        #region SelectedTestsChanged Event
-
-        public event SelectedTestsChangedEventHandler SelectedTestsChanged;
-
-        #endregion
-
         private void addCategory_Click(object sender, System.EventArgs e)
         {
             if (availableList.SelectedItems.Count > 0) 
@@ -485,15 +477,6 @@ namespace TestCentric.Gui.Controls
         {
             tests.CheckFailedNodes();
         }
-
-        //private void tests_SelectedTestChanged(ITest test)
-        //{
-        //	if (SelectedTestsChanged != null) 
-        //	{
-        //		SelectedTestsChangedEventArgs args = new SelectedTestsChangedEventArgs(test.TestName.Name, test.TestCount);
-        //		SelectedTestsChanged(tests, args);
-        //	}
-        //}
 
         private void excludeCheckbox_CheckedChanged(object sender, System.EventArgs e)
         {
@@ -622,27 +605,5 @@ namespace TestCentric.Gui.Controls
         }
 
         #endregion
-    }
-
-    public class SelectedTestsChangedEventArgs : EventArgs 
-    {
-        private string testName;
-        private int count;
-
-        public SelectedTestsChangedEventArgs(string testName, int count) 
-        {
-            this.testName = testName;
-            this.count = count;
-        }
-
-        public string TestName 
-        {
-            get { return testName; }
-        }
-
-        public int TestCount 
-        {
-            get { return count; }
-        }
     }
 }

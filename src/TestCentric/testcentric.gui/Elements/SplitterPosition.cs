@@ -8,10 +8,10 @@
 // distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so, subject to
 // the following conditions:
-//
+// 
 // The above copyright notice and this permission notice shall be
 // included in all copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 // MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -21,24 +21,36 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-namespace TestCentric.Gui.Controls
-{
-    using Model;
-    using Presenters;
+using System;
 
-    /// <summary>
-    /// IViewControl is implemented by any control that
-    /// functions as a view in the MVP architecture.
+using System.Windows.Forms;
+
+namespace TestCentric.Gui.Elements
+{
+	/// <summary>
+    /// A SplitterPosition element represents the position of
+	/// a particular Splitter that is part of the view.
     /// </summary>
-    public interface IViewControl
+	public class SplitterPosition : IViewParameter<int>
     {
-        /// <summary>
-        /// InitializeView is used by forms and controls to gain access
-        /// to the model and presenter, which they may save for later use,
-        /// and to set up any event handling that is necessary.
-        /// </summary>
-        /// <param name="model"></param>
-        /// <param name="presenter"></param>
-        void InitializeView(ITestModel model, TestCentricPresenter presenter);
+		private Splitter _splitter;
+
+		public event CommandHandler Changed;
+
+        public SplitterPosition(Splitter splitter)
+        {
+			_splitter = splitter;
+
+			_splitter.SplitterMoved += (s, e) =>
+			{
+				Changed?.Invoke();
+			};
+        }
+
+        public int Value
+		{
+			get { return _splitter.SplitPosition; }
+			set { _splitter.SplitPosition = value; }
+		}
     }
 }

@@ -256,6 +256,7 @@ namespace TestCentric.Gui
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ExtensionDialog";
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Engine Extensions";
             this.Load += new System.EventHandler(this.ExtensionDialog_Load);
             this.groupBox1.ResumeLayout(false);

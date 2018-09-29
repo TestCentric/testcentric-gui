@@ -23,75 +23,59 @@
 
 using System;
 using System.Drawing;
-using System.Collections;
-using System.Configuration;
-using System.ComponentModel;
-using System.ComponentModel.Design;
-using System.Globalization;
 using System.Windows.Forms;
 using System.IO;
-using NUnit.Engine;
 
-namespace TestCentric.Gui
+namespace TestCentric.Gui.Views
 {
-    using Views;
     using Controls;
     using Model;
-    using Model.Settings;
+    using Elements;
 
-    public class TestCentricMainForm : TestCentricFormBase
+    public class TestCentricMainView : TestCentricFormBase, IMainView
     {
-        static Logger log = InternalTrace.GetLogger(typeof(TestCentricMainForm));
+        static Logger log = InternalTrace.GetLogger(typeof(TestCentricMainView));
 
         #region Instance variables
-
-        // Handlers for our recentFiles and recentProjects
-        private RecentFileMenuHandler _recentProjectsMenuHandler;
-
-        private string _displayFormat = "Full";
-
-        private LongRunningOperationDisplay _longOpDisplay;
-
-        private System.Drawing.Font _fixedFont;
 
         private System.ComponentModel.IContainer components;
 
         private System.Windows.Forms.Panel leftPanel;
-        public System.Windows.Forms.Splitter treeSplitter;
-        public System.Windows.Forms.Panel rightPanel;
+        private System.Windows.Forms.Splitter treeSplitter;
+        private System.Windows.Forms.Panel rightPanel;
 
         private TestTree testTree;
 
-        public System.Windows.Forms.GroupBox groupBox1;
-        public System.Windows.Forms.Button runButton;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button runButton;
         private System.Windows.Forms.Button stopButton;
-        public ProgressBarView progressBar;
+        private ProgressBarView progressBar;
         private ExpandingLabel runCount;
 
-        public TabControl tabControl;
+        private TabControl tabControl;
 
-        public StatusBarView statusBar;
+        private StatusBarView statusBar;
 
-        public System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.ToolTip toolTip;
 
-        public System.Windows.Forms.MainMenu mainMenu;
+        private System.Windows.Forms.MainMenu mainMenu;
 
-        public System.Windows.Forms.MenuItem fileMenu;
+        private System.Windows.Forms.MenuItem fileMenu;
         private System.Windows.Forms.MenuItem openMenuItem;
-        private System.Windows.Forms.MenuItem recentProjectsMenu;
+        private System.Windows.Forms.MenuItem recentFilesMenu;
         private System.Windows.Forms.MenuItem fileMenuSeparator1;
-        public System.Windows.Forms.MenuItem fileMenuSeparator4;
+        private System.Windows.Forms.MenuItem fileMenuSeparator4;
         private System.Windows.Forms.MenuItem closeMenuItem;
-        public System.Windows.Forms.MenuItem exitMenuItem;
+        private System.Windows.Forms.MenuItem exitMenuItem;
 
         private System.Windows.Forms.MenuItem toolsMenu;
         private System.Windows.Forms.MenuItem settingsMenuItem;
         private System.Windows.Forms.MenuItem saveResultsMenuItem;
 
-        public System.Windows.Forms.MenuItem nunitHelpMenuItem;
-        public System.Windows.Forms.MenuItem helpItem;
-        public System.Windows.Forms.MenuItem helpMenuSeparator1;
-        public System.Windows.Forms.MenuItem aboutMenuItem;
+        private System.Windows.Forms.MenuItem nunitHelpMenuItem;
+        private System.Windows.Forms.MenuItem helpItem;
+        private System.Windows.Forms.MenuItem helpMenuSeparator1;
+        private System.Windows.Forms.MenuItem aboutMenuItem;
         private System.Windows.Forms.MenuItem viewMenu;
         private System.Windows.Forms.MenuItem statusBarMenuItem;
         private System.Windows.Forms.MenuItem miniGuiMenuItem;
@@ -140,30 +124,73 @@ namespace TestCentric.Gui
         private MenuItem hideTestsMenuItem;
         private MenuItem menuItem12;
         private MenuItem propertiesMenuItem;
-        private MenuItem menuItem3;
+        private MenuItem menuItem4;
         private TextOutputView textOutputView1;
-        private ExpandingLabel suiteName;
 
         #endregion
 
         #region Construction and Disposal
 
-        public TestCentricMainForm(ITestModel model, CommandLineOptions options) : base("NUnit")
+        public TestCentricMainView() : base("TestCentric")
         {
             InitializeComponent();
 
-            Model = model;
-            Presenter = new TestCentricPresenter(this, model, options);
-            Options = options;
+			// View Parameters
+			FontSelector = new FontSelector(this);
+			SplitterPosition = new SplitterPosition(treeSplitter);
 
-            UserSettings = Model.Services.UserSettings;
-            RecentFiles = Model.Services.RecentFiles;
+            // UI Elements on main form
+            RunButton = new ButtonElement(runButton);
+            StopButton = new ButtonElement(stopButton);
+            RunSummary = new ControlElement<ExpandingLabel>(runCount);
+			ResultTabs = new TabSelector(tabControl);
 
-            //UserSettings.Changed += (object sender, SettingsEventArgs e) =>
-            //{
-            //    if (e.SettingName == "Gui.Options.DisplayFormat")
-            //        LoadFormSettings();
-            //};
+            // Initialize File Menu Commands
+            FileMenu = new PopupMenu(fileMenu);
+            OpenCommand = new MenuCommand(openMenuItem);
+            CloseCommand = new MenuCommand(closeMenuItem);
+            AddTestFileCommand = new MenuCommand(addTestFileMenuItem);
+            ReloadTestsCommand = new MenuCommand(reloadTestsMenuItem);
+            RuntimeMenu = new PopupMenu(runtimeMenuItem);
+            SelectedRuntime = new CheckedMenuGroup(runtimeMenuItem);
+            RecentFilesMenu = new PopupMenu(recentFilesMenu);
+            ExitCommand = new MenuCommand(exitMenuItem);
+
+            // Initialize View Menu Commands
+            DisplayFormat = new CheckedMenuGroup(fullGuiMenuItem, miniGuiMenuItem);
+            TreeMenu = new PopupMenu(treeMenuItem);
+            CheckboxesCommand = new CheckedMenuItem(showCheckboxesMenuItem);
+            ExpandCommand = new MenuCommand(expandMenuItem);
+            CollapseCommand = new MenuCommand(collapseMenuItem);
+            ExpandAllCommand = new MenuCommand(expandAllMenuItem);
+            CollapseAllCommand = new MenuCommand(collapseAllMenuItem);
+            HideTestsCommand = new MenuCommand(hideTestsMenuItem);
+            PropertiesCommand = new MenuCommand(propertiesMenuItem);
+            IncreaseFontCommand = new MenuCommand(increaseFontMenuItem);
+            DecreaseFontCommand = new MenuCommand(decreaseFontMenuItem);
+            ChangeFontCommand = new MenuCommand(fontChangeMenuItem);
+            RestoreFontCommand = new MenuCommand(defaultFontMenuItem);
+            IncreaseFixedFontCommand = new MenuCommand(increaseFixedFontMenuItem);
+            DecreaseFixedFontCommand = new MenuCommand(decreaseFixedFontMenuItem);
+            RestoreFixedFontCommand = new MenuCommand(restoreFixedFontMenuItem);
+            StatusBarCommand = new CheckedMenuItem(statusBarMenuItem);
+
+            // Initialize Test Menu Commands
+            RunAllCommand = new MenuCommand(runAllMenuItem);
+            RunSelectedCommand = new MenuCommand(runSelectedMenuItem);
+            RunFailedCommand = new MenuCommand(runFailedMenuItem);
+            StopRunCommand = new MenuCommand(stopRunMenuItem);
+
+            // Initialize Tools Menu Comands
+            ToolsMenu = new PopupMenu(toolsMenu);
+            ProjectEditorCommand = new MenuCommand(projectEditorMenuItem);
+            SaveResultsCommand = new MenuCommand(saveResultsMenuItem);
+            ExtensionsCommand = new MenuCommand(extensionsMenuItem);
+            SettingsCommand = new MenuCommand(settingsMenuItem);
+
+            TestCentricHelpCommand = new MenuCommand(testCentricHelpMenuItem);
+            NUnitHelpCommand = new MenuCommand(nunitHelpMenuItem);
+            AboutCommand = new MenuCommand(aboutMenuItem);
         }
 
         protected override void Dispose(bool disposing)
@@ -188,7 +215,7 @@ namespace TestCentric.Gui
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TestCentricMainForm));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TestCentricMainView));
             this.statusBar = new TestCentric.Gui.Views.StatusBarView();
             this.mainMenu = new System.Windows.Forms.MainMenu(this.components);
             this.fileMenu = new System.Windows.Forms.MenuItem();
@@ -199,7 +226,8 @@ namespace TestCentric.Gui
             this.reloadTestsMenuItem = new System.Windows.Forms.MenuItem();
             this.runtimeMenuItem = new System.Windows.Forms.MenuItem();
             this.menuItem2 = new System.Windows.Forms.MenuItem();
-            this.recentProjectsMenu = new System.Windows.Forms.MenuItem();
+            this.recentFilesMenu = new System.Windows.Forms.MenuItem();
+            this.menuItem4 = new System.Windows.Forms.MenuItem();
             this.fileMenuSeparator4 = new System.Windows.Forms.MenuItem();
             this.exitMenuItem = new System.Windows.Forms.MenuItem();
             this.viewMenu = new System.Windows.Forms.MenuItem();
@@ -251,7 +279,6 @@ namespace TestCentric.Gui
             this.treeSplitter = new System.Windows.Forms.Splitter();
             this.rightPanel = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.suiteName = new TestCentric.Gui.Controls.ExpandingLabel();
             this.runCount = new TestCentric.Gui.Controls.ExpandingLabel();
             this.stopButton = new System.Windows.Forms.Button();
             this.runButton = new System.Windows.Forms.Button();
@@ -303,30 +330,26 @@ namespace TestCentric.Gui
             this.reloadTestsMenuItem,
             this.runtimeMenuItem,
             this.menuItem2,
-            this.recentProjectsMenu,
+            this.recentFilesMenu,
             this.fileMenuSeparator4,
             this.exitMenuItem});
             this.fileMenu.Text = "&File";
-            this.fileMenu.Popup += new System.EventHandler(this.fileMenu_Popup);
             // 
             // openMenuItem
             // 
             this.openMenuItem.Index = 0;
             this.openMenuItem.Shortcut = System.Windows.Forms.Shortcut.CtrlO;
             this.openMenuItem.Text = "&Open...";
-            this.openMenuItem.Click += new System.EventHandler(this.openMenuItem_Click);
             // 
             // closeMenuItem
             // 
             this.closeMenuItem.Index = 1;
             this.closeMenuItem.Text = "&Close";
-            this.closeMenuItem.Click += new System.EventHandler(this.closeMenuItem_Click);
             // 
             // addTestFileMenuItem
             // 
             this.addTestFileMenuItem.Index = 2;
             this.addTestFileMenuItem.Text = "&Add Test File...";
-            this.addTestFileMenuItem.Click += new System.EventHandler(this.addTestFileMenuItem_Click);
             // 
             // fileMenuSeparator1
             // 
@@ -338,7 +361,6 @@ namespace TestCentric.Gui
             this.reloadTestsMenuItem.Index = 4;
             this.reloadTestsMenuItem.Shortcut = System.Windows.Forms.Shortcut.CtrlR;
             this.reloadTestsMenuItem.Text = "&Reload Tests";
-            this.reloadTestsMenuItem.Click += new System.EventHandler(this.reloadTestsMenuItem_Click);
             // 
             // runtimeMenuItem
             // 
@@ -350,10 +372,17 @@ namespace TestCentric.Gui
             this.menuItem2.Index = 6;
             this.menuItem2.Text = "-";
             // 
-            // recentProjectsMenu
+            // recentFilesMenu
             // 
-            this.recentProjectsMenu.Index = 7;
-            this.recentProjectsMenu.Text = "Recent &Files";
+            this.recentFilesMenu.Index = 7;
+            this.recentFilesMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuItem4});
+            this.recentFilesMenu.Text = "Recent &Files";
+            // 
+            // menuItem4
+            // 
+            this.menuItem4.Index = 0;
+            this.menuItem4.Text = "Dummy Entry to force PopUp initially";
             // 
             // fileMenuSeparator4
             // 
@@ -364,7 +393,6 @@ namespace TestCentric.Gui
             // 
             this.exitMenuItem.Index = 9;
             this.exitMenuItem.Text = "E&xit";
-            this.exitMenuItem.Click += new System.EventHandler(this.exitMenuItem_Click);
             // 
             // viewMenu
             // 
@@ -386,15 +414,15 @@ namespace TestCentric.Gui
             this.fullGuiMenuItem.Checked = true;
             this.fullGuiMenuItem.Index = 0;
             this.fullGuiMenuItem.RadioCheck = true;
+            this.fullGuiMenuItem.Tag = "Full";
             this.fullGuiMenuItem.Text = "&Full GUI";
-            this.fullGuiMenuItem.Click += new System.EventHandler(this.fullGuiMenuItem_Click);
             // 
             // miniGuiMenuItem
             // 
             this.miniGuiMenuItem.Index = 1;
             this.miniGuiMenuItem.RadioCheck = true;
+            this.miniGuiMenuItem.Tag = "Mini";
             this.miniGuiMenuItem.Text = "&Mini GUI";
-            this.miniGuiMenuItem.Click += new System.EventHandler(this.miniGuiMenuItem_Click);
             // 
             // viewMenuSeparator1
             // 
@@ -416,13 +444,11 @@ namespace TestCentric.Gui
             this.menuItem12,
             this.propertiesMenuItem});
             this.treeMenuItem.Text = "Tree";
-            this.treeMenuItem.Popup += new System.EventHandler(this.treeMenuItem_Popup);
             // 
             // showCheckboxesMenuItem
             // 
             this.showCheckboxesMenuItem.Index = 0;
             this.showCheckboxesMenuItem.Text = "Show Checkboxes";
-            this.showCheckboxesMenuItem.Click += new System.EventHandler(this.showCheckboxesMenuItem_Click);
             // 
             // menuItem5
             // 
@@ -433,13 +459,11 @@ namespace TestCentric.Gui
             // 
             this.expandMenuItem.Index = 2;
             this.expandMenuItem.Text = "Expand";
-            this.expandMenuItem.Click += new System.EventHandler(this.expandMenuItem_Click);
             // 
             // collapseMenuItem
             // 
             this.collapseMenuItem.Index = 3;
             this.collapseMenuItem.Text = "Collapse";
-            this.collapseMenuItem.Click += new System.EventHandler(this.collapseMenuItem_Click);
             // 
             // menuItem8
             // 
@@ -450,19 +474,16 @@ namespace TestCentric.Gui
             // 
             this.expandAllMenuItem.Index = 5;
             this.expandAllMenuItem.Text = "Expand All";
-            this.expandAllMenuItem.Click += new System.EventHandler(this.expandAllMenuItem_Click);
             // 
             // collapseAllMenuItem
             // 
             this.collapseAllMenuItem.Index = 6;
             this.collapseAllMenuItem.Text = "Collapse All";
-            this.collapseAllMenuItem.Click += new System.EventHandler(this.collapseAllMenuItem_Click);
             // 
             // hideTestsMenuItem
             // 
             this.hideTestsMenuItem.Index = 7;
             this.hideTestsMenuItem.Text = "Hide Tests";
-            this.hideTestsMenuItem.Click += new System.EventHandler(this.hideTestsMenuItem_Click);
             // 
             // menuItem12
             // 
@@ -473,7 +494,6 @@ namespace TestCentric.Gui
             // 
             this.propertiesMenuItem.Index = 9;
             this.propertiesMenuItem.Text = "Properties...";
-            this.propertiesMenuItem.Click += new System.EventHandler(this.propertiesMenuItem_Click);
             // 
             // viewMenuSeparator2
             // 
@@ -495,13 +515,11 @@ namespace TestCentric.Gui
             // 
             this.increaseFontMenuItem.Index = 0;
             this.increaseFontMenuItem.Text = "&Increase";
-            this.increaseFontMenuItem.Click += new System.EventHandler(this.increaseFontMenuItem_Click);
             // 
             // decreaseFontMenuItem
             // 
             this.decreaseFontMenuItem.Index = 1;
             this.decreaseFontMenuItem.Text = "&Decrease";
-            this.decreaseFontMenuItem.Click += new System.EventHandler(this.decreaseFontMenuItem_Click);
             // 
             // fontMenuSeparator
             // 
@@ -512,13 +530,11 @@ namespace TestCentric.Gui
             // 
             this.fontChangeMenuItem.Index = 3;
             this.fontChangeMenuItem.Text = "&Change...";
-            this.fontChangeMenuItem.Click += new System.EventHandler(this.fontChangeMenuItem_Click);
             // 
             // defaultFontMenuItem
             // 
             this.defaultFontMenuItem.Index = 4;
             this.defaultFontMenuItem.Text = "&Restore";
-            this.defaultFontMenuItem.Click += new System.EventHandler(this.defaultFontMenuItem_Click);
             // 
             // fixedFontMenuItem
             // 
@@ -534,13 +550,11 @@ namespace TestCentric.Gui
             // 
             this.increaseFixedFontMenuItem.Index = 0;
             this.increaseFixedFontMenuItem.Text = "&Increase";
-            this.increaseFixedFontMenuItem.Click += new System.EventHandler(this.increaseFixedFontMenuItem_Click);
             // 
             // decreaseFixedFontMenuItem
             // 
             this.decreaseFixedFontMenuItem.Index = 1;
             this.decreaseFixedFontMenuItem.Text = "&Decrease";
-            this.decreaseFixedFontMenuItem.Click += new System.EventHandler(this.decreaseFixedFontMenuItem_Click);
             // 
             // menuItem1
             // 
@@ -551,7 +565,6 @@ namespace TestCentric.Gui
             // 
             this.restoreFixedFontMenuItem.Index = 3;
             this.restoreFixedFontMenuItem.Text = "&Restore";
-            this.restoreFixedFontMenuItem.Click += new System.EventHandler(this.restoreFixedFontMenuItem_Click);
             // 
             // viewMenuSeparator3
             // 
@@ -563,7 +576,6 @@ namespace TestCentric.Gui
             this.statusBarMenuItem.Checked = true;
             this.statusBarMenuItem.Index = 8;
             this.statusBarMenuItem.Text = "&Status Bar";
-            this.statusBarMenuItem.Click += new System.EventHandler(this.statusBarMenuItem_Click);
             // 
             // testMenu
             // 
@@ -581,14 +593,12 @@ namespace TestCentric.Gui
             this.runAllMenuItem.Index = 0;
             this.runAllMenuItem.Shortcut = System.Windows.Forms.Shortcut.F5;
             this.runAllMenuItem.Text = "&Run All";
-            this.runAllMenuItem.Click += new System.EventHandler(this.runAllMenuItem_Click);
             // 
             // runSelectedMenuItem
             // 
             this.runSelectedMenuItem.Index = 1;
             this.runSelectedMenuItem.Shortcut = System.Windows.Forms.Shortcut.F6;
             this.runSelectedMenuItem.Text = "Run &Selected";
-            this.runSelectedMenuItem.Click += new System.EventHandler(this.runSelectedMenuItem_Click);
             // 
             // runFailedMenuItem
             // 
@@ -596,7 +606,6 @@ namespace TestCentric.Gui
             this.runFailedMenuItem.Index = 2;
             this.runFailedMenuItem.Shortcut = System.Windows.Forms.Shortcut.F7;
             this.runFailedMenuItem.Text = "Run &Failed";
-            this.runFailedMenuItem.Click += new System.EventHandler(this.runFailedMenuItem_Click);
             // 
             // testMenuSeparator
             // 
@@ -607,7 +616,6 @@ namespace TestCentric.Gui
             // 
             this.stopRunMenuItem.Index = 4;
             this.stopRunMenuItem.Text = "S&top Run";
-            this.stopRunMenuItem.Click += new System.EventHandler(this.stopRunMenuItem_Click);
             // 
             // toolsMenu
             // 
@@ -619,19 +627,16 @@ namespace TestCentric.Gui
             this.extensionsMenuItem,
             this.settingsMenuItem});
             this.toolsMenu.Text = "T&ools";
-            this.toolsMenu.Popup += new System.EventHandler(this.toolsMenu_Popup);
             // 
             // projectEditorMenuItem
             // 
             this.projectEditorMenuItem.Index = 0;
             this.projectEditorMenuItem.Text = "Project Editor...";
-            this.projectEditorMenuItem.Click += new System.EventHandler(this.projectEditorMenuItem_Click);
             // 
             // saveResultsMenuItem
             // 
             this.saveResultsMenuItem.Index = 1;
             this.saveResultsMenuItem.Text = "&Save Test Results...";
-            this.saveResultsMenuItem.Click += new System.EventHandler(this.saveResultsMenuItem_Click);
             // 
             // toolsMenuSeparator1
             // 
@@ -642,13 +647,11 @@ namespace TestCentric.Gui
             // 
             this.extensionsMenuItem.Index = 3;
             this.extensionsMenuItem.Text = "Extensions...";
-            this.extensionsMenuItem.Click += new System.EventHandler(this.extensionsMenuItem_Click);
             // 
             // settingsMenuItem
             // 
             this.settingsMenuItem.Index = 4;
             this.settingsMenuItem.Text = "&Settings...";
-            this.settingsMenuItem.Click += new System.EventHandler(this.settingsMenuItem_Click);
             // 
             // helpItem
             // 
@@ -664,14 +667,12 @@ namespace TestCentric.Gui
             // 
             this.testCentricHelpMenuItem.Index = 0;
             this.testCentricHelpMenuItem.Text = "TestCentric Help...";
-            this.testCentricHelpMenuItem.Click += new System.EventHandler(this.testCentricHelpMenuItem_Click);
             // 
             // nunitHelpMenuItem
             // 
             this.nunitHelpMenuItem.Index = 1;
             this.nunitHelpMenuItem.Shortcut = System.Windows.Forms.Shortcut.F1;
             this.nunitHelpMenuItem.Text = "NUnit &Help...";
-            this.nunitHelpMenuItem.Click += new System.EventHandler(this.nunitHelpMenuItem_Click);
             // 
             // helpMenuSeparator1
             // 
@@ -682,7 +683,6 @@ namespace TestCentric.Gui
             // 
             this.aboutMenuItem.Index = 3;
             this.aboutMenuItem.Text = "&About TestCentric...";
-            this.aboutMenuItem.Click += new System.EventHandler(this.aboutMenuItem_Click);
             // 
             // treeSplitter
             // 
@@ -696,8 +696,8 @@ namespace TestCentric.Gui
             // rightPanel
             // 
             this.rightPanel.BackColor = System.Drawing.SystemColors.Control;
+			this.rightPanel.Controls.Add(this.tabControl);
             this.rightPanel.Controls.Add(this.groupBox1);
-            this.rightPanel.Controls.Add(this.tabControl);
             this.rightPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rightPanel.Location = new System.Drawing.Point(246, 0);
             this.rightPanel.Name = "rightPanel";
@@ -706,7 +706,6 @@ namespace TestCentric.Gui
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.suiteName);
             this.groupBox1.Controls.Add(this.runCount);
             this.groupBox1.Controls.Add(this.stopButton);
             this.groupBox1.Controls.Add(this.runButton);
@@ -717,16 +716,6 @@ namespace TestCentric.Gui
             this.groupBox1.Size = new System.Drawing.Size(498, 120);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
-            // 
-            // suiteName
-            // 
-            this.suiteName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.suiteName.AutoEllipsis = true;
-            this.suiteName.Location = new System.Drawing.Point(145, 21);
-            this.suiteName.Name = "suiteName";
-            this.suiteName.Size = new System.Drawing.Size(343, 23);
-            this.suiteName.TabIndex = 1;
             // 
             // runCount
             // 
@@ -746,7 +735,6 @@ namespace TestCentric.Gui
             this.stopButton.Size = new System.Drawing.Size(64, 31);
             this.stopButton.TabIndex = 4;
             this.stopButton.Text = "&Stop";
-            this.stopButton.Click += new System.EventHandler(this.stopButton_Click);
             // 
             // runButton
             // 
@@ -755,7 +743,6 @@ namespace TestCentric.Gui
             this.runButton.Size = new System.Drawing.Size(64, 31);
             this.runButton.TabIndex = 3;
             this.runButton.Text = "&Run";
-            this.runButton.Click += new System.EventHandler(this.runButton_Click);
             // 
             // progressBar
             // 
@@ -771,20 +758,20 @@ namespace TestCentric.Gui
             this.progressBar.Size = new System.Drawing.Size(480, 16);
             this.progressBar.Status = TestCentric.Gui.Views.ProgressBarStatus.Success;
             this.progressBar.TabIndex = 0;
-            // 
-            // tabControl
-            // 
+			// 
+			// tabControl
+			// 
+			//this.tabControl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             this.tabControl.Alignment = System.Windows.Forms.TabAlignment.Bottom;
             this.tabControl.Controls.Add(this.errorTab);
             this.tabControl.Controls.Add(this.notrunTab);
             this.tabControl.Controls.Add(this.outputTab);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl.Location = new System.Drawing.Point(0, 0);
+            this.tabControl.Location = new System.Drawing.Point(0, 120);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(498, 407);
             this.tabControl.TabIndex = 2;
-            this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
             // 
             // errorTab
             // 
@@ -798,11 +785,11 @@ namespace TestCentric.Gui
             // 
             // errorsAndFailuresView1
             // 
-            this.errorsAndFailuresView1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.errorsAndFailuresView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.errorsAndFailuresView1.EnableToolTips = false;
-            this.errorsAndFailuresView1.Location = new System.Drawing.Point(0, 123);
+            this.errorsAndFailuresView1.Location = new System.Drawing.Point(0,123);
             this.errorsAndFailuresView1.Name = "errorsAndFailuresView1";
-            this.errorsAndFailuresView1.Size = new System.Drawing.Size(490, 258);
+            this.errorsAndFailuresView1.Size = new System.Drawing.Size(490,381);
             this.errorsAndFailuresView1.SourceCodeDisplay = true;
             this.errorsAndFailuresView1.SourceCodeSplitOrientation = System.Windows.Forms.Orientation.Vertical;
             this.errorsAndFailuresView1.SourceCodeSplitterDistance = 0.3F;
@@ -854,7 +841,6 @@ namespace TestCentric.Gui
             this.testTree.Name = "testTree";
             this.testTree.Size = new System.Drawing.Size(240, 407);
             this.testTree.TabIndex = 0;
-            this.testTree.SelectedTestsChanged += new TestCentric.Gui.Controls.SelectedTestsChangedEventHandler(this.testTree_SelectedTestsChanged);
             // 
             // leftPanel
             // 
@@ -865,7 +851,7 @@ namespace TestCentric.Gui
             this.leftPanel.Size = new System.Drawing.Size(240, 407);
             this.leftPanel.TabIndex = 4;
             // 
-            // TestCentricMainForm
+            // TestCentricMainView
             // 
             this.ClientSize = new System.Drawing.Size(744, 431);
             this.Controls.Add(this.rightPanel);
@@ -875,11 +861,9 @@ namespace TestCentric.Gui
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Menu = this.mainMenu;
             this.MinimumSize = new System.Drawing.Size(160, 32);
-            this.Name = "TestCentricMainForm";
+            this.Name = "TestCentricMainView";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "TestCentric Runner for NUnit";
-            this.Closing += new System.ComponentModel.CancelEventHandler(this.NUnitForm_Closing);
-            this.Load += new System.EventHandler(this.NUnitForm_Load);
             this.rightPanel.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -892,12 +876,81 @@ namespace TestCentric.Gui
 
         }
 
-        #endregion
+		#endregion
 
-        #region Properties
+		#region Properties
 
-        public TestCentricPresenter Presenter { get; set; }
+        public bool Maximized
+		{
+			get { return WindowState == FormWindowState.Maximized; }
+			set
+			{
+				if (value)
+					WindowState = FormWindowState.Maximized;
+				else if (WindowState == FormWindowState.Maximized)
+					WindowState = FormWindowState.Normal;
+				// No actionif minimized
+			}
+		}
+		// View Parameters
+		public IViewParameter<Font> FontSelector { get; }
+		public IViewParameter<int> SplitterPosition { get; }
 
+        // UI Elements
+        public ICommand RunButton { get; }
+        public ICommand StopButton { get; }
+        public IControlElement<ExpandingLabel> RunSummary { get; }
+		public ISelection ResultTabs { get; }
+
+        // File Menu Items
+        public IMenu FileMenu { get; }
+        public ICommand OpenCommand { get; }
+        public ICommand CloseCommand { get; }
+        public ICommand AddTestFileCommand { get; }
+        public ICommand ReloadTestsCommand { get; }
+        public IMenu RuntimeMenu { get; }
+        public ISelection SelectedRuntime { get; }
+        public IMenu RecentFilesMenu { get; }
+        public ICommand ExitCommand { get; }
+
+        // View Menu Items
+        public ISelection DisplayFormat { get; }
+        public IMenu TreeMenu { get; }
+        public IChecked CheckboxesCommand { get; }
+        public ICommand ExpandCommand { get; }
+        public ICommand CollapseCommand { get; }
+        public ICommand ExpandAllCommand { get; }
+        public ICommand CollapseAllCommand { get; }
+        public ICommand HideTestsCommand { get; }
+        public ICommand PropertiesCommand { get; }
+        public ICommand IncreaseFontCommand { get; }
+        public ICommand DecreaseFontCommand { get; }
+        public ICommand ChangeFontCommand { get; }
+        public ICommand RestoreFontCommand { get; }
+        public ICommand IncreaseFixedFontCommand { get; }
+        public ICommand DecreaseFixedFontCommand { get; }
+        public ICommand RestoreFixedFontCommand { get; }
+        public IChecked StatusBarCommand { get; }
+
+        // Test Menu Items
+        public ICommand RunAllCommand { get; }
+        public ICommand RunSelectedCommand { get; }
+        public ICommand RunFailedCommand { get; }
+        public ICommand StopRunCommand { get; }
+
+        // Tools Menu Items
+        public IMenu ToolsMenu { get; }
+        public ICommand ProjectEditorCommand { get; }
+        public ICommand SaveResultsCommand { get; }
+        public ICommand ExtensionsCommand { get; }
+        public ICommand SettingsCommand { get; }
+
+        // Help Menu Items
+        public ICommand TestCentricHelpCommand { get; }
+        public ICommand NUnitHelpCommand { get; }
+        public ICommand AboutCommand { get; }
+
+        // Test Selection
         public TestNode[] SelectedTests
         {
             get { return testTree.SelectedTests; }
@@ -908,13 +961,10 @@ namespace TestCentric.Gui
             get { return testTree.FailedTests; }
         }
 
-        private CommandLineOptions Options {  get; }
-
-        private ITestModel Model { get; }
-
-        private UserSettings UserSettings { get; }
-
-        private IRecentFiles RecentFiles { get; }
+        public LongRunningOperationDisplay LongOperationDisplay(string text)
+		{
+			return new LongRunningOperationDisplay(this, text);
+		}
 
         #region Subordinate Views contained in main form
 
@@ -934,616 +984,22 @@ namespace TestCentric.Gui
 
         #endregion
 
-        #region Display Methods
-
-        public void DisplaySummary(string text)
-        {
-            runCount.Text = text;
-        }
-
-        #endregion
-
         #region Menu Handlers
 
-        #region File Menu
-
-        private void fileMenu_Popup(object sender, System.EventArgs e)
-        {
-            openMenuItem.Enabled = !Model.IsTestRunning;
-            closeMenuItem.Enabled = Model.IsPackageLoaded && !Model.IsTestRunning;
-
-            reloadTestsMenuItem.Enabled = Model.IsPackageLoaded && !Model.IsTestRunning;
-
-            var frameworks = Model.AvailableRuntimes;
-
-            runtimeMenuItem.Visible = frameworks.Count > 1;
-
-            if (runtimeMenuItem.Visible && runtimeMenuItem.Enabled && runtimeMenuItem.MenuItems.Count == 0)
-            {
-                var defaultMenuItem = new MenuItem("Default");
-                defaultMenuItem.Name = "defaultMenuItem";
-                defaultMenuItem.Tag = "DEFAULT";
-                defaultMenuItem.Checked = true;
-                
-                runtimeMenuItem.MenuItems.Add(defaultMenuItem);
-
-                foreach (IRuntimeFramework framework in frameworks)
-                {
-                    MenuItem item = new MenuItem(framework.DisplayName);
-                    item.Tag = framework;
-                    item.Click += new EventHandler(runtimeFrameworkMenuItem_Click);
-
-                    runtimeMenuItem.MenuItems.Add(item);
-                }
-            }
-
-            recentProjectsMenu.Enabled = !Model.IsTestRunning;
-
-            if (!Model.IsTestRunning)
-            {
-                _recentProjectsMenuHandler.Load();
-            }
-        }
-
-        private void openMenuItem_Click(object sender, System.EventArgs e)
-        {
-            Presenter.OpenProject();
-        }
-
-        private void closeMenuItem_Click(object sender, System.EventArgs e)
-        {
-            Presenter.CloseProject();
-        }
-
-        private void addTestFileMenuItem_Click(object sender, System.EventArgs e)
-        {
-            Presenter.AddTestFile();
-        }
-
-        private void runtimeFrameworkMenuItem_Click(object sender, System.EventArgs e)
-        {
-            //Presenter.ReloadProject(((MenuItem)sender).Tag as RuntimeFramework);
-        }
-
-        private void reloadTestsMenuItem_Click(object sender, System.EventArgs e)
-        {
-            Presenter.ReloadTests();
-        }
-
-        private void exitMenuItem_Click(object sender, System.EventArgs e)
-        {
-            Close();
-        }
-
-        #endregion
-
         #region View Menu
-        private void statusBarMenuItem_Click(object sender, System.EventArgs e)
+
+		public void Configure(bool useFullGui)
         {
-            statusBarMenuItem.Checked = !statusBarMenuItem.Checked;
-            statusBar.Visible = statusBarMenuItem.Checked;
-        }
-
-        private void fontChangeMenuItem_Click(object sender, System.EventArgs e)
-        {
-            FontDialog fontDialog = new FontDialog();
-            fontDialog.FontMustExist = true;
-            fontDialog.Font = Font;
-            fontDialog.MinSize = 6;
-            fontDialog.MaxSize = 12;
-            fontDialog.AllowVectorFonts = false;
-            fontDialog.ScriptsOnly = true;
-            fontDialog.ShowEffects = false;
-            fontDialog.ShowApply = true;
-            fontDialog.Apply += new EventHandler(fontDialog_Apply);
-            if( fontDialog.ShowDialog() == DialogResult.OK )
-                applyFont( fontDialog.Font );
-        }
-
-        private void fontDialog_Apply(object sender, EventArgs e)
-        {
-            applyFont( ((FontDialog)sender).Font );
-        }
-
-
-        private void defaultFontMenuItem_Click(object sender, System.EventArgs e)
-        {
-            applyFont( System.Windows.Forms.Form.DefaultFont );
-        }
-
-        private void fullGuiMenuItem_Click(object sender, System.EventArgs e)
-        {
-            if ( !fullGuiMenuItem.Checked )
-                displayFullGui();
-        }
-
-        private void miniGuiMenuItem_Click(object sender, System.EventArgs e)
-        {
-            if ( !miniGuiMenuItem.Checked )
-                displayMiniGui();
-        }
-
-        private void displayFullGui()
-        {
-            fullGuiMenuItem.Checked = true;
-            miniGuiMenuItem.Checked = false;
-
-            _displayFormat = "Full";
-            UserSettings.Gui.DisplayFormat = "Full";
-
             leftPanel.Visible = true;
-            leftPanel.Dock = DockStyle.Left;
-            treeSplitter.Visible = true;
-            rightPanel.Visible = true;
-            statusBar.Visible = true;
-
-            int x = UserSettings.Gui.MainForm.Left;
-            int y = UserSettings.Gui.MainForm.Top;
-            Point location = new Point(x, y);
-
-            if (!IsValidLocation(location))
-                location = new Point(10, 10);
-            Location = location;
-
-            int width = UserSettings.Gui.MainForm.Width;
-            int height = UserSettings.Gui.MainForm.Height;
-            if (width < 160) width = 160;
-            if (height < 32) height = 32;
-            Size = new Size(width, height);
-
-            // Set to maximized if required
-            if (UserSettings.Gui.MainForm.Maximized)
-                WindowState = FormWindowState.Maximized;
-
-            // Set the font to use
-            applyFont(UserSettings.Gui.Font);
-        }
-
-        private void displayMiniGui()
-        {
-            miniGuiMenuItem.Checked = true;
-            fullGuiMenuItem.Checked = false;
-            
-            _displayFormat = "Mini";
-            UserSettings.Gui.DisplayFormat = "Mini";
-
-            leftPanel.Visible = true;
-            leftPanel.Dock = DockStyle.Fill;
-            treeSplitter.Visible = false;
-            rightPanel.Visible = false;
-            statusBar.Visible = false;
-
-            int x = UserSettings.Gui.MiniForm.Left;
-            int y = UserSettings.Gui.MiniForm.Top;
-            Point location = new Point(x, y);
-
-            if (!IsValidLocation(location))
-                location = new Point(10, 10);
-            Location = location;
-
-            int width = UserSettings.Gui.MiniForm.Width;
-            int height = UserSettings.Gui.MiniForm.Height;
-            if (width < 160) width = 160;
-            if (height < 32) height = 32;
-            Size = new Size(width, height);
-
-            // Set to maximized if required
-            if (UserSettings.Gui.MiniForm.Maximized)
-                WindowState = FormWindowState.Maximized;
-
-            // Set the font to use
-            applyFont(UserSettings.Gui.Font);
-        }
-
-        private void increaseFontMenuItem_Click(object sender, System.EventArgs e)
-        {
-            applyFont( new Font( Font.FontFamily, Font.SizeInPoints * 1.2f, Font.Style ) );
-        }
-
-        private void decreaseFontMenuItem_Click(object sender, System.EventArgs e)
-        {
-            applyFont( new Font( Font.FontFamily, Font.SizeInPoints / 1.2f, Font.Style ) );
-        }
-
-        private void applyFont( Font font )
-        {
-            UserSettings.Gui.Font = Font = font;
-
-            runCount.Font = font.FontFamily.IsStyleAvailable( FontStyle.Bold )
-                ? new Font( font, FontStyle.Bold )
-                : font;
-        }
-
-        private void increaseFixedFontMenuItem_Click(object sender, System.EventArgs e)
-        {
-            applyFixedFont( new Font( _fixedFont.FontFamily, _fixedFont.SizeInPoints * 1.2f, _fixedFont.Style ) );		
-        }
-
-        private void decreaseFixedFontMenuItem_Click(object sender, System.EventArgs e)
-        {
-            applyFixedFont( new Font( _fixedFont.FontFamily, _fixedFont.SizeInPoints / 1.2f, _fixedFont.Style ) );		
-        }
-
-        private void restoreFixedFontMenuItem_Click(object sender, System.EventArgs e)
-        {
-            applyFixedFont( new Font( FontFamily.GenericMonospace, 8.0f ) );
-        }
-
-        private void applyFixedFont(Font font)
-        {
-            UserSettings.Gui.FixedFont = _fixedFont = font;
-        }
-
-        private void treeMenuItem_Popup(object sender, EventArgs e)
-        {
-            TreeNode selectedNode = TreeView.SelectedNode;
-
-            showCheckboxesMenuItem.Checked = UserSettings.Gui.TestTree.ShowCheckBoxes;
-
-            if (selectedNode != null && selectedNode.Nodes.Count > 0)
-            {
-                bool isExpanded = selectedNode.IsExpanded;
-                collapseMenuItem.Enabled = isExpanded;
-                expandMenuItem.Enabled = !isExpanded;
-            }
-            else
-            {
-                collapseMenuItem.Enabled = expandMenuItem.Enabled = false;
-            }
-        }
-
-        private void showCheckboxesMenuItem_Click(object sender, EventArgs e)
-        {
-            UserSettings.Gui.TestTree.ShowCheckBoxes = !showCheckboxesMenuItem.Checked;
-        }
-
-        private void expandMenuItem_Click(object sender, EventArgs e)
-        {
-            TreeView.SelectedNode.Expand();
-        }
-
-        private void collapseMenuItem_Click(object sender, EventArgs e)
-        {
-            TreeView.SelectedNode.Collapse();
-        }
-
-        private void expandAllMenuItem_Click(object sender, EventArgs e)
-        {
-            TreeView.BeginUpdate();
-            TreeView.ExpandAll();
-            TreeView.EndUpdate();
-        }
-
-        private void collapseAllMenuItem_Click(object sender, EventArgs e)
-        {
-            TreeView.BeginUpdate();
-            TreeView.CollapseAll();
-            TreeView.EndUpdate();
-
-            // Compensate for a bug in the underlying control
-            if (TreeView.Nodes.Count > 0)
-                TreeView.SelectedNode = TreeView.Nodes[0];
-        }
-
-        private void hideTestsMenuItem_Click(object sender, EventArgs e)
-        {
-            TreeView.HideTests();
-        }
-
-        private void propertiesMenuItem_Click(object sender, EventArgs e)
-        {
-            if (TreeView.SelectedTest != null)
-                TreeView.ShowPropertiesDialog(TreeView.SelectedTest);
+            leftPanel.Dock = useFullGui
+				? DockStyle.Left
+				: DockStyle.Fill;
+            treeSplitter.Visible = useFullGui;
+            rightPanel.Visible = useFullGui;
+            statusBar.Visible = useFullGui;
         }
 
         #endregion
-
-        #region Test Menu
-
-        private void runAllMenuItem_Click(object sender, System.EventArgs e)
-        {
-            Presenter.RunAllTests();
-        }
-
-        private void runSelectedMenuItem_Click(object sender, System.EventArgs e)
-        {
-            Presenter.RunSelectedTests();
-        
-        }
-
-        private void runFailedMenuItem_Click(object sender, System.EventArgs e)
-        {
-            Presenter.RunFailedTests();
-        }
-
-        private void stopRunMenuItem_Click(object sender, System.EventArgs e)
-        {
-            CancelRun();
-        }
-
-        #endregion
-
-        #region Tools Menu
-
-        private void toolsMenu_Popup(object sender, EventArgs e)
-        {
-            projectEditorMenuItem.Enabled = File.Exists(Model.ProjectEditorPath);
-
-        }
-
-        private void projectEditorMenuItem_Click(object sender, EventArgs e)
-        {
-            Presenter.DisplayProjectEditor();
-        }
-
-        private void saveResultsMenuItem_Click(object sender, System.EventArgs e)
-        {
-            Presenter.SaveResults();
-        }
-
-        private void extensionsMenuItem_Click(object sender, EventArgs e)
-        {
-            using (var extensionsDialog = new ExtensionDialog(Model.Services.ExtensionService))
-            {
-                extensionsDialog.Font = Model.Services.UserSettings.Gui.Font;
-                extensionsDialog.ShowDialog();
-            }
-        }
-
-        private void settingsMenuItem_Click(object sender, System.EventArgs e)
-        {
-            Presenter.DisplaySettings();
-        }
-
-        #endregion
-
-        #region Help Menu
-
-
-        private void testCentricHelpMenuItem_Click(object sender, EventArgs e)
-        {
-            MessageDisplay.Error("Not Yet Implemented");
-            //System.Diagnostics.Process.Start("");
-
-        }
-        private void nunitHelpMenuItem_Click(object sender, System.EventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://github.com/nunit/docs/wiki/NUnit-Documentation");
-        }
-
-        /// <summary>
-        /// Display the about box when menu item is selected
-        /// </summary>
-        private void aboutMenuItem_Click(object sender, EventArgs e)
-        {
-            using(var aboutBox = new AboutBox())
-            {
-                aboutBox.ShowDialog();
-            }
-        }
-
-        #endregion
-
-        #endregion
-
-        #region Form Level Events
-
-        /// <summary>
-        /// Get saved options when form loads
-        /// </summary>
-        private void NUnitForm_Load(object sender, System.EventArgs e)
-        {
-            if ( !DesignMode )
-            {
-                EnableRunCommand( false );
-                EnableStopCommand( false );
-
-                _recentProjectsMenuHandler = new RecentFileMenuHandler(recentProjectsMenu, Model, File.Exists);
-
-                LoadFormSettings();
-
-                // Force display  so that any "Loading..." or error 
-                // message overlays the main form.
-                Show();
-                Invalidate();
-                Update();
-
-                SubscribeToTestEvents();
-
-                Presenter.OnStartup();
-            }
-        }
-
-        private void LoadFormSettings()
-        {
-            switch (UserSettings.Gui.DisplayFormat)
-            {
-                case "Full":
-                    displayFullGui();
-                    break;
-                case "Mini":
-                    displayMiniGui();
-                    break;
-                default:
-                    throw new ApplicationException("Invalid Setting");
-            }
-
-            // Handle changes to form position
-            Move += new System.EventHandler(NUnitForm_Move);
-            Resize += new System.EventHandler(NUnitForm_Resize);
-
-            // Set the splitter position
-            int splitPosition = UserSettings.Gui.MainForm.SplitPosition;
-            if (splitPosition >= treeSplitter.MinSize && splitPosition < ClientSize.Width)
-                treeSplitter.SplitPosition = splitPosition;
-
-            // Handle changes in splitter positions
-            treeSplitter.SplitterMoved += new SplitterEventHandler(treeSplitter_SplitterMoved);
-
-            // Get the fixed font used by result tabs
-            _fixedFont = UserSettings.Gui.FixedFont;
-
-            // Set the selected result tab
-            tabControl.SelectedIndex = UserSettings.Gui.SelectedTab;
-
-            // Handle changes in settings
-            UserSettings.Changed += (object sender, SettingsEventArgs e) =>
-            {
-                if (e.SettingName == "Gui.Options.DisplayFormat")
-                {
-                    if (UserSettings.Gui.DisplayFormat == "Full")
-                        displayFullGui();
-                    else
-                        displayMiniGui();
-                }
-                //else if (args.SettingName.StartsWith("Gui.TextOutput.") && args.SettingName.EndsWith(".Content"))
-                //{
-                //    TestLoader.IsTracingEnabled = resultTabs.IsTracingEnabled;
-                //    TestLoader.LoggingThreshold = resultTabs.MaximumLogLevel;
-                //}
-            };
-        }
-
-        private bool IsValidLocation( Point location )
-        {
-            Rectangle myArea = new Rectangle( location, Size );
-            bool intersect = false;
-            foreach (System.Windows.Forms.Screen screen in System.Windows.Forms.Screen.AllScreens)
-            {
-                intersect |= myArea.IntersectsWith(screen.WorkingArea);
-            }
-            return intersect;
-        }
-
-        // Save settings changed by moving the form
-        private void NUnitForm_Move(object sender, System.EventArgs e)
-        {
-            switch( _displayFormat )
-            {
-                case "Full":
-                default:
-                    if ( WindowState == FormWindowState.Normal )
-                    {
-                        UserSettings.Gui.MainForm.Left = Location.X;
-                        UserSettings.Gui.MainForm.Top = Location.Y;
-                        UserSettings.Gui.MainForm.Maximized = false;
-                    }
-                    break;
-                case "Mini":
-                    if ( WindowState == FormWindowState.Normal )
-                    {
-                        UserSettings.Gui.MiniForm.Left = Location.X;
-                        UserSettings.Gui.MiniForm.Top = Location.Y;
-                        UserSettings.Gui.MiniForm.Maximized = false;
-                    }
-                    break;
-            }
-        }
-
-        // Save settings that change when window is resized
-        private void NUnitForm_Resize(object sender,System.EventArgs e)
-        {
-            if ( WindowState == FormWindowState.Normal )
-            {
-                if (_displayFormat == "Full")
-                {
-                    UserSettings.Gui.MainForm.Width = Size.Width;
-                    UserSettings.Gui.MainForm.Height = Size.Height;
-                }
-                else
-                {
-                    UserSettings.Gui.MiniForm.Width = Size.Width;
-                    UserSettings.Gui.MiniForm.Height = Size.Height;
-                }
-            }
-        }
-
-        // Splitter moved so save it's position
-        private void treeSplitter_SplitterMoved( object sender, SplitterEventArgs e )
-        {
-            UserSettings.Gui.MainForm.SplitPosition = treeSplitter.SplitPosition;
-        }
-
-        /// <summary>
-        ///	Form is about to close, first see if we 
-        ///	have a test run going on and if so whether
-        ///	we should cancel it. Then unload the 
-        ///	test and save the latest form position.
-        /// </summary>
-        private void NUnitForm_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (Model.IsPackageLoaded)
-            {
-                if (Model.IsTestRunning) // TODO: Job for Presenter?
-                {
-                    DialogResult dialogResult = MessageDisplay.Ask(
-                        "A test is running, do you want to stop the test and exit?");
-
-                    if (dialogResult == DialogResult.No)
-                    {
-                        e.Cancel = true;
-                        return;
-                    }
-
-                    Model.CancelTestRun();
-                }
-
-                if (Presenter.CloseProject() == DialogResult.Cancel)
-                    e.Cancel = true;
-            }
-        }
-
-        #endregion
-
-        #region Other UI Event Handlers
-
-        /// <summary>
-        /// When the Run Button is clicked, run the selected test.
-        /// </summary>
-        private void runButton_Click(object sender, System.EventArgs e)
-        {
-            Presenter.RunSelectedTests();
-        }
-
-        /// <summary>
-        /// When the Stop Button is clicked, cancel running test
-        /// </summary>
-        private void stopButton_Click(object sender, System.EventArgs e)
-        {
-            CancelRun();
-        }
-
-        private void CancelRun()
-        {
-            EnableStopCommand( false );
-
-            if (Model.IsTestRunning)
-            {
-                DialogResult dialogResult = MessageDisplay.Ask(
-                    "Do you want to cancel the running test?");
-
-                if (dialogResult == DialogResult.No)
-                    EnableStopCommand(true);
-                else
-                    Model.CancelTestRun();
-            }
-        }
-
-        private void testTree_SelectedTestsChanged(object sender, SelectedTestsChangedEventArgs e)
-        {
-            if (!Model.IsTestRunning)
-            {
-                suiteName.Text = e.TestName;
-                //statusBar.Initialize(e.TestCount, e.TestName);
-            }
-        }
-
-        private void tabControl_SelectedIndexChanged(object sender, System.EventArgs e)
-        {
-            int index = tabControl.SelectedIndex;
-            if (index >= 0 && index < tabControl.TabCount)
-                UserSettings.Gui.SelectedTab = index;
-        }
 
         #endregion
 
@@ -1596,22 +1052,6 @@ namespace TestCentric.Gui
 
         #region Event Handlers for Test Load and Unload
 
-        //private void OnTestLoadStarting(TestFilesLoadingEventArgs e)
-        //{
-        //    Presenter.EnableRunCommand( false );
-        //    longOpDisplay = new LongRunningOperationDisplay( this, "Loading..." );
-        //}
-
-        //private void OnTestUnloadStarting( object sender, TestEventArgs e )
-        //{
-        //    Presenter.EnableRunCommand( false );
-        //}
-
-        //private void OnReloadStarting( object sender, TestEventArgs e )
-        //{
-        //    Presenter.EnableRunCommand( false );
-        //    longOpDisplay = new LongRunningOperationDisplay( this, "Reloading..." );
-        //}
 
         ///// <summary>
         ///// A test suite has been loaded, so update 
@@ -1619,13 +1059,6 @@ namespace TestCentric.Gui
         ///// </summary>
         //private void OnTestLoaded( TestNodeEventArgs e )
         //{
-        //    if ( longOpDisplay != null )
-        //    {
-        //        longOpDisplay.Dispose();
-        //        longOpDisplay = null;
-        //    }
-        //    Presenter.EnableRunCommand( true );
-
         //    //if ( TestLoader.TestCount == 0 )
         //    //{
         //    //    foreach( TestAssemblyInfo info in TestLoader.AssemblyInfo )
@@ -1641,7 +1074,6 @@ namespace TestCentric.Gui
         ///// </summary>
         //private void OnTestUnloaded( TestEventArgs e )
         //{
-        //    suiteName.Text = null;
         //    runCount.Text = null;
         //    Presenter.EnableRunCommand( false );
         //    Refresh();
@@ -1713,126 +1145,6 @@ namespace TestCentric.Gui
             Text = fileName == null 
                 ? "NUnit"
                 : string.Format( "{0} - NUnit", Path.GetFileName( fileName ) );
-        }
-
-        public void EnableRunCommand( bool enable )
-        {
-            runButton.Enabled = enable;
-            runAllMenuItem.Enabled = enable;
-            runSelectedMenuItem.Enabled = enable;
-            runFailedMenuItem.Enabled = enable && Model.HasResults && testTree.FailedTests != null;
-        }
-
-        public void EnableStopCommand( bool enable )
-        {
-            stopButton.Enabled = enable;
-            stopRunMenuItem.Enabled = enable;
-        }
-
-        private void SubscribeToTestEvents()
-        {
-            Model.Events.RunStarting += (RunStartingEventArgs e) =>
-            {
-                //suiteName.Text = e.Name;
-                EnableRunCommand(false);
-                EnableStopCommand(true);
-                saveResultsMenuItem.Enabled = false;
-            };
-
-            Model.Events.RunFinished += (TestResultEventArgs e) =>
-            {
-                EnableStopCommand(false);
-
-                //if ( e.Exception != null )
-                //{
-                //    if ( ! ( e.Exception is System.Threading.ThreadAbortException ) )
-                //        MessageDisplay.Error("NUnit Test Run Failed", e.Exception);
-                //}
-
-                ResultSummary summary = ResultSummaryCreator.FromResultNode(e.Result);
-                DisplaySummary(string.Format(
-                    "Passed: {0}   Failed: {1}   Errors: {2}   Inconclusive: {3}   Invalid: {4}   Ignored: {5}   Skipped: {6}   Time: {7}",
-                    summary.PassCount, summary.FailedCount, summary.ErrorCount, summary.InconclusiveCount, summary.InvalidCount, summary.IgnoreCount, summary.SkipCount, summary.Duration));
-
-                //string resultPath = Path.Combine(TestProject.BasePath, "TestResult.xml");
-                //try
-                //{
-                //    TestLoader.SaveLastResult(resultPath);
-                //    log.Debug("Saved result to {0}", resultPath);
-                //}
-                //catch (Exception ex)
-                //{
-                //    log.Warning("Unable to save result to {0}\n{1}", resultPath, ex.ToString());
-                //}
-
-                EnableRunCommand(true);
-                saveResultsMenuItem.Enabled = true;
-
-                if (e.Result.Outcome.Status == TestStatus.Failed)
-                    Activate();
-            };
-
-            Model.Events.TestsLoading += (TestFilesLoadingEventArgs e) =>
-            {
-                EnableRunCommand(false);
-                saveResultsMenuItem.Enabled = false;
-                _longOpDisplay = new LongRunningOperationDisplay(this, "Loading...");
-            };
-
-            Model.Events.TestLoaded += (TestNodeEventArgs e) =>
-            {
-                if (_longOpDisplay != null)
-                {
-                    _longOpDisplay.Dispose();
-                    _longOpDisplay = null;
-                }
-
-                EnableRunCommand(true);
-                saveResultsMenuItem.Enabled = false;
-
-                foreach (var assembly in Model.TestAssemblies)
-                    if (assembly.RunState == RunState.NotRunnable)
-                        MessageDisplay.Error(assembly.GetProperty("_SKIPREASON"));
-
-                //if ( TestLoader.TestCount == 0 )
-                //{
-                //    foreach( TestAssemblyInfo info in TestLoader.AssemblyInfo )
-                //        if ( info.TestFrameworks.Count > 0 ) return;
-
-                //    MessageDisplay.Error("This assembly was not built with any known testing framework.");
-                //}
-            };
-
-            //Model.Events.TestLoadFailed += new TestEventHandler(OnTestLoadFailure);
-            //Model.Events.TestsUnloading += new TestEventHandler(OnTestUnloadStarting);
-
-            Model.Events.TestUnloaded += (TestEventArgs) =>
-            {
-                suiteName.Text = null;
-                runCount.Text = null;
-                EnableRunCommand(false);
-                saveResultsMenuItem.Enabled = false;
-                Refresh();
-            };
-
-            //Model.Events.TestReloading += new TestEventHandler(OnReloadStarting);
-
-            Model.Events.TestReloaded += (TestNodeEventArgs ea) =>
-            {
-                //SetTitleBar(TestProject.Name);
-
-                if (_longOpDisplay != null)
-                {
-                    _longOpDisplay.Dispose();
-                    _longOpDisplay = null;
-                }
-
-                if (UserSettings.Gui.ClearResultsOnReload)
-                    runCount.Text = null;
-
-                EnableRunCommand(true);
-                saveResultsMenuItem.Enabled = false;
-            };
         }
 
         #endregion
