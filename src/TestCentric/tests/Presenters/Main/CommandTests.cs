@@ -66,8 +66,8 @@ namespace TestCentric.Gui.Presenters.Main
         [Test]
         public void CloseCommand_CallsUnloadTest()
         {
-            View.CloseCommand.Execute += Raise.Event<CommandHandler>();
-            Model.Received().UnloadTests();
+            _view.CloseCommand.Execute += Raise.Event<CommandHandler>();
+            _model.Received().UnloadTests();
         }
         
         //[Test]
@@ -93,8 +93,8 @@ namespace TestCentric.Gui.Presenters.Main
         [Test]
         public void ReloadTestsCommand_CallsReloadTests()
         {
-            View.ReloadTestsCommand.Execute += Raise.Event<CommandHandler>();
-            Model.Received().ReloadTests();
+            _view.ReloadTestsCommand.Execute += Raise.Event<CommandHandler>();
+            _model.Received().ReloadTests();
         }
 
         public void SelectRuntimeCommand_PopsUpMenu()

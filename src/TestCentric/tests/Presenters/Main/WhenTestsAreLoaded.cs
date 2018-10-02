@@ -33,19 +33,17 @@ namespace TestCentric.Gui.Presenters.Main
 	public class WhenTestsAreLoaded : MainPresenterTestBase
 	{
 		[SetUp]
-		public void SimulateTestReload()
+		public void SimulateTestLoad()
 		{
 			ClearAllReceivedCalls();
 
-			Model.HasTests.Returns(true);
-			Model.IsTestRunning.Returns(false);
+			_model.HasTests.Returns(true);
+			_model.IsTestRunning.Returns(false);
 
-			XmlDocument doc = new XmlDocument();
-			doc.LoadXml("<test-suite id='1'/>");
-			TestNode testNode = new TestNode(doc.FirstChild);
-			Model.Tests.Returns(testNode);
-			Model.TestAssemblies.Returns(new TestSelection(new []{testNode}));
-			Model.Events.TestLoaded += Raise.Event<TestNodeEventHandler>(new TestNodeEventArgs(testNode));
+			TestNode testNode = new TestNode("<test-suite id='1'/>");
+			_model.Tests.Returns(testNode);
+			_model.TestAssemblies.Returns(new TestSelection(new []{testNode}));
+			FireTestLoadedEvent(testNode);
 		}
         
 #if NYI // Add after implementation of project or package saving

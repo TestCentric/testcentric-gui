@@ -31,7 +31,7 @@ using System.Collections;
 
 namespace TestCentric.Gui
 {
-    using Controls;
+    using Views;
     using Model;
 
     public partial class TestPropertiesDialog : Form
@@ -46,12 +46,14 @@ namespace TestCentric.Gui
         private Image pinnedImage;
         private Image unpinnedImage;
 
-        public TestPropertiesDialog(TestSuiteTreeNode node)
-        {
-            InitializeComponent();
+        public TestPropertiesDialog()
+		{
+			InitializeComponent();
 
-            this._treeNode = node;
-        }
+			pinnedImage = new Bitmap(typeof(TestPropertiesDialog), "Images.pinned.gif");
+            unpinnedImage = new Bitmap(typeof(TestPropertiesDialog), "Images.unpinned.gif");
+            pinButton.Image = unpinnedImage;
+		}
 
         #region Properties
 
@@ -66,16 +68,14 @@ namespace TestCentric.Gui
 
         #region Public Methods
 
-        public void DisplayProperties()
-        {
-            DisplayProperties(this._treeNode);
-        }
-
         public void DisplayProperties(TestSuiteTreeNode node)
         {
-            this._treeNode = node;
-            this._testNode = node.Test;
-            this._resultNode = node.Result;
+			if (node == null)
+				throw new ArgumentNullException(nameof(node));
+			
+            _treeNode = node;
+            _testNode = node.Test;
+            _resultNode = node.Result;
 
             SetTitleBarText();
 
@@ -164,6 +164,8 @@ namespace TestCentric.Gui
 
             this.ClientSize = new Size(
                 this.ClientSize.Width, groupBox2.Bottom + 12);
+
+			Show();
         }
 
         private void FillPropertyList()
@@ -197,15 +199,13 @@ namespace TestCentric.Gui
         #region Event Handlers and Overrides
 
         private void TestPropertiesDialog_Load(object sender, System.EventArgs e)
-        {
-            pinnedImage = new Bitmap(typeof(TestPropertiesDialog), "Images.pinned.gif");
-            unpinnedImage = new Bitmap(typeof(TestPropertiesDialog), "Images.unpinned.gif");
-            pinButton.Image = unpinnedImage;
-
-            if (!this.DesignMode)
-                DisplayProperties();
-
-            _treeNode.TreeView.AfterSelect += new TreeViewEventHandler(OnSelectedNodeChanged);
+		{
+            //pinnedImage = new Bitmap(typeof(TestPropertiesDialog), "Images.pinned.gif");
+            //unpinnedImage = new Bitmap(typeof(TestPropertiesDialog), "Images.unpinned.gif");
+            //pinButton.Image = unpinnedImage;
+            
+			//if (!this.DesignMode && _treeNode != null)
+				//DisplayProperties(_treeNode);
         }
 
         private void pinButton_Click(object sender, System.EventArgs e)
@@ -220,28 +220,19 @@ namespace TestCentric.Gui
         {
             if (clientWidth != this.ClientSize.Width)
             {
-                if (this._treeNode != null)
-                    this.DisplayProperties();
+                if (_treeNode != null)
+                    DisplayProperties(_treeNode);
+				
                 clientWidth = this.ClientSize.Width;
             }
         }
 
         private void TestPropertiesDialog_ResizeEnd(object sender, EventArgs e)
         {
-            this.ClientSize = new Size(
-                this.ClientSize.Width, groupBox2.Bottom + 12);
+            ClientSize = new Size(
+                ClientSize.Width, groupBox2.Bottom + 12);
 
-            clientWidth = this.ClientSize.Width;
-        }
-
-        private void OnSelectedNodeChanged(object sender, TreeViewEventArgs e)
-        {
-            if (pinButton.Checked)
-            {
-                DisplayProperties((TestSuiteTreeNode)e.Node);
-            }
-            else
-                this.Close();
+            clientWidth = ClientSize.Width;
         }
 
         protected override bool ProcessKeyPreview(ref System.Windows.Forms.Message m)
@@ -268,12 +259,17 @@ namespace TestCentric.Gui
         #region Helper Methods
 
         private void SetTitleBarText()
-        {
-            string name = _testNode.Name;
-            int index = name.LastIndexOfAny(new char[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar });
-            if (index >= 0)
-                name = name.Substring(index + 1);
-            this.Text = string.Format("{0} Properties - {1}", _treeNode.TestType, name);
+		{
+            string name = _testNode?.Name;
+			if (name == null)
+				Text = "Properties";
+			else
+			{
+				int index = name.LastIndexOfAny(new char[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar });
+				if (index >= 0)
+					name = name.Substring(index + 1);
+				Text = $"{_treeNode.TestType} Properties - {name}";
+			}
         }
 
         private void BeginPanel()

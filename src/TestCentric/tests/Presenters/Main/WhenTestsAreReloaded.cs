@@ -37,14 +37,12 @@ namespace TestCentric.Gui.Presenters.Main
 		{
 			ClearAllReceivedCalls();
 
-			Model.HasTests.Returns(true);
-			Model.IsTestRunning.Returns(false);
+			_model.HasTests.Returns(true);
+			_model.IsTestRunning.Returns(false);
 
-			XmlDocument doc = new XmlDocument();
-			doc.LoadXml("<test-suite id='1'/>");
-			TestNode testNode = new TestNode(doc.FirstChild);
-			Model.Tests.Returns(testNode);
-			Model.Events.TestReloaded += Raise.Event<TestNodeEventHandler>(new TestNodeEventArgs(testNode));
+			TestNode testNode = new TestNode("<test-suite id='1'/>");
+			_model.Tests.Returns(testNode);
+			FireTestReloadedEvent(testNode);
 		}
 
 		#if NYI // Add after implementation of project or package saving

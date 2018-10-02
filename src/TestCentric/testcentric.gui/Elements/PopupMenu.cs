@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Copyright (c) 2018 Charlie Poole
+// Copyright (c) 2015-2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -8,10 +8,10 @@
 // distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so, subject to
 // the following conditions:
-//
+// 
 // The above copyright notice and this permission notice shall be
 // included in all copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 // MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -21,24 +21,22 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-namespace TestCentric.Gui.Controls
-{
-    using Model;
-    using Presenters;
+using System.Windows.Forms;
 
-    /// <summary>
-    /// IViewControl is implemented by any control that
-    /// functions as a view in the MVP architecture.
-    /// </summary>
-    public interface IViewControl
+namespace TestCentric.Gui.Elements
+{
+    public class PopupMenu : MenuElement, IMenu
     {
-        /// <summary>
-        /// InitializeView is used by forms and controls to gain access
-        /// to the model and presenter, which they may save for later use,
-        /// and to set up any event handling that is necessary.
-        /// </summary>
-        /// <param name="model"></param>
-        /// <param name="presenter"></param>
-        void InitializeView(ITestModel model);
+        public event CommandHandler Popup;
+
+        public PopupMenu(MenuItem menuItem) : base(menuItem)
+        {
+            menuItem.Popup += (s, e) => Popup?.Invoke();
+        }
+
+        public Menu.MenuItemCollection MenuItems
+        {
+            get { return _menuItem.MenuItems; }
+        }
     }
-}
+ }

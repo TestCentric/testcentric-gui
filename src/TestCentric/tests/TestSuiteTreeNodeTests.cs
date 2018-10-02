@@ -23,12 +23,11 @@
 
 using System;
 using NUnit.Framework;
-using NUnit.Tests.Assemblies;
 using TestCentric.Gui.Model;
 
 namespace TestCentric.Gui.Tests
 {
-    using Controls;
+    using Views;
 
     /// <summary>
     /// Summary description for TestSuiteTreeNodeTests.

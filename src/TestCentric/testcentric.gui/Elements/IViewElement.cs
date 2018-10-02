@@ -29,7 +29,7 @@ namespace TestCentric.Gui.Elements
     /// The IViewElement interface wraps an individual gui
     /// item like a control or toolstrip item. It is generally
     /// exposed by views and is the base of other interfaces
-    /// in the NUnit.UiKit.Elements namespace.
+    /// in the TestCentric.Gui.Elements namespace.
     /// </summary>
     public interface IViewElement
     {
@@ -42,11 +42,6 @@ namespace TestCentric.Gui.Elements
         /// Gets or sets the Visible status of the element
         /// </summary>
         bool Visible { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Text of an element
-        /// </summary>
-        string Text { get; set; }
 
         ///// <summary>
         ///// Invoke a delegate if necessary, otherwise just call it

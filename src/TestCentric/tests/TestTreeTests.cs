@@ -28,7 +28,7 @@ using NUnit.Framework;
 
 namespace TestCentric.Gui.Tests
 {
-    using Controls;
+    using Views;
 
     [TestFixture, Ignore("Same internal fields no longer exist to test this. Need to rewrite.")]
     public class TestTreeTests

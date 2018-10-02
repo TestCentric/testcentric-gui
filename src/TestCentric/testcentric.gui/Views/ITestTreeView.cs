@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Copyright (c) 2015-2018 Charlie Poole
+// Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -21,23 +21,55 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System.Drawing;
+using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace TestCentric.Gui.Elements
+namespace TestCentric.Gui.Views
 {
-    /// <summary>
-    /// IControlElement is implemented by elements that wrap controls.
+	using Model; // To be removed
+	using Elements;
+
+	/// <summary>
+    /// Indicates how a tree should be displayed
     /// </summary>
-    public interface IControlElement : ITextElement
+    public enum DisplayStyle
     {
-        Point Location { get; set; }
-        Size Size { get; set; }
-        Size ClientSize { get; set; }
+        Auto,       // Select based on space available
+        Expand,     // Expand fully
+        Collapse,   // Collapase fully
+        HideTests   // Expand all but the fixtures, leaving
+                    // leaf nodes hidden
     }
 
-    public interface IControlElement<T> : IControlElement where T : Control
+	public interface ITestTreeView
     {
-        T Control { get; }
+		ContextMenu ContextMenu { get; }
+
+		ICommand RunCommand { get; }
+		IChecked ShowFailedAssumptions { get; }
+		ICommand PropertiesCommand { get; }
+		// TODO: Can we eliminate need for having both of the following?
+		IChecked ShowCheckBoxes { get; }
+		bool CheckBoxes { get; set; }
+
+		DisplayStyle DisplayStyle { get; set; }
+		string AlternateImageSet { get; set; }
+
+		TreeNodeCollection Nodes { get; }
+		TreeNode TopNode { get; }
+        TestSuiteTreeNode ContextNode { get; }
+		TreeNode SelectedNode { get; }
+		TestNode SelectedTest { get; }
+		TestNode[] SelectedTests { get; }
+
+		void Clear();
+		void Reload(TestNode test);
+
+		void ShowPropertiesDialog(TestSuiteTreeNode node);
+		void ClosePropertiesDialog();
+		void CheckPropertiesDialog();
+
+		void SetTestResult(ResultNode result);
     }
 }

@@ -27,25 +27,19 @@ using NSubstitute;
 
 namespace TestCentric.Gui.Presenters.Main
 {
-    using Model;
-    using Views;
+	using Model;
+	using Views;
 	using Elements;
 
-    public class MainPresenterTestBase
+	public class MainPresenterTestBase : PresenterTestBase<IMainView>
     {
-        protected IMainView View;
-        protected ITestModel Model;
         protected TestCentricPresenter Presenter;
 
         [SetUp]
         public void CreatePresenter()
         {
-			var settings = new FakeUserSettings();
-            View = Substitute.For<IMainView>();
-            Model = Substitute.For<ITestModel>();
-			Model.Services.UserSettings.Returns(settings);
 
-            Presenter = new TestCentricPresenter(View, Model, new CommandLineOptions());
+            Presenter = new TestCentricPresenter(_view, _model, new CommandLineOptions());
         }
 
         [TearDown]
@@ -54,24 +48,13 @@ namespace TestCentric.Gui.Presenters.Main
             Presenter = null;
         }
 
-        protected void ClearAllReceivedCalls()
-		{
-			View.ClearReceivedCalls();
-
-			foreach (PropertyInfo prop in View.GetType().GetProperties())
-			{
-				if (typeof(IViewElement).IsAssignableFrom(prop.PropertyType))
-					prop.GetValue(View).ClearReceivedCalls();
-			}
-		}
-
 		protected IViewElement ViewElement(string propName)
         {
-            var prop = View.GetType().GetProperty(propName);
+            var prop = _view.GetType().GetProperty(propName);
             if (prop == null)
                 Assert.Fail($"View has no property named {propName}.");
 
-            var element = prop.GetValue(View) as IViewElement;
+            var element = prop.GetValue(_view) as IViewElement;
             if (element == null)
                 Assert.Fail($"Property {propName} is not an IViewElement. It is declared as {prop.PropertyType}.");
 

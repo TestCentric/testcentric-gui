@@ -21,6 +21,8 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System.Collections.Generic;
+using System.Reflection;
 using System.Xml;
 using NSubstitute;
 using NUnit.Framework;
@@ -28,136 +30,167 @@ using NUnit.Framework;
 namespace TestCentric.Gui.Presenters
 {
     using Model;
+	using Elements;
 
-    /// <summary>
-    /// Base class for presenter tests, providing utiity methods
-    /// </summary>
-    public class PresenterTestBase<TView> where TView : class
-    {
-        protected TView _view;
-        protected ITestModel _model;
-        protected FakeUserSettings _settings;
+	/// <summary>
+	/// Base class for presenter tests, providing utiity methods
+	/// </summary>
+	public class PresenterTestBase<TView> where TView : class
+	{
+		protected TView _view;
+		protected ITestModel _model;
+		protected FakeUserSettings _settings;
 
-        [SetUp]
-        public void Initialize()
-        {
-            _view = Substitute.For<TView>();
-            _model = Substitute.For<ITestModel>();
-            _settings = new FakeUserSettings();
-            _model.Services.UserSettings.Returns(_settings);
-        }
+		[SetUp]
+		public void Initialize()
+		{
+			_view = Substitute.For<TView>();
+			_model = Substitute.For<ITestModel>();
+			_settings = new FakeUserSettings();
+			_model.Services.UserSettings.Returns(_settings);
+		}
 
-        protected void FireTestLoadedEvent(TestNode testNode)
-        {
-            _model.Events.TestLoaded += Raise.Event<TestNodeEventHandler>(new TestNodeEventArgs(testNode));
-        }
+		#region Helper Methods
 
-        protected void FireTestReloadedEvent(TestNode testNode)
-        {
-            _model.Events.TestReloaded += Raise.Event<TestNodeEventHandler>(new TestNodeEventArgs(testNode));
-        }
+		protected void ClearAllReceivedCalls()
+		{
+			_view.ClearReceivedCalls();
 
-        protected void FireTestUnloadedEvent()
-        {
-            _model.Events.TestUnloaded += Raise.Event<TestEventHandler>(new TestEventArgs());
-        }
+			foreach (PropertyInfo prop in _view.GetType().GetProperties())
+			{
+				if (typeof(IViewElement).IsAssignableFrom(prop.PropertyType))
+					prop.GetValue(_view).ClearReceivedCalls();
+			}
+		}
 
-        protected void FireRunStartingEvent(int testCount)
-        {
-            _model.Events.RunStarting += Raise.Event<RunStartingEventHandler>(new RunStartingEventArgs(testCount));
-        }
+		protected void FireTestsLoadingEvent(IList<string> testFiles)
+		{
+			_model.Events.TestsLoading += Raise.Event<TestFilesLoadingEventHandler>(new TestFilesLoadingEventArgs(testFiles));
+		}
 
-        protected void FireRunFinishedEvent(ResultNode result)
-        {
-            _model.Events.RunFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(result));
-        }
+		protected void FireTestLoadedEvent(TestNode testNode)
+		{
+			_model.Events.TestLoaded += Raise.Event<TestNodeEventHandler>(new TestNodeEventArgs(testNode));
+		}
 
-        protected void FireTestStartingEvent(string testName)
-        {
-            var start = new TestNode($"<test-start fullname='{testName}'/>");
-            _model.Events.TestStarting += Raise.Event<TestNodeEventHandler>(new TestNodeEventArgs(start));
-        }
+		protected void FireTestsReloadingEvent()
+		{
+			_model.Events.TestsReloading += Raise.Event<TestEventHandler>(new TestEventArgs());
+		}
 
-        protected void FireSuiteStartingEvent(string testName)
-        {
-            var start = new TestNode($"<suite-start fullname='{testName}'/>");
-            _model.Events.SuiteStarting += Raise.Event<TestNodeEventHandler>(new TestNodeEventArgs(start));
-        }
+		protected void FireTestReloadedEvent(TestNode testNode)
+		{
+			_model.Events.TestReloaded += Raise.Event<TestNodeEventHandler>(new TestNodeEventArgs(testNode));
+		}
 
-        protected void FireTestFinishedEvent(string testName, string result, string output = null)
-        {
-            FireTestFinishedEvent( CreateResultNode("test-case", testName, result, output) );
+		protected void FireTestUnloadedEvent()
+		{
+			_model.Events.TestUnloaded += Raise.Event<TestEventHandler>(new TestEventArgs());
+		}
 
-        }
+		protected void FireTestsUnloadingEvent()
+		{
+			_model.Events.TestsUnloading += Raise.Event<TestEventHandler>(new TestEventArgs());
+		}
 
-        protected void FireTestFinishedEvent(string testName, string result, FailureSite site)
-        {
-            FireTestFinishedEvent(CreateResultNode("test-case", testName, result, site));
-        }
+		protected void FireRunStartingEvent(int testCount)
+		{
+			_model.Events.RunStarting += Raise.Event<RunStartingEventHandler>(new RunStartingEventArgs(testCount));
+		}
 
-        protected void FireTestFinishedEvent(ResultNode result)
-        {
-            _model.Events.TestFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(result));
-        }
+		protected void FireRunFinishedEvent(ResultNode result)
+		{
+			_model.Events.RunFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(result));
+		}
 
-        protected void FireSuiteFinishedEvent(string testName, string result, string output = null)
-        {
-            FireSuiteFinishedEvent( CreateResultNode("test-suite", testName, result, output) );
-        }
+		protected void FireTestStartingEvent(string testName)
+		{
+			var start = new TestNode($"<test-start fullname='{testName}'/>");
+			_model.Events.TestStarting += Raise.Event<TestNodeEventHandler>(new TestNodeEventArgs(start));
+		}
 
-        protected void FireSuiteFinishedEvent(string testName, string result, FailureSite site)
-        {
-            FireSuiteFinishedEvent(CreateResultNode("test-suite", testName, result, site));
-        }
+		protected void FireSuiteStartingEvent(string testName)
+		{
+			var start = new TestNode($"<suite-start fullname='{testName}'/>");
+			_model.Events.SuiteStarting += Raise.Event<TestNodeEventHandler>(new TestNodeEventArgs(start));
+		}
 
-        protected void FireSuiteFinishedEvent(ResultNode result)
-        {
-            _model.Events.SuiteFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(result));
-        }
+		protected void FireTestFinishedEvent(string testName, string result, string output = null)
+		{
+			FireTestFinishedEvent(CreateResultNode("test-case", testName, result, output));
 
-        private static ResultNode CreateResultNode(string element, string testName, string result, string output = null)
-        {
-            return new ResultNode(CreateResultXml(element, testName, result, output));
-        }
+		}
 
-        private static ResultNode CreateResultNode(string element, string testName, string result, FailureSite site)
-        {
-            return new ResultNode(CreateResultXml(element, testName, result, site));
-        }
+		protected void FireTestFinishedEvent(string testName, string result, FailureSite site)
+		{
+			FireTestFinishedEvent(CreateResultNode("test-case", testName, result, site));
+		}
 
-        private static XmlNode CreateResultXml(string element, string testName, string result, FailureSite site)
-        {
-            var xmlNode = CreateResultXml(element, testName, result);
-            xmlNode.AddAttribute("site", site.ToString());
-            return xmlNode;
-        }
+		protected void FireTestFinishedEvent(ResultNode result)
+		{
+			_model.Events.TestFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(result));
+		}
 
-        private static XmlNode CreateResultXml(string element, string testName, string result, string output = null)
-        {
-            int colon = result.IndexOf(':');
-            string xml;
+		protected void FireSuiteFinishedEvent(string testName, string result, string output = null)
+		{
+			FireSuiteFinishedEvent(CreateResultNode("test-suite", testName, result, output));
+		}
 
-            if (colon > 0)
-            {
-                string status = result.Substring(0, colon);
-                string label = result.Substring(colon + 1);
-                xml = $"<{element} fullname='{testName}' result='{status}' label='{label}'/>";
-            }
-            else
-            {
-                xml = $"<{element} fullname='{testName}' result='{result}'/>";
-            }
+		protected void FireSuiteFinishedEvent(string testName, string result, FailureSite site)
+		{
+			FireSuiteFinishedEvent(CreateResultNode("test-suite", testName, result, site));
+		}
 
-            var xmlNode = XmlHelper.CreateXmlNode(xml);
-            if (output != null)
-                xmlNode.AddElementWithCDataSection("output", output);
+		protected void FireSuiteFinishedEvent(ResultNode result)
+		{
+			_model.Events.SuiteFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(result));
+		}
 
-            return xmlNode;
-        }
+		private static ResultNode CreateResultNode(string element, string testName, string result, string output = null)
+		{
+			return new ResultNode(CreateResultXml(element, testName, result, output));
+		}
 
-        protected void FireTestOutputEvent(string testName, string stream, string text)
-        {
-            _model.Events.TestOutput += Raise.Event<TestOutputEventHandler>(new TestOutputEventArgs(testName, stream, text));
-        }
-    }
+		private static ResultNode CreateResultNode(string element, string testName, string result, FailureSite site)
+		{
+			return new ResultNode(CreateResultXml(element, testName, result, site));
+		}
+
+		private static XmlNode CreateResultXml(string element, string testName, string result, FailureSite site)
+		{
+			var xmlNode = CreateResultXml(element, testName, result);
+			xmlNode.AddAttribute("site", site.ToString());
+			return xmlNode;
+		}
+
+		private static XmlNode CreateResultXml(string element, string testName, string result, string output = null)
+		{
+			int colon = result.IndexOf(':');
+			string xml;
+
+			if (colon > 0)
+			{
+				string status = result.Substring(0, colon);
+				string label = result.Substring(colon + 1);
+				xml = $"<{element} fullname='{testName}' result='{status}' label='{label}'/>";
+			}
+			else
+			{
+				xml = $"<{element} fullname='{testName}' result='{result}'/>";
+			}
+
+			var xmlNode = XmlHelper.CreateXmlNode(xml);
+			if (output != null)
+				xmlNode.AddElementWithCDataSection("output", output);
+
+			return xmlNode;
+		}
+
+		protected void FireTestOutputEvent(string testName, string stream, string text)
+		{
+			_model.Events.TestOutput += Raise.Event<TestOutputEventHandler>(new TestOutputEventArgs(testName, stream, text));
+		}
+
+        #endregion
+	}
 }

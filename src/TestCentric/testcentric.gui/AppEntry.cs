@@ -94,6 +94,7 @@ namespace TestCentric.Gui
             new ErrorsAndFailuresPresenter(view.ErrorsAndFailuresView, model);
             new TestsNotRunPresenter(view.TestsNotRunView, model);
             new TextOutputPresenter(view.TextOutputView, model);
+			new TreeViewPresenter(view.TreeView, model);
             new TestCentricPresenter(view, model, options);
 
             try

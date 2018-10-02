@@ -25,7 +25,7 @@ using System;
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace TestCentric.Gui.Controls
+namespace TestCentric.Gui.Views
 {
     using Model;
 

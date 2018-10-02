@@ -26,18 +26,17 @@ using System.Windows.Forms;
 namespace TestCentric.Gui.Elements
 {
     /// <summary>
-    /// MenuElement is the implementation of ToolStripItem 
-    /// used in the actual application.
+    /// MenuElement wraps a MenuItem
     /// </summary>
-    public abstract class AbstractMenuElement
+	public abstract class MenuElement : IMenuElement
     {
         protected MenuItem _menuItem;
         private Form _form;
 
-        public AbstractMenuElement(MenuItem menuItem)
+        public MenuElement(MenuItem menuItem)
         {
             _menuItem = menuItem;
-            _form = menuItem.GetMainMenu().GetForm();
+            _form = menuItem.GetMainMenu()?.GetForm();
         }
 
         public bool Enabled
@@ -51,6 +50,18 @@ namespace TestCentric.Gui.Elements
                 });
             }
         }
+
+        public bool DefaultItem
+		{
+			get { return _menuItem.DefaultItem; }
+			set
+			{
+				InvokeIfRequired(() =>
+				{
+					_menuItem.DefaultItem = value;
+				});
+			}
+		}
 
         public string Text
         {
@@ -78,64 +89,10 @@ namespace TestCentric.Gui.Elements
 
         protected void InvokeIfRequired(MethodInvoker del)
         {
-            if (_form.InvokeRequired)
+            if (_form!= null && _form.InvokeRequired)
                 _form.BeginInvoke(del, new object[0]);
             else
                 del();
-        }
-    }
-
-    public class MenuCommand : AbstractMenuElement, ICommand
-    {
-        public event CommandHandler Execute;
-
-        public MenuCommand(MenuItem menuItem) : base(menuItem)
-        {
-            menuItem.Click += (s, e) => Execute?.Invoke();
-        }
-    }
-
-    public class PopupMenu : AbstractMenuElement, IMenu
-    {
-        public event CommandHandler Popup;
-
-        public PopupMenu(MenuItem menuItem) : base(menuItem)
-        {
-            menuItem.Popup += (s, e) => Popup?.Invoke();
-        }
-
-        public Menu.MenuItemCollection MenuItems
-        {
-            get { return _menuItem.MenuItems; }
-        }
-    }
-
-    public class CheckedMenuItem : AbstractMenuElement, IChecked
-    {
-        public event CommandHandler CheckedChanged;
-
-        public CheckedMenuItem(MenuItem menuItem) : base(menuItem)
-        {
-            menuItem.Click += (s, e) =>
-            {
-                menuItem.Checked = !menuItem.Checked;
-                CheckedChanged?.Invoke();
-            };
-        }
-
-        public bool Checked
-        {
-            get { return _menuItem.Checked; }
-            set
-            {
-                if (_menuItem.Checked != value)
-                {
-                    InvokeIfRequired(() =>
-                    {
-                        _menuItem.Checked = value;
-                    });
-                }
-            }
         }
     }
 }
