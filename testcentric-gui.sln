@@ -42,8 +42,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCentric.Gui", "src\Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCentric.Gui.Exe", "src\TestCentric\testcentric.exe\TestCentric.Gui.Exe.csproj", "{AAB186A4-FA3D-404D-AD78-7EB5BB861655}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCentric.Gui.Tests", "src\TestCentric\tests\TestCentric.Gui.Tests.csproj", "{AAD27267-DE1F-4F61-A1FB-D1680A5B8001}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "choco", "choco", "{7A082D44-4669-485E-AB71-5475978EE240}"
 	ProjectSection(SolutionItems) = preProject
 		choco\nunit-agent-x86.exe.ignore = choco\nunit-agent-x86.exe.ignore
@@ -52,6 +50,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "choco", "choco", "{7A082D44
 		choco\testcentric-gui.nuspec = choco\testcentric-gui.nuspec
 		choco\VERIFICATION.txt = choco\VERIFICATION.txt
 	EndProjectSection
+EndProject
+Project("{9344BDBB-3E7F-41FC-A0DD-8665D75EE146}") = "TestCentric.Gui.Tests", "src\TestCentric\tests\TestCentric.Gui.Tests.csproj", "{69A3BF28-AE7B-407A-A1F4-0D6CC3FB2E96}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,10 +91,10 @@ Global
 		{AAB186A4-FA3D-404D-AD78-7EB5BB861655}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AAB186A4-FA3D-404D-AD78-7EB5BB861655}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AAB186A4-FA3D-404D-AD78-7EB5BB861655}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AAD27267-DE1F-4F61-A1FB-D1680A5B8001}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AAD27267-DE1F-4F61-A1FB-D1680A5B8001}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AAD27267-DE1F-4F61-A1FB-D1680A5B8001}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AAD27267-DE1F-4F61-A1FB-D1680A5B8001}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69A3BF28-AE7B-407A-A1F4-0D6CC3FB2E96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69A3BF28-AE7B-407A-A1F4-0D6CC3FB2E96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69A3BF28-AE7B-407A-A1F4-0D6CC3FB2E96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69A3BF28-AE7B-407A-A1F4-0D6CC3FB2E96}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -108,8 +108,8 @@ Global
 		{E978A8D7-E4A4-4DE9-94DF-D82BD764936B} = {C68900CC-C4E4-48D5-A2AC-267726E75C60}
 		{3FF340D5-D3B4-4DF0-BAF1-98B3C00B6148} = {26735BF4-848E-4B3D-BA4D-E1366986F5BD}
 		{AAB186A4-FA3D-404D-AD78-7EB5BB861655} = {26735BF4-848E-4B3D-BA4D-E1366986F5BD}
-		{AAD27267-DE1F-4F61-A1FB-D1680A5B8001} = {26735BF4-848E-4B3D-BA4D-E1366986F5BD}
 		{7A082D44-4669-485E-AB71-5475978EE240} = {A65042E1-D8BC-48DD-8DE1-F0991F07EA77}
+		{69A3BF28-AE7B-407A-A1F4-0D6CC3FB2E96} = {26735BF4-848E-4B3D-BA4D-E1366986F5BD}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = src\ConsoleRunner\nunit-console-exe\nunit-console.exe.csproj

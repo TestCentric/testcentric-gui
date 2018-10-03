@@ -59,7 +59,7 @@ namespace TestCentric.Gui.Tests
 		public void DisplayShowsProperText()
 		{
             Assert.That( GetOperationText( _display ), Is.EqualTo( "Loading..." ) );
-        }
+		}
 
         private string GetOperationText( Control display )
         {

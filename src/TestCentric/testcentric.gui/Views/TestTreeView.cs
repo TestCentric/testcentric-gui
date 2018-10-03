@@ -36,6 +36,9 @@ namespace TestCentric.Gui.Views
     using Model;
 	using Elements;
 
+    //public delegate void SelectedTestChangedHandler( ITest test );
+    //public delegate void CheckedTestChangedHandler( ITest[] tests );
+
  
     /// <summary>
     /// TestSuiteTreeView is a tree view control
@@ -535,8 +538,8 @@ namespace TestCentric.Gui.Views
 
 		private TestPropertiesDialog TestPropertiesDialog
         {
-            get
-            {
+			get
+			{
                 if (propertiesDialog == null)
                 {
                     Form owner = this.FindForm();
