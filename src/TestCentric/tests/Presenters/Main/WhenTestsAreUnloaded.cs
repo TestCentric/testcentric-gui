@@ -35,9 +35,9 @@ namespace TestCentric.Gui.Presenters.Main
 		{
 			ClearAllReceivedCalls();
 
-			Model.HasTests.Returns(false);
-			Model.IsTestRunning.Returns(false);
-			Model.Events.TestUnloaded += Raise.Event<TestEventHandler>(new TestEventArgs());
+			_model.HasTests.Returns(false);
+			_model.IsTestRunning.Returns(false);
+			FireTestUnloadedEvent();
 		}
 
 #if NYI // Add after implementation of project or package saving

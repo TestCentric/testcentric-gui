@@ -36,12 +36,14 @@ namespace TestCentric.Gui.Tests
         [Test]
         public void SaveAndRestoreVisualState()
         {
-            VisualState state = new VisualState();
-            state.ShowCheckBoxes = true;
-            state.TopNode = "ABC.Test.dll";
-            state.SelectedNode = "NUnit.Tests.MyFixture.MyTest";
-            state.SelectedCategories = new string[] { "A", "B", "C" };
-            state.ExcludeCategories = true;
+			VisualState state = new VisualState()
+			{
+                ShowCheckBoxes = true,
+				TopNode = "ABC.Test.dll",
+                SelectedNode = "NUnit.Tests.MyFixture.MyTest",
+                SelectedCategories = new string[] { "A", "B", "C" },
+                ExcludeCategories = true
+			};
 
             StringWriter writer = new StringWriter();
             state.Save( writer );

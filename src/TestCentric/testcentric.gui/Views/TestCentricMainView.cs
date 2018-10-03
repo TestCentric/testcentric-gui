@@ -291,7 +291,7 @@ namespace TestCentric.Gui.Views
             this.outputTab = new System.Windows.Forms.TabPage();
             this.textOutputView1 = new TestCentric.Gui.Views.TextOutputView();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.testTree = new TestCentric.Gui.Controls.TestTree();
+            this.testTree = new TestCentric.Gui.Views.TestTree();
             this.leftPanel = new System.Windows.Forms.Panel();
             this.rightPanel.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -968,7 +968,7 @@ namespace TestCentric.Gui.Views
 
         #region Subordinate Views contained in main form
 
-        public TestSuiteTreeView TreeView { get { return testTree.TreeView; } }
+        public TestTreeView TreeView { get { return testTree.TreeView; } }
 
         public ProgressBarView ProgressBarView { get { return progressBar; } }
 

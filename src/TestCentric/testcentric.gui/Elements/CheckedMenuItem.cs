@@ -25,32 +25,32 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Elements
 {
-    /// <summary>
-    /// The IViewElement interface wraps an individual gui
-    /// item like a control or toolstrip item. It is generally
-    /// exposed by views and is the base of other interfaces
-    /// in the TestCentric.Gui.Elements namespace.
-    /// </summary>
-    public interface IViewElement
+    public class CheckedMenuItem : MenuElement, IChecked
     {
-        /// <summary>
-        /// Gets or sets the Enabled status of the element
-        /// </summary>
-        bool Enabled { get; set; }
+        public event CommandHandler CheckedChanged;
+        
+        public CheckedMenuItem(MenuItem menuItem) : base(menuItem)
+        {
+			menuItem.Click += (s, e) =>
+            {
+                menuItem.Checked = !menuItem.Checked;
+                CheckedChanged?.Invoke();
+            };
+        }
 
-        /// <summary>
-        /// Gets or sets the Visible status of the element
-        /// </summary>
-        bool Visible { get; set; }
-
-        /// <summary>
-        /// Gets or sets the Text of an element
-        /// </summary>
-        string Text { get; set; }
-
-        ///// <summary>
-        ///// Invoke a delegate if necessary, otherwise just call it
-        ///// </summary>
-        //void InvokeIfRequired(MethodInvoker _delegate);
+        public bool Checked
+        {
+            get { return _menuItem.Checked; }
+            set
+            {
+                if (_menuItem.Checked != value)
+                {
+                    InvokeIfRequired(() =>
+                    {
+                        _menuItem.Checked = value;
+                    });
+                }
+            }
+        }
     }
 }

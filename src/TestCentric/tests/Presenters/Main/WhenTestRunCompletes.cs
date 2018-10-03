@@ -36,12 +36,12 @@ namespace TestCentric.Gui.Presenters.Main
 		{
 			ClearAllReceivedCalls();
 
-			Model.HasTests.Returns(true);
-			Model.HasResults.Returns(true);
-			Model.IsTestRunning.Returns(false);
+			_model.HasTests.Returns(true);
+			_model.HasResults.Returns(true);
+			_model.IsTestRunning.Returns(false);
 
 			var resultNode = new ResultNode("<test-run/>");
-			Model.Events.RunFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(resultNode));
+			FireRunFinishedEvent(resultNode);
 		}
 
 #if NYI // Add after implementation of project or package saving

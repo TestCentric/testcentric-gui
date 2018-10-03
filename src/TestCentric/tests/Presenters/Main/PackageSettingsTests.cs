@@ -83,12 +83,12 @@ namespace TestCentric.Gui.Presenters.Main
         {
             foreach (var setting in settings)
             {
-                View.SelectedRuntime.SelectedItem.Returns(setting);
+				_view.SelectedRuntime.SelectedItem.Returns(setting);
 
-                View.SelectedRuntime.SelectionChanged += Raise.Event<CommandHandler>();
+                _view.SelectedRuntime.SelectionChanged += Raise.Event<CommandHandler>();
 
-                Model.PackageSettings.Received(1)["RuntimeFramework"] = setting;
-            }
+                _model.PackageSettings.Received(1)["RuntimeFramework"] = setting;
+			}
         }
 
         public void SelectedRuntime_MultipleChanges()
@@ -99,11 +99,11 @@ namespace TestCentric.Gui.Presenters.Main
         [Test]
         public void SelectedRuntime_SetToDefault()
         {
-            View.SelectedRuntime.SelectedItem.Returns("DEFAULT");
+			_view.SelectedRuntime.SelectedItem.Returns("DEFAULT");
 
-            View.SelectedRuntime.SelectionChanged += Raise.Event<CommandHandler>();
+            _view.SelectedRuntime.SelectionChanged += Raise.Event<CommandHandler>();
 
-            Model.PackageSettings.Received(1).Remove("RuntimeFramework");
-        }
+            _model.PackageSettings.Received(1).Remove("RuntimeFramework");
+		}
     }
 }

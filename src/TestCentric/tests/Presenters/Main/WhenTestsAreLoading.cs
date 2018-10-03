@@ -34,8 +34,8 @@ namespace TestCentric.Gui.Presenters.Main
         public void SimulateTestsLoading()
 		{
 			ClearAllReceivedCalls();
-            
-			Model.Events.TestsLoading += Raise.Event<TestFilesLoadingEventHandler>(new TestFilesLoadingEventArgs( new[] { "test.dll" }));
+
+			FireTestsLoadingEvent(new[] { "test.dll" });
 		}
 
 #if NYI // Add after implementation of project or package saving

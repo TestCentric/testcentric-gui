@@ -35,9 +35,9 @@ namespace TestCentric.Gui.Presenters.Main
 		{
 			ClearAllReceivedCalls();
 
-			Model.HasTests.Returns(true);
-			Model.IsTestRunning.Returns(true);
-			Model.Events.RunStarting += Raise.Event<RunStartingEventHandler>(new RunStartingEventArgs(1234));
+			_model.HasTests.Returns(true);
+			_model.IsTestRunning.Returns(true);
+			FireRunStartingEvent(1234);
 		}
 
 #if NYI // Add after implementation of project or package saving

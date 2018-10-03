@@ -28,7 +28,7 @@ using System.Xml.Serialization;
 
 namespace TestCentric.Gui
 {
-    using Controls;
+    using Views;
 
     /// <summary>
     /// The VisualState class holds the latest visual state for a project.
@@ -56,14 +56,9 @@ namespace TestCentric.Gui
 
         public static string GetVisualStateFileName( string testFileName )
         {
-            if ( testFileName == null )
-                return "VisualState.xml";
-
-            string baseName = testFileName;
-            if ( baseName.EndsWith( ".nunit" ) )
-                baseName = baseName.Substring( 0, baseName.Length - 6 );
-            
-            return baseName + ".VisualState.xml";
+			return string.IsNullOrEmpty(testFileName)
+				? "VisualState.xml"
+				: testFileName + ".VisualState.xml";
         }
 
         public static VisualState LoadFrom( string fileName )
@@ -86,14 +81,12 @@ namespace TestCentric.Gui
 
         public VisualState() { }
 
-        public VisualState( TestSuiteTreeView treeView )
+        public VisualState( ITestTreeView treeView )
         {
             ShowCheckBoxes = treeView.CheckBoxes;
             TopNode = ((TestSuiteTreeNode)treeView.TopNode).Test.Id;
             SelectedNode = ((TestSuiteTreeNode)treeView.SelectedNode).Test.Id;
             Nodes = new List<VisualTreeNode>();
-            SelectedCategories = treeView.Model.SelectedCategories;
-            ExcludeCategories = treeView.Model.ExcludeSelectedCategories;
 
             ProcessTreeNodes((TestSuiteTreeNode)treeView.Nodes[0]);
         }
@@ -130,7 +123,7 @@ namespace TestCentric.Gui
             serializer.Serialize( writer, this );
         }
 
-        public void Restore(TestSuiteTreeView treeView)
+        public void Restore(TestTreeView treeView)
         {
             treeView.CheckBoxes = ShowCheckBoxes;
 
@@ -159,9 +152,6 @@ namespace TestCentric.Gui
                 if (treeNode != null)
                     treeView.TopNode = treeNode;
             }
-
-            if (SelectedCategories != null)
-                treeView.Model.SelectCategories(SelectedCategories, ExcludeCategories);
 
             treeView.Select();
         }

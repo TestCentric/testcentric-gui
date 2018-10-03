@@ -99,7 +99,7 @@ namespace TestCentric.Gui.Views
 		TestNode[] FailedTests { get; }
 
         // SubViews
-		TestSuiteTreeView TreeView { get; }
+		TestTreeView TreeView { get; }
 		StatusBarView StatusBarView { get; }
 		IMessageDisplay MessageDisplay { get; }
  

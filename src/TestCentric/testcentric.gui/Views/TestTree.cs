@@ -23,14 +23,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 using NUnit.Engine;
 
-namespace TestCentric.Gui.Controls
+namespace TestCentric.Gui.Views
 {
     using Model;
-    using Model.Settings;
-    using Presenters;
+    using Controls;
 
     /// <summary>
     /// Summary description for TestTree.
@@ -46,7 +46,7 @@ namespace TestCentric.Gui.Controls
         private System.Windows.Forms.Panel categoryPanel;
         private System.Windows.Forms.Panel treePanel;
         private System.Windows.Forms.Panel buttonPanel;
-        private TestSuiteTreeView tests;
+        private TestTreeView tests;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ListBox availableList;
         private System.Windows.Forms.GroupBox selectedCategories;
@@ -67,7 +67,7 @@ namespace TestCentric.Gui.Controls
 
         #region Properties
 
-        public TestSuiteTreeView TreeView
+        public TestTreeView TreeView
         {
             get { return tests; }
         }
@@ -167,10 +167,6 @@ namespace TestCentric.Gui.Controls
 
         #endregion
 
-        #region View Menu Handlers
-
-        #endregion
-
         #region Component Designer generated code
         /// <summary> 
         /// Required method for Designer support - do not modify 
@@ -182,7 +178,7 @@ namespace TestCentric.Gui.Controls
             this.testPage = new System.Windows.Forms.TabPage();
             this.testPanel = new System.Windows.Forms.Panel();
             this.treePanel = new System.Windows.Forms.Panel();
-            this.tests = new TestSuiteTreeView();
+            this.tests = new TestTreeView();
             this.buttonPanel = new System.Windows.Forms.Panel();
             this.checkFailedButton = new System.Windows.Forms.Button();
             this.clearAllButton = new System.Windows.Forms.Button();
@@ -521,7 +517,7 @@ namespace TestCentric.Gui.Controls
 
         #region IViewControl Implementation
 
-        public void InitializeView(ITestModel model, TestCentricPresenter presenter)
+        public void InitializeView(ITestModel model)
         {
             Model = model;
 
@@ -536,11 +532,21 @@ namespace TestCentric.Gui.Controls
                 foreach (string category in model.AvailableCategories)
                     availableList.Items.Add(category);
                 
-                // We need to ensure the tree loads first because that's
-                // where we restore visual state and possibly change the
-                // selected categories.
+                // We need to ensure the tree loads first and restore the
+                // visual state before checking the seleted categories.
                 tests.Load(e.Test);
 
+				if (model.Services.UserSettings.Gui.TestTree.SaveVisualState)
+				{
+					string fileName = VisualState.GetVisualStateFileName(Model.TestFiles[0]);
+					if (File.Exists(fileName))
+					{
+						var visualState = VisualState.LoadFrom(fileName);
+						visualState.Restore(tests);
+						model.SelectCategories(visualState.SelectedCategories, visualState.ExcludeCategories);
+					}
+				}
+                 
                 // Reflect any changes in the controls
                 if (model.SelectedCategories != null && model.SelectedCategories.Length > 0)
                 {

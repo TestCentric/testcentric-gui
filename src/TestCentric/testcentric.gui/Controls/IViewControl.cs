@@ -39,6 +39,6 @@ namespace TestCentric.Gui.Controls
         /// </summary>
         /// <param name="model"></param>
         /// <param name="presenter"></param>
-        void InitializeView(ITestModel model, TestCentricPresenter presenter);
+        void InitializeView(ITestModel model);
     }
 }

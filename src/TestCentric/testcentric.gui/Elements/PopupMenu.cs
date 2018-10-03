@@ -25,32 +25,18 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Elements
 {
-    /// <summary>
-    /// The IViewElement interface wraps an individual gui
-    /// item like a control or toolstrip item. It is generally
-    /// exposed by views and is the base of other interfaces
-    /// in the TestCentric.Gui.Elements namespace.
-    /// </summary>
-    public interface IViewElement
+    public class PopupMenu : MenuElement, IMenu
     {
-        /// <summary>
-        /// Gets or sets the Enabled status of the element
-        /// </summary>
-        bool Enabled { get; set; }
+        public event CommandHandler Popup;
 
-        /// <summary>
-        /// Gets or sets the Visible status of the element
-        /// </summary>
-        bool Visible { get; set; }
+        public PopupMenu(MenuItem menuItem) : base(menuItem)
+        {
+            menuItem.Popup += (s, e) => Popup?.Invoke();
+        }
 
-        /// <summary>
-        /// Gets or sets the Text of an element
-        /// </summary>
-        string Text { get; set; }
-
-        ///// <summary>
-        ///// Invoke a delegate if necessary, otherwise just call it
-        ///// </summary>
-        //void InvokeIfRequired(MethodInvoker _delegate);
+        public Menu.MenuItemCollection MenuItems
+        {
+            get { return _menuItem.MenuItems; }
+        }
     }
-}
+ }

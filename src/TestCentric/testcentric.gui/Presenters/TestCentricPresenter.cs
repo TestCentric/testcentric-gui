@@ -475,9 +475,9 @@ namespace TestCentric.Gui.Presenters
 
             _view.PropertiesCommand.Execute += () =>
             {
-                if (_view.TreeView.SelectedTest != null)
-                    _view.TreeView.ShowPropertiesDialog(_view.TreeView.SelectedTest);
-            };
+				if (_view.TreeView.SelectedNode != null)
+					_view.TreeView.ShowPropertiesDialog((TestSuiteTreeNode)_view.TreeView.SelectedNode);
+			};
 
             _view.IncreaseFontCommand.Execute += () =>
             {
@@ -585,13 +585,12 @@ namespace TestCentric.Gui.Presenters
                 }
             };
             
-			// TODO: Should be an element
 			_view.ResultTabs.SelectionChanged += () =>
 			{
 				_settings.Gui.SelectedTab = _view.ResultTabs.SelectedIndex;
 			};
 
-            #endregion
+			#endregion
         }
 
         #endregion
@@ -874,9 +873,9 @@ namespace TestCentric.Gui.Presenters
             {
                 var view = control as IViewControl;
                 if (view != null)
-                    view.InitializeView(_model, this);
-                
-                InitializeControls(control);
+					view.InitializeView(_model);
+
+				InitializeControls(control);
             }
         }
 

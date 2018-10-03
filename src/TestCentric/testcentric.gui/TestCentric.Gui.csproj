@@ -167,7 +167,7 @@
     <Compile Include="Elements\ICommand.cs" />
     <Compile Include="Views\IMainView.cs" />
     <Compile Include="Elements\IViewElement.cs" />
-    <Compile Include="Elements\AbstractMenuElement.cs" />
+    <Compile Include="Elements\MenuElement.cs" />
     <Compile Include="Views\TestCentricMainView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -215,13 +215,6 @@
       <DependentUpon>TestPropertiesDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\TestResultItem.cs" />
-    <Compile Include="Controls\TestSuiteTreeNode.cs" />
-    <Compile Include="Controls\TestSuiteTreeView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\TestTree.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="Controls\TipWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -324,12 +317,6 @@
     <EmbeddedResource Include="Dialogs\TestPropertiesDialog.resx">
       <DependentUpon>TestPropertiesDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\TestSuiteTreeView.resx">
-      <DependentUpon>TestSuiteTreeView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\TestTree.resx">
-      <DependentUpon>TestTree.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Controls\TipWindow.resx">
       <DependentUpon>TipWindow.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -353,6 +340,26 @@
     <Compile Include="Elements\IViewParameter.cs" />
     <Compile Include="Elements\SplitterPosition.cs" />
     <Compile Include="Elements\FontSelector.cs" />
+    <Compile Include="Presenters\TreeViewPresenter.cs" />
+    <Compile Include="Views\ITestTreeView.cs" />
+    <Compile Include="Views\TestTree.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <EmbeddedResource Include="Views\TestTree.resx">
+      <DependentUpon>TestTree.cs</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="Views\TestTreeView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <EmbeddedResource Include="Views\TestSuiteTreeView.resx">
+      <DependentUpon>TestTreeView.cs</DependentUpon>
+    </EmbeddedResource>
+    <Compile Include="Views\TestSuiteTreeNode.cs" />
+    <Compile Include="Elements\MenuCommand.cs" />
+    <Compile Include="Elements\PopupMenu.cs" />
+    <Compile Include="Elements\CheckedMenuItem.cs" />
+    <Compile Include="Elements\ITextElement.cs" />
+    <Compile Include="Elements\IMenuElement.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="nunit.snk" />

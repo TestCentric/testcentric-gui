@@ -32,14 +32,34 @@ namespace TestCentric.Gui.Tests
     [TestFixture]
     public class LongRunningOperationDisplayTests
     {
-        [Test]
+		private IMainView _view;
+		private LongRunningOperationDisplay _display;
+
+		[OneTimeSetUp]
         public void CreateDisplay()
-        {
-			var view = new TestCentricMainView();
-            LongRunningOperationDisplay display = view.LongOperationDisplay( "Loading..." );
-            Assert.That( display.Owner, Is.EqualTo( view ) );
-            Assert.That( GetOperationText( display ), Is.EqualTo( "Loading..." ) );
-        }
+		{
+			_view = new TestCentricMainView();
+			_display = _view.LongOperationDisplay("Loading...");
+		}
+
+        [OneTimeTearDown]
+        public void CloseDisplay()
+		{
+			_display.Close();
+			_display = null;
+		}
+
+		[Test]
+		public void DisplayIsOwnedByView()
+		{
+			Assert.That(_display.Owner, Is.EqualTo(_view));
+		}
+
+        [Test]
+		public void DisplayShowsProperText()
+		{
+            Assert.That( GetOperationText( _display ), Is.EqualTo( "Loading..." ) );
+		}
 
         private string GetOperationText( Control display )
         {

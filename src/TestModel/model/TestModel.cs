@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text;
 using NUnit.Engine;
 
 namespace TestCentric.Gui.Model
@@ -310,17 +311,24 @@ namespace TestCentric.Gui.Model
         #endregion
 
         #region IDisposable Implementation
-
+        
         public void Dispose()
         {
-            if (IsPackageLoaded)
-                UnloadTests();
+			try
+			{
+				if (IsPackageLoaded)
+					UnloadTests();
 
-            if (Runner != null)
-                Runner.Dispose();
+				if (Runner != null)
+					Runner.Dispose();
 
-            if (TestEngine != null)
-                TestEngine.Dispose();
+				if (TestEngine != null)
+					TestEngine.Dispose();
+			}
+			catch(NUnitEngineUnloadException)
+			{
+				// TODO: Figure out what to do about this
+			}
         }
 
         #endregion
