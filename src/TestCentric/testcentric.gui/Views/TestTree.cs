@@ -542,7 +542,7 @@ namespace TestCentric.Gui.Views
 					if (File.Exists(fileName))
 					{
 						var visualState = VisualState.LoadFrom(fileName);
-						visualState.Restore(tests);
+						tests.RestoreVisualState(visualState);
 						model.SelectCategories(visualState.SelectedCategories, visualState.ExcludeCategories);
 					}
 				}

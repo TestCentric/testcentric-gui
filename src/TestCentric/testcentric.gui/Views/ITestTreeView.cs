@@ -66,6 +66,9 @@ namespace TestCentric.Gui.Views
 		void Clear();
 		void Reload(TestNode test);
 
+		VisualState GetVisualState();
+		void RestoreVisualState(VisualState visualState);
+
 		void ShowPropertiesDialog(TestSuiteTreeNode node);
 		void ClosePropertiesDialog();
 		void CheckPropertiesDialog();

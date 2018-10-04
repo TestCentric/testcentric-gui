@@ -45,11 +45,11 @@ namespace TestCentric.Gui
         public string SelectedNode;
 
         public string[] SelectedCategories;
-
+        
         public bool ExcludeCategories;
 
-        [XmlArrayItem("Node")]
-        public List<VisualTreeNode> Nodes;
+		[XmlArrayItem("Node")]
+		public List<VisualTreeNode> Nodes = new List<VisualTreeNode>();
         #endregion
 
         #region Static Methods
@@ -79,19 +79,7 @@ namespace TestCentric.Gui
 
         #region Constructors
 
-        public VisualState() { }
-
-        public VisualState( ITestTreeView treeView )
-        {
-            ShowCheckBoxes = treeView.CheckBoxes;
-            TopNode = ((TestSuiteTreeNode)treeView.TopNode).Test.Id;
-            SelectedNode = ((TestSuiteTreeNode)treeView.SelectedNode).Test.Id;
-            Nodes = new List<VisualTreeNode>();
-
-            ProcessTreeNodes((TestSuiteTreeNode)treeView.Nodes[0]);
-        }
-
-        private void ProcessTreeNodes(TestSuiteTreeNode node)
+        public void ProcessTreeNodes(TestSuiteTreeNode node)
         {
             if (IsInteresting(node))
                 this.Nodes.Add(new VisualTreeNode(node));
@@ -121,39 +109,6 @@ namespace TestCentric.Gui
         {
             XmlSerializer serializer = new XmlSerializer( GetType() );
             serializer.Serialize( writer, this );
-        }
-
-        public void Restore(TestTreeView treeView)
-        {
-            treeView.CheckBoxes = ShowCheckBoxes;
-
-            foreach (VisualTreeNode visualNode in Nodes)
-            {
-                TestSuiteTreeNode treeNode = treeView[visualNode.Id];
-                if (treeNode != null)
-                {
-                    if (treeNode.IsExpanded != visualNode.Expanded)
-                        treeNode.Toggle();
-
-                    treeNode.Checked = visualNode.Checked;
-                }
-            }
-
-            if (this.SelectedNode != null)
-            {
-                TestSuiteTreeNode treeNode = treeView[SelectedNode];
-                if (treeNode != null)
-                    treeView.SelectedNode = treeNode;
-            }
-
-            if (TopNode != null)
-            {
-                TestSuiteTreeNode treeNode = treeView[TopNode];
-                if (treeNode != null)
-                    treeView.TopNode = treeNode;
-            }
-
-            treeView.Select();
         }
 
         #endregion

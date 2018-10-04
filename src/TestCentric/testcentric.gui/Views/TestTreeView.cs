@@ -174,7 +174,7 @@ namespace TestCentric.Gui.Views
                     // structure of what is expanded and collapsed is lost.
                     // We save that structure as a VisualState and then restore it.
                     VisualState visualState = !value && TopNode != null
-                        ? new VisualState(this)
+                        ? GetVisualState()
                         : null;
 
                     base.CheckBoxes = value;
@@ -182,7 +182,7 @@ namespace TestCentric.Gui.Views
                     if (visualState != null)
                     {
                         visualState.ShowCheckBoxes = this.CheckBoxes;
-                        visualState.Restore(this);
+                        RestoreVisualState(visualState);
                     }
                 }
             }
@@ -244,12 +244,61 @@ namespace TestCentric.Gui.Views
         /// <param name="test">Test suite to be loaded</param>
         public void Reload(TestNode test)
         {
-            VisualState visualState = new VisualState(this);
+			
+			VisualState visualState = GetVisualState();
 
             Load(test);
 
-            visualState.Restore(this);
+            RestoreVisualState(visualState);
         }
+
+        public VisualState GetVisualState()
+		{
+			var visualState = new VisualState()
+			{
+				ShowCheckBoxes = CheckBoxes,
+				TopNode = ((TestSuiteTreeNode)TopNode).Test.Id,
+				SelectedNode = ((TestSuiteTreeNode)SelectedNode).Test.Id,
+			};
+
+			foreach (TestSuiteTreeNode node in Nodes)
+				visualState.ProcessTreeNodes(node);
+
+			return visualState;
+		}
+
+		public void RestoreVisualState(VisualState visualState)
+		{
+			CheckBoxes = visualState.ShowCheckBoxes;
+
+            foreach (VisualTreeNode visualNode in visualState.Nodes)
+            {
+                TestSuiteTreeNode treeNode = this[visualNode.Id];
+                if (treeNode != null)
+                {
+                    if (treeNode.IsExpanded != visualNode.Expanded)
+                        treeNode.Toggle();
+
+                    treeNode.Checked = visualNode.Checked;
+                }
+            }
+
+            if (visualState.SelectedNode != null)
+            {
+                TestSuiteTreeNode treeNode = this[visualState.SelectedNode];
+                if (treeNode != null)
+                    this.SelectedNode = treeNode;
+            }
+
+            if (visualState.TopNode != null)
+            {
+                TestSuiteTreeNode treeNode = this[visualState.TopNode];
+                if (treeNode != null)
+                    this.TopNode = treeNode;
+            }
+
+            this.Select();
+ 		}
 
 		public void ShowPropertiesDialog(TestSuiteTreeNode node)
         {
@@ -877,7 +926,7 @@ namespace TestCentric.Gui.Views
                 return false;
         }
 
-        public CheckedTestFinder(TestTreeView treeView)
+        public CheckedTestFinder(ITestTreeView treeView)
         {
             FindCheckedNodes(treeView.Nodes, true);
         }
