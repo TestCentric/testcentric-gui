@@ -87,7 +87,7 @@ namespace TestCentric.Gui.Presenters
 				if (_settings.Gui.TestTree.SaveVisualState)
                     try
                     {
-					    var visualState = new VisualState(_view);
+						var visualState = _view.GetVisualState();
 						visualState.SelectedCategories = _model.SelectedCategories;
 						visualState.ExcludeCategories = _model.ExcludeSelectedCategories;
 						visualState.Save(VisualState.GetVisualStateFileName(_model.TestFiles[0]));
