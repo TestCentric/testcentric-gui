@@ -42,8 +42,12 @@ namespace TestCentric.Gui.Views
                     // leaf nodes hidden
     }
 
+    public delegate void FileDropEventHandler(IList<string> fileNames);
+
 	public interface ITestTreeView
     {
+        event FileDropEventHandler FileDrop;
+
 		ContextMenu ContextMenu { get; }
 
 		ICommand RunCommand { get; }
@@ -65,6 +69,10 @@ namespace TestCentric.Gui.Views
 
 		void Clear();
 		void Reload(TestNode test);
+
+		void ExpandAll();
+		void CollapseAll();
+		void HideTests();
 
 		VisualState GetVisualState();
 		void RestoreVisualState(VisualState visualState);

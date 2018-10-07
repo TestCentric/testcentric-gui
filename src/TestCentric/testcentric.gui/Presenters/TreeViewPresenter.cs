@@ -127,28 +127,30 @@ namespace TestCentric.Gui.Presenters
 				_view.SetTestResult(e.Result);
             };
 
-			//_settings.Changed += (s, e) =>
-			//{
-			//    if (e.SettingName == "Gui.TestTree.AlternateImageSet")
-			//   {
-			//       _view.LoadAlternateImages();
-			//       _view.Invalidate();
-			//   }
-			//};
+            //_settings.Changed += (s, e) =>
+            //{
+            //    if (e.SettingName == "Gui.TestTree.AlternateImageSet")
+            //   {
+            //       _view.LoadAlternateImages();
+            //       _view.Invalidate();
+            //   }
+            //};
 
-			//_model.Events.CategorySelectionChanged += (TestEventArgs e) =>
-			//{
-			//    TestNodeFilter filter = TestNodeFilter.Empty;
+            //_model.Events.CategorySelectionChanged += (TestEventArgs e) =>
+            //{
+            //    TestNodeFilter filter = TestNodeFilter.Empty;
 
-			//    if (_model.SelectedCategories.Length > 0)
-			//    {
-			//        filter = new CategoryFilter(_model.SelectedCategories);
-			//        if (_model.ExcludeSelectedCategories)
-			//            filter = new NotFilter(filter);
-			//    }
+            //    if (_model.SelectedCategories.Length > 0)
+            //    {
+            //        filter = new CategoryFilter(_model.SelectedCategories);
+            //        if (_model.ExcludeSelectedCategories)
+            //            filter = new NotFilter(filter);
+            //    }
 
-			//    _view.TreeFilter = filter;
-			//};
+            //    _view.TreeFilter = filter;
+            //};
+
+            _view.FileDrop += _model.LoadTests;
 
             _view.RunCommand.Execute += () =>
 			{
