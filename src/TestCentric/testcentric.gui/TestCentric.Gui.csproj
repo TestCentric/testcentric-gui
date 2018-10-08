@@ -340,18 +340,19 @@
     <EmbeddedResource Include="Views\TestTree.resx">
       <DependentUpon>TestTree.cs</DependentUpon>
     </EmbeddedResource>
-    <Compile Include="Views\TestTreeView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <EmbeddedResource Include="Views\TestSuiteTreeView.resx">
-      <DependentUpon>TestTreeView.cs</DependentUpon>
-    </EmbeddedResource>
     <Compile Include="Views\TestSuiteTreeNode.cs" />
     <Compile Include="Elements\MenuCommand.cs" />
     <Compile Include="Elements\PopupMenu.cs" />
     <Compile Include="Elements\CheckedMenuItem.cs" />
     <Compile Include="Elements\ITextElement.cs" />
     <Compile Include="Elements\IMenuElement.cs" />
+    <Compile Include="Views\TestTreeView.cs" />
+    <Compile Include="Views\TestTreeView.Designer.cs">
+        <DependentUpon>TestTreeView.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Views\TestTreeView.resx">
+        <DependentUpon>TestTreeView.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="nunit.snk" />

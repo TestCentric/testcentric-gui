@@ -452,20 +452,12 @@ namespace TestCentric.Gui.Presenters
 
             _view.ExpandAllCommand.Execute += () =>
             {
-                _view.TreeView.BeginUpdate();
-                _view.TreeView.ExpandAll();
-                _view.TreeView.EndUpdate();
+				_view.TreeView.ExpandAll();
             };
 
             _view.CollapseAllCommand.Execute += () =>
             {
-                _view.TreeView.BeginUpdate();
-                _view.TreeView.CollapseAll();
-                _view.TreeView.EndUpdate();
-
-                // Compensate for a bug in the underlying control
-                if (_view.TreeView.Nodes.Count > 0)
-                    _view.TreeView.SelectedNode = _view.TreeView.Nodes[0];
+				_view.TreeView.CollapseAll();
             };
 
             _view.HideTestsCommand.Execute += () =>

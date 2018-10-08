@@ -1,4 +1,4 @@
-// ***********************************************************************
+﻿// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -34,150 +34,129 @@ using System.Reflection;
 namespace TestCentric.Gui.Views
 {
     using Model;
-	using Elements;
+    using Elements;
 
-    //public delegate void SelectedTestChangedHandler( ITest test );
-    //public delegate void CheckedTestChangedHandler( ITest[] tests );
-
- 
     /// <summary>
-    /// TestSuiteTreeView is a tree view control
-    /// specialized for displaying the tests
-    /// in an assembly. Clients should always
-    /// use TestNode rather than TreeNode when
-    /// dealing with this class to be sure of
-    /// calling the proper methods.
+    /// TestTreeView contains the tree control that displays tests.
     /// </summary>
-    public class TestTreeView : TreeView, ITestTreeView
+    public partial class TestTreeView : UserControlView, ITestTreeView
     {
-        //static Logger log = InternalTrace.GetLogger(typeof(TestSuiteTreeView));
-
         #region Instance Variables
 
         /// <summary>
         /// Hashtable provides direct access to TestNodes
         /// </summary>
-        private Hashtable treeMap = new Hashtable();
-        
+		private Hashtable _treeMap = new Hashtable();
+
         /// <summary>
         /// The properties dialog if displayed
         /// </summary>
-        private TestPropertiesDialog propertiesDialog;
+        private TestPropertiesDialog _propertiesDialog;
 
-        public System.Windows.Forms.ImageList treeImages;
-        private System.ComponentModel.IContainer components;
+        private string _alternateImageSet;
+        private TestNodeFilter _treeFilter = TestNodeFilter.Empty;
 
-		private MenuItem runMenuItem;
-		private MenuItem showCheckBoxesMenuItem;
-		private MenuItem failedAssumptionsMenuItem;
-		private MenuItem propertiesMenuItem;
+        #endregion
 
-		private string _alternateImageSet;
-		private TestNodeFilter _treeFilter = TestNodeFilter.Empty;
-        
-		#endregion
+        #region Constructor
 
-        #region Construction and Initialization
-        
         public TestTreeView()
         {
-            InitializeComponent();
-
-            ContextMenu = new System.Windows.Forms.ContextMenu();
-            ContextMenu.Popup += new System.EventHandler(ContextMenu_Popup);
-			ContextMenu.Collapse += new EventHandler(ContextMenu_Collapse);
-
-			runMenuItem = new MenuItem("&Run");// new EventHandler(runMenuItem_Click));
-			failedAssumptionsMenuItem = new MenuItem("Show Failed Assumptions");
-			showCheckBoxesMenuItem = new MenuItem("Show CheckBoxes");
-			propertiesMenuItem = new MenuItem("&Properties");
-       
-			ContextMenu.MenuItems.Add(runMenuItem);
-            ContextMenu.MenuItems.Add("-");
-			ContextMenu.MenuItems.Add(failedAssumptionsMenuItem);
-            ContextMenu.MenuItems.Add(showCheckBoxesMenuItem);
-            ContextMenu.MenuItems.Add("-");
-            ContextMenu.MenuItems.Add(propertiesMenuItem);
+			InitializeComponent();
 
 			RunCommand = new MenuCommand(runMenuItem);
-			ShowCheckBoxes = new CheckedMenuItem(showCheckBoxesMenuItem);
-			ShowFailedAssumptions = new CheckedMenuItem(failedAssumptionsMenuItem);
-			PropertiesCommand = new MenuCommand(propertiesMenuItem);
+            ShowCheckBoxes = new CheckedMenuItem(showCheckBoxesMenuItem);
+            ShowFailedAssumptions = new CheckedMenuItem(failedAssumptionsMenuItem);
+            PropertiesCommand = new MenuCommand(propertiesMenuItem);
+
+			WireUpEvents();
 		}
 
-        private void InitializeComponent()
-        {
-            this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TestTreeView));
-            this.treeImages = new System.Windows.Forms.ImageList(this.components);
-            this.SuspendLayout();
-            // 
-            // treeImages
-            // 
-            this.treeImages.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("treeImages.ImageStream")));
-            this.treeImages.TransparentColor = System.Drawing.Color.White;
-            this.treeImages.Images.SetKeyName(0, "Skipped.png");
-            this.treeImages.Images.SetKeyName(1, "Failure.png");
-            this.treeImages.Images.SetKeyName(2, "Success.png");
-            this.treeImages.Images.SetKeyName(3, "Ignored.png");
-            this.treeImages.Images.SetKeyName(4, "Inconclusive.png");
-            // 
-            // TestSuiteTreeView
-            // 
-            this.ImageIndex = 0;
-            this.ImageList = this.treeImages;
-            this.SelectedImageIndex = 0;
-            this.DoubleClick += new System.EventHandler(this.TestSuiteTreeView_DoubleClick);
-            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.TestSuiteTreeView_DragDrop);
-            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.TestSuiteTreeView_DragEnter);
-            this.ResumeLayout(false);
+        private void WireUpEvents()
+		{
+			tree.MouseDown += (s, e) =>
+            {
+                if (e.Button == MouseButtons.Right)
+                {
+                    ContextNode = tree.GetNodeAt(e.X, e.Y) as TestSuiteTreeNode;
+                }
+            };
 
-        }
+			tree.AfterSelect += (s, e) =>
+            {
+                if (_propertiesDialog != null)
+                {
+                    if (_propertiesDialog.Pinned)
+                    {
+                        _propertiesDialog.DisplayProperties((TestSuiteTreeNode)e.Node);
+                    }
+                    else
+                        _propertiesDialog.Close();
+                }
+            };
+
+            tree.DragDrop += (s, e) =>
+            {
+				if (IsValidFileDrop(e.Data))
+					FileDrop?.Invoke((string[])e.Data.GetData(DataFormats.FileDrop));
+            };
+
+            tree.DragEnter += (s, e) =>
+            {
+				e.Effect = IsValidFileDrop(e.Data)
+                    ? DragDropEffects.Copy
+					: DragDropEffects.None;
+            };
+
+            treeMenu.Popup += (s, e) =>
+            {
+                TestSuiteTreeNode targetNode = ContextNode ?? (TestSuiteTreeNode)SelectedNode;
+                TestSuiteTreeNode theoryNode = targetNode?.GetTheoryNode();
+
+
+                runMenuItem.DefaultItem = runMenuItem.Enabled && targetNode != null && targetNode.Included &&
+                        (targetNode.Test.RunState == RunState.Runnable || targetNode.Test.RunState == RunState.Explicit);
+
+                showCheckBoxesMenuItem.Checked = tree.CheckBoxes;
+
+                //failedAssumptionsMenuItem.Visible = 
+                failedAssumptionsMenuItem.Enabled = theoryNode != null;
+                failedAssumptionsMenuItem.Checked = theoryNode?.ShowFailedAssumptions ?? false;
+
+                propertiesMenuItem.Enabled = targetNode != null;
+            };
+
+            treeMenu.Collapse += (s, e) => ContextNode = null;
+		}
 
 		#endregion
 
-		#region ITestTreeView Members
+		#region ITestTreeView Implementation
 
-		// The following members are implemented by underlying classes
-        //    ContextMenu
-        //    Nodes
-        //    TopNode
-        //    SelectedNode
+		public event FileDropEventHandler FileDrop;
 
-		public ICommand RunCommand { get; }
-		public IChecked ShowCheckBoxes { get; }
-		public IChecked ShowFailedAssumptions { get; }
-		public ICommand PropertiesCommand { get; }
+        public ICommand RunCommand { get; private set; }
+        public IChecked ShowFailedAssumptions { get; private set; }
+        public IChecked ShowCheckBoxes { get; private set; }
+        public ICommand PropertiesCommand { get; private set; }
 
-		public DisplayStyle DisplayStyle { get; set; }
-		public string AlternateImageSet
-		{
-			get { return _alternateImageSet; }
-			set
-			{
-				_alternateImageSet = value;
-                if (!string.IsNullOrEmpty(value))
-				    LoadAlternateImages(value);
-			}
-		}
-        
         [Category("Appearance"), DefaultValue(false)]
         [Description("Indicates whether checkboxes are displayed beside test nodes")]
-        public new bool CheckBoxes
+        public bool CheckBoxes
         {
-            get { return base.CheckBoxes; }
+            get { return tree.CheckBoxes; }
             set
             {
-                if (base.CheckBoxes != value)
+                if (tree.CheckBoxes != value)
                 {
-					// When turning off checkboxes with a non-empty tree, the
+                    // When turning off checkboxes with a non-empty tree, the
                     // structure of what is expanded and collapsed is lost.
                     // We save that structure as a VisualState and then restore it.
                     VisualState visualState = !value && TopNode != null
                         ? GetVisualState()
                         : null;
 
-                    base.CheckBoxes = value;
+                    tree.CheckBoxes = value;
 
                     if (visualState != null)
                     {
@@ -188,23 +167,47 @@ namespace TestCentric.Gui.Views
             }
         }
 
-         /// <summary>
-        /// The currently selected test.
-        /// </summary>
         [Browsable(false)]
-        public TestNode SelectedTest
+        public DisplayStyle DisplayStyle { get; set; }
+
+        [Browsable(false)]
+        public string AlternateImageSet
         {
-            get
+            get { return _alternateImageSet; }
+            set
             {
-                TestSuiteTreeNode node = (TestSuiteTreeNode)SelectedNode;
-                return node == null ? null : node.Test;
+                _alternateImageSet = value;
+                if (!string.IsNullOrEmpty(value))
+                    LoadAlternateImages(value);
             }
         }
 
+        [Browsable(false)]
+        public TreeNodeCollection Nodes => tree.Nodes;
+
+        [Browsable(false)]
+        public TreeNode TopNode
+        {
+            get => tree.TopNode;
+            set => tree.TopNode = value;
+        }
+
+        [Browsable(false)]
+        public TestSuiteTreeNode ContextNode { get; private set; }
+
+        [Browsable(false)]
+        public TreeNode SelectedNode
+        {
+            get => tree.SelectedNode;
+            set => tree.SelectedNode = value;
+        }
+
         /// <summary>
-        /// The TreeNode that was right clicked to bring up context menu
+        /// The currently selected test.
         /// </summary>
-		public TestSuiteTreeNode ContextNode { get; private set; }
+        [Browsable(false)]
+        public TestNode SelectedTest => ((TestSuiteTreeNode)tree.SelectedNode)?.Test;
+
 
         [Browsable(false)]
         public TestNode[] SelectedTests
@@ -213,9 +216,9 @@ namespace TestCentric.Gui.Views
             {
                 TestNode[] result = null;
 
-                if (this.CheckBoxes)
+                if (tree.CheckBoxes)
                 {
-                    CheckedTestFinder finder = new CheckedTestFinder(this);
+                    var finder = new CheckedTestFinder(tree);
                     result = finder.GetCheckedTests(
                         CheckedTestFinder.SelectionFlags.Top | CheckedTestFinder.SelectionFlags.Explicit);
                 }
@@ -228,48 +231,69 @@ namespace TestCentric.Gui.Views
             }
         }
 
-		/// <summary>
+        /// <summary>
         /// Clear all the info in the tree.
         /// </summary>
         public void Clear()
         {
-            treeMap.Clear();
+            _treeMap.Clear();
             Nodes.Clear();
         }
 
-		/// <summary>
+        /// <summary>
         /// Reload the tree with a changed test hierarchy
         /// while maintaining as much gui state as possible.
         /// </summary>
         /// <param name="test">Test suite to be loaded</param>
         public void Reload(TestNode test)
         {
-			
-			VisualState visualState = GetVisualState();
-
-            Load(test);
-
+            VisualState visualState = GetVisualState();
+            LoadTests(test);
             RestoreVisualState(visualState);
         }
 
+        public void ExpandAll()
+        {
+            tree.BeginUpdate();
+            tree.ExpandAll();
+            tree.EndUpdate();
+        }
+
+        public void CollapseAll()
+        {
+            tree.BeginUpdate();
+            tree.CollapseAll();
+            tree.EndUpdate();
+        }
+
+        public void HideTests()
+        {
+            tree.BeginUpdate();
+
+            foreach (TestSuiteTreeNode node in Nodes)
+                HideTestsUnderNode(node);
+
+            tree.EndUpdate();
+        }
+
         public VisualState GetVisualState()
-		{
-			var visualState = new VisualState()
-			{
-				ShowCheckBoxes = CheckBoxes,
-				TopNode = ((TestSuiteTreeNode)TopNode).Test.Id,
-				SelectedNode = ((TestSuiteTreeNode)SelectedNode).Test.Id,
-			};
+        {
+            var visualState = new VisualState()
+            {
+                ShowCheckBoxes = tree.CheckBoxes,
+                TopNode = ((TestSuiteTreeNode)tree.TopNode).Test.Id,
+                SelectedNode = ((TestSuiteTreeNode)tree.SelectedNode).Test.Id,
+            };
 
-			foreach (TestSuiteTreeNode node in Nodes)
-				visualState.ProcessTreeNodes(node);
+            foreach (TestSuiteTreeNode node in tree.Nodes)
+                visualState.ProcessTreeNodes(node);
 
-			return visualState;
-		}
+            return visualState;
+        }
 
-		public void RestoreVisualState(VisualState visualState)
-		{
-			CheckBoxes = visualState.ShowCheckBoxes;
+        public void RestoreVisualState(VisualState visualState)
+        {
+            CheckBoxes = visualState.ShowCheckBoxes;
 
             foreach (VisualTreeNode visualNode in visualState.Nodes)
             {
@@ -298,32 +322,32 @@ namespace TestCentric.Gui.Views
             }
 
             this.Select();
- 		}
+        }
 
-		public void ShowPropertiesDialog(TestSuiteTreeNode node)
+        public void ShowPropertiesDialog(TestSuiteTreeNode node)
         {
             TestPropertiesDialog.DisplayProperties(node);
         }
 
         public void ClosePropertiesDialog()
         {
-            if (propertiesDialog != null)
-                propertiesDialog.Close();
+            if (_propertiesDialog != null)
+                _propertiesDialog.Close();
         }
 
         public void CheckPropertiesDialog()
         {
-            if (propertiesDialog != null && !propertiesDialog.Pinned)
-                propertiesDialog.Close();
+            if (_propertiesDialog != null && !_propertiesDialog.Pinned)
+                _propertiesDialog.Close();
         }
 
-		/// <summary>
+        /// <summary>
         /// Add the result of a test to the tree
         /// </summary>
         /// <param name="result">The result of the test</param>
         public void SetTestResult(ResultNode result)
         {
-            TestSuiteTreeNode node = this[result];
+            TestSuiteTreeNode node = this[result.Id];
             if (node == null)
             {
                 Debug.WriteLine("Test not found in tree: " + result.FullName);
@@ -340,287 +364,103 @@ namespace TestCentric.Gui.Views
             }
         }
 
-		#endregion
+        #endregion
 
-		#region Other Public Properties
+        #region Other Public Properties
 
-		[Browsable(false)]
         public TestNode[] FailedTests
         {
             get
             {
-                FailedTestsFilterVisitor visitor = new FailedTestsFilterVisitor();
+                var visitor = new FailedTestsFilterVisitor();
                 Accept(visitor);
                 return visitor.Tests;
             }
         }
 
-		[Browsable(false)]
         public TestNodeFilter TreeFilter
         {
-            get { return _treeFilter; }
-            set
-            {
-                _treeFilter = value;
-
-                TestFilterVisitor visitor = new TestFilterVisitor(_treeFilter);
-                this.Accept(visitor);
-            }
+            get => _treeFilter;
+            set => Accept(new TestFilterVisitor(_treeFilter = value));
         }
 
-		public TestSuiteTreeNode this[string id]
-        {
-            get { return treeMap[id] as TestSuiteTreeNode; }
-        }
+        public TestSuiteTreeNode this[string id] => _treeMap[id] as TestSuiteTreeNode;
 
-		#endregion
+        #endregion
 
-		#region Other Public Methods
+        #region Other Public Methods
 
         /// <summary>
         /// Load the tree with a test hierarchy
         /// </summary>
         /// <param name="topLevelNode">Test-run node for tests to be loaded</param>
-        public void Load(TestNode topLevelNode)
+        public void LoadTests(TestNode topLevelNode)
         {
             using (new WaitCursor())
             {
                 Clear();
-                BeginUpdate();
+                tree.BeginUpdate();
 
                 try
                 {
                     AddTreeNodes(Nodes, topLevelNode, false);
-
                     SetInitialExpansion();
                 }
                 finally
                 {
-                    EndUpdate();
-                    this.Select();
+                    tree.EndUpdate();
+                    tree.Select();
                 }
             }
         }
 
-        public void ClearCheckedNodes()
-        {
-            Accept(new ClearCheckedNodesVisitor());
-        }
+        public void ClearCheckedNodes() => Accept(new ClearCheckedNodesVisitor());
 
-        public void CheckFailedNodes()
-        {
-            Accept(new CheckFailedNodesVisitor());
-        }
-
-        public void HideTests()
-        {
-            this.BeginUpdate();
-            foreach (TestSuiteTreeNode node in Nodes)
-                HideTestsUnderNode(node);
-            this.EndUpdate();
-        }
+        public void CheckFailedNodes() => Accept(new CheckFailedNodesVisitor());
 
         #endregion
 
-		#region Context Menu
-		/// <summary>
-		/// Handles right mouse button down by remembering the proper context item
-		/// </summary>
-		/// <param name="e">MouseEventArgs structure with information about the mouse position and button state</param>
-		protected override void OnMouseDown(System.Windows.Forms.MouseEventArgs e)
+        #region Private Properties
+
+        public TestPropertiesDialog TestPropertiesDialog
         {
-            if (e.Button == MouseButtons.Right)
+            get
             {
-                ClosePropertiesDialog();
-                ContextNode = GetNodeAt(e.X, e.Y) as TestSuiteTreeNode;
-            }
-			// TODO: Finish this to implement multiple select or remove
-            //else if (e.Button == MouseButtons.Left)
-            //{
-            //    if (Control.ModifierKeys == Keys.Control)
-            //    {
-            //        TestSuiteTreeNode theNode = GetNodeAt(e.X, e.Y) as TestSuiteTreeNode;
-            //        if (theNode != null)
-            //            theNode.IsSelected = true;
-            //    }
-            //    else
-            //    {
-            //        ClearSelected();
-            //    }
-            //}
-
-            base.OnMouseDown(e);
-        }
-
-        /// <summary>
-        /// Build treeview context menu dynamically on popup
-        /// </summary>
-        private void ContextMenu_Popup(object sender, System.EventArgs e)
-        {
-			TestSuiteTreeNode targetNode = ContextNode ?? (TestSuiteTreeNode)SelectedNode;
-			TestSuiteTreeNode theoryNode = targetNode?.GetTheoryNode();
-
-            runMenuItem.DefaultItem = runMenuItem.Enabled && targetNode != null && targetNode.Included &&
-                    (targetNode.Test.RunState == RunState.Runnable || targetNode.Test.RunState == RunState.Explicit);
-
-			//failedAssumptionsMenuItem.Visible = 
-			failedAssumptionsMenuItem.Enabled = theoryNode != null;
-			failedAssumptionsMenuItem.Checked = theoryNode?.ShowFailedAssumptions ?? false;
-
-			propertiesMenuItem.Enabled = targetNode != null;
-        }
-
-        /// <summary>
-        /// Clear the ContextNode once the menu is no longer active
-        /// </summary>
-		private void ContextMenu_Collapse(object sender, EventArgs eventArgs)
-		{
-			ContextNode = null;
-		}
-
-        #endregion
-
-        #region Drag and drop
-
-        /// <summary>
-        /// Helper method to determine if an IDataObject is valid
-        /// for dropping on the tree view. It must be a the drop
-        /// of a single file with a valid assembly file type.
-        /// </summary>
-        /// <param name="data">IDataObject to be tested</param>
-        /// <returns>True if dropping is allowed</returns>
-        private bool IsValidFileDrop(IDataObject data)
-        {
-            if (!data.GetDataPresent(DataFormats.FileDrop))
-                return false;
-
-            string[] fileNames = data.GetData(DataFormats.FileDrop) as string[];
-
-            if (fileNames == null || fileNames.Length == 0)
-                return false;
-
-            // Multiple assemblies are allowed - we
-            // assume they are all in the same directory
-            // since they are being dragged together.
-            foreach (string fileName in fileNames)
-            {
-                //if ( !PathUtils.IsAssemblyFileType( fileName ) )
-                //	return false;
-            }
-
-            return true;
-        }
-
-        private void TestSuiteTreeView_DragDrop(object sender, System.Windows.Forms.DragEventArgs e)
-        {
-            if (IsValidFileDrop(e.Data))
-            {
-                //string[] fileNames = (string[])e.Data.GetData( DataFormats.FileDrop );
-                //if ( fileNames.Length == 1 )
-                //	loader.LoadProject( fileNames[0] );
-                //else
-                //	loader.LoadProject( fileNames );
-
-                //if (loader.IsProjectLoaded && loader.TestProject.IsLoadable)
-                //	loader.LoadTest();
-            }
-        }
-
-        private void TestSuiteTreeView_DragEnter(object sender, System.Windows.Forms.DragEventArgs e)
-        {
-            if (IsValidFileDrop(e.Data))
-                e.Effect = DragDropEffects.Copy;
-            else
-                e.Effect = DragDropEffects.None;
-        }
-
-        #endregion
-
-        #region UI Event Handlers
-
-        private void TestSuiteTreeView_DoubleClick(object sender, System.EventArgs e)
-        {
-            //TestSuiteTreeNode node = SelectedNode as TestSuiteTreeNode;
-            //if ( runCommandSupported && runCommandEnabled && node.Nodes.Count == 0 && node.Included )
-            //{
-            //	runCommandEnabled = false;
-
-            //	// TODO: Since this is a terminal node, don't use a category filter
-            //	RunTests( new ITest[] { SelectedTest }, true );
-            //}
-        }
-
-        protected override void OnAfterSelect(System.Windows.Forms.TreeViewEventArgs e)
-        {
-            if (propertiesDialog != null)
-			{
-				if (propertiesDialog.Pinned)
+                if (_propertiesDialog == null)
                 {
-                    propertiesDialog.DisplayProperties((TestSuiteTreeNode)e.Node);
-                }
-                else
-                    propertiesDialog.Close();
-			}
+                    Form owner = FindForm();
+                    _propertiesDialog = new TestPropertiesDialog()
+                    {
+                        Owner = owner,
+                        Font = owner.Font,
+                        StartPosition = FormStartPosition.Manual
+                    };
 
-			base.OnAfterSelect(e);
-        }
-
-        #endregion
-
-		#region Private Properties
-
-		/// <summary>
-        /// Test node corresponding to a test
-        /// </summary>
-        private TestSuiteTreeNode this[TestNode test]
-        {
-            get { return this[test.Id]; }
-        }
-
-        /// <summary>
-        /// Test node corresponding to a TestResultInfo
-        /// </summary>
-        private TestSuiteTreeNode this[ResultNode result]
-        {
-            get { return this[result.Id]; }
-        }
-
-		private TestPropertiesDialog TestPropertiesDialog
-        {
-			get
-			{
-                if (propertiesDialog == null)
-                {
-                    Form owner = this.FindForm();
-                    propertiesDialog = new TestPropertiesDialog();
-                    propertiesDialog.Owner = owner;
-                    propertiesDialog.Font = owner.Font;
-                    propertiesDialog.StartPosition = FormStartPosition.Manual;
-                    propertiesDialog.Left = Math.Max(0, owner.Left + (owner.Width - propertiesDialog.Width) / 2);
-                    propertiesDialog.Top = Math.Max(0, owner.Top + (owner.Height - propertiesDialog.Height) / 2);
-                    propertiesDialog.Closed += (s, e) => propertiesDialog = null;
+                    _propertiesDialog.Left = Math.Max(0, owner.Left + (owner.Width - _propertiesDialog.Width) / 2);
+                    _propertiesDialog.Top = Math.Max(0, owner.Top + (owner.Height - _propertiesDialog.Height) / 2);
+                    _propertiesDialog.Closed += (s, e) => _propertiesDialog = null;
                 }
 
-                return propertiesDialog;
+                return _propertiesDialog;
             }
         }
 
         #endregion
 
-		#region Private Methods
+        #region Helper Methods
 
-		/// <summary>
-		/// Add nodes to the tree constructed from a test
-		/// </summary>
-		/// <param name="nodes">The TreeNodeCollection to which the new node should  be added</param>
-		/// <param name="testNode">The test for which a node is to be built</param>
-		/// <param name="highlight">If true, highlight the text for this node in the tree</param>
-		/// <returns>A newly constructed TestSuiteTreeNode, possibly with descendant nodes</returns>
-		private TestSuiteTreeNode AddTreeNodes(IList nodes, TestNode testNode, bool highlight)
+        /// <summary>
+        /// Add nodes to the tree constructed from a test
+        /// </summary>
+        /// <param name="nodes">The TreeNodeCollection to which the new node should  be added</param>
+        /// <param name="testNode">The test for which a node is to be built</param>
+        /// <param name="highlight">If true, highlight the text for this node in the tree</param>
+        /// <returns>A newly constructed TestSuiteTreeNode, possibly with descendant nodes</returns>
+        private TestSuiteTreeNode AddTreeNodes(IList nodes, TestNode testNode, bool highlight)
         {
             TestSuiteTreeNode treeNode = new TestSuiteTreeNode(testNode);
             if (highlight) treeNode.ForeColor = Color.Blue;
-            treeMap.Add(treeNode.Test.Id, treeNode);
+            _treeMap.Add(treeNode.Test.Id, treeNode);
 
             nodes.Add(treeNode);
 
@@ -632,50 +472,6 @@ namespace TestCentric.Gui.Views
 
             return treeNode;
         }
-
-        //private TestSuiteTreeNode AddTreeNodes( IList nodes, TestResult rootResult, bool highlight )
-        //{
-        //	TestSuiteTreeNode node = new TestSuiteTreeNode( rootResult );
-        //	AddToMap( node );
-
-        //	nodes.Add( node );
-
-        //	if ( rootResult.HasResults )
-        //	{
-        //		foreach( TestResult result in rootResult.Results )
-        //			AddTreeNodes( node.Nodes, result, highlight );
-        //	}
-
-        //	node.UpdateImageIndex();
-
-        //	return node;
-        //}
-
-        private void RemoveFromMap(TestSuiteTreeNode node)
-        {
-            foreach (TestSuiteTreeNode child in node.Nodes)
-                RemoveFromMap(child);
-
-            treeMap.Remove(node.Test.Id);
-        }
-
-        /// <summary>
-        /// Remove a node from the tree itself and the hashtable
-        /// </summary>
-        /// <param name="treeNode">Node to remove</param>
-        private void RemoveNode(TestSuiteTreeNode treeNode)
-        {
-            RemoveFromMap(treeNode);
-            treeNode.Remove();
-        }
-
-        /// <summary>
-        /// Delegate for use in invoking the tree loader
-        /// from the watcher thread.
-        /// </summary>
-        private delegate void LoadHandler( TestNode test );
-
-        private delegate void PropertiesDisplayHandler(TestSuiteTreeNode node);
 
         /// <summary>
         /// Helper collapses all fixtures under a node
@@ -702,22 +498,22 @@ namespace TestCentric.Gui.Views
         /// to use when the setting is Auto
         /// </summary>
         /// <returns>DisplayStyle to be used</returns>
-		private DisplayStyle GetEffectiveDisplayStyle()
+        private DisplayStyle GetEffectiveDisplayStyle()
         {
-            if ( DisplayStyle != DisplayStyle.Auto )
+            if (DisplayStyle != DisplayStyle.Auto)
                 return DisplayStyle;
 
-            if ( VisibleCount >= GetNodeCount( true ) )
+            if (tree.VisibleCount >= tree.GetNodeCount(true))
                 return DisplayStyle.Expand;
 
             return DisplayStyle.HideTests;
         }
-
-        public void SetInitialExpansion()
+        
+        private void SetInitialExpansion()
         {
             CollapseAll();
-            
-            switch ( GetEffectiveDisplayStyle() )
+
+            switch (GetEffectiveDisplayStyle())
             {
                 case DisplayStyle.Expand:
                     ExpandAll();
@@ -737,42 +533,19 @@ namespace TestCentric.Gui.Views
             }
         }
 
-        private TestSuiteTreeNode FindNode(TestNode test)
-        {
-            TestSuiteTreeNode node = treeMap[test.Id] as TestSuiteTreeNode;
-
-            if (node == null)
-                node = FindNodeByName(test.FullName);
-
-            return node;
-        }
-
-        private TestSuiteTreeNode FindNodeByName(string fullName)
-        {
-            foreach (string uname in treeMap.Keys)
-            {
-                int rbrack = uname.IndexOf(']');
-                string name = rbrack >= 0 ? uname.Substring(rbrack + 1) : uname;
-                if (name == fullName)
-                    return treeMap[uname] as TestSuiteTreeNode;
-            }
-
-            return null;
-        }
-        
 		private void Accept(TestSuiteTreeNodeVisitor visitor)
         {
-            foreach (TestSuiteTreeNode node in Nodes)
+            foreach (TestSuiteTreeNode node in tree.Nodes)
             {
                 node.Accept(visitor);
             }
         }
 
-        private void LoadAlternateImages(string imageSet)
+		public void LoadAlternateImages(string imageSet)
         {
             string[] imageNames = { "Skipped", "Failure", "Success", "Ignored", "Inconclusive" };
 
-			string imageDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+            string imageDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
                 Path.Combine("Images", Path.Combine("Tree", imageSet)));
 
             for (int index = 0; index < imageNames.Length; index++)
@@ -788,16 +561,42 @@ namespace TestCentric.Gui.Views
                 string filePath = Path.Combine(imageDir, name + ext);
                 if (File.Exists(filePath))
                 {
-					treeImages.Images[index] = Image.FromFile(filePath);
+                    treeImages.Images[index] = Image.FromFile(filePath);
                     break;
                 }
             }
         }
 
-        #endregion
-    }
+		/// <summary>
+        /// Helper method to determine if an IDataObject is valid
+        /// for dropping on the tree view. It must be a the drop
+        /// of a single file with a valid assembly file type.
+        /// </summary>
+        /// <param name="data">IDataObject to be tested</param>
+        /// <returns>True if dropping is allowed</returns>
+        private static bool IsValidFileDrop(IDataObject data)
+        {
+            if (!data.GetDataPresent(DataFormats.FileDrop))
+                return false;
 
-    #region Helper Classes
+            string[] fileNames = data.GetData(DataFormats.FileDrop) as string[];
+
+            if (fileNames == null || fileNames.Length == 0)
+                return false;
+
+            // Multiple assemblies are allowed - we
+            // assume they are all in the same directory
+            // since they are being dragged together.
+            foreach (string fileName in fileNames)
+            {
+                //if ( !PathUtils.IsAssemblyFileType( fileName ) )
+                //  return false;
+            }
+
+            return true;
+        }
+
+        #endregion
 
         #region ClearCheckedNodesVisitor
 
@@ -831,125 +630,124 @@ namespace TestCentric.Gui.Views
 
         #endregion
 
-    #region FailedTestsFilterVisitor
+        #region FailedTestsFilterVisitor
 
-    internal class FailedTestsFilterVisitor : TestSuiteTreeNodeVisitor
-    {
-        List<TestNode> tests = new List<TestNode>();
-
-        public TestNode[] Tests
+        internal class FailedTestsFilterVisitor : TestSuiteTreeNodeVisitor
         {
-            get { return tests.ToArray(); }
-        }
+            List<TestNode> tests = new List<TestNode>();
 
-        public override void Visit(TestSuiteTreeNode node)
-        {
-            if (!node.Test.IsSuite && node.HasResult && node.Result.Outcome.Status == TestStatus.Failed)
+            public TestNode[] Tests
             {
-                tests.Add(node.Test);
+                get { return tests.ToArray(); }
             }
-        }
-    }
 
-    #endregion
-
-    #region TestFilterVisitor
-
-    public class TestFilterVisitor : TestSuiteTreeNodeVisitor
-    {
-        private TestNodeFilter filter;
-
-        public TestFilterVisitor(TestNodeFilter filter)
-        {
-            this.filter = filter;
-        }
-
-        public override void Visit(TestSuiteTreeNode node)
-        {
-            node.Included = filter.Pass(node.Test);
-        }
-    }
-
-    #endregion
-
-    #region CheckedTestFinder
-
-    internal class CheckedTestFinder
-    {
-        [Flags]
-        public enum SelectionFlags
-        {
-            Top = 1,
-            Sub = 2,
-            Explicit = 4,
-            All = Top + Sub
-        }
-
-        private List<CheckedTestInfo> checkedTests = new List<CheckedTestInfo>();
-        private struct CheckedTestInfo
-        {
-            public TestNode Test;
-            public bool TopLevel;
-
-            public CheckedTestInfo(TestNode test, bool topLevel)
+            public override void Visit(TestSuiteTreeNode node)
             {
-                this.Test = test;
-                this.TopLevel = topLevel;
+                if (!node.Test.IsSuite && node.HasResult && node.Result.Outcome.Status == TestStatus.Failed)
+                {
+                    tests.Add(node.Test);
+                }
             }
         }
 
-        public TestNode[] GetCheckedTests(SelectionFlags flags)
+        #endregion
+
+        #region TestFilterVisitor
+
+        public class TestFilterVisitor : TestSuiteTreeNodeVisitor
         {
-            int count = 0;
-            foreach (CheckedTestInfo info in checkedTests)
-                if (isSelected(info, flags)) count++;
+            private TestNodeFilter filter;
 
-            TestNode[] result = new TestNode[count];
-
-            int index = 0;
-            foreach (CheckedTestInfo info in checkedTests)
-                if (isSelected(info, flags))
-                    result[index++] = info.Test;
-
-            return result;
-        }
-
-        private bool isSelected(CheckedTestInfo info, SelectionFlags flags)
-        {
-            if (info.TopLevel && (flags & SelectionFlags.Top) != 0)
-                return true;
-            else if (!info.TopLevel && (flags & SelectionFlags.Sub) != 0)
-                return true;
-            else if (info.Test.RunState == RunState.Explicit && (flags & SelectionFlags.Explicit) != 0)
-                return true;
-            else
-                return false;
-        }
-
-        public CheckedTestFinder(ITestTreeView treeView)
-        {
-            FindCheckedNodes(treeView.Nodes, true);
-        }
-
-        private void FindCheckedNodes(TestSuiteTreeNode node, bool topLevel)
-        {
-            if (node.Checked)
+            public TestFilterVisitor(TestNodeFilter filter)
             {
-                checkedTests.Add(new CheckedTestInfo(node.Test, topLevel));
-                topLevel = false;
+                this.filter = filter;
             }
 
-            FindCheckedNodes(node.Nodes, topLevel);
+            public override void Visit(TestSuiteTreeNode node)
+            {
+                node.Included = filter.Pass(node.Test);
+            }
         }
 
-        private void FindCheckedNodes(TreeNodeCollection nodes, bool topLevel)
+        #endregion
+
+        #region CheckedTestFinder
+
+        internal class CheckedTestFinder
         {
-            foreach (TestSuiteTreeNode node in nodes)
-                FindCheckedNodes(node, topLevel);
+            [Flags]
+            public enum SelectionFlags
+            {
+                Top = 1,
+                Sub = 2,
+                Explicit = 4,
+                All = Top + Sub
+            }
+
+            private List<CheckedTestInfo> checkedTests = new List<CheckedTestInfo>();
+            private struct CheckedTestInfo
+            {
+                public TestNode Test;
+                public bool TopLevel;
+
+                public CheckedTestInfo(TestNode test, bool topLevel)
+                {
+                    this.Test = test;
+                    this.TopLevel = topLevel;
+                }
+            }
+
+            public TestNode[] GetCheckedTests(SelectionFlags flags)
+            {
+                int count = 0;
+                foreach (CheckedTestInfo info in checkedTests)
+                    if (isSelected(info, flags)) count++;
+
+                TestNode[] result = new TestNode[count];
+
+                int index = 0;
+                foreach (CheckedTestInfo info in checkedTests)
+                    if (isSelected(info, flags))
+                        result[index++] = info.Test;
+
+                return result;
+            }
+
+            private bool isSelected(CheckedTestInfo info, SelectionFlags flags)
+            {
+                if (info.TopLevel && (flags & SelectionFlags.Top) != 0)
+                    return true;
+                else if (!info.TopLevel && (flags & SelectionFlags.Sub) != 0)
+                    return true;
+                else if (info.Test.RunState == RunState.Explicit && (flags & SelectionFlags.Explicit) != 0)
+                    return true;
+                else
+                    return false;
+            }
+
+            public CheckedTestFinder(TreeView treeView)
+            {
+                FindCheckedNodes(treeView.Nodes, true);
+            }
+
+            private void FindCheckedNodes(TestSuiteTreeNode node, bool topLevel)
+            {
+                if (node.Checked)
+                {
+                    checkedTests.Add(new CheckedTestInfo(node.Test, topLevel));
+                    topLevel = false;
+                }
+
+                FindCheckedNodes(node.Nodes, topLevel);
+            }
+
+            private void FindCheckedNodes(TreeNodeCollection nodes, bool topLevel)
+            {
+                foreach (TestSuiteTreeNode node in nodes)
+                    FindCheckedNodes(node, topLevel);
+            }
         }
+
+        #endregion
     }
-
-    #endregion
-
-    #endregion
 }

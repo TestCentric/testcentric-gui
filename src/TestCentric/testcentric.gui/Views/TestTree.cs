@@ -249,7 +249,7 @@ namespace TestCentric.Gui.Views
             // 
             this.tests.AllowDrop = true;
             this.tests.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tests.HideSelection = false;
+            //this.tests.HideSelection = false;
             this.tests.Location = new System.Drawing.Point(0, 0);
             this.tests.Name = "tests";
             this.tests.Size = new System.Drawing.Size(219, 448);
@@ -534,7 +534,7 @@ namespace TestCentric.Gui.Views
                 
                 // We need to ensure the tree loads first and restore the
                 // visual state before checking the seleted categories.
-                tests.Load(e.Test);
+                tests.LoadTests(e.Test);
 
 				if (model.Services.UserSettings.Gui.TestTree.SaveVisualState)
 				{
