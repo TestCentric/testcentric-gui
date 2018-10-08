@@ -950,15 +950,9 @@ namespace TestCentric.Gui.Views
         public ICommand NUnitHelpCommand { get; }
         public ICommand AboutCommand { get; }
 
-        // Test Selection
-        public TestNode[] SelectedTests
-        {
-            get { return testTree.SelectedTests; }
-        }
-
         public TestNode[] FailedTests
         {
-            get { return testTree.FailedTests; }
+            get { return TreeView.FailedTests; }
         }
 
         public LongRunningOperationDisplay LongOperationDisplay(string text)

@@ -84,16 +84,6 @@ namespace TestCentric.Gui.Views
             }
         }
 
-        public TestNode[] SelectedTests
-        {
-            get { return tests.SelectedTests; }
-        }
-
-        public TestNode[] FailedTests
-        {
-            get { return tests.FailedTests; }
-        }
-
         private ITestModel Model { get; set; }
 
         #endregion
@@ -109,15 +99,6 @@ namespace TestCentric.Gui.Views
             //tests.CheckedTestChanged += new CheckedTestChangedHandler(tests_CheckedTestChanged);
 
             this.excludeCheckbox.Enabled = false;
-        }
-
-        protected override void OnLoad(EventArgs e)
-        {
-            if ( !this.DesignMode )
-            {
-            }
-
-            base.OnLoad (e);
         }
 
         public void ClearSelectedCategories()
@@ -478,19 +459,6 @@ namespace TestCentric.Gui.Views
         {
             UpdateCategorySelection();
         }
-
-        //private void tests_CheckedTestChanged(ITest[] tests)
-        //{
-        //	if (SelectedTestsChanged != null) 
-        //	{
-        //		SelectedTestsChangedEventArgs args = new SelectedTestsChangedEventArgs("", tests.Length);
-        //		SelectedTestsChanged(tests, args);
-        //	}
-
-        //	if (tests.Length > 0) 
-        //	{
-        //	}
-        //}
 
         private void UpdateCategorySelection()
         {

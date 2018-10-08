@@ -787,12 +787,12 @@ namespace TestCentric.Gui.Presenters
 
         public void RunSelectedTests()
         {
-            RunTests(_view.SelectedTests);
+            RunTests(_view.TreeView.SelectedTests);
         }
 
         public void RunFailedTests()
         {
-            RunTests(_view.FailedTests);
+            RunTests(_view.TreeView.FailedTests);
         }
 
         public void RunTests(TestNode test)
@@ -850,15 +850,6 @@ namespace TestCentric.Gui.Presenters
 			_view.SaveResultsCommand.Enabled = !testRunning && !testLoading && _model.HasResults;
 		}
         
-		// TODO:Remove use by TestTree
-        internal void EnableRunCommands(bool enabled)
-        {
-            _view.RunButton.Enabled = enabled;
-            _view.RunAllCommand.Enabled = enabled;
-            _view.RunSelectedCommand.Enabled = enabled;
-            _view.RunFailedCommand.Enabled = enabled && _model.HasResults && _view.FailedTests != null;
-        }
-
        private void InitializeControls(Control owner)
         {
             foreach (Control control in owner.Controls)

@@ -94,10 +94,6 @@ namespace TestCentric.Gui.Views
         ICommand NUnitHelpCommand { get; }
         ICommand AboutCommand { get; }
 	
-		// Test Selection
-		TestNode[] SelectedTests { get; }
-		TestNode[] FailedTests { get; }
-
         // SubViews
 		TestTreeView TreeView { get; }
 		StatusBarView StatusBarView { get; }
