@@ -30,6 +30,8 @@
         {
 			this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TestTreeView));
+            this.treePanel = new System.Windows.Forms.Panel();
+            this.buttonPanel = new System.Windows.Forms.Panel();
             this.tree = new System.Windows.Forms.TreeView();
             this.treeImages = new System.Windows.Forms.ImageList(this.components);
             this.runMenuItem = new System.Windows.Forms.MenuItem();
@@ -38,6 +40,10 @@
             this.propertiesMenuItem = new System.Windows.Forms.MenuItem();
             this.treeMenu = new System.Windows.Forms.ContextMenu();
             this.treeMenu.Name = "treeMenu";
+            this.checkFailedButton = new System.Windows.Forms.Button();
+            this.clearAllButton = new System.Windows.Forms.Button();
+            this.treePanel.SuspendLayout();
+            this.buttonPanel.SuspendLayout();
             this.SuspendLayout();
 			// 
             // treeImages
@@ -49,6 +55,15 @@
             this.treeImages.Images.SetKeyName(2, "Success.png");
             this.treeImages.Images.SetKeyName(3, "Ignored.png");
             this.treeImages.Images.SetKeyName(4, "Inconclusive.png");
+            // 
+            // treePanel
+            // 
+            this.treePanel.Controls.Add(this.tree);
+            this.treePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treePanel.Location = new System.Drawing.Point(0, 0);
+            this.treePanel.Name = "treePanel";
+            this.treePanel.Size = new System.Drawing.Size(219, 448);
+            this.treePanel.TabIndex = 0;
             // 
             // tree
             //
@@ -73,7 +88,38 @@
                 this.showCheckBoxesMenuItem,
                 new System.Windows.Forms.MenuItem("-"),
                 this.propertiesMenuItem});
-            //
+            // 
+            // buttonPanel
+            // 
+            this.buttonPanel.Controls.Add(this.checkFailedButton);
+            this.buttonPanel.Controls.Add(this.clearAllButton);
+            //this.buttonPanel.Visible = true;
+            this.buttonPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.buttonPanel.Location = new System.Drawing.Point(0, 448);
+            this.buttonPanel.Name = "buttonPanel";
+            this.buttonPanel.Size = new System.Drawing.Size(219, 40);
+            this.buttonPanel.TabIndex = 1;
+            // 
+            // checkFailedButton
+            // 
+            this.checkFailedButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.checkFailedButton.Location = new System.Drawing.Point(117, 8);
+            this.checkFailedButton.Name = "checkFailedButton";
+            this.checkFailedButton.Size = new System.Drawing.Size(96, 23);
+            this.checkFailedButton.TabIndex = 1;
+            this.checkFailedButton.Text = "Check Failed";
+            this.checkFailedButton.Click += new System.EventHandler(this.checkFailedButton_Click);
+            // 
+            // clearAllButton
+            // 
+            this.clearAllButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.clearAllButton.Location = new System.Drawing.Point(13, 8);
+            this.clearAllButton.Name = "clearAllButton";
+            this.clearAllButton.Size = new System.Drawing.Size(96, 23);
+            this.clearAllButton.TabIndex = 0;
+            this.clearAllButton.Text = "Clear All";
+            this.clearAllButton.Click += new System.EventHandler(this.clearAllButton_Click);
+           //
             // runMenuItem
             //
             this.runMenuItem.Name = "runMenuItem";
@@ -98,8 +144,12 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.tree);
+            this.Controls.AddRange(new System.Windows.Forms.Control[]{
+                this.treePanel,
+                this.buttonPanel});
             this.Name = "TestTreeView";
+            this.buttonPanel.ResumeLayout();
+            this.treePanel.ResumeLayout();
             this.ResumeLayout(false);
 
         }
@@ -107,7 +157,11 @@
         #endregion
 
         private System.Windows.Forms.ImageList treeImages;
+        private System.Windows.Forms.Panel treePanel;
         private System.Windows.Forms.TreeView tree;
+        private System.Windows.Forms.Panel buttonPanel;
+        private System.Windows.Forms.Button clearAllButton;
+        private System.Windows.Forms.Button checkFailedButton;
         private System.Windows.Forms.ContextMenu treeMenu;
         private System.Windows.Forms.MenuItem runMenuItem;
         private System.Windows.Forms.MenuItem showCheckBoxesMenuItem;

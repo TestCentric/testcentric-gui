@@ -44,8 +44,6 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.TabPage categoryPage;
         private System.Windows.Forms.Panel testPanel;
         private System.Windows.Forms.Panel categoryPanel;
-        private System.Windows.Forms.Panel treePanel;
-        private System.Windows.Forms.Panel buttonPanel;
         private TestTreeView tests;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ListBox availableList;
@@ -54,8 +52,6 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.Panel categoryButtonPanel;
         private System.Windows.Forms.Button addCategory;
         private System.Windows.Forms.Button removeCategory;
-        private System.Windows.Forms.Button clearAllButton;
-        private System.Windows.Forms.Button checkFailedButton;
         private System.Windows.Forms.CheckBox excludeCheckbox;
 
         /// <summary> 
@@ -158,11 +154,7 @@ namespace TestCentric.Gui.Views
             this.tabs = new System.Windows.Forms.TabControl();
             this.testPage = new System.Windows.Forms.TabPage();
             this.testPanel = new System.Windows.Forms.Panel();
-            this.treePanel = new System.Windows.Forms.Panel();
             this.tests = new TestTreeView();
-            this.buttonPanel = new System.Windows.Forms.Panel();
-            this.checkFailedButton = new System.Windows.Forms.Button();
-            this.clearAllButton = new System.Windows.Forms.Button();
             this.categoryPage = new System.Windows.Forms.TabPage();
             this.categoryPanel = new System.Windows.Forms.Panel();
             this.categoryButtonPanel = new System.Windows.Forms.Panel();
@@ -176,8 +168,6 @@ namespace TestCentric.Gui.Views
             this.tabs.SuspendLayout();
             this.testPage.SuspendLayout();
             this.testPanel.SuspendLayout();
-            this.treePanel.SuspendLayout();
-            this.buttonPanel.SuspendLayout();
             this.categoryPage.SuspendLayout();
             this.categoryPanel.SuspendLayout();
             this.categoryButtonPanel.SuspendLayout();
@@ -209,22 +199,12 @@ namespace TestCentric.Gui.Views
             // 
             // testPanel
             // 
-            this.testPanel.Controls.Add(this.treePanel);
-            this.testPanel.Controls.Add(this.buttonPanel);
+            this.testPanel.Controls.Add(this.tests);
             this.testPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.testPanel.Location = new System.Drawing.Point(0, 0);
             this.testPanel.Name = "testPanel";
             this.testPanel.Size = new System.Drawing.Size(219, 488);
             this.testPanel.TabIndex = 0;
-            // 
-            // treePanel
-            // 
-            this.treePanel.Controls.Add(this.tests);
-            this.treePanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treePanel.Location = new System.Drawing.Point(0, 0);
-            this.treePanel.Name = "treePanel";
-            this.treePanel.Size = new System.Drawing.Size(219, 448);
-            this.treePanel.TabIndex = 0;
             // 
             // tests
             // 
@@ -235,36 +215,6 @@ namespace TestCentric.Gui.Views
             this.tests.Name = "tests";
             this.tests.Size = new System.Drawing.Size(219, 448);
             this.tests.TabIndex = 0;
-            // 
-            // buttonPanel
-            // 
-            this.buttonPanel.Controls.Add(this.checkFailedButton);
-            this.buttonPanel.Controls.Add(this.clearAllButton);
-            this.buttonPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.buttonPanel.Location = new System.Drawing.Point(0, 448);
-            this.buttonPanel.Name = "buttonPanel";
-            this.buttonPanel.Size = new System.Drawing.Size(219, 40);
-            this.buttonPanel.TabIndex = 1;
-            // 
-            // checkFailedButton
-            // 
-            this.checkFailedButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.checkFailedButton.Location = new System.Drawing.Point(117, 8);
-            this.checkFailedButton.Name = "checkFailedButton";
-            this.checkFailedButton.Size = new System.Drawing.Size(96, 23);
-            this.checkFailedButton.TabIndex = 1;
-            this.checkFailedButton.Text = "Check Failed";
-            this.checkFailedButton.Click += new System.EventHandler(this.checkFailedButton_Click);
-            // 
-            // clearAllButton
-            // 
-            this.clearAllButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.clearAllButton.Location = new System.Drawing.Point(13, 8);
-            this.clearAllButton.Name = "clearAllButton";
-            this.clearAllButton.Size = new System.Drawing.Size(96, 23);
-            this.clearAllButton.TabIndex = 0;
-            this.clearAllButton.Text = "Clear All";
-            this.clearAllButton.Click += new System.EventHandler(this.clearAllButton_Click);
             // 
             // categoryPage
             // 
@@ -386,8 +336,6 @@ namespace TestCentric.Gui.Views
             this.tabs.ResumeLayout(false);
             this.testPage.ResumeLayout(false);
             this.testPanel.ResumeLayout(false);
-            this.treePanel.ResumeLayout(false);
-            this.buttonPanel.ResumeLayout(false);
             this.categoryPage.ResumeLayout(false);
             this.categoryPanel.ResumeLayout(false);
             this.categoryButtonPanel.ResumeLayout(false);
@@ -445,16 +393,6 @@ namespace TestCentric.Gui.Views
             }
         }
 
-        private void clearAllButton_Click(object sender, System.EventArgs e)
-        {
-            tests.ClearCheckedNodes();
-        }
-
-        private void checkFailedButton_Click(object sender, System.EventArgs e)
-        {
-            tests.CheckFailedNodes();
-        }
-
         private void excludeCheckbox_CheckedChanged(object sender, System.EventArgs e)
         {
             UpdateCategorySelection();
@@ -476,20 +414,11 @@ namespace TestCentric.Gui.Views
             tests.TreeFilter = treeFilter;
         }
 
-        private void EnableCheckBoxes(bool enable)
-        {
-            buttonPanel.Visible = enable;
-            clearAllButton.Visible = enable;
-            checkFailedButton.Visible = enable;
-        }
-
         #region IViewControl Implementation
 
         public void InitializeView(ITestModel model)
         {
             Model = model;
-
-            EnableCheckBoxes(model.Services.UserSettings.Gui.TestTree.ShowCheckBoxes);
 
             model.Events.TestLoaded += (TestNodeEventArgs e) =>
             {
@@ -569,12 +498,6 @@ namespace TestCentric.Gui.Views
                 selectedList.Items.Clear();
                 excludeCheckbox.Checked = false;
                 excludeCheckbox.Enabled = false;
-            };
-
-            model.Services.UserSettings.Changed += (object sender, SettingsEventArgs e) =>
-            {
-                if (e.SettingName == "Gui.TestTree.ShowCheckBoxes")
-                    this.EnableCheckBoxes(model.Services.UserSettings.Gui.TestTree.ShowCheckBoxes);
             };
         }
 

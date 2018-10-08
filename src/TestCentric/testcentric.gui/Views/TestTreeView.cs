@@ -156,7 +156,7 @@ namespace TestCentric.Gui.Views
                         ? GetVisualState()
                         : null;
 
-                    tree.CheckBoxes = value;
+                    EnableCheckBoxes(value);
 
                     if (visualState != null)
                     {
@@ -165,6 +165,14 @@ namespace TestCentric.Gui.Views
                     }
                 }
             }
+        }
+
+        private void EnableCheckBoxes(bool enable)
+        {
+            tree.CheckBoxes = enable;
+            buttonPanel.Visible = enable;
+            clearAllButton.Visible = enable;
+            checkFailedButton.Visible = enable;
         }
 
         [Browsable(false)]
@@ -293,7 +301,7 @@ namespace TestCentric.Gui.Views
 
         public void RestoreVisualState(VisualState visualState)
         {
-            CheckBoxes = visualState.ShowCheckBoxes;
+            EnableCheckBoxes(visualState.ShowCheckBoxes);
 
             foreach (VisualTreeNode visualNode in visualState.Nodes)
             {
@@ -594,6 +602,16 @@ namespace TestCentric.Gui.Views
             }
 
             return true;
+        }
+
+        private void clearAllButton_Click(object sender, System.EventArgs e)
+        {
+            ClearCheckedNodes();
+        }
+
+        private void checkFailedButton_Click(object sender, System.EventArgs e)
+        {
+            CheckFailedNodes();
         }
 
         #endregion

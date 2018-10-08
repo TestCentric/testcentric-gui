@@ -45,6 +45,8 @@ namespace TestCentric.Gui.Presenters
 			_view.DisplayStyle = (DisplayStyle)_settings.Gui.TestTree.InitialTreeDisplay;
 			_view.AlternateImageSet = (string)_settings.Gui.TestTree.AlternateImageSet;
 
+            //_view.ShowCheckBoxes.Checked = _view.CheckBoxes = _settings.Gui.TestTree.ShowCheckBoxes;
+
 			_view.RunCommand.Enabled = false;
 
 			WireUpEvents();
