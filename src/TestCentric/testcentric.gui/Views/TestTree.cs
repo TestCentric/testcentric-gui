@@ -430,13 +430,13 @@ namespace TestCentric.Gui.Views
                     availableList.Items.Add(category);
                 
                 // We need to ensure the tree loads first and restore the
-                // visual state before checking the seleted categories.
+                // visual state before checking the selected categories.
                 tests.LoadTests(e.Test);
 
 				if (model.Services.UserSettings.Gui.TestTree.SaveVisualState)
 				{
 					string fileName = VisualState.GetVisualStateFileName(Model.TestFiles[0]);
-					if (File.Exists(fileName))
+					if (File.Exists(fileName) && new FileInfo(fileName).Length > 0)
 					{
 						var visualState = VisualState.LoadFrom(fileName);
 						tests.RestoreVisualState(visualState);

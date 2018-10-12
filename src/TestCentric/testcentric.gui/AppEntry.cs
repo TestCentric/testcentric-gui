@@ -105,7 +105,7 @@ namespace TestCentric.Gui
             }
             catch( Exception ex )
             {
-                log.Error("Gui Application threw an excepion", ex );
+                log.Error("Gui Application threw an exception", ex );
                 throw;
             }
             finally
