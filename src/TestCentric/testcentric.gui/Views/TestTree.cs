@@ -82,6 +82,10 @@ namespace TestCentric.Gui.Views
 
         private ITestModel Model { get; set; }
 
+        private readonly IMessageDisplay _messageDisplay;
+
+        private FileInfo _fileInfo;
+
         #endregion
 
         #region Construction and Initialization
@@ -95,6 +99,8 @@ namespace TestCentric.Gui.Views
             //tests.CheckedTestChanged += new CheckedTestChangedHandler(tests_CheckedTestChanged);
 
             this.excludeCheckbox.Enabled = false;
+
+            _messageDisplay = new MessageDisplay();
         }
 
         public void ClearSelectedCategories()
@@ -438,9 +444,17 @@ namespace TestCentric.Gui.Views
 					string fileName = VisualState.GetVisualStateFileName(Model.TestFiles[0]);
 					if (File.Exists(fileName) && new FileInfo(fileName).Length > 0)
 					{
-						var visualState = VisualState.LoadFrom(fileName);
-						tests.RestoreVisualState(visualState);
-						model.SelectCategories(visualState.SelectedCategories, visualState.ExcludeCategories);
+					    try
+					    {
+					        VisualState visualState = VisualState.LoadFrom(fileName);
+					        tests.RestoreVisualState(visualState);
+					        model.SelectCategories(visualState.SelectedCategories, visualState.ExcludeCategories);
+                        }
+					    catch (Exception exception)
+					    {
+					        Console.WriteLine(exception);
+					        _messageDisplay.Error($"There was an error loading the Visual State from {fileName}");
+					    }
 					}
 				}
                  
