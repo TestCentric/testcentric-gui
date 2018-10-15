@@ -74,17 +74,13 @@ namespace TestCentric.Gui.Views
             {
                 int n = this.selectedList.Items.Count;
                 string[] categories = new string[n];
-                for( int i = 0; i < n; i++ )
+                for (int i = 0; i < n; i++)
                     categories[i] = this.selectedList.Items[i].ToString();
                 return categories;
             }
         }
 
         private ITestModel Model { get; set; }
-
-        private readonly IMessageDisplay _messageDisplay;
-
-        private FileInfo _fileInfo;
 
         #endregion
 
@@ -99,8 +95,6 @@ namespace TestCentric.Gui.Views
             //tests.CheckedTestChanged += new CheckedTestChangedHandler(tests_CheckedTestChanged);
 
             this.excludeCheckbox.Enabled = false;
-
-            _messageDisplay = new MessageDisplay();
         }
 
         public void ClearSelectedCategories()
@@ -111,17 +105,17 @@ namespace TestCentric.Gui.Views
             UpdateCategorySelection();
         }
 
-        public void SelectCategories( string[] categories, bool exclude )
+        public void SelectCategories(string[] categories, bool exclude)
         {
-            foreach( string category in categories )
+            foreach (string category in categories)
             {
-                if ( Model.AvailableCategories.Contains( category ) )
+                if (Model.AvailableCategories.Contains(category))
                 {
                     if (!selectedList.Items.Contains(category))
                     {
                         selectedList.Items.Add(category);
                     }
-                    availableList.Items.Remove( category );
+                    availableList.Items.Remove(category);
 
                     this.excludeCheckbox.Checked = exclude;
                 }
@@ -136,16 +130,16 @@ namespace TestCentric.Gui.Views
         /// <summary> 
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         #endregion
@@ -244,7 +238,7 @@ namespace TestCentric.Gui.Views
             // 
             // categoryButtonPanel
             // 
-            this.categoryButtonPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.categoryButtonPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.categoryButtonPanel.Controls.Add(this.removeCategory);
             this.categoryButtonPanel.Controls.Add(this.addCategory);
@@ -273,7 +267,7 @@ namespace TestCentric.Gui.Views
             // 
             // selectedCategories
             // 
-            this.selectedCategories.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.selectedCategories.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.selectedCategories.Controls.Add(this.selectedList);
             this.selectedCategories.Controls.Add(this.excludeCheckbox);
@@ -286,8 +280,8 @@ namespace TestCentric.Gui.Views
             // 
             // selectedList
             // 
-            this.selectedList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-                | System.Windows.Forms.AnchorStyles.Left) 
+            this.selectedList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.selectedList.ItemHeight = 16;
             this.selectedList.Location = new System.Drawing.Point(8, 16);
@@ -299,7 +293,7 @@ namespace TestCentric.Gui.Views
             // 
             // excludeCheckbox
             // 
-            this.excludeCheckbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.excludeCheckbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.excludeCheckbox.Location = new System.Drawing.Point(8, 120);
             this.excludeCheckbox.Name = "excludeCheckbox";
@@ -310,8 +304,8 @@ namespace TestCentric.Gui.Views
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-                | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.availableList);
             this.groupBox1.Location = new System.Drawing.Point(8, 0);
@@ -323,8 +317,8 @@ namespace TestCentric.Gui.Views
             // 
             // availableList
             // 
-            this.availableList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-                | System.Windows.Forms.AnchorStyles.Left) 
+            this.availableList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.availableList.ItemHeight = 16;
             this.availableList.Location = new System.Drawing.Point(8, 24);
@@ -354,15 +348,15 @@ namespace TestCentric.Gui.Views
 
         private void addCategory_Click(object sender, System.EventArgs e)
         {
-            if (availableList.SelectedItems.Count > 0) 
+            if (availableList.SelectedItems.Count > 0)
             {
                 // Create a separate list to avoid exception
                 // when using the list box directly.
                 List<string> categories = new List<string>();
-                foreach ( string category in availableList.SelectedItems ) 
+                foreach (string category in availableList.SelectedItems)
                     categories.Add(category);
 
-                foreach ( string category in categories)
+                foreach (string category in categories)
                 {
                     selectedList.Items.Add(category);
                     availableList.Items.Remove(category);
@@ -376,7 +370,7 @@ namespace TestCentric.Gui.Views
 
         private void removeCategory_Click(object sender, System.EventArgs e)
         {
-            if (selectedList.SelectedItems.Count > 0) 
+            if (selectedList.SelectedItems.Count > 0)
             {
                 // Create a separate list to avoid exception
                 // when using the list box directly.
@@ -384,7 +378,7 @@ namespace TestCentric.Gui.Views
                 foreach (string category in selectedList.SelectedItems)
                     categories.Add(category);
 
-                foreach ( string category in categories )
+                foreach (string category in categories)
                 {
                     selectedList.Items.Remove(category);
                     availableList.Items.Add(category);
@@ -434,30 +428,30 @@ namespace TestCentric.Gui.Views
                 availableList.SuspendLayout();
                 foreach (string category in model.AvailableCategories)
                     availableList.Items.Add(category);
-                
+
                 // We need to ensure the tree loads first and restore the
                 // visual state before checking the selected categories.
                 tests.LoadTests(e.Test);
 
-				if (model.Services.UserSettings.Gui.TestTree.SaveVisualState)
-				{
-					string fileName = VisualState.GetVisualStateFileName(Model.TestFiles[0]);
-					if (File.Exists(fileName) && new FileInfo(fileName).Length > 0)
-					{
-					    try
-					    {
-					        VisualState visualState = VisualState.LoadFrom(fileName);
-					        tests.RestoreVisualState(visualState);
-					        model.SelectCategories(visualState.SelectedCategories, visualState.ExcludeCategories);
+                if (model.Services.UserSettings.Gui.TestTree.SaveVisualState)
+                {
+                    string fileName = VisualState.GetVisualStateFileName(Model.TestFiles[0]);
+                    if (File.Exists(fileName) && new FileInfo(fileName).Length > 0)
+                    {
+                        try
+                        {
+                            VisualState visualState = VisualState.LoadFrom(fileName);
+                            tests.RestoreVisualState(visualState);
+                            model.SelectCategories(visualState.SelectedCategories, visualState.ExcludeCategories);
                         }
-					    catch (Exception exception)
-					    {
-					        Console.WriteLine(exception);
-					        _messageDisplay.Error($"There was an error loading the Visual State from {fileName}");
-					    }
-					}
-				}
-                 
+                        catch (Exception exception)
+                        {
+                            var messageDisplay = new MessageDisplay();
+                            messageDisplay.Error($"There was an error loading the Visual State from {fileName}");
+                        }
+                    }
+                }
+
                 // Reflect any changes in the controls
                 if (model.SelectedCategories != null && model.SelectedCategories.Length > 0)
                 {
