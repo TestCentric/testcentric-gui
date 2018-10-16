@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Copyright (c) 2015-2018 Charlie Poole
+// Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -21,31 +21,27 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Elements
 {
     /// <summary>
-    /// The IViewElement interface wraps an individual gui
-    /// item like a control or toolstrip item. It is generally
-    /// exposed by views and is the base of other interfaces
-    /// in the TestCentric.Gui.Elements namespace.
+    /// ControlElement is a generic wrapper for controls.
     /// </summary>
-    public interface IViewElement
+    public class CheckBoxElement : ControlElement<CheckBox>, ICheckBox
     {
-        /// <summary>
-        /// Gets or sets the Enabled status of the element
-        /// </summary>
-        bool Enabled { get; set; }
+        public CheckBoxElement(CheckBox checkBox) : base(checkBox)
+        {
+            checkBox.Click += (s, e) => CheckedChanged?.Invoke();
+        }
 
-        /// <summary>
-        /// Gets or sets the Visible status of the element
-        /// </summary>
-        bool Visible { get; set; }
+        public bool Checked
+        {
+            get => Control.Checked;
+            set => Control.Checked = value;
+        }
 
-        ///// <summary>
-        ///// Invoke a delegate if necessary, otherwise just call it
-        ///// </summary>
-        //void InvokeIfRequired(MethodInvoker _delegate);
+        public event CommandHandler CheckedChanged;
     }
 }

@@ -138,7 +138,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Elements\CheckedMenuGroup.cs" />
-    <Compile Include="Elements\ControlElement.cs" />
+    <Compile Include="Elements\CheckBoxElement.cs" />
     <Compile Include="Elements\IChecked.cs" />
     <Compile Include="Elements\IControlElement.cs" />
     <Compile Include="Elements\IMenu.cs" />
@@ -153,7 +153,6 @@
     <Compile Include="IMessageDisplay.cs" />
     <Compile Include="InternalTrace.cs" />
     <Compile Include="InternalTraceWriter.cs" />
-    <Compile Include="Controls\IViewControl.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="MessageDisplay.cs" />
     <Compile Include="Elements\ICommand.cs" />
@@ -334,11 +333,11 @@
     <Compile Include="Elements\FontSelector.cs" />
     <Compile Include="Presenters\TreeViewPresenter.cs" />
     <Compile Include="Views\ITestTreeView.cs" />
-    <Compile Include="Views\TestTree.cs">
+    <Compile Include="Views\CategoryView.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <EmbeddedResource Include="Views\TestTree.resx">
-      <DependentUpon>TestTree.cs</DependentUpon>
+      <DependentUpon>CategoryView.cs</DependentUpon>
     </EmbeddedResource>
     <Compile Include="Views\TestSuiteTreeNode.cs" />
     <Compile Include="Elements\MenuCommand.cs" />
@@ -353,6 +352,12 @@
     <EmbeddedResource Include="Views\TestTreeView.resx">
         <DependentUpon>TestTreeView.cs</DependentUpon>
     </EmbeddedResource>
+    <Compile Include="Views\ICategoryView.cs" />
+    <Compile Include="Presenters\CategoryPresenter.cs" />
+    <Compile Include="Elements\ICheckBox.cs" />
+    <Compile Include="Elements\ControlElement.cs" />
+    <Compile Include="Elements\IListBox.cs" />
+    <Compile Include="Elements\ListBoxELement.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="nunit.snk" />

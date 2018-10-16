@@ -21,6 +21,8 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System.Collections.Generic;
+
 namespace TestCentric.Gui
 {
     using Model;
@@ -95,14 +97,14 @@ namespace TestCentric.Gui
 
     public class CategoryFilter : TestNodeFilter
     {
-        string[] _categories;
+        IList<string> _categories;
 
         public override bool IsEmpty
         {
-            get { return _categories.Length == 0; }
+            get { return _categories.Count == 0; }
         }
 
-        public CategoryFilter(string[] categories)
+        public CategoryFilter(IList<string> categories)
         {
             _categories = categories;
         }

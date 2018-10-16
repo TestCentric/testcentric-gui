@@ -120,8 +120,8 @@ namespace TestCentric.Gui.Presenters
                 foreach (var assembly in _model.TestAssemblies)
                     if (assembly.RunState == RunState.NotRunnable)
                         _view.MessageDisplay.Error(assembly.GetProperty("_SKIPREASON"));
-                
-				UpdateViewCommands();
+
+                UpdateViewCommands();
             };
 
             _model.Events.TestsUnloading += (TestEventArgse) =>
@@ -204,10 +204,6 @@ namespace TestCentric.Gui.Presenters
 			_view.Load += (s, e) =>
 			{
 				InitializeDisplay(_settings.Gui.DisplayFormat);
-                
-                // Temporary call, so long as IViewControl is used
-				InitializeControls((Control)_view);
-                
 			};
 
             _view.Shown += (s, e) =>
@@ -850,18 +846,6 @@ namespace TestCentric.Gui.Presenters
 			_view.SaveResultsCommand.Enabled = !testRunning && !testLoading && _model.HasResults;
 		}
         
-       private void InitializeControls(Control owner)
-        {
-            foreach (Control control in owner.Controls)
-            {
-                var view = control as IViewControl;
-                if (view != null)
-					view.InitializeView(_model);
-
-				InitializeControls(control);
-            }
-        }
-
         private OpenFileDialog CreateOpenFileDialog(string title, bool includeProjects, bool includeAssemblies)
         {
             OpenFileDialog dlg = new OpenFileDialog();

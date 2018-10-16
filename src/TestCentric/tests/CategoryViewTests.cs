@@ -31,17 +31,17 @@ namespace TestCentric.Gui.Tests
     using Views;
 
     [TestFixture, Ignore("Same internal fields no longer exist to test this. Need to rewrite.")]
-    public class TestTreeTests
+    public class CategoryViewTests
     {
         [Test]
         public void SameCategoryShouldNotBeSelectedMoreThanOnce()
         {
             // arrange
-            TestTree target = new TestTree();
+            CategoryView target = new CategoryView();
 
             // we need to populate the available categories
             // this can be done via TestLoader but this way the test is isolated
-            FieldInfo fieldInfo = typeof (TestTree).GetField("availableCategories", BindingFlags.NonPublic | BindingFlags.Instance);
+            FieldInfo fieldInfo = typeof (CategoryView).GetField("availableCategories", BindingFlags.NonPublic | BindingFlags.Instance);
             Assert.IsNotNull(fieldInfo, "The field 'availableCategories' should be found.");
             object fieldValue = fieldInfo.GetValue(target);
             Assert.IsNotNull(fieldValue, "The value of 'availableCategories' should not be null.");
@@ -57,7 +57,7 @@ namespace TestCentric.Gui.Tests
             // act
             //target.SelectCategories(expectedSelectedCategories, true);
             //target.SelectCategories(expectedSelectedCategories, true);
-            string[] actualSelectedCategories = target.SelectedCategories;
+            var actualSelectedCategories = target.SelectedList.Items;
 
             // assert
             CollectionAssert.AreEquivalent(expectedSelectedCategories, actualSelectedCategories);

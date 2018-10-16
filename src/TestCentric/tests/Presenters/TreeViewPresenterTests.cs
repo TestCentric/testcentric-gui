@@ -21,7 +21,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System.Windows.Forms;
+using System.Collections.Generic;
 using NUnit.Framework;
 using NSubstitute;
 
@@ -73,8 +73,9 @@ namespace TestCentric.Gui.Presenters
         public void WhenTestLoadCompletes_RunCommandIsEnabled()
         {
             ClearAllReceivedCalls();
+            _model.TestFiles.Returns(new List<string>(new[] { "test.dll" }));
             FireTestLoadedEvent(new TestNode("<test-run/>"));
-
+            
             _view.RunCommand.Received().Enabled = true;
         }
 

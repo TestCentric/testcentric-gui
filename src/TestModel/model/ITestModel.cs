@@ -73,7 +73,7 @@ namespace TestCentric.Gui.Model
         // Do we have results from running the test?
         bool HasResults { get; }
 
-        string[] SelectedCategories { get; }
+        List<string> SelectedCategories { get; }
 
         bool ExcludeSelectedCategories { get; }
 
@@ -124,7 +124,7 @@ namespace TestCentric.Gui.Model
         void NotifySelectedItemChanged(ITestItem testItem);
 
         // Set the category filters for running and tree display
-        void SelectCategories(string[] categories, bool exclude);
+        void SelectCategories(IList<string> categories, bool exclude);
 
         #endregion
     }
