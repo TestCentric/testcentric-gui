@@ -44,7 +44,7 @@ namespace TestCentric.Gui
 
         public string SelectedNode;
 
-        public string[] SelectedCategories;
+        public List<string> SelectedCategories;
         
         public bool ExcludeCategories;
 

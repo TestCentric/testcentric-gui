@@ -74,17 +74,17 @@ namespace TestCentric.Gui.Model
             return new TestFilter(sb.ToString());
         }
 
-        public static TestFilter MakeCategoryFilter(params string[] categories)
+        public static TestFilter MakeCategoryFilter(IList<string> categories)
         {
             var sb = new StringBuilder("<filter>");
 
-            if (categories.Length > 1)
+            if (categories.Count > 1)
                 sb.Append("<or>");
 
             foreach (string category in categories)
                 sb.Append($"<cat>{category}</cat>");
 
-            if (categories.Length > 1)
+            if (categories.Count > 1)
                 sb.Append("</or>");
 
             sb.Append("</filter>");

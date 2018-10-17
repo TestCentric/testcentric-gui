@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Copyright (c) 2015-2018 Charlie Poole
+// Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -21,31 +21,25 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System.Collections;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Elements
 {
     /// <summary>
-    /// The IViewElement interface wraps an individual gui
-    /// item like a control or toolstrip item. It is generally
-    /// exposed by views and is the base of other interfaces
-    /// in the TestCentric.Gui.Elements namespace.
+    /// The IListBox interface is implemented by an element
+    /// representing a ListBox containing string items or
+    /// items that implement ToString() in a useful way.
     /// </summary>
-    public interface IViewElement
+    public interface IListBox : IControlElement<ListBox>
     {
-        /// <summary>
-        /// Gets or sets the Enabled status of the element
-        /// </summary>
-        bool Enabled { get; set; }
+        ListBox.ObjectCollection Items { get; }
+        ListBox.SelectedObjectCollection SelectedItems { get; }
 
-        /// <summary>
-        /// Gets or sets the Visible status of the element
-        /// </summary>
-        bool Visible { get; set; }
+        event CommandHandler DoubleClick;
 
-        ///// <summary>
-        ///// Invoke a delegate if necessary, otherwise just call it
-        ///// </summary>
-        //void InvokeIfRequired(MethodInvoker _delegate);
+        void Add(string item);
+        void Remove(string item);
     }
 }

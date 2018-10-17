@@ -22,6 +22,7 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using NUnit.Framework;
 
@@ -41,7 +42,7 @@ namespace TestCentric.Gui.Tests
                 ShowCheckBoxes = true,
 				TopNode = "ABC.Test.dll",
                 SelectedNode = "NUnit.Tests.MyFixture.MyTest",
-                SelectedCategories = new string[] { "A", "B", "C" },
+                SelectedCategories = new List<string>( new [] { "A", "B", "C" } ),
                 ExcludeCategories = true
 			};
 

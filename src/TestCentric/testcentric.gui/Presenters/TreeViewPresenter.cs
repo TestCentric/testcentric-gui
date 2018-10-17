@@ -23,6 +23,7 @@
 
 using System;
 using System.Diagnostics;
+using System.IO;
 
 namespace TestCentric.Gui.Presenters
 {
@@ -63,6 +64,19 @@ namespace TestCentric.Gui.Presenters
             {
                 _view.RunCommand.Enabled = true;
 				_view.CheckPropertiesDialog();
+
+                _view.LoadTests(e.Test);
+
+                if (_model.Services.UserSettings.Gui.TestTree.SaveVisualState)
+                {
+                    string fileName = VisualState.GetVisualStateFileName(_model.TestFiles[0]);
+                    if (File.Exists(fileName))
+                    {
+                        var visualState = VisualState.LoadFrom(fileName);
+                        _view.RestoreVisualState(visualState);
+                        _model.SelectCategories(visualState.SelectedCategories, visualState.ExcludeCategories);
+                    }
+                }
             };
 
 			_model.Events.TestsReloading += (e) =>
@@ -138,19 +152,19 @@ namespace TestCentric.Gui.Presenters
             //   }
             //};
 
-            //_model.Events.CategorySelectionChanged += (TestEventArgs e) =>
-            //{
-            //    TestNodeFilter filter = TestNodeFilter.Empty;
+            _model.Events.CategorySelectionChanged += (TestEventArgs e) =>
+            {
+                TestNodeFilter filter = TestNodeFilter.Empty;
 
-            //    if (_model.SelectedCategories.Length > 0)
-            //    {
-            //        filter = new CategoryFilter(_model.SelectedCategories);
-            //        if (_model.ExcludeSelectedCategories)
-            //            filter = new NotFilter(filter);
-            //    }
+                if (_model.SelectedCategories.Count > 0)
+                {
+                    filter = new CategoryFilter(_model.SelectedCategories);
+                    if (_model.ExcludeSelectedCategories)
+                        filter = new NotFilter(filter);
+                }
 
-            //    _view.TreeFilter = filter;
-            //};
+                _view.TreeFilter = filter;
+            };
 
             _view.FileDrop += _model.LoadTests;
 

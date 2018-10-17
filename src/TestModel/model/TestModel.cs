@@ -134,7 +134,7 @@ namespace TestCentric.Gui.Model
             get { return Results.Count > 0; }
         }
 
-        public string[] SelectedCategories { get; private set; }
+        public List<string> SelectedCategories { get; private set; }
 
         public bool ExcludeSelectedCategories { get; private set; }
 
@@ -276,9 +276,9 @@ namespace TestCentric.Gui.Model
             Results.Clear();
         }
 
-        public void SelectCategories(string[] categories, bool exclude)
+        public void SelectCategories(IList<string> categories, bool exclude)
         {
-            SelectedCategories = categories;
+            SelectedCategories = new List<string>(categories);
             ExcludeSelectedCategories = exclude;
 
             UpdateCategoryFilter();
@@ -290,7 +290,7 @@ namespace TestCentric.Gui.Model
         {
             var catFilter = TestFilter.Empty;
 
-            if (SelectedCategories != null && SelectedCategories.Length > 0)
+            if (SelectedCategories != null && SelectedCategories.Count > 0)
             {
                 catFilter = Filters.MakeCategoryFilter(SelectedCategories);
 

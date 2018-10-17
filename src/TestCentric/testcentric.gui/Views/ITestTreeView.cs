@@ -67,7 +67,10 @@ namespace TestCentric.Gui.Views
 		TestNode SelectedTest { get; }
 		TestNode[] SelectedTests { get; }
 
+        TestNodeFilter TreeFilter { get; set; }
+
 		void Clear();
+        void LoadTests(TestNode test);
 		void Reload(TestNode test);
 
 		void ExpandAll();

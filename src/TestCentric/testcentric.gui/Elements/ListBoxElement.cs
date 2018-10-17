@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Copyright (c) 2015-2018 Charlie Poole
+// Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -21,31 +21,42 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Elements
 {
     /// <summary>
-    /// The IViewElement interface wraps an individual gui
-    /// item like a control or toolstrip item. It is generally
-    /// exposed by views and is the base of other interfaces
-    /// in the TestCentric.Gui.Elements namespace.
+    /// ListBoxElement wraps a ListBox that contains string items
+    /// or items that implement ToString() in a useful way.
     /// </summary>
-    public interface IViewElement
+    public class ListBoxElement : ControlElement<ListBox>, IListBox
     {
-        /// <summary>
-        /// Gets or sets the Enabled status of the element
-        /// </summary>
-        bool Enabled { get; set; }
+        public ListBoxElement(ListBox listBox) : base(listBox)
+        {
+            listBox.DoubleClick += (s, e) => DoubleClick?.Invoke();
+        }
 
-        /// <summary>
-        /// Gets or sets the Visible status of the element
-        /// </summary>
-        bool Visible { get; set; }
+        #region IListBox Implementation
 
-        ///// <summary>
-        ///// Invoke a delegate if necessary, otherwise just call it
-        ///// </summary>
-        //void InvokeIfRequired(MethodInvoker _delegate);
+        public ListBox.ObjectCollection Items => Control.Items;
+
+        public ListBox.SelectedObjectCollection SelectedItems => Control.SelectedItems;
+
+        public event CommandHandler DoubleClick;
+
+        public void Add(string item)
+        {
+            InvokeIfRequired(() => Control.Items.Add(item));
+        }
+
+        public void Remove(string item)
+        {
+            InvokeIfRequired(() => Control.Items.Remove(item));
+        }
+
+        #endregion
     }
 }

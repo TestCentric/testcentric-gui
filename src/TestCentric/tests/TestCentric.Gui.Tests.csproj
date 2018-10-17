@@ -147,7 +147,7 @@
     <Compile Include="Presenters\TestsNotRunPresenterTests.cs" />
     <Compile Include="Presenters\TextOutputPresenterTests.cs" />
     <Compile Include="TestSuiteTreeNodeTests.cs" />
-    <Compile Include="TestTreeTests.cs" />
+    <Compile Include="CategoryViewTests.cs" />
     <Compile Include="TextOutputDisplayTests.cs" />
     <Compile Include="VisualStateTests.cs" />
     <Compile Include="Views\CommonViewTests.cs" />
@@ -161,7 +161,7 @@
     <Compile Include="Presenters\Main\WhenTestsAreLoading.cs" />
     <Compile Include="Presenters\Main\WhenTestsAreReloaded.cs" />
     <Compile Include="Presenters\Main\WhenTestsAreUnloaded.cs" />
-    <Compile Include="Views\TreeViewPresenterTests.cs" />
+    <Compile Include="Presenters\TreeViewPresenterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="TestCentric.Gui.Tests.addins">
