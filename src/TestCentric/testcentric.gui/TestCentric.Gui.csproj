@@ -357,7 +357,7 @@
     <Compile Include="Elements\ICheckBox.cs" />
     <Compile Include="Elements\ControlElement.cs" />
     <Compile Include="Elements\IListBox.cs" />
-    <Compile Include="Elements\ListBoxELement.cs" />
+    <Compile Include="Elements\ListBoxElement.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="nunit.snk" />

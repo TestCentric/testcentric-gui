@@ -33,7 +33,7 @@ namespace TestCentric.Gui.Views
     using Elements;
 
     /// <summary>
-    /// Summary description for TestTree.
+    /// CategoryView displays and allows selecting the available categories.
     /// </summary>
     public class CategoryView : UserControl, ICategoryView
     {
@@ -67,9 +67,6 @@ namespace TestCentric.Gui.Views
             ExcludeCategories = new CheckBoxElement(excludeCheckbox);
             AddButton = new ButtonElement(addCategory);
             RemoveButton = new ButtonElement(removeCategory);
-
-            //tests.SelectedTestChanged += new SelectedTestChangedHandler(tests_SelectedTestChanged);
-                //tests.CheckedTestChanged += new CheckedTestChangedHandler(tests_CheckedTestChanged);
 
             this.excludeCheckbox.Enabled = false;
         }

@@ -775,7 +775,6 @@ namespace TestCentric.Gui.Views
 			// 
 			// tabControl
 			// 
-			//this.tabControl.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             this.resultTabs.Alignment = System.Windows.Forms.TabAlignment.Bottom;
             this.resultTabs.Controls.Add(this.errorTab);
             this.resultTabs.Controls.Add(this.notrunTab);
@@ -850,7 +849,6 @@ namespace TestCentric.Gui.Views
             // 
             // leftPanel
             // 
-            //this.leftPanel.Controls.Add(this.testTree);
             this.leftPanel.Controls.Add(this.tabs);
             this.leftPanel.Dock = System.Windows.Forms.DockStyle.Left;
             this.leftPanel.Location = new System.Drawing.Point(0, 0);
@@ -893,7 +891,6 @@ namespace TestCentric.Gui.Views
             // 
             this.treeView.AllowDrop = true;
             this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
-            //this.treeView.HideSelection = false;
             this.treeView.Location = new System.Drawing.Point(0, 0);
             this.treeView.Name = "tests";
             this.treeView.Size = new System.Drawing.Size(219, 448);
@@ -910,9 +907,6 @@ namespace TestCentric.Gui.Views
             // 
             // categoryPanel
             // 
-            //this.categoryPanel.Controls.Add(this.categoryButtonPanel);
-            //this.categoryPanel.Controls.Add(this.selectedCategories);
-            //this.categoryPanel.Controls.Add(this.groupBox1);
             this.categoryPanel.Controls.Add(this.categoryView);
             this.categoryPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.categoryPanel.Location = new System.Drawing.Point(0, 0);

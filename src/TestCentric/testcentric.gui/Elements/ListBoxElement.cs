@@ -58,28 +58,5 @@ namespace TestCentric.Gui.Elements
         }
 
         #endregion
-
-        #region Nested ItemCollection class
-
-        class StringItemCollection : List<string>
-        {
-            private IList _items;
-
-            public StringItemCollection(IList items)
-            {
-                _items = items;
-
-                foreach (var item in items)
-                    Add(item.ToString());
-            }
-
-            public new void Add(string item)
-            {
-                _items.Add(item);
-                base.Add(item);
-            }
-        }
-
-        #endregion
     }
 }

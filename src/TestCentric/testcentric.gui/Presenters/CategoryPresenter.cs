@@ -80,8 +80,7 @@ namespace TestCentric.Gui.Presenters
                     _view.AvailableList.Remove(category);
                 }
 
-                if (_view.SelectedList.Items.Count > 0)
-                    _view.ExcludeCategories.Enabled = true;
+                _view.ExcludeCategories.Enabled = true;
 
                 UpdateCategorySelection();
             }
