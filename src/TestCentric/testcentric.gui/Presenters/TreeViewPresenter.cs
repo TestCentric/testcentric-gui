@@ -70,11 +70,19 @@ namespace TestCentric.Gui.Presenters
                 if (_model.Services.UserSettings.Gui.TestTree.SaveVisualState)
                 {
                     string fileName = VisualState.GetVisualStateFileName(_model.TestFiles[0]);
-                    if (File.Exists(fileName))
+                    if (File.Exists(fileName) && new FileInfo(fileName).Length > 0)
                     {
-                        var visualState = VisualState.LoadFrom(fileName);
-                        _view.RestoreVisualState(visualState);
-                        _model.SelectCategories(visualState.SelectedCategories, visualState.ExcludeCategories);
+                        try
+                        {
+                            var visualState = VisualState.LoadFrom(fileName);
+                            _view.RestoreVisualState(visualState);
+                            _model.SelectCategories(visualState.SelectedCategories, visualState.ExcludeCategories);
+                        }
+                        catch (Exception exception)
+                        {
+                            var messageDisplay = new MessageDisplay();
+                            messageDisplay.Error($"There was an error loading the Visual State from {fileName}");
+                        }
                     }
                 }
             };
