@@ -39,4 +39,4 @@ namespace TestCentric.Gui.Elements
             get { return _menuItem.MenuItems; }
         }
     }
- }
+}

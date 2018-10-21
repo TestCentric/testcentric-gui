@@ -83,7 +83,7 @@ namespace NUnit.ProjectEditor
         {
             int offset = 0;
 
-            for (int lineCount = 1; lineCount < lineNumber; lineCount++ )
+            for (int lineCount = 1; lineCount < lineNumber; lineCount++)
             {
                 int next = doc.XmlText.IndexOf(Environment.NewLine, offset);
                 if (next < 0) break;

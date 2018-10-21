@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -23,9 +23,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Collections;
-using NUnit.UiException.CodeFormatters;
 
 namespace NUnit.UiException.CodeFormatters
 {
@@ -94,9 +91,9 @@ namespace NUnit.UiException.CodeFormatters
         {
             FormattedCode copy;
 
-            copy = new FormattedCode(_codeInfo.Text, 
+            copy = new FormattedCode(_codeInfo.Text,
                 _codeInfo.IndexArray.ToArray(),
-                _codeInfo.TagArray.ToArray(), 
+                _codeInfo.TagArray.ToArray(),
                 _codeInfo.LineArray.ToArray());
 
             return (copy._codeInfo);
@@ -123,7 +120,7 @@ namespace NUnit.UiException.CodeFormatters
         /// </summary>
         public string Text
         {
-            get { return (_codeInfo.Text); }           
+            get { return (_codeInfo.Text); }
         }
 
         /// <summary>
@@ -141,7 +138,7 @@ namespace NUnit.UiException.CodeFormatters
         /// </summary>
         public int MaxLength
         {
-            get 
+            get
             {
                 int i;
 
@@ -149,7 +146,7 @@ namespace NUnit.UiException.CodeFormatters
                     for (i = 0; i < LineCount; ++i)
                         _maxLength = Math.Max(_maxLength, this[i].Text.TrimEnd().Length);
 
-                return (_maxLength); 
+                return (_maxLength);
             }
         }
 

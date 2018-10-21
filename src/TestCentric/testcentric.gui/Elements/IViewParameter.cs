@@ -21,20 +21,19 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
 
 namespace TestCentric.Gui.Elements
 {
-	/// <summary>
+    /// <summary>
     /// The IViewParameter interface is implemented by objects that
-	/// serve as some sort of parameter to a view, usually determining
-	/// how the view is displayed. They are not separate UI elements and
-	/// so do not have properties like Visible or Enabled.
+    /// serve as some sort of parameter to a view, usually determining
+    /// how the view is displayed. They are not separate UI elements and
+    /// so do not have properties like Visible or Enabled.
     /// </summary>
     public interface IViewParameter<T>
     {
-		T Value { get; set; }
+        T Value { get; set; }
 
-		event CommandHandler Changed;
+        event CommandHandler Changed;
     }
 }

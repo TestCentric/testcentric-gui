@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -21,7 +21,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
 
 namespace NUnit.ProjectEditor.ViewElements
 {
@@ -38,7 +37,7 @@ namespace NUnit.ProjectEditor.ViewElements
         /// Changed event is raised whenever the text changes
         /// </summary>
         event ActionDelegate Changed;
-        
+
         /// <summary>
         /// Validated event is raised when the text has been
         /// changed and focus has left the UI element.

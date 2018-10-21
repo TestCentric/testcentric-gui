@@ -21,7 +21,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
 using NUnit.Framework;
 using NUnit.UiException.CodeFormatters;
 
@@ -50,7 +49,7 @@ namespace NUnit.UiException.Tests.CodeFormatters
             Assert.That(_parser.Language, Is.EqualTo("C#"));
 
             return;
-        }        
+        }
 
         [Test]
         public void Test_PreProcess()
@@ -159,7 +158,7 @@ namespace NUnit.UiException.Tests.CodeFormatters
             FormattedCode res;
 
             res = _parser.Format(
-                         "{\r\n" + 
+                         "{\r\n" +
                          "    class A { }\r\n" +
                          "}\r\n");
 

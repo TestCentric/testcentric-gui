@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2015-2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -21,7 +21,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -41,13 +40,13 @@ namespace TestCentric.Gui.Controls
         private const int WARNING = 1;
         private const int FAILURE = 2;
 
-        public readonly static Color[][] BrushColors = 
+        public readonly static Color[][] BrushColors =
         {
               new Color[] { Color.FromArgb(32, 205, 32), Color.FromArgb(16, 64, 16) },  // Success
               new Color[] { Color.FromArgb(255, 255, 0), Color.FromArgb(242, 242, 0) }, // Warning
               new Color[] { Color.FromArgb(255, 0, 0), Color.FromArgb(150, 0, 0) }      // Failure
         };
-        
+
         private Brush _brush;
 
         public TestCentricProgressBar()
@@ -67,7 +66,7 @@ namespace TestCentric.Gui.Controls
             {
                 if (value != _display)
                 {
-                    _display = value;                    
+                    _display = value;
 
                     CreateNewBrush();
                 }
@@ -96,9 +95,9 @@ namespace TestCentric.Gui.Controls
                 _brush.Dispose();
 
             _brush = new LinearGradientBrush(
-                new Point(0, 0), 
-                new Point(0, this.ClientSize.Height - 3), 
-                colors[0], 
+                new Point(0, 0),
+                new Point(0, this.ClientSize.Height - 3),
+                colors[0],
                 colors[1]);
 
             Invalidate();

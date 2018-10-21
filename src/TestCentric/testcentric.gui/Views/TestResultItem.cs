@@ -25,8 +25,6 @@ using System;
 
 namespace TestCentric.Gui.Views
 {
-    using Model;
-
     /// <summary>
     /// TestResultItem is used by the ErrorsAndFailuresView to hold
     /// all the information about a test result for display.
@@ -37,7 +35,7 @@ namespace TestCentric.Gui.Views
         private string message;
         private string stackTrace;
 
-        public TestResultItem( string testName, string message, string stackTrace )
+        public TestResultItem(string testName, string message, string stackTrace)
         {
             this.testName = testName;
             this.message = message;
@@ -46,8 +44,8 @@ namespace TestCentric.Gui.Views
 
         public override string ToString()
         {
-            if ( message.Length > 64000 )
-                return string.Format( "{0}:{1}{2}", testName, Environment.NewLine, message.Substring( 0, 64000 ) );
+            if (message.Length > 64000)
+                return string.Format("{0}:{1}{2}", testName, Environment.NewLine, message.Substring(0, 64000));
 
             return GetMessage();
         }
@@ -66,12 +64,12 @@ namespace TestCentric.Gui.Views
         {
             string strSpaces = string.Empty;
             strSpaces = strSpaces.PadRight(nSpaces, ' ');
-            return(strOriginal.Replace("\t", strSpaces));
+            return (strOriginal.Replace("\t", strSpaces));
         }
 
         public string StackTrace
         {
-            get 
+            get
             {
                 return stackTrace == null ? null : StackTraceFilter.Filter(stackTrace);
 

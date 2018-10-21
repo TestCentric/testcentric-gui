@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016-2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -23,7 +23,6 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {

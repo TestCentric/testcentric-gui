@@ -22,12 +22,10 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
-using NUnit.UiException.Properties;
 using NUnit.UiException.CodeFormatters;
+using NUnit.UiException.Properties;
 
 namespace NUnit.UiException.Controls
 {
@@ -195,7 +193,7 @@ namespace NUnit.UiException.Controls
         public ToolStripItem[] OptionItems
         {
             get { return (new ToolStripItem[] { _btnSwap }); }
-        }             
+        }
 
         public Control Content
         {

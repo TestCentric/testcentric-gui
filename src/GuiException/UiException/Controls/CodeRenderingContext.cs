@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -21,9 +21,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
 using NUnit.UiException.CodeFormatters;
 
@@ -51,7 +48,7 @@ namespace NUnit.UiException.Controls
 
         public CodeRenderingContext()
         {
-            _colors = new ColorMaterial[] 
+            _colors = new ColorMaterial[]
             {
                 new ColorMaterial(Color.Black),        // code color
                 new ColorMaterial(Color.Blue),         // keyword color
@@ -66,22 +63,26 @@ namespace NUnit.UiException.Controls
             return;
         }
 
-        public Graphics Graphics {
+        public Graphics Graphics
+        {
             get { return (_graphics); }
             set { _graphics = value; }
-        }       
+        }
 
-        public Font Font {
+        public Font Font
+        {
             get { return (_font); }
             set { _font = value; }
         }
 
-        public int CurrentLine {
+        public int CurrentLine
+        {
             get { return (_currentLine); }
             set { _currentLine = value; }
         }
 
-        public Color BackgroundColor {
+        public Color BackgroundColor
+        {
             get { return (_colors[INDEX_BACKGROUND].Color); }
             set
             {
@@ -90,49 +91,61 @@ namespace NUnit.UiException.Controls
             }
         }
 
-        public Color CurrentLineBackColor {
+        public Color CurrentLineBackColor
+        {
             get { return (_colors[INDEX_CURRBACK].Color); }
-            set {
+            set
+            {
                 _colors[INDEX_CURRBACK].Dispose();
                 _colors[INDEX_CURRBACK] = new ColorMaterial(value);
             }
         }
 
-        public Color CurrentLineForeColor {
+        public Color CurrentLineForeColor
+        {
             get { return (_colors[INDEX_CURRFORE].Color); }
-            set {
+            set
+            {
                 _colors[INDEX_CURRFORE].Dispose();
                 _colors[INDEX_CURRFORE] = new ColorMaterial(value);
             }
         }
 
-        public Color KeywordColor {
+        public Color KeywordColor
+        {
             get { return (_colors[INDEX_KEYWORD].Color); }
-            set {
+            set
+            {
                 _colors[INDEX_KEYWORD].Dispose();
                 _colors[INDEX_KEYWORD] = new ColorMaterial(value);
             }
         }
 
-        public Color CommentColor {
+        public Color CommentColor
+        {
             get { return (_colors[INDEX_COMMENT].Color); }
-            set {
+            set
+            {
                 _colors[INDEX_COMMENT].Dispose();
                 _colors[INDEX_COMMENT] = new ColorMaterial(value);
             }
         }
 
-        public Color CodeColor {
+        public Color CodeColor
+        {
             get { return (_colors[INDEX_CODE].Color); }
-            set {
+            set
+            {
                 _colors[INDEX_CODE].Dispose();
                 _colors[INDEX_CODE] = new ColorMaterial(value);
             }
         }
 
-        public Color StringColor {
+        public Color StringColor
+        {
             get { return (_colors[INDEX_STRING].Color); }
-            set {
+            set
+            {
                 _colors[INDEX_STRING].Dispose();
                 _colors[INDEX_STRING] = new ColorMaterial(value);
             }
@@ -145,43 +158,52 @@ namespace NUnit.UiException.Controls
                 int idx = (int)tag;
                 return (_colors[idx].Color);
             }
-        }    
+        }
 
-        public Brush GetBrush(ClassificationTag tag) {
+        public Brush GetBrush(ClassificationTag tag)
+        {
             return (_colors[(int)tag].Brush);
         }
-      
-        public Pen GetPen(ClassificationTag tag) {
+
+        public Pen GetPen(ClassificationTag tag)
+        {
             return (_colors[(int)tag].Pen);
         }
 
         #region Brushes
 
-        public Brush BackgroundBrush {
+        public Brush BackgroundBrush
+        {
             get { return (_colors[INDEX_BACKGROUND].Brush); }
         }
 
-        public Brush CurrentLineBackBrush {
+        public Brush CurrentLineBackBrush
+        {
             get { return (_colors[INDEX_CURRBACK].Brush); }
         }
 
-        public Brush CurrentLineForeBrush {
+        public Brush CurrentLineForeBrush
+        {
             get { return (_colors[INDEX_CURRFORE].Brush); }
         }
 
-        public Brush KeywordBrush {
+        public Brush KeywordBrush
+        {
             get { return (_colors[INDEX_KEYWORD].Brush); }
         }
 
-        public Brush CommentBrush {
+        public Brush CommentBrush
+        {
             get { return (_colors[INDEX_COMMENT].Brush); }
         }
 
-        public Brush CodeBrush {
+        public Brush CodeBrush
+        {
             get { return (_colors[INDEX_CODE].Brush); }
         }
 
-        public Brush StringBrush {
+        public Brush StringBrush
+        {
             get { return (_colors[INDEX_STRING].Brush); }
         }
 
@@ -189,31 +211,38 @@ namespace NUnit.UiException.Controls
 
         #region Pens
 
-        public Pen BackgroundPen {
+        public Pen BackgroundPen
+        {
             get { return (_colors[INDEX_BACKGROUND].Pen); }
         }
 
-        public Pen CurrentLineBackPen {
+        public Pen CurrentLineBackPen
+        {
             get { return (_colors[INDEX_CURRBACK].Pen); }
         }
 
-        public Pen CurrentLineForePen {
+        public Pen CurrentLineForePen
+        {
             get { return (_colors[INDEX_CURRFORE].Pen); }
         }
 
-        public Pen KeywordPen {
+        public Pen KeywordPen
+        {
             get { return (_colors[INDEX_KEYWORD].Pen); }
         }
 
-        public Pen CommentPen {
+        public Pen CommentPen
+        {
             get { return (_colors[INDEX_COMMENT].Pen); }
         }
 
-        public Pen CodePen {
+        public Pen CodePen
+        {
             get { return (_colors[INDEX_CODE].Pen); }
         }
 
-        public Pen StringPen {
+        public Pen StringPen
+        {
             get { return (_colors[INDEX_STRING].Pen); }
         }
 

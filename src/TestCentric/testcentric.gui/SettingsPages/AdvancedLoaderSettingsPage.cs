@@ -42,7 +42,7 @@ namespace TestCentric.Gui.SettingsPages
         private Label label1;
         private System.ComponentModel.IContainer components = null;
 
-        public AdvancedLoaderSettingsPage( string key ) : base( key )
+        public AdvancedLoaderSettingsPage(string key) : base(key)
         {
             // This call is required by the Windows Form Designer.
             InitializeComponent();
@@ -53,16 +53,16 @@ namespace TestCentric.Gui.SettingsPages
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if (components != null) 
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         #region Designer generated code
@@ -97,7 +97,7 @@ namespace TestCentric.Gui.SettingsPages
             // 
             // groupBox3
             // 
-            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Location = new System.Drawing.Point(139, 8);
             this.groupBox3.Name = "groupBox3";
@@ -156,7 +156,7 @@ namespace TestCentric.Gui.SettingsPages
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Location = new System.Drawing.Point(139, 120);
             this.groupBox1.Name = "groupBox1";
@@ -211,7 +211,7 @@ namespace TestCentric.Gui.SettingsPages
             principalPolicyCheckBox.Checked = principalPolicyListBox.Enabled =
                 Settings.Engine.SetPrincipalPolicy;
             principalPolicyListBox.SelectedItem = Settings.Engine.PrincipalPolicy;
-    }
+        }
 
         public override void ApplySettings()
         {
@@ -222,9 +222,9 @@ namespace TestCentric.Gui.SettingsPages
             Settings.Engine.PrincipalPolicy = principalPolicyCheckBox.Checked
                 ? (string)principalPolicyListBox.SelectedItem
                 : nameof(PrincipalPolicy.UnauthenticatedPrincipal);
-    }
+        }
 
-    public override bool HasChangesRequiringReload
+        public override bool HasChangesRequiringReload
         {
             get
             {

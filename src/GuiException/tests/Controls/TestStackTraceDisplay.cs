@@ -21,11 +21,10 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-using NUnit.Framework;
-using NUnit.UiException.Controls;
 using System.Threading;
 using System.Windows.Forms;
+using NUnit.Framework;
+using NUnit.UiException.Controls;
 
 namespace NUnit.UiException.Tests.Controls
 {
@@ -51,7 +50,7 @@ namespace NUnit.UiException.Tests.Controls
 
             Assert.That(_traceDisplay.Content, Is.Not.Null);
             Assert.That(_traceDisplay.Content, Is.TypeOf(typeof(TextBox)));
-            TextBox text = _traceDisplay.Content as TextBox;            
+            TextBox text = _traceDisplay.Content as TextBox;
             Assert.That(text.Text, Is.EqualTo(""));
             Assert.That(text.ReadOnly, Is.True);
             Assert.That(text.Multiline, Is.True);
@@ -62,7 +61,7 @@ namespace NUnit.UiException.Tests.Controls
         [Test]
         public void OnStackTraceChanged()
         {
-            string trace_1 = 
+            string trace_1 =
                     "à System.ThrowHelper.ThrowArgumentException(ExceptionResource resource)\r\n" +
                     "à System.Collections.Generic.Dictionary`2.Insert(TKey key, TValue value, Boolean add)\r\n" +
                     "à System.Collections.Generic.Dictionary`2.Add(TKey key, TValue value)\r\n" +

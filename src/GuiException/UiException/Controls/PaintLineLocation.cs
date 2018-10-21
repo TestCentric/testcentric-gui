@@ -21,9 +21,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
 
 namespace NUnit.UiException.Controls
@@ -46,7 +43,7 @@ namespace NUnit.UiException.Controls
         /// <summary>
         /// A client coordinate from where beginning the drawing.
         /// </summary>
-        private PointF _location;        
+        private PointF _location;
 
         /// <summary>
         /// Build a new instance of this object given some data.
@@ -86,7 +83,7 @@ namespace NUnit.UiException.Controls
         {
             get { return (_location); }
         }
-       
+
         public override bool Equals(object obj)
         {
             PaintLineLocation line;
@@ -102,11 +99,13 @@ namespace NUnit.UiException.Controls
                 line.Location == Location);
         }
 
-        public override int GetHashCode() {
+        public override int GetHashCode()
+        {
             return base.GetHashCode();
         }
 
-        public override string ToString() {
+        public override string ToString()
+        {
             return ("PaintLineLocation: {" + LineIndex + ":[" + Text + "]:(" +
                      Location.X + ", " + Location.Y + ")}");
         }
@@ -120,13 +119,14 @@ namespace NUnit.UiException.Controls
             return;
         }
 
-        protected void SetText(string text) 
+        protected void SetText(string text)
         {
             UiExceptionHelper.CheckNotNull(text, "text");
             _text = text;
         }
 
-        protected void SetLocation(PointF location) {
+        protected void SetLocation(PointF location)
+        {
             _location = location;
         }
 

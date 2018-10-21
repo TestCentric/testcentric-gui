@@ -22,7 +22,6 @@
 // ***********************************************************************
 
 using System.Drawing;
-using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {

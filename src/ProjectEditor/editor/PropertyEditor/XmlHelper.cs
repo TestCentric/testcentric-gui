@@ -22,7 +22,6 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
 using System.Xml;
 
 namespace NUnit.ProjectEditor
@@ -90,7 +89,7 @@ namespace NUnit.ProjectEditor
             if (attrAdded || attr.Value != valString)
                 attr.Value = valString;
         }
-        
+
         #endregion
 
         #region Elements

@@ -22,16 +22,14 @@
 // ***********************************************************************
 
 using System.Collections.Generic;
-using NUnit.Framework;
 using NSubstitute;
+using NUnit.Framework;
 
 namespace TestCentric.Gui.Presenters
 {
-    using Views;
     using Model;
-	using Elements;
 
-	public class TreeViewPresenterTests : PresenterTestBase<ITestTreeView>
+    public class TreeViewPresenterTests : PresenterTestBase<ITestTreeView>
     {
         private TreeViewPresenter _presenter;
 
@@ -39,7 +37,7 @@ namespace TestCentric.Gui.Presenters
         public void CreatePresenter()
         {
             _presenter = new TreeViewPresenter(_view, _model);
-			_model.IsTestRunning.Returns(false);
+            _model.IsTestRunning.Returns(false);
 
             // Make it look like the view loaded
             //_view.Load += Raise.Event<System.EventHandler>(null, new System.EventArgs());
@@ -50,17 +48,17 @@ namespace TestCentric.Gui.Presenters
         {
             //if (_presenter != null)
             //    _presenter.Dispose();
-            
+
             _presenter = null;
         }
 
         [Test]
         public void WhenPresenterIsCreated_RunCommandIsDisabled()
-		{
-			_view.RunCommand.Received().Enabled = false;
-		}
+        {
+            _view.RunCommand.Received().Enabled = false;
+        }
 
-		[Test]
+        [Test]
         public void WhenTestLoadBegins_RunCommandIsDisabled()
         {
             ClearAllReceivedCalls();
@@ -75,11 +73,11 @@ namespace TestCentric.Gui.Presenters
             ClearAllReceivedCalls();
             _model.TestFiles.Returns(new List<string>(new[] { "test.dll" }));
             FireTestLoadedEvent(new TestNode("<test-run/>"));
-            
+
             _view.RunCommand.Received().Enabled = true;
         }
 
-		[Test]
+        [Test]
         public void WhenTestReloadBegins_RunCommandIsDisabled()
         {
             ClearAllReceivedCalls();
@@ -97,7 +95,7 @@ namespace TestCentric.Gui.Presenters
             _view.RunCommand.Received().Enabled = true;
         }
 
-		[Test]
+        [Test]
         public void WhenTestUnloadBegins_RunCommandIsDisabled()
         {
             ClearAllReceivedCalls();
@@ -115,7 +113,7 @@ namespace TestCentric.Gui.Presenters
             _view.RunCommand.Received().Enabled = false;
         }
 
-		[Test]
+        [Test]
         public void WhenTestRunStarts_RunCommandIsDisabled()
         {
             ClearAllReceivedCalls();
@@ -123,8 +121,8 @@ namespace TestCentric.Gui.Presenters
 
             _view.RunCommand.Received().Enabled = false;
         }
-        
-		[Test]
+
+        [Test]
         public void WhenTestRunCompletes_RunCommandIsEnabled()
         {
             ClearAllReceivedCalls();
@@ -133,29 +131,29 @@ namespace TestCentric.Gui.Presenters
             _view.RunCommand.Received().Enabled = true;
         }
 
-		[Test]
-		public void WhenContextNodeIsNotNull_RunCommandExecutesThatTest()
-		{
-			var testNode = new TestNode("<test-case id='DUMMY-ID'/>");
-			_view.ContextNode.Returns(new TestSuiteTreeNode(testNode));
-
-			_view.RunCommand.Execute += Raise.Event<CommandHandler>();
-
-			_model.Received().RunTests(testNode);
-		}
-
-		[Test]
-        public void WhenContextNodeIsNull_RunCommandExecutesSelectedTests()
-		{
-			var testNodes = new[] { new TestNode("<test-case id='DUMMY-1'/>"), new TestNode("<test-case id='DUMMY-2'/>") };
-			_view.SelectedTests.Returns(testNodes);
+        [Test]
+        public void WhenContextNodeIsNotNull_RunCommandExecutesThatTest()
+        {
+            var testNode = new TestNode("<test-case id='DUMMY-ID'/>");
+            _view.ContextNode.Returns(new TestSuiteTreeNode(testNode));
 
             _view.RunCommand.Execute += Raise.Event<CommandHandler>();
-            
-			_model.Received().RunTests(Arg.Is<TestSelection>((sel) => sel.Count == 2 && sel[0].Id == "DUMMY-1" && sel[1].Id =="DUMMY-2"));
-		}
 
-		[Test]
+            _model.Received().RunTests(testNode);
+        }
+
+        [Test]
+        public void WhenContextNodeIsNull_RunCommandExecutesSelectedTests()
+        {
+            var testNodes = new[] { new TestNode("<test-case id='DUMMY-1'/>"), new TestNode("<test-case id='DUMMY-2'/>") };
+            _view.SelectedTests.Returns(testNodes);
+
+            _view.RunCommand.Execute += Raise.Event<CommandHandler>();
+
+            _model.Received().RunTests(Arg.Is<TestSelection>((sel) => sel.Count == 2 && sel[0].Id == "DUMMY-1" && sel[1].Id == "DUMMY-2"));
+        }
+
+        [Test]
         public void WhenTestCaseCompletes_ResultIsPosted()
         {
             var result = new ResultNode("<test-case id='DUMMY' result='Passed'/>");
@@ -163,8 +161,8 @@ namespace TestCentric.Gui.Presenters
 
             _view.Received().SetTestResult(result);
         }
-        
-		[Test]
+
+        [Test]
         public void WhenTestSuiteCompletes_ResultIsPosted()
         {
             var result = new ResultNode("<test-suite id='DUMMY' result='Passed'/>");
@@ -180,7 +178,7 @@ namespace TestCentric.Gui.Presenters
 
         //    _view.Received().ClearResults();
         //}
-        
+
         //static object[] resultData = new object[] {
         //    new object[] { ResultState.Success, TestTreeView.SuccessIndex },
         //    new object[] { ResultState.Ignored, TestTreeView.WarningIndex },

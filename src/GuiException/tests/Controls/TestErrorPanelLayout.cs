@@ -21,9 +21,9 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System.Windows.Forms;
 using NUnit.Framework;
 using NUnit.UiException.Controls;
-using System.Windows.Forms;
 
 namespace NUnit.UiException.Tests.Controls
 {
@@ -93,7 +93,7 @@ namespace NUnit.UiException.Tests.Controls
 
             // restoring default state
 
-            _panel.Toolbar = null; 
+            _panel.Toolbar = null;
 
             Assert.That(_panel.Toolbar, Is.EqualTo(prev));
             Assert.False(_panel.Controls.Contains(_aToolbar));
@@ -101,7 +101,7 @@ namespace NUnit.UiException.Tests.Controls
             CheckLayout(_panel.Toolbar, 0, 0, 200, ErrorPanelLayout.TOOLBAR_HEIGHT);
 
             return;
-        }        
+        }
 
         [Test]
         public void Setting_Content()
@@ -116,12 +116,12 @@ namespace NUnit.UiException.Tests.Controls
             Assert.That(_panel.Content, Is.EqualTo(_aContent));
             Assert.True(_panel.Controls.Contains(_aContent));
             Assert.False(_panel.Controls.Contains(prev));
-            CheckLayout(_panel.Content, 0, ErrorPanelLayout.TOOLBAR_HEIGHT, 200, 
+            CheckLayout(_panel.Content, 0, ErrorPanelLayout.TOOLBAR_HEIGHT, 200,
                 200 - ErrorPanelLayout.TOOLBAR_HEIGHT);
 
             // restoring Content to its default state
 
-            _panel.Content = null; 
+            _panel.Content = null;
 
             Assert.That(_panel.Content, Is.EqualTo(prev));
             Assert.False(_panel.Controls.Contains(_aContent));
@@ -156,6 +156,6 @@ namespace NUnit.UiException.Tests.Controls
                 400 - ErrorPanelLayout.TOOLBAR_HEIGHT);
 
             return;
-        }        
+        }
     }
 }

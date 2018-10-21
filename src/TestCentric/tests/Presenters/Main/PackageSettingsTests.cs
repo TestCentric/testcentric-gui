@@ -26,8 +26,6 @@ using NUnit.Framework;
 
 namespace TestCentric.Gui.Presenters.Main
 {
-	using Elements;
-
     public class PackageSettingsTests : MainPresenterTestBase
     {
         //[TestCase("Single")]
@@ -83,12 +81,12 @@ namespace TestCentric.Gui.Presenters.Main
         {
             foreach (var setting in settings)
             {
-				_view.SelectedRuntime.SelectedItem.Returns(setting);
+                _view.SelectedRuntime.SelectedItem.Returns(setting);
 
                 _view.SelectedRuntime.SelectionChanged += Raise.Event<CommandHandler>();
 
                 _model.PackageSettings.Received(1)["RuntimeFramework"] = setting;
-			}
+            }
         }
 
         public void SelectedRuntime_MultipleChanges()
@@ -99,11 +97,11 @@ namespace TestCentric.Gui.Presenters.Main
         [Test]
         public void SelectedRuntime_SetToDefault()
         {
-			_view.SelectedRuntime.SelectedItem.Returns("DEFAULT");
+            _view.SelectedRuntime.SelectedItem.Returns("DEFAULT");
 
             _view.SelectedRuntime.SelectionChanged += Raise.Event<CommandHandler>();
 
             _model.PackageSettings.Received(1).Remove("RuntimeFramework");
-		}
+        }
     }
 }

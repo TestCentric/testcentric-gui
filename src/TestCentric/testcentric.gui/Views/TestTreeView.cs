@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -22,19 +22,19 @@
 // ***********************************************************************
 
 using System;
-using System.IO;
-using System.Drawing;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Windows.Forms;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
 using System.Reflection;
+using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
-    using Model;
     using Elements;
+    using Model;
 
     /// <summary>
     /// TestTreeView contains the tree control that displays tests.
@@ -46,7 +46,7 @@ namespace TestCentric.Gui.Views
         /// <summary>
         /// Hashtable provides direct access to TestNodes
         /// </summary>
-		private Hashtable _treeMap = new Hashtable();
+        private Hashtable _treeMap = new Hashtable();
 
         /// <summary>
         /// The properties dialog if displayed
@@ -62,50 +62,50 @@ namespace TestCentric.Gui.Views
 
         public TestTreeView()
         {
-			InitializeComponent();
+            InitializeComponent();
 
-			RunCommand = new MenuCommand(runMenuItem);
+            RunCommand = new MenuCommand(runMenuItem);
             ShowCheckBoxes = new CheckedMenuItem(showCheckBoxesMenuItem);
             ShowFailedAssumptions = new CheckedMenuItem(failedAssumptionsMenuItem);
             PropertiesCommand = new MenuCommand(propertiesMenuItem);
 
-			WireUpEvents();
-		}
+            WireUpEvents();
+        }
 
         private void WireUpEvents()
-		{
-			tree.MouseDown += (s, e) =>
-            {
-                if (e.Button == MouseButtons.Right)
-                {
-                    ContextNode = tree.GetNodeAt(e.X, e.Y) as TestSuiteTreeNode;
-                }
-            };
+        {
+            tree.MouseDown += (s, e) =>
+                  {
+                      if (e.Button == MouseButtons.Right)
+                      {
+                          ContextNode = tree.GetNodeAt(e.X, e.Y) as TestSuiteTreeNode;
+                      }
+                  };
 
-			tree.AfterSelect += (s, e) =>
-            {
-                if (_propertiesDialog != null)
-                {
-                    if (_propertiesDialog.Pinned)
-                    {
-                        _propertiesDialog.DisplayProperties((TestSuiteTreeNode)e.Node);
-                    }
-                    else
-                        _propertiesDialog.Close();
-                }
-            };
+            tree.AfterSelect += (s, e) =>
+                  {
+                      if (_propertiesDialog != null)
+                      {
+                          if (_propertiesDialog.Pinned)
+                          {
+                              _propertiesDialog.DisplayProperties((TestSuiteTreeNode)e.Node);
+                          }
+                          else
+                              _propertiesDialog.Close();
+                      }
+                  };
 
             tree.DragDrop += (s, e) =>
             {
-				if (IsValidFileDrop(e.Data))
-					FileDrop?.Invoke((string[])e.Data.GetData(DataFormats.FileDrop));
+                if (IsValidFileDrop(e.Data))
+                    FileDrop?.Invoke((string[])e.Data.GetData(DataFormats.FileDrop));
             };
 
             tree.DragEnter += (s, e) =>
             {
-				e.Effect = IsValidFileDrop(e.Data)
-                    ? DragDropEffects.Copy
-					: DragDropEffects.None;
+                e.Effect = IsValidFileDrop(e.Data)
+                            ? DragDropEffects.Copy
+                  : DragDropEffects.None;
             };
 
             treeMenu.Popup += (s, e) =>
@@ -127,13 +127,13 @@ namespace TestCentric.Gui.Views
             };
 
             treeMenu.Collapse += (s, e) => ContextNode = null;
-		}
+        }
 
-		#endregion
+        #endregion
 
-		#region ITestTreeView Implementation
+        #region ITestTreeView Implementation
 
-		public event FileDropEventHandler FileDrop;
+        public event FileDropEventHandler FileDrop;
 
         public ICommand RunCommand { get; private set; }
         public IChecked ShowFailedAssumptions { get; private set; }
@@ -516,7 +516,7 @@ namespace TestCentric.Gui.Views
 
             return DisplayStyle.HideTests;
         }
-        
+
         private void SetInitialExpansion()
         {
             CollapseAll();
@@ -541,7 +541,7 @@ namespace TestCentric.Gui.Views
             }
         }
 
-		private void Accept(TestSuiteTreeNodeVisitor visitor)
+        private void Accept(TestSuiteTreeNodeVisitor visitor)
         {
             foreach (TestSuiteTreeNode node in tree.Nodes)
             {
@@ -549,7 +549,7 @@ namespace TestCentric.Gui.Views
             }
         }
 
-		public void LoadAlternateImages(string imageSet)
+        public void LoadAlternateImages(string imageSet)
         {
             string[] imageNames = { "Skipped", "Failure", "Success", "Ignored", "Inconclusive" };
 
@@ -575,7 +575,7 @@ namespace TestCentric.Gui.Views
             }
         }
 
-		/// <summary>
+        /// <summary>
         /// Helper method to determine if an IDataObject is valid
         /// for dropping on the tree view. It must be a the drop
         /// of a single file with a valid assembly file type.

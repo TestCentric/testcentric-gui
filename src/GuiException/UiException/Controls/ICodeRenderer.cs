@@ -21,14 +21,11 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using NUnit.UiException.CodeFormatters;
 using System.Drawing;
+using NUnit.UiException.CodeFormatters;
 
 namespace NUnit.UiException.Controls
-{   
+{
     /// <summary>
     /// The interface through which CodeBox interacts with a display to display itself.
     /// 

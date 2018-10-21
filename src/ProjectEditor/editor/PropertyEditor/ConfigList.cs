@@ -21,17 +21,16 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
 using System.Collections.Generic;
 using System.Xml;
 
 namespace NUnit.ProjectEditor
 {
-	/// <summary>
-	/// Summary description for ConfigList.
-	/// </summary>
-	public class ConfigList : IEnumerable<IProjectConfig>
-	{
+    /// <summary>
+    /// Summary description for ConfigList.
+    /// </summary>
+    public class ConfigList : IEnumerable<IProjectConfig>
+    {
         private IProjectModel project;
         private XmlNode projectNode;
 
@@ -41,17 +40,17 @@ namespace NUnit.ProjectEditor
             this.projectNode = project.Document.RootNode;
         }
 
-		#region Properties
+        #region Properties
 
         public int Count
         {
             get { return ConfigNodes.Count; }
         }
 
-		public IProjectConfig this[int index]
-		{
+        public IProjectConfig this[int index]
+        {
             get { return new ProjectConfig(project, ConfigNodes[index]); }
-		}
+        }
 
         public IProjectConfig this[string name]
         {
@@ -72,9 +71,9 @@ namespace NUnit.ProjectEditor
             get { return projectNode.SelectSingleNode("Settings"); }
         }
 
-		#endregion
+        #endregion
 
-		#region Methods
+        #region Methods
 
         //public IProjectConfig Add(string name)
         //{
@@ -117,7 +116,7 @@ namespace NUnit.ProjectEditor
         //    return IndexOf(name) >= 0;
         //}
 
-		#endregion
+        #endregion
 
         #region IEnumerable<IProjectConfig> Members
 

@@ -21,21 +21,15 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-using System.IO;
-using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
-using System.Windows.Forms;
 using NUnit.ProjectEditor.ViewElements;
 
 namespace NUnit.ProjectEditor
 {
-	/// <summary>
-	/// ConfigurationEditor form is designed for adding, deleting
-	/// and renaming configurations from a doc.
-	/// </summary>
-	public partial class ConfigurationEditorDialog : System.Windows.Forms.Form, IConfigurationEditorDialog
+    /// <summary>
+    /// ConfigurationEditor form is designed for adding, deleting
+    /// and renaming configurations from a doc.
+    /// </summary>
+    public partial class ConfigurationEditorDialog : System.Windows.Forms.Form, IConfigurationEditorDialog
     {
         #region Instance Variables
 
@@ -53,8 +47,8 @@ namespace NUnit.ProjectEditor
         #region Constructor
 
         public ConfigurationEditorDialog()
-		{
-			InitializeComponent();
+        {
+            InitializeComponent();
 
             addCommand = new ButtonElement(addButton);
             removeCommand = new ButtonElement(removeButton);
@@ -64,35 +58,35 @@ namespace NUnit.ProjectEditor
             configList = new ListBoxElement(configListBox);
 
             messageDisplay = new MessageDisplay("NUnit Configuration Editor");
-		}
+        }
 
-		#endregion
+        #endregion
 
         #region IConfigurationEditorDialog Members
 
         #region Properties
 
-        public ICommand AddCommand 
+        public ICommand AddCommand
         {
             get { return addCommand; }
         }
 
-        public ICommand RemoveCommand 
+        public ICommand RemoveCommand
         {
             get { return removeCommand; }
         }
 
-        public ICommand RenameCommand 
+        public ICommand RenameCommand
         {
             get { return renameCommand; }
         }
 
-        public ICommand ActiveCommand 
+        public ICommand ActiveCommand
         {
             get { return activeCommand; }
         }
 
-        public ISelectionList ConfigList 
+        public ISelectionList ConfigList
         {
             get { return configList; }
         }
@@ -102,11 +96,11 @@ namespace NUnit.ProjectEditor
             get { return new AddConfigurationDialog(); }
         }
 
-        public IMessageDisplay MessageDisplay 
+        public IMessageDisplay MessageDisplay
         {
             get { return messageDisplay; }
         }
-        
+
         public IRenameConfigurationDialog RenameConfigurationDialog
         {
             get { return new RenameConfigurationDialog(); }

@@ -21,7 +21,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
 using System.Windows.Forms;
 using NUnit.ProjectEditor.ViewElements;
 
@@ -54,7 +53,7 @@ namespace NUnit.ProjectEditor
         IPropertyView PropertyView { get; }
         IXmlView XmlView { get; }
 
-        SelectedView SelectedView { get; set;  }
+        SelectedView SelectedView { get; set; }
     }
 
     public enum SelectedView

@@ -22,10 +22,7 @@
 // ***********************************************************************
 
 #if NET_3_5 || NET_4_0 || NET_4_5
-using System;
 using System.Windows.Forms;
-using NUnit.Framework;
-using NUnit.ProjectEditor.ViewElements;
 using NSubstitute;
 
 namespace NUnit.ProjectEditor.Tests.Presenters
@@ -83,7 +80,7 @@ namespace NUnit.ProjectEditor.Tests.Presenters
         [Test]
         public void ConfigList_OnLoad_IsCorrectlyInitialized()
         {
-            Assert.That(view.ConfigList.SelectionList, Is.EqualTo( new string[] { "Debug (active)", "Release" }));
+            Assert.That(view.ConfigList.SelectionList, Is.EqualTo(new string[] { "Debug (active)", "Release" }));
         }
 
         [Test]
@@ -113,8 +110,7 @@ namespace NUnit.ProjectEditor.Tests.Presenters
         [Test]
         public void AddButton_WhenClicked_AddsNewConfig()
         {
-            view.AddConfigurationDialog.ShowDialog().Returns(delegate
-            {
+            view.AddConfigurationDialog.ShowDialog().Returns(delegate {
                 view.AddConfigurationDialog.OkButton.Execute += Raise.Event<CommandDelegate>();
                 return DialogResult.OK;
             });
@@ -145,8 +141,7 @@ namespace NUnit.ProjectEditor.Tests.Presenters
         public void RenameButton_WhenClicked_PerformsRename()
         {
             view.ConfigList.SelectedItem.Returns("Debug");
-            view.RenameConfigurationDialog.ShowDialog().Returns(delegate
-            {
+            view.RenameConfigurationDialog.ShowDialog().Returns(delegate {
                 view.RenameConfigurationDialog.ConfigurationName.Text = "NewName";
                 view.RenameConfigurationDialog.OkButton.Execute += Raise.Event<CommandDelegate>();
                 return DialogResult.OK;

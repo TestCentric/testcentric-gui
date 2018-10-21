@@ -21,9 +21,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using NUnit.UiException.StackTraceAnalyzers;
 
 namespace NUnit.UiException.StackTraceAnalysers
@@ -49,8 +46,8 @@ namespace NUnit.UiException.StackTraceAnalysers
         {
             // setup this array with a couple of algorithms
             // that handle respectively Windows and Unix like paths.
-            
-            _array = new IErrorParser[] { 
+
+            _array = new IErrorParser[] {
                 new WindowsPathParser(),
                 new UnixPathParser()
 
@@ -115,6 +112,6 @@ namespace NUnit.UiException.StackTraceAnalysers
                     return (i);
 
             return (-1);
-        }                                
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2015-2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -28,7 +28,7 @@ namespace TestCentric.Gui.Elements
     /// <summary>
     /// MenuElement wraps a MenuItem
     /// </summary>
-	public abstract class MenuElement : IMenuElement
+    public abstract class MenuElement : IMenuElement
     {
         protected MenuItem _menuItem;
         private Form _form;
@@ -52,16 +52,16 @@ namespace TestCentric.Gui.Elements
         }
 
         public bool DefaultItem
-		{
-			get { return _menuItem.DefaultItem; }
-			set
-			{
-				InvokeIfRequired(() =>
-				{
-					_menuItem.DefaultItem = value;
-				});
-			}
-		}
+        {
+            get { return _menuItem.DefaultItem; }
+            set
+            {
+                InvokeIfRequired(() =>
+                {
+                    _menuItem.DefaultItem = value;
+                });
+            }
+        }
 
         public string Text
         {
@@ -89,7 +89,7 @@ namespace TestCentric.Gui.Elements
 
         protected void InvokeIfRequired(MethodInvoker del)
         {
-            if (_form!= null && _form.InvokeRequired)
+            if (_form != null && _form.InvokeRequired)
                 _form.BeginInvoke(del, new object[0]);
             else
                 del();

@@ -23,11 +23,11 @@
 
 #if NET_3_5 || NET_4_0 || NET_4_5
 using System;
+using System.Drawing;
+using System.Windows.Forms;
 using NSubstitute;
 using NUnit.Framework;
 using NUnit.UiException.Controls;
-using System.Drawing;
-using System.Windows.Forms;
 
 namespace NUnit.UiException.Tests.Controls
 {

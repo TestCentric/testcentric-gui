@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -22,9 +22,6 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Collections;
 
 namespace NUnit.UiException.CodeFormatters
 {
@@ -99,7 +96,7 @@ namespace NUnit.UiException.CodeFormatters
                 result = (InternalToken)_token;
                 _populateToken(_lineIndex, index, result);
 
-                return (result); 
+                return (result);
             }
         }
 
@@ -189,11 +186,11 @@ namespace NUnit.UiException.CodeFormatters
             get
             {
                 int index_start;
-                int index_start_ptr; 
+                int index_start_ptr;
                 int index_end;
                 int index_end_ptr;
                 string text;
-                
+
                 index_start_ptr = _info.LineArray[_lineIndex];
                 index_start = _info.IndexArray[index_start_ptr];
 
@@ -218,7 +215,7 @@ namespace NUnit.UiException.CodeFormatters
 
         #region InternalToken
 
-        class InternalToken : 
+        class InternalToken :
             ClassifiedToken
         {
             public InternalToken()

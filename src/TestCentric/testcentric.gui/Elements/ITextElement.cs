@@ -21,18 +21,17 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System.Windows.Forms;
 
 namespace TestCentric.Gui.Elements
 {
     /// <summary>
     /// Implemented by View Elements that display text in some way.
     /// </summary>
-	public interface ITextElement : IViewElement
-	{
-		/// <summary>
+    public interface ITextElement : IViewElement
+    {
+        /// <summary>
         /// Gets or sets the Text of an element
         /// </summary>
         string Text { get; set; }
-	}
+    }
 }

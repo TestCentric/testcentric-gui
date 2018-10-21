@@ -21,16 +21,15 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
-	using Model; // To be removed
-	using Elements;
+    using Elements;
+    using Model; // To be removed
 
-	/// <summary>
+    /// <summary>
     /// Indicates how a tree should be displayed
     /// </summary>
     public enum DisplayStyle
@@ -44,46 +43,46 @@ namespace TestCentric.Gui.Views
 
     public delegate void FileDropEventHandler(IList<string> fileNames);
 
-	public interface ITestTreeView
+    public interface ITestTreeView
     {
         event FileDropEventHandler FileDrop;
 
-		ContextMenu ContextMenu { get; }
+        ContextMenu ContextMenu { get; }
 
-		ICommand RunCommand { get; }
-		IChecked ShowFailedAssumptions { get; }
-		ICommand PropertiesCommand { get; }
-		// TODO: Can we eliminate need for having both of the following?
-		IChecked ShowCheckBoxes { get; }
-		bool CheckBoxes { get; set; }
+        ICommand RunCommand { get; }
+        IChecked ShowFailedAssumptions { get; }
+        ICommand PropertiesCommand { get; }
+        // TODO: Can we eliminate need for having both of the following?
+        IChecked ShowCheckBoxes { get; }
+        bool CheckBoxes { get; set; }
 
-		DisplayStyle DisplayStyle { get; set; }
-		string AlternateImageSet { get; set; }
+        DisplayStyle DisplayStyle { get; set; }
+        string AlternateImageSet { get; set; }
 
-		TreeNodeCollection Nodes { get; }
-		TreeNode TopNode { get; }
+        TreeNodeCollection Nodes { get; }
+        TreeNode TopNode { get; }
         TestSuiteTreeNode ContextNode { get; }
-		TreeNode SelectedNode { get; }
-		TestNode SelectedTest { get; }
-		TestNode[] SelectedTests { get; }
+        TreeNode SelectedNode { get; }
+        TestNode SelectedTest { get; }
+        TestNode[] SelectedTests { get; }
 
         TestNodeFilter TreeFilter { get; set; }
 
-		void Clear();
+        void Clear();
         void LoadTests(TestNode test);
-		void Reload(TestNode test);
+        void Reload(TestNode test);
 
-		void ExpandAll();
-		void CollapseAll();
-		void HideTests();
+        void ExpandAll();
+        void CollapseAll();
+        void HideTests();
 
-		VisualState GetVisualState();
-		void RestoreVisualState(VisualState visualState);
+        VisualState GetVisualState();
+        void RestoreVisualState(VisualState visualState);
 
-		void ShowPropertiesDialog(TestSuiteTreeNode node);
-		void ClosePropertiesDialog();
-		void CheckPropertiesDialog();
+        void ShowPropertiesDialog(TestSuiteTreeNode node);
+        void ClosePropertiesDialog();
+        void CheckPropertiesDialog();
 
-		void SetTestResult(ResultNode result);
+        void SetTestResult(ResultNode result);
     }
 }

@@ -36,7 +36,7 @@ namespace TestCentric.Gui
         [STAThread]
         public static int Main(string[] args)
         {
-            return AppEntry.Main( args );
+            return AppEntry.Main(args);
         }
     }
 }

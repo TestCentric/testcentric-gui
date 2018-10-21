@@ -27,11 +27,9 @@ using NUnit.Framework;
 
 namespace TestCentric.Gui.Views
 {
-	using Elements;
-
     [TestFixture(typeof(TestCentricMainView))]
     //[TestFixture(typeof(TestTreeView))]
-    public class CommonViewTests<T> where T: new()
+    public class CommonViewTests<T> where T : new()
     {
         protected T View { get; private set; }
 
@@ -41,13 +39,13 @@ namespace TestCentric.Gui.Views
             this.View = new T();
         }
 
-		[TestCaseSource("GetViewElementProperties")]
-		public void ViewElementsAreInitialized(PropertyInfo prop)
-		{
-			var element = prop.GetValue(View, new object[0]) as IViewElement;
+        [TestCaseSource("GetViewElementProperties")]
+        public void ViewElementsAreInitialized(PropertyInfo prop)
+        {
+            var element = prop.GetValue(View, new object[0]) as IViewElement;
 
-			Assert.NotNull(element, $"Element {prop.Name} was not initialized");
- 		}
+            Assert.NotNull(element, $"Element {prop.Name} was not initialized");
+        }
 
         static protected IEnumerable<PropertyInfo> GetViewElementProperties()
         {

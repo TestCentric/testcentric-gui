@@ -22,13 +22,13 @@
 // ***********************************************************************
 
 #if NET_3_5 || NET_4_0 || NET_4_5
+using System.Drawing;
+using System.Windows.Forms;
 using NSubstitute;
 using NUnit.Framework;
-using NUnit.UiException.Controls;
-using System.Windows.Forms;
 using NUnit.UiException.CodeFormatters;
+using NUnit.UiException.Controls;
 using NUnit.UiException.Tests.data;
-using System.Drawing;
 
 namespace NUnit.UiException.Tests.Controls
 {
@@ -67,7 +67,7 @@ namespace NUnit.UiException.Tests.Controls
 
             CodeBox codeBox = splitter.Control2 as CodeBox;
             Assert.NotNull(codeBox);
-            Assert.True(codeBox.ShowCurrentLine);            
+            Assert.True(codeBox.ShowCurrentLine);
             Assert.That(codeBox.CurrentLineBackColor, Is.EqualTo(Color.Red));
             Assert.That(codeBox.CurrentLineForeColor, Is.EqualTo(Color.White));
 
@@ -123,7 +123,7 @@ namespace NUnit.UiException.Tests.Controls
 
                 _mockStack.SelectedItem.Returns(item);
                 _mockCode.Formatter.Returns(formatter);
-                
+
                 _code.RaiseSelectedItemChanged();
 
                 Assert.That(_mockCode.Text, Is.EqualTo(item.ReadFile()));
@@ -137,7 +137,7 @@ namespace NUnit.UiException.Tests.Controls
             // should handle selection changed event even
             // if selection comes to null
 
-            _mockStack.SelectedItem.Returns((ErrorItem) null); 
+            _mockStack.SelectedItem.Returns((ErrorItem)null);
 
             _code.RaiseSelectedItemChanged();
 

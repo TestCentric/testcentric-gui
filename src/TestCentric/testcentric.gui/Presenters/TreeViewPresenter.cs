@@ -27,9 +27,9 @@ using System.IO;
 
 namespace TestCentric.Gui.Presenters
 {
-    using Views;
     using Model;
     using Model.Settings;
+    using Views;
 
     public class TreeViewPresenter
     {

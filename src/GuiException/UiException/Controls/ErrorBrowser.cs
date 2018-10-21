@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -22,8 +22,6 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
 
 namespace NUnit.UiException.Controls
@@ -70,9 +68,9 @@ namespace NUnit.UiException.Controls
         /// Builds a new instance of ErrorBrowser.
         /// </summary>
         public ErrorBrowser()
-        {            
+        {
             _layout = new ErrorPanelLayout();
-            _layout.Toolbar = new ErrorToolbar();            
+            _layout.Toolbar = new ErrorToolbar();
             Toolbar.SelectedRendererChanged += new EventHandler(Toolbar_SelectedRendererChanged);
 
             Controls.Add(_layout);
@@ -87,7 +85,7 @@ namespace NUnit.UiException.Controls
                              AnchorStyles.Right;
 
             return;
-        }        
+        }
 
         /// <summary>
         /// Use this property to get or set the new stack trace details.
@@ -96,7 +94,8 @@ namespace NUnit.UiException.Controls
         public string StackTraceSource
         {
             get { return (_stackStace); }
-            set {
+            set
+            {
                 if (_stackStace == value)
                     return;
 

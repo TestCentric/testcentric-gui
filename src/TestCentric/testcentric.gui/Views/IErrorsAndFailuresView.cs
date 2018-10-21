@@ -34,7 +34,7 @@ namespace TestCentric.Gui.Views
         event EventHandler SourceCodeSplitOrientationChanged;
         event EventHandler SourceCodeDisplayChanged;
 
-        bool WordWrap { get; set; } 
+        bool WordWrap { get; set; }
         bool EnableToolTips { get; set; }
         Font Font { get; set; }
         int SplitterPosition { get; set; }

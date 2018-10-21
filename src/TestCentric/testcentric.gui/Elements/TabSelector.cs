@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -21,49 +21,48 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Elements
 {
-	/// <summary>
+    /// <summary>
     /// A TabSelector represents which tab of a particular TabControl in
-	/// the view is selected.
+    /// the view is selected.
     /// </summary>
-	public class TabSelector : ControlElement<TabControl>, ISelection
+    public class TabSelector : ControlElement<TabControl>, ISelection
     {
-		public event CommandHandler SelectionChanged;
+        public event CommandHandler SelectionChanged;
 
-		public TabSelector(TabControl tabControl) : base(tabControl)
+        public TabSelector(TabControl tabControl) : base(tabControl)
         {
-			tabControl.SelectedIndexChanged += (s, e) =>
-			{
-				int index = tabControl.SelectedIndex;
-				if (index >= 0 && index < tabControl.TabCount)
-					SelectionChanged?.Invoke();			
-			};
+            tabControl.SelectedIndexChanged += (s, e) =>
+            {
+                int index = tabControl.SelectedIndex;
+                if (index >= 0 && index < tabControl.TabCount)
+                    SelectionChanged?.Invoke();
+            };
         }
 
         public int SelectedIndex
-		{
-			get { return Control.SelectedIndex; }
-			set { Control.SelectedIndex = value; }
-		}
+        {
+            get { return Control.SelectedIndex; }
+            set { Control.SelectedIndex = value; }
+        }
 
         public string SelectedItem
-		{
-			get { return Control.SelectedTab.Text; }
-			set
-			{
-				foreach (TabPage tab in Control.TabPages)
-					if (tab.Text == value)
-						Control.SelectedTab = tab;
-			}
-		}
+        {
+            get { return Control.SelectedTab.Text; }
+            set
+            {
+                foreach (TabPage tab in Control.TabPages)
+                    if (tab.Text == value)
+                        Control.SelectedTab = tab;
+            }
+        }
 
         public void Refresh()
-		{
-			Control.Refresh();
-		}
+        {
+            Control.Refresh();
+        }
     }
 }

@@ -22,12 +22,12 @@
 // ***********************************************************************
 
 #if NET_3_5 || NET_4_0 || NET_4_5
+using System.Drawing;
+using System.Windows.Forms;
 using NSubstitute;
 using NUnit.Framework;
-using System.Drawing;
-using NUnit.UiException.Controls;
 using NUnit.UiException.CodeFormatters;
-using System.Windows.Forms;
+using NUnit.UiException.Controls;
 
 namespace NUnit.UiException.Tests.Controls
 {
@@ -131,7 +131,7 @@ namespace NUnit.UiException.Tests.Controls
 
             _box.Text = null;
 
-            Assert.That(_box.Text, Is.EqualTo(""));           
+            Assert.That(_box.Text, Is.EqualTo(""));
 
             return;
         }
@@ -189,7 +189,7 @@ namespace NUnit.UiException.Tests.Controls
 
             return;
         }
-       
+
         [Test]
         public void CurrentLine()
         {
@@ -228,10 +228,10 @@ namespace NUnit.UiException.Tests.Controls
             _box = new TestingCodeBox(new GeneralCodeFormatter(), renderer);
             _box.Text = "line 1\r\nline 2\r\nline 3\r\n";
             _box.ShowCurrentLine = true;
-            
+
             _box.CurrentLine = 1;
             _box.FireOnPaint();
-            Assert.That(renderer.CURRENTLINE_INDEX, Is.EqualTo(1));            
+            Assert.That(renderer.CURRENTLINE_INDEX, Is.EqualTo(1));
 
             _box.ShowCurrentLine = false;
             _box.FireOnPaint();
@@ -268,20 +268,23 @@ namespace NUnit.UiException.Tests.Controls
             }
 
             public TestingCodeBox(IFormatterCatalog formatter, ICodeRenderer renderer) :
-                base(formatter, renderer) { }
+                base(formatter, renderer)
+            { }
 
-            public CodeRenderingContext RenderingContext {
+            public CodeRenderingContext RenderingContext
+            {
                 get { return (_workingContext); }
             }
 
-            public FormattedCode FormattedCode {
+            public FormattedCode FormattedCode
+            {
                 get { return (_formattedCode); }
             }
 
             public new void OnScroll(ScrollEventArgs args)
             {
                 base.OnScroll(args);
-            }                        
+            }
 
             public void FireOnPaint()
             {
@@ -294,7 +297,7 @@ namespace NUnit.UiException.Tests.Controls
 
         class TestingRenderer : ICodeRenderer
         {
-            public int CURRENTLINE_INDEX;            
+            public int CURRENTLINE_INDEX;
 
             #region ICodeRenderer Membres
 
@@ -310,266 +313,266 @@ namespace NUnit.UiException.Tests.Controls
 
             public float LineIndexToYCoordinate(int lineIndex, Graphics g, Font font)
             {
-                return (0);   
+                return (0);
             }
 
             #endregion
         }
     }
 
-/*    [TestFixture]
-    public class TestCodeBox
-    {
-        private InternalCodeBox _empty;
-        private InternalCodeBox _filled;
-
-        private int _repaintNotification;
-        private int _textChangedNotification;
-
-        [SetUp]
-        public void SetUp()
+    /*    [TestFixture]
+        public class TestCodeBox
         {
-            _empty = new InternalCodeBox();
+            private InternalCodeBox _empty;
+            private InternalCodeBox _filled;
 
-            _filled = new InternalCodeBox();
-            _filled.Text = "111\r\n" +
-                           "222\r\n" +
-                           "333\r\n";
-            _filled.HighlightedLine = 1;
+            private int _repaintNotification;
+            private int _textChangedNotification;
 
-            _filled.Repainted += new RepaintEventArgs(_filled_Repainted);
-            _filled.TextChanged += new EventHandler(_filled_TextChanged);
-
-            _repaintNotification = 0;            
-
-            return;
-        }
-
-        void _filled_TextChanged(object sender, EventArgs e)
-        {
-            _textChangedNotification++;
-        }
-
-        void _filled_Repainted(object sender, EventArgs e)
-        {
-            _repaintNotification++;
-        }
-
-        [Test]
-        public void Test_Default()
-        {
-            Assert.That(_empty.Text, Is.EqualTo(""));
-            Assert.That(_empty.HighlightedLine, Is.EqualTo(0));
-            Assert.That(_empty.Viewport, Is.Not.Null);
-            Assert.That(_empty.FirstLine, Is.EqualTo(""));
-            Assert.That(_empty.CurrentLineNumber, Is.EqualTo(1));
-            Assert.That(_empty.MouseWheelDistance, Is.EqualTo(OLD_CodeBox.DEFAULT_MOUSEWHEEL_DISTANCE));
-
-            Assert.That(_empty.Viewport.CharHeight, Is.GreaterThan(1));
-            Assert.That(_empty.Viewport.CharWidth, Is.GreaterThan(1));
-            Assert.That(_empty.Viewport.Width, Is.GreaterThan(1));
-            Assert.That(_empty.Viewport.Height, Is.GreaterThan(1));
-
-            return;
-        }
-
-        [Test]
-        public void Test_Filled()
-        {
-            Assert.That(_filled.Text, Is.EqualTo("111\r\n222\r\n333\r\n"));
-            Assert.That(_filled.HighlightedLine, Is.EqualTo(1));
-            Assert.That(_filled.FirstLine, Is.EqualTo("111"));
-            Assert.That(_filled.CurrentLineNumber, Is.EqualTo(1));
-
-            return;
-        }
-
-        [Test]
-        public void Test_Setting_MouseWheelDistance()
-        {
-            _filled.MouseWheelDistance = 4;
-            Assert.That(_filled.MouseWheelDistance, Is.EqualTo(4));
-
-            _filled.MouseWheelDistance = 6;
-            Assert.That(_filled.MouseWheelDistance, Is.EqualTo(6));
-
-            return;
-        }
-
-        [Test]
-        public void Test_Setting_Text()
-        {
-            _textChangedNotification = 0;
-
-            _filled.Text = "hello world";
-            Assert.That(_repaintNotification, Is.EqualTo(1));
-            Assert.That(_textChangedNotification, Is.EqualTo(1));
-
-            // test to fail
-            _filled.Text = null;
-            Assert.That(_filled.Text, Is.EqualTo(""));
-
-            return;
-        }
-
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void SetFormattedCode_Can_Throw_FormatNullException()
-        {
-            _filled.SetFormattedCode(null); // throws exception
-        }
-
-        [Test]
-        public void Test_Setting_FormattedCode()
-        {
-            CSharpCodeFormatter textFormatter;
-            FormattedCode format;
-
-            textFormatter = new CSharpCodeFormatter();
-            format = textFormatter.Format("namespace test { class MyClass { } }\r\n");
-
-            _filled.SetFormattedCode(format);
-            Assert.That(_filled.Text, Is.EqualTo("namespace test { class MyClass { } }\r\n"));           
-
-            return;
-        }
-
-        [Test]
-        public void Test_Setting_Size_Invalidate_Box()
-        {
-            _filled.Width = 200;
-            Assert.That(_repaintNotification, Is.EqualTo(1));
-
-            _filled.Height = 400;
-            Assert.That(_repaintNotification, Is.EqualTo(2));
-
-            Assert.That(_filled.Viewport.Width, Is.EqualTo(200));
-            Assert.That(_filled.Viewport.Height, Is.EqualTo(400));
-
-            return;
-        }
-
-        [Test]
-        public void Test_Setting_HighlighedLine_Invalidate_Box()
-        {
-            _filled.HighlightedLine = 2;
-            Assert.That(_repaintNotification, Is.EqualTo(1));
-        }
-
-        [Test]
-        public void Test_Changing_Location_Invalidate_Box()
-        {
-            _filled.Viewport.Location = new PointF(0, 1);
-            Assert.That(_repaintNotification, Is.EqualTo(1));
-        }
-
-        [Test]
-        public void Test_TranslateView()
-        {
-            _filled.Text = "******\r\n******\r\n******\r\n******\r\n******\r\n";
-            _filled.Viewport.SetCharSize(1, 1);
-            _filled.Viewport.SetViewport(1, 1);
-
-            _filled.TranslateView(0, 0);
-            Assert.That(_filled.Viewport.Location, Is.EqualTo(new PointF(0, 0)));
-
-            _filled.TranslateView(2, 1);
-            Assert.That(_filled.Viewport.Location, Is.EqualTo(new PointF(2, 1)));
-
-            _filled.TranslateView(3, 1);
-            Assert.That(_filled.Viewport.Location, Is.EqualTo(new PointF(5, 2)));
-
-            return;
-        }
-
-        [Test]
-        public void Test_CurrentLineNumber()
-        {
-            _filled.Viewport.SetViewport(1, 1);
-            _filled.Viewport.SetCharSize(1, 1);
-
-            Assert.That(_filled.CurrentLineNumber, Is.EqualTo(1));
-
-            _filled.TranslateView(0, 1000);
-
-            Assert.That(_filled.CurrentLineNumber,
-                Is.EqualTo(_filled.Viewport.TextSource.LineCount));
-
-            _filled.TranslateView(0, -2000);
-            Assert.That(_filled.CurrentLineNumber, Is.EqualTo(1));
-
-            return;
-        }
-
-        [Test]
-        public void Test_MouseWheel_Up()
-        {
-            _filled.Viewport.SetViewport(1, 1);
-            _filled.Viewport.SetCharSize(1, 1);
-
-            _filled.Viewport.SetPosition(0, 2);
-
-            _filled.MouseWheelDistance = 1;           
-
-            _filled.HandleMouseWheelUp();
-            Assert.That(_filled.Viewport.Location, Is.EqualTo(new PointF(0, 1)));
-
-            _filled.HandleMouseWheelUp();
-            Assert.That(_filled.Viewport.Location, Is.EqualTo(new PointF(0, 0)));
-
-            return;
-        }
-
-        [Test]
-        public void Test_MouseWheel_Down()
-        {
-            _filled.Viewport.SetViewport(1, 1);
-            _filled.Viewport.SetCharSize(1, 1);
-
-            _filled.Viewport.SetPosition(0, 0);
-
-            _filled.MouseWheelDistance = 1;
-
-            _filled.HandleMouseWheelDown();
-            Assert.That(_filled.Viewport.Location, Is.EqualTo(new PointF(0, 1)));
-
-            _filled.HandleMouseWheelDown();
-            Assert.That(_filled.Viewport.Location, Is.EqualTo(new PointF(0, 2)));
-
-            return;
-        }
-
-        #region InternalCodeBox
-
-        delegate void RepaintEventArgs(object sender, EventArgs e);
-
-        class InternalCodeBox :
-            OLD_CodeBox
-        {
-            public event RepaintEventArgs Repainted;
-
-            protected override void Repaint()
+            [SetUp]
+            public void SetUp()
             {
-                base.Repaint();
+                _empty = new InternalCodeBox();
 
-                if (Repainted != null)
-                    Repainted(this, new EventArgs());
+                _filled = new InternalCodeBox();
+                _filled.Text = "111\r\n" +
+                               "222\r\n" +
+                               "333\r\n";
+                _filled.HighlightedLine = 1;
+
+                _filled.Repainted += new RepaintEventArgs(_filled_Repainted);
+                _filled.TextChanged += new EventHandler(_filled_TextChanged);
+
+                _repaintNotification = 0;            
 
                 return;
             }
 
-            public new void HandleMouseWheelUp()
+            void _filled_TextChanged(object sender, EventArgs e)
             {
-                base.HandleMouseWheelUp();
+                _textChangedNotification++;
             }
 
-            public new void HandleMouseWheelDown()
+            void _filled_Repainted(object sender, EventArgs e)
             {
-                base.HandleMouseWheelDown();
+                _repaintNotification++;
             }
-        }
 
-        #endregion
-    } */
+            [Test]
+            public void Test_Default()
+            {
+                Assert.That(_empty.Text, Is.EqualTo(""));
+                Assert.That(_empty.HighlightedLine, Is.EqualTo(0));
+                Assert.That(_empty.Viewport, Is.Not.Null);
+                Assert.That(_empty.FirstLine, Is.EqualTo(""));
+                Assert.That(_empty.CurrentLineNumber, Is.EqualTo(1));
+                Assert.That(_empty.MouseWheelDistance, Is.EqualTo(OLD_CodeBox.DEFAULT_MOUSEWHEEL_DISTANCE));
+
+                Assert.That(_empty.Viewport.CharHeight, Is.GreaterThan(1));
+                Assert.That(_empty.Viewport.CharWidth, Is.GreaterThan(1));
+                Assert.That(_empty.Viewport.Width, Is.GreaterThan(1));
+                Assert.That(_empty.Viewport.Height, Is.GreaterThan(1));
+
+                return;
+            }
+
+            [Test]
+            public void Test_Filled()
+            {
+                Assert.That(_filled.Text, Is.EqualTo("111\r\n222\r\n333\r\n"));
+                Assert.That(_filled.HighlightedLine, Is.EqualTo(1));
+                Assert.That(_filled.FirstLine, Is.EqualTo("111"));
+                Assert.That(_filled.CurrentLineNumber, Is.EqualTo(1));
+
+                return;
+            }
+
+            [Test]
+            public void Test_Setting_MouseWheelDistance()
+            {
+                _filled.MouseWheelDistance = 4;
+                Assert.That(_filled.MouseWheelDistance, Is.EqualTo(4));
+
+                _filled.MouseWheelDistance = 6;
+                Assert.That(_filled.MouseWheelDistance, Is.EqualTo(6));
+
+                return;
+            }
+
+            [Test]
+            public void Test_Setting_Text()
+            {
+                _textChangedNotification = 0;
+
+                _filled.Text = "hello world";
+                Assert.That(_repaintNotification, Is.EqualTo(1));
+                Assert.That(_textChangedNotification, Is.EqualTo(1));
+
+                // test to fail
+                _filled.Text = null;
+                Assert.That(_filled.Text, Is.EqualTo(""));
+
+                return;
+            }
+
+            [Test]
+            [ExpectedException(typeof(ArgumentNullException))]
+            public void SetFormattedCode_Can_Throw_FormatNullException()
+            {
+                _filled.SetFormattedCode(null); // throws exception
+            }
+
+            [Test]
+            public void Test_Setting_FormattedCode()
+            {
+                CSharpCodeFormatter textFormatter;
+                FormattedCode format;
+
+                textFormatter = new CSharpCodeFormatter();
+                format = textFormatter.Format("namespace test { class MyClass { } }\r\n");
+
+                _filled.SetFormattedCode(format);
+                Assert.That(_filled.Text, Is.EqualTo("namespace test { class MyClass { } }\r\n"));           
+
+                return;
+            }
+
+            [Test]
+            public void Test_Setting_Size_Invalidate_Box()
+            {
+                _filled.Width = 200;
+                Assert.That(_repaintNotification, Is.EqualTo(1));
+
+                _filled.Height = 400;
+                Assert.That(_repaintNotification, Is.EqualTo(2));
+
+                Assert.That(_filled.Viewport.Width, Is.EqualTo(200));
+                Assert.That(_filled.Viewport.Height, Is.EqualTo(400));
+
+                return;
+            }
+
+            [Test]
+            public void Test_Setting_HighlighedLine_Invalidate_Box()
+            {
+                _filled.HighlightedLine = 2;
+                Assert.That(_repaintNotification, Is.EqualTo(1));
+            }
+
+            [Test]
+            public void Test_Changing_Location_Invalidate_Box()
+            {
+                _filled.Viewport.Location = new PointF(0, 1);
+                Assert.That(_repaintNotification, Is.EqualTo(1));
+            }
+
+            [Test]
+            public void Test_TranslateView()
+            {
+                _filled.Text = "******\r\n******\r\n******\r\n******\r\n******\r\n";
+                _filled.Viewport.SetCharSize(1, 1);
+                _filled.Viewport.SetViewport(1, 1);
+
+                _filled.TranslateView(0, 0);
+                Assert.That(_filled.Viewport.Location, Is.EqualTo(new PointF(0, 0)));
+
+                _filled.TranslateView(2, 1);
+                Assert.That(_filled.Viewport.Location, Is.EqualTo(new PointF(2, 1)));
+
+                _filled.TranslateView(3, 1);
+                Assert.That(_filled.Viewport.Location, Is.EqualTo(new PointF(5, 2)));
+
+                return;
+            }
+
+            [Test]
+            public void Test_CurrentLineNumber()
+            {
+                _filled.Viewport.SetViewport(1, 1);
+                _filled.Viewport.SetCharSize(1, 1);
+
+                Assert.That(_filled.CurrentLineNumber, Is.EqualTo(1));
+
+                _filled.TranslateView(0, 1000);
+
+                Assert.That(_filled.CurrentLineNumber,
+                    Is.EqualTo(_filled.Viewport.TextSource.LineCount));
+
+                _filled.TranslateView(0, -2000);
+                Assert.That(_filled.CurrentLineNumber, Is.EqualTo(1));
+
+                return;
+            }
+
+            [Test]
+            public void Test_MouseWheel_Up()
+            {
+                _filled.Viewport.SetViewport(1, 1);
+                _filled.Viewport.SetCharSize(1, 1);
+
+                _filled.Viewport.SetPosition(0, 2);
+
+                _filled.MouseWheelDistance = 1;           
+
+                _filled.HandleMouseWheelUp();
+                Assert.That(_filled.Viewport.Location, Is.EqualTo(new PointF(0, 1)));
+
+                _filled.HandleMouseWheelUp();
+                Assert.That(_filled.Viewport.Location, Is.EqualTo(new PointF(0, 0)));
+
+                return;
+            }
+
+            [Test]
+            public void Test_MouseWheel_Down()
+            {
+                _filled.Viewport.SetViewport(1, 1);
+                _filled.Viewport.SetCharSize(1, 1);
+
+                _filled.Viewport.SetPosition(0, 0);
+
+                _filled.MouseWheelDistance = 1;
+
+                _filled.HandleMouseWheelDown();
+                Assert.That(_filled.Viewport.Location, Is.EqualTo(new PointF(0, 1)));
+
+                _filled.HandleMouseWheelDown();
+                Assert.That(_filled.Viewport.Location, Is.EqualTo(new PointF(0, 2)));
+
+                return;
+            }
+
+            #region InternalCodeBox
+
+            delegate void RepaintEventArgs(object sender, EventArgs e);
+
+            class InternalCodeBox :
+                OLD_CodeBox
+            {
+                public event RepaintEventArgs Repainted;
+
+                protected override void Repaint()
+                {
+                    base.Repaint();
+
+                    if (Repainted != null)
+                        Repainted(this, new EventArgs());
+
+                    return;
+                }
+
+                public new void HandleMouseWheelUp()
+                {
+                    base.HandleMouseWheelUp();
+                }
+
+                public new void HandleMouseWheelDown()
+                {
+                    base.HandleMouseWheelDown();
+                }
+            }
+
+            #endregion
+        } */
 }
 #endif

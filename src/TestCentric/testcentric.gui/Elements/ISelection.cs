@@ -33,7 +33,7 @@ namespace TestCentric.Gui.Elements
         /// <summary>
         /// Gets or sets the index of the currently selected item
         /// </summary>
-		int SelectedIndex { get; set; }
+        int SelectedIndex { get; set; }
 
         /// <summary>
         /// Gets or sets the string value of the currently selected item

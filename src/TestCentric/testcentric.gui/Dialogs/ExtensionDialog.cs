@@ -22,9 +22,7 @@
 // ***********************************************************************
 
 using System;
-using System.Drawing;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Text;
 using System.Windows.Forms;
 using NUnit.Engine;
@@ -32,8 +30,6 @@ using NUnit.Engine.Extensibility;
 
 namespace TestCentric.Gui
 {
-    using Model;
-
     /// <summary>
     /// Summary description for AddinDialog.
     /// </summary>
@@ -80,16 +76,16 @@ namespace TestCentric.Gui
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
@@ -119,7 +115,7 @@ namespace TestCentric.Gui
             // 
             // extensionListView
             // 
-            this.extensionListView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.extensionListView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.extensionListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.extensionNameColumn,
@@ -149,7 +145,7 @@ namespace TestCentric.Gui
             // 
             // extensionPointDescriptionTextBox
             // 
-            this.extensionPointDescriptionTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.extensionPointDescriptionTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.extensionPointDescriptionTextBox.Location = new System.Drawing.Point(9, 128);
             this.extensionPointDescriptionTextBox.Multiline = true;
@@ -230,7 +226,7 @@ namespace TestCentric.Gui
             // 
             // extensionDescriptionTextBox
             // 
-            this.extensionDescriptionTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.extensionDescriptionTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.extensionDescriptionTextBox.Location = new System.Drawing.Point(7, 115);
             this.extensionDescriptionTextBox.Multiline = true;
@@ -315,7 +311,7 @@ namespace TestCentric.Gui
 
         private void extensionListView_SelectedIndexChanged(object sender, System.EventArgs e)
         {
-            if ( !DesignMode && extensionListView.SelectedIndices.Count > 0 )
+            if (!DesignMode && extensionListView.SelectedIndices.Count > 0)
             {
                 int index = extensionListView.SelectedIndices[0];
                 var extension = _extensions[index];
@@ -323,7 +319,7 @@ namespace TestCentric.Gui
                 foreach (string prop in extension.PropertyNames)
                 {
                     var sb = new StringBuilder($"{prop} :");
-                    foreach(string val in extension.GetValues(prop))
+                    foreach (string val in extension.GetValues(prop))
                         sb.Append(" " + val);
 
                     propertiesTextBox.AppendText(sb.ToString() + Environment.NewLine);
@@ -339,7 +335,7 @@ namespace TestCentric.Gui
         private void AutoSizeFirstColumnOfListView()
         {
             int width = extensionListView.ClientSize.Width;
-            for( int i = 1; i < extensionListView.Columns.Count; i++ )
+            for (int i = 1; i < extensionListView.Columns.Count; i++)
                 width -= extensionListView.Columns[i].Width;
             extensionListView.Columns[0].Width = width;
         }

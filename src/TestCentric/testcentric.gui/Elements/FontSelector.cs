@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -21,35 +21,34 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
 using System.Drawing;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Elements
 {
-	/// <summary>
+    /// <summary>
     /// A FontSelector represents a particular font used for a view
-	/// or an individual control within a view.
+    /// or an individual control within a view.
     /// </summary>
-	public class FontSelector : IViewParameter<Font>
+    public class FontSelector : IViewParameter<Font>
     {
-		private Control _control;
+        private Control _control;
 
-		public event CommandHandler Changed;
+        public event CommandHandler Changed;
 
         public FontSelector(Control control)
         {
-			_control = control;
+            _control = control;
         }
 
-		public Font Value
-		{
-			get { return _control.Font; }
-			set
-			{ 
-				_control.Font = value;
-				Changed?.Invoke();
-			}
-		}
+        public Font Value
+        {
+            get { return _control.Font; }
+            set
+            {
+                _control.Font = value;
+                Changed?.Invoke();
+            }
+        }
     }
 }

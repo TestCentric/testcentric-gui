@@ -22,11 +22,7 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TestCentric.Gui.Presenters
 {
@@ -35,7 +31,7 @@ namespace TestCentric.Gui.Presenters
 
     public class TextOutputPresenter
     {
-        public static  Color WarningColor = Color.Yellow;
+        public static Color WarningColor = Color.Yellow;
         static readonly Color ErrorColor = Color.Red;
         static readonly Color LabelColor = Color.Green;
         static readonly Color OutputColor = Color.Black;

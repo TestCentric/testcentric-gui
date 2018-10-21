@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2015-2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -28,14 +28,14 @@ namespace TestCentric.Gui.Elements
     public class CheckedMenuItem : MenuElement, IChecked
     {
         public event CommandHandler CheckedChanged;
-        
+
         public CheckedMenuItem(MenuItem menuItem) : base(menuItem)
         {
-			menuItem.Click += (s, e) =>
-            {
-                menuItem.Checked = !menuItem.Checked;
-                CheckedChanged?.Invoke();
-            };
+            menuItem.Click += (s, e) =>
+                  {
+                      menuItem.Checked = !menuItem.Checked;
+                      CheckedChanged?.Invoke();
+                  };
         }
 
         public bool Checked

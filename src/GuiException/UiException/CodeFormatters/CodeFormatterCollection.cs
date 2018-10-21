@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -22,9 +22,8 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 
 namespace NUnit.UiException.CodeFormatters
@@ -84,7 +83,7 @@ namespace NUnit.UiException.CodeFormatters
                 throw new ArgumentException("unknown language: '" + language + "'");
             }
         }
-        
+
         /// <summary>
         /// Checks whether there is a formatter that has been
         /// assigned to the given file extension.
@@ -131,7 +130,7 @@ namespace NUnit.UiException.CodeFormatters
             extension = extension.ToLower();
             return (_toFormatter[extension]);
         }
-       
+
         /// <summary>
         /// Registers an ICodeFormatter for the given language. The system
         /// is not case sensitive.

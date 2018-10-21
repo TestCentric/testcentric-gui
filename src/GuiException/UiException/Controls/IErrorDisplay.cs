@@ -21,10 +21,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace NUnit.UiException.Controls

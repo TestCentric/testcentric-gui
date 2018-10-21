@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -52,7 +52,7 @@ namespace TestCentric.Gui.Model
         [TestCase(EnginePackageSettings.DomainUsage, "Multiple")]
         [TestCase(EnginePackageSettings.RuntimeFramework, "net-2.0")]
         [TestCase(EnginePackageSettings.MaxAgents, 8)]
-        public void PackageReflectsPackageSettings(string key , object value)
+        public void PackageReflectsPackageSettings(string key, object value)
         {
             _model.PackageSettings[key] = value;
             TestPackage package = _model.MakeTestPackage(new[] { "my.dll" });

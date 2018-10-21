@@ -21,9 +21,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
 using System.Collections.Generic;
-using System.Text;
 using NUnit.Framework;
 using NUnit.UiException.CodeFormatters;
 
@@ -216,8 +214,8 @@ namespace NUnit.UiException.Tests.CodeFormatters
             string[] tab;
 
             tab = new string[] {
-                "\\\"", "\\\'", "/*", "*/", "//", "\\", " ", "\t", "\r", 
-                ".", ";", "[", "]", "(", ")", "#", ":", "<", ">", "=", 
+                "\\\"", "\\\'", "/*", "*/", "//", "\\", " ", "\t", "\r",
+                ".", ";", "[", "]", "(", ")", "#", ":", "<", ">", "=",
                 ",", "\n", "'", "\""};
 
             foreach (string item in tab)

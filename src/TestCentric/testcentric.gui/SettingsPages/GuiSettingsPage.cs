@@ -21,10 +21,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.SettingsPages
@@ -59,16 +55,16 @@ namespace TestCentric.Gui.SettingsPages
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if (components != null) 
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         #region Designer generated code
@@ -103,7 +99,7 @@ namespace TestCentric.Gui.SettingsPages
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Location = new System.Drawing.Point(135, 0);
             this.groupBox1.Name = "groupBox1";
@@ -248,7 +244,7 @@ namespace TestCentric.Gui.SettingsPages
 
         private void recentFilesCountTextBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if ( recentFilesCountTextBox.Text.Length == 0 )
+            if (recentFilesCountTextBox.Text.Length == 0)
             {
                 recentFilesCountTextBox.Text = MAX_RECENT_FILES.ToString();
                 recentFilesCountTextBox.SelectAll();
@@ -260,7 +256,7 @@ namespace TestCentric.Gui.SettingsPages
 
                 try
                 {
-                    int count = int.Parse( recentFilesCountTextBox.Text );
+                    int count = int.Parse(recentFilesCountTextBox.Text);
 
                     if (count < MIN_RECENT_FILES ||
                         count > MAX_RECENT_FILES)
@@ -274,7 +270,7 @@ namespace TestCentric.Gui.SettingsPages
                     errmsg = "Number of files must be numeric.";
                 }
 
-                if ( errmsg != null )
+                if (errmsg != null)
                 {
                     recentFilesCountTextBox.SelectAll();
                     MessageDisplay.Error(errmsg);
@@ -285,7 +281,7 @@ namespace TestCentric.Gui.SettingsPages
 
         private void recentFilesCountTextBox_Validated(object sender, System.EventArgs e)
         {
-            int count = int.Parse( recentFilesCountTextBox.Text );
+            int count = int.Parse(recentFilesCountTextBox.Text);
             Settings.Gui.RecentProjects.MaxFiles = count;
             if (count == 0)
                 loadLastProjectCheckBox.Checked = false;

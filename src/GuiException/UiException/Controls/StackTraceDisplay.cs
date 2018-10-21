@@ -22,10 +22,7 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
-using System.Drawing;
 using NUnit.UiException.Properties;
 
 namespace NUnit.UiException.Controls
@@ -54,7 +51,7 @@ namespace NUnit.UiException.Controls
             _textContent.Multiline = true;
             _textContent.ScrollBars = ScrollBars.Both;
 
-           return;
+            return;
         }
 
         protected override void OnFontChanged(EventArgs e)
@@ -91,7 +88,7 @@ namespace NUnit.UiException.Controls
         {
             get { return (new ToolStripItem[] { _btnCopy }); }
         }
-        
+
         public Control Content
         {
             get { return (_textContent); }

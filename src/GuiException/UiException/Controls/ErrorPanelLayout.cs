@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -22,11 +22,7 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Forms;
-using System.Drawing;
-using NUnit.UiException.Properties;
 
 namespace NUnit.UiException.Controls
 {
@@ -61,7 +57,7 @@ namespace NUnit.UiException.Controls
     ///          collection changes in regard of the
     ///          selected display.
     /// </summary>
-    public class ErrorPanelLayout : 
+    public class ErrorPanelLayout :
         UserControl
     {
         private static readonly int PANEL_LEFT = 0;
@@ -120,7 +116,8 @@ namespace NUnit.UiException.Controls
         public Control Toolbar
         {
             get { return (_header[PANEL_LEFT]); }
-            set {                                
+            set
+            {
                 Controls.Remove(_header[PANEL_LEFT]);
                 _header[PANEL_LEFT] = value;
                 Controls.Add(_header[PANEL_LEFT]);
@@ -140,7 +137,8 @@ namespace NUnit.UiException.Controls
         public Control Option
         {
             get { return (_header[PANEL_RIGHT]); }
-            set {
+            set
+            {
                 Controls.Remove(_header[PANEL_RIGHT]);
                 _header[PANEL_RIGHT] = value;
                 Controls.Add(_header[PANEL_RIGHT]);
@@ -160,7 +158,8 @@ namespace NUnit.UiException.Controls
         public Control Content
         {
             get { return (_contentCurrent); }
-            set {
+            set
+            {
                 if (value == null)
                     value = _contentDefault;
                 Controls.Remove(_contentCurrent);
@@ -183,11 +182,11 @@ namespace NUnit.UiException.Controls
 
         private void doLayout()
         {
-//            int widthLeft;
+            //            int widthLeft;
             int widthRight;
 
             widthRight = _header.WidthAt(PANEL_RIGHT);
-//            widthLeft = _header.WidthAt(PANEL_LEFT);
+            //            widthLeft = _header.WidthAt(PANEL_LEFT);
 
             _header[PANEL_LEFT].Width = Math.Max(0, Width - widthRight);
             _contentCurrent.Width = Width;
@@ -222,10 +221,11 @@ namespace NUnit.UiException.Controls
             public Control this[int index]
             {
                 get { return (_currents[index]); }
-                set {
+                set
+                {
                     if (value == null)
                         value = _panels[index];
-                    _currents[index] = value; 
+                    _currents[index] = value;
                 }
             }
 

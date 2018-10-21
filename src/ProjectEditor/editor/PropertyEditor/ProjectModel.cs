@@ -21,7 +21,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
 using System.IO;
 using System.Xml;
 
@@ -65,13 +64,13 @@ namespace NUnit.ProjectEditor
         /// </summary>
         public string EffectiveBasePath
         {
-            get 
-            { 
+            get
+            {
                 return this.BasePath == null
                     ? Path.GetDirectoryName(this.ProjectPath)
                     : Path.Combine(
                         Path.GetDirectoryName(this.ProjectPath),
-                        this.BasePath); 
+                        this.BasePath);
             }
         }
 
@@ -123,7 +122,7 @@ namespace NUnit.ProjectEditor
             bool itWasActive = ActiveConfigName == Configs[index].Name;
 
             doc.RootNode.RemoveChild(doc.ConfigNodes[index]);
-            
+
             if (itWasActive)
                 doc.RemoveSettingsAttribute("activeconfig");
         }

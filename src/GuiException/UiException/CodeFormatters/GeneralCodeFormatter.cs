@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -21,10 +21,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using NUnit.UiException.CodeFormatters;
 
 namespace NUnit.UiException.CodeFormatters
 {
@@ -75,7 +71,7 @@ namespace NUnit.UiException.CodeFormatters
         public ICodeFormatter DefaultFormatter
         {
             get { return (_default); }
-            set 
+            set
             {
                 UiExceptionHelper.CheckNotNull(value, "value");
                 _default = value;
@@ -89,7 +85,7 @@ namespace NUnit.UiException.CodeFormatters
         {
             get { return (_formatters); }
         }
-        
+
         /// <summary>
         /// Gets the best formatter that fits the given language. If there
         /// is no such formatter, a default one is returned.

@@ -24,8 +24,8 @@
 namespace TestCentric.Gui
 {
     using Model;
-    using SettingsPages;
     using Presenters;
+    using SettingsPages;
 
     /// <summary>
     /// Static class used to display the tree-based SettingsDialog.

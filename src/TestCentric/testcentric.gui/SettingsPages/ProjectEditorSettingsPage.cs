@@ -22,11 +22,8 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.IO;
-using System.Text;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.SettingsPages
@@ -72,14 +69,14 @@ namespace TestCentric.Gui.SettingsPages
         private void editorPathBrowseButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog dlg = new OpenFileDialog();
-            if ( Site != null ) dlg.Site = Site;
+            if (Site != null) dlg.Site = Site;
             dlg.Title = "Select Project Editor";
 
             dlg.Filter = "Executable Files (*.exe)|*.exe";
             dlg.FilterIndex = 1;
             dlg.FileName = "";
 
-            if ( dlg.ShowDialog() == DialogResult.OK ) 
+            if (dlg.ShowDialog() == DialogResult.OK)
                 editorPathTextBox.Text = dlg.FileName;
         }
 
