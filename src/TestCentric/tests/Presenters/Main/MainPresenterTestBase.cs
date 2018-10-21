@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -25,6 +25,9 @@ using NUnit.Framework;
 
 namespace TestCentric.Gui.Presenters.Main
 {
+    using Elements;
+    using Views;
+
     public class MainPresenterTestBase : PresenterTestBase<IMainView>
     {
         protected TestCentricPresenter Presenter;

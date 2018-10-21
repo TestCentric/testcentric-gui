@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -29,6 +29,7 @@ using NUnit.Framework;
 
 namespace TestCentric.Gui.Presenters
 {
+    using Elements;
     using Model;
 
     /// <summary>

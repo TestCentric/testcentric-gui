@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -27,6 +27,8 @@ using NUnit.Framework;
 
 namespace TestCentric.Gui.Views
 {
+    using Elements;
+
     [TestFixture(typeof(TestCentricMainView))]
     //[TestFixture(typeof(TestTreeView))]
     public class CommonViewTests<T> where T : new()
