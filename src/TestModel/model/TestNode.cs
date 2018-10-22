@@ -61,7 +61,7 @@ namespace TestCentric.Gui.Model
                 case "test-run":
                     IsSuite = true;
                     // It's a quirk of the test engine that the test-run element does
-                    // not have attributes for Name, FullName, Type, or Runstate.
+                    // not have attributes for Name, FullName, Type, or RunState.
                     Name = FullName = Type = "TestRun";
                     TestCount = GetAttribute("testcasecount", 0);
                     RunState = RunState.Runnable;
