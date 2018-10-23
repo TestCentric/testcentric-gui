@@ -186,9 +186,9 @@ namespace TestCentric.Gui.Presenters
                 //{
                 //    //log.Warning("Unable to save result to {0}\n{1}", resultPath, ex.ToString());
                 //}
-                         
-                //if (e.Result.Outcome.Status == TestStatus.Failed)
-                //    _view.Activate();
+
+                if (e.Result.Outcome.Status == TestStatus.Failed)
+                    _view.Activate();
             };
 
 			_settings.Changed += (s, e) =>
