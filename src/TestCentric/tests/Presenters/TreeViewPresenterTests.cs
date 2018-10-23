@@ -21,6 +21,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using NSubstitute;
@@ -79,7 +80,30 @@ namespace TestCentric.Gui.Presenters
             _view.RunCommand.Received().Enabled = true;
         }
 
-		[Test]
+        [Test]
+        public void WhenTestLoadCompletes_TestContainsMoreChildren()
+        {
+            TestNode tn = new TestNode("<test-run><test-suite id=\"1\"/><test-suite id=\"1\"/></test-run>");
+            ClearAllReceivedCalls();
+            _model.TestFiles.Returns(new List<string>(new[] { "test.dll" }));
+            FireTestLoadedEvent(tn);
+
+            _view.Received().LoadTests(tn);
+        }
+
+        [Test]
+        public void WhenTestLoadCompletes_TestContainsOnlyOneChild()
+        {
+            TestNode tn = new TestNode("<test-run><test-suite/></test-run>");
+            ClearAllReceivedCalls();
+            _model.TestFiles.Returns(new List<string>(new[] { "test.dll" }));
+            FireTestLoadedEvent(tn);
+
+            _view.Received().LoadTests(tn.Children[0]);
+        }
+
+
+        [Test]
         public void WhenTestReloadBegins_RunCommandIsDisabled()
         {
             ClearAllReceivedCalls();
