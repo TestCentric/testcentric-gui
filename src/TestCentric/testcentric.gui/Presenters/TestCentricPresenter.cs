@@ -402,6 +402,7 @@ namespace TestCentric.Gui.Presenters
                         _model.LoadTests(new[] { path });
                     };
                     menuItems.Add(menuItem);
+                    if (num >= _settings.Gui.RecentProjects.MaxFiles) break;
                 }
             };
 

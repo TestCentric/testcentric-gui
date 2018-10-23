@@ -41,11 +41,11 @@ namespace TestCentric.Gui.SettingsPages
         private System.Windows.Forms.HelpProvider helpProvider1;
         private CheckBox checkFilesExistCheckBox;
         private Label label3;
-        private TextBox recentFilesCountTextBox;
         private Label label4;
         private System.ComponentModel.IContainer components = null;
 
         private const int MIN_RECENT_FILES = 5;
+        private NumericUpDown recentFilesCountUpDown;
         private const int MAX_RECENT_FILES = 24;
 
         public GuiSettingsPage(string key) : base(key)
@@ -86,10 +86,11 @@ namespace TestCentric.Gui.SettingsPages
             this.fullGuiRadioButton = new System.Windows.Forms.RadioButton();
             this.miniGuiRadioButton = new System.Windows.Forms.RadioButton();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
-            this.recentFilesCountTextBox = new System.Windows.Forms.TextBox();
             this.checkFilesExistCheckBox = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.recentFilesCountUpDown = new System.Windows.Forms.NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)(this.recentFilesCountUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -163,17 +164,6 @@ namespace TestCentric.Gui.SettingsPages
             this.miniGuiRadioButton.TabIndex = 33;
             this.miniGuiRadioButton.Text = "Mini Gui showing tree only";
             // 
-            // recentFilesCountTextBox
-            // 
-            this.helpProvider1.SetHelpString(this.recentFilesCountTextBox, "The maximum number of files to display in the Recent Files list.");
-            this.recentFilesCountTextBox.Location = new System.Drawing.Point(69, 120);
-            this.recentFilesCountTextBox.Name = "recentFilesCountTextBox";
-            this.helpProvider1.SetShowHelp(this.recentFilesCountTextBox, true);
-            this.recentFilesCountTextBox.Size = new System.Drawing.Size(40, 20);
-            this.recentFilesCountTextBox.TabIndex = 29;
-            this.recentFilesCountTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.recentFilesCountTextBox_Validating);
-            this.recentFilesCountTextBox.Validated += new System.EventHandler(this.recentFilesCountTextBox_Validated);
-            // 
             // checkFilesExistCheckBox
             // 
             this.checkFilesExistCheckBox.AutoSize = true;
@@ -202,13 +192,30 @@ namespace TestCentric.Gui.SettingsPages
             this.label4.TabIndex = 28;
             this.label4.Text = "List";
             // 
+            // recentFilesCountUpDown
+            // 
+            this.recentFilesCountUpDown.Location = new System.Drawing.Point(61, 122);
+            this.recentFilesCountUpDown.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.recentFilesCountUpDown.Name = "recentFilesCountUpDown";
+            this.recentFilesCountUpDown.Size = new System.Drawing.Size(58, 20);
+            this.recentFilesCountUpDown.TabIndex = 35;
+            this.recentFilesCountUpDown.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
             // GuiSettingsPage
             // 
+            this.Controls.Add(this.recentFilesCountUpDown);
             this.Controls.Add(this.checkFilesExistCheckBox);
             this.Controls.Add(this.miniGuiRadioButton);
             this.Controls.Add(this.fullGuiRadioButton);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.recentFilesCountTextBox);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.loadLastProjectCheckBox);
             this.Controls.Add(this.groupBox2);
@@ -216,6 +223,7 @@ namespace TestCentric.Gui.SettingsPages
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label1);
             this.Name = "GuiSettingsPage";
+            ((System.ComponentModel.ISupportInitialize)(this.recentFilesCountUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -234,7 +242,7 @@ namespace TestCentric.Gui.SettingsPages
                     break;
             }
 
-            recentFilesCountTextBox.Text = Settings.Gui.RecentProjects.MaxFiles.ToString();
+            recentFilesCountUpDown.Text = Settings.Gui.RecentProjects.MaxFiles.ToString();
             checkFilesExistCheckBox.Checked = Settings.Gui.RecentProjects.CheckFilesExist;
             loadLastProjectCheckBox.Checked = Settings.Gui.LoadLastProject;
         }
@@ -244,14 +252,15 @@ namespace TestCentric.Gui.SettingsPages
             Settings.Gui.DisplayFormat = fullGuiRadioButton.Checked ? "Full" : "Mini";
             Settings.Gui.RecentProjects.CheckFilesExist = checkFilesExistCheckBox.Checked;
             Settings.Gui.LoadLastProject = loadLastProjectCheckBox.Checked;
+            Settings.Gui.RecentProjects.MaxFiles = (int)recentFilesCountUpDown.Value;
         }
 
         private void recentFilesCountTextBox_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if ( recentFilesCountTextBox.Text.Length == 0 )
+            if (recentFilesCountUpDown.Text.Length == 0 )
             {
-                recentFilesCountTextBox.Text = MAX_RECENT_FILES.ToString();
-                recentFilesCountTextBox.SelectAll();
+                recentFilesCountUpDown.Text = MAX_RECENT_FILES.ToString();
+                recentFilesCountUpDown.Select();
                 e.Cancel = true;
             }
             else
@@ -260,7 +269,7 @@ namespace TestCentric.Gui.SettingsPages
 
                 try
                 {
-                    int count = int.Parse( recentFilesCountTextBox.Text );
+                    int count = int.Parse(recentFilesCountUpDown.Text );
 
                     if (count < MIN_RECENT_FILES ||
                         count > MAX_RECENT_FILES)
@@ -276,7 +285,7 @@ namespace TestCentric.Gui.SettingsPages
 
                 if ( errmsg != null )
                 {
-                    recentFilesCountTextBox.SelectAll();
+                    recentFilesCountUpDown.Select();
                     MessageDisplay.Error(errmsg);
                     e.Cancel = true;
                 }
@@ -285,7 +294,7 @@ namespace TestCentric.Gui.SettingsPages
 
         private void recentFilesCountTextBox_Validated(object sender, System.EventArgs e)
         {
-            int count = int.Parse( recentFilesCountTextBox.Text );
+            int count = int.Parse(recentFilesCountUpDown.Text );
             Settings.Gui.RecentProjects.MaxFiles = count;
             if (count == 0)
                 loadLastProjectCheckBox.Checked = false;
