@@ -65,15 +65,7 @@ namespace TestCentric.Gui.Presenters
                 _view.RunCommand.Enabled = true;
                 _view.CheckPropertiesDialog();
 
-                if (e.Test.Children.Count == 1)
-                {
-                    _view.LoadTests(e.Test.Children[0]);
-                }
-                else
-                {
-                    _view.LoadTests(e.Test);
-                }
-                
+                _view.LoadTests(e.Test);
 
                 if (_model.Services.UserSettings.Gui.TestTree.SaveVisualState)
                 {
