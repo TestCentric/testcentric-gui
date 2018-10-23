@@ -362,13 +362,16 @@ namespace TestCentric.Gui.Views
             }
             else
             {
-                node.Result = result;
+                InvokeIfRequired(() =>
+                    {
+                        node.Result = result;
 
-                if (result.Type == "Theory")
-                    node.RepopulateTheoryNode();
+                        if (result.Type == "Theory")
+                            node.RepopulateTheoryNode();
 
-                Invalidate(node.Bounds);
-                Update();
+                        Invalidate(node.Bounds);
+                        Update();
+                    });
             }
         }
 
