@@ -132,13 +132,6 @@ namespace TestCentric.Gui.Presenters
         }
 
         [Test]
-        public void WhenPresenterIsCreated_WordWrapIsSetToDefault()
-        {
-            bool wordwrap = _settings.Gui.ErrorDisplay.WordWrapEnabled;
-            _view.Received().WordWrap = wordwrap;
-        }
-
-        [Test]
         public void WhenPresenterIsCreated_FontIsSetToDefault()
         {
             var font = _settings.Gui.FixedFont;
@@ -181,14 +174,6 @@ namespace TestCentric.Gui.Presenters
         {
             bool enabled = _settings.Gui.ErrorDisplay.ToolTipsEnabled;
             _view.Received().EnableToolTips = enabled;
-        }
-
-        [Test]
-        public void WhenWordWrapSettingChanges_ViewIsUpdated()
-        {
-            _view.ClearReceivedCalls();
-            _settings.Gui.ErrorDisplay.WordWrapEnabled = true;
-            _view.Received().WordWrap = true;
         }
 
         [Test]
