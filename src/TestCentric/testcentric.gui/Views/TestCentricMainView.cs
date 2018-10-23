@@ -808,7 +808,6 @@ namespace TestCentric.Gui.Views
             this.errorsAndFailuresView1.SourceCodeSplitterDistance = 0.3F;
             this.errorsAndFailuresView1.SplitterPosition = 128;
             this.errorsAndFailuresView1.TabIndex = 0;
-            this.errorsAndFailuresView1.WordWrap = false;
             // 
             // notrunTab
             // 
