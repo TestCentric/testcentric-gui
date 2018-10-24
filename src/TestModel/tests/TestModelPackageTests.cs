@@ -21,8 +21,9 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System;
 using System.Linq;
-using NSubstitute;
+using System.Reflection;
 using NUnit.Engine;
 using NUnit.Framework;
 using NUnit.TestUtilities.Fakes;
@@ -52,13 +53,20 @@ namespace TestCentric.Gui.Model
         [TestCase(EnginePackageSettings.DomainUsage, "Multiple")]
         [TestCase(EnginePackageSettings.RuntimeFramework, "net-2.0")]
         [TestCase(EnginePackageSettings.MaxAgents, 8)]
-        public void PackageReflectsPackageSettings(string key , object value)
+        [TestCase(EnginePackageSettings.ShadowCopyFiles, false)]
+        public void PackageReflectsPackageSettings(string key, object value)
         {
             _model.PackageSettings[key] = value;
             TestPackage package = _model.MakeTestPackage(new[] { "my.dll" });
 
             Assert.That(package.Settings.ContainsKey(key));
             Assert.That(package.Settings[key], Is.EqualTo(value));
+        }
+
+        [Test]
+        public void DisplayShadowCopySettings()
+        {
+            Console.WriteLine($"Current AppDomain has ShadowCopyFiles = {AppDomain.CurrentDomain.SetupInformation.ShadowCopyFiles}");
         }
     }
 }
