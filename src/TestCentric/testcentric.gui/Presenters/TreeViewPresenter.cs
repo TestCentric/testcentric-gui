@@ -65,7 +65,7 @@ namespace TestCentric.Gui.Presenters
                 _view.RunCommand.Enabled = true;
                 _view.CheckPropertiesDialog();
 
-                _view.LoadTests(e.Test);
+                _view.LoadTests(GetTopDisplayNode(e.Test));
 
                 if (_model.Services.UserSettings.Gui.TestTree.SaveVisualState)
                 {
@@ -78,10 +78,10 @@ namespace TestCentric.Gui.Presenters
                             _view.RestoreVisualState(visualState);
                             _model.SelectCategories(visualState.SelectedCategories, visualState.ExcludeCategories);
                         }
-                        catch (Exception exception)
+                        catch (Exception ex)
                         {
-                            var messageDisplay = new MessageDisplay();
-                            messageDisplay.Error($"There was an error loading the Visual State from {fileName}");
+                            new MessageDisplay().Error(
+                                $"Unable to load visual state from {fileName}{Environment.NewLine}{ex.Message}");
                         }
                     }
                 }
@@ -94,7 +94,7 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.TestReloaded += (e) =>
             {
-                _view.Reload(e.Test);
+                _view.Reload(GetTopDisplayNode(e.Test));
 
                 if (!_settings.Gui.ClearResultsOnReload)
                     RestoreResults(e.Test);
@@ -219,6 +219,13 @@ namespace TestCentric.Gui.Presenters
                 foreach (TestNode child in testNode.Children)
                     RestoreResults(child);
             }
+        }
+
+        private static TestNode GetTopDisplayNode(TestNode node)
+        {
+            return node.Xml.Name == "test-run" && node.Children.Count == 1
+                ? node.Children[0]
+                : node;
         }
     }
 }

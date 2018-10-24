@@ -81,20 +81,20 @@ namespace TestCentric.Gui.Presenters
         }
 
         [Test]
-        public void WhenTestLoadCompletes_TestContainsMoreChildren()
+        public void WhenTestLoadCompletes_MultipleAssemblies_TopNodeIsTestRun()
         {
-            TestNode tn = new TestNode("<test-run><test-suite id=\"1\"/><test-suite id=\"1\"/></test-run>");
+            TestNode tn = new TestNode("<test-run><test-suite id='1' name='test.dll'/><test-suite id='2' name='another.dll'/></test-run>");
             ClearAllReceivedCalls();
-            _model.TestFiles.Returns(new List<string>(new[] { "test.dll" }));
+            _model.TestFiles.Returns(new List<string>(new[] { "test.dll", "another.dll" }));
             FireTestLoadedEvent(tn);
 
             _view.Received().LoadTests(tn);
         }
 
         [Test]
-        public void WhenTestLoadCompletes_TestContainsOnlyOneChild()
+        public void WhenTestLoadCompletes_SingleAssembly_TopNodeIsAssembly()
         {
-            TestNode tn = new TestNode("<test-run><test-suite/></test-run>");
+            TestNode tn = new TestNode("<test-run><test-suite id='1' name='another.dll'/></test-run>");
             ClearAllReceivedCalls();
             _model.TestFiles.Returns(new List<string>(new[] { "test.dll" }));
             FireTestLoadedEvent(tn);
