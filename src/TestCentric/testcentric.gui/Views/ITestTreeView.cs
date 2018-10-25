@@ -85,5 +85,6 @@ namespace TestCentric.Gui.Views
 		void CheckPropertiesDialog();
 
 		void SetTestResult(ResultNode result);
+        void LoadAlternateImages(string imageSet);
     }
 }

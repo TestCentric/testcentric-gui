@@ -23,9 +23,11 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -50,15 +52,43 @@ namespace TestCentric.Gui.SettingsPages
         private System.ComponentModel.IContainer components = null;
         private Label label4;
         private ListBox imageSetListBox;
+        private static readonly List<string> imageExtensions = new List<string> { ".JPG", ".JPE", ".BMP", ".GIF", ".PNG" };
 
-        private static string treeImageDir = Path.Combine(Assembly.GetExecutingAssembly().Location, Path.Combine("Images", "Tree"));
+        private static string treeImageDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.Combine("Images", "Tree"));
 
         public TreeSettingsPage(string key) : base(key)
         {
             // This call is required by the Windows Form Designer.
             InitializeComponent();
+            //if (Directory.Exists(treeImageDir))
+            //{
+            //    foreach (var dir in Directory.EnumerateDirectories(treeImageDir))
+            //    {
+            //        if (IsValidImageSet(dir))
+            //        {
+            //            imageSetListBox.Items.Add(new DirectoryInfo(dir).Name);
+            //            imageSetListBox.Enabled = true;
+            //        }
+            //    }
+            //}
+        }
 
-            // TODO: Add any initialization after the InitializeComponent call
+        private bool IsValidImageSet(string dir)
+        {
+            if (Directory.EnumerateFiles(dir).Count() == 5)
+            {
+                foreach (var f in Directory.GetFiles(dir))
+                {
+                    if (!imageExtensions.Contains(Path.GetExtension(f).ToUpperInvariant()))
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -232,7 +262,6 @@ namespace TestCentric.Gui.SettingsPages
             // 
             // imageSetListBox
             // 
-            this.imageSetListBox.Enabled = false;
             this.imageSetListBox.FormattingEnabled = true;
             this.imageSetListBox.Location = new System.Drawing.Point(236, 61);
             this.imageSetListBox.Name = "imageSetListBox";
@@ -277,7 +306,10 @@ namespace TestCentric.Gui.SettingsPages
                 : new string[0];
 
             foreach (string altDir in altDirs)
-                imageSetListBox.Items.Add(Path.GetFileName(altDir));
+            {
+                if(IsValidImageSet(altDir))
+                    imageSetListBox.Items.Add(Path.GetFileName(altDir));
+            }
             string imageSet = Settings.Gui.TestTree.AlternateImageSet;
             if (imageSetListBox.Items.Contains(imageSet))
                 imageSetListBox.SelectedItem = imageSet;

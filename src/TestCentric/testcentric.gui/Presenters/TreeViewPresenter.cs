@@ -151,14 +151,14 @@ namespace TestCentric.Gui.Presenters
                 _view.SetTestResult(e.Result);
             };
 
-            //_settings.Changed += (s, e) =>
-            //{
-            //    if (e.SettingName == "Gui.TestTree.AlternateImageSet")
-            //   {
-            //       _view.LoadAlternateImages();
-            //       _view.Invalidate();
-            //   }
-            //};
+            _settings.Changed += (s, e) =>
+            {
+                if (e.SettingName == "Gui.TestTree.AlternateImageSet")
+               {
+                   _view.AlternateImageSet = (string)_settings.Gui.TestTree.AlternateImageSet;
+                   _view.LoadAlternateImages(_view.AlternateImageSet);
+               }
+            };
 
             _model.Events.CategorySelectionChanged += (TestEventArgs e) =>
             {
