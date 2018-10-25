@@ -155,8 +155,7 @@ namespace TestCentric.Gui.Presenters
             {
                 if (e.SettingName == "Gui.TestTree.AlternateImageSet")
                {
-                   _view.AlternateImageSet = (string)_settings.Gui.TestTree.AlternateImageSet;
-                   _view.LoadAlternateImages(_view.AlternateImageSet);
+                   _view.AlternateImageSet = _settings.Gui.TestTree.AlternateImageSet;
                }
             };
 

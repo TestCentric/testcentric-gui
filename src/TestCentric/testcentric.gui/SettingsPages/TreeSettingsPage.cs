@@ -52,7 +52,7 @@ namespace TestCentric.Gui.SettingsPages
         private System.ComponentModel.IContainer components = null;
         private Label label4;
         private ListBox imageSetListBox;
-        private static readonly List<string> imageExtensions = new List<string> { ".JPG", ".JPE", ".BMP", ".GIF", ".PNG" };
+        private static readonly string[] imageExtensions = { ".png", ".jpg" };
 
         private static string treeImageDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.Combine("Images", "Tree"));
 
@@ -60,17 +60,6 @@ namespace TestCentric.Gui.SettingsPages
         {
             // This call is required by the Windows Form Designer.
             InitializeComponent();
-            //if (Directory.Exists(treeImageDir))
-            //{
-            //    foreach (var dir in Directory.EnumerateDirectories(treeImageDir))
-            //    {
-            //        if (IsValidImageSet(dir))
-            //        {
-            //            imageSetListBox.Items.Add(new DirectoryInfo(dir).Name);
-            //            imageSetListBox.Enabled = true;
-            //        }
-            //    }
-            //}
         }
 
         private bool IsValidImageSet(string dir)
@@ -79,7 +68,7 @@ namespace TestCentric.Gui.SettingsPages
             {
                 foreach (var f in Directory.GetFiles(dir))
                 {
-                    if (!imageExtensions.Contains(Path.GetExtension(f).ToUpperInvariant()))
+                    if (!imageExtensions.Contains(Path.GetExtension(f)))
                     {
                         return false;
                     }
@@ -345,9 +334,7 @@ namespace TestCentric.Gui.SettingsPages
 
         private void DisplayImage(string imageDir, string filename, PictureBox box)
         {
-            string[] extensions = { ".png", ".jpg" };
-
-            foreach (string ext in extensions)
+            foreach (string ext in imageExtensions)
             {
                 string filePath = Path.Combine(imageDir, filename + ext);
                 if (File.Exists(filePath))
