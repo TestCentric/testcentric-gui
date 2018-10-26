@@ -105,6 +105,10 @@
       <Name>nunit.uiexception.dll</Name>
     </ProjectReference>
     <Reference Include="System.Configuration" />
+    <ProjectReference Include="..\..\Common\testcentric.common\TestCentric.Common.csproj">
+      <Project>{B69057F3-0663-4763-A3EC-50D463578B94}</Project>
+      <Name>TestCentric.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\CommonAssemblyInfo.cs">
@@ -150,11 +154,6 @@
     <Compile Include="Presenters\StatusBarPresenter.cs" />
     <Compile Include="Presenters\TextOutputPresenter.cs" />
     <Compile Include="TestNodeFilters.cs" />
-    <Compile Include="IMessageDisplay.cs" />
-    <Compile Include="InternalTrace.cs" />
-    <Compile Include="InternalTraceWriter.cs" />
-    <Compile Include="Logger.cs" />
-    <Compile Include="MessageDisplay.cs" />
     <Compile Include="Elements\ICommand.cs" />
     <Compile Include="Views\IMainView.cs" />
     <Compile Include="Elements\IViewElement.cs" />
