@@ -50,17 +50,38 @@ namespace TestCentric.Gui
 			// Save the owner
 			Owner = owner;
 
+		    if (Owner.InvokeRequired)
+		    {
+		        Owner.Invoke(new Action(() =>
+		            {
+		                _originalCursor = owner.Cursor;
+		                owner.Cursor = Cursors.WaitCursor;
+
+		                // Display the text
+		                this.operation.Text = text;
+
+		                // Force immediate display upon construction
+		                Show();
+		                Invalidate();
+		                Update();
+                    })
+		        );
+		    }
+		    else
+		    {
+		        _originalCursor = owner.Cursor;
+		        owner.Cursor = Cursors.WaitCursor;
+
+		        // Display the text
+		        this.operation.Text = text;
+
+		        // Force immediate display upon construction
+		        Show();
+		        Invalidate();
+		        Update();
+            }
 			// Save owner's current cursor and set it to the WaitCursor
-            _originalCursor = owner.Cursor;
-            owner.Cursor = Cursors.WaitCursor;
-
-            // Display the text
-			this.operation.Text = text;
-
-            // Force immediate display upon construction
-            Show();
-            Invalidate();
-            Update();
+            
 
 			Application.DoEvents();
         }
@@ -77,9 +98,21 @@ namespace TestCentric.Gui
                     components.Dispose();
                 }
 
-				Owner.Cursor = _originalCursor;
+                if (Owner.InvokeRequired)
+                {
+                    Owner.Invoke(new Action(() =>
+                    {
+                        Owner.Cursor = _originalCursor;
+                        base.Dispose(disposing);
+                    }));
+                }
+                else
+                {
+                    Owner.Cursor = _originalCursor;
+                    base.Dispose(disposing);
+                }
             }
-            base.Dispose( disposing );
+            
         }
 
         #region Windows Form Designer generated code

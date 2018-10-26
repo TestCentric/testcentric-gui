@@ -22,6 +22,7 @@
 // ***********************************************************************
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Engine;
@@ -37,7 +38,7 @@ namespace TestCentric.Gui.Model
         // Our event dispatcher. Events are exposed through the Events
         // property. This is used when firing events from the model.
         private TestEventDispatcher _events;
-
+        private AssemblyWatcher _assemblyWatcher;
         #region Constructor
 
         public TestModel(ITestEngine testEngine)
@@ -53,6 +54,7 @@ namespace TestCentric.Gui.Model
                     VisualStudioSupport = true;
             }
 
+            _assemblyWatcher = new AssemblyWatcher();
             _events = new TestEventDispatcher(this);
         }
 
@@ -182,8 +184,27 @@ namespace TestCentric.Gui.Model
 
             _events.FireTestLoaded(Tests);
 
+            InstallAssemblyWatcher(files);
             foreach (var subPackage in TestPackage.SubPackages)
                 Services.RecentFiles.SetMostRecent(subPackage.FullName);
+        }
+
+        private void InstallAssemblyWatcher(IList<string> files)
+        {
+            _assemblyWatcher.Setup(1000,files as IList);
+            _assemblyWatcher.AssemblyChanged += new AssemblyChangedHandler(OnChange);
+            _assemblyWatcher.Start();
+        }
+
+        private void OnChange(string fullpath)
+        {
+            ReloadTests();
+        }
+
+        private void RemoveAssemblyWatcher()
+        {
+            _assemblyWatcher.Stop();
+            _assemblyWatcher.Dispose();
         }
 
         public void UnloadTests()
@@ -196,7 +217,7 @@ namespace TestCentric.Gui.Model
             TestPackage = null;
             TestFiles.Clear();
             Results.Clear();
-
+            RemoveAssemblyWatcher();
             _events.FireTestUnloaded();
         }
 

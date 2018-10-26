@@ -255,9 +255,12 @@ namespace TestCentric.Gui.Views
         /// <param name="test">Test suite to be loaded</param>
         public void Reload(TestNode test)
         {
-            VisualState visualState = GetVisualState();
-            LoadTests(test);
-            RestoreVisualState(visualState);
+            InvokeIfRequired(() =>
+            {
+                VisualState visualState = GetVisualState();
+                LoadTests(test);
+                RestoreVisualState(visualState);
+            });
         }
 
         public void ExpandAll()
