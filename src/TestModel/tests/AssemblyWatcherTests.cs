@@ -6,7 +6,6 @@ using NUnit.Framework;
 namespace TestCentric.Gui.Model
 {
     [TestFixture]
-    [Platform(Exclude = "Win95,Win98,WinMe")]
     public class AssemblyWatcherTests
     {
         private AssemblyWatcher watcher;
