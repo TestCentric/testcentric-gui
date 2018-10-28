@@ -25,8 +25,6 @@ using System;
 
 namespace TestCentric.Gui.Views
 {
-    using Model;
-
     /// <summary>
     /// TestResultItem is used by the ErrorsAndFailuresView to hold
     /// all the information about a test result for display.
