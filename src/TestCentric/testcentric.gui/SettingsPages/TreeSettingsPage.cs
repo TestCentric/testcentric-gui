@@ -64,19 +64,11 @@ namespace TestCentric.Gui.SettingsPages
 
         private bool IsValidImageSet(string dir)
         {
-            if (Directory.EnumerateFiles(dir).Count() == 5)
+            foreach (var file in Directory.EnumerateFiles(dir))
             {
-                foreach (var f in Directory.GetFiles(dir))
-                {
-                    if (!imageExtensions.Contains(Path.GetExtension(f)))
-                    {
-                        return false;
-                    }
-                }
-
-                return true;
+                if (imageExtensions.Contains(Path.GetExtension(file)))
+                    return true;
             }
-
             return false;
         }
 
