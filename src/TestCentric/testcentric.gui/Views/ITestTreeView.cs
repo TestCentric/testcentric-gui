@@ -64,7 +64,6 @@ namespace TestCentric.Gui.Views
 		TreeNode TopNode { get; }
         TestSuiteTreeNode ContextNode { get; }
 		TreeNode SelectedNode { get; }
-		TestNode SelectedTest { get; }
 		TestNode[] SelectedTests { get; }
 
         TestNodeFilter TreeFilter { get; set; }

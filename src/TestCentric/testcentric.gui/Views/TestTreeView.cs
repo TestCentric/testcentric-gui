@@ -210,13 +210,6 @@ namespace TestCentric.Gui.Views
             set => tree.SelectedNode = value;
         }
 
-        /// <summary>
-        /// The currently selected test.
-        /// </summary>
-        [Browsable(false)]
-        public TestNode SelectedTest => ((TestSuiteTreeNode)tree.SelectedNode)?.Test;
-
-
         [Browsable(false)]
         public TestNode[] SelectedTests
         {
@@ -232,8 +225,8 @@ namespace TestCentric.Gui.Views
                 }
 
                 if (result == null || result.Length == 0)
-                    if (SelectedTest != null)
-                        result = new TestNode[] { SelectedTest };
+                    if (SelectedNode != null)
+                    result = new TestNode[] { ((TestSuiteTreeNode)SelectedNode).Test };
 
                 return result;
             }
