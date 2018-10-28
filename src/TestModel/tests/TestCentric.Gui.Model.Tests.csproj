@@ -84,6 +84,7 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AssemblyWatcherTests.cs" />
     <Compile Include="AvailableRuntimesTest.cs" />
     <Compile Include="ResultNodeTests.cs" />
     <Compile Include="ResultStateTests.cs" />

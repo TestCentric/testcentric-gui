@@ -52,7 +52,9 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AssemblyWatcher.cs" />
     <Compile Include="Filters.cs" />
+    <Compile Include="IAsemblyWatcher.cs" />
     <Compile Include="ITestEvents.cs" />
     <Compile Include="ITestServices.cs" />
     <Compile Include="Settings\ErrorDisplaySettings.cs" />
