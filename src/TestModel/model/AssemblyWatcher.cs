@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Copyright (c) 2018 Charlie Poole
+// Copyright (c) 2002-2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -28,7 +28,7 @@ using System.Timers;
 
 namespace TestCentric.Gui.Model
 {
-    public class AssemblyWatcher:IAsemblyWatcher,IDisposable
+    public class AssemblyWatcher:IAsemblyWatcher
     {
         private FileSystemWatcher[] fileWatchers;
         private FileInfo[] files;

@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Copyright (c) 2018 Charlie Poole
+// Copyright (c) 2010-2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -21,12 +21,13 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System;
 using System.Collections;
 
 namespace TestCentric.Gui.Model
 {
     public delegate void AssemblyChangedHandler(string fullPath);
-    public interface IAsemblyWatcher
+    public interface IAsemblyWatcher: IDisposable
     {
         /// <summary>
         /// Stops watching for changes.
