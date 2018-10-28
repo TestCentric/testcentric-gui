@@ -31,7 +31,6 @@ using NUnit.Engine;
 
 namespace TestCentric.Gui.Presenters
 {
-    using Controls;
     using Model;
     using Model.Settings;
     using Views;

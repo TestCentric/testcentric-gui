@@ -25,9 +25,7 @@ using System;
 using System.Drawing;
 using System.ComponentModel;
 using System.Windows.Forms;
-using System.Text;
 using System.IO;
-using System.Collections;
 
 namespace TestCentric.Gui
 {

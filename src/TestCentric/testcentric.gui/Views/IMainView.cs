@@ -29,7 +29,6 @@ namespace TestCentric.Gui.Views
 {
 	using Controls;
 	using Elements;
-	using Model; // TODO: We shouldn't need this, but we do for now
 
 	public interface IMainView
     {

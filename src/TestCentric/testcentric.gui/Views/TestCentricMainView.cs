@@ -29,7 +29,6 @@ using System.IO;
 namespace TestCentric.Gui.Views
 {
     using Controls;
-    using Model;
     using Elements;
 
     public class TestCentricMainView : TestCentricFormBase, IMainView
@@ -1022,11 +1021,6 @@ namespace TestCentric.Gui.Views
         public ICommand TestCentricHelpCommand { get; }
         public ICommand NUnitHelpCommand { get; }
         public ICommand AboutCommand { get; }
-
-        public TestNode[] FailedTests
-        {
-            get { return TreeView.FailedTests; }
-        }
 
         public LongRunningOperationDisplay LongOperationDisplay(string text)
 		{
