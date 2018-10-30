@@ -81,7 +81,5 @@ namespace TestCentric.Gui.Views
 		void ShowPropertiesDialog(TestSuiteTreeNode node);
 		void ClosePropertiesDialog();
 		void CheckPropertiesDialog();
-
-		void SetTestResult(ResultNode result);
     }
 }

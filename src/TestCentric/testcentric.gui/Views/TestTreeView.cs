@@ -300,7 +300,7 @@ namespace TestCentric.Gui.Views
 
             foreach (VisualTreeNode visualNode in visualState.Nodes)
             {
-                TestSuiteTreeNode treeNode = this[visualNode.Id];
+                TestSuiteTreeNode treeNode = (TestSuiteTreeNode)_treeMap[visualNode.Id];
                 if (treeNode != null)
                 {
                     if (treeNode.IsExpanded != visualNode.Expanded)
@@ -312,14 +312,14 @@ namespace TestCentric.Gui.Views
 
             if (visualState.SelectedNode != null)
             {
-                TestSuiteTreeNode treeNode = this[visualState.SelectedNode];
+                TestSuiteTreeNode treeNode = (TestSuiteTreeNode)_treeMap[visualState.SelectedNode];
                 if (treeNode != null)
                     this.SelectedNode = treeNode;
             }
 
             if (visualState.TopNode != null)
             {
-                TestSuiteTreeNode treeNode = this[visualState.TopNode];
+                TestSuiteTreeNode treeNode = (TestSuiteTreeNode)_treeMap[visualState.TopNode];
                 if (treeNode != null)
                     this.TopNode = treeNode;
             }
@@ -344,32 +344,6 @@ namespace TestCentric.Gui.Views
                 _propertiesDialog.Close();
         }
 
-        /// <summary>
-        /// Add the result of a test to the tree
-        /// </summary>
-        /// <param name="result">The result of the test</param>
-        public void SetTestResult(ResultNode result)
-        {
-            TestSuiteTreeNode node = this[result.Id];
-            if (node == null)
-            {
-                Debug.WriteLine("Test not found in tree: " + result.FullName);
-            }
-            else
-            {
-                InvokeIfRequired(() =>
-                    {
-                        node.Result = result;
-
-                        if (result.Type == "Theory")
-                            node.RepopulateTheoryNode();
-
-                        Invalidate(node.Bounds);
-                        Update();
-                    });
-            }
-        }
-
         #endregion
 
         #region Other Public Properties
@@ -389,8 +363,6 @@ namespace TestCentric.Gui.Views
             get => _treeFilter;
             set => Accept(new TestFilterVisitor(_treeFilter = value));
         }
-
-        public TestSuiteTreeNode this[string id] => _treeMap[id] as TestSuiteTreeNode;
 
         #endregion
 
