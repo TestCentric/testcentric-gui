@@ -76,7 +76,7 @@ namespace TestCentric.Gui.Presenters
         {
             ClearAllReceivedCalls();
             _model.TestFiles.Returns(new List<string>(new[] { "test.dll" }));
-            FireTestLoadedEvent(new TestNode("<test-run/>"));
+            FireTestLoadedEvent(new TestNode("<test-run id='2'/>"));
             
             _view.RunCommand.Received().Enabled = true;
         }
@@ -84,7 +84,7 @@ namespace TestCentric.Gui.Presenters
         [Test]
         public void WhenTestLoadCompletes_MultipleAssemblies_TopNodeIsTestRun()
         {
-            TestNode testNode = new TestNode("<test-run><test-suite id='1' name='test.dll'/><test-suite id='2' name='another.dll'/></test-run>");
+            TestNode testNode = new TestNode("<test-run id='2'><test-suite id='101' name='test.dll'/><test-suite id='102' name='another.dll'/></test-run>");
             ClearAllReceivedCalls();
             _model.TestFiles.Returns(new List<string>(new[] { "test.dll", "another.dll" }));
             FireTestLoadedEvent(testNode);
@@ -117,7 +117,7 @@ namespace TestCentric.Gui.Presenters
         public void WhenTestReloadCompletes_RunCommandIsEnabled()
         {
             ClearAllReceivedCalls();
-            FireTestReloadedEvent(new TestNode("<test-run/>"));
+            FireTestReloadedEvent(new TestNode("<test-run id='2'/>"));
 
             _view.RunCommand.Received().Enabled = true;
         }
@@ -183,19 +183,29 @@ namespace TestCentric.Gui.Presenters
 		[Test]
         public void WhenTestCaseCompletes_ResultIsPosted()
         {
-            var result = new ResultNode("<test-case id='DUMMY' result='Passed'/>");
+            var test = new TestNode("<test-case id='100' name='DummyTest'/>");
+            var treeNode = new TestSuiteTreeNode(test);
+            _presenter.TreeMap["100"] = treeNode;
+
+            var result = new ResultNode("<test-case id='100' name='DummyTest' result='Passed'/>");
+
             _model.Events.TestFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(result));
 
-            _view.Received().SetTestResult(result);
+            Assert.That(treeNode.Result, Is.EqualTo(result));
         }
         
 		[Test]
         public void WhenTestSuiteCompletes_ResultIsPosted()
         {
-            var result = new ResultNode("<test-suite id='DUMMY' result='Passed'/>");
+            var suite = new TestNode("<test-suite id='100' name='DUMMY'/>");
+            var treeNode = new TestSuiteTreeNode(suite);
+            _presenter.TreeMap["100"] = treeNode;
+
+            var result = new ResultNode("<test-suite id='100' name='DUMMY' result='Passed'/>");
+
             _model.Events.SuiteFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(result));
 
-            _view.Received().SetTestResult(result);
+            Assert.That(treeNode.Result, Is.EqualTo(result));
         }
 
         //[Test]

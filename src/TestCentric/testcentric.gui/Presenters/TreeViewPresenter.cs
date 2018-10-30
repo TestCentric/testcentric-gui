@@ -22,9 +22,11 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Windows.Forms;
 
 namespace TestCentric.Gui.Presenters
 {
@@ -37,6 +39,13 @@ namespace TestCentric.Gui.Presenters
         private ITestTreeView _view;
         private ITestModel _model;
         private UserSettings _settings;
+
+        /// <summary>
+        /// Hashtable provides direct access to TestNodes
+        /// </summary>
+        internal Dictionary<string, TreeNode> _treeMap = new Dictionary<string, TreeNode>();
+
+        public Dictionary<string, TreeNode> TreeMap { get { return _treeMap; } }
 
         public TreeViewPresenter(ITestTreeView view, ITestModel model)
         {
@@ -124,6 +133,7 @@ namespace TestCentric.Gui.Presenters
                     }
 
                 _view.Clear();
+                _treeMap.Clear();
             };
 
             _model.Events.TestUnloaded += (e) =>
@@ -142,15 +152,9 @@ namespace TestCentric.Gui.Presenters
                 _view.RunCommand.Enabled = true;
             };
 
-            _model.Events.TestFinished += (e) =>
-            {
-                _view.SetTestResult(e.Result);
-            };
+            _model.Events.TestFinished += (e) => SetTestResult(e.Result);
 
-            _model.Events.SuiteFinished += (e) =>
-            {
-                _view.SetTestResult(e.Result);
-            };
+            _model.Events.SuiteFinished += (e) => SetTestResult(e.Result);
 
             //_settings.Changed += (s, e) =>
             //{
@@ -218,7 +222,7 @@ namespace TestCentric.Gui.Presenters
         {
             var treeNode = new TestSuiteTreeNode(testNode);
             if (highlight) treeNode.ForeColor = Color.Blue;
-            //_treeMap.Add(treeNode.Test.Id, treeNode);
+            _treeMap.Add(testNode.Id, treeNode);
             treeNode.Tag = testNode.Id;
 
             if (testNode.IsSuite)
@@ -242,13 +246,33 @@ namespace TestCentric.Gui.Presenters
             _view.RestoreVisualState(visualState);
         }
 
+        /// <summary>
+        /// Add the result of a test to the tree
+        /// </summary>
+        /// <param name="result">The result of a test</param>
+        private void SetTestResult(ResultNode result)
+        {
+            TestSuiteTreeNode node = (TestSuiteTreeNode)_treeMap[result.Id];
+            if (node == null)
+            {
+                Debug.WriteLine("Test not found in tree: " + result.FullName);
+            }
+            else
+            {
+                node.Result = result;
+
+                if (result.Type == "Theory")
+                    node.RepopulateTheoryNode();
+            }
+        }
+
         public void RestoreResults(TestNode testNode)
         {
             var result = _model.GetResultForTest(testNode);
 
             if (result != null)
             {
-                _view.SetTestResult(result);
+                SetTestResult(result);
 
                 foreach (TestNode child in testNode.Children)
                     RestoreResults(child);
