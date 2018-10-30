@@ -23,6 +23,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 
 namespace TestCentric.Gui.Presenters
@@ -65,7 +66,7 @@ namespace TestCentric.Gui.Presenters
                 _view.RunCommand.Enabled = true;
                 _view.CheckPropertiesDialog();
 
-                _view.LoadTests(GetTopDisplayNode(e.Test));
+                LoadTests(GetTopDisplayNode(e.Test));
 
                 if (_model.Services.UserSettings.Gui.TestTree.SaveVisualState)
                 {
@@ -94,7 +95,7 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.TestReloaded += (e) =>
             {
-                _view.Reload(GetTopDisplayNode(e.Test));
+                ReloadTests(e.Test);
 
                 if (!_settings.Gui.ClearResultsOnReload)
                     RestoreResults(e.Test);
@@ -206,6 +207,39 @@ namespace TestCentric.Gui.Presenters
                 if (targetNode != null)
                     _view.ShowPropertiesDialog(targetNode);
             };
+        }
+
+        public void LoadTests(TestNode test)
+        {
+            _view.LoadTree(BuildTestTree(test, false));
+        }
+
+        private TestSuiteTreeNode BuildTestTree(TestNode testNode, bool highlight)
+        {
+            var treeNode = new TestSuiteTreeNode(testNode);
+            if (highlight) treeNode.ForeColor = Color.Blue;
+            //_treeMap.Add(treeNode.Test.Id, treeNode);
+            treeNode.Tag = testNode.Id;
+
+            if (testNode.IsSuite)
+            {
+                foreach (TestNode child in testNode.Children)
+                    treeNode.Nodes.Add(BuildTestTree(child, highlight));
+            }
+
+            return treeNode;
+        }
+
+        /// <summary>
+        /// Reload the tree with a changed test hierarchy
+        /// while maintaining as much gui state as possible.
+        /// </summary>
+        /// <param name="test">Test suite to be loaded</param>
+        public void ReloadTests(TestNode test)
+        {
+            VisualState visualState = _view.GetVisualState();
+            LoadTests(test);
+            _view.RestoreVisualState(visualState);
         }
 
         public void RestoreResults(TestNode testNode)

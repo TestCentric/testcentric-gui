@@ -69,8 +69,7 @@ namespace TestCentric.Gui.Views
         TestNodeFilter TreeFilter { get; set; }
 
 		void Clear();
-        void LoadTests(TestNode test);
-		void Reload(TestNode test);
+        void LoadTree(TreeNode topLevelNode);
 
 		void ExpandAll();
 		void CollapseAll();

@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using NUnit.Framework;
 using NSubstitute;
 
@@ -83,23 +84,23 @@ namespace TestCentric.Gui.Presenters
         [Test]
         public void WhenTestLoadCompletes_MultipleAssemblies_TopNodeIsTestRun()
         {
-            TestNode tn = new TestNode("<test-run><test-suite id='1' name='test.dll'/><test-suite id='2' name='another.dll'/></test-run>");
+            TestNode testNode = new TestNode("<test-run><test-suite id='1' name='test.dll'/><test-suite id='2' name='another.dll'/></test-run>");
             ClearAllReceivedCalls();
             _model.TestFiles.Returns(new List<string>(new[] { "test.dll", "another.dll" }));
-            FireTestLoadedEvent(tn);
+            FireTestLoadedEvent(testNode);
 
-            _view.Received().LoadTests(tn);
+            _view.Received().LoadTree(Arg.Is<TreeNode>((tn) => tn.Text == "TestRun" && tn.Nodes.Count == 2));
         }
 
         [Test]
         public void WhenTestLoadCompletes_SingleAssembly_TopNodeIsAssembly()
         {
-            TestNode tn = new TestNode("<test-run><test-suite id='1' name='another.dll'/></test-run>");
+            TestNode testNode = new TestNode("<test-run><test-suite id='1' name='another.dll'/></test-run>");
             ClearAllReceivedCalls();
             _model.TestFiles.Returns(new List<string>(new[] { "test.dll" }));
-            FireTestLoadedEvent(tn);
+            FireTestLoadedEvent(testNode);
 
-            _view.Received().LoadTests(tn.Children[0]);
+            _view.Received().LoadTree(Arg.Is<TreeNode>(tn => tn.Text == "another.dll"));
         }
 
 

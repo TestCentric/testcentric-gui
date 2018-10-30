@@ -241,16 +241,18 @@ namespace TestCentric.Gui.Views
             Nodes.Clear();
         }
 
-        /// <summary>
-        /// Reload the tree with a changed test hierarchy
-        /// while maintaining as much gui state as possible.
-        /// </summary>
-        /// <param name="test">Test suite to be loaded</param>
-        public void Reload(TestNode test)
+        public void LoadTree(TreeNode topLevelNode)
         {
-            VisualState visualState = GetVisualState();
-            LoadTests(test);
-            RestoreVisualState(visualState);
+            using (new WaitCursor())
+            {
+                Clear();
+                tree.BeginUpdate();
+                tree.Nodes.Add(topLevelNode);
+                AddNodesToMap(topLevelNode);
+                SetInitialExpansion();
+                tree.EndUpdate();
+                tree.Select();
+            }
         }
 
         public void ExpandAll()
@@ -394,30 +396,6 @@ namespace TestCentric.Gui.Views
 
         #region Other Public Methods
 
-        /// <summary>
-        /// Load the tree with a test hierarchy
-        /// </summary>
-        /// <param name="topLevelNode">Test-run node for tests to be loaded</param>
-        public void LoadTests(TestNode topLevelNode)
-        {
-            using (new WaitCursor())
-            {
-                Clear();
-                tree.BeginUpdate();
-
-                try
-                {
-                    AddTreeNodes(Nodes, topLevelNode, false);
-                    SetInitialExpansion();
-                }
-                finally
-                {
-                    tree.EndUpdate();
-                    tree.Select();
-                }
-            }
-        }
-
         public void ClearCheckedNodes() => Accept(new ClearCheckedNodesVisitor());
 
         public void CheckFailedNodes() => Accept(new CheckFailedNodesVisitor());
@@ -453,28 +431,13 @@ namespace TestCentric.Gui.Views
 
         #region Helper Methods
 
-        /// <summary>
-        /// Add nodes to the tree constructed from a test
-        /// </summary>
-        /// <param name="nodes">The TreeNodeCollection to which the new node should  be added</param>
-        /// <param name="testNode">The test for which a node is to be built</param>
-        /// <param name="highlight">If true, highlight the text for this node in the tree</param>
-        /// <returns>A newly constructed TestSuiteTreeNode, possibly with descendant nodes</returns>
-        private TestSuiteTreeNode AddTreeNodes(IList nodes, TestNode testNode, bool highlight)
+        private void AddNodesToMap(TreeNode treeNode)
         {
-            TestSuiteTreeNode treeNode = new TestSuiteTreeNode(testNode);
-            if (highlight) treeNode.ForeColor = Color.Blue;
-            _treeMap.Add(treeNode.Test.Id, treeNode);
+            if (treeNode.Tag != null)
+                _treeMap[treeNode.Tag] = treeNode;
 
-            nodes.Add(treeNode);
-
-            if (testNode.IsSuite)
-            {
-                foreach (TestNode child in testNode.Children)
-                    AddTreeNodes(treeNode.Nodes, child, highlight);
-            }
-
-            return treeNode;
+            foreach (TreeNode child in treeNode.Nodes)
+                AddNodesToMap(child);
         }
 
         /// <summary>
