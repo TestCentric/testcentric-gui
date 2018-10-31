@@ -31,7 +31,6 @@ using NUnit.Engine;
 
 namespace TestCentric.Gui.Presenters
 {
-    using Controls;
     using Model;
     using Model.Settings;
     using Views;
@@ -186,7 +185,7 @@ namespace TestCentric.Gui.Presenters
                 //{
                 //    //log.Warning("Unable to save result to {0}\n{1}", resultPath, ex.ToString());
                 //}
-                         
+
                 if (e.Result.Outcome.Status == TestStatus.Failed)
                     _view.Activate();
             };
@@ -402,6 +401,7 @@ namespace TestCentric.Gui.Presenters
                         _model.LoadTests(new[] { path });
                     };
                     menuItems.Add(menuItem);
+                    if (num >= _settings.Gui.RecentProjects.MaxFiles) break;
                 }
             };
 

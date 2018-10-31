@@ -30,16 +30,20 @@ using NUnit.UiException.Controls;
 namespace TestCentric.Gui.Views
 {
     using Controls;
+    using Elements;
 
     /// <summary>
     /// Summary description for ErrorDisplay.
     /// </summary>
     public class ErrorsAndFailuresView : UserControlView, IErrorsAndFailuresView
     {
+        static Logger log = InternalTrace.GetLogger("ErrorsAndFailureView");
+
+        private const int ITEM_MARGIN = 2;
+
         int hoverIndex = -1;
         private System.Windows.Forms.Timer hoverTimer;
         TipWindow tipWindow;
-        private bool wordWrap = false;
 
         private System.Windows.Forms.ListBox detailList;
         public StackTraceDisplay stackTraceDisplay;
@@ -113,19 +117,16 @@ namespace TestCentric.Gui.Views
 			// 
 			// detailList
 			// 
-			//this.detailList.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 			this.detailList.Dock = DockStyle.Top;
             this.detailList.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
             this.detailList.Font = new Font(FontFamily.GenericMonospace, 8.0F);
-            this.detailList.HorizontalExtent = 2000;
             this.detailList.HorizontalScrollbar = true;
-            this.detailList.ItemHeight = 16;
+            this.detailList.IntegralHeight = true;
             this.detailList.Location = new System.Drawing.Point(0, 123);
             this.detailList.Name = "detailList";
             this.detailList.ScrollAlwaysVisible = true;
             this.detailList.Size = new System.Drawing.Size(496, 128);
             this.detailList.TabIndex = 1;
-            this.detailList.Resize += new System.EventHandler(this.detailList_Resize);
             this.detailList.MouseHover += new System.EventHandler(this.OnMouseHover);
             this.detailList.MeasureItem += new System.Windows.Forms.MeasureItemEventHandler(this.detailList_MeasureItem);
             this.detailList.MouseMove += new System.Windows.Forms.MouseEventHandler(this.detailList_MouseMove);
@@ -191,20 +192,6 @@ namespace TestCentric.Gui.Views
         public event EventHandler SourceCodeSplitterDistanceChanged;
         public event EventHandler SourceCodeSplitOrientationChanged;
         public event EventHandler SourceCodeDisplayChanged;
-
-        public bool WordWrap
-        {
-            get { return wordWrap; }
-            set
-            {
-                if (value != wordWrap)
-                    InvokeIfRequired(() =>
-                    {
-                        wordWrap = value;
-                        RefillDetailList();
-                    });
-            }
-        }
 
         public bool EnableToolTips { get; set; }
 
@@ -313,12 +300,11 @@ namespace TestCentric.Gui.Views
         private void detailList_MeasureItem(object sender, System.Windows.Forms.MeasureItemEventArgs e)
         {
             TestResultItem item = (TestResultItem)detailList.Items[e.Index];
-            string s = item.ToString();
-            SizeF size = this.WordWrap
-                ? e.Graphics.MeasureString(item.ToString(), detailList.Font, detailList.ClientSize.Width)
-                : e.Graphics.MeasureString(item.ToString(), detailList.Font);
-            e.ItemHeight = (int)size.Height;
+            SizeF size = e.Graphics.MeasureString(item.ToString(), detailList.Font);
+            e.ItemHeight = (int)size.Height + 2 * ITEM_MARGIN;
             e.ItemWidth = (int)size.Width;
+            if (e.ItemWidth > detailList.HorizontalExtent)
+                detailList.HorizontalExtent = e.ItemWidth;
         }
 
         private void detailList_DrawItem(object sender, System.Windows.Forms.DrawItemEventArgs e)
@@ -327,18 +313,11 @@ namespace TestCentric.Gui.Views
             {
                 e.DrawBackground();
                 TestResultItem item = (TestResultItem)detailList.Items[e.Index];
-                bool selected = ((e.State & DrawItemState.Selected) == DrawItemState.Selected) ? true : false;
-                Brush brush = selected ? SystemBrushes.HighlightText : SystemBrushes.WindowText;
-                RectangleF layoutRect = e.Bounds;
-                if (this.WordWrap && layoutRect.Width > detailList.ClientSize.Width)
-                    layoutRect.Width = detailList.ClientSize.Width;
-                e.Graphics.DrawString(item.ToString(), detailList.Font, brush, layoutRect);
+                Brush brush = (e.State & DrawItemState.Selected) == DrawItemState.Selected
+                    ? SystemBrushes.HighlightText
+                    : SystemBrushes.WindowText;
+                e.Graphics.DrawString(item.ToString(), detailList.Font, brush, e.Bounds.Left, e.Bounds.Top + ITEM_MARGIN);
             }
-        }
-
-        private void detailList_Resize(object sender, System.EventArgs e)
-        {
-            if ( this.WordWrap ) RefillDetailList();
         }
 
         private void RefillDetailList()
@@ -351,6 +330,7 @@ namespace TestCentric.Gui.Views
                 foreach( object item in copiedItems )
                     this.detailList.Items.Add( item );
                 this.detailList.EndUpdate();
+                this.detailList.Invalidate();
             }
         }
 

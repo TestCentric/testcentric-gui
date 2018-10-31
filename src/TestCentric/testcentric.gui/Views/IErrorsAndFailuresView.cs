@@ -27,6 +27,8 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
+    using Elements;
+
     public interface IErrorsAndFailuresView
     {
         event EventHandler SplitterPositionChanged;
@@ -34,7 +36,6 @@ namespace TestCentric.Gui.Views
         event EventHandler SourceCodeSplitOrientationChanged;
         event EventHandler SourceCodeDisplayChanged;
 
-        bool WordWrap { get; set; } 
         bool EnableToolTips { get; set; }
         Font Font { get; set; }
         int SplitterPosition { get; set; }

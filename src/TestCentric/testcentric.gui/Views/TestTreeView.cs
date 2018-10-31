@@ -210,13 +210,6 @@ namespace TestCentric.Gui.Views
             set => tree.SelectedNode = value;
         }
 
-        /// <summary>
-        /// The currently selected test.
-        /// </summary>
-        [Browsable(false)]
-        public TestNode SelectedTest => ((TestSuiteTreeNode)tree.SelectedNode)?.Test;
-
-
         [Browsable(false)]
         public TestNode[] SelectedTests
         {
@@ -232,8 +225,8 @@ namespace TestCentric.Gui.Views
                 }
 
                 if (result == null || result.Length == 0)
-                    if (SelectedTest != null)
-                        result = new TestNode[] { SelectedTest };
+                    if (SelectedNode != null)
+                    result = new TestNode[] { ((TestSuiteTreeNode)SelectedNode).Test };
 
                 return result;
             }
@@ -248,12 +241,7 @@ namespace TestCentric.Gui.Views
             Nodes.Clear();
         }
 
-        /// <summary>
-        /// Reload the tree with a changed test hierarchy
-        /// while maintaining as much gui state as possible.
-        /// </summary>
-        /// <param name="test">Test suite to be loaded</param>
-        public void Reload(TestNode test)
+        public void LoadTree(TreeNode topLevelNode)
         {
             InvokeIfRequired(() =>
             {
@@ -308,7 +296,7 @@ namespace TestCentric.Gui.Views
 
             foreach (VisualTreeNode visualNode in visualState.Nodes)
             {
-                TestSuiteTreeNode treeNode = this[visualNode.Id];
+                TestSuiteTreeNode treeNode = (TestSuiteTreeNode)_treeMap[visualNode.Id];
                 if (treeNode != null)
                 {
                     if (treeNode.IsExpanded != visualNode.Expanded)
@@ -320,14 +308,14 @@ namespace TestCentric.Gui.Views
 
             if (visualState.SelectedNode != null)
             {
-                TestSuiteTreeNode treeNode = this[visualState.SelectedNode];
+                TestSuiteTreeNode treeNode = (TestSuiteTreeNode)_treeMap[visualState.SelectedNode];
                 if (treeNode != null)
                     this.SelectedNode = treeNode;
             }
 
             if (visualState.TopNode != null)
             {
-                TestSuiteTreeNode treeNode = this[visualState.TopNode];
+                TestSuiteTreeNode treeNode = (TestSuiteTreeNode)_treeMap[visualState.TopNode];
                 if (treeNode != null)
                     this.TopNode = treeNode;
             }
@@ -352,29 +340,6 @@ namespace TestCentric.Gui.Views
                 _propertiesDialog.Close();
         }
 
-        /// <summary>
-        /// Add the result of a test to the tree
-        /// </summary>
-        /// <param name="result">The result of the test</param>
-        public void SetTestResult(ResultNode result)
-        {
-            TestSuiteTreeNode node = this[result.Id];
-            if (node == null)
-            {
-                Debug.WriteLine("Test not found in tree: " + result.FullName);
-            }
-            else
-            {
-                node.Result = result;
-
-                if (result.Type == "Theory")
-                    node.RepopulateTheoryNode();
-
-                Invalidate(node.Bounds);
-                Update();
-            }
-        }
-
         #endregion
 
         #region Other Public Properties
@@ -395,35 +360,9 @@ namespace TestCentric.Gui.Views
             set => Accept(new TestFilterVisitor(_treeFilter = value));
         }
 
-        public TestSuiteTreeNode this[string id] => _treeMap[id] as TestSuiteTreeNode;
-
         #endregion
 
         #region Other Public Methods
-
-        /// <summary>
-        /// Load the tree with a test hierarchy
-        /// </summary>
-        /// <param name="topLevelNode">Test-run node for tests to be loaded</param>
-        public void LoadTests(TestNode topLevelNode)
-        {
-            using (new WaitCursor())
-            {
-                Clear();
-                tree.BeginUpdate();
-
-                try
-                {
-                    AddTreeNodes(Nodes, topLevelNode, false);
-                    SetInitialExpansion();
-                }
-                finally
-                {
-                    tree.EndUpdate();
-                    tree.Select();
-                }
-            }
-        }
 
         public void ClearCheckedNodes() => Accept(new ClearCheckedNodesVisitor());
 
@@ -460,28 +399,13 @@ namespace TestCentric.Gui.Views
 
         #region Helper Methods
 
-        /// <summary>
-        /// Add nodes to the tree constructed from a test
-        /// </summary>
-        /// <param name="nodes">The TreeNodeCollection to which the new node should  be added</param>
-        /// <param name="testNode">The test for which a node is to be built</param>
-        /// <param name="highlight">If true, highlight the text for this node in the tree</param>
-        /// <returns>A newly constructed TestSuiteTreeNode, possibly with descendant nodes</returns>
-        private TestSuiteTreeNode AddTreeNodes(IList nodes, TestNode testNode, bool highlight)
+        private void AddNodesToMap(TreeNode treeNode)
         {
-            TestSuiteTreeNode treeNode = new TestSuiteTreeNode(testNode);
-            if (highlight) treeNode.ForeColor = Color.Blue;
-            _treeMap.Add(treeNode.Test.Id, treeNode);
+            if (treeNode.Tag != null)
+                _treeMap[treeNode.Tag] = treeNode;
 
-            nodes.Add(treeNode);
-
-            if (testNode.IsSuite)
-            {
-                foreach (TestNode child in testNode.Children)
-                    AddTreeNodes(treeNode.Nodes, child, highlight);
-            }
-
-            return treeNode;
+            foreach (TreeNode child in treeNode.Nodes)
+                AddNodesToMap(child);
         }
 
         /// <summary>

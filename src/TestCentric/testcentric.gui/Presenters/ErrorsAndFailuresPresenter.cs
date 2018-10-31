@@ -43,7 +43,6 @@ namespace TestCentric.Gui.Presenters
             _model = model;
             _settings = model.Services.UserSettings;
 
-            _view.WordWrap = _settings.Gui.ErrorDisplay.WordWrapEnabled;
             _view.Font = _settings.Gui.FixedFont;
             _view.SplitterPosition = _settings.Gui.ErrorDisplay.SplitterPosition;
             _view.EnableToolTips = _settings.Gui.ErrorDisplay.ToolTipsEnabled;
@@ -63,26 +62,17 @@ namespace TestCentric.Gui.Presenters
         {
             // Events that arise in the model
 
-            _model.Events.TestLoaded += ((TestNodeEventArgs e) =>
-            {
-                _view.Clear();
-            });
+            _model.Events.TestLoaded += (e) => _view.Clear();
 
-            _model.Events.TestUnloaded += ((TestEventArgs e) =>
-            {
-                _view.Clear();
-            });
+            _model.Events.TestUnloaded += (e) => _view.Clear();
 
-            _model.Events.TestReloaded += (TestNodeEventArgs e) =>
+            _model.Events.TestReloaded += (e) =>
             {
                 if (_settings.Gui.ClearResultsOnReload)
                     _view.Clear();
             };
 
-            _model.Events.RunStarting += (RunStartingEventArgs e) =>
-            {
-                _view.Clear();
-            };
+            _model.Events.RunStarting += (e) => _view.Clear();
 
             _model.Events.TestFinished += (TestResultEventArgs e) =>
             {
@@ -100,7 +90,6 @@ namespace TestCentric.Gui.Presenters
 
             _model.Services.UserSettings.Changed += (object sender, SettingsEventArgs e) =>
             {
-                _view.WordWrap = _settings.Gui.ErrorDisplay.WordWrapEnabled;
                 _view.Font = _settings.Gui.FixedFont;
             };
 

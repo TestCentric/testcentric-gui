@@ -392,8 +392,7 @@ namespace TestCentric.Gui.Model
             //if (Options.InternalTraceLevel != null)
             //    package.AddSetting(EnginePackageSettings.InternalTraceLevel, Options.InternalTraceLevel);
 
-            // We use shadow copy so that the user may re-compile while the gui is running.
-            package.AddSetting(EnginePackageSettings.ShadowCopyFiles, true);
+            package.AddSetting(EnginePackageSettings.ShadowCopyFiles, engineSettings.ShadowCopyFiles);
 
             foreach (var entry in PackageSettings)
                 package.AddSetting(entry.Key, entry.Value);

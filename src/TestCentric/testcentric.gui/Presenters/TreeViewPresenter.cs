@@ -22,8 +22,11 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
+using System.Windows.Forms;
 
 namespace TestCentric.Gui.Presenters
 {
@@ -36,6 +39,13 @@ namespace TestCentric.Gui.Presenters
         private ITestTreeView _view;
         private ITestModel _model;
         private UserSettings _settings;
+
+        /// <summary>
+        /// Hashtable provides direct access to TestNodes
+        /// </summary>
+        internal Dictionary<string, TreeNode> _treeMap = new Dictionary<string, TreeNode>();
+
+        public Dictionary<string, TreeNode> TreeMap { get { return _treeMap; } }
 
         public TreeViewPresenter(ITestTreeView view, ITestModel model)
         {
@@ -65,15 +75,7 @@ namespace TestCentric.Gui.Presenters
                 _view.RunCommand.Enabled = true;
                 _view.CheckPropertiesDialog();
 
-                if (e.Test.Children.Count == 1)
-                {
-                    _view.LoadTests(e.Test.Children[0]);
-                }
-                else
-                {
-                    _view.LoadTests(e.Test);
-                }
-                
+                LoadTests(GetTopDisplayNode(e.Test));
 
                 if (_model.Services.UserSettings.Gui.TestTree.SaveVisualState)
                 {
@@ -86,10 +88,10 @@ namespace TestCentric.Gui.Presenters
                             _view.RestoreVisualState(visualState);
                             _model.SelectCategories(visualState.SelectedCategories, visualState.ExcludeCategories);
                         }
-                        catch (Exception exception)
+                        catch (Exception ex)
                         {
-                            var messageDisplay = new MessageDisplay();
-                            messageDisplay.Error($"There was an error loading the Visual State from {fileName}");
+                            new MessageDisplay().Error(
+                                $"Unable to load visual state from {fileName}{Environment.NewLine}{ex.Message}");
                         }
                     }
                 }
@@ -102,7 +104,7 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.TestReloaded += (e) =>
             {
-                _view.Reload(e.Test);
+                ReloadTests(e.Test);
 
                 if (!_settings.Gui.ClearResultsOnReload)
                     RestoreResults(e.Test);
@@ -131,6 +133,7 @@ namespace TestCentric.Gui.Presenters
                     }
 
                 _view.Clear();
+                _treeMap.Clear();
             };
 
             _model.Events.TestUnloaded += (e) =>
@@ -149,15 +152,9 @@ namespace TestCentric.Gui.Presenters
                 _view.RunCommand.Enabled = true;
             };
 
-            _model.Events.TestFinished += (e) =>
-            {
-                _view.SetTestResult(e.Result);
-            };
+            _model.Events.TestFinished += (e) => SetTestResult(e.Result);
 
-            _model.Events.SuiteFinished += (e) =>
-            {
-                _view.SetTestResult(e.Result);
-            };
+            _model.Events.SuiteFinished += (e) => SetTestResult(e.Result);
 
             //_settings.Changed += (s, e) =>
             //{
@@ -216,17 +213,77 @@ namespace TestCentric.Gui.Presenters
             };
         }
 
+        public void LoadTests(TestNode test)
+        {
+            _view.LoadTree(BuildTestTree(test, false));
+        }
+
+        private TestSuiteTreeNode BuildTestTree(TestNode testNode, bool highlight)
+        {
+            var treeNode = new TestSuiteTreeNode(testNode);
+            if (highlight) treeNode.ForeColor = Color.Blue;
+            _treeMap.Add(testNode.Id, treeNode);
+            treeNode.Tag = testNode.Id;
+
+            if (testNode.IsSuite)
+            {
+                foreach (TestNode child in testNode.Children)
+                    treeNode.Nodes.Add(BuildTestTree(child, highlight));
+            }
+
+            return treeNode;
+        }
+
+        /// <summary>
+        /// Reload the tree with a changed test hierarchy
+        /// while maintaining as much gui state as possible.
+        /// </summary>
+        /// <param name="test">Test suite to be loaded</param>
+        public void ReloadTests(TestNode test)
+        {
+            VisualState visualState = _view.GetVisualState();
+            LoadTests(test);
+            _view.RestoreVisualState(visualState);
+        }
+
+        /// <summary>
+        /// Add the result of a test to the tree
+        /// </summary>
+        /// <param name="result">The result of a test</param>
+        private void SetTestResult(ResultNode result)
+        {
+            TestSuiteTreeNode node = (TestSuiteTreeNode)_treeMap[result.Id];
+            if (node == null)
+            {
+                Debug.WriteLine("Test not found in tree: " + result.FullName);
+            }
+            else
+            {
+                node.Result = result;
+
+                if (result.Type == "Theory")
+                    node.RepopulateTheoryNode();
+            }
+        }
+
         public void RestoreResults(TestNode testNode)
         {
             var result = _model.GetResultForTest(testNode);
 
             if (result != null)
             {
-                _view.SetTestResult(result);
+                SetTestResult(result);
 
                 foreach (TestNode child in testNode.Children)
                     RestoreResults(child);
             }
+        }
+
+        private static TestNode GetTopDisplayNode(TestNode node)
+        {
+            return node.Xml.Name == "test-run" && node.Children.Count == 1
+                ? node.Children[0]
+                : node;
         }
     }
 }

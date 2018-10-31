@@ -64,14 +64,12 @@ namespace TestCentric.Gui.Views
 		TreeNode TopNode { get; }
         TestSuiteTreeNode ContextNode { get; }
 		TreeNode SelectedNode { get; }
-		TestNode SelectedTest { get; }
 		TestNode[] SelectedTests { get; }
 
         TestNodeFilter TreeFilter { get; set; }
 
 		void Clear();
-        void LoadTests(TestNode test);
-		void Reload(TestNode test);
+        void LoadTree(TreeNode topLevelNode);
 
 		void ExpandAll();
 		void CollapseAll();
@@ -83,7 +81,5 @@ namespace TestCentric.Gui.Views
 		void ShowPropertiesDialog(TestSuiteTreeNode node);
 		void ClosePropertiesDialog();
 		void CheckPropertiesDialog();
-
-		void SetTestResult(ResultNode result);
     }
 }
