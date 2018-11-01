@@ -110,13 +110,13 @@ namespace TestCentric.Gui.Presenters
             ClearAllReceivedCalls();
             FireTestsReloadingEvent();
 
-            _view.RunCommand.Received().Enabled = false;
-        }
+            _view.RunCommand.Received().Enabled = false;}
 
         [Test]
         public void WhenTestReloadCompletes_RunCommandIsEnabled()
         {
             ClearAllReceivedCalls();
+
             FireTestReloadedEvent(new TestNode("<test-run id='2'/>"));
 
             _view.RunCommand.Received().Enabled = true;

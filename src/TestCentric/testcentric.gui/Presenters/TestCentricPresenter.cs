@@ -433,7 +433,7 @@ namespace TestCentric.Gui.Presenters
 
             _view.CheckboxesCommand.CheckedChanged += () =>
             {
-                _settings.Gui.TestTree.ShowCheckBoxes = _view.TreeView.CheckBoxes = _view.CheckboxesCommand.Checked;
+                _settings.Gui.TestTree.ShowCheckBoxes = _view.CheckboxesCommand.Checked;
             };
 
             _view.ExpandCommand.Execute += () =>

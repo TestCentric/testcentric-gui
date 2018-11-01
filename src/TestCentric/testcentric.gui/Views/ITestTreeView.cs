@@ -55,15 +55,15 @@ namespace TestCentric.Gui.Views
 		ICommand PropertiesCommand { get; }
 		// TODO: Can we eliminate need for having both of the following?
 		IChecked ShowCheckBoxes { get; }
-		bool CheckBoxes { get; set; }
+        bool CheckBoxes { get; set; }
 
 		DisplayStyle DisplayStyle { get; set; }
 		string AlternateImageSet { get; set; }
 
 		TreeNodeCollection Nodes { get; }
-		TreeNode TopNode { get; }
+        TreeNode TopNode { get; set; }
         TestSuiteTreeNode ContextNode { get; }
-		TreeNode SelectedNode { get; }
+        TreeNode SelectedNode { get; set; }
 		TestNode[] SelectedTests { get; }
 
         TestNodeFilter TreeFilter { get; set; }
@@ -74,9 +74,6 @@ namespace TestCentric.Gui.Views
 		void ExpandAll();
 		void CollapseAll();
 		void HideTests();
-
-		VisualState GetVisualState();
-		void RestoreVisualState(VisualState visualState);
 
 		void ShowPropertiesDialog(TestSuiteTreeNode node);
 		void ClosePropertiesDialog();
