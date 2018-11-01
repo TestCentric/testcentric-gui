@@ -44,11 +44,6 @@ namespace TestCentric.Gui.Views
         #region Instance Variables
 
         /// <summary>
-        /// Hashtable provides direct access to TestNodes
-        /// </summary>
-		private Hashtable _treeMap = new Hashtable();
-
-        /// <summary>
         /// The properties dialog if displayed
         /// </summary>
         private TestPropertiesDialog _propertiesDialog;
@@ -144,35 +139,14 @@ namespace TestCentric.Gui.Views
         [Description("Indicates whether checkboxes are displayed beside test nodes")]
         public bool CheckBoxes
         {
-            get { return tree.CheckBoxes; }
+            get => tree.CheckBoxes;
             set
             {
-                if (tree.CheckBoxes != value)
-                {
-                    // When turning off checkboxes with a non-empty tree, the
-                    // structure of what is expanded and collapsed is lost.
-                    // We save that structure as a VisualState and then restore it.
-                    VisualState visualState = !value && TopNode != null
-                        ? GetVisualState()
-                        : null;
-
-                    EnableCheckBoxes(value);
-
-                    if (visualState != null)
-                    {
-                        visualState.ShowCheckBoxes = this.CheckBoxes;
-                        RestoreVisualState(visualState);
-                    }
-                }
+                tree.CheckBoxes = value;
+                buttonPanel.Visible = value;
+                clearAllButton.Visible = value;
+                checkFailedButton.Visible = value;
             }
-        }
-
-        private void EnableCheckBoxes(bool enable)
-        {
-            tree.CheckBoxes = enable;
-            buttonPanel.Visible = enable;
-            clearAllButton.Visible = enable;
-            checkFailedButton.Visible = enable;
         }
 
         [Browsable(false)]
@@ -237,18 +211,16 @@ namespace TestCentric.Gui.Views
         /// </summary>
         public void Clear()
         {
-            _treeMap.Clear();
-            Nodes.Clear();
+            tree.Nodes.Clear();
         }
 
         public void LoadTree(TreeNode topLevelNode)
         {
             using (new WaitCursor())
             {
-                Clear();
+                tree.Nodes.Clear();
                 tree.BeginUpdate();
                 tree.Nodes.Add(topLevelNode);
-                AddNodesToMap(topLevelNode);
                 SetInitialExpansion();
                 tree.EndUpdate();
                 tree.Select();
@@ -277,54 +249,6 @@ namespace TestCentric.Gui.Views
                 HideTestsUnderNode(node);
 
             tree.EndUpdate();
-        }
-
-        public VisualState GetVisualState()
-        {
-            var visualState = new VisualState()
-            {
-                ShowCheckBoxes = tree.CheckBoxes,
-                TopNode = ((TestSuiteTreeNode)tree.TopNode).Test.Id,
-                SelectedNode = ((TestSuiteTreeNode)tree.SelectedNode).Test.Id,
-            };
-
-            foreach (TestSuiteTreeNode node in tree.Nodes)
-                visualState.ProcessTreeNodes(node);
-
-            return visualState;
-        }
-
-        public void RestoreVisualState(VisualState visualState)
-        {
-            EnableCheckBoxes(visualState.ShowCheckBoxes);
-
-            foreach (VisualTreeNode visualNode in visualState.Nodes)
-            {
-                TestSuiteTreeNode treeNode = (TestSuiteTreeNode)_treeMap[visualNode.Id];
-                if (treeNode != null)
-                {
-                    if (treeNode.IsExpanded != visualNode.Expanded)
-                        treeNode.Toggle();
-
-                    treeNode.Checked = visualNode.Checked;
-                }
-            }
-
-            if (visualState.SelectedNode != null)
-            {
-                TestSuiteTreeNode treeNode = (TestSuiteTreeNode)_treeMap[visualState.SelectedNode];
-                if (treeNode != null)
-                    this.SelectedNode = treeNode;
-            }
-
-            if (visualState.TopNode != null)
-            {
-                TestSuiteTreeNode treeNode = (TestSuiteTreeNode)_treeMap[visualState.TopNode];
-                if (treeNode != null)
-                    this.TopNode = treeNode;
-            }
-
-            this.Select();
         }
 
         public void ShowPropertiesDialog(TestSuiteTreeNode node)
@@ -402,15 +326,6 @@ namespace TestCentric.Gui.Views
         #endregion
 
         #region Helper Methods
-
-        private void AddNodesToMap(TreeNode treeNode)
-        {
-            if (treeNode.Tag != null)
-                _treeMap[treeNode.Tag] = treeNode;
-
-            foreach (TreeNode child in treeNode.Nodes)
-                AddNodesToMap(child);
-        }
 
         /// <summary>
         /// Helper collapses all fixtures under a node

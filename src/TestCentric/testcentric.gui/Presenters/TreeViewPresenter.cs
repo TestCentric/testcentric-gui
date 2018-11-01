@@ -85,7 +85,7 @@ namespace TestCentric.Gui.Presenters
                         try
                         {
                             var visualState = VisualState.LoadFrom(fileName);
-                            _view.RestoreVisualState(visualState);
+                            RestoreVisualState(visualState);
                             _model.SelectCategories(visualState.SelectedCategories, visualState.ExcludeCategories);
                         }
                         catch (Exception ex)
@@ -121,7 +121,7 @@ namespace TestCentric.Gui.Presenters
                 if (_settings.Gui.TestTree.SaveVisualState)
                     try
                     {
-                        var visualState = _view.GetVisualState();
+                        var visualState = GetVisualState();
                         visualState.SelectedCategories = _model.SelectedCategories;
                         visualState.ExcludeCategories = _model.ExcludeSelectedCategories;
                         visualState.Save(VisualState.GetVisualStateFileName(_model.TestFiles[0]));
@@ -156,15 +156,6 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.SuiteFinished += (e) => SetTestResult(e.Result);
 
-            //_settings.Changed += (s, e) =>
-            //{
-            //    if (e.SettingName == "Gui.TestTree.AlternateImageSet")
-            //   {
-            //       _view.LoadAlternateImages();
-            //       _view.Invalidate();
-            //   }
-            //};
-
             _model.Events.CategorySelectionChanged += (TestEventArgs e) =>
             {
                 TestNodeFilter filter = TestNodeFilter.Empty;
@@ -177,6 +168,29 @@ namespace TestCentric.Gui.Presenters
                 }
 
                 _view.TreeFilter = filter;
+            };
+
+            _settings.Changed += (s, e) =>
+            {
+                if (e.SettingName == "Gui.TestTree.ShowCheckBoxes")
+                {
+                    var showCheckBoxes = _settings.Gui.TestTree.ShowCheckBoxes;
+
+                    // When turning off checkboxes with a non-empty tree, the
+                    // structure of what is expanded and collapsed is lost.
+                    // We save that structure as a VisualState and then restore it.
+                    VisualState visualState = !showCheckBoxes && _view.TopNode != null
+                        ? GetVisualState()
+                        : null;
+
+                    _view.CheckBoxes = showCheckBoxes;
+
+                    if (visualState != null)
+                    {
+                        visualState.ShowCheckBoxes = showCheckBoxes;
+                        RestoreVisualState(visualState);
+                    }
+                }
             };
 
             _view.FileDrop += _model.LoadTests;
@@ -194,7 +208,7 @@ namespace TestCentric.Gui.Presenters
 
             _view.ShowCheckBoxes.CheckedChanged += () =>
             {
-                _settings.Gui.TestTree.ShowCheckBoxes = _view.CheckBoxes = _view.ShowCheckBoxes.Checked;
+                _settings.Gui.TestTree.ShowCheckBoxes = _view.ShowCheckBoxes.Checked;
             };
 
             _view.ShowFailedAssumptions.CheckedChanged += () =>
@@ -215,6 +229,7 @@ namespace TestCentric.Gui.Presenters
 
         public void LoadTests(TestNode test)
         {
+            _treeMap.Clear();
             _view.LoadTree(BuildTestTree(test, false));
         }
 
@@ -241,9 +256,9 @@ namespace TestCentric.Gui.Presenters
         /// <param name="test">Test suite to be loaded</param>
         public void ReloadTests(TestNode test)
         {
-            VisualState visualState = _view.GetVisualState();
+            VisualState visualState = GetVisualState();
             LoadTests(test);
-            _view.RestoreVisualState(visualState);
+            RestoreVisualState(visualState);
         }
 
         /// <summary>
@@ -277,6 +292,56 @@ namespace TestCentric.Gui.Presenters
                 foreach (TestNode child in testNode.Children)
                     RestoreResults(child);
             }
+        }
+
+        public VisualState GetVisualState()
+        {
+            var visualState = new VisualState()
+            {
+                ShowCheckBoxes = _view.CheckBoxes,
+                TopNode = (string)_view.TopNode?.Tag,
+                SelectedNode = (string)_view.SelectedNode?.Tag,
+            };
+
+            // TODO: Remove null check used for testing
+            if (_view.Nodes != null)
+            foreach (TreeNode node in _view.Nodes)
+                visualState.ProcessTreeNodes(node);
+
+            return visualState;
+        }
+
+        private void RestoreVisualState(VisualState visualState)
+        {
+            _view.CheckBoxes = visualState.ShowCheckBoxes;
+
+            foreach (VisualTreeNode visualNode in visualState.Nodes)
+            {
+                TreeNode treeNode = _treeMap[visualNode.Id];
+                if (treeNode != null)
+                {
+                    if (treeNode.IsExpanded != visualNode.Expanded)
+                        treeNode.Toggle();
+
+                    treeNode.Checked = visualNode.Checked;
+                }
+            }
+
+            if (visualState.SelectedNode != null)
+            {
+                TreeNode treeNode = _treeMap[visualState.SelectedNode];
+                if (treeNode != null)
+                    _view.SelectedNode = treeNode;
+            }
+
+            if (visualState.TopNode != null)
+            {
+                TreeNode treeNode = (TreeNode)_treeMap[visualState.TopNode];
+                if (treeNode != null)
+                    _view.TopNode = treeNode;
+            }
+
+            //_view.Select();
         }
 
         private static TestNode GetTopDisplayNode(TestNode node)

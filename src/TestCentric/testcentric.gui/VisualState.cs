@@ -24,6 +24,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using System.Xml.Serialization;
 
 namespace TestCentric.Gui
@@ -79,16 +80,16 @@ namespace TestCentric.Gui
 
         #region Constructors
 
-        public void ProcessTreeNodes(TestSuiteTreeNode node)
+        public void ProcessTreeNodes(TreeNode node)
         {
             if (IsInteresting(node))
                 this.Nodes.Add(new VisualTreeNode(node));
 
-            foreach (TestSuiteTreeNode childNode in node.Nodes)
+            foreach (TreeNode childNode in node.Nodes)
                 ProcessTreeNodes(childNode);
         }
 
-        private bool IsInteresting(TestSuiteTreeNode node)
+        private bool IsInteresting(TreeNode node)
         {
             return node.IsExpanded || node.Checked;
         }
@@ -131,9 +132,9 @@ namespace TestCentric.Gui
 
         public VisualTreeNode() { }
 
-        public VisualTreeNode( TestSuiteTreeNode treeNode )
+        public VisualTreeNode( TreeNode treeNode )
         {
-            Id = treeNode.Test.Id;
+            Id = (string)treeNode.Tag;
             Expanded = treeNode.IsExpanded;
             Checked = treeNode.Checked;
         }
