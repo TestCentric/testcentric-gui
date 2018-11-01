@@ -404,6 +404,8 @@ namespace TestCentric.Gui.Views
 
             for (int index = 0; index < imageNames.Length; index++)
                 LoadAlternateImage(index, imageNames[index], imageDir);
+            this.Invalidate();
+            this.Refresh();
         }
 
         private void LoadAlternateImage(int index, string name, string imageDir)

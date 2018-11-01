@@ -172,7 +172,11 @@ namespace TestCentric.Gui.Presenters
 
             _settings.Changed += (s, e) =>
             {
-                if (e.SettingName == "Gui.TestTree.ShowCheckBoxes")
+                if (e.SettingName == "Gui.TestTree.AlternateImageSet")
+                {
+                    _view.AlternateImageSet = _settings.Gui.TestTree.AlternateImageSet;
+                }
+                else if (e.SettingName == "Gui.TestTree.ShowCheckBoxes")
                 {
                     var showCheckBoxes = _settings.Gui.TestTree.ShowCheckBoxes;
 

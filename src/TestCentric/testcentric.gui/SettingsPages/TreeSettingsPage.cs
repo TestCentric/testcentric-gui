@@ -22,7 +22,12 @@
 // ***********************************************************************
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -47,15 +52,24 @@ namespace TestCentric.Gui.SettingsPages
         private System.ComponentModel.IContainer components = null;
         private Label label4;
         private ListBox imageSetListBox;
+        private static readonly string[] imageExtensions = { ".png", ".jpg" };
 
-        private static string treeImageDir = Path.Combine(Assembly.GetExecutingAssembly().Location, Path.Combine("Images", "Tree"));
+        private static string treeImageDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.Combine("Images", "Tree"));
 
         public TreeSettingsPage(string key) : base(key)
         {
             // This call is required by the Windows Form Designer.
             InitializeComponent();
+        }
 
-            // TODO: Add any initialization after the InitializeComponent call
+        private bool IsValidImageSet(string dir)
+        {
+            foreach (var file in Directory.EnumerateFiles(dir))
+            {
+                if (imageExtensions.Contains(Path.GetExtension(file)))
+                    return true;
+            }
+            return false;
         }
 
         /// <summary>
@@ -229,7 +243,6 @@ namespace TestCentric.Gui.SettingsPages
             // 
             // imageSetListBox
             // 
-            this.imageSetListBox.Enabled = false;
             this.imageSetListBox.FormattingEnabled = true;
             this.imageSetListBox.Location = new System.Drawing.Point(236, 61);
             this.imageSetListBox.Name = "imageSetListBox";
@@ -274,7 +287,10 @@ namespace TestCentric.Gui.SettingsPages
                 : new string[0];
 
             foreach (string altDir in altDirs)
-                imageSetListBox.Items.Add(Path.GetFileName(altDir));
+            {
+                if(IsValidImageSet(altDir))
+                    imageSetListBox.Items.Add(Path.GetFileName(altDir));
+            }
             string imageSet = Settings.Gui.TestTree.AlternateImageSet;
             if (imageSetListBox.Items.Contains(imageSet))
                 imageSetListBox.SelectedItem = imageSet;
@@ -310,9 +326,7 @@ namespace TestCentric.Gui.SettingsPages
 
         private void DisplayImage(string imageDir, string filename, PictureBox box)
         {
-            string[] extensions = { ".png", ".jpg" };
-
-            foreach (string ext in extensions)
+            foreach (string ext in imageExtensions)
             {
                 string filePath = Path.Combine(imageDir, filename + ext);
                 if (File.Exists(filePath))
