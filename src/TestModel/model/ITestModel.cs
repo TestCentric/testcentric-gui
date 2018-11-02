@@ -115,7 +115,7 @@ namespace TestCentric.Gui.Model
         void SaveResults(string fileName, string format="nunit3");
 
         // Get the result for a test if available
-        ResultNode GetResultForTest(TestNode testNode);
+        ResultNode GetResultForTest(string id);
 
         // Clear the results for all tests
         void ClearResults();

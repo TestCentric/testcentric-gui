@@ -215,6 +215,10 @@ namespace TestCentric.Gui.Presenters
                 _settings.Gui.TestTree.ShowCheckBoxes = _view.ShowCheckBoxes.Checked;
             };
 
+            _view.ClearAllCheckBoxes.Execute += () => ClearAllCheckBoxes(_view.TopNode);
+
+            _view.CheckFailedTests.Execute += () => CheckFailedTests(_view.TopNode);
+
             _view.ShowFailedAssumptions.CheckedChanged += () =>
             {
                 TestSuiteTreeNode targetNode = _view.ContextNode ?? (TestSuiteTreeNode)_view.SelectedNode;
@@ -271,7 +275,7 @@ namespace TestCentric.Gui.Presenters
         /// <param name="result">The result of a test</param>
         private void SetTestResult(ResultNode result)
         {
-            TestSuiteTreeNode node = (TestSuiteTreeNode)_treeMap[result.Id];
+            TestSuiteTreeNode node = (TestSuiteTreeNode)GetTreeNode(result.Id);
             if (node == null)
             {
                 Debug.WriteLine("Test not found in tree: " + result.FullName);
@@ -287,7 +291,7 @@ namespace TestCentric.Gui.Presenters
 
         public void RestoreResults(TestNode testNode)
         {
-            var result = _model.GetResultForTest(testNode);
+            var result = _model.GetResultForTest(testNode.Id);
 
             if (result != null)
             {
@@ -309,8 +313,8 @@ namespace TestCentric.Gui.Presenters
 
             // TODO: Remove null check used for testing
             if (_view.Nodes != null)
-            foreach (TreeNode node in _view.Nodes)
-                visualState.ProcessTreeNodes(node);
+                foreach (TreeNode node in _view.Nodes)
+                    visualState.ProcessTreeNodes(node);
 
             return visualState;
         }
@@ -321,7 +325,7 @@ namespace TestCentric.Gui.Presenters
 
             foreach (VisualTreeNode visualNode in visualState.Nodes)
             {
-                TreeNode treeNode = _treeMap[visualNode.Id];
+                TreeNode treeNode = GetTreeNode(visualNode.Id);
                 if (treeNode != null)
                 {
                     if (treeNode.IsExpanded != visualNode.Expanded)
@@ -333,14 +337,14 @@ namespace TestCentric.Gui.Presenters
 
             if (visualState.SelectedNode != null)
             {
-                TreeNode treeNode = _treeMap[visualState.SelectedNode];
+                TreeNode treeNode = GetTreeNode(visualState.SelectedNode);
                 if (treeNode != null)
                     _view.SelectedNode = treeNode;
             }
 
             if (visualState.TopNode != null)
             {
-                TreeNode treeNode = (TreeNode)_treeMap[visualState.TopNode];
+                TreeNode treeNode = GetTreeNode(visualState.TopNode);
                 if (treeNode != null)
                     _view.TopNode = treeNode;
             }
@@ -348,11 +352,52 @@ namespace TestCentric.Gui.Presenters
             //_view.Select();
         }
 
+        private TreeNode GetTreeNode(string id)
+        {
+            TreeNode treeNode;
+
+            return _treeMap.TryGetValue(id, out treeNode)
+                ? treeNode
+                : null;
+        }
+
         private static TestNode GetTopDisplayNode(TestNode node)
         {
             return node.Xml.Name == "test-run" && node.Children.Count == 1
                 ? node.Children[0]
                 : node;
+        }
+
+        private static void ClearAllCheckBoxes(TreeNode node)
+        {
+            node.Checked = false;
+
+            foreach (TreeNode child in node.Nodes)
+                ClearAllCheckBoxes(child);
+        }
+
+        private void CheckFailedTests(TreeNode node)
+        {
+            if (node.Nodes.Count == 0) // Only terminal nodes
+            {
+                string id = (string)node.Tag;
+                var result = _model.GetResultForTest(id);
+
+                if (result != null &&
+                    !result.IsSuite &&
+                    result.Outcome.Status == TestStatus.Failed)
+                {
+                    node.Checked = true;
+                    node.EnsureVisible();
+                }
+                else
+                {
+                    node.Checked = false;
+                }
+            }
+            else
+                foreach (TreeNode child in node.Nodes)
+                    CheckFailedTests(child);
         }
     }
 }
