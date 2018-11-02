@@ -255,16 +255,16 @@ namespace TestCentric.Gui.Model
         public void SaveResults(string filePath, string format = "nunit3")
         {
             var resultWriter = Services.ResultService.GetResultWriter(format, new object[0]);
-            var results = GetResultForTest(Tests);
+            var results = GetResultForTest(Tests.Id);
             resultWriter.WriteResultFile(results.Xml, filePath);
         }
 
-        public ResultNode GetResultForTest(TestNode testNode)
+        public ResultNode GetResultForTest(string id)
         {
-            if (testNode != null)
+            if (!string.IsNullOrEmpty(id))
             {
                 ResultNode result;
-                if (Results.TryGetValue(testNode.Id, out result))
+                if (Results.TryGetValue(id, out result))
                     return result;
             }
 

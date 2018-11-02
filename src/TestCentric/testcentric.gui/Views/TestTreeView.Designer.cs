@@ -108,7 +108,6 @@
             this.checkFailedButton.Size = new System.Drawing.Size(96, 23);
             this.checkFailedButton.TabIndex = 1;
             this.checkFailedButton.Text = "Check Failed";
-            this.checkFailedButton.Click += new System.EventHandler(this.checkFailedButton_Click);
             // 
             // clearAllButton
             // 
@@ -118,7 +117,6 @@
             this.clearAllButton.Size = new System.Drawing.Size(96, 23);
             this.clearAllButton.TabIndex = 0;
             this.clearAllButton.Text = "Clear All";
-            this.clearAllButton.Click += new System.EventHandler(this.clearAllButton_Click);
            //
             // runMenuItem
             //

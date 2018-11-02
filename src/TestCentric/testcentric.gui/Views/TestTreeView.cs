@@ -63,6 +63,8 @@ namespace TestCentric.Gui.Views
             ShowCheckBoxes = new CheckedMenuItem(showCheckBoxesMenuItem);
             ShowFailedAssumptions = new CheckedMenuItem(failedAssumptionsMenuItem);
             PropertiesCommand = new MenuCommand(propertiesMenuItem);
+            ClearAllCheckBoxes = new ButtonElement(clearAllButton);
+            CheckFailedTests = new ButtonElement(checkFailedButton);
 
 			WireUpEvents();
 		}
@@ -148,6 +150,9 @@ namespace TestCentric.Gui.Views
                 checkFailedButton.Visible = value;
             }
         }
+
+        public ICommand ClearAllCheckBoxes { get; private set; }
+        public ICommand CheckFailedTests { get; private set; }
 
         [Browsable(false)]
         public DisplayStyle DisplayStyle { get; set; }
@@ -287,14 +292,6 @@ namespace TestCentric.Gui.Views
             get => _treeFilter;
             set => Accept(new TestFilterVisitor(_treeFilter = value));
         }
-
-        #endregion
-
-        #region Other Public Methods
-
-        public void ClearCheckedNodes() => Accept(new ClearCheckedNodesVisitor());
-
-        public void CheckFailedNodes() => Accept(new CheckFailedNodesVisitor());
 
         #endregion
 
@@ -450,48 +447,6 @@ namespace TestCentric.Gui.Views
             }
 
             return true;
-        }
-
-        private void clearAllButton_Click(object sender, System.EventArgs e)
-        {
-            ClearCheckedNodes();
-        }
-
-        private void checkFailedButton_Click(object sender, System.EventArgs e)
-        {
-            CheckFailedNodes();
-        }
-
-        #endregion
-
-        #region ClearCheckedNodesVisitor
-
-        internal class ClearCheckedNodesVisitor : TestSuiteTreeNodeVisitor
-        {
-            public override void Visit(TestSuiteTreeNode node)
-            {
-                node.Checked = false;
-            }
-        }
-
-        #endregion
-
-        #region CheckFailedNodesVisitor
-
-        internal class CheckFailedNodesVisitor : TestSuiteTreeNodeVisitor
-        {
-            public override void Visit(TestSuiteTreeNode node)
-            {
-                if (!node.Test.IsSuite &&
-                    node.HasResult &&
-                    node.Result.Outcome.Status == TestStatus.Failed)
-                {
-                    node.Checked = true;
-                    node.EnsureVisible();
-                }
-                else
-                    node.Checked = false;
-            }
         }
 
         #endregion

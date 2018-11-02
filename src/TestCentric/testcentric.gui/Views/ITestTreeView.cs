@@ -57,6 +57,9 @@ namespace TestCentric.Gui.Views
 		IChecked ShowCheckBoxes { get; }
         bool CheckBoxes { get; set; }
 
+        ICommand ClearAllCheckBoxes { get; }
+        ICommand CheckFailedTests { get; }
+
 		DisplayStyle DisplayStyle { get; set; }
 		string AlternateImageSet { get; set; }
 
