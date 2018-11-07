@@ -87,7 +87,7 @@ namespace TestCentric.Gui.Elements
             }
         }
 
-        protected void InvokeIfRequired(MethodInvoker del)
+        public void InvokeIfRequired(MethodInvoker del)
         {
             if (_form!= null && _form.InvokeRequired)
                 _form.BeginInvoke(del, new object[0]);

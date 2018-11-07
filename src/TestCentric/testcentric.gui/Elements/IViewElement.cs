@@ -43,9 +43,14 @@ namespace TestCentric.Gui.Elements
         /// </summary>
         bool Visible { get; set; }
 
+        /// <summary>
+        /// Gets or sets the text of an element.
+        /// </summary>
+        string Text { get; set; }
+
         ///// <summary>
         ///// Invoke a delegate if necessary, otherwise just call it
         ///// </summary>
-        //void InvokeIfRequired(MethodInvoker _delegate);
+        void InvokeIfRequired(MethodInvoker _delegate);
     }
 }
