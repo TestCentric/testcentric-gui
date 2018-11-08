@@ -77,8 +77,8 @@ Task("Build")
     }
 
     // Temporary hack... needs update if we update the engine
-    CopyFileToDirectory("packages/NUnit.Engine.3.8.0/lib/nunit-agent.exe.config", BIN_DIR);
-    CopyFileToDirectory("packages/NUnit.Engine.3.8.0/lib/nunit-agent-x86.exe.config", BIN_DIR);
+    CopyFileToDirectory("packages/NUnit.Engine.3.9.0/lib/nunit-agent.exe.config", BIN_DIR);
+    CopyFileToDirectory("packages/NUnit.Engine.3.9.0/lib/nunit-agent-x86.exe.config", BIN_DIR);
 });
 
 //////////////////////////////////////////////////////////////////////

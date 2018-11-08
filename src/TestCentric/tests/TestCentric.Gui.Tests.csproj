@@ -88,10 +88,6 @@
       <Project>{3ff340d5-d3b4-4df0-baf1-98b3c00b6148}</Project>
       <Name>TestCentric.Gui</Name>
     </ProjectReference>
-    <Reference Include="nunit.engine.api, Version=3.0.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NUnit.Engine.Api.3.8.0\lib\nunit.engine.api.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="NSubstitute, Version=3.1.0.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\NSubstitute.3.1.0\lib\net45\NSubstitute.dll</HintPath>
       <Private>True</Private>
@@ -131,6 +127,9 @@
       <Project>{3e63ad0f-24d4-46be-bee4-5a3299847d86}</Project>
       <Name>test-utilities</Name>
     </ProjectReference>
+    <Reference Include="nunit.engine.api">
+      <HintPath>..\..\..\packages\NUnit.Engine.Api.3.9.0\lib\nunit.engine.api.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\CommonAssemblyInfo.cs">

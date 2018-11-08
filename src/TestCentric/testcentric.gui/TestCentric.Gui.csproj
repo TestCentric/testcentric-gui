@@ -81,10 +81,6 @@
       <Project>{e978a8d7-e4a4-4de9-94df-d82bd764936b}</Project>
       <Name>TestCentric.Gui.Model</Name>
     </ProjectReference>
-    <Reference Include="nunit.engine.api, Version=3.0.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NUnit.Engine.Api.3.8.0\lib\nunit.engine.api.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -109,6 +105,9 @@
       <Project>{B69057F3-0663-4763-A3EC-50D463578B94}</Project>
       <Name>TestCentric.Common</Name>
     </ProjectReference>
+    <Reference Include="nunit.engine.api">
+      <HintPath>..\..\..\packages\NUnit.Engine.Api.3.9.0\lib\nunit.engine.api.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\CommonAssemblyInfo.cs">

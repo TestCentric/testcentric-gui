@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using NUnit.Engine;
 using NUnit.Framework;
 using NUnit.TestUtilities.Fakes;
+using RuntimeFramework = NUnit.TestUtilities.Fakes.RuntimeFramework;
 
 namespace TestCentric.Gui.Model
 {
