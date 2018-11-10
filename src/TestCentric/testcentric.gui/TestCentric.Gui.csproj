@@ -341,7 +341,6 @@
     <Compile Include="Elements\MenuCommand.cs" />
     <Compile Include="Elements\PopupMenu.cs" />
     <Compile Include="Elements\CheckedMenuItem.cs" />
-    <Compile Include="Elements\ITextElement.cs" />
     <Compile Include="Elements\IMenuElement.cs" />
     <Compile Include="Views\TestTreeView.cs" />
     <Compile Include="Views\TestTreeView.Designer.cs">
@@ -356,6 +355,8 @@
     <Compile Include="Elements\ControlElement.cs" />
     <Compile Include="Elements\IListBox.cs" />
     <Compile Include="Elements\ListBoxElement.cs" />
+    <Compile Include="Elements\ITreeView.cs" />
+    <Compile Include="Elements\TreeViewElement.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="nunit.snk" />

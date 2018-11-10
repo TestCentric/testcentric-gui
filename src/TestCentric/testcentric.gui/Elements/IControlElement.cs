@@ -29,7 +29,7 @@ namespace TestCentric.Gui.Elements
     /// <summary>
     /// IControlElement is implemented by elements that wrap controls.
     /// </summary>
-    public interface IControlElement : ITextElement
+    public interface IControlElement : IViewElement
     {
         Point Location { get; set; }
         Size Size { get; set; }

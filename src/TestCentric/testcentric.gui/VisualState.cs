@@ -30,6 +30,7 @@ using System.Xml.Serialization;
 namespace TestCentric.Gui
 {
     using Views;
+    using Elements;
 
     /// <summary>
     /// The VisualState class holds the latest visual state for a project.
@@ -46,41 +47,102 @@ namespace TestCentric.Gui
         public string SelectedNode;
 
         public List<string> SelectedCategories;
-        
+
         public bool ExcludeCategories;
 
-		[XmlArrayItem("Node")]
-		public List<VisualTreeNode> Nodes = new List<VisualTreeNode>();
+        [XmlArrayItem("Node")]
+        public List<VisualTreeNode> Nodes = new List<VisualTreeNode>();
         #endregion
 
-        #region Static Methods
+        #region Public Methods
 
-        public static string GetVisualStateFileName( string testFileName )
+        public static string GetVisualStateFileName(string testFileName)
         {
-			return string.IsNullOrEmpty(testFileName)
-				? "VisualState.xml"
-				: testFileName + ".VisualState.xml";
+            return string.IsNullOrEmpty(testFileName)
+                ? "VisualState.xml"
+                : testFileName + ".VisualState.xml";
         }
 
-        public static VisualState LoadFrom( string fileName )
+        public static VisualState LoadFrom(string fileName)
         {
-            using ( StreamReader reader = new StreamReader( fileName ) )
+            using (StreamReader reader = new StreamReader(fileName))
             {
-                return LoadFrom( reader );
+                return LoadFrom(reader);
             }
         }
 
-        public static VisualState LoadFrom( TextReader reader )
+        public static VisualState LoadFrom(TextReader reader)
         {
-            XmlSerializer serializer = new XmlSerializer( typeof( VisualState) );
-            return (VisualState)serializer.Deserialize( reader );
+            XmlSerializer serializer = new XmlSerializer(typeof(VisualState));
+            return (VisualState)serializer.Deserialize(reader);
+        }
+
+        public static VisualState LoadFrom(ITestTreeView view)
+        {
+            var visualState = new VisualState()
+            {
+                ShowCheckBoxes = view.CheckBoxes,
+                TopNode = (string)view.Tree.TopNode?.Tag,
+                SelectedNode = (string)view.Tree.SelectedNode?.Tag,
+            };
+
+            visualState.ProcessTreeNodes(view.Tree);
+
+            return visualState;
+        }
+
+        public void Save(string fileName)
+        {
+            using (StreamWriter writer = new StreamWriter(fileName))
+            {
+                Save(writer);
+            }
+        }
+
+        public void Save(TextWriter writer)
+        {
+            XmlSerializer serializer = new XmlSerializer(GetType());
+            serializer.Serialize(writer, this);
+        }
+
+        public void RestoreVisualState(ITestTreeView view, IDictionary<string, TreeNode> treeMap)
+        {
+            view.CheckBoxes = ShowCheckBoxes;
+
+            foreach (VisualTreeNode visualNode in Nodes)
+            {
+                if (treeMap.ContainsKey(visualNode.Id))
+                {
+                    TreeNode treeNode = treeMap[visualNode.Id];
+
+                    if (treeNode.IsExpanded != visualNode.Expanded)
+                        treeNode.Toggle();
+                    
+                    treeNode.Checked = visualNode.Checked;
+                }
+            }
+
+            if (SelectedNode != null && treeMap.ContainsKey(SelectedNode))
+                view.Tree.SelectedNode = treeMap[SelectedNode];
+
+            if (TopNode != null && treeMap.ContainsKey(TopNode))
+                view.Tree.TopNode = treeMap[TopNode];
+
+            //view.Tree.Select();
         }
 
         #endregion
 
-        #region Constructors
+        #region Helper Methods
 
-        public void ProcessTreeNodes(TreeNode node)
+        private void ProcessTreeNodes(ITreeView tree)
+        {
+            if (tree.Nodes != null)
+                foreach (TreeNode node in tree.Nodes)
+                    ProcessTreeNodes(node);
+        }
+
+        private void ProcessTreeNodes(TreeNode node)
         {
             if (IsInteresting(node))
                 this.Nodes.Add(new VisualTreeNode(node));
@@ -92,24 +154,6 @@ namespace TestCentric.Gui
         private bool IsInteresting(TreeNode node)
         {
             return node.IsExpanded || node.Checked;
-        }
-
-        #endregion
-
-        #region Instance Methods
-
-        public void Save( string fileName )
-        {
-            using ( StreamWriter writer = new StreamWriter( fileName ) )
-            {
-                Save( writer );
-            }
-        }
-
-        public void Save( TextWriter writer )
-        {
-            XmlSerializer serializer = new XmlSerializer( GetType() );
-            serializer.Serialize( writer, this );
         }
 
         #endregion

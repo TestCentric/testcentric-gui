@@ -415,7 +415,7 @@ namespace TestCentric.Gui.Presenters
 
             _view.TreeMenu.Popup += () =>
             {
-                TreeNode selectedNode = _view.TreeView.SelectedNode;
+                TreeNode selectedNode = _view.TreeView.Tree.SelectedNode;
 
                 _view.CheckboxesCommand.Checked = _settings.Gui.TestTree.ShowCheckBoxes;
 
@@ -438,12 +438,12 @@ namespace TestCentric.Gui.Presenters
 
             _view.ExpandCommand.Execute += () =>
             {
-                _view.TreeView.SelectedNode.Expand();
+                _view.TreeView.Tree.SelectedNode.Expand();
             };
 
             _view.CollapseCommand.Execute += () =>
             {
-                _view.TreeView.SelectedNode.Collapse();
+                _view.TreeView.Tree.SelectedNode.Collapse();
             };
 
             _view.ExpandAllCommand.Execute += () =>
@@ -463,8 +463,8 @@ namespace TestCentric.Gui.Presenters
 
             _view.PropertiesCommand.Execute += () =>
             {
-				if (_view.TreeView.SelectedNode != null)
-					_view.TreeView.ShowPropertiesDialog((TestSuiteTreeNode)_view.TreeView.SelectedNode);
+				if (_view.TreeView.Tree.SelectedNode != null)
+					_view.TreeView.ShowPropertiesDialog((TestSuiteTreeNode)_view.TreeView.Tree.SelectedNode);
 			};
 
             _view.IncreaseFontCommand.Execute += () =>

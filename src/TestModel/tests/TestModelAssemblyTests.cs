@@ -34,7 +34,7 @@ namespace TestCentric.Gui.Model
 
         private ITestModel _model;
 
-        [OneTimeSetUp]
+        [SetUp]
         public void CreateTestModel()
         {
             var engine = TestEngineActivator.CreateInstance();
@@ -45,7 +45,7 @@ namespace TestCentric.Gui.Model
             _model.LoadTests(new[] { Path.Combine(TestContext.CurrentContext.TestDirectory, MOCK_ASSEMBLY) });
         }
 
-        [OneTimeTearDown]
+        [TearDown]
         public void ReleaseTestModel()
         {
             _model.Dispose();
@@ -71,21 +71,67 @@ namespace TestCentric.Gui.Model
         [Test]
         public void CheckStateAfterRunningTests()
         {
-            _model.RunAllTests();
+            RunAllTestsAndWaitForCompletion();
 
+            Assert.That(_model.HasTests, "HasTests");
+            Assert.NotNull(_model.Tests, "Tests");
+            Assert.That(_model.HasResults, "HasResults");
+        }
+
+        [Test]
+        public void CheckStateAfterUnloading()
+        {
+            _model.UnloadTests();
+
+            Assert.False(_model.HasTests, "HasTests");
+            Assert.Null(_model.Tests, "Tests");
+            Assert.False(_model.HasResults, "HasResults");
+        }
+
+        [Test]
+        public void CheckStateAfterReloading()
+        {
+            _model.ReloadTests();
+ 
             Assert.That(_model.HasTests, "HasTests");
             Assert.NotNull(_model.Tests, "Tests");
             Assert.False(_model.HasResults, "HasResults");
         }
 
         [Test]
-        public void CheckStateAfterUnloading()
+        public void TestTreeIsUnchangedByReload()
         {
+            var originalTests = _model.Tests;
+
+            _model.ReloadTests();
+
+            Assert.Multiple(() => CheckNodesAreEqual(originalTests, _model.Tests));
+        }
+
+        private void RunAllTestsAndWaitForCompletion()
+        {
+            bool runComplete = false;
+            _model.Events.RunFinished += (r) => runComplete = true;
+
             _model.RunAllTests();
 
-            //Assert.False(_model.HasTests, "HasTests");
-            //Assert.Null(_model.Tests, "Tests");
-            Assert.False(_model.HasResults, "HasResults");
+            while (!runComplete)
+                System.Threading.Thread.Sleep(1);
+        }
+
+        private void CheckNodesAreEqual(TestNode beforeReload, TestNode afterReload)
+        {
+            Assert.That(afterReload.Name, Is.EqualTo(beforeReload.Name));
+            Assert.That(afterReload.FullName, Is.EqualTo(beforeReload.FullName));
+            Assert.That(afterReload.Id, Is.EqualTo(beforeReload.Id), $"Different IDs for {beforeReload.Name}");
+            Assert.That(afterReload.IsSuite, Is.EqualTo(beforeReload.IsSuite));
+
+            if (afterReload.IsSuite)
+            {
+                Assert.That(afterReload.Children.Count, Is.EqualTo(beforeReload.Children.Count), $"Different number of children for {beforeReload.Name}");
+                for (int i = 0; i < afterReload.Children.Count; i++)
+                    CheckNodesAreEqual(beforeReload.Children[i], afterReload.Children[i]);
+            }
         }
     }
 }

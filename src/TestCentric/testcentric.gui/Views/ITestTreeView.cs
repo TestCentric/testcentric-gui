@@ -30,19 +30,7 @@ namespace TestCentric.Gui.Views
 	using Model; // To be removed
 	using Elements;
 
-	/// <summary>
-    /// Indicates how a tree should be displayed
-    /// </summary>
-    public enum DisplayStyle
-    {
-        Auto,       // Select based on space available
-        Expand,     // Expand fully
-        Collapse,   // Collapase fully
-        HideTests   // Expand all but the fixtures, leaving
-                    // leaf nodes hidden
-    }
-
-    public delegate void FileDropEventHandler(IList<string> fileNames);
+   public delegate void FileDropEventHandler(IList<string> fileNames);
 
 	public interface ITestTreeView
     {
@@ -55,28 +43,21 @@ namespace TestCentric.Gui.Views
 		ICommand PropertiesCommand { get; }
 		// TODO: Can we eliminate need for having both of the following?
 		IChecked ShowCheckBoxes { get; }
+
         bool CheckBoxes { get; set; }
 
         ICommand ClearAllCheckBoxes { get; }
         ICommand CheckFailedTests { get; }
 
-		DisplayStyle DisplayStyle { get; set; }
 		string AlternateImageSet { get; set; }
 
-		TreeNodeCollection Nodes { get; }
-        TreeNode TopNode { get; set; }
+        ITreeView Tree { get; }
         TestSuiteTreeNode ContextNode { get; }
-        TreeNode SelectedNode { get; set; }
 		TestNode[] SelectedTests { get; }
 
         TestNodeFilter TreeFilter { get; set; }
 
-		void Clear();
-        void LoadTree(TreeNode topLevelNode);
-
-		void ExpandAll();
-		void CollapseAll();
-		void HideTests();
+        void Clear();
 
 		void ShowPropertiesDialog(TestSuiteTreeNode node);
 		void ClosePropertiesDialog();
