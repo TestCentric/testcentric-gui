@@ -146,7 +146,6 @@
     <Compile Include="Presenters\TestsNotRunPresenterTests.cs" />
     <Compile Include="Presenters\TextOutputPresenterTests.cs" />
     <Compile Include="TestSuiteTreeNodeTests.cs" />
-    <Compile Include="CategoryViewTests.cs" />
     <Compile Include="TextOutputDisplayTests.cs" />
     <Compile Include="VisualStateTests.cs" />
     <Compile Include="Views\CommonViewTests.cs" />
