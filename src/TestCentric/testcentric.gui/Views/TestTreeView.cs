@@ -57,21 +57,22 @@ namespace TestCentric.Gui.Views
 
         public TestTreeView()
         {
-			InitializeComponent();
+            InitializeComponent();
 
-			RunCommand = new MenuCommand(runMenuItem);
+            RunCommand = new MenuCommand(runMenuItem);
             ShowCheckBoxes = new CheckedMenuItem(showCheckBoxesMenuItem);
             ShowFailedAssumptions = new CheckedMenuItem(failedAssumptionsMenuItem);
             PropertiesCommand = new MenuCommand(propertiesMenuItem);
             ClearAllCheckBoxes = new ButtonElement(clearAllButton);
             CheckFailedTests = new ButtonElement(checkFailedButton);
+            Tree = new TreeViewElement(tree);
 
-			WireUpEvents();
-		}
+            WireUpEvents();
+        }
 
         private void WireUpEvents()
-		{
-			tree.MouseDown += (s, e) =>
+        {
+            tree.MouseDown += (s, e) =>
             {
                 if (e.Button == MouseButtons.Right)
                 {
@@ -79,7 +80,7 @@ namespace TestCentric.Gui.Views
                 }
             };
 
-			tree.AfterSelect += (s, e) =>
+            tree.AfterSelect += (s, e) =>
             {
                 if (_propertiesDialog != null)
                 {
@@ -94,20 +95,20 @@ namespace TestCentric.Gui.Views
 
             tree.DragDrop += (s, e) =>
             {
-				if (IsValidFileDrop(e.Data))
-					FileDrop?.Invoke((string[])e.Data.GetData(DataFormats.FileDrop));
+                if (IsValidFileDrop(e.Data))
+                    FileDrop?.Invoke((string[])e.Data.GetData(DataFormats.FileDrop));
             };
 
             tree.DragEnter += (s, e) =>
             {
-				e.Effect = IsValidFileDrop(e.Data)
+                e.Effect = IsValidFileDrop(e.Data)
                     ? DragDropEffects.Copy
-					: DragDropEffects.None;
+                    : DragDropEffects.None;
             };
 
             treeMenu.Popup += (s, e) =>
             {
-                TestSuiteTreeNode targetNode = ContextNode ?? (TestSuiteTreeNode)SelectedNode;
+                TestSuiteTreeNode targetNode = ContextNode ?? (TestSuiteTreeNode)tree.SelectedNode;
                 TestSuiteTreeNode theoryNode = targetNode?.GetTheoryNode();
 
 
@@ -124,13 +125,13 @@ namespace TestCentric.Gui.Views
             };
 
             treeMenu.Collapse += (s, e) => ContextNode = null;
-		}
+        }
 
-		#endregion
+        #endregion
 
-		#region ITestTreeView Implementation
+        #region ITestTreeView Implementation
 
-		public event FileDropEventHandler FileDrop;
+        public event FileDropEventHandler FileDrop;
 
         public ICommand RunCommand { get; private set; }
         public IChecked ShowFailedAssumptions { get; private set; }
@@ -155,9 +156,6 @@ namespace TestCentric.Gui.Views
         public ICommand CheckFailedTests { get; private set; }
 
         [Browsable(false)]
-        public DisplayStyle DisplayStyle { get; set; }
-
-        [Browsable(false)]
         public string AlternateImageSet
         {
             get { return _alternateImageSet; }
@@ -170,24 +168,10 @@ namespace TestCentric.Gui.Views
         }
 
         [Browsable(false)]
-        public TreeNodeCollection Nodes => tree.Nodes;
-
-        [Browsable(false)]
-        public TreeNode TopNode
-        {
-            get => tree.TopNode;
-            set => tree.TopNode = value;
-        }
+        public ITreeView Tree { get; private set; }
 
         [Browsable(false)]
         public TestSuiteTreeNode ContextNode { get; private set; }
-
-        [Browsable(false)]
-        public TreeNode SelectedNode
-        {
-            get => tree.SelectedNode;
-            set => tree.SelectedNode = value;
-        }
 
         [Browsable(false)]
         public TestNode[] SelectedTests
@@ -204,56 +188,16 @@ namespace TestCentric.Gui.Views
                 }
 
                 if (result == null || result.Length == 0)
-                    if (SelectedNode != null)
-                    result = new TestNode[] { ((TestSuiteTreeNode)SelectedNode).Test };
+                    if (tree.SelectedNode != null)
+                    result = new TestNode[] { ((TestSuiteTreeNode)tree.SelectedNode).Test };
 
                 return result;
             }
         }
 
-        /// <summary>
-        /// Clear all the info in the tree.
-        /// </summary>
         public void Clear()
         {
             tree.Nodes.Clear();
-        }
-
-        public void LoadTree(TreeNode topLevelNode)
-        {
-            using (new WaitCursor())
-            {
-                tree.Nodes.Clear();
-                tree.BeginUpdate();
-                tree.Nodes.Add(topLevelNode);
-                SetInitialExpansion();
-                tree.EndUpdate();
-                tree.Select();
-            }
-        }
-
-        public void ExpandAll()
-        {
-            tree.BeginUpdate();
-            tree.ExpandAll();
-            tree.EndUpdate();
-        }
-
-        public void CollapseAll()
-        {
-            tree.BeginUpdate();
-            tree.CollapseAll();
-            tree.EndUpdate();
-        }
-
-        public void HideTests()
-        {
-            tree.BeginUpdate();
-
-            foreach (TestSuiteTreeNode node in Nodes)
-                HideTestsUnderNode(node);
-
-            tree.EndUpdate();
         }
 
         public void ShowPropertiesDialog(TestSuiteTreeNode node)
@@ -295,9 +239,37 @@ namespace TestCentric.Gui.Views
 
         #endregion
 
+        #region Other Public Methods
+
+        public void ExpandAll()
+        {
+            tree.BeginUpdate();
+            tree.ExpandAll();
+            tree.EndUpdate();
+        }
+
+        public void CollapseAll()
+        {
+            tree.BeginUpdate();
+            tree.CollapseAll();
+            tree.EndUpdate();
+        }
+
+        public void HideTests()
+        {
+            tree.BeginUpdate();
+
+            foreach (TestSuiteTreeNode node in tree.Nodes)
+                HideTestsUnderNode(node);
+
+            tree.EndUpdate();
+        }
+
+        #endregion
+
         #region Private Properties
 
-        public TestPropertiesDialog TestPropertiesDialog
+        private TestPropertiesDialog TestPropertiesDialog
         {
             get
             {
@@ -341,46 +313,6 @@ namespace TestCentric.Gui.Views
                     foreach (TestSuiteTreeNode child in node.Nodes)
                         HideTestsUnderNode(child);
                 }
-            }
-        }
-
-        /// <summary>
-        /// Helper used to figure out the display style
-        /// to use when the setting is Auto
-        /// </summary>
-        /// <returns>DisplayStyle to be used</returns>
-        private DisplayStyle GetEffectiveDisplayStyle()
-        {
-            if (DisplayStyle != DisplayStyle.Auto)
-                return DisplayStyle;
-
-            if (tree.VisibleCount >= tree.GetNodeCount(true))
-                return DisplayStyle.Expand;
-
-            return DisplayStyle.HideTests;
-        }
-        
-        private void SetInitialExpansion()
-        {
-            CollapseAll();
-
-            switch (GetEffectiveDisplayStyle())
-            {
-                case DisplayStyle.Expand:
-                    ExpandAll();
-                    break;
-                case DisplayStyle.HideTests:
-                    HideTests();
-                    break;
-                case DisplayStyle.Collapse:
-                default:
-                    break;
-            }
-
-            if (Nodes.Count > 0)
-            {
-                SelectedNode = Nodes[0];
-                SelectedNode.EnsureVisible();
             }
         }
 

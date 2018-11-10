@@ -40,19 +40,15 @@ namespace TestCentric.Gui.Presenters
         [SetUp]
         public void CreatePresenter()
         {
+            _settings.Gui.TestTree.AlternateImageSet = "MyImageSet";
+            _settings.Gui.TestTree.ShowCheckBoxes = true;
             _presenter = new TreeViewPresenter(_view, _model);
 			_model.IsTestRunning.Returns(false);
-
-            // Make it look like the view loaded
-            //_view.Load += Raise.Event<System.EventHandler>(null, new System.EventArgs());
         }
 
         [TearDown]
         public void RemovePresenter()
         {
-            //if (_presenter != null)
-            //    _presenter.Dispose();
-            
             _presenter = null;
         }
 
@@ -61,6 +57,19 @@ namespace TestCentric.Gui.Presenters
 		{
 			_view.RunCommand.Received().Enabled = false;
 		}
+
+        [Test]
+        public void WhenPresenterIsCreated_AlternateImageSetIsSet()
+        {
+            _view.Received().AlternateImageSet = "MyImageSet";
+        }
+
+        [Test]
+        public void WhenPresenterIsCreated_ShowCheckBoxesIsSet()
+        {
+            _view.Received().CheckBoxes = true;
+            _view.ShowCheckBoxes.Received().Checked = true;
+        }
 
 		[Test]
         public void WhenTestLoadBegins_RunCommandIsDisabled()
@@ -77,8 +86,18 @@ namespace TestCentric.Gui.Presenters
             ClearAllReceivedCalls();
             _model.TestFiles.Returns(new List<string>(new[] { "test.dll" }));
             FireTestLoadedEvent(new TestNode("<test-run id='2'/>"));
-            
+
             _view.RunCommand.Received().Enabled = true;
+        }
+
+        [Test]
+        public void WhenTestLoadCompletes_PropertyDialogIsClosed()
+        {
+            ClearAllReceivedCalls();
+            _model.TestFiles.Returns(new List<string>(new[] { "test.dll" }));
+            FireTestLoadedEvent(new TestNode("<test-run id='2'/>"));
+
+            _view.Received().CheckPropertiesDialog();
         }
 
         [Test]
@@ -89,7 +108,7 @@ namespace TestCentric.Gui.Presenters
             _model.TestFiles.Returns(new List<string>(new[] { "test.dll", "another.dll" }));
             FireTestLoadedEvent(testNode);
 
-            _view.Received().LoadTree(Arg.Is<TreeNode>((tn) => tn.Text == "TestRun" && tn.Nodes.Count == 2));
+            _view.Tree.Received().Load(Arg.Is<TreeNode>((tn) => tn.Text == "TestRun" && tn.Nodes.Count == 2));
         }
 
         [Test]
@@ -100,7 +119,7 @@ namespace TestCentric.Gui.Presenters
             _model.TestFiles.Returns(new List<string>(new[] { "test.dll" }));
             FireTestLoadedEvent(testNode);
 
-            _view.Received().LoadTree(Arg.Is<TreeNode>(tn => tn.Text == "another.dll"));
+            _view.Tree.Received().Load(Arg.Is<TreeNode>(tn => tn.Text == "another.dll"));
         }
 
 
@@ -116,7 +135,6 @@ namespace TestCentric.Gui.Presenters
         public void WhenTestReloadCompletes_RunCommandIsEnabled()
         {
             ClearAllReceivedCalls();
-
             FireTestReloadedEvent(new TestNode("<test-run id='2'/>"));
 
             _view.RunCommand.Received().Enabled = true;

@@ -210,8 +210,6 @@ namespace TestCentric.Gui.Model
 
             TestPackage = MakeTestPackage(TestFiles);
 
-            Runner = TestEngine.GetRunner(TestPackage);
-
             Tests = new TestNode(Runner.Explore(TestFilter.Empty));
             AvailableCategories = GetAvailableCategories();
 
