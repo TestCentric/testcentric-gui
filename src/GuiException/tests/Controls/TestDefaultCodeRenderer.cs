@@ -22,10 +22,10 @@
 // ***********************************************************************
 
 using System;
-using NUnit.Framework;
-using NUnit.UiException.Controls;
-using NUnit.UiException.CodeFormatters;
 using System.Drawing;
+using NUnit.Framework;
+using NUnit.UiException.CodeFormatters;
+using NUnit.UiException.Controls;
 
 namespace NUnit.UiException.Tests.Controls
 {
@@ -78,21 +78,25 @@ namespace NUnit.UiException.Tests.Controls
         [Test]
         public void DrawToGraphics_Can_Raise_ArgumentNullException()
         {
-            try {
+            try
+            {
                 _renderer.DrawToGraphics(null, _args, new Rectangle()); // throws exception
                 Assert.Fail();
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 Assert.True(e.Message.Contains("code"));
             }
 
-            try {
+            try
+            {
                 _renderer.DrawToGraphics(_loremIpsum, null, new Rectangle()); // throws exception
                 Assert.Fail();
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 Assert.True(e.Message.Contains("g"));
-            }            
+            }
 
             return;
         }
@@ -100,53 +104,63 @@ namespace NUnit.UiException.Tests.Controls
         [Test]
         public void GetDocumentSize_Can_Raise_ArgumentNullException()
         {
-            try {
+            try
+            {
                 _renderer.GetDocumentSize(null, _args.Graphics, _args.Font); // throws exception
                 Assert.Fail();
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 Assert.True(e.Message.Contains("code"));
             }
 
-            try {
+            try
+            {
                 _renderer.GetDocumentSize(_loremIpsum, null, _args.Font); // throws exception
                 Assert.Fail();
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 Assert.True(e.Message.Contains("g"));
             }
 
-            try {
+            try
+            {
                 _renderer.GetDocumentSize(_loremIpsum, _args.Graphics, null); // throws exception
                 Assert.Fail();
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 Assert.True(e.Message.Contains("font"));
             }
-           
+
             return;
         }
 
         [Test]
         public void LineIndexToYCoordinate_Can_Raise_ArgumentNullException()
         {
-            try {
+            try
+            {
                 _renderer.LineIndexToYCoordinate(0, null, _args.Font); // throws exception
                 Assert.Fail();
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 Assert.True(e.Message.Contains("g"));
             }
 
-            try {
+            try
+            {
                 _renderer.LineIndexToYCoordinate(0, _args.Graphics, null); // throws exception
                 Assert.Fail();
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 Assert.True(e.Message.Contains("font"));
             }
         }
-       
+
         [Test]
         public void LineIndexToYCoordinate()
         {
@@ -169,7 +183,7 @@ namespace NUnit.UiException.Tests.Controls
 
         [Test]
         public void GetDocumentSize()
-        {           
+        {
             SizeF expSize;
             SizeF docSize;
 
@@ -180,7 +194,7 @@ namespace NUnit.UiException.Tests.Controls
 
             Assert.That(docSize.Width, Is.EqualTo(expSize.Width));
             Assert.That(docSize.Height, Is.EqualTo(7 * expSize.Height));
-            
+
             // measures loremIpsum's size
 
             expSize = _args.Graphics.MeasureString(
@@ -192,17 +206,17 @@ namespace NUnit.UiException.Tests.Controls
 
             return;
         }
-       
+
         [Test]
         public void ViewportLines()
         {
             DefaultCodeRenderer renderer = new DefaultCodeRenderer();
             PaintLineLocation[] lines;
             RectangleF viewport = new RectangleF(0, 0, 2, 4);
-            
+
             Assert.That(renderer.ViewportLines(_empty, viewport, 1), Is.Not.Null);
             Assert.That(renderer.ViewportLines(_empty, viewport, 1).Length, Is.EqualTo(0));
-            
+
             // Using the given text and viewport
             //
             // document   viewport
@@ -270,6 +284,6 @@ namespace NUnit.UiException.Tests.Controls
             Assert.That(lines[4], Is.EqualTo(new PaintLineLocation(6, "777", new PointF(-1.5f * 8, 52.5f))));
 
             return;
-        }        
+        }
     }
 }

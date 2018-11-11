@@ -52,7 +52,7 @@ namespace TestCentric.Gui
         public static InternalTraceLevel Level
         {
             get { return level; }
-            set 
+            set
             {
                 if (level != value)
                 {
@@ -100,12 +100,12 @@ namespace TestCentric.Gui
 
         public static Logger GetLogger(string name)
         {
-            return new Logger( name );
+            return new Logger(name);
         }
 
-        public static Logger GetLogger( Type type )
+        public static Logger GetLogger(Type type)
         {
-            return new Logger( type.FullName );
+            return new Logger(type.FullName);
         }
 
         public static void Log(InternalTraceLevel level, string message, string category)

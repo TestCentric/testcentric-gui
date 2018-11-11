@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -232,7 +232,7 @@ namespace TestCentric.Gui.Model
             var filter = testItem.GetTestFilter();
 
             if (!CategoryFilter.IsEmpty())
-                filter = Filters.MakeAndFilter( filter, CategoryFilter );
+                filter = Filters.MakeAndFilter(filter, CategoryFilter);
 
             RunTests(filter);
         }
@@ -309,24 +309,24 @@ namespace TestCentric.Gui.Model
         #endregion
 
         #region IDisposable Implementation
-        
+
         public void Dispose()
         {
-			try
-			{
-				if (IsPackageLoaded)
-					UnloadTests();
+            try
+            {
+                if (IsPackageLoaded)
+                    UnloadTests();
 
-				if (Runner != null)
-					Runner.Dispose();
+                if (Runner != null)
+                    Runner.Dispose();
 
-				if (TestEngine != null)
-					TestEngine.Dispose();
-			}
-			catch(NUnitEngineUnloadException)
-			{
-				// TODO: Figure out what to do about this
-			}
+                if (TestEngine != null)
+                    TestEngine.Dispose();
+            }
+            catch (NUnitEngineUnloadException)
+            {
+                // TODO: Figure out what to do about this
+            }
         }
 
         #endregion
@@ -334,9 +334,9 @@ namespace TestCentric.Gui.Model
         #region Private Properties
 
         private ITestEngine TestEngine { get; }
-        
+
         private ITestRunner Runner { get; set; }
-        
+
         private TestPackage TestPackage { get; set; }
 
         internal IDictionary<string, ResultNode> Results { get; } = new Dictionary<string, ResultNode>();
@@ -436,7 +436,7 @@ namespace TestCentric.Gui.Model
 
         public IList<string> GetAvailableCategories()
         {
-            var categories = new Dictionary<string, string> ();
+            var categories = new Dictionary<string, string>();
             CollectCategories(Tests, categories);
 
             var list = new List<string>(categories.Values);

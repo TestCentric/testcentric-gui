@@ -22,37 +22,34 @@
 // ***********************************************************************
 
 using System;
-using System.Reflection;
-using System.Collections;
-using Microsoft.Win32;
 
 namespace NUnit.ProjectEditor
 {
-	/// <summary>
-	/// Enumeration identifying a common language 
-	/// runtime implementation.
-	/// </summary>
-	public enum RuntimeType
-	{
+    /// <summary>
+    /// Enumeration identifying a common language 
+    /// runtime implementation.
+    /// </summary>
+    public enum RuntimeType
+    {
         /// <summary>AnyRuntime supported runtime framework</summary>
         Any,
-		/// <summary>Microsoft .NET Framework</summary>
-		Net,
-		/// <summary>Microsoft .NET Compact Framework</summary>
-		NetCF,
-		/// <summary>Microsoft Shared Source CLI</summary>
-		SSCLI,
-		/// <summary>Mono</summary>
-		Mono
-	}
+        /// <summary>Microsoft .NET Framework</summary>
+        Net,
+        /// <summary>Microsoft .NET Compact Framework</summary>
+        NetCF,
+        /// <summary>Microsoft Shared Source CLI</summary>
+        SSCLI,
+        /// <summary>Mono</summary>
+        Mono
+    }
 
-	/// <summary>
-	/// RuntimeFramework encapsulates the naming standards
+    /// <summary>
+    /// RuntimeFramework encapsulates the naming standards
     /// for identifying CLR implementations by runtime type
     /// and version in the XML project file and elsewhere.
-	/// </summary>
+    /// </summary>
     [Serializable]
-	public sealed class RuntimeFramework
+    public sealed class RuntimeFramework
     {
         #region Instance Fields
 
@@ -66,13 +63,13 @@ namespace NUnit.ProjectEditor
         #region Constructors
 
         /// <summary>
-		/// Construct from a runtime type and version
-		/// </summary>
-		/// <param name="runtime">The runtime type of the framework</param>
-		/// <param name="version">The version of the framework</param>
-		public RuntimeFramework( RuntimeType runtime, Version version)
-		{
-			this.runtime = runtime;
+        /// Construct from a runtime type and version
+        /// </summary>
+        /// <param name="runtime">The runtime type of the framework</param>
+        /// <param name="version">The version of the framework</param>
+        public RuntimeFramework(RuntimeType runtime, Version version)
+        {
+            this.runtime = runtime;
             this.version = version;
         }
 
@@ -144,14 +141,14 @@ namespace NUnit.ProjectEditor
         /// Overridden to return the short name of the framework
         /// </summary>
         /// <returns></returns>
-		public override string ToString()
-		{
+        public override string ToString()
+        {
             string vstring = version.ToString();
             if (runtime == RuntimeType.Any)
                 return "v" + vstring;
             else
                 return runtime.ToString().ToLower() + "-" + vstring;
-		}
+        }
 
         #endregion
     }

@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -53,7 +53,7 @@ namespace TestCentric.Gui.Model
         #endregion
 
         #region Methods to Create TestFilters
-        
+
         public static TestFilter MakeIdFilter(TestNode test)
         {
             return new TestFilter($"<filter><id>{test.Id}</id></filter>");

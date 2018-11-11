@@ -22,10 +22,8 @@
 // ***********************************************************************
 
 #if NET_3_5 || NET_4_0 || NET_4_5
-using System;
 using System.IO;
 using NSubstitute;
-using NUnit.Framework;
 
 namespace NUnit.ProjectEditor.Tests.Presenters
 {
@@ -51,7 +49,7 @@ namespace NUnit.ProjectEditor.Tests.Presenters
         [Test]
         public void ConfigList_LoadFromModel_SetsViewCorrectly()
         {
-            Assert.That(dlg.ConfigList, Is.EqualTo(new string[] {"Debug", "Release"}));
+            Assert.That(dlg.ConfigList, Is.EqualTo(new string[] { "Debug", "Release" }));
         }
 
         [Test]
@@ -60,7 +58,7 @@ namespace NUnit.ProjectEditor.Tests.Presenters
             dlg.ConfigToCreate.Returns("New");
             dlg.OkButton.Execute += Raise.Event<CommandDelegate>();
 
-            Assert.That(model.ConfigNames, Is.EqualTo(new string[] {"Debug", "Release", "New"}));
+            Assert.That(model.ConfigNames, Is.EqualTo(new string[] { "Debug", "Release", "New" }));
         }
 
         [Test]

@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -40,7 +40,7 @@ namespace NUnit.UiException.Tests
         //   new ErrorItem(null, 1); // throws exception
         //}
 
-        [Test]        
+        [Test]
         public void Ctor_With_Line_0()
         {
             new ErrorItem("file.txt", 0);
@@ -50,11 +50,11 @@ namespace NUnit.UiException.Tests
         public void Ctor_2()
         {
             ErrorItem item;
-            
+
             item = new ErrorItem("Test.cs", "myFunction()", 1);
 
             Assert.That(item.Path, Is.EqualTo("Test.cs"));
-            Assert.That(item.FullyQualifiedMethodName, Is.EqualTo("myFunction()"));            
+            Assert.That(item.FullyQualifiedMethodName, Is.EqualTo("myFunction()"));
             Assert.That(item.LineNumber, Is.EqualTo(1));
             Assert.That(item.HasSourceAttachment, Is.True);
             Assert.That(item.FileExtension, Is.EqualTo("cs"));
@@ -89,7 +89,7 @@ namespace NUnit.UiException.Tests
             item = new ErrorItem("path", "0123456789012.a()", 1);
             Assert.That(item.MethodName, Is.EqualTo("a()"));
             Assert.That(item.BaseMethodName, Is.EqualTo("a"));
-            Assert.That(item.ClassName, Is.EqualTo("0123456789012"));                
+            Assert.That(item.ClassName, Is.EqualTo("0123456789012"));
 
             // test to fail
 
@@ -176,7 +176,7 @@ namespace NUnit.UiException.Tests
             }
 
             return;
-        }        
+        }
 
         [Test]
         public void Test_Equals()

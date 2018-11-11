@@ -23,36 +23,34 @@
 
 using NSubstitute;
 using NUnit.Framework;
-using System.Xml;
 
 namespace TestCentric.Gui.Presenters.Main
 {
-	using Model;
-	using Views;
+    using Model;
 
-	public class WhenTestsAreLoaded : MainPresenterTestBase
-	{
-		[SetUp]
-		public void SimulateTestLoad()
-		{
-			ClearAllReceivedCalls();
+    public class WhenTestsAreLoaded : MainPresenterTestBase
+    {
+        [SetUp]
+        public void SimulateTestLoad()
+        {
+            ClearAllReceivedCalls();
 
-			_model.HasTests.Returns(true);
-			_model.IsTestRunning.Returns(false);
+            _model.HasTests.Returns(true);
+            _model.IsTestRunning.Returns(false);
 
-			TestNode testNode = new TestNode("<test-suite id='1'/>");
-			_model.Tests.Returns(testNode);
-			_model.TestAssemblies.Returns(new TestSelection(new []{testNode}));
-			FireTestLoadedEvent(testNode);
-		}
-        
+            TestNode testNode = new TestNode("<test-suite id='1'/>");
+            _model.Tests.Returns(testNode);
+            _model.TestAssemblies.Returns(new TestSelection(new[] { testNode }));
+            FireTestLoadedEvent(testNode);
+        }
+
 #if NYI // Add after implementation of project or package saving
         [TestCase("NewProjectCommand", true)]
         [TestCase("OpenProjectCommand", true)]
         [TestCase("SaveCommand", true)]
         [TestCase("SaveAsCommand", true)
 #endif
-        
+
         [TestCase("RunButton", true)]
         [TestCase("StopButton", false)]
         [TestCase("OpenCommand", true)]
@@ -79,5 +77,5 @@ namespace TestCentric.Gui.Presenters.Main
             View.Received().OnTestAssembliesLoaded();
         }
 #endif
-      }
+    }
 }

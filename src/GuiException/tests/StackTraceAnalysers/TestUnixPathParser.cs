@@ -22,8 +22,8 @@
 // ***********************************************************************
 
 using NUnit.Framework;
-using NUnit.UiException.StackTraceAnalyzers;
 using NUnit.UiException.StackTraceAnalysers;
+using NUnit.UiException.StackTraceAnalyzers;
 
 namespace NUnit.UiException.Tests.StackTraceAnalyzers
 {
@@ -41,7 +41,7 @@ namespace NUnit.UiException.Tests.StackTraceAnalyzers
             Assert.That(_parser, Is.Not.Null);
 
             return;
-        }        
+        }
 
         [Test]
         public void Test_Ability_To_Parse_Regular_Unix_Like_Path_Values()

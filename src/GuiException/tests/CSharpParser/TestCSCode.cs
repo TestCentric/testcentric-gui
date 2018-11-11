@@ -31,7 +31,7 @@ namespace NUnit.UiException.Tests.CodeFormatters
     [TestFixture]
     public class TestFormattedCode
     {
-        private FormattedCode _code;       
+        private FormattedCode _code;
 
         [Test]
         public void Test_SimpleCollection()
@@ -39,7 +39,7 @@ namespace NUnit.UiException.Tests.CodeFormatters
             _code = new TestingCSCode(
                 "line 1\n  line 2\nline 3\n",
                 new int[] { 0, 7, 16 },
-                new byte[] { 0, 0,  0 },
+                new byte[] { 0, 0, 0 },
                 new int[] { 0, 1, 2 }
                 );
 
@@ -86,7 +86,7 @@ namespace NUnit.UiException.Tests.CodeFormatters
                 "int i; //comment\n" +
                 "char c='a';\n",
                 new int[] { 0, 4, 7, 17, 22, 24, 27 },
-                new byte[] { 1, 0, 2,  1,  0,  3,  0 },
+                new byte[] { 1, 0, 2, 1, 0, 3, 0 },
                 new int[] { 0, 3 }
             );
 
@@ -255,7 +255,7 @@ namespace NUnit.UiException.Tests.CodeFormatters
                     _codeInfo.LineArray.Add(line);
 
                 return;
-            }         
+            }
         }
 
         #endregion

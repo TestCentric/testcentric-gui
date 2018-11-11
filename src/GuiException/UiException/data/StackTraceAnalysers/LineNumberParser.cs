@@ -22,8 +22,6 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using NUnit.UiException.StackTraceAnalyzers;
 
 namespace NUnit.UiException.StackTraceAnalysers
@@ -63,7 +61,7 @@ namespace NUnit.UiException.StackTraceAnalysers
             if ((posTrailingColon = args.Input.LastIndexOf(":")) == -1)
                 return (false);
 
-            if ((line = lookForLastInteger(args.Input, posTrailingColon)) <= 0)                
+            if ((line = lookForLastInteger(args.Input, posTrailingColon)) <= 0)
                 return (false);
 
             args.Line = line;
@@ -111,7 +109,7 @@ namespace NUnit.UiException.StackTraceAnalysers
             if (lookForLastInteger(error, workPos) != -1)
                 return (-1);
 
-            Int32.TryParse(error.Substring(startIndex, workPos-startIndex), out res);
+            Int32.TryParse(error.Substring(startIndex, workPos - startIndex), out res);
 
             return (res);
         }

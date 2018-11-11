@@ -27,17 +27,17 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
-	using Controls;
-	using Elements;
+    using Controls;
+    using Elements;
 
-	public interface IMainView
+    public interface IMainView
     {
-		// View Parameters
-		Point Location { get; set; }
-		Size Size { get; set; }
-		bool Maximized { get; set; }
-		IViewParameter<Font> FontSelector { get; }
-		IViewParameter<int> SplitterPosition { get; }
+        // View Parameters
+        Point Location { get; set; }
+        Size Size { get; set; }
+        bool Maximized { get; set; }
+        IViewParameter<Font> FontSelector { get; }
+        IViewParameter<int> SplitterPosition { get; }
 
         // UI Elements
         ICommand RunButton { get; }
@@ -45,7 +45,7 @@ namespace TestCentric.Gui.Views
         IControlElement<ExpandingLabel> RunSummary { get; }
         ISelection ResultTabs { get; }
 
-		// File Menu Items
+        // File Menu Items
         IMenu FileMenu { get; }
         ICommand OpenCommand { get; }
         ICommand CloseCommand { get; }
@@ -75,7 +75,7 @@ namespace TestCentric.Gui.Views
         ICommand RestoreFixedFontCommand { get; }
         IChecked StatusBarCommand { get; }
 
-		// Test Menu Items
+        // Test Menu Items
         ICommand RunAllCommand { get; }
         ICommand RunSelectedCommand { get; }
         ICommand RunFailedCommand { get; }
@@ -92,21 +92,21 @@ namespace TestCentric.Gui.Views
         ICommand TestCentricHelpCommand { get; }
         ICommand NUnitHelpCommand { get; }
         ICommand AboutCommand { get; }
-	
+
         // SubViews
-		TestTreeView TreeView { get; }
-		StatusBarView StatusBarView { get; }
-		IMessageDisplay MessageDisplay { get; }
- 
-		// Methods used by Presenter
-		void Configure(bool useFullGui);
-		LongRunningOperationDisplay LongOperationDisplay(string text);
+        TestTreeView TreeView { get; }
+        StatusBarView StatusBarView { get; }
+        IMessageDisplay MessageDisplay { get; }
+
+        // Methods used by Presenter
+        void Configure(bool useFullGui);
+        LongRunningOperationDisplay LongOperationDisplay(string text);
 
         // Form methods that we have to use
-		void Activate();
-		void Close();
+        void Activate();
+        void Close();
 
-		// Form Events that we use
+        // Form Events that we use
         event EventHandler Load;
         event EventHandler Shown;
         event EventHandler Move;

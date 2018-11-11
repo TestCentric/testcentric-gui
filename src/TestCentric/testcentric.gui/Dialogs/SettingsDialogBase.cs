@@ -71,22 +71,22 @@ namespace TestCentric.Gui
             //
             // TODO: Add any constructor code after InitializeComponent call
             //
-            pageList = new SettingsPageCollection( );
+            pageList = new SettingsPageCollection();
         }
 
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
         #endregion
 
@@ -161,8 +161,8 @@ namespace TestCentric.Gui
         #region Public Methods
         public void ApplySettings()
         {
-            foreach( SettingsPage page in pageList )
-                if ( page.SettingsLoaded )
+            foreach (SettingsPage page in pageList)
+                if (page.SettingsLoaded)
                     page.ApplySettings();
         }
         #endregion
@@ -201,8 +201,8 @@ namespace TestCentric.Gui
         {
             get
             {
-                foreach( SettingsPage page in pageList )
-                    if ( page.SettingsLoaded && page.HasChangesRequiringReload )
+                foreach (SettingsPage page in pageList)
+                    if (page.SettingsLoaded && page.HasChangesRequiringReload)
                         return true;
 
                 return false;
@@ -214,14 +214,14 @@ namespace TestCentric.Gui
         #region Nested SettingsPageCollection Class
         public class SettingsPageCollection : CollectionBase
         {
-            public void Add( SettingsPage page )
+            public void Add(SettingsPage page)
             {
-                this.InnerList.Add( page );
+                this.InnerList.Add(page);
             }
 
-            public void AddRange( params SettingsPage[] pages )
+            public void AddRange(params SettingsPage[] pages)
             {
-                this.InnerList.AddRange( pages );
+                this.InnerList.AddRange(pages);
             }
 
             public SettingsPage this[int index]
@@ -233,8 +233,8 @@ namespace TestCentric.Gui
             {
                 get
                 {
-                    foreach( SettingsPage page in InnerList )
-                        if ( page.Key == key )
+                    foreach (SettingsPage page in InnerList)
+                        if (page.Key == key)
                             return page;
 
                     return null;

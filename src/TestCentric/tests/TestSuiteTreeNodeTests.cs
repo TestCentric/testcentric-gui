@@ -65,18 +65,18 @@ namespace TestCentric.Gui.Tests
             var testFixture = new TestNode("<test-suite id='123' type='TestFixture' name='SomeFixture' fullname='/A/B/C/mytest.dll' testcasecount='42' runstate='Runnable'/>");
             TestSuiteTreeNode node = new TestSuiteTreeNode(testFixture);
 
-            Assert.AreEqual( "SomeFixture", node.Text );
-            Assert.AreEqual( "TestFixture", node.TestType );
+            Assert.AreEqual("SomeFixture", node.Text);
+            Assert.AreEqual("TestFixture", node.TestType);
         }
 
         [Test]
         public void CanConstructFromTestCase()
         {
             var testCase = new TestNode("<test-case id='123' name='SomeTest' fullname='A.B.C.SomeTest' runstate='Ignored'/>");
-            TestSuiteTreeNode node = new TestSuiteTreeNode( testCase );
+            TestSuiteTreeNode node = new TestSuiteTreeNode(testCase);
 
-            Assert.AreEqual( "SomeTest", node.Text );
-            Assert.AreEqual( "TestCase", node.TestType );
+            Assert.AreEqual("SomeTest", node.Text);
+            Assert.AreEqual("TestCase", node.TestType);
         }
 
         [TestCase("Unknown", TestSuiteTreeNode.InitIndex)]
@@ -106,7 +106,7 @@ namespace TestCentric.Gui.Tests
             string resultPart = colon >= 0
                 ? $"result='{outcome.Substring(0, colon)}' label='{outcome.Substring(colon + 1)}'"
                 : $"result='{outcome}'";
-            
+
             var result = new ResultNode($"<test-case id='123' name='SomeTest' fullname='A.B.C.SomeTest' runstate='Runnable' {resultPart}/>");
             TestSuiteTreeNode node = new TestSuiteTreeNode(result);
 
@@ -121,7 +121,7 @@ namespace TestCentric.Gui.Tests
         public void WhenResultIsCleared_IndexReflectsRunState(string runState, int expectedIndex)
         {
             var result = new ResultNode($"<test-case id='123' name='SomeTest' fullname='A.B.C.SomeTest' runstate='{runState}' result='Failed'/>");
-            TestSuiteTreeNode node = new TestSuiteTreeNode( result );
+            TestSuiteTreeNode node = new TestSuiteTreeNode(result);
             Assert.AreEqual(TestSuiteTreeNode.FailureIndex, node.ImageIndex);
             Assert.AreEqual(TestSuiteTreeNode.FailureIndex, node.SelectedImageIndex);
 

@@ -22,9 +22,9 @@
 // ***********************************************************************
 
 using System;
+using System.Drawing;
 using NUnit.Framework;
 using NUnit.UiException.Controls;
-using System.Drawing;
 
 namespace NUnit.UiException.Tests.Controls
 {
@@ -52,7 +52,7 @@ namespace NUnit.UiException.Tests.Controls
 
             Image img = new Bitmap(300, 100);
             _gr = Graphics.FromImage(img);
-            
+
             return;
         }
 
@@ -82,7 +82,7 @@ namespace NUnit.UiException.Tests.Controls
             exp = _gr.MeasureString("0123456789012", renderer.Font);
             actual = renderer.MeasureItem(_gr, itemClass);
             int itemHeight = renderer.Font.Height * 4 + 6;
-            
+
             Assert.That((int)actual.Width, Is.EqualTo((int)exp.Width + 16));
             Assert.That((int)actual.Height, Is.EqualTo(itemHeight));
 
@@ -103,7 +103,7 @@ namespace NUnit.UiException.Tests.Controls
             Assert.That((int)actual.Height, Is.EqualTo(itemHeight));
 
             return;
-        }        
+        }
 
         [Test]
         public void ItemAt()
@@ -135,15 +135,15 @@ namespace NUnit.UiException.Tests.Controls
             SizeF maxSize = SizeF.Empty;
 
             // measuring an empty list returns 0x0
-            
+
             docSize = renderer.GetDocumentSize(_empty.Items, _gr);
             Assert.NotNull(docSize);
             Assert.That(docSize, Is.EqualTo(new Size(0, 0)));
 
             // measure for a non empty list relies on the longest item
             // in that list
-            
-            foreach(ErrorItem item in _filled.Items)
+
+            foreach (ErrorItem item in _filled.Items)
             {
                 SizeF sz = renderer.MeasureItem(_gr, item);
                 if (sz.Width > maxSize.Width)
@@ -162,19 +162,23 @@ namespace NUnit.UiException.Tests.Controls
         [Test]
         public void DrawToGraphics_Can_Throw_ArgumentNullException()
         {
-            try {
+            try
+            {
                 _renderer.DrawToGraphics(null, null, _gr, new Rectangle()); // throws exception
                 Assert.Fail();
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 Assert.That(e.Message.Contains("items"));
             }
 
-            try {
+            try
+            {
                 _renderer.DrawToGraphics(_filled.Items, null, null, new Rectangle()); // throws exception
                 Assert.Fail();
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 Assert.That(e.Message.Contains("g"));
             }
 
@@ -196,7 +200,7 @@ namespace NUnit.UiException.Tests.Controls
 
             renderer.DrawToGraphics(_filled.Items, _filled.Items[0], _gr, viewport);
             Assert.True(renderer.IsDirty(_empty.Items, _filled.Items[0], viewport));
-           
+
             // changes selected item
 
             renderer.DrawToGraphics(_filled.Items, _filled.Items[0], _gr, viewport);
@@ -229,11 +233,13 @@ namespace NUnit.UiException.Tests.Controls
 
         class TestingRenderer : DefaultErrorListRenderer
         {
-            public new SizeF MeasureItem(Graphics g, ErrorItem item) {
+            public new SizeF MeasureItem(Graphics g, ErrorItem item)
+            {
                 return (base.MeasureItem(g, item));
             }
 
-            public new bool IsDirty(ErrorItemCollection items, ErrorItem selection, Rectangle viewport) {
+            public new bool IsDirty(ErrorItemCollection items, ErrorItem selection, Rectangle viewport)
+            {
                 return (base.IsDirty(items, selection, viewport));
             }
         }

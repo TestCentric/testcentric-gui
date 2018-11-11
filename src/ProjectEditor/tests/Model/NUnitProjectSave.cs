@@ -22,53 +22,50 @@
 // ***********************************************************************
 
 using System;
-using System.Text;
-using System.Xml;
 using System.IO;
-using NUnit.Framework;
 
 namespace NUnit.ProjectEditor.Tests.Model
 {
-	[TestFixture]
-	public class NUnitProjectSave
-	{
+    [TestFixture]
+    public class NUnitProjectSave
+    {
         private ProjectDocument doc;
         private ProjectModel project;
         private string xmlfile;
 
-		[SetUp]
-		public void SetUp()
-		{
+        [SetUp]
+        public void SetUp()
+        {
             doc = new ProjectDocument();
             project = new ProjectModel(doc);
             doc.CreateNewProject();
             xmlfile = Path.ChangeExtension(Path.GetTempFileName(), ".nunit");
-		}
+        }
 
-		[TearDown]
-		public void TearDown()
-		{
-			if ( File.Exists( xmlfile ) )
-				File.Delete( xmlfile );
-		}
+        [TearDown]
+        public void TearDown()
+        {
+            if (File.Exists(xmlfile))
+                File.Delete(xmlfile);
+        }
 
-		[Test]
-		public void EmptyProject()
-		{
-			CheckContents( NUnitProjectXml.EmptyProject );
-		}
+        [Test]
+        public void EmptyProject()
+        {
+            CheckContents(NUnitProjectXml.EmptyProject);
+        }
 
-		[Test]
-		public void EmptyConfigs()
-		{
+        [Test]
+        public void EmptyConfigs()
+        {
             project.AddConfig("Debug");
             project.AddConfig("Release");
             project.ActiveConfigName = "Debug";
             project.Configs["Debug"].BinPathType = BinPathType.Auto;
             project.Configs["Release"].BinPathType = BinPathType.Auto;
 
-			CheckContents( NUnitProjectXml.EmptyConfigs );			
-		}
+            CheckContents(NUnitProjectXml.EmptyConfigs);
+        }
 
         [Test]
         public void NormalProject()

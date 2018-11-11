@@ -22,9 +22,7 @@
 // ***********************************************************************
 
 #if NET_3_5 || NET_4_0 || NET_4_5
-using System;
 using NSubstitute;
-using NUnit.Framework;
 using NUnit.TestUtilities;
 
 namespace NUnit.ProjectEditor.Tests.Presenters

@@ -21,7 +21,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
 using System.Windows.Forms;
 using NUnit.ProjectEditor.ViewElements;
 
@@ -82,7 +81,7 @@ namespace NUnit.ProjectEditor
             get
             {
                 string[] list = new string[comboBox.Items.Count];
-                    
+
                 int index = 0;
                 foreach (string item in comboBox.Items)
                     list[index++] = item;

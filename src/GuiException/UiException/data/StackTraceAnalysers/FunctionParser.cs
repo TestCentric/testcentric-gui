@@ -21,9 +21,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using NUnit.UiException.StackTraceAnalyzers;
 
 namespace NUnit.UiException.StackTraceAnalysers
@@ -101,9 +98,9 @@ namespace NUnit.UiException.StackTraceAnalysers
 
             res = args.Input.Substring(posName, posEndingParenthesis - posName + 1);
             args.Function = res;
-            
+
             return (true);
-        }       
+        }
 
         #endregion
     }

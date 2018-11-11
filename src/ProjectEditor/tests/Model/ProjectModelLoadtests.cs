@@ -22,7 +22,6 @@
 // ***********************************************************************
 
 using System.IO;
-using NUnit.Framework;
 
 namespace NUnit.ProjectEditor.Tests.Model
 {
@@ -54,7 +53,7 @@ namespace NUnit.ProjectEditor.Tests.Model
             doc.LoadXml(NUnitProjectXml.EmptyProject);
 
             Assert.AreEqual(Path.GetFullPath(xmlfile), project.ProjectPath);
-            
+
             Assert.AreEqual(null, project.BasePath);
             Assert.AreEqual(Path.GetDirectoryName(project.ProjectPath), project.EffectiveBasePath);
 

@@ -22,9 +22,6 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
 
 namespace NUnit.UiException.Controls
 {
@@ -62,6 +59,6 @@ namespace NUnit.UiException.Controls
         string StackTrace { get; set; }
         ErrorItem SelectedItem { get; }
         bool AutoSelectFirstItem { get; set; }
-        ErrorListOrderPolicy ListOrderPolicy { get; set; }        
+        ErrorListOrderPolicy ListOrderPolicy { get; set; }
     }
 }

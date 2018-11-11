@@ -23,10 +23,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 using NUnit.UiException.CodeFormatters;
-using System.Drawing;
-using System.Diagnostics;
 
 namespace NUnit.UiException.Controls
 {
@@ -44,7 +43,7 @@ namespace NUnit.UiException.Controls
         {
             List<PaintLineLocation> list = new List<PaintLineLocation>();
             int visibles = CountVisibleLines(viewport.Height, fontHeight);
-//            int topIndex = YCoordinateToLineIndex(viewport.Top, fontHeight);
+            //            int topIndex = YCoordinateToLineIndex(viewport.Top, fontHeight);
             int lineIndex = YCoordinateToLineIndex(viewport.Top, fontHeight);
             int i;
 
@@ -212,6 +211,6 @@ namespace NUnit.UiException.Controls
         float LineIndexToYCoordinate(int index, float fontHeight)
         {
             return (index * fontHeight);
-        }        
+        }
     }
 }

@@ -45,7 +45,7 @@ namespace NUnit.TestUtilities.Fakes
 
         public T GetService<T>() where T : class
         {
-           return (T)GetService(typeof(T));
+            return (T)GetService(typeof(T));
         }
     }
 }

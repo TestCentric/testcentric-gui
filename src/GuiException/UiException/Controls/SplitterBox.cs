@@ -22,12 +22,9 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
 using System.Drawing;
+using System.Windows.Forms;
 using NUnit.UiException.Properties;
-using System.Diagnostics;
 
 //
 // This re-implements SplitContainer. Why re-inventing the wheel?
@@ -73,14 +70,14 @@ namespace NUnit.UiException.Controls
         public static readonly int SPLITTER_SIZE = 9;
         public static readonly int SPLITTER_HALFSIZE = SPLITTER_SIZE / 2;
         public static readonly int BUTTON_SIZE = 13;
-        
+
         private Control _emptyControl1;
         private Control _emptyControl2;
 
         private Control _control1;
         private Control _control2;
 
-        private Orientation _orientation;        
+        private Orientation _orientation;
         private float _x;
         private float _y;
 
@@ -119,7 +116,7 @@ namespace NUnit.UiException.Controls
 
             _rHorizontalCollapse1 = new Rectangle(0, 24, 13, 9);
             _rHorizontalDirection = new Rectangle(14, 14, 13, 9);
-            _rHorizontalCollapse2 = new Rectangle(0, 14, 13, 9);     
+            _rHorizontalCollapse2 = new Rectangle(0, 14, 13, 9);
 
             _emptyControl1 = new Control();
             _emptyControl2 = new Control();
@@ -148,7 +145,8 @@ namespace NUnit.UiException.Controls
         public Orientation Orientation
         {
             get { return (_orientation); }
-            set { 
+            set
+            {
                 _orientation = value;
                 DoLayout();
             }
@@ -166,7 +164,8 @@ namespace NUnit.UiException.Controls
         public float SplitterDistance
         {
             get { return (_orientation == Orientation.Vertical ? _x : _y); }
-            set {
+            set
+            {
                 value = Math.Max(0, Math.Min(1, value));
                 if (_orientation == Orientation.Vertical)
                     _x = value;
@@ -188,7 +187,7 @@ namespace NUnit.UiException.Controls
         public Control Control1
         {
             get { return (_control1); }
-            set 
+            set
             {
                 if (_control1 == value)
                     return;
@@ -216,7 +215,7 @@ namespace NUnit.UiException.Controls
         public Control Control2
         {
             get { return (_control2); }
-            set 
+            set
             {
                 if (_control2 == value)
                     return;
@@ -238,7 +237,7 @@ namespace NUnit.UiException.Controls
         /// </summary>
         public Rectangle SplitterRectangle
         {
-            get { return (_splitterRectangle); }            
+            get { return (_splitterRectangle); }
         }
 
         /// <summary>
@@ -293,7 +292,7 @@ namespace NUnit.UiException.Controls
         protected Rectangle DirectionRectangle
         {
             get { return (_directionRectangle); }
-        }        
+        }
 
         private void HorizontalLayout()
         {
@@ -388,7 +387,7 @@ namespace NUnit.UiException.Controls
             UpdateCursor(e.X, e.Y);
 
             if (_movingSplitter == true)
-            {                
+            {
                 PointToSplit(e.X, e.Y);
                 Invalidate();
             }

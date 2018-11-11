@@ -23,8 +23,8 @@
 
 using System;
 using System.Drawing;
-using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace TestCentric.Gui.Controls
 {
@@ -63,7 +63,7 @@ namespace TestCentric.Gui.Controls
         /// True if we may overlay control or item
         /// </summary>
         private bool overlay = true;
-            
+
         /// <summary>
         /// Directions we are allowed to expand
         /// </summary>
@@ -104,10 +104,10 @@ namespace TestCentric.Gui.Controls
 
         #region Construction and Initialization
 
-        public TipWindow( Control control )
+        public TipWindow(Control control)
         {
             InitializeComponent();
-            InitControl( control );
+            InitControl(control);
 
             // Note: This causes an error if called on a listbox
             // with no item as yet selected, therefore, it is handled
@@ -115,16 +115,16 @@ namespace TestCentric.Gui.Controls
             this.tipText = control.Text;
         }
 
-        public TipWindow( ListBox listbox, int index )
+        public TipWindow(ListBox listbox, int index)
         {
             InitializeComponent();
-            InitControl( listbox );
+            InitControl(listbox);
 
-            this.itemBounds = listbox.GetItemRectangle( index );
-            this.tipText = listbox.Items[ index ].ToString();
+            this.itemBounds = listbox.GetItemRectangle(index);
+            this.tipText = listbox.Items[index].ToString();
         }
 
-        private void InitControl( Control control )
+        private void InitControl(Control control)
         {
             this.control = control;
             this.Owner = control.FindForm();
@@ -135,7 +135,7 @@ namespace TestCentric.Gui.Controls
             this.MinimizeBox = false;
             this.BackColor = Color.LightYellow;
             this.FormBorderStyle = FormBorderStyle.None;
-            this.StartPosition = FormStartPosition.Manual; 			
+            this.StartPosition = FormStartPosition.Manual;
 
             this.Font = control.Font;
         }
@@ -161,55 +161,55 @@ namespace TestCentric.Gui.Controls
         {
             // At this point, further changes to the properties
             // of the label will have no effect on the tip.
-            Point origin = control.Parent.PointToScreen( control.Location );
-            origin.Offset( itemBounds.Left, itemBounds.Top );
-            if ( !overlay )	origin.Offset( 0, itemBounds.Height );
+            Point origin = control.Parent.PointToScreen(control.Location);
+            origin.Offset(itemBounds.Left, itemBounds.Top);
+            if (!overlay) origin.Offset(0, itemBounds.Height);
             this.Location = origin;
 
-            Graphics g = Graphics.FromHwnd( Handle );
-            Screen screen = Screen.FromControl( control );
-            SizeF layoutArea = new SizeF( screen.WorkingArea.Width - 40, screen.WorkingArea.Height - 40 );
-            if ( expansion == ExpansionStyle.Vertical )
+            Graphics g = Graphics.FromHwnd(Handle);
+            Screen screen = Screen.FromControl(control);
+            SizeF layoutArea = new SizeF(screen.WorkingArea.Width - 40, screen.WorkingArea.Height - 40);
+            if (expansion == ExpansionStyle.Vertical)
                 layoutArea.Width = itemBounds.Width;
-            else if ( expansion == ExpansionStyle.Horizontal )
+            else if (expansion == ExpansionStyle.Horizontal)
                 layoutArea.Height = itemBounds.Height;
 
-            Size sizeNeeded = Size.Ceiling( g.MeasureString( tipText, Font, layoutArea ) );
+            Size sizeNeeded = Size.Ceiling(g.MeasureString(tipText, Font, layoutArea));
 
             this.ClientSize = sizeNeeded;
-            this.Size = sizeNeeded + new Size( 2, 2 );
-            this.textRect = new Rectangle( 1, 1, sizeNeeded.Width, sizeNeeded.Height );
+            this.Size = sizeNeeded + new Size(2, 2);
+            this.textRect = new Rectangle(1, 1, sizeNeeded.Width, sizeNeeded.Height);
 
             // Catch mouse leaving the control
-            control.MouseLeave += new EventHandler( control_MouseLeave );
+            control.MouseLeave += new EventHandler(control_MouseLeave);
 
             // Catch the form that holds the control closing
-            control.FindForm().Closed += new EventHandler( control_FormClosed );
+            control.FindForm().Closed += new EventHandler(control_FormClosed);
 
-            if ( this.Right > screen.WorkingArea.Right )
+            if (this.Right > screen.WorkingArea.Right)
             {
-                this.Left = Math.Max( 
-                    screen.WorkingArea.Right - this.Width - 20, 
+                this.Left = Math.Max(
+                    screen.WorkingArea.Right - this.Width - 20,
                     screen.WorkingArea.Left + 20);
             }
 
-            if ( this.Bottom > screen.WorkingArea.Bottom - 20 )
+            if (this.Bottom > screen.WorkingArea.Bottom - 20)
             {
-                if ( overlay )
+                if (overlay)
                     this.Top = Math.Max(
                         screen.WorkingArea.Bottom - this.Height - 20,
-                        screen.WorkingArea.Top + 20 );
+                        screen.WorkingArea.Top + 20);
 
-                if ( this.Bottom > screen.WorkingArea.Bottom - 20 )
+                if (this.Bottom > screen.WorkingArea.Bottom - 20)
                     this.Height = screen.WorkingArea.Bottom - 20 - this.Top;
 
             }
 
-            if ( autoCloseDelay > 0 )
+            if (autoCloseDelay > 0)
             {
                 autoCloseTimer = new System.Windows.Forms.Timer();
                 autoCloseTimer.Interval = autoCloseDelay;
-                autoCloseTimer.Tick += new EventHandler( OnAutoClose );
+                autoCloseTimer.Tick += new EventHandler(OnAutoClose);
                 autoCloseTimer.Start();
             }
         }
@@ -266,46 +266,46 @@ namespace TestCentric.Gui.Controls
 
         protected override void OnPaint(System.Windows.Forms.PaintEventArgs e)
         {
-            base.OnPaint( e );
-                
+            base.OnPaint(e);
+
             Graphics g = e.Graphics;
             Rectangle outlineRect = this.ClientRectangle;
-            outlineRect.Inflate( -1, -1 );
-            g.DrawRectangle( Pens.Black, outlineRect );
-            g.DrawString( tipText, Font, Brushes.Black, textRect );
+            outlineRect.Inflate(-1, -1);
+            g.DrawRectangle(Pens.Black, outlineRect);
+            g.DrawString(tipText, Font, Brushes.Black, textRect);
         }
 
-        private void OnAutoClose( object sender, System.EventArgs e )
+        private void OnAutoClose(object sender, System.EventArgs e)
         {
             this.Close();
         }
 
         protected override void OnMouseEnter(System.EventArgs e)
         {
-            if ( mouseLeaveTimer != null )
+            if (mouseLeaveTimer != null)
             {
                 mouseLeaveTimer.Stop();
                 mouseLeaveTimer.Dispose();
-                System.Diagnostics.Debug.WriteLine( "Entered TipWindow - stopped mouseLeaveTimer" );
+                System.Diagnostics.Debug.WriteLine("Entered TipWindow - stopped mouseLeaveTimer");
             }
         }
 
         protected override void OnMouseLeave(System.EventArgs e)
         {
-            if ( mouseLeaveDelay > 0  )
+            if (mouseLeaveDelay > 0)
             {
                 mouseLeaveTimer = new System.Windows.Forms.Timer();
                 mouseLeaveTimer.Interval = mouseLeaveDelay;
-                mouseLeaveTimer.Tick += new EventHandler( OnAutoClose );
+                mouseLeaveTimer.Tick += new EventHandler(OnAutoClose);
                 mouseLeaveTimer.Start();
-                System.Diagnostics.Debug.WriteLine( "Left TipWindow - started mouseLeaveTimer" );
+                System.Diagnostics.Debug.WriteLine("Left TipWindow - started mouseLeaveTimer");
             }
         }
 
         /// <summary>
         /// The form our label is on closed, so we should. 
         /// </summary>
-        private void control_FormClosed( object sender, System.EventArgs e )
+        private void control_FormClosed(object sender, System.EventArgs e)
         {
             this.Close();
         }
@@ -315,20 +315,20 @@ namespace TestCentric.Gui.Controls
         /// overlaying the label but otherwise start a
         /// delay for closing the window
         /// </summary>
-        private void control_MouseLeave( object sender, System.EventArgs e )
+        private void control_MouseLeave(object sender, System.EventArgs e)
         {
-            if ( mouseLeaveDelay > 0 && !overlay )
+            if (mouseLeaveDelay > 0 && !overlay)
             {
                 mouseLeaveTimer = new System.Windows.Forms.Timer();
                 mouseLeaveTimer.Interval = mouseLeaveDelay;
-                mouseLeaveTimer.Tick += new EventHandler( OnAutoClose );
+                mouseLeaveTimer.Tick += new EventHandler(OnAutoClose);
                 mouseLeaveTimer.Start();
-                System.Diagnostics.Debug.WriteLine( "Left Control - started mouseLeaveTimer" );
+                System.Diagnostics.Debug.WriteLine("Left Control - started mouseLeaveTimer");
             }
         }
 
         #endregion
-    
+
         [DllImport("user32.dll")]
         static extern uint SendMessage(
             IntPtr hwnd,
@@ -336,22 +336,22 @@ namespace TestCentric.Gui.Controls
             IntPtr wparam,
             IntPtr lparam
             );
-    
+
         protected override void WndProc(ref Message m)
         {
             uint WM_LBUTTONDOWN = 0x201;
             uint WM_RBUTTONDOWN = 0x204;
             uint WM_MBUTTONDOWN = 0x207;
 
-            if ( m.Msg == WM_LBUTTONDOWN || m.Msg == WM_RBUTTONDOWN || m.Msg == WM_MBUTTONDOWN )
+            if (m.Msg == WM_LBUTTONDOWN || m.Msg == WM_RBUTTONDOWN || m.Msg == WM_MBUTTONDOWN)
             {
-                if ( m.Msg != WM_LBUTTONDOWN )
+                if (m.Msg != WM_LBUTTONDOWN)
                     this.Close();
-                SendMessage( control.Handle, m.Msg, m.WParam, m.LParam );
+                SendMessage(control.Handle, m.Msg, m.WParam, m.LParam);
             }
             else
             {
-                base.WndProc (ref m);
+                base.WndProc(ref m);
             }
         }
     }

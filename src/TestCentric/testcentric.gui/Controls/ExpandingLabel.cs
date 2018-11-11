@@ -22,9 +22,9 @@
 // ***********************************************************************
 
 using System;
-using System.Windows.Forms;
 using System.ComponentModel;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace TestCentric.Gui.Controls
 {
@@ -43,17 +43,17 @@ namespace TestCentric.Gui.Controls
         /// Our window for displaying expanded text
         /// </summary>
         private TipWindow tipWindow;
-        
+
         /// <summary>
         /// Direction of expansion
         /// </summary>
         private TipWindow.ExpansionStyle expansion = TipWindow.ExpansionStyle.Horizontal;
-        
+
         /// <summary>
         /// True if tipWindow may overlay the label
         /// </summary>
         private bool overlay = true;
-        
+
         /// <summary>
         /// Time in milliseconds that the tip window
         /// will remain displayed.
@@ -76,20 +76,20 @@ namespace TestCentric.Gui.Controls
 
         #region Properties
 
-        [Browsable( false )]
+        [Browsable(false)]
         public bool Expanded
         {
             get { return tipWindow != null && tipWindow.Visible; }
         }
 
-        [Category ( "Behavior"  ), DefaultValue( TipWindow.ExpansionStyle.Horizontal )]
+        [Category("Behavior"), DefaultValue(TipWindow.ExpansionStyle.Horizontal)]
         public TipWindow.ExpansionStyle Expansion
         {
             get { return expansion; }
             set { expansion = value; }
         }
 
-        [Category( "Behavior" ), DefaultValue( true )]
+        [Category("Behavior"), DefaultValue(true)]
         [Description("Indicates whether the tip window should overlay the label")]
         public bool Overlay
         {
@@ -101,7 +101,7 @@ namespace TestCentric.Gui.Controls
         /// Time in milliseconds that the tip window
         /// will remain displayed.
         /// </summary>
-        [Category( "Behavior" ), DefaultValue( 0 )]
+        [Category("Behavior"), DefaultValue(0)]
         [Description("Time in milliseconds that the tip is displayed. Zero indicates no automatic timeout.")]
         public int AutoCloseDelay
         {
@@ -114,7 +114,7 @@ namespace TestCentric.Gui.Controls
         /// open after the mouse leaves the control.
         /// Reentering the control resets this.
         /// </summary>
-        [Category( "Behavior" ), DefaultValue( 300 )]
+        [Category("Behavior"), DefaultValue(300)]
         [Description("Time in milliseconds that the tip is displayed after the mouse levaes the control")]
         public int MouseLeaveDelay
         {
@@ -122,15 +122,15 @@ namespace TestCentric.Gui.Controls
             set { mouseLeaveDelay = value; }
         }
 
-        [Category( "Behavior"), DefaultValue( false )]
+        [Category("Behavior"), DefaultValue(false)]
         [Description("If true, displays a context menu with Copy")]
         public bool CopySupported
         {
             get { return copySupported; }
-            set 
-            { 
-                copySupported = value; 
-                if ( copySupported )
+            set
+            {
+                copySupported = value;
+                if (copySupported)
                     base.ContextMenu = null;
             }
         }
@@ -142,15 +142,15 @@ namespace TestCentric.Gui.Controls
         public override string Text
         {
             get { return base.Text; }
-            set 
-            { 
+            set
+            {
                 base.Text = value;
 
-                if ( copySupported )
+                if (copySupported)
                 {
-                    if ( value == null || value == string.Empty )
+                    if (value == null || value == string.Empty)
                     {
-                        if ( this.ContextMenu != null )
+                        if (this.ContextMenu != null)
                         {
                             this.ContextMenu.Dispose();
                             this.ContextMenu = null;
@@ -159,8 +159,8 @@ namespace TestCentric.Gui.Controls
                     else
                     {
                         this.ContextMenu = new System.Windows.Forms.ContextMenu();
-                        MenuItem copyMenuItem = new MenuItem( "Copy", new EventHandler( CopyToClipboard ) );
-                        this.ContextMenu.MenuItems.Add( copyMenuItem );
+                        MenuItem copyMenuItem = new MenuItem("Copy", new EventHandler(CopyToClipboard));
+                        this.ContextMenu.MenuItems.Add(copyMenuItem);
                     }
                 }
             }
@@ -172,10 +172,10 @@ namespace TestCentric.Gui.Controls
 
         public void Expand()
         {
-            if ( !Expanded )
+            if (!Expanded)
             {
-                tipWindow = new TipWindow( this );
-                tipWindow.Closed += new EventHandler( tipWindow_Closed );
+                tipWindow = new TipWindow(this);
+                tipWindow.Closed += new EventHandler(tipWindow_Closed);
                 tipWindow.Expansion = this.Expansion;
                 tipWindow.Overlay = this.Overlay;
                 tipWindow.AutoCloseDelay = this.AutoCloseDelay;
@@ -187,7 +187,7 @@ namespace TestCentric.Gui.Controls
 
         public void Unexpand()
         {
-            if ( Expanded )
+            if (Expanded)
             {
                 tipWindow.Close();
             }
@@ -197,30 +197,30 @@ namespace TestCentric.Gui.Controls
 
         #region Event Handlers
 
-        private void tipWindow_Closed( object sender, EventArgs e )
+        private void tipWindow_Closed(object sender, EventArgs e)
         {
             tipWindow = null;
         }
 
         protected override void OnMouseHover(System.EventArgs e)
         {
-            Graphics g = Graphics.FromHwnd( Handle );
-            SizeF sizeNeeded = g.MeasureString( Text, Font );
-            bool expansionNeeded = 
+            Graphics g = Graphics.FromHwnd(Handle);
+            SizeF sizeNeeded = g.MeasureString(Text, Font);
+            bool expansionNeeded =
                 Width < (int)sizeNeeded.Width ||
                 Height < (int)sizeNeeded.Height;
 
-            if ( expansionNeeded ) Expand();
+            if (expansionNeeded) Expand();
         }
 
         /// <summary>
         /// Copy contents to clipboard
         /// </summary>
-        private void CopyToClipboard( object sender, EventArgs e )
+        private void CopyToClipboard(object sender, EventArgs e)
         {
-            Clipboard.SetDataObject( this.Text );
+            Clipboard.SetDataObject(this.Text);
         }
-    
+
         #endregion
     }
 }

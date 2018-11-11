@@ -22,11 +22,6 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.IO;
-using System.Text;
 using System.Windows.Forms;
 using NUnit.ProjectEditor.ViewElements;
 
@@ -78,32 +73,32 @@ namespace NUnit.ProjectEditor
 
         #region Properties
 
-        public IDialogManager DialogManager 
+        public IDialogManager DialogManager
         {
             get { return dialogManager; }
         }
 
-        public ICommand NewProjectCommand 
+        public ICommand NewProjectCommand
         {
             get { return newProjectCommand; }
         }
 
-        public ICommand OpenProjectCommand 
-        { 
-            get {return openProjectCommand; }
+        public ICommand OpenProjectCommand
+        {
+            get { return openProjectCommand; }
         }
 
-        public ICommand CloseProjectCommand 
+        public ICommand CloseProjectCommand
         {
             get { return closeProjectCommand; }
         }
 
-        public ICommand SaveProjectCommand 
+        public ICommand SaveProjectCommand
         {
             get { return saveProjectCommand; }
         }
 
-        public ICommand SaveProjectAsCommand 
+        public ICommand SaveProjectAsCommand
         {
             get { return saveProjectAsCommand; }
         }
@@ -124,7 +119,7 @@ namespace NUnit.ProjectEditor
             set { tabControl1.SelectedIndex = (int)value; }
         }
 
-        public IMessageDisplay MessageDisplay 
+        public IMessageDisplay MessageDisplay
         {
             get { return messageDisplay; }
         }

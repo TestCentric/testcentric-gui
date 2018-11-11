@@ -22,19 +22,17 @@
 // ***********************************************************************
 
 using System;
-using System.IO;
-using System.Drawing;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Windows.Forms;
 using System.ComponentModel;
+using System.Drawing;
+using System.IO;
 using System.Reflection;
+using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
-    using Model;
     using Elements;
+    using Model;
 
     /// <summary>
     /// TestTreeView contains the tree control that displays tests.
@@ -189,7 +187,7 @@ namespace TestCentric.Gui.Views
 
                 if (result == null || result.Length == 0)
                     if (tree.SelectedNode != null)
-                    result = new TestNode[] { ((TestSuiteTreeNode)tree.SelectedNode).Test };
+                        result = new TestNode[] { ((TestSuiteTreeNode)tree.SelectedNode).Test };
 
                 return result;
             }
@@ -316,7 +314,7 @@ namespace TestCentric.Gui.Views
             }
         }
 
-		private void Accept(TestSuiteTreeNodeVisitor visitor)
+        private void Accept(TestSuiteTreeNodeVisitor visitor)
         {
             foreach (TestSuiteTreeNode node in tree.Nodes)
             {
@@ -324,7 +322,7 @@ namespace TestCentric.Gui.Views
             }
         }
 
-		public void LoadAlternateImages(string imageSet)
+        public void LoadAlternateImages(string imageSet)
         {
             string[] imageNames = { "Skipped", "Failure", "Success", "Ignored", "Inconclusive" };
 
@@ -352,7 +350,7 @@ namespace TestCentric.Gui.Views
             }
         }
 
-		/// <summary>
+        /// <summary>
         /// Helper method to determine if an IDataObject is valid
         /// for dropping on the tree view. It must be a the drop
         /// of a single file with a valid assembly file type.

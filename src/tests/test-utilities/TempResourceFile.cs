@@ -30,7 +30,7 @@ namespace NUnit.TestUtilities
     {
         string path;
 
-        public TempResourceFile(Type type, string name) : this(type, name, null) {}
+        public TempResourceFile(Type type, string name) : this(type, name, null) { }
 
         public TempResourceFile(Type type, string name, string filePath)
         {
@@ -47,12 +47,12 @@ namespace NUnit.TestUtilities
             stream.Read(buffer, 0, buffer.Length);
 
             string dir = System.IO.Path.GetDirectoryName(this.path);
-            if(dir != null && dir.Length != 0)
+            if (dir != null && dir.Length != 0)
             {
                 Directory.CreateDirectory(dir);
             }
 
-            using(FileStream fileStream = new FileStream(this.path, FileMode.Create))
+            using (FileStream fileStream = new FileStream(this.path, FileMode.Create))
             {
                 fileStream.Write(buffer, 0, buffer.Length);
             }
@@ -61,12 +61,12 @@ namespace NUnit.TestUtilities
         public void Dispose()
         {
             File.Delete(this.path);
-            
+
             string path = this.path;
-            while(true)
+            while (true)
             {
                 path = System.IO.Path.GetDirectoryName(path);
-                if(path == null || path.Length == 0 || Directory.GetFiles(path).Length > 0)
+                if (path == null || path.Length == 0 || Directory.GetFiles(path).Length > 0)
                 {
                     break;
                 }

@@ -40,19 +40,19 @@ namespace NUnit.Tests
 #endif
             public static int NamespaceSuites = 6; // assembly, NUnit, Tests, Assemblies, Singletons, TestAssembly
 
-            public static int Tests = MockTestFixture.Tests 
-                        + Singletons.OneTestCase.Tests 
-                        + TestAssembly.MockTestFixture.Tests 
+            public static int Tests = MockTestFixture.Tests
+                        + Singletons.OneTestCase.Tests
+                        + TestAssembly.MockTestFixture.Tests
                         + IgnoredFixture.Tests
                         + ExplicitFixture.Tests
                         + BadFixture.Tests
                         + FixtureWithTestCases.Tests
                         + ParameterizedFixture.Tests
                         + GenericFixtureConstants.Tests;
-            
-            public static int Suites = MockTestFixture.Suites 
+
+            public static int Suites = MockTestFixture.Suites
                         + Singletons.OneTestCase.Suites
-                        + TestAssembly.MockTestFixture.Suites 
+                        + TestAssembly.MockTestFixture.Suites
                         + IgnoredFixture.Suites
                         + ExplicitFixture.Suites
                         + BadFixture.Suites
@@ -60,9 +60,9 @@ namespace NUnit.Tests
                         + ParameterizedFixture.Suites
                         + GenericFixtureConstants.Suites
                         + NamespaceSuites;
-            
+
             public static readonly int Nodes = Tests + Suites;
-            
+
             public static int ExplicitFixtures = 1;
             public static int SuitesRun = Suites - ExplicitFixtures;
 
@@ -91,7 +91,7 @@ namespace NUnit.Tests
             }
         }
 
-        [TestFixture(Description="Fake Test Fixture")]
+        [TestFixture(Description = "Fake Test Fixture")]
         [Category("FixtureCategory")]
         public class MockTestFixture
         {
@@ -111,16 +111,16 @@ namespace NUnit.Tests
             public static readonly int Categories = 5;
             public static readonly int MockCategoryTests = 2;
 
-            [Test(Description="Mock Test #1")]
+            [Test(Description = "Mock Test #1")]
             public void MockTest1()
-            {}
+            { }
 
             [Test]
             [Category("MockCategory")]
-            [Property("Severity","Critical")]
+            [Property("Severity", "Critical")]
             [Description("This is a really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really, really long description")]
             public void MockTest2()
-            {}
+            { }
 
             [Test]
             [Category("MockCategory")]
@@ -130,7 +130,7 @@ namespace NUnit.Tests
 
             [Test]
             protected static void MockTest5()
-            {}
+            { }
 
             [Test]
             public void FailingTest()
@@ -140,21 +140,21 @@ namespace NUnit.Tests
 
             [Test, Property("TargetMethod", "SomeClassName"), Property("Size", 5), /*Property("TargetType", typeof( System.Threading.Thread ))*/]
             public void TestWithManyProperties()
-            {}
+            { }
 
             [Test]
             [Ignore("ignoring this test method for now")]
             [Category("Foo")]
             public void MockTest4()
-            {}
+            { }
 
             [Test, Explicit]
-            [Category( "Special" )]
+            [Category("Special")]
             public void ExplicitlyRunTest()
-            {}
+            { }
 
             [Test]
-            public void NotRunnableTest( int a, int b)
+            public void NotRunnableTest(int a, int b)
             {
             }
 
@@ -186,8 +186,8 @@ namespace NUnit.Tests
             public static readonly int Suites = 1;
 
             [Test]
-            public virtual void TestCase() 
-            {}
+            public virtual void TestCase()
+            { }
         }
     }
 
@@ -217,12 +217,12 @@ namespace NUnit.Tests
 
         [Test]
         public void Test2() { }
-        
+
         [Test]
         public void Test3() { }
     }
 
-    [TestFixture,Explicit]
+    [TestFixture, Explicit]
     public class ExplicitFixture
     {
         public static readonly int Tests = 2;
@@ -247,7 +247,7 @@ namespace NUnit.Tests
         [Test]
         public void SomeTest() { }
     }
-    
+
     [TestFixture]
     public class FixtureWithTestCases
     {
@@ -258,12 +258,12 @@ namespace NUnit.Tests
         public static readonly int Tests = 2;
         public static readonly int Suites = 2;
 #endif
-        
-        [TestCase(2, 2, ExpectedResult=4)]
-        [TestCase(9, 11, ExpectedResult=20)]
+
+        [TestCase(2, 2, ExpectedResult = 4)]
+        [TestCase(9, 11, ExpectedResult = 20)]
         public int MethodWithParameters(int x, int y)
         {
-            return x+y;
+            return x + y;
         }
 
 #if CLR_2_0 || CLR_4_0
@@ -274,7 +274,7 @@ namespace NUnit.Tests
         }
 #endif
     }
-    
+
     [TestFixture(5)]
     [TestFixture(42)]
     public class ParameterizedFixture
@@ -283,14 +283,14 @@ namespace NUnit.Tests
         public static readonly int Suites = 3;
 
         public ParameterizedFixture(int num) { }
-        
+
         [Test]
         public void Test1() { }
-        
+
         [Test]
         public void Test2() { }
     }
-    
+
     public class GenericFixtureConstants
     {
 #if CLR_2_0 || CLR_4_0
@@ -307,11 +307,11 @@ namespace NUnit.Tests
     [TestFixture(11.5)]
     public class GenericFixture<T>
     {
-        public GenericFixture(T num){ }
-        
+        public GenericFixture(T num) { }
+
         [Test]
         public void Test1() { }
-        
+
         [Test]
         public void Test2() { }
     }

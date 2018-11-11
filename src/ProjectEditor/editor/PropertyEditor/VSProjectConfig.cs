@@ -21,36 +21,35 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
 using System.Collections.Specialized;
 
 namespace NUnit.ProjectEditor
 {
-	/// <summary>
-	/// Originally, we used the same ProjectConfig class for both
-	/// NUnit and Visual Studio projects. Since we really do very
-	/// little with VS Projects, this class has been created to 
-	/// hold the name and the collection of assembly paths.
-	/// </summary>
-	public class VSProjectConfig
-	{
-		private string name;
-		
-		private StringCollection assemblies = new StringCollection();
+    /// <summary>
+    /// Originally, we used the same ProjectConfig class for both
+    /// NUnit and Visual Studio projects. Since we really do very
+    /// little with VS Projects, this class has been created to 
+    /// hold the name and the collection of assembly paths.
+    /// </summary>
+    public class VSProjectConfig
+    {
+        private string name;
 
-		public VSProjectConfig( string name )
-		{
-			this.name = name;
-		}
+        private StringCollection assemblies = new StringCollection();
 
-		public string Name
-		{
-			get { return name; }
-		}
+        public VSProjectConfig(string name)
+        {
+            this.name = name;
+        }
 
-		public StringCollection Assemblies
-		{
-			get { return assemblies; }
-		}
-	}
+        public string Name
+        {
+            get { return name; }
+        }
+
+        public StringCollection Assemblies
+        {
+            get { return assemblies; }
+        }
+    }
 }

@@ -22,15 +22,15 @@
 // ***********************************************************************
 
 using System;
-using System.Drawing;
 using System.ComponentModel;
-using System.Windows.Forms;
+using System.Drawing;
 using System.IO;
+using System.Windows.Forms;
 
 namespace TestCentric.Gui
 {
-    using Views;
     using Model;
+    using Views;
 
     public partial class TestPropertiesDialog : Form
     {
@@ -45,13 +45,13 @@ namespace TestCentric.Gui
         private Image unpinnedImage;
 
         public TestPropertiesDialog()
-		{
-			InitializeComponent();
+        {
+            InitializeComponent();
 
-			pinnedImage = new Bitmap(typeof(TestPropertiesDialog), "Images.pinned.gif");
+            pinnedImage = new Bitmap(typeof(TestPropertiesDialog), "Images.pinned.gif");
             unpinnedImage = new Bitmap(typeof(TestPropertiesDialog), "Images.unpinned.gif");
             pinButton.Image = unpinnedImage;
-		}
+        }
 
         #region Properties
 
@@ -68,9 +68,9 @@ namespace TestCentric.Gui
 
         public void DisplayProperties(TestSuiteTreeNode node)
         {
-			if (node == null)
-				throw new ArgumentNullException(nameof(node));
-			
+            if (node == null)
+                throw new ArgumentNullException(nameof(node));
+
             _treeNode = node;
             _testNode = node.Test;
             _resultNode = node.Result;
@@ -163,7 +163,7 @@ namespace TestCentric.Gui
             this.ClientSize = new Size(
                 this.ClientSize.Width, groupBox2.Bottom + 12);
 
-			Show();
+            Show();
         }
 
         private void FillPropertyList()
@@ -197,13 +197,13 @@ namespace TestCentric.Gui
         #region Event Handlers and Overrides
 
         private void TestPropertiesDialog_Load(object sender, System.EventArgs e)
-		{
+        {
             //pinnedImage = new Bitmap(typeof(TestPropertiesDialog), "Images.pinned.gif");
             //unpinnedImage = new Bitmap(typeof(TestPropertiesDialog), "Images.unpinned.gif");
             //pinButton.Image = unpinnedImage;
-            
-			//if (!this.DesignMode && _treeNode != null)
-				//DisplayProperties(_treeNode);
+
+            //if (!this.DesignMode && _treeNode != null)
+            //DisplayProperties(_treeNode);
         }
 
         private void pinButton_Click(object sender, System.EventArgs e)
@@ -220,7 +220,7 @@ namespace TestCentric.Gui
             {
                 if (_treeNode != null)
                     DisplayProperties(_treeNode);
-				
+
                 clientWidth = this.ClientSize.Width;
             }
         }
@@ -257,17 +257,17 @@ namespace TestCentric.Gui
         #region Helper Methods
 
         private void SetTitleBarText()
-		{
+        {
             string name = _testNode?.Name;
-			if (name == null)
-				Text = "Properties";
-			else
-			{
-				int index = name.LastIndexOfAny(new char[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar });
-				if (index >= 0)
-					name = name.Substring(index + 1);
-				Text = $"{_treeNode.TestType} Properties - {name}";
-			}
+            if (name == null)
+                Text = "Properties";
+            else
+            {
+                int index = name.LastIndexOfAny(new char[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar });
+                if (index >= 0)
+                    name = name.Substring(index + 1);
+                Text = $"{_treeNode.TestType} Properties - {name}";
+            }
         }
 
         private void BeginPanel()
@@ -279,7 +279,7 @@ namespace TestCentric.Gui
         private void SizeToFitText(Label label)
         {
             string text = label.Text;
-            if (text == "") 
+            if (text == "")
                 text = "Ay"; // Include descender to be sure of size
 
             Graphics g = Graphics.FromHwnd(label.Handle);
@@ -330,7 +330,7 @@ namespace TestCentric.Gui
                 }
             }
 
-        getout:
+            getout:
             return start == 0 ? s : s.Substring(start);
         }
 

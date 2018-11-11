@@ -21,16 +21,11 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
-using System.Windows.Forms;
 using NUnit.ProjectEditor.ViewElements;
 
 namespace NUnit.ProjectEditor
 {
-	/// <summary>
+    /// <summary>
     /// Displays a dialog for creation of a new configuration.
     /// The dialog collects and validates the name and the
     /// name of a configuration to be copied and then adds the
@@ -39,32 +34,32 @@ namespace NUnit.ProjectEditor
     /// A DialogResult of DialogResult.OK indicates that the
     /// configuration was added successfully.
     /// </summary>
-	public partial class AddConfigurationDialog : System.Windows.Forms.Form, IAddConfigurationDialog
-	{
+    public partial class AddConfigurationDialog : System.Windows.Forms.Form, IAddConfigurationDialog
+    {
         private static readonly string NONE_SELECTED = "<none>";
 
-		#region Constructor
+        #region Constructor
 
-		public AddConfigurationDialog()
-		{ 
-			InitializeComponent();
+        public AddConfigurationDialog()
+        {
+            InitializeComponent();
 
             okButtonWrapper = new ButtonElement(okButton);
         }
 
-		#endregion
+        #endregion
 
-		#region Properties
+        #region Properties
 
         private MessageDisplay mbox = new MessageDisplay("Add Configuration");
         public IMessageDisplay MessageDisplay { get { return mbox; } }
 
         private string[] configList;
-        public string[] ConfigList 
+        public string[] ConfigList
         {
             get { return configList; }
-            set 
-            { 
+            set
+            {
                 configList = value;
 
                 configurationComboBox.Items.Clear();
@@ -73,22 +68,22 @@ namespace NUnit.ProjectEditor
 
                 foreach (string config in configList)
                     configurationComboBox.Items.Add(config);
-            } 
+            }
         }
 
-		public string ConfigToCreate 
+        public string ConfigToCreate
         {
             get { return configurationNameTextBox.Text; }
         }
 
-		public string ConfigToCopy 
+        public string ConfigToCopy
         {
-            get 
-            { 
+            get
+            {
                 string config = (string)configurationComboBox.SelectedItem;
                 return config == NONE_SELECTED ? null : config;
             }
-            set 
+            set
             {
                 string config = string.IsNullOrEmpty(value) ? NONE_SELECTED : value;
                 configurationComboBox.SelectedItem = config;
@@ -96,12 +91,12 @@ namespace NUnit.ProjectEditor
         }
 
         private ICommand okButtonWrapper;
-        public ICommand OkButton 
+        public ICommand OkButton
         {
             get { return okButtonWrapper; }
         }
 
-		#endregion
+        #endregion
     }
 
     public interface IAddConfigurationDialog : IDialog

@@ -51,7 +51,7 @@ namespace TestCentric.Gui
             Cursor.Current = Cursors.WaitCursor;
         }
 
-        public WaitCursor( Control control )
+        public WaitCursor(Control control)
         {
             this.control = control;
             this.cursor = control.Cursor;
@@ -60,7 +60,7 @@ namespace TestCentric.Gui
 
         public void Dispose()
         {
-            if ( control != null )
+            if (control != null)
                 control.Cursor = this.cursor;
             else
                 Cursor.Current = this.cursor;

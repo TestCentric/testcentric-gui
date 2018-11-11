@@ -22,11 +22,8 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
 using System.Drawing;
-using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace NUnit.UiException.Controls
 {
@@ -170,7 +167,7 @@ namespace NUnit.UiException.Controls
 
             base.OnPaint(e);
 
-            viewport = new Rectangle(-AutoScrollPosition.X, -AutoScrollPosition.Y, 
+            viewport = new Rectangle(-AutoScrollPosition.X, -AutoScrollPosition.Y,
                 ClientRectangle.Width, ClientRectangle.Height);
             _renderer.DrawToGraphics(_items, _selection, e.Graphics, viewport);
 
@@ -186,7 +183,7 @@ namespace NUnit.UiException.Controls
             base.OnMouseHover(e);
             Focus();
         }
-       
+
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
@@ -208,7 +205,7 @@ namespace NUnit.UiException.Controls
                 {
                     itemIndex = i;
                     break;
-                }            
+                }
 
             if (itemIndex != _hoveredIndex)
             {

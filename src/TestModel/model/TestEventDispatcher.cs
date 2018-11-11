@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -81,7 +81,7 @@ namespace TestCentric.Gui.Model
 
         #endregion
 
-       #region ITestEvents Implementation
+        #region ITestEvents Implementation
 
         // Test loading events
         public event TestFilesLoadingEventHandler TestsLoading;
@@ -157,7 +157,7 @@ namespace TestCentric.Gui.Model
                     break;
             }
         }
-        
+
         #endregion
 
         #region Helper Methods

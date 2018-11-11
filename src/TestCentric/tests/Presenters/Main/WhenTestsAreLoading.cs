@@ -21,22 +21,20 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using NUnit.Framework;
 using NSubstitute;
+using NUnit.Framework;
 
 namespace TestCentric.Gui.Presenters.Main
 {
-	using Model;
-
-	public class WhenTestsAreLoading : MainPresenterTestBase
-	{
-		[SetUp]
+    public class WhenTestsAreLoading : MainPresenterTestBase
+    {
+        [SetUp]
         public void SimulateTestsLoading()
-		{
-			ClearAllReceivedCalls();
+        {
+            ClearAllReceivedCalls();
 
-			FireTestsLoadingEvent(new[] { "test.dll" });
-		}
+            FireTestsLoadingEvent(new[] { "test.dll" });
+        }
 
 #if NYI // Add after implementation of project or package saving
         [TestCase("NewProjectCommand", false)]
@@ -44,7 +42,7 @@ namespace TestCentric.Gui.Presenters.Main
         [TestCase("SaveCommand", false)]
         [TestCase("SaveAsCommand", false)
 #endif
-        
+
         [TestCase("RunButton", false)]
         [TestCase("StopButton", false)]
         [TestCase("OpenCommand", false)]
@@ -59,12 +57,12 @@ namespace TestCentric.Gui.Presenters.Main
         [TestCase("RunFailedCommand", false)]
         [TestCase("StopRunCommand", false)]
         [TestCase("SaveResultsCommand", false)]
-		public void CheckCommandEnabled(string propName, bool enabled)
+        public void CheckCommandEnabled(string propName, bool enabled)
         {
             ViewElement(propName).Received().Enabled = enabled;
         }
 
- #if NYI
+#if NYI
 		[Test]
         public void View_Receives_FileNameOfSingleAssembly()
         {

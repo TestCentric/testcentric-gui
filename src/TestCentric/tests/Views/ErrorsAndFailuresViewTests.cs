@@ -21,7 +21,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
 using System.Windows.Forms;
 using NUnit.Framework;
 using NUnit.TestUtilities;
@@ -46,9 +45,9 @@ namespace TestCentric.Gui.Views
         [Test]
         public void ControlsExist()
         {
-            AssertControlExists( "detailList", typeof( ListBox ) );
-            AssertControlExists( "tabSplitter", typeof( Splitter ) );
-            AssertControlExists( "errorBrowser", typeof( NUnit.UiException.Controls.ErrorBrowser ) );
+            AssertControlExists("detailList", typeof(ListBox));
+            AssertControlExists("tabSplitter", typeof(Splitter));
+            AssertControlExists("errorBrowser", typeof(NUnit.UiException.Controls.ErrorBrowser));
         }
 
         //[Test]

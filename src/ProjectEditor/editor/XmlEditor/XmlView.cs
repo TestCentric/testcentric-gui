@@ -21,8 +21,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-using System.ComponentModel;
 using System.Windows.Forms;
 using NUnit.ProjectEditor.ViewElements;
 
@@ -57,7 +55,7 @@ namespace NUnit.ProjectEditor
         /// <summary>
         /// Gets or sets the XML text
         /// </summary>
-        public ITextElement Xml 
+        public ITextElement Xml
         {
             get { return xml; }
         }
@@ -97,7 +95,7 @@ namespace NUnit.ProjectEditor
             richTextBox1.Dock = DockStyle.Fill;
         }
 
-        public IMessageDisplay MessageDisplay 
+        public IMessageDisplay MessageDisplay
         {
             get { return messageDisplay; }
         }

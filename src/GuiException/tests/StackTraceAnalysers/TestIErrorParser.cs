@@ -22,9 +22,9 @@
 // ***********************************************************************
 
 using System;
-using NUnit.UiException.StackTraceAnalyzers;
 using NUnit.Framework;
 using NUnit.UiException.StackTraceAnalysers;
+using NUnit.UiException.StackTraceAnalyzers;
 
 namespace NUnit.UiException.Tests.StackTraceAnalyzers
 {
@@ -68,7 +68,8 @@ namespace NUnit.UiException.Tests.StackTraceAnalyzers
             {
                 hasRaisedException = false;
 
-                try {
+                try
+                {
                     item.TryParse(null, new RawError("test")); // throws exception
                 }
                 catch (Exception e)

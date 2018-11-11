@@ -22,10 +22,7 @@
 // ***********************************************************************
 
 #if NET_3_5 || NET_4_0 || NET_4_5
-using System;
-using System.Collections.Generic;
 using NSubstitute;
-using NUnit.Framework;
 
 namespace NUnit.ProjectEditor.Tests.Presenters
 {
@@ -55,7 +52,7 @@ namespace NUnit.ProjectEditor.Tests.Presenters
         [Test]
         public void ConfigurationName_OnLoad_OriginalNameIsSelected()
         {
-            dlg.ConfigurationName.Received().Select(0,5);
+            dlg.ConfigurationName.Received().Select(0, 5);
         }
 
         [Test]

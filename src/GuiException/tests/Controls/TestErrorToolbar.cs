@@ -23,11 +23,11 @@
 
 #if NET_3_5 || NET_4_0 || NET_4_5
 using System;
+using System.Drawing;
+using System.Windows.Forms;
 using NSubstitute;
 using NUnit.Framework;
 using NUnit.UiException.Controls;
-using System.Windows.Forms;
-using System.Drawing;
 
 namespace NUnit.UiException.Tests.Controls
 {
@@ -50,7 +50,7 @@ namespace NUnit.UiException.Tests.Controls
 
             _raw = Substitute.For<IErrorDisplay>();
             _raw.PluginItem.Returns(new ToolStripButton());
-            
+
             _browser = Substitute.For<IErrorDisplay>();
             _browser.PluginItem.Returns(new ToolStripButton());
 
@@ -93,20 +93,24 @@ namespace NUnit.UiException.Tests.Controls
         [Test]
         public void Cannot_Register_Null_Display()
         {
-            try {
+            try
+            {
                 _emptyToolbar.Register(null); // throws exception
                 Assert.Fail();
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 Assert.True(e.Message.Contains("display"));
             }
 
-            try {
-                _raw.PluginItem.Returns((ToolStripButton) null); 
+            try
+            {
+                _raw.PluginItem.Returns((ToolStripButton)null);
                 _emptyToolbar.Register(_raw); // throws exception
                 Assert.Fail();
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 Assert.True(e.Message.Contains("PluginItem"));
             }
 
@@ -134,7 +138,7 @@ namespace NUnit.UiException.Tests.Controls
             _filledToolbar.SelectedDisplay = null;
 
             // check ability to select raw display
-            
+
             _filledToolbar.SelectedDisplay = _raw;
             Assert.NotNull(_filledToolbar.SelectedDisplay);
             Assert.That(_filledToolbar.SelectedDisplay, Is.SameAs(_raw));
@@ -174,7 +178,7 @@ namespace NUnit.UiException.Tests.Controls
 
             // add part            
             _raw.PluginItem.Returns(rawView);
-            _raw.OptionItems.Returns((ToolStripItem[]) null);
+            _raw.OptionItems.Returns((ToolStripItem[])null);
             _emptyToolbar.Register(_raw);
             Assert.True(_emptyToolbar.Items.Contains(rawView));
 
@@ -192,7 +196,7 @@ namespace NUnit.UiException.Tests.Controls
             Assert.False(_emptyToolbar.Items.Contains(rawView));
             Assert.False(_emptyToolbar.Items.Contains(browserView));
             Assert.False(_emptyToolbar.Items.Contains(btns[0]));
-            
+
             return;
         }
 
@@ -240,7 +244,7 @@ namespace NUnit.UiException.Tests.Controls
             Assert.False(((ToolStripButton)code.PluginItem).Checked);
 
             return;
-        }        
+        }
     }
 }
 #endif

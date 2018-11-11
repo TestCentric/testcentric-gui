@@ -21,9 +21,8 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-using System.Windows.Forms;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
@@ -42,7 +41,7 @@ namespace TestCentric.Gui.Views
         /// must match the indices of the image list used
         /// </summary>
         public const int InitIndex = 0;
-        public const int SkippedIndex = 0; 
+        public const int SkippedIndex = 0;
         public const int FailureIndex = 1;
         public const int SuccessIndex = 2;
         public const int IgnoredIndex = 3;
@@ -56,7 +55,7 @@ namespace TestCentric.Gui.Views
         /// <summary>
         /// Construct a TestNode given a test
         /// </summary>
-        public TestSuiteTreeNode( TestNode test ) : base(test.Name)
+        public TestSuiteTreeNode(TestNode test) : base(test.Name)
         {
             Test = test;
             UpdateImageIndex();
@@ -118,7 +117,7 @@ namespace TestCentric.Gui.Views
         {
             get { return _included; }
             set
-            { 
+            {
                 _included = value;
                 this.ForeColor = _included ? SystemColors.WindowText : Color.LightBlue;
             }
@@ -267,10 +266,10 @@ namespace TestCentric.Gui.Views
             }
         }
 
-        internal void Accept(TestSuiteTreeNodeVisitor visitor) 
+        internal void Accept(TestSuiteTreeNodeVisitor visitor)
         {
             visitor.Visit(this);
-            foreach (TestSuiteTreeNode node in this.Nodes) 
+            foreach (TestSuiteTreeNode node in this.Nodes)
             {
                 node.Accept(visitor);
             }
@@ -279,7 +278,7 @@ namespace TestCentric.Gui.Views
         #endregion
     }
 
-    public abstract class TestSuiteTreeNodeVisitor 
+    public abstract class TestSuiteTreeNodeVisitor
     {
         public abstract void Visit(TestSuiteTreeNode node);
     }

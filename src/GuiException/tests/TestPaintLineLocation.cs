@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -47,7 +47,7 @@ namespace NUnit.UiException.Tests
             Assert.That(_line.Location, Is.EqualTo(new PointF(13, 42)));
 
             return;
-        }       
+        }
 
         //[Test]
         //[ExpectedException(typeof(ArgumentNullException),

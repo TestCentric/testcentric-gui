@@ -21,42 +21,40 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
 namespace NUnit.ProjectEditor
 {
-	public enum BinPathType
-	{
-		Auto,
-		Manual,
-		None
-	}
+    public enum BinPathType
+    {
+        Auto,
+        Manual,
+        None
+    }
 
-	public class ProjectConfig : IProjectConfig
-	{
-		#region Instance Variables
+    public class ProjectConfig : IProjectConfig
+    {
+        #region Instance Variables
 
         /// <summary>
         /// The XmlNode representing this config
         /// </summary>
         private XmlNode configNode;
-        
-		/// <summary>
-		/// IProject interface of containing doc
-		/// </summary>
-		private IProjectModel project;
+
+        /// <summary>
+        /// IProject interface of containing doc
+        /// </summary>
+        private IProjectModel project;
 
         /// <summary>
         /// List of the test assemblies in this config
         /// </summary>
         private AssemblyList assemblies;
 
-		#endregion
+        #endregion
 
-		#region Constructor
+        #region Constructor
 
         public ProjectConfig(IProjectModel project, XmlNode configNode)
         {
@@ -65,14 +63,14 @@ namespace NUnit.ProjectEditor
             this.assemblies = new AssemblyList(configNode);
         }
 
-		#endregion
+        #endregion
 
-		#region Properties
+        #region Properties
 
         public string Name
         {
             get { return GetAttribute("name"); }
-            set 
+            set
             {
                 bool itWasActive = Name == project.ActiveConfigName;
 
@@ -117,7 +115,7 @@ namespace NUnit.ProjectEditor
             {
                 string basePath = BasePath;
 
-                if (project == null) 
+                if (project == null)
                     return basePath;
 
                 if (basePath == null)
@@ -148,11 +146,11 @@ namespace NUnit.ProjectEditor
         /// </summary>
         public BinPathType BinPathType
         {
-            get 
-            { 
+            get
+            {
                 return XmlHelper.GetAttributeAsEnum(
-                    configNode, 
-                    "binpathtype", 
+                    configNode,
+                    "binpathtype",
                     PrivateBinPath == null
                         ? BinPathType.Auto
                         : BinPathType.Manual);
@@ -170,17 +168,17 @@ namespace NUnit.ProjectEditor
 
         public RuntimeFramework RuntimeFramework
         {
-            get 
+            get
             {
                 string runtime = GetAttribute("runtimeFramework");
-                return runtime == null 
-                    ? RuntimeFramework.AnyRuntime 
+                return runtime == null
+                    ? RuntimeFramework.AnyRuntime
                     : new RuntimeFramework(runtime);
             }
             set { SetAttribute("runtimeFramework", value); }
         }
 
-		#endregion
+        #endregion
 
         #region Helper Methods
 

@@ -69,14 +69,14 @@ namespace TestCentric.Gui.SettingsPages
         private void editorPathBrowseButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog dlg = new OpenFileDialog();
-            if ( Site != null ) dlg.Site = Site;
+            if (Site != null) dlg.Site = Site;
             dlg.Title = "Select Project Editor";
 
             dlg.Filter = "Executable Files (*.exe)|*.exe";
             dlg.FilterIndex = 1;
             dlg.FileName = "";
 
-            if ( dlg.ShowDialog() == DialogResult.OK ) 
+            if (dlg.ShowDialog() == DialogResult.OK)
                 editorPathTextBox.Text = dlg.FileName;
         }
 

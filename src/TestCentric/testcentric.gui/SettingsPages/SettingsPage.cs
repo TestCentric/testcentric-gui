@@ -55,28 +55,28 @@ namespace TestCentric.Gui
 
         // Constructor we use in creating page for a Tabbed
         // or TreeBased dialog.
-        public SettingsPage( string key) : this()
+        public SettingsPage(string key) : this()
         {
             _key = key;
             _title = key;
-            int dot = key.LastIndexOf( '.' );
-            if ( dot >= 0 ) _title = key.Substring(dot+1);
+            int dot = key.LastIndexOf('.');
+            if (dot >= 0) _title = key.Substring(dot + 1);
             _messageDisplay = new MessageDisplay("NUnit Settings");
         }
 
         /// <summary> 
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         #region Properties
@@ -138,9 +138,9 @@ namespace TestCentric.Gui
 
         protected override void OnLoad(EventArgs e)
         {
-            base.OnLoad (e);
+            base.OnLoad(e);
 
-            if ( !DesignMode )
+            if (!DesignMode)
             {
                 var dlg = ParentForm as SettingsDialogBase;
 

@@ -30,7 +30,6 @@ using NUnit.UiException.Controls;
 namespace TestCentric.Gui.Views
 {
     using Controls;
-    using Elements;
 
     /// <summary>
     /// Summary description for ErrorDisplay.
@@ -84,16 +83,16 @@ namespace TestCentric.Gui.Views
         /// <summary> 
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         #endregion
@@ -114,10 +113,10 @@ namespace TestCentric.Gui.Views
             this.detailListContextMenu = new System.Windows.Forms.ContextMenu();
             this.copyDetailMenuItem = new System.Windows.Forms.MenuItem();
             this.SuspendLayout();
-			// 
-			// detailList
-			// 
-			this.detailList.Dock = DockStyle.Top;
+            // 
+            // detailList
+            // 
+            this.detailList.Dock = DockStyle.Top;
             this.detailList.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
             this.detailList.Font = new Font(FontFamily.GenericMonospace, 8.0F);
             this.detailList.HorizontalScrollbar = true;
@@ -133,9 +132,9 @@ namespace TestCentric.Gui.Views
             this.detailList.MouseLeave += new System.EventHandler(this.detailList_MouseLeave);
             this.detailList.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.detailList_DrawItem);
             this.detailList.SelectedIndexChanged += new System.EventHandler(this.detailList_SelectedIndexChanged);
-			// 
-			// tabSplitter
-			// 
+            // 
+            // tabSplitter
+            // 
             this.tabSplitter.Dock = System.Windows.Forms.DockStyle.Top;
             this.tabSplitter.Location = new System.Drawing.Point(0, 251);
             this.tabSplitter.MinSize = 100;
@@ -143,7 +142,7 @@ namespace TestCentric.Gui.Views
             this.tabSplitter.Size = new System.Drawing.Size(496, 9);
             this.tabSplitter.TabIndex = 3;
             this.tabSplitter.TabStop = false;
-			this.tabSplitter.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.tabSplitter_SplitterMoved);
+            this.tabSplitter.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.tabSplitter_SplitterMoved);
             // 
             // errorBrowser
             // 
@@ -176,9 +175,9 @@ namespace TestCentric.Gui.Views
             // 
             // ErrorDisplay
             // 
-			this.Controls.Add(this.errorBrowser);
-			this.Controls.Add(this.tabSplitter);
-			this.Controls.Add(this.detailList);
+            this.Controls.Add(this.errorBrowser);
+            this.Controls.Add(this.tabSplitter);
+            this.Controls.Add(this.detailList);
             this.Name = "ErrorDisplay";
             this.Size = new System.Drawing.Size(496, 288);
             this.ResumeLayout(false);
@@ -322,13 +321,13 @@ namespace TestCentric.Gui.Views
 
         private void RefillDetailList()
         {
-            if ( this.detailList.Items.Count > 0 )
+            if (this.detailList.Items.Count > 0)
             {
                 this.detailList.BeginUpdate();
-                ArrayList copiedItems = new ArrayList( detailList.Items );
+                ArrayList copiedItems = new ArrayList(detailList.Items);
                 this.detailList.Items.Clear();
-                foreach( object item in copiedItems )
-                    this.detailList.Items.Add( item );
+                foreach (object item in copiedItems)
+                    this.detailList.Items.Add(item);
                 this.detailList.EndUpdate();
                 this.detailList.Invalidate();
             }
@@ -336,8 +335,8 @@ namespace TestCentric.Gui.Views
 
         private void copyDetailMenuItem_Click(object sender, System.EventArgs e)
         {
-            if ( detailList.SelectedItem != null )
-                Clipboard.SetDataObject( detailList.SelectedItem.ToString() );
+            if (detailList.SelectedItem != null)
+                Clipboard.SetDataObject(detailList.SelectedItem.ToString());
         }
 
         private void OnMouseHover(object sender, System.EventArgs e)
@@ -370,7 +369,7 @@ namespace TestCentric.Gui.Views
             }
         }
 
-        private void tipWindow_Closed( object sender, System.EventArgs e )
+        private void tipWindow_Closed(object sender, System.EventArgs e)
         {
             tipWindow = null;
             hoverIndex = -1;
@@ -387,20 +386,20 @@ namespace TestCentric.Gui.Views
         {
             ClearTimer();
 
-            hoverIndex = detailList.IndexFromPoint( e.X, e.Y );	
+            hoverIndex = detailList.IndexFromPoint(e.X, e.Y);
 
-            if ( hoverIndex >= 0 && hoverIndex < detailList.Items.Count )
+            if (hoverIndex >= 0 && hoverIndex < detailList.Items.Count)
             {
                 // Workaround problem of IndexFromPoint returning an
                 // index when mouse is over bottom part of list.
-                Rectangle r = detailList.GetItemRectangle( hoverIndex );
-                if ( e.Y > r.Bottom )
+                Rectangle r = detailList.GetItemRectangle(hoverIndex);
+                if (e.Y > r.Bottom)
                     hoverIndex = -1;
                 else
                 {
                     hoverTimer = new System.Windows.Forms.Timer();
                     hoverTimer.Interval = 800;
-                    hoverTimer.Tick += new EventHandler( OnMouseHover );
+                    hoverTimer.Tick += new EventHandler(OnMouseHover);
                     hoverTimer.Start();
                 }
             }
@@ -408,14 +407,14 @@ namespace TestCentric.Gui.Views
 
         private void ClearTimer()
         {
-            if ( hoverTimer != null )
+            if (hoverTimer != null)
             {
                 hoverTimer.Stop();
                 hoverTimer.Dispose();
             }
         }
 
-        private void tabSplitter_SplitterMoved( object sender, SplitterEventArgs e )
+        private void tabSplitter_SplitterMoved(object sender, SplitterEventArgs e)
         {
             SplitterPositionChanged?.Invoke(this, new EventArgs());
         }

@@ -22,9 +22,6 @@
 // ***********************************************************************
 
 #if NET_3_5 || NET_4_0 || NET_4_5
-using System;
-using System.Collections.Generic;
-using NUnit.ProjectEditor.ViewElements;
 
 namespace NUnit.ProjectEditor.Tests
 {
@@ -44,8 +41,8 @@ namespace NUnit.ProjectEditor.Tests
         public string Text
         {
             get { return text; }
-            set 
-            { 
+            set
+            {
                 text = value;
 
                 int index = IndexOf(text);
@@ -79,7 +76,7 @@ namespace NUnit.ProjectEditor.Tests
             set
             {
                 int index = IndexOf(value);
-                
+
                 if (index >= 0)
                 {
                     text = value;
@@ -97,7 +94,7 @@ namespace NUnit.ProjectEditor.Tests
         /// <summary>
         /// Gets or sets the contents of the selection list
         /// </summary>
-        public string[] SelectionList 
+        public string[] SelectionList
         {
             get { return selectionList; }
             set
@@ -120,15 +117,15 @@ namespace NUnit.ProjectEditor.Tests
         public int SelectedIndex
         {
             get { return selectedIndex; }
-            set 
-            { 
+            set
+            {
                 selectedIndex = value < 0 || value >= SelectionList.Length ? -1 : value;
 
                 if (SelectionChanged != null)
                     SelectionChanged();
             }
         }
-        
+
 
         /// <summary>
         /// Event raised when the selection is changed by the user

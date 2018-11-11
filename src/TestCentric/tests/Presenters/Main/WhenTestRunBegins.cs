@@ -26,19 +26,17 @@ using NUnit.Framework;
 
 namespace TestCentric.Gui.Presenters.Main
 {
-	using Model;
+    public class WhenTestRunBegins : MainPresenterTestBase
+    {
+        [SetUp]
+        protected void SimulateTestRunStarting()
+        {
+            ClearAllReceivedCalls();
 
-	public class WhenTestRunBegins : MainPresenterTestBase
-	{
-		[SetUp]
-		protected void SimulateTestRunStarting()
-		{
-			ClearAllReceivedCalls();
-
-			_model.HasTests.Returns(true);
-			_model.IsTestRunning.Returns(true);
-			FireRunStartingEvent(1234);
-		}
+            _model.HasTests.Returns(true);
+            _model.IsTestRunning.Returns(true);
+            FireRunStartingEvent(1234);
+        }
 
 #if NYI // Add after implementation of project or package saving
         [TestCase("NewProjectCommand", false)]
@@ -46,7 +44,7 @@ namespace TestCentric.Gui.Presenters.Main
         [TestCase("SaveCommand", false)]
         [TestCase("SaveAsCommand", false)
 #endif
-        
+
         [TestCase("RunButton", false)]
         [TestCase("StopButton", true)]
         [TestCase("OpenCommand", false)]

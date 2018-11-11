@@ -22,8 +22,8 @@
 // ***********************************************************************
 
 using NUnit.Framework;
-using NUnit.UiException.StackTraceAnalyzers;
 using NUnit.UiException.StackTraceAnalysers;
+using NUnit.UiException.StackTraceAnalyzers;
 
 namespace NUnit.UiException.Tests.StackTraceAnalyzers
 {
@@ -90,6 +90,6 @@ namespace NUnit.UiException.Tests.StackTraceAnalyzers
             RejectValue(_parser, "à get_Text() dans C:\\folder\\file1:line -42");
 
             return;
-        }        
+        }
     }
 }

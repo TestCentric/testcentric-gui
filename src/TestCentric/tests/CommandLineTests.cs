@@ -32,21 +32,21 @@ namespace TestCentric.Gui.Tests
         [Test]
         public void NoParametersCount()
         {
-            var options = new CommandLineOptions(new string[] {});
+            var options = new CommandLineOptions(new string[] { });
             Assert.IsTrue(options.InputFiles.Count == 0);
         }
 
         [Test]
         public void Help()
         {
-            var options = new CommandLineOptions(new string[] {"-help"});
+            var options = new CommandLineOptions(new string[] { "-help" });
             Assert.IsTrue(options.ShowHelp);
         }
 
         [Test]
         public void ShortHelp()
         {
-            var options = new CommandLineOptions(new string[] {"-h"});
+            var options = new CommandLineOptions(new string[] { "-h" });
             Assert.IsTrue(options.ShowHelp);
         }
 
@@ -54,7 +54,7 @@ namespace TestCentric.Gui.Tests
         public void AssemblyName()
         {
             string assemblyName = "nunit.tests.dll";
-            var options = new CommandLineOptions(new string[]{ assemblyName });
+            var options = new CommandLineOptions(new string[] { assemblyName });
             Assert.AreEqual(assemblyName, options.InputFiles[0]);
         }
 
@@ -73,10 +73,10 @@ namespace TestCentric.Gui.Tests
         }
 
 
-        [Test] 
+        [Test]
         public void InvalidCommandLineParms()
         {
-            var parser = new CommandLineOptions(new String[]{"-garbage:TestFixture", "-assembly:Tests.dll"});
+            var parser = new CommandLineOptions(new String[] { "-garbage:TestFixture", "-assembly:Tests.dll" });
             Assert.IsFalse(parser.Validate());
         }
 

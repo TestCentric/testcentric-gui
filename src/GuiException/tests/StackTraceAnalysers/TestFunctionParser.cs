@@ -22,8 +22,8 @@
 // ***********************************************************************
 
 using NUnit.Framework;
-using NUnit.UiException.StackTraceAnalyzers;
 using NUnit.UiException.StackTraceAnalysers;
+using NUnit.UiException.StackTraceAnalyzers;
 
 namespace NUnit.UiException.Tests.StackTraceAnalyzers
 {
@@ -67,7 +67,7 @@ namespace NUnit.UiException.Tests.StackTraceAnalyzers
             // opening parenthesis.
             RejectValue(_parser, "get_Text()");
 
-            return;            
+            return;
         }
 
         [Test]

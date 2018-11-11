@@ -38,12 +38,12 @@ namespace TestCentric.Gui
 
         private SettingsPage current;
 
-        public static void Display( TestCentricPresenter presenter, ITestModel model, params SettingsPage[] pages )
+        public static void Display(TestCentricPresenter presenter, ITestModel model, params SettingsPage[] pages)
         {
-            using( TreeBasedSettingsDialog dialog = new TreeBasedSettingsDialog(presenter, model) )
+            using (TreeBasedSettingsDialog dialog = new TreeBasedSettingsDialog(presenter, model))
             {
                 dialog.Font = model.Services.UserSettings.Gui.Font;
-                dialog.SettingsPages.AddRange( pages ); 
+                dialog.SettingsPages.AddRange(pages);
                 dialog.ShowDialog();
             }
         }
@@ -59,16 +59,16 @@ namespace TestCentric.Gui
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if (components != null) 
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         #region Designer generated code
@@ -151,10 +151,10 @@ namespace TestCentric.Gui
 
         private void TreeBasedSettingsDialog_Load(object sender, System.EventArgs e)
         {
-            foreach( SettingsPage page in SettingsPages )
-                AddBranchToTree( treeView1.Nodes, page.Key );
+            foreach (SettingsPage page in SettingsPages)
+                AddBranchToTree(treeView1.Nodes, page.Key);
 
-            if ( treeView1.VisibleCount >= treeView1.GetNodeCount( true ) )
+            if (treeView1.VisibleCount >= treeView1.GetNodeCount(true))
                 treeView1.ExpandAll();
 
             SelectInitialPage();
@@ -204,7 +204,7 @@ namespace TestCentric.Gui
 
         private void SelectFirstPage(TreeNodeCollection nodes)
         {
-            if ( nodes[0].Nodes.Count == 0 )
+            if (nodes[0].Nodes.Count == 0)
                 treeView1.SelectedNode = nodes[0];
             else
             {
@@ -213,32 +213,32 @@ namespace TestCentric.Gui
             }
         }
 
-        private void AddBranchToTree( TreeNodeCollection nodes, string key )
+        private void AddBranchToTree(TreeNodeCollection nodes, string key)
         {
-            int dot = key.IndexOf( '.' );
-            if ( dot < 0 )
+            int dot = key.IndexOf('.');
+            if (dot < 0)
             {
-                nodes.Add( new TreeNode( key, 2, 2 ) );
+                nodes.Add(new TreeNode(key, 2, 2));
                 return;
             }
 
-            string name = key.Substring( 0, dot );
-            key = key.Substring(dot+1);
+            string name = key.Substring(0, dot);
+            key = key.Substring(dot + 1);
 
-            TreeNode node = FindOrAddNode( nodes, name );
-            
-            if ( key != null )
-                AddBranchToTree( node.Nodes, key );
+            TreeNode node = FindOrAddNode(nodes, name);
+
+            if (key != null)
+                AddBranchToTree(node.Nodes, key);
         }
 
-        private TreeNode FindOrAddNode( TreeNodeCollection nodes, string name )
+        private TreeNode FindOrAddNode(TreeNodeCollection nodes, string name)
         {
-            foreach( TreeNode node in nodes )
-                if ( node.Text == name )
+            foreach (TreeNode node in nodes)
+                if (node.Text == name)
                     return node;
 
             TreeNode newNode = new TreeNode(name, 0, 0);
-            nodes.Add( newNode );
+            nodes.Add(newNode);
             return newNode;
         }
 
@@ -248,10 +248,10 @@ namespace TestCentric.Gui
             SettingsPage page = SettingsPages[key];
             Settings.Gui.InitialSettingsPage = key;
 
-            if ( page != null && page != current )
+            if (page != null && page != current)
             {
                 panel1.Controls.Clear();
-                panel1.Controls.Add( page );
+                panel1.Controls.Add(page);
                 page.Dock = DockStyle.Fill;
                 current = page;
                 return;

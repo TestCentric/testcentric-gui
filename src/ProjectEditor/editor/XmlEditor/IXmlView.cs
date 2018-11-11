@@ -21,7 +21,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
 using NUnit.ProjectEditor.ViewElements;
 
 namespace NUnit.ProjectEditor
@@ -60,6 +59,6 @@ namespace NUnit.ProjectEditor
         /// </summary>
         void RemoveError();
 
-        
+
     }
 }

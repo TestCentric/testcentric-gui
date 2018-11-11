@@ -35,7 +35,7 @@ namespace NUnit.TestUtilities
     {
         public FormTester() { }
 
-        public FormTester( Form form ) : base( form ) { }
+        public FormTester(Form form) : base(form) { }
 
         public Form Form
         {
@@ -51,7 +51,7 @@ namespace NUnit.TestUtilities
     {
         public ControlTester() { }
 
-        public ControlTester( Control control )
+        public ControlTester(Control control)
         {
             this.control = control;
         }
@@ -76,7 +76,7 @@ namespace NUnit.TestUtilities
         {
             get { return control; }
             set
-            { 
+            {
                 control = value;
                 InitCollections();
             }
@@ -84,8 +84,8 @@ namespace NUnit.TestUtilities
 
         private void InitCollections()
         {
-            controls = new ControlCollection( control.Controls );
-            
+            controls = new ControlCollection(control.Controls);
+
             // These will be initialized as needed
             buttons = null;
             labels = null;
@@ -106,10 +106,10 @@ namespace NUnit.TestUtilities
         /// </summary>
         public ButtonCollection Buttons
         {
-            get 
-            { 
-                if ( buttons == null )
-                    buttons = new ButtonCollection( control.Controls );
+            get
+            {
+                if (buttons == null)
+                    buttons = new ButtonCollection(control.Controls);
 
                 return buttons;
             }
@@ -120,10 +120,10 @@ namespace NUnit.TestUtilities
         /// </summary>
         public LabelCollection Labels
         {
-            get 
+            get
             {
-                if (labels == null )
-                    labels = new LabelCollection( control.Controls );
+                if (labels == null)
+                    labels = new LabelCollection(control.Controls);
 
                 return labels;
             }
@@ -134,10 +134,10 @@ namespace NUnit.TestUtilities
         /// </summary>
         public TextBoxCollection TextBoxes
         {
-            get 
+            get
             {
-                if ( textboxes == null )
-                    textboxes = new TextBoxCollection( control.Controls );
+                if (textboxes == null)
+                    textboxes = new TextBoxCollection(control.Controls);
 
                 return textboxes;
             }
@@ -150,8 +150,8 @@ namespace NUnit.TestUtilities
         {
             get
             {
-                if ( combos == null )
-                    combos = new ComboBoxCollection( control.Controls );
+                if (combos == null)
+                    combos = new ComboBoxCollection(control.Controls);
 
                 return combos;
             }
@@ -163,43 +163,43 @@ namespace NUnit.TestUtilities
         /// Assert that a control with a given name exists on this control.
         /// </summary>
         /// <param name="name">The name of the control.</param>
-        public void AssertControlExists( string targetName )
+        public void AssertControlExists(string targetName)
         {
-            AssertControlExists( targetName, null );
+            AssertControlExists(targetName, null);
         }
-            
-        public void AssertControlExists( string expectedName, Type expectedType )
+
+        public void AssertControlExists(string expectedName, Type expectedType)
         {
             bool gotName = false;
             System.Type gotType = null;
-            foreach( Control ctl in control.Controls ) 
+            foreach (Control ctl in control.Controls)
             {
-                if ( ctl.Name == expectedName )
+                if (ctl.Name == expectedName)
                 {
                     gotName = true;
-                    if ( expectedType == null )
+                    if (expectedType == null)
                         return;
                     gotType = ctl.GetType();
-                    if ( expectedType.IsAssignableFrom( gotType ) )
+                    if (expectedType.IsAssignableFrom(gotType))
                         return;
                 }
             }
 
-            if ( gotName )
-                Assert.Fail( "Expected control {0} to be a {1} but was {2}", expectedName, expectedType.Name, gotType.Name );
+            if (gotName)
+                Assert.Fail("Expected control {0} to be a {1} but was {2}", expectedName, expectedType.Name, gotType.Name);
             else
-                Assert.Fail( "{0} does not contain {1} control", control.Name, expectedName );
+                Assert.Fail("{0} does not contain {1} control", control.Name, expectedName);
         }
 
-        public void AssertControlsAreStackedVertically( params string[] names )
+        public void AssertControlsAreStackedVertically(params string[] names)
         {
             string prior = null;
-            foreach( string current in names )
+            foreach (string current in names)
             {
-                if ( prior != null )
+                if (prior != null)
                 {
-                    if ( Controls[prior].Bottom > Controls[current].Top )
-                        Assert.Fail( "The {0} control should be above the {1} control", prior, current );
+                    if (Controls[prior].Bottom > Controls[current].Top)
+                        Assert.Fail("The {0} control should be above the {1} control", prior, current);
                 }
                 prior = current;
             }
@@ -207,9 +207,9 @@ namespace NUnit.TestUtilities
         #endregion
 
         #region Other public methods
-        public string GetText( string name )
+        public string GetText(string name)
         {
-            return Controls[ name ].Text;
+            return Controls[name].Text;
         }
         #endregion
 
@@ -221,7 +221,7 @@ namespace NUnit.TestUtilities
             IEnumerator sourceEnum;
             System.Type typeFilter;
 
-            public ControlEnumerator( Control.ControlCollection source, System.Type typeFilter )
+            public ControlEnumerator(Control.ControlCollection source, System.Type typeFilter)
             {
                 this.sourceEnum = source.GetEnumerator();
                 this.typeFilter = typeFilter;
@@ -241,9 +241,9 @@ namespace NUnit.TestUtilities
 
             public bool MoveNext()
             {
-                while( sourceEnum.MoveNext() )
+                while (sourceEnum.MoveNext())
                 {
-                    if ( typeFilter == null || typeFilter.IsAssignableFrom( Current.GetType() ) )
+                    if (typeFilter == null || typeFilter.IsAssignableFrom(Current.GetType()))
                         return true;
                 }
 
@@ -260,10 +260,10 @@ namespace NUnit.TestUtilities
             protected Control.ControlCollection source;
             private System.Type typeFilter;
 
-            public ControlCollection( Control.ControlCollection source )
-                : this( source, null ) { }
+            public ControlCollection(Control.ControlCollection source)
+                : this(source, null) { }
 
-            public ControlCollection( Control.ControlCollection source, System.Type typeFilter )
+            public ControlCollection(Control.ControlCollection source, System.Type typeFilter)
             {
                 this.source = source;
                 this.typeFilter = typeFilter;
@@ -271,11 +271,11 @@ namespace NUnit.TestUtilities
 
             public Control this[string name]
             {
-                get 
+                get
                 {
-                    foreach( Control control in this )
+                    foreach (Control control in this)
                     {
-                        if ( control.Name == name )
+                        if (control.Name == name)
                             return control;
                     }
 
@@ -287,9 +287,9 @@ namespace NUnit.TestUtilities
 
             public IEnumerator GetEnumerator()
             {
-                return new ControlEnumerator( this.source, this.typeFilter );
+                return new ControlEnumerator(this.source, this.typeFilter);
             }
-                    
+
             #endregion
         }
         #endregion
@@ -297,8 +297,8 @@ namespace NUnit.TestUtilities
         #region ButtonCollection
         public class ButtonCollection : ControlCollection
         {
-            public ButtonCollection( Control.ControlCollection controls )
-                : base( controls, typeof( Button ) ) { }
+            public ButtonCollection(Control.ControlCollection controls)
+                : base(controls, typeof(Button)) { }
 
             public new Button this[string name]
             {
@@ -310,8 +310,8 @@ namespace NUnit.TestUtilities
         #region LabelCollection
         public class LabelCollection : ControlCollection
         {
-            public LabelCollection( Control.ControlCollection controls )
-                : base( controls, typeof( Label ) ) { }
+            public LabelCollection(Control.ControlCollection controls)
+                : base(controls, typeof(Label)) { }
 
             public new Label this[string name]
             {
@@ -323,8 +323,8 @@ namespace NUnit.TestUtilities
         #region TextBoxCollection
         public class TextBoxCollection : ControlCollection
         {
-            public TextBoxCollection( Control.ControlCollection controls )
-                : base( controls, typeof( TextBox ) ) { }
+            public TextBoxCollection(Control.ControlCollection controls)
+                : base(controls, typeof(TextBox)) { }
 
             public new TextBox this[string name]
             {
@@ -336,8 +336,8 @@ namespace NUnit.TestUtilities
         #region ComboBoxCollection
         public class ComboBoxCollection : ControlCollection
         {
-            public ComboBoxCollection( Control.ControlCollection controls )
-                : base( controls, typeof( ComboBox ) ) { }
+            public ComboBoxCollection(Control.ControlCollection controls)
+                : base(controls, typeof(ComboBox)) { }
 
             public new ComboBox this[string name]
             {

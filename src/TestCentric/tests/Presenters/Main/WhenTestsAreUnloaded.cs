@@ -26,19 +26,17 @@ using NUnit.Framework;
 
 namespace TestCentric.Gui.Presenters.Main
 {
-	using Model;
+    public class WhenTestsAreUnloaded : MainPresenterTestBase
+    {
+        [SetUp]
+        public void SimulateTestUnload()
+        {
+            ClearAllReceivedCalls();
 
-	public class WhenTestsAreUnloaded : MainPresenterTestBase
-	{
-		[SetUp]
-		public void SimulateTestUnload()
-		{
-			ClearAllReceivedCalls();
-
-			_model.HasTests.Returns(false);
-			_model.IsTestRunning.Returns(false);
-			FireTestUnloadedEvent();
-		}
+            _model.HasTests.Returns(false);
+            _model.IsTestRunning.Returns(false);
+            FireTestUnloadedEvent();
+        }
 
 #if NYI // Add after implementation of project or package saving
         [TestCase("NewProjectCommand", true)]

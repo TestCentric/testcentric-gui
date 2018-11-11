@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -21,16 +21,13 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System.Collections.Generic;
-using System.IO;
-using NUnit.Engine;
-using NUnit.Framework;
 using NSubstitute;
+using NUnit.Framework;
 
 namespace TestCentric.Gui.Presenters.Main
 {
+    using Elements;
     using Views;
-	using Elements;
 
     public class CommandTests : MainPresenterTestBase
     {
@@ -66,10 +63,10 @@ namespace TestCentric.Gui.Presenters.Main
         [Test]
         public void CloseCommand_CallsUnloadTest()
         {
-			_view.CloseCommand.Execute += Raise.Event<CommandHandler>();
+            _view.CloseCommand.Execute += Raise.Event<CommandHandler>();
             _model.Received().UnloadTests();
-		}
-        
+        }
+
         //[Test]
         //public void SaveCommand_CallsSaveProject()
         //{
@@ -93,9 +90,9 @@ namespace TestCentric.Gui.Presenters.Main
         [Test]
         public void ReloadTestsCommand_CallsReloadTests()
         {
-			_view.ReloadTestsCommand.Execute += Raise.Event<CommandHandler>();
+            _view.ReloadTestsCommand.Execute += Raise.Event<CommandHandler>();
             _model.Received().ReloadTests();
-		}
+        }
 
         public void SelectRuntimeCommand_PopsUpMenu()
         {

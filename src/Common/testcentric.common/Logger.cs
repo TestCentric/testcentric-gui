@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -45,7 +45,7 @@ namespace TestCentric.Gui
         #endregion
 
         #region Error
-        
+
         public void Error(string message)
         {
             Log(InternalTraceLevel.Error, message);
@@ -109,7 +109,7 @@ namespace TestCentric.Gui
         private void Log(InternalTraceLevel level, string format, params object[] args)
         {
             if (InternalTrace.Level >= level)
-                Log(level, string.Format( format, args ) );
+                Log(level, string.Format(format, args));
         }
 
         public void Log(string message, Exception ex)

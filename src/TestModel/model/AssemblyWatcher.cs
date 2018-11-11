@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2002-2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -28,7 +28,7 @@ using System.Timers;
 
 namespace TestCentric.Gui.Model
 {
-    public class AssemblyWatcher:IAsemblyWatcher
+    public class AssemblyWatcher : IAsemblyWatcher
     {
         private FileSystemWatcher[] fileWatchers;
         private FileInfo[] files;

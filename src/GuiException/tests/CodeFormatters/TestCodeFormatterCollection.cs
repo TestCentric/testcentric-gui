@@ -21,7 +21,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using NUnit.UiException.CodeFormatters;
@@ -54,19 +53,19 @@ namespace NUnit.UiException.Tests.CodeFormatters
         public void Test_Default()
         {
             List<string> extensions;
-//            ErrorItem errorCS;
-//            ErrorItem errorCS_Upper;
-//            ErrorItem errorTxt;
+            //            ErrorItem errorCS;
+            //            ErrorItem errorCS_Upper;
+            //            ErrorItem errorTxt;
 
-//            errorCS = new ErrorItem("C:\\dir\\file.cs", 1);
-//            errorCS_Upper = new ErrorItem("C:\\dir\\file.CS", 1);
-//            errorTxt = new ErrorItem("C:\\dir\\file.txt", 1);
+            //            errorCS = new ErrorItem("C:\\dir\\file.cs", 1);
+            //            errorCS_Upper = new ErrorItem("C:\\dir\\file.CS", 1);
+            //            errorTxt = new ErrorItem("C:\\dir\\file.txt", 1);
 
             Assert.That(_empty.Count, Is.EqualTo(0));
             Assert.That(_empty.HasExtension("cs"), Is.False);
             Assert.That(_empty.HasLanguage("C#"), Is.False);
-            Assert.That(_empty, Is.EquivalentTo(new List<string>()));                
-                
+            Assert.That(_empty, Is.EquivalentTo(new List<string>()));
+
             Assert.That(_filled.Count, Is.EqualTo(2));
 
             Assert.That(_filled["C#"], Is.EqualTo(_csFormatter));
@@ -83,87 +82,87 @@ namespace NUnit.UiException.Tests.CodeFormatters
             return;
         }
 
-    //    [Test]
-    //    [ExpectedException(typeof(ArgumentNullException),
-    //        ExpectedMessage = "formatter",
-    //        MatchType = MessageMatch.Contains)]
-    //    public void Register_Can_Throw_NullFormatterException()
-    //    {
-    //        _empty.Register(null, "cs"); // throws exception
-    //    }
+        //    [Test]
+        //    [ExpectedException(typeof(ArgumentNullException),
+        //        ExpectedMessage = "formatter",
+        //        MatchType = MessageMatch.Contains)]
+        //    public void Register_Can_Throw_NullFormatterException()
+        //    {
+        //        _empty.Register(null, "cs"); // throws exception
+        //    }
 
-    //    [Test]
-    //    [ExpectedException(typeof(ArgumentNullException),
-    //        ExpectedMessage = "language",
-    //        MatchType = MessageMatch.Contains)]
-    //    public void Register_Can_Throw_NullExtensionException()
-    //    {
-    //        _empty.Register(_csFormatter, null); // throws exception
-    //    }
+        //    [Test]
+        //    [ExpectedException(typeof(ArgumentNullException),
+        //        ExpectedMessage = "language",
+        //        MatchType = MessageMatch.Contains)]
+        //    public void Register_Can_Throw_NullExtensionException()
+        //    {
+        //        _empty.Register(_csFormatter, null); // throws exception
+        //    }
 
-    //    [Test]
-    //    [ExpectedException(typeof(ArgumentException),
-    //        ExpectedMessage = "language cannot be empty",
-    //        MatchType = MessageMatch.Contains)]
-    //    public void Register_Check_Extension_Is_Not_Empty()
-    //    {
-    //        _empty.Register(_csFormatter, ""); // throws exception
-    //    }
+        //    [Test]
+        //    [ExpectedException(typeof(ArgumentException),
+        //        ExpectedMessage = "language cannot be empty",
+        //        MatchType = MessageMatch.Contains)]
+        //    public void Register_Check_Extension_Is_Not_Empty()
+        //    {
+        //        _empty.Register(_csFormatter, ""); // throws exception
+        //    }
 
-    //    [Test]
-    //    [ExpectedException(typeof(ArgumentException),
-    //        ExpectedMessage = "language cannot contain '.'",
-    //        MatchType = MessageMatch.Contains)]
-    //    public void Register_Check_Extension_Not_Contain_Dot_Character()
-    //    {
-    //        _empty.Register(_csFormatter, ".cs"); // throws exception
-    //    }
+        //    [Test]
+        //    [ExpectedException(typeof(ArgumentException),
+        //        ExpectedMessage = "language cannot contain '.'",
+        //        MatchType = MessageMatch.Contains)]
+        //    public void Register_Check_Extension_Not_Contain_Dot_Character()
+        //    {
+        //        _empty.Register(_csFormatter, ".cs"); // throws exception
+        //    }
 
-    //    [Test]
-    //    [ExpectedException(typeof(ArgumentException),
-    //        ExpectedMessage = "language 'cs' has already an handler. Remove handler first.",
-    //        MatchType = MessageMatch.Contains)]
-    //    public void Register_Check_Multiple_Extension_Definition()
-    //    {
-    //        _empty.Register(_csFormatter, "cs"); // OK
-    //        _empty.Register(_defaultFormatter, "cs"); // throws exception
-    //    }
+        //    [Test]
+        //    [ExpectedException(typeof(ArgumentException),
+        //        ExpectedMessage = "language 'cs' has already an handler. Remove handler first.",
+        //        MatchType = MessageMatch.Contains)]
+        //    public void Register_Check_Multiple_Extension_Definition()
+        //    {
+        //        _empty.Register(_csFormatter, "cs"); // OK
+        //        _empty.Register(_defaultFormatter, "cs"); // throws exception
+        //    }
 
-    //    [Test]
-    //    [ExpectedException(typeof(ArgumentException),
-    //        ExpectedMessage = "language 'cs' has already an handler. Remove handler first.",
-    //        MatchType = MessageMatch.Contains)]
-    //    public void Register_Check_Extension_Case()
-    //    {
-    //        _empty.Register(_csFormatter, "cs"); // OK
-    //        _empty.Register(_csFormatter, "CS"); // throws exception
-    //    }
+        //    [Test]
+        //    [ExpectedException(typeof(ArgumentException),
+        //        ExpectedMessage = "language 'cs' has already an handler. Remove handler first.",
+        //        MatchType = MessageMatch.Contains)]
+        //    public void Register_Check_Extension_Case()
+        //    {
+        //        _empty.Register(_csFormatter, "cs"); // OK
+        //        _empty.Register(_csFormatter, "CS"); // throws exception
+        //    }
 
-    //    [Test]
-    //    [ExpectedException(typeof(ArgumentNullException))]
-    //    public void StringIndexer_Can_Throw_NullExtensionException()
-    //    {
-    //        if (_empty[(string)null] == null) // throws exception
-                //return;
-    //    }
+        //    [Test]
+        //    [ExpectedException(typeof(ArgumentNullException))]
+        //    public void StringIndexer_Can_Throw_NullExtensionException()
+        //    {
+        //        if (_empty[(string)null] == null) // throws exception
+        //return;
+        //    }
 
-    //    [Test]
-    //    [ExpectedException(typeof(ArgumentNullException))]
-    //    public void ItemIndexer_Can_Throw_NullExtensionException()
-    //    {
-    //        if (_empty[null] == null) // throws exception
-                //return;
-    //    }
+        //    [Test]
+        //    [ExpectedException(typeof(ArgumentNullException))]
+        //    public void ItemIndexer_Can_Throw_NullExtensionException()
+        //    {
+        //        if (_empty[null] == null) // throws exception
+        //return;
+        //    }
 
-    //    [Test]
-    //    [ExpectedException(typeof(ArgumentException),
-    //        ExpectedMessage = "unknown language: 'unk'",
-    //        MatchType = MessageMatch.Contains)]
-    //    public void Indexer_Can_Throw_UnknownExtensionException()
-    //    {
-    //        if (_empty["unk"] == null) // throws exception
-                //return;
-    //    }
+        //    [Test]
+        //    [ExpectedException(typeof(ArgumentException),
+        //        ExpectedMessage = "unknown language: 'unk'",
+        //        MatchType = MessageMatch.Contains)]
+        //    public void Indexer_Can_Throw_UnknownExtensionException()
+        //    {
+        //        if (_empty["unk"] == null) // throws exception
+        //return;
+        //    }
 
         [Test]
         public void Remove()
