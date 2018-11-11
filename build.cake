@@ -11,7 +11,7 @@ var configuration = Argument("configuration", "Release");
 //////////////////////////////////////////////////////////////////////
 
 var version = "1.0";
-var modifier = "-alpha1";
+var modifier = "-alpha2";
 var dbgSuffix = configuration == "Debug" ? "-dbg" : "";
 
 //////////////////////////////////////////////////////////////////////

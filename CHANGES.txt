@@ -1,4 +1,32 @@
-﻿TestCentric Runner for NUnit 1.0.0-Alpha1 - August 3, 2018
+﻿TestCentric Runner for NUnit 1.0.0-Alpha2 - November 11, 2018
+
+General
+
+This is the second alpha release of the TestCentric Runner for NUnit. It is not yet recommended
+for use in production work.
+
+Features
+
+ * The GUI now uses the NUnit 3.9 engine
+ * Reloading on each Run is now functional.
+ * Alternate images for the tree are now implemented.
+ * Saving and Restoring the visual state is now implemented.
+
+Issues Resolved
+
+ 12 Use UpDown counter for number of recent files to display
+ 15 Alternate Tree Images not working
+ 21 Disabling Shadow Copy is Ignored
+ 76 Exception "Cross-thread operation not valid: Control 'progressBar' accessed from a thread other than the thread it was created on."
+ 93 NRE when starting the GUI
+ 95 Implement MVP for main form and sub-views
+ 99 Scrolling not working correctly for ErrorDisplay
+100 Don't display "Test-Run" as root node in tree with only one assembly
+115 Zero Length VisualState.xml file results in exception
+132 Create TestCentric.Common assembly
+144 Update NUnit Engine to 3.9
+
+TestCentric Runner for NUnit 1.0.0-Alpha1 - August 3, 2018
 
 General
 
