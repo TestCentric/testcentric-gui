@@ -21,8 +21,8 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using NUnit.Framework;
 using NSubstitute;
+using NUnit.Framework;
 
 namespace TestCentric.Gui.Presenters
 {
@@ -93,7 +93,7 @@ namespace TestCentric.Gui.Presenters
         [TestCase("Inconclusive", "Test", false)]
         public void TestsCasesAreHandledCorrectly(string status, string site, bool shouldBeAdded)
         {
-            FireTestFinishedEvent( new ResultNode(
+            FireTestFinishedEvent(new ResultNode(
                 $"<test-case id='1' name='NAME' result='{status}' site='{site}'><reason><message>REASON</message></reason></test-case>"));
 
             if (shouldBeAdded)
@@ -114,7 +114,7 @@ namespace TestCentric.Gui.Presenters
         [TestCase("Skipped", "Test", "One or more child tests were ignored", false)]
         public void TestSuitesAreHandledCorrectly(string status, string site, string reason, bool shouldBeAdded)
         {
-            FireSuiteFinishedEvent( new ResultNode(
+            FireSuiteFinishedEvent(new ResultNode(
                 $"<test-suite id='1' name='NAME' result='{status}' site='{site}'><reason><message>{reason}</message></reason></test-suite>"));
 
             if (shouldBeAdded)

@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -34,8 +34,8 @@ namespace NUnit.UiException.Tests
         [SetUp]
         public void SetUp()
         {
-            _textBlocks = new DefaultTextManager();            
-        }       
+            _textBlocks = new DefaultTextManager();
+        }
 
         [Test]
         public void Test_Default()
@@ -79,7 +79,7 @@ namespace NUnit.UiException.Tests
             Assert.That(lst[1], Is.EqualTo(_textBlocks.GetTextAt(1)));
 
             _textBlocks.Text = null;
-            Assert.That(_textBlocks.Text, Is.EqualTo(""));            
+            Assert.That(_textBlocks.Text, Is.EqualTo(""));
 
             return;
         }

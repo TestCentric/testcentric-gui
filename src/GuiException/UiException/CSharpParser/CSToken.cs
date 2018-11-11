@@ -22,8 +22,6 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace NUnit.UiException.CodeFormatters
 {
@@ -67,7 +65,7 @@ namespace NUnit.UiException.CodeFormatters
         /// <summary>
         /// The string held by this token.
         /// </summary>
-        protected string _text; 
+        protected string _text;
 
         /// <summary>
         /// The matching tag.

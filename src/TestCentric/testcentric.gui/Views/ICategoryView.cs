@@ -21,8 +21,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-using System.Collections.Generic;
 
 namespace TestCentric.Gui.Views
 {
@@ -35,7 +33,7 @@ namespace TestCentric.Gui.Views
         ICheckBox ExcludeCategories { get; }
         ICommand AddButton { get; }
         ICommand RemoveButton { get; }
- 
+
         void Clear();
     }
 }

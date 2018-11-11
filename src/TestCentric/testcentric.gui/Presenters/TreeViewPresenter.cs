@@ -30,10 +30,10 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Presenters
 {
-    using Views;
+    using Elements;
     using Model;
     using Model.Settings;
-    using Elements;
+    using Views;
 
     public class TreeViewPresenter
     {
@@ -202,7 +202,7 @@ namespace TestCentric.Gui.Presenters
                     VisualState visualState = !showCheckBoxes && _view.Tree.TopNode != null
                         ? VisualState.LoadFrom(_view)
                         : null;
-                    
+
                     _view.CheckBoxes = showCheckBoxes;
 
                     if (visualState != null)
@@ -296,7 +296,7 @@ namespace TestCentric.Gui.Presenters
             {
                 if (testNode.Type == "TestFixture" && displayStyle == DisplayStyle.HideTests)
                     displayStyle = DisplayStyle.Collapse;
-                
+
                 foreach (TestNode child in testNode.Children)
                     treeNode.Nodes.Add(BuildTestTree(child, displayStyle, highlight));
 

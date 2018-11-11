@@ -41,43 +41,43 @@ namespace TestCentric.Gui
         /// </summary>
         private System.ComponentModel.Container components = null;
 
-		public LongRunningOperationDisplay(Form owner, string text)
-		{
-			InitializeComponent();
-            
-			// Save the owner
-			Owner = owner;
+        public LongRunningOperationDisplay(Form owner, string text)
+        {
+            InitializeComponent();
 
-			// Save owner's current cursor and set it to the WaitCursor
+            // Save the owner
+            Owner = owner;
+
+            // Save owner's current cursor and set it to the WaitCursor
             _originalCursor = owner.Cursor;
             owner.Cursor = Cursors.WaitCursor;
 
             // Display the text
-			this.operation.Text = text;
+            this.operation.Text = text;
 
             // Force immediate display upon construction
             Show();
             Invalidate();
             Update();
 
-			Application.DoEvents();
+            Application.DoEvents();
         }
 
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
 
-				Owner.Cursor = _originalCursor;
+                Owner.Cursor = _originalCursor;
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
@@ -120,14 +120,14 @@ namespace TestCentric.Gui
 
         protected override void OnLoad(EventArgs e)
         {
-            base.OnLoad (e);
-    
+            base.OnLoad(e);
+
             // Set this again, see Mono Bug #82769
             this.ClientSize = new System.Drawing.Size(320, 40);
             Point origin = this.Owner.Location;
-            origin.Offset( 
+            origin.Offset(
                 (this.Owner.Size.Width - this.Size.Width) / 2,
-                (this.Owner.Size.Height - this.Size.Height) / 2 );
+                (this.Owner.Size.Height - this.Size.Height) / 2);
             this.Location = origin;
         }
     }

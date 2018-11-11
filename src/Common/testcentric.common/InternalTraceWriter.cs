@@ -41,8 +41,8 @@ namespace TestCentric.Gui
             string domainName = AppDomain.CurrentDomain.FriendlyName;
 
             string fileName = logName
-                .Replace("%p", pId.ToString() )
-                .Replace("%a", domainName );
+                .Replace("%p", pId.ToString())
+                .Replace("%a", domainName);
 
             string logDirectory = Environment.CurrentDirectory;
             //if (!Directory.Exists(logDirectory))
@@ -85,7 +85,7 @@ namespace TestCentric.Gui
 
         public override void Flush()
         {
-            if ( writer != null )
+            if (writer != null)
                 writer.Flush();
         }
     }

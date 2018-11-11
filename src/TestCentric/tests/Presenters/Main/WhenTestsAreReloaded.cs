@@ -23,29 +23,27 @@
 
 using NSubstitute;
 using NUnit.Framework;
-using System.Xml;
 
 namespace TestCentric.Gui.Presenters.Main
 {
-	using Model;
-	using Views;
+    using Model;
 
-	public class WhenTestsAreReloaded : MainPresenterTestBase
-	{
-		[SetUp]
-		public void SimulateTestLoad()
-		{
-			ClearAllReceivedCalls();
+    public class WhenTestsAreReloaded : MainPresenterTestBase
+    {
+        [SetUp]
+        public void SimulateTestLoad()
+        {
+            ClearAllReceivedCalls();
 
-			_model.HasTests.Returns(true);
-			_model.IsTestRunning.Returns(false);
+            _model.HasTests.Returns(true);
+            _model.IsTestRunning.Returns(false);
 
-			TestNode testNode = new TestNode("<test-suite id='1'/>");
-			_model.Tests.Returns(testNode);
-			FireTestReloadedEvent(testNode);
-		}
+            TestNode testNode = new TestNode("<test-suite id='1'/>");
+            _model.Tests.Returns(testNode);
+            FireTestReloadedEvent(testNode);
+        }
 
-		#if NYI // Add after implementation of project or package saving
+#if NYI // Add after implementation of project or package saving
         [TestCase("NewProjectCommand", true)]
         [TestCase("OpenProjectCommand", true)]
         [TestCase("SaveCommand", true)]

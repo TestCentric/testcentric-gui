@@ -21,7 +21,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
 using NUnit.Framework;
 using NUnit.UiException.CodeFormatters;
 
@@ -75,7 +74,7 @@ namespace NUnit.UiException.Tests.CodeFormatters
         {
             FormattedCode res;
             FormattedCode exp;
-            
+
             res = _formatter.Format("Hello world!");
 
             exp = new FormattedCode(
@@ -133,5 +132,5 @@ namespace NUnit.UiException.Tests.CodeFormatters
         {
             Assert.DoesNotThrow(() => _formatter.Format(input));
         }
-    }    
+    }
 }

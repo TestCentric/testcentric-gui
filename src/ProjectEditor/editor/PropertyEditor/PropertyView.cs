@@ -21,12 +21,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.IO;
-using System.Text;
 using System.Windows.Forms;
 using NUnit.ProjectEditor.ViewElements;
 
@@ -105,50 +99,50 @@ namespace NUnit.ProjectEditor
         }
 
         #endregion
-        
+
         #region IPropertyView Members
 
-        public IDialogManager DialogManager 
+        public IDialogManager DialogManager
         {
             get { return dialogManager; }
         }
 
-        public IMessageDisplay MessageDisplay 
+        public IMessageDisplay MessageDisplay
         {
             get { return messageDisplay; }
         }
 
-        public IConfigurationEditorDialog ConfigurationEditorDialog 
+        public IConfigurationEditorDialog ConfigurationEditorDialog
         {
             get { return new ConfigurationEditorDialog(); }
         }
 
-        public ICommand BrowseProjectBaseCommand 
+        public ICommand BrowseProjectBaseCommand
         {
             get { return browseProjectBaseCommand; }
         }
 
-        public ICommand EditConfigsCommand 
+        public ICommand EditConfigsCommand
         {
             get { return editConfigsCommand; }
         }
 
-        public ICommand BrowseConfigBaseCommand 
+        public ICommand BrowseConfigBaseCommand
         {
             get { return browseConfigBaseCommand; }
         }
 
-        public ICommand AddAssemblyCommand 
+        public ICommand AddAssemblyCommand
         {
             get { return addAssemblyCommand; }
         }
 
-        public ICommand RemoveAssemblyCommand 
+        public ICommand RemoveAssemblyCommand
         {
             get { return removeAssemblyCommand; }
         }
 
-        public ICommand BrowseAssemblyPathCommand 
+        public ICommand BrowseAssemblyPathCommand
         {
             get { return browseAssemblyPathCommand; }
         }
@@ -158,67 +152,67 @@ namespace NUnit.ProjectEditor
             get { return projectPath; }
         }
 
-        public ITextElement ProjectBase 
+        public ITextElement ProjectBase
         {
             get { return projectBase; }
         }
 
-        public ISelectionList ProcessModel 
+        public ISelectionList ProcessModel
         {
             get { return processModel; }
         }
 
-        public ISelectionList DomainUsage 
+        public ISelectionList DomainUsage
         {
             get { return domainUsage; }
         }
 
-        public ITextElement ActiveConfigName 
+        public ITextElement ActiveConfigName
         {
             get { return activeConfigName; }
         }
 
-        public ISelectionList ConfigList 
+        public ISelectionList ConfigList
         {
             get { return configList; }
         }
 
-        public ISelectionList Runtime 
+        public ISelectionList Runtime
         {
             get { return runtime; }
         }
 
-        public IComboBox RuntimeVersion 
+        public IComboBox RuntimeVersion
         {
             get { return runtimeVersion; }
         }
 
-        public ITextElement ApplicationBase 
+        public ITextElement ApplicationBase
         {
             get { return applicationBase; }
         }
 
-        public ITextElement ConfigurationFile 
+        public ITextElement ConfigurationFile
         {
             get { return configurationFile; }
         }
 
-        public ISelection BinPathType 
+        public ISelection BinPathType
         {
             get { return binPathType; }
         }
 
-        public ITextElement PrivateBinPath 
+        public ITextElement PrivateBinPath
         {
             get { return privateBinPath; }
         }
 
-        public ISelectionList AssemblyList 
+        public ISelectionList AssemblyList
         {
             get { return assemblyList; }
         }
 
-        public ITextElement AssemblyPath 
+        public ITextElement AssemblyPath
         {
             get { return assemblyPath; }
         }

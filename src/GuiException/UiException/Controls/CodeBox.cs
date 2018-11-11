@@ -22,13 +22,9 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using NUnit.UiException.CodeFormatters;
-using System.Diagnostics;
 
 /// This control could have been replaced by a standard RichTextBox control, but
 /// it turned out that RichTextBox:
@@ -56,9 +52,10 @@ namespace NUnit.UiException.Controls
 
         private bool _showCurrentLine;
         private int _currentLine;
-        
+
         public CodeBox() :
-            this(new GeneralCodeFormatter(), new DefaultCodeRenderer()) { }
+            this(new GeneralCodeFormatter(), new DefaultCodeRenderer())
+        { }
 
         #region ICodeView Members
 
@@ -138,7 +135,8 @@ namespace NUnit.UiException.Controls
         public Color CurrentLineBackColor
         {
             get { return (_workingContext.CurrentLineBackColor); }
-            set { 
+            set
+            {
                 _workingContext.CurrentLineBackColor = value;
                 Invalidate();
             }
@@ -150,12 +148,13 @@ namespace NUnit.UiException.Controls
         public Color CurrentLineForeColor
         {
             get { return (_workingContext.CurrentLineForeColor); }
-            set { 
+            set
+            {
                 _workingContext.CurrentLineForeColor = value;
                 Invalidate();
             }
         }
-       
+
         protected CodeBox(IFormatterCatalog formatter, ICodeRenderer renderer)
         {
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
@@ -241,5 +240,5 @@ namespace NUnit.UiException.Controls
 
             return;
         }
-    }    
+    }
 }

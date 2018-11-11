@@ -21,7 +21,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
 using System.Windows.Forms;
 
 namespace NUnit.ProjectEditor.ViewElements
@@ -53,7 +52,7 @@ namespace NUnit.ProjectEditor.ViewElements
 
         public bool Enabled
         {
-            get 
+            get
             {
                 return enabled;
             }
@@ -76,10 +75,10 @@ namespace NUnit.ProjectEditor.ViewElements
 
                 return -1;
             }
-            set 
-            { 
+            set
+            {
                 if (value >= 0 && value < buttons.Length)
-                    buttons[value].Checked = true; 
+                    buttons[value].Checked = true;
             }
         }
 

@@ -22,7 +22,6 @@
 // ***********************************************************************
 
 using System.IO;
-using NUnit.Framework;
 
 namespace NUnit.ProjectEditor.Tests.Model
 {

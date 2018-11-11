@@ -21,31 +21,29 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
 using System.Windows.Forms;
-using NUnit.Framework;
 using NUnit.TestUtilities;
 
 namespace NUnit.ProjectEditor.Tests.Views
 {
-	[TestFixture]
-	public class AddConfigurationDialogTests : FormTester
-	{
-		private AddConfigurationDialog dlg;
+    [TestFixture]
+    public class AddConfigurationDialogTests : FormTester
+    {
+        private AddConfigurationDialog dlg;
 
-		[SetUp]
-		public void SetUp()
-		{
+        [SetUp]
+        public void SetUp()
+        {
             dlg = new AddConfigurationDialog();
             dlg.ConfigList = new string[] { "Debug", "Release" };
             this.Form = dlg;
-		}
+        }
 
-		[TearDown]
-		public void TearDown()
-		{
-			dlg.Close();
-		}
+        [TearDown]
+        public void TearDown()
+        {
+            dlg.Close();
+        }
 
         [Test]
         public void CheckForControls()
@@ -102,5 +100,5 @@ namespace NUnit.ProjectEditor.Tests.Views
             Assert.AreEqual("Super", dlg.ConfigToCreate);
             Assert.AreEqual("Release", dlg.ConfigToCopy);
         }
-	}
+    }
 }

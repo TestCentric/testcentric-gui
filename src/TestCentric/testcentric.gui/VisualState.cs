@@ -117,7 +117,7 @@ namespace TestCentric.Gui
 
                     if (treeNode.IsExpanded != visualNode.Expanded)
                         treeNode.Toggle();
-                    
+
                     treeNode.Checked = visualNode.Checked;
                 }
             }
@@ -165,10 +165,10 @@ namespace TestCentric.Gui
         [XmlAttribute]
         public string Id;
 
-        [XmlAttribute,System.ComponentModel.DefaultValue(false)]
+        [XmlAttribute, System.ComponentModel.DefaultValue(false)]
         public bool Expanded;
 
-        [XmlAttribute,System.ComponentModel.DefaultValue(false)]
+        [XmlAttribute, System.ComponentModel.DefaultValue(false)]
         public bool Checked;
 
         [XmlArrayItem("Node")]
@@ -176,7 +176,7 @@ namespace TestCentric.Gui
 
         public VisualTreeNode() { }
 
-        public VisualTreeNode( TreeNode treeNode )
+        public VisualTreeNode(TreeNode treeNode)
         {
             Id = (string)treeNode.Tag;
             Expanded = treeNode.IsExpanded;

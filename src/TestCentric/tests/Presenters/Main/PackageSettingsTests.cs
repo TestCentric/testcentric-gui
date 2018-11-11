@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2017 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -26,7 +26,7 @@ using NUnit.Framework;
 
 namespace TestCentric.Gui.Presenters.Main
 {
-	using Elements;
+    using Elements;
 
     public class PackageSettingsTests : MainPresenterTestBase
     {
@@ -83,12 +83,12 @@ namespace TestCentric.Gui.Presenters.Main
         {
             foreach (var setting in settings)
             {
-				_view.SelectedRuntime.SelectedItem.Returns(setting);
+                _view.SelectedRuntime.SelectedItem.Returns(setting);
 
                 _view.SelectedRuntime.SelectionChanged += Raise.Event<CommandHandler>();
 
                 _model.PackageSettings.Received(1)["RuntimeFramework"] = setting;
-			}
+            }
         }
 
         public void SelectedRuntime_MultipleChanges()
@@ -99,11 +99,11 @@ namespace TestCentric.Gui.Presenters.Main
         [Test]
         public void SelectedRuntime_SetToDefault()
         {
-			_view.SelectedRuntime.SelectedItem.Returns("DEFAULT");
+            _view.SelectedRuntime.SelectedItem.Returns("DEFAULT");
 
             _view.SelectedRuntime.SelectionChanged += Raise.Event<CommandHandler>();
 
             _model.PackageSettings.Received(1).Remove("RuntimeFramework");
-		}
+        }
     }
 }

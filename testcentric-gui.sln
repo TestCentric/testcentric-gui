@@ -1,10 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A65042E1-D8BC-48DD-8DE1-F0991F07EA77}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		appveyor.yml = appveyor.yml
 		build.cake = build.cake
 		build.cmd = build.cmd
@@ -119,6 +120,9 @@ Global
 		{AAD27267-DE1F-4F61-A1FB-D1680A5B8001} = {26735BF4-848E-4B3D-BA4D-E1366986F5BD}
 		{3FF340D5-D3B4-4DF0-BAF1-98B3C00B6148} = {26735BF4-848E-4B3D-BA4D-E1366986F5BD}
 		{B69057F3-0663-4763-A3EC-50D463578B94} = {0C0A29CA-1A18-4B1A-9262-F41C01E7E30F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CDFF439B-8888-4133-8734-86F4F899BC40}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = src\ConsoleRunner\nunit-console-exe\nunit-console.exe.csproj

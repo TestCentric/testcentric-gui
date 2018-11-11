@@ -22,10 +22,10 @@
 // ***********************************************************************
 
 using System;
+using System.Drawing;
+using System.Windows.Forms;
 using NUnit.Framework;
 using NUnit.UiException.Controls;
-using System.Windows.Forms;
-using System.Drawing;
 
 namespace NUnit.UiException.Tests.Controls
 {
@@ -144,7 +144,7 @@ namespace NUnit.UiException.Tests.Controls
                 Is.EqualTo(new Rectangle(
                     splitter.SplitterRectangle.Left,
                     splitter.DirectionRectangle.Bottom + 2, SplitterBox.SPLITTER_SIZE, SplitterBox.BUTTON_SIZE)));
-            
+
             return;
         }
 
@@ -284,7 +284,7 @@ namespace NUnit.UiException.Tests.Controls
             // vertical layout
 
             _vertical.PointToSplit((int)(_vertical.Width * 0.4f), 0);
-            CheckVerticalLayout(_vertical, 0.4f);            
+            CheckVerticalLayout(_vertical, 0.4f);
 
             _vertical.PointToSplit(-1, 0);
             CheckVerticalLayout(_vertical, 0f);
@@ -314,7 +314,7 @@ namespace NUnit.UiException.Tests.Controls
             _vertical.CollapseControl1();
             CheckVerticalRectangles(_vertical);
             CheckVerticalLayout(_vertical, 0);
-            
+
             _vertical.CollapseControl2();
             CheckVerticalRectangles(_vertical);
             CheckVerticalLayout(_vertical, 1);
@@ -354,7 +354,7 @@ namespace NUnit.UiException.Tests.Controls
             _vertical.FireMouseMove(0, 1);
             _vertical.FireMouseUp(0, 1);
 
-            Assert.That(_vertical.SplitterDistance, Is.EqualTo(0.5f));            
+            Assert.That(_vertical.SplitterDistance, Is.EqualTo(0.5f));
 
             // test 3: mouse down occurs on SplitterRectangle area (except the buttons)
             //         mouse up occurs on Collapse1Rectangle
@@ -367,7 +367,7 @@ namespace NUnit.UiException.Tests.Controls
             _vertical.FireMouseUp(_vertical.Collapse1Rectangle.Left + 1,
                 _vertical.Collapse1Rectangle.Top + 1);
             Assert.That(_vertical.SplitterDistance, Is.EqualTo(1));
-         
+
             // test 4: mouse down occurs on SplitterRectangle
             //         mouse up occurs on Collapse2Rectangle
             //         CollapseControl2 shouldn't be triggered and splitter

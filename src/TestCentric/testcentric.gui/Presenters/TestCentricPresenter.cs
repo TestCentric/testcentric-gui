@@ -86,10 +86,10 @@ namespace TestCentric.Gui.Presenters
             _recentFiles = _model.Services.RecentFiles;
 
             _view.FontSelector.Value = _settings.Gui.Font;
-			_view.ResultTabs.SelectedIndex = _settings.Gui.SelectedTab;
-            
+            _view.ResultTabs.SelectedIndex = _settings.Gui.SelectedTab;
+
             UpdateViewCommands();
-            
+
             WireUpEvents();
         }
 
@@ -100,10 +100,10 @@ namespace TestCentric.Gui.Presenters
         private void WireUpEvents()
         {
             #region Model Events
-            
+
             _model.Events.TestsLoading += (TestFilesLoadingEventArgs e) =>
             {
-				UpdateViewCommands(testLoading: true);
+                UpdateViewCommands(testLoading: true);
 
                 _longOpDisplay = _view.LongOperationDisplay("Loading...");
             };
@@ -115,7 +115,7 @@ namespace TestCentric.Gui.Presenters
                     _longOpDisplay.Dispose();
                     _longOpDisplay = null;
                 }
-                
+
                 foreach (var assembly in _model.TestAssemblies)
                     if (assembly.RunState == RunState.NotRunnable)
                         _view.MessageDisplay.Error(assembly.GetProperty("_SKIPREASON"));
@@ -128,13 +128,13 @@ namespace TestCentric.Gui.Presenters
                 UpdateViewCommands();
             };
 
-			_model.Events.TestUnloaded += (TestEventArgs e) =>
-			{
-				_view.RunSummary.Text = null;
+            _model.Events.TestUnloaded += (TestEventArgs e) =>
+            {
+                _view.RunSummary.Text = null;
 
-				UpdateViewCommands();
-			};
-            
+                UpdateViewCommands();
+            };
+
             _model.Events.TestsReloading += (TestEventArgs e) =>
             {
                 UpdateViewCommands();
@@ -154,18 +154,18 @@ namespace TestCentric.Gui.Presenters
 
                 if (_settings.Gui.ClearResultsOnReload)
                     _view.RunSummary.Text = null;
-                
-				UpdateViewCommands();
+
+                UpdateViewCommands();
             };
 
             _model.Events.RunStarting += (RunStartingEventArgs e) =>
             {
-				UpdateViewCommands();
+                UpdateViewCommands();
             };
 
             _model.Events.RunFinished += (TestResultEventArgs e) =>
             {
-				UpdateViewCommands();
+                UpdateViewCommands();
 
                 ResultSummary summary = ResultSummaryCreator.FromResultNode(e.Result);
                 _view.RunSummary.Text = string.Format(
@@ -175,7 +175,7 @@ namespace TestCentric.Gui.Presenters
                 //string resultPath = Path.Combine(TestProject.BasePath, "TestResult.xml");
                 // TODO: Use Work Directory
                 string resultPath = "TestResult.xml";
-				_model.SaveResults(resultPath);
+                _model.SaveResults(resultPath);
                 //try
                 //{
                 //    _model.SaveResults(resultPath);
@@ -190,71 +190,71 @@ namespace TestCentric.Gui.Presenters
                     _view.Activate();
             };
 
-			_settings.Changed += (s, e) =>
-			{
-				if (e.SettingName == "Gui.Options.DisplayFormat")
-					InitializeDisplay();
-			};
+            _settings.Changed += (s, e) =>
+            {
+                if (e.SettingName == "Gui.Options.DisplayFormat")
+                    InitializeDisplay();
+            };
 
-			#endregion
+            #endregion
 
-			#region View Events
+            #region View Events
 
-			_view.Load += (s, e) =>
-			{
-				InitializeDisplay(_settings.Gui.DisplayFormat);
-			};
+            _view.Load += (s, e) =>
+            {
+                InitializeDisplay(_settings.Gui.DisplayFormat);
+            };
 
             _view.Shown += (s, e) =>
-			{
-				Application.DoEvents();
+      {
+          Application.DoEvents();
 
-                // Load test specified on command line or
-                // the most recent one if options call for it
-                if (_options.InputFiles.Count != 0)
-                    LoadTests(_options.InputFiles);
-                else if (_settings.Gui.LoadLastProject && !_options.NoLoad)
-                {
-                    foreach (string entry in _recentFiles.Entries)
-                    {
-                        if (entry != null && File.Exists(entry))
-                        {
-                            LoadTests(entry);
-                            break;
-                        }
-                    }
-                }
-			
-				//if ( guiOptions.include != null || guiOptions.exclude != null)
-                //{
-                //    testTree.ClearSelectedCategories();
-                //    bool exclude = guiOptions.include == null;
-                //    string[] categories = exclude
-                //        ? guiOptions.exclude.Split(',')
-                //        : guiOptions.include.Split(',');
-                //    if ( categories.Length > 0 )
-                //        testTree.SelectCategories( categories, exclude );
-                //}
+          // Load test specified on command line or
+          // the most recent one if options call for it
+          if (_options.InputFiles.Count != 0)
+              LoadTests(_options.InputFiles);
+          else if (_settings.Gui.LoadLastProject && !_options.NoLoad)
+          {
+              foreach (string entry in _recentFiles.Entries)
+              {
+                  if (entry != null && File.Exists(entry))
+                  {
+                      LoadTests(entry);
+                      break;
+                  }
+              }
+          }
 
-                // Run loaded test automatically if called for
-                if (_model.IsPackageLoaded && _options.RunAllTests)
-                {
-                    // TODO: Temporary fix to avoid problem when /run is used 
-                    // with ReloadOnRun turned on. Refactor TestModel so
-                    // we can just do a run without reload.
-                    bool reload = _settings.Gui.ReloadOnRun;
+          //if ( guiOptions.include != null || guiOptions.exclude != null)
+          //{
+          //    testTree.ClearSelectedCategories();
+          //    bool exclude = guiOptions.include == null;
+          //    string[] categories = exclude
+          //        ? guiOptions.exclude.Split(',')
+          //        : guiOptions.include.Split(',');
+          //    if ( categories.Length > 0 )
+          //        testTree.SelectCategories( categories, exclude );
+          //}
 
-                    try
-                    {
-                        _settings.Gui.ReloadOnRun = false;
-                        RunAllTests();
-                    }
-                    finally
-                    {
-                        _settings.Gui.ReloadOnRun = reload;
-                    }
-                }
-			};
+          // Run loaded test automatically if called for
+          if (_model.IsPackageLoaded && _options.RunAllTests)
+          {
+              // TODO: Temporary fix to avoid problem when /run is used 
+              // with ReloadOnRun turned on. Refactor TestModel so
+              // we can just do a run without reload.
+              bool reload = _settings.Gui.ReloadOnRun;
+
+              try
+              {
+                  _settings.Gui.ReloadOnRun = false;
+                  RunAllTests();
+              }
+              finally
+              {
+                  _settings.Gui.ReloadOnRun = reload;
+              }
+          }
+      };
 
             _view.Move += (s, e) =>
             {
@@ -298,10 +298,10 @@ namespace TestCentric.Gui.Presenters
                 }
             };
 
-			_view.SplitterPosition.Changed += () =>
-			{
-				_settings.Gui.MainForm.SplitPosition = _view.SplitterPosition.Value;
-			};
+            _view.SplitterPosition.Changed += () =>
+            {
+                _settings.Gui.MainForm.SplitPosition = _view.SplitterPosition.Value;
+            };
 
             _view.FormClosing += (s, e) =>
             {
@@ -448,12 +448,12 @@ namespace TestCentric.Gui.Presenters
 
             _view.ExpandAllCommand.Execute += () =>
             {
-				_view.TreeView.ExpandAll();
+                _view.TreeView.ExpandAll();
             };
 
             _view.CollapseAllCommand.Execute += () =>
             {
-				_view.TreeView.CollapseAll();
+                _view.TreeView.CollapseAll();
             };
 
             _view.HideTestsCommand.Execute += () =>
@@ -463,18 +463,18 @@ namespace TestCentric.Gui.Presenters
 
             _view.PropertiesCommand.Execute += () =>
             {
-				if (_view.TreeView.Tree.SelectedNode != null)
-					_view.TreeView.ShowPropertiesDialog((TestSuiteTreeNode)_view.TreeView.Tree.SelectedNode);
-			};
+                if (_view.TreeView.Tree.SelectedNode != null)
+                    _view.TreeView.ShowPropertiesDialog((TestSuiteTreeNode)_view.TreeView.Tree.SelectedNode);
+            };
 
             _view.IncreaseFontCommand.Execute += () =>
             {
-				applyFont(IncreaseFont(_settings.Gui.Font));
+                applyFont(IncreaseFont(_settings.Gui.Font));
             };
 
             _view.DecreaseFontCommand.Execute += () =>
             {
-				applyFont(DecreaseFont(_settings.Gui.Font));
+                applyFont(DecreaseFont(_settings.Gui.Font));
             };
 
             _view.ChangeFontCommand.Execute += () =>
@@ -503,12 +503,12 @@ namespace TestCentric.Gui.Presenters
 
             _view.IncreaseFixedFontCommand.Execute += () =>
             {
-				_settings.Gui.FixedFont = IncreaseFont(_settings.Gui.FixedFont);
+                _settings.Gui.FixedFont = IncreaseFont(_settings.Gui.FixedFont);
             };
 
             _view.DecreaseFixedFontCommand.Execute += () =>
             {
-				_settings.Gui.FixedFont = DecreaseFont(_settings.Gui.FixedFont);
+                _settings.Gui.FixedFont = DecreaseFont(_settings.Gui.FixedFont);
             };
 
             _view.RestoreFixedFontCommand.Execute += () =>
@@ -572,13 +572,13 @@ namespace TestCentric.Gui.Presenters
                     aboutBox.ShowDialog();
                 }
             };
-            
-			_view.ResultTabs.SelectionChanged += () =>
-			{
-				_settings.Gui.SelectedTab = _view.ResultTabs.SelectedIndex;
-			};
 
-			#endregion
+            _view.ResultTabs.SelectionChanged += () =>
+            {
+                _settings.Gui.SelectedTab = _view.ResultTabs.SelectedIndex;
+            };
+
+            #endregion
         }
 
         #endregion
@@ -614,7 +614,7 @@ namespace TestCentric.Gui.Presenters
             //DialogResult result = SaveProjectIfDirty();
 
             //if (result != DialogResult.Cancel)
-                _model.UnloadTests();
+            _model.UnloadTests();
 
             //return result;
             return DialogResult.OK;
@@ -772,7 +772,7 @@ namespace TestCentric.Gui.Presenters
         }
 
         #endregion
-        
+
         #region Run Methods
 
         public void RunAllTests()
@@ -811,41 +811,41 @@ namespace TestCentric.Gui.Presenters
             {
                 DialogResult dialogResult = _view.MessageDisplay.Ask(
                     "Do you want to cancel the running test?");
-                
+
                 if (dialogResult == DialogResult.Yes)
                     _model.CancelTestRun();
             }
         }
 
-		#endregion
-        
-		#endregion
-        
-		#region Helper Methods
-        
-		private void UpdateViewCommands(bool testLoading = false)
-		{
-			bool testLoaded = _model.HasTests;
-			bool testRunning = _model.IsTestRunning;
+        #endregion
 
-			_view.RunButton.Enabled = testLoaded && !testRunning;
-			_view.RunAllCommand.Enabled = testLoaded && !testRunning;
-			_view.RunSelectedCommand.Enabled = testLoaded && !testRunning;
-			_view.RunFailedCommand.Enabled = testLoaded && !testRunning && _model.HasResults;
-            
-			_view.StopButton.Enabled = testRunning;
-			_view.StopRunCommand.Enabled = testRunning;
+        #endregion
 
-			_view.OpenCommand.Enabled = !testRunning && !testLoading;
-			_view.CloseCommand.Enabled = testLoaded && !testRunning;
-			_view.AddTestFileCommand.Enabled = testLoaded && !testRunning;
-			_view.ReloadTestsCommand.Enabled = testLoaded && !testRunning;
-			_view.RuntimeMenu.Enabled = !testRunning && !testLoading;
-			_view.RecentFilesMenu.Enabled = !testRunning && !testLoading;
-			_view.ExitCommand.Enabled = !testLoading;
-			_view.SaveResultsCommand.Enabled = !testRunning && !testLoading && _model.HasResults;
-		}
-        
+        #region Helper Methods
+
+        private void UpdateViewCommands(bool testLoading = false)
+        {
+            bool testLoaded = _model.HasTests;
+            bool testRunning = _model.IsTestRunning;
+
+            _view.RunButton.Enabled = testLoaded && !testRunning;
+            _view.RunAllCommand.Enabled = testLoaded && !testRunning;
+            _view.RunSelectedCommand.Enabled = testLoaded && !testRunning;
+            _view.RunFailedCommand.Enabled = testLoaded && !testRunning && _model.HasResults;
+
+            _view.StopButton.Enabled = testRunning;
+            _view.StopRunCommand.Enabled = testRunning;
+
+            _view.OpenCommand.Enabled = !testRunning && !testLoading;
+            _view.CloseCommand.Enabled = testLoaded && !testRunning;
+            _view.AddTestFileCommand.Enabled = testLoaded && !testRunning;
+            _view.ReloadTestsCommand.Enabled = testLoaded && !testRunning;
+            _view.RuntimeMenu.Enabled = !testRunning && !testLoading;
+            _view.RecentFilesMenu.Enabled = !testRunning && !testLoading;
+            _view.ExitCommand.Enabled = !testLoading;
+            _view.SaveResultsCommand.Enabled = !testRunning && !testLoading && _model.HasResults;
+        }
+
         private OpenFileDialog CreateOpenFileDialog(string title, bool includeProjects, bool includeAssemblies)
         {
             OpenFileDialog dlg = new OpenFileDialog();
@@ -914,7 +914,7 @@ namespace TestCentric.Gui.Presenters
         private void applyFont(Font font)
         {
             _settings.Gui.Font = _view.FontSelector.Value = font;
-			_view.RunSummary.Control.Font = MakeBold(font);
+            _view.RunSummary.Control.Font = MakeBold(font);
         }
 
         private void InitializeDisplay()
@@ -925,23 +925,23 @@ namespace TestCentric.Gui.Presenters
         private void InitializeDisplay(string displayFormat)
         {
             _view.DisplayFormat.SelectedItem = displayFormat;
-            
+
             int x = 0, y = 0, width = 0, height = 0;
             bool isMaximized = false;
-			bool useFullGui = displayFormat != "Mini";
+            bool useFullGui = displayFormat != "Mini";
 
-			_view.Configure(useFullGui);
-            
-			if (useFullGui)
-			{
-				x = _settings.Gui.MainForm.Left;
-				y = _settings.Gui.MainForm.Top;
-				width = _settings.Gui.MainForm.Width;
-				height = _settings.Gui.MainForm.Height;
-				isMaximized = _settings.Gui.MainForm.Maximized;
-			}
-			else
-			{
+            _view.Configure(useFullGui);
+
+            if (useFullGui)
+            {
+                x = _settings.Gui.MainForm.Left;
+                y = _settings.Gui.MainForm.Top;
+                width = _settings.Gui.MainForm.Width;
+                height = _settings.Gui.MainForm.Height;
+                isMaximized = _settings.Gui.MainForm.Maximized;
+            }
+            else
+            {
                 x = _settings.Gui.MiniForm.Left;
                 y = _settings.Gui.MiniForm.Top;
                 width = _settings.Gui.MiniForm.Width;
@@ -955,13 +955,13 @@ namespace TestCentric.Gui.Presenters
             if (!IsValidLocation(location, size))
                 location = new Point(10, 10);
 
-			_view.Location = location;
-			_view.Size = size;
-			_view.Maximized = isMaximized;
+            _view.Location = location;
+            _view.Size = size;
+            _view.Maximized = isMaximized;
 
-			if (useFullGui)
-				_view.SplitterPosition.Value = _settings.Gui.MainForm.SplitPosition;           
-		}
+            if (useFullGui)
+                _view.SplitterPosition.Value = _settings.Gui.MainForm.SplitPosition;
+        }
 
         private static bool IsValidLocation(Point location, Size size)
         {
@@ -974,7 +974,7 @@ namespace TestCentric.Gui.Presenters
             return intersect;
         }
 
-		private static Font IncreaseFont(Font font)
+        private static Font IncreaseFont(Font font)
         {
             return new Font(font.FontFamily, font.SizeInPoints * 1.2f, font.Style);
         }
@@ -984,7 +984,7 @@ namespace TestCentric.Gui.Presenters
             return new Font(font.FontFamily, font.SizeInPoints / 1.2f, font.Style);
         }
 
-		private static Font MakeBold(Font font)
+        private static Font MakeBold(Font font)
         {
             return font.FontFamily.IsStyleAvailable(FontStyle.Bold)
                        ? new Font(font, FontStyle.Bold) : font;

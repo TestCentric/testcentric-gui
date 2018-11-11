@@ -23,10 +23,6 @@
 
 #if NET_3_5 || NET_4_0 || NET_4_5
 using System;
-using System.IO;
-using System.Reflection;
-using NUnit.Framework;
-using NUnit.ProjectEditor.ViewElements;
 using NSubstitute;
 
 namespace NUnit.ProjectEditor.Tests.Presenters
@@ -80,8 +76,8 @@ namespace NUnit.ProjectEditor.Tests.Presenters
         [Test]
         public void AssemblyList_LoadFromModel_SetsListCorrectly()
         {
-            Assert.That(view.AssemblyList.SelectionList, 
-                Is.EqualTo(new string[] {"assembly1.dll", "assembly2.dll"}));
+            Assert.That(view.AssemblyList.SelectionList,
+                Is.EqualTo(new string[] { "assembly1.dll", "assembly2.dll" }));
         }
 
         [Test]

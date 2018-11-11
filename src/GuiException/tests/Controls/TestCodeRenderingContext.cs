@@ -21,10 +21,10 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using NUnit.Framework;
-using NUnit.UiException.Controls;
 using System.Drawing;
+using NUnit.Framework;
 using NUnit.UiException.CodeFormatters;
+using NUnit.UiException.Controls;
 
 namespace NUnit.UiException.Tests.Controls
 {

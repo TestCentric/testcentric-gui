@@ -21,10 +21,9 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
 using System.Drawing;
-using System.Windows.Forms;
 using System.IO;
+using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
@@ -140,15 +139,15 @@ namespace TestCentric.Gui.Views
         {
             InitializeComponent();
 
-			// View Parameters
-			FontSelector = new FontSelector(this);
-			SplitterPosition = new SplitterPosition(treeSplitter);
+            // View Parameters
+            FontSelector = new FontSelector(this);
+            SplitterPosition = new SplitterPosition(treeSplitter);
 
             // UI Elements on main form
             RunButton = new ButtonElement(runButton);
             StopButton = new ButtonElement(stopButton);
             RunSummary = new ControlElement<ExpandingLabel>(runCount);
-			ResultTabs = new TabSelector(resultTabs);
+            ResultTabs = new TabSelector(resultTabs);
 
             // Initialize File Menu Commands
             FileMenu = new PopupMenu(fileMenu);
@@ -709,7 +708,7 @@ namespace TestCentric.Gui.Views
             // rightPanel
             // 
             this.rightPanel.BackColor = System.Drawing.SystemColors.Control;
-			this.rightPanel.Controls.Add(this.resultTabs);
+            this.rightPanel.Controls.Add(this.resultTabs);
             this.rightPanel.Controls.Add(this.groupBox1);
             this.rightPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rightPanel.Location = new System.Drawing.Point(246, 0);
@@ -732,7 +731,7 @@ namespace TestCentric.Gui.Views
             // 
             // runCount
             // 
-            this.runCount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.runCount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.runCount.AutoEllipsis = true;
             this.runCount.Location = new System.Drawing.Point(8, 89);
@@ -759,7 +758,7 @@ namespace TestCentric.Gui.Views
             // 
             // progressBar
             // 
-            this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBar.BackColor = System.Drawing.SystemColors.Control;
             this.progressBar.CausesValidation = false;
@@ -771,9 +770,9 @@ namespace TestCentric.Gui.Views
             this.progressBar.Size = new System.Drawing.Size(480, 16);
             this.progressBar.Status = TestCentric.Gui.Views.ProgressBarStatus.Success;
             this.progressBar.TabIndex = 0;
-			// 
-			// tabControl
-			// 
+            // 
+            // tabControl
+            // 
             this.resultTabs.Alignment = System.Windows.Forms.TabAlignment.Bottom;
             this.resultTabs.Controls.Add(this.errorTab);
             this.resultTabs.Controls.Add(this.notrunTab);
@@ -799,9 +798,9 @@ namespace TestCentric.Gui.Views
             // 
             this.errorsAndFailuresView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.errorsAndFailuresView1.EnableToolTips = false;
-            this.errorsAndFailuresView1.Location = new System.Drawing.Point(0,123);
+            this.errorsAndFailuresView1.Location = new System.Drawing.Point(0, 123);
             this.errorsAndFailuresView1.Name = "errorsAndFailuresView1";
-            this.errorsAndFailuresView1.Size = new System.Drawing.Size(490,381);
+            this.errorsAndFailuresView1.Size = new System.Drawing.Size(490, 381);
             this.errorsAndFailuresView1.SourceCodeDisplay = true;
             this.errorsAndFailuresView1.SourceCodeSplitOrientation = System.Windows.Forms.Orientation.Vertical;
             this.errorsAndFailuresView1.SourceCodeSplitterDistance = 0.3F;
@@ -948,31 +947,31 @@ namespace TestCentric.Gui.Views
 
         }
 
-		#endregion
+        #endregion
 
-		#region Properties
+        #region Properties
 
         public bool Maximized
-		{
-			get { return WindowState == FormWindowState.Maximized; }
-			set
-			{
-				if (value)
-					WindowState = FormWindowState.Maximized;
-				else if (WindowState == FormWindowState.Maximized)
-					WindowState = FormWindowState.Normal;
-				// No actionif minimized
-			}
-		}
-		// View Parameters
-		public IViewParameter<Font> FontSelector { get; }
-		public IViewParameter<int> SplitterPosition { get; }
+        {
+            get { return WindowState == FormWindowState.Maximized; }
+            set
+            {
+                if (value)
+                    WindowState = FormWindowState.Maximized;
+                else if (WindowState == FormWindowState.Maximized)
+                    WindowState = FormWindowState.Normal;
+                // No actionif minimized
+            }
+        }
+        // View Parameters
+        public IViewParameter<Font> FontSelector { get; }
+        public IViewParameter<int> SplitterPosition { get; }
 
         // UI Elements
         public ICommand RunButton { get; }
         public ICommand StopButton { get; }
         public IControlElement<ExpandingLabel> RunSummary { get; }
-		public ISelection ResultTabs { get; }
+        public ISelection ResultTabs { get; }
 
         // File Menu Items
         public IMenu FileMenu { get; }
@@ -1023,9 +1022,9 @@ namespace TestCentric.Gui.Views
         public ICommand AboutCommand { get; }
 
         public LongRunningOperationDisplay LongOperationDisplay(string text)
-		{
-			return new LongRunningOperationDisplay(this, text);
-		}
+        {
+            return new LongRunningOperationDisplay(this, text);
+        }
 
         #region Subordinate Views contained in main form
 
@@ -1051,12 +1050,12 @@ namespace TestCentric.Gui.Views
 
         #region View Menu
 
-		public void Configure(bool useFullGui)
+        public void Configure(bool useFullGui)
         {
             leftPanel.Visible = true;
             leftPanel.Dock = useFullGui
-				? DockStyle.Left
-				: DockStyle.Fill;
+        ? DockStyle.Left
+        : DockStyle.Fill;
             treeSplitter.Visible = useFullGui;
             rightPanel.Visible = useFullGui;
             statusBar.Visible = useFullGui;
@@ -1203,11 +1202,11 @@ namespace TestCentric.Gui.Views
         /// Set the title bar based on the loaded file or project
         /// </summary>
         /// <param name="fileName"></param>
-        private void SetTitleBar( string fileName )
+        private void SetTitleBar(string fileName)
         {
-            Text = fileName == null 
+            Text = fileName == null
                 ? "NUnit"
-                : string.Format( "{0} - NUnit", Path.GetFileName( fileName ) );
+                : string.Format("{0} - NUnit", Path.GetFileName(fileName));
         }
 
         #endregion

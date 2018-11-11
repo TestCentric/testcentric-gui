@@ -325,5 +325,5 @@ namespace NUnit.UiException.Tests.CodeFormatters
 
             return;
         }
-    }    
+    }
 }

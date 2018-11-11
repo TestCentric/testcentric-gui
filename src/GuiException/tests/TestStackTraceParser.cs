@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -53,7 +53,7 @@ namespace NUnit.UiException.Tests
             _parser.Parse("à NUnit.UiException.TraceItem.get_Text() dans C:\\TraceItem.cs:ligne 43");
 
             Assert.That(_parser.Items.Count, Is.EqualTo(1));
-            Assert.That(_parser.Items[0], 
+            Assert.That(_parser.Items[0],
                 Is.EqualTo(new ErrorItem("C:\\TraceItem.cs", "NUnit.UiException.TraceItem.get_Text()", 43)));
 
             // TryParse should clear previous textFormatter
@@ -130,7 +130,7 @@ namespace NUnit.UiException.Tests
                     30)));
 
             return;
-        }        
+        }
 
         [Test]
         public void Test_Trace_When_Missing_File()
@@ -152,7 +152,7 @@ namespace NUnit.UiException.Tests
             Assert.That(_parser.Items[0].FullyQualifiedMethodName,
                 Is.EqualTo("System.String.InternalSubStringWithChecks(Int32 startIndex, Int32 length, Boolean fAlwaysCopy)"));
 
-            Assert.That(_parser.Items[1], 
+            Assert.That(_parser.Items[1],
                 Is.EqualTo(
                     new ErrorItem(
                         "C:\\StackTraceParser.cs",
@@ -179,9 +179,9 @@ namespace NUnit.UiException.Tests
             _parser.Parse("à Test.TestStackTraceParser.Test_Parse() dans C:\\TestStackTraceParser.cs:\r\n");
 
             Assert.That(_parser.Items.Count, Is.EqualTo(1));
-            Assert.That(_parser.Items[0], 
+            Assert.That(_parser.Items[0],
                 Is.EqualTo(new ErrorItem(
-                    "C:\\TestStackTraceParser.cs", 
+                    "C:\\TestStackTraceParser.cs",
                     "Test.TestStackTraceParser.Test_Parse()",
                     0)));
 
@@ -200,7 +200,7 @@ namespace NUnit.UiException.Tests
 
             Assert.That(_parser.Items.Count, Is.EqualTo(1));
             Assert.That(_parser.Items[0], Is.EqualTo(
-                new ErrorItem("C:\\TestStackTraceParser.cs", 
+                new ErrorItem("C:\\TestStackTraceParser.cs",
                     "Test.TestStackTraceParser.Test_Parse()", 36)));
 
             return;
@@ -214,7 +214,7 @@ namespace NUnit.UiException.Tests
             //
 
             // here, an hypothetic stack containing UNIX and Windows like filePath values...
-           
+
             _parser.Parse(
                 "at Test.TestStackTraceParser.Test_Parse() in /home/ihottier/work/stacktrace/test/TestStackTraceParser.cs:line 36\r\n" +
                 "at Test.TestStackTraceParser2.Text_Parse2() in C:\\folder\\file1:line 42"
@@ -269,7 +269,7 @@ namespace NUnit.UiException.Tests
 
             return;
         }
-               
+
         [Test]
         public void Test_Parse_Null()
         {

@@ -21,7 +21,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
 using System.Windows.Forms;
 
 namespace NUnit.ProjectEditor.ViewElements
@@ -40,7 +39,7 @@ namespace NUnit.ProjectEditor.ViewElements
         {
             this.control = control;
         }
-       
+
         public string Name
         {
             get { return control.Name; }

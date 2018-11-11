@@ -22,11 +22,8 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
 using NUnit.UiException.Properties;
-using System.Diagnostics;
 
 namespace NUnit.UiException.Controls
 {
@@ -45,7 +42,7 @@ namespace NUnit.UiException.Controls
         private Brush _brushBlue;
         private Brush _brushGray;
         private float _offsetLine;
-        
+
         private Rectangle _rectListShadow;
         private Rectangle _rectListBackground;
         private Rectangle _rectItemGray;
@@ -54,7 +51,7 @@ namespace NUnit.UiException.Controls
         private Rectangle _rectIconDll;
         private Rectangle _rectIconCSharp;
         private Rectangle _rectIconArrow;
-//        private Rectangle _rectShadow;
+        //        private Rectangle _rectShadow;
 
         private PaintData _paintData;
 
@@ -75,7 +72,7 @@ namespace NUnit.UiException.Controls
             _rectIconDll = new Rectangle(1, 59, 16, 15);
             _rectIconCSharp = new Rectangle(18, 59, 14, 15);
             _rectIconArrow = new Rectangle(35, 60, 9, 5);
-//            _rectShadow = new Rectangle(49, 60, 4, 8);
+            //            _rectShadow = new Rectangle(49, 60, 4, 8);
 
             _paintData = new PaintData();
 
@@ -85,8 +82,8 @@ namespace NUnit.UiException.Controls
         public Font Font
         {
             get { return (_font); }
-            set 
-            { 
+            set
+            {
                 _fontUnderlined = _font = value;
                 if (_font.FontFamily.IsStyleAvailable(FontStyle.Underline))
                     _fontUnderlined = new Font(_font, FontStyle.Underline);
@@ -119,15 +116,15 @@ namespace NUnit.UiException.Controls
 
                 last = LastIndexVisible(items.Count, viewport);
                 for (i = FirstIndexVisible(items.Count, viewport); i <= last; ++i)
-                    DrawItem(items[i], i, selected == items[i], i == items.Count - 1, false, 
+                    DrawItem(items[i], i, selected == items[i], i == items.Count - 1, false,
                         _paintData.WorkingGraphics, viewport);
 
                 //_paintData.WorkingGraphics.DrawImage(Resources.ErrorList,
                 //new Rectangle(0, 0, viewport.Width, _rectShadow.Height),
                 //_rectShadow, GraphicsUnit.Pixel);
             }
-            
-            _paintData.PaintTo(g);           
+
+            _paintData.PaintTo(g);
 
             return;
         }
@@ -152,7 +149,7 @@ namespace NUnit.UiException.Controls
             {
                 current = MeasureItem(g, item);
                 w = Math.Max(w, current.Width);
-            }            
+            }
 
             return (new Size((int)w, items.Count * _itemHeight));
         }
@@ -200,7 +197,7 @@ namespace NUnit.UiException.Controls
             int x = -viewport.X;
             int y = _itemHeight * index - viewport.Y;
 
-            src = (index % 2 == 0) ? _rectItemWhite : _rectItemGray ;
+            src = (index % 2 == 0) ? _rectItemWhite : _rectItemGray;
             font = (hover == true) ? _fontUnderlined : _font;
 
             g.DrawImage(Resources.ImageErrorList,
@@ -210,7 +207,7 @@ namespace NUnit.UiException.Controls
             if (selected)
             {
                 g.DrawImage(Resources.ImageErrorList,
-                    new Rectangle(0, y + 1, viewport.Width, _itemHeight ),
+                    new Rectangle(0, y + 1, viewport.Width, _itemHeight),
                     _rectSelectionMiddle, GraphicsUnit.Pixel);
             }
 
@@ -218,7 +215,7 @@ namespace NUnit.UiException.Controls
             {
                 g.DrawImage(Resources.ImageErrorList, new Rectangle(x + 1, y + 2 + font.Height, 14, 15),
                    _rectIconCSharp, GraphicsUnit.Pixel);
-                g.DrawImage(Resources.ImageErrorList, 
+                g.DrawImage(Resources.ImageErrorList,
                     new Rectangle(TEXT_MARGIN_X - 3 + x, y + 5 + 2 * font.Height, 9, 5),
                     _rectIconArrow, GraphicsUnit.Pixel);
 
@@ -236,10 +233,10 @@ namespace NUnit.UiException.Controls
                    _rectIconDll, GraphicsUnit.Pixel);
 
                 g.DrawString("N/A", font, _brushGray, _offsetLine, y + 2);
-                g.DrawString(item.ClassName, font, _brushGray, 
+                g.DrawString(item.ClassName, font, _brushGray,
                     x + TEXT_MARGIN_X, y + 2 + font.Height);
                 g.DrawString(item.BaseMethodName + "()", font, _brushGray,
-                    x + TEXT_MARGIN_X, y + 2 + 2 * font.Height);                
+                    x + TEXT_MARGIN_X, y + 2 + 2 * font.Height);
             }
 
             if (!last)
@@ -343,7 +340,7 @@ namespace NUnit.UiException.Controls
             }
 
             public bool Equals(ErrorItemCollection items, ErrorItem item, Rectangle rectangle)
-            {               
+            {
                 ErrorItem first = ((items.Count > 0) ? items[0] : null);
 
                 return (viewport.Equals(rectangle) &&

@@ -22,9 +22,7 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Windows.Forms;
 
 namespace NUnit.ProjectEditor
@@ -125,7 +123,7 @@ namespace NUnit.ProjectEditor
         private void OpenProject()
         {
             string path = view.DialogManager.GetFileOpenPath(
-                "Open Project", 
+                "Open Project",
                 "Test Projects (*.nunit)|*.nunit",
                 null);
 
@@ -146,7 +144,7 @@ namespace NUnit.ProjectEditor
         {
             if (doc.IsValid && doc.HasUnsavedChanges &&
                 view.MessageDisplay.AskYesNoQuestion(string.Format("Do you want to save changes to {0}?", doc.Name)))
-                    SaveProject();
+                SaveProject();
 
             doc.CloseProject();
         }

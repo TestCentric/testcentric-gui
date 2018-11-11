@@ -31,29 +31,29 @@ namespace TestCentric.Gui
     /// </summary>
     public class StackTraceFilter
     {
-        public static string Filter(string stack) 
+        public static string Filter(string stack)
         {
-            if(stack == null) return null;
+            if (stack == null) return null;
             StringWriter sw = new StringWriter();
             StringReader sr = new StringReader(stack);
 
-            try 
+            try
             {
                 string line;
-                while ((line = sr.ReadLine()) != null) 
+                while ((line = sr.ReadLine()) != null)
                 {
                     if (!FilterLine(line))
                         sw.WriteLine(line.Trim());
                 }
-            } 
-            catch (Exception) 
+            }
+            catch (Exception)
             {
                 return stack;
             }
             return sw.ToString();
         }
 
-        static bool FilterLine(string line) 
+        static bool FilterLine(string line)
         {
             string[] patterns = new string[]
             {
@@ -62,12 +62,12 @@ namespace TestCentric.Gui
                 "NUnit.Core.TemplateTestCase",
                 "NUnit.Core.TestResult",
                 "NUnit.Core.TestSuite",
-                "NUnit.Framework.Assertion", 
+                "NUnit.Framework.Assertion",
                 "NUnit.Framework.Assert",
                 "System.Reflection.MonoMethod"
             };
 
-            for (int i = 0; i < patterns.Length; i++) 
+            for (int i = 0; i < patterns.Length; i++)
             {
                 if (line.IndexOf(patterns[i]) > 0)
                     return true;

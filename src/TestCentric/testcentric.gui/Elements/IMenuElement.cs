@@ -21,12 +21,11 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
 
 namespace TestCentric.Gui.Elements
 {
-	public interface IMenuElement : IViewElement
+    public interface IMenuElement : IViewElement
     {
-		bool DefaultItem { get; set; }
+        bool DefaultItem { get; set; }
     }
 }

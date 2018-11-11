@@ -83,7 +83,7 @@ namespace TestCentric.Gui
                     InternalTraceLevel = (InternalTraceLevel)Enum.Parse(typeof(InternalTraceLevel), v);
                 });
 
-            this.Add("help|h", "Display this message and exit.", 
+            this.Add("help|h", "Display this message and exit.",
                 v => ShowHelp = v != null);
 
             // Default
@@ -201,7 +201,7 @@ namespace TestCentric.Gui
 
             if (val == null || val == string.Empty)
                 ErrorMessages.Add("Missing required value for option '" + option + "'.");
-            else 
+            else
             {
                 int r;
                 if (int.TryParse(val, out r))
@@ -209,7 +209,7 @@ namespace TestCentric.Gui
                 else
                     ErrorMessages.Add("An int value was expected for option '{0}' but a value of '{1}' was used");
             }
-                
+
             return result;
         }
 

@@ -21,13 +21,13 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using NUnit.Framework;
 using NSubstitute;
+using NUnit.Framework;
 
 namespace TestCentric.Gui.Presenters
 {
-    using Views;
     using Model;
+    using Views;
 
     public class StatusBarPresenterTests : PresenterTestBase<IStatusBarView>
     {
@@ -40,7 +40,7 @@ namespace TestCentric.Gui.Presenters
         [Test]
         public void WhenTestsAreLoaded_StatusBar_IsInitialized()
         {
-            FireTestLoadedEvent( new TestNode("<test-run id='2' testcasecount='123' />") );
+            FireTestLoadedEvent(new TestNode("<test-run id='2' testcasecount='123' />"));
 
             _view.Received().Initialize(123);
             _view.Received().DisplayText("Ready");
@@ -49,7 +49,7 @@ namespace TestCentric.Gui.Presenters
         [Test]
         public void WhenTestsArReloaded_StatusBar_IsInitialized()
         {
-            FireTestReloadedEvent( new TestNode("<test-run id='2' testcasecount='123' />") );
+            FireTestReloadedEvent(new TestNode("<test-run id='2' testcasecount='123' />"));
 
             _view.Received().Initialize(123);
             _view.Received().DisplayText("Reloaded");

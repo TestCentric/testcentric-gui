@@ -22,9 +22,7 @@
 // ***********************************************************************
 
 #if NET_3_5 || NET_4_0 || NET_4_5
-using System;
 using System.Xml;
-using NUnit.Framework;
 using NSubstitute;
 
 namespace NUnit.ProjectEditor.Tests.Presenters
@@ -68,7 +66,7 @@ namespace NUnit.ProjectEditor.Tests.Presenters
         {
             xmlView.Xml.Text = "<NUnitProject>"; // Missing slash
             xmlView.Xml.Validated += Raise.Event<ActionDelegate>();
-            
+
             Assert.AreEqual("<NUnitProject>", doc.XmlText);
             Assert.NotNull(doc.Exception);
             Assert.IsInstanceOf<XmlException>(doc.Exception);

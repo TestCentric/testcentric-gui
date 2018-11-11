@@ -23,10 +23,10 @@
 
 #if NET_3_5 || NET_4_0 || NET_4_5
 using System;
+using System.Windows.Forms;
 using NSubstitute;
 using NUnit.Framework;
 using NUnit.UiException.Controls;
-using System.Windows.Forms;
 
 namespace NUnit.UiException.Tests.Controls
 {
@@ -95,7 +95,7 @@ namespace NUnit.UiException.Tests.Controls
 
             ToolStripButton tracePlugin = new ToolStripButton();
             Control traceContent = new TextBox();
-            
+
             mockTraceDisplay.PluginItem.Returns(tracePlugin);
             mockTraceDisplay.Content.Returns(traceContent);
 
@@ -140,7 +140,7 @@ namespace NUnit.UiException.Tests.Controls
 
             mockTraceDisplay.Received().OnStackTraceChanged(stack);
             mockSourceDisplay.Received().OnStackTraceChanged(stack);
-            
+
             // clears all renderers
 
             _errorBrowser.ClearAll();
@@ -150,8 +150,8 @@ namespace NUnit.UiException.Tests.Controls
             Assert.That(_errorBrowser.LayoutPanel.Option, Is.TypeOf(typeof(Panel)));
 
             Assert.That(_errorBrowser.LayoutPanel.Content, Is.Not.Null);
-            Assert.That(_errorBrowser.LayoutPanel.Content, Is.TypeOf(typeof(Panel)));          
-            
+            Assert.That(_errorBrowser.LayoutPanel.Content, Is.TypeOf(typeof(Panel)));
+
             return;
         }
 

@@ -31,7 +31,7 @@ namespace TestCentric.Gui.Presenters
 
     public class TextOutputPresenter
     {
-        public static  Color WarningColor = Color.Yellow;
+        public static Color WarningColor = Color.Yellow;
         static readonly Color ErrorColor = Color.Red;
         static readonly Color LabelColor = Color.Green;
         static readonly Color OutputColor = Color.Black;

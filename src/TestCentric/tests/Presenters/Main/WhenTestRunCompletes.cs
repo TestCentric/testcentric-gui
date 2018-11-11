@@ -26,23 +26,22 @@ using NUnit.Framework;
 
 namespace TestCentric.Gui.Presenters.Main
 {
-	using Model;
-	using Views;
+    using Model;
 
-	public class WhenTestRunCompletes : MainPresenterTestBase
-	{
-		[SetUp]
-		public void SimulateTestRunFinish()
-		{
-			ClearAllReceivedCalls();
+    public class WhenTestRunCompletes : MainPresenterTestBase
+    {
+        [SetUp]
+        public void SimulateTestRunFinish()
+        {
+            ClearAllReceivedCalls();
 
-			_model.HasTests.Returns(true);
-			_model.HasResults.Returns(true);
-			_model.IsTestRunning.Returns(false);
+            _model.HasTests.Returns(true);
+            _model.HasResults.Returns(true);
+            _model.IsTestRunning.Returns(false);
 
-			var resultNode = new ResultNode("<test-run/>");
-			FireRunFinishedEvent(resultNode);
-		}
+            var resultNode = new ResultNode("<test-run/>");
+            FireRunFinishedEvent(resultNode);
+        }
 
 #if NYI // Add after implementation of project or package saving
         [TestCase("NewProjectCommand", true)]

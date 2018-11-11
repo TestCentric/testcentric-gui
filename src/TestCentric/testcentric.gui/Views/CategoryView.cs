@@ -69,16 +69,16 @@ namespace TestCentric.Gui.Views
         /// <summary> 
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if(components != null)
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         #endregion
@@ -105,7 +105,7 @@ namespace TestCentric.Gui.Views
             // 
             // categoryButtonPanel
             // 
-            this.categoryButtonPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.categoryButtonPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.categoryButtonPanel.Controls.Add(this.removeCategory);
             this.categoryButtonPanel.Controls.Add(this.addCategory);
@@ -132,7 +132,7 @@ namespace TestCentric.Gui.Views
             // 
             // selectedCategories
             // 
-            this.selectedCategories.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.selectedCategories.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.selectedCategories.Controls.Add(this.selectedList);
             this.selectedCategories.Controls.Add(this.excludeCheckbox);
@@ -145,8 +145,8 @@ namespace TestCentric.Gui.Views
             // 
             // selectedList
             // 
-            this.selectedList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-                | System.Windows.Forms.AnchorStyles.Left) 
+            this.selectedList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.selectedList.ItemHeight = 16;
             this.selectedList.Location = new System.Drawing.Point(8, 16);
@@ -157,7 +157,7 @@ namespace TestCentric.Gui.Views
             // 
             // excludeCheckbox
             // 
-            this.excludeCheckbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.excludeCheckbox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.excludeCheckbox.Location = new System.Drawing.Point(8, 120);
             this.excludeCheckbox.Name = "excludeCheckbox";
@@ -167,8 +167,8 @@ namespace TestCentric.Gui.Views
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-                | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.availableList);
             this.groupBox1.Location = new System.Drawing.Point(8, 0);
@@ -180,8 +180,8 @@ namespace TestCentric.Gui.Views
             // 
             // availableList
             // 
-            this.availableList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-                | System.Windows.Forms.AnchorStyles.Left) 
+            this.availableList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right)));
             this.availableList.ItemHeight = 16;
             this.availableList.Location = new System.Drawing.Point(8, 24);

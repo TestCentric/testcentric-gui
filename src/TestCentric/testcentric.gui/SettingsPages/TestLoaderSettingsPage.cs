@@ -53,16 +53,16 @@ namespace TestCentric.Gui.SettingsPages
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
-        protected override void Dispose( bool disposing )
+        protected override void Dispose(bool disposing)
         {
-            if( disposing )
+            if (disposing)
             {
-                if (components != null) 
+                if (components != null)
                 {
                     components.Dispose();
                 }
             }
-            base.Dispose( disposing );
+            base.Dispose(disposing);
         }
 
         #region Designer generated code
@@ -126,7 +126,7 @@ namespace TestCentric.Gui.SettingsPages
             // 
             // groupBox3
             // 
-            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Location = new System.Drawing.Point(199, 8);
             this.groupBox3.Name = "groupBox3";
@@ -177,7 +177,7 @@ namespace TestCentric.Gui.SettingsPages
             // 
             // groupBox2
             // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Location = new System.Drawing.Point(199, 158);
             this.groupBox2.Name = "groupBox2";
@@ -225,10 +225,10 @@ namespace TestCentric.Gui.SettingsPages
 
         }
         #endregion
-        
+
         public override void LoadSettings()
         {
-            switch( Settings.Engine.ProcessModel )
+            switch (Settings.Engine.ProcessModel)
             {
                 case "Separate":
                     separateProcessRadioButton.Checked = true;
@@ -292,13 +292,13 @@ namespace TestCentric.Gui.SettingsPages
 
         private void toggleMultiDomain(object sender, System.EventArgs e)
         {
-            bool multiDomain = multiDomainRadioButton.Checked = ! multiDomainRadioButton.Checked;
+            bool multiDomain = multiDomainRadioButton.Checked = !multiDomainRadioButton.Checked;
             singleDomainRadioButton.Checked = !multiDomain;
         }
 
         public override bool HasChangesRequiringReload
         {
-            get 
+            get
             {
                 return
                     Settings.Engine.ProcessModel != SelectedProcessModel() ||

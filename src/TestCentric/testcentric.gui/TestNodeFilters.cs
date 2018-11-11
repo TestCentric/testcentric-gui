@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -61,7 +61,7 @@ namespace TestCentric.Gui
                 return false;
 
             var parentNode = new TestNode(parentXmlNode);
-            
+
             return Match(parentNode) || MatchParent(parentNode);
         }
 

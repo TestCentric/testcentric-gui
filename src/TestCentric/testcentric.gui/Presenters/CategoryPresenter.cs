@@ -21,14 +21,13 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
 using System.Collections.Generic;
 
 namespace TestCentric.Gui.Presenters
 {
-    using Views;
     using Model;
     using Model.Settings;
+    using Views;
 
     public class CategoryPresenter
     {

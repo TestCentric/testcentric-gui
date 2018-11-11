@@ -22,8 +22,8 @@
 // ***********************************************************************
 
 using NUnit.Framework;
-using NUnit.UiException.StackTraceAnalyzers;
 using NUnit.UiException.StackTraceAnalysers;
+using NUnit.UiException.StackTraceAnalyzers;
 
 namespace NUnit.UiException.Tests.StackTraceAnalyzers
 {
@@ -39,7 +39,7 @@ namespace NUnit.UiException.Tests.StackTraceAnalyzers
             _parser = new PathCompositeParser();
 
             Assert.That(_parser.UnixPathParser, Is.Not.Null);
-            Assert.That(_parser.WindowsPathParser, Is.Not.Null);                
+            Assert.That(_parser.WindowsPathParser, Is.Not.Null);
 
             return;
         }

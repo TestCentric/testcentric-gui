@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -21,26 +21,24 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System.Reflection;
 using NUnit.Framework;
-using NSubstitute;
 
 namespace TestCentric.Gui.Presenters.Main
 {
-	using Model;
-	using Views;
-	using Elements;
+    using Elements;
+    using Model;
+    using Views;
 
-	public class MainPresenterTestBase : PresenterTestBase<IMainView>
+    public class MainPresenterTestBase : PresenterTestBase<IMainView>
     {
-		protected TestCentricPresenter Presenter;
+        protected TestCentricPresenter Presenter;
 
         [SetUp]
         public void CreatePresenter()
         {
 
             Presenter = new TestCentricPresenter(_view, _model, new CommandLineOptions());
-		}
+        }
 
         [TearDown]
         public void RemovePresenter()
@@ -48,14 +46,14 @@ namespace TestCentric.Gui.Presenters.Main
             Presenter = null;
         }
 
-		protected IViewElement ViewElement(string propName)
+        protected IViewElement ViewElement(string propName)
         {
             var prop = _view.GetType().GetProperty(propName);
             if (prop == null)
                 Assert.Fail($"View has no property named {propName}.");
 
             var element = prop.GetValue(_view) as IViewElement;
-			if (element == null)
+            if (element == null)
                 Assert.Fail($"Property {propName} is not an IViewElement. It is declared as {prop.PropertyType}.");
 
             return element;

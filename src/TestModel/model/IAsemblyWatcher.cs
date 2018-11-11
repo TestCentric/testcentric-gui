@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2010-2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -27,7 +27,7 @@ using System.Collections;
 namespace TestCentric.Gui.Model
 {
     public delegate void AssemblyChangedHandler(string fullPath);
-    public interface IAsemblyWatcher: IDisposable
+    public interface IAsemblyWatcher : IDisposable
     {
         /// <summary>
         /// Stops watching for changes.

@@ -21,45 +21,44 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
 using System.Collections;
 
 namespace NUnit.ProjectEditor
 {
-	/// <summary>
-	/// A simple collection to hold VSProjectConfigs. Originally,
-	/// we used the (NUnit) ProjectConfigCollection, but the
-	/// classes have since diverged.
-	/// </summary>
-	public class VSProjectConfigCollection : CollectionBase
-	{
-		public VSProjectConfig this[int index]
-		{
-			get { return List[index] as VSProjectConfig; }
-		}
+    /// <summary>
+    /// A simple collection to hold VSProjectConfigs. Originally,
+    /// we used the (NUnit) ProjectConfigCollection, but the
+    /// classes have since diverged.
+    /// </summary>
+    public class VSProjectConfigCollection : CollectionBase
+    {
+        public VSProjectConfig this[int index]
+        {
+            get { return List[index] as VSProjectConfig; }
+        }
 
-		public VSProjectConfig this[string name]
-		{
-			get
-			{
-				foreach ( VSProjectConfig config in InnerList )
-					if ( config.Name == name ) return config;
+        public VSProjectConfig this[string name]
+        {
+            get
+            {
+                foreach (VSProjectConfig config in InnerList)
+                    if (config.Name == name) return config;
 
-				return null;
-			}
-		}
+                return null;
+            }
+        }
 
-		public void Add( VSProjectConfig config )
-		{
-			List.Add( config );
-		}
+        public void Add(VSProjectConfig config)
+        {
+            List.Add(config);
+        }
 
-		public bool Contains( string name )
-		{
-			foreach( VSProjectConfig config in InnerList )
-				if ( config.Name == name ) return true;
+        public bool Contains(string name)
+        {
+            foreach (VSProjectConfig config in InnerList)
+                if (config.Name == name) return true;
 
-			return false;
-		}
-	}
+            return false;
+        }
+    }
 }

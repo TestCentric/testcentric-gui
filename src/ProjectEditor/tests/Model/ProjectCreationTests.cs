@@ -21,10 +21,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
 using System.IO;
-using System.Xml;
-using NUnit.Framework;
 
 namespace NUnit.ProjectEditor.Tests.Model
 {

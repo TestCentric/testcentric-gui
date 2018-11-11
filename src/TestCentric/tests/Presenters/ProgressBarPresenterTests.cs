@@ -21,15 +21,13 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System.Xml;
-using NUnit.Framework;
 using NSubstitute;
-using TestCentric.Gui.Controls;
+using NUnit.Framework;
 
 namespace TestCentric.Gui.Presenters
 {
-    using Views;
     using Model;
+    using Views;
 
     public class ProgressBarPresenterTests : PresenterTestBase<IProgressBarView>
     {

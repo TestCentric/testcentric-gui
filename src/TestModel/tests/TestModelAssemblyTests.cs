@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -92,7 +92,7 @@ namespace TestCentric.Gui.Model
         public void CheckStateAfterReloading()
         {
             _model.ReloadTests();
- 
+
             Assert.That(_model.HasTests, "HasTests");
             Assert.NotNull(_model.Tests, "Tests");
             Assert.False(_model.HasResults, "HasResults");

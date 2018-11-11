@@ -25,30 +25,30 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Elements
 {
-	/// <summary>
+    /// <summary>
     /// A SplitterPosition element represents the position of
-	/// a particular Splitter that is part of the view.
+    /// a particular Splitter that is part of the view.
     /// </summary>
-	public class SplitterPosition : IViewParameter<int>
+    public class SplitterPosition : IViewParameter<int>
     {
-		private Splitter _splitter;
+        private Splitter _splitter;
 
-		public event CommandHandler Changed;
+        public event CommandHandler Changed;
 
         public SplitterPosition(Splitter splitter)
         {
-			_splitter = splitter;
+            _splitter = splitter;
 
-			_splitter.SplitterMoved += (s, e) =>
-			{
-				Changed?.Invoke();
-			};
+            _splitter.SplitterMoved += (s, e) =>
+            {
+                Changed?.Invoke();
+            };
         }
 
         public int Value
-		{
-			get { return _splitter.SplitPosition; }
-			set { _splitter.SplitPosition = value; }
-		}
+        {
+            get { return _splitter.SplitPosition; }
+            set { _splitter.SplitPosition = value; }
+        }
     }
 }

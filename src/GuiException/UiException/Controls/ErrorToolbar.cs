@@ -22,12 +22,10 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
 using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
-using System.Diagnostics;
+using System.Windows.Forms;
 using NUnit.UiException.Properties;
 
 namespace NUnit.UiException.Controls
@@ -54,7 +52,7 @@ namespace NUnit.UiException.Controls
             Items.Add(_separator);
 
             _selection = -1;
-            
+
             BackgroundImage = Resources.ImageErrorBrowserHeader;
             BackgroundImageLayout = ImageLayout.Tile;
 
@@ -100,10 +98,11 @@ namespace NUnit.UiException.Controls
         /// </summary>
         public IErrorDisplay SelectedDisplay
         {
-            get {
+            get
+            {
                 if (_selection == -1)
                     return (null);
-                return ((IErrorDisplay)Items[_selection].Tag); 
+                return ((IErrorDisplay)Items[_selection].Tag);
             }
             set
             {
@@ -118,7 +117,7 @@ namespace NUnit.UiException.Controls
                 _selection = index;
                 SetOrUnsetCheckedFlag(_selection);
                 ShowOrHideOptionItems(_selection);
-                
+
                 if (SelectedRendererChanged != null)
                     SelectedRendererChanged(this, new EventArgs());
 
@@ -171,7 +170,7 @@ namespace NUnit.UiException.Controls
             Items.Add(_separator);
 
             return;
-        }        
+        }
 
         private void ShowOrHideOptionItems(int selectedIndex)
         {
@@ -179,7 +178,7 @@ namespace NUnit.UiException.Controls
 
             foreach (IErrorDisplay item in _displays)
             {
-                if ((index = IndexOf(item)) == -1)                     
+                if ((index = IndexOf(item)) == -1)
                     continue;
 
                 if (item.OptionItems == null)
@@ -219,7 +218,7 @@ namespace NUnit.UiException.Controls
                     return (i);
 
             return (-1);
-        }       
+        }
 
         private void item_Click(object sender, EventArgs e)
         {
@@ -236,7 +235,7 @@ namespace NUnit.UiException.Controls
             SelectedDisplay = renderer;
 
             return;
-        }                
+        }
 
         #region IEnumerable Membres
 
@@ -246,5 +245,5 @@ namespace NUnit.UiException.Controls
         }
 
         #endregion
-    }      
+    }
 }

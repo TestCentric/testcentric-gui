@@ -21,46 +21,45 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
-	using Model; // To be removed
-	using Elements;
+    using Elements;
+    using Model; // To be removed
 
-   public delegate void FileDropEventHandler(IList<string> fileNames);
+    public delegate void FileDropEventHandler(IList<string> fileNames);
 
-	public interface ITestTreeView
+    public interface ITestTreeView
     {
         event FileDropEventHandler FileDrop;
 
-		ContextMenu ContextMenu { get; }
+        ContextMenu ContextMenu { get; }
 
-		ICommand RunCommand { get; }
-		IChecked ShowFailedAssumptions { get; }
-		ICommand PropertiesCommand { get; }
-		// TODO: Can we eliminate need for having both of the following?
-		IChecked ShowCheckBoxes { get; }
+        ICommand RunCommand { get; }
+        IChecked ShowFailedAssumptions { get; }
+        ICommand PropertiesCommand { get; }
+        // TODO: Can we eliminate need for having both of the following?
+        IChecked ShowCheckBoxes { get; }
 
         bool CheckBoxes { get; set; }
 
         ICommand ClearAllCheckBoxes { get; }
         ICommand CheckFailedTests { get; }
 
-		string AlternateImageSet { get; set; }
+        string AlternateImageSet { get; set; }
 
         ITreeView Tree { get; }
         TestSuiteTreeNode ContextNode { get; }
-		TestNode[] SelectedTests { get; }
+        TestNode[] SelectedTests { get; }
 
         TestNodeFilter TreeFilter { get; set; }
 
         void Clear();
 
-		void ShowPropertiesDialog(TestSuiteTreeNode node);
-		void ClosePropertiesDialog();
-		void CheckPropertiesDialog();
+        void ShowPropertiesDialog(TestSuiteTreeNode node);
+        void ClosePropertiesDialog();
+        void CheckPropertiesDialog();
     }
 }

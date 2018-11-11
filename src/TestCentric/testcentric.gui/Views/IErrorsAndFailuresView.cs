@@ -27,8 +27,6 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
-    using Elements;
-
     public interface IErrorsAndFailuresView
     {
         event EventHandler SplitterPositionChanged;

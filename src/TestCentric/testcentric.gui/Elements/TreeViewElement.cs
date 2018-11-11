@@ -164,7 +164,7 @@ namespace TestCentric.Gui.Elements
             Add(treeNode, true);
         }
 
-        #if EXPERIMENTAL
+#if EXPERIMENTAL
         public void Add(TreeNode treeNode)
         {
             Add(treeNode, false);
@@ -192,7 +192,7 @@ namespace TestCentric.Gui.Elements
         }
 #endif
 
-#region Helper Methods
+        #region Helper Methods
 
         private void Add(TreeNode treeNode, bool doClear)
         {
@@ -236,6 +236,6 @@ namespace TestCentric.Gui.Elements
                     CollectCheckedNodes(checkedNodes, child);
         }
 
-#endregion
+        #endregion
     }
 }

@@ -61,7 +61,7 @@ namespace TestCentric.Gui
 
         #region Error
 
-        public DialogResult Error( string message )
+        public DialogResult Error(string message)
         {
             return Error(message, MessageBoxButtons.OK);
         }
@@ -78,12 +78,12 @@ namespace TestCentric.Gui
 
         public DialogResult Error(string message, Exception exception, MessageBoxButtons buttons)
         {
-            return Error( BuildMessage(message, exception, false), buttons);
+            return Error(BuildMessage(message, exception, false), buttons);
         }
 
         public DialogResult FatalError(string message, Exception exception)
         {
-            return Error( BuildMessage(message, exception, true), MessageBoxButtons.OK);
+            return Error(BuildMessage(message, exception, true), MessageBoxButtons.OK);
         }
 
         #endregion

@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -107,7 +107,7 @@ namespace TestCentric.Gui.Model
         public XmlNode Xml { get; }
         public bool IsSuite { get; }
         public string Id { get; }
-        public string FullName  { get; }
+        public string FullName { get; }
         public string Type { get; }
         public int TestCount { get; }
         public RunState RunState { get; }
@@ -226,9 +226,9 @@ namespace TestCentric.Gui.Model
                     Accumulate(selection, child, predicate);
         }
 
-#endregion
+        #endregion
 
-#region Helper Methods
+        #region Helper Methods
 
         private static string FormatPropertyValue(string val)
         {
@@ -258,6 +258,6 @@ namespace TestCentric.Gui.Model
             }
         }
 
-#endregion
+        #endregion
     }
 }

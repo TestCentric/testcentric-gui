@@ -22,10 +22,7 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
-using System.Text;
 
 namespace NUnit.ProjectEditor
 {
@@ -267,7 +264,7 @@ namespace NUnit.ProjectEditor
                         (RuntimeType)Enum.Parse(typeof(RuntimeType), view.Runtime.SelectedItem),
                         selectedConfig.RuntimeFramework.Version);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 // Note: Should not be called with an invalid value,
                 // but we catch and report the error in any case
@@ -441,7 +438,7 @@ namespace NUnit.ProjectEditor
         {
             IProjectConfig config = model.Configs[view.ConfigList.SelectedIndex];
             string[] list = new string[config.Assemblies.Count];
-            
+
             for (int i = 0; i < list.Length; i++)
                 list[i] = config.Assemblies[i];
 
@@ -499,7 +496,7 @@ namespace NUnit.ProjectEditor
                 return configList;
             }
         }
-        
+
         #endregion
     }
 }
