@@ -31,4 +31,4 @@ A `chocolatey` package will be developed soon and these instructions will be upd
 
 **TestCentric** is Open Source software, released under the MIT / X11 license. See LICENSE.txt for a copy of the license.
 
-**TestCentric** bundles an unchanged binary copy of the NUnit test engine, version 3.8, which is also licensed under the MIT / X11 license. In addition, the first version of the GUI is based in part on the NUnit 2.x GUI runner, released under the NUnit license. See NOTICES.txt for copyright information.
+**TestCentric** bundles an unchanged binary copy of the NUnit test engine, version 3.9, which is also licensed under the MIT / X11 license. In addition, the first version of the GUI is based in part on the NUnit 2.x GUI runner, released under the NUnit license. See NOTICES.txt for copyright information.
