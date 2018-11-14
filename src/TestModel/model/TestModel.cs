@@ -23,6 +23,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using NUnit.Engine;
 
@@ -370,6 +371,10 @@ namespace TestCentric.Gui.Model
             //    package.AddSetting(EnginePackageSettings.InternalTraceLevel, Options.InternalTraceLevel);
 
             package.AddSetting(EnginePackageSettings.ShadowCopyFiles, engineSettings.ShadowCopyFiles);
+
+            foreach (var subpackage in package.SubPackages)
+                if (Path.GetExtension(subpackage.Name) == ".sln")
+                    subpackage.AddSetting(EnginePackageSettings.SkipNonTestAssemblies, true);
 
             foreach (var entry in PackageSettings)
                 package.AddSetting(entry.Key, entry.Value);
