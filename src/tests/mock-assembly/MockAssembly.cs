@@ -24,6 +24,8 @@
 using System;
 using NUnit.Framework;
 
+[assembly: NonTestAssembly]
+
 namespace NUnit.Tests
 {
     namespace Assemblies

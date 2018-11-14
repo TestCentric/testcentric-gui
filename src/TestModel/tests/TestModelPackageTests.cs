@@ -68,5 +68,25 @@ namespace TestCentric.Gui.Model
         {
             Console.WriteLine($"Current AppDomain has ShadowCopyFiles = {AppDomain.CurrentDomain.SetupInformation.ShadowCopyFiles}");
         }
+
+        [TestCase("my.dll")]
+        [TestCase("my.sln")]
+        [TestCase("my.dll,my.sln")]
+        [TestCase("my.sln,my.dll")]
+        [TestCase("my.sln,another.sln")]
+        public void PackageForSolutionFileHasSkipNonTestAssemblies(string files)
+        {
+            TestPackage package = _model.MakeTestPackage(files.Split(','));
+            string skipKey = EnginePackageSettings.SkipNonTestAssemblies;
+
+            foreach (var subpackage in package.SubPackages)
+                if (subpackage.Name.EndsWith(".sln"))
+                {
+                    Assert.That(subpackage.Settings, Does.ContainKey(skipKey));
+                    Assert.That(subpackage.Settings[skipKey], Is.True);
+                }
+                else
+                    Assert.That(subpackage.Settings, Does.Not.ContainKey(skipKey));
+        }
     }
 }

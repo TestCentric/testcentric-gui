@@ -26,6 +26,8 @@ using System.Collections;
 using System.Windows.Forms;
 using NUnit.Framework;
 
+[assembly: NUnit.Framework.NonTestAssembly]
+
 namespace NUnit.TestUtilities
 {
     /// <summary>

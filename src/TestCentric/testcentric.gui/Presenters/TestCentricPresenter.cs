@@ -116,10 +116,6 @@ namespace TestCentric.Gui.Presenters
                     _longOpDisplay = null;
                 }
 
-                foreach (var assembly in _model.TestAssemblies)
-                    if (assembly.RunState == RunState.NotRunnable)
-                        _view.MessageDisplay.Error(assembly.GetProperty("_SKIPREASON"));
-
                 UpdateViewCommands();
             };
 
