@@ -80,6 +80,7 @@ namespace TestCentric.Gui.Model
             string skipKey = EnginePackageSettings.SkipNonTestAssemblies;
 
             foreach (var subpackage in package.SubPackages)
+            {
                 if (subpackage.Name.EndsWith(".sln"))
                 {
                     Assert.That(subpackage.Settings, Does.ContainKey(skipKey));
@@ -87,6 +88,7 @@ namespace TestCentric.Gui.Model
                 }
                 else
                     Assert.That(subpackage.Settings, Does.Not.ContainKey(skipKey));
+            }
         }
     }
 }
