@@ -39,9 +39,13 @@ namespace TestCentric.Gui.Views
 
         ICommand RunCommand { get; }
         IChecked ShowFailedAssumptions { get; }
-        ICommand PropertiesCommand { get; }
         // TODO: Can we eliminate need for having both of the following?
         IChecked ShowCheckBoxes { get; }
+        //IChecked CheckboxesCommand { get; }
+        ICommand ExpandAllCommand { get; }
+        ICommand CollapseAllCommand { get; }
+        ICommand HideTestsCommand { get; }
+        ICommand PropertiesCommand { get; }
 
         bool CheckBoxes { get; set; }
 

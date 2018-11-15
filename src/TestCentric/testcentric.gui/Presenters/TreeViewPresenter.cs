@@ -243,6 +243,21 @@ namespace TestCentric.Gui.Presenters
                     theoryNode.ShowFailedAssumptions = _view.ShowFailedAssumptions.Checked;
             };
 
+            _view.ExpandAllCommand.Execute += () =>
+            {
+                _view.Tree.ExpandAll();
+            };
+
+            _view.CollapseAllCommand.Execute += () =>
+            {
+                _view.Tree.CollapseAll();
+            };
+
+            _view.HideTestsCommand.Execute += () =>
+            {
+                HideTestsUnderNode(_model.Tests);
+            };
+
             _view.PropertiesCommand.Execute += () =>
             {
                 TestSuiteTreeNode targetNode = _view.ContextNode ?? (TestSuiteTreeNode)_view.Tree.SelectedNode;
@@ -317,6 +332,24 @@ namespace TestCentric.Gui.Presenters
             VisualState visualState = VisualState.LoadFrom(_view);
             LoadTests(test, DisplayStyle.Collapse);
             visualState.RestoreVisualState(_view, _treeMap);
+        }
+
+        private void HideTestsUnderNode(TestNode test)
+        {
+            if (test.IsSuite && _treeMap.ContainsKey(test.Id))
+            {
+                TreeNode node = _treeMap[test.Id];
+
+                if (test.Type == "TestFixture")
+                    node.Collapse();
+                else
+                {
+                    node.Expand();
+
+                    foreach (TestNode child in test.Children)
+                        HideTestsUnderNode(child);
+                }
+            }
         }
 
         /// <summary>

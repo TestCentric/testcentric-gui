@@ -94,7 +94,6 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.MenuItem runFailedMenuItem;
         private System.Windows.Forms.MenuItem stopRunMenuItem;
         private System.Windows.Forms.MenuItem viewMenuSeparator1;
-        private System.Windows.Forms.MenuItem viewMenuSeparator2;
         private System.Windows.Forms.MenuItem viewMenuSeparator3;
         private System.Windows.Forms.MenuItem fontMenuSeparator;
         private System.Windows.Forms.MenuItem testMenuSeparator;
@@ -117,17 +116,6 @@ namespace TestCentric.Gui.Views
         private TabPage outputTab;
         private ErrorsAndFailuresView errorsAndFailuresView1;
         private TestsNotRunView testsNotRunView1;
-        private MenuItem treeMenuItem;
-        private MenuItem showCheckboxesMenuItem;
-        private MenuItem menuItem5;
-        private MenuItem expandMenuItem;
-        private MenuItem collapseMenuItem;
-        private MenuItem menuItem8;
-        private MenuItem expandAllMenuItem;
-        private MenuItem collapseAllMenuItem;
-        private MenuItem hideTestsMenuItem;
-        private MenuItem menuItem12;
-        private MenuItem propertiesMenuItem;
         private MenuItem menuItem4;
         private TextOutputView textOutputView1;
 
@@ -162,14 +150,6 @@ namespace TestCentric.Gui.Views
 
             // Initialize View Menu Commands
             DisplayFormat = new CheckedMenuGroup(fullGuiMenuItem, miniGuiMenuItem);
-            TreeMenu = new PopupMenu(treeMenuItem);
-            CheckboxesCommand = new CheckedMenuItem(showCheckboxesMenuItem);
-            ExpandCommand = new MenuCommand(expandMenuItem);
-            CollapseCommand = new MenuCommand(collapseMenuItem);
-            ExpandAllCommand = new MenuCommand(expandAllMenuItem);
-            CollapseAllCommand = new MenuCommand(collapseAllMenuItem);
-            HideTestsCommand = new MenuCommand(hideTestsMenuItem);
-            PropertiesCommand = new MenuCommand(propertiesMenuItem);
             IncreaseFontCommand = new MenuCommand(increaseFontMenuItem);
             DecreaseFontCommand = new MenuCommand(decreaseFontMenuItem);
             ChangeFontCommand = new MenuCommand(fontChangeMenuItem);
@@ -238,18 +218,6 @@ namespace TestCentric.Gui.Views
             this.fullGuiMenuItem = new System.Windows.Forms.MenuItem();
             this.miniGuiMenuItem = new System.Windows.Forms.MenuItem();
             this.viewMenuSeparator1 = new System.Windows.Forms.MenuItem();
-            this.treeMenuItem = new System.Windows.Forms.MenuItem();
-            this.showCheckboxesMenuItem = new System.Windows.Forms.MenuItem();
-            this.menuItem5 = new System.Windows.Forms.MenuItem();
-            this.expandMenuItem = new System.Windows.Forms.MenuItem();
-            this.collapseMenuItem = new System.Windows.Forms.MenuItem();
-            this.menuItem8 = new System.Windows.Forms.MenuItem();
-            this.expandAllMenuItem = new System.Windows.Forms.MenuItem();
-            this.collapseAllMenuItem = new System.Windows.Forms.MenuItem();
-            this.hideTestsMenuItem = new System.Windows.Forms.MenuItem();
-            this.menuItem12 = new System.Windows.Forms.MenuItem();
-            this.propertiesMenuItem = new System.Windows.Forms.MenuItem();
-            this.viewMenuSeparator2 = new System.Windows.Forms.MenuItem();
             this.guiFontMenuItem = new System.Windows.Forms.MenuItem();
             this.increaseFontMenuItem = new System.Windows.Forms.MenuItem();
             this.decreaseFontMenuItem = new System.Windows.Forms.MenuItem();
@@ -413,8 +381,6 @@ namespace TestCentric.Gui.Views
             this.fullGuiMenuItem,
             this.miniGuiMenuItem,
             this.viewMenuSeparator1,
-            this.treeMenuItem,
-            this.viewMenuSeparator2,
             this.guiFontMenuItem,
             this.fixedFontMenuItem,
             this.viewMenuSeparator3,
@@ -441,80 +407,9 @@ namespace TestCentric.Gui.Views
             this.viewMenuSeparator1.Index = 2;
             this.viewMenuSeparator1.Text = "-";
             // 
-            // treeMenuItem
-            // 
-            this.treeMenuItem.Index = 3;
-            this.treeMenuItem.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.showCheckboxesMenuItem,
-            this.menuItem5,
-            this.expandMenuItem,
-            this.collapseMenuItem,
-            this.menuItem8,
-            this.expandAllMenuItem,
-            this.collapseAllMenuItem,
-            this.hideTestsMenuItem,
-            this.menuItem12,
-            this.propertiesMenuItem});
-            this.treeMenuItem.Text = "Tree";
-            // 
-            // showCheckboxesMenuItem
-            // 
-            this.showCheckboxesMenuItem.Index = 0;
-            this.showCheckboxesMenuItem.Text = "Show Checkboxes";
-            // 
-            // menuItem5
-            // 
-            this.menuItem5.Index = 1;
-            this.menuItem5.Text = "-";
-            // 
-            // expandMenuItem
-            // 
-            this.expandMenuItem.Index = 2;
-            this.expandMenuItem.Text = "Expand";
-            // 
-            // collapseMenuItem
-            // 
-            this.collapseMenuItem.Index = 3;
-            this.collapseMenuItem.Text = "Collapse";
-            // 
-            // menuItem8
-            // 
-            this.menuItem8.Index = 4;
-            this.menuItem8.Text = "-";
-            // 
-            // expandAllMenuItem
-            // 
-            this.expandAllMenuItem.Index = 5;
-            this.expandAllMenuItem.Text = "Expand All";
-            // 
-            // collapseAllMenuItem
-            // 
-            this.collapseAllMenuItem.Index = 6;
-            this.collapseAllMenuItem.Text = "Collapse All";
-            // 
-            // hideTestsMenuItem
-            // 
-            this.hideTestsMenuItem.Index = 7;
-            this.hideTestsMenuItem.Text = "Hide Tests";
-            // 
-            // menuItem12
-            // 
-            this.menuItem12.Index = 8;
-            this.menuItem12.Text = "-";
-            // 
-            // propertiesMenuItem
-            // 
-            this.propertiesMenuItem.Index = 9;
-            this.propertiesMenuItem.Text = "Properties...";
-            // 
-            // viewMenuSeparator2
-            // 
-            this.viewMenuSeparator2.Index = 4;
-            this.viewMenuSeparator2.Text = "-";
-            // 
             // guiFontMenuItem
             // 
-            this.guiFontMenuItem.Index = 5;
+            this.guiFontMenuItem.Index = 3;
             this.guiFontMenuItem.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.increaseFontMenuItem,
             this.decreaseFontMenuItem,
@@ -550,7 +445,7 @@ namespace TestCentric.Gui.Views
             // 
             // fixedFontMenuItem
             // 
-            this.fixedFontMenuItem.Index = 6;
+            this.fixedFontMenuItem.Index = 4;
             this.fixedFontMenuItem.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.increaseFixedFontMenuItem,
             this.decreaseFixedFontMenuItem,
@@ -580,13 +475,13 @@ namespace TestCentric.Gui.Views
             // 
             // viewMenuSeparator3
             // 
-            this.viewMenuSeparator3.Index = 7;
+            this.viewMenuSeparator3.Index = 5;
             this.viewMenuSeparator3.Text = "-";
             // 
             // statusBarMenuItem
             // 
             this.statusBarMenuItem.Checked = true;
-            this.statusBarMenuItem.Index = 8;
+            this.statusBarMenuItem.Index = 6;
             this.statusBarMenuItem.Text = "&Status Bar";
             // 
             // testMenu
@@ -986,14 +881,6 @@ namespace TestCentric.Gui.Views
 
         // View Menu Items
         public ISelection DisplayFormat { get; }
-        public IMenu TreeMenu { get; }
-        public IChecked CheckboxesCommand { get; }
-        public ICommand ExpandCommand { get; }
-        public ICommand CollapseCommand { get; }
-        public ICommand ExpandAllCommand { get; }
-        public ICommand CollapseAllCommand { get; }
-        public ICommand HideTestsCommand { get; }
-        public ICommand PropertiesCommand { get; }
         public ICommand IncreaseFontCommand { get; }
         public ICommand DecreaseFontCommand { get; }
         public ICommand ChangeFontCommand { get; }
@@ -1062,137 +949,6 @@ namespace TestCentric.Gui.Views
         }
 
         #endregion
-
-        #endregion
-
-        #region Event Handlers for Project Load and Unload
-
-        //private void OnTestProjectLoaded( object sender, TestNodeEventArgs e )
-        //{
-        //    string projectPath = e.Test.Name;
-
-        //    //SetTitleBar( projectPath );
-        //    runCount.Text = "";
-
-        //    // If this is an NUnit project, set up watcher
-        //    //if (NUnitProject.IsNUnitProjectFile(projectPath) && File.Exists(projectPath))
-        //    //    presenter.WatchProject(projectPath);
-        //}
-
-        //private void OnTestProjectUnloading(object sender, TestEventArgs e)
-        //{
-        //    // Remove any watcher
-        //    //if (e.Name != null && File.Exists(e.Name))
-        //    //{
-        //    //    presenter.RemoveWatcher();
-
-        //    //    Version version = Environment.Version;
-        //    //    foreach( TestAssemblyInfo info in TestLoader.AssemblyInfo )
-        //    //        if ( info.ImageRuntimeVersion < version )
-        //    //            version = info.ImageRuntimeVersion;
-
-        //    //    recentFilesService.SetMostRecent( new RecentFileEntry( e.Name, version ) );
-        //    //}
-        //}
-
-        //private void OnTestProjectUnloaded( object sender, TestEventArgs e )
-        //{
-        //    SetTitleBar( null );
-        //    runCount.Text = "";
-        //}
-
-        //private void OnProjectLoadFailure(object sender, TestEventArgs e)
-        //{
-        //    //MessageDisplay.Error("Project Not Loaded", e.Exception);
-
-        //    //recentFilesService.Remove(e.Name);
-
-        //    //EnableRunCommand(IsProjectLoaded);
-        //}
-
-        #endregion
-
-        #region Event Handlers for Test Load and Unload
-
-
-        ///// <summary>
-        ///// A test suite has been loaded, so update 
-        ///// recent assemblies and display the tests in the UI
-        ///// </summary>
-        //private void OnTestLoaded( TestNodeEventArgs e )
-        //{
-        //    //if ( TestLoader.TestCount == 0 )
-        //    //{
-        //    //    foreach( TestAssemblyInfo info in TestLoader.AssemblyInfo )
-        //    //        if ( info.TestFrameworks.Count > 0 ) return;
-
-        //    //    MessageDisplay.Error("This assembly was not built with any known testing framework.");
-        //    //}
-        //}
-
-        ///// <summary>
-        ///// A test suite has been unloaded, so clear the UI
-        ///// and remove any references to the suite.
-        ///// </summary>
-        //private void OnTestUnloaded( TestEventArgs e )
-        //{
-        //    runCount.Text = null;
-        //    Presenter.EnableRunCommand( false );
-        //    Refresh();
-        //}
-
-        ///// <summary>
-        ///// The current test suite has changed in some way,
-        ///// so update the info in the UI and clear the
-        ///// test results, since they are no longer valid.
-        ///// </summary>
-        //private void OnTestChanged( TestEventArgs e )
-        //{
-        //    //SetTitleBar(TestProject.Name);
-
-        //    if ( longOpDisplay != null )
-        //    {
-        //        longOpDisplay.Dispose();
-        //        longOpDisplay = null;
-        //    }
-
-        //    if (UserSettings.ClearResultsOnReload)
-        //        runCount.Text = null;
-
-        //    Presenter.EnableRunCommand( true );
-        //}
-
-        ///// <summary>
-        ///// Event handler for assembly load failures. We do this via
-        ///// an event since some errors may occur asynchronously.
-        ///// </summary>
-        //private void OnTestLoadFailure( object sender, TestEventArgs e )
-        //{
-        //    if ( longOpDisplay != null )
-        //    {
-        //        longOpDisplay.Dispose();
-        //        longOpDisplay = null;
-        //    }
-
-        //    //string message = e.Action == NUnit.Util.TestAction.TestReloadFailed
-        //    //    ? "Test reload failed!"
-        //    //    : "Test load failed!";
-        //    //string NL = Environment.NewLine;
-        //    //if ( e.Exception is BadImageFormatException )
-        //    //    message += string.Format(NL + NL +
-        //    //        "The assembly could not be loaded by NUnit. PossibleProblems include:" + NL + NL +
-        //    //        "1. The assembly may not be a valid .NET assembly." + NL + NL +
-        //    //        "2. You may be attempting to load an assembly built with a later version of the CLR than the version under which NUnit is currently running ({0})." + NL + NL +
-        //    //        "3. You may be attempting to load a 64-bit assembly into a 32-bit process.",
-        //    //        Environment.Version.ToString(3) );
-
-        //    //MessageDisplay.Error(message, e.Exception);
-
-        //    //if ( !IsTestLoaded )
-        //    //    OnTestUnloaded( sender, e );
-        //    //else
-        //    //    EnableRunCommand( true );
-        //}
 
         #endregion
 

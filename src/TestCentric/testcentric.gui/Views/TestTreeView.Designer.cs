@@ -37,6 +37,9 @@
             this.runMenuItem = new System.Windows.Forms.MenuItem();
             this.failedAssumptionsMenuItem = new System.Windows.Forms.MenuItem();
             this.showCheckBoxesMenuItem = new System.Windows.Forms.MenuItem();
+            this.expandAllMenuItem = new System.Windows.Forms.MenuItem();
+            this.collapseAllMenuItem = new System.Windows.Forms.MenuItem();
+            this.hideTestsMenuItem = new System.Windows.Forms.MenuItem();
             this.propertiesMenuItem = new System.Windows.Forms.MenuItem();
             this.treeMenu = new System.Windows.Forms.ContextMenu();
             this.treeMenu.Name = "treeMenu";
@@ -87,6 +90,10 @@
                 this.failedAssumptionsMenuItem,
                 this.showCheckBoxesMenuItem,
                 new System.Windows.Forms.MenuItem("-"),
+                this.expandAllMenuItem,
+                this.collapseAllMenuItem,
+                this.hideTestsMenuItem,
+                new System.Windows.Forms.MenuItem("-"),
                 this.propertiesMenuItem});
             // 
             // buttonPanel
@@ -132,6 +139,21 @@
             //
             this.showCheckBoxesMenuItem.Name = "showCheckBoxesMenuItem";
             this.showCheckBoxesMenuItem.Text = "Show CheckBoxes";
+            // 
+            // expandAllMenuItem
+            // 
+            //this.expandAllMenuItem.Index = 5;
+            this.expandAllMenuItem.Text = "Expand All";
+            // 
+            // collapseAllMenuItem
+            // 
+            //this.collapseAllMenuItem.Index = 6;
+            this.collapseAllMenuItem.Text = "Collapse All";
+            // 
+            // hideTestsMenuItem
+            // 
+            //this.hideTestsMenuItem.Index = 7;
+            this.hideTestsMenuItem.Text = "Hide Tests";
             //
             // propertiesMenuItem
             //
@@ -164,6 +186,9 @@
         private System.Windows.Forms.MenuItem runMenuItem;
         private System.Windows.Forms.MenuItem showCheckBoxesMenuItem;
         private System.Windows.Forms.MenuItem failedAssumptionsMenuItem;
+        private System.Windows.Forms.MenuItem expandAllMenuItem;
+        private System.Windows.Forms.MenuItem collapseAllMenuItem;
+        private System.Windows.Forms.MenuItem hideTestsMenuItem;
         private System.Windows.Forms.MenuItem propertiesMenuItem;
     }
 }
