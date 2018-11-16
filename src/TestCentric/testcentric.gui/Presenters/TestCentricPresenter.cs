@@ -409,60 +409,6 @@ namespace TestCentric.Gui.Presenters
                 InitializeDisplay(_view.DisplayFormat.SelectedItem);
             };
 
-            _view.TreeMenu.Popup += () =>
-            {
-                TreeNode selectedNode = _view.TreeView.Tree.SelectedNode;
-
-                _view.CheckboxesCommand.Checked = _settings.Gui.TestTree.ShowCheckBoxes;
-
-                if (selectedNode != null && selectedNode.Nodes.Count > 0)
-                {
-                    bool isExpanded = selectedNode.IsExpanded;
-                    _view.CollapseCommand.Enabled = isExpanded;
-                    _view.ExpandCommand.Enabled = !isExpanded;
-                }
-                else
-                {
-                    _view.CollapseCommand.Enabled = _view.ExpandCommand.Enabled = false;
-                }
-            };
-
-            _view.CheckboxesCommand.CheckedChanged += () =>
-            {
-                _settings.Gui.TestTree.ShowCheckBoxes = _view.CheckboxesCommand.Checked;
-            };
-
-            _view.ExpandCommand.Execute += () =>
-            {
-                _view.TreeView.Tree.SelectedNode.Expand();
-            };
-
-            _view.CollapseCommand.Execute += () =>
-            {
-                _view.TreeView.Tree.SelectedNode.Collapse();
-            };
-
-            _view.ExpandAllCommand.Execute += () =>
-            {
-                _view.TreeView.ExpandAll();
-            };
-
-            _view.CollapseAllCommand.Execute += () =>
-            {
-                _view.TreeView.CollapseAll();
-            };
-
-            _view.HideTestsCommand.Execute += () =>
-            {
-                _view.TreeView.HideTests();
-            };
-
-            _view.PropertiesCommand.Execute += () =>
-            {
-                if (_view.TreeView.Tree.SelectedNode != null)
-                    _view.TreeView.ShowPropertiesDialog((TestSuiteTreeNode)_view.TreeView.Tree.SelectedNode);
-            };
-
             _view.IncreaseFontCommand.Execute += () =>
             {
                 applyFont(IncreaseFont(_settings.Gui.Font));

@@ -60,6 +60,9 @@ namespace TestCentric.Gui.Views
             RunCommand = new MenuCommand(runMenuItem);
             ShowCheckBoxes = new CheckedMenuItem(showCheckBoxesMenuItem);
             ShowFailedAssumptions = new CheckedMenuItem(failedAssumptionsMenuItem);
+            ExpandAllCommand = new MenuCommand(expandAllMenuItem);
+            CollapseAllCommand = new MenuCommand(collapseAllMenuItem);
+            HideTestsCommand = new MenuCommand(hideTestsMenuItem);
             PropertiesCommand = new MenuCommand(propertiesMenuItem);
             ClearAllCheckBoxes = new ButtonElement(clearAllButton);
             CheckFailedTests = new ButtonElement(checkFailedButton);
@@ -134,6 +137,9 @@ namespace TestCentric.Gui.Views
         public ICommand RunCommand { get; private set; }
         public IChecked ShowFailedAssumptions { get; private set; }
         public IChecked ShowCheckBoxes { get; private set; }
+        public ICommand ExpandAllCommand { get; private set; }
+        public ICommand CollapseAllCommand { get; private set; }
+        public ICommand HideTestsCommand { get; private set; }
         public ICommand PropertiesCommand { get; private set; }
 
         [Category("Appearance"), DefaultValue(false)]
@@ -253,16 +259,6 @@ namespace TestCentric.Gui.Views
             tree.EndUpdate();
         }
 
-        public void HideTests()
-        {
-            tree.BeginUpdate();
-
-            foreach (TestSuiteTreeNode node in tree.Nodes)
-                HideTestsUnderNode(node);
-
-            tree.EndUpdate();
-        }
-
         #endregion
 
         #region Private Properties
@@ -293,26 +289,6 @@ namespace TestCentric.Gui.Views
         #endregion
 
         #region Helper Methods
-
-        /// <summary>
-        /// Helper collapses all fixtures under a node
-        /// </summary>
-        /// <param name="node">Node under which to collapse fixtures</param>
-        private void HideTestsUnderNode(TestSuiteTreeNode node)
-        {
-            if (node.Test.IsSuite)
-            {
-                if (node.Test.Type == "TestFixture")
-                    node.Collapse();
-                else
-                {
-                    node.Expand();
-
-                    foreach (TestSuiteTreeNode child in node.Nodes)
-                        HideTestsUnderNode(child);
-                }
-            }
-        }
 
         private void Accept(TestSuiteTreeNodeVisitor visitor)
         {

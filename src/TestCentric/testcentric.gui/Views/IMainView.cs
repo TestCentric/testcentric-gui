@@ -58,14 +58,6 @@ namespace TestCentric.Gui.Views
 
         // View Menu Items
         ISelection DisplayFormat { get; }
-        IMenu TreeMenu { get; }
-        IChecked CheckboxesCommand { get; }
-        ICommand ExpandCommand { get; }
-        ICommand CollapseCommand { get; }
-        ICommand ExpandAllCommand { get; }
-        ICommand CollapseAllCommand { get; }
-        ICommand HideTestsCommand { get; }
-        ICommand PropertiesCommand { get; }
         ICommand IncreaseFontCommand { get; }
         ICommand DecreaseFontCommand { get; }
         ICommand ChangeFontCommand { get; }
