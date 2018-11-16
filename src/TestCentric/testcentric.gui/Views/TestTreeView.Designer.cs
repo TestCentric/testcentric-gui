@@ -100,7 +100,6 @@
             // 
             this.buttonPanel.Controls.Add(this.checkFailedButton);
             this.buttonPanel.Controls.Add(this.clearAllButton);
-            //this.buttonPanel.Visible = true;
             this.buttonPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.buttonPanel.Location = new System.Drawing.Point(0, 448);
             this.buttonPanel.Name = "buttonPanel";
@@ -142,17 +141,17 @@
             // 
             // expandAllMenuItem
             // 
-            //this.expandAllMenuItem.Index = 5;
+            this.expandAllMenuItem.Name = "expandAllMenuItem";
             this.expandAllMenuItem.Text = "Expand All";
             // 
             // collapseAllMenuItem
             // 
-            //this.collapseAllMenuItem.Index = 6;
+            this.collapseAllMenuItem.Name = "collapseAllMenuItem";
             this.collapseAllMenuItem.Text = "Collapse All";
             // 
             // hideTestsMenuItem
             // 
-            //this.hideTestsMenuItem.Index = 7;
+            this.hideTestsMenuItem.Name = "hideTestsMenuItem";
             this.hideTestsMenuItem.Text = "Hide Tests";
             //
             // propertiesMenuItem
