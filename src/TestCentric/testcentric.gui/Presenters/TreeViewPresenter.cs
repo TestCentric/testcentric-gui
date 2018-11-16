@@ -81,10 +81,7 @@ namespace TestCentric.Gui.Presenters
 
         private void WireUpEvents()
         {
-            _model.Events.TestsLoading += (e) =>
-            {
-                _view.RunCommand.Enabled = false;
-            };
+            _model.Events.TestsLoading += (e) => _view.RunCommand.Enabled = false;
 
             _model.Events.TestLoaded += (e) =>
             {
@@ -113,10 +110,7 @@ namespace TestCentric.Gui.Presenters
                 }
             };
 
-            _model.Events.TestsReloading += (e) =>
-            {
-                _view.RunCommand.Enabled = false;
-            };
+            _model.Events.TestsReloading += (e) => _view.RunCommand.Enabled = false;
 
             _model.Events.TestReloaded += (e) =>
             {
@@ -152,10 +146,7 @@ namespace TestCentric.Gui.Presenters
                 _treeMap.Clear();
             };
 
-            _model.Events.TestUnloaded += (e) =>
-            {
-                _view.RunCommand.Enabled = false;
-            };
+            _model.Events.TestUnloaded += (e) => _view.RunCommand.Enabled = false;
 
             _model.Events.RunStarting += (e) =>
             {
@@ -163,10 +154,7 @@ namespace TestCentric.Gui.Presenters
                 _view.CheckPropertiesDialog();
             };
 
-            _model.Events.RunFinished += (e) =>
-            {
-                _view.RunCommand.Enabled = true;
-            };
+            _model.Events.RunFinished += (e) => _view.RunCommand.Enabled = true;
 
             _model.Events.TestFinished += (e) => SetTestResult(e.Result);
 
@@ -226,11 +214,8 @@ namespace TestCentric.Gui.Presenters
                     _model.RunTests(new TestSelection(_view.SelectedTests));
             };
 
-            _view.ShowCheckBoxes.CheckedChanged += () =>
-            {
-                _settings.Gui.TestTree.ShowCheckBoxes = _view.ShowCheckBoxes.Checked;
-            };
-
+            _view.ShowCheckBoxes.CheckedChanged += () => _view.CheckBoxes = _view.ShowCheckBoxes.Checked;
+ 
             _view.ClearAllCheckBoxes.Execute += () => ClearAllCheckBoxes(_view.Tree.TopNode);
 
             _view.CheckFailedTests.Execute += () => CheckFailedTests(_view.Tree.TopNode);
@@ -243,20 +228,11 @@ namespace TestCentric.Gui.Presenters
                     theoryNode.ShowFailedAssumptions = _view.ShowFailedAssumptions.Checked;
             };
 
-            _view.ExpandAllCommand.Execute += () =>
-            {
-                _view.Tree.ExpandAll();
-            };
+            _view.ExpandAllCommand.Execute += () => _view.Tree.ExpandAll();
 
-            _view.CollapseAllCommand.Execute += () =>
-            {
-                _view.Tree.CollapseAll();
-            };
+            _view.CollapseAllCommand.Execute += () => _view.Tree.CollapseAll();
 
-            _view.HideTestsCommand.Execute += () =>
-            {
-                HideTestsUnderNode(_model.Tests);
-            };
+            _view.HideTestsCommand.Execute += () => HideTestsUnderNode(_model.Tests);
 
             _view.PropertiesCommand.Execute += () =>
             {
