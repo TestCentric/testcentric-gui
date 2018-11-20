@@ -22,6 +22,7 @@
 // ***********************************************************************
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -39,6 +40,9 @@ namespace TestCentric.Gui.Model
         // property. This is used when firing events from the model.
         private TestEventDispatcher _events;
 
+        // Check if the loaded Assemblies has been changed
+        private AssemblyWatcher _assemblyWatcher;
+
         #region Constructor
 
         public TestModel(ITestEngine testEngine)
@@ -55,6 +59,7 @@ namespace TestCentric.Gui.Model
             }
 
             _events = new TestEventDispatcher(this);
+            _assemblyWatcher = new AssemblyWatcher();
         }
 
         #endregion
@@ -181,10 +186,18 @@ namespace TestCentric.Gui.Model
 
             Results.Clear();
 
+            _assemblyWatcher.Setup(1000, files as IList);
+            _assemblyWatcher.AssemblyChanged += new AssemblyChangedHandler(OnChange);
+            _assemblyWatcher.Start();
             _events.FireTestLoaded(Tests);
 
             foreach (var subPackage in TestPackage.SubPackages)
                 Services.RecentFiles.SetMostRecent(subPackage.FullName);
+        }
+
+        private void OnChange(string fullpath)
+        {
+            ReloadTests();
         }
 
         public void UnloadTests()
@@ -197,6 +210,7 @@ namespace TestCentric.Gui.Model
             TestPackage = null;
             TestFiles.Clear();
             Results.Clear();
+            _assemblyWatcher.Stop();
 
             _events.FireTestUnloaded();
         }
@@ -323,6 +337,9 @@ namespace TestCentric.Gui.Model
 
                 if (TestEngine != null)
                     TestEngine.Dispose();
+
+                if (_assemblyWatcher != null)
+                    _assemblyWatcher.Dispose();
             }
             catch (NUnitEngineUnloadException)
             {
