@@ -226,6 +226,21 @@ namespace TestCentric.Gui.Presenters
             Assert.That(treeNode.Result, Is.EqualTo(result));
         }
 
+        [Test]
+        public void WhenTestIsChanged_ReloadSettingsIsEnabled()
+        {
+            _settings.Gui.ReloadOnChange = true;
+            _model.Events.TestChanged += Raise.Event<TestEventHandler>(new TestEventArgs());
+            _model.Received().ReloadTests();
+        }
+
+        [Test]
+        public void WhenTestIsChanged_ReloadSettingsIsDisabled()
+        {
+            _settings.Gui.ReloadOnChange = false;
+            _model.Events.TestChanged += Raise.Event<TestEventHandler>(new TestEventArgs());
+            _model.DidNotReceive().ReloadTests();
+        }
         //[Test]
         //public void WhenTestRunStarts_ResultsAreCleared()
         //{

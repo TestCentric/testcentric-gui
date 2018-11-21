@@ -197,7 +197,7 @@ namespace TestCentric.Gui.Model
 
         private void OnChange(string fullpath)
         {
-            ReloadTests();
+            _events.FireTestChanged();
         }
 
         public void UnloadTests()

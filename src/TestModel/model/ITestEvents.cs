@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -45,6 +45,7 @@ namespace TestCentric.Gui.Model
         event TestFilesLoadingEventHandler TestsLoading;
         event TestEventHandler TestsReloading;
         event TestEventHandler TestsUnloading;
+        event TestEventHandler TestChanged;
 
         event TestNodeEventHandler TestLoaded;
         event TestNodeEventHandler TestReloaded;

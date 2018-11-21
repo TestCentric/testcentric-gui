@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -120,6 +120,14 @@ namespace TestCentric.Gui.Presenters
                     RestoreResults(e.Test);
 
                 _view.RunCommand.Enabled = true;
+            };
+
+            _model.Events.TestChanged += (e) =>
+            {
+                if (_settings.Gui.ReloadOnChange)
+                {
+                    _model.ReloadTests();
+                }
             };
 
             _model.Events.TestsUnloading += (e) =>
