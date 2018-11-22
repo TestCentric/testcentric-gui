@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -73,6 +73,12 @@ namespace TestCentric.Gui.Views
 
         private void WireUpEvents()
         {
+            tree.NodeMouseDoubleClick += (s, e) =>
+            {
+                Delegate eventDelegate = (Delegate)RunCommand.GetType().GetField("Execute", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(RunCommand);
+                eventDelegate.Method.Invoke(eventDelegate.Target, null);
+            };
+
             tree.MouseDown += (s, e) =>
             {
                 if (e.Button == MouseButtons.Right)
