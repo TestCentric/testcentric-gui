@@ -73,10 +73,14 @@ namespace TestCentric.Gui.Views
 
         private void WireUpEvents()
         {
-            tree.NodeMouseDoubleClick += (s, e) =>
+            tree.MouseDoubleClick += (s, e) =>
             {
-                Delegate eventDelegate = (Delegate)RunCommand.GetType().GetField("Execute", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(RunCommand);
-                eventDelegate.Method.Invoke(eventDelegate.Target, null);
+                ContextNode = tree.GetNodeAt(e.X, e.Y) as TestSuiteTreeNode;
+                if (ContextNode.TestType == "TestCase")
+                {
+                    Delegate eventDelegate = (Delegate)RunCommand.GetType().GetField("Execute", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(RunCommand);
+                    eventDelegate.Method.Invoke(eventDelegate.Target, null);
+                }
             };
 
             tree.MouseDown += (s, e) =>
