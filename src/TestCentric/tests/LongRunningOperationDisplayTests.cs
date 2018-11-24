@@ -30,6 +30,7 @@ namespace TestCentric.Gui.Tests
     using Views;
 
     [TestFixture]
+    [Platform(Exclude = "Linux", Reason = "Display issues")]
     public class LongRunningOperationDisplayTests
     {
         private IMainView _view;
