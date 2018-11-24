@@ -28,6 +28,7 @@ using NUnit.TestUtilities;
 namespace TestCentric.Gui.Views
 {
     [TestFixture]
+    [Platform(Exclude = "Linux", Reason = "Uninitialized form causes an error in Travis-CI")]
     public class ErrorsAndFailuresViewTests : ControlTester
     {
         [OneTimeSetUp]
