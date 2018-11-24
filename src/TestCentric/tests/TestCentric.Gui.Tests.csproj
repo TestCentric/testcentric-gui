@@ -130,6 +130,10 @@
     <Reference Include="nunit.engine.api">
       <HintPath>..\..\..\packages\NUnit.Engine.Api.3.9.0\lib\nunit.engine.api.dll</HintPath>
     </Reference>
+    <ProjectReference Include="..\components\TestCentric.Gui.Components.csproj">
+      <Project>{AC6DFB0E-C717-4FC4-B918-D6B789061212}</Project>
+      <Name>TestCentric.Gui.Components</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\CommonAssemblyInfo.cs">
