@@ -114,6 +114,8 @@ namespace NUnit.TestUtilities.Fakes
 
         public string TypeName { get; }
 
+        public IRuntimeFramework TargetFramework { get; }
+
         public IEnumerable<string> GetValues(string name)
         {
             return new string[0];

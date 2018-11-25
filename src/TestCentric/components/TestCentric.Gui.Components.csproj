@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AC6DFB0E-C717-4FC4-B918-D6B789061212}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>TestCentric.Gui.Components</RootNamespace>
+    <AssemblyName>TestCentric.Gui.Components</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\nunit.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Drawing" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Elements\ButtonElement.cs" />
+    <Compile Include="Elements\CheckBoxElement.cs" />
+    <Compile Include="Elements\CheckedMenuGroup.cs" />
+    <Compile Include="Elements\CheckedMenuItem.cs" />
+    <Compile Include="Elements\ControlElement.cs" />
+    <Compile Include="Elements\FontSelector.cs" />
+    <Compile Include="Elements\ICheckBox.cs" />
+    <Compile Include="Elements\IChecked.cs" />
+    <Compile Include="Elements\ICommand.cs" />
+    <Compile Include="Elements\IControlElement.cs" />
+    <Compile Include="Elements\IListBox.cs" />
+    <Compile Include="Elements\IMenu.cs" />
+    <Compile Include="Elements\IMenuElement.cs" />
+    <Compile Include="Elements\ISelection.cs" />
+    <Compile Include="Elements\ITreeView.cs" />
+    <Compile Include="Elements\IViewElement.cs" />
+    <Compile Include="Elements\IViewParameter.cs" />
+    <Compile Include="Elements\ListBoxElement.cs" />
+    <Compile Include="Elements\MenuCommand.cs" />
+    <Compile Include="Elements\MenuElement.cs" />
+    <Compile Include="Elements\PopupMenu.cs" />
+    <Compile Include="Elements\SplitterPosition.cs" />
+    <Compile Include="Elements\TabSelector.cs" />
+    <Compile Include="Elements\TreeViewElement.cs" />
+    <Compile Include="Controls\ExpandingLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\ExpandingTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\TestCentricProgressBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\TipWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+    <Folder Include="Elements\" />
+    <Folder Include="Controls\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\ExpandingLabel.resx">
+      <DependentUpon>..\..\components\Controls\ExpandingLabel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\ExpandingTextBox.resx">
+      <DependentUpon>..\..\components\Controls\ExpandingTextBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\TipWindow.resx">
+      <DependentUpon>..\..\components\Controls\TipWindow.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>
