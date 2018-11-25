@@ -80,6 +80,7 @@ namespace TestCentric.Gui.Presenters
         }
 
         [Test]
+        [Platform(Exclude = "Linux", Reason = "Display issues")]
         public void WhenTestLoadCompletes_RunCommandIsEnabled()
         {
             ClearAllReceivedCalls();
@@ -90,6 +91,7 @@ namespace TestCentric.Gui.Presenters
         }
 
         [Test]
+        [Platform(Exclude = "Linux", Reason = "Display issues")]
         public void WhenTestLoadCompletes_PropertyDialogIsClosed()
         {
             ClearAllReceivedCalls();
@@ -100,6 +102,7 @@ namespace TestCentric.Gui.Presenters
         }
 
         [Test]
+        [Platform(Exclude = "Linux", Reason = "Display issues")]
         public void WhenTestLoadCompletes_MultipleAssemblies_TopNodeIsTestRun()
         {
             TestNode testNode = new TestNode("<test-run id='2'><test-suite id='101' name='test.dll'/><test-suite id='102' name='another.dll'/></test-run>");
@@ -111,6 +114,7 @@ namespace TestCentric.Gui.Presenters
         }
 
         [Test]
+        [Platform(Exclude = "Linux", Reason = "Display issues")]
         public void WhenTestLoadCompletes_SingleAssembly_TopNodeIsAssembly()
         {
             TestNode testNode = new TestNode("<test-run><test-suite id='1' name='another.dll'/></test-run>");
@@ -132,6 +136,7 @@ namespace TestCentric.Gui.Presenters
         }
 
         [Test]
+        [Platform(Exclude = "Linux", Reason = "Display issues")]
         public void WhenTestReloadCompletes_RunCommandIsEnabled()
         {
             ClearAllReceivedCalls();

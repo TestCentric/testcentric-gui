@@ -31,6 +31,7 @@ namespace TestCentric.Gui.Views
 
     [TestFixture(typeof(TestCentricMainView))]
     //[TestFixture(typeof(TestTreeView))]
+    [Platform(Exclude = "Linux", Reason = "Uninitialized form causes an error in Travis-CI")]
     public class CommonViewTests<T> where T : new()
     {
         protected T View { get; private set; }

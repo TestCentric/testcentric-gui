@@ -109,16 +109,16 @@ namespace TestCentric.Gui.Elements
 
         public TreeNode TopNode
         {
-            get => Control.TopNode;
-            set => Control.TopNode = value;
+            get { return Control.TopNode; }
+            set { Control.TopNode = value; }
         }
 
         public int VisibleCount => Control.VisibleCount;
 
         public TreeNode SelectedNode
         {
-            get => Control.SelectedNode;
-            set => Control.SelectedNode = value;
+            get { return Control.SelectedNode; }
+            set { Control.SelectedNode = value; }
         }
 
         public IList<TreeNode> Nodes

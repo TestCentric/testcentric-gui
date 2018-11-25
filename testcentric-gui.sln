@@ -17,6 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		src\nunit.snk = src\nunit.snk
 		README.md = README.md
 		testcentric-gui.sln.licenseheader = testcentric-gui.sln.licenseheader
+		.travis.yml = .travis.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GuiException", "GuiException", "{35A92AA3-A1E6-426E-8D96-322F3EBF1C8D}"

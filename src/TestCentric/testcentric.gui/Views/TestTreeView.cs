@@ -146,7 +146,7 @@ namespace TestCentric.Gui.Views
         [Description("Indicates whether checkboxes are displayed beside test nodes")]
         public bool CheckBoxes
         {
-            get => tree.CheckBoxes;
+            get { return tree.CheckBoxes; }
             set
             {
                 tree.CheckBoxes = value;
@@ -237,8 +237,8 @@ namespace TestCentric.Gui.Views
 
         public TestNodeFilter TreeFilter
         {
-            get => _treeFilter;
-            set => Accept(new TestFilterVisitor(_treeFilter = value));
+            get { return _treeFilter; }
+            set { Accept(new TestFilterVisitor(_treeFilter = value)); }
         }
 
         #endregion

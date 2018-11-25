@@ -37,8 +37,8 @@ namespace TestCentric.Gui.Elements
 
         public bool Checked
         {
-            get => Control.Checked;
-            set => Control.Checked = value;
+            get { return Control.Checked; }
+            set { Control.Checked = value; }
         }
 
         public event CommandHandler CheckedChanged;
