@@ -38,6 +38,7 @@ namespace TestCentric.Gui
             _originalCursor = owner.Cursor;
             _operation = new Label()
             {
+                Name = "operation", // Test uses this
                 BorderStyle = BorderStyle.FixedSingle,
                 Dock = DockStyle.Fill,
                 Font = new Font(FontFamily.GenericSansSerif, 10.2F, FontStyle.Italic, GraphicsUnit.Point, 0),
