@@ -48,9 +48,9 @@ namespace TestCentric.Gui.Elements
         /// </summary>
         string Text { get; set; }
 
-        ///// <summary>
-        ///// Invoke a delegate if necessary, otherwise just call it
-        ///// </summary>
+        /// <summary>
+        /// Invoke a delegate if necessary, otherwise just call it
+        /// </summary>
         void InvokeIfRequired(MethodInvoker _delegate);
     }
 }
