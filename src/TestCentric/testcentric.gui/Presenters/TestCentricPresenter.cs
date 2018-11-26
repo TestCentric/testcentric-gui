@@ -85,7 +85,7 @@ namespace TestCentric.Gui.Presenters
             _settings = _model.Services.UserSettings;
             _recentFiles = _model.Services.RecentFiles;
 
-            _view.FontSelector.Value = _settings.Gui.Font;
+            _view.Font = _settings.Gui.Font;
             _view.ResultTabs.SelectedIndex = _settings.Gui.SelectedTab;
 
             UpdateViewCommands();
@@ -855,7 +855,7 @@ namespace TestCentric.Gui.Presenters
 
         private void applyFont(Font font)
         {
-            _settings.Gui.Font = _view.FontSelector.Value = font;
+            _settings.Gui.Font = _view.Font = font;
             _view.RunSummary.Control.Font = MakeBold(font);
         }
 

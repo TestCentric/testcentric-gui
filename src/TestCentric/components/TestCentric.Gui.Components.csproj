@@ -42,7 +42,6 @@
     <Compile Include="Elements\CheckedMenuGroup.cs" />
     <Compile Include="Elements\CheckedMenuItem.cs" />
     <Compile Include="Elements\ControlElement.cs" />
-    <Compile Include="Elements\FontSelector.cs" />
     <Compile Include="Elements\ICheckBox.cs" />
     <Compile Include="Elements\IChecked.cs" />
     <Compile Include="Elements\ICommand.cs" />

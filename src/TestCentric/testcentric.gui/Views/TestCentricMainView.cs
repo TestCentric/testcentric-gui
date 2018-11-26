@@ -128,7 +128,6 @@ namespace TestCentric.Gui.Views
             InitializeComponent();
 
             // View Parameters
-            FontSelector = new FontSelector(this);
             SplitterPosition = new SplitterPosition(treeSplitter);
 
             // UI Elements on main form
@@ -858,8 +857,8 @@ namespace TestCentric.Gui.Views
                 // No actionif minimized
             }
         }
+
         // View Parameters
-        public IViewParameter<Font> FontSelector { get; }
         public IViewParameter<int> SplitterPosition { get; }
 
         // UI Elements

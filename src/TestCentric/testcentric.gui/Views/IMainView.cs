@@ -36,7 +36,8 @@ namespace TestCentric.Gui.Views
         Point Location { get; set; }
         Size Size { get; set; }
         bool Maximized { get; set; }
-        IViewParameter<Font> FontSelector { get; }
+        //IViewParameter<Font> FontSelector { get; }
+        Font Font { get; set; }
         IViewParameter<int> SplitterPosition { get; }
 
         // UI Elements
