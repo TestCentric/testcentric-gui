@@ -86,7 +86,7 @@ namespace TestCentric.Gui.SettingsPages
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Location = new System.Drawing.Point(181, 4);
             this.groupBox1.Name = "groupBox1";
@@ -121,7 +121,6 @@ namespace TestCentric.Gui.SettingsPages
             // reloadOnChangeCheckBox
             // 
             this.reloadOnChangeCheckBox.AutoSize = true;
-            this.reloadOnChangeCheckBox.Enabled = false;
             this.helpProvider1.SetHelpString(this.reloadOnChangeCheckBox, "If checked, the assembly is reloaded whenever it changes. Changes to this setting" +
         " do not take effect until the next time an assembly is loaded.");
             this.reloadOnChangeCheckBox.Location = new System.Drawing.Point(24, 64);

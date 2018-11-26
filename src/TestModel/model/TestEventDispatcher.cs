@@ -54,6 +54,11 @@ namespace TestCentric.Gui.Model
             TestsUnloading?.Invoke(new TestEventArgs());
         }
 
+        public void FireTestChanged()
+        {
+            TestChanged?.Invoke(new TestEventArgs());
+        }
+
         public void FireTestLoaded(TestNode testNode)
         {
             TestLoaded?.Invoke(new TestNodeEventArgs(testNode));
@@ -87,6 +92,7 @@ namespace TestCentric.Gui.Model
         public event TestFilesLoadingEventHandler TestsLoading;
         public event TestEventHandler TestsReloading;
         public event TestEventHandler TestsUnloading;
+        public event TestEventHandler TestChanged;
 
         public event TestNodeEventHandler TestLoaded;
         public event TestNodeEventHandler TestReloaded;
