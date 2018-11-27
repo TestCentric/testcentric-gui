@@ -294,9 +294,9 @@ namespace TestCentric.Gui.Presenters
                 }
             };
 
-            _view.SplitterPosition.Changed += () =>
+            _view.SplitterPositionChanged += (s, e) =>
             {
-                _settings.Gui.MainForm.SplitPosition = _view.SplitterPosition.Value;
+                _settings.Gui.MainForm.SplitPosition = _view.SplitterPosition;
             };
 
             _view.FormClosing += (s, e) =>
@@ -902,7 +902,7 @@ namespace TestCentric.Gui.Presenters
             _view.Maximized = isMaximized;
 
             if (useFullGui)
-                _view.SplitterPosition.Value = _settings.Gui.MainForm.SplitPosition;
+                _view.SplitterPosition = _settings.Gui.MainForm.SplitPosition;
         }
 
         private static bool IsValidLocation(Point location, Size size)

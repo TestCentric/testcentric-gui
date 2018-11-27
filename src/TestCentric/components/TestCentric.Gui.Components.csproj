@@ -52,12 +52,10 @@
     <Compile Include="Elements\ISelection.cs" />
     <Compile Include="Elements\ITreeView.cs" />
     <Compile Include="Elements\IViewElement.cs" />
-    <Compile Include="Elements\IViewParameter.cs" />
     <Compile Include="Elements\ListBoxElement.cs" />
     <Compile Include="Elements\MenuCommand.cs" />
     <Compile Include="Elements\MenuElement.cs" />
     <Compile Include="Elements\PopupMenu.cs" />
-    <Compile Include="Elements\SplitterPosition.cs" />
     <Compile Include="Elements\TabSelector.cs" />
     <Compile Include="Elements\TreeViewElement.cs" />
     <Compile Include="Controls\ExpandingLabel.cs">
