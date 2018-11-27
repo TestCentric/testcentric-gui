@@ -21,6 +21,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -127,8 +128,10 @@ namespace TestCentric.Gui.Views
         {
             InitializeComponent();
 
-            // View Parameters
-            SplitterPosition = new SplitterPosition(treeSplitter);
+            treeSplitter.SplitterMoved += (s, e) =>
+            {
+                SplitterPositionChanged?.Invoke(s, e);
+            };
 
             // UI Elements on main form
             RunButton = new ButtonElement(runButton);
@@ -843,7 +846,9 @@ namespace TestCentric.Gui.Views
 
         #endregion
 
-        #region Properties
+        #region Events and Properties
+
+        public event EventHandler SplitterPositionChanged;
 
         public bool Maximized
         {
@@ -858,8 +863,11 @@ namespace TestCentric.Gui.Views
             }
         }
 
-        // View Parameters
-        public IViewParameter<int> SplitterPosition { get; }
+        public int SplitterPosition
+        { 
+            get { return treeSplitter.SplitPosition; }
+            set { treeSplitter.SplitPosition = value; }
+        }
 
         // UI Elements
         public ICommand RunButton { get; }

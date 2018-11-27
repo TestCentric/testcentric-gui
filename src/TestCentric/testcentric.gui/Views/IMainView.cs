@@ -36,9 +36,8 @@ namespace TestCentric.Gui.Views
         Point Location { get; set; }
         Size Size { get; set; }
         bool Maximized { get; set; }
-        //IViewParameter<Font> FontSelector { get; }
         Font Font { get; set; }
-        IViewParameter<int> SplitterPosition { get; }
+        int SplitterPosition { get; set; }
 
         // UI Elements
         ICommand RunButton { get; }
@@ -105,5 +104,8 @@ namespace TestCentric.Gui.Views
         event EventHandler Move;
         event EventHandler Resize;
         event FormClosingEventHandler FormClosing;
+
+        // Our own events
+        event EventHandler SplitterPositionChanged;
     }
 }
