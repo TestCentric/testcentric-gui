@@ -18,6 +18,9 @@ var dbgSuffix = configuration == "Debug" ? "-dbg" : "";
 // DEFINE RUN CONSTANTS
 //////////////////////////////////////////////////////////////////////
 
+// HACK: Engine Version - Must update this manually to match package used
+var ENGINE_VERSION = "3.9.0";
+
 // Directories
 var PROJECT_DIR = Context.Environment.WorkingDirectory.FullPath + "/";
 var PACKAGE_DIR = PROJECT_DIR + "package/";
@@ -49,7 +52,6 @@ Task("Clean")
 //////////////////////////////////////////////////////////////////////
 
 Task("RestorePackages")
-    .IsDependentOn("Clean")
     .Does(() =>
 {
     NuGetRestore(SOLUTION);
@@ -60,6 +62,7 @@ Task("RestorePackages")
 //////////////////////////////////////////////////////////////////////
 
 Task("Build")
+	.IsDependentOn("Clean")
     .IsDependentOn("RestorePackages")
     .Does(() =>
 {
@@ -77,8 +80,8 @@ Task("Build")
     }
 
     // Temporary hack... needs update if we update the engine
-    CopyFileToDirectory("packages/NUnit.Engine.3.9.0/lib/nunit-agent.exe.config", BIN_DIR);
-    CopyFileToDirectory("packages/NUnit.Engine.3.9.0/lib/nunit-agent-x86.exe.config", BIN_DIR);
+    CopyFileToDirectory("packages/NUnit.Engine." + ENGINE_VERSION + "/lib/nunit-agent.exe.config", BIN_DIR);
+    CopyFileToDirectory("packages/NUnit.Engine." + ENGINE_VERSION + "/lib/nunit-agent-x86.exe.config", BIN_DIR);
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -142,7 +145,7 @@ Task("PackageChocolatey")
     {
         CreateDirectory(PACKAGE_DIR);
 
-        ChocolateyPack("choco/" + PACKAGE_NAME + ".nuspec", 
+        ChocolateyPack(CHOCO_DIR + PACKAGE_NAME + ".nuspec", 
             new ChocolateyPackSettings()
             {
                 Version = PACKAGE_VERSION,
@@ -191,6 +194,11 @@ Task("Travis")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
     .IsDependentOn("PackageZip");
+
+Task("All")
+    .IsDependentOn("Build")
+    .IsDependentOn("Test")
+    .IsDependentOn("Package");
 
 Task("Default")
     .IsDependentOn("Test");
