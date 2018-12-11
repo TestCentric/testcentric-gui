@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016-2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -20,6 +20,8 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
+
+using System;
 
 namespace TestCentric.Gui.Views
 {
@@ -105,6 +107,13 @@ namespace TestCentric.Gui.Views
                 timePanel.Text = "Time : " + time.ToString("F3");
                 timePanel.Visible = true;
             });
+        }
+
+        protected override void OnFontChanged(EventArgs e)
+        {
+            StatusLabel.Font = testCountPanel.Font = testsRunPanel.Font = passedPanel.Font =
+                failedPanel.Font = warningsPanel.Font = inconclusivePanel.Font = timePanel.Font = Font;
+            base.OnFontChanged(e);
         }
     }
 }
