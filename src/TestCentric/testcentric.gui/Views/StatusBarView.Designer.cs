@@ -51,16 +51,16 @@
             this.warningsPanel,
             this.inconclusivePanel,
             this.timePanel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, -1);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 2);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(579, 24);
+            this.statusStrip1.Size = new System.Drawing.Size(579, 22);
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // StatusLabel
             // 
             this.StatusLabel.Name = "StatusLabel";
-            this.StatusLabel.Size = new System.Drawing.Size(88, 19);
+            this.StatusLabel.Size = new System.Drawing.Size(564, 17);
             this.StatusLabel.Spring = true;
             this.StatusLabel.Text = "Ready";
             this.StatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -70,7 +70,7 @@
             this.testCountPanel.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
             this.testCountPanel.BorderStyle = System.Windows.Forms.Border3DStyle.Etched;
             this.testCountPanel.Name = "testCountPanel";
-            this.testCountPanel.Size = new System.Drawing.Size(52, 19);
+            this.testCountPanel.Size = new System.Drawing.Size(53, 19);
             this.testCountPanel.Text = "Tests : 0";
             this.testCountPanel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.testCountPanel.Visible = false;
@@ -138,8 +138,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.statusStrip1);
+            this.MinimumSize = new System.Drawing.Size(0, 24);
             this.Name = "StatusBarView";
-            this.Size = new System.Drawing.Size(579, 23);
+            this.Size = new System.Drawing.Size(579, 24);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
