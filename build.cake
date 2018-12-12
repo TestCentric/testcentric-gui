@@ -15,6 +15,42 @@ var modifier = "-alpha2";
 var dbgSuffix = configuration == "Debug" ? "-dbg" : "";
 
 //////////////////////////////////////////////////////////////////////
+// DETERMINE BUILD ENVIRONMENT
+//////////////////////////////////////////////////////////////////////
+
+string monoVersion = null;
+
+Type type = Type.GetType("Mono.Runtime");
+if (type != null)
+{
+    var displayName = type.GetMethod("GetDisplayName", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+    if (displayName != null)
+        monoVersion = displayName.Invoke(null, null).ToString();
+}
+
+bool isMonoButSupportsMsBuild = monoVersion!=null && System.Text.RegularExpressions.Regex.IsMatch(monoVersion,@"^([5-9]|\d{2,})\.\d+\.\d+(\.\d+)?");
+
+var msBuildSettings = new MSBuildSettings {
+    Verbosity = Verbosity.Minimal,
+    ToolVersion = MSBuildToolVersion.Default,//The highest available MSBuild tool version//VS2017
+    Configuration = configuration,
+    PlatformTarget = PlatformTarget.MSIL,
+    MSBuildPlatform = MSBuildPlatform.Automatic,
+    DetailedSummary = true,
+};
+
+if(!IsRunningOnWindows() && isMonoButSupportsMsBuild)
+{
+    msBuildSettings.ToolPath = new FilePath(@"/usr/lib/mono/msbuild/15.0/bin/MSBuild.dll");//hack for Linux bug - missing MSBuild path
+}
+
+var xBuildSettings = new XBuildSettings {
+    Verbosity = Verbosity.Minimal,
+    ToolVersion = XBuildToolVersion.Default,//The highest available XBuild tool version//NET40
+    Configuration = configuration,
+};
+
+//////////////////////////////////////////////////////////////////////
 // DEFINE RUN CONSTANTS
 //////////////////////////////////////////////////////////////////////
 
@@ -66,18 +102,14 @@ Task("Build")
     .IsDependentOn("RestorePackages")
     .Does(() =>
 {
-    if(IsRunningOnWindows())
-    {
-      // Use MSBuild
-      MSBuild(SOLUTION, settings =>
-        settings.SetConfiguration(configuration));
-    }
-    else
-    {
-      // Use XBuild
-      XBuild(SOLUTION, settings =>
-        settings.SetConfiguration(configuration));
-    }
+        if(IsRunningOnWindows() || isMonoButSupportsMsBuild)
+        {
+            MSBuild(SOLUTION, msBuildSettings);
+        }
+        else
+        {
+            XBuild(SOLUTION, xBuildSettings);
+        }
 
     // Temporary hack... needs update if we update the engine
     CopyFileToDirectory("packages/NUnit.Engine." + ENGINE_VERSION + "/lib/nunit-agent.exe.config", BIN_DIR);
