@@ -111,9 +111,10 @@ namespace TestCentric.Gui.Views
 
         protected override void OnFontChanged(EventArgs e)
         {
-            StatusLabel.Font = testCountPanel.Font = testsRunPanel.Font = passedPanel.Font =
-                failedPanel.Font = warningsPanel.Font = inconclusivePanel.Font = timePanel.Font = Font;
             base.OnFontChanged(e);
+
+            Height = Math.Max((int)Font.GetHeight() + 10, MinimumSize.Height);
+            statusStrip1.Font = Font;
         }
     }
 }
