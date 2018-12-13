@@ -15,8 +15,47 @@ var modifier = "-alpha2";
 var dbgSuffix = configuration == "Debug" ? "-dbg" : "";
 
 //////////////////////////////////////////////////////////////////////
+// DETERMINE BUILD ENVIRONMENT
+//////////////////////////////////////////////////////////////////////
+
+string monoVersion = null;
+
+Type type = Type.GetType("Mono.Runtime");
+if (type != null)
+{
+    var displayName = type.GetMethod("GetDisplayName", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+    if (displayName != null)
+        monoVersion = displayName.Invoke(null, null).ToString();
+}
+
+bool isMonoButSupportsMsBuild = monoVersion!=null && System.Text.RegularExpressions.Regex.IsMatch(monoVersion,@"^([5-9]|\d{2,})\.\d+\.\d+(\.\d+)?");
+
+var msBuildSettings = new MSBuildSettings {
+    Verbosity = Verbosity.Minimal,
+    ToolVersion = MSBuildToolVersion.Default,//The highest available MSBuild tool version//VS2017
+    Configuration = configuration,
+    PlatformTarget = PlatformTarget.MSIL,
+    MSBuildPlatform = MSBuildPlatform.Automatic,
+    DetailedSummary = true,
+};
+
+if(!IsRunningOnWindows() && isMonoButSupportsMsBuild)
+{
+    msBuildSettings.ToolPath = new FilePath(@"/usr/lib/mono/msbuild/15.0/bin/MSBuild.dll");//hack for Linux bug - missing MSBuild path
+}
+
+var xBuildSettings = new XBuildSettings {
+    Verbosity = Verbosity.Minimal,
+    ToolVersion = XBuildToolVersion.Default,//The highest available XBuild tool version//NET40
+    Configuration = configuration,
+};
+
+//////////////////////////////////////////////////////////////////////
 // DEFINE RUN CONSTANTS
 //////////////////////////////////////////////////////////////////////
+
+// HACK: Engine Version - Must update this manually to match package used
+var ENGINE_VERSION = "3.9.0";
 
 // Directories
 var PROJECT_DIR = Context.Environment.WorkingDirectory.FullPath + "/";
@@ -49,7 +88,6 @@ Task("Clean")
 //////////////////////////////////////////////////////////////////////
 
 Task("RestorePackages")
-    .IsDependentOn("Clean")
     .Does(() =>
 {
     NuGetRestore(SOLUTION);
@@ -60,25 +98,22 @@ Task("RestorePackages")
 //////////////////////////////////////////////////////////////////////
 
 Task("Build")
+	.IsDependentOn("Clean")
     .IsDependentOn("RestorePackages")
     .Does(() =>
 {
-    if(IsRunningOnWindows())
-    {
-      // Use MSBuild
-      MSBuild(SOLUTION, settings =>
-        settings.SetConfiguration(configuration));
-    }
-    else
-    {
-      // Use XBuild
-      XBuild(SOLUTION, settings =>
-        settings.SetConfiguration(configuration));
-    }
+        if(IsRunningOnWindows() || isMonoButSupportsMsBuild)
+        {
+            MSBuild(SOLUTION, msBuildSettings);
+        }
+        else
+        {
+            XBuild(SOLUTION, xBuildSettings);
+        }
 
     // Temporary hack... needs update if we update the engine
-    CopyFileToDirectory("packages/NUnit.Engine.3.9.0/lib/nunit-agent.exe.config", BIN_DIR);
-    CopyFileToDirectory("packages/NUnit.Engine.3.9.0/lib/nunit-agent-x86.exe.config", BIN_DIR);
+    CopyFileToDirectory("packages/NUnit.Engine." + ENGINE_VERSION + "/lib/nunit-agent.exe.config", BIN_DIR);
+    CopyFileToDirectory("packages/NUnit.Engine." + ENGINE_VERSION + "/lib/nunit-agent-x86.exe.config", BIN_DIR);
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -142,7 +177,7 @@ Task("PackageChocolatey")
     {
         CreateDirectory(PACKAGE_DIR);
 
-        ChocolateyPack("choco/" + PACKAGE_NAME + ".nuspec", 
+        ChocolateyPack(CHOCO_DIR + PACKAGE_NAME + ".nuspec", 
             new ChocolateyPackSettings()
             {
                 Version = PACKAGE_VERSION,
@@ -191,6 +226,11 @@ Task("Travis")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
     .IsDependentOn("PackageZip");
+
+Task("All")
+    .IsDependentOn("Build")
+    .IsDependentOn("Test")
+    .IsDependentOn("Package");
 
 Task("Default")
     .IsDependentOn("Test");
