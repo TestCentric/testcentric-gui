@@ -32,34 +32,28 @@ namespace TestCentric.Gui.Elements
     /// The ITreeViewElement interface provides additional methods
     /// used when wrapping a TreeView.
     /// </summary>
-    public interface ITreeView : IControlElement<TreeView>
+    public interface ITreeView : IControlElement
     {
         event TreeNodeActionHandler SelectedNodeChanged;
 
         bool CheckBoxes { get; set; }
+        int VisibleCount { get; }
 
         TreeNode TopNode { get; set; }
 
         TreeNode SelectedNode { get; set; }
-
-        IList<TreeNode> Nodes { get; }
-        int VisibleCount { get; }
-
-#if EXPERIMENTAL
+        TreeNodeCollection Nodes { get; }
         IList<TreeNode> CheckedNodes { get; }
-        IContextMenuElement ContextMenu { get; set; }
+
+#if EXPERIMENTL
+        IMenu ContextMenu { get; }
 #endif
 
         void Clear();
         void ExpandAll();
         void CollapseAll();
-        void Load(TreeNode treeNode);
-        int GetNodeCount(bool includeSubTrees);
-        void Select();
-
-#if EXPERIMENTAL
         void Add(TreeNode treeNode);
+        void Load(TreeNode treeNode);
         void SetImageIndex(TreeNode treeNode, int imageIndex);
-#endif
     }
 }

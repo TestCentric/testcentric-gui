@@ -30,7 +30,7 @@ namespace TestCentric.Gui.Elements
     /// representing a ListBox containing string items or
     /// items that implement ToString() in a useful way.
     /// </summary>
-    public interface IListBox : IControlElement<ListBox>
+    public interface IListBox : IControlElement
     {
         ListBox.ObjectCollection Items { get; }
         ListBox.SelectedObjectCollection SelectedItems { get; }

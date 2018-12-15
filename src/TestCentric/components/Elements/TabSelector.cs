@@ -29,12 +29,16 @@ namespace TestCentric.Gui.Elements
     /// A TabSelector represents which tab of a particular TabControl in
     /// the view is selected.
     /// </summary>
-    public class TabSelector : ControlElement<TabControl>, ISelection
+    public class TabSelector : ControlElement, ISelection
     {
         public event CommandHandler SelectionChanged;
 
+        private TabControl _tabControl;
+
         public TabSelector(TabControl tabControl) : base(tabControl)
         {
+            _tabControl = tabControl;
+
             tabControl.SelectedIndexChanged += (s, e) =>
             {
                 int index = tabControl.SelectedIndex;
@@ -45,24 +49,24 @@ namespace TestCentric.Gui.Elements
 
         public int SelectedIndex
         {
-            get { return Control.SelectedIndex; }
-            set { Control.SelectedIndex = value; }
+            get { return _tabControl.SelectedIndex; }
+            set { _tabControl.SelectedIndex = value; }
         }
 
         public string SelectedItem
         {
-            get { return Control.SelectedTab.Text; }
+            get { return _tabControl.SelectedTab.Text; }
             set
             {
-                foreach (TabPage tab in Control.TabPages)
+                foreach (TabPage tab in _tabControl.TabPages)
                     if (tab.Text == value)
-                        Control.SelectedTab = tab;
+                        _tabControl.SelectedTab = tab;
             }
         }
 
         public void Refresh()
         {
-            Control.Refresh();
+            _tabControl.Refresh();
         }
     }
 }

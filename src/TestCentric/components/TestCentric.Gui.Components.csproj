@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -42,13 +42,11 @@
     <Compile Include="Elements\CheckedMenuGroup.cs" />
     <Compile Include="Elements\CheckedMenuItem.cs" />
     <Compile Include="Elements\ControlElement.cs" />
-    <Compile Include="Elements\ICheckBox.cs" />
     <Compile Include="Elements\IChecked.cs" />
     <Compile Include="Elements\ICommand.cs" />
     <Compile Include="Elements\IControlElement.cs" />
     <Compile Include="Elements\IListBox.cs" />
     <Compile Include="Elements\IMenu.cs" />
-    <Compile Include="Elements\IMenuElement.cs" />
     <Compile Include="Elements\ISelection.cs" />
     <Compile Include="Elements\ITreeView.cs" />
     <Compile Include="Elements\IViewElement.cs" />
@@ -73,8 +71,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
-    <Folder Include="Elements\" />
-    <Folder Include="Controls\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\ExpandingLabel.resx">

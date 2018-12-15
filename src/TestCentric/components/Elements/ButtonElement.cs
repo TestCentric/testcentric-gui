@@ -26,10 +26,9 @@ using System.Windows.Forms;
 namespace TestCentric.Gui.Elements
 {
     /// <summary>
-    /// MenuElement is the implementation of ToolStripItem 
-    /// used in the actual application.
+    /// ButtonElement wraps a Button as an ICommand.
     /// </summary>
-    public class ButtonElement : ControlElement<Button>, ICommand
+    public class ButtonElement : ControlElement, ICommand
     {
         public event CommandHandler Execute;
 

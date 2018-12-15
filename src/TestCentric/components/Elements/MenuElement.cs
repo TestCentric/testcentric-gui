@@ -28,7 +28,7 @@ namespace TestCentric.Gui.Elements
     /// <summary>
     /// MenuElement wraps a MenuItem
     /// </summary>
-    public abstract class MenuElement : IMenuElement
+    public abstract class MenuElement
     {
         protected MenuItem _menuItem;
         private Form _form;

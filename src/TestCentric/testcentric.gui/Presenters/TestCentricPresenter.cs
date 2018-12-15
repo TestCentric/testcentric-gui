@@ -202,55 +202,55 @@ namespace TestCentric.Gui.Presenters
             };
 
             _view.Shown += (s, e) =>
-      {
-          Application.DoEvents();
+            {
+                Application.DoEvents();
 
-          // Load test specified on command line or
-          // the most recent one if options call for it
-          if (_options.InputFiles.Count != 0)
-              LoadTests(_options.InputFiles);
-          else if (_settings.Gui.LoadLastProject && !_options.NoLoad)
-          {
-              foreach (string entry in _recentFiles.Entries)
-              {
-                  if (entry != null && File.Exists(entry))
-                  {
-                      LoadTests(entry);
-                      break;
-                  }
-              }
-          }
+                // Load test specified on command line or
+                // the most recent one if options call for it
+                if (_options.InputFiles.Count != 0)
+                    LoadTests(_options.InputFiles);
+                else if (_settings.Gui.LoadLastProject && !_options.NoLoad)
+                {
+                    foreach (string entry in _recentFiles.Entries)
+                    {
+                        if (entry != null && File.Exists(entry))
+                        {
+                            LoadTests(entry);
+                            break;
+                        }
+                    }
+                }
 
-          //if ( guiOptions.include != null || guiOptions.exclude != null)
-          //{
-          //    testTree.ClearSelectedCategories();
-          //    bool exclude = guiOptions.include == null;
-          //    string[] categories = exclude
-          //        ? guiOptions.exclude.Split(',')
-          //        : guiOptions.include.Split(',');
-          //    if ( categories.Length > 0 )
-          //        testTree.SelectCategories( categories, exclude );
-          //}
+                //if ( guiOptions.include != null || guiOptions.exclude != null)
+                //{
+                //    testTree.ClearSelectedCategories();
+                //    bool exclude = guiOptions.include == null;
+                //    string[] categories = exclude
+                //        ? guiOptions.exclude.Split(',')
+                //        : guiOptions.include.Split(',');
+                //    if ( categories.Length > 0 )
+                //        testTree.SelectCategories( categories, exclude );
+                //}
 
-          // Run loaded test automatically if called for
-          if (_model.IsPackageLoaded && _options.RunAllTests)
-          {
-              // TODO: Temporary fix to avoid problem when /run is used 
-              // with ReloadOnRun turned on. Refactor TestModel so
-              // we can just do a run without reload.
-              bool reload = _settings.Gui.ReloadOnRun;
+                // Run loaded test automatically if called for
+                if (_model.IsPackageLoaded && _options.RunAllTests)
+                {
+                    // TODO: Temporary fix to avoid problem when /run is used 
+                    // with ReloadOnRun turned on. Refactor TestModel so
+                    // we can just do a run without reload.
+                    bool reload = _settings.Gui.ReloadOnRun;
 
-              try
-              {
-                  _settings.Gui.ReloadOnRun = false;
-                  RunAllTests();
-              }
-              finally
-              {
-                  _settings.Gui.ReloadOnRun = reload;
-              }
-          }
-      };
+                    try
+                    {
+                        _settings.Gui.ReloadOnRun = false;
+                        RunAllTests();
+                    }
+                    finally
+                    {
+                        _settings.Gui.ReloadOnRun = reload;
+                    }
+                }
+            };
 
             _view.Move += (s, e) =>
             {
@@ -856,7 +856,6 @@ namespace TestCentric.Gui.Presenters
         private void applyFont(Font font)
         {
             _settings.Gui.Font = _view.Font = font;
-            _view.RunSummary.Control.Font = MakeBold(font);
         }
 
         private void InitializeDisplay()
@@ -924,12 +923,6 @@ namespace TestCentric.Gui.Presenters
         private static Font DecreaseFont(Font font)
         {
             return new Font(font.FontFamily, font.SizeInPoints / 1.2f, font.Style);
-        }
-
-        private static Font MakeBold(Font font)
-        {
-            return font.FontFamily.IsStyleAvailable(FontStyle.Bold)
-                       ? new Font(font, FontStyle.Bold) : font;
         }
 
         #endregion

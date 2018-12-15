@@ -32,10 +32,10 @@ namespace TestCentric.Gui.Elements
         public CheckedMenuItem(MenuItem menuItem) : base(menuItem)
         {
             menuItem.Click += (s, e) =>
-                  {
-                      menuItem.Checked = !menuItem.Checked;
-                      CheckedChanged?.Invoke();
-                  };
+            {
+                menuItem.Checked = !menuItem.Checked;
+                CheckedChanged?.Invoke();
+            };
         }
 
         public bool Checked
@@ -44,12 +44,7 @@ namespace TestCentric.Gui.Elements
             set
             {
                 if (_menuItem.Checked != value)
-                {
-                    InvokeIfRequired(() =>
-                    {
-                        _menuItem.Checked = value;
-                    });
-                }
+                    InvokeIfRequired(() => _menuItem.Checked = value);
             }
         }
     }

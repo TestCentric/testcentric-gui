@@ -30,7 +30,7 @@ namespace TestCentric.Gui.Views
     {
         IListBox AvailableList { get; }
         IListBox SelectedList { get; }
-        ICheckBox ExcludeCategories { get; }
+        IChecked ExcludeCategories { get; }
         ICommand AddButton { get; }
         ICommand RemoveButton { get; }
 

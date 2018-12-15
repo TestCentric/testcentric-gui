@@ -209,7 +209,7 @@ namespace TestCentric.Gui.Views
 
         public IListBox AvailableList { get; }
         public IListBox SelectedList { get; }
-        public ICheckBox ExcludeCategories { get; }
+        public IChecked ExcludeCategories { get; }
         public ICommand AddButton { get; }
         public ICommand RemoveButton { get; }
 
