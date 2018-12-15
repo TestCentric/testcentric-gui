@@ -34,13 +34,16 @@ namespace TestCentric.Gui.Elements
     ///    the current visual state of the tree.
     ///  * The CheckedNodes property returns a list of checked TreeNodes.
     /// </summary>
-    public class TreeViewElement : ControlElement<TreeView>, ITreeView
+    public class TreeViewElement : ControlElement, ITreeView
     {
         public event TreeNodeActionHandler SelectedNodeChanged;
+
+        private TreeView _treeView;
 
         public TreeViewElement(TreeView treeView)
             : base(treeView)
         {
+            _treeView = treeView;
             _checkBoxes = treeView.CheckBoxes;
 
             treeView.AfterSelect += (s, e) =>
@@ -61,24 +64,24 @@ namespace TestCentric.Gui.Elements
         }
 
 #if EXPERIMENTAL
-       private IContextMenuElement contextMenu;
-        public IContextMenuElement ContextMenu
+        private IMenu _contextMenu;
+        public IMenu ContextMenu
         {
             get 
             {
-                if (contextMenu == null && Control.ContextMenuStrip != null)
-                    contextMenu = new ContextMenuElement(Control.ContextMenuStrip);
+                if (_contextMenu == null && _treeView.ContextMenuStrip != null)
+                    _contextMenu = new ContextMenuElement(_treeView.ContextMenuStrip);
 
-                return contextMenu;
+                return _contextMenu;
             }
-            set 
-            {
-                InvokeIfRequired(() =>
-                {
-                    contextMenu = value;
-                    Control.ContextMenuStrip = contextMenu.Control;
-                });
-            }
+            //set 
+            //{
+            //    InvokeIfRequired(() =>
+            //    {
+            //        _contextMenu = value;
+            //        _treeView.ContextMenuStrip = _contextMenu.Control;
+            //    });
+            //}
         }
 #endif
 
@@ -95,10 +98,10 @@ namespace TestCentric.Gui.Elements
                     // Turning off checkboxes collapses everything, so we
                     // have to save and restore the expanded nodes.
                     if (!value)
-                        foreach (TreeNode node in Control.Nodes)
+                        foreach (TreeNode node in _treeView.Nodes)
                             RecordExpandedNodes(expandedNodes, node);
 
-                    InvokeIfRequired(() => { Control.CheckBoxes = _checkBoxes = value; });
+                    InvokeIfRequired(() => { _treeView.CheckBoxes = _checkBoxes = value; });
 
                     if (!value)
                         foreach (var node in expandedNodes)
@@ -109,79 +112,55 @@ namespace TestCentric.Gui.Elements
 
         public TreeNode TopNode
         {
-            get { return Control.TopNode; }
-            set { Control.TopNode = value; }
+            get { return _treeView.TopNode; }
+            set { _treeView.TopNode = value; }
         }
 
-        public int VisibleCount => Control.VisibleCount;
+        public int VisibleCount => _treeView.VisibleCount;
 
         public TreeNode SelectedNode
         {
-            get { return Control.SelectedNode; }
-            set { Control.SelectedNode = value; }
+            get { return _treeView.SelectedNode; }
+            set { _treeView.SelectedNode = value; }
         }
 
-        public IList<TreeNode> Nodes
+        public TreeNodeCollection Nodes
         {
-            get
-            {
-                var nodes = new List<TreeNode>();
-                foreach (TreeNode node in Control.Nodes)
-                    nodes.Add(node);
-                return nodes;
-            }
+            get { return _treeView.Nodes; }
         }
 
         public IList<TreeNode> CheckedNodes => GetCheckedNodes();
 
         public int GetNodeCount(bool includeSubTrees)
         {
-            return Control.GetNodeCount(includeSubTrees);
+            return _treeView.GetNodeCount(includeSubTrees);
         }
 
         public void Clear()
         {
-            InvokeIfRequired(() => Control.Nodes.Clear());
+            InvokeIfRequired(() => _treeView.Nodes.Clear());
         }
 
         public void ExpandAll()
         {
-            InvokeIfRequired(() => Control.ExpandAll());
+            InvokeIfRequired(() => _treeView.ExpandAll());
         }
 
         public void CollapseAll()
         {
-            InvokeIfRequired(() => Control.CollapseAll());
+            InvokeIfRequired(() => _treeView.CollapseAll());
         }
 
-        public void Select()
-        {
-            InvokeIfRequired(() => Control.Select());
-        }
-
-        public void Load(TreeNode treeNode)
-        {
-            Add(treeNode, true);
-        }
-
-#if EXPERIMENTAL
         public void Add(TreeNode treeNode)
         {
             Add(treeNode, false);
         }
 
-        public void Insert(int index, TreeNode treeNode)
-        {
-            InvokeIfRequired(() =>
-            {
-                Control.Nodes.Insert(index, treeNode);
-            });
-        }
-
         public void Load(TreeNode treeNode)
         {
             Add(treeNode, true);
         }
+
 
         public void SetImageIndex(TreeNode treeNode, int imageIndex)
         {
@@ -190,23 +169,22 @@ namespace TestCentric.Gui.Elements
                 treeNode.ImageIndex = treeNode.SelectedImageIndex = imageIndex;
             });
         }
-#endif
 
-        #region Helper Methods
+#region Helper Methods
 
         private void Add(TreeNode treeNode, bool doClear)
         {
             InvokeIfRequired(() =>
             {
                 if (doClear)
-                    Control.Nodes.Clear();
+                    _treeView.Nodes.Clear();
 
-                Control.BeginUpdate();
-                Control.Nodes.Add(treeNode);
-                if (Control.SelectedNode == null)
-                    Control.SelectedNode = treeNode;
-                Control.EndUpdate();
-                Control.Select();
+                _treeView.BeginUpdate();
+                _treeView.Nodes.Add(treeNode);
+                if (_treeView.SelectedNode == null)
+                    _treeView.SelectedNode = treeNode;
+                _treeView.EndUpdate();
+                _treeView.Select();
             });
         }
 
@@ -222,7 +200,7 @@ namespace TestCentric.Gui.Elements
         private IList<TreeNode> GetCheckedNodes()
         {
             var checkedNodes = new List<TreeNode>();
-            foreach (TreeNode node in Control.Nodes)
+            foreach (TreeNode node in _treeView.Nodes)
                 CollectCheckedNodes(checkedNodes, node);
             return checkedNodes;
         }
@@ -236,6 +214,6 @@ namespace TestCentric.Gui.Elements
                     CollectCheckedNodes(checkedNodes, child);
         }
 
-        #endregion
+#endregion
     }
 }

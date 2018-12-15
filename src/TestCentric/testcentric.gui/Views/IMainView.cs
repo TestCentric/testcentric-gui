@@ -42,7 +42,7 @@ namespace TestCentric.Gui.Views
         // UI Elements
         ICommand RunButton { get; }
         ICommand StopButton { get; }
-        IControlElement<ExpandingLabel> RunSummary { get; }
+        IControlElement RunSummary { get; }
         ISelection ResultTabs { get; }
 
         // File Menu Items

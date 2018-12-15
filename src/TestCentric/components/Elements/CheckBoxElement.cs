@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Copyright (c) 2018 Charlie Poole
+// Copyright (c) 2015-2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -26,19 +26,26 @@ using System.Windows.Forms;
 namespace TestCentric.Gui.Elements
 {
     /// <summary>
-    /// ControlElement is a generic wrapper for controls.
+    /// CheckBoxElement wraps a CheckBox as an IChecked.
     /// </summary>
-    public class CheckBoxElement : ControlElement<CheckBox>, ICheckBox
+    public class CheckBoxElement : ControlElement, IChecked
     {
+        private CheckBox _checkBox;
+
         public CheckBoxElement(CheckBox checkBox) : base(checkBox)
         {
-            checkBox.Click += (s, e) => CheckedChanged?.Invoke();
+            _checkBox = checkBox;
+            checkBox.CheckedChanged += (s, e) => CheckedChanged?.Invoke();
         }
 
         public bool Checked
         {
-            get { return Control.Checked; }
-            set { Control.Checked = value; }
+            get { return _checkBox.Checked; }
+            set
+            {
+                if (_checkBox.Checked != value)
+                    InvokeIfRequired(() => _checkBox.Checked = value);
+            }
         }
 
         public event CommandHandler CheckedChanged;

@@ -26,8 +26,7 @@ using System.Windows.Forms;
 namespace TestCentric.Gui.Elements
 {
     /// <summary>
-    /// The IMenu interface is implemented by a menu item,
-    /// which displays subordinate items.
+    /// IMenu is implemented by a menu item that displays subitems.
     /// </summary>
     public interface IMenu : IViewElement
     {
