@@ -703,13 +703,13 @@ namespace TestCentric.Gui.Views
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             // 
-            // runCount
+            // runSummary
             // 
             this.runSummary.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.runSummary.AutoEllipsis = true;
             this.runSummary.Location = new System.Drawing.Point(8, 89);
-            this.runSummary.Name = "runCount";
+            this.runSummary.Name = "runSummary";
             this.runSummary.Size = new System.Drawing.Size(480, 21);
             this.runSummary.TabIndex = 5;
             // 
