@@ -1,9 +1,11 @@
 ﻿language: csharp
 sudo: false
+dotnet: 2.1.502
 mono:
   - latest
   - 5.10.1
   - 4.6.2
-script: 
+script:
   - git fetch --unshallow
-  - ./build.sh --target=Travis --configuration=Release
+  - dotnet tool install --version "0.31.0" -g Cake.Tool
+  - ~/.dotnet/tools/dotnet-cake --target=Travis --configuration=Release
