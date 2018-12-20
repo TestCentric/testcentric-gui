@@ -45,7 +45,7 @@ namespace TestCentric.Gui.Model
     /// 3. When a test completes, information about the 
     /// result of running it is added to the full test
     /// information and the derived class ResultNode
-    /// is created from it.
+    /// is created from it. 
     /// </summary>
     public class TestNode : ITestItem
     {
@@ -54,34 +54,15 @@ namespace TestCentric.Gui.Model
         public TestNode(XmlNode xmlNode)
         {
             Xml = xmlNode;
-            Id = Xml.GetAttribute("id");
 
-            switch (Xml.Name)
+            // It's a quirk of the test engine that the test-run element does;
+            // not have attributes for Name, FullName, Type, or RunState.
+            if (Xml.Name == "test-run")
             {
-                case "test-run":
-                    IsSuite = true;
-                    // It's a quirk of the test engine that the test-run element does
-                    // not have attributes for Name, FullName, Type, or RunState.
-                    Name = FullName = Type = "TestRun";
-                    TestCount = GetAttribute("testcasecount", 0);
-                    RunState = RunState.Runnable;
-                    break;
-                case "test-suite":
-                    IsSuite = true;
-                    Name = Xml.GetAttribute("name");
-                    FullName = Xml.GetAttribute("fullname") ?? Name;
-                    Type = Xml.GetAttribute("type");
-                    TestCount = GetAttribute("testcasecount", 0);
-                    RunState = GetRunState();
-                    break;
-                default:
-                    IsSuite = false;
-                    Name = Xml.GetAttribute("name");
-                    FullName = Xml.GetAttribute("fullname") ?? Name;
-                    Type = "TestCase";
-                    TestCount = 1;
-                    RunState = GetRunState();
-                    break;
+                Xml.AddAttribute("name", "TestRun");
+                Xml.AddAttribute("fullname", "TestRun");
+                Xml.AddAttribute("type", "TestRun");
+                Xml.AddAttribute("runstate", "Runnable");
             }
         }
 
@@ -91,13 +72,15 @@ namespace TestCentric.Gui.Model
 
         #region ITestItem Implementation
 
-        public string Name { get; }
+        public string Name => Xml.GetAttribute("name");
 
         public TestFilter GetTestFilter()
         {
             return Xml.Name == "test-run"
                 ? TestFilter.Empty
-                : Filters.MakeIdFilter(this);
+                : IsSuite && Type == "Project"
+                    ? Filters.MakeIdFilter(Children)
+                    : Filters.MakeIdFilter(this);
         }
 
         #endregion
@@ -105,12 +88,14 @@ namespace TestCentric.Gui.Model
         #region Additonal Public Properties
 
         public XmlNode Xml { get; }
-        public bool IsSuite { get; }
-        public string Id { get; }
-        public string FullName { get; }
-        public string Type { get; }
-        public int TestCount { get; }
-        public RunState RunState { get; }
+
+        public bool IsSuite => Xml.Name == "test-suite" || Xml.Name == "test-run";
+        public string Id => GetAttribute("id");
+        public string FullName => GetAttribute("fullname") ?? Name;
+        public string Type => IsSuite ? GetAttribute("type") : "TestCase";
+
+        public int TestCount => IsSuite ? GetAttribute("testcasecount", 0) : 1;
+        public RunState RunState => GetRunState();
 
         private List<TestNode> _children;
         public IList<TestNode> Children
