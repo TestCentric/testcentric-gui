@@ -33,7 +33,7 @@
             // 
             // testProgressBar
             // 
-            this.testProgressBar.Display = TestCentric.Gui.Controls.ProgressBarDisplay.Success;
+            this.testProgressBar.Status = TestCentric.Gui.Controls.ProgressBarStatus.Success;
             this.testProgressBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.testProgressBar.Location = new System.Drawing.Point(0, 0);
             this.testProgressBar.Name = "testProgressBar";

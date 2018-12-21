@@ -35,7 +35,7 @@ namespace TestCentric.Gui.Elements
 
         public ListBoxElement(ListBox listBox) : base(listBox)
         {
-            //_listBox = listBox;
+            _listBox = listBox;
             listBox.DoubleClick += (s, e) => DoubleClick?.Invoke();
         }
 

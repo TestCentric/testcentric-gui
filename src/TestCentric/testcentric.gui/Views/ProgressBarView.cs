@@ -51,7 +51,7 @@ namespace TestCentric.Gui.Views
             {
                 testProgressBar.Maximum = _maximum;
                 testProgressBar.Value = _progress;
-                testProgressBar.Display = (ProgressBarDisplay)_status;
+                testProgressBar.Status = (Controls.ProgressBarStatus)_status;
             });
         }
 
@@ -78,7 +78,7 @@ namespace TestCentric.Gui.Views
 
                 InvokeIfRequired(() =>
                 {
-                    testProgressBar.Display = (ProgressBarDisplay)_status;
+                    testProgressBar.Status = (Controls.ProgressBarStatus)_status;
                 });
             }
         }

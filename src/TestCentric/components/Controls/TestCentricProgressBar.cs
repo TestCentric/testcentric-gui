@@ -27,7 +27,7 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Controls
 {
-    public enum ProgressBarDisplay
+    public enum ProgressBarStatus
     {
         Success = 0,
         Warning = 1,
@@ -58,15 +58,15 @@ namespace TestCentric.Gui.Controls
 
         #region Properties
 
-        private ProgressBarDisplay _display = ProgressBarDisplay.Success;
-        public ProgressBarDisplay Display
+        private ProgressBarStatus _status = ProgressBarStatus.Success;
+        public ProgressBarStatus Status
         {
-            get { return _display; }
+            get { return _status; }
             set
             {
-                if (value != _display)
+                if (value != _status)
                 {
-                    _display = value;
+                    _status = value;
 
                     CreateNewBrush();
                 }
@@ -80,16 +80,17 @@ namespace TestCentric.Gui.Controls
         protected override void OnPaint(PaintEventArgs e)
         {
             Rectangle rec = this.ClientRectangle;
+            rec.Inflate(-2, -2);
             if (ProgressBarRenderer.IsSupported)
                 ProgressBarRenderer.DrawHorizontalBar(e.Graphics, rec);
             rec.Inflate(-1, -1);
             rec.Width = (int)(rec.Width * ((double)Value / Maximum));
-            e.Graphics.FillRectangle(_brush, rec);
+            e.Graphics.FillRectangle(_brush, rec); //2, 2, rec.Width, rec.Height);
         }
 
         private void CreateNewBrush()
         {
-            Color[] colors = BrushColors[(int)_display];
+            Color[] colors = BrushColors[(int)_status];
 
             if (_brush != null)
                 _brush.Dispose();
