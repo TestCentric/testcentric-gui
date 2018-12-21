@@ -21,37 +21,43 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace TestCentric.Gui.Elements
+namespace TestCentric.Gui.Views.SettingsPages
 {
-    public delegate void TreeNodeActionHandler(TreeNode treeNode);
+    using Settings;
 
-    /// <summary>
-    /// The ITreeViewElement interface provides additional methods
-    /// used when wrapping a TreeView.
-    /// </summary>
-    public interface ITreeView : IControlElement
+    public partial class AssemblyReloadSettingsPage : SettingsPage
     {
-        event TreeNodeActionHandler SelectedNodeChanged;
+        public AssemblyReloadSettingsPage(SettingsModel settings) : base("Engine.Assembly Reload", settings)
+        {
+            InitializeComponent();
+        }
 
-        bool CheckBoxes { get; set; }
-        int VisibleCount { get; }
+        public override void LoadSettings()
+        {
+            reloadOnChangeCheckBox.Checked = Settings.Engine.ReloadOnChange;
+            rerunOnChangeCheckBox.Checked = Settings.Engine.RerunOnChange;
+            reloadOnRunCheckBox.Checked = Settings.Engine.ReloadOnRun;
+        }
 
-        TreeNode TopNode { get; set; }
+        public override void ApplySettings()
+        {
+            Settings.Engine.ReloadOnChange = reloadOnChangeCheckBox.Checked;
+            Settings.Engine.RerunOnChange = rerunOnChangeCheckBox.Checked;
+            Settings.Engine.ReloadOnRun = reloadOnRunCheckBox.Checked;
+        }
 
-        TreeNode SelectedNode { get; set; }
-        TreeNodeCollection Nodes { get; }
-        IList<TreeNode> CheckedNodes { get; }
 
-        IToolStripMenu ContextMenu { get; }
 
-        void Clear();
-        void ExpandAll();
-        void CollapseAll();
-        void Add(TreeNode treeNode);
-        void Load(TreeNode treeNode);
-        void SetImageIndex(TreeNode treeNode, int imageIndex);
+        private void reloadOnChangeCheckBox_CheckedChanged(object sender, System.EventArgs e)
+        {
+            rerunOnChangeCheckBox.Enabled = reloadOnChangeCheckBox.Checked;
+        }
+
+        protected override void OnHelpRequested(HelpEventArgs hevent)
+        {
+            System.Diagnostics.Process.Start("http://nunit.com/?p=optionsDialog&r=2.4.5");
+        }
     }
 }

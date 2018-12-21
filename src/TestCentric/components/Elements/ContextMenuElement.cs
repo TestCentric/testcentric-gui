@@ -21,37 +21,35 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Elements
 {
-    public delegate void TreeNodeActionHandler(TreeNode treeNode);
-
     /// <summary>
-    /// The ITreeViewElement interface provides additional methods
-    /// used when wrapping a TreeView.
+    /// MenuElement is the implementation of ToolStripItem 
+    /// used in the actual application.
     /// </summary>
-    public interface ITreeView : IControlElement
+    public class ContextMenuElement : ControlElement, IToolStripMenu
     {
-        event TreeNodeActionHandler SelectedNodeChanged;
+        public ContextMenuStrip _contextMenu;
 
-        bool CheckBoxes { get; set; }
-        int VisibleCount { get; }
+        public ContextMenuElement(ContextMenuStrip contextMenu)
+            : base(contextMenu)
+        {
+            _contextMenu = contextMenu;
 
-        TreeNode TopNode { get; set; }
+            contextMenu.Opening += (s, cea) =>
+            {
+                if (Popup != null)
+                    Popup();
+            };
+        }
 
-        TreeNode SelectedNode { get; set; }
-        TreeNodeCollection Nodes { get; }
-        IList<TreeNode> CheckedNodes { get; }
+        public event CommandHandler Popup;
 
-        IToolStripMenu ContextMenu { get; }
-
-        void Clear();
-        void ExpandAll();
-        void CollapseAll();
-        void Add(TreeNode treeNode);
-        void Load(TreeNode treeNode);
-        void SetImageIndex(TreeNode treeNode, int imageIndex);
+        public ToolStripItemCollection MenuItems
+        {
+            get { return _contextMenu.Items; }
+        }
     }
 }

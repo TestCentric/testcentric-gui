@@ -21,37 +21,14 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System.Collections.Generic;
-using System.Windows.Forms;
+using System.Reflection;
+using System.Runtime.InteropServices;
 
-namespace TestCentric.Gui.Elements
-{
-    public delegate void TreeNodeActionHandler(TreeNode treeNode);
+// General Information about an assembly is controlled through the following 
+// set of attributes. Change these attribute values to modify the information
+// associated with an assembly.
+[assembly: AssemblyTitle("nunit-gui")]
+[assembly: AssemblyDescription("Main program for the GUI runner")]
 
-    /// <summary>
-    /// The ITreeViewElement interface provides additional methods
-    /// used when wrapping a TreeView.
-    /// </summary>
-    public interface ITreeView : IControlElement
-    {
-        event TreeNodeActionHandler SelectedNodeChanged;
-
-        bool CheckBoxes { get; set; }
-        int VisibleCount { get; }
-
-        TreeNode TopNode { get; set; }
-
-        TreeNode SelectedNode { get; set; }
-        TreeNodeCollection Nodes { get; }
-        IList<TreeNode> CheckedNodes { get; }
-
-        IToolStripMenu ContextMenu { get; }
-
-        void Clear();
-        void ExpandAll();
-        void CollapseAll();
-        void Add(TreeNode treeNode);
-        void Load(TreeNode treeNode);
-        void SetImageIndex(TreeNode treeNode, int imageIndex);
-    }
-}
+// The following GUID is for the Id of the typelib if this project is exposed to COM
+[assembly: Guid("6a34c3cc-e569-4349-a736-ad99ced6c195")]

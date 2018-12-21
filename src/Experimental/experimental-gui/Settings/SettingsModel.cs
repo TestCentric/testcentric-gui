@@ -21,37 +21,26 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System.Collections.Generic;
-using System.Windows.Forms;
+using NUnit.Engine;
 
-namespace TestCentric.Gui.Elements
+namespace TestCentric.Gui.Settings
 {
-    public delegate void TreeNodeActionHandler(TreeNode treeNode);
-
     /// <summary>
-    /// The ITreeViewElement interface provides additional methods
-    /// used when wrapping a TreeView.
+    /// SettingsModel is the top level of a set of wrapper
+    /// classes that provide type-safe access to user settings.
     /// </summary>
-    public interface ITreeView : IControlElement
+    public class SettingsModel : SettingsGroup
     {
-        event TreeNodeActionHandler SelectedNodeChanged;
+        public SettingsModel(ISettings settings) : base(settings, null) { }
 
-        bool CheckBoxes { get; set; }
-        int VisibleCount { get; }
+        public GuiSettings Gui
+        {
+            get { return new GuiSettings(SettingsService); }
+        }
 
-        TreeNode TopNode { get; set; }
-
-        TreeNode SelectedNode { get; set; }
-        TreeNodeCollection Nodes { get; }
-        IList<TreeNode> CheckedNodes { get; }
-
-        IToolStripMenu ContextMenu { get; }
-
-        void Clear();
-        void ExpandAll();
-        void CollapseAll();
-        void Add(TreeNode treeNode);
-        void Load(TreeNode treeNode);
-        void SetImageIndex(TreeNode treeNode, int imageIndex);
+        public EngineSettings Engine
+        {
+            get { return new EngineSettings(SettingsService); }
+        }
     }
 }

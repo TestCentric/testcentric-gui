@@ -29,6 +29,9 @@ namespace TestCentric.Gui.Model
 {
     public delegate string GroupingFunction(TestNode testNode);
 
+    // TODO: We are now building for .NET 4.5 so the following
+    // limitation no longer applies.
+
     /// <summary>
     /// TestSelection is an extended List of TestNodes, with
     /// the addition of a SortBy method. Since the Gui is 
@@ -64,45 +67,35 @@ namespace TestCentric.Gui.Model
                 }
         }
 
-        //public TestSelection SortBy(Comparison<TestNode> comparer)
-        //{
-        //    Sort(comparer);
-        //    return this;
-        //}
+        public TestSelection SortBy(Comparison<TestNode> comparer)
+        {
+            Sort(comparer);
+            return this;
+        }
 
-        //public IDictionary<string, TestSelection> GroupBy(GroupingFunction groupingFunction)
-        //{
-        //    var groups = new Dictionary<string, TestSelection>();
+        public IDictionary<string, TestSelection> GroupBy(GroupingFunction groupingFunction)
+        {
+            var groups = new Dictionary<string, TestSelection>();
 
-        //    foreach (TestNode testNode in this)
-        //    {
-        //        var groupName = groupingFunction(testNode);
+            foreach (TestNode testNode in this)
+            {
+                var groupName = groupingFunction(testNode);
 
-        //        TestSelection group = null;
-        //        if (!groups.ContainsKey(groupName))
-        //        {
-        //            group = new TestSelection();
-        //            groups[groupName] = group;
-        //        }
-        //        else
-        //        {
-        //            group = groups[groupName];
-        //        }
+                TestSelection group = null;
+                if (!groups.ContainsKey(groupName))
+                {
+                    group = new TestSelection();
+                    groups[groupName] = group;
+                }
+                else
+                {
+                    group = groups[groupName];
+                }
 
-        //        group.Add(testNode);
-        //    }
+                group.Add(testNode);
+            }
 
-        //    return groups;
-        //}
-
-        //IEnumerator<TestNode> IEnumerable<TestNode>.GetEnumerator()
-        //{
-        //    return _selection.GetEnumerator();
-        //}
-
-        //IEnumerator IEnumerable.GetEnumerator()
-        //{
-        //    return _selection.GetEnumerator();
-        //}
+            return groups;
+        }
     }
 }

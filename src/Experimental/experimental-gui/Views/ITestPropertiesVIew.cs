@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Copyright (c) 2015 Charlie Poole
+// Copyright (c) 2016 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -21,37 +21,32 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System.Collections.Generic;
-using System.Windows.Forms;
-
-namespace TestCentric.Gui.Elements
+namespace TestCentric.Gui.Views
 {
-    public delegate void TreeNodeActionHandler(TreeNode treeNode);
+    using Elements;
 
-    /// <summary>
-    /// The ITreeViewElement interface provides additional methods
-    /// used when wrapping a TreeView.
-    /// </summary>
-    public interface ITreeView : IControlElement
+    public interface ITestPropertiesView : IView
     {
-        event TreeNodeActionHandler SelectedNodeChanged;
+        event CommandHandler DisplayHiddenPropertiesChanged;
 
-        bool CheckBoxes { get; set; }
-        int VisibleCount { get; }
+        bool Visible { get; set; }
+        string Header { get; set; }
+        IViewElement TestPanel { get; }
+        IViewElement ResultPanel { get; }
 
-        TreeNode TopNode { get; set; }
-
-        TreeNode SelectedNode { get; set; }
-        TreeNodeCollection Nodes { get; }
-        IList<TreeNode> CheckedNodes { get; }
-
-        IToolStripMenu ContextMenu { get; }
-
-        void Clear();
-        void ExpandAll();
-        void CollapseAll();
-        void Add(TreeNode treeNode);
-        void Load(TreeNode treeNode);
-        void SetImageIndex(TreeNode treeNode, int imageIndex);
+        string TestType { get; set; }
+        string FullName { get; set; }
+        string Description { get; set; }
+        string Categories { get; set; }
+        string TestCount { get; set; }
+        string RunState { get; set; }
+        string SkipReason { get; set; }
+        bool DisplayHiddenProperties { get; }
+        string Properties { get; set; }
+        string Outcome { get; set; }
+        string ElapsedTime { get; set; }
+        string AssertCount { get; set; }
+        string Assertions { get; set; }
+        string Output { get; set; }
     }
 }

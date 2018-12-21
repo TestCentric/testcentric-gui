@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Copyright (c) 2015 Charlie Poole
+// Copyright (c) 2016 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -21,37 +21,20 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System.Collections.Generic;
-using System.Windows.Forms;
-
-namespace TestCentric.Gui.Elements
+namespace TestCentric.Gui.Views
 {
-    public delegate void TreeNodeActionHandler(TreeNode treeNode);
-
-    /// <summary>
-    /// The ITreeViewElement interface provides additional methods
-    /// used when wrapping a TreeView.
-    /// </summary>
-    public interface ITreeView : IControlElement
+    // Interface is used by presenter and tests
+    public interface IStatusBarView : IView
     {
-        event TreeNodeActionHandler SelectedNodeChanged;
-
-        bool CheckBoxes { get; set; }
-        int VisibleCount { get; }
-
-        TreeNode TopNode { get; set; }
-
-        TreeNode SelectedNode { get; set; }
-        TreeNodeCollection Nodes { get; }
-        IList<TreeNode> CheckedNodes { get; }
-
-        IToolStripMenu ContextMenu { get; }
-
-        void Clear();
-        void ExpandAll();
-        void CollapseAll();
-        void Add(TreeNode treeNode);
-        void Load(TreeNode treeNode);
-        void SetImageIndex(TreeNode treeNode, int imageIndex);
+        void OnTestLoaded(int testCount);
+        void OnTestUnloaded();
+        void OnRunStarting(int testCount);
+        void OnRunFinished(double elapsedTime);
+        void OnTestStarting(string name);
+        void OnTestPassed();
+        void OnTestFailed();
+        void OnTestWarning();
+        void OnTestInconclusive();
+        void OnTestRunSummaryCompiled(string testRunSummary);
     }
 }

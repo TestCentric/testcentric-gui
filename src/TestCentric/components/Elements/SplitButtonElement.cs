@@ -21,37 +21,20 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Elements
 {
-    public delegate void TreeNodeActionHandler(TreeNode treeNode);
-
     /// <summary>
-    /// The ITreeViewElement interface provides additional methods
-    /// used when wrapping a TreeView.
+    /// SplitButtonElement extends ToolStripElement for use with a SplitButton.
     /// </summary>
-    public interface ITreeView : IControlElement
+    public class SplitButtonElement : ToolStripElement, ICommand
     {
-        event TreeNodeActionHandler SelectedNodeChanged;
+        public SplitButtonElement(ToolStripSplitButton button) : base(button)
+        {
+            button.ButtonClick += delegate { if (Execute != null) Execute(); };
+        }
 
-        bool CheckBoxes { get; set; }
-        int VisibleCount { get; }
-
-        TreeNode TopNode { get; set; }
-
-        TreeNode SelectedNode { get; set; }
-        TreeNodeCollection Nodes { get; }
-        IList<TreeNode> CheckedNodes { get; }
-
-        IToolStripMenu ContextMenu { get; }
-
-        void Clear();
-        void ExpandAll();
-        void CollapseAll();
-        void Add(TreeNode treeNode);
-        void Load(TreeNode treeNode);
-        void SetImageIndex(TreeNode treeNode, int imageIndex);
+        public event CommandHandler Execute;
     }
 }

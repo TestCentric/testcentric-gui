@@ -39,8 +39,10 @@
     </Compile>
     <Compile Include="Elements\ButtonElement.cs" />
     <Compile Include="Elements\CheckBoxElement.cs" />
+    <Compile Include="Elements\CheckedToolStripMenuGroup.cs" />
     <Compile Include="Elements\CheckedMenuGroup.cs" />
     <Compile Include="Elements\CheckedMenuItem.cs" />
+    <Compile Include="Elements\ContextMenuElement.cs" />
     <Compile Include="Elements\ControlElement.cs" />
     <Compile Include="Elements\IChecked.cs" />
     <Compile Include="Elements\ICommand.cs" />
@@ -54,6 +56,7 @@
     <Compile Include="Elements\IViewElement.cs" />
     <Compile Include="Elements\ListBoxElement.cs" />
     <Compile Include="Elements\MenuCommand.cs" />
+    <Compile Include="Elements\SplitButtonElement.cs" />
     <Compile Include="Elements\ToolStripMenuElement.cs" />
     <Compile Include="Elements\MenuElement.cs" />
     <Compile Include="Elements\PopupMenu.cs" />

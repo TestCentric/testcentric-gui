@@ -21,37 +21,37 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System.Collections.Generic;
-using System.Windows.Forms;
+using NUnit.Engine;
 
-namespace TestCentric.Gui.Elements
+namespace TestCentric.Gui.Settings
 {
-    public delegate void TreeNodeActionHandler(TreeNode treeNode);
-
     /// <summary>
-    /// The ITreeViewElement interface provides additional methods
-    /// used when wrapping a TreeView.
+    /// SettingsModel is the top level of a set of wrapper
+    /// classes that provide type-safe access to settingsService.
     /// </summary>
-    public interface ITreeView : IControlElement
+    public class EngineSettings : SettingsGroup
     {
-        event TreeNodeActionHandler SelectedNodeChanged;
+        public EngineSettings(ISettings settingsService) : base(settingsService, "Engine.Options") { }
 
-        bool CheckBoxes { get; set; }
-        int VisibleCount { get; }
+        private const string reloadOnChangeKey = "ReloadOnChange";
+        public bool ReloadOnChange
+        {
+            get { return GetSetting(reloadOnChangeKey, true); }
+            set { SaveSetting(reloadOnChangeKey, value); }
+        }
 
-        TreeNode TopNode { get; set; }
+        private const string rerunOnChangeKey = "RerunOnChange";
+        public bool RerunOnChange
+        {
+            get { return GetSetting(rerunOnChangeKey, false); }
+            set { SaveSetting(rerunOnChangeKey, value); }
+        }
 
-        TreeNode SelectedNode { get; set; }
-        TreeNodeCollection Nodes { get; }
-        IList<TreeNode> CheckedNodes { get; }
-
-        IToolStripMenu ContextMenu { get; }
-
-        void Clear();
-        void ExpandAll();
-        void CollapseAll();
-        void Add(TreeNode treeNode);
-        void Load(TreeNode treeNode);
-        void SetImageIndex(TreeNode treeNode, int imageIndex);
+        private const string reloadOnRunKey = "ReloadOnRun";
+        public bool ReloadOnRun
+        {
+            get { return GetSetting(reloadOnRunKey, false); }
+            set { SaveSetting(reloadOnRunKey, value); }
+        }
     }
 }

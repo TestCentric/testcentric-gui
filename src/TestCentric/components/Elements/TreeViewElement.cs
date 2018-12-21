@@ -63,9 +63,8 @@ namespace TestCentric.Gui.Elements
             };
         }
 
-#if EXPERIMENTAL
-        private IMenu _contextMenu;
-        public IMenu ContextMenu
+        private IToolStripMenu _contextMenu;
+        public IToolStripMenu ContextMenu
         {
             get 
             {
@@ -83,7 +82,6 @@ namespace TestCentric.Gui.Elements
             //    });
             //}
         }
-#endif
 
         private bool _checkBoxes;
         public bool CheckBoxes

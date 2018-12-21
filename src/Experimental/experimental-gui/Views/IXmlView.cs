@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Copyright (c) 2015 Charlie Poole
+// Copyright (c) 2016 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -21,37 +21,35 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Xml;
 
-namespace TestCentric.Gui.Elements
+namespace TestCentric.Gui.Views
 {
-    public delegate void TreeNodeActionHandler(TreeNode treeNode);
+    using Elements;
 
-    /// <summary>
-    /// The ITreeViewElement interface provides additional methods
-    /// used when wrapping a TreeView.
-    /// </summary>
-    public interface ITreeView : IControlElement
+    public interface IXmlView : IView
     {
-        event TreeNodeActionHandler SelectedNodeChanged;
+        bool Visible { get; set; }
+        bool WordWrap { get; set; }
 
-        bool CheckBoxes { get; set; }
-        int VisibleCount { get; }
+        string Header { get; set; }
+        IViewElement XmlPanel { get; }
 
-        TreeNode TopNode { get; set; }
+        ICommand CopyToolStripMenuItem { get; }
+        IChecked WordWrapToolStripMenuItem { get; }
 
-        TreeNode SelectedNode { get; set; }
-        TreeNodeCollection Nodes { get; }
-        IList<TreeNode> CheckedNodes { get; }
+        XmlNode TestXml { get; set; }
 
-        IToolStripMenu ContextMenu { get; }
+        string SelectedText { get; set; }
+        
+        void SelectAll();
+        void Copy();
 
-        void Clear();
-        void ExpandAll();
-        void CollapseAll();
-        void Add(TreeNode treeNode);
-        void Load(TreeNode treeNode);
-        void SetImageIndex(TreeNode treeNode, int imageIndex);
+        event CommandHandler SelectAllCommand;
+        event CommandHandler SelectionChanged;
+        event CommandHandler CopyCommand;
+        event CommandHandler WordWrapChanged;
+        event CommandHandler ViewGotFocus;
     }
 }

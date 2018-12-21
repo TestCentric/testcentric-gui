@@ -1,11 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2046
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A65042E1-D8BC-48DD-8DE1-F0991F07EA77}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		.travis.yml = .travis.yml
 		appveyor.yml = appveyor.yml
 		build.cake = build.cake
 		build.cmd = build.cmd
@@ -17,7 +18,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		src\nunit.snk = src\nunit.snk
 		README.md = README.md
 		testcentric-gui.sln.licenseheader = testcentric-gui.sln.licenseheader
-		.travis.yml = .travis.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GuiException", "GuiException", "{35A92AA3-A1E6-426E-8D96-322F3EBF1C8D}"
@@ -60,6 +60,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCentric.Common", "src\Common\testcentric.common\TestCentric.Common.csproj", "{B69057F3-0663-4763-A3EC-50D463578B94}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCentric.Gui.Components", "src\TestCentric\components\TestCentric.Gui.Components.csproj", "{AC6DFB0E-C717-4FC4-B918-D6B789061212}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Experimental", "Experimental", "{57B0C862-C6E4-42FA-9FFC-591CCA51FD27}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experimental.Gui", "src\Experimental\experimental-gui\Experimental.Gui.csproj", "{9E15166C-D2B7-4B24-AB1C-1C69FFCEC9D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experimental.Gui.Exe", "src\Experimental\experimental-exe\Experimental.Gui.Exe.csproj", "{D5556639-F04B-4389-92C8-E110D6688BA7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -111,6 +117,14 @@ Global
 		{AC6DFB0E-C717-4FC4-B918-D6B789061212}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC6DFB0E-C717-4FC4-B918-D6B789061212}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC6DFB0E-C717-4FC4-B918-D6B789061212}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E15166C-D2B7-4B24-AB1C-1C69FFCEC9D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E15166C-D2B7-4B24-AB1C-1C69FFCEC9D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E15166C-D2B7-4B24-AB1C-1C69FFCEC9D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E15166C-D2B7-4B24-AB1C-1C69FFCEC9D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5556639-F04B-4389-92C8-E110D6688BA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5556639-F04B-4389-92C8-E110D6688BA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5556639-F04B-4389-92C8-E110D6688BA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5556639-F04B-4389-92C8-E110D6688BA7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -128,6 +142,8 @@ Global
 		{3FF340D5-D3B4-4DF0-BAF1-98B3C00B6148} = {26735BF4-848E-4B3D-BA4D-E1366986F5BD}
 		{B69057F3-0663-4763-A3EC-50D463578B94} = {0C0A29CA-1A18-4B1A-9262-F41C01E7E30F}
 		{AC6DFB0E-C717-4FC4-B918-D6B789061212} = {26735BF4-848E-4B3D-BA4D-E1366986F5BD}
+		{9E15166C-D2B7-4B24-AB1C-1C69FFCEC9D3} = {57B0C862-C6E4-42FA-9FFC-591CCA51FD27}
+		{D5556639-F04B-4389-92C8-E110D6688BA7} = {57B0C862-C6E4-42FA-9FFC-591CCA51FD27}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CDFF439B-8888-4133-8734-86F4F899BC40}
