@@ -80,6 +80,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\components\TestCentric.Gui.Components.csproj">
+      <Project>{ac6dfb0e-c717-4fc4-b918-d6b789061212}</Project>
+      <Name>TestCentric.Gui.Components</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\TestModel\model\TestCentric.Gui.Model.csproj">
       <Project>{e978a8d7-e4a4-4de9-94df-d82bd764936b}</Project>
       <Name>TestCentric.Gui.Model</Name>
@@ -122,10 +126,6 @@
     <Reference Include="nunit.engine.api">
       <HintPath>..\..\..\packages\NUnit.Engine.Api.3.9.0\lib\nunit.engine.api.dll</HintPath>
     </Reference>
-    <ProjectReference Include="..\components\TestCentric.Gui.Components.csproj">
-      <Project>{AC6DFB0E-C717-4FC4-B918-D6B789061212}</Project>
-      <Name>TestCentric.Gui.Components</Name>
-    </ProjectReference>
     <Reference Include="Castle.Core">
       <HintPath>..\..\..\packages\Castle.Core.4.2.0\lib\net45\Castle.Core.dll</HintPath>
     </Reference>

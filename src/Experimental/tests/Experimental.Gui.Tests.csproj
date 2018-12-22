@@ -110,7 +110,7 @@
     <Compile Include="XmlRtfConverterTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\TestCentric\components\TestCentric.Gui.Components.csproj">
+    <ProjectReference Include="..\..\Common\components\TestCentric.Gui.Components.csproj">
       <Project>{ac6dfb0e-c717-4fc4-b918-d6b789061212}</Project>
       <Name>TestCentric.Gui.Components</Name>
     </ProjectReference>
