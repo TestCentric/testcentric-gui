@@ -160,7 +160,6 @@
       <DependentUpon>XmlView.cs</DependentUpon>
     </Compile>
     <Compile Include="Xml2RtfConverter.cs" />
-    <Compile Include="XmlHelper.cs" />
     <EmbeddedResource Include="Views\AddinPages\AddinsView.resx">
       <DependentUpon>AddinsView.cs</DependentUpon>
     </EmbeddedResource>

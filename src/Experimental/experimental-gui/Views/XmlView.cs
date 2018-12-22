@@ -93,7 +93,7 @@ namespace TestCentric.Gui.Views
             set
             {
                 _testXml = value;
-                InvokeIfRequired(() => xmlTextBox.Rtf = TestXml != null ? XmlHelper.ToRtfString(_testXml, 2) : "");
+                InvokeIfRequired(() => xmlTextBox.Rtf = _testXml != null ? new Xml2RtfConverter(2).Convert(_testXml) : "");
             }
         }
 

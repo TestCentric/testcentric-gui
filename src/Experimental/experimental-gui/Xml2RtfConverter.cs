@@ -19,16 +19,22 @@ namespace TestCentric.Gui
             CData
         }
 
-        private Dictionary<ColorKinds, Color> _colorTable = new Dictionary<ColorKinds, Color>();
-        private readonly int indentationSize;
+        private Dictionary<ColorKinds, Color> _colorTable;
+        private readonly int _indentationSize;
 
-        public Xml2RtfConverter(int indentationSize, Dictionary<ColorKinds, Color> colorTable = null)
+        public Xml2RtfConverter(int indentationSize) : this(indentationSize, null)
         {
-            this.indentationSize = indentationSize;
-            if (colorTable != null)
-                _colorTable = colorTable;
-            else
+        }
+
+        public Xml2RtfConverter(int indentationSize, Dictionary<ColorKinds, Color> colorTable)
+        {
+            _indentationSize = indentationSize;
+            _colorTable = colorTable;
+
+            if (_colorTable == null)
             {
+                _colorTable = new Dictionary<ColorKinds, Color>();
+
                 _colorTable.Add(ColorKinds.Element, Color.Purple);
                 _colorTable.Add(ColorKinds.Value, Color.Black);
                 _colorTable.Add(ColorKinds.Attribute, Color.DarkGoldenrod);
@@ -161,7 +167,7 @@ namespace TestCentric.Gui
 
         private void Indent(StringBuilder sb, int indentationLevel)
         {
-            sb.Append(new string(' ', indentationSize * indentationLevel));
+            sb.Append(new string(' ', _indentationSize * indentationLevel));
         }
 
         private bool HasSingleTextNode(XmlElement element)

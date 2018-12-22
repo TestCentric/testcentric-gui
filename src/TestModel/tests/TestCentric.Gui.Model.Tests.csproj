@@ -92,6 +92,10 @@
     <Compile Include="TestSelectionTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\testcentric.common\TestCentric.Common.csproj">
+      <Project>{b69057f3-0663-4763-a3ec-50d463578b94}</Project>
+      <Name>TestCentric.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\tests\mock-assembly\mock-assembly.csproj">
       <Project>{2e368281-3ba8-4050-b05e-0e0e43f8f446}</Project>
       <Name>mock-assembly</Name>
