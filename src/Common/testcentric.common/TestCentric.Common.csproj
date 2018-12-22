@@ -47,6 +47,7 @@
     <Compile Include="InternalTrace.cs" />
     <Compile Include="InternalTraceWriter.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="StackTraceFilter.cs" />
     <Compile Include="XmlHelper.cs" />
   </ItemGroup>
   <ItemGroup>

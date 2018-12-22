@@ -186,7 +186,6 @@
     <Compile Include="SettingsPages\TreeSettingsPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="StackTraceFilter.cs" />
     <Compile Include="Dialogs\TestPropertiesDialog.cs">
       <SubType>Form</SubType>
     </Compile>
