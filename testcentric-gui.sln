@@ -67,6 +67,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experimental.Gui", "src\Exp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experimental.Gui.Exe", "src\Experimental\experimental-exe\Experimental.Gui.Exe.csproj", "{D5556639-F04B-4389-92C8-E110D6688BA7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experimental.Gui.Tests", "src\Experimental\tests\Experimental.Gui.Tests.csproj", "{96279B6C-981E-428F-B184-0831136ADD31}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -125,6 +127,10 @@ Global
 		{D5556639-F04B-4389-92C8-E110D6688BA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5556639-F04B-4389-92C8-E110D6688BA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5556639-F04B-4389-92C8-E110D6688BA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96279B6C-981E-428F-B184-0831136ADD31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96279B6C-981E-428F-B184-0831136ADD31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96279B6C-981E-428F-B184-0831136ADD31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96279B6C-981E-428F-B184-0831136ADD31}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -144,6 +150,7 @@ Global
 		{AC6DFB0E-C717-4FC4-B918-D6B789061212} = {26735BF4-848E-4B3D-BA4D-E1366986F5BD}
 		{9E15166C-D2B7-4B24-AB1C-1C69FFCEC9D3} = {57B0C862-C6E4-42FA-9FFC-591CCA51FD27}
 		{D5556639-F04B-4389-92C8-E110D6688BA7} = {57B0C862-C6E4-42FA-9FFC-591CCA51FD27}
+		{96279B6C-981E-428F-B184-0831136ADD31} = {57B0C862-C6E4-42FA-9FFC-591CCA51FD27}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CDFF439B-8888-4133-8734-86F4F899BC40}

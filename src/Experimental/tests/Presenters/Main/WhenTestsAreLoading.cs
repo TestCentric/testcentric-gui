@@ -1,5 +1,5 @@
 // ***********************************************************************
-// Copyright (c) 2016 Charlie Poole
+// Copyright (c) 2017 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -21,56 +21,38 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System.Text;
-using System.Windows.Forms;
-using NUnit.Engine;
+using NUnit.Framework;
+using NSubstitute;
 
-namespace TestCentric.Gui.Presenters
+namespace TestCentric.Gui.Presenters.Main
 {
     using Model;
 
-    /// <summary>
-    /// A TestGroup is essentially a TestSelection with a
-    /// name and image index for use in the tree display.
-    /// Its TreeNode property is externally set and updated.
-    /// It can create a filter for running all the tests
-    /// in the group.
-    /// </summary>
-    public class TestGroup : TestSelection, ITestItem
+    public class WhenTestsAreLoading : MainPresenterTestBase
     {
-        #region Constructors
-
-        public TestGroup(string name) : this(name, -1) { }
-
-        public TestGroup(string name, int imageIndex)
+        [Test]
+        public void View_Receives_FileNameOfSingleAssembly()
         {
-            Name = name;
-            ImageIndex = imageIndex;
+            string path = "C:\\git\\projects\\pull-request\\SomeAssembly.AcceptanceTests.dll";
+            var arguments = new TestFilesLoadingEventArgs(new[] { path });
+
+            Model.Events.TestsLoading += Raise.Event<TestFilesLoadingEventHandler>(arguments);
+
+            View.Received().OnTestAssembliesLoading($"Loading Assembly: {path}");
         }
 
-        #endregion
-
-        #region Properties
-
-        public override string Name { get; }
-
-        public int ImageIndex { get; set; }
-
-        public TreeNode TreeNode { get; set; }
-
-        #endregion
-
-        public override TestFilter GetTestFilter()
+        [Test]
+        public void View_Receives_CountOfMultipleAssemblies()
         {
-            StringBuilder sb = new StringBuilder("<filter><or>");
+            var arguments = new TestFilesLoadingEventArgs(new[]
+                {
+                    "C:\\git\\projects\\pull-request\\SomeAssembly.Tests.dll",
+                    "C:\\git\\projects\\pull-request\\SomeAssembly.IntegrationTests.dll",
+                    "C:\\git\\projects\\pull-request\\SomeAssembly.AcceptanceTests.dll"
+                });
+            Model.Events.TestsLoading += Raise.Event<TestFilesLoadingEventHandler>(arguments);
 
-            foreach (TestNode test in this)
-                if (test.RunState != RunState.Explicit)
-                    sb.AppendFormat("<id>{0}</id>", test.Id);
-
-            sb.Append("</or></filter>");
-
-            return new TestFilter(sb.ToString());
+            View.Received().OnTestAssembliesLoading("Loading 3 Assemblies...");
         }
     }
 }

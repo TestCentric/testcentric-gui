@@ -44,9 +44,9 @@ namespace TestCentric.Gui.Model
 
         public TestSelection(IEnumerable<TestNode> tests) : base(tests) { }
 
-        public string Name { get { return GetType().Name; } }
+        public virtual string Name { get { return GetType().Name; } }
 
-        public TestFilter GetTestFilter()
+        public virtual TestFilter GetTestFilter()
         {
             return Count == 1
                 ? this[0].GetTestFilter() // This allows nodes with special handling for filters to apply it.

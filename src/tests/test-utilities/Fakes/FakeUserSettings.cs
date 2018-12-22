@@ -21,12 +21,10 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-namespace TestCentric.Gui.Presenters
+namespace NUnit.TestUtilities.Fakes
 {
-    using Model.Settings;
-
-    public class FakeUserSettings : UserSettings
+    public class UserSettings : TestCentric.Gui.Model.Settings.UserSettings
     {
-        public FakeUserSettings() : base(new NUnit.TestUtilities.Fakes.SettingsService()) { }
+        public UserSettings() : base(new SettingsService()) { }
     }
 }

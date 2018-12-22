@@ -21,56 +21,41 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System.Text;
-using System.Windows.Forms;
-using NUnit.Engine;
+using System.Collections.Generic;
+using System.Reflection;
+using NUnit.Framework;
 
-namespace TestCentric.Gui.Presenters
+namespace TestCentric.Gui.Views
 {
-    using Model;
+    using Elements;
 
-    /// <summary>
-    /// A TestGroup is essentially a TestSelection with a
-    /// name and image index for use in the tree display.
-    /// Its TreeNode property is externally set and updated.
-    /// It can create a filter for running all the tests
-    /// in the group.
-    /// </summary>
-    public class TestGroup : TestSelection, ITestItem
+    [TestFixture(typeof(MainForm))]
+    [TestFixture(typeof(TestTreeView))]
+    [Platform(Exclude = "Linux", Reason = "Uninitialized form causes an error in Travis-CI")]
+    public class CommonViewTests<T> where T : new()
     {
-        #region Constructors
+        protected T View { get; private set; }
 
-        public TestGroup(string name) : this(name, -1) { }
-
-        public TestGroup(string name, int imageIndex)
+        [SetUp]
+        public void CreateView()
         {
-            Name = name;
-            ImageIndex = imageIndex;
+            this.View = new T();
         }
 
-        #endregion
-
-        #region Properties
-
-        public override string Name { get; }
-
-        public int ImageIndex { get; set; }
-
-        public TreeNode TreeNode { get; set; }
-
-        #endregion
-
-        public override TestFilter GetTestFilter()
+        [TestCaseSource("GetViewElementProperties")]
+        public void ViewElementsAreInitialized(PropertyInfo prop)
         {
-            StringBuilder sb = new StringBuilder("<filter><or>");
+            if (prop.GetValue(View, new object[0]) == null)
+                Assert.Fail("{0} was not initialized", prop.Name);
+        }
 
-            foreach (TestNode test in this)
-                if (test.RunState != RunState.Explicit)
-                    sb.AppendFormat("<id>{0}</id>", test.Id);
-
-            sb.Append("</or></filter>");
-
-            return new TestFilter(sb.ToString());
+        static protected IEnumerable<PropertyInfo> GetViewElementProperties()
+        {
+            foreach (PropertyInfo prop in typeof(T).GetProperties())
+            {
+                if (typeof(IViewElement).IsAssignableFrom(prop.PropertyType))
+                    yield return prop;
+            }
         }
     }
 }

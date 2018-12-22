@@ -147,7 +147,6 @@
     <Compile Include="CommandLineTests.cs" />
     <Compile Include="Presenters\ErrorsAndFailuresPresenterTests.cs" />
     <Compile Include="Views\ErrorsAndFailuresViewTests.cs" />
-    <Compile Include="Presenters\FakeUserSettings.cs" />
     <Compile Include="LongRunningOperationDisplayTests.cs" />
     <Compile Include="Presenters\PresenterTestBase.cs" />
     <Compile Include="Presenters\ProgressBarPresenterTests.cs" />
@@ -197,9 +196,7 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Folder Include="Presenters\Main\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

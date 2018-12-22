@@ -106,6 +106,7 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Fakes\ExtensionService.cs" />
+    <Compile Include="Fakes\FakeUserSettings.cs" />
     <Compile Include="Fakes\RecentFilesService.cs" />
     <Compile Include="Fakes\AvailableRuntimesService.cs" />
     <Compile Include="Fakes\ResultService.cs" />
@@ -138,7 +139,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Properties\" />
+    <ProjectReference Include="..\..\TestModel\model\TestCentric.Gui.Model.csproj">
+      <Project>{e978a8d7-e4a4-4de9-94df-d82bd764936b}</Project>
+      <Name>TestCentric.Gui.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
