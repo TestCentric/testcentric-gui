@@ -35,6 +35,7 @@ namespace NUnit.TestUtilities.Fakes
         public ExtensionService()
         {
             _extensionPoints = new List<IExtensionPoint>();
+            _extensions = new List<IExtensionNode>();
 
             // ExtensionPoints are all known, so we add in constructor. Extensions
             // may vary, so we use a method to add them.

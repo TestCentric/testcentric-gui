@@ -1,4 +1,5 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
     <ProductVersion>9.0.30729</ProductVersion>
@@ -6,7 +7,8 @@
     <ProjectGuid>{3FF340D5-D3B4-4DF0-BAF1-98B3C00B6148}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <AssemblyKeyContainerName></AssemblyKeyContainerName>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
     <AssemblyName>TestCentric.Gui.Runner</AssemblyName>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
@@ -14,8 +16,10 @@
     <OutputType>Library</OutputType>
     <RootNamespace>TestCentric.Gui</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-    <FileUpgradeFlags></FileUpgradeFlags>
-    <UpgradeBackupLocation></UpgradeBackupLocation>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
     <OldToolsVersion>3.5</OldToolsVersion>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <PublishUrl>publish\</PublishUrl>
@@ -38,9 +42,11 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>..\..\..\bin\Debug\</OutputPath>
     <BaseAddress>285212672</BaseAddress>
-    <ConfigurationOverrideFile></ConfigurationOverrideFile>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
     <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <DocumentationFile></DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <NoWarn>1699</NoWarn>
@@ -56,9 +62,11 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>..\..\..\bin\Release\</OutputPath>
     <BaseAddress>285212672</BaseAddress>
-    <ConfigurationOverrideFile></ConfigurationOverrideFile>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
     <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile></DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
     <FileAlignment>4096</FileAlignment>
     <NoWarn>1699</NoWarn>
     <Optimize>true</Optimize>
@@ -77,6 +85,10 @@
     <AssemblyOriginatorKeyFile>nunit.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\components\TestCentric.Gui.Components.csproj">
+      <Project>{ac6dfb0e-c717-4fc4-b918-d6b789061212}</Project>
+      <Name>TestCentric.Gui.Components</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\TestModel\model\TestCentric.Gui.Model.csproj">
       <Project>{e978a8d7-e4a4-4de9-94df-d82bd764936b}</Project>
       <Name>TestCentric.Gui.Model</Name>
@@ -108,10 +120,6 @@
     <Reference Include="nunit.engine.api">
       <HintPath>..\..\..\packages\NUnit.Engine.Api.3.9.0\lib\nunit.engine.api.dll</HintPath>
     </Reference>
-    <ProjectReference Include="..\components\TestCentric.Gui.Components.csproj">
-      <Project>{AC6DFB0E-C717-4FC4-B918-D6B789061212}</Project>
-      <Name>TestCentric.Gui.Components</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\CommonAssemblyInfo.cs">
@@ -178,7 +186,6 @@
     <Compile Include="SettingsPages\TreeSettingsPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="StackTraceFilter.cs" />
     <Compile Include="Dialogs\TestPropertiesDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -298,12 +305,14 @@
       <DependentUpon>CategoryView.cs</DependentUpon>
     </EmbeddedResource>
     <Compile Include="Views\TestSuiteTreeNode.cs" />
-    <Compile Include="Views\TestTreeView.cs" />
+    <Compile Include="Views\TestTreeView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Views\TestTreeView.Designer.cs">
-        <DependentUpon>TestTreeView.cs</DependentUpon>
+      <DependentUpon>TestTreeView.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Views\TestTreeView.resx">
-        <DependentUpon>TestTreeView.cs</DependentUpon>
+      <DependentUpon>TestTreeView.cs</DependentUpon>
     </EmbeddedResource>
     <Compile Include="Views\ICategoryView.cs" />
     <Compile Include="Presenters\CategoryPresenter.cs" />
@@ -397,7 +406,9 @@
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent></PreBuildEvent>
-    <PostBuildEvent></PostBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>
