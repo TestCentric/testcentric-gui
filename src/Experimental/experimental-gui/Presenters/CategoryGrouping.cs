@@ -81,7 +81,7 @@ namespace TestCentric.Gui.Presenters
         {
             List<TestGroup> groups = new List<TestGroup>();
 
-            foreach (XmlNode node in testNode.Xml.SelectNodes("properties/property[@name='Category']"))
+            foreach (XmlNode node in testNode.Xml.SelectNodes("ancestor-or-self::*/properties/property[@name='Category']"))
             {
                 var groupName = node.Attributes["value"].Value;
                 var group = Groups.Find((g) => g.Name == groupName);//GetGroup(groupName);
