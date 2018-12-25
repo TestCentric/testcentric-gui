@@ -82,7 +82,6 @@
     </Compile>
     <Compile Include="Views\IAddinsView.cs" />
     <Compile Include="Views\IDialog.cs" />
-    <Compile Include="Views\IDialogManager.cs" />
     <Compile Include="Views\IMainView.cs" />
     <Compile Include="Views\IProgressBarView.cs" />
     <Compile Include="Views\ISettingsDialog.cs" />
@@ -141,9 +140,6 @@
     </Compile>
     <Compile Include="Presenters\ProgressBarPresenter.cs" />
     <Compile Include="Presenters\TreeViewPresenter.cs" />
-    <Compile Include="Views\DialogManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Views\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
