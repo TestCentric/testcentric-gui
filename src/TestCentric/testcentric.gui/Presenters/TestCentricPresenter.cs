@@ -46,9 +46,7 @@ namespace TestCentric.Gui.Presenters
     /// 1. Many functions, which should properly be in
     /// the presenter, remain in the form.
     /// 
-    /// 2. The form has references to the model and presenter.
-    /// 
-    /// 3. The presenter creates dialogs itself, which
+    /// 2. The presenter creates dialogs itself, which
     /// limits testability.
     /// </summary>
     public class TestCentricPresenter
@@ -653,8 +651,11 @@ namespace TestCentric.Gui.Presenters
 
             if (dlg.ShowDialog() == DialogResult.OK)
             {
-                _model.TestFiles.Add(dlg.FileName);
-                _model.ReloadTests();
+                // We need a copy because LoadTests causes the model to clear TestFiles
+                var files = new List<string>(_model.TestFiles);
+                files.Add(dlg.FileName);
+
+                _model.LoadTests(files);
             }
         }
 
