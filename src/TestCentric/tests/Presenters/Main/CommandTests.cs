@@ -31,6 +31,10 @@ namespace TestCentric.Gui.Presenters.Main
 
     public class CommandTests : MainPresenterTestBase
     {
+        // TODO: Because the presenter opens dialogs for these commands,
+        // they can't be tested directly. This could be fixed if the
+        // presenter asked the view to open dialogs.
+
         //[Test]
         //public void NewProjectCommand_CallsNewProject()
         //{
@@ -58,6 +62,13 @@ namespace TestCentric.Gui.Presenters.Main
 
         //    View.OpenProjectCommand.Execute += Raise.Event<CommandHandler>();
         //    Model.DidNotReceive().LoadTests(Arg.Any<IList<string>>());
+        //}
+
+        //[Test]
+        //public void AddTestFileCommand_CallsReloadTests()
+        //{
+        //    _view.AddTestFileCommand.Execute += Raise.Event<CommandHandler>();
+        //    _model.Received().LoadTests();
         //}
 
         [Test]
