@@ -46,11 +46,12 @@ namespace TestCentric.Gui.Presenters.Main
         public void OpenProjectCommand_CallsLoadTests()
         {
             var files = new string[] { Path.GetFullPath("/path/to/test.dll") };
-            View.DialogManager.GetFilesToOpen().Returns(files);
+            View.DialogManager.GetFilesToOpen(null).ReturnsForAnyArgs(files);
 
             View.OpenProjectCommand.Execute += Raise.Event<CommandHandler>();
-            Model.Received().LoadTests(Arg.Any<IList<string>>());
-            Model.Received().LoadTests(Arg.Is<IList<string>>((p) => p.Count == 1));
+
+            View.DialogManager.Received().GetFilesToOpen("Open Project");
+            Model.Received().LoadTests(files);
         }
 
         [Test]

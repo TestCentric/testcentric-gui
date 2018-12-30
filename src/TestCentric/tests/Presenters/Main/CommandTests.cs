@@ -21,6 +21,9 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -43,33 +46,57 @@ namespace TestCentric.Gui.Presenters.Main
         //    Model.DidNotReceive().NewProject();
         //}
 
-        //[Test]
-        //public void OpenProjectCommand_CallsLoadTests()
-        //{
-        //    var files = new string[] { Path.GetFullPath("/path/to/test.dll") };
-        //    View.DialogManager.GetFilesToOpen().Returns(files);
+        [Test]
+        public void OpenCommand_GetsFilesAndLoadsTests()
+        {
+            var files = new string[] { Path.GetFullPath("/path/to/test.dll") };
+            _view.DialogManager.GetFilesToOpen(null).ReturnsForAnyArgs(files);
 
-        //    View.OpenProjectCommand.Execute += Raise.Event<CommandHandler>();
-        //    Model.Received().LoadTests(Arg.Any<IList<string>>());
-        //    Model.Received().LoadTests(Arg.Is<IList<string>>((p) => p.Count == 1));
-        //}
+            _view.OpenCommand.Execute += Raise.Event<CommandHandler>();
 
-        //[Test]
-        //public void OpenProjectCommand_WhenLoadFails_DoesNotCallLoadTest()
-        //{
-        //    View.DialogManager.GetFileOpenPath(null).ReturnsForAnyArgs("/path/to/test.dll");
-        //    Model.HasTests.Returns(false);
+            _view.DialogManager.Received().GetFilesToOpen("Open Project");
+            _model.Received().LoadTests(files);
+        }
 
-        //    View.OpenProjectCommand.Execute += Raise.Event<CommandHandler>();
-        //    Model.DidNotReceive().LoadTests(Arg.Any<IList<string>>());
-        //}
+        [Test]
+        public void OpenCommand_WhenNothingIsSelected_DoesNotLoadTests()
+        {
+            _view.DialogManager.GetFilesToOpen(null).ReturnsForAnyArgs((string[])null);
 
-        //[Test]
-        //public void AddTestFileCommand_CallsReloadTests()
-        //{
-        //    _view.AddTestFileCommand.Execute += Raise.Event<CommandHandler>();
-        //    _model.Received().LoadTests();
-        //}
+            _view.OpenCommand.Execute += Raise.Event<CommandHandler>();
+
+            _model.DidNotReceive().LoadTests(Arg.Any<IList<string>>());
+        }
+
+        [Test]
+        public void AddTestFilesCommand_LoadsTests()
+        {
+            var testFiles = new List<string>();
+            testFiles.Add("FILE1");
+            testFiles.Add("FILE2");
+            _model.TestFiles.Returns(testFiles);
+
+            var filesToAdd = new string[] { Path.GetFullPath("/path/to/test.dll") };
+            _view.DialogManager.GetFilesToOpen(null).ReturnsForAnyArgs(filesToAdd);
+
+            var allFiles = new List<string>(testFiles);
+            allFiles.AddRange(filesToAdd);
+
+            _view.AddTestFilesCommand.Execute += Raise.Event<CommandHandler>();
+
+            _view.DialogManager.Received().GetFilesToOpen("Add Test Files");
+            _model.Received().LoadTests(Arg.Is<List<string>>(l => l.SequenceEqual(allFiles)));
+        }
+
+        [Test]
+        public void AddTestFilesCommand_WhenNothingIsSelected_DoesNotLoadTests()
+        {
+            _view.DialogManager.GetFilesToOpen(null).ReturnsForAnyArgs((string[])null);
+
+            _view.AddTestFilesCommand.Execute += Raise.Event<CommandHandler>();
+
+            _model.DidNotReceive().LoadTests(Arg.Any<IList<string>>());
+        }
 
         [Test]
         public void CloseCommand_CallsUnloadTest()

@@ -29,11 +29,11 @@ namespace TestCentric.Gui.Views
     {
         #region IDialogManager Members
 
-        public string[] GetFilesToOpen()
+        public string[] GetFilesToOpen(string title)
         {
             OpenFileDialog dlg = new OpenFileDialog();
 
-            dlg.Title = "Open Project";
+            dlg.Title = title;
             dlg.Filter =
                 "Projects & Assemblies(*.nunit,*.csproj,*.vbproj,*.vjsproj, *.vcproj,*.sln,*.dll,*.exe )|*.nunit;*.csproj;*.vjsproj;*.vbproj;*.vcproj;*.sln;*.dll;*.exe|" +
                 "All Project Types (*.nunit,*.csproj,*.vbproj,*.vjsproj,*.vcproj,*.sln)|*.nunit;*.csproj;*.vjsproj;*.vbproj;*.vcproj;*.sln|" +

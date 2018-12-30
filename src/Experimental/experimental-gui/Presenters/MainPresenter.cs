@@ -242,7 +242,7 @@ namespace TestCentric.Gui.Presenters
 
         private void OnOpenProjectCommand()
         {
-            string[] files = _view.DialogManager.GetFilesToOpen();
+            string[] files = _view.DialogManager.GetFilesToOpen("Open Project");
             if (files.Length > 0)
                 _model.LoadTests(files);
         }

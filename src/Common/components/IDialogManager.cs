@@ -25,7 +25,7 @@ namespace TestCentric.Gui.Views
 {
     public interface IDialogManager
     {
-        string[] GetFilesToOpen();
+        string[] GetFilesToOpen(string title);
 
         string GetFileOpenPath(string filter);
 

@@ -368,7 +368,7 @@ namespace TestCentric.Gui.Presenters
 
             _view.OpenCommand.Execute += () => OpenProject();
             _view.CloseCommand.Execute += () => CloseProject();
-            _view.AddTestFileCommand.Execute += () => AddTestFile();
+            _view.AddTestFilesCommand.Execute += () => AddTestFiles();
             _view.ReloadTestsCommand.Execute += () => ReloadTests();
 
             _view.SelectedRuntime.SelectionChanged += () =>
@@ -529,10 +529,9 @@ namespace TestCentric.Gui.Presenters
 
         private void OpenProject()
         {
-            OpenFileDialog dlg = CreateOpenFileDialog("Open Project", true, true);
-
-            if (dlg.ShowDialog() == DialogResult.OK)
-                LoadTests(dlg.FileNames);
+            string[] files = _view.DialogManager.GetFilesToOpen("Open Project");
+            if (files != null)
+                LoadTests(files);
         }
 
         public void LoadTests(string testFileName)
@@ -641,19 +640,20 @@ namespace TestCentric.Gui.Presenters
         //              }
         //              catch (Exception ex)
         //              {
-        //                  Form.MessageDisplay.Error("Invalid VS Project", ex);
+        //                  Form.MessageDisplay.Error("Invalid VSProject", ex);
         //              }
         //      }
 
-        public void AddTestFile()
+        public void AddTestFiles()
         {
-            OpenFileDialog dlg = CreateOpenFileDialog("Add Test File", true, true);
+            string[] filesToAdd = _view.DialogManager.GetFilesToOpen("Add Test Files");
 
-            if (dlg.ShowDialog() == DialogResult.OK)
+            if (filesToAdd != null)
             {
-                // We need a copy because LoadTests causes the model to clear TestFiles
-                var files = new List<string>(_model.TestFiles);
-                files.Add(dlg.FileName);
+                var files = new List<string>();
+                if (_model.TestFiles != null)
+                    files.AddRange(_model.TestFiles);
+                files.AddRange(filesToAdd);
 
                 _model.LoadTests(files);
             }
@@ -781,7 +781,7 @@ namespace TestCentric.Gui.Presenters
 
             _view.OpenCommand.Enabled = !testRunning && !testLoading;
             _view.CloseCommand.Enabled = testLoaded && !testRunning;
-            _view.AddTestFileCommand.Enabled = testLoaded && !testRunning;
+            _view.AddTestFilesCommand.Enabled = testLoaded && !testRunning;
             _view.ReloadTestsCommand.Enabled = testLoaded && !testRunning;
             _view.RuntimeMenu.Enabled = !testRunning && !testLoading;
             _view.RecentFilesMenu.Enabled = !testRunning && !testLoading;

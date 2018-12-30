@@ -169,7 +169,7 @@ namespace TestCentric.Gui.Views
         /// </summary>
         public void UpdateImageIndex()
         {
-            ImageIndex = SelectedImageIndex = CalcImageIndex();
+            InvokeIfRequired(() => ImageIndex = SelectedImageIndex = CalcImageIndex());
         }
 
         /// <summary>
@@ -273,6 +273,14 @@ namespace TestCentric.Gui.Views
             {
                 node.Accept(visitor);
             }
+        }
+
+        private void InvokeIfRequired(MethodInvoker del)
+        {
+            if (TreeView != null && TreeView.InvokeRequired)
+                TreeView.BeginInvoke(del);
+            else
+                del();
         }
 
         #endregion

@@ -49,7 +49,7 @@ namespace TestCentric.Gui.Presenters.Main
         [TestCase("StopButton", true)]
         [TestCase("OpenCommand", false)]
         [TestCase("CloseCommand", false)]
-        [TestCase("AddTestFileCommand", false)]
+        [TestCase("AddTestFilesCommand", false)]
         [TestCase("ReloadTestsCommand", false)]
         [TestCase("RuntimeMenu", false)]
         [TestCase("RecentFilesMenu", false)]
