@@ -29,7 +29,7 @@ namespace TestCentric.Gui.Views
 
         string GetFileOpenPath(string filter);
 
-        string GetSaveAsPath(string filter);
+        string GetSaveAsPath(string title, string filter);
 
         string GetFolderPath(string message, string initialPath);
     }

@@ -665,25 +665,24 @@ namespace TestCentric.Gui.Presenters
 
         public void SaveResults()
         {
-            //TODO: Save all results
-            SaveFileDialog dlg = new SaveFileDialog();
-            dlg.Title = "Save Test Results as XML";
-            dlg.Filter = "XML Files (*.xml)|*.xml|All Files (*.*)|*.*";
-            dlg.FileName = "TestResult.xml";
-            dlg.InitialDirectory = Path.GetDirectoryName(_model.TestFiles[0]);
-            dlg.DefaultExt = "xml";
-            dlg.ValidateNames = true;
-            dlg.OverwritePrompt = true;
+            string savePath = _view.DialogManager.GetSaveAsPath("Save Results as XML", "XML Files (*.xml)|*.xml|All Files (*.*)|*.*");
+            ////TODO: Save all results
+            //SaveFileDialog dlg = new SaveFileDialog();
+            //dlg.Title = "Save Test Results as XML";
+            //dlg.Filter = "XML Files (*.xml)|*.xml|All Files (*.*)|*.*";
+            //dlg.FileName = "TestResult.xml";
+            //dlg.InitialDirectory = Path.GetDirectoryName(_model.TestFiles[0]);
+            //dlg.DefaultExt = "xml";
+            //dlg.ValidateNames = true;
+            //dlg.OverwritePrompt = true;
 
-            if (dlg.ShowDialog() == DialogResult.OK)
+            if (savePath != null)
             {
                 try
                 {
-                    string fileName = dlg.FileName;
+                    _model.SaveResults(savePath);
 
-                    _model.SaveResults(fileName);
-
-                    _view.MessageDisplay.Info(String.Format($"Results saved in nunit3 format as {fileName}"));
+                    _view.MessageDisplay.Info(String.Format($"Results saved in nunit3 format as {savePath}"));
                 }
                 catch (Exception exception)
                 {

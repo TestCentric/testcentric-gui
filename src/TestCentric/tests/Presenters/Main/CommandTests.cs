@@ -47,14 +47,24 @@ namespace TestCentric.Gui.Presenters.Main
         //}
 
         [Test]
-        public void OpenCommand_GetsFilesAndLoadsTests()
+        public void OpenCommand_DisplaysDialogCorrectly()
+        {
+            // Return null so model is not called
+            _view.DialogManager.GetFilesToOpen(null).ReturnsForAnyArgs((string[])null);
+
+            _view.OpenCommand.Execute += Raise.Event<CommandHandler>();
+
+            _view.DialogManager.Received().GetFilesToOpen("Open Project");
+        }
+
+        [Test]
+        public void OpenCommand_TellsModelToLoadTests()
         {
             var files = new string[] { Path.GetFullPath("/path/to/test.dll") };
             _view.DialogManager.GetFilesToOpen(null).ReturnsForAnyArgs(files);
 
             _view.OpenCommand.Execute += Raise.Event<CommandHandler>();
 
-            _view.DialogManager.Received().GetFilesToOpen("Open Project");
             _model.Received().LoadTests(files);
         }
 
@@ -69,7 +79,18 @@ namespace TestCentric.Gui.Presenters.Main
         }
 
         [Test]
-        public void AddTestFilesCommand_LoadsTests()
+        public void AddTestFilesCommand_DisplaysDialogCorrectly()
+        {
+            // Return null so model isn't called
+            _view.DialogManager.GetFilesToOpen(null).ReturnsForAnyArgs((string[])null);
+
+            _view.AddTestFilesCommand.Execute += Raise.Event<CommandHandler>();
+
+            _view.DialogManager.Received().GetFilesToOpen("Add Test Files");
+        }
+
+        [Test]
+        public void AddTestFilesCommand_TellsModelToLoadTests()
         {
             var testFiles = new List<string>();
             testFiles.Add("FILE1");
@@ -84,7 +105,6 @@ namespace TestCentric.Gui.Presenters.Main
 
             _view.AddTestFilesCommand.Execute += Raise.Event<CommandHandler>();
 
-            _view.DialogManager.Received().GetFilesToOpen("Add Test Files");
             _model.Received().LoadTests(Arg.Is<List<string>>(l => l.SequenceEqual(allFiles)));
         }
 
@@ -108,9 +128,8 @@ namespace TestCentric.Gui.Presenters.Main
         //[Test]
         //public void SaveCommand_CallsSaveProject()
         //{
-        //    View.SaveCommand.Execute += Raise.Event<CommandHandler>();
-        //    // This is NYI, change when we implement it
-        //    Model.DidNotReceive().SaveProject();
+        //    _view.SaveCommand.Execute += Raise.Event<CommandHandler>();
+        //    _model.Received().SaveProject();
         //}
 
         //[Test]
@@ -121,8 +140,26 @@ namespace TestCentric.Gui.Presenters.Main
         //    Model.DidNotReceive().SaveProject();
         //}
 
-        public void SaveResultsCommand_CallsSaveResults()
+        [Test]
+        public void SaveResultsCommand_DisplaysDialogCorrectly()
         {
+            // Return null so model is not called
+            _view.DialogManager.GetSaveAsPath(null, null).ReturnsForAnyArgs((string)null);
+
+            _view.SaveResultsCommand.Execute += Raise.Event<CommandHandler>();
+
+            _view.DialogManager.Received().GetSaveAsPath("Save Results as XML", "XML Files (*.xml)|*.xml|All Files (*.*)|*.*");
+        }
+
+        [Test]
+        public void SaveResultsCommand_TellsModelToSaveResults()
+        {
+            var savePath = Path.GetFullPath("/path/to/TestResult.xml");
+            _view.DialogManager.GetSaveAsPath(null, null).ReturnsForAnyArgs(savePath);
+
+            _view.SaveResultsCommand.Execute += Raise.Event<CommandHandler>();
+
+            _model.Received().SaveResults(savePath);
         }
 
         [Test]

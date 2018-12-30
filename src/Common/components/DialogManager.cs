@@ -72,11 +72,11 @@ namespace TestCentric.Gui.Views
                 : null;
         }
 
-        public string GetSaveAsPath(string filter)
+        public string GetSaveAsPath(string title, string filter)
         {
             SaveFileDialog dlg = new SaveFileDialog();
 
-            dlg.Title = "Save Project";
+            dlg.Title = title;
             dlg.Filter = filter;
             dlg.FilterIndex = 1;
             dlg.FileName = "";
