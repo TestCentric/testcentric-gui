@@ -21,15 +21,17 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System.Collections.Generic;
+
 namespace TestCentric.Gui.Views
 {
     public interface IDialogManager
     {
-        string[] GetFilesToOpen(string title);
+        IList<string> SelectMultipleFiles(string title, string filter);
 
-        string GetFileOpenPath(string filter);
+        string GetFileOpenPath(string title, string filter);
 
-        string GetSaveAsPath(string title, string filter);
+        string GetFileSavePath(string title, string filter);
 
         string GetFolderPath(string message, string initialPath);
     }

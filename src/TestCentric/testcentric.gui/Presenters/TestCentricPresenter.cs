@@ -529,8 +529,8 @@ namespace TestCentric.Gui.Presenters
 
         private void OpenProject()
         {
-            string[] files = _view.DialogManager.GetFilesToOpen("Open Project");
-            if (files != null)
+            var files = _view.DialogManager.SelectMultipleFiles("Open Project", CreateOpenFileFilter());
+            if (files.Count > 0)
                 LoadTests(files);
         }
 
@@ -646,9 +646,9 @@ namespace TestCentric.Gui.Presenters
 
         public void AddTestFiles()
         {
-            string[] filesToAdd = _view.DialogManager.GetFilesToOpen("Add Test Files");
+            var filesToAdd = _view.DialogManager.SelectMultipleFiles("Add Test Files", CreateOpenFileFilter());
 
-            if (filesToAdd != null)
+            if (filesToAdd.Count > 0)
             {
                 var files = new List<string>();
                 if (_model.TestFiles != null)
@@ -665,7 +665,7 @@ namespace TestCentric.Gui.Presenters
 
         public void SaveResults()
         {
-            string savePath = _view.DialogManager.GetSaveAsPath("Save Results as XML", "XML Files (*.xml)|*.xml|All Files (*.*)|*.*");
+            string savePath = _view.DialogManager.GetFileSavePath("Save Results as XML", "XML Files (*.xml)|*.xml|All Files (*.*)|*.*");
             ////TODO: Save all results
             //SaveFileDialog dlg = new SaveFileDialog();
             //dlg.Title = "Save Test Results as XML";
@@ -788,41 +788,26 @@ namespace TestCentric.Gui.Presenters
             _view.SaveResultsCommand.Enabled = !testRunning && !testLoading && _model.HasResults;
         }
 
-        private OpenFileDialog CreateOpenFileDialog(string title, bool includeProjects, bool includeAssemblies)
-        {
-            OpenFileDialog dlg = new OpenFileDialog();
-            dlg.Title = title;
-            dlg.Filter = DialogFilter(includeProjects, includeAssemblies);
-            dlg.FilterIndex = 1;
-            dlg.FileName = "";
-            dlg.Multiselect = true;
-            return dlg;
-        }
-
-        private string DialogFilter(bool includeProjects, bool includeAssemblies)
+        private string CreateOpenFileFilter()
         {
             StringBuilder sb = new StringBuilder();
-            bool nunit = includeProjects && _model.NUnitProjectSupport;
-            bool vs = includeProjects && _model.VisualStudioSupport;
+            bool nunit = _model.NUnitProjectSupport;
+            bool vs = _model.VisualStudioSupport;
 
-            if (includeProjects && includeAssemblies)
-            {
-                if (nunit && vs)
-                    sb.Append("Projects & Assemblies(*.nunit,*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln,*.dll,*.exe )|*.nunit;*.csproj;*.fsproj;*.vjsproj;*.vbproj;*.vcproj;*.sln;*.dll;*.exe|");
-                else if (nunit)
-                    sb.Append("Projects & Assemblies (*.nunit,*.dll,*.exe)|*.nunit;*.dll;*.exe|");
-                else if (vs)
-                    sb.Append("Projects & Assemblies(*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln,*.dll,*.exe )|*.csproj;*.fsproj;*.vjsproj;*.vbproj;*.vcproj;*.sln;*.dll;*.exe|");
-            }
+            if (nunit && vs)
+                sb.Append("Projects & Assemblies (*.nunit,*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln,*.dll,*.exe)|*.nunit;*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln;*.dll;*.exe|");
+            else if (nunit)
+                sb.Append("Projects & Assemblies (*.nunit,*.dll,*.exe)|*.nunit;*.dll;*.exe|");
+            else if (vs)
+                sb.Append("Projects & Assemblies (*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln,*.dll,*.exe)|*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln;*.dll;*.exe|");
 
             if (nunit)
                 sb.Append("NUnit Projects (*.nunit)|*.nunit|");
 
             if (vs)
-                sb.Append("Visual Studio Projects (*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln)|*.csproj;*.fsproj;*.vjsproj;*.vbproj;*.vcproj;*.sln|");
+                sb.Append("Visual Studio Projects (*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln)|*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln|");
 
-            if (includeAssemblies)
-                sb.Append("Assemblies (*.dll,*.exe)|*.dll;*.exe|");
+            sb.Append("Assemblies (*.dll,*.exe)|*.dll;*.exe|");
 
             sb.Append("All Files (*.*)|*.*");
 

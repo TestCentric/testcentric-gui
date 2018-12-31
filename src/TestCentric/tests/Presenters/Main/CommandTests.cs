@@ -1,5 +1,5 @@
 // ***********************************************************************
-// Copyright (c) 2016 Charlie Poole
+// Copyright (c) 2016-2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -34,6 +34,9 @@ namespace TestCentric.Gui.Presenters.Main
 
     public class CommandTests : MainPresenterTestBase
     {
+        private static string[] NO_FILES_SELECTED = new string[0];
+        private static string NO_FILE_PATH = null;
+
         // TODO: Because the presenter opens dialogs for these commands,
         // they can't be tested directly. This could be fixed if the
         // presenter asked the view to open dialogs.
@@ -46,22 +49,27 @@ namespace TestCentric.Gui.Presenters.Main
         //    Model.DidNotReceive().NewProject();
         //}
 
-        [Test]
-        public void OpenCommand_DisplaysDialogCorrectly()
+        [TestCase(false, false, "Assemblies (*.dll,*.exe)|*.dll;*.exe|All Files (*.*)|*.*")]
+        [TestCase(true, false, "Projects & Assemblies (*.nunit,*.dll,*.exe)|*.nunit;*.dll;*.exe|NUnit Projects (*.nunit)|*.nunit|Assemblies (*.dll,*.exe)|*.dll;*.exe|All Files (*.*)|*.*")]
+        [TestCase(false, true, "Projects & Assemblies (*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln,*.dll,*.exe)|*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln;*.dll;*.exe|Visual Studio Projects (*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln)|*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln|Assemblies (*.dll,*.exe)|*.dll;*.exe|All Files (*.*)|*.*")]
+        [TestCase(true, true, "Projects & Assemblies (*.nunit,*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln,*.dll,*.exe)|*.nunit;*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln;*.dll;*.exe|NUnit Projects (*.nunit)|*.nunit|Visual Studio Projects (*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln)|*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln|Assemblies (*.dll,*.exe)|*.dll;*.exe|All Files (*.*)|*.*")]
+        public void OpenCommand_DisplaysDialogCorrectly(bool nunitSupport, bool vsSupport, string filter)
         {
-            // Return null so model is not called
-            _view.DialogManager.GetFilesToOpen(null).ReturnsForAnyArgs((string[])null);
+            // Return no files so model is not called
+            _view.DialogManager.SelectMultipleFiles(null, null).ReturnsForAnyArgs(NO_FILES_SELECTED);
+            _model.NUnitProjectSupport.Returns(nunitSupport);
+            _model.VisualStudioSupport.Returns(vsSupport);
 
             _view.OpenCommand.Execute += Raise.Event<CommandHandler>();
 
-            _view.DialogManager.Received().GetFilesToOpen("Open Project");
+            _view.DialogManager.Received().SelectMultipleFiles("Open Project", filter);
         }
 
         [Test]
-        public void OpenCommand_TellsModelToLoadTests()
+        public void OpenCommand_FileSelected_LoadsTests()
         {
             var files = new string[] { Path.GetFullPath("/path/to/test.dll") };
-            _view.DialogManager.GetFilesToOpen(null).ReturnsForAnyArgs(files);
+            _view.DialogManager.SelectMultipleFiles(null, null).ReturnsForAnyArgs(files);
 
             _view.OpenCommand.Execute += Raise.Event<CommandHandler>();
 
@@ -69,24 +77,29 @@ namespace TestCentric.Gui.Presenters.Main
         }
 
         [Test]
-        public void OpenCommand_WhenNothingIsSelected_DoesNotLoadTests()
+        public void OpenCommand_NoFileSelected_DoesNotLoadTests()
         {
-            _view.DialogManager.GetFilesToOpen(null).ReturnsForAnyArgs((string[])null);
+            _view.DialogManager.SelectMultipleFiles(null, null).ReturnsForAnyArgs(NO_FILES_SELECTED);
 
             _view.OpenCommand.Execute += Raise.Event<CommandHandler>();
 
-            _model.DidNotReceive().LoadTests(Arg.Any<IList<string>>());
+            _model.DidNotReceiveWithAnyArgs().LoadTests(null);
         }
 
-        [Test]
-        public void AddTestFilesCommand_DisplaysDialogCorrectly()
+        [TestCase(false, false, "Assemblies (*.dll,*.exe)|*.dll;*.exe|All Files (*.*)|*.*")]
+        [TestCase(true, false, "Projects & Assemblies (*.nunit,*.dll,*.exe)|*.nunit;*.dll;*.exe|NUnit Projects (*.nunit)|*.nunit|Assemblies (*.dll,*.exe)|*.dll;*.exe|All Files (*.*)|*.*")]
+        [TestCase(false, true, "Projects & Assemblies (*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln,*.dll,*.exe)|*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln;*.dll;*.exe|Visual Studio Projects (*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln)|*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln|Assemblies (*.dll,*.exe)|*.dll;*.exe|All Files (*.*)|*.*")]
+        [TestCase(true, true, "Projects & Assemblies (*.nunit,*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln,*.dll,*.exe)|*.nunit;*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln;*.dll;*.exe|NUnit Projects (*.nunit)|*.nunit|Visual Studio Projects (*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln)|*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln|Assemblies (*.dll,*.exe)|*.dll;*.exe|All Files (*.*)|*.*")]
+        public void AddTestFilesCommand_DisplaysDialogCorrectly(bool nunitSupport, bool vsSupport, string filter)
         {
-            // Return null so model isn't called
-            _view.DialogManager.GetFilesToOpen(null).ReturnsForAnyArgs((string[])null);
+            // Return no files so model is not called
+            _view.DialogManager.SelectMultipleFiles(null, null).ReturnsForAnyArgs(NO_FILES_SELECTED);
+            _model.NUnitProjectSupport.Returns(nunitSupport);
+            _model.VisualStudioSupport.Returns(vsSupport);
 
             _view.AddTestFilesCommand.Execute += Raise.Event<CommandHandler>();
 
-            _view.DialogManager.Received().GetFilesToOpen("Add Test Files");
+            _view.DialogManager.Received().SelectMultipleFiles("Add Test Files", filter);
         }
 
         [Test]
@@ -98,7 +111,7 @@ namespace TestCentric.Gui.Presenters.Main
             _model.TestFiles.Returns(testFiles);
 
             var filesToAdd = new string[] { Path.GetFullPath("/path/to/test.dll") };
-            _view.DialogManager.GetFilesToOpen(null).ReturnsForAnyArgs(filesToAdd);
+            _view.DialogManager.SelectMultipleFiles(null, null).ReturnsForAnyArgs(filesToAdd);
 
             var allFiles = new List<string>(testFiles);
             allFiles.AddRange(filesToAdd);
@@ -111,7 +124,7 @@ namespace TestCentric.Gui.Presenters.Main
         [Test]
         public void AddTestFilesCommand_WhenNothingIsSelected_DoesNotLoadTests()
         {
-            _view.DialogManager.GetFilesToOpen(null).ReturnsForAnyArgs((string[])null);
+            _view.DialogManager.SelectMultipleFiles(null, null).ReturnsForAnyArgs(NO_FILES_SELECTED);
 
             _view.AddTestFilesCommand.Execute += Raise.Event<CommandHandler>();
 
@@ -143,23 +156,33 @@ namespace TestCentric.Gui.Presenters.Main
         [Test]
         public void SaveResultsCommand_DisplaysDialogCorrectly()
         {
-            // Return null so model is not called
-            _view.DialogManager.GetSaveAsPath(null, null).ReturnsForAnyArgs((string)null);
+            // Return no file path so model is not called
+            _view.DialogManager.GetFileSavePath(null, null).ReturnsForAnyArgs(NO_FILE_PATH);
 
             _view.SaveResultsCommand.Execute += Raise.Event<CommandHandler>();
 
-            _view.DialogManager.Received().GetSaveAsPath("Save Results as XML", "XML Files (*.xml)|*.xml|All Files (*.*)|*.*");
+            _view.DialogManager.Received().GetFileSavePath("Save Results as XML", "XML Files (*.xml)|*.xml|All Files (*.*)|*.*");
         }
 
         [Test]
-        public void SaveResultsCommand_TellsModelToSaveResults()
+        public void SaveResultsCommand_FilePathSelected_SavesResults()
         {
             var savePath = Path.GetFullPath("/path/to/TestResult.xml");
-            _view.DialogManager.GetSaveAsPath(null, null).ReturnsForAnyArgs(savePath);
+            _view.DialogManager.GetFileSavePath(null, null).ReturnsForAnyArgs(savePath);
 
             _view.SaveResultsCommand.Execute += Raise.Event<CommandHandler>();
 
             _model.Received().SaveResults(savePath);
+        }
+
+        [Test]
+        public void SaveResultsCommand_NoFilePathSelected_DoesNotSaveResults()
+        {
+            _view.DialogManager.GetFileSavePath(null, null).ReturnsForAnyArgs(NO_FILE_PATH);
+
+            _view.SaveResultsCommand.Execute += Raise.Event<CommandHandler>();
+
+            _model.DidNotReceiveWithAnyArgs().SaveResults(null);
         }
 
         [Test]

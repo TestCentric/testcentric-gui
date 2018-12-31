@@ -21,6 +21,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
@@ -29,25 +30,10 @@ namespace TestCentric.Gui.Views
     {
         #region IDialogManager Members
 
-        public string[] GetFilesToOpen(string title)
+        public IList<string> SelectMultipleFiles(string title, string filter)
         {
-            OpenFileDialog dlg = new OpenFileDialog();
+            OpenFileDialog dlg = CreateOpenFileDialog(title, filter);
 
-            dlg.Title = title;
-            dlg.Filter =
-                "Projects & Assemblies(*.nunit,*.csproj,*.vbproj,*.vjsproj, *.vcproj,*.sln,*.dll,*.exe )|*.nunit;*.csproj;*.vjsproj;*.vbproj;*.vcproj;*.sln;*.dll;*.exe|" +
-                "All Project Types (*.nunit,*.csproj,*.vbproj,*.vjsproj,*.vcproj,*.sln)|*.nunit;*.csproj;*.vjsproj;*.vbproj;*.vcproj;*.sln|" +
-                "Test Projects (*.nunit)|*.nunit|" +
-                "Solutions (*.sln)|*.sln|" +
-                "C# Projects (*.csproj)|*.csproj|" +
-                "J# Projects (*.vjsproj)|*.vjsproj|" +
-                "VB Projects (*.vbproj)|*.vbproj|" +
-                "C++ Projects (*.vcproj)|*.vcproj|" +
-                "Assemblies (*.dll,*.exe)|*.dll;*.exe";
-            //if (initialDirectory != null)
-            //    dlg.InitialDirectory = initialDirectory;
-            dlg.FilterIndex = 1;
-            dlg.FileName = "";
             dlg.Multiselect = true;
 
             return dlg.ShowDialog() == DialogResult.OK
@@ -55,31 +41,20 @@ namespace TestCentric.Gui.Views
                 : new string[0];
         }
 
-        public string GetFileOpenPath(string filter)
+        public string GetFileOpenPath(string title, string filter)
         {
-            OpenFileDialog dlg = new OpenFileDialog();
+            OpenFileDialog dlg = CreateOpenFileDialog(title, filter);
 
-            dlg.Title = "Open Project";
-            dlg.Filter = filter;
-            //if (initialDirectory != null)
-            //    dlg.InitialDirectory = initialDirectory;
-            dlg.FilterIndex = 1;
-            dlg.FileName = "";
             dlg.Multiselect = false;
 
             return dlg.ShowDialog() == DialogResult.OK
-                ? dlg.FileNames[0]
+                ? dlg.FileName
                 : null;
         }
 
-        public string GetSaveAsPath(string title, string filter)
+        public string GetFileSavePath(string title, string filter)
         {
-            SaveFileDialog dlg = new SaveFileDialog();
-
-            dlg.Title = title;
-            dlg.Filter = filter;
-            dlg.FilterIndex = 1;
-            dlg.FileName = "";
+            SaveFileDialog dlg = CreateSaveFileDialog(title, filter);
 
             return dlg.ShowDialog() == DialogResult.OK
                 ? dlg.FileName
@@ -94,6 +69,34 @@ namespace TestCentric.Gui.Views
             return browser.ShowDialog() == DialogResult.OK
                 ? browser.SelectedPath
                 : null;
+        }
+
+        #endregion
+
+        #region Helper Methods
+
+        private static OpenFileDialog CreateOpenFileDialog(string title, string filter)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+
+            dlg.Title = title;
+            dlg.Filter = filter;
+            //if (initialDirectory != null)
+            //    dlg.InitialDirectory = initialDirectory;
+            dlg.FilterIndex = 1;
+            dlg.FileName = "";
+            return dlg;
+        }
+
+        private static SaveFileDialog CreateSaveFileDialog(string title, string filter)
+        {
+            SaveFileDialog dlg = new SaveFileDialog();
+
+            dlg.Title = title;
+            dlg.Filter = filter;
+            dlg.FilterIndex = 1;
+            dlg.FileName = "";
+            return dlg;
         }
 
         #endregion
