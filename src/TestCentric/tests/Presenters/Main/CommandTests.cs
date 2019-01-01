@@ -22,6 +22,7 @@
 // ***********************************************************************
 
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using NSubstitute;
@@ -202,6 +203,32 @@ namespace TestCentric.Gui.Presenters.Main
 
         public void ExitCommand_CallsExit()
         {
+        }
+
+        [Test]
+        public void ChangeFontCommand_DisplaysFontDialog()
+        {
+            Font currentFont = _settings.Gui.Font = new Font(FontFamily.GenericSansSerif, 12.0f);
+            // Return same font to avoid setting the font
+            _view.DialogManager.SelectFont(null).ReturnsForAnyArgs(currentFont);
+
+            _view.ChangeFontCommand.Execute += Raise.Event<CommandHandler>();
+
+            _view.DialogManager.Received().SelectFont(currentFont);
+        }
+
+        [Test]
+        public void ChangeFontCommand_ChangesTheFont()
+        {
+            Font currentFont = _settings.Gui.Font = new Font(FontFamily.GenericSansSerif, 12.0f);
+            Font newFont = new Font(FontFamily.GenericSerif, 16.0f);
+
+            _view.DialogManager.SelectFont(null).ReturnsForAnyArgs(newFont);
+
+            _view.ChangeFontCommand.Execute += Raise.Event<CommandHandler>();
+
+            _view.Received().Font = newFont;
+            Assert.That(_settings.Gui.Font, Is.EqualTo(newFont));
         }
     }
 }

@@ -419,21 +419,26 @@ namespace TestCentric.Gui.Presenters
 
             _view.ChangeFontCommand.Execute += () =>
             {
-                FontDialog fontDialog = new FontDialog();
-                fontDialog.FontMustExist = true;
-                fontDialog.Font = _settings.Gui.Font;
-                fontDialog.MinSize = 6;
-                fontDialog.MaxSize = 12;
-                fontDialog.AllowVectorFonts = false;
-                fontDialog.ScriptsOnly = true;
-                fontDialog.ShowEffects = false;
-                fontDialog.ShowApply = true;
-                fontDialog.Apply += (s, e) =>
-                {
-                    applyFont(((FontDialog)s).Font);
-                };
-                if (fontDialog.ShowDialog() == DialogResult.OK)
-                    applyFont(fontDialog.Font);
+                //FontDialog fontDialog = new FontDialog();
+                //fontDialog.FontMustExist = true;
+                //fontDialog.Font = _settings.Gui.Font;
+                //fontDialog.MinSize = 6;
+                //fontDialog.MaxSize = 12;
+                //fontDialog.AllowVectorFonts = false;
+                //fontDialog.ScriptsOnly = true;
+                //fontDialog.ShowEffects = false;
+                //fontDialog.ShowApply = true;
+                //fontDialog.Apply += (s, e) =>
+                //{
+                //    applyFont(((FontDialog)s).Font);
+                //};
+                //if (fontDialog.ShowDialog() == DialogResult.OK)
+                //    applyFont(fontDialog.Font);
+
+                Font currentFont = _settings.Gui.Font;
+                Font newFont = _view.DialogManager.SelectFont(currentFont);
+                if (newFont != currentFont)
+                    applyFont(newFont);
             };
 
             _view.RestoreFontCommand.Execute += () =>
@@ -666,16 +671,6 @@ namespace TestCentric.Gui.Presenters
         public void SaveResults()
         {
             string savePath = _view.DialogManager.GetFileSavePath("Save Results as XML", "XML Files (*.xml)|*.xml|All Files (*.*)|*.*");
-            ////TODO: Save all results
-            //SaveFileDialog dlg = new SaveFileDialog();
-            //dlg.Title = "Save Test Results as XML";
-            //dlg.Filter = "XML Files (*.xml)|*.xml|All Files (*.*)|*.*";
-            //dlg.FileName = "TestResult.xml";
-            //dlg.InitialDirectory = Path.GetDirectoryName(_model.TestFiles[0]);
-            //dlg.DefaultExt = "xml";
-            //dlg.ValidateNames = true;
-            //dlg.OverwritePrompt = true;
-
             if (savePath != null)
             {
                 try

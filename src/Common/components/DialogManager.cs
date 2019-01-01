@@ -22,6 +22,7 @@
 // ***********************************************************************
 
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
@@ -69,6 +70,23 @@ namespace TestCentric.Gui.Views
             return browser.ShowDialog() == DialogResult.OK
                 ? browser.SelectedPath
                 : null;
+        }
+
+        public Font SelectFont(Font currentFont)
+        {
+            FontDialog fontDialog = new FontDialog();
+            fontDialog.FontMustExist = true;
+            fontDialog.Font = currentFont;
+            fontDialog.MinSize = 6;
+            fontDialog.MaxSize = 12;
+            fontDialog.AllowVectorFonts = false;
+            fontDialog.ScriptsOnly = true;
+            fontDialog.ShowEffects = false;
+            fontDialog.ShowApply = false;
+
+            return fontDialog.ShowDialog() == DialogResult.OK
+                ? fontDialog.Font
+                : currentFont;
         }
 
         #endregion

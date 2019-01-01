@@ -22,6 +22,7 @@
 // ***********************************************************************
 
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace TestCentric.Gui.Views
 {
@@ -34,5 +35,7 @@ namespace TestCentric.Gui.Views
         string GetFileSavePath(string title, string filter);
 
         string GetFolderPath(string message, string initialPath);
+
+        Font SelectFont(Font currentFont);
     }
 }
