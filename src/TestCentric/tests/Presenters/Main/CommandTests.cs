@@ -230,5 +230,17 @@ namespace TestCentric.Gui.Presenters.Main
             _view.Received().Font = newFont;
             Assert.That(_settings.Gui.Font, Is.EqualTo(newFont));
         }
+
+        [Test]
+        public void ApplyFontEvent_ChangesTheFont()
+        {
+            Font currentFont = _settings.Gui.Font = new Font(FontFamily.GenericSansSerif, 12.0f);
+            Font newFont = new Font(FontFamily.GenericSerif, 16.0f);
+
+            _view.DialogManager.ApplyFont += Raise.Event<ApplyFontHandler>(newFont);
+
+            _view.Received().Font = newFont;
+            Assert.That(_settings.Gui.Font, Is.EqualTo(newFont));
+        }
     }
 }

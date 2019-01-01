@@ -74,20 +74,21 @@ namespace TestCentric.Gui.Views
 
         public Font SelectFont(Font currentFont)
         {
-            FontDialog fontDialog = new FontDialog();
-            fontDialog.FontMustExist = true;
-            fontDialog.Font = currentFont;
-            fontDialog.MinSize = 6;
-            fontDialog.MaxSize = 12;
-            fontDialog.AllowVectorFonts = false;
-            fontDialog.ScriptsOnly = true;
-            fontDialog.ShowEffects = false;
-            fontDialog.ShowApply = false;
+            FontDialog dlg = new FontDialog();
+            dlg.FontMustExist = true;
+            dlg.Font = currentFont;
+            dlg.MinSize = 6;
+            dlg.MaxSize = 12;
+            dlg.AllowVectorFonts = false;
+            dlg.ScriptsOnly = true;
+            dlg.ShowEffects = false;
+            dlg.ShowApply = true;
+            dlg.Apply += (s, e) => ApplyFont?.Invoke(currentFont = dlg.Font);
 
-            return fontDialog.ShowDialog() == DialogResult.OK
-                ? fontDialog.Font
-                : currentFont;
+            return dlg.ShowDialog() == DialogResult.OK ? dlg.Font : currentFont;
         }
+
+        public event ApplyFontHandler ApplyFont;
 
         #endregion
 

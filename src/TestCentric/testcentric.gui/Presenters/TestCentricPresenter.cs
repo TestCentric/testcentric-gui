@@ -419,27 +419,13 @@ namespace TestCentric.Gui.Presenters
 
             _view.ChangeFontCommand.Execute += () =>
             {
-                //FontDialog fontDialog = new FontDialog();
-                //fontDialog.FontMustExist = true;
-                //fontDialog.Font = _settings.Gui.Font;
-                //fontDialog.MinSize = 6;
-                //fontDialog.MaxSize = 12;
-                //fontDialog.AllowVectorFonts = false;
-                //fontDialog.ScriptsOnly = true;
-                //fontDialog.ShowEffects = false;
-                //fontDialog.ShowApply = true;
-                //fontDialog.Apply += (s, e) =>
-                //{
-                //    applyFont(((FontDialog)s).Font);
-                //};
-                //if (fontDialog.ShowDialog() == DialogResult.OK)
-                //    applyFont(fontDialog.Font);
-
                 Font currentFont = _settings.Gui.Font;
                 Font newFont = _view.DialogManager.SelectFont(currentFont);
-                if (newFont != currentFont)
+                if (newFont != _settings.Gui.Font)
                     applyFont(newFont);
             };
+
+            _view.DialogManager.ApplyFont += (font) => applyFont(font);
 
             _view.RestoreFontCommand.Execute += () =>
             {
@@ -567,87 +553,6 @@ namespace TestCentric.Gui.Presenters
         #endregion
 
         #region Add Methods
-
-        //      public void AddToProject()
-        //{
-        //	AddToProject( null );
-        //}
-
-        // TODO: Not used?
-        //public void AddToProject( string configName )
-        //{
-        //	ProjectConfig config = configName == null
-        //		? loader.TestProject.ActiveConfig
-        //		: loader.TestProject.Configs[configName];
-
-        //	OpenFileDialog dlg = new OpenFileDialog();
-        //	dlg.Title = "Add Assemblies To Project";
-        //	dlg.InitialDirectory = config.BasePath;
-
-        //	if ( VisualStudioSupport )
-        //		dlg.Filter =
-        //			"Projects & Assemblies(*.csproj,*.vbproj,*.vjsproj, *.vcproj,*.dll,*.exe )|*.csproj;*.vjsproj;*.vbproj;*.vcproj;*.dll;*.exe|" +
-        //			"Visual Studio Projects (*.csproj,*.vjsproj,*.vbproj,*.vcproj)|*.csproj;*.vjsproj;*.vbproj;*.vcproj|" +
-        //			"C# Projects (*.csproj)|*.csproj|" +
-        //			"J# Projects (*.vjsproj)|*.vjsproj|" +
-        //			"VB Projects (*.vbproj)|*.vbproj|" +
-        //			"C++ Projects (*.vcproj)|*.vcproj|" +
-        //			"Assemblies (*.dll,*.exe)|*.dll;*.exe";
-        //	else
-        //		dlg.Filter = "Assemblies (*.dll,*.exe)|*.dll;*.exe";
-
-        //	dlg.FilterIndex = 1;
-        //	dlg.FileName = "";
-
-        //	if ( dlg.ShowDialog() != DialogResult.OK )
-        //		return;
-
-        //          if (PathUtils.IsAssemblyFileType(dlg.FileName))
-        //          {
-        //              config.Assemblies.Add(dlg.FileName);
-        //              return;
-        //          }
-        //          else if (VSProject.IsProjectFile(dlg.FileName))
-        //              try
-        //              {
-        //                  VSProject vsProject = new VSProject(dlg.FileName);
-        //                  MessageBoxButtons buttons;
-        //                  string msg;
-
-        //                  if (configName != null && vsProject.Configs.Contains(configName))
-        //                  {
-        //                      msg = "The project being added may contain multiple configurations;\r\r" +
-        //                          "Select\tYes to add all configurations found.\r" +
-        //                          "\tNo to add only the " + configName + " configuration.\r" +
-        //                          "\tCancel to exit without modifying the project.";
-        //                      buttons = MessageBoxButtons.YesNoCancel;
-        //                  }
-        //                  else
-        //                  {
-        //                      msg = "The project being added may contain multiple configurations;\r\r" +
-        //                          "Select\tOK to add all configurations found.\r" +
-        //                          "\tCancel to exit without modifying the project.";
-        //                      buttons = MessageBoxButtons.OKCancel;
-        //                  }
-
-        //                  DialogResult result = Form.MessageDisplay.Ask(msg, buttons);
-        //                  if (result == DialogResult.Yes || result == DialogResult.OK)
-        //                  {
-        //                      loader.TestProject.Add(vsProject);
-        //                      return;
-        //                  }
-        //                  else if (result == DialogResult.No)
-        //                  {
-        //                      foreach (string assembly in vsProject.Configs[configName].Assemblies)
-        //                          config.Assemblies.Add(assembly);
-        //                      return;
-        //                  }
-        //              }
-        //              catch (Exception ex)
-        //              {
-        //                  Form.MessageDisplay.Error("Invalid VSProject", ex);
-        //              }
-        //      }
 
         public void AddTestFiles()
         {
