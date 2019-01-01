@@ -368,7 +368,7 @@ namespace TestCentric.Gui.Presenters
 
             _view.OpenCommand.Execute += () => OpenProject();
             _view.CloseCommand.Execute += () => CloseProject();
-            _view.AddTestFileCommand.Execute += () => AddTestFile();
+            _view.AddTestFilesCommand.Execute += () => AddTestFiles();
             _view.ReloadTestsCommand.Execute += () => ReloadTests();
 
             _view.SelectedRuntime.SelectionChanged += () =>
@@ -419,22 +419,13 @@ namespace TestCentric.Gui.Presenters
 
             _view.ChangeFontCommand.Execute += () =>
             {
-                FontDialog fontDialog = new FontDialog();
-                fontDialog.FontMustExist = true;
-                fontDialog.Font = _settings.Gui.Font;
-                fontDialog.MinSize = 6;
-                fontDialog.MaxSize = 12;
-                fontDialog.AllowVectorFonts = false;
-                fontDialog.ScriptsOnly = true;
-                fontDialog.ShowEffects = false;
-                fontDialog.ShowApply = true;
-                fontDialog.Apply += (s, e) =>
-                {
-                    applyFont(((FontDialog)s).Font);
-                };
-                if (fontDialog.ShowDialog() == DialogResult.OK)
-                    applyFont(fontDialog.Font);
+                Font currentFont = _settings.Gui.Font;
+                Font newFont = _view.DialogManager.SelectFont(currentFont);
+                if (newFont != _settings.Gui.Font)
+                    applyFont(newFont);
             };
+
+            _view.DialogManager.ApplyFont += (font) => applyFont(font);
 
             _view.RestoreFontCommand.Execute += () =>
             {
@@ -529,10 +520,9 @@ namespace TestCentric.Gui.Presenters
 
         private void OpenProject()
         {
-            OpenFileDialog dlg = CreateOpenFileDialog("Open Project", true, true);
-
-            if (dlg.ShowDialog() == DialogResult.OK)
-                LoadTests(dlg.FileNames);
+            var files = _view.DialogManager.SelectMultipleFiles("Open Project", CreateOpenFileFilter());
+            if (files.Count > 0)
+                LoadTests(files);
         }
 
         public void LoadTests(string testFileName)
@@ -564,96 +554,16 @@ namespace TestCentric.Gui.Presenters
 
         #region Add Methods
 
-        //      public void AddToProject()
-        //{
-        //	AddToProject( null );
-        //}
-
-        // TODO: Not used?
-        //public void AddToProject( string configName )
-        //{
-        //	ProjectConfig config = configName == null
-        //		? loader.TestProject.ActiveConfig
-        //		: loader.TestProject.Configs[configName];
-
-        //	OpenFileDialog dlg = new OpenFileDialog();
-        //	dlg.Title = "Add Assemblies To Project";
-        //	dlg.InitialDirectory = config.BasePath;
-
-        //	if ( VisualStudioSupport )
-        //		dlg.Filter =
-        //			"Projects & Assemblies(*.csproj,*.vbproj,*.vjsproj, *.vcproj,*.dll,*.exe )|*.csproj;*.vjsproj;*.vbproj;*.vcproj;*.dll;*.exe|" +
-        //			"Visual Studio Projects (*.csproj,*.vjsproj,*.vbproj,*.vcproj)|*.csproj;*.vjsproj;*.vbproj;*.vcproj|" +
-        //			"C# Projects (*.csproj)|*.csproj|" +
-        //			"J# Projects (*.vjsproj)|*.vjsproj|" +
-        //			"VB Projects (*.vbproj)|*.vbproj|" +
-        //			"C++ Projects (*.vcproj)|*.vcproj|" +
-        //			"Assemblies (*.dll,*.exe)|*.dll;*.exe";
-        //	else
-        //		dlg.Filter = "Assemblies (*.dll,*.exe)|*.dll;*.exe";
-
-        //	dlg.FilterIndex = 1;
-        //	dlg.FileName = "";
-
-        //	if ( dlg.ShowDialog() != DialogResult.OK )
-        //		return;
-
-        //          if (PathUtils.IsAssemblyFileType(dlg.FileName))
-        //          {
-        //              config.Assemblies.Add(dlg.FileName);
-        //              return;
-        //          }
-        //          else if (VSProject.IsProjectFile(dlg.FileName))
-        //              try
-        //              {
-        //                  VSProject vsProject = new VSProject(dlg.FileName);
-        //                  MessageBoxButtons buttons;
-        //                  string msg;
-
-        //                  if (configName != null && vsProject.Configs.Contains(configName))
-        //                  {
-        //                      msg = "The project being added may contain multiple configurations;\r\r" +
-        //                          "Select\tYes to add all configurations found.\r" +
-        //                          "\tNo to add only the " + configName + " configuration.\r" +
-        //                          "\tCancel to exit without modifying the project.";
-        //                      buttons = MessageBoxButtons.YesNoCancel;
-        //                  }
-        //                  else
-        //                  {
-        //                      msg = "The project being added may contain multiple configurations;\r\r" +
-        //                          "Select\tOK to add all configurations found.\r" +
-        //                          "\tCancel to exit without modifying the project.";
-        //                      buttons = MessageBoxButtons.OKCancel;
-        //                  }
-
-        //                  DialogResult result = Form.MessageDisplay.Ask(msg, buttons);
-        //                  if (result == DialogResult.Yes || result == DialogResult.OK)
-        //                  {
-        //                      loader.TestProject.Add(vsProject);
-        //                      return;
-        //                  }
-        //                  else if (result == DialogResult.No)
-        //                  {
-        //                      foreach (string assembly in vsProject.Configs[configName].Assemblies)
-        //                          config.Assemblies.Add(assembly);
-        //                      return;
-        //                  }
-        //              }
-        //              catch (Exception ex)
-        //              {
-        //                  Form.MessageDisplay.Error("Invalid VS Project", ex);
-        //              }
-        //      }
-
-        public void AddTestFile()
+        public void AddTestFiles()
         {
-            OpenFileDialog dlg = CreateOpenFileDialog("Add Test File", true, true);
+            var filesToAdd = _view.DialogManager.SelectMultipleFiles("Add Test Files", CreateOpenFileFilter());
 
-            if (dlg.ShowDialog() == DialogResult.OK)
+            if (filesToAdd.Count > 0)
             {
-                // We need a copy because LoadTests causes the model to clear TestFiles
-                var files = new List<string>(_model.TestFiles);
-                files.Add(dlg.FileName);
+                var files = new List<string>();
+                if (_model.TestFiles != null)
+                    files.AddRange(_model.TestFiles);
+                files.AddRange(filesToAdd);
 
                 _model.LoadTests(files);
             }
@@ -665,25 +575,14 @@ namespace TestCentric.Gui.Presenters
 
         public void SaveResults()
         {
-            //TODO: Save all results
-            SaveFileDialog dlg = new SaveFileDialog();
-            dlg.Title = "Save Test Results as XML";
-            dlg.Filter = "XML Files (*.xml)|*.xml|All Files (*.*)|*.*";
-            dlg.FileName = "TestResult.xml";
-            dlg.InitialDirectory = Path.GetDirectoryName(_model.TestFiles[0]);
-            dlg.DefaultExt = "xml";
-            dlg.ValidateNames = true;
-            dlg.OverwritePrompt = true;
-
-            if (dlg.ShowDialog() == DialogResult.OK)
+            string savePath = _view.DialogManager.GetFileSavePath("Save Results as XML", "XML Files (*.xml)|*.xml|All Files (*.*)|*.*");
+            if (savePath != null)
             {
                 try
                 {
-                    string fileName = dlg.FileName;
+                    _model.SaveResults(savePath);
 
-                    _model.SaveResults(fileName);
-
-                    _view.MessageDisplay.Info(String.Format($"Results saved in nunit3 format as {fileName}"));
+                    _view.MessageDisplay.Info(String.Format($"Results saved in nunit3 format as {savePath}"));
                 }
                 catch (Exception exception)
                 {
@@ -781,7 +680,7 @@ namespace TestCentric.Gui.Presenters
 
             _view.OpenCommand.Enabled = !testRunning && !testLoading;
             _view.CloseCommand.Enabled = testLoaded && !testRunning;
-            _view.AddTestFileCommand.Enabled = testLoaded && !testRunning;
+            _view.AddTestFilesCommand.Enabled = testLoaded && !testRunning;
             _view.ReloadTestsCommand.Enabled = testLoaded && !testRunning;
             _view.RuntimeMenu.Enabled = !testRunning && !testLoading;
             _view.RecentFilesMenu.Enabled = !testRunning && !testLoading;
@@ -789,41 +688,26 @@ namespace TestCentric.Gui.Presenters
             _view.SaveResultsCommand.Enabled = !testRunning && !testLoading && _model.HasResults;
         }
 
-        private OpenFileDialog CreateOpenFileDialog(string title, bool includeProjects, bool includeAssemblies)
-        {
-            OpenFileDialog dlg = new OpenFileDialog();
-            dlg.Title = title;
-            dlg.Filter = DialogFilter(includeProjects, includeAssemblies);
-            dlg.FilterIndex = 1;
-            dlg.FileName = "";
-            dlg.Multiselect = true;
-            return dlg;
-        }
-
-        private string DialogFilter(bool includeProjects, bool includeAssemblies)
+        private string CreateOpenFileFilter()
         {
             StringBuilder sb = new StringBuilder();
-            bool nunit = includeProjects && _model.NUnitProjectSupport;
-            bool vs = includeProjects && _model.VisualStudioSupport;
+            bool nunit = _model.NUnitProjectSupport;
+            bool vs = _model.VisualStudioSupport;
 
-            if (includeProjects && includeAssemblies)
-            {
-                if (nunit && vs)
-                    sb.Append("Projects & Assemblies(*.nunit,*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln,*.dll,*.exe )|*.nunit;*.csproj;*.fsproj;*.vjsproj;*.vbproj;*.vcproj;*.sln;*.dll;*.exe|");
-                else if (nunit)
-                    sb.Append("Projects & Assemblies (*.nunit,*.dll,*.exe)|*.nunit;*.dll;*.exe|");
-                else if (vs)
-                    sb.Append("Projects & Assemblies(*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln,*.dll,*.exe )|*.csproj;*.fsproj;*.vjsproj;*.vbproj;*.vcproj;*.sln;*.dll;*.exe|");
-            }
+            if (nunit && vs)
+                sb.Append("Projects & Assemblies (*.nunit,*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln,*.dll,*.exe)|*.nunit;*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln;*.dll;*.exe|");
+            else if (nunit)
+                sb.Append("Projects & Assemblies (*.nunit,*.dll,*.exe)|*.nunit;*.dll;*.exe|");
+            else if (vs)
+                sb.Append("Projects & Assemblies (*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln,*.dll,*.exe)|*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln;*.dll;*.exe|");
 
             if (nunit)
                 sb.Append("NUnit Projects (*.nunit)|*.nunit|");
 
             if (vs)
-                sb.Append("Visual Studio Projects (*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln)|*.csproj;*.fsproj;*.vjsproj;*.vbproj;*.vcproj;*.sln|");
+                sb.Append("Visual Studio Projects (*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln)|*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln|");
 
-            if (includeAssemblies)
-                sb.Append("Assemblies (*.dll,*.exe)|*.dll;*.exe|");
+            sb.Append("Assemblies (*.dll,*.exe)|*.dll;*.exe|");
 
             sb.Append("All Files (*.*)|*.*");
 

@@ -23,6 +23,7 @@
 
 using System.Collections.Generic;
 using System.Drawing;
+using System.Text;
 using System.Windows.Forms;
 using NUnit.Engine;
 
@@ -242,8 +243,8 @@ namespace TestCentric.Gui.Presenters
 
         private void OnOpenProjectCommand()
         {
-            string[] files = _view.DialogManager.GetFilesToOpen();
-            if (files.Length > 0)
+            var files = _view.DialogManager.SelectMultipleFiles("Open Project", CreateOpenFileFilter());
+            if (files.Count > 0)
                 _model.LoadTests(files);
         }
 
@@ -323,6 +324,33 @@ namespace TestCentric.Gui.Presenters
             return intersect;
         }
 
+        private string CreateOpenFileFilter()
+        {
+            const string VS_FILE_TYPES = "*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln";
+
+            StringBuilder sb = new StringBuilder();
+            bool nunit = _model.NUnitProjectSupport;
+            bool vs = _model.VisualStudioSupport;
+
+            if (nunit && vs)
+                sb.Append("Projects & Assemblies (*.nunit,*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln,*.dll,*.exe)|*.nunit;*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln;*.dll;*.exe|");
+            else if (nunit)
+                sb.Append("Projects & Assemblies (*.nunit,*.dll,*.exe)|*.nunit;*.dll;*.exe|");
+            else if (vs)
+                sb.Append("Projects & Assemblies (*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln,*.dll,*.exe)|*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln;*.dll;*.exe|");
+
+            if (nunit)
+                sb.Append("NUnit Projects (*.nunit)|*.nunit|");
+
+            if (vs)
+                sb.Append("Visual Studio Projects (*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln)|*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln|");
+
+            sb.Append("Assemblies (*.dll,*.exe)|*.dll;*.exe|");
+
+            sb.Append("All Files (*.*)|*.*");
+
+            return sb.ToString();
+        }
 
         #region IDispose Implementation
 
