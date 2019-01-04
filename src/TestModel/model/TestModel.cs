@@ -218,13 +218,8 @@ namespace TestCentric.Gui.Model
         {
             _events.FireTestsReloading();
 
-            Runner.Unload();
-            Results.Clear();
-            Tests = null;
+            Runner.Reload();
 
-            TestPackage = MakeTestPackage(TestFiles);
-
-            Tests = ExploreTestPackage(TestPackage);
             AvailableCategories = GetAvailableCategories();
 
             if (Services.UserSettings.Gui.ClearResultsOnReload)
