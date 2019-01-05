@@ -37,10 +37,13 @@
             this.toolStripMenuItem13 = new System.Windows.Forms.ToolStripSeparator();
             this.showCheckboxesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.expandAllMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.collapseAllMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.collapseToFixturesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.treeImages = new System.Windows.Forms.ImageList(this.components);
+            this.debugMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.debugCheckedMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.runButton = new System.Windows.Forms.ToolStripSplitButton();
             this.runAllMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -48,6 +51,10 @@
             this.runFailedMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem9 = new System.Windows.Forms.ToolStripSeparator();
             this.stopRunMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.debugButton = new System.Windows.Forms.ToolStripSplitButton();
+            this.debugAllMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.debugSelectedMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.debugFailedMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.formatButton = new System.Windows.Forms.ToolStripDropDownButton();
             this.nunitTreeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fixtureListMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -80,7 +87,10 @@
             this.testTreeContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.runMenuItem,
             this.runCheckedMenuItem,
-            this.toolStripMenuItem13,
+            toolStripSeparator2,
+            this.debugMenuItem,
+            this.debugCheckedMenuItem,
+            toolStripMenuItem13,
             this.showCheckboxesMenuItem,
             this.toolStripSeparator1,
             this.expandAllMenuItem,
@@ -146,11 +156,24 @@
             this.treeImages.Images.SetKeyName(3, "Warning.png");
             this.treeImages.Images.SetKeyName(4, "Failure.png");
             // 
+            // debugMenuItem
+            // 
+            this.debugMenuItem.Name = "debugMenuItem";
+            this.debugMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.debugMenuItem.Text = "Debug";
+            // 
+            // debugCheckedMenuItem
+            // 
+            this.debugCheckedMenuItem.Name = "debugCheckedMenuItem";
+            this.debugCheckedMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.debugCheckedMenuItem.Text = "Debug Checked Items";
+            // 
             // toolStrip
             // 
             this.toolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.runButton,
+            this.debugButton,
             this.formatButton});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
@@ -207,6 +230,43 @@
             this.stopRunMenuItem.Name = "stopRunMenuItem";
             this.stopRunMenuItem.Size = new System.Drawing.Size(161, 22);
             this.stopRunMenuItem.Text = "Stop Run";
+            // 
+            // debugButton
+            // 
+            this.debugButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.debugButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.debugAllMenuItem,
+            this.debugSelectedMenuItem,
+            this.debugFailedMenuItem});
+            this.debugButton.Image = ((System.Drawing.Image)(resources.GetObject("debugButton.Image")));
+            this.debugButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.debugButton.Name = "debugButton";
+            this.debugButton.Size = new System.Drawing.Size(32, 22);
+            this.debugButton.ToolTipText = "Debug All Tests";
+            // 
+            // debugAllMenuItem
+            // 
+            this.debugAllMenuItem.Name = "debugAllMenuItem";
+            this.debugAllMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F5)));
+            this.debugAllMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.debugAllMenuItem.Text = "Debug All";
+            this.debugAllMenuItem.ToolTipText = "Debug all tests displayed";
+            // 
+            // debugSelectedMenuItem
+            // 
+            this.debugSelectedMenuItem.Name = "debugSelectedMenuItem";
+            this.debugSelectedMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F6)));
+            this.debugSelectedMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.debugSelectedMenuItem.Text = "Debug Selected";
+            this.debugSelectedMenuItem.ToolTipText = "Debug the selected tests";
+            // 
+            // debugFailedMenuItem
+            // 
+            this.debugFailedMenuItem.Name = "debugFailedMenuItem";
+            this.debugFailedMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F7)));
+            this.debugFailedMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.debugFailedMenuItem.Text = "Debug Failed";
+            this.debugFailedMenuItem.ToolTipText = "Debug the tests that failed on the last run";
             // 
             // formatButton
             // 
@@ -332,6 +392,13 @@
         private System.Windows.Forms.ToolStripMenuItem fixtureListMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showCheckboxesMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem runCheckedMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem debugMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem debugCheckedMenuItem;
+        private System.Windows.Forms.ToolStripSplitButton debugButton;
+        private System.Windows.Forms.ToolStripMenuItem debugAllMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem debugSelectedMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem debugFailedMenuItem;
     }
 }
