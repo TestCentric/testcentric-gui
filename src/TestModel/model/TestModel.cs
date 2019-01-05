@@ -223,7 +223,7 @@ namespace TestCentric.Gui.Model
 
             Runner.Reload();
 
-<           _lastRunWasDebugRun = false;
+            _lastRunWasDebugRun = false;
             TestPackage = MakeTestPackage(TestFiles);
 
             Tests = ExploreTestPackage(TestPackage);
