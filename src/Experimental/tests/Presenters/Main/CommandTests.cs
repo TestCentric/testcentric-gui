@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Copyright (c) 2016 Charlie Poole
+// Copyright (c) 2016-2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -34,6 +34,8 @@ namespace TestCentric.Gui.Presenters.Main
 
     public class CommandTests : MainPresenterTestBase
     {
+        private static string[] NO_FILES_SELECTED = new string[0];
+
         [Test]
         public void NewProjectCommand_CallsNewProject()
         {
@@ -42,25 +44,41 @@ namespace TestCentric.Gui.Presenters.Main
             Model.DidNotReceive().NewProject();
         }
 
-        [Test]
-        public void OpenProjectCommand_CallsLoadTests()
+        [TestCase(false, false, "Assemblies (*.dll,*.exe)|*.dll;*.exe|All Files (*.*)|*.*")]
+        [TestCase(true, false, "Projects & Assemblies (*.nunit,*.dll,*.exe)|*.nunit;*.dll;*.exe|NUnit Projects (*.nunit)|*.nunit|Assemblies (*.dll,*.exe)|*.dll;*.exe|All Files (*.*)|*.*")]
+        [TestCase(false, true, "Projects & Assemblies (*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln,*.dll,*.exe)|*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln;*.dll;*.exe|Visual Studio Projects (*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln)|*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln|Assemblies (*.dll,*.exe)|*.dll;*.exe|All Files (*.*)|*.*")]
+        [TestCase(true, true, "Projects & Assemblies (*.nunit,*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln,*.dll,*.exe)|*.nunit;*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln;*.dll;*.exe|NUnit Projects (*.nunit)|*.nunit|Visual Studio Projects (*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln)|*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln|Assemblies (*.dll,*.exe)|*.dll;*.exe|All Files (*.*)|*.*")]
+        public void OpenProjectCommand_DisplaysDialogCorrectly(bool nunitSupport, bool vsSupport, string filter)
         {
-            var files = new string[] { Path.GetFullPath("/path/to/test.dll") };
-            View.DialogManager.GetFilesToOpen().Returns(files);
+            // Return no files so model is not called
+            View.DialogManager.SelectMultipleFiles(null, null).ReturnsForAnyArgs(NO_FILES_SELECTED);
+            Model.NUnitProjectSupport.Returns(nunitSupport);
+            Model.VisualStudioSupport.Returns(vsSupport);
 
             View.OpenProjectCommand.Execute += Raise.Event<CommandHandler>();
-            Model.Received().LoadTests(Arg.Any<IList<string>>());
-            Model.Received().LoadTests(Arg.Is<IList<string>>((p) => p.Count == 1));
+
+            View.DialogManager.Received().SelectMultipleFiles("Open Project", filter);
         }
 
         [Test]
-        public void OpenProjectCommand_WhenLoadFails_DoesNotCallLoadTest()
+        public void OpenProjectCommand_FileSelected_LoadsTests()
         {
-            View.DialogManager.GetFileOpenPath(null).ReturnsForAnyArgs("/path/to/test.dll");
-            Model.HasTests.Returns(false);
+            var files = new string[] { Path.GetFullPath("/path/to/test.dll") };
+            View.DialogManager.SelectMultipleFiles(null, null).ReturnsForAnyArgs(files);
 
             View.OpenProjectCommand.Execute += Raise.Event<CommandHandler>();
-            Model.DidNotReceive().LoadTests(Arg.Any<IList<string>>());
+
+            Model.Received().LoadTests(files);
+        }
+
+        [Test]
+        public void OpenProjectCommand_NoFileSelected_DoesNotLoadTests()
+        {
+            View.DialogManager.SelectMultipleFiles(null, null).ReturnsForAnyArgs(new string[0]);
+
+            View.OpenProjectCommand.Execute += Raise.Event<CommandHandler>();
+
+            Model.DidNotReceiveWithAnyArgs().LoadTests(null);
         }
 
         [Test]

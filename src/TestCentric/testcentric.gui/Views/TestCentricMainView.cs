@@ -143,7 +143,7 @@ namespace TestCentric.Gui.Views
             FileMenu = new PopupMenu(fileMenu);
             OpenCommand = new MenuCommand(openMenuItem);
             CloseCommand = new MenuCommand(closeMenuItem);
-            AddTestFileCommand = new MenuCommand(addTestFileMenuItem);
+            AddTestFilesCommand = new MenuCommand(addTestFileMenuItem);
             ReloadTestsCommand = new MenuCommand(reloadTestsMenuItem);
             RuntimeMenu = new PopupMenu(runtimeMenuItem);
             SelectedRuntime = new CheckedMenuGroup(runtimeMenuItem);
@@ -177,6 +177,8 @@ namespace TestCentric.Gui.Views
             TestCentricHelpCommand = new MenuCommand(testCentricHelpMenuItem);
             NUnitHelpCommand = new MenuCommand(nunitHelpMenuItem);
             AboutCommand = new MenuCommand(aboutMenuItem);
+
+            DialogManager = new DialogManager();
         }
 
         protected override void Dispose(bool disposing)
@@ -886,7 +888,7 @@ namespace TestCentric.Gui.Views
         public IMenu FileMenu { get; }
         public ICommand OpenCommand { get; }
         public ICommand CloseCommand { get; }
-        public ICommand AddTestFileCommand { get; }
+        public ICommand AddTestFilesCommand { get; }
         public ICommand ReloadTestsCommand { get; }
         public IMenu RuntimeMenu { get; }
         public ISelection SelectedRuntime { get; }
@@ -921,6 +923,8 @@ namespace TestCentric.Gui.Views
         public ICommand TestCentricHelpCommand { get; }
         public ICommand NUnitHelpCommand { get; }
         public ICommand AboutCommand { get; }
+
+        public IDialogManager DialogManager { get; }
 
         public LongRunningOperationDisplay LongOperationDisplay(string text)
         {

@@ -221,11 +221,9 @@ namespace TestCentric.Gui.Model
         {
             _events.FireTestsReloading();
 
-            Runner.Unload();
-            Results.Clear();
-            Tests = null;
+            Runner.Reload();
 
-            _lastRunWasDebugRun = false;
+<           _lastRunWasDebugRun = false;
             TestPackage = MakeTestPackage(TestFiles);
 
             Tests = ExploreTestPackage(TestPackage);

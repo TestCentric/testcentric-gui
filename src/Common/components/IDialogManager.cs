@@ -21,16 +21,25 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System.Collections.Generic;
+using System.Drawing;
+
 namespace TestCentric.Gui.Views
 {
+    public delegate void ApplyFontHandler(Font font);
+
     public interface IDialogManager
     {
-        string[] GetFilesToOpen();
+        IList<string> SelectMultipleFiles(string title, string filter);
 
-        string GetFileOpenPath(string filter);
+        string GetFileOpenPath(string title, string filter);
 
-        string GetSaveAsPath(string filter);
+        string GetFileSavePath(string title, string filter);
 
         string GetFolderPath(string message, string initialPath);
+
+        Font SelectFont(Font currentFont);
+
+        event ApplyFontHandler ApplyFont;
     }
 }

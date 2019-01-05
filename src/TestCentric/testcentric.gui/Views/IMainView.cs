@@ -49,7 +49,7 @@ namespace TestCentric.Gui.Views
         IMenu FileMenu { get; }
         ICommand OpenCommand { get; }
         ICommand CloseCommand { get; }
-        ICommand AddTestFileCommand { get; }
+        ICommand AddTestFilesCommand { get; }
         ICommand ReloadTestsCommand { get; }
         IMenu RuntimeMenu { get; }
         ISelection SelectedRuntime { get; }
@@ -89,6 +89,9 @@ namespace TestCentric.Gui.Views
         TestTreeView TreeView { get; }
         StatusBarView StatusBarView { get; }
         IMessageDisplay MessageDisplay { get; }
+
+        // Dialog Manager
+        IDialogManager DialogManager { get; }
 
         // Methods used by Presenter
         void Configure(bool useFullGui);

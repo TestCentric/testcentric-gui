@@ -55,7 +55,7 @@ namespace TestCentric.Gui.Presenters.Main
         [TestCase("StopButton", false)]
         [TestCase("OpenCommand", true)]
         [TestCase("CloseCommand", true)]
-        [TestCase("AddTestFileCommand", true)]
+        [TestCase("AddTestFilesCommand", true)]
         [TestCase("ReloadTestsCommand", true)]
         [TestCase("RuntimeMenu", true)]
         [TestCase("RecentFilesMenu", true)]
