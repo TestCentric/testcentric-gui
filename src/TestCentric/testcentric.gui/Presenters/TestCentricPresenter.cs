@@ -103,7 +103,11 @@ namespace TestCentric.Gui.Presenters
             {
                 UpdateViewCommands(testLoading: true);
 
-                _longOpDisplay = _view.LongOperationDisplay("Loading...");
+                var message = e.TestFilesLoading.Count == 1 ?
+                    $"Loading Assembly: {e.TestFilesLoading[0]}" :
+                    $"Loading {e.TestFilesLoading.Count} Assemblies...";
+
+                _longOpDisplay = _view.LongOperationDisplay(message);
             };
 
             _model.Events.TestLoaded += (TestNodeEventArgs e) =>
