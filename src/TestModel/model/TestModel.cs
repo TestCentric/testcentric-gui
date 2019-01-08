@@ -226,7 +226,7 @@ namespace TestCentric.Gui.Model
             _lastRunWasDebugRun = false;
             TestPackage = MakeTestPackage(TestFiles);
 
-            Tests = ExploreTestPackage(TestPackage);
+            //Tests = ExploreTestPackage(TestPackage);
             AvailableCategories = GetAvailableCategories();
 
             if (Services.UserSettings.Gui.ClearResultsOnReload)
