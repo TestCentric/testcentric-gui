@@ -136,6 +136,7 @@
     <EmbeddedResource Include="data\TextCode.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

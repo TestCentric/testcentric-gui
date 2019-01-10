@@ -55,7 +55,7 @@ var xBuildSettings = new XBuildSettings {
 //////////////////////////////////////////////////////////////////////
 
 // HACK: Engine Version - Must update this manually to match package used
-var ENGINE_VERSION = "3.9.0";
+var ENGINE_VERSION = "3.10.0-dev-00002";
 
 // Directories
 var PROJECT_DIR = Context.Environment.WorkingDirectory.FullPath + "/";
@@ -112,8 +112,8 @@ Task("Build")
         }
 
     // Temporary hack... needs update if we update the engine
-    CopyFileToDirectory("packages/NUnit.Engine." + ENGINE_VERSION + "/lib/nunit-agent.exe.config", BIN_DIR);
-    CopyFileToDirectory("packages/NUnit.Engine." + ENGINE_VERSION + "/lib/nunit-agent-x86.exe.config", BIN_DIR);
+    CopyFileToDirectory("packages/NUnit.Engine." + ENGINE_VERSION + "/lib/net20/nunit-agent.exe.config", BIN_DIR);
+    CopyFileToDirectory("packages/NUnit.Engine." + ENGINE_VERSION + "/lib/net20/nunit-agent-x86.exe.config", BIN_DIR);
 });
 
 //////////////////////////////////////////////////////////////////////
