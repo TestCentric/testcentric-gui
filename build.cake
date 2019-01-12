@@ -28,6 +28,7 @@ if (type != null)
         monoVersion = displayName.Invoke(null, null).ToString();
 }
 
+// Thanks to Pawel Troka for this idea. See https://github.com/cake-build/cake/issues/1631
 bool isMonoButSupportsMsBuild = monoVersion!=null && System.Text.RegularExpressions.Regex.IsMatch(monoVersion,@"^([5-9]|\d{2,})\.\d+\.\d+(\.\d+)?");
 
 var msBuildSettings = new MSBuildSettings {
@@ -49,6 +50,16 @@ var xBuildSettings = new XBuildSettings {
     ToolVersion = XBuildToolVersion.Default,//The highest available XBuild tool version//NET40
     Configuration = configuration,
 };
+
+var nugetRestoreSettings = new NuGetRestoreSettings();
+// Older Mono version was not picking up the testcentric source
+if (!IsRunningOnWindows() && !isMonoButSupportsMsBuild)
+    nugetRestoreSettings.Source = new string [] {
+        "https://www.myget.org/F/testcentric/api/v2/",
+        "https://www.myget.org/F/testcentric/api/v3/index.json",
+        "https://www.nuget.org/api/v2/",
+        "https://api.nuget.org/v3/index.json"
+    };
 
 //////////////////////////////////////////////////////////////////////
 // DEFINE RUN CONSTANTS
@@ -90,7 +101,7 @@ Task("Clean")
 Task("RestorePackages")
     .Does(() =>
 {
-    NuGetRestore(SOLUTION);
+    NuGetRestore(SOLUTION, nugetRestoreSettings);
 });
 
 //////////////////////////////////////////////////////////////////////
