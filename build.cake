@@ -28,6 +28,7 @@ if (type != null)
         monoVersion = displayName.Invoke(null, null).ToString();
 }
 
+// Thanks to Pawel Troka for this idea. See https://github.com/cake-build/cake/issues/1631
 bool isMonoButSupportsMsBuild = monoVersion!=null && System.Text.RegularExpressions.Regex.IsMatch(monoVersion,@"^([5-9]|\d{2,})\.\d+\.\d+(\.\d+)?");
 
 var msBuildSettings = new MSBuildSettings {
@@ -50,12 +51,22 @@ var xBuildSettings = new XBuildSettings {
     Configuration = configuration,
 };
 
+var nugetRestoreSettings = new NuGetRestoreSettings();
+// Older Mono version was not picking up the testcentric source
+if (!IsRunningOnWindows() && !isMonoButSupportsMsBuild)
+    nugetRestoreSettings.Source = new string [] {
+        "https://www.myget.org/F/testcentric/api/v2/",
+        "https://www.myget.org/F/testcentric/api/v3/index.json",
+        "https://www.nuget.org/api/v2/",
+        "https://api.nuget.org/v3/index.json"
+    };
+
 //////////////////////////////////////////////////////////////////////
 // DEFINE RUN CONSTANTS
 //////////////////////////////////////////////////////////////////////
 
 // HACK: Engine Version - Must update this manually to match package used
-var ENGINE_VERSION = "3.9.0";
+var ENGINE_VERSION = "3.10.0-dev-00002";
 
 // Directories
 var PROJECT_DIR = Context.Environment.WorkingDirectory.FullPath + "/";
@@ -90,7 +101,7 @@ Task("Clean")
 Task("RestorePackages")
     .Does(() =>
 {
-    NuGetRestore(SOLUTION);
+    NuGetRestore(SOLUTION, nugetRestoreSettings);
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -112,8 +123,8 @@ Task("Build")
         }
 
     // Temporary hack... needs update if we update the engine
-    CopyFileToDirectory("packages/NUnit.Engine." + ENGINE_VERSION + "/lib/nunit-agent.exe.config", BIN_DIR);
-    CopyFileToDirectory("packages/NUnit.Engine." + ENGINE_VERSION + "/lib/nunit-agent-x86.exe.config", BIN_DIR);
+    CopyFileToDirectory("packages/NUnit.Engine." + ENGINE_VERSION + "/lib/net20/nunit-agent.exe.config", BIN_DIR);
+    CopyFileToDirectory("packages/NUnit.Engine." + ENGINE_VERSION + "/lib/net20/nunit-agent-x86.exe.config", BIN_DIR);
 });
 
 //////////////////////////////////////////////////////////////////////
