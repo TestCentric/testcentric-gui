@@ -66,7 +66,7 @@ if (!IsRunningOnWindows() && !isMonoButSupportsMsBuild)
 //////////////////////////////////////////////////////////////////////
 
 // HACK: Engine Version - Must update this manually to match package used
-var ENGINE_VERSION = "3.10.0-dev-00003";
+var ENGINE_VERSION = "3.10.0-dev-00004";
 
 // Directories
 var PROJECT_DIR = Context.Environment.WorkingDirectory.FullPath + "/";
