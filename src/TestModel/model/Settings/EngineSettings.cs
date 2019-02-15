@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -43,13 +43,13 @@ namespace TestCentric.Gui.Model.Settings
 
         public string ProcessModel
         {
-            get { return GetSetting(nameof(ProcessModel), "Multiple"); }
+            get { return GetSetting(nameof(ProcessModel), "Default"); }
             set { SaveSetting(nameof(ProcessModel), value); }
         }
 
         public string DomainUsage
         {
-            get { return GetSetting(nameof(DomainUsage), "Multiple"); }
+            get { return GetSetting(nameof(DomainUsage), "Default"); }
             set { SaveSetting(nameof(DomainUsage), value); }
         }
 

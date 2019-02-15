@@ -415,14 +415,15 @@ namespace TestCentric.Gui.Model
             // We use AddSetting rather than just setting the value because
             // it propagates the setting to all subprojects.
 
-            package.AddSetting(EnginePackageSettings.ProcessModel, engineSettings.ProcessModel);
+            if (engineSettings.ProcessModel != "Default")
+                package.AddSetting(EnginePackageSettings.ProcessModel, engineSettings.ProcessModel);
 
-            // Don't set DomainUsage for Multiple to avoid engine error
-            if (engineSettings.ProcessModel != "Multiple")
-                package.AddSetting(EnginePackageSettings.DomainUsage, engineSettings.DomainUsage);
-            // Don't bother checking Agents unless we are running multiple processes
-            else if (engineSettings.Agents > 0)
-                package.AddSetting(EnginePackageSettings.MaxAgents, engineSettings.Agents);
+            //// Don't set DomainUsage for Multiple to avoid engine error
+            //if (engineSettings.ProcessModel != "Multiple")
+            //    package.AddSetting(EnginePackageSettings.DomainUsage, engineSettings.DomainUsage);
+            //// Don't bother checking Agents unless we are running multiple processes
+            //else if (engineSettings.Agents > 0)
+            //    package.AddSetting(EnginePackageSettings.MaxAgents, engineSettings.Agents);
 
             if (engineSettings.SetPrincipalPolicy)
                 package.AddSetting(EnginePackageSettings.PrincipalPolicy, engineSettings.PrincipalPolicy);
@@ -430,7 +431,7 @@ namespace TestCentric.Gui.Model
             //if (Options.InternalTraceLevel != null)
             //    package.AddSetting(EnginePackageSettings.InternalTraceLevel, Options.InternalTraceLevel);
 
-            package.AddSetting(EnginePackageSettings.ShadowCopyFiles, engineSettings.ShadowCopyFiles);
+            //package.AddSetting(EnginePackageSettings.ShadowCopyFiles, engineSettings.ShadowCopyFiles);
 
             foreach (var subpackage in package.SubPackages)
                 if (Path.GetExtension(subpackage.Name) == ".sln")
@@ -442,6 +443,8 @@ namespace TestCentric.Gui.Model
             return package;
         }
 
+        // TODO: The NUnit engine is not returning project elements for each project
+        // so we create them in this method. Remove when the engine is fixed.
         private TestNode ExploreTestPackage(TestPackage package)
         {
             var tests = new TestNode(Runner.Explore(TestFilter.Empty));
@@ -457,11 +460,11 @@ namespace TestCentric.Gui.Model
                 if (subPackage.Name != childTest.Name)
                 {
                     // SubPackage did not match the next child test node, so it must be a project.
-                     var project = new TestNode($"<test-suite type='Project' id='{nextId++}' name='{subPackage.Name}' fullname='{subPackage.FullName}' runstate='Runnable'/>");
+                    var project = new TestNode($"<test-suite type='Project' id='{nextId++}' name='{subPackage.Name}' fullname='{subPackage.FullName}' runstate='Runnable'/>");
                     int testCount = 0;
 
                     // Now move any children of this project under it
-                    foreach(var subSubPackage in subPackage.SubPackages)
+                    foreach (var subSubPackage in subPackage.SubPackages)
                     {
                         childTest = tests.Children[nextTest];
 
@@ -479,7 +482,6 @@ namespace TestCentric.Gui.Model
 
                 nextTest++;
             }
-
 
             return tests;
         }

@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -90,8 +90,8 @@ namespace TestCentric.Gui.Model.Settings
         public static TestCaseData[] TestCases = new TestCaseData[]
         {
             new TestCaseData("ShadowCopyFiles", true, false),
-            new TestCaseData("ProcessModel", "Multiple", "InProcess"),
-            new TestCaseData("DomainUsage", "Multiple", "Single"),
+            new TestCaseData("ProcessModel", "Default", "InProcess"),
+            new TestCaseData("DomainUsage", "Default", "Single"),
             new TestCaseData("Agents", 0, 8),
             new TestCaseData("SetPrincipalPolicy", false, true),
             new TestCaseData("PrincipalPolicy", nameof(PrincipalPolicy.UnauthenticatedPrincipal), nameof(PrincipalPolicy.WindowsPrincipal))
