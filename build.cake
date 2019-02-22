@@ -5,14 +5,19 @@
 
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
+var packageVersion = Argument("packageVersion", "1.0-alpha2");
 
 //////////////////////////////////////////////////////////////////////
 // SET PACKAGE VERSION
 //////////////////////////////////////////////////////////////////////
 
-var version = "1.0";
-var modifier = "-alpha2";
-var dbgSuffix = configuration == "Debug" ? "-dbg" : "";
+var dash = packageVersion.IndexOf('-');
+var version = dash > 0
+    ? packageVersion.Substring(0, dash)
+    : packageVersion;
+
+if (configuration == "Debug")
+    packageVersion += "-dbg";
 
 //////////////////////////////////////////////////////////////////////
 // DETERMINE BUILD ENVIRONMENT
@@ -65,9 +70,6 @@ if (!IsRunningOnWindows() && !isMonoButSupportsMsBuild)
 // DEFINE RUN CONSTANTS
 //////////////////////////////////////////////////////////////////////
 
-// HACK: Engine Version - Must update this manually to match package used
-var ENGINE_VERSION = "3.10.0-tc-00002";
-
 // Directories
 var PROJECT_DIR = Context.Environment.WorkingDirectory.FullPath + "/";
 var PACKAGE_DIR = PROJECT_DIR + "package/";
@@ -76,7 +78,6 @@ var BIN_DIR = PROJECT_DIR + "bin/" + configuration + "/";
 
 // Packaging
 var PACKAGE_NAME = "testcentric-gui";
-var PACKAGE_VERSION = version + modifier + dbgSuffix;
 
 // Solution
 var SOLUTION = "testcentric-gui.sln";
@@ -122,9 +123,24 @@ Task("Build")
             XBuild(SOLUTION, xBuildSettings);
         }
 
-    // Temporary hack... needs update if we update the engine
-    CopyFileToDirectory("packages/NUnit.Engine." + ENGINE_VERSION + "/lib/net20/nunit-agent.exe.config", BIN_DIR);
-    CopyFileToDirectory("packages/NUnit.Engine." + ENGINE_VERSION + "/lib/net20/nunit-agent-x86.exe.config", BIN_DIR);
+    // Figure out where the engine package is installed so we can
+    // copy the agent config files.
+    string enginePackageDir = null;
+
+	// Needs update if engine gets a major release
+    foreach (var dir in GetDirectories("./packages/NUnit.Engine.3.*"))
+    {
+	    if (enginePackageDir != null)
+	        throw new InvalidOperationException("Multiple engine packages found in ./packages directory");
+
+        enginePackageDir = dir.ToString();
+    }
+
+    if (enginePackageDir == null)
+        throw new InvalidOperationException("Engine package not found in ./packages directlry");
+
+    CopyFileToDirectory(enginePackageDir + "/lib/net20/nunit-agent.exe.config", BIN_DIR);
+    CopyFileToDirectory(enginePackageDir + "/lib/net20/nunit-agent-x86.exe.config", BIN_DIR);
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -178,7 +194,7 @@ Task("PackageZip")
             BIN_DIR + "nunit-agent-x86.exe.config"
         };
 
-        Zip(BIN_DIR, File(PACKAGE_DIR + PACKAGE_NAME + "-" + PACKAGE_VERSION + ".zip"), zipFiles);
+        Zip(BIN_DIR, File(PACKAGE_DIR + PACKAGE_NAME + "-" + packageVersion + ".zip"), zipFiles);
     });
 
 //////////////////////////////////////////////////////////////////////
@@ -194,7 +210,7 @@ Task("PackageChocolatey")
         ChocolateyPack(CHOCO_DIR + PACKAGE_NAME + ".nuspec", 
             new ChocolateyPackSettings()
             {
-                Version = PACKAGE_VERSION,
+                Version = packageVersion,
                 OutputDirectory = PACKAGE_DIR,
                 Files = new ChocolateyNuSpecContent[]
                 {
