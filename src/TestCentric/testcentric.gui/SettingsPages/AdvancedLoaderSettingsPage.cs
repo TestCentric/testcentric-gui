@@ -40,6 +40,10 @@ namespace TestCentric.Gui.SettingsPages
         private GroupBox groupBox1;
         private ListBox principalPolicyListBox;
         private Label label1;
+        private Label label4;
+        private GroupBox groupBox2;
+        private CheckBox numberOfAgentsCheckBox;
+        private NumericUpDown numberOfAgentsUpDown;
         private System.ComponentModel.IContainer components = null;
 
         public AdvancedLoaderSettingsPage(string key) : base(key)
@@ -84,12 +88,17 @@ namespace TestCentric.Gui.SettingsPages
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.principalPolicyListBox = new System.Windows.Forms.ListBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.numberOfAgentsCheckBox = new System.Windows.Forms.CheckBox();
+            this.numberOfAgentsUpDown = new System.Windows.Forms.NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)(this.numberOfAgentsUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(8, 8);
+            this.label3.Location = new System.Drawing.Point(8, 70);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(73, 13);
             this.label3.TabIndex = 0;
@@ -97,9 +106,9 @@ namespace TestCentric.Gui.SettingsPages
             // 
             // groupBox3
             // 
-            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox3.Location = new System.Drawing.Point(139, 8);
+            this.groupBox3.Location = new System.Drawing.Point(139, 70);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(309, 8);
             this.groupBox3.TabIndex = 1;
@@ -109,7 +118,7 @@ namespace TestCentric.Gui.SettingsPages
             // 
             this.disableShadowCopyCheckBox.AutoSize = true;
             this.helpProvider1.SetHelpString(this.disableShadowCopyCheckBox, resources.GetString("disableShadowCopyCheckBox.HelpString"));
-            this.disableShadowCopyCheckBox.Location = new System.Drawing.Point(24, 32);
+            this.disableShadowCopyCheckBox.Location = new System.Drawing.Point(24, 94);
             this.disableShadowCopyCheckBox.Name = "disableShadowCopyCheckBox";
             this.helpProvider1.SetShowHelp(this.disableShadowCopyCheckBox, true);
             this.disableShadowCopyCheckBox.Size = new System.Drawing.Size(130, 17);
@@ -118,7 +127,7 @@ namespace TestCentric.Gui.SettingsPages
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(139, 61);
+            this.label2.Location = new System.Drawing.Point(139, 123);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(260, 59);
             this.label2.TabIndex = 6;
@@ -128,7 +137,7 @@ namespace TestCentric.Gui.SettingsPages
             // principalPolicyCheckBox
             // 
             this.principalPolicyCheckBox.AutoSize = true;
-            this.principalPolicyCheckBox.Location = new System.Drawing.Point(24, 145);
+            this.principalPolicyCheckBox.Location = new System.Drawing.Point(24, 207);
             this.principalPolicyCheckBox.Name = "principalPolicyCheckBox";
             this.principalPolicyCheckBox.Size = new System.Drawing.Size(214, 17);
             this.principalPolicyCheckBox.TabIndex = 9;
@@ -139,7 +148,7 @@ namespace TestCentric.Gui.SettingsPages
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(42, 171);
+            this.label7.Location = new System.Drawing.Point(42, 233);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(38, 13);
             this.label7.TabIndex = 10;
@@ -148,7 +157,7 @@ namespace TestCentric.Gui.SettingsPages
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(8, 117);
+            this.label6.Location = new System.Drawing.Point(8, 179);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(78, 13);
             this.label6.TabIndex = 7;
@@ -156,9 +165,9 @@ namespace TestCentric.Gui.SettingsPages
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Location = new System.Drawing.Point(139, 120);
+            this.groupBox1.Location = new System.Drawing.Point(139, 184);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(309, 8);
             this.groupBox1.TabIndex = 8;
@@ -171,7 +180,7 @@ namespace TestCentric.Gui.SettingsPages
             "UnauthenticatedPrincipal",
             "NoPrincipal",
             "WindowsPrincipal"});
-            this.principalPolicyListBox.Location = new System.Drawing.Point(139, 171);
+            this.principalPolicyListBox.Location = new System.Drawing.Point(139, 233);
             this.principalPolicyListBox.Name = "principalPolicyListBox";
             this.principalPolicyListBox.Size = new System.Drawing.Size(241, 69);
             this.principalPolicyListBox.TabIndex = 11;
@@ -179,14 +188,56 @@ namespace TestCentric.Gui.SettingsPages
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(42, 61);
+            this.label1.Location = new System.Drawing.Point(42, 123);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(50, 13);
             this.label1.TabIndex = 12;
             this.label1.Text = "Warning:";
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(8, 3);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(59, 13);
+            this.label4.TabIndex = 13;
+            this.label4.Text = "Agent Limit";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Location = new System.Drawing.Point(139, 3);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(309, 8);
+            this.groupBox2.TabIndex = 14;
+            this.groupBox2.TabStop = false;
+            // 
+            // numberOfAgentsCheckBox
+            // 
+            this.numberOfAgentsCheckBox.AutoSize = true;
+            this.numberOfAgentsCheckBox.Location = new System.Drawing.Point(24, 31);
+            this.numberOfAgentsCheckBox.Name = "numberOfAgentsCheckBox";
+            this.numberOfAgentsCheckBox.Size = new System.Drawing.Size(205, 17);
+            this.numberOfAgentsCheckBox.TabIndex = 44;
+            this.numberOfAgentsCheckBox.Text = "LImit simultaneous agent processes to";
+            this.numberOfAgentsCheckBox.UseVisualStyleBackColor = true;
+            this.numberOfAgentsCheckBox.CheckedChanged += new System.EventHandler(this.numberOfAgentsCheckBox_CheckedChanged);
+            // 
+            // numberOfAgentsUpDown
+            // 
+            this.numberOfAgentsUpDown.Enabled = false;
+            this.numberOfAgentsUpDown.Location = new System.Drawing.Point(324, 28);
+            this.numberOfAgentsUpDown.Name = "numberOfAgentsUpDown";
+            this.numberOfAgentsUpDown.Size = new System.Drawing.Size(66, 20);
+            this.numberOfAgentsUpDown.TabIndex = 43;
+            // 
             // AdvancedLoaderSettingsPage
             // 
+            this.Controls.Add(this.numberOfAgentsCheckBox);
+            this.Controls.Add(this.numberOfAgentsUpDown);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.principalPolicyListBox);
             this.Controls.Add(this.principalPolicyCheckBox);
@@ -198,6 +249,7 @@ namespace TestCentric.Gui.SettingsPages
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.disableShadowCopyCheckBox);
             this.Name = "AdvancedLoaderSettingsPage";
+            ((System.ComponentModel.ISupportInitialize)(this.numberOfAgentsUpDown)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -206,6 +258,11 @@ namespace TestCentric.Gui.SettingsPages
 
         public override void LoadSettings()
         {
+            int agents = Settings.Engine.Agents;
+            
+            numberOfAgentsCheckBox.Checked = agents > 0;
+            numberOfAgentsUpDown.Value = agents;
+
             disableShadowCopyCheckBox.Checked = !Settings.Engine.ShadowCopyFiles;
 
             principalPolicyCheckBox.Checked = principalPolicyListBox.Enabled =
@@ -215,6 +272,10 @@ namespace TestCentric.Gui.SettingsPages
 
         public override void ApplySettings()
         {
+            Settings.Engine.Agents = numberOfAgentsCheckBox.Checked
+                ? (int)numberOfAgentsUpDown.Value
+                : 0;
+
             Settings.Engine.ShadowCopyFiles = !disableShadowCopyCheckBox.Checked;
 
             Settings.Engine.SetPrincipalPolicy = principalPolicyCheckBox.Checked;
@@ -228,11 +289,17 @@ namespace TestCentric.Gui.SettingsPages
         {
             get
             {
-                return disableShadowCopyCheckBox.Checked == Settings.Engine.ShadowCopyFiles // Use == because the checkbox disables
+                return numberOfAgentsUpDown.Value != Settings.Engine.Agents
+                    || disableShadowCopyCheckBox.Checked == Settings.Engine.ShadowCopyFiles // Use == because the checkbox disables
                     || principalPolicyCheckBox.Checked != Settings.Engine.SetPrincipalPolicy
                     || (string)principalPolicyListBox.SelectedItem != Settings.Engine.PrincipalPolicy;
 
             }
+        }
+
+        private void numberOfAgentsCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            numberOfAgentsUpDown.Enabled = numberOfAgentsCheckBox.Checked;
         }
 
         private void principalPolicyCheckBox_CheckedChanged(object sender, EventArgs e)
