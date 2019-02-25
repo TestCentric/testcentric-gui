@@ -40,7 +40,6 @@ namespace TestCentric.Gui
             new AssemblyReloadSettingsPage("Gui.Assembly Reload"),
             new TextOutputSettingsPage("Gui.Text Output"),
             new ProjectEditorSettingsPage("Gui.Project Editor"),
-            new TestLoaderSettingsPage("Engine.Assembly Isolation"),
             new AdvancedLoaderSettingsPage("Engine.Advanced"));
         }
     }
