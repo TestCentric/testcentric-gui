@@ -35,6 +35,7 @@ if (type != null)
 
 // Thanks to Pawel Troka for this idea. See https://github.com/cake-build/cake/issues/1631
 bool isMonoButSupportsMsBuild = monoVersion!=null && System.Text.RegularExpressions.Regex.IsMatch(monoVersion,@"^([5-9]|\d{2,})\.\d+\.\d+(\.\d+)?");
+bool usingMsBuild = IsRunningOnWindows() || isMonoButSupportsMsBuild;
 
 var msBuildSettings = new MSBuildSettings {
     Verbosity = Verbosity.Minimal,
@@ -58,7 +59,7 @@ var xBuildSettings = new XBuildSettings {
 
 var nugetRestoreSettings = new NuGetRestoreSettings();
 // Older Mono version was not picking up the testcentric source
-if (!IsRunningOnWindows() && !isMonoButSupportsMsBuild)
+if (!usingMsBuild)
     nugetRestoreSettings.Source = new string [] {
         "https://www.myget.org/F/testcentric/api/v2/",
         "https://www.myget.org/F/testcentric/api/v3/index.json",
@@ -114,7 +115,7 @@ Task("Build")
     .IsDependentOn("RestorePackages")
     .Does(() =>
 {
-        if(IsRunningOnWindows() || isMonoButSupportsMsBuild)
+        if(usingMsBuild)
         {
             MSBuild(SOLUTION, msBuildSettings);
         }
@@ -141,6 +142,9 @@ Task("Build")
 
     CopyFileToDirectory(enginePackageDir + "/lib/net20/nunit-agent.exe.config", BIN_DIR);
     CopyFileToDirectory(enginePackageDir + "/lib/net20/nunit-agent-x86.exe.config", BIN_DIR);
+    CopyFileToDirectory("LICENSE.txt", BIN_DIR);
+    CopyFileToDirectory("NOTICES.txt", BIN_DIR);
+    CopyFileToDirectory("CHANGES.txt", BIN_DIR);
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -157,6 +161,54 @@ Task("Test")
 });
 
 //////////////////////////////////////////////////////////////////////
+// PACKAGING
+//////////////////////////////////////////////////////////////////////
+
+var baseFiles = new string[]
+{
+    BIN_DIR + "LICENSE.txt",
+    BIN_DIR + "NOTICES.txt",
+    BIN_DIR + "CHANGES.txt",
+    BIN_DIR + "testcentric.exe",
+    BIN_DIR + "testcentric.exe.config",
+    BIN_DIR + "tc-next.exe",
+    BIN_DIR + "tc-next.exe.config",
+    BIN_DIR + "TestCentric.Common.dll",
+    BIN_DIR + "TestCentric.Gui.Components.dll",
+    BIN_DIR + "TestCentric.Gui.Runner.dll",
+    BIN_DIR + "Experimental.Gui.Runner.dll",
+    BIN_DIR + "nunit.uiexception.dll",
+    BIN_DIR + "TestCentric.Gui.Model.dll",
+    BIN_DIR + "nunit.engine.api.dll",
+    BIN_DIR + "nunit.engine.dll",
+    BIN_DIR + "Mono.Cecil.dll",
+    BIN_DIR + "nunit-agent.exe",
+    BIN_DIR + "nunit-agent.exe.config",
+    BIN_DIR + "nunit-agent-x86.exe",
+    BIN_DIR + "nunit-agent-x86.exe.config"
+};
+
+var chocoFiles = new string[]
+{
+    CHOCO_DIR + "VERIFICATION.txt",
+    CHOCO_DIR + "nunit-agent.exe.ignore",
+    CHOCO_DIR + "nunit-agent-x86.exe.ignore",
+    CHOCO_DIR + "nunit.choco.addins"
+};
+
+var pdbFiles = new string[]
+{
+    BIN_DIR + "testcentric.pdb",
+    BIN_DIR + "tc-next.pdb",
+    BIN_DIR + "TestCentric.Common.pdb",
+    BIN_DIR + "TestCentric.Gui.Components.pdb",
+    BIN_DIR + "TestCentric.Gui.Runner.pdb",
+    BIN_DIR + "Experimental.Gui.Runner.pdb",
+    BIN_DIR + "nunit.uiexception.pdb",
+    BIN_DIR + "TestCentric.Gui.Model.pdb",
+};
+
+//////////////////////////////////////////////////////////////////////
 // PACKAGE ZIP
 //////////////////////////////////////////////////////////////////////
 
@@ -166,33 +218,9 @@ Task("PackageZip")
     {
         CreateDirectory(PACKAGE_DIR);
 
-        CopyFileToDirectory("LICENSE.txt", BIN_DIR);
-        CopyFileToDirectory("NOTICES.txt", BIN_DIR);
-        CopyFileToDirectory("CHANGES.txt", BIN_DIR);
-
-        var zipFiles = new FilePath[]
-        {
-            BIN_DIR + "LICENSE.txt",
-            BIN_DIR + "NOTICES.txt",
-            BIN_DIR + "CHANGES.txt",
-            BIN_DIR + "testcentric.exe",
-            BIN_DIR + "testcentric.exe.config",
-            BIN_DIR + "tc-next.exe",
-            BIN_DIR + "tc-next.exe.config",
-            BIN_DIR + "TestCentric.Common.dll",
-            BIN_DIR + "TestCentric.Gui.Components.dll",
-            BIN_DIR + "TestCentric.Gui.Runner.dll",
-            BIN_DIR + "Experimental.Gui.Runner.dll",
-            BIN_DIR + "nunit.uiexception.dll",
-            BIN_DIR + "TestCentric.Gui.Model.dll",
-            BIN_DIR + "nunit.engine.api.dll",
-            BIN_DIR + "nunit.engine.dll",
-            BIN_DIR + "Mono.Cecil.dll",
-            BIN_DIR + "nunit-agent.exe",
-            BIN_DIR + "nunit-agent.exe.config",
-            BIN_DIR + "nunit-agent-x86.exe",
-            BIN_DIR + "nunit-agent-x86.exe.config"
-        };
+        var zipFiles = new List<string>(baseFiles);
+        if (usingMsBuild)
+            zipFiles.AddRange(pdbFiles);
 
         Zip(BIN_DIR, File(PACKAGE_DIR + PACKAGE_NAME + "-" + packageVersion + ".zip"), zipFiles);
     });
@@ -207,38 +235,21 @@ Task("PackageChocolatey")
     {
         CreateDirectory(PACKAGE_DIR);
 
+        var content = new List<ChocolateyNuSpecContent>();
+        var sources = usingMsBuild
+            ? new[] { baseFiles, chocoFiles, pdbFiles }
+            : new[] { baseFiles, chocoFiles };
+
+        foreach (var source in sources)
+            foreach (string file in source)
+                content.Add(new ChocolateyNuSpecContent() { Source = file, Target = "tools" });
+
         ChocolateyPack(CHOCO_DIR + PACKAGE_NAME + ".nuspec", 
             new ChocolateyPackSettings()
             {
                 Version = packageVersion,
                 OutputDirectory = PACKAGE_DIR,
-                Files = new ChocolateyNuSpecContent[]
-                {
-                    new ChocolateyNuSpecContent() { Source = PROJECT_DIR + "LICENSE.txt", Target="tools" },
-                    new ChocolateyNuSpecContent() { Source = PROJECT_DIR + "NOTICES.txt", Target="tools" },
-                    new ChocolateyNuSpecContent() { Source = PROJECT_DIR + "CHANGES.txt", Target="tools" },
-                    new ChocolateyNuSpecContent() { Source = CHOCO_DIR + "VERIFICATION.txt", Target="tools" },
-                    new ChocolateyNuSpecContent() { Source = BIN_DIR + "testcentric.exe", Target="tools" },
-                    new ChocolateyNuSpecContent() { Source = BIN_DIR + "testcentric.exe.config", Target="tools" },
-                    new ChocolateyNuSpecContent() { Source = BIN_DIR + "tc-next.exe", Target="tools" },
-                    new ChocolateyNuSpecContent() { Source = BIN_DIR + "tc-next.exe.config", Target="tools" },
-                    new ChocolateyNuSpecContent() { Source = BIN_DIR + "TestCentric.Common.dll", Target="tools" },
-                    new ChocolateyNuSpecContent() { Source = BIN_DIR + "TestCentric.Gui.Components.dll", Target="tools" },
-                    new ChocolateyNuSpecContent() { Source = BIN_DIR + "TestCentric.Gui.Runner.dll", Target="tools" },
-                    new ChocolateyNuSpecContent() { Source = BIN_DIR + "Experimental.Gui.Runner.dll", Target="tools" },
-                    new ChocolateyNuSpecContent() { Source = BIN_DIR + "nunit.uiexception.dll", Target="tools" },
-                    new ChocolateyNuSpecContent() { Source = BIN_DIR + "TestCentric.Gui.Model.dll", Target="tools" },
-                    new ChocolateyNuSpecContent() { Source = BIN_DIR + "nunit.engine.dll", Target="tools" },
-                    new ChocolateyNuSpecContent() { Source = BIN_DIR + "nunit.engine.api.dll", Target="tools" },
-                    new ChocolateyNuSpecContent() { Source = BIN_DIR + "Mono.Cecil.dll", Target="tools" },
-                    new ChocolateyNuSpecContent() { Source = BIN_DIR + "nunit-agent.exe", Target="tools" },
-                    new ChocolateyNuSpecContent() { Source = BIN_DIR + "nunit-agent.exe.config", Target="tools" },
-                    new ChocolateyNuSpecContent() { Source = CHOCO_DIR + "nunit-agent.exe.ignore", Target="tools" },
-                    new ChocolateyNuSpecContent() { Source = BIN_DIR + "nunit-agent-x86.exe", Target="tools" },
-                    new ChocolateyNuSpecContent() { Source = BIN_DIR + "nunit-agent-x86.exe.config", Target="tools" },
-                    new ChocolateyNuSpecContent() { Source = CHOCO_DIR + "nunit-agent-x86.exe.ignore", Target="tools" },
-                    new ChocolateyNuSpecContent() { Source = CHOCO_DIR + "nunit.choco.addins", Target="tools" }
-                }
+                Files = content
             });
     });
 
