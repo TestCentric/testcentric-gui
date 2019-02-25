@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -53,6 +53,9 @@ namespace TestCentric.Gui.Views
         ICommand ReloadTestsCommand { get; }
         IMenu RuntimeMenu { get; }
         ISelection SelectedRuntime { get; }
+        ISelection ProcessModel { get; }
+        IChecked RunAsX86 { get; }
+        ISelection DomainUsage { get; }
         IMenu RecentFilesMenu { get; }
         ICommand ExitCommand { get; }
 

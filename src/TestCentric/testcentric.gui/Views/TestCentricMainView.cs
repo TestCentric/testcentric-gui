@@ -118,6 +118,18 @@ namespace TestCentric.Gui.Views
         private ErrorsAndFailuresView errorsAndFailuresView1;
         private TestsNotRunView testsNotRunView1;
         private MenuItem menuItem4;
+        private MenuItem menuItem5;
+        private MenuItem processModelMenuItem;
+        private MenuItem domainUsageMenuItem;
+        private MenuItem defaultProcessMenuItem;
+        private MenuItem inProcessMenuItem;
+        private MenuItem singleProcessMenuItem;
+        private MenuItem multipleProcessMenuItem;
+        private MenuItem menuItem11;
+        private MenuItem runAsX86MenuItem;
+        private MenuItem defaultDomainMenuItem;
+        private MenuItem singleDomainMenuItem;
+        private MenuItem multipleDomainMenuItem;
         private TextOutputView textOutputView1;
 
         #endregion
@@ -147,6 +159,11 @@ namespace TestCentric.Gui.Views
             ReloadTestsCommand = new MenuCommand(reloadTestsMenuItem);
             RuntimeMenu = new PopupMenu(runtimeMenuItem);
             SelectedRuntime = new CheckedMenuGroup(runtimeMenuItem);
+            ProcessModel = new CheckedMenuGroup(
+                defaultProcessMenuItem, inProcessMenuItem, singleProcessMenuItem, multipleProcessMenuItem);
+            DomainUsage = new CheckedMenuGroup(
+                defaultDomainMenuItem, singleDomainMenuItem, multipleDomainMenuItem);
+            RunAsX86 = new CheckedMenuItem(runAsX86MenuItem);
             RecentFilesMenu = new PopupMenu(recentFilesMenu);
             ExitCommand = new MenuCommand(exitMenuItem);
 
@@ -212,7 +229,19 @@ namespace TestCentric.Gui.Views
             this.addTestFileMenuItem = new System.Windows.Forms.MenuItem();
             this.fileMenuSeparator1 = new System.Windows.Forms.MenuItem();
             this.reloadTestsMenuItem = new System.Windows.Forms.MenuItem();
+            this.menuItem5 = new System.Windows.Forms.MenuItem();
             this.runtimeMenuItem = new System.Windows.Forms.MenuItem();
+            this.processModelMenuItem = new System.Windows.Forms.MenuItem();
+            this.defaultProcessMenuItem = new System.Windows.Forms.MenuItem();
+            this.inProcessMenuItem = new System.Windows.Forms.MenuItem();
+            this.singleProcessMenuItem = new System.Windows.Forms.MenuItem();
+            this.multipleProcessMenuItem = new System.Windows.Forms.MenuItem();
+            this.menuItem11 = new System.Windows.Forms.MenuItem();
+            this.runAsX86MenuItem = new System.Windows.Forms.MenuItem();
+            this.domainUsageMenuItem = new System.Windows.Forms.MenuItem();
+            this.defaultDomainMenuItem = new System.Windows.Forms.MenuItem();
+            this.singleDomainMenuItem = new System.Windows.Forms.MenuItem();
+            this.multipleDomainMenuItem = new System.Windows.Forms.MenuItem();
             this.menuItem2 = new System.Windows.Forms.MenuItem();
             this.recentFilesMenu = new System.Windows.Forms.MenuItem();
             this.menuItem4 = new System.Windows.Forms.MenuItem();
@@ -316,7 +345,10 @@ namespace TestCentric.Gui.Views
             this.addTestFileMenuItem,
             this.fileMenuSeparator1,
             this.reloadTestsMenuItem,
+            this.menuItem5,
             this.runtimeMenuItem,
+            this.processModelMenuItem,
+            this.domainUsageMenuItem,
             this.menuItem2,
             this.recentFilesMenu,
             this.fileMenuSeparator4,
@@ -350,19 +382,90 @@ namespace TestCentric.Gui.Views
             this.reloadTestsMenuItem.Shortcut = System.Windows.Forms.Shortcut.CtrlR;
             this.reloadTestsMenuItem.Text = "&Reload Tests";
             // 
+            // menuItem5
+            // 
+            this.menuItem5.Index = 5;
+            this.menuItem5.Text = "-";
+            // 
             // runtimeMenuItem
             // 
-            this.runtimeMenuItem.Index = 5;
-            this.runtimeMenuItem.Text = "  Select R&untime";
+            this.runtimeMenuItem.Index = 6;
+            this.runtimeMenuItem.Text = "Select R&untime";
+            // 
+            // processModelMenuItem
+            // 
+            this.processModelMenuItem.Index = 7;
+            this.processModelMenuItem.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.defaultProcessMenuItem,
+            this.inProcessMenuItem,
+            this.singleProcessMenuItem,
+            this.multipleProcessMenuItem,
+            this.menuItem11,
+            this.runAsX86MenuItem});
+            this.processModelMenuItem.Text = "Process Model";
+            // 
+            // defaultProcessMenuItem
+            // 
+            this.defaultProcessMenuItem.Index = 0;
+            this.defaultProcessMenuItem.Text = "Default";
+            // 
+            // inProcessMenuItem
+            // 
+            this.inProcessMenuItem.Index = 1;
+            this.inProcessMenuItem.Text = "InProcess";
+            // 
+            // singleProcessMenuItem
+            // 
+            this.singleProcessMenuItem.Index = 2;
+            this.singleProcessMenuItem.Text = "Single";
+            // 
+            // multipleProcessMenuItem
+            // 
+            this.multipleProcessMenuItem.Index = 3;
+            this.multipleProcessMenuItem.Text = "Multiple";
+            // 
+            // menuItem11
+            // 
+            this.menuItem11.Index = 4;
+            this.menuItem11.Text = "-";
+            // 
+            // runAsX86MenuItem
+            // 
+            this.runAsX86MenuItem.Index = 5;
+            this.runAsX86MenuItem.Text = "Run as X86";
+            // 
+            // domainUsageMenuItem
+            // 
+            this.domainUsageMenuItem.Index = 8;
+            this.domainUsageMenuItem.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.defaultDomainMenuItem,
+            this.singleDomainMenuItem,
+            this.multipleDomainMenuItem});
+            this.domainUsageMenuItem.Text = "Domain Usage";
+            // 
+            // defaultDomainMenuItem
+            // 
+            this.defaultDomainMenuItem.Index = 0;
+            this.defaultDomainMenuItem.Text = "Default";
+            // 
+            // singleDomainMenuItem
+            // 
+            this.singleDomainMenuItem.Index = 1;
+            this.singleDomainMenuItem.Text = "Single";
+            // 
+            // multipleDomainMenuItem
+            // 
+            this.multipleDomainMenuItem.Index = 2;
+            this.multipleDomainMenuItem.Text = "Multiple";
             // 
             // menuItem2
             // 
-            this.menuItem2.Index = 6;
+            this.menuItem2.Index = 9;
             this.menuItem2.Text = "-";
             // 
             // recentFilesMenu
             // 
-            this.recentFilesMenu.Index = 7;
+            this.recentFilesMenu.Index = 10;
             this.recentFilesMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItem4});
             this.recentFilesMenu.Text = "Recent &Files";
@@ -374,12 +477,12 @@ namespace TestCentric.Gui.Views
             // 
             // fileMenuSeparator4
             // 
-            this.fileMenuSeparator4.Index = 8;
+            this.fileMenuSeparator4.Index = 11;
             this.fileMenuSeparator4.Text = "-";
             // 
             // exitMenuItem
             // 
-            this.exitMenuItem.Index = 9;
+            this.exitMenuItem.Index = 12;
             this.exitMenuItem.Text = "E&xit";
             // 
             // viewMenu
@@ -892,6 +995,9 @@ namespace TestCentric.Gui.Views
         public ICommand ReloadTestsCommand { get; }
         public IMenu RuntimeMenu { get; }
         public ISelection SelectedRuntime { get; }
+        public ISelection ProcessModel { get; private set; }
+        public IChecked RunAsX86 { get; private set; }
+        public ISelection DomainUsage { get; private set; }
         public IMenu RecentFilesMenu { get; }
         public ICommand ExitCommand { get; }
 

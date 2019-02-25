@@ -178,9 +178,6 @@
     <Compile Include="SettingsPages\SettingsPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="SettingsPages\TestLoaderSettingsPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="SettingsPages\TextOutputSettingsPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -269,9 +266,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsPages\SettingsPage.resx">
       <DependentUpon>SettingsPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SettingsPages\TestLoaderSettingsPage.resx">
-      <DependentUpon>TestLoaderSettingsPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsPages\TextOutputSettingsPage.resx">
       <DependentUpon>TextOutputSettingsPage.cs</DependentUpon>
