@@ -380,6 +380,25 @@ namespace TestCentric.Gui.Presenters
                 ChangePackageSetting(EnginePackageSettings.RuntimeFramework, _view.SelectedRuntime.SelectedItem);
             };
 
+            _view.ProcessModel.SelectionChanged += () =>
+            {
+                ChangePackageSetting(EnginePackageSettings.ProcessModel, _view.ProcessModel.SelectedItem);
+            };
+
+            _view.DomainUsage.SelectionChanged += () =>
+            {
+                ChangePackageSetting(EnginePackageSettings.DomainUsage, _view.DomainUsage.SelectedItem);
+            };
+
+            _view.RunAsX86.CheckedChanged += () =>
+            {
+                var key = EnginePackageSettings.RunAsX86;
+                if (_view.RunAsX86.Checked)
+                    ChangePackageSetting(key, true);
+                else
+                    ChangePackageSetting(key, null);
+            };
+
             _view.RecentFilesMenu.Popup += () =>
             {
                 var menuItems = _view.RecentFilesMenu.MenuItems;

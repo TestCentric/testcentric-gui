@@ -159,6 +159,11 @@ namespace TestCentric.Gui.Views
             ReloadTestsCommand = new MenuCommand(reloadTestsMenuItem);
             RuntimeMenu = new PopupMenu(runtimeMenuItem);
             SelectedRuntime = new CheckedMenuGroup(runtimeMenuItem);
+            ProcessModel = new CheckedMenuGroup(
+                defaultProcessMenuItem, inProcessMenuItem, singleProcessMenuItem, multipleProcessMenuItem);
+            DomainUsage = new CheckedMenuGroup(
+                defaultDomainMenuItem, singleDomainMenuItem, multipleDomainMenuItem);
+            RunAsX86 = new CheckedMenuItem(runAsX86MenuItem);
             RecentFilesMenu = new PopupMenu(recentFilesMenu);
             ExitCommand = new MenuCommand(exitMenuItem);
 
@@ -990,6 +995,9 @@ namespace TestCentric.Gui.Views
         public ICommand ReloadTestsCommand { get; }
         public IMenu RuntimeMenu { get; }
         public ISelection SelectedRuntime { get; }
+        public ISelection ProcessModel { get; private set; }
+        public IChecked RunAsX86 { get; private set; }
+        public ISelection DomainUsage { get; private set; }
         public IMenu RecentFilesMenu { get; }
         public ICommand ExitCommand { get; }
 
