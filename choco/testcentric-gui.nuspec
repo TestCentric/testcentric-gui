@@ -7,7 +7,7 @@
     <title>TestCentric Runner for NUnit</title>
     <summary>TestCentric GUI runner for the NUnit 3 unit-testing framework.</summary>
     <description>
-      This package includes the TestCentric GUI runner and incorporates the NUnit 3.9 test engine.
+      This package includes the TestCentric GUI runner and incorporates the NUnit test engine.
     </description>
     <projectUrl>http://test-centric.org</projectUrl>
     <projectSourceUrl>https://github.com/TestCentric/testcentric-gui</projectSourceUrl>
@@ -23,6 +23,6 @@
     <owners>Charlie Poole</owners>
     <language>en-US</language>
     <tags>testcentric nunit gui runner test centric testing tdd</tags>
-    <copyright>Copyright (c) 2018 Charlie Poole</copyright>
+    <copyright>Copyright (c) 2018-2019 Charlie Poole</copyright>
   </metadata>
 </package>
