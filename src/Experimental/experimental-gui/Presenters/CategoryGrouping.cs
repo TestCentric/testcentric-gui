@@ -37,8 +37,11 @@ namespace TestCentric.Gui.Presenters
     /// </summary>
     public class CategoryGrouping : TestGrouping
     {
-        public CategoryGrouping(GroupDisplayStrategy display) : base(display)
+        private bool _includeAncestors;
+
+        public CategoryGrouping(GroupDisplayStrategy display, bool includeAncestors) : base(display)
         {
+            _includeAncestors = includeAncestors;
         }
 
         #region Overrides
@@ -80,8 +83,11 @@ namespace TestCentric.Gui.Presenters
         protected override TestGroup[] SelectGroups(TestNode testNode)
         {
             List<TestGroup> groups = new List<TestGroup>();
+            string xpathExpression = "properties/property[@name='Category']";
+            if (_includeAncestors)
+                xpathExpression = "ancestor-or-self::*/" + xpathExpression;
 
-            foreach (XmlNode node in testNode.Xml.SelectNodes("ancestor-or-self::*/properties/property[@name='Category']"))
+            foreach (XmlNode node in testNode.Xml.SelectNodes(xpathExpression))
             {
                 var groupName = node.Attributes["value"].Value;
                 var group = Groups.Find((g) => g.Name == groupName);//GetGroup(groupName);

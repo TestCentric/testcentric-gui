@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -63,7 +63,7 @@ namespace TestCentric.Gui.Views
                 nunitTreeMenuItem, fixtureListMenuItem, testListMenuItem);
             GroupBy = new CheckedToolStripMenuGroup(
                 "testGrouping",
-                byAssemblyMenuItem, byFixtureMenuItem, byCategoryMenuItem, byOutcomeMenuItem, byDurationMenuItem);
+                byAssemblyMenuItem, byFixtureMenuItem, byCategoryMenuItem, byExtendedCategoryMenuItem, byOutcomeMenuItem, byDurationMenuItem);
 
             RunContextCommand = new ToolStripMenuElement(this.runMenuItem);
             RunCheckedCommand = new ToolStripMenuElement(this.runCheckedMenuItem);
