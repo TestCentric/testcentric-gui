@@ -119,7 +119,7 @@ namespace TestCentric.Gui.Presenters.Main
 
             _view.AddTestFilesCommand.Execute += Raise.Event<CommandHandler>();
 
-            _model.Received().LoadTests(Arg.Is<List<string>>(l => l.SequenceEqual(allFiles)));
+            _model.Received().LoadTests(Arg.Compat.Is<List<string>>(l => l.SequenceEqual(allFiles)));
         }
 
         [Test]
@@ -129,7 +129,7 @@ namespace TestCentric.Gui.Presenters.Main
 
             _view.AddTestFilesCommand.Execute += Raise.Event<CommandHandler>();
 
-            _model.DidNotReceive().LoadTests(Arg.Any<IList<string>>());
+            _model.DidNotReceive().LoadTests(Arg.Compat.Any<IList<string>>());
         }
 
         [Test]
