@@ -40,9 +40,8 @@
     <Reference Include="Mono.Cecil, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\NUnit.Engine.3.10.0-tc-00002\lib\net20\Mono.Cecil.dll</HintPath>
     </Reference>
-    <Reference Include="NSubstitute, Version=3.1.0.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NSubstitute.3.1.0\lib\net45\NSubstitute.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="NSubstitute, Version=4.0.0.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\NSubstitute.4.0.0\lib\net45\NSubstitute.dll</HintPath>
     </Reference>
     <Reference Include="nunit-agent, Version=3.10.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\NUnit.Engine.3.10.0-tc-00002\lib\net20\nunit-agent.exe</HintPath>

@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -99,7 +99,7 @@ namespace TestCentric.Gui.Presenters
             _model.Events.TestLoaded += Raise.Event<TestNodeEventHandler>(new TestNodeEventArgs(testNode));
             _model.Events.TestFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(resultNode));
 
-            _view.Tree.Received().SetImageIndex(Arg.Any<TreeNode>(), expectedIndex);
+            _view.Tree.Received().SetImageIndex(Arg.Compat.Any<TreeNode>(), expectedIndex);
         }
 
         [Test]
@@ -110,7 +110,7 @@ namespace TestCentric.Gui.Presenters
             _view.DisplayFormat.SelectedItem.Returns("NUNIT_TREE");
             _view.DisplayFormat.SelectionChanged += Raise.Event<CommandHandler>();
 
-            _view.Tree.Received().Add(Arg.Is<TreeNode>((tn) => ((TestNode)tn.Tag).Id == "42"));
+            _view.Tree.Received().Add(Arg.Compat.Is<TreeNode>((tn) => ((TestNode)tn.Tag).Id == "42"));
         }
     }
 }

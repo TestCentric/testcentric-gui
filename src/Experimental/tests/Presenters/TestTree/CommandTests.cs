@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -113,7 +113,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             _view.Tree.SelectedNodeChanged += Raise.Event<TreeNodeActionHandler>(treeNode);
             _view.RunContextCommand.Execute += Raise.Event<CommandHandler>();
 
-            _model.Received().RunTests(Arg.Is<TestNode>((t) => t.Id == "5"));
+            _model.Received().RunTests(Arg.Compat.Is<TestNode>((t) => t.Id == "5"));
         }
 
         [Test]
@@ -126,7 +126,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             _view.Tree.SelectedNodeChanged += Raise.Event<TreeNodeActionHandler>(treeNode);
             _view.DebugContextCommand.Execute += Raise.Event<CommandHandler>();
 
-            _model.Received().DebugTests(Arg.Is<TestNode>((t) => t.Id == "5"));
+            _model.Received().DebugTests(Arg.Compat.Is<TestNode>((t) => t.Id == "5"));
         }
 
         [Test]

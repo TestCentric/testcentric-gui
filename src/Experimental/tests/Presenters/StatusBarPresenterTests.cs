@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -103,7 +103,7 @@ namespace TestCentric.Gui.Presenters
             _model.Events.RunFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(result));
 
             _view.Received().OnRunFinished(0);
-            _view.Received().OnTestRunSummaryCompiled(Arg.Any<string>());
+            _view.Received().OnTestRunSummaryCompiled(Arg.Compat.Any<string>());
         }
 
         //[Test]

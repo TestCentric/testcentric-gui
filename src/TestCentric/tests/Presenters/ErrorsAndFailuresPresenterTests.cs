@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016-2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -243,7 +243,7 @@ namespace TestCentric.Gui.Presenters
         {
             // NOTE: We only verify that something was sent, not the content
             if (shouldDisplay)
-                _view.Received().AddResult(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>());
+                _view.Received().AddResult(Arg.Compat.Any<string>(), Arg.Compat.Any<string>(), Arg.Compat.Any<string>());
             else
                 _view.DidNotReceiveWithAnyArgs().AddResult(null, null, null);
         }

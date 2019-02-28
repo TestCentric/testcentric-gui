@@ -110,7 +110,7 @@ namespace TestCentric.Gui.Presenters
             _model.TestFiles.Returns(new List<string>(new[] { "test.dll", "another.dll" }));
             FireTestLoadedEvent(testNode);
 
-            _view.Tree.Received().Load(Arg.Is<TreeNode>((tn) => tn.Text == "TestRun" && tn.Nodes.Count == 2));
+            _view.Tree.Received().Load(Arg.Compat.Is<TreeNode>((tn) => tn.Text == "TestRun" && tn.Nodes.Count == 2));
         }
 
         [Test]
@@ -122,7 +122,7 @@ namespace TestCentric.Gui.Presenters
             _model.TestFiles.Returns(new List<string>(new[] { "test.dll" }));
             FireTestLoadedEvent(testNode);
 
-            _view.Tree.Received().Load(Arg.Is<TreeNode>(tn => tn.Text == "another.dll"));
+            _view.Tree.Received().Load(Arg.Compat.Is<TreeNode>(tn => tn.Text == "another.dll"));
         }
 
 
@@ -200,7 +200,7 @@ namespace TestCentric.Gui.Presenters
 
             _view.RunCommand.Execute += Raise.Event<CommandHandler>();
 
-            _model.Received().RunTests(Arg.Is<TestSelection>((sel) => sel.Count == 2 && sel[0].Id == "DUMMY-1" && sel[1].Id == "DUMMY-2"));
+            _model.Received().RunTests(Arg.Compat.Is<TestSelection>((sel) => sel.Count == 2 && sel[0].Id == "DUMMY-1" && sel[1].Id == "DUMMY-2"));
         }
 
         [Test]
@@ -286,7 +286,7 @@ namespace TestCentric.Gui.Presenters
         //    _model.Events.TestLoaded += Raise.Event<TestNodeEventHandler>(new TestNodeEventArgs(TestAction.TestLoaded, testNode));
         //    _model.Events.TestFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(TestAction.TestFinished, resultNode));
 
-        //    _view.Tree.Received().SetImageIndex(Arg.Any<TreeNode>(), expectedIndex);
+        //    _view.Tree.Received().SetImageIndex(Arg.Compat.Any<TreeNode>(), expectedIndex);
         //}
 
         //[Test]
@@ -297,7 +297,7 @@ namespace TestCentric.Gui.Presenters
         //    _view.DisplayFormat.SelectedItem.Returns("NUNIT_TREE");
         //    _view.DisplayFormat.SelectionChanged += Raise.Event<CommandHandler>();
 
-        //    _view.Tree.Received().Add(Arg.Is<TreeNode>((tn) => ((TestNode)tn.Tag).Id == "42"));
+        //    _view.Tree.Received().Add(Arg.Compat.Is<TreeNode>((tn) => ((TestNode)tn.Tag).Id == "42"));
         //}
     }
 }

@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -422,7 +422,7 @@ namespace TestCentric.Gui.Presenters
         /// </summary>
         private void VerifyNothingWasWritten()
         {
-            _view.DidNotReceiveWithAnyArgs().Write(Arg.Any<string>(), Arg.Any<Color>());
+            _view.DidNotReceiveWithAnyArgs().Write(Arg.Compat.Any<string>(), Arg.Compat.Any<Color>());
         }
 
         /// <summary>
