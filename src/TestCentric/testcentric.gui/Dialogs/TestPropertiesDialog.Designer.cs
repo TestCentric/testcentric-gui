@@ -1,4 +1,4 @@
-﻿namespace TestCentric.Gui
+namespace TestCentric.Gui
 {
     using Controls;
 
@@ -339,7 +339,6 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "TestPropertiesDialog";
             this.Text = "Test Properties";
-            this.Load += new System.EventHandler(this.TestPropertiesDialog_Load);
             this.ResizeEnd += new System.EventHandler(this.TestPropertiesDialog_ResizeEnd);
             this.SizeChanged += new System.EventHandler(this.TestPropertiesDialog_SizeChanged);
             this.groupBox1.ResumeLayout(false);

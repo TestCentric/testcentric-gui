@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -171,23 +171,6 @@ namespace TestCentric.Gui
             properties.Items.Clear();
             foreach (string entry in _testNode.GetAllProperties(hiddenProperties.Checked))
             {
-                //if (entry.Value is ICollection)
-                //{
-                //    ICollection items = (ICollection)entry.Value;
-                //    if (items.Count == 0) continue;
-
-                //    StringBuilder sb = new StringBuilder();
-                //    foreach (object item in items)
-                //    {
-                //        if (sb.Length > 0)
-                //            sb.Append(",");
-                //        sb.Append(item.ToString());
-                //    }
-
-                //    properties.Items.Add(entry.Key.ToString() + "=" + sb.ToString());
-                //}
-                //else
-                //    properties.Items.Add(entry.Key.ToString() + "=" + entry.Value.ToString());
                 properties.Items.Add(entry);
             }
         }
@@ -195,16 +178,6 @@ namespace TestCentric.Gui
         #endregion
 
         #region Event Handlers and Overrides
-
-        private void TestPropertiesDialog_Load(object sender, System.EventArgs e)
-        {
-            //pinnedImage = new Bitmap(typeof(TestPropertiesDialog), "Images.pinned.gif");
-            //unpinnedImage = new Bitmap(typeof(TestPropertiesDialog), "Images.unpinned.gif");
-            //pinButton.Image = unpinnedImage;
-
-            //if (!this.DesignMode && _treeNode != null)
-            //DisplayProperties(_treeNode);
-        }
 
         private void pinButton_Click(object sender, System.EventArgs e)
         {
@@ -249,7 +222,7 @@ namespace TestCentric.Gui
 
         private void hiddenProperties_CheckedChanged(object sender, EventArgs e)
         {
-            //FillPropertyList();
+            FillPropertyList();
         }
 
         #endregion
