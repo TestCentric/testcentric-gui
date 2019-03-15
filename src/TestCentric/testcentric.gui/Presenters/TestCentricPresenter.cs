@@ -480,18 +480,6 @@ namespace TestCentric.Gui.Presenters
             _view.RunFailedCommand.Execute += () => RunFailedTests();
             _view.StopRunCommand.Execute += () => CancelRun();
 
-            _view.ToolsMenu.Popup += () =>
-            {
-                _view.ProjectEditorCommand.Enabled = File.Exists(_model.ProjectEditorPath);
-            };
-
-            _view.ProjectEditorCommand.Execute += () =>
-            {
-                string editorPath = _settings.Gui.ProjectEditorPath;
-                if (editorPath != null && File.Exists(editorPath))
-                    System.Diagnostics.Process.Start(editorPath);
-            };
-
             _view.SaveResultsCommand.Execute += () => SaveResults();
 
             _view.ExtensionsCommand.Execute += () =>
