@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -125,12 +125,6 @@ namespace TestCentric.Gui.Model.Settings
         {
             get { return GetSetting(nameof(FixedFont), DefaultFixedFont); }
             set { SaveSetting(nameof(FixedFont), value); }
-        }
-
-        public string ProjectEditorPath
-        {
-            get { return (string)GetSetting(nameof(ProjectEditorPath)); }
-            set { SaveSetting(nameof(ProjectEditorPath), value); }
         }
 
         public InternalTraceLevel InternalTraceLevel

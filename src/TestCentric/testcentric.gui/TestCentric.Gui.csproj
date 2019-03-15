@@ -169,12 +169,6 @@
     <Compile Include="SettingsPages\GuiSettingsPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="SettingsPages\ProjectEditorSettingsPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="SettingsPages\ProjectEditorSettingsPage.Designer.cs">
-      <DependentUpon>ProjectEditorSettingsPage.cs</DependentUpon>
-    </Compile>
     <Compile Include="SettingsPages\SettingsPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -260,9 +254,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsPages\GuiSettingsPage.resx">
       <DependentUpon>GuiSettingsPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SettingsPages\ProjectEditorSettingsPage.resx">
-      <DependentUpon>ProjectEditorSettingsPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SettingsPages\SettingsPage.resx">
       <DependentUpon>SettingsPage.cs</DependentUpon>

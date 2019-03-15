@@ -39,7 +39,6 @@ namespace TestCentric.Gui
             new TreeSettingsPage("Gui.Tree Display"),
             new AssemblyReloadSettingsPage("Gui.Assembly Reload"),
             new TextOutputSettingsPage("Gui.Text Output"),
-            new ProjectEditorSettingsPage("Gui.Project Editor"),
             new AdvancedLoaderSettingsPage("Engine.Advanced"));
         }
     }

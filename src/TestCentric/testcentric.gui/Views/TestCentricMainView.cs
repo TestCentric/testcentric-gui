@@ -111,7 +111,6 @@ namespace TestCentric.Gui.Views
         private MenuItem addTestFileMenuItem;
         private MenuItem extensionsMenuItem;
         private MenuItem testCentricHelpMenuItem;
-        private MenuItem projectEditorMenuItem;
         private TabPage errorTab;
         private TabPage notrunTab;
         private TabPage outputTab;
@@ -186,7 +185,6 @@ namespace TestCentric.Gui.Views
 
             // Initialize Tools Menu Comands
             ToolsMenu = new PopupMenu(toolsMenu);
-            ProjectEditorCommand = new MenuCommand(projectEditorMenuItem);
             SaveResultsCommand = new MenuCommand(saveResultsMenuItem);
             ExtensionsCommand = new MenuCommand(extensionsMenuItem);
             SettingsCommand = new MenuCommand(settingsMenuItem);
@@ -271,7 +269,6 @@ namespace TestCentric.Gui.Views
             this.testMenuSeparator = new System.Windows.Forms.MenuItem();
             this.stopRunMenuItem = new System.Windows.Forms.MenuItem();
             this.toolsMenu = new System.Windows.Forms.MenuItem();
-            this.projectEditorMenuItem = new System.Windows.Forms.MenuItem();
             this.saveResultsMenuItem = new System.Windows.Forms.MenuItem();
             this.toolsMenuSeparator1 = new System.Windows.Forms.MenuItem();
             this.extensionsMenuItem = new System.Windows.Forms.MenuItem();
@@ -639,36 +636,30 @@ namespace TestCentric.Gui.Views
             // 
             this.toolsMenu.Index = 3;
             this.toolsMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.projectEditorMenuItem,
             this.saveResultsMenuItem,
             this.toolsMenuSeparator1,
             this.extensionsMenuItem,
             this.settingsMenuItem});
             this.toolsMenu.Text = "T&ools";
             // 
-            // projectEditorMenuItem
-            // 
-            this.projectEditorMenuItem.Index = 0;
-            this.projectEditorMenuItem.Text = "Project Editor...";
-            // 
             // saveResultsMenuItem
             // 
-            this.saveResultsMenuItem.Index = 1;
+            this.saveResultsMenuItem.Index = 0;
             this.saveResultsMenuItem.Text = "&Save Test Results...";
             // 
             // toolsMenuSeparator1
             // 
-            this.toolsMenuSeparator1.Index = 2;
+            this.toolsMenuSeparator1.Index = 1;
             this.toolsMenuSeparator1.Text = "-";
             // 
             // extensionsMenuItem
             // 
-            this.extensionsMenuItem.Index = 3;
+            this.extensionsMenuItem.Index = 2;
             this.extensionsMenuItem.Text = "Extensions...";
             // 
             // settingsMenuItem
             // 
-            this.settingsMenuItem.Index = 4;
+            this.settingsMenuItem.Index = 3;
             this.settingsMenuItem.Text = "&Settings...";
             // 
             // helpItem
@@ -1020,7 +1011,6 @@ namespace TestCentric.Gui.Views
 
         // Tools Menu Items
         public IMenu ToolsMenu { get; }
-        public ICommand ProjectEditorCommand { get; }
         public ICommand SaveResultsCommand { get; }
         public ICommand ExtensionsCommand { get; }
         public ICommand SettingsCommand { get; }

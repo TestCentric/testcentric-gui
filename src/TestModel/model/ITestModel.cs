@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -78,8 +78,6 @@ namespace TestCentric.Gui.Model
         bool ExcludeSelectedCategories { get; }
 
         TestFilter CategoryFilter { get; }
-
-        string ProjectEditorPath { get; }
 
         #endregion
 
