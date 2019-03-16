@@ -482,6 +482,8 @@ namespace TestCentric.Gui.Presenters
 
             _view.SaveResultsCommand.Execute += () => SaveResults();
 
+            _view.OpenWorkDirectoryCommand.Execute += () => System.Diagnostics.Process.Start(".");
+
             _view.ExtensionsCommand.Execute += () =>
             {
                 using (var extensionsDialog = new ExtensionDialog(_model.Services.ExtensionService))
