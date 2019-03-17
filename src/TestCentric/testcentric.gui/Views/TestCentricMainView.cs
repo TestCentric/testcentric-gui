@@ -651,7 +651,7 @@ namespace TestCentric.Gui.Views
             this.saveResultsMenuItem.Index = 0;
             this.saveResultsMenuItem.Text = "&Save Test Results...";
             // 
-            // menuItem3
+            // openWorkDirectoryMenuItem
             // 
             this.openWorkDirectoryMenuItem.Index = 1;
             this.openWorkDirectoryMenuItem.Text = "Open Work Directory...";
