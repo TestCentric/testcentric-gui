@@ -413,12 +413,12 @@ namespace TestCentric.Gui.Model
             if (engineSettings.ProcessModel != "Default")
                 package.AddSetting(EnginePackageSettings.ProcessModel, engineSettings.ProcessModel);
 
-            //// Don't set DomainUsage for Multiple to avoid engine error
-            //if (engineSettings.ProcessModel != "Multiple")
-            //    package.AddSetting(EnginePackageSettings.DomainUsage, engineSettings.DomainUsage);
-            //// Don't bother checking Agents unless we are running multiple processes
-            //else if (engineSettings.Agents > 0)
-            //    package.AddSetting(EnginePackageSettings.MaxAgents, engineSettings.Agents);
+            // Don't set DomainUsage for Multiple to avoid engine error
+            if (engineSettings.ProcessModel != "Multiple")
+                package.AddSetting(EnginePackageSettings.DomainUsage, engineSettings.DomainUsage);
+            // Don't bother checking Agents unless we are running multiple processes
+            else if (engineSettings.Agents > 0)
+                package.AddSetting(EnginePackageSettings.MaxAgents, engineSettings.Agents);
 
             if (engineSettings.SetPrincipalPolicy)
                 package.AddSetting(EnginePackageSettings.PrincipalPolicy, engineSettings.PrincipalPolicy);
@@ -426,7 +426,7 @@ namespace TestCentric.Gui.Model
             //if (Options.InternalTraceLevel != null)
             //    package.AddSetting(EnginePackageSettings.InternalTraceLevel, Options.InternalTraceLevel);
 
-            //package.AddSetting(EnginePackageSettings.ShadowCopyFiles, engineSettings.ShadowCopyFiles);
+            package.AddSetting(EnginePackageSettings.ShadowCopyFiles, engineSettings.ShadowCopyFiles);
 
             foreach (var subpackage in package.SubPackages)
                 if (Path.GetExtension(subpackage.Name) == ".sln")
