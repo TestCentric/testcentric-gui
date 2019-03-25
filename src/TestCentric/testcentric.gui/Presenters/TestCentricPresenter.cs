@@ -25,6 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using NUnit.Engine;
@@ -748,7 +749,13 @@ namespace TestCentric.Gui.Presenters
             string message = string.Format("New {0} setting will not take effect until you reload.\r\n\r\n\t\tReload Now?", key);
 
             if (_view.MessageDisplay.Ask(message) == DialogResult.Yes)
-                _model.ReloadTests();
+            {
+                // Even though the _model has a Reload method, we cannot use it because Reload
+                // does not re-create the Engine.  Since we just changed a setting, we must
+                // re-create the Engine by unloading/reloading the tests.
+                List<string> listCopy = _model.TestFiles.ToList();
+                LoadTests(listCopy);    // This also does an Unload first.
+            }
         }
 
         private void applyFont(Font font)
