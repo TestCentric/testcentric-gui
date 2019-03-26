@@ -90,5 +90,25 @@ namespace TestCentric.Gui.Model
                     Assert.That(subpackage.Settings, Does.Not.ContainKey(skipKey));
             }
         }
+
+        [Test]
+        public void RunAsX86_GuiSettingFalse_DefaultsPackageSettingToFalse()
+        {
+            MockTestEngine testEngine = new MockTestEngine().WithSetting("Gui.Options." + EnginePackageSettings.RunAsX86, false);
+
+            TestModel model = new TestModel(testEngine);
+
+            Assert.That(model.PackageSettings[EnginePackageSettings.RunAsX86], Is.EqualTo(false));
+        }
+
+        [Test]
+        public void RunAsX86_GuiSettingTrue_DefaultsPackageSettingToTrue()
+        {
+            MockTestEngine testEngine = new MockTestEngine().WithSetting("Gui.Options." + EnginePackageSettings.RunAsX86, true);
+
+            TestModel model = new TestModel(testEngine);
+
+            Assert.That(model.PackageSettings[EnginePackageSettings.RunAsX86], Is.EqualTo(true));
+        }
     }
 }

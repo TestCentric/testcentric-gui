@@ -60,6 +60,8 @@ namespace TestCentric.Gui.Model
                     VisualStudioSupport = true;
             }
 
+            PackageSettings[EnginePackageSettings.RunAsX86] = Services.UserSettings.Gui.RunAsX86;
+
             _events = new TestEventDispatcher(this);
             _assemblyWatcher = new AssemblyWatcher();
         }

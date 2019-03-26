@@ -145,7 +145,8 @@ namespace TestCentric.Gui.Model.Settings
             new TestCaseData("ClearResultsOnReload", false, true),
             new TestCaseData("Font", DEFAULT_FONT, TEST_FONT),
             new TestCaseData("FixedFont", DEFAULT_FIXED_FONT, TEST_FIXED_FONT),
-            new TestCaseData("InternalTraceLevel", InternalTraceLevel.Off, InternalTraceLevel.Verbose)
+            new TestCaseData("InternalTraceLevel", InternalTraceLevel.Off, InternalTraceLevel.Verbose),
+            new TestCaseData("RunAsX86", false, true)
         };
 
         [TestCase("TestTree", typeof(TestTreeSettings))]

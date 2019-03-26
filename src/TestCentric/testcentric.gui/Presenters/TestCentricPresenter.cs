@@ -394,9 +394,15 @@ namespace TestCentric.Gui.Presenters
             {
                 var key = EnginePackageSettings.RunAsX86;
                 if (_view.RunAsX86.Checked)
+                {
                     ChangePackageSetting(key, true);
+                    _settings.Gui.RunAsX86 = true;
+                }
                 else
+                {
                     ChangePackageSetting(key, null);
+                    _settings.Gui.RunAsX86 = false;
+                }
             };
 
             _view.RecentFilesMenu.Popup += () =>
@@ -800,6 +806,8 @@ namespace TestCentric.Gui.Presenters
 
             if (useFullGui)
                 _view.SplitterPosition = _settings.Gui.MainForm.SplitPosition;
+
+            _view.RunAsX86.Checked = (bool)_model.PackageSettings[EnginePackageSettings.RunAsX86];
         }
 
         private static bool IsValidLocation(Point location, Size size)

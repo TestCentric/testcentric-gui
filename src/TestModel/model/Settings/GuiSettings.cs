@@ -132,5 +132,11 @@ namespace TestCentric.Gui.Model.Settings
             get { return GetSetting(nameof(InternalTraceLevel), InternalTraceLevel.Off); }
             set { SaveSetting(nameof(InternalTraceLevel), value); }
         }
+
+        public bool RunAsX86
+        {
+            get { return GetSetting(nameof(RunAsX86), false); }
+            set { SaveSetting(nameof(RunAsX86), value); }
+        }
     }
 }
