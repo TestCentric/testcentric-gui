@@ -202,6 +202,7 @@ namespace TestCentric.Gui.Model
             _events.FireTestsUnloading();
 
             Runner.Unload();
+            Runner.Dispose();
             Tests = null;
             AvailableCategories = null;
             TestPackage = null;
