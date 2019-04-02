@@ -25,6 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using NUnit.Engine;
@@ -377,26 +378,26 @@ namespace TestCentric.Gui.Presenters
 
             _view.SelectedRuntime.SelectionChanged += () =>
             {
-                ChangePackageSetting(EnginePackageSettings.RuntimeFramework, _view.SelectedRuntime.SelectedItem);
+                ChangePackageSettingAndReload(EnginePackageSettings.RuntimeFramework, _view.SelectedRuntime.SelectedItem);
             };
 
             _view.ProcessModel.SelectionChanged += () =>
             {
-                ChangePackageSetting(EnginePackageSettings.ProcessModel, _view.ProcessModel.SelectedItem);
+                ChangePackageSettingAndReload(EnginePackageSettings.ProcessModel, _view.ProcessModel.SelectedItem);
             };
 
             _view.DomainUsage.SelectionChanged += () =>
             {
-                ChangePackageSetting(EnginePackageSettings.DomainUsage, _view.DomainUsage.SelectedItem);
+                ChangePackageSettingAndReload(EnginePackageSettings.DomainUsage, _view.DomainUsage.SelectedItem);
             };
 
             _view.RunAsX86.CheckedChanged += () =>
             {
                 var key = EnginePackageSettings.RunAsX86;
                 if (_view.RunAsX86.Checked)
-                    ChangePackageSetting(key, true);
+                    ChangePackageSettingAndReload(key, true);
                 else
-                    ChangePackageSetting(key, null);
+                    ChangePackageSettingAndReload(key, null);
             };
 
             _view.RecentFilesMenu.Popup += () =>
@@ -738,17 +739,18 @@ namespace TestCentric.Gui.Presenters
             return "\"" + s + "\"";
         }
 
-        private void ChangePackageSetting(string key, object setting)
+        private void ChangePackageSettingAndReload(string key, object setting)
         {
             if (setting == null || setting as string == "DEFAULT")
                 _model.PackageSettings.Remove(key);
             else
                 _model.PackageSettings[key] = setting;
 
-            string message = string.Format("New {0} setting will not take effect until you reload.\r\n\r\n\t\tReload Now?", key);
-
-            if (_view.MessageDisplay.Ask(message) == DialogResult.Yes)
-                _model.ReloadTests();
+            // Even though the _model has a Reload method, we cannot use it because Reload
+            // does not re-create the Engine.  Since we just changed a setting, we must
+            // re-create the Engine by unloading/reloading the tests.
+            List<string> listCopy = _model.TestFiles.ToList();
+            LoadTests(listCopy);    // This also does an Unload first.
         }
 
         private void applyFont(Font font)
