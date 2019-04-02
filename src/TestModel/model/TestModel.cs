@@ -178,7 +178,7 @@ namespace TestCentric.Gui.Model
             _lastRunWasDebugRun = false;
 
             Runner = TestEngine.GetRunner(TestPackage);
-            Tests = ExploreTestPackage(TestPackage);
+            Tests = new TestNode(Runner.Explore(TestFilter.Empty));
             AvailableCategories = GetAvailableCategories();
 
             Results.Clear();
@@ -222,7 +222,6 @@ namespace TestCentric.Gui.Model
             _lastRunWasDebugRun = false;
             TestPackage = MakeTestPackage(TestFiles);
 
-            //Tests = ExploreTestPackage(TestPackage);
             AvailableCategories = GetAvailableCategories();
 
             if (Services.UserSettings.Gui.ClearResultsOnReload)
@@ -437,49 +436,6 @@ namespace TestCentric.Gui.Model
                 package.AddSetting(entry.Key, entry.Value);
 
             return package;
-        }
-
-        // TODO: The NUnit engine is not returning project elements for each project
-        // so we create them in this method. Remove when the engine is fixed.
-        private TestNode ExploreTestPackage(TestPackage package)
-        {
-            var tests = new TestNode(Runner.Explore(TestFilter.Empty));
-            int nextId = 10;
-            int nextTest = 0;
-            int nextPackage = 0;
-
-            while (nextPackage < package.SubPackages.Count && nextTest < tests.Children.Count)
-            {
-                var subPackage = package.SubPackages[nextPackage++];
-                var childTest = tests.Children[nextTest];
-
-                if (subPackage.Name != childTest.Name)
-                {
-                    // SubPackage did not match the next child test node, so it must be a project.
-                    var project = new TestNode($"<test-suite type='Project' id='{nextId++}' name='{subPackage.Name}' fullname='{subPackage.FullName}' runstate='Runnable'/>");
-                    int testCount = 0;
-
-                    // Now move any children of this project under it
-                    foreach (var subSubPackage in subPackage.SubPackages)
-                    {
-                        childTest = tests.Children[nextTest];
-
-                        if (subSubPackage.Name == childTest.Name)
-                        {
-                            project.Children.Add(childTest);
-                            tests.Children.RemoveAt(nextTest);
-                            testCount += childTest.TestCount;
-                        }
-                    }
-
-                    project.Xml.AddAttribute("testcasecount", testCount.ToString());
-                    tests.Children.Insert(nextTest, project);
-                }
-
-                nextTest++;
-            }
-
-            return tests;
         }
 
         // The engine returns more values than we really want.
