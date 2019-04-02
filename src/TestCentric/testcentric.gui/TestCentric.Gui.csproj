@@ -95,7 +95,7 @@
       <Name>TestCentric.Gui.Model</Name>
     </ProjectReference>
     <Reference Include="nunit.engine.api, Version=3.0.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NUnit.Engine.Api.3.10.0\lib\net20\nunit.engine.api.dll</HintPath>
+      <HintPath>..\..\..\packages\NUnit.Engine.Api.3.11.0-dev-00013\lib\net20\nunit.engine.api.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
