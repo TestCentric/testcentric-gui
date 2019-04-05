@@ -25,7 +25,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using NUnit.Engine;
 
 namespace TestCentric.Gui.Model
@@ -119,6 +118,8 @@ namespace TestCentric.Gui.Model
         public List<string> TestFiles { get; } = new List<string>();
 
         public TestSelection TestAssemblies { get { return Tests.Select((tn) => tn.Type == "Assembly"); } }
+
+        public TestSelection TestProjects { get { return Tests.Select((tn) => tn.Type == "Project"); } }
 
         public IDictionary<string, object> PackageSettings { get; } = new Dictionary<string, object>();
 
@@ -387,7 +388,7 @@ namespace TestCentric.Gui.Model
 
         #endregion
 
-        #region Private Properties
+        #region Private and Internal Properties
 
         private ITestEngine TestEngine { get; }
 
