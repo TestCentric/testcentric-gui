@@ -1,4 +1,30 @@
-﻿TestCentric Runner for NUnit 1.0.0-Alpha3 - February 27, 2019
+﻿TestCentric Runner for NUnit 1.0.0-Alpha4 - April 5, 2019
+
+General
+
+This is the fourth alpha release of the TestCentric Runner for NUnit. It is not yet recommended
+for use in production work.
+
+Features
+
+ * Entries now appear in the tree display for any projects loaded
+ * The GUI now uses a custom built version of the engine, based on the NUnit 3.10 engine.
+
+Issues Resolved
+
+164 Update NSubstitute to version 4.0
+241 Terminate nunit-agent.exe / nunit-agent-x86.exe once they are no longer in use
+273 FIXED: No project elements are present in the test XML received from the engine
+285 FIXED: NUnit Agent locks dll
+288 FIXED: Property dialog not showing assembly process id or appdomain name
+290 Need a way to locate and examine log files
+292 Remove project editor integration
+294 Document differences from the NUnit V2 GUI
+299 FIXED: Choosing "Run as X86" from menu doesn't actually load the X86 agent.
+301 FIXED Tree icons of previous run do not clear when starting second run
+304 FIXED Use new 3.10 release of NUnit engine
+
+TestCentric Runner for NUnit 1.0.0-Alpha3 - February 27, 2019
 
 General
 
