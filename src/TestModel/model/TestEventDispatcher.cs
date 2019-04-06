@@ -32,6 +32,22 @@ namespace TestCentric.Gui.Model
     {
         private TestModel _model;
 
+        private Dictionary<string, ProjectInfo> _projectLookup;
+
+        private class ProjectInfo
+        {
+            public TestNode ProjectNode;
+            public bool WasStarted;
+            public int AssembliesToRun;
+
+            public ProjectInfo(TestNode projectNode)
+            {
+                ProjectNode = projectNode;
+                WasStarted = false;
+                AssembliesToRun = 0;
+            }
+        }
+
         public TestEventDispatcher(TestModel model)
         {
             _model = model;
@@ -130,10 +146,15 @@ namespace TestCentric.Gui.Model
                     break;
 
                 case "start-suite":
-                    InvokeHandler(SuiteStarting, new TestNodeEventArgs(new TestNode(xmlNode)));
+                    var testNode = new TestNode(xmlNode);
+
+                    CheckForProjectStart(testNode);
+
+                    InvokeHandler(SuiteStarting, new TestNodeEventArgs(testNode));
                     break;
 
                 case "start-run":
+                    InitializeProjectDictionary();
                     InvokeHandler(RunStarting, new RunStartingEventArgs(xmlNode.GetAttribute("count", -1)));
                     break;
 
@@ -146,6 +167,9 @@ namespace TestCentric.Gui.Model
                 case "test-suite":
                     resultNode = new ResultNode(xmlNode);
                     _model.Results[resultNode.Id] = resultNode;
+
+                    CheckForProjectFinish(resultNode);
+
                     InvokeHandler(SuiteFinished, new TestResultEventArgs(resultNode));
                     break;
 
@@ -194,6 +218,57 @@ namespace TestCentric.Gui.Model
                     Console.WriteLine(ex);
                     //throw new TestEventInvocationException( ex );
                     //throw;
+                }
+            }
+        }
+
+        private void InitializeProjectDictionary()
+        {
+            // Initialize Dictionary to look up projects to which assemblies belong
+            _projectLookup = new Dictionary<string, ProjectInfo>();
+
+            foreach (var projectNode in _model.TestProjects)
+            {
+                var projectInfo = new ProjectInfo(projectNode);
+
+                foreach (var child in projectNode.Select((tn) => tn.Type == "Assembly"))
+                {
+                    projectInfo.AssembliesToRun++;
+                    _projectLookup.Add(child.GetAttribute("id"), projectInfo);
+                }
+            }
+        }
+
+        private void CheckForProjectStart(TestNode testNode)
+        {
+            if (_projectLookup.ContainsKey(testNode.Id))
+            {
+                var projectInfo = _projectLookup[testNode.Id];
+
+                lock (projectInfo)
+                {
+                    if (!projectInfo.WasStarted)
+                    {
+                        InvokeHandler(SuiteStarting, new TestNodeEventArgs(projectInfo.ProjectNode));
+                        projectInfo.WasStarted = true;
+                    }
+                }
+            }
+        }
+
+        private void CheckForProjectFinish(ResultNode resultNode)
+        {
+            if (_projectLookup.ContainsKey(resultNode.Id))
+            {
+                var projectInfo = _projectLookup[resultNode.Id];
+
+                lock (projectInfo)
+                {
+                    if (--projectInfo.AssembliesToRun == 0)
+                    {
+                        var projectResult = new ResultNode(projectInfo.ProjectNode.Xml);
+                        InvokeHandler(SuiteFinished, new TestResultEventArgs(projectResult));
+                    }
                 }
             }
         }
