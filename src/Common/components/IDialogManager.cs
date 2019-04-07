@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -34,7 +34,7 @@ namespace TestCentric.Gui.Views
 
         string GetFileOpenPath(string title, string filter);
 
-        string GetFileSavePath(string title, string filter);
+        string GetFileSavePath(string title, string filter, string initialDirectory, string suggestedName);
 
         string GetFolderPath(string message, string initialPath);
 

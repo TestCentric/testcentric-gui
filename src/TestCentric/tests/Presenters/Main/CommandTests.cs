@@ -158,18 +158,19 @@ namespace TestCentric.Gui.Presenters.Main
         public void SaveResultsCommand_DisplaysDialogCorrectly()
         {
             // Return no file path so model is not called
-            _view.DialogManager.GetFileSavePath(null, null).ReturnsForAnyArgs(NO_FILE_PATH);
+            _view.DialogManager.GetFileSavePath(null, null, null, null).ReturnsForAnyArgs(NO_FILE_PATH);
+            _model.WorkDirectory.Returns("WORKDIRECTORY");
 
             _view.SaveResultsCommand.Execute += Raise.Event<CommandHandler>();
 
-            _view.DialogManager.Received().GetFileSavePath("Save Results as XML", "XML Files (*.xml)|*.xml|All Files (*.*)|*.*");
+            _view.DialogManager.Received().GetFileSavePath("Save Results as XML", "XML Files (*.xml)|*.xml|All Files (*.*)|*.*", "WORKDIRECTORY", "TestResult.xml");
         }
 
         [Test]
         public void SaveResultsCommand_FilePathSelected_SavesResults()
         {
             var savePath = Path.GetFullPath("/path/to/TestResult.xml");
-            _view.DialogManager.GetFileSavePath(null, null).ReturnsForAnyArgs(savePath);
+            _view.DialogManager.GetFileSavePath(null, null, null, null).ReturnsForAnyArgs(savePath);
 
             _view.SaveResultsCommand.Execute += Raise.Event<CommandHandler>();
 
@@ -179,7 +180,7 @@ namespace TestCentric.Gui.Presenters.Main
         [Test]
         public void SaveResultsCommand_NoFilePathSelected_DoesNotSaveResults()
         {
-            _view.DialogManager.GetFileSavePath(null, null).ReturnsForAnyArgs(NO_FILE_PATH);
+            _view.DialogManager.GetFileSavePath(null, null, null, null).ReturnsForAnyArgs(NO_FILE_PATH);
 
             _view.SaveResultsCommand.Execute += Raise.Event<CommandHandler>();
 
