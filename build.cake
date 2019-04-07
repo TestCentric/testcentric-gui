@@ -87,6 +87,51 @@ var SOLUTION = "testcentric-gui.sln";
 var ALL_TESTS = BIN_DIR + "*.Tests.dll";
 
 //////////////////////////////////////////////////////////////////////
+// SETUP
+//////////////////////////////////////////////////////////////////////
+Setup(context =>
+{
+    if (BuildSystem.IsRunningOnAppVeyor)
+    {
+	    // The provided package version suffix is ignored when running
+		// on AppVeyor and is determined from the type of build and the 
+		// AppVeyor build number.
+
+        var buildNumber = AppVeyor.Environment.Build.Number.ToString("00000");
+        var branch = AppVeyor.Environment.Repository.Branch;
+        var isPullRequest = AppVeyor.Environment.PullRequest.IsPullRequest;
+
+        if (branch == "master" && !isPullRequest)
+        {
+            packageVersion = version + "-dev-" + buildNumber;
+        }
+        else
+        {
+            var suffix = "-ci-" + buildNumber;
+
+            if (isPullRequest)
+                suffix += "-pr-" + AppVeyor.Environment.PullRequest.Number;
+            else if (AppVeyor.Environment.Repository.Branch.StartsWith("release", StringComparison.OrdinalIgnoreCase))
+                suffix += "-pre-" + buildNumber;
+            else
+                suffix += "-" + System.Text.RegularExpressions.Regex.Replace(branch, "[^0-9A-Za-z-]+", "-");
+
+            // Nuget limits "special version part" to 20 chars. Add one for the hyphen.
+            if (suffix.Length > 21)
+                suffix = suffix.Substring(0, 21);
+
+            packageVersion = version + suffix;
+        }
+
+        AppVeyor.UpdateBuildVersion(packageVersion);
+    }
+
+    // Executed BEFORE the first task.
+    Information("Building {0} version {1} of TestCentric GUI.", configuration, packageVersion);
+});
+
+
+//////////////////////////////////////////////////////////////////////
 // CLEAN
 //////////////////////////////////////////////////////////////////////
 
