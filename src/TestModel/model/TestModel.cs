@@ -69,6 +69,9 @@ namespace TestCentric.Gui.Model
 
         #region General Properties
 
+        // Work Directory
+        public string WorkDirectory { get { return TestEngine.WorkDirectory; } }
+
         // Event Dispatcher
         public ITestEvents Events { get { return _events; } }
 

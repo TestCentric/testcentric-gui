@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -53,9 +53,9 @@ namespace TestCentric.Gui.Views
                 : null;
         }
 
-        public string GetFileSavePath(string title, string filter)
+        public string GetFileSavePath(string title, string filter, string initialDirectory, string suggestedName)
         {
-            SaveFileDialog dlg = CreateSaveFileDialog(title, filter);
+            SaveFileDialog dlg = CreateSaveFileDialog(title, filter, initialDirectory, suggestedName);
 
             return dlg.ShowDialog() == DialogResult.OK
                 ? dlg.FileName
@@ -107,14 +107,15 @@ namespace TestCentric.Gui.Views
             return dlg;
         }
 
-        private static SaveFileDialog CreateSaveFileDialog(string title, string filter)
+        private static SaveFileDialog CreateSaveFileDialog(string title, string filter, string initialDirectory, string suggestedName)
         {
             SaveFileDialog dlg = new SaveFileDialog();
 
             dlg.Title = title;
             dlg.Filter = filter;
             dlg.FilterIndex = 1;
-            dlg.FileName = "";
+            dlg.InitialDirectory = initialDirectory;
+            dlg.FileName = suggestedName;
             return dlg;
         }
 

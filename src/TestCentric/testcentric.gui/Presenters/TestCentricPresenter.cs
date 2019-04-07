@@ -483,7 +483,7 @@ namespace TestCentric.Gui.Presenters
 
             _view.SaveResultsCommand.Execute += () => SaveResults();
 
-            _view.OpenWorkDirectoryCommand.Execute += () => System.Diagnostics.Process.Start(".");
+            _view.OpenWorkDirectoryCommand.Execute += () => System.Diagnostics.Process.Start(_model.WorkDirectory);
 
             _view.ExtensionsCommand.Execute += () =>
             {
@@ -589,7 +589,8 @@ namespace TestCentric.Gui.Presenters
 
         public void SaveResults()
         {
-            string savePath = _view.DialogManager.GetFileSavePath("Save Results as XML", "XML Files (*.xml)|*.xml|All Files (*.*)|*.*");
+            string savePath = _view.DialogManager.GetFileSavePath("Save Results as XML", "XML Files (*.xml)|*.xml|All Files (*.*)|*.*", _model.WorkDirectory, "TestResult.xml");
+
             if (savePath != null)
             {
                 try
