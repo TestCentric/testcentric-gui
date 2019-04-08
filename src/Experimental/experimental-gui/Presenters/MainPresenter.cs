@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -21,6 +21,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
@@ -78,6 +79,7 @@ namespace TestCentric.Gui.Presenters
             _view.CloseCommand.Execute += _model.UnloadTests;
             _view.SaveCommand.Execute += ProjectSaveNotYetImplemented; // _model.SaveProject;
             _view.SaveAsCommand.Execute += ProjectSaveNotYetImplemented; // _model.SaveProject;
+            _view.SaveResultsCommand.Execute += () => SaveResults();
             _view.ReloadTestsCommand.Execute += _model.ReloadTests;
             _view.RecentProjectsMenu.Popup += PopulateRecentProjectsMenu;
             _view.SelectedRuntime.SelectionChanged += SelectedRuntime_SelectionChanged;
@@ -246,6 +248,25 @@ namespace TestCentric.Gui.Presenters
             var files = _view.DialogManager.SelectMultipleFiles("Open Project", CreateOpenFileFilter());
             if (files.Count > 0)
                 _model.LoadTests(files);
+        }
+
+        public void SaveResults()
+        {
+            string savePath = _view.DialogManager.GetFileSavePath("Save Results as XML", "XML Files (*.xml)|*.xml|All Files (*.*)|*.*", _model.WorkDirectory, "TestResult.xml");
+
+            if (savePath != null)
+            {
+                try
+                {
+                    _model.SaveResults(savePath);
+
+                    _view.MessageDisplay.Info(String.Format($"Results saved in nunit3 format as {savePath}"));
+                }
+                catch (Exception exception)
+                {
+                    _view.MessageDisplay.Error("Unable to Save Results", exception);
+                }
+            }
         }
 
         void OpenSettingsDialogCommand_Execute()
