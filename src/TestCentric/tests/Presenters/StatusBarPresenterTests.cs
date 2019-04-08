@@ -75,7 +75,7 @@ namespace TestCentric.Gui.Presenters
             _view.Received().DisplayFailed(0);
             _view.Received().DisplayWarnings(0);
             _view.Received().DisplayInconclusive(0);
-            _view.Received().DisplayTime(0.0);
+            _view.Received().DisplayDuration(0.0);
         }
 
         [Test]
@@ -169,7 +169,7 @@ namespace TestCentric.Gui.Presenters
             FireRunFinishedEvent(result);
 
             _view.Received().DisplayText("Completed");
-            _view.Received().DisplayTime(1.234);
+            _view.Received().DisplayDuration(1.234);
         }
     }
 }

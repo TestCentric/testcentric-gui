@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016-2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -91,13 +91,13 @@ namespace TestCentric.Gui.Presenters
                 _view.DisplayFailed(0);
                 _view.DisplayWarnings(0);
                 _view.DisplayInconclusive(0);
-                _view.DisplayTime(0.0);
+                _view.DisplayDuration(0.0);
             };
 
             _model.Events.RunFinished += (ea) =>
             {
                 _view.DisplayText("Completed");
-                _view.DisplayTime(ea.Result.Duration);
+                _view.DisplayDuration(ea.Result.Duration);
             };
 
             _model.Events.TestStarting += (ea) =>
