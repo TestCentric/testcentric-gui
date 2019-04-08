@@ -34,6 +34,6 @@ namespace TestCentric.Gui.Views
         void DisplayFailed(int count);
         void DisplayWarnings(int count);
         void DisplayInconclusive(int count);
-        void DisplayTime(double time);
+        void DisplayDuration(double time);
     }
 }

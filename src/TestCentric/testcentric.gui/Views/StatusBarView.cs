@@ -100,11 +100,11 @@ namespace TestCentric.Gui.Views
             });
         }
 
-        public void DisplayTime(double time)
+        public void DisplayDuration(double duration)
         {
             InvokeIfRequired(() =>
             {
-                timePanel.Text = "Time : " + time.ToString("F3");
+                timePanel.Text = $"Duration : {duration.ToString("F3")}s";
                 timePanel.Visible = true;
             });
         }

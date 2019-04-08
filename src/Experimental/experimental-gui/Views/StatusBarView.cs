@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -83,7 +83,7 @@ namespace TestCentric.Gui.Views
                 DisplayFailed();
                 DisplayWarnings();
                 DisplayInconclusive();
-                DisplayTime(0.0);
+                DisplayDuration(0.0);
             });
         }
 
@@ -92,7 +92,7 @@ namespace TestCentric.Gui.Views
             InvokeIfRequired(() =>
             {
                 StatusLabel.Text = "Completed";
-                DisplayTime(elapsedTime);
+                DisplayDuration(elapsedTime);
             });
         }
 
@@ -220,9 +220,9 @@ namespace TestCentric.Gui.Views
             inconclusivePanel.Visible = true;
         }
 
-        private void DisplayTime(double time)
+        private void DisplayDuration(double duration)
         {
-            timePanel.Text = "Time : " + time.ToString("F3");
+            timePanel.Text = $"Duration : {duration.ToString("F3")}s";
             timePanel.Visible = true;
         }
 
