@@ -254,9 +254,6 @@ namespace TestCentric.Gui.Model
 
         private void RunTests(TestFilter filter)
         {
-            if (Services.UserSettings.Engine.ReloadOnRun)
-                ReloadTests();
-
             SetTestDebuggingFlag(false);
 
             Runner.RunAsync(_events, filter);

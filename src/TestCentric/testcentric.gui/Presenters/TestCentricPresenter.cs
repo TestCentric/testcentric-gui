@@ -237,22 +237,7 @@ namespace TestCentric.Gui.Presenters
 
                 // Run loaded test automatically if called for
                 if (_model.IsPackageLoaded && _options.RunAllTests)
-                {
-                    // TODO: Temporary fix to avoid problem when /run is used 
-                    // with ReloadOnRun turned on. Refactor TestModel so
-                    // we can just do a run without reload.
-                    bool reload = _settings.Engine.ReloadOnRun;
-
-                    try
-                    {
-                        _settings.Engine.ReloadOnRun = false;
-                        RunAllTests();
-                    }
-                    finally
-                    {
-                        _settings.Engine.ReloadOnRun = reload;
-                    }
-                }
+                    RunAllTests();
             };
 
             _view.Move += (s, e) =>
@@ -656,7 +641,10 @@ namespace TestCentric.Gui.Presenters
         public void RunTests(TestNode[] tests)
         {
             if (_settings.Engine.ReloadOnRun)
+            {
                 _model.ClearResults();
+                _model.ReloadTests();
+            }
 
             if (tests != null && tests.Length > 0)
                 _model.RunTests(new TestSelection(tests));
