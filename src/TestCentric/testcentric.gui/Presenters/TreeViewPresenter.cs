@@ -124,7 +124,7 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.TestChanged += (e) =>
             {
-                if (_settings.Gui.ReloadOnChange)
+                if (_settings.Engine.ReloadOnChange)
                 {
                     _model.ReloadTests();
                 }
@@ -214,7 +214,7 @@ namespace TestCentric.Gui.Presenters
 
             _view.RunCommand.Execute += () =>
             {
-                if (_settings.Gui.ReloadOnRun)
+                if (_settings.Engine.ReloadOnRun)
                     _model.ClearResults();
 
                 if (_view.ContextNode != null)

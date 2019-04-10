@@ -93,6 +93,9 @@ namespace TestCentric.Gui.Model.Settings
             new TestCaseData("ProcessModel", "Default", "InProcess"),
             new TestCaseData("DomainUsage", "Default", "Single"),
             new TestCaseData("Agents", 0, 8),
+            new TestCaseData("ReloadOnChange", true, false),
+            new TestCaseData("RerunOnChange", false, true),
+            new TestCaseData("ReloadOnRun", false, true),
             new TestCaseData("SetPrincipalPolicy", false, true),
             new TestCaseData("PrincipalPolicy", nameof(PrincipalPolicy.UnauthenticatedPrincipal), nameof(PrincipalPolicy.WindowsPrincipal))
         };
@@ -139,9 +142,6 @@ namespace TestCentric.Gui.Model.Settings
             new TestCaseData("LoadLastProject", true, false),
             new TestCaseData("SelectedTab", 0, 1),
             new TestCaseData("InitialSettingsPage", null, "Some.Page"),
-            new TestCaseData("ReloadOnChange", true, false),
-            new TestCaseData("RerunOnChange", false, true),
-            new TestCaseData("ReloadOnRun", false, true),
             new TestCaseData("ClearResultsOnReload", false, true),
             new TestCaseData("Font", DEFAULT_FONT, TEST_FONT),
             new TestCaseData("FixedFont", DEFAULT_FIXED_FONT, TEST_FIXED_FONT),

@@ -241,16 +241,16 @@ namespace TestCentric.Gui.Presenters
                     // TODO: Temporary fix to avoid problem when /run is used 
                     // with ReloadOnRun turned on. Refactor TestModel so
                     // we can just do a run without reload.
-                    bool reload = _settings.Gui.ReloadOnRun;
+                    bool reload = _settings.Engine.ReloadOnRun;
 
                     try
                     {
-                        _settings.Gui.ReloadOnRun = false;
+                        _settings.Engine.ReloadOnRun = false;
                         RunAllTests();
                     }
                     finally
                     {
-                        _settings.Gui.ReloadOnRun = reload;
+                        _settings.Engine.ReloadOnRun = reload;
                     }
                 }
             };
@@ -655,7 +655,7 @@ namespace TestCentric.Gui.Presenters
 
         public void RunTests(TestNode[] tests)
         {
-            if (_settings.Gui.ReloadOnRun)
+            if (_settings.Engine.ReloadOnRun)
                 _model.ClearResults();
 
             if (tests != null && tests.Length > 0)
