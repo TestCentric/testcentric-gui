@@ -129,11 +129,11 @@ namespace TestCentric.Gui.Presenters
             {
                 // Necessary test because we don't disable the button click
                 if (_model.HasTests && !_model.IsTestRunning)
-                    _model.RunAllTests();
+                    RunAllTests();
             };
-            _view.RunAllCommand.Execute += () => _model.RunAllTests();
-            _view.RunSelectedCommand.Execute += () => _model.RunTests(_selectedTestItem);
-            _view.RunFailedCommand.Execute += () => _model.RunAllTests(); // NYI
+            _view.RunAllCommand.Execute += () => RunAllTests();
+            _view.RunSelectedCommand.Execute += () => RunTests(_selectedTestItem);
+            _view.RunFailedCommand.Execute += () => RunAllTests(); // RunFailed NYI
             _view.StopRunCommand.Execute += () => _model.CancelTestRun();
 
             // Debug button and dropdowns
@@ -154,6 +154,22 @@ namespace TestCentric.Gui.Presenters
 
                 _strategy.Reload();
             };
+        }
+
+        private void RunAllTests()
+        {
+            if (_model.Services.UserSettings.Engine.ReloadOnRun)
+                _model.ReloadTests();
+
+            _model.RunAllTests();
+        }
+
+        private void RunTests(ITestItem testItem)
+        {
+            if (_model.Services.UserSettings.Engine.ReloadOnRun)
+                _model.ReloadTests();
+
+            _model.RunTests(testItem);
         }
 
         private void RunCheckedTests()
