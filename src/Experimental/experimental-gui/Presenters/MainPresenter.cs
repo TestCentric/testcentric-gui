@@ -66,11 +66,19 @@ namespace TestCentric.Gui.Presenters
             _model.Events.TestLoaded += (ea) => InitializeMainMenu();
             _model.Events.TestUnloaded += (ea) => InitializeMainMenu();
             _model.Events.TestsReloading += NotifyTestsReloading;
+
             _model.Events.TestReloaded += (ea) =>
             {
                 InitializeMainMenu();
                 _view.OnTestAssembliesLoaded();
             };
+
+            _model.Events.TestChanged += (ea) =>
+            {
+                if (_model.Services.UserSettings.Engine.ReloadOnChange)
+                    _model.ReloadTests();
+            };
+
             _model.Events.RunStarting += (ea) => InitializeMainMenu();
             _model.Events.RunFinished += (ea) => InitializeMainMenu();
 
