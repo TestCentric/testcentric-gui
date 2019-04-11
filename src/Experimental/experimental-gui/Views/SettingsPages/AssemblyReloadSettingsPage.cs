@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2015 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -52,7 +52,8 @@ namespace TestCentric.Gui.Views.SettingsPages
 
         private void reloadOnChangeCheckBox_CheckedChanged(object sender, System.EventArgs e)
         {
-            rerunOnChangeCheckBox.Enabled = reloadOnChangeCheckBox.Checked;
+            // TODO: Waiting for issue #233
+            //rerunOnChangeCheckBox.Enabled = reloadOnChangeCheckBox.Checked;
         }
 
         protected override void OnHelpRequested(HelpEventArgs hevent)

@@ -177,7 +177,8 @@ namespace TestCentric.Gui.SettingsPages
 
         private void reloadOnChangeCheckBox_CheckedChanged(object sender, System.EventArgs e)
         {
-            rerunOnChangeCheckBox.Enabled = reloadOnChangeCheckBox.Checked;
+            // TODO: Waiting for issue #233
+            //rerunOnChangeCheckBox.Enabled = reloadOnChangeCheckBox.Checked;
         }
 
         protected override void OnHelpRequested(HelpEventArgs hevent)
