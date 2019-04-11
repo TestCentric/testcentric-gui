@@ -234,7 +234,7 @@ namespace TestCentric.Gui.Presenters
         [Test]
         public void WhenTestIsChanged_ReloadSettingsIsEnabled()
         {
-            _settings.Gui.ReloadOnChange = true;
+            _settings.Engine.ReloadOnChange = true;
             _model.Events.TestChanged += Raise.Event<TestEventHandler>(new TestEventArgs());
             _model.Received().ReloadTests();
         }
@@ -242,7 +242,7 @@ namespace TestCentric.Gui.Presenters
         [Test]
         public void WhenTestIsChanged_ReloadSettingsIsDisabled()
         {
-            _settings.Gui.ReloadOnChange = false;
+            _settings.Engine.ReloadOnChange = false;
             _model.Events.TestChanged += Raise.Event<TestEventHandler>(new TestEventArgs());
             _model.DidNotReceive().ReloadTests();
         }

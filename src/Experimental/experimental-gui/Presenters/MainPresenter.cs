@@ -65,7 +65,12 @@ namespace TestCentric.Gui.Presenters
             _model.Events.TestsLoading += NotifyTestsLoading;
             _model.Events.TestLoaded += (ea) => InitializeMainMenu();
             _model.Events.TestUnloaded += (ea) => InitializeMainMenu();
-            _model.Events.TestReloaded += (ea) => InitializeMainMenu();
+            _model.Events.TestsReloading += NotifyTestsReloading;
+            _model.Events.TestReloaded += (ea) =>
+            {
+                InitializeMainMenu();
+                _view.OnTestAssembliesLoaded();
+            };
             _model.Events.RunStarting += (ea) => InitializeMainMenu();
             _model.Events.RunFinished += (ea) => InitializeMainMenu();
 
@@ -105,6 +110,11 @@ namespace TestCentric.Gui.Presenters
                 $"Loading Assembly: {args.TestFilesLoading[0]}" :
                 $"Loading {args.TestFilesLoading.Count} Assemblies...";
             _view.OnTestAssembliesLoading(message);
+        }
+
+        private void NotifyTestsReloading(TestEventArgs args)
+        {
+            _view.OnTestAssembliesLoading("Reloading Tests...");
         }
 
         private void MainForm_DragDrop(string[] files)

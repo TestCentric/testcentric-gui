@@ -59,6 +59,24 @@ namespace TestCentric.Gui.Model.Settings
             set { SaveSetting(nameof(Agents), value); }
         }
 
+        public bool ReloadOnChange
+        {
+            get { return GetSetting(nameof(ReloadOnChange), true); }
+            set { SaveSetting(nameof(ReloadOnChange), value); }
+        }
+
+        public bool RerunOnChange
+        {
+            get { return GetSetting(nameof(RerunOnChange), false); }
+            set { SaveSetting(nameof(RerunOnChange), value); }
+        }
+
+        public bool ReloadOnRun
+        {
+            get { return GetSetting(nameof(ReloadOnRun), false); }
+            set { SaveSetting(nameof(ReloadOnRun), value); }
+        }
+
         public bool SetPrincipalPolicy
         {
             get { return GetSetting(nameof(SetPrincipalPolicy), false); }
