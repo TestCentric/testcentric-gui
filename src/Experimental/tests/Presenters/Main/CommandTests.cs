@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016-2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -31,6 +31,7 @@ namespace TestCentric.Gui.Presenters.Main
 {
     using Views;
     using Elements;
+    using Model;
 
     public class CommandTests : MainPresenterTestBase
     {
@@ -113,6 +114,22 @@ namespace TestCentric.Gui.Presenters.Main
         {
             View.ReloadTestsCommand.Execute += Raise.Event<CommandHandler>();
             Model.Received().ReloadTests();
+        }
+
+        [Test]
+        public void WhenTestIsChanged_ReloadSettingsIsEnabled()
+        {
+            Model.Services.UserSettings.Engine.ReloadOnChange = true;
+            Model.Events.TestChanged += Raise.Event<TestEventHandler>(new TestEventArgs());
+            Model.Received().ReloadTests();
+        }
+
+        [Test]
+        public void WhenTestIsChanged_ReloadSettingsIsDisabled()
+        {
+            Model.Services.UserSettings.Engine.ReloadOnChange = false;
+            Model.Events.TestChanged += Raise.Event<TestEventHandler>(new TestEventArgs());
+            Model.DidNotReceive().ReloadTests();
         }
 
         public void SelectRuntimeCommand_PopsUpMenu()

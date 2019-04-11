@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -40,6 +40,7 @@ namespace TestCentric.Gui.Presenters.Main
         {
             View = Substitute.For<IMainView>();
             Model = Substitute.For<ITestModel>();
+            Model.Services.UserSettings.Returns(new NUnit.TestUtilities.Fakes.UserSettings());
 
             Presenter = new MainPresenter(View, Model, new CommandLineOptions());
         }
