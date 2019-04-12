@@ -83,7 +83,8 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>nunit.snk</AssemblyOriginatorKeyFile>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\testcentric.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Common\components\TestCentric.Gui.Components.csproj">
@@ -304,7 +305,6 @@
     <Compile Include="Presenters\CategoryPresenter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="nunit.snk" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
