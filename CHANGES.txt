@@ -1,4 +1,29 @@
-﻿TestCentric Runner for NUnit 1.0.0-Alpha4 - April 5, 2019
+﻿TestCentric Runner for NUnit 1.0.0-Beta - April 13, 2019
+
+General
+
+This is the beta release of the TestCentric Runner for NUnit. While it is still beta,
+it is feature-complete. Since the actual execution of tests is done by the NUnit engine
+rather than the GUI itself, it's probably reasonable for developers to use this on the
+desktop, provided their CI is based on a stable production-level NUnit runner, such as
+the NUnit 3 Console Runner or the NUnit 3 VS adapter.
+
+Features
+
+ * Version 0.11 of the Experimental GUI is included with support for saving test results,
+   reload on change and reload on run.
+
+Issues Resolved
+
+ 22 Create new signing key for TestCentric
+212 Experimental GUI: Need SaveResults menu item
+213 Experimental GUI: Reload on change
+226 Display time in a more natural format
+232 Experimental GUI: Reload on Run
+306 FIXED: Save TestResult Dialog not initialized correctly
+318 Disable ReRun on Change setting
+
+TestCentric Runner for NUnit 1.0.0-Alpha4 - April 5, 2019
 
 General
 
