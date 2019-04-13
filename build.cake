@@ -5,7 +5,7 @@
 
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
-var packageVersion = Argument("packageVersion", "1.0-alpha4");
+var packageVersion = Argument("packageVersion", "1.0-beta");
 
 //////////////////////////////////////////////////////////////////////
 // SET PACKAGE VERSION

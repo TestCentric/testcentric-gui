@@ -48,5 +48,5 @@ using System.Runtime.InteropServices;
 // Common version information for local developer builds.
 // Should be set to the NEXT planned version between releases.
 // For CI builds, this info will be updated by GitVersion.
-[assembly: AssemblyVersion("0.10.0.0")]
-[assembly: AssemblyFileVersion("0.10.0.0")]
+[assembly: AssemblyVersion("0.11.0.0")]
+[assembly: AssemblyFileVersion("0.11.0.0")]
