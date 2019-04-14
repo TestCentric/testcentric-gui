@@ -55,6 +55,7 @@
     <Compile Include="Presenters\GroupDisplayStrategy.cs" />
     <Compile Include="Presenters\DurationGrouping.cs" />
     <Compile Include="Presenters\OutcomeGrouping.cs" />
+    <Compile Include="Presenters\TextOutputPresenter.cs" />
     <Compile Include="Settings\EngineSettings.cs" />
     <Compile Include="Settings\GuiSettings.cs" />
     <Compile Include="Settings\SettingsGroup.cs" />
@@ -90,6 +91,7 @@
     <Compile Include="Views\IStatusBarView.cs" />
     <Compile Include="Views\ITestPropertiesVIew.cs" />
     <Compile Include="Views\ITestTreeView.cs" />
+    <Compile Include="Views\ITextOutputView.cs" />
     <Compile Include="Views\IView.cs" />
     <Compile Include="Views\IXmlView.cs" />
     <Compile Include="Views\SettingsDialog.cs">
@@ -151,6 +153,12 @@
     <Compile Include="Presenters\MainPresenter.cs" />
     <Compile Include="AppEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\TextOutputView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Views\TextOutputView.Designer.cs">
+      <DependentUpon>TextOutputView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\XmlView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -194,6 +202,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\StatusBarView.resx">
       <DependentUpon>StatusBarView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\TextOutputView.resx">
+      <DependentUpon>TextOutputView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\XmlView.resx">
       <DependentUpon>XmlView.cs</DependentUpon>

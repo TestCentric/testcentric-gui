@@ -91,12 +91,14 @@ namespace TestCentric.Gui
             var model = new TestModel(testEngine);
 
             var form = new MainForm();
-            new MainPresenter(form, model, options);
+
             new ProgressBarPresenter(form.ProgressBarView, model);
-            new TreeViewPresenter(form.TestTreeView, model);
             new StatusBarPresenter(form.StatusBarView, model);
             new TestPropertiesPresenter(form.PropertiesView, model);
             new XmlPresenter(form.XmlView, model);
+            new TextOutputPresenter(form.TextOutputView, model);
+            new TreeViewPresenter(form.TestTreeView, model);
+            new MainPresenter(form, model, options);
 
             //new RecentFiles(settingsServiceServiceService._settings);
             //new RecentFilesPresenter(form, settingsServiceServiceService);
