@@ -174,9 +174,21 @@ namespace TestCentric.Gui.Model
             if (IsPackageLoaded)
                 UnloadTests();
 
+            _events.FireTestsLoading(files);
+
+            LoadAllTests(files);
+
+            _events.FireTestLoaded(Tests);
+
+            foreach (var subPackage in TestPackage.SubPackages)
+                Services.RecentFiles.SetMostRecent(subPackage.FullName);
+        }
+
+        // Load Tests without sending events
+        private void LoadAllTests(IList<string> files)
+        {
             TestFiles.Clear();
             TestFiles.AddRange(files);
-            _events.FireTestsLoading(files);
 
             TestPackage = MakeTestPackage(files);
             _lastRunWasDebugRun = false;
@@ -188,23 +200,22 @@ namespace TestCentric.Gui.Model
             Results.Clear();
 
             _assemblyWatcher.Setup(1000, files as IList);
-            _assemblyWatcher.AssemblyChanged += new AssemblyChangedHandler(OnChange);
+            _assemblyWatcher.AssemblyChanged += (path) => _events.FireTestChanged();
             _assemblyWatcher.Start();
-            _events.FireTestLoaded(Tests);
-
-            foreach (var subPackage in TestPackage.SubPackages)
-                Services.RecentFiles.SetMostRecent(subPackage.FullName);
-        }
-
-        private void OnChange(string fullpath)
-        {
-            _events.FireTestChanged();
         }
 
         public void UnloadTests()
         {
             _events.FireTestsUnloading();
 
+            UnloadAllTests();
+
+            _events.FireTestUnloaded();
+        }
+
+        // Unload tests without sending events
+        private void UnloadAllTests()
+        {
             Runner.Unload();
             Runner.Dispose();
             Tests = null;
@@ -213,25 +224,26 @@ namespace TestCentric.Gui.Model
             TestFiles.Clear();
             Results.Clear();
             _assemblyWatcher.Stop();
-
-            _events.FireTestUnloaded();
         }
 
         public void ReloadTests()
         {
             _events.FireTestsReloading();
 
-            Runner.Reload();
-
-            _lastRunWasDebugRun = false;
-            TestPackage = MakeTestPackage(TestFiles);
-
-            AvailableCategories = GetAvailableCategories();
-
-            if (Services.UserSettings.Gui.ClearResultsOnReload)
-                Results.Clear();
+            ReloadAllTests();
 
             _events.FireTestReloaded(Tests);
+        }
+
+        // Reload tests without sending events.
+        private void ReloadAllTests()
+        {
+            string[] files = TestFiles.ToArray();
+
+            // NOTE: The `ITestRunner.Reload` method supported by the engine
+            // has some problems, so we use Unload+Load. See issue #328.
+            UnloadAllTests();
+            LoadAllTests(files);
         }
 
         public void RunAllTests()

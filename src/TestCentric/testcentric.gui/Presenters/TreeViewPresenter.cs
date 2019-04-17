@@ -110,11 +110,21 @@ namespace TestCentric.Gui.Presenters
                 }
             };
 
-            _model.Events.TestsReloading += (e) => _view.RunCommand.Enabled = false;
+            VisualState reloadState = null;
+
+            _model.Events.TestsReloading += (e) =>
+            {
+                reloadState = VisualState.LoadFrom(_view);
+
+                _view.RunCommand.Enabled = false;
+            };
 
             _model.Events.TestReloaded += (e) =>
             {
                 ReloadTests(GetTopDisplayNode(e.Test));
+
+                if (reloadState != null)
+                    reloadState.RestoreVisualState(_view, _treeMap);
 
                 if (!_settings.Gui.ClearResultsOnReload)
                     RestoreResults(e.Test);
