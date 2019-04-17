@@ -96,7 +96,7 @@
       <Name>TestCentric.Gui.Model</Name>
     </ProjectReference>
     <Reference Include="nunit.engine.api, Version=3.0.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NUnit.Engine.Api.3.11.0-tc-00017\lib\net20\nunit.engine.api.dll</HintPath>
+      <HintPath>..\..\..\packages\NUnit.Engine.Api.3.11.0-tc-00020\lib\net20\nunit.engine.api.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -305,9 +305,6 @@
     <Compile Include="Presenters\CategoryPresenter.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Images\Ellipsis.gif" />
     <Content Include="Images\Tree\Circles\Failure.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -389,7 +386,9 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
