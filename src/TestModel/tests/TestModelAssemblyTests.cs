@@ -99,7 +99,7 @@ namespace TestCentric.Gui.Model
             Assert.False(_model.HasResults, "HasResults");
         }
 
-        //[Test] Temporarily removed...
+        [Test]
         public void TestTreeIsUnchangedByReload()
         {
             var originalTests = _model.Tests;
