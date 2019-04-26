@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2015 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -110,21 +110,51 @@ namespace TestCentric.Gui.Elements
 
         public TreeNode TopNode
         {
-            get { return _treeView.TopNode; }
-            set { _treeView.TopNode = value; }
+            get
+            {
+                TreeNode topNode = null;
+                InvokeIfRequired(() => topNode = _treeView.TopNode);
+                return topNode;
+            }
+            set
+            {
+                InvokeIfRequired(() => _treeView.TopNode = value);
+            }
         }
 
-        public int VisibleCount => _treeView.VisibleCount;
+        public int VisibleCount
+        {
+            get
+            {
+                int visibleCount = 0;
+                InvokeIfRequired(() => visibleCount = _treeView.VisibleCount);
+                return visibleCount;
+            }
+        }
+
 
         public TreeNode SelectedNode
         {
-            get { return _treeView.SelectedNode; }
-            set { _treeView.SelectedNode = value; }
+            get
+            {
+                TreeNode selectedNode = null;
+                InvokeIfRequired(() => selectedNode = _treeView.SelectedNode);
+                return selectedNode;
+            }
+            set
+            {
+                InvokeIfRequired(() => _treeView.SelectedNode = value);
+            }
         }
 
         public TreeNodeCollection Nodes
         {
-            get { return _treeView.Nodes; }
+            get
+            {
+                TreeNodeCollection nodes = null;
+                InvokeIfRequired(() => nodes = _treeView.Nodes);
+                return nodes;
+            }
         }
 
         public IList<TreeNode> CheckedNodes => GetCheckedNodes();
