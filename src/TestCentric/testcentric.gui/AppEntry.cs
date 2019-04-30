@@ -84,6 +84,7 @@ namespace TestCentric.Gui
 
             log.Info("Instantiating TestModel");
             ITestModel model = new TestModel(testEngine);
+            model.PackageSettings.Add(EnginePackageSettings.InternalTraceLevel, traceLevel.ToString());
 
             log.Info("Constructing Form");
             TestCentricMainView view = new TestCentricMainView();
