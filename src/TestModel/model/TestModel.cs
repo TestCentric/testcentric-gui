@@ -176,17 +176,6 @@ namespace TestCentric.Gui.Model
 
             _events.FireTestsLoading(files);
 
-            LoadAllTests(files);
-
-            _events.FireTestLoaded(Tests);
-
-            foreach (var subPackage in TestPackage.SubPackages)
-                Services.RecentFiles.SetMostRecent(subPackage.FullName);
-        }
-
-        // Load Tests without sending events
-        private void LoadAllTests(IList<string> files)
-        {
             TestFiles.Clear();
             TestFiles.AddRange(files);
 
@@ -202,20 +191,22 @@ namespace TestCentric.Gui.Model
             _assemblyWatcher.Setup(1000, files as IList);
             _assemblyWatcher.AssemblyChanged += (path) => _events.FireTestChanged();
             _assemblyWatcher.Start();
+
+            _events.FireTestLoaded(Tests);
+
+            foreach (var subPackage in TestPackage.SubPackages)
+                Services.RecentFiles.SetMostRecent(subPackage.FullName);
+        }
+
+        // Load Tests without sending events
+        private void LoadAllTests(IList<string> files)
+        {
         }
 
         public void UnloadTests()
         {
             _events.FireTestsUnloading();
 
-            UnloadAllTests();
-
-            _events.FireTestUnloaded();
-        }
-
-        // Unload tests without sending events
-        private void UnloadAllTests()
-        {
             Runner.Unload();
             Runner.Dispose();
             Tests = null;
@@ -224,26 +215,31 @@ namespace TestCentric.Gui.Model
             TestFiles.Clear();
             Results.Clear();
             _assemblyWatcher.Stop();
+
+            _events.FireTestUnloaded();
         }
 
         public void ReloadTests()
         {
             _events.FireTestsReloading();
 
-            ReloadAllTests();
-
-            _events.FireTestReloaded(Tests);
-        }
-
-        // Reload tests without sending events.
-        private void ReloadAllTests()
-        {
             string[] files = TestFiles.ToArray();
 
             // NOTE: The `ITestRunner.Reload` method supported by the engine
-            // has some problems, so we use Unload+Load. See issue #328.
-            UnloadAllTests();
-            LoadAllTests(files);
+            // has some problems, so we simulate Unload+Load. See issue #328.
+
+            // Replace Runner in case settings changed
+            Runner.Unload();
+            Runner.Dispose();
+            Runner = TestEngine.GetRunner(TestPackage);
+
+            // Discover tests
+            Tests = new TestNode(Runner.Explore(TestFilter.Empty));
+            AvailableCategories = GetAvailableCategories();
+
+            Results.Clear();
+
+            _events.FireTestReloaded(Tests);
         }
 
         public void RunAllTests()
