@@ -64,7 +64,9 @@ if (!usingMsBuild)
         "https://www.myget.org/F/testcentric/api/v2/",
         "https://www.myget.org/F/testcentric/api/v3/index.json",
         "https://www.nuget.org/api/v2/",
-        "https://api.nuget.org/v3/index.json"
+        "https://api.nuget.org/v3/index.json",
+		"https://www.myget.org/F/nunit/api/v2/",
+		"https://www.myget.org/F/nunit/api/v3/index.json"
     };
 
 //////////////////////////////////////////////////////////////////////
