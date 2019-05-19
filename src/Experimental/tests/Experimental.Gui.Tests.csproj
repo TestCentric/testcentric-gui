@@ -80,6 +80,7 @@
     <Compile Include="Presenters\Main\PackageSettingsTests.cs" />
     <Compile Include="Presenters\Main\WhenTestsAreLoading.cs" />
     <Compile Include="Presenters\Main\WhenTestsAreReloaded.cs" />
+    <Compile Include="Presenters\PresenterTestBase.cs" />
     <Compile Include="Presenters\TestGroupTests.cs" />
     <Compile Include="Presenters\StatusBarPresenterTests.cs" />
     <Compile Include="Presenters\TestPropertiesPresenterTests.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Presenters\TestTree\WhenTestsAreReloaded.cs" />
     <Compile Include="Presenters\TestTree\WhenTestsAreLoaded.cs" />
     <Compile Include="Presenters\TestTree\WhenTestsAreUnloaded.cs" />
+    <Compile Include="Presenters\TextOutputPresenterTests.cs" />
     <Compile Include="Presenters\TreeViewPresenterTests.cs" />
     <Compile Include="Presenters\Main\WhenPresenterIsCreated.cs" />
     <Compile Include="Presenters\Main\CommandTests.cs" />

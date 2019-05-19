@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -162,6 +162,7 @@ namespace TestCentric.Gui.Views
         public StatusBarView StatusBarView { get { return statusBarView; } }
         public TestPropertiesView PropertiesView { get { return propertiesView; } }
         public XmlView XmlView { get { return xmlView; } }
+        public TextOutputView TextOutputView { get { return textOutputView; } }
 
         #endregion
 
