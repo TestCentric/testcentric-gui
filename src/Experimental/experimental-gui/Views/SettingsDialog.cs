@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -49,6 +49,7 @@ namespace TestCentric.Gui.Views
 
             _pageList.AddRange(new SettingsPage[] {
                 new GuiSettingsPage(_settings),
+                new TextOutputSettingsPage(_settings),
                 new AssemblyReloadSettingsPage(_settings)
             });
             _owner = owner;

@@ -70,6 +70,7 @@
     <Compile Include="Presenters\StatusBarPresenter.cs" />
     <Compile Include="Presenters\DisplayStrategy.cs" />
     <Compile Include="Presenters\XmlPresenter.cs" />
+    <Compile Include="Settings\TextOutputSettings.cs" />
     <Compile Include="Settings\TreeDisplayStyle.cs" />
     <Compile Include="Views\AddinPages\AddinsView.cs">
       <SubType>Form</SubType>
@@ -117,6 +118,9 @@
     </Compile>
     <Compile Include="Views\SettingsPages\GuiSettingsPage.Designer.cs">
       <DependentUpon>GuiSettingsPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsPages\TextOutputSettingsPage.cs">
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Views\TestPropertiesView.cs">
       <SubType>UserControl</SubType>
@@ -190,6 +194,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\SettingsPages\GuiSettingsPage.resx">
       <DependentUpon>GuiSettingsPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\SettingsPages\TextOutputSettingsPage.resx">
+      <DependentUpon>TextOutputSettingsPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\TestPropertiesView.resx">
       <DependentUpon>TestPropertiesView.cs</DependentUpon>

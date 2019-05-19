@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2015 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -44,6 +44,11 @@ namespace TestCentric.Gui.Settings
         public TestTreeSettings TestTree
         {
             get { return new TestTreeSettings(SettingsService); }
+        }
+
+        public TextOutputSettings TextOutput
+        {
+            get { return new TextOutputSettings(SettingsService); }
         }
 
         private const string initialPageKey = "InitialSettingsPage";
