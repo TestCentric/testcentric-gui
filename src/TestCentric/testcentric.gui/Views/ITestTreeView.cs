@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -57,9 +57,9 @@ namespace TestCentric.Gui.Views
         TestSuiteTreeNode ContextNode { get; }
         TestNode[] SelectedTests { get; }
 
-        TestNodeFilter TreeFilter { get; set; }
-
         void Clear();
+
+        void Accept(TestSuiteTreeNodeVisitor visitor);
 
         void ShowPropertiesDialog(TestSuiteTreeNode node);
         void ClosePropertiesDialog();
