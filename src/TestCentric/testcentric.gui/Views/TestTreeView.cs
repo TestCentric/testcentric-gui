@@ -214,6 +214,14 @@ namespace TestCentric.Gui.Views
             tree.Nodes.Clear();
         }
 
+        public void Accept(TestSuiteTreeNodeVisitor visitor)
+        {
+            foreach (TestSuiteTreeNode node in tree.Nodes)
+            {
+                node.Accept(visitor);
+            }
+        }
+
         public void ShowPropertiesDialog(TestSuiteTreeNode node)
         {
             TestPropertiesDialog.DisplayProperties(node);
@@ -243,12 +251,6 @@ namespace TestCentric.Gui.Views
                 Accept(visitor);
                 return visitor.Tests;
             }
-        }
-
-        public TestNodeFilter TreeFilter
-        {
-            get { return _treeFilter; }
-            set { Accept(new TestFilterVisitor(_treeFilter = value)); }
         }
 
         #endregion
@@ -299,14 +301,6 @@ namespace TestCentric.Gui.Views
         #endregion
 
         #region Helper Methods
-
-        private void Accept(TestSuiteTreeNodeVisitor visitor)
-        {
-            foreach (TestSuiteTreeNode node in tree.Nodes)
-            {
-                node.Accept(visitor);
-            }
-        }
 
         public void LoadAlternateImages(string imageSet)
         {
@@ -384,25 +378,6 @@ namespace TestCentric.Gui.Views
                 {
                     tests.Add(node.Test);
                 }
-            }
-        }
-
-        #endregion
-
-        #region TestFilterVisitor
-
-        public class TestFilterVisitor : TestSuiteTreeNodeVisitor
-        {
-            private TestNodeFilter filter;
-
-            public TestFilterVisitor(TestNodeFilter filter)
-            {
-                this.filter = filter;
-            }
-
-            public override void Visit(TestSuiteTreeNode node)
-            {
-                node.Included = filter.Pass(node.Test);
             }
         }
 

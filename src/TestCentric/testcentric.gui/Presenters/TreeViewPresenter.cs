@@ -53,6 +53,7 @@ namespace TestCentric.Gui.Presenters
         private ITestModel _model;
         private UserSettings _settings;
         private ITreeView _tree;
+        private TestNodeFilter _treeFilter = TestNodeFilter.Empty;
 
         /// <summary>
         /// Hashtable provides direct access to TestNodes
@@ -129,6 +130,9 @@ namespace TestCentric.Gui.Presenters
                 if (!_settings.Gui.ClearResultsOnReload)
                     RestoreResults(e.Test);
 
+                if (!_treeFilter.IsEmpty)
+                    _view.Accept(new TestFilterVisitor(_treeFilter));
+
                 _view.RunCommand.Enabled = true;
             };
 
@@ -190,7 +194,7 @@ namespace TestCentric.Gui.Presenters
                         filter = new NotFilter(filter);
                 }
 
-                _view.TreeFilter = filter;
+                _view.Accept(new TestFilterVisitor(_treeFilter = filter));
             };
 
             _settings.Changed += (s, e) =>
@@ -422,5 +426,24 @@ namespace TestCentric.Gui.Presenters
                 foreach (TreeNode child in node.Nodes)
                     CheckFailedTests(child);
         }
+
+        #region TestFilterVisitor
+
+        public class TestFilterVisitor : TestSuiteTreeNodeVisitor
+        {
+            private TestNodeFilter filter;
+
+            public TestFilterVisitor(TestNodeFilter filter)
+            {
+                this.filter = filter;
+            }
+
+            public override void Visit(TestSuiteTreeNode node)
+            {
+                node.Included = filter.Pass(node.Test);
+            }
+        }
+
+        #endregion
     }
 }
