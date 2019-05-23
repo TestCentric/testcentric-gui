@@ -122,6 +122,9 @@
     <Compile Include="Views\SettingsPages\TextOutputSettingsPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Views\SettingsPages\TreeSettingsPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Views\TestPropertiesView.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -197,6 +200,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\SettingsPages\TextOutputSettingsPage.resx">
       <DependentUpon>TextOutputSettingsPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\SettingsPages\TreeSettingsPage.resx">
+      <DependentUpon>TreeSettingsPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\TestPropertiesView.resx">
       <DependentUpon>TestPropertiesView.cs</DependentUpon>

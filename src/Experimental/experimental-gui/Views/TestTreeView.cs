@@ -21,7 +21,10 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System.Drawing;
 using System.Windows.Forms;
+using System.IO;
+using System.Reflection;
 
 namespace TestCentric.Gui.Views
 {
@@ -105,6 +108,18 @@ namespace TestCentric.Gui.Views
 
         public ITreeView Tree { get; private set; }
 
+        private string _alternateImageSet;
+        public string AlternateImageSet
+        {
+            get { return _alternateImageSet; }
+            set
+            {
+                _alternateImageSet = value;
+                if (!string.IsNullOrEmpty(value))
+                    LoadAlternateImages(value);
+            }
+        }
+
         #endregion
 
         #region Public Methods
@@ -129,6 +144,34 @@ namespace TestCentric.Gui.Views
                 treeView.Invoke(_delegate);
             else
                 _delegate();
+        }
+
+        public void LoadAlternateImages(string imageSet)
+        {
+            string[] imageNames = { "Skipped", "Failure", "Success", "Ignored", "Inconclusive" };
+
+            string imageDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                Path.Combine("Images", Path.Combine("Tree", imageSet)));
+
+            for (int index = 0; index < imageNames.Length; index++)
+                LoadAlternateImage(index, imageNames[index], imageDir);
+            this.Invalidate();
+            this.Refresh();
+        }
+
+        private void LoadAlternateImage(int index, string name, string imageDir)
+        {
+            string[] extensions = { ".png", ".jpg" };
+
+            foreach (string ext in extensions)
+            {
+                string filePath = Path.Combine(imageDir, name + ext);
+                if (File.Exists(filePath))
+                {
+                    treeImages.Images[index] = Image.FromFile(filePath);
+                    break;
+                }
+            }
         }
 
         #endregion

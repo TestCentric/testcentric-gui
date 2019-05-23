@@ -52,6 +52,8 @@ namespace TestCentric.Gui.Presenters
 
             Settings = new Settings.TestTreeSettings(_model.Services.UserSettings);
 
+            _view.AlternateImageSet = (string)Settings.AlternateImageSet;
+
             InitializeRunCommands();
             WireUpEvents();
         }
@@ -86,6 +88,12 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.TestFinished += (ea) => _strategy.OnTestFinished(ea.Result);
             _model.Events.SuiteFinished += (ea) => _strategy.OnTestFinished(ea.Result);
+
+            _model.Services.UserSettings.Changed += (s, e) =>
+            {
+                if (e.SettingName == "Gui.TestTree.AlternateImageSet")
+                    _view.AlternateImageSet = Settings.AlternateImageSet;
+            };
 
             // View actions - Initial Load
             _view.Load += (s, e) =>
