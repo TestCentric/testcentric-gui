@@ -52,6 +52,8 @@ namespace TestCentric.Gui.Views
         ICommand CollapseAllCommand { get; }
         ICommand CollapseToFixturesCommand { get; }
 
+        string AlternateImageSet { get; set; }
+
         void ExpandAll();
         void CollapseAll();
 

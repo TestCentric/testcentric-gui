@@ -49,6 +49,7 @@ namespace TestCentric.Gui.Views
 
             _pageList.AddRange(new SettingsPage[] {
                 new GuiSettingsPage(_settings),
+                new TreeSettingsPage(_settings),
                 new TextOutputSettingsPage(_settings),
                 new AssemblyReloadSettingsPage(_settings)
             });

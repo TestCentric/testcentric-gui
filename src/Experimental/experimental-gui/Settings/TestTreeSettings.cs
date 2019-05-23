@@ -67,12 +67,12 @@ namespace TestCentric.Gui.Settings
             set { SaveSetting(saveVisualStateKey, value); }
         }
 
-        //private const string alternateImageSetKey = "AlternateImageSet";
-        //public string AlternateImageSet
-        //{
-        //    get { return GetSetting(alternateImageSetKey, "Default"); }
-        //    set { SaveSetting(alternateImageSetKey, value); }
-        //}
+        private const string alternateImageSetKey = "AlternateImageSet";
+        public string AlternateImageSet
+        {
+            get { return GetSetting(alternateImageSetKey, "Default"); }
+            set { SaveSetting(alternateImageSetKey, value); }
+        }
     }
 
     public class FixtureListSettings : SettingsGroup
