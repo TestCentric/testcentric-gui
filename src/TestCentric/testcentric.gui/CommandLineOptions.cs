@@ -67,23 +67,23 @@ namespace TestCentric.Gui
             //this.Add("config=", "Project {CONFIG} to load.",
             //    v => ActiveConfig = RequiredValue(v, "--config"));
 
-            this.Add("noload", "Suppress loading of most recent project.",
+            this.Add("noload", "Suppress loading of the most recent test file.",
                 v => NoLoad = v != null);
 
-            this.Add("run", "Automatically run the loaded project.",
+            this.Add("run", "Automatically run the loaded tests.",
                 v => RunAllTests = v != null);
 
             //this.Add("runselected", "Automatically run last selected tests.",
             //    v => RunSelectedTests = v != null);
 
-            this.Add("trace=", "Set internal trace {LEVEL}.",
+            this.Add("trace=", "Set internal trace {LEVEL}. Valid values are Off, Error, Warning, Info or Debug.Verbose is a synonym for Debug.",
                 v =>
                 {
                     var traceSetting = RequiredValue(v, "--trace", "Off", "Error", "Warning", "Info", "Verbose", "Debug");
                     InternalTraceLevel = (InternalTraceLevel)Enum.Parse(typeof(InternalTraceLevel), v);
                 });
 
-            this.Add("help|h", "Display this message and exit.",
+            this.Add("help|h", "Display the help message and exit.",
                 v => ShowHelp = v != null);
 
             // Default
