@@ -87,11 +87,11 @@ namespace TestCentric.Gui.SettingsPages
             this.labelsOnRadioButton.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.labelsOnRadioButton.Location = new System.Drawing.Point(40, 53);
             this.labelsOnRadioButton.Name = "labelsOnRadioButton";
-            this.labelsOnRadioButton.Size = new System.Drawing.Size(303, 43);
+            this.labelsOnRadioButton.Size = new System.Drawing.Size(326, 43);
             this.labelsOnRadioButton.TabIndex = 38;
             this.labelsOnRadioButton.TabStop = true;
-            this.labelsOnRadioButton.Text = "Label any output with the name of the test that produced it.\r\nRepeat the label as" +
-    " necessary if output from multiple tests\r\nis interleaved.";
+            this.labelsOnRadioButton.Text = "On - Label any output with the name of the test that produced it.\r\nRepeat the lab" +
+    "el as necessary if output from multiple tests\r\nis interleaved.";
             this.labelsOnRadioButton.UseVisualStyleBackColor = true;
             // 
             // labelsBeforeRadioButton
@@ -100,16 +100,16 @@ namespace TestCentric.Gui.SettingsPages
             this.labelsBeforeRadioButton.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.labelsBeforeRadioButton.Location = new System.Drawing.Point(40, 106);
             this.labelsBeforeRadioButton.Name = "labelsBeforeRadioButton";
-            this.labelsBeforeRadioButton.Size = new System.Drawing.Size(303, 43);
+            this.labelsBeforeRadioButton.Size = new System.Drawing.Size(343, 43);
             this.labelsBeforeRadioButton.TabIndex = 39;
             this.labelsBeforeRadioButton.TabStop = true;
-            this.labelsBeforeRadioButton.Text = "Label start of every test, whether output is produced or not.\r\nRepeat the label a" +
-    "s necessary if output from multiple tests\r\nis interleaved.";
+            this.labelsBeforeRadioButton.Text = "Before - Label start of every test, whether output is produced or not.\r\nRepeat th" +
+    "e label as necessary if output from multiple tests\r\nis interleaved.";
             this.labelsBeforeRadioButton.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Location = new System.Drawing.Point(131, 24);
             this.groupBox1.Name = "groupBox1";
@@ -123,10 +123,10 @@ namespace TestCentric.Gui.SettingsPages
             this.labelsOffRadioButton.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
             this.labelsOffRadioButton.Location = new System.Drawing.Point(40, 159);
             this.labelsOffRadioButton.Name = "labelsOffRadioButton";
-            this.labelsOffRadioButton.Size = new System.Drawing.Size(162, 17);
+            this.labelsOffRadioButton.Size = new System.Drawing.Size(185, 17);
             this.labelsOffRadioButton.TabIndex = 41;
             this.labelsOffRadioButton.TabStop = true;
-            this.labelsOffRadioButton.Text = "Display output without labels.";
+            this.labelsOffRadioButton.Text = "Off - Display output without labels.";
             this.labelsOffRadioButton.UseVisualStyleBackColor = true;
             // 
             // TextOutputSettingsPage
