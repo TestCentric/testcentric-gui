@@ -23,16 +23,17 @@ The GUI presents the user with information (output) in a graphical format and al
 
 #### Examples of MAJOR UI Changes
 
-- Removal of a capability. For example, if we were to remove the abiity, now provided, to automatically reload tests before running.
+- Removal of a capability. For example, if we were to remove the ability, now provided, to automatically reload tests before running.
 - Changing an existing UI element so it does something completely different.
 
 #### Examples of MINOR UI Changes
 
-- Provision of a new capability. F1or example, adding the ability to save test results in multiple formats.
+- Provision of a new capability. For example, adding the ability to save test results in multiple formats.
 - Changes to how a capability is accessed. For example, replacing a simple menu item with a dialog.
 - Addition of a new UI element.
 
 #### Examples of PATCH UI Changes
+
 - Fixing a bug in how a command functions.
 - Fixing alignment, font, appearance, etc. of elements in the UI.
 - Restoring behavior of some capability to that originally designed.

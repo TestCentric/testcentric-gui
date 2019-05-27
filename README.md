@@ -23,7 +23,7 @@ To use the **zip** distribution, you should simply unzip the contents into a con
 
 ## Versioning
 
-**TestCentric** uses semantic versioning for it's version numbers, with specific exceptions and clarification regarding __what is considered a breaking change__. See the [VERSIONING](./VERSIONING.md) file for more information.
+**TestCentric** uses semantic versioning for its version numbers, with specific exceptions and clarification regarding what is considered a breaking change. See the [VERSIONING](./VERSIONING.md) file for more information.
 
 ## Licensing
 
