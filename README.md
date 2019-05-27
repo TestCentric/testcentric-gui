@@ -21,8 +21,12 @@ The **chocolatey** package provides the best user experience and is the recommen
 
 To use the **zip** distribution, you should simply unzip the contents into a convenient directory and create your own shortcut to `testcentric.exe`. To use it from the command-line, place the install directory on your path.
 
+## Versioning
+
+**TestCentric** uses semantic versioning for it's version numbers, with specific exceptions and clarification regarding __what is considered a breaking change__. See the [VERSIONING](./VERSIONING.md) file for more information.
+
 ## Licensing
 
 **TestCentric** is Open Source software, released under the MIT / X11 license. See LICENSE.txt for a copy of the license.
 
-**TestCentric** bundles a copy of the NUnit test engine, version 3.9, which is also licensed under the MIT / X11 license. In addition, the first version of the GUI is based in part on the NUnit 2.x GUI runner, released under the NUnit license. See NOTICES.txt for copyright information.
+**TestCentric** bundles a copy of the NUnit test engine, which is also licensed under the MIT / X11 license. In addition, the first version of the GUI is based in part on the NUnit 2.x GUI runner, released under the NUnit license. See NOTICES.txt for copyright information.
