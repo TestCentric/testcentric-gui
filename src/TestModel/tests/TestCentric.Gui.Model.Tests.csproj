@@ -37,23 +37,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Mono.Cecil, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NUnit.Engine.3.11.0-dev-04462\lib\net20\Mono.Cecil.dll</HintPath>
-    </Reference>
     <Reference Include="NSubstitute, Version=4.0.0.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\NSubstitute.4.0.0\lib\net45\NSubstitute.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit-agent, Version=3.11.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NUnit.Engine.3.11.0-dev-04462\lib\net20\nunit-agent.exe</HintPath>
-    </Reference>
-    <Reference Include="nunit-agent-x86, Version=3.11.0.0, Culture=neutral, processorArchitecture=x86">
-      <HintPath>..\..\..\packages\NUnit.Engine.3.11.0-dev-04462\lib\net20\nunit-agent-x86.exe</HintPath>
-    </Reference>
-    <Reference Include="nunit.engine, Version=3.11.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NUnit.Engine.3.11.0-dev-04462\lib\net20\nunit.engine.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.engine.api, Version=3.0.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NUnit.Engine.3.11.0-dev-04462\lib\net20\nunit.engine.api.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -94,6 +79,10 @@
     <ProjectReference Include="..\..\Common\testcentric.common\TestCentric.Common.csproj">
       <Project>{b69057f3-0663-4763-a3ec-50d463578b94}</Project>
       <Name>TestCentric.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TestEngine\src\NUnitEngine\nunit.engine.api\nunit.engine.api.csproj">
+      <Project>{44fddb13-129b-4595-92e1-447e1c065c07}</Project>
+      <Name>nunit.engine.api</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\tests\mock-assembly\mock-assembly.csproj">
       <Project>{2e368281-3ba8-4050-b05e-0e0e43f8f446}</Project>
