@@ -78,6 +78,7 @@ var PROJECT_DIR = Context.Environment.WorkingDirectory.FullPath + "/";
 var PACKAGE_DIR = PROJECT_DIR + "package/";
 var CHOCO_DIR = PROJECT_DIR + "choco/";
 var BIN_DIR = PROJECT_DIR + "bin/" + configuration + "/";
+var ENGINE_BIN_DIR = PROJECT_DIR + "src/TestEngine/bin/" + configuration + "/net20/";
 
 // Packaging
 var PACKAGE_NAME = "testcentric-gui";
@@ -162,33 +163,18 @@ Task("Build")
     .IsDependentOn("RestorePackages")
     .Does(() =>
 {
-        if(usingMsBuild)
-        {
-            MSBuild(SOLUTION, msBuildSettings);
-        }
-        else
-        {
-            XBuild(SOLUTION, xBuildSettings);
-        }
-
-    // Figure out where the engine package is installed so we can
-    // copy the agent config files.
-    string enginePackageDir = null;
-
-	// Needs update if engine gets a major release
-    foreach (var dir in GetDirectories("./packages/NUnit.Engine.3.*"))
+    if(usingMsBuild)
     {
-	    if (enginePackageDir != null)
-	        throw new InvalidOperationException("Multiple engine packages found in ./packages directory");
-
-        enginePackageDir = dir.ToString();
+        MSBuild(SOLUTION, msBuildSettings);
+    }
+    else
+    {
+        XBuild(SOLUTION, xBuildSettings);
     }
 
-    if (enginePackageDir == null)
-        throw new InvalidOperationException("Engine package not found in ./packages directlry");
+	CopyFiles(ENGINE_BIN_DIR + "nunit-agent.*", BIN_DIR);
+	CopyFiles(ENGINE_BIN_DIR + "nunit-agent-x86.*", BIN_DIR);
 
-    CopyFileToDirectory(enginePackageDir + "/lib/net20/nunit-agent.exe.config", BIN_DIR);
-    CopyFileToDirectory(enginePackageDir + "/lib/net20/nunit-agent-x86.exe.config", BIN_DIR);
     CopyFileToDirectory("LICENSE.txt", BIN_DIR);
     CopyFileToDirectory("NOTICES.txt", BIN_DIR);
     CopyFileToDirectory("CHANGES.txt", BIN_DIR);
