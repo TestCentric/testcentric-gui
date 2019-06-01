@@ -6,8 +6,9 @@ matrix:
   include:
     - mono: latest
     - mono: 5.10.1
-    - mono: 4.6.2
-      env: USE_XBUILD=1
+# Drop temporarily - can't build engine this way because projects use new format.
+#    - mono: 4.6.2
+#      env: USE_XBUILD=1
 
 script:
   - git fetch --unshallow
