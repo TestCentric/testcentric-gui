@@ -23,19 +23,7 @@ if (configuration == "Debug")
 // DETERMINE BUILD ENVIRONMENT
 //////////////////////////////////////////////////////////////////////
 
-string monoVersion = null;
-
-Type type = Type.GetType("Mono.Runtime");
-if (type != null)
-{
-    var displayName = type.GetMethod("GetDisplayName", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
-    if (displayName != null)
-        monoVersion = displayName.Invoke(null, null).ToString();
-}
-
-// Thanks to Pawel Troka for this idea. See https://github.com/cake-build/cake/issues/1631
-bool isMonoButSupportsMsBuild = monoVersion!=null && System.Text.RegularExpressions.Regex.IsMatch(monoVersion,@"^([5-9]|\d{2,})\.\d+\.\d+(\.\d+)?");
-bool usingMsBuild = IsRunningOnWindows() || isMonoButSupportsMsBuild;
+bool usingXBuild = EnvironmentVariable("USE_XBUILD") != null;
 
 var msBuildSettings = new MSBuildSettings {
     Verbosity = Verbosity.Minimal,
@@ -46,11 +34,6 @@ var msBuildSettings = new MSBuildSettings {
     DetailedSummary = true,
 };
 
-if(!IsRunningOnWindows() && isMonoButSupportsMsBuild)
-{
-    msBuildSettings.ToolPath = new FilePath(@"/usr/lib/mono/msbuild/15.0/bin/MSBuild.dll");//hack for Linux bug - missing MSBuild path
-}
-
 var xBuildSettings = new XBuildSettings {
     Verbosity = Verbosity.Minimal,
     ToolVersion = XBuildToolVersion.Default,//The highest available XBuild tool version//NET40
@@ -59,7 +42,7 @@ var xBuildSettings = new XBuildSettings {
 
 var nugetRestoreSettings = new NuGetRestoreSettings();
 // Older Mono version was not picking up the testcentric source
-if (!usingMsBuild)
+if (usingXBuild)
     nugetRestoreSettings.Source = new string [] {
         "https://www.myget.org/F/testcentric/api/v2/",
         "https://www.myget.org/F/testcentric/api/v3/index.json",
@@ -163,13 +146,13 @@ Task("Build")
     .IsDependentOn("RestorePackages")
     .Does(() =>
 {
-    if(usingMsBuild)
+    if(usingXBuild)
     {
-        MSBuild(SOLUTION, msBuildSettings);
+        XBuild(SOLUTION, xBuildSettings);
     }
     else
     {
-        XBuild(SOLUTION, xBuildSettings);
+        MSBuild(SOLUTION, msBuildSettings);
     }
 
 	CopyFiles(ENGINE_BIN_DIR + "nunit-agent.*", BIN_DIR);
@@ -252,7 +235,7 @@ Task("PackageZip")
         CreateDirectory(PACKAGE_DIR);
 
         var zipFiles = new List<string>(baseFiles);
-        if (usingMsBuild)
+        if (!usingXBuild)
             zipFiles.AddRange(pdbFiles);
 
         Zip(BIN_DIR, File(PACKAGE_DIR + PACKAGE_NAME + "-" + packageVersion + ".zip"), zipFiles);
@@ -269,9 +252,9 @@ Task("PackageChocolatey")
         CreateDirectory(PACKAGE_DIR);
 
         var content = new List<ChocolateyNuSpecContent>();
-        var sources = usingMsBuild
-            ? new[] { baseFiles, chocoFiles, pdbFiles }
-            : new[] { baseFiles, chocoFiles };
+        var sources = usingXBuild
+            ? new[] { baseFiles, chocoFiles }
+            : new[] { baseFiles, chocoFiles, pdbFiles };
 
         foreach (var source in sources)
             foreach (string file in source)
