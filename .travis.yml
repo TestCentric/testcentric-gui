@@ -1,10 +1,15 @@
 ﻿language: csharp
 sudo: false
 dotnet: 2.1.502
-mono:
-  - latest
-  - 5.10.1
-  - 4.6.2
+
+matrix:
+  include:
+    - mono: latest
+    - mono: 5.10.1
+# Drop temporarily - can't build engine this way because projects use new format.
+#    - mono: 4.6.2
+#      env: USE_XBUILD=1
+
 script:
   - git fetch --unshallow
   - dotnet tool install --version "0.31.0" -g Cake.Tool

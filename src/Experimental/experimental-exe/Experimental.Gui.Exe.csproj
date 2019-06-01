@@ -43,7 +43,7 @@
   <ItemGroup>
     <ProjectReference Include="..\experimental-gui\Experimental.Gui.csproj">
       <Project>{9E15166C-D2B7-4B24-AB1C-1C69FFCEC9D3}</Project>
-      <Name>TestCentric.Gui</Name>
+      <Name>Experimental.Gui</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -91,13 +91,14 @@
       <Project>{ac6dfb0e-c717-4fc4-b918-d6b789061212}</Project>
       <Name>TestCentric.Gui.Components</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\TestEngine\src\NUnitEngine\nunit.engine.api\nunit.engine.api.csproj">
+      <Project>{44fddb13-129b-4595-92e1-447e1c065c07}</Project>
+      <Name>nunit.engine.api</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\TestModel\model\TestCentric.Gui.Model.csproj">
       <Project>{e978a8d7-e4a4-4de9-94df-d82bd764936b}</Project>
       <Name>TestCentric.Gui.Model</Name>
     </ProjectReference>
-    <Reference Include="nunit.engine.api, Version=3.0.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NUnit.Engine.Api.3.11.0-dev-04462\lib\net20\nunit.engine.api.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -385,9 +386,6 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

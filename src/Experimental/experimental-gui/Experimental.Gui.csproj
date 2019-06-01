@@ -40,9 +40,6 @@
     <ApplicationIcon>nunit.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.engine.api, Version=3.0.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NUnit.Engine.Api.3.11.0-dev-04462\lib\net20\nunit.engine.api.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -232,6 +229,10 @@
       <Project>{b69057f3-0663-4763-a3ec-50d463578b94}</Project>
       <Name>TestCentric.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\TestEngine\src\NUnitEngine\nunit.engine.api\nunit.engine.api.csproj">
+      <Project>{44fddb13-129b-4595-92e1-447e1c065c07}</Project>
+      <Name>nunit.engine.api</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\TestModel\model\TestCentric.Gui.Model.csproj">
       <Project>{e978a8d7-e4a4-4de9-94df-d82bd764936b}</Project>
       <Name>TestCentric.Gui.Model</Name>
@@ -260,9 +261,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="nunit.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
