@@ -126,6 +126,8 @@ namespace TestCentric.Gui.Model
 
         public event TestOutputEventHandler TestOutput;
 
+        public event UnhandledExceptionEventHandler UnhandledException;
+
         // Test Selection Event
         public event TestItemEventHandler SelectedItemChanged;
 
@@ -185,6 +187,13 @@ namespace TestCentric.Gui.Model
                     string text = xmlNode.InnerText;
                     InvokeHandler(TestOutput, new TestOutputEventArgs(testName, stream, text));
                     break;
+
+                case "unhandled-exception":
+                    string message = xmlNode.GetAttribute("message");
+                    string stackTrace = xmlNode.GetAttribute("stacktrace");
+
+                    InvokeHandler(UnhandledException, new UnhandledExceptionEventArgs(message, stackTrace));
+                    break;
             }
         }
 
@@ -203,22 +212,11 @@ namespace TestCentric.Gui.Model
                 object target = handler.Target;
                 System.Windows.Forms.Control control
                     = target as System.Windows.Forms.Control;
-                try
-                {
-                    if (control != null && control.InvokeRequired)
+
+                if (control != null && control.InvokeRequired)
                         control.Invoke(handler, args);
                     else
                         handler.Method.Invoke(target, args);
-                }
-                catch (Exception ex)
-                {
-                    // TODO: Stop rethrowing this since it goes back to the
-                    // Test domain which may not know how to handle it!!!
-                    Console.WriteLine("Exception:");
-                    Console.WriteLine(ex);
-                    //throw new TestEventInvocationException( ex );
-                    //throw;
-                }
             }
         }
 

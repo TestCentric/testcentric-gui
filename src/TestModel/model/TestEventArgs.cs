@@ -93,6 +93,18 @@ namespace TestCentric.Gui.Model
         public string Text { get; }
     }
 
+    public class UnhandledExceptionEventArgs : EventArgs
+    {
+        public UnhandledExceptionEventArgs(string message, string stackTrace)
+        {
+            Message = message;
+            StackTrace = stackTrace;
+        }
+
+        public string Message;
+        public string StackTrace;
+    }
+
     public class TestFilesLoadingEventArgs : EventArgs
     {
         public TestFilesLoadingEventArgs(IList<string> testFilesLoading)
