@@ -446,43 +446,65 @@ namespace NUnit.Engine.Runners
             clrVersion =  Microsoft.DotNet.InternalAbstractions.RuntimeEnvironment.GetRuntimeIdentifier();
             engineVersion = typeof(MasterTestRunner).GetTypeInfo().Assembly.GetName().Version.ToString();
 #endif
-
             var startTime = DateTime.UtcNow;
-            var startRunNode = XmlHelper.CreateTopLevelElement("start-run");
-            startRunNode.AddAttribute("count", CountTests(filter).ToString());
-            startRunNode.AddAttribute("start-time", XmlConvert.ToString(startTime, "u"));
-            startRunNode.AddAttribute("engine-version", engineVersion);
-            startRunNode.AddAttribute("clr-version", clrVersion);
-
-#if !NETSTANDARD1_6
-            InsertCommandLineElement(startRunNode);
-#endif
-
-            eventDispatcher.OnTestEvent(startRunNode.OuterXml);
-
             long startTicks = Stopwatch.GetTimestamp();
 
-            TestEngineResult result = PrepareResult(GetEngineRunner().Run(eventDispatcher, filter)).MakeTestRunResult(TestPackage);
-
-            // These are inserted in reverse order, since each is added as the first child.
-            InsertFilterElement(result.Xml, filter);
+            try
+            {
+                var startRunNode = XmlHelper.CreateTopLevelElement("start-run");
+                startRunNode.AddAttribute("count", CountTests(filter).ToString());
+                startRunNode.AddAttribute("start-time", XmlConvert.ToString(startTime, "u"));
+                startRunNode.AddAttribute("engine-version", engineVersion);
+                startRunNode.AddAttribute("clr-version", clrVersion);
 
 #if !NETSTANDARD1_6
-            InsertCommandLineElement(result.Xml);
+                InsertCommandLineElement(startRunNode);
 #endif
 
-            result.Xml.AddAttribute("engine-version", engineVersion);
-            result.Xml.AddAttribute("clr-version", clrVersion);
-            double duration = (double)(Stopwatch.GetTimestamp() - startTicks) / Stopwatch.Frequency;
-            result.Xml.AddAttribute("start-time", XmlConvert.ToString(startTime, "u"));
-            result.Xml.AddAttribute("end-time", XmlConvert.ToString(DateTime.UtcNow, "u"));
-            result.Xml.AddAttribute("duration", duration.ToString("0.000000", NumberFormatInfo.InvariantInfo));
+                eventDispatcher.OnTestEvent(startRunNode.OuterXml);
 
-            IsTestRunning = false;
+                TestEngineResult result = PrepareResult(GetEngineRunner().Run(eventDispatcher, filter)).MakeTestRunResult(TestPackage);
 
-            eventDispatcher.OnTestEvent(result.Xml.OuterXml);
+                // These are inserted in reverse order, since each is added as the first child.
+                InsertFilterElement(result.Xml, filter);
 
-            return result;
+#if !NETSTANDARD1_6
+                InsertCommandLineElement(result.Xml);
+#endif
+
+                result.Xml.AddAttribute("engine-version", engineVersion);
+                result.Xml.AddAttribute("clr-version", clrVersion);
+                double duration = (double)(Stopwatch.GetTimestamp() - startTicks) / Stopwatch.Frequency;
+                result.Xml.AddAttribute("start-time", XmlConvert.ToString(startTime, "u"));
+                result.Xml.AddAttribute("end-time", XmlConvert.ToString(DateTime.UtcNow, "u"));
+                result.Xml.AddAttribute("duration", duration.ToString("0.000000", NumberFormatInfo.InvariantInfo));
+
+                IsTestRunning = false;
+
+                eventDispatcher.OnTestEvent(result.Xml.OuterXml);
+
+                return result;
+            }
+            catch(Exception ex)
+            {
+                IsTestRunning = false;
+
+                var resultXml = XmlHelper.CreateTopLevelElement("test-run");
+                resultXml.AddAttribute("id", TestPackage.ID);
+                resultXml.AddAttribute("result", "Failed");
+                resultXml.AddAttribute("label", "Error");
+                resultXml.AddAttribute("engine-version", engineVersion);
+                resultXml.AddAttribute("clr-version", clrVersion);
+                double duration = (double)(Stopwatch.GetTimestamp() - startTicks) / Stopwatch.Frequency;
+                resultXml.AddAttribute("start-time", XmlConvert.ToString(startTime, "u"));
+                resultXml.AddAttribute("end-time", XmlConvert.ToString(DateTime.UtcNow, "u"));
+                resultXml.AddAttribute("duration", duration.ToString("0.000000", NumberFormatInfo.InvariantInfo));
+
+                eventDispatcher.OnTestEvent(resultXml.OuterXml);
+                eventDispatcher.OnTestEvent($"<unhandled-exception message='{ex.Message}' stacktrace='{ex.StackTrace}'/>");
+
+                return new TestEngineResult(resultXml);
+            }
         }
 
 #if !NETSTANDARD1_6
