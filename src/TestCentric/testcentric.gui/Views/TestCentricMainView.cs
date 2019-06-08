@@ -322,6 +322,7 @@ namespace TestCentric.Gui.Views
             // 
             this.statusBar.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.statusBar.Location = new System.Drawing.Point(0, 407);
+            this.statusBar.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.statusBar.MinimumSize = new System.Drawing.Size(0, 24);
             this.statusBar.Name = "statusBar";
             this.statusBar.Size = new System.Drawing.Size(744, 24);
@@ -738,9 +739,9 @@ namespace TestCentric.Gui.Views
             // errorTab
             // 
             this.errorTab.Controls.Add(this.errorsAndFailuresView1);
-            this.errorTab.Location = new System.Drawing.Point(4, 4);
+            this.errorTab.Location = new System.Drawing.Point(8, 8);
             this.errorTab.Name = "errorTab";
-            this.errorTab.Size = new System.Drawing.Size(490, 261);
+            this.errorTab.Size = new System.Drawing.Size(482, 240);
             this.errorTab.TabIndex = 0;
             this.errorTab.Text = "Errors and Failures";
             this.errorTab.UseVisualStyleBackColor = true;
@@ -751,7 +752,7 @@ namespace TestCentric.Gui.Views
             this.errorsAndFailuresView1.EnableToolTips = false;
             this.errorsAndFailuresView1.Location = new System.Drawing.Point(0, 0);
             this.errorsAndFailuresView1.Name = "errorsAndFailuresView1";
-            this.errorsAndFailuresView1.Size = new System.Drawing.Size(490, 261);
+            this.errorsAndFailuresView1.Size = new System.Drawing.Size(482, 240);
             this.errorsAndFailuresView1.SourceCodeDisplay = true;
             this.errorsAndFailuresView1.SourceCodeSplitOrientation = System.Windows.Forms.Orientation.Vertical;
             this.errorsAndFailuresView1.SourceCodeSplitterDistance = 0.3F;
@@ -761,9 +762,9 @@ namespace TestCentric.Gui.Views
             // notrunTab
             // 
             this.notrunTab.Controls.Add(this.testsNotRunView1);
-            this.notrunTab.Location = new System.Drawing.Point(4, 4);
+            this.notrunTab.Location = new System.Drawing.Point(8, 8);
             this.notrunTab.Name = "notrunTab";
-            this.notrunTab.Size = new System.Drawing.Size(490, 261);
+            this.notrunTab.Size = new System.Drawing.Size(482, 240);
             this.notrunTab.TabIndex = 1;
             this.notrunTab.Text = "Tests Not Run";
             this.notrunTab.UseVisualStyleBackColor = true;
@@ -772,16 +773,17 @@ namespace TestCentric.Gui.Views
             // 
             this.testsNotRunView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.testsNotRunView1.Location = new System.Drawing.Point(0, 0);
+            this.testsNotRunView1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.testsNotRunView1.Name = "testsNotRunView1";
-            this.testsNotRunView1.Size = new System.Drawing.Size(490, 261);
+            this.testsNotRunView1.Size = new System.Drawing.Size(482, 240);
             this.testsNotRunView1.TabIndex = 0;
             // 
             // outputTab
             // 
             this.outputTab.Controls.Add(this.textOutputView1);
-            this.outputTab.Location = new System.Drawing.Point(4, 4);
+            this.outputTab.Location = new System.Drawing.Point(8, 8);
             this.outputTab.Name = "outputTab";
-            this.outputTab.Size = new System.Drawing.Size(490, 261);
+            this.outputTab.Size = new System.Drawing.Size(482, 240);
             this.outputTab.TabIndex = 2;
             this.outputTab.Text = "Text Output";
             this.outputTab.UseVisualStyleBackColor = true;
@@ -790,8 +792,9 @@ namespace TestCentric.Gui.Views
             // 
             this.textOutputView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textOutputView1.Location = new System.Drawing.Point(0, 0);
+            this.textOutputView1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.textOutputView1.Name = "textOutputView1";
-            this.textOutputView1.Size = new System.Drawing.Size(490, 261);
+            this.textOutputView1.Size = new System.Drawing.Size(482, 240);
             this.textOutputView1.TabIndex = 0;
             this.textOutputView1.WordWrap = true;
             // 
@@ -823,7 +826,7 @@ namespace TestCentric.Gui.Views
             this.stopButton.AutoSize = true;
             this.stopButton.Location = new System.Drawing.Point(75, 16);
             this.stopButton.Name = "stopButton";
-            this.stopButton.Size = new System.Drawing.Size(64, 31);
+            this.stopButton.Size = new System.Drawing.Size(66, 35);
             this.stopButton.TabIndex = 4;
             this.stopButton.Text = "&Stop";
             // 
@@ -844,6 +847,7 @@ namespace TestCentric.Gui.Views
             this.progressBar.Enabled = false;
             this.progressBar.ForeColor = System.Drawing.SystemColors.Highlight;
             this.progressBar.Location = new System.Drawing.Point(8, 54);
+            this.progressBar.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.progressBar.Name = "progressBar";
             this.progressBar.Progress = 0;
             this.progressBar.Size = new System.Drawing.Size(480, 16);
@@ -855,7 +859,7 @@ namespace TestCentric.Gui.Views
             this.categoryView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.categoryView.Location = new System.Drawing.Point(0, 0);
             this.categoryView.Name = "categoryView";
-            this.categoryView.Size = new System.Drawing.Size(213, 399);
+            this.categoryView.Size = new System.Drawing.Size(202, 399);
             this.categoryView.TabIndex = 0;
             // 
             // leftPanel
@@ -883,9 +887,9 @@ namespace TestCentric.Gui.Views
             // testPage
             // 
             this.testPage.Controls.Add(this.testPanel);
-            this.testPage.Location = new System.Drawing.Point(23, 4);
+            this.testPage.Location = new System.Drawing.Point(34, 4);
             this.testPage.Name = "testPage";
-            this.testPage.Size = new System.Drawing.Size(213, 399);
+            this.testPage.Size = new System.Drawing.Size(202, 399);
             this.testPage.TabIndex = 0;
             this.testPage.Text = "Tests";
             // 
@@ -895,7 +899,7 @@ namespace TestCentric.Gui.Views
             this.testPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.testPanel.Location = new System.Drawing.Point(0, 0);
             this.testPanel.Name = "testPanel";
-            this.testPanel.Size = new System.Drawing.Size(213, 399);
+            this.testPanel.Size = new System.Drawing.Size(202, 399);
             this.testPanel.TabIndex = 0;
             // 
             // treeView
@@ -904,16 +908,17 @@ namespace TestCentric.Gui.Views
             this.treeView.AlternateImageSet = null;
             this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView.Location = new System.Drawing.Point(0, 0);
+            this.treeView.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.treeView.Name = "treeView";
-            this.treeView.Size = new System.Drawing.Size(213, 399);
+            this.treeView.Size = new System.Drawing.Size(202, 399);
             this.treeView.TabIndex = 0;
             // 
             // categoryPage
             // 
             this.categoryPage.Controls.Add(this.categoryPanel);
-            this.categoryPage.Location = new System.Drawing.Point(23, 4);
+            this.categoryPage.Location = new System.Drawing.Point(34, 4);
             this.categoryPage.Name = "categoryPage";
-            this.categoryPage.Size = new System.Drawing.Size(213, 399);
+            this.categoryPage.Size = new System.Drawing.Size(202, 399);
             this.categoryPage.TabIndex = 1;
             this.categoryPage.Text = "Categories";
             // 
@@ -923,7 +928,7 @@ namespace TestCentric.Gui.Views
             this.categoryPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.categoryPanel.Location = new System.Drawing.Point(0, 0);
             this.categoryPanel.Name = "categoryPanel";
-            this.categoryPanel.Size = new System.Drawing.Size(213, 399);
+            this.categoryPanel.Size = new System.Drawing.Size(202, 399);
             this.categoryPanel.TabIndex = 0;
             // 
             // TestCentricMainView
