@@ -27,6 +27,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using NUnit.Engine;
 
@@ -302,7 +303,7 @@ namespace TestCentric.Gui.Presenters
                             return;
                         }
 
-                        _model.CancelTestRun();
+                        _model.CancelTestRun(true);
                     }
 
                     if (CloseProject() == DialogResult.Cancel)
@@ -658,7 +659,7 @@ namespace TestCentric.Gui.Presenters
                     "Do you want to cancel the running test?");
 
                 if (dialogResult == DialogResult.Yes)
-                    _model.CancelTestRun();
+                    _model.CancelTestRun(true);
             }
         }
 

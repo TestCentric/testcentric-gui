@@ -142,7 +142,7 @@ namespace TestCentric.Gui.Presenters
             _view.RunAllCommand.Execute += () => RunAllTests();
             _view.RunSelectedCommand.Execute += () => RunTests(_selectedTestItem);
             _view.RunFailedCommand.Execute += () => RunAllTests(); // RunFailed NYI
-            _view.StopRunCommand.Execute += () => _model.CancelTestRun();
+            _view.StopRunCommand.Execute += () => _model.CancelTestRun(true);
 
             // Debug button and dropdowns
             _view.DebugButton.Execute += () =>
