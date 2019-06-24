@@ -307,9 +307,9 @@ namespace TestCentric.Gui.Model
             }
         }
 
-        public void CancelTestRun()
+        public void CancelTestRun(bool force)
         {
-            Runner.StopRun(false);
+            Runner.StopRun(force);
         }
 
         public void SaveResults(string filePath, string format = "nunit3")
