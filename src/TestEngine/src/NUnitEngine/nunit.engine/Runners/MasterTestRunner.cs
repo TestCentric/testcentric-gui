@@ -65,6 +65,9 @@ namespace NUnit.Engine.Runners
         private ITestRunnerFactory _testRunnerFactory;
         private bool _disposed;
 
+        private TestEventDispatcher _eventDispatcher = new TestEventDispatcher();
+        private WorkItemTracker _workItemTracker = new WorkItemTracker();
+
         public MasterTestRunner(IServiceLocator services, TestPackage package)
         {
             if (services == null) throw new ArgumentNullException("services");
@@ -198,6 +201,31 @@ namespace NUnit.Engine.Runners
         public void StopRun(bool force)
         {
             _engineRunner.StopRun(force);
+
+            if (force && !_workItemTracker.AllItemsComplete.WaitOne(5000))
+            {
+                // Some suites never completed, we simulate completion for them
+                int count = _workItemTracker.ItemsInProcess.Count;
+                while (count > 0)
+                {
+                    XmlNode startItem = _workItemTracker.ItemsInProcess[--count];
+                    XmlNode suiteItem = XmlHelper.CreateTopLevelElement("test-suite");
+                    suiteItem.AddAttribute("type", startItem.GetAttribute("type"));
+                    suiteItem.AddAttribute("id", startItem.GetAttribute("id"));
+                    suiteItem.AddAttribute("name", startItem.GetAttribute("name"));
+                    suiteItem.AddAttribute("fullName", startItem.GetAttribute("fullname"));
+                    suiteItem.AddAttribute("result", "Failed");
+                    suiteItem.AddAttribute("label", "Cancelled");
+                    XmlNode failure = suiteItem.AddElement("failure");
+                    XmlNode message = failure.AddElementWithCDataSection("message", "Test run cancelled by user");
+                    _eventDispatcher.OnTestEvent(suiteItem.OuterXml);
+                }
+
+                IsTestRunning = false;
+
+                // Simulate completion of the run
+                _eventDispatcher.OnTestEvent($"<test-run id='{TestPackage.ID}' result='Failed' label='Cancelled' />");
+            }
         }
 
         /// <summary>
@@ -426,12 +454,15 @@ namespace NUnit.Engine.Runners
         /// <returns>A TestEngineResult giving the result of the test execution</returns>
         private TestEngineResult RunTests(ITestEventListener listener, TestFilter filter)
         {
-            var eventDispatcher = new TestEventDispatcher();
+            _workItemTracker.Clear();
+            _eventDispatcher.Listeners.Clear();
+            _eventDispatcher.Listeners.Add(_workItemTracker);
+
             if (listener != null)
-                eventDispatcher.Listeners.Add(listener);
+                _eventDispatcher.Listeners.Add(listener);
 #if !NETSTANDARD1_6
             foreach (var extension in _extensionService.GetExtensions<ITestEventListener>())
-                eventDispatcher.Listeners.Add(extension);
+                _eventDispatcher.Listeners.Add(extension);
 #endif
 
             IsTestRunning = true;
@@ -461,9 +492,9 @@ namespace NUnit.Engine.Runners
                 InsertCommandLineElement(startRunNode);
 #endif
 
-                eventDispatcher.OnTestEvent(startRunNode.OuterXml);
+                _eventDispatcher.OnTestEvent(startRunNode.OuterXml);
 
-                TestEngineResult result = PrepareResult(GetEngineRunner().Run(eventDispatcher, filter)).MakeTestRunResult(TestPackage);
+                TestEngineResult result = PrepareResult(GetEngineRunner().Run(_eventDispatcher, filter)).MakeTestRunResult(TestPackage);
 
                 // These are inserted in reverse order, since each is added as the first child.
                 InsertFilterElement(result.Xml, filter);
@@ -481,7 +512,7 @@ namespace NUnit.Engine.Runners
 
                 IsTestRunning = false;
 
-                eventDispatcher.OnTestEvent(result.Xml.OuterXml);
+                _eventDispatcher.OnTestEvent(result.Xml.OuterXml);
 
                 return result;
             }
@@ -500,8 +531,8 @@ namespace NUnit.Engine.Runners
                 resultXml.AddAttribute("end-time", XmlConvert.ToString(DateTime.UtcNow, "u"));
                 resultXml.AddAttribute("duration", duration.ToString("0.000000", NumberFormatInfo.InvariantInfo));
 
-                eventDispatcher.OnTestEvent(resultXml.OuterXml);
-                eventDispatcher.OnTestEvent($"<unhandled-exception message='{ex.Message}' stacktrace='{ex.StackTrace}'/>");
+                _eventDispatcher.OnTestEvent(resultXml.OuterXml);
+                _eventDispatcher.OnTestEvent($"<unhandled-exception message='{ex.Message}' stacktrace='{ex.StackTrace}'/>");
 
                 return new TestEngineResult(resultXml);
             }
