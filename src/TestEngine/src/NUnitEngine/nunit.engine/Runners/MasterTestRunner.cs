@@ -68,6 +68,8 @@ namespace NUnit.Engine.Runners
         private TestEventDispatcher _eventDispatcher = new TestEventDispatcher();
         private WorkItemTracker _workItemTracker = new WorkItemTracker();
 
+        private const int WAIT_FOR_CANCEL_TO_COMPLETE = 5000;
+
         public MasterTestRunner(IServiceLocator services, TestPackage package)
         {
             if (services == null) throw new ArgumentNullException("services");
@@ -202,28 +204,29 @@ namespace NUnit.Engine.Runners
         {
             _engineRunner.StopRun(force);
 
-            if (force && !_workItemTracker.AllItemsComplete.WaitOne(5000))
-            {
-                // Some suites never completed, we simulate completion for them
-                int count = _workItemTracker.ItemsInProcess.Count;
-                while (count > 0)
-                {
-                    XmlNode startItem = _workItemTracker.ItemsInProcess[--count];
-                    XmlNode suiteItem = XmlHelper.CreateTopLevelElement("test-suite");
-                    suiteItem.AddAttribute("type", startItem.GetAttribute("type"));
-                    suiteItem.AddAttribute("id", startItem.GetAttribute("id"));
-                    suiteItem.AddAttribute("name", startItem.GetAttribute("name"));
-                    suiteItem.AddAttribute("fullName", startItem.GetAttribute("fullname"));
-                    suiteItem.AddAttribute("result", "Failed");
-                    suiteItem.AddAttribute("label", "Cancelled");
-                    XmlNode failure = suiteItem.AddElement("failure");
-                    XmlNode message = failure.AddElementWithCDataSection("message", "Test run cancelled by user");
-                    _eventDispatcher.OnTestEvent(suiteItem.OuterXml);
-                }
+            // Frameworks should handle StopRun(true) by cancelling all tests and notifying
+            // us of the completion of any tests that were running. However, this feature
+            // may be absent in some frameworks or may be broken and we may not pass on the
+            // notifications needed by some runners. In fact, such a bug is present in the
+            // NUnit framework through release 3.12 and motivated the following code.
+            //
+            // We try to make up for the potential problem here by notifying the listeners 
+            // of the completion of every pending WorkItem, one that started but never
+            // sent a completion event. Since we have so far only noted this failure wrt
+            // test suites and fixtures, those are the only ones we currently track.
+            //
+            // Note that this code only deals with notifications. If the framework did not
+            // actually stop the run, that's a different problem, which has to be handled
+            // at a lower level within the engine.
 
+            if (force && !_workItemTracker.WaitForCompletion(WAIT_FOR_CANCEL_TO_COMPLETE))
+            {
+                _workItemTracker.IssuePendingNotifications(_eventDispatcher);
+
+                // Indicate we are no longer running
                 IsTestRunning = false;
 
-                // Simulate completion of the run
+                // Signal completion of the run
                 _eventDispatcher.OnTestEvent($"<test-run id='{TestPackage.ID}' result='Failed' label='Cancelled' />");
             }
         }
