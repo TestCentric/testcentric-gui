@@ -306,6 +306,11 @@ namespace TestCentric.Gui
                     extensionListView.Items[0].Selected = true;
                     AutoSizeFirstColumnOfListView();
                 }
+                else
+                {
+                    extensionDescriptionTextBox.Text = "";
+                    propertiesTextBox.Text = "";
+                }
             }
         }
 
@@ -315,7 +320,10 @@ namespace TestCentric.Gui
             {
                 int index = extensionListView.SelectedIndices[0];
                 var extension = _extensions[index];
+
                 extensionDescriptionTextBox.Text = extension.Description ?? "==None Provided==";
+
+                propertiesTextBox.Clear();
                 foreach (string prop in extension.PropertyNames)
                 {
                     var sb = new StringBuilder($"{prop} :");
