@@ -417,7 +417,7 @@ namespace TestCentric.Gui.Views
             // singleProcessMenuItem
             // 
             this.singleProcessMenuItem.Index = 2;
-            this.singleProcessMenuItem.Text = "Single";
+            this.singleProcessMenuItem.Text = "Separate";
             // 
             // multipleProcessMenuItem
             // 
