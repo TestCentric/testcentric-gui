@@ -30,50 +30,50 @@ namespace TestCentric.Gui.Presenters.Main
 
     public class PackageSettingsTests : MainPresenterTestBase
     {
-        //[TestCase("Single")]
-        //[TestCase("Multiple")]
-        //[TestCase("InProcess")]
-        //[TestCase("INVALID", Description = "Invalid Setting is passed on to the model")]
-        //public void ProcessModel_SettingChanged(string value)
-        //{
-        //    View.ProcessModel.SelectedItem.Returns(value);
+        [TestCase("Separate")]
+        [TestCase("Multiple")]
+        [TestCase("InProcess")]
+        [TestCase("INVALID", Description = "Invalid Setting is passed on to the model")]
+        public void ProcessModel_SettingChanged(string value)
+        {
+            _view.ProcessModel.SelectedItem.Returns(value);
 
-        //    View.ProcessModel.SelectionChanged += Raise.Event<CommandHandler>();
+            _view.ProcessModel.SelectionChanged += Raise.Event<CommandHandler>();
 
-        //    Model.PackageSettings.Received(1)["ProcessModel"] = value;
-        //}
+            _model.PackageSettings.Received(1)["ProcessModel"] = value;
+        }
 
-        //[Test]
-        //public void ProcessModel_SetToDefault()
-        //{
-        //    View.ProcessModel.SelectedItem.Returns("DEFAULT");
+        [Test]
+        public void ProcessModel_SetToDefault()
+        {
+            _view.ProcessModel.SelectedItem.Returns("DEFAULT");
 
-        //    View.ProcessModel.SelectionChanged += Raise.Event<CommandHandler>();
+            _view.ProcessModel.SelectionChanged += Raise.Event<CommandHandler>();
 
-        //    Model.PackageSettings.Received(1).Remove("ProcessModel");
-        //}
+            _model.PackageSettings.Received(1).Remove("ProcessModel");
+        }
 
-        //[TestCase("Single")]
-        //[TestCase("Multiple")]
-        //[TestCase("INVALID", Description = "Invalid Setting is passed on to the model")]
-        //public void DomainUsage_SettingChanged(string value)
-        //{
-        //    View.DomainUsage.SelectedItem.Returns(value);
+        [TestCase("Single")]
+        [TestCase("Multiple")]
+        [TestCase("INVALID", Description = "Invalid Setting is passed on to the model")]
+        public void DomainUsage_SettingChanged(string value)
+        {
+            _view.DomainUsage.SelectedItem.Returns(value);
 
-        //    View.DomainUsage.SelectionChanged += Raise.Event<CommandHandler>();
+            _view.DomainUsage.SelectionChanged += Raise.Event<CommandHandler>();
 
-        //    Model.PackageSettings.Received(1)["DomainUsage"] = value;
-        //}
+            _model.PackageSettings.Received(1)["DomainUsage"] = value;
+        }
 
-        //[Test]
-        //public void DomainUsage_SetToDefault()
-        //{
-        //    View.DomainUsage.SelectedItem.Returns("DEFAULT");
+        [Test]
+        public void DomainUsage_SetToDefault()
+        {
+            _view.DomainUsage.SelectedItem.Returns("DEFAULT");
 
-        //    View.DomainUsage.SelectionChanged += Raise.Event<CommandHandler>();
+            _view.DomainUsage.SelectionChanged += Raise.Event<CommandHandler>();
 
-        //    Model.PackageSettings.Received(1).Remove("DomainUsage");
-        //}
+            _model.PackageSettings.Received(1).Remove("DomainUsage");
+        }
 
         [TestCase("net-2.0")]
         [TestCase("net-4.5")]
