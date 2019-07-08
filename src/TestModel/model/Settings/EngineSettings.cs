@@ -41,18 +41,6 @@ namespace TestCentric.Gui.Model.Settings
             set { SaveSetting(nameof(ShadowCopyFiles), value); }
         }
 
-        public string ProcessModel
-        {
-            get { return GetSetting(nameof(ProcessModel), "Default"); }
-            set { SaveSetting(nameof(ProcessModel), value); }
-        }
-
-        public string DomainUsage
-        {
-            get { return GetSetting(nameof(DomainUsage), "Default"); }
-            set { SaveSetting(nameof(DomainUsage), value); }
-        }
-
         public int Agents
         {
             get { return GetSetting(nameof(Agents), 0); }

@@ -90,8 +90,6 @@ namespace TestCentric.Gui.Model.Settings
         public static TestCaseData[] TestCases = new TestCaseData[]
         {
             new TestCaseData("ShadowCopyFiles", true, false),
-            new TestCaseData("ProcessModel", "Default", "InProcess"),
-            new TestCaseData("DomainUsage", "Default", "Single"),
             new TestCaseData("Agents", 0, 8),
             new TestCaseData("ReloadOnChange", true, false),
             new TestCaseData("RerunOnChange", false, true),
