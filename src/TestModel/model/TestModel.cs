@@ -419,14 +419,9 @@ namespace TestCentric.Gui.Model
             // We use AddSetting rather than just setting the value because
             // it propagates the setting to all subprojects.
 
-            if (engineSettings.ProcessModel != "Default")
-                package.AddSetting(EnginePackageSettings.ProcessModel, engineSettings.ProcessModel);
+            //WIP: No longer use the process  or domain settings from earlier versions
 
-            // Don't set DomainUsage for Multiple to avoid engine error
-            if (engineSettings.ProcessModel != "Multiple")
-                package.AddSetting(EnginePackageSettings.DomainUsage, engineSettings.DomainUsage);
-            // Don't bother checking Agents unless we are running multiple processes
-            else if (engineSettings.Agents > 0)
+            if (engineSettings.Agents > 0)
                 package.AddSetting(EnginePackageSettings.MaxAgents, engineSettings.Agents);
 
             if (engineSettings.SetPrincipalPolicy)

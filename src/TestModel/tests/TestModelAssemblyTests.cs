@@ -41,7 +41,6 @@ namespace TestCentric.Gui.Model
             Assert.NotNull(engine, "Unable to create engine instance for testing");
 
             _model = new TestModel(engine);
-            _model.Services.UserSettings.Engine.ProcessModel = "Single";
 
             _model.LoadTests(new[] { Path.Combine(TestContext.CurrentContext.TestDirectory, MOCK_ASSEMBLY) });
         }
