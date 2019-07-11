@@ -22,6 +22,7 @@
 // ***********************************************************************
 
 using System;
+using System.Reflection;
 using NUnit.Framework;
 
 namespace TestCentric.Gui.Tests
@@ -29,63 +30,101 @@ namespace TestCentric.Gui.Tests
     [TestFixture]
     public class CommandLineTests
     {
-        [Test]
-        public void NoParametersCount()
+        [TestCase]
+        [TestCase("tests.dll")]
+        [TestCase("one.dll", "two.dll", "three.dll")]
+        public void InputFiles(params string[] files)
         {
-            var options = new CommandLineOptions(new string[] { });
-            Assert.IsTrue(options.InputFiles.Count == 0);
+            var options = new CommandLineOptions(files);
+
+            Assert.That(options.InputFiles.Count, Is.EqualTo(files.Length));
+            for (int i = 0; i < files.Length; i++)
+                Assert.That(options.InputFiles[i], Is.EqualTo(files[i]));
+
+            Assert.True(options.Validate());
         }
 
-        [Test]
-        public void Help()
+        [TestCase("NoLoad", false)]
+        [TestCase("RunAllTests", false)]
+        [TestCase("RunAsX86", false)]
+        [TestCase("ShowHelp", false)]
+        [TestCase("ProcessModel", null)]
+        [TestCase("DomainUsage", null)]
+        [TestCase("InternalTraceLevel", NUnit.Engine.InternalTraceLevel.Default)]
+        public void DefaultOptionValues(string propertyName, object val)
         {
-            var options = new CommandLineOptions(new string[] { "-help" });
-            Assert.IsTrue(options.ShowHelp);
+            var property = GetPropertyInfo(propertyName);
+            var options = new CommandLineOptions();
+
+            Assert.That(property.GetValue(options, null), Is.EqualTo(val));
         }
 
-        [Test]
-        public void ShortHelp()
+        [TestCase("NoLoad", "--noload", true)]
+        [TestCase("RunAllTests", "--run", true)]
+        [TestCase("ProcessModel", "--process:Single")]
+        [TestCase("ProcessModel", "--process:Separate")]
+        [TestCase("ProcessModel", "--process:Multiple")]
+        [TestCase("ProcessModel", "--inprocess", "Single")]
+        [TestCase("DomainUsage", "--domain:Single")]
+        [TestCase("DomainUsage", "--domain:Separate")]
+        [TestCase("DomainUsage", "--domain:Multiple")]
+        [TestCase("RunAsX86", "--x86", true)]
+        [TestCase("MaxAgents", "--agents:8", 8)]
+        [TestCase("InternalTraceLevel", "--trace:Off", NUnit.Engine.InternalTraceLevel.Off)]
+        [TestCase("InternalTraceLevel", "--trace:Error", NUnit.Engine.InternalTraceLevel.Error)]
+        [TestCase("InternalTraceLevel", "--trace:Warning", NUnit.Engine.InternalTraceLevel.Warning)]
+        [TestCase("InternalTraceLevel", "--trace:Info", NUnit.Engine.InternalTraceLevel.Info)]
+        [TestCase("InternalTraceLevel", "--trace:Verbose", NUnit.Engine.InternalTraceLevel.Verbose)]
+        [TestCase("InternalTraceLevel", "--trace:Debug", NUnit.Engine.InternalTraceLevel.Debug)]
+        [TestCase("ShowHelp", "--help", true)]
+        [TestCase("ShowHelp", "-h", true)]
+        public void ValidOptionsAreRecognized(string propertyName, string option, object expected = null)
         {
-            var options = new CommandLineOptions(new string[] { "-h" });
-            Assert.IsTrue(options.ShowHelp);
+            var property = GetPropertyInfo(propertyName);
+            var options = new CommandLineOptions(option);
+
+            if (expected == null)
+            {
+                var index = option.IndexOf(':');
+                expected = option.Substring(index + 1);
+            }
+
+            Assert.That(options.Validate(), Is.True, $"Should be valid: {option}");
+            Assert.That(property.GetValue(options, null), Is.EqualTo(expected));
         }
 
-        [Test]
-        public void AssemblyName()
+        [TestCase("--process")]
+        [TestCase("--agents")]
+        [TestCase("--domain")]
+        [TestCase("--trace")]
+        public void InvalidOptionsAreDetectedByMonoOptions(string option)
         {
-            string assemblyName = "nunit.tests.dll";
-            var options = new CommandLineOptions(new string[] { assemblyName });
-            Assert.AreEqual(assemblyName, options.InputFiles[0]);
+            // We would prefer to handle all errors ourselves so
+            // this will eventually change. The test documents
+            // the current behavior.
+            Assert.Throws<Mono.Options.OptionException>(
+                () => new CommandLineOptions(option));
         }
 
-        [Test]
-        public void ValidateSuccessful()
+        [TestCase("--assembly:nunit.tests.dll")]
+        [TestCase("--garbage")]
+        [TestCase("--process:Unknown")]
+        [TestCase("--agents:XYZ")]
+        [TestCase("--domain:Junk")]
+        [TestCase("--trace:Something")]
+        public void InvalidOptionsAreDetected(string option)
         {
-            var options = new CommandLineOptions(new string[] { "nunit.tests.dll" });
-            Assert.IsTrue(options.Validate(), "command line should be valid");
-        }
-
-        [Test]
-        public void InvalidArgs()
-        {
-            var options = new CommandLineOptions(new string[] { "-asembly:nunit.tests.dll" });
+            var options = new CommandLineOptions(option);
             Assert.IsFalse(options.Validate());
+            Assert.That(options.ErrorMessages.Count, Is.EqualTo(1));
         }
 
-
-        [Test]
-        public void InvalidCommandLineParms()
+        private static PropertyInfo GetPropertyInfo(string propertyName)
         {
-            var parser = new CommandLineOptions(new String[] { "-garbage:TestFixture", "-assembly:Tests.dll" });
-            Assert.IsFalse(parser.Validate());
+            PropertyInfo property = typeof(CommandLineOptions).GetProperty(propertyName);
+            Assert.IsNotNull(property, "The property '{0}' is not defined", propertyName);
+            return property;
         }
-
-        //[Test] 
-        //public void NoNameValuePairs()
-        //{
-        //	var parser = new CommandLineOptions(new String[]{"TestFixture", "Tests.dll"});
-        //	Assert.IsFalse(parser.Validate());
-        //}
     }
 }
 

@@ -407,21 +407,25 @@ namespace TestCentric.Gui.Views
             // defaultProcessMenuItem
             // 
             this.defaultProcessMenuItem.Index = 0;
+            this.defaultProcessMenuItem.Tag = "Default";
             this.defaultProcessMenuItem.Text = "Default";
             // 
             // inProcessMenuItem
             // 
             this.inProcessMenuItem.Index = 1;
+            this.inProcessMenuItem.Tag = "InProcess";
             this.inProcessMenuItem.Text = "InProcess";
             // 
             // singleProcessMenuItem
             // 
             this.singleProcessMenuItem.Index = 2;
+            this.singleProcessMenuItem.Tag = "Separate";
             this.singleProcessMenuItem.Text = "Separate";
             // 
             // multipleProcessMenuItem
             // 
             this.multipleProcessMenuItem.Index = 3;
+            this.multipleProcessMenuItem.Tag = "Multiple";
             this.multipleProcessMenuItem.Text = "Multiple";
             // 
             // menuItem11
