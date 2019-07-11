@@ -450,16 +450,19 @@ namespace TestCentric.Gui.Views
             // defaultDomainMenuItem
             // 
             this.defaultDomainMenuItem.Index = 0;
+            this.defaultDomainMenuItem.Tag = "Default";
             this.defaultDomainMenuItem.Text = "Default";
             // 
             // singleDomainMenuItem
             // 
             this.singleDomainMenuItem.Index = 1;
+            this.singleDomainMenuItem.Tag = "Single";
             this.singleDomainMenuItem.Text = "Single";
             // 
             // multipleDomainMenuItem
             // 
             this.multipleDomainMenuItem.Index = 2;
+            this.multipleDomainMenuItem.Tag = "Multiple";
             this.multipleDomainMenuItem.Text = "Multiple";
             // 
             // menuItem2

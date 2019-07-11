@@ -86,6 +86,15 @@ namespace TestCentric.Gui
             ITestModel model = new TestModel(testEngine);
             model.PackageSettings.Add(EnginePackageSettings.InternalTraceLevel, traceLevel.ToString());
 
+            if (options.ProcessModel != null)
+                model.PackageSettings.Add(EnginePackageSettings.ProcessModel, options.ProcessModel);
+            if (options.DomainUsage != null)
+                model.PackageSettings.Add(EnginePackageSettings.DomainUsage, options.DomainUsage);
+            if (options.MaxAgents >= 0)
+                model.PackageSettings.Add(EnginePackageSettings.MaxAgents, options.MaxAgents);
+            if (options.RunAsX86)
+                model.PackageSettings.Add(EnginePackageSettings.RunAsX86, true);
+
             log.Info("Constructing Form");
             TestCentricMainView view = new TestCentricMainView();
 
