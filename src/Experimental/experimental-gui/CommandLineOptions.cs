@@ -29,10 +29,9 @@ using Mono.Options;
 namespace TestCentric.Gui
 {
     /// <summary>
-    /// GuiOptions encapsulates the option settingsServiceServiceService for
-    /// the nunit-console program. It inherits from the Mono
-    /// Options OptionSet class and provides a central location
-    /// for defining and parsing options.
+    /// CommandLineOptions encapsulates the option settings for TestCentric.
+    /// It inherits from the Mono.Options OptionSet class and provides a 
+    /// central location for defining and parsing options.
     /// </summary>
     public class CommandLineOptions : OptionSet
     {
@@ -43,7 +42,7 @@ namespace TestCentric.Gui
         public CommandLineOptions(params string[] args)
         {
             this.Add("config=", "Project {CONFIG} to load (e.g.: Debug).",
-                v => ActiveConfig = RequiredValue(v, "--config"));
+                v => ActiveConfig = v);
 
             this.Add("noload", "Suppress loading of most recent project.",
                 v => NoLoad = v != null);
@@ -81,11 +80,14 @@ namespace TestCentric.Gui
             //this.Add("runselected", "Automatically run last selected tests.",
             //    v => RunSelectedTests = v != null);
 
-            // Output GuiElement
             this.Add("trace=", "Set internal trace {LEVEL}.",
-                v => InternalTraceLevel = RequiredValue(v, "--trace", "Off", "Error", "Warning", "Info", "Verbose", "Debug"));
+                v =>
+                {
+                    if (CheckRequiredValue(v, "--trace", "Off", "Error", "Warning", "Info", "Verbose", "Debug"))
+                        InternalTraceLevel = v;
+                });
 
-            this.Add("help|h", "Display this message and exit.",
+            this.Add("help|h", "Display thehelp message and exit.",
                 v => ShowHelp = v != null);
 
             // Default
@@ -124,7 +126,6 @@ namespace TestCentric.Gui
         public string DomainUsage { get; private set; }
         public bool RunAsX86 { get; private set; }
         public int MaxAgents { get; private set; }
-        //public InternalTraceLevel InternalTraceLevel { get; private set; }
         public string InternalTraceLevel { get; private set; }
 
         // Error Processing
@@ -201,57 +202,6 @@ namespace TestCentric.Gui
 
             return val;
         }
-
-        private int RequiredInt(string val, string option)
-        {
-            // We have to return something even though the val will 
-            // be ignored if an error is reported. The -1 val seems
-            // like a safe bet in case it isn't ignored due to a bug.
-            int result = -1;
-
-            if (val == null || val == string.Empty)
-                ErrorMessages.Add("Missing required value for option '" + option + "'.");
-            else
-            {
-                int r;
-                if (int.TryParse(val, out r))
-                    result = r;
-                else
-                    ErrorMessages.Add("An int value was expected for option '{0}' but a value of '{1}' was used");
-            }
-
-            return result;
-        }
-
-        //private void RequiredIntError(string option)
-        //{
-        //    ErrorMessages.Insert("An int val is required for option '" + option + "'.");
-        //}
-
-        //private void ProcessIntOption(string v, ref int field)
-        //{
-        //    if (!int.TryParse(v, out field))
-        //        ErrorMessages.Insert("Invalid argument val: " + v);
-        //}
-
-        //private void ProcessEnumOption<T>(string v, ref T field)
-        //{
-        //    if (Enum.IsDefined(typeof(T), v))
-        //        field = (T)Enum.Parse(typeof(T), v);
-        //    else
-        //        ErrorMessages.Insert("Invalid argument val: " + v);
-        //}
-
-        //private object ParseEnumOption(Type enumType, string val)
-        //{
-        //    foreach (string name in Enum.GetNames(enumType))
-        //        if (val.ToLower() == name.ToLower())
-        //            return Enum.Parse(enumType, val);
-
-        //    this.ErrorMessages.Insert(val);
-
-        //    return null;
-        //}
 
         #endregion
     }

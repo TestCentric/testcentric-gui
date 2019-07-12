@@ -34,7 +34,6 @@ namespace TestCentric.Gui.Presenters
     using Settings;
     using Views;
     using Views.AddinPages;
-    using Elements;
 
     public class MainPresenter : System.IDisposable
     {

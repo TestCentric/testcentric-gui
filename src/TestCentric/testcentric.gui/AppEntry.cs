@@ -72,7 +72,7 @@ namespace TestCentric.Gui
             // We can't use user settings to provide a default because the settings
             // are an engine service and the engine have the internal trace level
             // set as part of its initialization.
-            var traceLevel = options.InternalTraceLevel;
+            var traceLevel = (InternalTraceLevel)Enum.Parse(typeof(InternalTraceLevel), options.InternalTraceLevel);
 
             // This initializes the trace setting for the GUI itself.
             InternalTrace.Initialize($"InternalTrace.{Process.GetCurrentProcess().Id}.gui.log", traceLevel);

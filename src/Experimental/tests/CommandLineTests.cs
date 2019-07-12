@@ -93,6 +93,7 @@ namespace TestCentric.Gui.Tests
             Assert.That(property.GetValue(options, null), Is.EqualTo(expected));
         }
 
+        [TestCase("--config")]
         [TestCase("--process")]
         [TestCase("--agents")]
         [TestCase("--domain")]

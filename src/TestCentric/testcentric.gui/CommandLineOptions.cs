@@ -25,7 +25,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Mono.Options;
-using NUnit.Engine;
 
 namespace TestCentric.Gui
 {
@@ -42,6 +41,9 @@ namespace TestCentric.Gui
 
         public CommandLineOptions(params string[] args)
         {
+            //this.Add("config=", "Project {CONFIG} to load (e.g.: Debug).",
+            //    v => ActiveConfig = v);
+
             this.Add("noload", "Suppress loading of the most recent test file.",
                 v => NoLoad = v != null);
 
@@ -75,11 +77,14 @@ namespace TestCentric.Gui
                         DomainUsage = v;
                 });
 
+            //this.Add("runselected", "Automatically run last selected tests.",
+            //    v => RunSelectedTests = v != null);
+
             this.Add("trace=", "Set internal trace {LEVEL}. Valid values are Off, Error, Warning, Info or Debug.Verbose is a synonym for Debug.",
                 v =>
                 {
-                    if (CheckRequiredValue(v, "--trace", "Off", "Error", "Warning", "Info", "Verbose", "Debug"))
-                        InternalTraceLevel = (InternalTraceLevel)Enum.Parse(typeof(InternalTraceLevel), v);
+                if (CheckRequiredValue(v, "--trace", "Off", "Error", "Warning", "Info", "Verbose", "Debug"))
+                    InternalTraceLevel = v;
                 });
 
             this.Add("help|h", "Display the help message and exit.",
@@ -113,13 +118,15 @@ namespace TestCentric.Gui
         private List<string> inputFiles = new List<string>();
         public IList<string> InputFiles { get { return inputFiles; } }
 
+        public string ActiveConfig { get; private set; }
+
         // How to Run Tests
 
         public string ProcessModel { get; private set; }
         public string DomainUsage { get; private set; }
         public bool RunAsX86 { get; private set; }
         public int MaxAgents { get; private set; }
-        public InternalTraceLevel InternalTraceLevel { get; private set; }
+        public string InternalTraceLevel { get; private set; }
 
         // Error Processing
 

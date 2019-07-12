@@ -50,7 +50,7 @@ namespace TestCentric.Gui.Tests
         [TestCase("ShowHelp", false)]
         [TestCase("ProcessModel", null)]
         [TestCase("DomainUsage", null)]
-        [TestCase("InternalTraceLevel", NUnit.Engine.InternalTraceLevel.Default)]
+        [TestCase("InternalTraceLevel", null)]
         public void DefaultOptionValues(string propertyName, object val)
         {
             var property = GetPropertyInfo(propertyName);
@@ -70,12 +70,12 @@ namespace TestCentric.Gui.Tests
         [TestCase("DomainUsage", "--domain:Multiple")]
         [TestCase("RunAsX86", "--x86", true)]
         [TestCase("MaxAgents", "--agents:8", 8)]
-        [TestCase("InternalTraceLevel", "--trace:Off", NUnit.Engine.InternalTraceLevel.Off)]
-        [TestCase("InternalTraceLevel", "--trace:Error", NUnit.Engine.InternalTraceLevel.Error)]
-        [TestCase("InternalTraceLevel", "--trace:Warning", NUnit.Engine.InternalTraceLevel.Warning)]
-        [TestCase("InternalTraceLevel", "--trace:Info", NUnit.Engine.InternalTraceLevel.Info)]
-        [TestCase("InternalTraceLevel", "--trace:Verbose", NUnit.Engine.InternalTraceLevel.Verbose)]
-        [TestCase("InternalTraceLevel", "--trace:Debug", NUnit.Engine.InternalTraceLevel.Debug)]
+        [TestCase("InternalTraceLevel", "--trace:Off")]
+        [TestCase("InternalTraceLevel", "--trace:Error")]
+        [TestCase("InternalTraceLevel", "--trace:Warning")]
+        [TestCase("InternalTraceLevel", "--trace:Info")]
+        [TestCase("InternalTraceLevel", "--trace:Verbose")]
+        [TestCase("InternalTraceLevel", "--trace:Debug")]
         [TestCase("ShowHelp", "--help", true)]
         [TestCase("ShowHelp", "-h", true)]
         public void ValidOptionsAreRecognized(string propertyName, string option, object expected = null)
@@ -93,6 +93,7 @@ namespace TestCentric.Gui.Tests
             Assert.That(property.GetValue(options, null), Is.EqualTo(expected));
         }
 
+        //[TestCase("--config")]
         [TestCase("--process")]
         [TestCase("--agents")]
         [TestCase("--domain")]
