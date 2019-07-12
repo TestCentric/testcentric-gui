@@ -52,7 +52,7 @@ namespace TestCentric.Gui.Views
             this.processModelToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.defaultProcessToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.inProcessToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.singleProcessToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.separateProcessToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.multipleProcessToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.loadAsX86ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -309,7 +309,7 @@ namespace TestCentric.Gui.Views
             this.processModelToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.defaultProcessToolStripMenuItem,
             this.inProcessToolStripMenuItem,
-            this.singleProcessToolStripMenuItem,
+            this.separateProcessToolStripMenuItem,
             this.multipleProcessToolStripMenuItem,
             this.toolStripSeparator2,
             this.loadAsX86ToolStripMenuItem});
@@ -333,13 +333,13 @@ namespace TestCentric.Gui.Views
             this.inProcessToolStripMenuItem.Text = "InProcess";
             this.inProcessToolStripMenuItem.ToolTipText = "Test assemblies are loaded directly in the NUnit process.";
             // 
-            // singleProcessToolStripMenuItem
+            // separateProcessToolStripMenuItem
             // 
-            this.singleProcessToolStripMenuItem.Name = "singleProcessToolStripMenuItem";
-            this.singleProcessToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
-            this.singleProcessToolStripMenuItem.Tag = "Single";
-            this.singleProcessToolStripMenuItem.Text = "Single";
-            this.singleProcessToolStripMenuItem.ToolTipText = "All test assemblies are loaded in the same process, separate from the NUnit proce" +
+            this.separateProcessToolStripMenuItem.Name = "separateProcessToolStripMenuItem";
+            this.separateProcessToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.separateProcessToolStripMenuItem.Tag = "Separate";
+            this.separateProcessToolStripMenuItem.Text = "Separate";
+            this.separateProcessToolStripMenuItem.ToolTipText = "All test assemblies are loaded in the same process, separate from the NUnit proce" +
     "ss.";
             // 
             // multipleProcessToolStripMenuItem
@@ -933,7 +933,7 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.ToolStripMenuItem processModelToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem defaultProcessToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem inProcessToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem singleProcessToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem separateProcessToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem multipleProcessToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem loadAsX86ToolStripMenuItem;

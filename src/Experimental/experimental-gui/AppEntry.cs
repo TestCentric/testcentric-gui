@@ -85,10 +85,20 @@ namespace TestCentric.Gui
             }
 
             var testEngine = TestEngineActivator.CreateInstance(true);
-            if (options.InternalTraceLevel != null)
-                testEngine.InternalTraceLevel = (InternalTraceLevel)Enum.Parse(typeof(InternalTraceLevel), options.InternalTraceLevel);
+            var traceLevel = (InternalTraceLevel)Enum.Parse(typeof(InternalTraceLevel), options.InternalTraceLevel ?? "Off");
+            testEngine.InternalTraceLevel = traceLevel;
 
             var model = new TestModel(testEngine);
+            model.PackageSettings.Add(EnginePackageSettings.InternalTraceLevel, traceLevel.ToString());
+
+            if (options.ProcessModel != null)
+                model.PackageSettings.Add(EnginePackageSettings.ProcessModel, options.ProcessModel);
+            if (options.DomainUsage != null)
+                model.PackageSettings.Add(EnginePackageSettings.DomainUsage, options.DomainUsage);
+            if (options.MaxAgents >= 0)
+                model.PackageSettings.Add(EnginePackageSettings.MaxAgents, options.MaxAgents);
+            if (options.RunAsX86)
+                model.PackageSettings.Add(EnginePackageSettings.RunAsX86, true);
 
             var form = new MainForm();
 

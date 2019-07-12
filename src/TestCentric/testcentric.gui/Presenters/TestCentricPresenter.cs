@@ -218,14 +218,6 @@ namespace TestCentric.Gui.Presenters
                 if (_options.MaxAgents >= 0)
                     _model.Services.UserSettings.Engine.Agents = _options.MaxAgents;
                 _view.RunAsX86.Checked = _options.RunAsX86;
-                //if (settings.ContainsKey(EnginePackageSettings.ProcessModel))
-                //    _view.ProcessModel.SelectedItem = (string)settings[EnginePackageSettings.ProcessModel];
-                //if (settings.ContainsKey(EnginePackageSettings.DomainUsage))
-                //    _view.DomainUsage.SelectedItem = (string)settings[EnginePackageSettings.DomainUsage];
-                //if (settings.ContainsKey(EnginePackageSettings.RunAsX86))
-                //    _view.RunAsX86.Checked = (bool)settings[EnginePackageSettings.RunAsX86];
-                //if (settings.ContainsKey(EnginePackageSettings.MaxAgents))
-                //    _model.Services.UserSettings.Engine.Agents = (int)settings[EnginePackageSettings.MaxAgents];
             };
 
             _view.Shown += (s, e) =>

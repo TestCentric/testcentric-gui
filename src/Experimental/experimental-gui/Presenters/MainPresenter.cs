@@ -192,10 +192,18 @@ namespace TestCentric.Gui.Presenters
             // Set the font to use
             _view.Font = _settings.Gui.MainForm.Font;
 
+            var settings = _model.PackageSettings;
             if (_options.InternalTraceLevel != null)
-                _model.PackageSettings.Add(EnginePackageSettings.InternalTraceLevel, _options.InternalTraceLevel);
+                settings.Add(EnginePackageSettings.InternalTraceLevel, _options.InternalTraceLevel);
 
-            //_model.OnStartup();
+            if (_options.ProcessModel != null)
+                _view.ProcessModel.SelectedItem = _options.ProcessModel;
+            if (_options.DomainUsage != null)
+                _view.DomainUsage.SelectedItem = _options.DomainUsage;
+            if (_options.MaxAgents >= 0)
+                _model.Services.UserSettings.Engine.Agents = _options.MaxAgents;
+            _view.RunAsX86.Checked = _options.RunAsX86;
+
             if (_options.InputFiles.Count > 0)
             {
                 _model.LoadTests(_options.InputFiles);
