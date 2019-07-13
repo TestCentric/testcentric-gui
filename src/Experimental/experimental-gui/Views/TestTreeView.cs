@@ -148,7 +148,7 @@ namespace TestCentric.Gui.Views
 
         public void LoadAlternateImages(string imageSet)
         {
-            string[] imageNames = { "Skipped", "Failure", "Success", "Ignored", "Inconclusive" };
+            string[] imageNames = { "Skipped", "Inconclusive", "Success", "Ignored", "Failure" };
 
             string imageDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
                 Path.Combine("Images", Path.Combine("Tree", imageSet)));
