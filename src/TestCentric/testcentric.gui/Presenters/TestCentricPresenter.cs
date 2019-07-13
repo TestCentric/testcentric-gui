@@ -209,6 +209,15 @@ namespace TestCentric.Gui.Presenters
             _view.Load += (s, e) =>
             {
                 InitializeDisplay(_settings.Gui.DisplayFormat);
+
+                var settings = _model.PackageSettings;
+                if (_options.ProcessModel != null)
+                    _view.ProcessModel.SelectedItem = _options.ProcessModel;
+                if (_options.DomainUsage != null)
+                    _view.DomainUsage.SelectedItem = _options.DomainUsage;
+                if (_options.MaxAgents >= 0)
+                    _model.Services.UserSettings.Engine.Agents = _options.MaxAgents;
+                _view.RunAsX86.Checked = _options.RunAsX86;
             };
 
             _view.Shown += (s, e) =>

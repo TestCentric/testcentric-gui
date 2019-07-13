@@ -29,10 +29,9 @@ using Mono.Options;
 namespace TestCentric.Gui
 {
     /// <summary>
-    /// GuiOptions encapsulates the option settingsServiceServiceService for
-    /// the nunit-console program. It inherits from the Mono
-    /// Options OptionSet class and provides a central location
-    /// for defining and parsing options.
+    /// CommandLineOptions encapsulates the option settings for TestCentric.
+    /// It inherits from the Mono.Options OptionSet class and provides a 
+    /// central location for defining and parsing options.
     /// </summary>
     public class CommandLineOptions : OptionSet
     {
@@ -42,30 +41,8 @@ namespace TestCentric.Gui
 
         public CommandLineOptions(params string[] args)
         {
-            // NOTE: The order in which patterns are added 
-            // determines the display order for the help.
-
-            // Old Options no longer supported:
-            //   test
-            //   console
-            //   include
-            //   exclude
-
-            // Old Options to continue supporting:
-            //   lang
-            //   cleanup
-            //   help
-
-            // Options to be added:
-            //   test
-            //   trace
-
-            // Select Tests
-            //this.Insert("test=", "Comma-separated list of {NAMES} of tests to run or explore. This option may be repeated.",
-            //    v => ((List<string>)TestList).AddRange(TestNameParser.Parse(RequiredValue(v, "--test"))));
-
             this.Add("config=", "Project {CONFIG} to load (e.g.: Debug).",
-                v => ActiveConfig = RequiredValue(v, "--config"));
+                v => ActiveConfig = v);
 
             this.Add("noload", "Suppress loading of most recent project.",
                 v => NoLoad = v != null);
@@ -73,14 +50,44 @@ namespace TestCentric.Gui
             this.Add("run", "Automatically run the loaded project.",
                 v => RunAllTests = v != null);
 
+            this.Add("process=", "Select the process model for running the tests.",
+                v =>
+                {
+                    if (CheckRequiredValue(v, "--process", "Single", "Separate", "Multiple"))
+                        ProcessModel = v;
+                });
+
+            this.Add("x86", "Run the tests as X86",
+                v => RunAsX86 = v != null);
+
+            this.Add("agents=", "Specify max number of agents",
+                v =>
+                {
+                    if (CheckRequiredInt(v, "--agents", out int val))
+                        MaxAgents = val;
+                });
+
+            this.Add("inprocess", "Run the tests in process.",
+                v => ProcessModel = "Single");
+
+            this.Add("domain=", "Define how AppDomains are used in running the tests.",
+                v =>
+                {
+                    if (CheckRequiredValue(v, "--domain", "Single", "Separate", "Multiple"))
+                        DomainUsage = v;
+                });
+
             //this.Add("runselected", "Automatically run last selected tests.",
             //    v => RunSelectedTests = v != null);
 
-            // Output GuiElement
             this.Add("trace=", "Set internal trace {LEVEL}.",
-                v => InternalTraceLevel = RequiredValue(v, "--trace", "Off", "Error", "Warning", "Info", "Verbose", "Debug"));
+                v =>
+                {
+                    if (CheckRequiredValue(v, "--trace", "Off", "Error", "Warning", "Info", "Verbose", "Debug"))
+                        InternalTraceLevel = v;
+                });
 
-            this.Add("help|h", "Display this message and exit.",
+            this.Add("help|h", "Display thehelp message and exit.",
                 v => ShowHelp = v != null);
 
             // Default
@@ -105,26 +112,20 @@ namespace TestCentric.Gui
         public bool ShowHelp { get; private set; }
         public bool NoLoad { get; private set; }
         public bool RunAllTests { get; private set; }
-        //public bool RunSelectedTests { get; private set; }
 
         // Select tests
 
         private List<string> inputFiles = new List<string>();
         public IList<string> InputFiles { get { return inputFiles; } }
 
-        //private List<string> testList = new List<string>();
-        //public IList<string> TestList { get { return testList; } }
-
         public string ActiveConfig { get; private set; }
 
-        // Where to Run Tests
+        // How to Run Tests
 
-        //public string ProcessModel { get; private set; }
-
-        //public string DomainUsage { get; private set; }
-
-        // Output GuiElement
-
+        public string ProcessModel { get; private set; }
+        public string DomainUsage { get; private set; }
+        public bool RunAsX86 { get; private set; }
+        public int MaxAgents { get; private set; }
         public string InternalTraceLevel { get; private set; }
 
         // Error Processing
@@ -152,6 +153,33 @@ namespace TestCentric.Gui
 
         #region Helper Methods
 
+        private bool CheckRequiredValue(string val, string option, params string[] validValues)
+        {
+            if (validValues == null || validValues.Length == 0)
+                return true;
+
+            foreach (string valid in validValues)
+                if (string.Compare(valid, val, StringComparison.OrdinalIgnoreCase) == 0)
+                    return true;
+
+            ErrorMessages.Add(string.Format("The value '{0}' is not valid for option '{1}'.", val, option));
+            return false;
+        }
+
+        private bool CheckRequiredInt(string val, string option, out int result)
+        {
+            // We have to return something even though the val will 
+            // be ignored if an error is reported. The -1 val seems
+            // like a safe bet in case it isn't ignored due to a bug.
+            result = -1;
+
+            if (int.TryParse(val, out result))
+                return true;
+
+            ErrorMessages.Add("An int value was expected for option '{0}' but a value of '{1}' was used");
+            return false;
+        }
+
         private string RequiredValue(string val, string option, params string[] validValues)
         {
             if (string.IsNullOrEmpty(val))
@@ -174,57 +202,6 @@ namespace TestCentric.Gui
 
             return val;
         }
-
-        private int RequiredInt(string val, string option)
-        {
-            // We have to return something even though the val will 
-            // be ignored if an error is reported. The -1 val seems
-            // like a safe bet in case it isn't ignored due to a bug.
-            int result = -1;
-
-            if (val == null || val == string.Empty)
-                ErrorMessages.Add("Missing required value for option '" + option + "'.");
-            else
-            {
-                int r;
-                if (int.TryParse(val, out r))
-                    result = r;
-                else
-                    ErrorMessages.Add("An int value was expected for option '{0}' but a value of '{1}' was used");
-            }
-
-            return result;
-        }
-
-        //private void RequiredIntError(string option)
-        //{
-        //    ErrorMessages.Insert("An int val is required for option '" + option + "'.");
-        //}
-
-        //private void ProcessIntOption(string v, ref int field)
-        //{
-        //    if (!int.TryParse(v, out field))
-        //        ErrorMessages.Insert("Invalid argument val: " + v);
-        //}
-
-        //private void ProcessEnumOption<T>(string v, ref T field)
-        //{
-        //    if (Enum.IsDefined(typeof(T), v))
-        //        field = (T)Enum.Parse(typeof(T), v);
-        //    else
-        //        ErrorMessages.Insert("Invalid argument val: " + v);
-        //}
-
-        //private object ParseEnumOption(Type enumType, string val)
-        //{
-        //    foreach (string name in Enum.GetNames(enumType))
-        //        if (val.ToLower() == name.ToLower())
-        //            return Enum.Parse(enumType, val);
-
-        //    this.ErrorMessages.Insert(val);
-
-        //    return null;
-        //}
 
         #endregion
     }

@@ -55,7 +55,7 @@ namespace TestCentric.Gui.Views
             SelectRuntimeMenu = new ToolStripMenuElement(selectRuntimeToolStripMenuItem);
             SelectedRuntime = new CheckedToolStripMenuGroup(selectRuntimeToolStripMenuItem);
             ProcessModel = new CheckedToolStripMenuGroup("processModel",
-                defaultProcessToolStripMenuItem, inProcessToolStripMenuItem, singleProcessToolStripMenuItem, multipleProcessToolStripMenuItem);
+                defaultProcessToolStripMenuItem, inProcessToolStripMenuItem, separateProcessToolStripMenuItem, multipleProcessToolStripMenuItem);
             DomainUsage = new CheckedToolStripMenuGroup("domainUsage",
                 defaultDomainToolStripMenuItem, singleDomainToolStripMenuItem, multipleDomainToolStripMenuItem);
             RunAsX86 = new ToolStripMenuElement(loadAsX86ToolStripMenuItem);

@@ -72,7 +72,7 @@ namespace TestCentric.Gui
             // We can't use user settings to provide a default because the settings
             // are an engine service and the engine have the internal trace level
             // set as part of its initialization.
-            var traceLevel = options.InternalTraceLevel;
+            var traceLevel = (InternalTraceLevel)Enum.Parse(typeof(InternalTraceLevel), options.InternalTraceLevel);
 
             // This initializes the trace setting for the GUI itself.
             InternalTrace.Initialize($"InternalTrace.{Process.GetCurrentProcess().Id}.gui.log", traceLevel);
@@ -85,6 +85,15 @@ namespace TestCentric.Gui
             log.Info("Instantiating TestModel");
             ITestModel model = new TestModel(testEngine);
             model.PackageSettings.Add(EnginePackageSettings.InternalTraceLevel, traceLevel.ToString());
+
+            if (options.ProcessModel != null)
+                model.PackageSettings.Add(EnginePackageSettings.ProcessModel, options.ProcessModel);
+            if (options.DomainUsage != null)
+                model.PackageSettings.Add(EnginePackageSettings.DomainUsage, options.DomainUsage);
+            if (options.MaxAgents >= 0)
+                model.PackageSettings.Add(EnginePackageSettings.MaxAgents, options.MaxAgents);
+            if (options.RunAsX86)
+                model.PackageSettings.Add(EnginePackageSettings.RunAsX86, true);
 
             log.Info("Constructing Form");
             TestCentricMainView view = new TestCentricMainView();
