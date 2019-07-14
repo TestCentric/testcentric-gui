@@ -1,4 +1,31 @@
-﻿TestCentric Runner for NUnit 1.0.0-Beta2 - May 30, 2019
+﻿TestCentric Runner for NUnit 1.0.0-Beta3 - July 14, 2019
+
+General
+
+This is the third beta release of the TestCentric Runner for NUnit. While it is still beta,
+it is feature-complete. Since the actual execution of tests is done by the NUnit engine
+rather than the GUI itself, it's probably reasonable for developers to use this on the
+desktop, provided their CI is based on a stable production-level NUnit runner, such as
+the NUnit 3 Console Runner or the NUnit 3 VS adapter.
+
+Features
+
+ * Version 0.13 of the Experimental GUI is included.
+ * Added command-line options --process, --domain, --inprocess, --x86 and --agents.
+
+Issues Resolved
+
+ * 139 FIXED: Stop Button to interrupt infinite loop
+ * 287 Assembly or project full name not shown
+ * 337 FIXED: Stopping a long running test from TestCentric gui does not stop right away
+ * 350 FIXED: Installed Extensions fields not cleared
+ * 352 Incorporate NUnit Engine as a subtree
+ * 357 Review whether File menu settings should be saved
+ * 358 FIXED: Assemblies Running in Parallel (Regardless of Settings)
+ * 361 FIXED: Process Model setting includes Single rather than Separate
+ * 364 FIXED: Experimental GUI: Proper icons are not displayed for warnings and failures
+
+TestCentric Runner for NUnit 1.0.0-Beta2 - May 30, 2019
 
 General
 
