@@ -132,7 +132,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="AppEntry.cs" />
-    <Compile Include="CommandLineOptions.cs" />
     <Compile Include="Dialogs\ExtensionDialog.cs">
       <SubType>Form</SubType>
     </Compile>
