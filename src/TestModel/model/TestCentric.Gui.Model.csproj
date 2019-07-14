@@ -84,7 +84,6 @@
     <Compile Include="TestNode.cs" />
     <Compile Include="TestStartNotice.cs" />
     <Compile Include="TestStatus.cs" />
-    <Compile Include="Options.external.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
