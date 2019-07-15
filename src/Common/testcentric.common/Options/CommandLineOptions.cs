@@ -103,9 +103,9 @@ namespace TestCentric.Gui
                 this.Parse(args);
         }
 
-        #endregion
+#endregion
 
-        #region Properties
+#region Properties
 
         // Action to Perform
 
@@ -133,9 +133,9 @@ namespace TestCentric.Gui
         private List<string> errorMessages = new List<string>();
         public IList<string> ErrorMessages { get { return errorMessages; } }
 
-        #endregion
+#endregion
 
-        #region Public Methods
+#region Public Methods
 
         public bool Validate()
         {
@@ -163,9 +163,9 @@ namespace TestCentric.Gui
             return writer.ToString();
         }
 
-        #endregion
+#endregion
 
-        #region Helper Methods
+#region Helper Methods
 
         private bool CheckRequiredValue(string val, string option, params string[] validValues)
         {
@@ -194,6 +194,6 @@ namespace TestCentric.Gui
             return false;
         }
 
-        #endregion
+#endregion
     }
 }
