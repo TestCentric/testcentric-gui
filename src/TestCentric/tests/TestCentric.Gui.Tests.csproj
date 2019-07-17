@@ -154,7 +154,6 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="CommandLineTests.cs" />
     <Compile Include="Presenters\ErrorsAndFailuresPresenterTests.cs" />
     <Compile Include="Views\ErrorsAndFailuresViewTests.cs" />
     <Compile Include="LongRunningOperationDisplayTests.cs" />
