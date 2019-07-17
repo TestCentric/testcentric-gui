@@ -61,7 +61,6 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="CommandLineTests.cs" />
     <Compile Include="Presenters\AddinsPresenterTests.cs" />
     <Compile Include="Presenters\Main\PackageSettingsTests.cs" />
     <Compile Include="Presenters\Main\WhenTestsAreLoading.cs" />
