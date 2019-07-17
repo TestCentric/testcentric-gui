@@ -80,7 +80,7 @@ namespace TestCentric.Gui
 
             if (options.ShowHelp)
             {
-                ShowHelpText(options);
+                MessageDisplay.Info(GetHelpText(options));
                 return;
             }
 
@@ -123,35 +123,29 @@ namespace TestCentric.Gui
             }
         }
 
-        private static readonly string NL = Environment.NewLine;
-
-        private static void ShowHelpText(CommandLineOptions options)
+        private static string GetHelpText(CommandLineOptions options)
         {
             StringWriter writer = new StringWriter();
 
-            writer.WriteLine("NUNIT [inputfiles] [options]");
+            writer.WriteLine("TC-NEXT [inputfiles] [options]");
             writer.WriteLine();
-            writer.WriteLine("Loads and optionally runs a set of NUnit tests using the GUI runner.");
+            writer.WriteLine("Starts the TestCentric Experimental Runner, optionally loading and running a set of NUnit tests. You may specify any combination of assemblies and supported project files as arguments.");
             writer.WriteLine();
             writer.WriteLine("InputFiles:");
             writer.WriteLine("   One or more assemblies or test projects of a recognized type.");
+            writer.WriteLine("   If no input files are given, the tests contained in the most");
+            writer.WriteLine("   recently used project or assembly are loaded, unless the");
+            writer.WriteLine("   --noload option is specified");
             writer.WriteLine();
             writer.WriteLine("Options:");
             options.WriteOptionDescriptions(writer);
-            writer.WriteLine();
-            writer.WriteLine("Description:");
-            writer.WriteLine("   By default, this command loads the tests contained in the input");
-            writer.WriteLine("   specified, displaying them in the GUI runner, where the user may");
-            writer.WriteLine("   run some or all of them as desired. If no input files are given");
-            writer.WriteLine("   the tests contained in the most recently used project or assembly");
-            writer.WriteLine("   are loaded, unless the --noload option is specified.");
-            writer.WriteLine();
-            writer.WriteLine("   CATEGORIES may be specified singly, as a comma-separated list or");
-            writer.WriteLine("   as a category expression.");
-            writer.WriteLine();
-            writer.WriteLine("   Trace LEVEL may be Off, Error, Warning, Info, Verbose or Debug.");
 
-            MessageBox.Show(writer.GetStringBuilder().ToString(), "NUnit - Help");
+            return writer.GetStringBuilder().ToString();
+        }
+
+        private static IMessageDisplay MessageDisplay
+        {
+            get { return new MessageDisplay("TestCentric Experimental Runner for NUnit"); }
         }
     }
 }

@@ -22,6 +22,7 @@
 // ***********************************************************************
 
 using System;
+using System.IO;
 using System.Diagnostics;
 using System.Text;
 using System.Windows.Forms;
@@ -53,7 +54,7 @@ namespace TestCentric.Gui
                 // TODO: We would need to have a custom message box
                 // in order to use a fixed font and display the options
                 // so that the values all line up.
-                MessageDisplay.Info(options.GetHelpText());
+                MessageDisplay.Info(GetHelpText(options));
                 return 0;
             }
 
@@ -63,7 +64,7 @@ namespace TestCentric.Gui
                 var sb = new StringBuilder($"Error(s) in command line:{NL}");
                 foreach (string msg in options.ErrorMessages)
                     sb.Append($"  {msg}{NL}");
-                sb.Append($"{NL}{options.GetHelpText()}");
+                sb.Append($"{NL}{GetHelpText(options)}");
                 MessageDisplay.Error(sb.ToString());
                 return 2;
             }
@@ -72,7 +73,9 @@ namespace TestCentric.Gui
             // We can't use user settings to provide a default because the settings
             // are an engine service and the engine have the internal trace level
             // set as part of its initialization.
-            var traceLevel = (InternalTraceLevel)Enum.Parse(typeof(InternalTraceLevel), options.InternalTraceLevel);
+            var traceLevel = options.InternalTraceLevel != null
+                ? (InternalTraceLevel)Enum.Parse(typeof(InternalTraceLevel), options.InternalTraceLevel)
+                : InternalTraceLevel.Off;
 
             // This initializes the trace setting for the GUI itself.
             InternalTrace.Initialize($"InternalTrace.{Process.GetCurrentProcess().Id}.gui.log", traceLevel);
@@ -127,6 +130,26 @@ namespace TestCentric.Gui
             }
 
             return 0;
+        }
+
+        private static string GetHelpText(CommandLineOptions options)
+        {
+            StringWriter writer = new StringWriter();
+
+            writer.WriteLine("TESTCENTRIC [inputfiles] [options]");
+            writer.WriteLine();
+            writer.WriteLine("Starts the TestCentric Runner, optionally loading and running a set of NUnit tests. You may specify any combination of assemblies and supported project files as arguments.");
+            writer.WriteLine();
+            writer.WriteLine("InputFiles:");
+            writer.WriteLine("   One or more assemblies or test projects of a recognized type.");
+            writer.WriteLine("   If no input files are given, the tests contained in the most");
+            writer.WriteLine("   recently used project or assembly are loaded, unless the");
+            writer.WriteLine("   --noload option is specified");
+            writer.WriteLine();
+            writer.WriteLine("Options:");
+            options.WriteOptionDescriptions(writer);
+
+            return writer.GetStringBuilder().ToString();
         }
 
         private static IMessageDisplay MessageDisplay
