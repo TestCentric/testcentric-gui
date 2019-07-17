@@ -1,4 +1,24 @@
-﻿TestCentric Runner for NUnit 1.0.0-Beta3 - July 14, 2019
+﻿TestCentric Runner for NUnit 1.0.0-Beta4 - July 17, 2019
+
+General
+
+This is the fourth beta release of the TestCentric Runner for NUnit. While it is still beta,
+it is feature-complete. Since the actual execution of tests is done by the NUnit engine
+rather than the GUI itself, it's probably reasonable for developers to use this on the
+desktop, provided their CI is based on a stable production-level NUnit runner, such as
+the NUnit 3 Console Runner or the NUnit 3 VS adapter.
+
+Features
+
+ * Version 0.14 of the Experimental GUI is included.
+
+Issues Resolved
+
+ * 368 FIXED: Arguments to --process option for GUI don't match NUnit console.
+ * 369 Merge Options classes for two GUIs and move to common assembly.
+ * 370 FIXED: Beta3: unhandled .net exception
+
+TestCentric Runner for NUnit 1.0.0-Beta3 - July 14, 2019
 
 General
 
