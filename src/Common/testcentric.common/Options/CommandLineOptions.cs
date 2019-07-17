@@ -50,37 +50,37 @@ namespace TestCentric.Gui
             this.Add("run", "Automatically run the loaded tests.",
                 v => RunAllTests = v != null);
 
-            this.Add("process=", "Select the process model for running the tests.",
+            this.Add("process=", "{PROCESS} isolation for test assemblies. Values: InProcess, Separate, Multiple. If not specified, defaults to Separate for a single assembly or Multiple for more than one.",
                 v =>
                 {
-                    if (CheckRequiredValue(v, "--process", "Single", "Separate", "Multiple"))
+                    if (CheckRequiredValue(v, "--process", "InProcess", "Separate", "Multiple"))
                         ProcessModel = v;
                 });
 
-            this.Add("x86", "Run the tests as X86",
+            this.Add("x86", "Run tests in an X86 process on 64-bit systems.",
                 v => RunAsX86 = v != null);
 
-            this.Add("agents=", "Specify max number of agents",
+            this.Add("agents=", "Specify maximum {NUMBER} of test assembly agents to run at one time. If not specified, there is no limit.",
                 v =>
                 {
                     if (CheckRequiredInt(v, "--agents", out int val))
                         MaxAgents = val;
                 });
 
-            this.Add("inprocess", "Run the tests in process.",
+            this.Add("inprocess", "Synonym for --process.InProcess.",
                 v => ProcessModel = "Single");
 
-            this.Add("domain=", "Define how AppDomains are used in running the tests.",
+            this.Add("domain=", "{DOMAIN} isolation for test assemblies. Values: None, Single, Multiple. If not specified, defaults to Single for a single assembly or Multiple for more than one.",
                 v =>
                 {
-                    if (CheckRequiredValue(v, "--domain", "Single", "Separate", "Multiple"))
+                    if (CheckRequiredValue(v, "--domain", "None", "Single", "Multiple"))
                         DomainUsage = v;
                 });
 
             //this.Add("runselected", "Automatically run last selected tests.",
             //    v => RunSelectedTests = v != null);
 
-            this.Add("trace=", "Set internal trace {LEVEL}. Valid values are Off, Error, Warning, Info or Debug.Verbose is a synonym for Debug.",
+            this.Add("trace=", "Set internal trace {LEVEL}. Valid values are Off, Error, Warning, Info or Debug. Verbose is a synonym for Debug.",
                 v =>
                 {
                 if (CheckRequiredValue(v, "--trace", "Off", "Error", "Warning", "Info", "Verbose", "Debug"))
@@ -155,6 +155,12 @@ namespace TestCentric.Gui
             writer.WriteLine("TESTCENTRIC [inputfiles] [options]");
             writer.WriteLine();
             writer.WriteLine("Starts the TestCentric Runner, optionally loading and running a set of NUnit tests. You may specify any combination of assemblies and supported project files as arguments.");
+            writer.WriteLine();
+            writer.WriteLine("InputFiles:");
+            writer.WriteLine("   One or more assemblies or test projects of a recognized type.");
+            writer.WriteLine("   If no input files are given, the tests contained in the most");
+            writer.WriteLine("   recently used project or assembly are loaded, unless the");
+            writer.WriteLine("   --noload option is specified");
             writer.WriteLine();
             writer.WriteLine("Options:");
 
