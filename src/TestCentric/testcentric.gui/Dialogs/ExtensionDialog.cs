@@ -115,7 +115,7 @@ namespace TestCentric.Gui
             // 
             // extensionListView
             // 
-            this.extensionListView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.extensionListView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.extensionListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.extensionNameColumn,
@@ -145,7 +145,7 @@ namespace TestCentric.Gui
             // 
             // extensionPointDescriptionTextBox
             // 
-            this.extensionPointDescriptionTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            this.extensionPointDescriptionTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.extensionPointDescriptionTextBox.Location = new System.Drawing.Point(9, 128);
             this.extensionPointDescriptionTextBox.Multiline = true;
@@ -226,7 +226,7 @@ namespace TestCentric.Gui
             // 
             // extensionDescriptionTextBox
             // 
-            this.extensionDescriptionTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            this.extensionDescriptionTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.extensionDescriptionTextBox.Location = new System.Drawing.Point(7, 115);
             this.extensionDescriptionTextBox.Multiline = true;
