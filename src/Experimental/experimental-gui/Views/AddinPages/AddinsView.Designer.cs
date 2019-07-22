@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddinsView));
             this.availablePoints = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
@@ -36,7 +37,11 @@
             this.availablePoints.AutoScroll = true;
             this.availablePoints.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.availablePoints.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.availablePoints.Location = new System.Drawing.Point(3, 3);
             this.availablePoints.Margin = new System.Windows.Forms.Padding(0);
+            this.availablePoints.Name = "availablePoints";
+            this.availablePoints.Size = new System.Drawing.Size(478, 356);
+            this.availablePoints.TabIndex = 0;
             // 
             // AddinsView
             // 
@@ -44,13 +49,15 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(484, 362);
             this.Controls.Add(this.availablePoints);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "AddinsView";
             this.Padding = new System.Windows.Forms.Padding(3);
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "AddinsView";
             this.ResumeLayout(false);
+
         }
 
         #endregion

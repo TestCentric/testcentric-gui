@@ -120,6 +120,7 @@ namespace TestCentric.Gui.Views
             this.splitContainer1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolTip1
@@ -137,7 +138,7 @@ namespace TestCentric.Gui.Views
             this.tabPage1.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPage1.Size = new System.Drawing.Size(341, 336);
+            this.tabPage1.Size = new System.Drawing.Size(342, 336);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Properties";
             this.toolTip1.SetToolTip(this.tabPage1, "This tab displays the properties of the test, which NUnit V2 displayed in the Pro" +
@@ -164,7 +165,7 @@ namespace TestCentric.Gui.Views
             this.propertiesView.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
             this.propertiesView.Properties = "";
             this.propertiesView.RunState = "";
-            this.propertiesView.Size = new System.Drawing.Size(337, 332);
+            this.propertiesView.Size = new System.Drawing.Size(338, 332);
             this.propertiesView.SkipReason = "";
             this.propertiesView.TabIndex = 2;
             this.propertiesView.TestCount = "";
@@ -747,6 +748,7 @@ namespace TestCentric.Gui.Views
             // 
             // testTreeView
             // 
+            this.testTreeView.AlternateImageSet = null;
             this.testTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.testTreeView.Location = new System.Drawing.Point(0, 14);
             this.testTreeView.Name = "testTreeView";
@@ -779,7 +781,7 @@ namespace TestCentric.Gui.Views
             this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(349, 362);
+            this.tabControl1.Size = new System.Drawing.Size(350, 362);
             this.tabControl1.TabIndex = 1;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.TabControlSelectedIndexChanged);
             // 
@@ -790,7 +792,7 @@ namespace TestCentric.Gui.Views
             this.tabPage2.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPage2.Size = new System.Drawing.Size(341, 336);
+            this.tabPage2.Size = new System.Drawing.Size(342, 336);
             this.tabPage2.TabIndex = 4;
             this.tabPage2.Text = "XML";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -806,27 +808,27 @@ namespace TestCentric.Gui.Views
             this.xmlView.Name = "xmlView";
             this.xmlView.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
             this.xmlView.SelectedText = "";
-            this.xmlView.Size = new System.Drawing.Size(337, 332);
+            this.xmlView.Size = new System.Drawing.Size(338, 332);
             this.xmlView.TabIndex = 2;
             this.xmlView.TestXml = null;
             this.xmlView.WordWrap = false;
             // 
             // tabPage3
-            //
+            // 
             this.tabPage3.Controls.Add(this.textOutputView);
             this.tabPage3.Location = new System.Drawing.Point(4, 4);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(341, 336);
+            this.tabPage3.Size = new System.Drawing.Size(342, 336);
             this.tabPage3.TabIndex = 5;
             this.tabPage3.Text = "Text Output";
             this.tabPage3.UseVisualStyleBackColor = true;
-            //
+            // 
             // textOutputView
-            //
+            // 
             this.textOutputView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textOutputView.Location = new System.Drawing.Point(0, 0);
             this.textOutputView.Name = "textOutputView";
-            this.textOutputView.Size = new System.Drawing.Size(337, 332);
+            this.textOutputView.Size = new System.Drawing.Size(342, 336);
             this.textOutputView.TabIndex = 0;
             this.textOutputView.WordWrap = true;
             // 
@@ -854,6 +856,7 @@ namespace TestCentric.Gui.Views
             this.splitContainer1.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
+            this.tabPage3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
