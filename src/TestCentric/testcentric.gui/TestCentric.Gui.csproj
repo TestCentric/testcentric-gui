@@ -366,6 +366,7 @@
     <Content Include="Images\Tree\Visual Studio\Success.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\picturebox1.Image.bmp" />
     <EmbeddedResource Include="Images\unpinned.gif" />
     <EmbeddedResource Include="Images\pinned.gif" />
   </ItemGroup>
