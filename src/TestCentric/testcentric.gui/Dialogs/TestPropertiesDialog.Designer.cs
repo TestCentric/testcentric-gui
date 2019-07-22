@@ -36,12 +36,12 @@ namespace TestCentric.Gui
             this.testName = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.hiddenProperties = new System.Windows.Forms.CheckBox();
-            this.description = new ExpandingLabel();
+            this.description = new TestCentric.Gui.Controls.ExpandingLabel();
             this.categories = new System.Windows.Forms.Label();
             this.properties = new System.Windows.Forms.ListBox();
             this.propertiesLabel = new System.Windows.Forms.Label();
             this.testCaseCount = new System.Windows.Forms.Label();
-            this.ignoreReason = new ExpandingLabel();
+            this.ignoreReason = new TestCentric.Gui.Controls.ExpandingLabel();
             this.ignoreReasonLabel = new System.Windows.Forms.Label();
             this.testCaseCountLabel = new System.Windows.Forms.Label();
             this.shouldRun = new System.Windows.Forms.Label();
@@ -50,15 +50,15 @@ namespace TestCentric.Gui
             this.testTypeLabel = new System.Windows.Forms.Label();
             this.categoriesLabel = new System.Windows.Forms.Label();
             this.descriptionLabel = new System.Windows.Forms.Label();
-            this.fullName = new ExpandingLabel();
+            this.fullName = new TestCentric.Gui.Controls.ExpandingLabel();
             this.fullNameLabel = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.assertCount = new System.Windows.Forms.Label();
             this.messageLabel = new System.Windows.Forms.Label();
             this.elapsedTime = new System.Windows.Forms.Label();
             this.stackTraceLabel = new System.Windows.Forms.Label();
-            this.message = new ExpandingLabel();
-            this.stackTrace = new ExpandingLabel();
+            this.message = new TestCentric.Gui.Controls.ExpandingLabel();
+            this.stackTrace = new TestCentric.Gui.Controls.ExpandingLabel();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -130,7 +130,7 @@ namespace TestCentric.Gui
             // description
             // 
             this.description.CopySupported = true;
-            this.description.Expansion = TipWindow.ExpansionStyle.Both;
+            this.description.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
             this.description.Location = new System.Drawing.Point(101, 64);
             this.description.Name = "description";
             this.description.Size = new System.Drawing.Size(311, 17);
@@ -170,7 +170,7 @@ namespace TestCentric.Gui
             // ignoreReason
             // 
             this.ignoreReason.CopySupported = true;
-            this.ignoreReason.Expansion = TipWindow.ExpansionStyle.Vertical;
+            this.ignoreReason.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Vertical;
             this.ignoreReason.Location = new System.Drawing.Point(101, 125);
             this.ignoreReason.Name = "ignoreReason";
             this.ignoreReason.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -311,7 +311,7 @@ namespace TestCentric.Gui
             this.message.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.message.CopySupported = true;
-            this.message.Expansion = TipWindow.ExpansionStyle.Both;
+            this.message.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
             this.message.Location = new System.Drawing.Point(106, 47);
             this.message.Name = "message";
             this.message.Size = new System.Drawing.Size(306, 17);
@@ -320,7 +320,7 @@ namespace TestCentric.Gui
             // stackTrace
             // 
             this.stackTrace.CopySupported = true;
-            this.stackTrace.Expansion = TipWindow.ExpansionStyle.Both;
+            this.stackTrace.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
             this.stackTrace.Location = new System.Drawing.Point(106, 70);
             this.stackTrace.Name = "stackTrace";
             this.stackTrace.Size = new System.Drawing.Size(306, 50);
