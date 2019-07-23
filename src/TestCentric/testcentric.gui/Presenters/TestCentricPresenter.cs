@@ -172,6 +172,11 @@ namespace TestCentric.Gui.Presenters
                     "Passed: {0}   Failed: {1}   Errors: {2}   Inconclusive: {3}   Invalid: {4}   Ignored: {5}   Skipped: {6}   Time: {7}",
                     summary.PassCount, summary.FailedCount, summary.ErrorCount, summary.InconclusiveCount, summary.InvalidCount, summary.IgnoreCount, summary.SkipCount, summary.Duration);
 
+                if (summary.RunCount == 0)
+                {
+
+                }
+
                 //string resultPath = Path.Combine(TestProject.BasePath, "TestResult.xml");
                 // TODO: Use Work Directory
                 string resultPath = "TestResult.xml";

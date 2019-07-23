@@ -134,17 +134,9 @@ namespace NUnit.Engine.Runners
         /// <returns>The count of test cases</returns>
         public override int CountTestCases(TestFilter filter)
         {
-            try
-            {
-                CreateAgentAndRunner();
+            CreateAgentAndRunner();
 
-                return _remoteRunner.CountTestCases(filter);
-            }
-            catch (Exception e)
-            {
-                log.Error("Failed to count remote tests {0}", ExceptionHelper.BuildMessageAndStackTrace(e));
-                return 0;
-            }
+            return _remoteRunner.CountTestCases(filter);
         }
 
         /// <summary>
