@@ -121,7 +121,7 @@
   <data name="pictureBox1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAAAGYktHRAD/AP8A/6C9p5MAAAAHdElNRQfjBxYQJRvl5q2k
+        YQUAAAAJcEhZcwAADsEAAA7BAbiRa+0AAAAGYktHRAD/AP8A/6C9p5MAAAAHdElNRQfjBxYQJRvl5q2k
         AAAeQklEQVR4Xu1dB1QUVxceuoCAhCjGXmPsBVtUVKKxk4gKwhZ6lwXpAanSRYoiKigCCvaODQv2qFGj
         opGgRsWCXWMNKnD/+xb9o0ad2dlddsGdc/acRGbevHn3e/fedytF1cMLAJR3nTnS0i8rd9jIX+ZO6e+6
         mD/UfYs9N2pLJD8+L4cTt2TVlOh52ydFpeyYHDWv0CJm4SZu3JKV1nGr0yYGbZ3ez3ED39grm2sZmzMh
@@ -257,7 +257,7 @@
   <data name="label4.Text" xml:space="preserve">
     <value>TestCentric 1.0 is based on the NUnit V2 GUI, modified to support NUnit 3 and higher tests.
 
-The runner uses the NUnit test engine and some features require an engine extension to be installed. This includes opening NUnit and Visual Studio projects, running NUnit V2 tests and saving results in V2 format.
+The runner uses the NUnit test engine and some features require an engine extension to be installed. This includes the ability to open NUnit and Visual Studio projects, to run NUnit V2 tests and to save results in V2 format.
 
 Use Tools | Extensions to see what extensions are currently installed.</value>
   </data>
