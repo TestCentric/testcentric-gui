@@ -27,6 +27,7 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Xml;
+using NUnit.Common;
 using NUnit.Engine.Internal;
 using NUnit.Engine.Services;
 using System.ComponentModel;
@@ -535,7 +536,7 @@ namespace NUnit.Engine.Runners
                 resultXml.AddAttribute("duration", duration.ToString("0.000000", NumberFormatInfo.InvariantInfo));
 
                 _eventDispatcher.OnTestEvent(resultXml.OuterXml);
-                _eventDispatcher.OnTestEvent($"<unhandled-exception message='{ex.Message}' stacktrace='{ex.StackTrace}'/>");
+                _eventDispatcher.OnTestEvent($"<unhandled-exception message='{ex.Message}' />");
 
                 return new TestEngineResult(resultXml);
             }
