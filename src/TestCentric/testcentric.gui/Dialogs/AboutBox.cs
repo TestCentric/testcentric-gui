@@ -70,7 +70,7 @@ namespace TestCentric.Gui
                     versionText += string.Format(" ({0})", configText);
             }
 
-            string copyrightText = "Copyright (C) 2018 Charlie Poole.";
+            string copyrightText = "Copyright (C) 2018-2019 Charlie Poole.";
             objectAttrs = executingAssembly.GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
             if (objectAttrs.Length > 0)
                 copyrightText = ((AssemblyCopyrightAttribute)objectAttrs[0]).Copyright;
@@ -118,7 +118,7 @@ namespace TestCentric.Gui
             // OkButton
             // 
             this.OkButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.OkButton.Location = new System.Drawing.Point(158, 305);
+            this.OkButton.Location = new System.Drawing.Point(159, 349);
             this.OkButton.Name = "OkButton";
             this.OkButton.Size = new System.Drawing.Size(96, 29);
             this.OkButton.TabIndex = 0;
@@ -207,7 +207,7 @@ namespace TestCentric.Gui
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point(14, 162);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(387, 123);
+            this.label4.Size = new System.Drawing.Size(387, 185);
             this.label4.TabIndex = 16;
             this.label4.Text = resources.GetString("label4.Text");
             // 
@@ -215,7 +215,7 @@ namespace TestCentric.Gui
             // 
             this.AcceptButton = this.OkButton;
             this.CancelButton = this.OkButton;
-            this.ClientSize = new System.Drawing.Size(413, 346);
+            this.ClientSize = new System.Drawing.Size(413, 385);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.linkLabel2);
             this.Controls.Add(this.label3);
@@ -249,7 +249,7 @@ namespace TestCentric.Gui
 
         private void linkLabel1_LinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("http://nunitsoftware.com");
+            System.Diagnostics.Process.Start("http://test-centric.com");
             linkLabel1.LinkVisited = true;
         }
 

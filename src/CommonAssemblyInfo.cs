@@ -32,7 +32,7 @@ using System.Reflection;
 //
 [assembly: AssemblyCompany("TestCentric")]
 [assembly: AssemblyProduct("TestCentric Runner for NUnit")]
-[assembly: AssemblyCopyright("Copyright (C) 2018 Charlie Poole.")]
+[assembly: AssemblyCopyright("Copyright (C) 2018-2019 Charlie Poole.")]
 
 //
 // Version information for an assembly consists of the following four values:
