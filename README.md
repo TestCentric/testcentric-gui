@@ -29,4 +29,4 @@ To use the **zip** distribution, you should simply unzip the contents into a con
 
 **TestCentric** is Open Source software, released under the MIT / X11 license. See LICENSE.txt for a copy of the license.
 
-**TestCentric** bundles a copy of the NUnit test engine, which is also licensed under the MIT / X11 license. In addition, the first version of the GUI is based in part on the NUnit 2.x GUI runner, released under the NUnit license. See NOTICES.txt for copyright information.
+**TestCentric** bundles a modified copy of the NUnit test engine, which is also licensed under the MIT / X11 license. In addition, the first version of the GUI is based in part on the NUnit 2.x GUI runner, released under the NUnit license. See NOTICES.txt for copyright information.
