@@ -1,4 +1,22 @@
-﻿TestCentric Runner for NUnit 1.0.0-Beta4 - July 17, 2019
+﻿TestCentric Runner for NUnit 1.0.0 - July 26, 2019
+
+General
+
+This is the final release of version 1.0 of the TestCentric Runner for NUnit.
+
+Features
+
+ * Version 0.15 of the Experimental GUI is included.
+
+Issues Resolved
+
+ * 7 Credit for all contributors
+ * 8 Icon and Logo for TestCentric
+ * 224 FIXED: Appveyor build doesn't use generated identifier to tag packages 
+ * 375 Clean up GUI About box
+ * 378 Ensure that error message displays when exception is thrown in engine
+
+TestCentric Runner for NUnit 1.0.0-Beta4 - July 17, 2019
 
 General
 
