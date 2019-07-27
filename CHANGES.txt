@@ -1,4 +1,70 @@
-﻿TestCentric Runner for NUnit 1.0.0-Beta4 - July 17, 2019
+﻿TestCentric Runner for NUnit 1.0.0 - July 27, 2019
+
+General
+
+This is the final release of version 1.0 of the TestCentric Runner for NUnit, which is
+primarily based on the layout and feature set of the original NUnit V2 GUI runner with
+internals modified so as to run NUnit3 tests. Certain changes were made because of 
+differences in how NUnit3 works and are described below under Features.
+
+This new GUI runner was created by the TestCentric team: Charlie Poole, Mikkel Bundgaard,
+Manfred Lange, Stefano Nuzzo and Robert Snyder. Community members who contributed code to
+this release include Jeff Kryzer, zBrianW, Joseph Musser and Mattias Karlsson. Countless
+other folks contributed by filing issues, asking questions and making suggestions.
+ 
+Features
+
+ * TestCentric relies on the NUnit engine to load and run tests. Features that require 
+ an engine extension are only available if the appropriate extension is installed. In
+ particular, this includes the ability to open both NUnit and Visual Studio projects,
+ run NUNit V2 tests and save results in V2 format.
+ 
+ * All direct access to NUnit project contents, such as editing, saving and adding
+ configurations, has been removed. The user should use a separate editor such as
+ the NUnit Project Editor to perform those tasks.
+
+ * Because the GUI runs under .NET 4.5 or higher, any tests that you cause to execute
+ in-process will run under that version of the framework. In some cases, this may give
+ different results. By default, tests are run in a separate process and use the target
+ framework for which they were built. We recommend you stick with the default.
+
+ * The File menu no longer has entries for Load Fixture or Clear Fixture. New menu 
+ items to select Process and AppDomain options for loading have been added and the
+ corresponding Settings pages removed.
+
+ * The Project top level menu has been removed since it was mostly used to contain
+ entries related to NUnit projects. The "Add Projects" entry has been replaced by 
+ "Add Files" on the File menu.
+
+ * The Tools menu no longer has entries for Exception Details or Test Assemblies. 
+ The Open Log Directory entry has been replaced with Open Work Directory.
+
+ * The Result Tabs (Errors and Failures, Tests Not Run, and Text Output) may no 
+ longer be hidden. The Text Output tab only displays Console output and the ability 
+ to tailor it's contents has been removed with the exception of the option to label
+ tests by name in various ways.
+
+ * Version 0.15 of the Experimental GUI is included.
+
+Known Problems
+
+ * TestCentric uses the test id to select individual tests to be run. This is not 
+ currently supported by the V2 framework driver, which throws an exception when 
+ an id filter is encountered. The result for the GUI is that it is not possible
+ to select individual tests for execution if any V2 framework tests are loaded.
+ For that reason, we recommend that you only use this release for NUnit 3 tests.
+ This problem will be fixed when a new version of the V2 driver is available,
+ which includes support for an id filter.
+
+Issues Resolved
+
+ * 7 Credit for all contributors
+ * 8 Icon and Logo for TestCentric
+ * 224 FIXED: Appveyor build doesn't use generated identifier to tag packages 
+ * 375 Clean up GUI About box
+ * 378 Ensure that error message displays when exception is thrown in engine
+
+TestCentric Runner for NUnit 1.0.0-Beta4 - July 17, 2019
 
 General
 

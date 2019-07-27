@@ -46,9 +46,11 @@ We love pull requests! We prefer that new contributors start with small issues a
 
 To help new contributors get their feet wet, we have marked a number of issues with the `easyfix` label. These are great places to start.
 
-It is also a good idea to add a comment to an issue that you are working on to let everyone know. If you stop working on it, also please let us know.
+It is also a good idea to add a comment to an issue that you are working on to let everyone know. We'll assign the issue to you so that it shows up under your name on GitHub. If you stop working on it, also please let us know.
 
 Please read through the developer section of the documentation before contributing to understand our coding standards and contribution guidelines.
+
+Once you are ready to have your work reviewed, create a Pull Request (PR) on GitHub. A team member will review it and may make suggestions for changes. Only team members (committers) are able to merge your work into TestCentric.
 
 ## License
 
