@@ -6,18 +6,19 @@ The **TestCentric Runner for NUnit** (aka **TestCentric**) is a GUI runner aimed
 
 ## Features
 
-The initial release is based on the layout and feature set of the of the original NUnit GUI, with the internals modified so as to run NUnit 3 tests. See [NUnitGuiDifferences](./NUnitGuiDifferences.md) for a list of the most important changes.
+The initial release is based on the layout and feature set of the of the original NUnit GUI, with the internals modified so as to run NUnit 3 tests. See [CHANGES](./CHANGES.txt) for a list of the most important changes.
 
 ## Getting Started
+
 ### Prerequisites
 
 **TestCentric** requires .NET 4.5 or later in order to function. Your projects whose tests will run under **TestCentric** should already have some version of the NUnit framework installed.
 
 ### Installation
 
-**TestCentric** is released in two package formats, **zip** and **chocolatey**, both available from the GitHub project site https://github.com/TestCentric/testcentric-gui/releases. The **chocolatey** package is also available at https://chocolatey.org/testcentric-gui.
+**TestCentric** is released in two package formats, **zip** and **chocolatey**, both available from the [GitHub project](https://github.com/TestCentric/testcentric-gui/releases) site. The **chocolatey** package is also available at [chocolatey.org](https://chocolatey.org/testcentric-gui).
 
-The **chocolatey** package provides the best user experience and is the recommended way to install **TestCentric**. Follow the directions at the above link to **chocolatey.org**. If you wish to install any NUnit engine extensions for use with the GUI, simply install them using `choco.exe` in the same way as the GUI.
+The **chocolatey** package provides the best user experience and is the recommended way to install **TestCentric**. Follow the directions at [chocolatey.org](https://chocolatey.org/testcentric-gui). If you wish to install any NUnit engine extensions for use with the GUI, simply install them using `choco.exe` in the same way as the GUI.
 
 To use the **zip** distribution, you should simply unzip the contents into a convenient directory and create your own shortcut to `testcentric.exe`. To use it from the command-line, place the install directory on your path.
 
