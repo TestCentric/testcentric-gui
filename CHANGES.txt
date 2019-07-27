@@ -1,4 +1,4 @@
-﻿TestCentric Runner for NUnit 1.0.0 - July 26, 2019
+﻿TestCentric Runner for NUnit 1.0.0 - July 27, 2019
 
 General
 
