@@ -1,18 +1,21 @@
 #tool nuget:?package=NUnit.ConsoleRunner&version=3.9.0
+
+using System.Xml;
+
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
 //////////////////////////////////////////////////////////////////////
 
-var target = Argument("target", "Default");
-var configuration = Argument("configuration", "Release");
-var packageVersion = Argument("packageVersion", "1.0.0");
+string target = Argument("target", "Default");
+string configuration = Argument("configuration", "Release");
+string packageVersion = Argument("packageVersion", "1.0.0");
 
 //////////////////////////////////////////////////////////////////////
 // SET PACKAGE VERSION
 //////////////////////////////////////////////////////////////////////
 
-var dash = packageVersion.IndexOf('-');
-var version = dash > 0
+int dash = packageVersion.IndexOf('-');
+string version = dash > 0
     ? packageVersion.Substring(0, dash)
     : packageVersion;
 
@@ -57,20 +60,25 @@ if (usingXBuild)
 //////////////////////////////////////////////////////////////////////
 
 // Directories
-var PROJECT_DIR = Context.Environment.WorkingDirectory.FullPath + "/";
-var PACKAGE_DIR = PROJECT_DIR + "package/";
-var CHOCO_DIR = PROJECT_DIR + "choco/";
-var BIN_DIR = PROJECT_DIR + "bin/" + configuration + "/";
-var ENGINE_BIN_DIR = PROJECT_DIR + "src/TestEngine/bin/" + configuration + "/net20/";
+string PROJECT_DIR = Context.Environment.WorkingDirectory.FullPath + "/";
+string PACKAGE_DIR = PROJECT_DIR + "package/";
+string PACKAGE_TEST_DIR = PACKAGE_DIR + "test/";
+string CHOCO_DIR = PROJECT_DIR + "choco/";
+string BIN_DIR = PROJECT_DIR + "bin/" + configuration + "/";
+string ENGINE_BIN_DIR = PROJECT_DIR + "src/TestEngine/bin/" + configuration + "/net20/";
 
 // Packaging
-var PACKAGE_NAME = "testcentric-gui";
+string PACKAGE_NAME = "testcentric-gui";
 
 // Solution
-var SOLUTION = "testcentric-gui.sln";
+string SOLUTION = "testcentric-gui.sln";
 
-// Test Assembly Pattern
-var ALL_TESTS = BIN_DIR + "*.Tests.dll";
+// Testing
+string GUI_RUNNER = "testcentric.exe";
+string EXPERIMENTAL_RUNNER = "tc-next.exe";
+string GUI_TESTS = "TestCentric.Gui.Tests.dll";
+string EXPERIMENTAL_TESTS = "Experimental.Gui.Tests.dll";
+string ALL_TESTS = "*.Tests.dll";
 
 //////////////////////////////////////////////////////////////////////
 // SETUP
@@ -171,7 +179,7 @@ Task("Test")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    NUnit3(ALL_TESTS, new NUnit3Settings {
+    NUnit3(BIN_DIR + ALL_TESTS, new NUnit3Settings {
         NoResults = true
         });
 });
@@ -269,6 +277,118 @@ Task("PackageChocolatey")
             });
     });
 
+Task("CreatePackageTestDirectory")
+	.Does(() =>
+	{
+		CleanDirectory(PACKAGE_TEST_DIR);
+
+		Unzip(File(PACKAGE_DIR + PACKAGE_NAME + "-" + packageVersion + ".zip"), PACKAGE_TEST_DIR);
+		CopyTestFiles(BIN_DIR, PACKAGE_TEST_DIR);
+	});
+
+
+//////////////////////////////////////////////////////////////////////
+// ZIP PACKAGE TEST
+//////////////////////////////////////////////////////////////////////
+
+Task("ZipPackageTest")
+	.IsDependentOn("CreatePackageTestDirectory")
+	.Does(() =>
+	{
+		NUnit3(PACKAGE_TEST_DIR + ALL_TESTS);
+	});
+
+//////////////////////////////////////////////////////////////////////
+// INTERACTIVE TESTS FOR USE IN DEVELOPMENT
+//////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////
+// GUI TEST
+//////////////////////////////////////////////////////////////////////
+
+Task("GuiTest")
+    .IsDependentOn("Build")
+    .Does(() =>
+{
+		StartProcess(BIN_DIR + GUI_RUNNER, BIN_DIR + GUI_TESTS + " --run");
+		CheckTestResult("TestResult.xml");
+});
+
+//////////////////////////////////////////////////////////////////////
+// EXPERIMENTAL GUI TEST
+//////////////////////////////////////////////////////////////////////
+
+Task("ExperimentalGuiTest")
+    .IsDependentOn("Build")
+    .Does(() =>
+{
+		StartProcess(BIN_DIR + EXPERIMENTAL_RUNNER, BIN_DIR + EXPERIMENTAL_TESTS + " --run");
+		CheckTestResult("TestResult.xml");
+});
+
+//////////////////////////////////////////////////////////////////////
+// ZIP GUI TEST (USES ZIP PACKAGE)
+//////////////////////////////////////////////////////////////////////
+
+Task("ZipGuiTest")
+	.IsDependentOn("CreatePackageTestDirectory")
+	.Does(() =>
+	{
+		StartProcess(PACKAGE_TEST_DIR + GUI_RUNNER, PACKAGE_TEST_DIR + GUI_TESTS + " --run");
+		CheckTestResult("TestResult.xml");
+	});
+
+//////////////////////////////////////////////////////////////////////
+// ZIP EXPERIMENTAL GUI TEST (USES ZIP PACKAGE)
+//////////////////////////////////////////////////////////////////////
+
+Task("ZipExperimentalGuiTest")
+	.IsDependentOn("CreatePackageTestDirectory")
+	.Does(() =>
+	{
+		StartProcess(PACKAGE_TEST_DIR + EXPERIMENTAL_RUNNER, PACKAGE_TEST_DIR + EXPERIMENTAL_TESTS + " --run");
+		CheckTestResult("TestResult.xml");
+	});
+
+//////////////////////////////////////////////////////////////////////
+// HELPER METHODS
+//////////////////////////////////////////////////////////////////////
+
+// Copy all files needed to run tests from one directory to another
+private void CopyTestFiles(string fromDir, string toDir)
+{
+	CopyFiles(fromDir + "*.Tests.*", toDir);
+	CopyFiles(fromDir + "nunit.framework.*", toDir);
+	CopyFiles(fromDir + "mock-assembly.*", toDir);
+	CopyFiles(fromDir + "test-utilities.*", toDir);
+	CopyFiles(fromDir + "NSubstitute.*", toDir);
+	CopyFiles(fromDir + "Castle.Core.*", toDir);
+}
+
+// Examine the result file to make sure a test run passed
+private void CheckTestResult(string resultFile)
+{
+	var doc = new XmlDocument();
+	doc.Load(resultFile);
+
+	XmlNode testRun = doc.DocumentElement;
+	if (testRun.Name != "test-run")
+		throw new Exception("The test-run element was not found.");
+
+	string result = testRun.Attributes["result"]?.Value;
+	if (result == null)
+		throw new Exception("The test-run element has no result attribute.");
+
+	if (result == "Failed")
+	{
+		string msg = "The test run failed.";
+		string failed = testRun.Attributes["failed"]?.Value;
+		if (failed != null)
+			msg += $" {int.Parse(failed)} tests failed";
+		throw new Exception(msg);
+	}
+}
+
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
@@ -277,20 +397,26 @@ Task("Package")
     .IsDependentOn("PackageZip")
     .IsDependentOn("PackageChocolatey");
 
+Task("PackageTests")
+	.IsDependentOn("ZipPackageTest");
+
 Task("Appveyor")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
-    .IsDependentOn("Package");
+    .IsDependentOn("Package")
+	.IsDependentOn("PackageTests");
 
 Task("Travis")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
-    .IsDependentOn("PackageZip");
+    .IsDependentOn("PackageZip")
+	.IsDependentOn("ZipPackageTest");
 
 Task("All")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
-    .IsDependentOn("Package");
+    .IsDependentOn("Package")
+	.IsDependentOn("PackageTests");
 
 Task("Default")
     .IsDependentOn("Test");
