@@ -351,6 +351,21 @@ Task("ZipExperimentalGuiTest")
 	});
 
 //////////////////////////////////////////////////////////////////////
+// CHOCOLATEY TEST (USES CHOCOLATEY PACKAGE, MUST RUN AS ADMIN)
+//////////////////////////////////////////////////////////////////////
+
+Task("ChocolateyTest")
+	.IsDependentOn("CreatePackageTestDirectory")
+	.Does(() =>
+	{
+		if (StartProcess("choco", $"install -f -y -s {PACKAGE_DIR} {PACKAGE_NAME}") != 0)
+			throw new Exception("Failed to install package. Must run this command as administrator.");
+
+		StartProcess("testcentric", PACKAGE_TEST_DIR + "TestCentric.Gui.Tests.dll --run");
+		CheckTestResult("TestResult.xml");
+	});
+
+//////////////////////////////////////////////////////////////////////
 // HELPER METHODS
 //////////////////////////////////////////////////////////////////////
 
@@ -361,6 +376,7 @@ private void CopyTestFiles(string fromDir, string toDir)
 	CopyFiles(fromDir + "nunit.framework.*", toDir);
 	CopyFiles(fromDir + "mock-assembly.*", toDir);
 	CopyFiles(fromDir + "test-utilities.*", toDir);
+	CopyFiles(fromDir + "System.Threading.Tasks.*", toDir);
 	CopyFiles(fromDir + "NSubstitute.*", toDir);
 	CopyFiles(fromDir + "Castle.Core.*", toDir);
 }
