@@ -351,18 +351,31 @@ Task("ZipExperimentalGuiTest")
 	});
 
 //////////////////////////////////////////////////////////////////////
-// CHOCOLATEY TEST (USES CHOCOLATEY PACKAGE, MUST RUN AS ADMIN)
+// CHOCOLATEY INSTALL (MUST RUN AS ADMIN)
+//////////////////////////////////////////////////////////////////////
+
+Task("ChocolateyInstall")
+	.Does(() =>
+	{
+		if (StartProcess("choco", $"install -f -y -s {PACKAGE_DIR} {PACKAGE_NAME}") != 0)
+			throw new Exception("Failed to install package. Must run this command as administrator.");
+	});
+
+//////////////////////////////////////////////////////////////////////
+// CHOCOLATEY TEST (AFTER INSTALL)
 //////////////////////////////////////////////////////////////////////
 
 Task("ChocolateyTest")
 	.IsDependentOn("CreatePackageTestDirectory")
 	.Does(() =>
 	{
-		if (StartProcess("choco", $"install -f -y -s {PACKAGE_DIR} {PACKAGE_NAME}") != 0)
-			throw new Exception("Failed to install package. Must run this command as administrator.");
-
+		// TODO: When starting the commands that chocolatey has shimmed, the StartProcess
+		// call returns immediately, so we can't check the test result. For now, we just
+		// run the tests and inspect manually but we need to figure out how to wait for
+		// the process to complete.
 		StartProcess("testcentric", PACKAGE_TEST_DIR + "TestCentric.Gui.Tests.dll --run");
-		CheckTestResult("TestResult.xml");
+		StartProcess("tc-next", PACKAGE_TEST_DIR + "Experimental.Gui.Tests.dll --run");
+		//CheckTestResult("TestResult.xml");
 	});
 
 //////////////////////////////////////////////////////////////////////
