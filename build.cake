@@ -1,6 +1,10 @@
 #tool nuget:?package=NUnit.ConsoleRunner&version=3.9.0
+#tool nuget:?package=GitVersion.CommandLine&version=5.0.0
+#addin nuget:?package=Cake.Incubator&version=5.0.1
 
 using System.Xml;
+using System.Text.RegularExpressions;
+using Cake.Incubator.LoggingExtensions;
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -85,45 +89,53 @@ string ALL_TESTS = "*.Tests.dll";
 //////////////////////////////////////////////////////////////////////
 Setup(context =>
 {
-    if (BuildSystem.IsRunningOnAppVeyor)
-    {
-	    // The provided package version suffix is ignored when running
-		// on AppVeyor and is determined from the type of build and the 
-		// AppVeyor build number.
+	// TODO: Make GitVersion work on Linux
+	if (IsRunningOnWindows())
+	{
+		var gitVersion = GitVersion(new GitVersionSettings()
+		{
+			OutputType = GitVersionOutput.Json,
+			Verbosity = GitVersionVerbosity.Debug
+		});
 
-        var buildNumber = AppVeyor.Environment.Build.Number.ToString("00000");
-        var branch = AppVeyor.Environment.Repository.Branch;
-        var isPullRequest = AppVeyor.Environment.PullRequest.IsPullRequest;
+		Information("GitVersion Properties:");
+		Information(gitVersion.Dump());
 
-        if (branch == "master" && !isPullRequest)
-        {
-            packageVersion = version + "-dev-" + buildNumber;
-        }
-        else
-        {
-            var suffix = "-ci-" + buildNumber;
+		string branchName = gitVersion.BranchName;
+		// We don't currently use this pattern, but check in case we do later.
+		if (branchName.StartsWith ("feature/"))
+			branchName = branchName.Substring(8);
 
-            if (isPullRequest)
-                suffix += "-pr-" + AppVeyor.Environment.PullRequest.Number;
-            else if (AppVeyor.Environment.Repository.Branch.StartsWith("release", StringComparison.OrdinalIgnoreCase))
-                suffix += "-pre-" + buildNumber;
-            else
-                suffix += "-" + System.Text.RegularExpressions.Regex.Replace(branch, "[^0-9A-Za-z-]+", "-");
+		// Default based on GitVersion.yml
+		packageVersion = gitVersion.LegacySemVerPadded;
 
-            // Nuget limits "special version part" to 20 chars. Add one for the hyphen.
-            if (suffix.Length > 21)
-                suffix = suffix.Substring(0, 21);
+		int dash = packageVersion.IndexOf('-');	
+		if (dash > 0) // Only do this for pre-release versions
+		{
+			string suffix = packageVersion.Substring(dash);
 
-            packageVersion = version + suffix;
-        }
+			// This handles non-standard branch names not matching GitVersion's
+			// templates and suffixes the branch name for feature branches.
+			if (gitVersion.PreReleaseLabel == branchName)
+			{
+				suffix = suffix.Replace(branchName, "ci");
+				branchName = Regex.Replace(branchName, "[^0-9A-Za-z-]+", "-");
+				suffix += "-" + branchName;
+			}
 
-        AppVeyor.UpdateBuildVersion(packageVersion);
-    }
+			// Nuget limits "special version part" to 20 chars. Add one for the hyphen.
+			if (suffix.Length > 21)
+				suffix = suffix.Substring(0, 21);
 
-    // Executed BEFORE the first task.
+			packageVersion = gitVersion.MajorMinorPatch + suffix;
+		}
+
+		if (BuildSystem.IsRunningOnAppVeyor)
+			AppVeyor.UpdateBuildVersion(packageVersion);
+	}
+
     Information("Building {0} version {1} of TestCentric GUI.", configuration, packageVersion);
 });
-
 
 //////////////////////////////////////////////////////////////////////
 // CLEAN
