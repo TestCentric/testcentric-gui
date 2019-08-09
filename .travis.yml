@@ -14,5 +14,5 @@ matrix:
 
 script:
   - git fetch --unshallow
-  - dotnet tool install --version "0.31.0" -g Cake.Tool
+  - dotnet tool install --version "0.33.0" -g Cake.Tool
   - ~/.dotnet/tools/dotnet-cake --target=Travis --configuration=Release

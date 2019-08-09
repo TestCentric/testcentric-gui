@@ -1,0 +1,9 @@
+mode: ContinuousDelivery
+legacy-semver-padding: 5
+build-metadata-padding: 5
+commits-since-version-source-padding: 5
+branches:
+  master:
+    tag: dev
+  pull-request:
+    tag: pr
