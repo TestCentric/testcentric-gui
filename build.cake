@@ -130,8 +130,8 @@ Setup(context =>
 			packageVersion = gitVersion.MajorMinorPatch + suffix;
 		}
 
-		if (BuildSystem.IsRunningOnAppVeyor)
-			AppVeyor.UpdateBuildVersion(packageVersion);
+		//if (BuildSystem.IsRunningOnAppVeyor)
+		//	AppVeyor.UpdateBuildVersion(packageVersion);
 	}
 
     Information("Building {0} version {1} of TestCentric GUI.", configuration, packageVersion);
