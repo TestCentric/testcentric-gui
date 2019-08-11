@@ -92,11 +92,7 @@ Setup(context =>
 	// TODO: Make GitVersion work on Linux
 	if (IsRunningOnWindows())
 	{
-		var gitVersion = GitVersion(new GitVersionSettings()
-		{
-			OutputType = GitVersionOutput.Json,
-			Verbosity = GitVersionVerbosity.Debug
-		});
+		var gitVersion = GitVersion();
 
 		Information("GitVersion Properties:");
 		Information(gitVersion.Dump());
@@ -106,7 +102,8 @@ Setup(context =>
 		if (branchName.StartsWith ("feature/"))
 			branchName = branchName.Substring(8);
 
-		// Default based on GitVersion.yml
+		// Default based on GitVersion.yml. This gives us a tag of dev
+		// for master, ci for features and pr for pull requests.
 		packageVersion = gitVersion.LegacySemVerPadded;
 
 		// Full release versions and PRs need no further handling
