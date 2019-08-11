@@ -5,5 +5,7 @@ commits-since-version-source-padding: 5
 branches:
   master:
     tag: dev
+  release:
+    tag: rc
   pull-request:
     tag: pr
