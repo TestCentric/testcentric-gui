@@ -109,16 +109,23 @@ Setup(context =>
 		// Default based on GitVersion.yml
 		packageVersion = gitVersion.LegacySemVerPadded;
 
-		int dash = packageVersion.IndexOf('-');	
-		if (dash > 0) // Only do this for pre-release versions
-		{
-			string suffix = packageVersion.Substring(dash);
+		// Full release versions and PRs need no further handling
+		int dash = packageVersion.IndexOf('-');
+		bool isPreRelease = dash > 0;
 
-			// This handles non-standard branch names not matching GitVersion's
-			// templates and suffixes the branch name for feature branches.
-			if (gitVersion.PreReleaseLabel == branchName)
+		string label = gitVersion.PreReleaseLabel;
+		bool isPR = label == "pr"; // Set in our GitVersion.yml
+
+		if (isPreRelease && !isPR)
+		{
+			// This handles non-standard branch names.
+			if (label == branchName)
+				label = "ci";
+
+			string suffix = "-" + label + gitVersion.CommitsSinceVersionSourcePadded;
+
+			if (label == "ci")
 			{
-				suffix = suffix.Replace(branchName, "ci");
 				branchName = Regex.Replace(branchName, "[^0-9A-Za-z-]+", "-");
 				suffix += "-" + branchName;
 			}
@@ -130,8 +137,8 @@ Setup(context =>
 			packageVersion = gitVersion.MajorMinorPatch + suffix;
 		}
 
-		//if (BuildSystem.IsRunningOnAppVeyor)
-		//	AppVeyor.UpdateBuildVersion(packageVersion);
+		if (BuildSystem.IsRunningOnAppVeyor)
+			AppVeyor.UpdateBuildVersion(packageVersion);
 	}
 
     Information("Building {0} version {1} of TestCentric GUI.", configuration, packageVersion);
