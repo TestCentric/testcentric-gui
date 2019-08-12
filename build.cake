@@ -103,7 +103,8 @@ Setup(context =>
 			branchName = branchName.Substring(8);
 
 		// Default based on GitVersion.yml. This gives us a tag of dev
-		// for master, ci for features and pr for pull requests.
+		// for master, ci for features, pr for pull requests and rc
+		// for release branches.
 		packageVersion = gitVersion.LegacySemVerPadded;
 
 		// Full release versions and PRs need no further handling
