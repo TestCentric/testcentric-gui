@@ -230,7 +230,7 @@ namespace NUnit.Engine.Runners
 #if !NETSTANDARD1_6
             if (_assemblyResolver != null)
             {
-                foreach (var package in TestPackage.Select(p => p.IsAssemblyPackage()))
+                foreach (var package in TestPackage.AssemblyPackages())
                     _assemblyResolver.RemovePathFromFile(package.FullName);
             }
 #endif

@@ -38,6 +38,11 @@ namespace NUnit.Engine.Internal
             return package.FullName != null && PathUtils.IsAssemblyFileType(package.FullName);
         }
 
+        public static IList<TestPackage> AssemblyPackages(this TestPackage package)
+        {
+            return package.Select(p => p.IsAssemblyPackage());
+        }
+
         public static bool HasSubPackages(this TestPackage package)
         {
             return package.SubPackages.Count > 0;

@@ -80,7 +80,7 @@ namespace NUnit.Engine.Services
             {
                 default:
                 case ProcessModel.Default:
-                    if (package.SubPackages.Count > 1)
+                    if (package.AssemblyPackages().Count > 1)
                         return new MultipleTestProcessRunner(this.ServiceContext, package);
                     else
                         return new ProcessRunner(this.ServiceContext, package);

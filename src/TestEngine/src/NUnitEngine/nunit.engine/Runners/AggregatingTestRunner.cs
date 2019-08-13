@@ -76,7 +76,7 @@ namespace NUnit.Engine.Runners
                 if (_runners == null)
                 {
                     _runners = new List<ITestEngineRunner>();
-                    foreach (var subPackage in TestPackage.SubPackages)
+                    foreach (var subPackage in TestPackage.AssemblyPackages())
                     {
                         _runners.Add(CreateRunner(subPackage));
                     }
