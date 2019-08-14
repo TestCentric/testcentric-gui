@@ -16,11 +16,13 @@ The initial release is based on the layout and feature set of the of the origina
 
 ### Installation
 
-**TestCentric** is released in two package formats, **zip** and **chocolatey**, both available from the [GitHub project](https://github.com/TestCentric/testcentric-gui/releases) site. The **chocolatey** package is also available at [chocolatey.org](https://chocolatey.org/testcentric-gui).
+**TestCentric** is released in two package formats, **zip** and **chocolatey**, both available from the [GitHub project](https://github.com/TestCentric/testcentric-gui/releases) site. The **chocolatey** package is also available at [chocolatey.org](https://chocolatey.org/packages/testcentric-gui).
 
-The **chocolatey** package provides the best user experience and is the recommended way to install **TestCentric**. Follow the directions at [chocolatey.org](https://chocolatey.org/testcentric-gui). If you wish to install any NUnit engine extensions for use with the GUI, simply install them using `choco.exe` in the same way as the GUI.
+The **chocolatey** package provides the best user experience and is the recommended way to install **TestCentric**. Follow the directions at [chocolatey.org](https://chocolatey.org/testcentric-gui) or see the [INTALL](./INSTALL.md) document. If you wish to install any NUnit engine extensions for use with the GUI, simply install them using `choco.exe` in the same way as the GUI.
 
 To use the **zip** distribution, you should simply unzip the contents into a convenient directory and create your own shortcut to `testcentric.exe`. To use it from the command-line, place the install directory on your path.
+
+For installation of pre-release development versions of **TestCentric** see the [INSTALL](./INSTALL.md) document.
 
 ## Versioning
 
