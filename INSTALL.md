@@ -1,10 +1,10 @@
 # TestCentric Installation
 
-**TestCentric** is released in two package formats, **zip** and **chocolatey**, both available from the [GitHub project](https://github.com/TestCentric/testcentric-gui/releases) site. The **chocolatey** package is also available at [chocolatey.org](https://chocolatey.org/testcentric-gui).
+**TestCentric** is released in two package formats, **zip** and **chocolatey**, both available from the [GitHub project](https://github.com/TestCentric/testcentric-gui/releases) site. The **chocolatey** package is also available at [chocolatey.org](https://chocolatey.org/packages/testcentric-gui).
 
 ## Chocolatey Installation
 
-This is the recommended way to install chocolatey on a developer machine. It provides the best user experience and creates shim commands for both the standard and the experimental GUIs so they may be invoked from any directory.
+This is the recommended way to install TestCentric on a developer machine. It provides the best user experience and creates shim commands for both the standard and the experimental GUIs so they may be invoked from any directory.
 
 **NOTE:** As an executable tool, TestCentric is not designed to be installed in individual projects but is intended to exist in a single version, centrally available on the developer's machine. If special cases call for a different approach, you may download the **zip** package.
 
