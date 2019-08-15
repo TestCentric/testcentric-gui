@@ -1,4 +1,20 @@
-﻿TestCentric Runner for NUnit 1.0.0 - July 27, 2019
+﻿TestCentric Runner for NUnit 1.0.1 - August 15, 2019
+
+General
+
+This release fixes a critical error discovered after the release of 1.0.0.
+
+Features
+
+ * Includes version 0.15.1 of the experimental GUI
+
+Issues Resolved
+
+ * 325 Deploy development builds automatically
+ * 380 Automate testing of packages
+ * 388 FIXED: NUnit process with multiple assemblies will not load
+
+TestCentric Runner for NUnit 1.0.0 - July 27, 2019
 
 General
 
