@@ -95,8 +95,6 @@ namespace NUnit.Engine.Runners
             ValidatePackageSettings();
         }
 
-        #region Properties
-
         /// <summary>
         /// The TestPackage for which this is the runner
         /// </summary>
@@ -114,10 +112,6 @@ namespace NUnit.Engine.Runners
         {
             get { return LoadResult != null; }
         }
-
-#endregion
-
-#region ITestRunner Members
 
         /// <summary>
         /// Get a flag indicating whether a test is running
@@ -246,10 +240,6 @@ namespace NUnit.Engine.Runners
             return LoadResult.Xml;
         }
 
-#endregion
-
-#region IDisposable
-
         public void Dispose()
         {
             Dispose(true);
@@ -269,10 +259,6 @@ namespace NUnit.Engine.Runners
                 _disposed = true;
             }
         }
-
-#endregion
-
-#region Helper Methods
 
         //Exposed for testing
         internal ITestEngineRunner GetEngineRunner()
@@ -598,7 +584,5 @@ namespace NUnit.Engine.Runners
             var filterElement = doc.ImportNode(tempNode, true);
             resultNode.InsertAfter(filterElement, null);
         }
-
-#endregion
     }
 }
