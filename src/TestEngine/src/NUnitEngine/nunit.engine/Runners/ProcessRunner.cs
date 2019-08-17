@@ -57,8 +57,6 @@ namespace NUnit.Engine.Runners
             _agency = Services.GetService<TestAgency>();
         }
 
-        #region AbstractTestRunner Overrides
-
         /// <summary>
         /// Explore a TestPackage and return information about
         /// the tests found.
@@ -286,10 +284,6 @@ namespace NUnit.Engine.Runners
             }
         }
 
-        #endregion
-
-        #region Helper Methods
-
         private void CreateAgentAndRunner()
         {
             if (_agent == null)
@@ -335,8 +329,6 @@ namespace NUnit.Engine.Runners
 
             return new TestEngineResult(suite);
         }
-
-        #endregion
     }
 }
 #endif
