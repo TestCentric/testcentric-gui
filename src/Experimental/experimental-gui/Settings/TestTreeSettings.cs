@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2015 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -22,6 +22,7 @@
 // ***********************************************************************
 
 using NUnit.Engine;
+using TestCentric.Gui.Model;
 
 namespace TestCentric.Gui.Settings
 {
@@ -31,12 +32,12 @@ namespace TestCentric.Gui.Settings
 
         public FixtureListSettings FixtureList
         {
-            get { return new FixtureListSettings(SettingsService); }
+            get { return new FixtureListSettings(_settingsService); }
         }
 
         public TestListSettings TestList
         {
-            get { return new TestListSettings(SettingsService); }
+            get { return new TestListSettings(_settingsService); }
         }
 
         private const string displayFormatKey = "DisplayFormat";

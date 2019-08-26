@@ -55,7 +55,6 @@
     <Compile Include="Presenters\TextOutputPresenter.cs" />
     <Compile Include="Settings\EngineSettings.cs" />
     <Compile Include="Settings\GuiSettings.cs" />
-    <Compile Include="Settings\SettingsGroup.cs" />
     <Compile Include="Settings\SettingsModel.cs" />
     <Compile Include="Settings\TestTreeSettings.cs" />
     <Compile Include="Presenters\TestGroup.cs" />

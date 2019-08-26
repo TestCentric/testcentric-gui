@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -42,9 +42,18 @@ namespace NUnit.TestUtilities.Fakes
 
         public T GetSetting<T>(string settingName, T defaultValue)
         {
-            return _storage.ContainsKey(settingName)
-                ? (T)_storage[settingName]
-                : defaultValue;
+            if (!_storage.ContainsKey(settingName))
+                return defaultValue;
+
+            try
+            {
+                return (T)_storage[settingName];
+            }
+            catch(Exception)
+            {
+                // Simulate engine action when conversion fails
+                return defaultValue;
+            }
         }
 
         public void RemoveGroup(string groupName)
@@ -54,7 +63,7 @@ namespace NUnit.TestUtilities.Fakes
 
         public void RemoveSetting(string settingName)
         {
-            throw new NotImplementedException();
+            _storage.Remove(settingName);
         }
 
         public void SaveSetting(string settingName, object settingValue)

@@ -22,6 +22,7 @@
 // ***********************************************************************
 
 using NUnit.Engine;
+using TestCentric.Gui.Model;
 
 namespace TestCentric.Gui.Settings
 {

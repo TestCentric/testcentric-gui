@@ -1,5 +1,5 @@
-﻿// ***********************************************************************
-// Copyright (c) 2018 Charlie Poole
+// ***********************************************************************
+// Copyright (c) 2018-2019 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -23,23 +23,23 @@
 
 using NUnit.Engine;
 
-namespace TestCentric.Gui.Model.Settings
+namespace TestCentric.Gui.Model
 {
     public class SettingsGroup : ISettings
     {
-        protected ISettings _settings;
+        protected ISettings _settingsService;
         protected string _prefix;
 
-        public SettingsGroup(ISettings engineSettings, string prefix)
+        public SettingsGroup(ISettings settingsService, string prefix)
         {
-            _settings = engineSettings;
+            _settingsService = settingsService;
             _prefix = prefix ?? string.Empty;
 
             if (_prefix != string.Empty && !prefix.EndsWith("."))
                 _prefix += ".";
 
             // Forward any changes from the engine
-            _settings.Changed += (object s, SettingsEventArgs args) =>
+            _settingsService.Changed += (object s, SettingsEventArgs args) =>
             {
                 Changed?.Invoke(s, args);
             };
@@ -51,28 +51,28 @@ namespace TestCentric.Gui.Model.Settings
 
         public object GetSetting(string settingName)
         {
-            return _settings.GetSetting(_prefix + settingName);
+            return _settingsService.GetSetting(_prefix + settingName);
         }
 
         public T GetSetting<T>(string settingName, T defaultValue)
         {
-            return _settings.GetSetting<T>(_prefix + settingName, defaultValue);
+            return _settingsService.GetSetting<T>(_prefix + settingName, defaultValue);
         }
 
         public void RemoveGroup(string groupName)
         {
-            _settings.RemoveGroup(_prefix + groupName);
+            _settingsService.RemoveGroup(_prefix + groupName);
         }
 
         public void RemoveSetting(string settingName)
         {
-            _settings.RemoveSetting(_prefix + settingName);
+            _settingsService.RemoveSetting(_prefix + settingName);
         }
 
         public void SaveSetting(string settingName, object settingValue)
         {
             if (settingValue != null)
-                _settings.SaveSetting(_prefix + settingName, settingValue);
+                _settingsService.SaveSetting(_prefix + settingName, settingValue);
             else
                 RemoveSetting(settingName);
         }

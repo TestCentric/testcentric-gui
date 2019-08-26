@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2015 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -22,6 +22,7 @@
 // ***********************************************************************
 
 using NUnit.Engine;
+using TestCentric.Gui.Model;
 
 namespace TestCentric.Gui.Settings
 {
@@ -35,12 +36,12 @@ namespace TestCentric.Gui.Settings
 
         public GuiSettings Gui
         {
-            get { return new GuiSettings(SettingsService); }
+            get { return new GuiSettings(_settingsService); }
         }
 
         public EngineSettings Engine
         {
-            get { return new EngineSettings(SettingsService); }
+            get { return new EngineSettings(_settingsService); }
         }
     }
 }

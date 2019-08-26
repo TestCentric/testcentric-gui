@@ -24,6 +24,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 using NUnit.Engine;
+using TestCentric.Gui.Model;
 
 namespace TestCentric.Gui.Settings
 {
@@ -33,22 +34,22 @@ namespace TestCentric.Gui.Settings
 
         public MainFormSettings MainForm
         {
-            get { return new MainFormSettings(SettingsService); }
+            get { return new MainFormSettings(_settingsService); }
         }
 
         public RecentProjectSettings RecentProjects
         {
-            get { return new RecentProjectSettings(SettingsService); }
+            get { return new RecentProjectSettings(_settingsService); }
         }
 
         public TestTreeSettings TestTree
         {
-            get { return new TestTreeSettings(SettingsService); }
+            get { return new TestTreeSettings(_settingsService); }
         }
 
         public TextOutputSettings TextOutput
         {
-            get { return new TextOutputSettings(SettingsService); }
+            get { return new TextOutputSettings(_settingsService); }
         }
 
         private const string initialPageKey = "InitialSettingsPage";

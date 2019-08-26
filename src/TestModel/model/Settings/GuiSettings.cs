@@ -37,32 +37,32 @@ namespace TestCentric.Gui.Model.Settings
 
         public TestTreeSettings TestTree
         {
-            get { return new TestTreeSettings(_settings); }
+            get { return new TestTreeSettings(_settingsService); }
         }
 
         public RecentProjectsSettings RecentProjects
         {
-            get { return new RecentProjectsSettings(_settings); }
+            get { return new RecentProjectsSettings(_settingsService); }
         }
 
         public MiniFormSettings MiniForm
         {
-            get { return new MiniFormSettings(_settings); }
+            get { return new MiniFormSettings(_settingsService); }
         }
 
         public MainFormSettings MainForm
         {
-            get { return new MainFormSettings(_settings); }
+            get { return new MainFormSettings(_settingsService); }
         }
 
         public ErrorDisplaySettings ErrorDisplay
         {
-            get { return new ErrorDisplaySettings(_settings); }
+            get { return new ErrorDisplaySettings(_settingsService); }
         }
 
         public TextOutputSettings TextOutput
         {
-            get { return new TextOutputSettings(_settings); }
+            get { return new TextOutputSettings(_settingsService); }
         }
 
         public string DisplayFormat
