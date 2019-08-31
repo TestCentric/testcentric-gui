@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -27,8 +27,8 @@ namespace TestCentric.Gui.Model.Settings
 {
     public class TextOutputSettings : SettingsGroup
     {
-        public TextOutputSettings(ISettings settings)
-             : base(settings, "Gui.ResultTabs.TextOutput") { }
+        public TextOutputSettings(ISettings settings, string prefix)
+             : base(settings, prefix + "Gui.ResultTabs.TextOutput") { }
 
         public bool WordWrapEnabled
         {

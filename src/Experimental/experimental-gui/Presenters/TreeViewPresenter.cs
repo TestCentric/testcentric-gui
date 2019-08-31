@@ -50,7 +50,7 @@ namespace TestCentric.Gui.Presenters
             _view = treeView;
             _model = model;
 
-            Settings = new Settings.TestTreeSettings(_model.Services.UserSettings);
+            Settings = new Settings.SettingsModel(_model.Services.UserSettings, "Experimental.").Gui.TestTree;
 
             _view.AlternateImageSet = (string)Settings.AlternateImageSet;
 

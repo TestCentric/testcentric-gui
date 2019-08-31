@@ -50,7 +50,7 @@ namespace TestCentric.Gui.Presenters
         {
             _view = view;
             _model = model;
-            _settings = new SettingsModel(_model.Services.UserSettings);
+            _settings = new SettingsModel(_model.Services.UserSettings, "Experimental.");
             _options = options;
 
             InitializeMainMenu();

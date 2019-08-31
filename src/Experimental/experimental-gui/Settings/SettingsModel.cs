@@ -32,16 +32,16 @@ namespace TestCentric.Gui.Settings
     /// </summary>
     public class SettingsModel : SettingsGroup
     {
-        public SettingsModel(ISettings settings) : base(settings, null) { }
+        public SettingsModel(ISettings settings, string applicationPrefix) : base(settings, applicationPrefix) { }
 
         public GuiSettings Gui
         {
-            get { return new GuiSettings(_settingsService); }
+            get { return new GuiSettings(_settingsService, _prefix); }
         }
 
         public EngineSettings Engine
         {
-            get { return new EngineSettings(_settingsService); }
+            get { return new EngineSettings(_settingsService, _prefix); }
         }
     }
 }

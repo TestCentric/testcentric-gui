@@ -1,5 +1,5 @@
 // ***********************************************************************
-// Copyright (c) 2018 Charlie Poole
+// Copyright (c) 2018-2019 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -35,27 +35,28 @@ namespace TestCentric.Gui.Model.Settings
 {
     public abstract class SettingsTests<TSettings> where TSettings : SettingsGroup
     {
-        protected UserSettings _userSettings;
+        protected const string APPLICATION_PREFIX = "TestCentric.";
+        protected string _groupPrefix;
+
+        protected ISettings _settingsService;
         protected SettingsEventArgs _changeEvent;
         protected TSettings _settingsGroup;
 
         protected abstract TSettings GetSettingsGroup();
 
-        protected string _prefix;
-
-        public SettingsTests(string prefix)
+        public SettingsTests(string groupPrefix)
         {
-            _prefix = prefix ?? string.Empty;
+            _groupPrefix = groupPrefix ?? string.Empty;
 
-            if (_prefix != string.Empty && !prefix.EndsWith("."))
-                _prefix += ".";
+            if (_groupPrefix != string.Empty && !groupPrefix.EndsWith("."))
+                _groupPrefix += ".";
         }
 
         [SetUp]
         public void SetUp()
         {
-            _userSettings = new TestModel(new MockTestEngine()).Services.UserSettings;
-            _userSettings.Changed += (object s, SettingsEventArgs e) => { _changeEvent = e; };
+            _settingsService = new TestModel(new MockTestEngine()).Services.UserSettings;
+            _settingsService.Changed += (object s, SettingsEventArgs e) => { _changeEvent = e; };
             _settingsGroup = GetSettingsGroup();
         }
 
@@ -66,15 +67,15 @@ namespace TestCentric.Gui.Model.Settings
             var propInfo = typeof(TSettings).GetProperty(propertyName);
 
             // Check the default value
-            Assert.That(propInfo.GetValue(_settingsGroup), Is.EqualTo(defaultValue), "Incorrect default value");
+            Assert.That(propInfo.GetValue(_settingsGroup), Is.EqualTo(defaultValue), $"Incorrect default value for {propertyName}");
 
             // Set the property and verify that it changed
             propInfo.SetValue(_settingsGroup, testValue);
-            Assert.That(propInfo.GetValue(_settingsGroup), Is.EqualTo(testValue), "Value did not change");
+            Assert.That(propInfo.GetValue(_settingsGroup), Is.EqualTo(testValue), $"Value did not change when {propertyName} was set");
 
             // Check that a Changed event was received with the correct storage key
-            Assert.That(_changeEvent, Is.Not.Null, "No event received");
-            Assert.That(_changeEvent.SettingName, Is.EqualTo(_prefix + propertyName));
+            Assert.That(_changeEvent, Is.Not.Null, $"No event received when {propertyName} was set");
+            Assert.That(_changeEvent.SettingName, Is.EqualTo(APPLICATION_PREFIX + _groupPrefix + propertyName), $"Event has incorrect key for {propertyName}");
         }
     }
 
@@ -84,7 +85,7 @@ namespace TestCentric.Gui.Model.Settings
 
         protected override EngineSettings GetSettingsGroup()
         {
-            return _userSettings.Engine;
+            return new EngineSettings(_settingsService, APPLICATION_PREFIX);
         }
 
         public static TestCaseData[] TestCases = new TestCaseData[]
@@ -105,7 +106,7 @@ namespace TestCentric.Gui.Model.Settings
 
         protected override ErrorDisplaySettings GetSettingsGroup()
         {
-            return _userSettings.Gui.ErrorDisplay;
+            return new ErrorDisplaySettings(_settingsService, APPLICATION_PREFIX);
         }
 
         public static TestCaseData[] TestCases = new TestCaseData[]
@@ -131,7 +132,7 @@ namespace TestCentric.Gui.Model.Settings
 
         protected override GuiSettings GetSettingsGroup()
         {
-            return _userSettings.Gui;
+            return new GuiSettings(_settingsService, APPLICATION_PREFIX);
         }
 
         public static TestCaseData[] TestCases = new TestCaseData[]
@@ -166,7 +167,7 @@ namespace TestCentric.Gui.Model.Settings
 
         protected override MainFormSettings GetSettingsGroup()
         {
-            return _userSettings.Gui.MainForm;
+            return new MainFormSettings(_settingsService, APPLICATION_PREFIX);
         }
 
         public static TestCaseData[] TestCases = new TestCaseData[]
@@ -186,7 +187,7 @@ namespace TestCentric.Gui.Model.Settings
 
         protected override MiniFormSettings GetSettingsGroup()
         {
-            return _userSettings.Gui.MiniForm;
+            return new MiniFormSettings(_settingsService, APPLICATION_PREFIX);
         }
 
         public static TestCaseData[] TestCases = new TestCaseData[]
@@ -205,7 +206,7 @@ namespace TestCentric.Gui.Model.Settings
 
         protected override RecentProjectsSettings GetSettingsGroup()
         {
-            return _userSettings.Gui.RecentProjects;
+            return new RecentProjectsSettings(_settingsService, APPLICATION_PREFIX);
         }
 
         public static TestCaseData[] TestCases = new TestCaseData[]
@@ -221,7 +222,7 @@ namespace TestCentric.Gui.Model.Settings
 
         protected override TestTreeSettings GetSettingsGroup()
         {
-            return _userSettings.Gui.TestTree;
+            return new TestTreeSettings(_settingsService, APPLICATION_PREFIX);
         }
 
         public static TestCaseData[] TestCases = new TestCaseData[]
@@ -239,7 +240,7 @@ namespace TestCentric.Gui.Model.Settings
 
         protected override TextOutputSettings GetSettingsGroup()
         {
-            return _userSettings.Gui.TextOutput;
+            return new TextOutputSettings(_settingsService, APPLICATION_PREFIX);
         }
 
         public static TestCaseData[] TestCases = new TestCaseData[]

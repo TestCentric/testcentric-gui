@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -28,8 +28,8 @@ namespace TestCentric.Gui.Model.Settings
 {
     public class ErrorDisplaySettings : SettingsGroup
     {
-        public ErrorDisplaySettings(ISettings settings)
-             : base(settings, "Gui.ErrorDisplay") { }
+        public ErrorDisplaySettings(ISettings settings, string prefix)
+             : base(settings, prefix + "Gui.ErrorDisplay") { }
 
         public int SplitterPosition
         {

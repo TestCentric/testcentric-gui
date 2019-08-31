@@ -30,26 +30,26 @@ namespace TestCentric.Gui.Settings
 {
     public class GuiSettings : SettingsGroup
     {
-        public GuiSettings(ISettings settingsService) : base(settingsService, "Gui") { }
+        public GuiSettings(ISettings settingsService, string prefix) : base(settingsService, prefix + "Gui") { }
 
         public MainFormSettings MainForm
         {
-            get { return new MainFormSettings(_settingsService); }
+            get { return new MainFormSettings(_settingsService, _prefix); }
         }
 
         public RecentProjectSettings RecentProjects
         {
-            get { return new RecentProjectSettings(_settingsService); }
+            get { return new RecentProjectSettings(_settingsService, _prefix); }
         }
 
         public TestTreeSettings TestTree
         {
-            get { return new TestTreeSettings(_settingsService); }
+            get { return new TestTreeSettings(_settingsService, _prefix); }
         }
 
         public TextOutputSettings TextOutput
         {
-            get { return new TextOutputSettings(_settingsService); }
+            get { return new TextOutputSettings(_settingsService, _prefix); }
         }
 
         private const string initialPageKey = "InitialSettingsPage";
@@ -62,7 +62,7 @@ namespace TestCentric.Gui.Settings
 
     public class MainFormSettings : SettingsGroup
     {
-        public MainFormSettings(ISettings settingsService) : base(settingsService, "Gui.MainForm") { }
+        public MainFormSettings(ISettings settingsService, string prefix) : base(settingsService, prefix + "Gui.MainForm") { }
 
         private const string locationKey = "Location";
         public Point Location
@@ -95,7 +95,7 @@ namespace TestCentric.Gui.Settings
 
     public class RecentProjectSettings : SettingsGroup
     {
-        public RecentProjectSettings(ISettings settingsService) : base(settingsService, "Gui.RecentProjects") { }
+        public RecentProjectSettings(ISettings settingsService, string prefix) : base(settingsService, prefix + "Gui.RecentProjects") { }
 
         private const string maxFilesKey = "MaxFiles";
         public int MaxFiles

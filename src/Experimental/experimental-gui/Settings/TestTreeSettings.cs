@@ -28,16 +28,16 @@ namespace TestCentric.Gui.Settings
 {
     public class TestTreeSettings : SettingsGroup
     {
-        public TestTreeSettings(ISettings settingsService) : base(settingsService, "Gui.TestTree") { }
+        public TestTreeSettings(ISettings settingsService, string prefix) : base(settingsService, prefix + "Gui.TestTree") { }
 
         public FixtureListSettings FixtureList
         {
-            get { return new FixtureListSettings(_settingsService); }
+            get { return new FixtureListSettings(_settingsService, _prefix); }
         }
 
         public TestListSettings TestList
         {
-            get { return new TestListSettings(_settingsService); }
+            get { return new TestListSettings(_settingsService, _prefix); }
         }
 
         private const string displayFormatKey = "DisplayFormat";
@@ -78,7 +78,7 @@ namespace TestCentric.Gui.Settings
 
     public class FixtureListSettings : SettingsGroup
     {
-        public FixtureListSettings(ISettings settings) : base(settings, "Gui.TestTree.FixtureList") { }
+        public FixtureListSettings(ISettings settings, string prefix) : base(settings, prefix + "Gui.TestTree.FixtureList") { }
 
         private string groupByKey = "GroupBy";
         public string GroupBy
@@ -90,7 +90,7 @@ namespace TestCentric.Gui.Settings
 
     public class TestListSettings : SettingsGroup
     {
-        public TestListSettings(ISettings settings) : base(settings, "Gui.TestTree.TestList") { }
+        public TestListSettings(ISettings settings, string prefix) : base(settings, prefix + "Gui.TestTree.TestList") { }
 
         private string groupByKey = "GroupBy";
         public string GroupBy

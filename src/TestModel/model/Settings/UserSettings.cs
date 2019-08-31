@@ -32,12 +32,12 @@ namespace TestCentric.Gui.Model.Settings
 
         public GuiSettings Gui
         {
-            get { return new GuiSettings(_settingsService); }
+            get { return new GuiSettings(_settingsService, _prefix); }
         }
 
         public EngineSettings Engine
         {
-            get { return new EngineSettings(_settingsService); }
+            get { return new EngineSettings(_settingsService, _prefix); }
         }
     }
 }

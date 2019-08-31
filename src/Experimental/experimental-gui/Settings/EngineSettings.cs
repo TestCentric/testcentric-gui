@@ -32,7 +32,7 @@ namespace TestCentric.Gui.Settings
     /// </summary>
     public class EngineSettings : SettingsGroup
     {
-        public EngineSettings(ISettings settingsService) : base(settingsService, "Engine.Options") { }
+        public EngineSettings(ISettings settingsService, string prefix) : base(settingsService, prefix + "Engine.Options") { }
 
         private const string reloadOnChangeKey = "ReloadOnChange";
         public bool ReloadOnChange

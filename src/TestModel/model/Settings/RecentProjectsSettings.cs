@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -27,8 +27,8 @@ namespace TestCentric.Gui.Model.Settings
 {
     public class RecentProjectsSettings : SettingsGroup
     {
-        public RecentProjectsSettings(ISettings settings)
-            : base(settings, "Gui.RecentProjects") { }
+        public RecentProjectsSettings(ISettings settings, string prefix)
+            : base(settings, prefix + "Gui.RecentProjects") { }
 
         public int MaxFiles
         {
