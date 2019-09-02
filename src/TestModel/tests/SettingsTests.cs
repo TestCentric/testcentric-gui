@@ -170,15 +170,16 @@ namespace TestCentric.Gui.Model.Settings
             return new MainFormSettings(_settingsService, APPLICATION_PREFIX);
         }
 
-        public static TestCaseData[] TestCases = new TestCaseData[]
+        public static TestCaseData[] TestCases()
         {
-            new TestCaseData("Left", 10, 0),
-            new TestCaseData("Top", 10, 0),
-            new TestCaseData("Width", 700, 900),
-            new TestCaseData("Height", 400, 500),
-            new TestCaseData("Maximized", false, true),
-            new TestCaseData("SplitPosition", 0, 200)
-        };
+            return new TestCaseData[]
+            {
+                new TestCaseData("Location", new Point(10, 10), new Point(50, 50)),
+                new TestCaseData("Size", new Size(700, 400), new Size(900, 500)),
+                new TestCaseData("Maximized", false, true),
+                new TestCaseData("SplitPosition", 0, 200)
+            };
+        }
     }
 
     public class MiniFormSettingsTests : SettingsTests<MiniFormSettings>
@@ -190,14 +191,15 @@ namespace TestCentric.Gui.Model.Settings
             return new MiniFormSettings(_settingsService, APPLICATION_PREFIX);
         }
 
-        public static TestCaseData[] TestCases = new TestCaseData[]
+        public static TestCaseData[] TestCases()
         {
-            new TestCaseData("Left", 10, 0),
-            new TestCaseData("Top", 10, 0),
-            new TestCaseData("Width", 700, 900),
-            new TestCaseData("Height", 400, 500),
-            new TestCaseData("Maximized", false, true),
-        };
+            return new TestCaseData[]
+            {
+                new TestCaseData("Location", new Point(10, 10), new Point(0, 0)),
+                new TestCaseData("Size", new Size(700, 400), new Size(900, 500)),
+                new TestCaseData("Maximized", false, true)
+            };
+        }
     }
 
     public class RecentProjectsSettingsTests : SettingsTests<RecentProjectsSettings>

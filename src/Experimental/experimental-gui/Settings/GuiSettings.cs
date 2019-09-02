@@ -38,9 +38,9 @@ namespace TestCentric.Gui.Settings
             get { return new MainFormSettings(_settingsService, _prefix); }
         }
 
-        public RecentProjectSettings RecentProjects
+        public RecentProjectsSettings RecentProjects
         {
-            get { return new RecentProjectSettings(_settingsService, _prefix); }
+            get { return new RecentProjectsSettings(_settingsService, _prefix); }
         }
 
         public TestTreeSettings TestTree
@@ -58,51 +58,6 @@ namespace TestCentric.Gui.Settings
         {
             get { return GetSetting(initialPageKey, ""); }
             set { SaveSetting(initialPageKey, value); }
-        }
-    }
-
-    public class MainFormSettings : SettingsGroup
-    {
-        public MainFormSettings(ISettings settingsService, string prefix) : base(settingsService, prefix + "Gui.MainForm") { }
-
-        private const string locationKey = "Location";
-        public Point Location
-        {
-            get { return GetSetting(locationKey, new Point(10, 10)); }
-            set { SaveSetting(locationKey, value); }
-        }
-
-        private const string sizeKey = "Size";
-        public Size Size
-        {
-            get { return GetSetting(sizeKey, Size.Empty); }
-            set { SaveSetting(sizeKey, value); }
-        }
-
-        private const string maximizedKey = "Maximized";
-        public bool Maximized
-        {
-            get { return GetSetting(maximizedKey, false); }
-            set { SaveSetting(maximizedKey, value); }
-        }
-
-        private const string fontKey = "Font";
-        public Font Font
-        {
-            get { return GetSetting(fontKey, Form.DefaultFont); }
-            set { SaveSetting(fontKey, value); }
-        }
-    }
-
-    public class RecentProjectSettings : SettingsGroup
-    {
-        public RecentProjectSettings(ISettings settingsService, string prefix) : base(settingsService, prefix + "Gui.RecentProjects") { }
-
-        private const string maxFilesKey = "MaxFiles";
-        public int MaxFiles
-        {
-            get { return GetSetting(maxFilesKey, 5); }
-            set { SaveSetting(maxFilesKey, value); }
         }
     }
 }

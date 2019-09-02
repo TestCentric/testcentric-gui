@@ -21,6 +21,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System.Drawing;
 using NUnit.Engine;
 
 namespace TestCentric.Gui.Model.Settings
@@ -30,31 +31,19 @@ namespace TestCentric.Gui.Model.Settings
         public MiniFormSettings(ISettings settings, string prefix)
             : base(settings, prefix + "Gui.MiniForm") { }
 
-        public int Left
+        public Point Location
         {
-            get { return GetSetting(nameof(Left), 10); }
-            set { SaveSetting(nameof(Left), value); }
+            get { return GetSetting(nameof(Location), new Point(10, 10)); }
+            set { SaveSetting(nameof(Location), value); }
         }
 
-        public int Top
+        public Size Size
         {
-            get { return GetSetting(nameof(Top), 10); }
-            set { SaveSetting(nameof(Top), value); }
+            get { return GetSetting(nameof(Size), new Size(700, 400)); }
+            set { SaveSetting(nameof(Size), value); }
         }
 
-        public int Width
-        {
-            get { return GetSetting(nameof(Width), 700); }
-            set { SaveSetting(nameof(Width), value); }
-        }
-
-        public int Height
-        {
-            get { return GetSetting(nameof(Height), 400); }
-            set { SaveSetting(nameof(Height), value); }
-        }
-
-        public bool Maximized
+       public bool Maximized
         {
             get { return GetSetting(nameof(Maximized), false); }
             set { SaveSetting(nameof(Maximized), value); }
