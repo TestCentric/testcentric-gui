@@ -55,7 +55,6 @@
     <Compile Include="Presenters\TextOutputPresenter.cs" />
     <Compile Include="Settings\GuiSettings.cs" />
     <Compile Include="Settings\SettingsModel.cs" />
-    <Compile Include="Settings\TestTreeSettings.cs" />
     <Compile Include="Presenters\TestGroup.cs" />
     <Compile Include="Presenters\FixtureListDisplayStrategy.cs" />
     <Compile Include="Presenters\NUnitTreeDisplayStrategy.cs" />
@@ -65,7 +64,7 @@
     <Compile Include="Presenters\StatusBarPresenter.cs" />
     <Compile Include="Presenters\DisplayStrategy.cs" />
     <Compile Include="Presenters\XmlPresenter.cs" />
-    <Compile Include="Settings\TreeDisplayStyle.cs" />
+    <Compile Include="Presenters\TreeDisplayStyle.cs" />
     <Compile Include="Views\AddinPages\AddinsView.cs">
       <SubType>Form</SubType>
     </Compile>

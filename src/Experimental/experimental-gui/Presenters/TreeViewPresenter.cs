@@ -262,7 +262,7 @@ namespace TestCentric.Gui.Presenters
             _view.DisplayFormat.SelectedItem = format;
         }
 
-        private Settings.TestTreeSettings Settings { get; }
+        private Model.Settings.TestTreeSettings Settings { get; }
 
         #endregion
     }

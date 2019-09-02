@@ -30,6 +30,22 @@ namespace TestCentric.Gui.Model.Settings
         public TestTreeSettings(ISettings settings, string prefix)
              : base(settings, prefix + "Gui.TestTree") { }
 
+        public FixtureListSettings FixtureList
+        {
+            get { return new FixtureListSettings(_settingsService, _prefix); }
+        }
+
+        public TestListSettings TestList
+        {
+            get { return new TestListSettings(_settingsService, _prefix); }
+        }
+
+        public string DisplayFormat
+        {
+            get { return GetSetting(nameof(DisplayFormat), "NUNIT_TREE"); }
+            set { SaveSetting(nameof(DisplayFormat), value); }
+        }
+
         public bool SaveVisualState
         {
             get { return GetSetting(nameof(SaveVisualState), true); }
@@ -53,5 +69,30 @@ namespace TestCentric.Gui.Model.Settings
             get { return GetSetting(nameof(ShowCheckBoxes), false); }
             set { SaveSetting(nameof(ShowCheckBoxes), value); }
         }
+
+        public class FixtureListSettings : SettingsGroup
+        {
+            public FixtureListSettings(ISettings settings, string prefix) : base(settings, prefix + "Gui.TestTree.FixtureList") { }
+
+            private string groupByKey = "GroupBy";
+            public string GroupBy
+            {
+                get { return GetSetting(groupByKey, "OUTCOME"); }
+                set { SaveSetting(groupByKey, value); }
+            }
+        }
+
+        public class TestListSettings : SettingsGroup
+        {
+            public TestListSettings(ISettings settings, string prefix) : base(settings, prefix + "Gui.TestTree.TestList") { }
+
+            private string groupByKey = "GroupBy";
+            public string GroupBy
+            {
+                get { return GetSetting(groupByKey, "OUTCOME"); }
+                set { SaveSetting(groupByKey, value); }
+            }
+        }
     }
 }
+

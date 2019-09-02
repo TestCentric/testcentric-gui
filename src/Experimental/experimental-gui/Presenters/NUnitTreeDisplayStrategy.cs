@@ -66,7 +66,7 @@ namespace TestCentric.Gui.Presenters
 
                 _view.Tree.Add(treeNode);
 
-                SetInitialExpansion(displayStyle, treeNode);
+                SetInitialExpansion((TreeDisplayStyle)displayStyle, treeNode);
             }
 
             topNode?.EnsureVisible();
