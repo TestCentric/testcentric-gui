@@ -27,7 +27,6 @@ using System.Windows.Forms;
 namespace TestCentric.Gui.Presenters
 {
     using Model;
-    using Settings;
     using Views;
 
     /// <summary>

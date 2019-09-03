@@ -21,13 +21,13 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using TestCentric.Gui.Settings;
+using TestCentric.Gui.Model.Settings;
 
 namespace TestCentric.Gui.Views.SettingsPages
 {
     public partial class GuiSettingsPage : SettingsPage
     {
-        public GuiSettingsPage(SettingsModel settings) : base("Gui.General", settings)
+        public GuiSettingsPage(UserSettings settings) : base("Gui.General", settings)
         {
             InitializeComponent();
         }

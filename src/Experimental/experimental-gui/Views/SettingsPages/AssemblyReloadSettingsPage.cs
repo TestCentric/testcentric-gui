@@ -22,14 +22,13 @@
 // ***********************************************************************
 
 using System.Windows.Forms;
+using TestCentric.Gui.Model.Settings;
 
 namespace TestCentric.Gui.Views.SettingsPages
 {
-    using Settings;
-
     public partial class AssemblyReloadSettingsPage : SettingsPage
     {
-        public AssemblyReloadSettingsPage(SettingsModel settings) : base("Engine.Assembly Reload", settings)
+        public AssemblyReloadSettingsPage(UserSettings settings) : base("Engine.Assembly Reload", settings)
         {
             InitializeComponent();
         }

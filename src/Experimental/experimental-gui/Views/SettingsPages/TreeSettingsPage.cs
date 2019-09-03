@@ -25,7 +25,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using TestCentric.Gui.Settings;
+using TestCentric.Gui.Model.Settings;
 
 namespace TestCentric.Gui.Views.SettingsPages
 {
@@ -47,7 +47,7 @@ namespace TestCentric.Gui.Views.SettingsPages
 
         private static string treeImageDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.Combine("Images", "Tree"));
 
-        public TreeSettingsPage(SettingsModel settings) : base("Gui.TreeSettings", settings)
+        public TreeSettingsPage(UserSettings settings) : base("Gui.TreeSettings", settings)
         {
             // This call is required by the Windows Form Designer.
             InitializeComponent();

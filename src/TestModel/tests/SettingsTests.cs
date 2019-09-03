@@ -113,6 +113,7 @@ namespace TestCentric.Gui.Model.Settings
         {
             new TestCaseData("SplitterPosition", 0, 12),
             new TestCaseData("WordWrapEnabled", true, false),
+            new TestCaseData("ToolTipsEnabled", true, false),
             new TestCaseData("SourceCodeDisplay", false, true),
             new TestCaseData("SourceCodeSplitterOrientation", Orientation.Vertical, Orientation.Horizontal),
             new TestCaseData("SourceCodeVerticalSplitterPosition", 0.3f, 0.5f),
@@ -229,6 +230,7 @@ namespace TestCentric.Gui.Model.Settings
 
         public static TestCaseData[] TestCases = new TestCaseData[]
         {
+            new TestCaseData("DisplayFormat", "NUNIT_TREE", "TEST_LIST"),
             new TestCaseData("SaveVisualState", true, false),
             new TestCaseData("InitialTreeDisplay", 0, 2),
             new TestCaseData("AlternateImageSet", "Default", "Custom"),
