@@ -28,7 +28,7 @@ namespace TestCentric.Gui.Model.Settings
     public class RecentProjectsSettings : SettingsGroup
     {
         public RecentProjectsSettings(ISettings settings, string prefix)
-            : base(settings, prefix + "Gui.RecentProjects") { }
+            : base(settings, prefix + "RecentProjects") { }
 
         public int MaxFiles
         {

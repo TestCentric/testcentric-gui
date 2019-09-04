@@ -28,7 +28,7 @@ namespace TestCentric.Gui.Model.Settings
     public class TextOutputSettings : SettingsGroup
     {
         public TextOutputSettings(ISettings settings, string prefix)
-             : base(settings, prefix + "Gui.ResultTabs.TextOutput") { }
+             : base(settings, prefix + "TextOutput") { }
 
         public bool WordWrapEnabled
         {

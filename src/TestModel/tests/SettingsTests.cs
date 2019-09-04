@@ -36,28 +36,19 @@ namespace TestCentric.Gui.Model.Settings
     public abstract class SettingsTests<TSettings> where TSettings : SettingsGroup
     {
         protected const string APPLICATION_PREFIX = "TestCentric.";
-        protected string _groupPrefix;
 
-        protected ISettings _settingsService;
+        protected UserSettings _userSettings;
+
         protected SettingsEventArgs _changeEvent;
-        protected TSettings _settingsGroup;
 
-        protected abstract TSettings GetSettingsGroup();
-
-        public SettingsTests(string groupPrefix)
-        {
-            _groupPrefix = groupPrefix ?? string.Empty;
-
-            if (_groupPrefix != string.Empty && !groupPrefix.EndsWith("."))
-                _groupPrefix += ".";
-        }
+        protected abstract TSettings SettingsGroup { get; }
 
         [SetUp]
         public void SetUp()
         {
-            _settingsService = new TestModel(new MockTestEngine()).Services.UserSettings;
-            _settingsService.Changed += (object s, SettingsEventArgs e) => { _changeEvent = e; };
-            _settingsGroup = GetSettingsGroup();
+            ISettings settingsService = new TestModel(new MockTestEngine()).Services.UserSettings;
+            _userSettings = new UserSettings(settingsService, APPLICATION_PREFIX);
+            settingsService.Changed += (object s, SettingsEventArgs e) => { _changeEvent = e; };
         }
 
         [TestCaseSource("TestCases")]
@@ -67,25 +58,26 @@ namespace TestCentric.Gui.Model.Settings
             var propInfo = typeof(TSettings).GetProperty(propertyName);
 
             // Check the default value
-            Assert.That(propInfo.GetValue(_settingsGroup), Is.EqualTo(defaultValue), $"Incorrect default value for {propertyName}");
+            Assert.That(propInfo.GetValue(SettingsGroup), Is.EqualTo(defaultValue), $"Incorrect default value for {propertyName}");
 
             // Set the property and verify that it changed
-            propInfo.SetValue(_settingsGroup, testValue);
-            Assert.That(propInfo.GetValue(_settingsGroup), Is.EqualTo(testValue), $"Value did not change when {propertyName} was set");
+            propInfo.SetValue(SettingsGroup, testValue);
+            Assert.That(propInfo.GetValue(SettingsGroup), Is.EqualTo(testValue), $"Value did not change when {propertyName} was set");
 
             // Check that a Changed event was received with the correct storage key
             Assert.That(_changeEvent, Is.Not.Null, $"No event received when {propertyName} was set");
-            Assert.That(_changeEvent.SettingName, Is.EqualTo(APPLICATION_PREFIX + _groupPrefix + propertyName), $"Event has incorrect key for {propertyName}");
+            Assert.That(_changeEvent.SettingName, Is.EqualTo(SettingsGroup.GroupPrefix + propertyName), $"Event has incorrect key for {propertyName}");
         }
     }
 
     public class EngineSettingsTests : SettingsTests<EngineSettings>
     {
-        public EngineSettingsTests() : base("Engine.Options") { }
+        protected override EngineSettings SettingsGroup => _userSettings.Engine;
 
-        protected override EngineSettings GetSettingsGroup()
+        [Test]
+        public void GroupPrefixIsCorrect()
         {
-            return new EngineSettings(_settingsService, APPLICATION_PREFIX);
+            Assert.That(SettingsGroup.GroupPrefix, Is.EqualTo(APPLICATION_PREFIX + "Engine."));
         }
 
         public static TestCaseData[] TestCases = new TestCaseData[]
@@ -102,11 +94,12 @@ namespace TestCentric.Gui.Model.Settings
 
     public class ErrorDisplaySettingsTests : SettingsTests<ErrorDisplaySettings>
     {
-        public ErrorDisplaySettingsTests() : base("Gui.ErrorDisplay") { }
+        protected override ErrorDisplaySettings SettingsGroup => _userSettings.Gui.ErrorDisplay;
 
-        protected override ErrorDisplaySettings GetSettingsGroup()
+        [Test]
+        public void GroupPrefixIsCorrect()
         {
-            return new ErrorDisplaySettings(_settingsService, APPLICATION_PREFIX);
+            Assert.That(SettingsGroup.GroupPrefix, Is.EqualTo(APPLICATION_PREFIX + "Gui.ErrorDisplay."));
         }
 
         public static TestCaseData[] TestCases = new TestCaseData[]
@@ -123,17 +116,18 @@ namespace TestCentric.Gui.Model.Settings
 
     public class GuiSettingsTests : SettingsTests<GuiSettings>
     {
-        public GuiSettingsTests() : base("Gui.Options") { }
-
         private static readonly Font DEFAULT_FONT = new Font(FontFamily.GenericSansSerif, 8.25f);
         private static readonly Font DEFAULT_FIXED_FONT = new Font(FontFamily.GenericMonospace, 8.0f);
 
         private static readonly Font TEST_FONT = new Font(FontFamily.GenericSerif, 10.0f);
         private static readonly Font TEST_FIXED_FONT = new Font(FontFamily.GenericMonospace, 10.0f);
 
-        protected override GuiSettings GetSettingsGroup()
+        protected override GuiSettings SettingsGroup => _userSettings.Gui;
+
+        [Test]
+        public void GroupPrefixIsCorrect()
         {
-            return new GuiSettings(_settingsService, APPLICATION_PREFIX);
+            Assert.That(SettingsGroup.GroupPrefix, Is.EqualTo(APPLICATION_PREFIX + "Gui."));
         }
 
         public static TestCaseData[] TestCases = new TestCaseData[]
@@ -164,11 +158,12 @@ namespace TestCentric.Gui.Model.Settings
 
     public class MainFormSettingsTests : SettingsTests<MainFormSettings>
     {
-        public MainFormSettingsTests() : base("Gui.MainForm") { }
+        protected override MainFormSettings SettingsGroup => _userSettings.Gui.MainForm;
 
-        protected override MainFormSettings GetSettingsGroup()
+        [Test]
+        public void GroupPrefixIsCorrect()
         {
-            return new MainFormSettings(_settingsService, APPLICATION_PREFIX);
+            Assert.That(SettingsGroup.GroupPrefix, Is.EqualTo(APPLICATION_PREFIX + "Gui.MainForm."));
         }
 
         public static TestCaseData[] TestCases()
@@ -185,11 +180,12 @@ namespace TestCentric.Gui.Model.Settings
 
     public class MiniFormSettingsTests : SettingsTests<MiniFormSettings>
     {
-        public MiniFormSettingsTests() : base("Gui.MiniForm") { }
+        protected override MiniFormSettings SettingsGroup => _userSettings.Gui.MiniForm;
 
-        protected override MiniFormSettings GetSettingsGroup()
+        [Test]
+        public void GroupPrefixIsCorrect()
         {
-            return new MiniFormSettings(_settingsService, APPLICATION_PREFIX);
+            Assert.That(SettingsGroup.GroupPrefix, Is.EqualTo(APPLICATION_PREFIX + "Gui.MiniForm."));
         }
 
         public static TestCaseData[] TestCases()
@@ -205,11 +201,12 @@ namespace TestCentric.Gui.Model.Settings
 
     public class RecentProjectsSettingsTests : SettingsTests<RecentProjectsSettings>
     {
-        public RecentProjectsSettingsTests() : base("Gui.RecentProjects") { }
+        protected override RecentProjectsSettings SettingsGroup => _userSettings.Gui.RecentProjects;
 
-        protected override RecentProjectsSettings GetSettingsGroup()
+        [Test]
+        public void GroupPrefixIsCorrect()
         {
-            return new RecentProjectsSettings(_settingsService, APPLICATION_PREFIX);
+            Assert.That(SettingsGroup.GroupPrefix, Is.EqualTo(APPLICATION_PREFIX + "Gui.RecentProjects."));
         }
 
         public static TestCaseData[] TestCases = new TestCaseData[]
@@ -221,11 +218,12 @@ namespace TestCentric.Gui.Model.Settings
 
     public class TestTreeSettingsTests : SettingsTests<TestTreeSettings>
     {
-        public TestTreeSettingsTests() : base("Gui.TestTree") { }
+        protected override TestTreeSettings SettingsGroup => _userSettings.Gui.TestTree;
 
-        protected override TestTreeSettings GetSettingsGroup()
+        [Test]
+        public void GroupPrefixIsCorrect()
         {
-            return new TestTreeSettings(_settingsService, APPLICATION_PREFIX);
+            Assert.That(SettingsGroup.GroupPrefix, Is.EqualTo(APPLICATION_PREFIX + "Gui.TestTree."));
         }
 
         public static TestCaseData[] TestCases = new TestCaseData[]
@@ -240,11 +238,12 @@ namespace TestCentric.Gui.Model.Settings
 
     public class TextOutputSettingsTests : SettingsTests<TextOutputSettings>
     {
-        public TextOutputSettingsTests() : base("Gui.ResultTabs.TextOutput") { }
+        protected override TextOutputSettings SettingsGroup => _userSettings.Gui.TextOutput;
 
-        protected override TextOutputSettings GetSettingsGroup()
+        [Test]
+        public void GroupPrefixIsCorrect()
         {
-            return new TextOutputSettings(_settingsService, APPLICATION_PREFIX);
+            Assert.That(SettingsGroup.GroupPrefix, Is.EqualTo(APPLICATION_PREFIX + "Gui.TextOutput."));
         }
 
         public static TestCaseData[] TestCases = new TestCaseData[]

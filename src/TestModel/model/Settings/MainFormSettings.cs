@@ -29,7 +29,7 @@ namespace TestCentric.Gui.Model.Settings
     public class MainFormSettings : SettingsGroup
     {
         public MainFormSettings(ISettings settings, string prefix)
-            : base(settings, prefix + "Gui.MainForm") { }
+            : base(settings, prefix + "MainForm") { }
 
         public Point Location
         {

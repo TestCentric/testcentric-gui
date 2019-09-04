@@ -29,7 +29,7 @@ namespace TestCentric.Gui.Model.Settings
     public class MiniFormSettings : SettingsGroup
     {
         public MiniFormSettings(ISettings settings, string prefix)
-            : base(settings, prefix + "Gui.MiniForm") { }
+            : base(settings, prefix + "MiniForm") { }
 
         public Point Location
         {

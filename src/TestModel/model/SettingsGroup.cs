@@ -28,15 +28,17 @@ namespace TestCentric.Gui.Model
     public class SettingsGroup : ISettings
     {
         protected ISettings _settingsService;
-        protected string _prefix;
 
-        public SettingsGroup(ISettings settingsService, string prefix)
+        public readonly string GroupPrefix;
+
+        public SettingsGroup(ISettings settingsService, string groupPrefix)
         {
             _settingsService = settingsService;
-            _prefix = prefix ?? string.Empty;
 
-            if (_prefix != string.Empty && !prefix.EndsWith("."))
-                _prefix += ".";
+            GroupPrefix = groupPrefix ?? string.Empty;
+
+            if (GroupPrefix != string.Empty && !groupPrefix.EndsWith("."))
+                GroupPrefix += ".";
 
             // Forward any changes from the engine
             _settingsService.Changed += (object s, SettingsEventArgs args) =>
@@ -51,28 +53,28 @@ namespace TestCentric.Gui.Model
 
         public object GetSetting(string settingName)
         {
-            return _settingsService.GetSetting(_prefix + settingName);
+            return _settingsService.GetSetting(GroupPrefix + settingName);
         }
 
         public T GetSetting<T>(string settingName, T defaultValue)
         {
-            return _settingsService.GetSetting<T>(_prefix + settingName, defaultValue);
+            return _settingsService.GetSetting<T>(GroupPrefix + settingName, defaultValue);
         }
 
         public void RemoveGroup(string groupName)
         {
-            _settingsService.RemoveGroup(_prefix + groupName);
+            _settingsService.RemoveGroup(GroupPrefix + groupName);
         }
 
         public void RemoveSetting(string settingName)
         {
-            _settingsService.RemoveSetting(_prefix + settingName);
+            _settingsService.RemoveSetting(GroupPrefix + settingName);
         }
 
         public void SaveSetting(string settingName, object settingValue)
         {
             if (settingValue != null)
-                _settingsService.SaveSetting(_prefix + settingName, settingValue);
+                _settingsService.SaveSetting(GroupPrefix + settingName, settingValue);
             else
                 RemoveSetting(settingName);
         }

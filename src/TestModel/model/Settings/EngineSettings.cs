@@ -33,7 +33,7 @@ namespace TestCentric.Gui.Model.Settings
     public class EngineSettings : SettingsGroup
     {
         public EngineSettings(ISettings settings, string prefix)
-            : base(settings, prefix + "Engine.Options") { }
+            : base(settings, prefix + "Engine") { }
 
         public bool ShadowCopyFiles
         {

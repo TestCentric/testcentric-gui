@@ -29,7 +29,7 @@ namespace TestCentric.Gui.Model.Settings
     public class ErrorDisplaySettings : SettingsGroup
     {
         public ErrorDisplaySettings(ISettings settings, string prefix)
-             : base(settings, prefix + "Gui.ErrorDisplay") { }
+             : base(settings, prefix + "ErrorDisplay") { }
 
         public int SplitterPosition
         {
