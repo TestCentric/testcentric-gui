@@ -44,7 +44,7 @@ namespace TestCentric.Gui.Views
 
         public override string ToString()
         {
-            if (message.Length > 64000)
+            if (message?.Length > 64000)
                 return string.Format("{0}:{1}{2}", testName, Environment.NewLine, message.Substring(0, 64000));
 
             return GetMessage();

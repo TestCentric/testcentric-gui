@@ -164,6 +164,7 @@
     <Compile Include="Presenters\TextOutputPresenterTests.cs" />
     <Compile Include="TestSuiteTreeNodeTests.cs" />
     <Compile Include="TextOutputDisplayTests.cs" />
+    <Compile Include="Views\TestResultItemTests.cs" />
     <Compile Include="VisualStateTests.cs" />
     <Compile Include="Views\CommonViewTests.cs" />
     <Compile Include="Presenters\Main\CommandTests.cs" />
