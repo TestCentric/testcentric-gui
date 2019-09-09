@@ -2,7 +2,7 @@ using NUnit.Framework;
 
 namespace TestCentric.Gui.Views
 {
-    [TestFixture()]
+    [TestFixture]
     public class TestResultItemTests
     {
         [TestCase("message", "stack trace string")]
