@@ -43,7 +43,7 @@ namespace TestCentric.Gui.Model.Settings
             set { SaveSetting(nameof(Size), value); }
         }
 
-       public bool Maximized
+        public bool Maximized
         {
             get { return GetSetting(nameof(Maximized), false); }
             set { SaveSetting(nameof(Maximized), value); }

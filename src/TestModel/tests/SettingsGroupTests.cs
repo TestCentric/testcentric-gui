@@ -24,19 +24,32 @@
 using System.Drawing;
 using System.ComponentModel;
 using NUnit.Framework;
+using NUnit.Engine;
+using NSubstitute;
 
 namespace TestCentric.Gui.Model
 {
     [TestFixture]
     public class SettingsGroupTests
     {
+        private const string PREFIX = "Testing.";
+
         private SettingsGroup _settings;
+        private ISettings _settingsService;
 
         [SetUp]
         public void BeforeEachTest()
         {
-            _settings = new SettingsGroup(new NUnit.TestUtilities.Fakes.SettingsService(), "Testing.");
+            _settingsService = Substitute.For<ISettings>();
+            _settings = new SettingsGroup(_settingsService, PREFIX);
         }
+
+        [Test]
+        public void PrefixIsSetCorrectly()
+        {
+            Assert.That(_settings.GroupPrefix, Is.EqualTo(PREFIX));
+        }
+        
 
         [Test]
         public void GetSetting_WhenNotPresent_ReturnsNull()
@@ -47,56 +60,57 @@ namespace TestCentric.Gui.Model
         [TestCaseSource(nameof(TestCases))]
         public void GetSetting_WhenPresent_ReturnsValue<T>(string name, T expected)
         {
-            _settings.SaveSetting(name, expected);
-            Assert.That(_settings.GetSetting(name), Is.EqualTo(expected));
+            _settingsService.GetSetting(_settings.GroupPrefix + name).Returns(expected);
+
+            object actual = _settings.GetSetting(name);
+
+            _settingsService.Received().GetSetting(_settings.GroupPrefix + name);
+            Assert.That(actual, Is.EqualTo(expected));
         }
 
         [TestCaseSource(nameof(TestCases))]
         public void GetSettingWithDefault_WhenNotPresent_ReturnsDefault<T>(string name, T expected)
         {
-            Assert.That(_settings.GetSetting(name, expected), Is.EqualTo(expected));
+            _settingsService.GetSetting(_settings.GroupPrefix + name, expected).Returns(expected);
+
+            T actual = _settings.GetSetting(name, expected);
+
+            _settingsService.Received().GetSetting(_settings.GroupPrefix + name, expected);
+            Assert.That(actual, Is.EqualTo(expected));
         }
 
         [TestCaseSource(nameof(TestCases))]
-        public void GetSettingWithDefault_WhenPresent_ReturnsValue(string name, object expected)
+        public void GetSettingWithDefault_WhenPresent_ReturnsValue<T>(string name, T expected)
+        {
+            _settingsService.GetSetting(_settings.GroupPrefix + name, expected).Returns(expected);
+
+            object actual = _settings.GetSetting(name, expected);
+
+            Assert.That(actual, Is.EqualTo(expected));
+        }
+
+        [TestCaseSource(nameof(TestCases))]
+        public void SaveSetting_CallsSettingsServiceCorrectly<T>(string name, T expected)
         {
             _settings.SaveSetting(name, expected);
-            object actual = _settings.GetSetting(name);
-            Assert.That(actual, Is.EqualTo(expected));
-            Assert.IsInstanceOf(expected.GetType(),actual);
+
+            _settingsService.Received().SaveSetting(_settings.GroupPrefix + name, expected);
         }
 
         [Test]
-        public void RemoveSetting_WhenNotPresent_HasNoEffect()
+        public void RemoveSetting_CallsSettingsServiceCorrectly()
         {
-            _settings.SaveSetting("X", 5);
-            _settings.SaveSetting("NAME", "Charlie");
-
             _settings.RemoveSetting("JUNK");
 
-            Assert.That(_settings.GetSetting("X"), Is.EqualTo(5));
-            Assert.That(_settings.GetSetting("NAME"), Is.EqualTo("Charlie"));
+            _settingsService.Received().RemoveSetting(_settings.GroupPrefix + "JUNK");
         }
 
         [Test]
-        public void RemoveSetting_WhenPresent_IsRemoved_AndOtherSettingsAreNotAffected()
+        public void RemoveGroup_CallsSettingsServiceCorrectly()
         {
-            _settings.SaveSetting("X", 5);
-            _settings.SaveSetting("NAME", "Charlie");
-            _settings.SaveSetting("JUNK", "To be removed");
+            _settings.RemoveGroup("SUBGROUP");
 
-            _settings.RemoveSetting("JUNK");
-
-            Assert.IsNull(_settings.GetSetting("JUNK"), "Setting not removed");
-            Assert.That(_settings.GetSetting("X"), Is.EqualTo(5), "Value of 'X' changed");
-            Assert.That(_settings.GetSetting("NAME"), Is.EqualTo("Charlie"), "Value of 'NAME' changed");
-        }
-
-        [Test]
-        public void WhenSettingIsNotValid_DefaultSettingIsReturned()
-        {
-            _settings.SaveSetting( "X", "1y25" );
-            Assert.That(_settings.GetSetting( "X", 42 ), Is.EqualTo(42));
+            _settingsService.Received().RemoveGroup(_settings.GroupPrefix + "SUBGROUP");
         }
 
         private static TestCaseData[] TestCases = new TestCaseData[] {

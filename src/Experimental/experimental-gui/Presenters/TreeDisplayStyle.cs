@@ -26,7 +26,7 @@ namespace TestCentric.Gui.Presenters
     /// <summary>
     /// Indicates how a tree should be displayed
     /// </summary>
-    public enum TreeDisplayStyle
+    public enum InitialTreeExpansion
     {
         Auto,		// Select based on space available
         Expand,		// Expand fully
