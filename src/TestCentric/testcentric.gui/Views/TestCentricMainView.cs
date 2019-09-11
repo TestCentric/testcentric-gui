@@ -1100,7 +1100,7 @@ namespace TestCentric.Gui.Views
         /// Set the title bar based on the loaded file or project
         /// </summary>
         /// <param name="fileName"></param>
-        private void SetTitleBar(string fileName)
+        public void SetTitleBar(string fileName)
         {
             Text = fileName == null
                 ? "NUnit"

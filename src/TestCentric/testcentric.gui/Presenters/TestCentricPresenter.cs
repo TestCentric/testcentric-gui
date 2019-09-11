@@ -121,6 +121,11 @@ namespace TestCentric.Gui.Presenters
                 }
 
                 UpdateViewCommands();
+
+                if (_model.TestFiles.Count == 1)
+                {
+                    _view.SetTitleBar(_model.TestFiles.First());
+                }
             };
 
             _model.Events.TestsUnloading += (TestEventArgse) =>
