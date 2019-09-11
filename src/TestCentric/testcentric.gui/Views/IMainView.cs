@@ -98,6 +98,7 @@ namespace TestCentric.Gui.Views
 
         // Methods used by Presenter
         void Configure(bool useFullGui);
+        void SetTitleBar(string fileName);
         LongRunningOperationDisplay LongOperationDisplay(string text);
 
         // Form methods that we have to use
