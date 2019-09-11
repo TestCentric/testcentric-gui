@@ -122,9 +122,9 @@ namespace TestCentric.Gui.Presenters
 
                 UpdateViewCommands();
 
-                if (e.Test.Children.Count == 1)
+                if (_model.TestFiles.Count == 1)
                 {
-                    _view.SetTitleBar(e.Test.Children[0].Name);
+                    _view.SetTitleBar(_model.TestFiles.First());
                 }
             };
 
