@@ -62,7 +62,7 @@
     <Compile Include="Presenters\StatusBarPresenter.cs" />
     <Compile Include="Presenters\DisplayStrategy.cs" />
     <Compile Include="Presenters\XmlPresenter.cs" />
-    <Compile Include="Presenters\TreeDisplayStyle.cs" />
+    <Compile Include="Presenters\InitialTreeExpansion.cs" />
     <Compile Include="Views\AddinPages\AddinsView.cs">
       <SubType>Form</SubType>
     </Compile>
