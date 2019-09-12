@@ -34,6 +34,7 @@ using NUnit.Engine;
 namespace TestCentric.Gui.Presenters
 {
     using Model;
+    using Model.Services;
     using Model.Settings;
     using Views;
 
@@ -63,7 +64,7 @@ namespace TestCentric.Gui.Presenters
 
         private readonly UserSettings _settings;
 
-        private readonly IRecentFiles _recentFiles;
+        private readonly RecentFiles _recentFiles;
 
         // Our nunit project watcher
         //private FileWatcher projectWatcher;

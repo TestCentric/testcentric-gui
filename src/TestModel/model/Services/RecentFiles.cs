@@ -29,11 +29,11 @@ using System.Threading.Tasks;
 
 namespace TestCentric.Gui.Model.Services
 {
-    public class RecentFilesService : IRecentFiles
+    public class RecentFiles
     {
         private NUnit.Engine.IRecentFiles _engineService;
 
-        public RecentFilesService(NUnit.Engine.IRecentFiles engineService)
+        public RecentFiles(NUnit.Engine.IRecentFiles engineService)
         {
             _engineService = engineService;
         }

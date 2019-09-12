@@ -36,7 +36,7 @@ namespace TestCentric.Gui.Model.Services
     public class RecentFilesTests
     {
         NUnit.Engine.Services.RecentFilesService _engineService;
-        RecentFilesService _recentFiles;
+        RecentFiles _recentFiles;
 
         [SetUp]
         public void SetUp()
@@ -45,7 +45,7 @@ namespace TestCentric.Gui.Model.Services
             services.Add(new FakeSettingsService());
             _engineService = new NUnit.Engine.Services.RecentFilesService();
             services.Add(_engineService);
-            _recentFiles = new RecentFilesService(_engineService);
+            _recentFiles = new RecentFiles(_engineService);
             services.ServiceManager.StartServices();
         }
 

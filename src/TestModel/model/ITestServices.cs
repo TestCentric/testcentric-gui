@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -26,6 +26,7 @@ using NUnit.Engine;
 
 namespace TestCentric.Gui.Model
 {
+    using Services;
     using Settings;
 
     /// <summary>
@@ -35,7 +36,7 @@ namespace TestCentric.Gui.Model
     public interface ITestServices : IServiceLocator
     {
         UserSettings UserSettings { get; }
-        IRecentFiles RecentFiles { get; }
+        RecentFiles RecentFiles { get; }
         IExtensionService ExtensionService { get; }
         IResultService ResultService { get; }
     }
