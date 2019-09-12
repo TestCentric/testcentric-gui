@@ -35,24 +35,12 @@ namespace TestCentric.Gui.Model.Services
     [TestFixture]
     public class RecentFilesTests
     {
-        NUnit.Engine.Services.RecentFilesService _engineService;
         RecentFiles _recentFiles;
 
         [SetUp]
         public void SetUp()
         {
-            var services = new NUnit.Engine.ServiceContext();
-            services.Add(new FakeSettingsService());
-            _engineService = new NUnit.Engine.Services.RecentFilesService();
-            services.Add(_engineService);
-            _recentFiles = new RecentFiles(_engineService);
-            services.ServiceManager.StartServices();
-        }
-
-        [Test]
-        public void ServiceIsStarted()
-        {
-            Assert.That(_engineService.Status, Is.EqualTo(NUnit.Engine.ServiceStatus.Started));
+            _recentFiles = new RecentFiles(new FakeSettingsService());
         }
 
         [Test]

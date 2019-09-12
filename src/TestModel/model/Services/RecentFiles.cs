@@ -23,40 +23,89 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using NUnit.Engine;
 
 namespace TestCentric.Gui.Model.Services
 {
     public class RecentFiles
     {
-        private NUnit.Engine.IRecentFiles _engineService;
+        private IList<string> _fileEntries = new List<string>();
+        private ISettings _userSettings;
 
-        public RecentFiles(NUnit.Engine.IRecentFiles engineService)
+        private const int MAX_FILES = 24;
+
+        public RecentFiles(ISettings userSettings)
         {
-            _engineService = engineService;
+            _userSettings = userSettings;
+            LoadEntriesFromSettings();
         }
 
         public int MaxFiles
         {
-            get { return _engineService.MaxFiles; }
-            set {  /* Noop */ }
+            get { return MAX_FILES; }
         }
 
         public IList<string> Entries
         {
-            get { return _engineService.Entries; }
+            get { return _fileEntries; }
         }
 
         public void Remove(string fileName)
         {
-            _engineService.Remove(fileName);
+            _fileEntries.Remove(fileName);
         }
 
         public void SetMostRecent(string filePath)
         {
-            _engineService.SetMostRecent(filePath);
+            _fileEntries.Remove(filePath);
+
+            _fileEntries.Insert(0, filePath);
+            if (_fileEntries.Count > MAX_FILES)
+                _fileEntries.RemoveAt(MAX_FILES);
+        }
+
+        private void LoadEntriesFromSettings()
+        {
+            _fileEntries.Clear();
+
+            // TODO: Prefix should be provided by caller
+            AddEntriesForPrefix("Gui.RecentProjects");
+        }
+
+        private void AddEntriesForPrefix(string prefix)
+        {
+            for (int index = 1; index < MAX_FILES; index++)
+            {
+                if (_fileEntries.Count >= MAX_FILES) break;
+
+                string fileSpec = _userSettings.GetSetting(GetRecentFileKey(prefix, index)) as string;
+                if (fileSpec != null) _fileEntries.Add(fileSpec);
+            }
+        }
+
+        private void SaveEntriesToSettings()
+        {
+            string prefix = "Gui.RecentProjects";
+
+            while (_fileEntries.Count > MAX_FILES)
+                _fileEntries.RemoveAt(_fileEntries.Count - 1);
+
+            for (int index = 0; index < MAX_FILES; index++)
+            {
+                string keyName = GetRecentFileKey(prefix, index + 1);
+                if (index < _fileEntries.Count)
+                    _userSettings.SaveSetting(keyName, _fileEntries[index]);
+                else
+                    _userSettings.RemoveSetting(keyName);
+            }
+
+            // Remove legacy entries here
+            _userSettings.RemoveGroup("RecentProjects");
+        }
+
+        private string GetRecentFileKey(string prefix, int index)
+        {
+            return string.Format("{0}.File{1}", prefix, index);
         }
     }
 }

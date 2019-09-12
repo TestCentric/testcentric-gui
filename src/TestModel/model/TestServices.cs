@@ -43,7 +43,7 @@ namespace TestCentric.Gui.Model
             _services = testEngine.Services;
 
             UserSettings = new UserSettings(_services.GetService<ISettings>(), applicationPrefix);
-            RecentFiles = new RecentFiles(_services.GetService<IRecentFiles>());
+            RecentFiles = new RecentFiles(_services.GetService<ISettings>());
             ExtensionService = GetService<IExtensionService>();
             ResultService = GetService<IResultService>();
         }
