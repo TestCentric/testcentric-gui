@@ -52,12 +52,13 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AssemblyWatcher.cs" />
     <Compile Include="Filters.cs" />
-    <Compile Include="IAsemblyWatcher.cs" />
     <Compile Include="ITestEvents.cs" />
     <Compile Include="ITestServices.cs" />
-    <Compile Include="RecentFilesService.cs" />
+    <Compile Include="Services\AssemblyWatcher.cs" />
+    <Compile Include="Services\IAsemblyWatcher.cs" />
+    <Compile Include="Services\IRecentFiles.cs" />
+    <Compile Include="Services\RecentFilesService.cs" />
     <Compile Include="Settings\ErrorDisplaySettings.cs" />
     <Compile Include="Settings\MainFormSettings.cs" />
     <Compile Include="Settings\MiniFormSettings.cs" />

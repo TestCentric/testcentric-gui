@@ -1,5 +1,5 @@
 // ***********************************************************************
-// Copyright (c) 2010-2018 Charlie Poole
+// Copyright (c) 2007 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -8,10 +8,10 @@
 // distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so, subject to
 // the following conditions:
-//
+// 
 // The above copyright notice and this permission notice shall be
 // included in all copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 // MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -22,48 +22,39 @@
 // ***********************************************************************
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 
-namespace TestCentric.Gui.Model
+namespace TestCentric.Gui.Model.Services
 {
-    public delegate void AssemblyChangedHandler(string fullPath);
-    public interface IAsemblyWatcher : IDisposable
+    /// <summary>
+    /// The IRecentFiles interface is used to isolate the app
+    /// from various implementations of recent files.
+    /// </summary>
+    public interface IRecentFiles
     {
         /// <summary>
-        /// Stops watching for changes.
-        /// To release resources call FreeResources.
+        /// The max number of files saved
         /// </summary>
-        void Stop();
+        int MaxFiles { get; set; }
 
         /// <summary>
-        /// Starts watching for assembly changes.
-        /// You need to call Setup before start watching.
+        /// Get a list of all the file entries
         /// </summary>
-        void Start();
+        /// <returns>The most recent file list</returns>
+        IList<string> Entries { get; }
 
         /// <summary>
-        /// Initializes the watcher with assemblies to observe for changes.
+        /// Set the most recent file name, reordering
+        /// the saved names as needed and removing the oldest
+        /// if the max number of files would be exceeded.
+        /// The current CLR version is used to create the entry.
         /// </summary>
-        /// <param name="delayInMs">The delay in ms.</param>
-        /// <param name="assemblies">The assemblies.</param>
-
-        void Setup(int delayInMs, IList assemblies);
-
+        void SetMostRecent(string fileName);
 
         /// <summary>
-        /// Initializes the watcher with assemblies to observe for changes.
+        /// Remove a file from the list
         /// </summary>
-        /// <param name="delayInMs">The delay in ms.</param>
-        /// <param name="assemblyFileName">Name of the assembly file.</param>
-        void Setup(int delayInMs, string assemblyFileName);
-
-        /// <summary>
-        /// Releases all resources held by the watcher.
-        /// </summary>
-
-        /// <summary>
-        /// Occurs when an assembly being watched has changed.
-        /// </summary>
-        event AssemblyChangedHandler AssemblyChanged;
+        /// <param name="fileName">The name of the file to remove</param>
+        void Remove(string fileName);
     }
 }

@@ -29,6 +29,8 @@ using NUnit.Engine;
 
 namespace TestCentric.Gui.Model
 {
+    using Services;
+
     public class TestModel : ITestModel
     {
         private const string PROJECT_LOADER_EXTENSION_PATH = "/NUnit/Engine/TypeExtensions/IProjectLoader";

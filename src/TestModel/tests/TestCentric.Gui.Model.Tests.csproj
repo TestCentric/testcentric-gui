@@ -62,10 +62,10 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AssemblyWatcherTests.cs" />
+    <Compile Include="Services\AssemblyWatcherTests.cs" />
     <Compile Include="AvailableRuntimesTest.cs" />
     <Compile Include="FakeSettingsService.cs" />
-    <Compile Include="RecentFilesTests.cs" />
+    <Compile Include="Services\RecentFilesTests.cs" />
     <Compile Include="ResultNodeTests.cs" />
     <Compile Include="ResultStateTests.cs" />
     <Compile Include="ResultSummaryCreatorTests.cs" />

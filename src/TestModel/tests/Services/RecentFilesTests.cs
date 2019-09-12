@@ -25,7 +25,7 @@ using System;
 using NUnit.Framework;
 using NUnit.Engine.Services.Tests;
 
-namespace TestCentric.Gui.Model
+namespace TestCentric.Gui.Model.Services
 {
     /// <summary>
     /// This fixture is used to test both RecentProjects and

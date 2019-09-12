@@ -26,15 +26,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NUnit.Engine;
 
-namespace TestCentric.Gui.Model
+namespace TestCentric.Gui.Model.Services
 {
     public class RecentFilesService : IRecentFiles
     {
-        private IRecentFiles _engineService;
+        private NUnit.Engine.IRecentFiles _engineService;
 
-        public RecentFilesService(IRecentFiles engineService)
+        public RecentFilesService(NUnit.Engine.IRecentFiles engineService)
         {
             _engineService = engineService;
         }
