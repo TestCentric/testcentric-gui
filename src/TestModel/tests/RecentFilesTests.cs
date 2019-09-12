@@ -23,8 +23,9 @@
 
 using System;
 using NUnit.Framework;
+using NUnit.Engine.Services.Tests;
 
-namespace NUnit.Engine.Services.Tests
+namespace TestCentric.Gui.Model
 {
     /// <summary>
     /// This fixture is used to test both RecentProjects and
@@ -34,22 +35,24 @@ namespace NUnit.Engine.Services.Tests
     [TestFixture]
     public class RecentFilesTests
     {
+        NUnit.Engine.Services.RecentFilesService _engineService;
         RecentFilesService _recentFiles;
 
         [SetUp]
         public void SetUp()
         {
-            var services = new ServiceContext();
+            var services = new NUnit.Engine.ServiceContext();
             services.Add(new FakeSettingsService());
-            _recentFiles = new RecentFilesService();
-            services.Add(_recentFiles);
+            _engineService = new NUnit.Engine.Services.RecentFilesService();
+            services.Add(_engineService);
+            _recentFiles = new RecentFilesService(_engineService);
             services.ServiceManager.StartServices();
         }
 
         [Test]
         public void ServiceIsStarted()
         {
-            Assert.That(_recentFiles.Status, Is.EqualTo(ServiceStatus.Started));
+            Assert.That(_engineService.Status, Is.EqualTo(NUnit.Engine.ServiceStatus.Started));
         }
 
         [Test]

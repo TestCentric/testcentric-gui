@@ -57,6 +57,7 @@
     <Compile Include="IAsemblyWatcher.cs" />
     <Compile Include="ITestEvents.cs" />
     <Compile Include="ITestServices.cs" />
+    <Compile Include="RecentFilesService.cs" />
     <Compile Include="Settings\ErrorDisplaySettings.cs" />
     <Compile Include="Settings\MainFormSettings.cs" />
     <Compile Include="Settings\MiniFormSettings.cs" />
