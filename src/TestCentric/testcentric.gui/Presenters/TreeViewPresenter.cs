@@ -40,7 +40,7 @@ namespace TestCentric.Gui.Presenters
         /// <summary>
         /// Indicates how a tree should be displayed initially
         /// </summary>
-        private enum DisplayStyle
+        private enum InitialTreeExpansion
         {
             Auto,       // Select based on space available
             Expand,     // Expand fully
@@ -270,17 +270,17 @@ namespace TestCentric.Gui.Presenters
 
         public void LoadTests(TestNode topLevelTest)
         {
-            DisplayStyle displayStyle = (DisplayStyle)_settings.Gui.TestTree.InitialTreeDisplay;
+            InitialTreeExpansion displayStyle = (InitialTreeExpansion)_settings.Gui.TestTree.InitialTreeDisplay;
             var nodeCount = CountTestNodes(topLevelTest);
-            if (displayStyle == DisplayStyle.Auto)
+            if (displayStyle == InitialTreeExpansion.Auto)
                 displayStyle = _view.Tree.VisibleCount < nodeCount
-                    ? DisplayStyle.HideTests
-                    : DisplayStyle.Expand;
+                    ? InitialTreeExpansion.HideTests
+                    : InitialTreeExpansion.Expand;
 
             LoadTests(topLevelTest, displayStyle);
         }
 
-        private void LoadTests(TestNode topLevelTest, DisplayStyle displayStyle)
+        private void LoadTests(TestNode topLevelTest, InitialTreeExpansion displayStyle)
         {
             _treeMap.Clear();
 
@@ -302,7 +302,7 @@ namespace TestCentric.Gui.Presenters
             return result;
         }
 
-        private TestSuiteTreeNode BuildTestTree(TestNode testNode, DisplayStyle displayStyle, bool highlight)
+        private TestSuiteTreeNode BuildTestTree(TestNode testNode, InitialTreeExpansion displayStyle, bool highlight)
         {
             var treeNode = new TestSuiteTreeNode(testNode);
             if (highlight) treeNode.ForeColor = Color.Blue;
@@ -311,13 +311,13 @@ namespace TestCentric.Gui.Presenters
 
             if (testNode.IsSuite)
             {
-                if (testNode.Type == "TestFixture" && displayStyle == DisplayStyle.HideTests)
-                    displayStyle = DisplayStyle.Collapse;
+                if (testNode.Type == "TestFixture" && displayStyle == InitialTreeExpansion.HideTests)
+                    displayStyle = InitialTreeExpansion.Collapse;
 
                 foreach (TestNode child in testNode.Children)
                     treeNode.Nodes.Add(BuildTestTree(child, displayStyle, highlight));
 
-                if (displayStyle == DisplayStyle.Expand || displayStyle == DisplayStyle.HideTests)
+                if (displayStyle == InitialTreeExpansion.Expand || displayStyle == InitialTreeExpansion.HideTests)
                     treeNode.Expand();
             }
 
@@ -332,7 +332,7 @@ namespace TestCentric.Gui.Presenters
         public void ReloadTests(TestNode test)
         {
             VisualState visualState = VisualState.LoadFrom(_view);
-            LoadTests(test, DisplayStyle.Collapse);
+            LoadTests(test, InitialTreeExpansion.Collapse);
             visualState.RestoreVisualState(_view, _treeMap);
         }
 

@@ -27,7 +27,6 @@ using System.Windows.Forms;
 namespace TestCentric.Gui.Presenters
 {
     using Model;
-    using Settings;
     using Views;
 
     /// <summary>
@@ -66,29 +65,29 @@ namespace TestCentric.Gui.Presenters
 
                 _view.Tree.Add(treeNode);
 
-                SetInitialExpansion(displayStyle, treeNode);
+                SetInitialExpansion((InitialTreeExpansion)displayStyle, treeNode);
             }
 
             topNode?.EnsureVisible();
         }
 
-        private void SetInitialExpansion(TreeDisplayStyle displayStyle, TreeNode treeNode)
+        private void SetInitialExpansion(InitialTreeExpansion displayStyle, TreeNode treeNode)
         {
             switch (displayStyle)
             {
-                case TreeDisplayStyle.Auto:
+                case InitialTreeExpansion.Auto:
                     if (_view.Tree.VisibleCount >= treeNode.GetNodeCount(true))
                         treeNode.ExpandAll();
                     else
                         CollapseToFixtures(treeNode);
                     break;
-                case TreeDisplayStyle.Expand:
+                case InitialTreeExpansion.Expand:
                     treeNode.ExpandAll();
                     break;
-                case TreeDisplayStyle.Collapse:
+                case InitialTreeExpansion.Collapse:
                     treeNode.Collapse();
                     break;
-                case TreeDisplayStyle.HideTests:
+                case InitialTreeExpansion.HideTests:
                     CollapseToFixtures(treeNode);
                     break;
                 default:

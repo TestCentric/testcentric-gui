@@ -27,7 +27,7 @@ using System.Windows.Forms;
 namespace TestCentric.Gui.Presenters
 {
     using Model;
-    using Settings;
+    using Model.Settings;
     using Views;
 	using Elements;
 
@@ -46,7 +46,7 @@ namespace TestCentric.Gui.Presenters
     {
         protected ITestTreeView _view;
         protected ITestModel _model;
-        protected SettingsModel _settings;
+        protected UserSettings _settings;
 
         protected Dictionary<string, List<TreeNode>> _nodeIndex = new Dictionary<string, List<TreeNode>>();
 
@@ -58,7 +58,7 @@ namespace TestCentric.Gui.Presenters
         {
             _view = view;
             _model = model;
-            _settings = new SettingsModel(_model.Services.UserSettings);
+            _settings = _model.Services.UserSettings;
 
             this.Tree = view.Tree;
         }

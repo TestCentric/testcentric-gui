@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -36,12 +36,12 @@ namespace TestCentric.Gui.Model
         private IServiceLocator _services;
         private ITestEngine _testEngine;
 
-        public TestServices(ITestEngine testEngine)
+        public TestServices(ITestEngine testEngine, string applicationPrefix=null)
         {
             _testEngine = testEngine;
             _services = testEngine.Services;
 
-            UserSettings = new UserSettings(_services.GetService<ISettings>());
+            UserSettings = new UserSettings(_services.GetService<ISettings>(), applicationPrefix);
             RecentFiles = GetService<IRecentFiles>();
             ExtensionService = GetService<IExtensionService>();
             ResultService = GetService<IResultService>();

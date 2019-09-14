@@ -86,7 +86,7 @@ namespace TestCentric.Gui
             testEngine.InternalTraceLevel = traceLevel;
 
             log.Info("Instantiating TestModel");
-            ITestModel model = new TestModel(testEngine);
+            ITestModel model = new TestModel(testEngine, "TestCentric");
             model.PackageSettings.Add(EnginePackageSettings.InternalTraceLevel, traceLevel.ToString());
 
             if (options.ProcessModel != null)

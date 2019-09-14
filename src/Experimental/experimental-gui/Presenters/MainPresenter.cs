@@ -27,11 +27,11 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using NUnit.Engine;
+using TestCentric.Gui.Model.Settings;
 
 namespace TestCentric.Gui.Presenters
 {
     using Model;
-    using Settings;
     using Views;
     using Views.AddinPages;
 
@@ -39,7 +39,7 @@ namespace TestCentric.Gui.Presenters
     {
         IMainView _view;
         ITestModel _model;
-        SettingsModel _settings;
+        UserSettings _settings;
         CommandLineOptions _options;
 
         private Dictionary<string, TreeNode> _nodeIndex = new Dictionary<string, TreeNode>();
@@ -50,7 +50,7 @@ namespace TestCentric.Gui.Presenters
         {
             _view = view;
             _model = model;
-            _settings = new SettingsModel(_model.Services.UserSettings);
+            _settings = _model.Services.UserSettings;
             _options = options;
 
             InitializeMainMenu();
@@ -189,7 +189,7 @@ namespace TestCentric.Gui.Presenters
                 _view.IsMaximized = true;
 
             // Set the font to use
-            _view.Font = _settings.Gui.MainForm.Font;
+            _view.Font = _settings.Gui.Font;
 
             var settings = _model.PackageSettings;
             if (_options.InternalTraceLevel != null)

@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -23,13 +23,10 @@
 
 using System;
 using System.Windows.Forms;
-using TestCentric.Gui;
+using TestCentric.Gui.Model.Settings;
 
 namespace TestCentric.Gui.Views
 {
-    using Settings;
-    using Elements;
-
     public partial class SettingsPage : UserControl
     {
         // Constructor used by the Windows.Forms Designer.
@@ -41,7 +38,7 @@ namespace TestCentric.Gui.Views
         }
 
         // Constructor we use in creating page for SettingsDialog
-        public SettingsPage(string key, SettingsModel settings)
+        public SettingsPage(string key, UserSettings settings)
         {
             InitializeComponent();
 
@@ -52,7 +49,7 @@ namespace TestCentric.Gui.Views
 
         #region Properties
 
-        protected SettingsModel Settings { get; private set; }
+        protected UserSettings Settings { get; private set; }
 
         protected IMessageDisplay MessageDisplay { get; private set; }
 

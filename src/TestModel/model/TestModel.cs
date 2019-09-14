@@ -46,10 +46,10 @@ namespace TestCentric.Gui.Model
 
         #region Constructor
 
-        public TestModel(ITestEngine testEngine)
+        public TestModel(ITestEngine testEngine, string applicationPrefix=null)
         {
             TestEngine = testEngine;
-            Services = new TestServices(testEngine);
+            Services = new TestServices(testEngine, applicationPrefix);
 
             foreach (var node in Services.ExtensionService.GetExtensionNodes(PROJECT_LOADER_EXTENSION_PATH))
             {

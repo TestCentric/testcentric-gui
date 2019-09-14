@@ -149,7 +149,7 @@ namespace TestCentric.Gui
                 if (dlg.Settings == null)
                     throw new InvalidOperationException("The Settings Dialog was not properly initialized");
 
-                Settings = new UserSettings(dlg.Settings);
+                Settings = dlg.Settings;
 
                 LoadSettings();
             }

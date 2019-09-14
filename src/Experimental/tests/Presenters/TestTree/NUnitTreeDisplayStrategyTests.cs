@@ -30,7 +30,6 @@ namespace TestCentric.Gui.Presenters.TestTree
 {
     using Model;
     using Views;
-    using Settings;
 
     public abstract class DisplayStrategyTests
     {

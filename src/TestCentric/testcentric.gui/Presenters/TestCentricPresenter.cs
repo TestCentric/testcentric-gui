@@ -276,13 +276,11 @@ namespace TestCentric.Gui.Presenters
                     {
                         case "Full":
                         default:
-                            _settings.Gui.MainForm.Left = location.X;
-                            _settings.Gui.MainForm.Top = location.Y;
+                            _settings.Gui.MainForm.Location = location;
                             _settings.Gui.MainForm.Maximized = false;
                             break;
                         case "Mini":
-                            _settings.Gui.MiniForm.Left = location.X;
-                            _settings.Gui.MiniForm.Top = location.Y;
+                            _settings.Gui.MiniForm.Location = location;
                             _settings.Gui.MiniForm.Maximized = false;
                             break;
                     }
@@ -293,17 +291,13 @@ namespace TestCentric.Gui.Presenters
             {
                 if (!_view.Maximized)
                 {
-                    var size = _view.Size;
-
                     if (_view.DisplayFormat.SelectedItem == "Full")
                     {
-                        _settings.Gui.MainForm.Width = size.Width;
-                        _settings.Gui.MainForm.Height = size.Height;
+                        _settings.Gui.MainForm.Size = _view.Size;
                     }
                     else
                     {
-                        _settings.Gui.MiniForm.Width = size.Width;
-                        _settings.Gui.MiniForm.Height = size.Height;
+                        _settings.Gui.MiniForm.Size = _view.Size;
                     }
                 }
             };
@@ -782,7 +776,8 @@ namespace TestCentric.Gui.Presenters
         {
             _view.DisplayFormat.SelectedItem = displayFormat;
 
-            int x = 0, y = 0, width = 0, height = 0;
+            Point location;
+            Size size;
             bool isMaximized = false;
             bool useFullGui = displayFormat != "Mini";
 
@@ -790,23 +785,16 @@ namespace TestCentric.Gui.Presenters
 
             if (useFullGui)
             {
-                x = _settings.Gui.MainForm.Left;
-                y = _settings.Gui.MainForm.Top;
-                width = _settings.Gui.MainForm.Width;
-                height = _settings.Gui.MainForm.Height;
+                location = _settings.Gui.MainForm.Location;
+                size = _settings.Gui.MainForm.Size;
                 isMaximized = _settings.Gui.MainForm.Maximized;
             }
             else
             {
-                x = _settings.Gui.MiniForm.Left;
-                y = _settings.Gui.MiniForm.Top;
-                width = _settings.Gui.MiniForm.Width;
-                height = _settings.Gui.MiniForm.Height;
+                location = _settings.Gui.MiniForm.Location;
+                size = _settings.Gui.MiniForm.Size;
                 isMaximized = _settings.Gui.MiniForm.Maximized;
             }
-
-            Point location = new Point(x, y);
-            Size size = new Size(Math.Max(width, 160), Math.Max(height, 32));
 
             if (!IsValidLocation(location, size))
                 location = new Point(10, 10);

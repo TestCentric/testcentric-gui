@@ -24,21 +24,21 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using TestCentric.Gui.Model.Settings;
 
 namespace TestCentric.Gui.Views
 {
-    using Settings;
     using SettingsPages;
  
     public partial class SettingsDialog : Form, IDialog
     {
-        private readonly SettingsModel _settings;
+        private readonly UserSettings _settings;
         private readonly List<SettingsPage> _pageList = new List<SettingsPage>();
         private readonly Form _owner;
 
         private SettingsPage _currentPage;
 
-        public SettingsDialog(Form owner, SettingsModel settings)
+        public SettingsDialog(Form owner, UserSettings settings)
         {
             InitializeComponent();
 

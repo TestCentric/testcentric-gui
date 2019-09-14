@@ -22,7 +22,7 @@
 // ***********************************************************************
 
 using System.Windows.Forms;
-using TestCentric.Gui.Settings;
+using TestCentric.Gui.Model.Settings;
 
 namespace TestCentric.Gui.Views.SettingsPages
 {
@@ -37,7 +37,7 @@ namespace TestCentric.Gui.Views.SettingsPages
         private RadioButton labelsOffRadioButton;
         private Label label3;
 
-        public TextOutputSettingsPage(SettingsModel settings) : base("Gui.TextOutput", settings)
+        public TextOutputSettingsPage(UserSettings settings) : base("Gui.TextOutput", settings)
         {
             // This call is required by the Windows Form Designer.
             InitializeComponent();

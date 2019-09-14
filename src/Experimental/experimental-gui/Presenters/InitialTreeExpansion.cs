@@ -1,5 +1,5 @@
-﻿// ***********************************************************************
-// Copyright (c) 2015 Charlie Poole
+// ***********************************************************************
+// Copyright (c) 2016 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -21,37 +21,17 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using NUnit.Engine;
-
-namespace TestCentric.Gui.Settings
+namespace TestCentric.Gui.Presenters
 {
     /// <summary>
-    /// SettingsModel is the top level of a set of wrapper
-    /// classes that provide type-safe access to settingsService.
+    /// Indicates how a tree should be displayed
     /// </summary>
-    public class EngineSettings : SettingsGroup
+    public enum InitialTreeExpansion
     {
-        public EngineSettings(ISettings settingsService) : base(settingsService, "Engine.Options") { }
-
-        private const string reloadOnChangeKey = "ReloadOnChange";
-        public bool ReloadOnChange
-        {
-            get { return GetSetting(reloadOnChangeKey, true); }
-            set { SaveSetting(reloadOnChangeKey, value); }
-        }
-
-        private const string rerunOnChangeKey = "RerunOnChange";
-        public bool RerunOnChange
-        {
-            get { return GetSetting(rerunOnChangeKey, false); }
-            set { SaveSetting(rerunOnChangeKey, value); }
-        }
-
-        private const string reloadOnRunKey = "ReloadOnRun";
-        public bool ReloadOnRun
-        {
-            get { return GetSetting(reloadOnRunKey, false); }
-            set { SaveSetting(reloadOnRunKey, value); }
-        }
+        Auto,		// Select based on space available
+        Expand,		// Expand fully
+        Collapse,	// Collapse fully
+        HideTests	// Expand all but the fixtures, leaving
+        // leaf nodes hidden
     }
 }

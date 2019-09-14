@@ -32,37 +32,37 @@ namespace TestCentric.Gui.Model.Settings
     /// </summary>
     public class GuiSettings : SettingsGroup
     {
-        public GuiSettings(ISettings settings)
-             : base(settings, "Gui.Options") { }
+        public GuiSettings(ISettings settings, string prefix)
+             : base(settings, prefix + "Gui") { }
 
         public TestTreeSettings TestTree
         {
-            get { return new TestTreeSettings(_settings); }
+            get { return new TestTreeSettings(_settingsService, GroupPrefix); }
         }
 
         public RecentProjectsSettings RecentProjects
         {
-            get { return new RecentProjectsSettings(_settings); }
+            get { return new RecentProjectsSettings(_settingsService, GroupPrefix); }
         }
 
         public MiniFormSettings MiniForm
         {
-            get { return new MiniFormSettings(_settings); }
+            get { return new MiniFormSettings(_settingsService, GroupPrefix); }
         }
 
         public MainFormSettings MainForm
         {
-            get { return new MainFormSettings(_settings); }
+            get { return new MainFormSettings(_settingsService, GroupPrefix); }
         }
 
         public ErrorDisplaySettings ErrorDisplay
         {
-            get { return new ErrorDisplaySettings(_settings); }
+            get { return new ErrorDisplaySettings(_settingsService, GroupPrefix); }
         }
 
         public TextOutputSettings TextOutput
         {
-            get { return new TextOutputSettings(_settings); }
+            get { return new TextOutputSettings(_settingsService, GroupPrefix); }
         }
 
         public string DisplayFormat

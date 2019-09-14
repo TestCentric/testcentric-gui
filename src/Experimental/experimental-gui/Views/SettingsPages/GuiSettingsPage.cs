@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2015 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -21,13 +21,13 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using TestCentric.Gui.Settings;
+using TestCentric.Gui.Model.Settings;
 
 namespace TestCentric.Gui.Views.SettingsPages
 {
     public partial class GuiSettingsPage : SettingsPage
     {
-        public GuiSettingsPage(SettingsModel settings) : base("Gui.General", settings)
+        public GuiSettingsPage(UserSettings settings) : base("Gui.General", settings)
         {
             InitializeComponent();
         }
@@ -41,7 +41,7 @@ namespace TestCentric.Gui.Views.SettingsPages
 
         public override void ApplySettings()
         {
-            Settings.Gui.TestTree.InitialTreeDisplay = (TreeDisplayStyle)initialDisplayComboBox.SelectedIndex;
+            Settings.Gui.TestTree.InitialTreeDisplay = initialDisplayComboBox.SelectedIndex;
             Settings.Gui.TestTree.SaveVisualState = saveVisualStateCheckBox.Checked;
         }
 

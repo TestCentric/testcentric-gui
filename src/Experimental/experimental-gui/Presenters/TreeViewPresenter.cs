@@ -50,7 +50,7 @@ namespace TestCentric.Gui.Presenters
             _view = treeView;
             _model = model;
 
-            Settings = new Settings.TestTreeSettings(_model.Services.UserSettings);
+            Settings = _model.Services.UserSettings.Gui.TestTree;
 
             _view.AlternateImageSet = (string)Settings.AlternateImageSet;
 
@@ -262,7 +262,7 @@ namespace TestCentric.Gui.Presenters
             _view.DisplayFormat.SelectedItem = format;
         }
 
-        private Settings.TestTreeSettings Settings { get; }
+        private Model.Settings.TestTreeSettings Settings { get; }
 
         #endregion
     }

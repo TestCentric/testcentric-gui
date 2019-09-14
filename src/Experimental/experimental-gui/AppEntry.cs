@@ -88,7 +88,7 @@ namespace TestCentric.Gui
             var traceLevel = (InternalTraceLevel)Enum.Parse(typeof(InternalTraceLevel), options.InternalTraceLevel ?? "Off");
             testEngine.InternalTraceLevel = traceLevel;
 
-            var model = new TestModel(testEngine);
+            var model = new TestModel(testEngine, "Experimental.");
             model.PackageSettings.Add(EnginePackageSettings.InternalTraceLevel, traceLevel.ToString());
 
             if (options.ProcessModel != null)

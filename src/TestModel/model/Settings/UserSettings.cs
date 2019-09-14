@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -27,17 +27,17 @@ namespace TestCentric.Gui.Model.Settings
 {
     public class UserSettings : SettingsGroup
     {
-        public UserSettings(ISettings settings)
-            : base(settings, string.Empty) { }
+        public UserSettings(ISettings settings, string prefix=null)
+            : base(settings, prefix) { }
 
         public GuiSettings Gui
         {
-            get { return new GuiSettings(_settings); }
+            get { return new GuiSettings(_settingsService, GroupPrefix); }
         }
 
         public EngineSettings Engine
         {
-            get { return new EngineSettings(_settings); }
+            get { return new EngineSettings(_settingsService, GroupPrefix); }
         }
     }
 }

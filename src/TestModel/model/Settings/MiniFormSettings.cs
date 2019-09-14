@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -21,37 +21,26 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System.Drawing;
 using NUnit.Engine;
 
 namespace TestCentric.Gui.Model.Settings
 {
     public class MiniFormSettings : SettingsGroup
     {
-        public MiniFormSettings(ISettings settings)
-            : base(settings, "Gui.MiniForm") { }
+        public MiniFormSettings(ISettings settings, string prefix)
+            : base(settings, prefix + "MiniForm") { }
 
-        public int Left
+        public Point Location
         {
-            get { return GetSetting(nameof(Left), 10); }
-            set { SaveSetting(nameof(Left), value); }
+            get { return GetSetting(nameof(Location), new Point(10, 10)); }
+            set { SaveSetting(nameof(Location), value); }
         }
 
-        public int Top
+        public Size Size
         {
-            get { return GetSetting(nameof(Top), 10); }
-            set { SaveSetting(nameof(Top), value); }
-        }
-
-        public int Width
-        {
-            get { return GetSetting(nameof(Width), 700); }
-            set { SaveSetting(nameof(Width), value); }
-        }
-
-        public int Height
-        {
-            get { return GetSetting(nameof(Height), 400); }
-            set { SaveSetting(nameof(Height), value); }
+            get { return GetSetting(nameof(Size), new Size(700, 400)); }
+            set { SaveSetting(nameof(Size), value); }
         }
 
         public bool Maximized
