@@ -24,7 +24,7 @@
 using System;
 using System.Collections;
 
-namespace TestCentric.Gui.Model
+namespace TestCentric.Gui.Model.Services
 {
     public delegate void AssemblyChangedHandler(string fullPath);
     public interface IAsemblyWatcher : IDisposable

@@ -1,5 +1,5 @@
 // ***********************************************************************
-// Copyright (c) 2018 Charlie Poole
+// Copyright (c) 2015 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -8,10 +8,10 @@
 // distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so, subject to
 // the following conditions:
-//
+// 
 // The above copyright notice and this permission notice shall be
 // included in all copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 // MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -22,22 +22,36 @@
 // ***********************************************************************
 
 using System;
-using NUnit.Engine;
+using NUnit.Engine.Internal;
 
-namespace TestCentric.Gui.Model
+namespace NUnit.Engine.Services.Tests
 {
-    using Services;
-    using Settings;
-
-    /// <summary>
-    /// ITestServices extends IServiceLocator in order to
-    /// conveniently cache commonly used services.
-    /// </summary>
-    public interface ITestServices : IServiceLocator
+    public class FakeSettingsService : SettingsStore, IService
     {
-        UserSettings UserSettings { get; }
-        RecentFiles RecentFiles { get; }
-        IExtensionService ExtensionService { get; }
-        IResultService ResultService { get; }
+        IServiceLocator IService.ServiceContext { get; set; }
+
+        private ServiceStatus _status;
+        ServiceStatus IService.Status
+        {
+            get { return _status; }
+        }
+
+        void IService.StartService()
+        {
+            _status = FailToStart
+                ? ServiceStatus.Error
+                : ServiceStatus.Started;
+        }
+
+        void IService.StopService()
+        {
+            _status = ServiceStatus.Stopped;
+            if (FailedToStop)
+                throw new ArgumentException(nameof(FailedToStop));
+        }
+
+        public bool FailToStart { get; set; }
+
+        public bool FailedToStop { get; set; }
     }
 }

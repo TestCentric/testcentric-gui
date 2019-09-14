@@ -62,8 +62,10 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AssemblyWatcherTests.cs" />
+    <Compile Include="Services\AssemblyWatcherTests.cs" />
     <Compile Include="AvailableRuntimesTest.cs" />
+    <Compile Include="FakeSettingsService.cs" />
+    <Compile Include="Services\RecentFilesTests.cs" />
     <Compile Include="ResultNodeTests.cs" />
     <Compile Include="ResultStateTests.cs" />
     <Compile Include="ResultSummaryCreatorTests.cs" />
@@ -84,6 +86,10 @@
     <ProjectReference Include="..\..\TestEngine\src\NUnitEngine\nunit.engine.api\nunit.engine.api.csproj">
       <Project>{44fddb13-129b-4595-92e1-447e1c065c07}</Project>
       <Name>nunit.engine.api</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TestEngine\src\NUnitEngine\nunit.engine\nunit.engine.csproj">
+      <Project>{ac7ed833-5c39-4ab6-8054-cdfdd82ddfbf}</Project>
+      <Name>nunit.engine</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\tests\mock-assembly\mock-assembly.csproj">
       <Project>{2e368281-3ba8-4050-b05e-0e0e43f8f446}</Project>

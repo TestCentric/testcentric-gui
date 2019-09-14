@@ -29,6 +29,8 @@ using NUnit.Engine;
 
 namespace TestCentric.Gui.Model
 {
+    using Services;
+
     public class TestModel : ITestModel
     {
         private const string PROJECT_LOADER_EXTENSION_PATH = "/NUnit/Engine/TypeExtensions/IProjectLoader";
@@ -195,7 +197,7 @@ namespace TestCentric.Gui.Model
             _events.FireTestLoaded(Tests);
 
             foreach (var subPackage in TestPackage.SubPackages)
-                Services.RecentFiles.SetMostRecent(subPackage.FullName);
+                Services.RecentFiles.Latest = subPackage.FullName;
         }
 
         // Load Tests without sending events

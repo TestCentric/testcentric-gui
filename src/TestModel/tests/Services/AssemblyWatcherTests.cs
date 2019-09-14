@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2011-2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -25,7 +25,7 @@ using System.IO;
 using NUnit.Framework;
 
 
-namespace TestCentric.Gui.Model
+namespace TestCentric.Gui.Model.Services
 {
     [TestFixture]
     public class AssemblyWatcherTests

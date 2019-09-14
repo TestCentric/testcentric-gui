@@ -26,7 +26,7 @@ using System.Collections;
 using System.IO;
 using System.Timers;
 
-namespace TestCentric.Gui.Model
+namespace TestCentric.Gui.Model.Services
 {
     public class AssemblyWatcher : IAsemblyWatcher
     {

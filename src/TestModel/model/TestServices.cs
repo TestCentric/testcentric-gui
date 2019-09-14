@@ -26,6 +26,7 @@ using NUnit.Engine;
 
 namespace TestCentric.Gui.Model
 {
+    using Services;
     using Settings;
 
     /// <summary>
@@ -41,8 +42,9 @@ namespace TestCentric.Gui.Model
             _testEngine = testEngine;
             _services = testEngine.Services;
 
-            UserSettings = new UserSettings(_services.GetService<ISettings>(), applicationPrefix);
-            RecentFiles = GetService<IRecentFiles>();
+            var settings = _services.GetService<ISettings>();
+            UserSettings = new UserSettings(settings, applicationPrefix);
+            RecentFiles = new RecentFiles(settings, applicationPrefix);
             ExtensionService = GetService<IExtensionService>();
             ResultService = GetService<IResultService>();
         }
@@ -51,7 +53,7 @@ namespace TestCentric.Gui.Model
 
         public UserSettings UserSettings { get; }
 
-        public IRecentFiles RecentFiles { get; }
+        public RecentFiles RecentFiles { get; }
 
         public IExtensionService ExtensionService { get; }
 
