@@ -197,7 +197,7 @@ namespace TestCentric.Gui.Model
             _events.FireTestLoaded(Tests);
 
             foreach (var subPackage in TestPackage.SubPackages)
-                Services.RecentFiles.SetMostRecent(subPackage.FullName);
+                Services.RecentFiles.Latest = subPackage.FullName;
         }
 
         // Load Tests without sending events

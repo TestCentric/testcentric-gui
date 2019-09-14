@@ -31,18 +31,41 @@ namespace TestCentric.Gui.Model.Services
     {
         private IList<string> _fileEntries = new List<string>();
         private ISettings _userSettings;
+        private string _prefix;
 
         private const int MAX_FILES = 24;
 
-        public RecentFiles(ISettings userSettings)
+        public RecentFiles(ISettings userSettings, string applicationPrefix)
         {
             _userSettings = userSettings;
-            LoadEntriesFromSettings();
+            _prefix = applicationPrefix ?? string.Empty;
+
+            if (_prefix != string.Empty && !_prefix.EndsWith("."))
+                _prefix += ".";
+
+            _prefix += "Gui.RecentProjects";
+
+            LoadEntries();
         }
 
-        public int MaxFiles
+        public int MaxFiles { get; } = MAX_FILES;
+
+        public string Latest
         {
-            get { return MAX_FILES; }
+            get { return _fileEntries.Count == 0 ? null : _fileEntries[0]; }
+            set
+            {
+                if (Latest != value)
+                {
+                    _fileEntries.Remove(value);
+
+                    _fileEntries.Insert(0, value);
+                    if (_fileEntries.Count > MaxFiles)
+                        _fileEntries.RemoveAt(MaxFiles);
+
+                    SaveEntries();
+                }
+            }
         }
 
         public IList<string> Entries
@@ -55,57 +78,37 @@ namespace TestCentric.Gui.Model.Services
             _fileEntries.Remove(fileName);
         }
 
-        public void SetMostRecent(string filePath)
-        {
-            _fileEntries.Remove(filePath);
-
-            _fileEntries.Insert(0, filePath);
-            if (_fileEntries.Count > MAX_FILES)
-                _fileEntries.RemoveAt(MAX_FILES);
-        }
-
-        private void LoadEntriesFromSettings()
+        private void LoadEntries()
         {
             _fileEntries.Clear();
 
-            // TODO: Prefix should be provided by caller
-            AddEntriesForPrefix("Gui.RecentProjects");
-        }
-
-        private void AddEntriesForPrefix(string prefix)
-        {
-            for (int index = 1; index < MAX_FILES; index++)
+            for (int index = 1; index < MaxFiles; index++)
             {
-                if (_fileEntries.Count >= MAX_FILES) break;
+                if (_fileEntries.Count >= MaxFiles) break;
 
-                string fileSpec = _userSettings.GetSetting(GetRecentFileKey(prefix, index)) as string;
+                string fileSpec = _userSettings.GetSetting(GetRecentFileKey(index)) as string;
                 if (fileSpec != null) _fileEntries.Add(fileSpec);
             }
         }
 
-        private void SaveEntriesToSettings()
+        private void SaveEntries()
         {
-            string prefix = "Gui.RecentProjects";
-
-            while (_fileEntries.Count > MAX_FILES)
+            while (_fileEntries.Count > MaxFiles)
                 _fileEntries.RemoveAt(_fileEntries.Count - 1);
 
-            for (int index = 0; index < MAX_FILES; index++)
+            for (int index = 0; index < MaxFiles; index++)
             {
-                string keyName = GetRecentFileKey(prefix, index + 1);
+                string keyName = GetRecentFileKey(index + 1);
                 if (index < _fileEntries.Count)
                     _userSettings.SaveSetting(keyName, _fileEntries[index]);
                 else
                     _userSettings.RemoveSetting(keyName);
             }
-
-            // Remove legacy entries here
-            _userSettings.RemoveGroup("RecentProjects");
         }
 
-        private string GetRecentFileKey(string prefix, int index)
+        private string GetRecentFileKey(int index)
         {
-            return string.Format("{0}.File{1}", prefix, index);
+            return string.Format("{0}.File{1}", _prefix, index);
         }
     }
 }

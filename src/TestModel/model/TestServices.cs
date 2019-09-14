@@ -42,8 +42,9 @@ namespace TestCentric.Gui.Model
             _testEngine = testEngine;
             _services = testEngine.Services;
 
-            UserSettings = new UserSettings(_services.GetService<ISettings>(), applicationPrefix);
-            RecentFiles = new RecentFiles(_services.GetService<ISettings>());
+            var settings = _services.GetService<ISettings>();
+            UserSettings = new UserSettings(settings, applicationPrefix);
+            RecentFiles = new RecentFiles(settings, applicationPrefix);
             ExtensionService = GetService<IExtensionService>();
             ResultService = GetService<IResultService>();
         }

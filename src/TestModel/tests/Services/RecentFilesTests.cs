@@ -40,7 +40,7 @@ namespace TestCentric.Gui.Model.Services
         [SetUp]
         public void SetUp()
         {
-            _recentFiles = new RecentFiles(new FakeSettingsService());
+            _recentFiles = new RecentFiles(new FakeSettingsService(), "Testing.");
         }
 
         [Test]
@@ -78,9 +78,9 @@ namespace TestCentric.Gui.Model.Services
         public void AddMixedItems()
         {
             SetMockValues(5);
-            _recentFiles.SetMostRecent( "30" );
-            _recentFiles.SetMostRecent( "20" );
-            _recentFiles.SetMostRecent( "10" );
+            _recentFiles.Latest = "30";
+            _recentFiles.Latest = "20";
+            _recentFiles.Latest = "10";
             CheckListContains( 10, 20, 30, 1, 2, 3, 4, 5 );
         }
 
@@ -88,7 +88,7 @@ namespace TestCentric.Gui.Model.Services
         public void ReorderLastProject()
         {
             SetMockValues( 5 );
-            _recentFiles.SetMostRecent( "5" );
+            _recentFiles.Latest = "5";
             CheckListContains( 5, 1, 2, 3, 4 );
         }
 
@@ -96,7 +96,7 @@ namespace TestCentric.Gui.Model.Services
         public void ReorderSingleProject()
         {
             SetMockValues( 5 );
-            _recentFiles.SetMostRecent( "3" );
+            _recentFiles.Latest = "3";
             CheckListContains( 3, 1, 2, 4, 5 );
         }
 
@@ -104,9 +104,9 @@ namespace TestCentric.Gui.Model.Services
         public void ReorderMultipleProjects()
         {
             SetMockValues( 5 );
-            _recentFiles.SetMostRecent( "3" );
-            _recentFiles.SetMostRecent( "5" );
-            _recentFiles.SetMostRecent( "2" );
+            _recentFiles.Latest = "3";
+            _recentFiles.Latest = "5";
+            _recentFiles.Latest = "2";
             CheckListContains( 2, 5, 3, 1, 4 );
         }
 
@@ -114,7 +114,7 @@ namespace TestCentric.Gui.Model.Services
         public void ReorderSameProject()
         {
             SetMockValues( 5 );
-            _recentFiles.SetMostRecent( "1" );
+            _recentFiles.Latest = "1";
             CheckListContains( 1, 2, 3, 4, 5 );
         }
 
@@ -158,7 +158,7 @@ namespace TestCentric.Gui.Model.Services
         private void SetMockValues(int count)
         {
             for (int num = count; num > 0; --num)
-                _recentFiles.SetMostRecent(num.ToString());
+                _recentFiles.Latest = num.ToString();
         }
 
         // Check that the list is set right: 1, 2, ...
