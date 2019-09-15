@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -21,6 +21,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System;
 using System.Collections.Generic;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
@@ -121,5 +122,9 @@ namespace NUnit.TestUtilities.Fakes
         {
             return new string[0];
         }
+
+        public string AssemblyPath { get; }
+
+        public Version AssemblyVersion { get; }
     }
 }
