@@ -131,7 +131,7 @@ namespace NUnit.Engine.Services
             }
         }
 
-        private IProject LoadFrom(string path)
+        public IProject LoadFrom(string path)
         {
             if (File.Exists(path))
             {
