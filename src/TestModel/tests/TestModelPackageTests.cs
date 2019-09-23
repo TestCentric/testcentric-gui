@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -42,11 +42,12 @@ namespace TestCentric.Gui.Model
 
         [TestCase("my.test.assembly.dll")]
         [TestCase("one.dll", "two.dll", "three.dll")]
-        public void PackageContainsOneSubPackagePerAssembly(params string[] assemblies)
+        [TestCase("tests.nunit")]
+        public void PackageContainsOneSubPackagePerTestFile(params string[] testFiles)
         {
-            TestPackage package = _model.MakeTestPackage(assemblies);
+            TestPackage package = _model.MakeTestPackage(testFiles);
 
-            Assert.That(package.SubPackages.Select(p => p.Name), Is.EqualTo(assemblies));
+            Assert.That(package.SubPackages.Select(p => p.Name), Is.EqualTo(testFiles));
         }
 
         [TestCase(EnginePackageSettings.ProcessModel, "Single")]
@@ -56,7 +57,7 @@ namespace TestCentric.Gui.Model
         [TestCase(EnginePackageSettings.ShadowCopyFiles, false)]
         public void PackageReflectsPackageSettings(string key, object value)
         {
-            _model.PackageSettings[key] = value;
+            _model.PackageOverrides[key] = value;
             TestPackage package = _model.MakeTestPackage(new[] { "my.dll" });
 
             Assert.That(package.Settings.ContainsKey(key));

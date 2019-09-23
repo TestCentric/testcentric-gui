@@ -54,13 +54,13 @@ namespace TestCentric.Gui.Model
 
         #region Current State of the Model
 
+        TestPackage TestPackage { get; }
+
         bool IsPackageLoaded { get; }
 
         List<string> TestFiles { get; }
 
-        TestSelection TestAssemblies { get; }
-
-        IDictionary<string, object> PackageSettings { get; }
+        IDictionary<string, object> PackageOverrides { get; }
 
         // TestNode hierarchy representing the discovered tests
         TestNode Tests { get; }
@@ -123,6 +123,9 @@ namespace TestCentric.Gui.Model
 
         // Get the result for a test if available
         ResultNode GetResultForTest(string id);
+
+        // Get the TestPackage represented by a test,if available
+        TestPackage GetPackageForTest(string id);
 
         // Clear the results for all tests
         void ClearResults();

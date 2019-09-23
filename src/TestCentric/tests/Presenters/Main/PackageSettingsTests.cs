@@ -40,7 +40,7 @@ namespace TestCentric.Gui.Presenters.Main
 
             _view.ProcessModel.SelectionChanged += Raise.Event<CommandHandler>();
 
-            _model.PackageSettings.Received(1)["ProcessModel"] = value;
+            _model.PackageOverrides.Received(1)["ProcessModel"] = value;
         }
 
         [Test]
@@ -50,7 +50,7 @@ namespace TestCentric.Gui.Presenters.Main
 
             _view.ProcessModel.SelectionChanged += Raise.Event<CommandHandler>();
 
-            _model.PackageSettings.Received(1).Remove("ProcessModel");
+            _model.PackageOverrides.Received(1).Remove("ProcessModel");
         }
 
         [TestCase("Single")]
@@ -62,7 +62,7 @@ namespace TestCentric.Gui.Presenters.Main
 
             _view.DomainUsage.SelectionChanged += Raise.Event<CommandHandler>();
 
-            _model.PackageSettings.Received(1)["DomainUsage"] = value;
+            _model.PackageOverrides.Received(1)["DomainUsage"] = value;
         }
 
         [Test]
@@ -72,7 +72,7 @@ namespace TestCentric.Gui.Presenters.Main
 
             _view.DomainUsage.SelectionChanged += Raise.Event<CommandHandler>();
 
-            _model.PackageSettings.Received(1).Remove("DomainUsage");
+            _model.PackageOverrides.Received(1).Remove("DomainUsage");
         }
 
         [TestCase("net-2.0")]
@@ -87,7 +87,7 @@ namespace TestCentric.Gui.Presenters.Main
 
                 _view.SelectedRuntime.SelectionChanged += Raise.Event<CommandHandler>();
 
-                _model.PackageSettings.Received(1)["RuntimeFramework"] = setting;
+                _model.PackageOverrides.Received(1)["RuntimeFramework"] = setting;
             }
         }
 
@@ -103,7 +103,7 @@ namespace TestCentric.Gui.Presenters.Main
 
             _view.SelectedRuntime.SelectionChanged += Raise.Event<CommandHandler>();
 
-            _model.PackageSettings.Received(1).Remove("RuntimeFramework");
+            _model.PackageOverrides.Received(1).Remove("RuntimeFramework");
         }
     }
 }

@@ -68,7 +68,7 @@ namespace TestCentric.Gui.Model
         #endregion
 
         #region ITestModel Implementation
-
+        
         #region General Properties
 
         // Work Directory
@@ -118,15 +118,15 @@ namespace TestCentric.Gui.Model
 
         #region Current State of the Model
 
+        // The current TestPackage loaded by the model
+        public TestPackage TestPackage { get; private set; }
+
         public bool IsPackageLoaded { get { return TestPackage != null; } }
 
+        // The list of files passed to the model to load.
         public List<string> TestFiles { get; } = new List<string>();
 
-        public TestSelection TestAssemblies { get { return Tests.Select((tn) => tn.Type == "Assembly"); } }
-
-        public TestSelection TestProjects { get { return Tests.Select((tn) => tn.Type == "Project"); } }
-
-        public IDictionary<string, object> PackageSettings { get; } = new Dictionary<string, object>();
+        public IDictionary<string, object> PackageOverrides { get; } = new Dictionary<string, object>();
 
         public TestNode Tests { get; private set; }
         public bool HasTests { get { return Tests != null; } }
@@ -186,6 +186,8 @@ namespace TestCentric.Gui.Model
 
             Runner = TestEngine.GetRunner(TestPackage);
             Tests = new TestNode(Runner.Explore(TestFilter.Empty));
+
+            MapTestsToPackages();
             AvailableCategories = GetAvailableCategories();
 
             Results.Clear();
@@ -200,9 +202,20 @@ namespace TestCentric.Gui.Model
                 Services.RecentFiles.Latest = subPackage.FullName;
         }
 
-        // Load Tests without sending events
-        private void LoadAllTests(IList<string> files)
+        private Dictionary<string, TestPackage> _packageMap = new Dictionary<string, TestPackage>();
+
+        private void MapTestsToPackages()
         {
+            _packageMap.Clear();
+            MapTestToPackage(Tests, TestPackage);
+        }
+
+        private void MapTestToPackage(TestNode test, TestPackage package)
+        {
+            _packageMap[test.Id] = package;
+            
+            for (int index = 0; index < package.SubPackages.Count && index < test.Children.Count; index++)
+                MapTestToPackage(test.Children[index], package.SubPackages[index]);
         }
 
         public void UnloadTests()
@@ -224,8 +237,6 @@ namespace TestCentric.Gui.Model
         public void ReloadTests()
         {
             _events.FireTestsReloading();
-
-            string[] files = TestFiles.ToArray();
 
             // NOTE: The `ITestRunner.Reload` method supported by the engine
             // has some problems, so we simulate Unload+Load. See issue #328.
@@ -333,6 +344,13 @@ namespace TestCentric.Gui.Model
             return null;
         }
 
+        public TestPackage GetPackageForTest(string id)
+        {
+            return _packageMap.ContainsKey(id) 
+                ? _packageMap[id] 
+                : null;
+        }
+
         public void ClearResults()
         {
             Results.Clear();
@@ -404,8 +422,6 @@ namespace TestCentric.Gui.Model
 
         private ITestRunner Runner { get; set; }
 
-        private TestPackage TestPackage { get; set; }
-
         internal IDictionary<string, ResultNode> Results { get; } = new Dictionary<string, ResultNode>();
 
         #endregion
@@ -438,7 +454,7 @@ namespace TestCentric.Gui.Model
                 if (Path.GetExtension(subpackage.Name) == ".sln")
                     subpackage.AddSetting(EnginePackageSettings.SkipNonTestAssemblies, true);
 
-            foreach (var entry in PackageSettings)
+            foreach (var entry in PackageOverrides)
                 package.AddSetting(entry.Key, entry.Value);
 
             return package;

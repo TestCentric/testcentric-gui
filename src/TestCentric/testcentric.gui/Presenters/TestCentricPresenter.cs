@@ -123,10 +123,9 @@ namespace TestCentric.Gui.Presenters
 
                 UpdateViewCommands();
 
-                if (_model.TestFiles.Count == 1)
-                {
-                    _view.SetTitleBar(_model.TestFiles.First());
-                }
+                var files = _model.TestFiles;
+                if (files.Count == 1)
+                    _view.SetTitleBar(files.First());
             };
 
             _model.Events.TestsUnloading += (TestEventArgse) =>
@@ -221,7 +220,7 @@ namespace TestCentric.Gui.Presenters
             {
                 InitializeDisplay(_settings.Gui.DisplayFormat);
 
-                var settings = _model.PackageSettings;
+                var settings = _model.PackageOverrides;
                 if (_options.ProcessModel != null)
                     _view.ProcessModel.SelectedItem = _options.ProcessModel;
                 if (_options.DomainUsage != null)
@@ -580,9 +579,7 @@ namespace TestCentric.Gui.Presenters
 
             if (filesToAdd.Count > 0)
             {
-                var files = new List<string>();
-                if (_model.TestFiles != null)
-                    files.AddRange(_model.TestFiles);
+                var files = _model.TestFiles;
                 files.AddRange(filesToAdd);
 
                 _model.LoadTests(files);
@@ -752,15 +749,14 @@ namespace TestCentric.Gui.Presenters
         private void ChangePackageSettingAndReload(string key, object setting)
         {
             if (setting == null || setting as string == "DEFAULT")
-                _model.PackageSettings.Remove(key);
+                _model.PackageOverrides.Remove(key);
             else
-                _model.PackageSettings[key] = setting;
+                _model.PackageOverrides[key] = setting;
 
             // Even though the _model has a Reload method, we cannot use it because Reload
             // does not re-create the Engine.  Since we just changed a setting, we must
             // re-create the Engine by unloading/reloading the tests.
-            List<string> listCopy = _model.TestFiles.ToList();
-            LoadTests(listCopy);    // This also does an Unload first.
+            LoadTests(_model.TestFiles);    // This also does an Unload first.
         }
 
         private void applyFont(Font font)

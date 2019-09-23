@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -40,7 +40,6 @@ namespace TestCentric.Gui.Presenters.Main
 
             TestNode testNode = new TestNode("<test-suite id='1'/>");
             _model.Tests.Returns(testNode);
-            _model.TestAssemblies.Returns(new TestSelection(new[] { testNode }));
             FireTestLoadedEvent(testNode);
         }
 
