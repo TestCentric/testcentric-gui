@@ -191,7 +191,7 @@ namespace TestCentric.Gui.Presenters
             // Set the font to use
             _view.Font = _settings.Gui.Font;
 
-            var settings = _model.PackageSettings;
+            var settings = _model.PackageOverrides;
             if (_options.InternalTraceLevel != null)
                 settings.Add(EnginePackageSettings.InternalTraceLevel, _options.InternalTraceLevel);
 
@@ -231,34 +231,34 @@ namespace TestCentric.Gui.Presenters
 
         private void SelectedRuntime_SelectionChanged()
         {
-            ChangePackageSetting(EnginePackageSettings.RuntimeFramework, _view.SelectedRuntime.SelectedItem);
+            OverridePackageSetting(EnginePackageSettings.RuntimeFramework, _view.SelectedRuntime.SelectedItem);
         }
 
         private void ProcessModel_SelectionChanged()
         {
-            ChangePackageSetting(EnginePackageSettings.ProcessModel, _view.ProcessModel.SelectedItem);
+            OverridePackageSetting(EnginePackageSettings.ProcessModel, _view.ProcessModel.SelectedItem);
         }
 
         private void DomainUsage_SelectionChanged()
         {
-            ChangePackageSetting(EnginePackageSettings.DomainUsage, _view.DomainUsage.SelectedItem);
+            OverridePackageSetting(EnginePackageSettings.DomainUsage, _view.DomainUsage.SelectedItem);
         }
 
         private void LoadAsX86_CheckedChanged()
         {
             var key = EnginePackageSettings.RunAsX86;
             if (_view.RunAsX86.Checked)
-                ChangePackageSetting(key, true);
+                OverridePackageSetting(key, true);
             else
-                ChangePackageSetting(key, null);
+                OverridePackageSetting(key, null);
         }
 
-        private void ChangePackageSetting(string key, object setting)
+        private void OverridePackageSetting(string key, object setting)
         {
             if (setting == null || setting as string == "DEFAULT")
-                _model.PackageSettings.Remove(key);
+                _model.PackageOverrides.Remove(key);
             else
-                _model.PackageSettings[key] = setting;
+                _model.PackageOverrides[key] = setting;
 
             string message = string.Format("New {0} setting will not take effect until you reload.\r\n\r\n\t\tReload Now?", key);
 

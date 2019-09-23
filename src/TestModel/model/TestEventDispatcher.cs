@@ -225,7 +225,7 @@ namespace TestCentric.Gui.Model
             // Initialize Dictionary to look up projects to which assemblies belong
             _projectLookup = new Dictionary<string, ProjectInfo>();
 
-            foreach (var projectNode in _model.TestProjects)
+            foreach (var projectNode in _model.Tests.Select(tn => tn.Type == "Project"))
             {
                 var projectInfo = new ProjectInfo(projectNode);
 

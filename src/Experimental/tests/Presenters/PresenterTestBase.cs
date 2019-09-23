@@ -50,7 +50,6 @@ namespace TestCentric.Gui.Presenters
             _model = Substitute.For<ITestModel>();
             _settings = new FakeUserSettings();
             _model.Services.UserSettings.Returns(_settings);
-            _model.TestFiles.Returns(new List<string>());
         }
 
         #region Helper Methods

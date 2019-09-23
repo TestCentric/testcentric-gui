@@ -69,6 +69,26 @@ namespace TestCentric.Gui.Model
         }
 
         [Test]
+        public void CheckThatTestsMapToPackages()
+        {
+            var package1 = _model.GetPackageForTest(_model.Tests.Id);
+            var package2 = _model.GetPackageForTest(_model.Tests.Children[0].Id);
+            var nopackage = _model.GetPackageForTest(_model.Tests.Children[0].Children[0].Id);
+
+            Assert.NotNull(package1, "Package1");
+            Assert.NotNull(package2, "Package2");
+            Assert.Null(nopackage);
+
+            Assert.Null(package1.Name);
+            Assert.That(package1.SubPackages.Count, Is.EqualTo(1));
+
+            Assert.That(package2.Name, Is.EqualTo(MOCK_ASSEMBLY));
+            Assert.That(package2.SubPackages.Count, Is.Zero);
+
+            Assert.That(package2, Is.SameAs(package1.SubPackages[0]));
+        }
+
+        [Test]
         public void CheckStateAfterRunningTests()
         {
             RunAllTestsAndWaitForCompletion();
