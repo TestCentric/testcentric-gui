@@ -136,7 +136,7 @@ Setup(context =>
 		}
 
 		if (BuildSystem.IsRunningOnAppVeyor)
-			AppVeyor.UpdateBuildVersion(packageVersion);
+			AppVeyor.UpdateBuildVersion(packageVersion + "-" + AppVeyor.Environment.Build.Number);
 	}
 
     Information("Building {0} version {1} of TestCentric GUI.", configuration, packageVersion);
