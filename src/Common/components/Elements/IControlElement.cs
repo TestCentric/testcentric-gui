@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2015-2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -34,5 +34,8 @@ namespace TestCentric.Gui.Elements
         Point Location { get; set; }
         Size Size { get; set; }
         Size ClientSize { get; set; }
+
+        ContextMenu ContextMenu { get; }
+        ContextMenuStrip ContextMenuStrip { get; }
     }
 }

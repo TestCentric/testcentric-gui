@@ -63,26 +63,6 @@ namespace TestCentric.Gui.Elements
             };
         }
 
-        private IToolStripMenu _contextMenu;
-        public IToolStripMenu ContextMenu
-        {
-            get 
-            {
-                if (_contextMenu == null && _treeView.ContextMenuStrip != null)
-                    _contextMenu = new ContextMenuElement(_treeView.ContextMenuStrip);
-
-                return _contextMenu;
-            }
-            //set 
-            //{
-            //    InvokeIfRequired(() =>
-            //    {
-            //        _contextMenu = value;
-            //        _treeView.ContextMenuStrip = _contextMenu.Control;
-            //    });
-            //}
-        }
-
         private bool _checkBoxes;
         public bool CheckBoxes
         {

@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2015-2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -80,6 +80,16 @@ namespace TestCentric.Gui.Elements
                 _control.BeginInvoke(del, new object[0]);
             else
                 del();
+        }
+
+        public ContextMenu ContextMenu
+        {
+            get { return _control.ContextMenu; }
+        }
+
+        public ContextMenuStrip ContextMenuStrip
+        {
+            get { return _control.ContextMenuStrip; }
         }
     }
 }
