@@ -27,6 +27,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using NUnit.Engine.Services;
 
 namespace TestCentric.Gui.Presenters
 {
@@ -54,6 +55,7 @@ namespace TestCentric.Gui.Presenters
         private UserSettings _settings;
         private ITreeView _tree;
         private TestNodeFilter _treeFilter = TestNodeFilter.Empty;
+        private IProjectService _projectService;
 
         /// <summary>
         /// Hashtable provides direct access to TestNodes
@@ -68,6 +70,7 @@ namespace TestCentric.Gui.Presenters
             _tree = view.Tree;
             _model = model;
             _settings = model.Services.UserSettings;
+            _projectService = model.Services.GetService<IProjectService>();
 
             _view.AlternateImageSet = (string)_settings.Gui.TestTree.AlternateImageSet;
 
@@ -240,6 +243,8 @@ namespace TestCentric.Gui.Presenters
                     _model.RunTests(new TestSelection(_view.SelectedTests));
             };
 
+            _view.Tree.ContextMenu.Popup += (s, e) => InitializeContextMenu();
+
             _view.ShowCheckBoxes.CheckedChanged += () => _view.CheckBoxes = _view.ShowCheckBoxes.Checked;
  
             _view.ClearAllCheckBoxes.Execute += () => ClearAllCheckBoxes(_view.Tree.TopNode);
@@ -266,6 +271,55 @@ namespace TestCentric.Gui.Presenters
                 if (targetNode != null)
                     _view.ShowPropertiesDialog(targetNode);
             };
+        }
+
+        private void InitializeContextMenu()
+        {
+            _view.ShowCheckBoxes.Checked = _view.CheckBoxes;
+
+            TestSuiteTreeNode targetNode = _view.ContextNode ?? (TestSuiteTreeNode)_view.Tree.SelectedNode;
+
+            if (targetNode != null)
+            {
+                _view.RunCommand.DefaultItem = _view.RunCommand.Enabled && targetNode.Included &&
+                    (targetNode.Test.RunState == RunState.Runnable || targetNode.Test.RunState == RunState.Explicit);
+
+                TestSuiteTreeNode theoryNode = targetNode.GetTheoryNode();
+                _view.ShowFailedAssumptions.Visible = _view.ShowFailedAssumptions.Enabled = theoryNode != null;
+                _view.ShowFailedAssumptions.Checked = theoryNode?.ShowFailedAssumptions ?? false;
+
+                bool displayConfigurationMenu = false;
+                if (targetNode.Test.Type == "Project")
+                {
+                    var project = _projectService.LoadFrom(targetNode.Test.FullName);
+                    if (project.ConfigNames.Count > 0)
+                    {
+                        //var package = _model.TestPackage.Select((p) => p.FullName == targetNode.Test.FullName);
+                        displayConfigurationMenu = true;
+                        _view.ActiveConfiguration.MenuItems.Clear();
+
+                        foreach (string config in project.ConfigNames)
+                        {
+                            var configEntry = new MenuItem(config);
+                            configEntry.Click += ConfigEntry_Click;
+                            configEntry.Checked = config == project.ActiveConfigName;
+                            _view.ActiveConfiguration.MenuItems.Add(configEntry);
+                        }
+                    }
+                    _view.ActiveConfiguration.Visible = _view.ActiveConfiguration.Enabled = displayConfigurationMenu;
+                }
+                else
+                {
+                    _view.ShowFailedAssumptions.Visible = _view.ShowFailedAssumptions.Enabled = false;
+                    _view.ActiveConfiguration.Visible = _view.ActiveConfiguration.Enabled = false;
+                }
+            }
+        }
+
+        private void ConfigEntry_Click(object sender, EventArgs e)
+        {
+            var item = sender as MenuItem;
+            _model.ReloadTests();
         }
 
         public void LoadTests(TestNode topLevelTest)
