@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2015-2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -39,5 +39,10 @@ namespace TestCentric.Gui.Elements
         /// to execute the associated command.
         /// </summary>
         event CommandHandler Execute;
+    }
+
+    public interface IMenuCommand : ICommand
+    {
+        bool DefaultItem { get; set; }
     }
 }

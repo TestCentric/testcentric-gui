@@ -93,6 +93,8 @@ namespace TestCentric.Gui.Model
         public string Id => GetAttribute("id");
         public string FullName => GetAttribute("fullname") ?? Name;
         public string Type => IsSuite ? GetAttribute("type") : "TestCase";
+        public bool IsAssembly => Type == "Assembly";
+        public bool IsProject => Type == "Project";
 
         public int TestCount => IsSuite ? GetAttribute("testcasecount", 0) : 1;
         public RunState RunState => GetRunState();

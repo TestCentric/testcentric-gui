@@ -39,6 +39,7 @@ namespace TestCentric.Gui.Presenters
         [SetUp]
         public void CreatePresenter()
         {
+            _view.Tree.ContextMenu.Returns(new ContextMenu());
             _settings.Gui.TestTree.AlternateImageSet = "MyImageSet";
             _settings.Gui.TestTree.ShowCheckBoxes = true;
             _presenter = new TreeViewPresenter(_view, _model);

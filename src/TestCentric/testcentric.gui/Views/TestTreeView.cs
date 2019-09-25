@@ -58,12 +58,13 @@ namespace TestCentric.Gui.Views
             InitializeComponent();
 
             RunCommand = new MenuCommand(runMenuItem);
-            ShowCheckBoxes = new CheckedMenuItem(showCheckBoxesMenuItem);
             ShowFailedAssumptions = new CheckedMenuItem(failedAssumptionsMenuItem);
+            ActiveConfiguration = new PopupMenu(activeConfigurationMenuItem);
+            PropertiesCommand = new MenuCommand(propertiesMenuItem);
+            ShowCheckBoxes = new CheckedMenuItem(showCheckBoxesMenuItem);
             ExpandAllCommand = new MenuCommand(expandAllMenuItem);
             CollapseAllCommand = new MenuCommand(collapseAllMenuItem);
             HideTestsCommand = new MenuCommand(hideTestsMenuItem);
-            PropertiesCommand = new MenuCommand(propertiesMenuItem);
             ClearAllCheckBoxes = new ButtonElement(clearAllButton);
             CheckFailedTests = new ButtonElement(checkFailedButton);
             Tree = new TreeViewElement(tree);
@@ -117,24 +118,6 @@ namespace TestCentric.Gui.Views
                     : DragDropEffects.None;
             };
 
-            treeMenu.Popup += (s, e) =>
-            {
-                TestSuiteTreeNode targetNode = ContextNode ?? (TestSuiteTreeNode)tree.SelectedNode;
-                TestSuiteTreeNode theoryNode = targetNode?.GetTheoryNode();
-
-
-                runMenuItem.DefaultItem = runMenuItem.Enabled && targetNode != null && targetNode.Included &&
-                        (targetNode.Test.RunState == RunState.Runnable || targetNode.Test.RunState == RunState.Explicit);
-
-                showCheckBoxesMenuItem.Checked = tree.CheckBoxes;
-
-                //failedAssumptionsMenuItem.Visible = 
-                failedAssumptionsMenuItem.Enabled = theoryNode != null;
-                failedAssumptionsMenuItem.Checked = theoryNode?.ShowFailedAssumptions ?? false;
-
-                propertiesMenuItem.Enabled = targetNode != null;
-            };
-
             treeMenu.Collapse += (s, e) => ContextNode = null;
         }
 
@@ -144,13 +127,14 @@ namespace TestCentric.Gui.Views
 
         public event FileDropEventHandler FileDrop;
 
-        public ICommand RunCommand { get; private set; }
+        public IMenuCommand RunCommand { get; private set; }
         public IChecked ShowFailedAssumptions { get; private set; }
+        public IMenu ActiveConfiguration { get; private set; }
+        public ICommand PropertiesCommand { get; private set; }
         public IChecked ShowCheckBoxes { get; private set; }
         public ICommand ExpandAllCommand { get; private set; }
         public ICommand CollapseAllCommand { get; private set; }
         public ICommand HideTestsCommand { get; private set; }
-        public ICommand PropertiesCommand { get; private set; }
 
         [Category("Appearance"), DefaultValue(false)]
         [Description("Indicates whether checkboxes are displayed beside test nodes")]

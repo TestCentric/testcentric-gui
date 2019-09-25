@@ -27,6 +27,9 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using NUnit.Engine;
+using NUnit.Engine.Extensibility;
+using NUnit.Engine.Services;
 
 namespace TestCentric.Gui.Presenters
 {
@@ -54,6 +57,7 @@ namespace TestCentric.Gui.Presenters
         private UserSettings _settings;
         private ITreeView _tree;
         private TestNodeFilter _treeFilter = TestNodeFilter.Empty;
+        private IProjectService _projectService;
 
         /// <summary>
         /// Hashtable provides direct access to TestNodes
@@ -68,6 +72,7 @@ namespace TestCentric.Gui.Presenters
             _tree = view.Tree;
             _model = model;
             _settings = model.Services.UserSettings;
+            _projectService = model.Services.GetService<IProjectService>();
 
             _view.AlternateImageSet = (string)_settings.Gui.TestTree.AlternateImageSet;
 
@@ -240,6 +245,8 @@ namespace TestCentric.Gui.Presenters
                     _model.RunTests(new TestSelection(_view.SelectedTests));
             };
 
+            _view.Tree.ContextMenu.Popup += (s, e) => InitializeContextMenu();
+
             _view.ShowCheckBoxes.CheckedChanged += () => _view.CheckBoxes = _view.ShowCheckBoxes.Checked;
  
             _view.ClearAllCheckBoxes.Execute += () => ClearAllCheckBoxes(_view.Tree.TopNode);
@@ -266,6 +273,58 @@ namespace TestCentric.Gui.Presenters
                 if (targetNode != null)
                     _view.ShowPropertiesDialog(targetNode);
             };
+        }
+
+        private void InitializeContextMenu()
+        {
+            _view.ShowCheckBoxes.Checked = _view.CheckBoxes;
+
+            TestSuiteTreeNode targetNode = _view.ContextNode ?? (TestSuiteTreeNode)_view.Tree.SelectedNode;
+
+            if (targetNode != null)
+            {
+                TestNode test = targetNode.Test;
+
+                _view.RunCommand.DefaultItem = _view.RunCommand.Enabled && targetNode.Included &&
+                    (test.RunState == RunState.Runnable || test.RunState == RunState.Explicit);
+
+                TestSuiteTreeNode theoryNode = targetNode.GetTheoryNode();
+                _view.ShowFailedAssumptions.Visible = _view.ShowFailedAssumptions.Enabled = theoryNode != null;
+                _view.ShowFailedAssumptions.Checked = theoryNode?.ShowFailedAssumptions ?? false;
+
+                _view.ActiveConfiguration.Visible = _view.ActiveConfiguration.Enabled = false;
+                if (test.IsProject)
+                {
+                    TestPackage package = _model.GetPackageForTest(test.Id);
+                    IProject project = _projectService.LoadFrom(package.FullName);
+
+                    // Setting specified in package (via menu) is first choice, second is the active config specified in the project
+                    string activeConfig = package.GetSetting(EnginePackageSettings.ActiveConfig, project.ActiveConfigName) ?? null;
+                    if (project.ConfigNames.Count > 0)
+                    {
+                        _view.ActiveConfiguration.MenuItems.Clear();
+                        if (string.IsNullOrEmpty(activeConfig))
+                            activeConfig = project.ConfigNames[0];
+
+                        foreach (string config in project.ConfigNames)
+                        {
+                            var configEntry = new MenuItem(config);
+                            configEntry.Checked = config == activeConfig;
+                            configEntry.Click += (sender, e) =>
+                            {
+                                package.Settings[EnginePackageSettings.ActiveConfig] = ((MenuItem)sender).Text;
+                                var savedPackages = new List<TestPackage>(package.SubPackages);
+                                package.SubPackages.Clear();
+                                _projectService.ExpandProjectPackage(package);
+                                _model.ReloadTests();
+                            };
+                            _view.ActiveConfiguration.MenuItems.Add(configEntry);
+                        }
+
+                        _view.ActiveConfiguration.Visible = _view.ActiveConfiguration.Enabled = true;
+                    }
+                }
+            }
         }
 
         public void LoadTests(TestNode topLevelTest)

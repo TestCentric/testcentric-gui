@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2015-2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -25,7 +25,7 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Elements
 {
-    public class MenuCommand : MenuElement, ICommand
+    public class MenuCommand : MenuElement, IMenuCommand
     {
         public event CommandHandler Execute;
 
