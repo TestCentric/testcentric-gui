@@ -27,6 +27,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using NUnit.Engine;
+using NUnit.Engine.Extensibility;
 using NUnit.Engine.Services;
 
 namespace TestCentric.Gui.Presenters
@@ -281,45 +283,48 @@ namespace TestCentric.Gui.Presenters
 
             if (targetNode != null)
             {
+                TestNode test = targetNode.Test;
+
                 _view.RunCommand.DefaultItem = _view.RunCommand.Enabled && targetNode.Included &&
-                    (targetNode.Test.RunState == RunState.Runnable || targetNode.Test.RunState == RunState.Explicit);
+                    (test.RunState == RunState.Runnable || test.RunState == RunState.Explicit);
 
                 TestSuiteTreeNode theoryNode = targetNode.GetTheoryNode();
                 _view.ShowFailedAssumptions.Visible = _view.ShowFailedAssumptions.Enabled = theoryNode != null;
                 _view.ShowFailedAssumptions.Checked = theoryNode?.ShowFailedAssumptions ?? false;
 
-                bool displayConfigurationMenu = false;
-                if (targetNode.Test.Type == "Project")
+                _view.ActiveConfiguration.Visible = _view.ActiveConfiguration.Enabled = false;
+                if (test.IsProject)
                 {
-                    var project = _projectService.LoadFrom(targetNode.Test.FullName);
+                    TestPackage package = _model.GetPackageForTest(test.Id);
+                    IProject project = _projectService.LoadFrom(package.FullName);
+
+                    // Setting specified in package (via menu) is first choice, second is the active config specified in the project
+                    string activeConfig = package.GetSetting(EnginePackageSettings.ActiveConfig, project.ActiveConfigName) ?? null;
                     if (project.ConfigNames.Count > 0)
                     {
-                        //var package = _model.TestPackage.Select((p) => p.FullName == targetNode.Test.FullName);
-                        displayConfigurationMenu = true;
                         _view.ActiveConfiguration.MenuItems.Clear();
+                        if (string.IsNullOrEmpty(activeConfig))
+                            activeConfig = project.ConfigNames[0];
 
                         foreach (string config in project.ConfigNames)
                         {
                             var configEntry = new MenuItem(config);
-                            configEntry.Click += ConfigEntry_Click;
-                            configEntry.Checked = config == project.ActiveConfigName;
+                            configEntry.Checked = config == activeConfig;
+                            configEntry.Click += (sender, e) =>
+                            {
+                                package.Settings[EnginePackageSettings.ActiveConfig] = ((MenuItem)sender).Text;
+                                var savedPackages = new List<TestPackage>(package.SubPackages);
+                                package.SubPackages.Clear();
+                                _projectService.ExpandProjectPackage(package);
+                                _model.ReloadTests();
+                            };
                             _view.ActiveConfiguration.MenuItems.Add(configEntry);
                         }
+
+                        _view.ActiveConfiguration.Visible = _view.ActiveConfiguration.Enabled = true;
                     }
-                    _view.ActiveConfiguration.Visible = _view.ActiveConfiguration.Enabled = displayConfigurationMenu;
-                }
-                else
-                {
-                    _view.ShowFailedAssumptions.Visible = _view.ShowFailedAssumptions.Enabled = false;
-                    _view.ActiveConfiguration.Visible = _view.ActiveConfiguration.Enabled = false;
                 }
             }
-        }
-
-        private void ConfigEntry_Click(object sender, EventArgs e)
-        {
-            var item = sender as MenuItem;
-            _model.ReloadTests();
         }
 
         public void LoadTests(TestNode topLevelTest)

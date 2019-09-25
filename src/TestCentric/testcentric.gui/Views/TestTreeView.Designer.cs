@@ -1,4 +1,4 @@
-﻿namespace TestCentric.Gui.Views
+namespace TestCentric.Gui.Views
 {
     partial class TestTreeView
     {
@@ -36,11 +36,12 @@
             this.treeImages = new System.Windows.Forms.ImageList(this.components);
             this.runMenuItem = new System.Windows.Forms.MenuItem();
             this.failedAssumptionsMenuItem = new System.Windows.Forms.MenuItem();
+            this.activeConfigurationMenuItem = new System.Windows.Forms.MenuItem();
+            this.propertiesMenuItem = new System.Windows.Forms.MenuItem();
             this.showCheckBoxesMenuItem = new System.Windows.Forms.MenuItem();
             this.expandAllMenuItem = new System.Windows.Forms.MenuItem();
             this.collapseAllMenuItem = new System.Windows.Forms.MenuItem();
             this.hideTestsMenuItem = new System.Windows.Forms.MenuItem();
-            this.propertiesMenuItem = new System.Windows.Forms.MenuItem();
             this.treeMenu = new System.Windows.Forms.ContextMenu();
             this.treeMenu.Name = "treeMenu";
             this.checkFailedButton = new System.Windows.Forms.Button();
@@ -86,15 +87,14 @@
             //
             this.treeMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[]{
                 this.runMenuItem,
-                new System.Windows.Forms.MenuItem("-"),
                 this.failedAssumptionsMenuItem,
-                this.showCheckBoxesMenuItem,
+                this.activeConfigurationMenuItem,
+                this.propertiesMenuItem,
                 new System.Windows.Forms.MenuItem("-"),
+                this.showCheckBoxesMenuItem,
                 this.expandAllMenuItem,
                 this.collapseAllMenuItem,
-                this.hideTestsMenuItem,
-                new System.Windows.Forms.MenuItem("-"),
-                this.propertiesMenuItem});
+                this.hideTestsMenuItem });
             // 
             // buttonPanel
             // 
@@ -133,6 +133,11 @@
             //
             this.failedAssumptionsMenuItem.Name = "failedAssumptionsMenuItem";
             this.failedAssumptionsMenuItem.Text = "Show Failed Assumptions";
+            //
+            // activeConfigurationMenuItem
+            //
+            this.activeConfigurationMenuItem.Name = "activeConfigurationMenuItem";
+            this.activeConfigurationMenuItem.Text = "Active Configuration";
             //
             // showCheckBoxesMenuItem
             //
@@ -183,11 +188,12 @@
         private System.Windows.Forms.Button checkFailedButton;
         private System.Windows.Forms.ContextMenu treeMenu;
         private System.Windows.Forms.MenuItem runMenuItem;
-        private System.Windows.Forms.MenuItem showCheckBoxesMenuItem;
         private System.Windows.Forms.MenuItem failedAssumptionsMenuItem;
+        private System.Windows.Forms.MenuItem activeConfigurationMenuItem;
+        private System.Windows.Forms.MenuItem propertiesMenuItem;
+        private System.Windows.Forms.MenuItem showCheckBoxesMenuItem;
         private System.Windows.Forms.MenuItem expandAllMenuItem;
         private System.Windows.Forms.MenuItem collapseAllMenuItem;
         private System.Windows.Forms.MenuItem hideTestsMenuItem;
-        private System.Windows.Forms.MenuItem propertiesMenuItem;
     }
 }

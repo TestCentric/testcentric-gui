@@ -37,13 +37,14 @@ namespace TestCentric.Gui.Views
 
         ContextMenu ContextMenu { get; }
 
-        ICommand RunCommand { get; }
+        IMenuCommand RunCommand { get; }
         IChecked ShowFailedAssumptions { get; }
+        IMenu ActiveConfiguration { get; }
+        ICommand PropertiesCommand { get; }
         IChecked ShowCheckBoxes { get; }
         ICommand ExpandAllCommand { get; }
         ICommand CollapseAllCommand { get; }
         ICommand HideTestsCommand { get; }
-        ICommand PropertiesCommand { get; }
 
         // TODO: Can we eliminate need for having this in addition to ShowCheckBoxes?
         bool CheckBoxes { get; set; }
