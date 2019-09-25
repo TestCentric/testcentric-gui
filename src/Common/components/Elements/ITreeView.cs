@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2015 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -44,8 +44,6 @@ namespace TestCentric.Gui.Elements
         TreeNode SelectedNode { get; set; }
         TreeNodeCollection Nodes { get; }
         IList<TreeNode> CheckedNodes { get; }
-
-        IToolStripMenu ContextMenu { get; }
 
         void Clear();
         void ExpandAll();

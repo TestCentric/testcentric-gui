@@ -43,7 +43,6 @@
     <Compile Include="Elements\CheckedToolStripMenuGroup.cs" />
     <Compile Include="Elements\CheckedMenuGroup.cs" />
     <Compile Include="Elements\CheckedMenuItem.cs" />
-    <Compile Include="Elements\ContextMenuElement.cs" />
     <Compile Include="Elements\ControlElement.cs" />
     <Compile Include="Elements\IChecked.cs" />
     <Compile Include="Elements\ICommand.cs" />

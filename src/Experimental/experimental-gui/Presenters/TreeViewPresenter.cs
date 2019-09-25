@@ -102,17 +102,16 @@ namespace TestCentric.Gui.Presenters
             };
 
             // View context commands
-            _view.Tree.ContextMenu.Popup += delegate
-            {
-                bool checkedRunAvailable = _view.Tree.CheckBoxes && _view.Tree.CheckedNodes.Count > 0;
-                _view.RunCheckedCommand.Visible = checkedRunAvailable;
-                _view.DebugCheckedCommand.Visible = checkedRunAvailable;
-            };
 
             _view.CollapseAllCommand.Execute += () => _view.CollapseAll();
             _view.ExpandAllCommand.Execute += () => _view.ExpandAll();
             _view.CollapseToFixturesCommand.Execute += () => _strategy.CollapseToFixtures();
-            _view.ShowCheckBoxes.CheckedChanged += () => _view.Tree.CheckBoxes = _view.ShowCheckBoxes.Checked; ;
+            _view.ShowCheckBoxes.CheckedChanged += () =>
+            {
+                _view.RunCheckedCommand.Visible =
+                _view.DebugCheckedCommand.Visible =
+                _view.Tree.CheckBoxes = _view.ShowCheckBoxes.Checked;
+            };
             _view.RunContextCommand.Execute += () =>
             {
                 if (_selectedTestItem != null)
@@ -222,12 +221,18 @@ namespace TestCentric.Gui.Presenters
         {
             bool isRunning = _model.IsTestRunning;
             bool canRun = _model.HasTests && !isRunning;
+            bool canRunChecked = canRun && _view.ShowCheckBoxes.Checked;
 
             // TODO: Figure out how to disable the button click but not the dropdown.
             //_view.RunButton.Enabled = canRun;
             _view.RunAllCommand.Enabled = canRun;
             _view.RunSelectedCommand.Enabled = canRun;
             _view.RunFailedCommand.Enabled = canRun;
+            _view.DebugAllCommand.Enabled = canRun;
+            _view.DebugSelectedCommand.Enabled = canRun;
+            _view.DebugFailedCommand.Enabled = canRun;
+            _view.RunCheckedCommand.Visible = canRunChecked;
+            _view.DebugCheckedCommand.Visible = canRunChecked;
             _view.StopRunCommand.Enabled = isRunning;
         }
 
