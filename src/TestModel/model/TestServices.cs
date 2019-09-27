@@ -47,6 +47,7 @@ namespace TestCentric.Gui.Model
             RecentFiles = new RecentFiles(settings, applicationPrefix);
             ExtensionService = GetService<IExtensionService>();
             ResultService = GetService<IResultService>();
+            ProjectService = GetService<IProjectService>();
         }
 
         #region ITestServices Implementation
@@ -58,6 +59,8 @@ namespace TestCentric.Gui.Model
         public IExtensionService ExtensionService { get; }
 
         public IResultService ResultService { get; }
+
+        public IProjectService ProjectService { get; }
 
         #endregion
 

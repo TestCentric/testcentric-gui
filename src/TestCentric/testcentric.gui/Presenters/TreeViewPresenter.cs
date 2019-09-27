@@ -28,8 +28,6 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using NUnit.Engine;
-using NUnit.Engine.Extensibility;
-using NUnit.Engine.Services;
 
 namespace TestCentric.Gui.Presenters
 {
@@ -248,7 +246,7 @@ namespace TestCentric.Gui.Presenters
             _view.Tree.ContextMenu.Popup += (s, e) => InitializeContextMenu();
 
             _view.ShowCheckBoxes.CheckedChanged += () => _view.CheckBoxes = _view.ShowCheckBoxes.Checked;
- 
+
             _view.ClearAllCheckBoxes.Execute += () => ClearAllCheckBoxes(_view.Tree.TopNode);
 
             _view.CheckFailedTests.Execute += () => CheckFailedTests(_view.Tree.TopNode);
@@ -296,28 +294,17 @@ namespace TestCentric.Gui.Presenters
                 if (test.IsProject)
                 {
                     TestPackage package = _model.GetPackageForTest(test.Id);
-                    IProject project = _projectService.LoadFrom(package.FullName);
+                    string activeConfig = _model.GetActiveConfig(package);
+                    var configNames = _model.GetConfigNames(package);
 
-                    // Setting specified in package (via menu) is first choice, second is the active config specified in the project
-                    string activeConfig = package.GetSetting(EnginePackageSettings.ActiveConfig, project.ActiveConfigName) ?? null;
-                    if (project.ConfigNames.Count > 0)
+                    if (configNames.Count > 0)
                     {
                         _view.ActiveConfiguration.MenuItems.Clear();
-                        if (string.IsNullOrEmpty(activeConfig))
-                            activeConfig = project.ConfigNames[0];
-
-                        foreach (string config in project.ConfigNames)
+                        foreach (string config in configNames)
                         {
                             var configEntry = new MenuItem(config);
                             configEntry.Checked = config == activeConfig;
-                            configEntry.Click += (sender, e) =>
-                            {
-                                package.Settings[EnginePackageSettings.ActiveConfig] = ((MenuItem)sender).Text;
-                                var savedPackages = new List<TestPackage>(package.SubPackages);
-                                package.SubPackages.Clear();
-                                _projectService.ExpandProjectPackage(package);
-                                _model.ReloadTests();
-                            };
+                            configEntry.Click += (sender, e) => _model.ReloadPackage(package, ((MenuItem)sender).Text);
                             _view.ActiveConfiguration.MenuItems.Add(configEntry);
                         }
 
