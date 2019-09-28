@@ -25,6 +25,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using NUnit.Engine;
 
 namespace TestCentric.Gui.Model
@@ -255,6 +256,22 @@ namespace TestCentric.Gui.Model
             _events.FireTestReloaded(Tests);
         }
 
+        public void ReloadPackage(TestPackage package, string config)
+        {
+            var originalSubPackages = new List<TestPackage>(package.SubPackages);
+            package.SubPackages.Clear();
+
+            package.Settings[EnginePackageSettings.ActiveConfig] = config;
+            Services.ProjectService.ExpandProjectPackage(package);
+
+            foreach (var subPackage in package.SubPackages)
+                foreach (var original in originalSubPackages)
+                    if (subPackage.Name == original.Name)
+                        subPackage.SetID(original.ID);
+
+            ReloadTests();
+        }
+
         public void RunAllTests()
         {
             RunTests(CategoryFilter);
@@ -349,6 +366,27 @@ namespace TestCentric.Gui.Model
             return _packageMap.ContainsKey(id) 
                 ? _packageMap[id] 
                 : null;
+        }
+
+        public string GetActiveConfig(TestPackage package)
+        {
+            string activeConfig = package.GetSetting(EnginePackageSettings.ActiveConfig, "");
+
+            if (string.IsNullOrEmpty(activeConfig))
+            {
+                var project = Services.ProjectService.LoadFrom(package.FullName);
+                activeConfig = project.ActiveConfigName;
+
+                if (string.IsNullOrEmpty(activeConfig) && project.ConfigNames.Count > 0)
+                    activeConfig = project.ConfigNames.FirstOrDefault();
+            }
+
+            return activeConfig;
+        }
+
+        public IList<string> GetConfigNames(TestPackage package)
+        {
+            return Services.ProjectService.LoadFrom(package.FullName).ConfigNames;
         }
 
         public void ClearResults()

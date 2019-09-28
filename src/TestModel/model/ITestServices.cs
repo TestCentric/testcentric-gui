@@ -39,5 +39,6 @@ namespace TestCentric.Gui.Model
         RecentFiles RecentFiles { get; }
         IExtensionService ExtensionService { get; }
         IResultService ResultService { get; }
+        IProjectService ProjectService { get; }
     }
 }

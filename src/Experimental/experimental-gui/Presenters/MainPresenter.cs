@@ -372,8 +372,6 @@ namespace TestCentric.Gui.Presenters
 
         private string CreateOpenFileFilter()
         {
-            const string VS_FILE_TYPES = "*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln";
-
             StringBuilder sb = new StringBuilder();
             bool nunit = _model.NUnitProjectSupport;
             bool vs = _model.VisualStudioSupport;

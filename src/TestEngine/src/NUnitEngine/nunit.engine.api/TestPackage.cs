@@ -96,6 +96,18 @@ namespace NUnit.Engine
         public string ID { get; private set; }
 
         /// <summary>
+        /// Set the ID on a package that has already been created. This is separate from the
+        /// ID property itself because it's a temporary addition, necessitated by the way
+        /// projects work. It allows us to reload a project using a new config without changing
+        /// the test IDs. A broad engine API change may be needed to handle this correctly.
+        /// </summary>
+        /// <param name="id"></param>
+        public void SetID(string id)
+        {
+            ID = id;
+        }
+
+        /// <summary>
         /// Gets the name of the package
         /// </summary>
         public string Name

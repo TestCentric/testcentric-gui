@@ -103,6 +103,9 @@ namespace TestCentric.Gui.Model
         // Reload current TestPackage
         void ReloadTests();
 
+        // Reload a specific package using the specified config
+        void ReloadPackage(TestPackage package, string config);
+
         // Run all the tests
         void RunAllTests();
 
@@ -126,6 +129,12 @@ namespace TestCentric.Gui.Model
 
         // Get the TestPackage represented by a test,if available
         TestPackage GetPackageForTest(string id);
+
+        // Get the active config name for a TestPackage representing a project
+        string GetActiveConfig(TestPackage package);
+
+        // Get a list of config names for a TestPackage representing a project
+        IList<string> GetConfigNames(TestPackage package);
 
         // Clear the results for all tests
         void ClearResults();
