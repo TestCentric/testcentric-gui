@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -20,6 +20,8 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
+
+using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
@@ -47,6 +49,7 @@ namespace TestCentric.Gui.Views
         ICommand RunCheckedCommand { get; }
         ICommand DebugContextCommand { get; }
         ICommand DebugCheckedCommand { get; }
+        IToolStripMenu ActiveConfiguration { get; }
         IChecked ShowCheckBoxes { get; }
         ICommand ExpandAllCommand { get; }
         ICommand CollapseAllCommand { get; }
@@ -58,5 +61,6 @@ namespace TestCentric.Gui.Views
         void CollapseAll();
 
         ITreeView Tree { get; }
+        TreeNode ContextNode { get; }
     }
 }
