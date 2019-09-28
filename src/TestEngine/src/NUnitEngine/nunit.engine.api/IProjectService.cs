@@ -23,7 +23,7 @@
 
 using NUnit.Engine.Extensibility;
 
-namespace NUnit.Engine.Services
+namespace NUnit.Engine
 {
     /// <summary>
     /// The IProjectService interface is implemented by ProjectService.
