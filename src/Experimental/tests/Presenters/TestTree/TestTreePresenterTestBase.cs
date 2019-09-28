@@ -39,7 +39,6 @@ namespace TestCentric.Gui.Presenters.TestTree
         public void CreatePresenter()
         {
             _view = Substitute.For<ITestTreeView>();
-            _view.Tree.ContextMenuStrip.Returns(new ContextMenuStrip());
             _model = Substitute.For<ITestModel>();
             _model.Services.UserSettings.Returns(new NUnit.TestUtilities.Fakes.UserSettings());
 
