@@ -1,4 +1,4 @@
-﻿namespace TestCentric.Gui.Views
+namespace TestCentric.Gui.Views
 {
     partial class TestTreeView
     {
@@ -34,12 +34,11 @@
             this.testTreeContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.runMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runCheckedMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.debugMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugCheckedMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem13 = new System.Windows.Forms.ToolStripSeparator();
             this.showCheckboxesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.expandAllMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.collapseAllMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.collapseToFixturesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,6 +65,9 @@
             this.byExtendedCategoryMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.byOutcomeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.byDurationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.activeConfigMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.testTreeContextMenu.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -88,17 +90,19 @@
             this.testTreeContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.runMenuItem,
             this.runCheckedMenuItem,
-            this.toolStripSeparator2,
+            this.toolStripSeparator1,
             this.debugMenuItem,
             this.debugCheckedMenuItem,
-            this.toolStripMenuItem13,
+            this.toolStripSeparator2,
+            this.activeConfigMenuItem,
+            this.toolStripSeparator3,
             this.showCheckboxesMenuItem,
-            this.toolStripSeparator1,
+            this.toolStripSeparator4,
             this.expandAllMenuItem,
             this.collapseAllMenuItem,
             this.collapseToFixturesMenuItem});
             this.testTreeContextMenu.Name = "testTreeContextMenu";
-            this.testTreeContextMenu.Size = new System.Drawing.Size(191, 198);
+            this.testTreeContextMenu.Size = new System.Drawing.Size(191, 248);
             // 
             // runMenuItem
             // 
@@ -112,10 +116,10 @@
             this.runCheckedMenuItem.Size = new System.Drawing.Size(190, 22);
             this.runCheckedMenuItem.Text = "Run Checked Items";
             // 
-            // toolStripSeparator2
+            // toolStripSeparator1
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(187, 6);
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(187, 6);
             // 
             // debugMenuItem
             // 
@@ -129,11 +133,6 @@
             this.debugCheckedMenuItem.Size = new System.Drawing.Size(190, 22);
             this.debugCheckedMenuItem.Text = "Debug Checked Items";
             // 
-            // toolStripMenuItem13
-            // 
-            this.toolStripMenuItem13.Name = "toolStripMenuItem13";
-            this.toolStripMenuItem13.Size = new System.Drawing.Size(187, 6);
-            // 
             // showCheckboxesMenuItem
             // 
             this.showCheckboxesMenuItem.CheckOnClick = true;
@@ -141,10 +140,10 @@
             this.showCheckboxesMenuItem.Size = new System.Drawing.Size(190, 22);
             this.showCheckboxesMenuItem.Text = "Show Checkboxes";
             // 
-            // toolStripSeparator1
+            // toolStripSeparator4
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(187, 6);
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(187, 6);
             // 
             // expandAllMenuItem
             // 
@@ -362,6 +361,22 @@
             this.byDurationMenuItem.Tag = "DURATION";
             this.byDurationMenuItem.Text = "By Duration";
             // 
+            // activeConfigMenuItem
+            // 
+            this.activeConfigMenuItem.Name = "activeConfigMenuItem";
+            this.activeConfigMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.activeConfigMenuItem.Text = "Active Config";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(187, 6);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(187, 6);
+            // 
             // TestTreeView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -389,7 +404,6 @@
         private System.Windows.Forms.ToolStripMenuItem stopRunMenuItem;
         private System.Windows.Forms.ContextMenuStrip testTreeContextMenu;
         private System.Windows.Forms.ToolStripMenuItem runMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem13;
         private System.Windows.Forms.ToolStripMenuItem expandAllMenuItem;
         private System.Windows.Forms.ToolStripMenuItem collapseAllMenuItem;
         private System.Windows.Forms.ToolStripMenuItem collapseToFixturesMenuItem;
@@ -405,8 +419,8 @@
         private System.Windows.Forms.ToolStripMenuItem byDurationMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fixtureListMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showCheckboxesMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem runCheckedMenuItem;
         private System.Windows.Forms.ToolStripMenuItem debugMenuItem;
         private System.Windows.Forms.ToolStripMenuItem debugCheckedMenuItem;
@@ -415,5 +429,8 @@
         private System.Windows.Forms.ToolStripMenuItem debugSelectedMenuItem;
         private System.Windows.Forms.ToolStripMenuItem debugFailedMenuItem;
         private System.Windows.Forms.ToolStripMenuItem byExtendedCategoryMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem activeConfigMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
     }
 }

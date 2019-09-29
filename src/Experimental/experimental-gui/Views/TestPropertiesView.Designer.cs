@@ -52,15 +52,16 @@
             this.testCountLabel = new System.Windows.Forms.Label();
             this.runState = new System.Windows.Forms.Label();
             this.resultPanel = new System.Windows.Forms.Panel();
-            this.output = new TestCentric.Gui.Controls.ExpandingLabel();
             this.outputLabel = new System.Windows.Forms.Label();
-            this.assertions = new TestCentric.Gui.Controls.ExpandingLabel();
             this.testPanel = new System.Windows.Forms.Panel();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.fullName = new TestCentric.Gui.Controls.ExpandingLabel();
             this.description = new TestCentric.Gui.Controls.ExpandingLabel();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.output = new TestCentric.Gui.Controls.ExpandingLabel();
+            this.assertions = new TestCentric.Gui.Controls.ExpandingLabel();
             this.resultPanel.SuspendLayout();
             this.testPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -142,7 +143,7 @@
             this.properties.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.properties.Location = new System.Drawing.Point(6, 128);
             this.properties.Name = "properties";
-            this.properties.Size = new System.Drawing.Size(526, 98);
+            this.properties.Size = new System.Drawing.Size(526, 132);
             this.properties.TabIndex = 17;
             // 
             // reasonLabel
@@ -277,21 +278,8 @@
             this.resultPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.resultPanel.Location = new System.Drawing.Point(0, 0);
             this.resultPanel.Name = "resultPanel";
-            this.resultPanel.Size = new System.Drawing.Size(539, 405);
+            this.resultPanel.Size = new System.Drawing.Size(539, 371);
             this.resultPanel.TabIndex = 29;
-            // 
-            // output
-            // 
-            this.output.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.output.BackColor = System.Drawing.Color.LightYellow;
-            this.output.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
-            this.output.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.output.Location = new System.Drawing.Point(5, 203);
-            this.output.Name = "output";
-            this.output.Size = new System.Drawing.Size(527, 187);
-            this.output.TabIndex = 29;
             // 
             // outputLabel
             // 
@@ -301,18 +289,6 @@
             this.outputLabel.Size = new System.Drawing.Size(42, 13);
             this.outputLabel.TabIndex = 0;
             this.outputLabel.Text = "Output:";
-            // 
-            // assertions
-            // 
-            this.assertions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.assertions.BackColor = System.Drawing.Color.LightYellow;
-            this.assertions.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
-            this.assertions.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.assertions.Location = new System.Drawing.Point(3, 57);
-            this.assertions.Name = "assertions";
-            this.assertions.Size = new System.Drawing.Size(527, 114);
-            this.assertions.TabIndex = 26;
             // 
             // testPanel
             // 
@@ -337,8 +313,29 @@
             this.testPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.testPanel.Location = new System.Drawing.Point(0, 0);
             this.testPanel.Name = "testPanel";
-            this.testPanel.Size = new System.Drawing.Size(539, 238);
+            this.testPanel.Size = new System.Drawing.Size(539, 272);
             this.testPanel.TabIndex = 30;
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 18);
+            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.BackColor = System.Drawing.SystemColors.Control;
+            this.splitContainer1.Panel1.Controls.Add(this.testPanel);
+            this.splitContainer1.Panel1MinSize = 200;
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.BackColor = System.Drawing.SystemColors.Control;
+            this.splitContainer1.Panel2.Controls.Add(this.resultPanel);
+            this.splitContainer1.Size = new System.Drawing.Size(539, 647);
+            this.splitContainer1.SplitterDistance = 272;
+            this.splitContainer1.TabIndex = 31;
             // 
             // fullName
             // 
@@ -359,26 +356,30 @@
             this.description.Size = new System.Drawing.Size(444, 18);
             this.description.TabIndex = 6;
             // 
-            // splitContainer1
+            // output
             // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 18);
-            this.splitContainer1.Name = "splitContainer1";
-            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.output.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.output.BackColor = System.Drawing.Color.LightYellow;
+            this.output.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
+            this.output.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.output.Location = new System.Drawing.Point(5, 203);
+            this.output.Name = "output";
+            this.output.Size = new System.Drawing.Size(527, 187);
+            this.output.TabIndex = 29;
             // 
-            // splitContainer1.Panel1
+            // assertions
             // 
-            this.splitContainer1.Panel1.BackColor = System.Drawing.SystemColors.Control;
-            this.splitContainer1.Panel1.Controls.Add(this.testPanel);
-            this.splitContainer1.Panel1MinSize = 200;
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.BackColor = System.Drawing.SystemColors.Control;
-            this.splitContainer1.Panel2.Controls.Add(this.resultPanel);
-            this.splitContainer1.Size = new System.Drawing.Size(539, 647);
-            this.splitContainer1.SplitterDistance = 238;
-            this.splitContainer1.TabIndex = 31;
+            this.assertions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.assertions.BackColor = System.Drawing.Color.LightYellow;
+            this.assertions.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
+            this.assertions.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.assertions.Location = new System.Drawing.Point(3, 57);
+            this.assertions.Name = "assertions";
+            this.assertions.Size = new System.Drawing.Size(527, 114);
+            this.assertions.TabIndex = 26;
             // 
             // TestPropertiesView
             // 
@@ -395,6 +396,7 @@
             this.testPanel.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
 

@@ -72,12 +72,21 @@ namespace TestCentric.Gui.Views
             RunCheckedCommand = new ToolStripMenuElement(this.runCheckedMenuItem);
             DebugContextCommand = new ToolStripMenuElement(this.debugMenuItem);
             DebugCheckedCommand = new ToolStripMenuElement(this.debugCheckedMenuItem);
+            ActiveConfiguration = new ToolStripMenuElement(this.activeConfigMenuItem);
             ShowCheckBoxes = new ToolStripMenuElement(showCheckboxesMenuItem);
             ExpandAllCommand = new ToolStripMenuElement(expandAllMenuItem);
             CollapseAllCommand = new ToolStripMenuElement(collapseAllMenuItem);
             CollapseToFixturesCommand = new ToolStripMenuElement(collapseToFixturesMenuItem);
 
             Tree = new TreeViewElement(treeView);
+            treeView.MouseDown += (s, e) =>
+            {
+                if (e.Button == MouseButtons.Right)
+                {
+                    ContextNode = treeView.GetNodeAt(e.X, e.Y);
+                }
+            };
+
         }
 
         #region Properties
@@ -97,6 +106,7 @@ namespace TestCentric.Gui.Views
         public ICommand RunCheckedCommand { get; private set; }
         public ICommand DebugContextCommand { get; private set; }
         public ICommand DebugCheckedCommand { get; private set; }
+        public IToolStripMenu ActiveConfiguration { get; private set; }
         public IChecked ShowCheckBoxes { get; private set; }
         public ICommand ExpandAllCommand { get; private set; }
         public ICommand CollapseAllCommand { get; private set; }
@@ -107,6 +117,7 @@ namespace TestCentric.Gui.Views
         public ISelection GroupBy { get; private set; }
 
         public ITreeView Tree { get; private set; }
+        public TreeNode ContextNode { get; private set; }
 
         private string _alternateImageSet;
         public string AlternateImageSet

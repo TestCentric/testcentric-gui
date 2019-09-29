@@ -21,8 +21,9 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using System.Collections.Generic;
-using System.Windows.Forms;
+    using System.Collections.Generic;
+    using System.Windows.Forms;
+    using NUnit.Engine;
 
 namespace TestCentric.Gui.Presenters
 {
@@ -102,6 +103,12 @@ namespace TestCentric.Gui.Presenters
             };
 
             // View context commands
+
+            // Test for null is a hack that allows us to avoid
+            // a problem under Linux creating a ContextMenuStrip
+            // when no display is present.
+            if (_view.Tree.ContextMenuStrip != null)
+                _view.Tree.ContextMenuStrip.Opening += (s, e) => InitializeContextMenu();
 
             _view.CollapseAllCommand.Execute += () => _view.CollapseAll();
             _view.ExpandAllCommand.Execute += () => _view.ExpandAll();
@@ -215,6 +222,34 @@ namespace TestCentric.Gui.Presenters
             }
 
             _model.DebugTests(tests);
+        }
+
+        private void InitializeContextMenu()
+        {
+            bool displayConfigMenu = false;
+            var test = _view.ContextNode?.Tag as TestNode;
+            if (test != null && test.IsProject)
+            {
+                TestPackage package = _model.GetPackageForTest(test.Id);
+                string activeConfig = _model.GetActiveConfig(package);
+                var configNames = _model.GetConfigNames(package);
+
+                if (configNames.Count > 0)
+                {
+                    _view.ActiveConfiguration.MenuItems.Clear();
+                    foreach (string config in configNames)
+                    {
+                        var configEntry = new ToolStripMenuItem(config);
+                        configEntry.Checked = config == activeConfig;
+                        configEntry.Click += (sender, e) => _model.ReloadPackage(package, ((ToolStripMenuItem)sender).Text);
+                        _view.ActiveConfiguration.MenuItems.Add(configEntry);
+                    }
+
+                    displayConfigMenu = true;
+                }
+            }
+
+            _view.ActiveConfiguration.Visible = displayConfigMenu;
         }
 
         private void InitializeRunCommands()
