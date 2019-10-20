@@ -30,7 +30,7 @@ using NUnit.TestUtilities.Fakes;
 
 namespace TestCentric.Gui.Model
 {
-    public class TestModelPackageTests
+    public class MakeTestPackageTests
     {
         private TestModel _model;
 

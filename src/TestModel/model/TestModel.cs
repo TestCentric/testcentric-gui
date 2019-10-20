@@ -24,6 +24,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using NUnit.Engine;
@@ -34,6 +35,8 @@ namespace TestCentric.Gui.Model
 
     public class TestModel : ITestModel
     {
+        static Logger log = InternalTrace.GetLogger(typeof(TestModel));
+
         private const string PROJECT_LOADER_EXTENSION_PATH = "/NUnit/Engine/TypeExtensions/IProjectLoader";
         private const string NUNIT_PROJECT_LOADER = "NUnit.Engine.Services.ProjectLoaders.NUnitProjectLoader";
         private const string VISUAL_STUDIO_PROJECT_LOADER = "NUnit.Engine.Services.ProjectLoaders.VisualStudioProjectLoader";
@@ -47,7 +50,7 @@ namespace TestCentric.Gui.Model
 
         private bool _lastRunWasDebugRun;
 
-        #region Constructor
+        #region Constructor and Creation
 
         public TestModel(ITestEngine testEngine, string applicationPrefix=null)
         {
@@ -66,10 +69,44 @@ namespace TestCentric.Gui.Model
             _assemblyWatcher = new AssemblyWatcher();
         }
 
+        public static ITestModel CreateTestModel(ITestEngine testEngine, CommandLineOptions options)
+        {
+            // Currently the InternalTraceLevel can only be set from the command-line.
+            // We can't use user settings to provide a default because the settings
+            // are an engine service and the engine have the internal trace level
+            // set as part of its initialization.
+            var traceLevel = options.InternalTraceLevel != null
+                ? (InternalTraceLevel)Enum.Parse(typeof(InternalTraceLevel), options.InternalTraceLevel)
+                : InternalTraceLevel.Off;
+
+            // This initializes the trace setting for the process.
+            InternalTrace.Initialize($"InternalTrace.{Process.GetCurrentProcess().Id}.gui.log", traceLevel);
+
+            testEngine.InternalTraceLevel = traceLevel;
+            if (options.WorkDirectory != null)
+                testEngine.WorkDirectory = options.WorkDirectory;
+
+            var model = new TestModel(testEngine, "TestCentric");
+
+
+            model.PackageOverrides.Add(EnginePackageSettings.InternalTraceLevel, testEngine.InternalTraceLevel.ToString());
+
+            if (options.ProcessModel != null)
+                model.PackageOverrides.Add(EnginePackageSettings.ProcessModel, options.ProcessModel);
+            if (options.DomainUsage != null)
+                model.PackageOverrides.Add(EnginePackageSettings.DomainUsage, options.DomainUsage);
+            if (options.MaxAgents >= 0)
+                model.PackageOverrides.Add(EnginePackageSettings.MaxAgents, options.MaxAgents);
+            if (options.RunAsX86)
+                model.PackageOverrides.Add(EnginePackageSettings.RunAsX86, true);
+
+            return model;
+        }
+
         #endregion
 
         #region ITestModel Implementation
-        
+
         #region General Properties
 
         // Work Directory

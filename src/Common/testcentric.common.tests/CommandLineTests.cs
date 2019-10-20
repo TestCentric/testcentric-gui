@@ -68,6 +68,7 @@ namespace TestCentric.Gui.Tests
         [TestCase("DomainUsage", "--domain:None")]
         [TestCase("DomainUsage", "--domain:Single")]
         [TestCase("DomainUsage", "--domain:Multiple")]
+        [TestCase("WorkDirectory", "--work:PathToWorkDirectory")]
         [TestCase("RunAsX86", "--x86", true)]
         [TestCase("MaxAgents", "--agents:8", 8)]
         [TestCase("InternalTraceLevel", "--trace:Off")]
