@@ -163,7 +163,7 @@ namespace TestCentric.Gui.Presenters.Main
 
             _view.SaveResultsCommand.Execute += Raise.Event<CommandHandler>();
 
-            _view.DialogManager.Received().GetFileSavePath("Save Results as XML", "XML Files (*.xml)|*.xml|All Files (*.*)|*.*", "WORKDIRECTORY", "TestResult.xml");
+            _view.DialogManager.Received().GetFileSavePath("Save Results in nunit3 format", "XML Files (*.xml)|*.xml|All Files (*.*)|*.*", "WORKDIRECTORY", "TestResult.xml");
         }
 
         [Test]

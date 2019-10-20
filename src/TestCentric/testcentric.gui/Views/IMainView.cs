@@ -79,6 +79,7 @@ namespace TestCentric.Gui.Views
         // Tools Menu Items
         IMenu ToolsMenu { get; }
         ICommand SaveResultsCommand { get; }
+        IMenu SaveResultsAsMenu { get; }
         ICommand OpenWorkDirectoryCommand { get; }
         ICommand ExtensionsCommand { get; }
         ICommand SettingsCommand { get; }

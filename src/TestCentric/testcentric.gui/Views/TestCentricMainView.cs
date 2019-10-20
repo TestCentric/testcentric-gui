@@ -130,6 +130,7 @@ namespace TestCentric.Gui.Views
         private MenuItem singleDomainMenuItem;
         private MenuItem multipleDomainMenuItem;
         private MenuItem openWorkDirectoryMenuItem;
+        private MenuItem saveResultsAsMenuItem;
         private TextOutputView textOutputView1;
 
         #endregion
@@ -187,6 +188,7 @@ namespace TestCentric.Gui.Views
             // Initialize Tools Menu Comands
             ToolsMenu = new PopupMenu(toolsMenu);
             SaveResultsCommand = new MenuCommand(saveResultsMenuItem);
+            SaveResultsAsMenu = new PopupMenu(saveResultsAsMenuItem);
             OpenWorkDirectoryCommand = new MenuCommand(openWorkDirectoryMenuItem);
             ExtensionsCommand = new MenuCommand(extensionsMenuItem);
             SettingsCommand = new MenuCommand(settingsMenuItem);
@@ -272,6 +274,7 @@ namespace TestCentric.Gui.Views
             this.stopRunMenuItem = new System.Windows.Forms.MenuItem();
             this.toolsMenu = new System.Windows.Forms.MenuItem();
             this.saveResultsMenuItem = new System.Windows.Forms.MenuItem();
+            this.saveResultsAsMenuItem = new System.Windows.Forms.MenuItem();
             this.openWorkDirectoryMenuItem = new System.Windows.Forms.MenuItem();
             this.toolsMenuSeparator1 = new System.Windows.Forms.MenuItem();
             this.extensionsMenuItem = new System.Windows.Forms.MenuItem();
@@ -647,6 +650,7 @@ namespace TestCentric.Gui.Views
             this.toolsMenu.Index = 3;
             this.toolsMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.saveResultsMenuItem,
+            this.saveResultsAsMenuItem,
             this.openWorkDirectoryMenuItem,
             this.toolsMenuSeparator1,
             this.extensionsMenuItem,
@@ -658,24 +662,29 @@ namespace TestCentric.Gui.Views
             this.saveResultsMenuItem.Index = 0;
             this.saveResultsMenuItem.Text = "&Save Test Results...";
             // 
+            // saveResultsAsMenuItem
+            // 
+            this.saveResultsAsMenuItem.Index = 1;
+            this.saveResultsAsMenuItem.Text = "Save Test Results As";
+            // 
             // openWorkDirectoryMenuItem
             // 
-            this.openWorkDirectoryMenuItem.Index = 1;
+            this.openWorkDirectoryMenuItem.Index = 2;
             this.openWorkDirectoryMenuItem.Text = "Open Work Directory...";
             // 
             // toolsMenuSeparator1
             // 
-            this.toolsMenuSeparator1.Index = 2;
+            this.toolsMenuSeparator1.Index = 3;
             this.toolsMenuSeparator1.Text = "-";
             // 
             // extensionsMenuItem
             // 
-            this.extensionsMenuItem.Index = 3;
+            this.extensionsMenuItem.Index = 4;
             this.extensionsMenuItem.Text = "Extensions...";
             // 
             // settingsMenuItem
             // 
-            this.settingsMenuItem.Index = 4;
+            this.settingsMenuItem.Index = 5;
             this.settingsMenuItem.Text = "&Settings...";
             // 
             // helpItem
@@ -1028,6 +1037,7 @@ namespace TestCentric.Gui.Views
         // Tools Menu Items
         public IMenu ToolsMenu { get; }
         public ICommand SaveResultsCommand { get; }
+        public IMenu SaveResultsAsMenu { get; }
         public ICommand OpenWorkDirectoryCommand { get; }
         public ICommand ExtensionsCommand { get; }
         public ICommand SettingsCommand { get; }
