@@ -77,6 +77,13 @@ namespace TestCentric.Gui
                         DomainUsage = v;
                 });
 
+            this.Add("work=", "{PATH} of the directory to use for output files. If not specified, defaults to the current directory.",
+                v =>
+                {
+                    if (CheckRequiredValue(v, "--work"))
+                        WorkDirectory = v;
+                });
+
             //this.Add("runselected", "Automatically run last selected tests.",
             //    v => RunSelectedTests = v != null);
 
@@ -127,6 +134,7 @@ namespace TestCentric.Gui
         public bool RunAsX86 { get; private set; }
         public int MaxAgents { get; private set; }
         public string InternalTraceLevel { get; private set; }
+        public string WorkDirectory { get; private set; }
 
         // Error Processing
 

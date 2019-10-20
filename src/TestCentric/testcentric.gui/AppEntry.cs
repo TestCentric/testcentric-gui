@@ -23,7 +23,6 @@
 
 using System;
 using System.IO;
-using System.Diagnostics;
 using System.Text;
 using System.Windows.Forms;
 using NUnit.Engine;
@@ -69,34 +68,10 @@ namespace TestCentric.Gui
                 return 2;
             }
 
-            // Currently the InternalTraceLevel can only be set from the command-line.
-            // We can't use user settings to provide a default because the settings
-            // are an engine service and the engine have the internal trace level
-            // set as part of its initialization.
-            var traceLevel = options.InternalTraceLevel != null
-                ? (InternalTraceLevel)Enum.Parse(typeof(InternalTraceLevel), options.InternalTraceLevel)
-                : InternalTraceLevel.Off;
-
-            // This initializes the trace setting for the GUI itself.
-            InternalTrace.Initialize($"InternalTrace.{Process.GetCurrentProcess().Id}.gui.log", traceLevel);
-            log.Info($"Starting TestCentric Runner - InternalTraceLevel = {traceLevel}");
-
-            log.Info("Creating TestEngine");
-            ITestEngine testEngine = TestEngineActivator.CreateInstance();
-            testEngine.InternalTraceLevel = traceLevel;
+            ITestEngine engine = TestEngineActivator.CreateInstance();
 
             log.Info("Instantiating TestModel");
-            ITestModel model = new TestModel(testEngine, "TestCentric");
-            model.PackageOverrides.Add(EnginePackageSettings.InternalTraceLevel, traceLevel.ToString());
-
-            if (options.ProcessModel != null)
-                model.PackageOverrides.Add(EnginePackageSettings.ProcessModel, options.ProcessModel);
-            if (options.DomainUsage != null)
-                model.PackageOverrides.Add(EnginePackageSettings.DomainUsage, options.DomainUsage);
-            if (options.MaxAgents >= 0)
-                model.PackageOverrides.Add(EnginePackageSettings.MaxAgents, options.MaxAgents);
-            if (options.RunAsX86)
-                model.PackageOverrides.Add(EnginePackageSettings.RunAsX86, true);
+            ITestModel model = TestModel.CreateTestModel(engine, options);
 
             log.Info("Constructing Form");
             TestCentricMainView view = new TestCentricMainView();
@@ -126,7 +101,7 @@ namespace TestCentric.Gui
             {
                 log.Info("Exiting TestCentric Runner");
                 InternalTrace.Close();
-                testEngine.Dispose();
+                model.Dispose();
             }
 
             return 0;
