@@ -72,6 +72,8 @@ namespace TestCentric.Gui.Presenters
         // Current Long operation display, if any, or null
         private LongRunningOperationDisplay _longOpDisplay;
 
+        private List<string> _resultFormats = new List<string>();
+
         #endregion
 
         #region Constructor
@@ -90,6 +92,10 @@ namespace TestCentric.Gui.Presenters
             _view.ResultTabs.SelectedIndex = _settings.Gui.SelectedTab;
 
             UpdateViewCommands();
+
+            foreach (string format in _model.ResultFormats)
+                if (format != "cases" && format != "user")
+                    _resultFormats.Add(format);
 
             WireUpEvents();
         }
@@ -486,6 +492,18 @@ namespace TestCentric.Gui.Presenters
             _view.RunFailedCommand.Execute += () => RunFailedTests();
             _view.StopRunCommand.Execute += () => CancelRun();
 
+            _view.ToolsMenu.Popup += () =>
+            {
+                _view.SaveResultsAsMenu.MenuItems.Clear();
+
+                foreach (string format in _resultFormats)
+                {
+                    MenuItem formatItem = new MenuItem(format);
+                    formatItem.Click += (s, e) => SaveResults(format);
+                    _view.SaveResultsAsMenu.MenuItems.Add(formatItem);
+                }
+            };
+
             _view.SaveResultsCommand.Execute += () => SaveResults();
 
             _view.OpenWorkDirectoryCommand.Execute += () => System.Diagnostics.Process.Start(_model.WorkDirectory);
@@ -590,17 +608,17 @@ namespace TestCentric.Gui.Presenters
 
         #region Save Methods
 
-        public void SaveResults()
+        public void SaveResults(string format = "nunit3")
         {
-            string savePath = _view.DialogManager.GetFileSavePath("Save Results as XML", "XML Files (*.xml)|*.xml|All Files (*.*)|*.*", _model.WorkDirectory, "TestResult.xml");
+            string savePath = _view.DialogManager.GetFileSavePath($"Save Results in {format} format", "XML Files (*.xml)|*.xml|All Files (*.*)|*.*", _model.WorkDirectory, "TestResult.xml");
 
             if (savePath != null)
             {
                 try
                 {
-                    _model.SaveResults(savePath);
+                    _model.SaveResults(savePath, format);
 
-                    _view.MessageDisplay.Info(String.Format($"Results saved in nunit3 format as {savePath}"));
+                    _view.MessageDisplay.Info(String.Format($"Results saved in {format} format as {savePath}"));
                 }
                 catch (Exception exception)
                 {
@@ -706,7 +724,7 @@ namespace TestCentric.Gui.Presenters
             _view.RuntimeMenu.Enabled = !testRunning && !testLoading;
             _view.RecentFilesMenu.Enabled = !testRunning && !testLoading;
             _view.ExitCommand.Enabled = !testLoading;
-            _view.SaveResultsCommand.Enabled = !testRunning && !testLoading && _model.HasResults;
+            _view.SaveResultsCommand.Enabled = _view.SaveResultsAsMenu.Enabled = !testRunning && !testLoading && _model.HasResults;
         }
 
         private string CreateOpenFileFilter()
