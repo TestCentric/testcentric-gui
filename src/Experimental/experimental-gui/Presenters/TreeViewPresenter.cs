@@ -29,6 +29,7 @@ namespace TestCentric.Gui.Presenters
 {
     using Model;
     using Views;
+    using Dialogs;
 
     /// <summary>
     /// TreeViewPresenter is the presenter for the TestTreeView
@@ -149,6 +150,26 @@ namespace TestCentric.Gui.Presenters
             _view.RunSelectedCommand.Execute += () => RunTests(_selectedTestItem);
             _view.RunFailedCommand.Execute += () => RunAllTests(); // RunFailed NYI
             _view.StopRunCommand.Execute += () => _model.CancelTestRun(true);
+            _view.TestParametersCommand.Execute += () =>
+            {
+                using (var dlg = new TestParametersDialog())
+                {
+                    dlg.Font = _model.Services.UserSettings.Gui.Font;
+                    dlg.StartPosition = FormStartPosition.CenterParent;
+
+                    if (_model.PackageOverrides.ContainsKey("TestParametersDictionary"))
+                    {
+                        var testParms = _model.PackageOverrides["TestParametersDictionary"] as IDictionary<string, string>;
+                        foreach (string key in testParms.Keys)
+                            dlg.Parameters.Add(key, testParms[key]);
+                    }
+
+                    if (dlg.ShowDialog(_view as IWin32Window) == DialogResult.OK)
+                    {
+                        ChangePackageSettingAndReload("TestParametersDictionary", dlg.Parameters);
+                    }
+                }
+            };
 
             // Debug button and dropdowns
             _view.DebugButton.Execute += () =>
@@ -263,6 +284,7 @@ namespace TestCentric.Gui.Presenters
             _view.RunAllCommand.Enabled = canRun;
             _view.RunSelectedCommand.Enabled = canRun;
             _view.RunFailedCommand.Enabled = canRun;
+            _view.TestParametersCommand.Enabled = canRun;
             _view.DebugAllCommand.Enabled = canRun;
             _view.DebugSelectedCommand.Enabled = canRun;
             _view.DebugFailedCommand.Enabled = canRun;
@@ -300,6 +322,20 @@ namespace TestCentric.Gui.Presenters
 
             _view.FormatButton.ToolTipText = _strategy.Description;
             _view.DisplayFormat.SelectedItem = format;
+        }
+
+        private void ChangePackageSettingAndReload(string key, object setting)
+        {
+            if (setting == null || setting as string == "DEFAULT")
+                _model.PackageOverrides.Remove(key);
+            else
+                _model.PackageOverrides[key] = setting;
+
+            // Even though the _model has a Reload method, we cannot use it because Reload
+            // does not re-create the Engine.  Since we just changed a setting, we must
+            // re-create the Engine by unloading/reloading the tests. We make a copy of
+            // __model.TestFiles because the method does an unload before it loads.
+            _model.LoadTests(new List<string>(_model.TestFiles));
         }
 
         private Model.Settings.TestTreeSettings Settings { get; }

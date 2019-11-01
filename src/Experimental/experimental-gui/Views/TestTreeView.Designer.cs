@@ -37,6 +37,9 @@ namespace TestCentric.Gui.Views
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.debugMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugCheckedMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.activeConfigMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.showCheckboxesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.expandAllMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,9 +68,8 @@ namespace TestCentric.Gui.Views
             this.byExtendedCategoryMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.byOutcomeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.byDurationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.activeConfigMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.testParametersMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testTreeContextMenu.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -102,7 +104,7 @@ namespace TestCentric.Gui.Views
             this.collapseAllMenuItem,
             this.collapseToFixturesMenuItem});
             this.testTreeContextMenu.Name = "testTreeContextMenu";
-            this.testTreeContextMenu.Size = new System.Drawing.Size(191, 248);
+            this.testTreeContextMenu.Size = new System.Drawing.Size(191, 226);
             // 
             // runMenuItem
             // 
@@ -132,6 +134,22 @@ namespace TestCentric.Gui.Views
             this.debugCheckedMenuItem.Name = "debugCheckedMenuItem";
             this.debugCheckedMenuItem.Size = new System.Drawing.Size(190, 22);
             this.debugCheckedMenuItem.Text = "Debug Checked Items";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(187, 6);
+            // 
+            // activeConfigMenuItem
+            // 
+            this.activeConfigMenuItem.Name = "activeConfigMenuItem";
+            this.activeConfigMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.activeConfigMenuItem.Text = "Active Config";
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(187, 6);
             // 
             // showCheckboxesMenuItem
             // 
@@ -193,6 +211,8 @@ namespace TestCentric.Gui.Views
             this.runAllMenuItem,
             this.runSelectedMenuItem,
             this.runFailedMenuItem,
+            this.toolStripSeparator5,
+            this.testParametersMenuItem,
             this.toolStripMenuItem9,
             this.stopRunMenuItem});
             this.runButton.Image = ((System.Drawing.Image)(resources.GetObject("runButton.Image")));
@@ -205,7 +225,7 @@ namespace TestCentric.Gui.Views
             // 
             this.runAllMenuItem.Name = "runAllMenuItem";
             this.runAllMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.runAllMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.runAllMenuItem.Size = new System.Drawing.Size(180, 22);
             this.runAllMenuItem.Text = "Run All";
             this.runAllMenuItem.ToolTipText = "Run all tests displayed";
             // 
@@ -213,7 +233,7 @@ namespace TestCentric.Gui.Views
             // 
             this.runSelectedMenuItem.Name = "runSelectedMenuItem";
             this.runSelectedMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F6;
-            this.runSelectedMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.runSelectedMenuItem.Size = new System.Drawing.Size(180, 22);
             this.runSelectedMenuItem.Text = "Run Selected";
             this.runSelectedMenuItem.ToolTipText = "Run the selected tests";
             // 
@@ -221,19 +241,19 @@ namespace TestCentric.Gui.Views
             // 
             this.runFailedMenuItem.Name = "runFailedMenuItem";
             this.runFailedMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F7;
-            this.runFailedMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.runFailedMenuItem.Size = new System.Drawing.Size(180, 22);
             this.runFailedMenuItem.Text = "Run Failed";
             this.runFailedMenuItem.ToolTipText = "Run the tests that failed on the last run";
             // 
             // toolStripMenuItem9
             // 
             this.toolStripMenuItem9.Name = "toolStripMenuItem9";
-            this.toolStripMenuItem9.Size = new System.Drawing.Size(158, 6);
+            this.toolStripMenuItem9.Size = new System.Drawing.Size(177, 6);
             // 
             // stopRunMenuItem
             // 
             this.stopRunMenuItem.Name = "stopRunMenuItem";
-            this.stopRunMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.stopRunMenuItem.Size = new System.Drawing.Size(180, 22);
             this.stopRunMenuItem.Text = "Stop Run";
             // 
             // debugButton
@@ -361,21 +381,16 @@ namespace TestCentric.Gui.Views
             this.byDurationMenuItem.Tag = "DURATION";
             this.byDurationMenuItem.Text = "By Duration";
             // 
-            // activeConfigMenuItem
+            // toolStripSeparator5
             // 
-            this.activeConfigMenuItem.Name = "activeConfigMenuItem";
-            this.activeConfigMenuItem.Size = new System.Drawing.Size(190, 22);
-            this.activeConfigMenuItem.Text = "Active Config";
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(177, 6);
             // 
-            // toolStripSeparator2
+            // testParametersMenuItem
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(187, 6);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(187, 6);
+            this.testParametersMenuItem.Name = "testParametersMenuItem";
+            this.testParametersMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.testParametersMenuItem.Text = "Test Parameters...";
             // 
             // TestTreeView
             // 
@@ -432,5 +447,7 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.ToolStripMenuItem activeConfigMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripMenuItem testParametersMenuItem;
     }
 }

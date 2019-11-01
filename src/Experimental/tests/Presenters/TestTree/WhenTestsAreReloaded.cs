@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -63,6 +63,12 @@ namespace TestCentric.Gui.Presenters.TestTree
         public void StopRunCommand_IsDisabled()
         {
             _view.StopRunCommand.Received().Enabled = false;
+        }
+
+        [Test]
+        public void TestParametersCommand_IsEnabled()
+        {
+            _view.TestParametersCommand.Received(1).Enabled = true;
         }
     }
 }
