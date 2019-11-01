@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2017 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -55,6 +55,7 @@ namespace TestCentric.Gui.Presenters.Main
         [TestCase("RunAllCommand", false)]
         [TestCase("RunSelectedCommand", false)]
         [TestCase("RunFailedCommand", false)]
+        [TestCase("TestParametersCommand", false)]
         [TestCase("StopRunCommand", false)]
         [TestCase("SaveResultsCommand", false)]
         public void CheckCommandEnabled(string propName, bool enabled)

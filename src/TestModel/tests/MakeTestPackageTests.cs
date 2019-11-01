@@ -22,6 +22,7 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using NUnit.Engine;
@@ -65,9 +66,37 @@ namespace TestCentric.Gui.Model
         }
 
         [Test]
+        public void PackageReflectsTestParameters()
+        {
+            var testParms = new Dictionary<string, string>();
+            testParms.Add("parm1", "value1");
+            testParms.Add("parm2", "value2");
+            _model.PackageOverrides.Add("TestParametersDictionary", testParms);
+
+            TestPackage package = _model.MakeTestPackage(new[] { "my.dll" });
+
+            Assert.That(package.Settings.ContainsKey("TestParametersDictionary"));
+            var parms = package.Settings["TestParametersDictionary"] as IDictionary<string, string>;
+            Assert.NotNull(parms);
+
+            Assert.That(parms, Contains.Key("parm1"));
+            Assert.That(parms, Contains.Key("parm2"));
+            Assert.That(parms["parm1"], Is.EqualTo("value1"));
+            Assert.That(parms["parm2"], Is.EqualTo("value2"));
+        }
+
+        [Test]
         public void DisplayShadowCopySettings()
         {
             Console.WriteLine($"Current AppDomain has ShadowCopyFiles = {AppDomain.CurrentDomain.SetupInformation.ShadowCopyFiles}");
+        }
+
+        [Test]
+        public void DisplayTestParameters()
+        {
+            Console.WriteLine("Test Parameters for this run:");
+            foreach (string name in TestContext.Parameters.Names)
+                Console.WriteLine($"{name}={TestContext.Parameters[name]}");
         }
 
         [TestCase("my.dll")]
