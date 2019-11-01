@@ -131,6 +131,8 @@ namespace TestCentric.Gui.Views
         private MenuItem multipleDomainMenuItem;
         private MenuItem openWorkDirectoryMenuItem;
         private MenuItem saveResultsAsMenuItem;
+        private MenuItem menuItem3;
+        private MenuItem runParametersMenuItem;
         private TextOutputView textOutputView1;
 
         #endregion
@@ -184,6 +186,7 @@ namespace TestCentric.Gui.Views
             RunSelectedCommand = new MenuCommand(runSelectedMenuItem);
             RunFailedCommand = new MenuCommand(runFailedMenuItem);
             StopRunCommand = new MenuCommand(stopRunMenuItem);
+            TestParametersCommand = new MenuCommand(runParametersMenuItem);
 
             // Initialize Tools Menu Comands
             ToolsMenu = new PopupMenu(toolsMenu);
@@ -270,6 +273,8 @@ namespace TestCentric.Gui.Views
             this.runAllMenuItem = new System.Windows.Forms.MenuItem();
             this.runSelectedMenuItem = new System.Windows.Forms.MenuItem();
             this.runFailedMenuItem = new System.Windows.Forms.MenuItem();
+            this.menuItem3 = new System.Windows.Forms.MenuItem();
+            this.runParametersMenuItem = new System.Windows.Forms.MenuItem();
             this.testMenuSeparator = new System.Windows.Forms.MenuItem();
             this.stopRunMenuItem = new System.Windows.Forms.MenuItem();
             this.toolsMenu = new System.Windows.Forms.MenuItem();
@@ -612,6 +617,8 @@ namespace TestCentric.Gui.Views
             this.runAllMenuItem,
             this.runSelectedMenuItem,
             this.runFailedMenuItem,
+            this.menuItem3,
+            this.runParametersMenuItem,
             this.testMenuSeparator,
             this.stopRunMenuItem});
             this.testMenu.Text = "&Tests";
@@ -635,14 +642,24 @@ namespace TestCentric.Gui.Views
             this.runFailedMenuItem.Shortcut = System.Windows.Forms.Shortcut.F7;
             this.runFailedMenuItem.Text = "Run &Failed";
             // 
+            // menuItem3
+            // 
+            this.menuItem3.Index = 3;
+            this.menuItem3.Text = "-";
+            // 
+            // runParametersMenuItem
+            // 
+            this.runParametersMenuItem.Index = 4;
+            this.runParametersMenuItem.Text = "Test Parameters...";
+            // 
             // testMenuSeparator
             // 
-            this.testMenuSeparator.Index = 3;
+            this.testMenuSeparator.Index = 5;
             this.testMenuSeparator.Text = "-";
             // 
             // stopRunMenuItem
             // 
-            this.stopRunMenuItem.Index = 4;
+            this.stopRunMenuItem.Index = 6;
             this.stopRunMenuItem.Text = "S&top Run";
             // 
             // toolsMenu
@@ -1033,6 +1050,7 @@ namespace TestCentric.Gui.Views
         public ICommand RunSelectedCommand { get; }
         public ICommand RunFailedCommand { get; }
         public ICommand StopRunCommand { get; }
+        public ICommand TestParametersCommand { get; }
 
         // Tools Menu Items
         public IMenu ToolsMenu { get; }

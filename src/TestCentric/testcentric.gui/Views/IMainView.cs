@@ -75,6 +75,7 @@ namespace TestCentric.Gui.Views
         ICommand RunSelectedCommand { get; }
         ICommand RunFailedCommand { get; }
         ICommand StopRunCommand { get; }
+        ICommand TestParametersCommand { get; }
 
         // Tools Menu Items
         IMenu ToolsMenu { get; }

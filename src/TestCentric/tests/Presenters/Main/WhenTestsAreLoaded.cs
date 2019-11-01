@@ -62,6 +62,7 @@ namespace TestCentric.Gui.Presenters.Main
         [TestCase("RunAllCommand", true)]
         [TestCase("RunSelectedCommand", true)]
         [TestCase("RunFailedCommand", false)]
+        [TestCase("TestParametersCommand", true)]
         [TestCase("StopRunCommand", false)]
         [TestCase("SaveResultsCommand", false)]
         public void CheckCommandEnabled(string propName, bool enabled)

@@ -37,6 +37,7 @@ namespace TestCentric.Gui.Presenters
     using Model.Services;
     using Model.Settings;
     using Views;
+    using Dialogs;
 
     /// <summary>
     /// TestCentricPresenter does all file opening and closing that
@@ -490,7 +491,28 @@ namespace TestCentric.Gui.Presenters
             _view.RunAllCommand.Execute += () => RunAllTests();
             _view.RunSelectedCommand.Execute += () => RunSelectedTests();
             _view.RunFailedCommand.Execute += () => RunFailedTests();
+
             _view.StopRunCommand.Execute += () => CancelRun();
+            _view.TestParametersCommand.Execute += () =>
+            {
+                using (var dlg = new TestParametersDialog())
+                {
+                    dlg.Font = _settings.Gui.Font;
+                    dlg.StartPosition = FormStartPosition.CenterParent;
+
+                    if (_model.PackageOverrides.ContainsKey("TestParametersDictionary"))
+                    {
+                        var testParms = _model.PackageOverrides["TestParametersDictionary"] as IDictionary<string, string>;
+                        foreach (string key in testParms.Keys)
+                            dlg.Parameters.Add(key, testParms[key]);
+                    }
+
+                    if (dlg.ShowDialog(_view as IWin32Window) == DialogResult.OK)
+                    {
+                        ChangePackageSettingAndReload("TestParametersDictionary", dlg.Parameters);
+                    }
+                }
+            };
 
             _view.ToolsMenu.Popup += () =>
             {
@@ -713,6 +735,7 @@ namespace TestCentric.Gui.Presenters
             _view.RunAllCommand.Enabled = testLoaded && !testRunning;
             _view.RunSelectedCommand.Enabled = testLoaded && !testRunning;
             _view.RunFailedCommand.Enabled = testLoaded && !testRunning && _model.HasResults;
+            _view.TestParametersCommand.Enabled = testLoaded && !testRunning;
 
             _view.StopButton.Enabled = testRunning;
             _view.StopRunCommand.Enabled = testRunning;
@@ -773,8 +796,9 @@ namespace TestCentric.Gui.Presenters
 
             // Even though the _model has a Reload method, we cannot use it because Reload
             // does not re-create the Engine.  Since we just changed a setting, we must
-            // re-create the Engine by unloading/reloading the tests.
-            LoadTests(_model.TestFiles);    // This also does an Unload first.
+            // re-create the Engine by unloading/reloading the tests. We make a copy of
+            // __model.TestFiles because the method does an unload before it loads.
+            LoadTests(new List<string>(_model.TestFiles));
         }
 
         private void applyFont(Font font)
