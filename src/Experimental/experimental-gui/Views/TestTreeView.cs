@@ -53,6 +53,7 @@ namespace TestCentric.Gui.Views
             RunAllCommand = new ToolStripMenuElement(runAllMenuItem);
             RunSelectedCommand = new ToolStripMenuElement(runSelectedMenuItem);
             RunFailedCommand = new ToolStripMenuElement(runFailedMenuItem);
+            TestParametersCommand = new ToolStripMenuElement(testParametersMenuItem);
             StopRunCommand = new ToolStripMenuElement(stopRunMenuItem);
 
             DebugButton = new SplitButtonElement(debugButton);
@@ -95,6 +96,7 @@ namespace TestCentric.Gui.Views
         public ICommand RunAllCommand { get; private set; }
         public ICommand RunSelectedCommand { get; private set; }
         public ICommand RunFailedCommand { get; private set; }
+        public ICommand TestParametersCommand { get; private set; }
         public ICommand StopRunCommand { get; private set; }
 
         public ICommand DebugButton { get; private set; }
