@@ -94,6 +94,11 @@ namespace TestCentric.Gui
                     InternalTraceLevel = v;
                 });
 
+#if DEBUG
+            this.Add("debug-agent", "Launch debugger in nunit-agent when it starts.",
+                v => DebugAgent = v != null);
+#endif
+
             this.Add("help|h", "Display the help message and exit.",
                 v => ShowHelp = v != null);
 
@@ -135,6 +140,7 @@ namespace TestCentric.Gui
         public int MaxAgents { get; private set; }
         public string InternalTraceLevel { get; private set; }
         public string WorkDirectory { get; private set; }
+        public bool DebugAgent { get; private set; }
 
         // Error Processing
 

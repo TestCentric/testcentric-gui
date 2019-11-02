@@ -99,6 +99,8 @@ namespace TestCentric.Gui.Model
                 model.PackageOverrides.Add(EnginePackageSettings.MaxAgents, options.MaxAgents);
             if (options.RunAsX86)
                 model.PackageOverrides.Add(EnginePackageSettings.RunAsX86, true);
+            if (options.DebugAgent)
+                model.PackageOverrides.Add("DebugAgent", true);
 
             return model;
         }
@@ -511,8 +513,6 @@ namespace TestCentric.Gui.Model
 
             // We use AddSetting rather than just setting the value because
             // it propagates the setting to all subprojects.
-
-            //WIP: No longer use the process  or domain settings from earlier versions
 
             if (engineSettings.Agents > 0)
                 package.AddSetting(EnginePackageSettings.MaxAgents, engineSettings.Agents);
