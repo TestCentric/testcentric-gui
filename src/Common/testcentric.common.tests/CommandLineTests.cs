@@ -51,6 +51,7 @@ namespace TestCentric.Gui.Tests
         [TestCase("ProcessModel", null)]
         [TestCase("DomainUsage", null)]
         [TestCase("InternalTraceLevel", null)]
+        [TestCase("DebugAgent", false)]
         public void DefaultOptionValues(string propertyName, object val)
         {
             var property = GetPropertyInfo(propertyName);
@@ -79,6 +80,9 @@ namespace TestCentric.Gui.Tests
         [TestCase("InternalTraceLevel", "--trace:Debug")]
         [TestCase("ShowHelp", "--help", true)]
         [TestCase("ShowHelp", "-h", true)]
+#if DEBUG
+        [TestCase("DebugAgent", "--debug-agent", true)]
+#endif
         public void ValidOptionsAreRecognized(string propertyName, string option, object expected = null)
         {
             var property = GetPropertyInfo(propertyName);
