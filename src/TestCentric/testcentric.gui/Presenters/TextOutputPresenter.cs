@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -131,8 +131,8 @@ namespace TestCentric.Gui.Presenters
         private void Initialize(bool clearDisplay = false)
         {
             _labels = _model.Services.UserSettings.Gui.TextOutput.Labels;
-            _displayBeforeTest = _labels == "ALL" || _labels == "BEFORE";
-            _displayAfterTest = _labels == "AFTER";
+            _displayBeforeTest = _labels == "ALL" || _labels == "BEFORE" || _labels == "BEFOREANDAFTER";
+            _displayAfterTest = _labels == "AFTER" || _labels == "BEFOREANDAFTER";
             _displayBeforeOutput = _displayBeforeTest || _displayAfterTest || _labels == "ON";
 
             _currentLabel = _lastTestOutput = null;

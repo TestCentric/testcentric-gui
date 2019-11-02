@@ -173,6 +173,8 @@ namespace TestCentric.Gui.Presenters
             _model.Events.RunStarting += (RunStartingEventArgs e) =>
             {
                 UpdateViewCommands();
+
+                _view.RunSummary.Text = null;
             };
 
             _model.Events.RunFinished += (TestResultEventArgs e) =>
