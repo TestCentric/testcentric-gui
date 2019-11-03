@@ -98,7 +98,7 @@ namespace TestCentric.Gui.Views
             this.toolStripMenuItem14 = new System.Windows.Forms.ToolStripSeparator();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem15 = new System.Windows.Forms.ToolStripSeparator();
-            this.addinsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.extensionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.heopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nUnitHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
@@ -138,7 +138,7 @@ namespace TestCentric.Gui.Views
             this.tabPage1.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPage1.Size = new System.Drawing.Size(342, 336);
+            this.tabPage1.Size = new System.Drawing.Size(343, 336);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Properties";
             this.toolTip1.SetToolTip(this.tabPage1, "This tab displays the properties of the test, which NUnit V2 displayed in the Pro" +
@@ -165,7 +165,7 @@ namespace TestCentric.Gui.Views
             this.propertiesView.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
             this.propertiesView.Properties = "";
             this.propertiesView.RunState = "";
-            this.propertiesView.Size = new System.Drawing.Size(338, 332);
+            this.propertiesView.Size = new System.Drawing.Size(339, 332);
             this.propertiesView.SkipReason = "";
             this.propertiesView.TabIndex = 2;
             this.propertiesView.TestCount = "";
@@ -631,9 +631,9 @@ namespace TestCentric.Gui.Views
             this.exceptionToolStripMenuItem,
             this.openLogDirectoryToolStripMenuItem,
             this.toolStripMenuItem14,
-            this.settingsToolStripMenuItem,
+            this.extensionsToolStripMenuItem,
             this.toolStripMenuItem15,
-            this.addinsToolStripMenuItem});
+            this.settingsToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 22);
             this.toolsToolStripMenuItem.Text = "T&ools";
@@ -676,11 +676,11 @@ namespace TestCentric.Gui.Views
             this.toolStripMenuItem15.Name = "toolStripMenuItem15";
             this.toolStripMenuItem15.Size = new System.Drawing.Size(183, 6);
             // 
-            // addinsToolStripMenuItem
+            // extensionsToolStripMenuItem
             // 
-            this.addinsToolStripMenuItem.Name = "addinsToolStripMenuItem";
-            this.addinsToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
-            this.addinsToolStripMenuItem.Text = "&Addins...";
+            this.extensionsToolStripMenuItem.Name = "extensionsToolStripMenuItem";
+            this.extensionsToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.extensionsToolStripMenuItem.Text = "Extensions...";
             // 
             // heopToolStripMenuItem
             // 
@@ -781,7 +781,7 @@ namespace TestCentric.Gui.Views
             this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(350, 362);
+            this.tabControl1.Size = new System.Drawing.Size(351, 362);
             this.tabControl1.TabIndex = 1;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.TabControlSelectedIndexChanged);
             // 
@@ -792,7 +792,7 @@ namespace TestCentric.Gui.Views
             this.tabPage2.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPage2.Size = new System.Drawing.Size(342, 336);
+            this.tabPage2.Size = new System.Drawing.Size(343, 336);
             this.tabPage2.TabIndex = 4;
             this.tabPage2.Text = "XML";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -808,7 +808,7 @@ namespace TestCentric.Gui.Views
             this.xmlView.Name = "xmlView";
             this.xmlView.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
             this.xmlView.SelectedText = "";
-            this.xmlView.Size = new System.Drawing.Size(338, 332);
+            this.xmlView.Size = new System.Drawing.Size(339, 332);
             this.xmlView.TabIndex = 2;
             this.xmlView.TestXml = null;
             this.xmlView.WordWrap = false;
@@ -818,7 +818,7 @@ namespace TestCentric.Gui.Views
             this.tabPage3.Controls.Add(this.textOutputView);
             this.tabPage3.Location = new System.Drawing.Point(4, 4);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(342, 336);
+            this.tabPage3.Size = new System.Drawing.Size(343, 336);
             this.tabPage3.TabIndex = 5;
             this.tabPage3.Text = "Text Output";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -828,7 +828,7 @@ namespace TestCentric.Gui.Views
             this.textOutputView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textOutputView.Location = new System.Drawing.Point(0, 0);
             this.textOutputView.Name = "textOutputView";
-            this.textOutputView.Size = new System.Drawing.Size(342, 336);
+            this.textOutputView.Size = new System.Drawing.Size(343, 336);
             this.textOutputView.TabIndex = 0;
             this.textOutputView.WordWrap = true;
             // 
@@ -917,7 +917,7 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem14;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem15;
-        private System.Windows.Forms.ToolStripMenuItem addinsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem extensionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem heopToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem nUnitHelpToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;

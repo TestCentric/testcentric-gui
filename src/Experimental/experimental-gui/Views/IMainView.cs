@@ -83,7 +83,7 @@ namespace TestCentric.Gui.Views
         // Exception Details
         // Open Log Directory
         ICommand SettingsCommand { get; }
-        ICommand AddinsCommand { get; }
+        ICommand ExtensionsCommand { get; }
 
         // Help Menu
         ICommand NUnitHelpCommand { get; }

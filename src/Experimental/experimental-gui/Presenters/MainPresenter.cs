@@ -100,8 +100,22 @@ namespace TestCentric.Gui.Presenters
             _view.RunAsX86.CheckedChanged += LoadAsX86_CheckedChanged;
             _view.ExitCommand.Execute += () => Application.Exit();
 
-            _view.SettingsCommand.Execute += OpenSettingsDialogCommand_Execute;
-            _view.AddinsCommand.Execute += OpenExtensionsDialogCommand_Execute;
+            _view.SettingsCommand.Execute += () =>
+            {
+                using (var dialog = new SettingsDialog((Form)_view, _settings))
+                {
+                    dialog.ShowDialog();
+                }
+            };
+
+            _view.ExtensionsCommand.Execute += () =>
+            {
+                using (var extensionsDialog = new ExtensionDialog(_model.Services.ExtensionService))
+                {
+                    extensionsDialog.Font = _settings.Gui.Font;
+                    extensionsDialog.ShowDialog();
+                }
+            };
 
             _view.NUnitHelpCommand.Execute += () =>
                 { MessageBox.Show("This will show Help", "Not Yet Implemented"); };
@@ -291,25 +305,6 @@ namespace TestCentric.Gui.Presenters
                 {
                     _view.MessageDisplay.Error("Unable to Save Results", exception);
                 }
-            }
-        }
-
-        void OpenSettingsDialogCommand_Execute()
-        {
-            // The SettingsDialog has been ported from an older version of
-            // NUnit and doesn't use an MVP structure.
-            using (var dialog = new SettingsDialog((Form)_view, _settings))
-            {
-                dialog.ShowDialog();
-            }
-        }
-
-        private void OpenExtensionsDialogCommand_Execute()
-        {
-            using (var addinsView = new AddinsView())
-            {
-                var dialog = new AddinsPresenter(addinsView, _model.Services.ExtensionService);
-                dialog.Show();
             }
         }
 

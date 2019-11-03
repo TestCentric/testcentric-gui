@@ -132,9 +132,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="AppEntry.cs" />
-    <Compile Include="Dialogs\ExtensionDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Dialogs\SettingsDialog.cs" />
     <Compile Include="Dialogs\SettingsDialogBase.cs">
       <SubType>Form</SubType>
@@ -226,9 +223,6 @@
     <EmbeddedResource Include="Dialogs\AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\ExtensionDialog.resx">
-      <DependentUpon>ExtensionDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\SettingsDialog.resx">
       <DependentUpon>SettingsDialog.cs</DependentUpon>
