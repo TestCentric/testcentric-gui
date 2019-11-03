@@ -74,7 +74,7 @@ namespace TestCentric.Gui.Views
 
             // Tools Menu
             SettingsCommand = new ToolStripMenuElement(settingsToolStripMenuItem);
-            AddinsCommand = new ToolStripMenuElement(addinsToolStripMenuItem);
+            ExtensionsCommand = new ToolStripMenuElement(extensionsToolStripMenuItem);
 
             // Help Menu
             NUnitHelpCommand = new ToolStripMenuElement(nUnitHelpToolStripMenuItem);
@@ -126,7 +126,7 @@ namespace TestCentric.Gui.Views
 
         // Tools Menu
         public ICommand SettingsCommand { get; private set; }
-        public ICommand AddinsCommand { get; private set; }
+        public ICommand ExtensionsCommand { get; private set; }
 
         // Help Menu
         public ICommand NUnitHelpCommand { get; private set; }

@@ -375,6 +375,8 @@ namespace TestCentric.Gui
                 {
                     extensionDescriptionTextBox.Text = "";
                     propertiesTextBox.Text = "";
+                    assemblyPathLabel.Text = "";
+                    assemblyVersionLabel.Text = "";
                 }
             }
         }
