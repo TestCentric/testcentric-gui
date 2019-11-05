@@ -2,7 +2,7 @@
 
 General
 
-This release incluseds new features beyond the 1.0 release, together with some bug fixes.
+This release includes new features beyond the 1.0 release, together with some bug fixes.
 
 Features
  * The configuration to be loaded may be specified in the GUI.
