@@ -1,4 +1,41 @@
-﻿TestCentric Runner for NUnit 1.0.1 - August 15, 2019
+﻿TestCentric Runner for NUnit 1.1.0 - November 5, 2019
+
+General
+
+This release includes new features beyond the 1.0 release, together with some bug fixes.
+
+Features
+ * The configuration to be loaded may be specified in the GUI.
+ * A new dialog allows setting parameters for the test run.
+ * Test Results may be saved in any format for which an extension has been installed.
+ * Additional test label options are supported.
+ * The GUI uses a custom build of the latest version of the NUnit engine.
+ * Includes version 0.16 of the experimental GUI.
+
+Issues Resolved
+
+ *   4 Save test results in alternative formats
+ *  77 Setting up test parameters from gui
+ * 193 Experimental GUI: Passing parameters from GUI to Tests
+ * 216 Experimental GUI: Set project configuration to use
+ * 275 Add --debug-agent option to the TestCentric GUI
+ * 276 Deprecate old nunit-gui application on Chocolatey
+ * 315 Reorganize Settings
+ * 340 FIXED: Unable to run selected NUnit V2 tests
+ * 347 Add TextOutput labelling of final test result
+ * 372 Add command line option for specifying results file location
+ * 394 Update engine
+ * 395 Display version and path of loaded extensions
+ * 397 Fix unhandled NullReferenceException thrown when test fails with Assert.Fail()
+ * 399 Show the test assembly name in the main view's title bar.
+ * 402 Set Project Configuration to use
+ * 406 FIXED: Appveyor rebuild causes error
+ * 412 Update link to Chocolatey package
+ * 414 FIXED: Testcentric.exe needs icon
+ * 415 Better installation documentation
+ * 424 Use common dialog for extensions
+
+TestCentric Runner for NUnit 1.0.1 - August 15, 2019
 
 General
 
