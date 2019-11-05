@@ -33,7 +33,7 @@ Issues Resolved
  * 412 Update link to Chocolatey package
  * 414 FIXED: Testcentric.exe needs icon
  * 415 Better installation documentation
- * 424 Use common dialog for exensions
+ * 424 Use common dialog for extensions
 
 TestCentric Runner for NUnit 1.0.1 - August 15, 2019
 
