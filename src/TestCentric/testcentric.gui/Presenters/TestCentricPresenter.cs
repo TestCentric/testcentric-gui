@@ -621,7 +621,7 @@ namespace TestCentric.Gui.Presenters
 
             if (filesToAdd.Count > 0)
             {
-                var files = _model.TestFiles;
+                var files = new List<string>(_model.TestFiles);
                 files.AddRange(filesToAdd);
 
                 _model.LoadTests(files);
