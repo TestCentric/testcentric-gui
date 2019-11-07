@@ -8,6 +8,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <IntermediateOutputPath>obj\$(Configuration)\x86\</IntermediateOutputPath>
     <GenerateSupportedRuntime>false</GenerateSupportedRuntime>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net20'">
     <Reference Include="System.Runtime.Remoting" />
@@ -25,4 +26,10 @@
     <ProjectReference Include="..\nunit.engine.api\nunit.engine.api.csproj" />
     <ProjectReference Include="..\nunit.engine\nunit.engine.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <AgentFiles Include="$(TargetDir)nunit-agent-x86.*" />
+  </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Copy SourceFiles="@(AgentFiles)" DestinationFolder="$(SolutionDir)bin\$(ConfigurationName)\" />
+  </Target>
 </Project>
