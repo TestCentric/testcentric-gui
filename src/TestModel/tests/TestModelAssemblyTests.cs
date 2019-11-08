@@ -52,6 +52,14 @@ namespace TestCentric.Gui.Model
         }
 
         [Test]
+        public void EnsureAgentIsAvailable()
+        {
+            var testDir = TestContext.CurrentContext.TestDirectory;
+            Assert.That(File.Exists(Path.Combine(testDir, "nunit-agent.exe")), "Cannot find nunit-agent - may cause other test failures");
+            Assert.That(File.Exists(Path.Combine(testDir, "nunit-agent-x86.exe")), "Cannot find nunit-agent-x86 - may cause other test failures");
+        }
+
+        [Test]
         public void CheckStateAfterLoading()
         {
             Assert.That(_model.HasTests, "HasTests");
@@ -59,6 +67,7 @@ namespace TestCentric.Gui.Model
             Assert.False(_model.HasResults, "HasResults");
 
             var testRun = _model.Tests;
+            Assert.That(testRun.Xml.Name, Is.EqualTo("test-run"), "Expected test-run element");
             Assert.That(testRun.RunState, Is.EqualTo(RunState.Runnable), "RunState of test-run");
             Assert.That(testRun.TestCount, Is.EqualTo(MockAssembly.Tests), "TestCount of test-run");
             Assert.That(testRun.Children.Count, Is.EqualTo(1), "Child count of test-run");
