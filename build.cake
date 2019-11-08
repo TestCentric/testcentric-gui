@@ -180,9 +180,6 @@ Task("Build")
         MSBuild(SOLUTION, msBuildSettings);
     }
 
-	CopyFiles(ENGINE_BIN_DIR + "nunit-agent.*", BIN_DIR);
-	CopyFiles(ENGINE_BIN_DIR + "nunit-agent-x86.*", BIN_DIR);
-
     CopyFileToDirectory("LICENSE.txt", BIN_DIR);
     CopyFileToDirectory("NOTICES.txt", BIN_DIR);
     CopyFileToDirectory("CHANGES.txt", BIN_DIR);
