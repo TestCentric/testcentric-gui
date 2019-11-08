@@ -6,6 +6,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>..\..\..\nunit.ico</ApplicationIcon>
     <GenerateSupportedRuntime>false</GenerateSupportedRuntime>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net20'">
     <Reference Include="System.Runtime.Remoting" />
@@ -23,4 +24,17 @@
     <ProjectReference Include="..\nunit.engine.api\nunit.engine.api.csproj" />
     <ProjectReference Include="..\nunit.engine\nunit.engine.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <AgentFiles Include="$(TargetDir)nunit-agent.exe;$(TargetDir)nunit-agent.pdb;$(TargetDir)nunit-agent.exe.config" />
+    <AgentDirectory Include="$(SolutionDir)bin\$(ConfigurationName)\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="app.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Message Importance="high" Text="Copying @(AgentFiles) to @(AgentDirectory)" />
+    <Copy SourceFiles="@(AgentFiles)" DestinationFolder="@(AgentDirectory)" />
+  </Target>
 </Project>
