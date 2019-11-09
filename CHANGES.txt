@@ -1,4 +1,4 @@
-﻿TestCentric Runner for NUnit 1.1.0 - November 5, 2019
+﻿TestCentric Runner for NUnit 1.1.0 - November 9, 2019
 
 General
 
@@ -34,6 +34,9 @@ Issues Resolved
  * 414 FIXED: Testcentric.exe needs icon
  * 415 Better installation documentation
  * 424 Use common dialog for extensions
+ * 427 Ensure that agent exes are copied as part of building the project
+ * 430 FIXED: Index out of range exception when adding a test file
+ * 432 FIXED: TestParametersDialog enables Remove and Edit on startup
 
 TestCentric Runner for NUnit 1.0.1 - August 15, 2019
 
