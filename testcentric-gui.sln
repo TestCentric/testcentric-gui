@@ -87,6 +87,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mock-assembly-v2", "src\tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCentric.Common.Tests", "src\Common\testcentric.common.tests\TestCentric.Common.Tests.csproj", "{59C1C5EF-78B3-4E26-9B49-3032C57DC6F8}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "nunit.engine.core", "src\TestEngine\src\NUnitEngine\nunit.engine.core\nunit.engine.core.csproj", "{97DA5129-F215-42FB-8899-A525B748A23B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -173,6 +175,10 @@ Global
 		{59C1C5EF-78B3-4E26-9B49-3032C57DC6F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59C1C5EF-78B3-4E26-9B49-3032C57DC6F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59C1C5EF-78B3-4E26-9B49-3032C57DC6F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97DA5129-F215-42FB-8899-A525B748A23B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97DA5129-F215-42FB-8899-A525B748A23B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97DA5129-F215-42FB-8899-A525B748A23B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97DA5129-F215-42FB-8899-A525B748A23B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -199,6 +205,7 @@ Global
 		{A1BA8C1F-27CD-4078-B8F5-28496C51C7A3} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
 		{713E77FC-8CB1-46BC-93C8-33D1D302159C} = {0F939442-8450-41CF-8BB7-FAA00866F4E4}
 		{59C1C5EF-78B3-4E26-9B49-3032C57DC6F8} = {0C0A29CA-1A18-4B1A-9262-F41C01E7E30F}
+		{97DA5129-F215-42FB-8899-A525B748A23B} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CDFF439B-8888-4133-8734-86F4F899BC40}

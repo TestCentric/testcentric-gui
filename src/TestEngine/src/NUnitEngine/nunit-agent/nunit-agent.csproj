@@ -13,7 +13,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\EngineVersion.cs" LinkBase="Properties" />
-    <Compile Include="..\nunit.engine\Internal\ExceptionHelper.cs" Link="ExceptionHelper.cs" />
+    <Compile Include="..\nunit.engine.core\Internal\ExceptionHelper.cs" Link="ExceptionHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\..\nunit.ico">
@@ -22,7 +22,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\nunit.engine.api\nunit.engine.api.csproj" />
-    <ProjectReference Include="..\nunit.engine\nunit.engine.csproj" />
+    <ProjectReference Include="..\nunit.engine.core\nunit.engine.core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <AgentFiles Include="$(TargetDir)nunit-agent.exe;$(TargetDir)nunit-agent.pdb;$(TargetDir)nunit-agent.exe.config" />
