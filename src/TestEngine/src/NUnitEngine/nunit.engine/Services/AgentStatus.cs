@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Copyright (c) 2015 Charlie Poole, Rob Prouse
+// Copyright (c) 2011-2016 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -21,33 +21,17 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-#if !NETCOREAPP1_1 && !NETCOREAPP2_1
-using NUnit.Framework;
-
-namespace NUnit.Engine.Services.Tests
+#if !NETSTANDARD1_6 && !NETSTANDARD2_0
+namespace NUnit.Engine.Services
 {
-    using Fakes;
-
-    public class TestAgencyTests
+    /// <summary>
+    /// Enumeration used to report AgentStatus
+    /// </summary>
+    public enum AgentStatus
     {
-        private TestAgency _testAgency;
-
-        [SetUp]
-        public void CreateServiceContext()
-        {
-            var services = new ServiceContext();
-            services.Add(new FakeRuntimeService());
-            // Use a different URI to avoid conflicting with the "real" TestAgency
-            _testAgency = new TestAgency("TestAgencyTest", 0);
-            services.Add(_testAgency);
-            services.ServiceManager.StartServices();
-        }
-
-        [Test]
-        public void ServiceIsStarted()
-        {
-            Assert.That(_testAgency.Status, Is.EqualTo(ServiceStatus.Started));
-        }
+        Starting,
+        Ready,
+        Terminated
     }
 }
 #endif
