@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-// Copyright (c) 2015 Charlie Poole, Rob Prouse
+// Copyright (c) 2019 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -21,32 +21,36 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-#if !NETCOREAPP1_1 && !NETCOREAPP2_1
-using NUnit.Framework;
+#if !NETCOREAPP1_1 && !NETCOREAPP2_0
+using System;
 
 namespace NUnit.Engine.Services.Tests
 {
-    using Fakes;
-
-    public class TestAgencyTests
+    public partial class AgentStoreTests
     {
-        private TestAgency _testAgency;
-
-        [SetUp]
-        public void CreateServiceContext()
+        private sealed class DummyTestAgent : ITestAgent
         {
-            var services = new ServiceContext();
-            services.Add(new FakeRuntimeService());
-            // Use a different URI to avoid conflicting with the "real" TestAgency
-            _testAgency = new TestAgency("TestAgencyTest", 0);
-            services.Add(_testAgency);
-            services.ServiceManager.StartServices();
-        }
+            public DummyTestAgent(Guid id)
+            {
+                Id = id;
+            }
 
-        [Test]
-        public void ServiceIsStarted()
-        {
-            Assert.That(_testAgency.Status, Is.EqualTo(ServiceStatus.Started));
+            public Guid Id { get; }
+
+            public ITestEngineRunner CreateRunner(TestPackage package)
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool Start()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Stop()
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }
