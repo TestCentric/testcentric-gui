@@ -64,6 +64,7 @@ namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests.Results
                         SubRunners = new[]
                         {
                             RunnerResult.ProcessRunner,
+                            RunnerResult.ProcessRunner,
                             RunnerResult.ProcessRunner
                         }
                     };
@@ -97,6 +98,7 @@ namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests.Results
                         SubRunners = new[]
                         {
                             RunnerResult.TestDomainRunner,
+                            RunnerResult.TestDomainRunner,
                             RunnerResult.TestDomainRunner
                         }
                     };
@@ -110,6 +112,7 @@ namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests.Results
                         TestRunner = typeof(MultipleTestDomainRunner),
                         SubRunners = new[]
                         {
+                            RunnerResult.TestDomainRunner,
                             RunnerResult.TestDomainRunner,
                             RunnerResult.TestDomainRunner
                         }
@@ -132,6 +135,7 @@ namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests.Results
                         TestRunner = typeof(MultipleTestProcessRunner),
                         SubRunners = new[]
                         {
+                            RunnerResult.ProcessRunner,
                             RunnerResult.ProcessRunner,
                             RunnerResult.ProcessRunner
                         }

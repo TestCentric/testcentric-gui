@@ -70,6 +70,7 @@ string PACKAGE_TEST_DIR = PACKAGE_DIR + "test/";
 string CHOCO_DIR = PROJECT_DIR + "choco/";
 string BIN_DIR = PROJECT_DIR + "bin/" + configuration + "/";
 string ENGINE_BIN_DIR = PROJECT_DIR + "src/TestEngine/bin/" + configuration + "/net20/";
+string ENGINE_TESTS_BIN_DIR = PROJECT_DIR + "src/TestEngine/bin/" + configuration + "/net35/";
 
 // Packaging
 string PACKAGE_NAME = "testcentric-gui";
@@ -194,6 +195,11 @@ Task("Test")
     .Does(() =>
 {
     NUnit3(BIN_DIR + ALL_TESTS, new NUnit3Settings {
+        NoResults = true
+        });
+
+	// Keeping this separate until binaries are all merged
+    NUnit3(ENGINE_TESTS_BIN_DIR + ALL_TESTS, new NUnit3Settings {
         NoResults = true
         });
 });

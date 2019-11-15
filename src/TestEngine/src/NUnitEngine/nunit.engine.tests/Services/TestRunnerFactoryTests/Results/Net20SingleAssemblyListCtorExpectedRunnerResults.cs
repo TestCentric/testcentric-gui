@@ -80,14 +80,7 @@ namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests.Results
                         case DomainUsage.None:
                         case DomainUsage.Single:
                         case DomainUsage.Multiple:
-                            return new RunnerResult
-                            {
-                                TestRunner = typeof(MultipleTestProcessRunner),
-                                SubRunners = new[]
-                                {
-                                    RunnerResult.ProcessRunner
-                                }
-                            };
+                            return RunnerResult.ProcessRunner;
                         default:
                             throw new ArgumentOutOfRangeException(nameof(domainUsage), domainUsage, ExceptionMessage);
                     }
