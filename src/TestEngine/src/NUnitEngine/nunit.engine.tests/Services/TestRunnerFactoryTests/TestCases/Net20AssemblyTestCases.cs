@@ -45,7 +45,7 @@ namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests.TestCases
                         yield return SingleAssemblyListCtorTest(processModel, domainUsage);
                         yield return SingleUnknownExtensionTest(processModel, domainUsage);
                         yield return TwoAssembliesTest(processModel, domainUsage);
-                        yield return TwoUnknownsTest(processModel, domainUsage);
+                        //yield return TwoUnknownsTest(processModel, domainUsage);
                     }
                 }
             }

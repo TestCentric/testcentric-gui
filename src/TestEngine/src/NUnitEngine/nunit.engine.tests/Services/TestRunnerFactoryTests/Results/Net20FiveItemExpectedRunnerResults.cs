@@ -28,7 +28,7 @@ using NUnit.Engine.Runners;
 namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests.Results
 {
 #if !NETCOREAPP
-    internal static class Net20TwoProjectExpectedRunnerResults
+    internal static class Net20FiveItemExpectedRunnerResults
     {
         private static readonly string ExceptionMessage =
             $"No expected Test result provided for this {nameof(ProcessModel)}/{nameof(DomainUsage)} combination.";
@@ -66,6 +66,7 @@ namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests.Results
                             RunnerResult.ProcessRunner,
                             RunnerResult.ProcessRunner,
                             RunnerResult.ProcessRunner,
+                            RunnerResult.ProcessRunner,
                             RunnerResult.ProcessRunner
                         }
                     };
@@ -93,12 +94,12 @@ namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests.Results
             switch (domainUsage)
             {
                 case DomainUsage.Default:
-                case DomainUsage.Multiple:
                     return new RunnerResult
                     {
                         TestRunner = typeof(MultipleTestDomainRunner),
                         SubRunners = new[]
                         {
+                            RunnerResult.TestDomainRunner,
                             RunnerResult.TestDomainRunner,
                             RunnerResult.TestDomainRunner,
                             RunnerResult.TestDomainRunner,
@@ -109,6 +110,19 @@ namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests.Results
                     return RunnerResult.LocalTestRunner;
                 case DomainUsage.Single:
                     return RunnerResult.TestDomainRunner;
+                case DomainUsage.Multiple:
+                    return new RunnerResult
+                    {
+                        TestRunner = typeof(MultipleTestDomainRunner),
+                        SubRunners = new[]
+                        {
+                            RunnerResult.TestDomainRunner,
+                            RunnerResult.TestDomainRunner,
+                            RunnerResult.TestDomainRunner,
+                            RunnerResult.TestDomainRunner,
+                            RunnerResult.TestDomainRunner
+                        }
+                    };
                 default:
                     throw new ArgumentOutOfRangeException(nameof(domainUsage), domainUsage, ExceptionMessage);
             }
@@ -127,6 +141,7 @@ namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests.Results
                         TestRunner = typeof(MultipleTestProcessRunner),
                         SubRunners = new[]
                         {
+                            RunnerResult.ProcessRunner,
                             RunnerResult.ProcessRunner,
                             RunnerResult.ProcessRunner,
                             RunnerResult.ProcessRunner,

@@ -7,7 +7,7 @@ namespace NUnit.Engine.Tests.Integration
 {
     public sealed class RemoteAgentTests : IntegrationTests
     {
-        [Test]
+        [Test, Ignore("Won't work with ShadowCopy")]
         public void Explore_does_not_throw_SocketException()
         {
             using (var runner = new RunnerInDirectoryWithoutFramework())
