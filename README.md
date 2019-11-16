@@ -6,7 +6,7 @@ The **TestCentric Runner for NUnit** (aka **TestCentric**) is a GUI runner aimed
 
 ## Features
 
-The initial release is based on the layout and feature set of the of the original NUnit GUI, with the internals modified so as to run NUnit 3 tests. See [CHANGES](./CHANGES.txt) for a list of the most important changes.
+The initial release is based on the layout and feature set of the of the original NUnit GUI, with the internals modified so as to run NUnit 3 tests. See [CHANGES](./CHANGES.txt) for a list of the most important changes. See [ROADMAP](./ROADMAP.md) for info about future plans.
 
 ## Getting Started
 
