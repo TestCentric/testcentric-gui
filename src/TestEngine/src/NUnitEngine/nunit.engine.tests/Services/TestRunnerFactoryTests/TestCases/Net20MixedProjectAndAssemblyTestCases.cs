@@ -28,7 +28,7 @@ namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests.TestCases
                         package.AddSetting(EnginePackageSettings.DomainUsage, domainUsage.ToString());
 
                         var expected =
-                            Net20OneAssemblyOneProjectExpectedRunnerResults.ResultFor(processModel, domainUsage);
+                            Net20ExpectedRunnerResults.ResultFor(processModel, domainUsage, 3);
                         yield return new TestCaseData(package, expected).SetName($"{{m}}({testName})");
 
                         testName = "Two projects, one assembly - " +
@@ -39,8 +39,7 @@ namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests.TestCases
                         package.AddSetting(EnginePackageSettings.ProcessModel, processModel.ToString());
                         package.AddSetting(EnginePackageSettings.DomainUsage, domainUsage.ToString());
 
-                        expected = Net20FiveItemExpectedRunnerResults.ResultFor(processModel,
-                            domainUsage);
+                        expected = Net20ExpectedRunnerResults.ResultFor(processModel, domainUsage, 5);
                         yield return new TestCaseData(package, expected).SetName($"{{m}}({testName})");
 
                         testName = "Two assemblies, one project - " +
@@ -51,7 +50,7 @@ namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests.TestCases
                         package.AddSetting(EnginePackageSettings.ProcessModel, processModel.ToString());
                         package.AddSetting(EnginePackageSettings.DomainUsage, domainUsage.ToString());
 
-                        expected = Net20FourItemExpectedRunnerResults.ResultFor(processModel, domainUsage);
+                        expected = Net20ExpectedRunnerResults.ResultFor(processModel, domainUsage, 4);
                         yield return new TestCaseData(package, expected).SetName($"{{m}}({testName})");
 
                         testName = "One assembly, one project, one unknown - " +
@@ -62,7 +61,7 @@ namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests.TestCases
                         package.AddSetting(EnginePackageSettings.ProcessModel, processModel.ToString());
                         package.AddSetting(EnginePackageSettings.DomainUsage, domainUsage.ToString());
 
-                        expected = Net20ThreeItemExpectedRunnerResults.ResultFor(processModel, domainUsage);
+                        expected = Net20ExpectedRunnerResults.ResultFor(processModel, domainUsage, 3);
                         yield return new TestCaseData(package, expected).SetName($"{{m}}({testName})");
                     }
                 }

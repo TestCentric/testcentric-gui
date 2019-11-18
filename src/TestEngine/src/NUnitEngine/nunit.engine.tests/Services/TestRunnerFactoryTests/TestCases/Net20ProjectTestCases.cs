@@ -49,7 +49,7 @@ namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests.TestCases
                         package.AddSetting(EnginePackageSettings.ProcessModel, processModel.ToString());
                         package.AddSetting(EnginePackageSettings.DomainUsage, domainUsage.ToString());
 
-                        var expected = Net20SingleProjectListCtorExpectedRunnerResults.ResultFor(processModel, domainUsage);
+                        var expected = Net20ExpectedRunnerResults.ResultFor(processModel, domainUsage, 2);
                         yield return new TestCaseData(package, expected).SetName($"{{m}}({testName})");
 
                         testName = "Single project (string ctor) - " +
@@ -60,7 +60,7 @@ namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests.TestCases
                         package.AddSetting(EnginePackageSettings.ProcessModel, processModel.ToString());
                         package.AddSetting(EnginePackageSettings.DomainUsage, domainUsage.ToString());
 
-                        expected = Net20SingleProjectStringCtorExpectedRunnerResults.ResultFor(processModel, domainUsage);
+                        expected = Net20ExpectedRunnerResults.ResultFor(processModel, domainUsage, 2);
                         yield return new TestCaseData(package, expected).SetName($"{{m}}({testName})");
 
                         testName = "Two projects - " +
@@ -71,7 +71,7 @@ namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests.TestCases
                         package.AddSetting(EnginePackageSettings.ProcessModel, processModel.ToString());
                         package.AddSetting(EnginePackageSettings.DomainUsage, domainUsage.ToString());
 
-                        expected = Net20TwoProjectExpectedRunnerResults.ResultFor(processModel, domainUsage);
+                        expected = Net20ExpectedRunnerResults.ResultFor(processModel, domainUsage, 4);
                         yield return new TestCaseData(package, expected).SetName($"{{m}}({testName})");
                     }
                 }

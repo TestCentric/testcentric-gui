@@ -33,8 +33,11 @@ namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests
 {
     /// <summary>
     /// Tests of ITestRunner tree structure for different combinations
-    /// of TestPackage and PackageSettings. Tests are currently written
-    /// to protect existing behaviour, rather than define desired behaviour.
+    /// of TestPackage and PackageSettings. Some tests are overkill for
+    /// current capabilities. For example, it's really not necessary to
+    /// verify that the subrunners of a MultipleTestProcessRunner are
+    /// all ProcessRunners. However, this approach will support future
+    /// scenarios, where different types of runners are aggregated.
     /// </summary>
     public class RunnerSelectionTests
     {
