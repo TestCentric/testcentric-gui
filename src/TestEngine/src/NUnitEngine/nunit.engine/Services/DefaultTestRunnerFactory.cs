@@ -76,13 +76,11 @@ namespace NUnit.Engine.Services
             {
                 default:
                 case ProcessModel.Default:
+                case ProcessModel.Multiple:
                     if (package.AssemblyPackages().Count > 1)
                         return new MultipleTestProcessRunner(this.ServiceContext, package);
                     else
                         return new ProcessRunner(this.ServiceContext, package);
-
-                case ProcessModel.Multiple:
-                    return new MultipleTestProcessRunner(this.ServiceContext, package);
 
                 case ProcessModel.Separate:
                     return new ProcessRunner(this.ServiceContext, package);

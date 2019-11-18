@@ -25,6 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Engine.Internal;
+using NUnit.Engine.Runners;
 using NUnit.Engine.Tests.Services.TestRunnerFactoryTests.Results;
 using NUnit.Framework;
 
@@ -33,6 +34,9 @@ namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests.TestCases
 #if !NETCOREAPP
     internal static class Net20AssemblyTestCases
     {
+        private static readonly string ExceptionMessage =
+            $"No expected Test result provided for this {nameof(ProcessModel)}/{nameof(DomainUsage)} combination.";
+
         public static IEnumerable<TestCaseData> TestCases
         {
             get
@@ -45,7 +49,7 @@ namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests.TestCases
                         yield return SingleAssemblyListCtorTest(processModel, domainUsage);
                         yield return SingleUnknownExtensionTest(processModel, domainUsage);
                         yield return TwoAssembliesTest(processModel, domainUsage);
-                        yield return TwoUnknownsTest(processModel, domainUsage);
+                        //yield return TwoUnknownsTest(processModel, domainUsage);
                     }
                 }
             }
@@ -61,7 +65,7 @@ namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests.TestCases
             package.AddSetting(EnginePackageSettings.ProcessModel, processModel.ToString());
             package.AddSetting(EnginePackageSettings.DomainUsage, domainUsage.ToString());
 
-            var expected = Net20SingleAssemblyStringCtorExpectedRunnerResults.ResultFor(processModel, domainUsage);
+            var expected = Net20ExpectedRunnerResults.ResultFor(processModel, domainUsage, 1);
             var testCase = new TestCaseData(package, expected).SetName($"{{m}}({testName})");
             return testCase;
         }
@@ -76,7 +80,7 @@ namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests.TestCases
             package.AddSetting(EnginePackageSettings.ProcessModel, processModel.ToString());
             package.AddSetting(EnginePackageSettings.DomainUsage, domainUsage.ToString());
 
-            var expected = Net20SingleAssemblyListCtorExpectedRunnerResults.ResultFor(processModel, domainUsage);
+            var expected = Net20ExpectedRunnerResults.ResultFor(processModel, domainUsage, 1);
             return new TestCaseData(package, expected).SetName($"{{m}}({testName})");
         }
 
@@ -90,7 +94,7 @@ namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests.TestCases
             package.AddSetting(EnginePackageSettings.ProcessModel, processModel.ToString());
             package.AddSetting(EnginePackageSettings.DomainUsage, domainUsage.ToString());
 
-            var expected = Net20SingleAssemblyListCtorExpectedRunnerResults.ResultFor(processModel, domainUsage);
+            var expected = Net20ExpectedRunnerResults.ResultFor(processModel, domainUsage, 1);
             return new TestCaseData(package, expected).SetName($"{{m}}({testName})");
         }
 
@@ -104,7 +108,7 @@ namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests.TestCases
             package.AddSetting(EnginePackageSettings.ProcessModel, processModel.ToString());
             package.AddSetting(EnginePackageSettings.DomainUsage, domainUsage.ToString());
 
-            var expected = Net20TwoAssemblyExpectedRunnerResults.ResultFor(processModel, domainUsage);
+            var expected = Net20ExpectedRunnerResults.ResultFor(processModel, domainUsage, 2);
             return new TestCaseData(package, expected).SetName($"{{m}}({testName})");
         }
 
@@ -118,7 +122,7 @@ namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests.TestCases
             package.AddSetting(EnginePackageSettings.ProcessModel, processModel.ToString());
             package.AddSetting(EnginePackageSettings.DomainUsage, domainUsage.ToString());
 
-            var expected = Net20TwoAssemblyExpectedRunnerResults.ResultFor(processModel, domainUsage);
+            var expected = Net20ExpectedRunnerResults.ResultFor(processModel, domainUsage, 2);
             return new TestCaseData(package, expected).SetName($"{{m}}({testName})");
         }
     }

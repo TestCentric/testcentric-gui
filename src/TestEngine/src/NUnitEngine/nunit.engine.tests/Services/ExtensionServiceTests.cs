@@ -225,7 +225,7 @@ namespace NUnit.Engine.Services.Tests
             Assembly netFramework = typeof(ExtensionService).Assembly;
 
             var extNetFramework = new ExtensionAssembly(netFramework.Location, false);
-            var extNetStandard = new ExtensionAssembly(Path.Combine(GetSiblingDirectory("netstandard2.0"), "nunit.engine.dll"), false);
+            var extNetStandard = new ExtensionAssembly(Path.Combine(GetSiblingDirectory("netstandard2.0"), "nunit.engine.core.dll"), false);
 
             yield return new TestCaseData(new FrameworkCombo(netFramework, extNetFramework)).SetName("ValidCombo(.NET Framework, .NET Framework)");
             yield return new TestCaseData(new FrameworkCombo(netFramework, extNetStandard)).SetName("ValidCombo(.NET Framework, .NET Standard)");
@@ -246,7 +246,7 @@ namespace NUnit.Engine.Services.Tests
 #else
             Assembly netFramework = typeof(ExtensionService).Assembly;
 
-            var extNetStandard = new ExtensionAssembly(Path.Combine(GetSiblingDirectory("netstandard2.0"), "nunit.engine.dll"), false);
+            var extNetStandard = new ExtensionAssembly(Path.Combine(GetSiblingDirectory("netstandard2.0"), "nunit.engine.core.dll"), false);
             var extNetCore = new ExtensionAssembly(Path.Combine(GetSiblingDirectory("netcoreapp2.1"), "nunit.engine.tests.dll"), false);
 
             yield return new TestCaseData(new FrameworkCombo(netFramework, extNetCore)).SetName("InvalidCombo(.NET Framework, .NET Core)");
@@ -282,7 +282,7 @@ namespace NUnit.Engine.Services.Tests
         /// <returns></returns>
         private static string GetSiblingDirectory(string dir)
         {
-            var file = new FileInfo(typeof(ExtensionServiceTests).Assembly.Location);
+            var file = new FileInfo(AssemblyHelper.GetAssemblyPath(typeof(ExtensionServiceTests).Assembly));
             return Path.Combine(file.Directory.Parent.FullName, dir);
         }
     }

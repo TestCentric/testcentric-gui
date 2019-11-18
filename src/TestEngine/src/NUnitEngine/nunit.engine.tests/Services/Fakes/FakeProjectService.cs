@@ -56,5 +56,10 @@ namespace NUnit.Engine.Services.Tests.Fakes
         {
             return Path.GetExtension(path) == _supportedExtension;
         }
+
+        IProject IProjectService.LoadFrom(string path)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
