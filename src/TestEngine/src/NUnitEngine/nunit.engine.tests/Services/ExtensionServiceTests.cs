@@ -173,14 +173,14 @@ namespace NUnit.Engine.Services.Tests
             Assert.That(() => service.FindExtensionsInAssembly(extensionAssembly), Throws.Nothing);
         }
 
-        [TestCaseSource(nameof(ValidCombos)), Ignore("Won't work with ShadowCopy")]
+        [TestCaseSource(nameof(ValidCombos))]
         public void ValidTargetFrameworkCombinations(FrameworkCombo combo)
         {
             Assert.That(() => ExtensionService.CanLoadTargetFramework(combo.RunnerAssembly, combo.ExtensionAssembly),
                 Is.True);
         }
 
-        [TestCaseSource(nameof(InvalidTargetFrameworkCombos)), Ignore("Won't work with ShadowCopy")]
+        [TestCaseSource(nameof(InvalidTargetFrameworkCombos))]
         public void InvalidTargetFrameworkCombinations(FrameworkCombo combo)
         {
             Assert.That(() => ExtensionService.CanLoadTargetFramework(combo.RunnerAssembly, combo.ExtensionAssembly),
@@ -282,7 +282,7 @@ namespace NUnit.Engine.Services.Tests
         /// <returns></returns>
         private static string GetSiblingDirectory(string dir)
         {
-            var file = new FileInfo(typeof(ExtensionServiceTests).Assembly.Location);
+            var file = new FileInfo(AssemblyHelper.GetAssemblyPath(typeof(ExtensionServiceTests).Assembly));
             return Path.Combine(file.Directory.Parent.FullName, dir);
         }
     }
