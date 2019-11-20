@@ -55,7 +55,7 @@
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <ItemGroup>
-      <Net20Files Include="..\..\..\bin\$(Configuration)\net20\*" />
+      <Net20Files Include="..\bin\$(Configuration)\net20\*" />
     </ItemGroup>
     <Microsoft.Build.Tasks.Copy SourceFiles="@(Net20Files)" DestinationFolder="$(TargetDir)" Condition="'$(TargetFramework)'=='net35'" />
   </Target>

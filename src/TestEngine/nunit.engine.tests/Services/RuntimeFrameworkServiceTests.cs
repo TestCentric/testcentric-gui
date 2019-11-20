@@ -61,11 +61,13 @@ namespace NUnit.Engine.Services.Tests
         [TestCase("nunit-agent-x86.exe", true)]
         public void SelectRuntimeFramework(string assemblyName, bool runAsX86)
         {
-            var package = new TestPackage(Path.Combine(TestContext.CurrentContext.TestDirectory, assemblyName));
+            var assemblyPath = Path.Combine(TestContext.CurrentContext.TestDirectory, assemblyName);
+            FileAssert.Exists(assemblyPath, $"File not found: {assemblyPath}");
+            var package = new TestPackage(assemblyPath);
 
-            var returnValue = _runtimeService.SelectRuntimeFramework(package);
+            var runtimeFramework = _runtimeService.SelectRuntimeFramework(package);
 
-            Assert.That(package.GetSetting("RuntimeFramework", ""), Is.EqualTo(returnValue));
+            Assert.That(package.GetSetting("RuntimeFramework", ""), Is.EqualTo(runtimeFramework));
             Assert.That(package.GetSetting("RunAsX86", false), Is.EqualTo(runAsX86));
         }
 

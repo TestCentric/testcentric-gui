@@ -199,7 +199,7 @@ Task("Test")
         });
 
 	// Keeping this separate until binaries are all merged
-    NUnit3(ENGINE_TESTS_BIN_DIR + ALL_TESTS, new NUnit3Settings {
+    NUnit3(ENGINE_TESTS_BIN_DIR + "nunit.engine.tests.dll", new NUnit3Settings {
         NoResults = true
         });
 });

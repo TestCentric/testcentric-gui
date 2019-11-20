@@ -102,11 +102,11 @@
       <Project>{b69057f3-0663-4763-a3ec-50d463578b94}</Project>
       <Name>TestCentric.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\TestEngine\src\NUnitEngine\nunit.engine.api\nunit.engine.api.csproj">
+    <ProjectReference Include="..\..\TestEngine\nunit.engine.api\nunit.engine.api.csproj">
       <Project>{44fddb13-129b-4595-92e1-447e1c065c07}</Project>
       <Name>nunit.engine.api</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\TestEngine\src\NUnitEngine\nunit.engine\nunit.engine.csproj">
+    <ProjectReference Include="..\..\TestEngine\nunit.engine\nunit.engine.csproj">
       <Project>{ac7ed833-5c39-4ab6-8054-cdfdd82ddfbf}</Project>
       <Name>nunit.engine</Name>
     </ProjectReference>
