@@ -2,14 +2,14 @@
 
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>  
+    <OutputPath>..\bin\$(Configuration)\</OutputPath>  
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <LangVersion>7</LangVersion>
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\CommonAssemblyInfo.cs" LinkBase="Properties" />
+    <Compile Include="..\CommonEngineAssemblyInfo.cs" LinkBase="Properties" />
   </ItemGroup>
 
 </Project>
