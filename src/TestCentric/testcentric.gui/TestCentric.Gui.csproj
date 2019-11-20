@@ -91,7 +91,7 @@
       <Project>{ac6dfb0e-c717-4fc4-b918-d6b789061212}</Project>
       <Name>TestCentric.Gui.Components</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\TestEngine\src\NUnitEngine\nunit.engine.api\nunit.engine.api.csproj">
+    <ProjectReference Include="..\..\TestEngine\nunit.engine.api\nunit.engine.api.csproj">
       <Project>{44fddb13-129b-4595-92e1-447e1c065c07}</Project>
       <Name>nunit.engine.api</Name>
     </ProjectReference>

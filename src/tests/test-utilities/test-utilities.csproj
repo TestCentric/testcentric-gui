@@ -137,7 +137,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\TestEngine\src\NUnitEngine\nunit.engine.api\nunit.engine.api.csproj">
+    <ProjectReference Include="..\..\TestEngine\nunit.engine.api\nunit.engine.api.csproj">
       <Project>{44fddb13-129b-4595-92e1-447e1c065c07}</Project>
       <Name>nunit.engine.api</Name>
     </ProjectReference>
