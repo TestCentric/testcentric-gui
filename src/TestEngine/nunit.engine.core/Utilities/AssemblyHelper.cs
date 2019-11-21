@@ -25,7 +25,7 @@
 using System;
 using System.IO;
 using System.Reflection;
-namespace NUnit.Engine.Internal
+namespace NUnit.Engine.Utilities
 {
     /// <summary>
     /// AssemblyHelper provides static methods for working
