@@ -25,7 +25,7 @@ using System;
 using System.Collections.Generic;
 using NUnit.Engine.Utilities;
 
-namespace NUnit.Engine.Internal
+namespace NUnit.Engine.Extensions
 {
     public delegate bool TestPackageSelectorDelegate(TestPackage p);
 

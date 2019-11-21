@@ -29,6 +29,7 @@ using System.Reflection;
 using System.Xml;
 using Mono.Cecil;
 using NUnit.Engine.Extensibility;
+using NUnit.Engine.Extensions;
 using NUnit.Engine.Internal;
 using NUnit.Engine.Utilities;
 
