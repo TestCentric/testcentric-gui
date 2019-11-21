@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2015 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -26,12 +26,12 @@ using System.Collections.Generic;
 using System.Text;
 using Mono.Cecil;
 
-namespace NUnit.Engine.Internal
+namespace NUnit.Engine.Extensions
 {
     /// <summary>
     /// Extension methods that make it easier to work with Mono.Cecil.
     /// </summary>
-    public static class CecilExtensions
+    internal static class CecilExtensions
     {
         public static List<CustomAttribute> GetAttributes(this TypeDefinition type, string fullName)
         {

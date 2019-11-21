@@ -23,7 +23,7 @@
 
 using System;
 using System.Collections.Generic;
-using NUnit.Engine.Internal;
+using NUnit.Engine.Extensions;
 using NUnit.Engine.Utilities;
 
 using NUnit.Common;

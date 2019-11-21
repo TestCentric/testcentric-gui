@@ -29,7 +29,7 @@ using System.IO;
 using System.Reflection;
 using System.Xml;
 using NUnit.Common;
-using NUnit.Engine.Internal;
+using NUnit.Engine.Extensions;
 using NUnit.Engine.Services;
 using NUnit.Engine.Utilities;
 
