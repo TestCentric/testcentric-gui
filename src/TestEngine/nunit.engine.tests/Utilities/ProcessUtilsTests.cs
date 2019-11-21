@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016 Joseph N. Musser II
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -21,11 +21,10 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using NUnit.Engine.Internal;
 using NUnit.Framework;
 using System.Text;
 
-namespace NUnit.Engine.Tests.Internal
+namespace NUnit.Engine.Utilities
 {
     public static class ProcessUtilsTests
     {
