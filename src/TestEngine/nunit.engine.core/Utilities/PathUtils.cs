@@ -24,11 +24,9 @@
 using System;
 using System.IO;
 using System.Text;
-using System.Reflection;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
-namespace NUnit.Engine.Internal
+namespace NUnit.Engine.Utilities
 {
     /// <summary>
     /// Static methods for manipulating project paths, including both directories
@@ -111,7 +109,7 @@ namespace NUnit.Engine.Internal
         /// <summary>
         /// Return the canonical form of a path.
         /// </summary>
-        public static string Canonicalize( string path )
+        internal static string Canonicalize( string path )
         {
             List<string> parts = new List<string>(
                 path.Split( DirectorySeparatorChar, AltDirectorySeparatorChar ) );
@@ -174,17 +172,6 @@ namespace NUnit.Engine.Internal
             // must match through or up to a directory separator boundary
             return	path2[length1-1] == DirectorySeparatorChar ||
                 path2[length1] == DirectorySeparatorChar;
-        }
-
-        /// <summary>
-        /// Combines all the arguments into a single path
-        /// </summary>
-        public static string Combine(string path1, params string[] morePaths)
-        {
-            string result = path1;
-            foreach (string path in morePaths)
-                result = Path.Combine(result, path);
-            return result;
         }
 
         private static bool IsWindows()
