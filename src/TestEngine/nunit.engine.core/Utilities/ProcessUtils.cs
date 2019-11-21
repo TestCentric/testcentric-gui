@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016 Joseph N. Musser II
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -23,7 +23,7 @@
 
 using System.Text;
 
-namespace NUnit.Engine.Internal
+namespace NUnit.Engine.Utilities
 {
     public static class ProcessUtils
     {
