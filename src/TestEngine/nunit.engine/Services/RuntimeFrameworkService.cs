@@ -28,6 +28,7 @@ using System.IO;
 using Mono.Cecil;
 using NUnit.Common;
 using NUnit.Engine.Internal;
+using NUnit.Engine.Utilities;
 
 namespace NUnit.Engine.Services
 {
