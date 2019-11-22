@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -27,7 +27,7 @@ using System.IO;
 using System.Text;
 using NUnit.Common;
 
-namespace NUnit.Engine.Internal
+namespace NUnit.Engine.Helpers
 {
     /// <summary>
     /// DirectoryFinder is a utility class used for extended wildcard
