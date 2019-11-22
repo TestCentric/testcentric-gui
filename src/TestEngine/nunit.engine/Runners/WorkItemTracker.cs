@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2019 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -25,6 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Xml;
+using NUnit.Engine.Helpers;
 
 namespace NUnit.Engine.Runners
 {
