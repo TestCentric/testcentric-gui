@@ -25,9 +25,9 @@
 using System;
 using System.Diagnostics;
 using System.Net.Sockets;
-using NUnit.Common;
 using NUnit.Engine.Internal;
 using NUnit.Engine.Services;
+using NUnit.Engine.Utilities;
 
 namespace NUnit.Engine.Runners
 {
