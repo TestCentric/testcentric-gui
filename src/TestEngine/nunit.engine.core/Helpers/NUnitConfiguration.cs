@@ -28,7 +28,7 @@ using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using NUnit.Engine.Helpers;
 
-namespace NUnit.Engine.Internal
+namespace NUnit.Engine.Helpers
 {
     /// <summary>
     /// Provides static methods for accessing configuration info

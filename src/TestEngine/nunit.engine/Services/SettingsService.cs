@@ -23,6 +23,7 @@
 
 using System;
 using System.IO;
+using NUnit.Engine.Helpers;
 using NUnit.Engine.Internal;
 
 namespace NUnit.Engine.Services
