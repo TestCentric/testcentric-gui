@@ -28,7 +28,7 @@ using System.Reflection;
 using System.Text;
 using NUnit.Engine.Internal;
 
-namespace NUnit.Engine.Utilities
+namespace NUnit.Engine.Helpers
 {
     /// <summary>
     /// DomainDetailsBuilder provides human readable information on

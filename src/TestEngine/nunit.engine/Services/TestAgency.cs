@@ -30,7 +30,7 @@ using System.Text;
 using NUnit.Common;
 using NUnit.Engine.Agents;
 using NUnit.Engine.Internal;
-using NUnit.Engine.Utilities;
+using NUnit.Engine.Helpers;
 
 namespace NUnit.Engine.Services
 {

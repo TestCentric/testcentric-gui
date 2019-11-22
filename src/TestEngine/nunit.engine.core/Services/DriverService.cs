@@ -29,7 +29,7 @@ using Mono.Cecil;
 using NUnit.Common;
 using NUnit.Engine.Drivers;
 using NUnit.Engine.Extensibility;
-using NUnit.Engine.Utilities;
+using NUnit.Engine.Helpers;
 
 namespace NUnit.Engine.Services
 {

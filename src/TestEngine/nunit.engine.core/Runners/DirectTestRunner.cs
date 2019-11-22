@@ -25,7 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using NUnit.Engine.Extensibility;
-using NUnit.Engine.Extensions;
+using NUnit.Engine.Helpers;
 using NUnit.Engine.Internal;
 
 namespace NUnit.Engine.Runners

@@ -34,7 +34,7 @@ using System.Security.Policy;
 using System.Security.Principal;
 using NUnit.Common;
 using NUnit.Engine.Internal;
-using NUnit.Engine.Utilities;
+using NUnit.Engine.Helpers;
 
 namespace NUnit.Engine.Services
 {

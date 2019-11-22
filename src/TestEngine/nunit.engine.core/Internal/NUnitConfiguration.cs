@@ -26,7 +26,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
-using NUnit.Engine.Utilities;
+using NUnit.Engine.Helpers;
 
 namespace NUnit.Engine.Internal
 {

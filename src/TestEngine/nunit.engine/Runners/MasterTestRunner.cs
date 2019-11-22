@@ -28,10 +28,8 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Xml;
-using NUnit.Common;
-using NUnit.Engine.Extensions;
+using NUnit.Engine.Helpers;
 using NUnit.Engine.Services;
-using NUnit.Engine.Utilities;
 
 namespace NUnit.Engine.Runners
 {
