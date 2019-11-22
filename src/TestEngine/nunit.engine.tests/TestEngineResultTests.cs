@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2013 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -22,12 +22,11 @@
 // ***********************************************************************
 
 using System.Xml;
+using NUnit.Engine.Helpers;
+using NUnit.Framework;
 
 namespace NUnit.Engine.Tests
 {
-    using Framework;
-    using Internal;
-
     [TestFixture]
     public class TestEngineResultTests
     {

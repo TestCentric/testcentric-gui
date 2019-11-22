@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2014 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -29,6 +29,7 @@ using System.Xml;
 using NUnit.Tests.Assemblies;
 using NUnit.Framework;
 using NUnit.Engine.Extensibility;
+using NUnit.Engine.Helpers;
 
 namespace NUnit.Engine.Drivers.Tests
 {
