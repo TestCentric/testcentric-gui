@@ -26,12 +26,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Xml;
 using Mono.Cecil;
 using NUnit.Engine.Extensibility;
-using NUnit.Engine.Extensions;
+using NUnit.Engine.Helpers;
 using NUnit.Engine.Internal;
-using NUnit.Engine.Utilities;
 
 namespace NUnit.Engine.Services
 {

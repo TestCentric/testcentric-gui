@@ -23,10 +23,7 @@
 
 using System;
 using System.Collections.Generic;
-using NUnit.Engine.Extensions;
-using NUnit.Engine.Utilities;
-
-using NUnit.Common;
+using NUnit.Engine.Helpers;
 
 namespace NUnit.Engine.Runners
 {

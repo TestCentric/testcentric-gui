@@ -30,7 +30,7 @@ using System.IO;
 using System.Reflection;
 using System.Collections.Generic;
 using NUnit.Engine.Internal;
-using NUnit.Engine.Utilities;
+using NUnit.Engine.Helpers;
 
 namespace NUnit.Engine.Services.Tests
 {

@@ -23,7 +23,7 @@
 
 using System.Xml;
 
-namespace NUnit.Engine.Utilities
+namespace NUnit.Engine.Helpers
 {
     using Framework;
 

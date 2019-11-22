@@ -26,7 +26,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Utilities
+namespace NUnit.Engine.Helpers
 {
 	[TestFixture]
 	public class PathUtilTests : PathUtils

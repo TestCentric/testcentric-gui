@@ -26,7 +26,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace NUnit.Engine.Utilities
+namespace NUnit.Engine.Helpers
 {
     public static class ExceptionHelper
     {
