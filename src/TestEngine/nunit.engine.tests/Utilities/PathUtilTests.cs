@@ -26,7 +26,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Internal.Tests
+namespace NUnit.Engine.Helpers
 {
 	[TestFixture]
 	public class PathUtilTests : PathUtils
@@ -36,22 +36,6 @@ namespace NUnit.Engine.Internal.Tests
 		{
 			Assert.That(PathUtils.DirectorySeparatorChar, Is.EqualTo(Path.DirectorySeparatorChar));
 			Assert.That(PathUtils.AltDirectorySeparatorChar, Is.EqualTo(Path.AltDirectorySeparatorChar));
-		}
-	}
-
-	// Local Assert extension
-	internal class Assert : NUnit.Framework.Assert
-	{
-		public static void SamePathOrUnder( string path1, string path2 )
-		{
-			string msg = "\r\n\texpected: Same path or under <{0}>\r\n\t but was: <{1}>";
-			Assert.That(PathUtils.SamePathOrUnder( path1, path2 ), Is.True, msg, path1, path2);
-		}
-
-		public static void NotSamePathOrUnder( string path1, string path2 )
-		{
-			string msg = "\r\n\texpected: Not same path or under <{0}>\r\n\t but was: <{1}>";
-			Assert.That(PathUtils.SamePathOrUnder( path1, path2 ), Is.False, msg, path1, path2);
 		}
 	}
 
@@ -126,20 +110,25 @@ namespace NUnit.Engine.Internal.Tests
                 @"c:\folder1", @"C:\Folder2\folder3"), Is.EqualTo(@"..\Folder2\folder3"));
         }
 
-        [Test]
-		public void SamePathOrUnder()
-		{
-			Assert.SamePathOrUnder( @"C:\folder1\folder2\folder3", @"c:\folder1\.\folder2\junk\..\folder3" );
-			Assert.SamePathOrUnder( @"C:\folder1\folder2\", @"c:\folder1\.\folder2\junk\..\folder3" );
-			Assert.SamePathOrUnder( @"C:\folder1\folder2", @"c:\folder1\.\folder2\junk\..\folder3" );
-			Assert.SamePathOrUnder( @"C:\folder1\folder2", @"c:\folder1\.\Folder2\junk\..\folder3" );
-			Assert.NotSamePathOrUnder( @"C:\folder1\folder2", @"c:\folder1\.\folder22\junk\..\folder3" );
-			Assert.NotSamePathOrUnder( @"C:\folder1\folder2ile.tmp", @"D:\folder1\.\folder2\folder3\file.tmp" );
-			Assert.NotSamePathOrUnder( @"C:\", @"D:\" );
-			Assert.SamePathOrUnder( @"C:\", @"c:\" );
-			Assert.SamePathOrUnder( @"C:\", @"c:\bin\debug" );
-
-		}
+        [TestCase(@"C:\folder1\folder2\folder3", @"c:\folder1\.\folder2\junk\..\folder3", true)]
+        [TestCase(@"C:\folder1\folder2\", @"c:\folder1\.\folder2\junk\..\folder3", true)]
+        [TestCase(@"C:\folder1\folder2", @"c:\folder1\.\folder2\junk\..\folder3", true)]
+        [TestCase(@"C:\folder1\folder2", @"c:\folder1\.\Folder2\junk\..\folder3", true)]
+        [TestCase(@"C:\folder1\folder2", @"c:\folder1\.\folder22\junk\..\folder3", false)]
+        [TestCase(@"C:\folder1\folder2ile.tmp", @"D:\folder1\.\folder2\folder3\file.tmp", false)]
+        [TestCase(@"C:\", @"D:\", false)]
+        [TestCase(@"C:\", @"c:\", true)]
+		[TestCase(@"C:\", @"c:\bin\debug", true)]
+        public void SamePathOrUnder(string path1, string path2, bool expected)
+        {
+            if (PathUtils.SamePathOrUnder(path1, path2) != expected)
+            {
+                string msg = expected
+                   ? $"\r\n\tExpected: Same path or under <{path1}>\r\n\t but was: <{path2}>"
+                   : $"\r\n\tExpected: Not same path or under <{path1}>\r\n\t but was: <{path2}>";
+                Assert.Fail(msg);
+            }
+        }
 	}
 
 	[TestFixture]
@@ -192,16 +181,22 @@ namespace NUnit.Engine.Internal.Tests
             Assert.That(PathUtils.RelativePath("/folder1", "/Folder1/Folder2/folder3"), Is.EqualTo("../Folder1/Folder2/folder3"), "folders differing in case");
         }
 
-		[Test]
-		public void SamePathOrUnder()
+        [TestCase( "/folder1/folder2/folder3", "/folder1/./folder2/junk/../folder3", true )]
+        [TestCase( "/folder1/folder2/", "/folder1/./folder2/junk/../folder3", true )]
+        [TestCase( "/folder1/folder2", "/folder1/./folder2/junk/../folder3", true )]
+        [TestCase( "/folder1/folder2", "/folder1/./Folder2/junk/../folder3", false )]
+        [TestCase( "/folder1/folder2", "/folder1/./folder22/junk/../folder3", false )]
+        [TestCase( "/", "/", true )]
+        [TestCase( "/", "/bin/debug", true )]
+		public void SamePathOrUnder(string path1, string path2, bool expected)
 		{
-			Assert.SamePathOrUnder( "/folder1/folder2/folder3", "/folder1/./folder2/junk/../folder3" );
-			Assert.SamePathOrUnder( "/folder1/folder2/", "/folder1/./folder2/junk/../folder3" );
-			Assert.SamePathOrUnder( "/folder1/folder2", "/folder1/./folder2/junk/../folder3" );
-			Assert.NotSamePathOrUnder( "/folder1/folder2", "/folder1/./Folder2/junk/../folder3" );
-			Assert.NotSamePathOrUnder( "/folder1/folder2", "/folder1/./folder22/junk/../folder3" );
-			Assert.SamePathOrUnder( "/", "/" );
-			Assert.SamePathOrUnder( "/", "/bin/debug" );
+            if (PathUtils.SamePathOrUnder(path1, path2) != expected)
+            {
+                string msg = expected
+                   ? $"\r\n\tExpected: Same path or under <{path1}>\r\n\t but was: <{path2}>"
+                   : $"\r\n\tExpected: Not same path or under <{path1}>\r\n\t but was: <{path2}>";
+                Assert.Fail(msg);
+            }
 		}
 	}
 }

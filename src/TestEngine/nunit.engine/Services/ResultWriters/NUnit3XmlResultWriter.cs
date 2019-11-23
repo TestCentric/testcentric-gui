@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2014 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -26,6 +26,7 @@ using System.Text;
 using System.Xml;
 using System.IO;
 using NUnit.Engine.Extensibility;
+using NUnit.Engine.Helpers;
 
 namespace NUnit.Engine.Services
 {

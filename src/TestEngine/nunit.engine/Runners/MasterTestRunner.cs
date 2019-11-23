@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2011-2014 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -22,15 +22,14 @@
 // ***********************************************************************
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Xml;
-using NUnit.Common;
-using NUnit.Engine.Internal;
+using NUnit.Engine.Helpers;
 using NUnit.Engine.Services;
-using System.ComponentModel;
 
 namespace NUnit.Engine.Runners
 {
