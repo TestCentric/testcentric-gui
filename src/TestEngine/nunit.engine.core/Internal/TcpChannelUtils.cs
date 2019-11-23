@@ -29,7 +29,7 @@ using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
 using System.Runtime.Serialization.Formatters;
 using System.Threading;
-using NUnit.Common;
+using NUnit.Engine.Helpers;
 
 namespace NUnit.Engine.Internal
 {

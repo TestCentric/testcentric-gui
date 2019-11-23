@@ -1,5 +1,5 @@
 // ***********************************************************************
-// Copyright (c) 2011 Charlie Poole, Rob Prouse
+// Copyright (c) 2015 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -8,10 +8,10 @@
 // distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so, subject to
 // the following conditions:
-//
+// 
 // The above copyright notice and this permission notice shall be
 // included in all copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 // MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -22,53 +22,47 @@
 // ***********************************************************************
 
 using System;
-using System.IO;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using Microsoft.Win32;
+using System.Collections.Generic;
+using Mono.Cecil;
 
-namespace NUnit.Engine.Internal
+namespace NUnit.Engine.Helpers
 {
     /// <summary>
-    /// Provides static methods for accessing configuration info
+    /// Extension methods that make it easier to work with Mono.Cecil.
     /// </summary>
-    public static class NUnitConfiguration
+    internal static class CecilExtensions
     {
-#if !NETSTANDARD1_6
-
-        private static string _engineDirectory;
-        public static string EngineDirectory
+        public static List<CustomAttribute> GetAttributes(this TypeDefinition type, string fullName)
         {
-            get
-            {
-                if (_engineDirectory == null)
-                    _engineDirectory =
-                        AssemblyHelper.GetDirectoryName(Assembly.GetExecutingAssembly());
+            var attributes = new List<CustomAttribute>();
 
-                return _engineDirectory;
+            foreach (CustomAttribute attr in type.CustomAttributes)
+            {
+                if (attr.AttributeType.FullName == fullName)
+                    attributes.Add(attr);
             }
+
+            return attributes;
         }
 
-#endif
-
-        private static string _applicationDirectory;
-        public static string ApplicationDirectory
+        public static CustomAttribute GetAttribute(this TypeDefinition type, string fullName)
         {
-            get
+            foreach (CustomAttribute attr in type.CustomAttributes)
             {
-                if (_applicationDirectory == null)
-                {
-                    _applicationDirectory = Path.Combine(
-#if NETSTANDARD1_6
-                    Environment.GetEnvironmentVariable(RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "LocalAppData" : "HOME"),
-#else
-                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-#endif
-                        "NUnit");
-                }
-
-                return _applicationDirectory;
+                if (attr.AttributeType.FullName == fullName)
+                    return attr;
             }
+
+            return null;
+        }
+
+        public static object GetNamedArgument(this CustomAttribute attr, string name)
+        {
+            foreach (var property in attr.Properties)
+                if (property.Name == name)
+                    return property.Argument.Value;
+
+            return null;
         }
     }
 }

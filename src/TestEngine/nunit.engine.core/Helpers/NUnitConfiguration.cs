@@ -1,5 +1,5 @@
 // ***********************************************************************
-// Copyright (c) 2013 Charlie Poole, Rob Prouse
+// Copyright (c) 2011 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -8,10 +8,10 @@
 // distribute, sublicense, and/or sell copies of the Software, and to
 // permit persons to whom the Software is furnished to do so, subject to
 // the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be
 // included in all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 // EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 // MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -23,49 +23,52 @@
 
 using System;
 using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using Microsoft.Win32;
 using NUnit.Engine.Helpers;
-using NUnit.Engine.Internal;
 
-namespace NUnit.Engine.Services
+namespace NUnit.Engine.Helpers
 {
     /// <summary>
-    /// Summary description for UserSettingsService.
+    /// Provides static methods for accessing configuration info
     /// </summary>
-    public class SettingsService : SettingsStore, IService
+    public static class NUnitConfiguration
     {
-        private const string SETTINGS_FILE = "Nunit30Settings.xml";
+#if !NETSTANDARD1_6
 
-        public SettingsService(bool writeable)
-            : base(Path.Combine(NUnitConfiguration.ApplicationDirectory, SETTINGS_FILE), writeable) { }
-
-        public IServiceLocator ServiceContext { get; set; }
-
-        public ServiceStatus Status { get; private set; }
-
-        public void StartService()
+        private static string _engineDirectory;
+        public static string EngineDirectory
         {
-            try
+            get
             {
-                LoadSettings();
+                if (_engineDirectory == null)
+                    _engineDirectory =
+                        AssemblyHelper.GetDirectoryName(Assembly.GetExecutingAssembly());
 
-                Status = ServiceStatus.Started;
-            }
-            catch
-            {
-                Status = ServiceStatus.Error;
-                throw;
+                return _engineDirectory;
             }
         }
 
-        public void StopService()
+#endif
+
+        private static string _applicationDirectory;
+        public static string ApplicationDirectory
         {
-            try
+            get
             {
-                SaveSettings();
-            }
-            finally
-            {
-                Status = ServiceStatus.Stopped;
+                if (_applicationDirectory == null)
+                {
+                    _applicationDirectory = Path.Combine(
+#if NETSTANDARD1_6
+                    Environment.GetEnvironmentVariable(RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "LocalAppData" : "HOME"),
+#else
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+#endif
+                        "NUnit");
+                }
+
+                return _applicationDirectory;
             }
         }
     }

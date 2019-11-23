@@ -25,7 +25,7 @@
 using System.IO;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Internal.Tests
+namespace NUnit.Engine.Helpers
 {
     [TestFixture]
     public class AssemblyHelperTests
