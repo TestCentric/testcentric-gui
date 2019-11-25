@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2019 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -25,7 +25,7 @@ using System;
 using NUnit.Engine.Internal;
 using NUnit.Engine.Runners;
 
-namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests.Results
+namespace NUnit.Engine.Services.TestRunnerFactoryTests.Results
 {
 #if !NETCOREAPP
     internal static class Net20ExpectedRunnerResults

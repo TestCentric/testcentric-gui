@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
-namespace NUnit.Engine.Tests.Helpers
+namespace NUnit.Engine.TestUtilities
 {
     public static class StackEnumerator
     {

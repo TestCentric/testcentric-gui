@@ -31,7 +31,7 @@ using NUnit.Framework;
 using NUnit.Engine.Extensibility;
 using NUnit.Engine.Helpers;
 
-namespace NUnit.Engine.Drivers.Tests
+namespace NUnit.Engine.Drivers
 {
     [TestOf(typeof(NUnitNetStandardDriver))]
     public class NUnitNetStandardDriverTests

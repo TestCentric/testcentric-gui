@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -25,7 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests
+namespace NUnit.Engine.Services.TestRunnerFactoryTests
 {
     internal class RunnerResultComparer : IEqualityComparer<RunnerResult>
     {

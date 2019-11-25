@@ -1,12 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Engine.Internal;
-using NUnit.Engine.Tests.Services.TestRunnerFactoryTests.Results;
+using NUnit.Engine.Services.TestRunnerFactoryTests.Results;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests.TestCases
+namespace NUnit.Engine.Services.TestRunnerFactoryTests.TestCases
 {
 #if !NETCOREAPP
     internal class Net20MixedProjectAndAssemblyTestCases

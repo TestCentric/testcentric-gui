@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2011 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -26,7 +26,7 @@ using System.Xml;
 using NUnit.Engine;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Services.Tests
+namespace NUnit.Engine.Services
 {
     public class TestFilterBuilderTests
     {

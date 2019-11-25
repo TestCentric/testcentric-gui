@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -25,7 +25,7 @@ using System;
 using System.Threading;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Tests
+namespace NUnit.Engine
 {
     [Explicit]
     public class HangingAppDomainFixture

@@ -28,7 +28,7 @@ using NUnit.Framework;
 using System.Drawing;
 #endif
 
-namespace NUnit.Engine.Internal.Tests
+namespace NUnit.Engine.Internal
 {
     [TestFixture]
     public class SettingsGroupTests

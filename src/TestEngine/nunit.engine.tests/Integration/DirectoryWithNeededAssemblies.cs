@@ -1,9 +1,9 @@
-﻿#if !NETCOREAPP1_1
+#if !NETCOREAPP1_1
 using System;
 using System.IO;
-using NUnit.Engine.Tests.Helpers;
+using NUnit.Engine.TestUtilities;
 
-namespace NUnit.Engine.Tests.Integration
+namespace NUnit.Engine.Integration
 {
     internal sealed class DirectoryWithNeededAssemblies : IDisposable
     {

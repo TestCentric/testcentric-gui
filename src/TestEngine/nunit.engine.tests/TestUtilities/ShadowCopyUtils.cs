@@ -1,4 +1,4 @@
-﻿#if !NETCOREAPP1_1
+#if !NETCOREAPP1_1
 
 using System;
 using System.Collections.Generic;
@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace NUnit.Engine.Tests.Helpers
+namespace NUnit.Engine.TestUtilities
 {
     public static class ShadowCopyUtils
     {

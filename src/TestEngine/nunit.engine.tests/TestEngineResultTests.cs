@@ -25,7 +25,7 @@ using System.Xml;
 using NUnit.Engine.Helpers;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Tests
+namespace NUnit.Engine
 {
     [TestFixture]
     public class TestEngineResultTests

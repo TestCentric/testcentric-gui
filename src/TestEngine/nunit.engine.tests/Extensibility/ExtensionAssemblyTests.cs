@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -24,10 +24,9 @@
 #if !NETCOREAPP1_1
 using System;
 using System.Reflection;
-using NUnit.Engine.Extensibility;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Tests.Extensibility
+namespace NUnit.Engine.Extensibility
 {
     public class ExtensionAssemblyTests
     {

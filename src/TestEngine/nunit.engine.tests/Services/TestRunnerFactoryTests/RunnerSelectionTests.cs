@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -24,13 +24,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Engine.Runners;
-using NUnit.Engine.Services;
-using NUnit.Engine.Services.Tests.Fakes;
-using NUnit.Engine.Tests.Services.TestRunnerFactoryTests.TestCases;
+using NUnit.Engine.Services.TestRunnerFactoryTests.TestCases;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests
+namespace NUnit.Engine.Services.TestRunnerFactoryTests
 {
+    using Fakes;
+
     /// <summary>
     /// Tests of ITestRunner tree structure for different combinations
     /// of TestPackage and PackageSettings. Some tests are overkill for

@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NUnit.Engine.Tests.Runners.Fakes
+namespace NUnit.Engine.Runners.Fakes
 {
     internal class EmptyDirectTestRunner : Engine.Runners.DirectTestRunner
     {

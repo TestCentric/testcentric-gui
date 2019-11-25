@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2019 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -24,7 +24,7 @@
 #if !NETCOREAPP1_1 && !NETCOREAPP2_0
 using System;
 
-namespace NUnit.Engine.Services.Tests
+namespace NUnit.Engine.Services
 {
     public partial class AgentStoreTests
     {
