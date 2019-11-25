@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2015 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -24,7 +24,7 @@
 using System;
 using NUnit.Engine.Internal;
 
-namespace NUnit.Engine.Services.Tests.Fakes
+namespace NUnit.Engine.Services.Fakes
 {
     public class FakeSettingsService : SettingsStore, IService
     {

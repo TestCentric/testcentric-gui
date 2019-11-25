@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
-namespace NUnit.Engine.Tests.Helpers
+namespace NUnit.Engine.TestUtilities
 {
-    public static class ProcessUtils
+    public static class ProcessRunner
     {
         public static ProcessResult Run(ProcessStartInfo startInfo)
         {

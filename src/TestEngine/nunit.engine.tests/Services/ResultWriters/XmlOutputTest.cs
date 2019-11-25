@@ -28,7 +28,7 @@ using System.IO;
 using System.Reflection;
 using NUnit.Engine.Helpers;
 
-namespace NUnit.Engine.Services.ResultWriters.Tests
+namespace NUnit.Engine.Services.ResultWriters
 {
     using Engine;
     using Engine.Internal;
