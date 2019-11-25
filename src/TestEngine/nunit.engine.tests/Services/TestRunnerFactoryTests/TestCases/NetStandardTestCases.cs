@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -25,7 +25,7 @@ using System.Collections.Generic;
 using NUnit.Engine.Runners;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests.TestCases
+namespace NUnit.Engine.Services.TestRunnerFactoryTests.TestCases
 {
 #if NETCOREAPP1_1 || NETCOREAPP2_1
     internal static class NetStandardTestCases

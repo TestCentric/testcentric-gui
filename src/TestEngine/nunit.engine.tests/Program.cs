@@ -1,8 +1,8 @@
-﻿#if !NET35
+#if !NET35
 using System.Reflection;
 using NUnitLite;
 
-namespace NUnit.Engine.Tests
+namespace NUnit.Engine
 {
     class Program
     {

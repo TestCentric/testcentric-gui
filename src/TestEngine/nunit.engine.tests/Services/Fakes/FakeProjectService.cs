@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2015 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -26,7 +26,7 @@ using System.Collections.Generic;
 using System.IO;
 using NUnit.Engine.Extensibility;
 
-namespace NUnit.Engine.Services.Tests.Fakes
+namespace NUnit.Engine.Services.Fakes
 {
     public class FakeProjectService : FakeService, IProjectService
     {

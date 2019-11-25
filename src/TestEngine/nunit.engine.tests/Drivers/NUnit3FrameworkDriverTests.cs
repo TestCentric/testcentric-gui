@@ -24,14 +24,13 @@
 #if !NETCOREAPP1_1 &&!NETCOREAPP2_1
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Xml;
 using NUnit.Engine.Helpers;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 using NUnit.Tests.Assemblies;
 
-namespace NUnit.Engine.Drivers.Tests
+namespace NUnit.Engine.Drivers
 {
     // Functional tests of the NUnitFrameworkDriver calling into the framework.
     public class NUnit3FrameworkDriverTests
