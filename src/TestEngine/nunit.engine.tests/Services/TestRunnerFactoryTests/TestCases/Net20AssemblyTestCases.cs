@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -26,10 +26,10 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Engine.Internal;
 using NUnit.Engine.Runners;
-using NUnit.Engine.Tests.Services.TestRunnerFactoryTests.Results;
+using NUnit.Engine.Services.TestRunnerFactoryTests.Results;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests.TestCases
+namespace NUnit.Engine.Services.TestRunnerFactoryTests.TestCases
 {
 #if !NETCOREAPP
     internal static class Net20AssemblyTestCases

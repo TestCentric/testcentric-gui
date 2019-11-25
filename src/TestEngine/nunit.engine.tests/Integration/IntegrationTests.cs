@@ -1,6 +1,6 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 
-namespace NUnit.Engine.Tests.Integration
+namespace NUnit.Engine.Integration
 {
     [TestFixture, Category("Integration")]
     public abstract class IntegrationTests

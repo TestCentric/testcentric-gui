@@ -1,9 +1,9 @@
-﻿#if !NETCOREAPP1_1 && !NETCOREAPP2_1
+#if !NETCOREAPP1_1 && !NETCOREAPP2_1
 using System.Diagnostics;
-using NUnit.Engine.Tests.Helpers;
+using NUnit.Engine.TestUtilities;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Tests.Integration
+namespace NUnit.Engine.Integration
 {
     public sealed class RemoteAgentTests : IntegrationTests
     {
@@ -15,7 +15,7 @@ namespace NUnit.Engine.Tests.Integration
             {
                 for (var times = 0; times < 3; times++)
                 {
-                    var result = ProcessUtils.Run(new ProcessStartInfo(runner.ConsoleExe, $"--explore \"{test.MockAssemblyDll}\""));
+                    var result = ProcessRunner.Run(new ProcessStartInfo(runner.ConsoleExe, $"--explore \"{test.MockAssemblyDll}\""));
                     Assert.That(result.StandardStreamData, Has.None.With.Property("Data").Contains("System.Net.Sockets.SocketException"));
                     Assert.That(result.StandardStreamData, Has.None.With.Property("IsError").True);
                     Assert.That(result, Has.Property("ExitCode").Zero);

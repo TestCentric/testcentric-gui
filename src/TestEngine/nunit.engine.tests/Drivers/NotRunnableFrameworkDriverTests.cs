@@ -29,7 +29,7 @@ using NUnit.Framework.Internal;
 using NUnit.Engine.Helpers;
 using NUnit.Engine.Extensibility;
 
-namespace NUnit.Engine.Drivers.Tests
+namespace NUnit.Engine.Drivers
 {
     // Functional tests of the NUnitFrameworkDriver calling into the framework.
     public abstract class NotRunnableFrameworkDriverTests

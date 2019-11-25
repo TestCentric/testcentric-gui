@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2014-2015 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -22,12 +22,10 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using NUnit.Engine.Runners;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Services.Tests
+namespace NUnit.Engine.Services
 {
     using Fakes;
 

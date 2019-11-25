@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Threading;
 
-namespace NUnit.Engine.Tests.Helpers
+namespace NUnit.Engine.TestUtilities
 {
     public static class On
     {

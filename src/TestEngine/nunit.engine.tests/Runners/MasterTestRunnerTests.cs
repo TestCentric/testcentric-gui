@@ -30,9 +30,9 @@ using NUnit.Framework;
 using NUnit.Tests.Assemblies;
 using NUnit.Engine.Helpers;
 using NUnit.Engine.Services;
-using NUnit.Engine.Services.Tests.Fakes;
+using NUnit.Engine.Services.Fakes;
 
-namespace NUnit.Engine.Runners.Tests
+namespace NUnit.Engine.Runners
 {
     [TestFixtureSource(nameof(FixtureData))]
     public class MasterTestRunnerTests : ITestEventListener

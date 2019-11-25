@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -25,10 +25,9 @@
 #if !NETCOREAPP1_1 && !NETCOREAPP2_1
 using System;
 using NSubstitute;
-using NUnit.Engine.Extensibility;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Tests.Extensibility
+namespace NUnit.Engine.Extensibility
 {
     internal class ExtensionSelectorTests
     {

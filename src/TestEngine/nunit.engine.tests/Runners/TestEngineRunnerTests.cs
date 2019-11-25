@@ -29,7 +29,7 @@ using NUnit.Engine.Helpers;
 using NUnit.Framework;
 using NUnit.Tests.Assemblies;
 
-namespace NUnit.Engine.Runners.Tests
+namespace NUnit.Engine.Runners
 {
     // Temporarily commenting out Process tests due to
     // intermittent errors, probably due to the test

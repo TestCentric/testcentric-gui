@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -26,7 +26,7 @@ using System.Collections.Generic;
 using System.Text;
 using NUnit.Engine.Runners;
 
-namespace NUnit.Engine.Tests.Services.TestRunnerFactoryTests
+namespace NUnit.Engine.Services.TestRunnerFactoryTests
 {
     public class RunnerResult
     {
