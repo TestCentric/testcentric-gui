@@ -417,22 +417,22 @@ namespace NUnit.Engine.Services
             {
 
                 IRuntimeFramework assemblyTargetFramework = null;
-#if !NETSTANDARD2_0
-                var currentFramework = RuntimeFramework.CurrentFramework;
-                assemblyTargetFramework = assembly.TargetFramework;
-                if (!currentFramework.CanLoad(assemblyTargetFramework))
-                {
-                    if (!assembly.FromWildCard)
-                    {
-                        throw new NUnitEngineException($"Extension {assembly.FilePath} targets {assemblyTargetFramework.DisplayName}, which is not available.");
-                    }
-                    else
-                    {
-                        log.Info($"Assembly {assembly.FilePath} targets {assemblyTargetFramework.DisplayName}, which is not available. Assembly found via wildcard.");
-                        return;
-                    }
-                }
-#endif
+//#if !NETSTANDARD2_0
+//                var currentFramework = FrameworkFinder.CurrentFramework;
+//                assemblyTargetFramework = assembly.TargetFramework;
+//                if (!currentFramework.CanLoad(assemblyTargetFramework))
+//                {
+//                    if (!assembly.FromWildCard)
+//                    {
+//                        throw new NUnitEngineException($"Extension {assembly.FilePath} targets {assemblyTargetFramework.DisplayName}, which is not available.");
+//                    }
+//                    else
+//                    {
+//                        log.Info($"Assembly {assembly.FilePath} targets {assemblyTargetFramework.DisplayName}, which is not available. Assembly found via wildcard.");
+//                        return;
+//                    }
+//                }
+//#endif
 
                 foreach (var type in assembly.MainModule.GetTypes())
                 {
