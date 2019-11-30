@@ -48,6 +48,8 @@ namespace NUnit.Engine.Services
 
         private readonly AgentStore _agents = new AgentStore();
 
+        private IRuntimeFrameworkService _runtimeService;
+
         public TestAgency() : this( "TestAgency", 0 ) { }
 
         public TestAgency( string uri, int port ) : base( uri, port ) { }
@@ -130,7 +132,7 @@ namespace NUnit.Engine.Services
 
             log.Info("Getting {0} agent for use under {1}", useX86Agent ? "x86" : "standard", targetRuntime);
 
-            if (!targetRuntime.IsAvailable)
+            if (!_runtimeService.IsAvailable(targetRuntime.Id))
                 throw new ArgumentException(
                     string.Format("The {0} framework is not available", targetRuntime),
                     "framework");
@@ -155,7 +157,7 @@ namespace NUnit.Engine.Services
             switch( targetRuntime.Runtime )
             {
                 case RuntimeType.Mono:
-                    p.StartInfo.FileName = RuntimeFramework.MonoExePath;
+                    p.StartInfo.FileName = targetRuntime.MonoExePath;
                     string monoOptions = "--runtime=v" + targetRuntime.ClrVersion.ToString(3);
                     if (debugTests || debugAgent) monoOptions += " --debug";
                     p.StartInfo.Arguments = string.Format("{0} \"{1}\" {2}", monoOptions, agentExePath, arglist);
@@ -279,6 +281,10 @@ namespace NUnit.Engine.Services
 
         public void StartService()
         {
+            _runtimeService = ServiceContext.GetService<IRuntimeFrameworkService>();
+            if (_runtimeService == null)
+                Status = ServiceStatus.Error;
+            else
             try
             {
                 Start();
