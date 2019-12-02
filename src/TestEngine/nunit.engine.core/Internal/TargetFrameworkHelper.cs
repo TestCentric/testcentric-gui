@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -23,6 +23,7 @@
 
 
 using System;
+using System.Runtime.Versioning;
 using Mono.Cecil;
 
 namespace NUnit.Engine.Internal
