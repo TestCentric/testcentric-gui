@@ -25,6 +25,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Runtime.Versioning;
 using Microsoft.Win32;
 
 namespace NUnit.Engine
@@ -80,6 +81,20 @@ namespace NUnit.Engine
             Profile = profile;
 
             DisplayName = GetDefaultDisplayName(runtime, FrameworkVersion, profile);
+
+            // TODO: Expand to other frameworks. Consider use of a pseudo
+            // FrameworkName to represent Any Version or Runtime
+            if (FrameworkVersion != DefaultVersion)
+                switch (Runtime)
+                {
+                    case RuntimeType.Net:
+                    case RuntimeType.Mono:
+                        FrameworkName = new FrameworkName(".Net Framework", FrameworkVersion);
+                        break;
+                    default:
+                    case RuntimeType.Any:
+                        break;
+                }
         }
 
         private void InitFromFrameworkVersion(Version version)
@@ -232,15 +247,14 @@ namespace NUnit.Engine
         }
 
         /// <summary>
-        /// The version of Mono in use or null if no Mono runtime
-        /// is available on this machine.
+        /// The version of Mono in use or null if runtime type is not Mono.
         /// </summary>
         /// <value>The mono version.</value>
         public Version MonoVersion { get; set; }
 
         /// <summary>
         /// The install directory where the version of mono in
-        /// use is located. Null if no Mono runtime is present.
+        /// use is located. Null if this is not a Mono runtime.
         /// </summary>
         public string MonoPrefix { get; set; }
 
@@ -280,6 +294,8 @@ namespace NUnit.Engine
                 }
             }
         }
+
+        public FrameworkName FrameworkName { get; private set; }
 
         /// <summary>
         /// The type of this runtime framework
