@@ -349,6 +349,33 @@ namespace NUnit.Engine.Services
                     _availableRuntimes.Add(new RuntimeFramework(RuntimeType.Net, new Version("1.0." + build)));
         }
 
+        private struct MinimumRelease
+        {
+            public readonly int Release;
+            public readonly Version Version;
+
+            public MinimumRelease(int release, Version version)
+            {
+                Release = release;
+                Version = version;
+            }
+        }
+
+        private static readonly MinimumRelease[] ReleaseTable = new MinimumRelease[]
+        {
+            // TODO: Make 3-component versions work correctly
+            new MinimumRelease(378389, new Version(4, 5)),
+            //new MinimumRelease(378675, new Version(4, 5, 1)),
+            //new MinimumRelease(379893, new Version(4, 5, 2)),
+            new MinimumRelease(393295, new Version(4, 6)),
+            //new MinimumRelease(394254, new Version(4, 6, 1)),
+            //new MinimumRelease(394802, new Version(4, 6, 2)),
+            new MinimumRelease(460798, new Version(4, 7)),
+            //new MinimumRelease(461308, new Version(4, 7, 1)),
+            //new MinimumRelease(461808, new Version(4, 7, 2)),
+            new MinimumRelease(528040, new Version(4, 8))
+        };
+
         private void FindDotNetFourFrameworkVersions(RegistryKey versionKey)
         {
             foreach (string profile in new string[] { "Full", "Client" })
@@ -361,8 +388,9 @@ namespace NUnit.Engine.Services
                     _availableRuntimes.Add(new RuntimeFramework(RuntimeType.Net, new Version(4, 0), profile));
 
                     var release = (int)profileKey.GetValue("Release", 0);
-                    if (release > 0) // TODO: Other higher versions?
-                        _availableRuntimes.Add(new RuntimeFramework(RuntimeType.Net, new Version(4, 5)));
+                    foreach (var entry in ReleaseTable)
+                        if (release >= entry.Release)
+                            _availableRuntimes.Add(new RuntimeFramework(RuntimeType.Net, entry.Version));
 
                     break;     //If full profile found don't check for client profile
                 }
