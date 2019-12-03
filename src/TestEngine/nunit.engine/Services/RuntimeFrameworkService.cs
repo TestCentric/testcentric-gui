@@ -333,8 +333,8 @@ namespace NUnit.Engine.Services
                         }
                         else if (CheckInstallDword(versionKey))
                         {
-                            // Versions 1.1 through 3.5
-                            _availableRuntimes.Add(new RuntimeFramework(RuntimeType.Net, new Version(name.Substring(1))));
+                            // Versons 1.1, 2.0, 3.0 and 3.5 are possible here
+                            _availableRuntimes.Add(new RuntimeFramework(RuntimeType.Net, new Version(name.Substring(1, 3))));
                         }
                     }
                 }

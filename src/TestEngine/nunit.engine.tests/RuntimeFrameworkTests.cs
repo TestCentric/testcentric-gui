@@ -147,10 +147,6 @@ namespace NUnit.Engine
                 new RuntimeFramework(RuntimeType.Net, new Version(2,0,40607)))
                 .Returns(false),
             new TestCaseData(
-                new RuntimeFramework(RuntimeType.Mono, new Version(1,1)), // non-existent version but it works
-                new RuntimeFramework(RuntimeType.Mono, new Version(1,0)))
-                .Returns(true),
-            new TestCaseData(
                 new RuntimeFramework(RuntimeType.Mono, new Version(2,0)),
                 new RuntimeFramework(RuntimeType.Any, new Version(2,0)))
                 .Returns(true),
