@@ -23,6 +23,7 @@
 
 #if !NETCOREAPP1_1 && !NETCOREAPP2_1
 using System;
+using System.Collections.Generic;
 using System.IO;
 using NUnit.Framework;
 
@@ -77,6 +78,23 @@ namespace NUnit.Engine.Services
                 Console.WriteLine("Available: {0}", framework.DisplayName);
         }
 
+        [Test]
+        public void CurrentFrameworkMustBeAvailable()
+        {
+            var current = RuntimeFramework.CurrentFramework;
+            Console.WriteLine("Current framework is {0} ({1})", current.DisplayName, current.Id);
+            Assert.That(_runtimeService.IsAvailable(current), "{0} not available", current);
+        }
+
+        [Test]
+        public void AvailableFrameworksListContainsNoDuplicates()
+        {
+            var names = new List<string>();
+            foreach (var framework in _runtimeService.AvailableRuntimes)
+                names.Add(framework.DisplayName);
+            Assert.That(names, Is.Unique);
+        }
+
         [TestCase("mono", 4, 5, "net-4.5")]
         [TestCase("net", 4, 0, "net-4.5")]
         [TestCase("net", 4, 5, "net-4.5")]
@@ -95,10 +113,6 @@ namespace NUnit.Engine.Services
         [Test]
         public void RuntimeFrameworkIsSetForSubpackages()
         {
-            //Runtime Service verifies that requested frameworks are available, therefore this test can only currently be run on platforms with both CLR v2 and v4 available
-            Assume.That(new RuntimeFramework(RuntimeType.Net, new Version("2.0.50727")), Has.Property(nameof(RuntimeFramework.IsAvailable)).True);
-            Assume.That(new RuntimeFramework(RuntimeType.Net, new Version("4.0.30319")), Has.Property(nameof(RuntimeFramework.IsAvailable)).True);
-
             var topLevelPackage = new TestPackage(new [] {"a.dll", "b.dll"});
 
             var net20Package = topLevelPackage.SubPackages[0];
@@ -106,13 +120,27 @@ namespace NUnit.Engine.Services
             var net40Package = topLevelPackage.SubPackages[1];
             net40Package.Settings.Add(InternalEnginePackageSettings.ImageRuntimeVersion, new Version("4.0.30319"));
 
+            var platform = Environment.OSVersion.Platform;
+
             _runtimeService.SelectRuntimeFramework(topLevelPackage);
 
             Assert.Multiple(() =>
             {
-                Assert.That(net20Package.Settings[EnginePackageSettings.RuntimeFramework], Is.EqualTo("net-2.0"));
-                Assert.That(net40Package.Settings[EnginePackageSettings.RuntimeFramework], Is.EqualTo("net-4.0"));
-                Assert.That(topLevelPackage.Settings[EnginePackageSettings.RuntimeFramework], Is.EqualTo("net-4.0"));
+                // HACK: this test will pass on a windows system with .NET 2.0 and .NET 4.0 installed or on a 
+                // linux system with a newer version of Mono with no 2.0 profile.
+                // TODO: Test should not depend on the availability of specific runtimes
+                if (platform == PlatformID.Win32NT)
+                {
+                    Assert.That(net20Package.Settings[EnginePackageSettings.RuntimeFramework], Is.EqualTo("net-2.0"));
+                    Assert.That(net40Package.Settings[EnginePackageSettings.RuntimeFramework], Is.EqualTo("net-4.0"));
+                    Assert.That(topLevelPackage.Settings[EnginePackageSettings.RuntimeFramework], Is.EqualTo("net-4.0"));
+                }
+                else
+                {
+                    Assert.That(net20Package.Settings[EnginePackageSettings.RuntimeFramework], Is.EqualTo("mono-4.0"));
+                    Assert.That(net40Package.Settings[EnginePackageSettings.RuntimeFramework], Is.EqualTo("mono-4.0"));
+                    Assert.That(topLevelPackage.Settings[EnginePackageSettings.RuntimeFramework], Is.EqualTo("mono-4.0"));
+                }
             });
         }
     }
