@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -63,6 +63,7 @@ namespace NUnit.Engine.Extensibility
 #if !NETSTANDARD2_0
         public RuntimeFramework TargetFramework
         {
+            // TODO: Construct from CLR Version?
             get { return new RuntimeFramework(RuntimeType.Any, _targetFrameworkHelper.TargetRuntimeVersion); }
         }
 #endif
