@@ -378,8 +378,7 @@ namespace NUnit.Engine.Services
         {
             if (RuntimeFramework.CurrentFramework.Runtime == RuntimeType.Mono)
                 UseCurrentMonoFramework();
-            else
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            else if (Environment.OSVersion.Platform == PlatformID.Win32NT)
                 FindBestMonoFrameworkOnWindows();
         }
 
