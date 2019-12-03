@@ -1,5 +1,5 @@
 // ***********************************************************************
-// Copyright (c) 2011 Charlie Poole, Rob Prouse
+// Copyright (c) 2011-2019 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -23,15 +23,17 @@
 
 #if !NETCOREAPP1_1 && !NETCOREAPP2_1
 using System;
-using System.Collections.Generic;
+using System.Runtime.Versioning;
 using NUnit.Framework;
 
 namespace NUnit.Engine
 {
+    using Helpers;
+
     [TestFixture]
     public class RuntimeFrameworkTests
     {
-        static RuntimeType currentRuntime =
+        static readonly RuntimeType CURRENT_RUNTIME =
             Type.GetType("Mono.Runtime", false) != null
                 ? RuntimeType.Mono
                 : RuntimeType.Net;
@@ -41,7 +43,7 @@ namespace NUnit.Engine
         {
             RuntimeFramework framework = RuntimeFramework.CurrentFramework;
 
-            Assert.That(framework.Runtime, Is.EqualTo(currentRuntime));
+            Assert.That(framework.Runtime, Is.EqualTo(CURRENT_RUNTIME));
             Assert.That(framework.ClrVersion, Is.EqualTo(Environment.Version));
         }
 
@@ -51,42 +53,6 @@ namespace NUnit.Engine
             Assert.That(RuntimeFramework.CurrentFramework.ClrVersion.Build, Is.GreaterThan(0));
         }
 
-        [Test]
-        public void CurrentFrameworkMustBeAvailable()
-        {
-            var current = RuntimeFramework.CurrentFramework;
-            Console.WriteLine("Current framework is {0} ({1})", current.DisplayName, current.Id);
-            Assert.That(current.IsAvailable, "{0} not available", current);
-        }
-
-        [Test]
-        public void AvailableFrameworksList()
-        {
-            RuntimeFramework[] available = RuntimeFramework.AvailableFrameworks;
-            Assert.That(RuntimeFramework.AvailableFrameworks.Length, Is.GreaterThan(0) );
-            foreach (var framework in RuntimeFramework.AvailableFrameworks)
-                Console.WriteLine("Available: {0}", framework.DisplayName);
-        }
-
-        [Test]
-        public void AvailableFrameworksList_IncludesCurrentFramework()
-        {
-            foreach (var framework in RuntimeFramework.AvailableFrameworks)
-                if (RuntimeFramework.CurrentFramework.Supports(framework))
-                    return;
-
-            Assert.Fail("CurrentFramework not listed as available");
-        }
-
-        [Test]
-        public void AvailableFrameworksList_ContainsNoDuplicates()
-        {
-            var names = new List<string>();
-            foreach (var framework in RuntimeFramework.AvailableFrameworks)
-                names.Add(framework.DisplayName);
-            Assert.That(names, Is.Unique);
-        }
-
         [TestCaseSource(nameof(frameworkData))]
         public void CanCreateUsingFrameworkVersion(FrameworkData data)
         {
@@ -94,6 +60,7 @@ namespace NUnit.Engine
             Assert.That(framework.Runtime, Is.EqualTo(data.runtime));
             Assert.That(framework.FrameworkVersion, Is.EqualTo(data.frameworkVersion));
             Assert.That(framework.ClrVersion, Is.EqualTo(data.clrVersion));
+            Assert.That(framework.FrameworkName, Is.EqualTo(data.frameworkName));
         }
 
         [TestCaseSource(nameof(frameworkData))]
@@ -105,6 +72,7 @@ namespace NUnit.Engine
             Assert.That(framework.Runtime, Is.EqualTo(data.runtime));
             Assert.That(framework.FrameworkVersion, Is.EqualTo(data.frameworkVersion));
             Assert.That(framework.ClrVersion, Is.EqualTo(data.clrVersion));
+            Assert.That(framework.FrameworkName, Is.EqualTo(data.frameworkName));
         }
 
         [TestCaseSource(nameof(frameworkData))]
@@ -113,6 +81,7 @@ namespace NUnit.Engine
             RuntimeFramework framework = RuntimeFramework.Parse(data.representation);
             Assert.That(framework.Runtime, Is.EqualTo(data.runtime));
             Assert.That(framework.ClrVersion, Is.EqualTo(data.clrVersion));
+            Assert.That(framework.FrameworkName, Is.EqualTo(data.frameworkName));
         }
 
         [TestCaseSource(nameof(frameworkData))]
@@ -238,15 +207,19 @@ namespace NUnit.Engine
             public Version clrVersion;
             public string representation;
             public string displayName;
+            public FrameworkName frameworkName;
 
             public FrameworkData(RuntimeType runtime, Version frameworkVersion, Version clrVersion,
-                string representation, string displayName)
+                string representation, string displayName, string frameworkName)
             {
                 this.runtime = runtime;
                 this.frameworkVersion = frameworkVersion;
                 this.clrVersion = clrVersion;
                 this.representation = representation;
                 this.displayName = displayName;
+                this.frameworkName = frameworkName != null
+                    ? new FrameworkName(frameworkName)
+                    : null;
             }
 
             public override string ToString()
@@ -257,30 +230,30 @@ namespace NUnit.Engine
 
 #pragma warning disable 414
         static FrameworkData[] frameworkData = new FrameworkData[] {
-            new FrameworkData(RuntimeType.Net, new Version(1,0), new Version(1,0,3705), "net-1.0", ".NET 1.0"),
+            new FrameworkData(RuntimeType.Net, new Version(1,0), new Version(1,0,3705), "net-1.0", ".NET 1.0", ".Net Framework,Version=v1.0"),
             //new FrameworkData(RuntimeType.Net, new Version(1,0,3705), new Version(1,0,3705), "net-1.0.3705", "Net 1.0.3705"),
             //new FrameworkData(RuntimeType.Net, new Version(1,0), new Version(1,0,3705), "net-1.0.3705", "Net 1.0.3705"),
-            new FrameworkData(RuntimeType.Net, new Version(1,1), new Version(1,1,4322), "net-1.1", ".NET 1.1"),
+            new FrameworkData(RuntimeType.Net, new Version(1,1), new Version(1,1,4322), "net-1.1", ".NET 1.1", ".Net Framework,Version=v1.1"),
             //new FrameworkData(RuntimeType.Net, new Version(1,1,4322), new Version(1,1,4322), "net-1.1.4322", "Net 1.1.4322"),
-            new FrameworkData(RuntimeType.Net, new Version(2,0), new Version(2,0,50727), "net-2.0", ".NET 2.0"),
+            new FrameworkData(RuntimeType.Net, new Version(2,0), new Version(2,0,50727), "net-2.0", ".NET 2.0", ".Net Framework,Version=2.0"),
             //new FrameworkData(RuntimeType.Net, new Version(2,0,40607), new Version(2,0,40607), "net-2.0.40607", "Net 2.0.40607"),
             //new FrameworkData(RuntimeType.Net, new Version(2,0,50727), new Version(2,0,50727), "net-2.0.50727", "Net 2.0.50727"),
-            new FrameworkData(RuntimeType.Net, new Version(3,0), new Version(2,0,50727), "net-3.0", ".NET 3.0"),
-            new FrameworkData(RuntimeType.Net, new Version(3,5), new Version(2,0,50727), "net-3.5", ".NET 3.5"),
-            new FrameworkData(RuntimeType.Net, new Version(4,0), new Version(4,0,30319), "net-4.0", ".NET 4.0"),
-            new FrameworkData(RuntimeType.Net, RuntimeFramework.DefaultVersion, RuntimeFramework.DefaultVersion, "net", ".NET"),
-            new FrameworkData(RuntimeType.Mono, new Version(1,0), new Version(1,1,4322), "mono-1.0", "Mono 1.0"),
-            new FrameworkData(RuntimeType.Mono, new Version(2,0), new Version(2,0,50727), "mono-2.0", "Mono 2.0"),
+            new FrameworkData(RuntimeType.Net, new Version(3,0), new Version(2,0,50727), "net-3.0", ".NET 3.0", ".Net Framework,Version=3.0"),
+            new FrameworkData(RuntimeType.Net, new Version(3,5), new Version(2,0,50727), "net-3.5", ".NET 3.5", ".Net Framework,Version=3.5"),
+            new FrameworkData(RuntimeType.Net, new Version(4,0), new Version(4,0,30319), "net-4.0", ".NET 4.0", ".Net Framework,Version=4.0"),
+            new FrameworkData(RuntimeType.Net, RuntimeFramework.DefaultVersion, RuntimeFramework.DefaultVersion, "net", ".NET", null),
+            new FrameworkData(RuntimeType.Mono, new Version(1,0), new Version(1,1,4322), "mono-1.0", "Mono 1.0", ".Net Framework,Version=1.0"),
+            new FrameworkData(RuntimeType.Mono, new Version(2,0), new Version(2,0,50727), "mono-2.0", "Mono 2.0", ".Net Framework,Version=2.0"),
             //new FrameworkData(RuntimeType.Mono, new Version(2,0,50727), new Version(2,0,50727), "mono-2.0.50727", "Mono 2.0.50727"),
-            new FrameworkData(RuntimeType.Mono, new Version(3,5), new Version(2,0,50727), "mono-3.5", "Mono 3.5"),
-            new FrameworkData(RuntimeType.Mono, new Version(4,0), new Version(4,0,30319), "mono-4.0", "Mono 4.0"),
-            new FrameworkData(RuntimeType.Mono, RuntimeFramework.DefaultVersion, RuntimeFramework.DefaultVersion, "mono", "Mono"),
-            new FrameworkData(RuntimeType.Any, new Version(1,1), new Version(1,1,4322), "v1.1", "v1.1"),
-            new FrameworkData(RuntimeType.Any, new Version(2,0), new Version(2,0,50727), "v2.0", "v2.0"),
+            new FrameworkData(RuntimeType.Mono, new Version(3,5), new Version(2,0,50727), "mono-3.5", "Mono 3.5", ".Net Framework,Version=3.5"),
+            new FrameworkData(RuntimeType.Mono, new Version(4,0), new Version(4,0,30319), "mono-4.0", "Mono 4.0", ".Net Framework,Version=4.0"),
+            new FrameworkData(RuntimeType.Mono, RuntimeFramework.DefaultVersion, RuntimeFramework.DefaultVersion, "mono", "Mono", null),
+            new FrameworkData(RuntimeType.Any, new Version(1,1), new Version(1,1,4322), "v1.1", "v1.1", null),
+            new FrameworkData(RuntimeType.Any, new Version(2,0), new Version(2,0,50727), "v2.0", "v2.0", null),
             //new FrameworkData(RuntimeType.Any, new Version(2,0,50727), new Version(2,0,50727), "v2.0.50727", "v2.0.50727"),
-            new FrameworkData(RuntimeType.Any, new Version(3,5), new Version(2,0,50727), "v3.5", "v3.5"),
-            new FrameworkData(RuntimeType.Any, new Version(4,0), new Version(4,0,30319), "v4.0", "v4.0"),
-            new FrameworkData(RuntimeType.Any, RuntimeFramework.DefaultVersion, RuntimeFramework.DefaultVersion, "any", "Any")
+            new FrameworkData(RuntimeType.Any, new Version(3,5), new Version(2,0,50727), "v3.5", "v3.5", null),
+            new FrameworkData(RuntimeType.Any, new Version(4,0), new Version(4,0,30319), "v4.0", "v4.0", null),
+            new FrameworkData(RuntimeType.Any, RuntimeFramework.DefaultVersion, RuntimeFramework.DefaultVersion, "any", "Any", null)
         };
 #pragma warning restore 414
     }

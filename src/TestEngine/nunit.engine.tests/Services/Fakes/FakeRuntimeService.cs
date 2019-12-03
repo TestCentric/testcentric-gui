@@ -29,7 +29,7 @@ namespace NUnit.Engine.Services.Fakes
     {
         bool IRuntimeFrameworkService.IsAvailable(string framework)
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         string IRuntimeFrameworkService.SelectRuntimeFramework(TestPackage package)
