@@ -1,5 +1,5 @@
 // ***********************************************************************
-// Copyright (c) 2015 Charlie Poole, Rob Prouse
+// Copyright (c) 2019 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -21,7 +21,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-#if NET35
+#if NET20 || NET35
 using System;
 using System.Runtime.Versioning;
 using NUnit.Framework;
@@ -65,6 +65,7 @@ namespace NUnit.Engine.Compatibility
             Assert.Throws<ArgumentException>(() => new FrameworkName(arg));
         }
 
+        [Test]
         public static void ConstructFromStringThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>(() => new FrameworkName(null));

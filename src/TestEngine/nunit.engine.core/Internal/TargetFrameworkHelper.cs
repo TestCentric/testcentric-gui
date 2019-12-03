@@ -23,7 +23,6 @@
 
 
 using System;
-using System.Runtime.Versioning;
 using Mono.Cecil;
 
 namespace NUnit.Engine.Internal
