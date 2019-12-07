@@ -365,14 +365,14 @@ namespace NUnit.Engine.Services
         {
             // TODO: Make 3-component versions work correctly
             new MinimumRelease(378389, new Version(4, 5)),
-            //new MinimumRelease(378675, new Version(4, 5, 1)),
-            //new MinimumRelease(379893, new Version(4, 5, 2)),
+            new MinimumRelease(378675, new Version(4, 5, 1)),
+            new MinimumRelease(379893, new Version(4, 5, 2)),
             new MinimumRelease(393295, new Version(4, 6)),
-            //new MinimumRelease(394254, new Version(4, 6, 1)),
-            //new MinimumRelease(394802, new Version(4, 6, 2)),
+            new MinimumRelease(394254, new Version(4, 6, 1)),
+            new MinimumRelease(394802, new Version(4, 6, 2)),
             new MinimumRelease(460798, new Version(4, 7)),
-            //new MinimumRelease(461308, new Version(4, 7, 1)),
-            //new MinimumRelease(461808, new Version(4, 7, 2)),
+            new MinimumRelease(461308, new Version(4, 7, 1)),
+            new MinimumRelease(461808, new Version(4, 7, 2)),
             new MinimumRelease(528040, new Version(4, 8))
         };
 
