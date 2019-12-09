@@ -275,42 +275,6 @@ namespace TestCentric.Gui.Presenters
                     RunAllTests();
             };
 
-            _view.Move += (s, e) =>
-            {
-                if (!_view.Maximized)
-                {
-                    var location = _view.Location;
-
-                    switch (_view.DisplayFormat.SelectedItem)
-                    {
-                        case "Full":
-                        default:
-                            _settings.Gui.MainForm.Location = location;
-                            _settings.Gui.MainForm.Maximized = false;
-                            break;
-                        case "Mini":
-                            _settings.Gui.MiniForm.Location = location;
-                            _settings.Gui.MiniForm.Maximized = false;
-                            break;
-                    }
-                }
-            };
-
-            _view.Resize += (s, e) =>
-            {
-                if (!_view.Maximized)
-                {
-                    if (_view.DisplayFormat.SelectedItem == "Full")
-                    {
-                        _settings.Gui.MainForm.Size = _view.Size;
-                    }
-                    else
-                    {
-                        _settings.Gui.MiniForm.Size = _view.Size;
-                    }
-                }
-            };
-
             _view.SplitterPositionChanged += (s, e) =>
             {
                 _settings.Gui.MainForm.SplitPosition = _view.SplitterPosition;
@@ -336,6 +300,20 @@ namespace TestCentric.Gui.Presenters
 
                     if (CloseProject() == DialogResult.Cancel)
                         e.Cancel = true;
+                }
+
+                if (!e.Cancel)
+                {
+                    if (_settings.Gui.DisplayFormat == "Mini")
+                    {
+                        _settings.Gui.MiniForm.Location = _view.Location;
+                        _settings.Gui.MiniForm.Size = _view.Size;
+                    }
+                    else
+                    {
+                        _settings.Gui.MainForm.Location = _view.Location;
+                        _settings.Gui.MainForm.Size = _view.Size;
+                    }
                 }
             };
 
