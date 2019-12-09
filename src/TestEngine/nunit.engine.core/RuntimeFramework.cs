@@ -63,7 +63,7 @@ namespace NUnit.Engine
         /// <summary>
         /// Construct from a runtime type, version and profile. The version
         /// may be either a framework version or a CLR version. If a CLR
-        /// versionis provided, we try to deduce the framework version but
+        /// version is provided, we try to deduce the framework version but
         /// this may not always be successful, in which case a version of
         /// 0.0 is used.
         /// </summary>
