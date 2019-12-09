@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -34,6 +34,8 @@ namespace NUnit.Engine
         /// <summary>Microsoft .NET Framework</summary>
         Net,
         /// <summary>Mono</summary>
-        Mono
+        Mono,
+        /// <summary>NetCore</summary>
+        NetCore
     }
 }
