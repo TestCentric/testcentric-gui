@@ -149,7 +149,7 @@ namespace NUnit.Engine.Services
             var rt1 = f1.Runtime;
             var rt2 = f2.Runtime;
 
-            if (rt1 != RuntimeType.Any && rt2 != RuntimeType.Any && rt1 != rt2)
+            if (rt1 != Runtime.Any && rt2 != Runtime.Any && rt1 != rt2)
                 return false;
 
             var v1 = f1.ClrVersion;
@@ -189,14 +189,14 @@ namespace NUnit.Engine.Services
             }
             else
             {
-                requestedFramework = new RuntimeFramework(RuntimeType.Any, RuntimeFramework.DefaultVersion);
+                requestedFramework = new RuntimeFramework(Runtime.Any, RuntimeFramework.DefaultVersion);
                 log.Debug($"No specific framework requested for {package.Name}");
             }
 
-            RuntimeType targetRuntime = requestedFramework.Runtime;
+            Runtime targetRuntime = requestedFramework.Runtime;
             Version targetVersion = requestedFramework.FrameworkVersion;
 
-            if (targetRuntime == RuntimeType.Any)
+            if (targetRuntime == Runtime.Any)
                 targetRuntime = currentFramework.Runtime;
 
             if (targetVersion == RuntimeFramework.DefaultVersion)
@@ -334,7 +334,7 @@ namespace NUnit.Engine.Services
                         else if (CheckInstallDword(versionKey))
                         {
                             // Versons 1.1, 2.0, 3.0 and 3.5 are possible here
-                            _availableRuntimes.Add(new RuntimeFramework(RuntimeType.Net, new Version(name.Substring(1, 3))));
+                            _availableRuntimes.Add(new RuntimeFramework(Runtime.Net, new Version(name.Substring(1, 3))));
                         }
                     }
                 }
@@ -346,7 +346,7 @@ namespace NUnit.Engine.Services
             RegistryKey key = Registry.LocalMachine.OpenSubKey(@"Software\Microsoft\.NETFramework\policy\v1.0");
             if (key != null)
                 foreach (var build in key.GetValueNames())
-                    _availableRuntimes.Add(new RuntimeFramework(RuntimeType.Net, new Version("1.0." + build)));
+                    _availableRuntimes.Add(new RuntimeFramework(Runtime.Net, new Version("1.0." + build)));
         }
 
         private struct MinimumRelease
@@ -385,12 +385,12 @@ namespace NUnit.Engine.Services
 
                 if (CheckInstallDword(profileKey))
                 {
-                    _availableRuntimes.Add(new RuntimeFramework(RuntimeType.Net, new Version(4, 0), profile));
+                    _availableRuntimes.Add(new RuntimeFramework(Runtime.Net, new Version(4, 0), profile));
 
                     var release = (int)profileKey.GetValue("Release", 0);
                     foreach (var entry in ReleaseTable)
                         if (release >= entry.Release)
-                            _availableRuntimes.Add(new RuntimeFramework(RuntimeType.Net, entry.Version));
+                            _availableRuntimes.Add(new RuntimeFramework(Runtime.Net, entry.Version));
 
                     break;     //If full profile found don't check for client profile
                 }
@@ -404,7 +404,7 @@ namespace NUnit.Engine.Services
 
         private void FindDefaultMonoFramework()
         {
-            if (RuntimeFramework.CurrentFramework.Runtime == RuntimeType.Mono)
+            if (RuntimeFramework.CurrentFramework.Runtime == Runtime.Mono)
                 UseCurrentMonoFramework();
             else if (Environment.OSVersion.Platform == PlatformID.Win32NT)
                 FindBestMonoFrameworkOnWindows();
@@ -413,7 +413,7 @@ namespace NUnit.Engine.Services
         private void UseCurrentMonoFramework()
         {
             var current = RuntimeFramework.CurrentFramework;
-            Debug.Assert(current.Runtime == RuntimeType.Mono && current.MonoPrefix != null && current.MonoVersion != null);
+            Debug.Assert(current.Runtime == Runtime.Mono && current.MonoPrefix != null && current.MonoVersion != null);
 
             // Multiple profiles are no longer supported with Mono 4.0
             if (current.MonoVersion.Major < 4 && FindAllMonoProfiles(current.MonoVersion, current.MonoPrefix) > 0)
@@ -509,7 +509,7 @@ namespace NUnit.Engine.Services
 
         private void AddMonoFramework(Version frameworkVersion, Version monoVersion, string monoPrefix, string profile)
         {
-            var framework = new RuntimeFramework(RuntimeType.Mono, frameworkVersion, profile)
+            var framework = new RuntimeFramework(Runtime.Mono, frameworkVersion, profile)
             {
                 MonoVersion = monoVersion,
                 MonoPrefix = monoPrefix,
