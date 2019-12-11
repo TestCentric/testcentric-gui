@@ -108,7 +108,7 @@ namespace NUnit.Engine.Services
                 targetRuntime = RuntimeFramework.CurrentFramework;
             }
 
-            if (targetRuntime.Runtime == RuntimeType.Any)
+            if (targetRuntime.Runtime == Runtime.Any)
                 targetRuntime = new RuntimeFramework(RuntimeFramework.CurrentFramework.Runtime, targetRuntime.ClrVersion);
 
             bool useX86Agent = package.GetSetting(EnginePackageSettings.RunAsX86, false);
@@ -154,31 +154,29 @@ namespace NUnit.Engine.Services
 
             targetRuntime = ServiceContext.GetService<RuntimeFrameworkService>().GetBestAvailableFramework(targetRuntime);
 
-            switch( targetRuntime.Runtime )
+            if (targetRuntime.Runtime == Runtime.Mono)
             {
-                case RuntimeType.Mono:
-                    p.StartInfo.FileName = targetRuntime.MonoExePath;
-                    string monoOptions = "--runtime=v" + targetRuntime.ClrVersion.ToString(3);
-                    if (debugTests || debugAgent) monoOptions += " --debug";
-                    p.StartInfo.Arguments = string.Format("{0} \"{1}\" {2}", monoOptions, agentExePath, arglist);
-                    break;
-
-                case RuntimeType.Net:
-                    p.StartInfo.FileName = agentExePath;
-                    // Override the COMPLUS_Version env variable, this would cause CLR meta host to run a CLR of the specific version
-                    string envVar = "v" + targetRuntime.ClrVersion.ToString(3);
-                    p.StartInfo.EnvironmentVariables["COMPLUS_Version"] = envVar;
-                    // Leave a marker that we have changed this variable, so that the agent could restore it for any code or child processes running within the agent
-                    string cpvOriginal = Environment.GetEnvironmentVariable("COMPLUS_Version");
-                    p.StartInfo.EnvironmentVariables["TestAgency_COMPLUS_Version_Original"] = string.IsNullOrEmpty(cpvOriginal) ? "NULL" : cpvOriginal;
-                    p.StartInfo.Arguments = arglist;
-                    p.StartInfo.LoadUserProfile = loadUserProfile;
-                    break;
-
-                default:
-                    p.StartInfo.FileName = agentExePath;
-                    p.StartInfo.Arguments = arglist;
-                    break;
+                p.StartInfo.FileName = targetRuntime.MonoExePath;
+                string monoOptions = "--runtime=v" + targetRuntime.ClrVersion.ToString(3);
+                if (debugTests || debugAgent) monoOptions += " --debug";
+                p.StartInfo.Arguments = string.Format("{0} \"{1}\" {2}", monoOptions, agentExePath, arglist);
+            }
+            else if (targetRuntime.Runtime == Runtime.Net)
+            {
+                p.StartInfo.FileName = agentExePath;
+                // Override the COMPLUS_Version env variable, this would cause CLR meta host to run a CLR of the specific version
+                string envVar = "v" + targetRuntime.ClrVersion.ToString(3);
+                p.StartInfo.EnvironmentVariables["COMPLUS_Version"] = envVar;
+                // Leave a marker that we have changed this variable, so that the agent could restore it for any code or child processes running within the agent
+                string cpvOriginal = Environment.GetEnvironmentVariable("COMPLUS_Version");
+                p.StartInfo.EnvironmentVariables["TestAgency_COMPLUS_Version_Original"] = string.IsNullOrEmpty(cpvOriginal) ? "NULL" : cpvOriginal;
+                p.StartInfo.Arguments = arglist;
+                p.StartInfo.LoadUserProfile = loadUserProfile;
+            }
+            else
+            {
+                p.StartInfo.FileName = agentExePath;
+                p.StartInfo.Arguments = arglist;
             }
 
             p.Start();
