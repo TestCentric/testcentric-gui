@@ -30,8 +30,8 @@ using System.Reflection;
 using Microsoft.Win32;
 using Mono.Cecil;
 using NUnit.Common;
-using NUnit.Engine.Internal;
 using NUnit.Engine.Helpers;
+using NUnit.Engine.Internal;
 
 namespace NUnit.Engine.Services
 {
@@ -177,24 +177,43 @@ namespace NUnit.Engine.Services
             RuntimeFramework currentFramework = RuntimeFramework.CurrentFramework;
             log.Debug("Current framework is " + currentFramework);
 
-            string frameworkSetting = package.GetSetting(EnginePackageSettings.RuntimeFramework, "");
+            string requestedFrameworkSetting = package.GetSetting(EnginePackageSettings.RuntimeFramework, "");
 
-            RuntimeFramework requestedFramework;
-            if (frameworkSetting.Length > 0)
+            if (requestedFrameworkSetting.Length > 0)
             {
-                if (!RuntimeFramework.TryParse(frameworkSetting, out requestedFramework))
-                    throw new NUnitEngineException("Invalid or unknown framework requested: " + frameworkSetting);
+                RuntimeFramework requestedFramework;
+                if (!RuntimeFramework.TryParse(requestedFrameworkSetting, out requestedFramework))
+                    throw new NUnitEngineException("Invalid or unknown framework requested: " + requestedFrameworkSetting);
 
                 log.Debug($"Requested framework for {package.Name} is {requestedFramework}");
-            }
-            else
-            {
-                requestedFramework = new RuntimeFramework(Runtime.Any, RuntimeFramework.DefaultVersion);
-                log.Debug($"No specific framework requested for {package.Name}");
+
+                if (!IsAvailable(requestedFramework))
+                    throw new NUnitEngineException("Requested framework is not available: " + requestedFrameworkSetting);
+
+                return requestedFramework;
             }
 
-            Runtime targetRuntime = requestedFramework.Runtime;
-            Version targetVersion = requestedFramework.FrameworkVersion;
+            log.Debug($"No specific framework requested for {package.Name}");
+
+            string imageTargetFrameworkNameSetting = package.GetSetting(InternalEnginePackageSettings.ImageTargetFrameworkName, "");
+
+            Runtime targetRuntime = Runtime.Any;
+            Version targetVersion = RuntimeFramework.DefaultVersion;
+
+            if (imageTargetFrameworkNameSetting.Length > 0)
+            {
+                var imageTargetFrameworkName = new System.Runtime.Versioning.FrameworkName(imageTargetFrameworkNameSetting);
+
+                targetRuntime = Runtime.FromFrameworkIdentifier(imageTargetFrameworkName.Identifier);
+                if (targetRuntime == null)
+                    throw new NUnitEngineException("Unrecognized Target Framework Identifier: " + imageTargetFrameworkName.Identifier);
+
+                // TODO: temporary exception till we implement .NET Core
+                if (targetRuntime == Runtime.NetCore)
+                    throw new NotImplementedException("The GUI does not yet support .NET Core tests");
+
+                targetVersion = imageTargetFrameworkName.Version;
+            }
 
             if (targetRuntime == Runtime.Any)
                 targetRuntime = currentFramework.Runtime;
@@ -205,7 +224,7 @@ namespace NUnit.Engine.Services
             if (!IsAvailable(new RuntimeFramework(targetRuntime, targetVersion)))
             {
                 log.Debug("Preferred version {0} is not installed or this NUnit installation does not support it", targetVersion);
-                if (targetVersion < currentFramework.FrameworkVersion)
+                if (targetRuntime == currentFramework.Runtime && targetVersion < currentFramework.FrameworkVersion)
                     targetVersion = currentFramework.FrameworkVersion;
             }
 
