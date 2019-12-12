@@ -90,7 +90,7 @@ namespace NUnit.Engine
 
         [TestCaseSource(nameof(KNOWN_RUNTIMES))]
         public static void EqualityOperator(string name)
-        {
+        { 
             var rt1 = Runtime.Parse(name);
 
             var rt2 = Runtime.Parse(name);
@@ -98,6 +98,14 @@ namespace NUnit.Engine
             Assert.That(rt1 == rt1, "rt1 == rt1");
 #pragma warning restore 1718
             Assert.That(rt1 == rt2, "rt1 == rt2");
+        }
+
+        [Test]
+        public static void EqualityOperatorUsingNull()
+        {
+            Runtime rt = null;
+            Assert.That(rt == null, "rt == null");
+            Assert.That(null == rt, "null == rt");
         }
 
         [TestCaseSource(nameof(KNOWN_RUNTIMES))]

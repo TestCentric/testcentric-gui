@@ -109,6 +109,19 @@ namespace NUnit.Engine
             return new Runtime(runtimeType);
         }
 
+        public static Runtime FromFrameworkIdentifier(string s)
+        {
+            switch(s)
+            {
+                case ".NETFramework":
+                    return Runtime.Net;
+                case ".NETCoreApp":
+                    return Runtime.NetCore;
+                default:
+                    return null;
+            }
+        }
+
         public override string ToString()
         {
             return _runtimeType.ToString();
@@ -132,6 +145,12 @@ namespace NUnit.Engine
 
         public static bool operator ==(Runtime left, Runtime right)
         {
+            if (left is null)
+                return right is null;
+
+            if (right is null)
+                return false;
+
             return left._runtimeType == right._runtimeType;
         }
 
