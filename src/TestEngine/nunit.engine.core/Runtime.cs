@@ -89,6 +89,25 @@ namespace NUnit.Engine
 
         public string FrameworkIdentifier { get; private set; }
 
+        public bool Matches(Runtime targetRuntime)
+        {
+            var targetType = targetRuntime._runtimeType;
+
+            if (_runtimeType == RuntimeType.Any || targetType == RuntimeType.Any)
+                return true;
+
+            if (_runtimeType == targetType)
+                return true;
+
+            if (_runtimeType == RuntimeType.Net && targetType == RuntimeType.Mono)
+                return true;
+
+            if (_runtimeType == RuntimeType.Mono && targetType == RuntimeType.Net)
+                return true;
+
+            return false;
+        }
+
         /// <summary>
         /// Check to see if a Runtime of the supplied name exists
         /// </summary>
