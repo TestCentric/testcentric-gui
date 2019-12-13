@@ -149,7 +149,7 @@ namespace NUnit.Engine.Services
             var rt1 = f1.Runtime;
             var rt2 = f2.Runtime;
 
-            if (rt1 != Runtime.Any && rt2 != Runtime.Any && rt1 != rt2)
+            if (!rt1.Matches(rt2))
                 return false;
 
             var v1 = f1.ClrVersion;
@@ -200,7 +200,8 @@ namespace NUnit.Engine.Services
             Runtime targetRuntime = Runtime.Any;
             Version targetVersion = RuntimeFramework.DefaultVersion;
 
-            if (imageTargetFrameworkNameSetting.Length > 0)
+            // HACK: handling the TargetFrameworkName does not currently work outside of windows
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT && imageTargetFrameworkNameSetting.Length > 0)
             {
                 var imageTargetFrameworkName = new System.Runtime.Versioning.FrameworkName(imageTargetFrameworkNameSetting);
 
@@ -208,7 +209,7 @@ namespace NUnit.Engine.Services
                 if (targetRuntime == null)
                     throw new NUnitEngineException("Unrecognized Target Framework Identifier: " + imageTargetFrameworkName.Identifier);
 
-                // TODO: temporary exception till we implement .NET Core
+                // TODO: temporary exception thrown until we implement .NET Core
                 if (targetRuntime == Runtime.NetCore)
                     throw new NotImplementedException("The GUI does not yet support .NET Core tests");
 
