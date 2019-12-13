@@ -100,6 +100,29 @@ namespace TestCentric.Gui.Presenters
             _view.RunAsX86.CheckedChanged += LoadAsX86_CheckedChanged;
             _view.ExitCommand.Execute += () => Application.Exit();
 
+            _view.IncreaseFontCommand.Execute += () =>
+            {
+                ApplyFont(IncreaseFont(_settings.Gui.Font));
+            };
+
+            _view.DecreaseFontCommand.Execute += () =>
+            {
+                ApplyFont(DecreaseFont(_settings.Gui.Font));
+            };
+
+            _view.ChangeFontCommand.Execute += () =>
+            {
+                Font currentFont = _settings.Gui.Font;
+                Font newFont = _view.DialogManager.SelectFont(currentFont);
+                if (newFont != _settings.Gui.Font)
+                    ApplyFont(newFont);
+            };
+
+            _view.RestoreFontCommand.Execute += () =>
+            {
+                ApplyFont(Form.DefaultFont);
+            };
+
             _view.SettingsCommand.Execute += () =>
             {
                 using (var dialog = new SettingsDialog((Form)_view, _settings))
@@ -278,6 +301,21 @@ namespace TestCentric.Gui.Presenters
 
             if (_view.MessageDisplay.Ask(message) == DialogResult.Yes)
                 _model.ReloadTests();
+        }
+
+        private void ApplyFont(Font font)
+        {
+            _settings.Gui.Font = _view.Font = font;
+        }
+
+        private static Font IncreaseFont(Font font)
+        {
+            return new Font(font.FontFamily, font.SizeInPoints * 1.2f, font.Style);
+        }
+
+        private static Font DecreaseFont(Font font)
+        {
+            return new Font(font.FontFamily, font.SizeInPoints / 1.2f, font.Style);
         }
 
         #region Command Handlers
