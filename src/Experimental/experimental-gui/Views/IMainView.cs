@@ -52,6 +52,7 @@ namespace TestCentric.Gui.Views
         ICommand NewProjectCommand { get; }
         ICommand OpenProjectCommand { get; }
         ICommand CloseCommand { get; }
+        ICommand AddTestFilesCommand { get; }
         ICommand SaveCommand { get; }
         ICommand SaveAsCommand { get; }
         ICommand SaveResultsCommand { get; }

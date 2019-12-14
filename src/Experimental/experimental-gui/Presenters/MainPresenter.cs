@@ -89,6 +89,18 @@ namespace TestCentric.Gui.Presenters
             _view.NewProjectCommand.Execute += ProjectSaveNotYetImplemented; // _model.NewProject;
             _view.OpenProjectCommand.Execute += OnOpenProjectCommand;
             _view.CloseCommand.Execute += _model.UnloadTests;
+            _view.AddTestFilesCommand.Execute += () =>
+            {
+                var filesToAdd = _view.DialogManager.SelectMultipleFiles("Add Test Files", CreateOpenFileFilter());
+
+                if (filesToAdd.Count > 0)
+                {
+                    var files = new List<string>(_model.TestFiles);
+                    files.AddRange(filesToAdd);
+
+                    _model.LoadTests(files);
+                }
+            };
             _view.SaveCommand.Execute += ProjectSaveNotYetImplemented; // _model.SaveProject;
             _view.SaveAsCommand.Execute += ProjectSaveNotYetImplemented; // _model.SaveProject;
             _view.SaveResultsCommand.Execute += () => SaveResults();
