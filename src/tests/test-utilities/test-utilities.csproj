@@ -101,7 +101,6 @@
     </Compile>
     <Compile Include="Fakes\ExtensionService.cs" />
     <Compile Include="Fakes\FakeUserSettings.cs" />
-    <Compile Include="Fakes\RecentFilesService.cs" />
     <Compile Include="Fakes\AvailableRuntimesService.cs" />
     <Compile Include="Fakes\ResultService.cs" />
     <Compile Include="Fakes\ServiceLocator.cs" />
