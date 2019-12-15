@@ -68,13 +68,17 @@
       <Project>{b69057f3-0663-4763-a3ec-50d463578b94}</Project>
       <Name>TestCentric.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\TestEngine\nunit.engine.api\nunit.engine.api.csproj">
-      <Project>{44fddb13-129b-4595-92e1-447e1c065c07}</Project>
-      <Name>nunit.engine.api</Name>
+    <ProjectReference Include="..\..\TestEngine\testcentric.engine.api\testcentric.engine.api.csproj">
+      <Project>{97c6e923-621b-4b77-a084-4d2679152340}</Project>
+      <Name>testcentric.engine.api</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\TestEngine\nunit.engine\nunit.engine.csproj">
-      <Project>{ac7ed833-5c39-4ab6-8054-cdfdd82ddfbf}</Project>
-      <Name>nunit.engine</Name>
+    <ProjectReference Include="..\..\TestEngine\testcentric.engine.core\testcentric.engine.core.csproj">
+      <Project>{987b26c9-023d-4ecf-8a36-05f1b652b57f}</Project>
+      <Name>testcentric.engine.core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TestEngine\testcentric.engine\testcentric.engine.csproj">
+      <Project>{0bf010fe-fa9d-4131-a832-e88c12a131dd}</Project>
+      <Name>testcentric.engine</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\tests\mock-assembly\mock-assembly.csproj">
       <Project>{2e368281-3ba8-4050-b05e-0e0e43f8f446}</Project>

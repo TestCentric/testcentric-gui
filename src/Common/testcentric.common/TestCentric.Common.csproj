@@ -52,9 +52,9 @@
     <Compile Include="XmlHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\TestEngine\nunit.engine.api\nunit.engine.api.csproj">
-      <Project>{44fddb13-129b-4595-92e1-447e1c065c07}</Project>
-      <Name>nunit.engine.api</Name>
+    <ProjectReference Include="..\..\TestEngine\testcentric.engine.api\testcentric.engine.api.csproj">
+      <Project>{97c6e923-621b-4b77-a084-4d2679152340}</Project>
+      <Name>testcentric.engine.api</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

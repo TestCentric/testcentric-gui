@@ -50,7 +50,7 @@ choco install testcentric-gui --pre -s http://www.myget.org/F/testcentric
 
 Download the zip file from GitHub and unzip it into any convenient directory. To use it from the command line, you may add the directory to your path. You may also create a desktop shortcut to `testcentric.exe` and / or `tc-next.exe`.
 
-> _**NOTE:** The executables `testcentric.exe` and `tc-next.exe` are the only ones intended to be used directly. The `nunit-agent.exe` and `nunit-agent-x86.exe` executables are used internally by the NUnit engine._
+> _**NOTE:** The executables `testcentric.exe` and `tc-next.exe` are the only ones intended to be used directly. The `testcentric-agent.exe` and `testcentric-agent-x86.exe` executables are used internally by the NUnit engine._
 
 ### Installing Engine Extensions
 
