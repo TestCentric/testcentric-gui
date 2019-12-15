@@ -92,6 +92,7 @@ Setup(context =>
 {
 	// TODO: Make GitVersion work on Linux
 	if (IsRunningOnWindows())
+
 	{
 		var gitVersion = GitVersion();
 
@@ -151,6 +152,8 @@ Task("Clean")
     .Does(() =>
 {
     CleanDirectory(BIN_DIR);
+	CleanDirectory(ENGINE_BIN_DIR);
+	CleanDirectory(ENGINE_TESTS_BIN_DIR);
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -184,6 +187,8 @@ Task("Build")
     CopyFileToDirectory("LICENSE.txt", BIN_DIR);
     CopyFileToDirectory("NOTICES.txt", BIN_DIR);
     CopyFileToDirectory("CHANGES.txt", BIN_DIR);
+
+	CopyFiles(ENGINE_BIN_DIR + "testcentric-agent*", ENGINE_TESTS_BIN_DIR);
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -199,7 +204,7 @@ Task("Test")
         });
 
 	// Keeping this separate until binaries are all merged
-    NUnit3(ENGINE_TESTS_BIN_DIR + "nunit.engine.tests.dll", new NUnit3Settings {
+    NUnit3(ENGINE_TESTS_BIN_DIR + "testcentric.engine.tests.dll", new NUnit3Settings {
         NoResults = true
         });
 });
@@ -223,22 +228,22 @@ var baseFiles = new string[]
     BIN_DIR + "Experimental.Gui.Runner.dll",
     BIN_DIR + "nunit.uiexception.dll",
     BIN_DIR + "TestCentric.Gui.Model.dll",
-    BIN_DIR + "nunit.engine.api.dll",
-    BIN_DIR + "nunit.engine.core.dll",
-    BIN_DIR + "nunit.engine.dll",
+    BIN_DIR + "testcentric.engine.api.dll",
+    BIN_DIR + "testcentric.engine.core.dll",
+    BIN_DIR + "testcentric.engine.dll",
     BIN_DIR + "Mono.Cecil.dll",
-    BIN_DIR + "nunit-agent.exe",
-    BIN_DIR + "nunit-agent.exe.config",
-    BIN_DIR + "nunit-agent-x86.exe",
-    BIN_DIR + "nunit-agent-x86.exe.config"
+    BIN_DIR + "testcentric-agent.exe",
+    BIN_DIR + "testcentric-agent.exe.config",
+    BIN_DIR + "testcentric-agent-x86.exe",
+    BIN_DIR + "testcentric-agent-x86.exe.config"
 };
 
 var chocoFiles = new string[]
 {
     CHOCO_DIR + "VERIFICATION.txt",
-    CHOCO_DIR + "nunit-agent.exe.ignore",
-    CHOCO_DIR + "nunit-agent-x86.exe.ignore",
-    CHOCO_DIR + "nunit.choco.addins"
+    CHOCO_DIR + "testcentric-agent.exe.ignore",
+    CHOCO_DIR + "testcentric-agent-x86.exe.ignore",
+    CHOCO_DIR + "testcentric.choco.addins"
 };
 
 var pdbFiles = new string[]
