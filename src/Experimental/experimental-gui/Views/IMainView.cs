@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -52,6 +52,7 @@ namespace TestCentric.Gui.Views
         ICommand NewProjectCommand { get; }
         ICommand OpenProjectCommand { get; }
         ICommand CloseCommand { get; }
+        ICommand AddTestFilesCommand { get; }
         ICommand SaveCommand { get; }
         ICommand SaveAsCommand { get; }
         ICommand SaveResultsCommand { get; }
@@ -67,7 +68,10 @@ namespace TestCentric.Gui.Views
         // View Menu
         // Full Gui
         // Mini Gui
-        // Gui Font
+        ICommand IncreaseFontCommand { get; }
+        ICommand DecreaseFontCommand { get; }
+        ICommand ChangeFontCommand { get; }
+        ICommand RestoreFontCommand { get; }
         // Fixed Font
         // Status Bar
 

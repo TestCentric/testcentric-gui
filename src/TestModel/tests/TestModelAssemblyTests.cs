@@ -55,8 +55,8 @@ namespace TestCentric.Gui.Model
         public void EnsureAgentIsAvailable()
         {
             var testDir = TestContext.CurrentContext.TestDirectory;
-            Assert.That(File.Exists(Path.Combine(testDir, "nunit-agent.exe")), "Cannot find nunit-agent - may cause other test failures");
-            Assert.That(File.Exists(Path.Combine(testDir, "nunit-agent-x86.exe")), "Cannot find nunit-agent-x86 - may cause other test failures");
+            Assert.That(File.Exists(Path.Combine(testDir, "testcentric-agent.exe")), "Cannot find testcentric-agent - may cause other test failures");
+            Assert.That(File.Exists(Path.Combine(testDir, "testcentric-agent-x86.exe")), "Cannot find testcentric-agent-x86 - may cause other test failures");
         }
 
         [Test]

@@ -48,6 +48,7 @@ namespace TestCentric.Gui.Views
             NewProjectCommand = new ToolStripMenuElement(newProjectToolStripMenuItem);
             OpenProjectCommand = new ToolStripMenuElement(openProjectToolStripMenuItem);
             CloseCommand = new ToolStripMenuElement(closeToolStripMenuItem);
+            AddTestFilesCommand = new ToolStripMenuElement(addTestFilesToolStripMenuItem);
             SaveCommand = new ToolStripMenuElement(saveToolStripMenuItem);
             SaveAsCommand = new ToolStripMenuElement(saveAsToolStripMenuItem);
             SaveResultsCommand = new ToolStripMenuElement(saveResultsToolStripMenuItem);
@@ -65,8 +66,10 @@ namespace TestCentric.Gui.Views
             // View Menu
             FullGuiCommand = new ToolStripMenuElement(fullGuiToolStripMenuItem);
             MiniGuiCommand = new ToolStripMenuElement(miniGuiToolStripMenuItem);
-            GuiFontCommand = new ToolStripMenuElement(guiFontToolStripMenuItem);
-            FixedFontCommand = new ToolStripMenuElement(fixedFontToolStripMenuItem);
+            IncreaseFontCommand = new ToolStripMenuElement(increaseToolStripMenuItem);
+            DecreaseFontCommand = new ToolStripMenuElement(decreaseToolStripMenuItem);
+            ChangeFontCommand = new ToolStripMenuElement(changeToolStripMenuItem);
+            RestoreFontCommand = new ToolStripMenuElement(restoreToolStripMenuItem);
             StatusBarCommand = new ToolStripMenuElement(statusBarToolStripMenuItem);
 
             // Project Menu
@@ -102,6 +105,7 @@ namespace TestCentric.Gui.Views
         public ICommand NewProjectCommand { get; private set; }
         public ICommand OpenProjectCommand { get; private set; }
         public ICommand CloseCommand { get; private set; }
+        public ICommand AddTestFilesCommand { get; private set; }
         public ICommand SaveCommand { get; private set; }
         public ICommand SaveAsCommand { get; private set; }
         public ICommand SaveResultsCommand { get; private set; }
@@ -117,8 +121,10 @@ namespace TestCentric.Gui.Views
         // View Menu
         public ICommand FullGuiCommand { get; private set; }
         public ICommand MiniGuiCommand { get; private set; }
-        public ICommand GuiFontCommand { get; private set; }
-        public ICommand FixedFontCommand { get; private set; }
+        public ICommand IncreaseFontCommand { get; private set; }
+        public ICommand DecreaseFontCommand { get; private set; }
+        public ICommand ChangeFontCommand { get; private set; }
+        public ICommand RestoreFontCommand { get; private set; }
         public ICommand StatusBarCommand { get; private set; }
 
         // Project Menu

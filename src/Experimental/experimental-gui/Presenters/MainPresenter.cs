@@ -89,6 +89,18 @@ namespace TestCentric.Gui.Presenters
             _view.NewProjectCommand.Execute += ProjectSaveNotYetImplemented; // _model.NewProject;
             _view.OpenProjectCommand.Execute += OnOpenProjectCommand;
             _view.CloseCommand.Execute += _model.UnloadTests;
+            _view.AddTestFilesCommand.Execute += () =>
+            {
+                var filesToAdd = _view.DialogManager.SelectMultipleFiles("Add Test Files", CreateOpenFileFilter());
+
+                if (filesToAdd.Count > 0)
+                {
+                    var files = new List<string>(_model.TestFiles);
+                    files.AddRange(filesToAdd);
+
+                    _model.LoadTests(files);
+                }
+            };
             _view.SaveCommand.Execute += ProjectSaveNotYetImplemented; // _model.SaveProject;
             _view.SaveAsCommand.Execute += ProjectSaveNotYetImplemented; // _model.SaveProject;
             _view.SaveResultsCommand.Execute += () => SaveResults();
@@ -99,6 +111,29 @@ namespace TestCentric.Gui.Presenters
             _view.DomainUsage.SelectionChanged += DomainUsage_SelectionChanged;
             _view.RunAsX86.CheckedChanged += LoadAsX86_CheckedChanged;
             _view.ExitCommand.Execute += () => Application.Exit();
+
+            _view.IncreaseFontCommand.Execute += () =>
+            {
+                ApplyFont(IncreaseFont(_settings.Gui.Font));
+            };
+
+            _view.DecreaseFontCommand.Execute += () =>
+            {
+                ApplyFont(DecreaseFont(_settings.Gui.Font));
+            };
+
+            _view.ChangeFontCommand.Execute += () =>
+            {
+                Font currentFont = _settings.Gui.Font;
+                Font newFont = _view.DialogManager.SelectFont(currentFont);
+                if (newFont != _settings.Gui.Font)
+                    ApplyFont(newFont);
+            };
+
+            _view.RestoreFontCommand.Execute += () =>
+            {
+                ApplyFont(Form.DefaultFont);
+            };
 
             _view.SettingsCommand.Execute += () =>
             {
@@ -278,6 +313,21 @@ namespace TestCentric.Gui.Presenters
 
             if (_view.MessageDisplay.Ask(message) == DialogResult.Yes)
                 _model.ReloadTests();
+        }
+
+        private void ApplyFont(Font font)
+        {
+            _settings.Gui.Font = _view.Font = font;
+        }
+
+        private static Font IncreaseFont(Font font)
+        {
+            return new Font(font.FontFamily, font.SizeInPoints * 1.2f, font.Style);
+        }
+
+        private static Font DecreaseFont(Font font)
+        {
+            return new Font(font.FontFamily, font.SizeInPoints / 1.2f, font.Style);
         }
 
         #region Command Handlers

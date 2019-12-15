@@ -95,7 +95,7 @@ namespace TestCentric.Gui
                 });
 
 #if DEBUG
-            this.Add("debug-agent", "Launch debugger in nunit-agent when it starts.",
+            this.Add("debug-agent", "Launch debugger in testcentric-agent when it starts.",
                 v => DebugAgent = v != null);
 #endif
 
