@@ -200,12 +200,12 @@ Task("Test")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    NUnit3(BIN_DIR + ALL_TESTS, new NUnit3Settings {
+	// Keeping this separate until binaries are all merged
+    NUnit3(ENGINE_TESTS_BIN_DIR + "testcentric.engine.tests.dll", new NUnit3Settings {
         NoResults = true
         });
 
-	// Keeping this separate until binaries are all merged
-    NUnit3(ENGINE_TESTS_BIN_DIR + "testcentric.engine.tests.dll", new NUnit3Settings {
+    NUnit3(BIN_DIR + ALL_TESTS, new NUnit3Settings {
         NoResults = true
         });
 });

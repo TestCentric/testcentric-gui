@@ -95,10 +95,9 @@ namespace NUnit.Engine.Services
             Assert.That(names, Is.Unique);
         }
 
-        [TestCase("mono", 4, 5, "net-4.5")]
-        [TestCase("net", 4, 0, "net-4.5")]
-        [TestCase("net", 4, 5, "net-4.5")]
-
+        [TestCase("mono", 2, 0, "net-4.0")]
+        [TestCase("net", 4, 0, "net-4.0")]
+        [TestCase("net", 3, 5, "net-4.0")]
         public void EngineOptionPreferredOverImageTarget(string framework, int majorVersion, int minorVersion, string requested)
         {
             var package = new TestPackage("test");

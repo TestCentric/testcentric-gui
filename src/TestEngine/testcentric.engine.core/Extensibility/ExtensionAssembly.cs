@@ -64,7 +64,7 @@ namespace NUnit.Engine.Extensibility
         public RuntimeFramework TargetFramework
         {
             // TODO: Construct from CLR Version?
-            get { return new RuntimeFramework(RuntimeType.Any, _targetFrameworkHelper.TargetRuntimeVersion); }
+            get { return new RuntimeFramework(Runtime.Any, _targetFrameworkHelper.TargetRuntimeVersion); }
         }
 #endif
 

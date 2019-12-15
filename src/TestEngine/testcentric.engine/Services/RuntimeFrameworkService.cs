@@ -30,8 +30,8 @@ using System.Reflection;
 using Microsoft.Win32;
 using Mono.Cecil;
 using NUnit.Common;
-using NUnit.Engine.Internal;
 using NUnit.Engine.Helpers;
+using NUnit.Engine.Internal;
 
 namespace NUnit.Engine.Services
 {
@@ -149,7 +149,7 @@ namespace NUnit.Engine.Services
             var rt1 = f1.Runtime;
             var rt2 = f2.Runtime;
 
-            if (rt1 != RuntimeType.Any && rt2 != RuntimeType.Any && rt1 != rt2)
+            if (!rt1.Matches(rt2))
                 return false;
 
             var v1 = f1.ClrVersion;
@@ -177,26 +177,46 @@ namespace NUnit.Engine.Services
             RuntimeFramework currentFramework = RuntimeFramework.CurrentFramework;
             log.Debug("Current framework is " + currentFramework);
 
-            string frameworkSetting = package.GetSetting(EnginePackageSettings.RuntimeFramework, "");
+            string requestedFrameworkSetting = package.GetSetting(EnginePackageSettings.RuntimeFramework, "");
 
-            RuntimeFramework requestedFramework;
-            if (frameworkSetting.Length > 0)
+            if (requestedFrameworkSetting.Length > 0)
             {
-                if (!RuntimeFramework.TryParse(frameworkSetting, out requestedFramework))
-                    throw new NUnitEngineException("Invalid or unknown framework requested: " + frameworkSetting);
+                RuntimeFramework requestedFramework;
+                if (!RuntimeFramework.TryParse(requestedFrameworkSetting, out requestedFramework))
+                    throw new NUnitEngineException("Invalid or unknown framework requested: " + requestedFrameworkSetting);
 
                 log.Debug($"Requested framework for {package.Name} is {requestedFramework}");
+
+                if (!IsAvailable(requestedFramework))
+                    throw new NUnitEngineException("Requested framework is not available: " + requestedFrameworkSetting);
+
+                return requestedFramework;
             }
-            else
+
+            log.Debug($"No specific framework requested for {package.Name}");
+
+            string imageTargetFrameworkNameSetting = package.GetSetting(InternalEnginePackageSettings.ImageTargetFrameworkName, "");
+
+            Runtime targetRuntime = Runtime.Any;
+            Version targetVersion = RuntimeFramework.DefaultVersion;
+
+            // HACK: handling the TargetFrameworkName does not currently work outside of windows
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT && imageTargetFrameworkNameSetting.Length > 0)
             {
-                requestedFramework = new RuntimeFramework(RuntimeType.Any, RuntimeFramework.DefaultVersion);
-                log.Debug($"No specific framework requested for {package.Name}");
+                var imageTargetFrameworkName = new System.Runtime.Versioning.FrameworkName(imageTargetFrameworkNameSetting);
+
+                targetRuntime = Runtime.FromFrameworkIdentifier(imageTargetFrameworkName.Identifier);
+                if (targetRuntime == null)
+                    throw new NUnitEngineException("Unrecognized Target Framework Identifier: " + imageTargetFrameworkName.Identifier);
+
+                // TODO: temporary exception thrown until we implement .NET Core
+                if (targetRuntime == Runtime.NetCore)
+                    throw new NotImplementedException("The GUI does not yet support .NET Core tests");
+
+                targetVersion = imageTargetFrameworkName.Version;
             }
 
-            RuntimeType targetRuntime = requestedFramework.Runtime;
-            Version targetVersion = requestedFramework.FrameworkVersion;
-
-            if (targetRuntime == RuntimeType.Any)
+            if (targetRuntime == Runtime.Any)
                 targetRuntime = currentFramework.Runtime;
 
             if (targetVersion == RuntimeFramework.DefaultVersion)
@@ -205,7 +225,7 @@ namespace NUnit.Engine.Services
             if (!IsAvailable(new RuntimeFramework(targetRuntime, targetVersion)))
             {
                 log.Debug("Preferred version {0} is not installed or this NUnit installation does not support it", targetVersion);
-                if (targetVersion < currentFramework.FrameworkVersion)
+                if (targetRuntime == currentFramework.Runtime && targetVersion < currentFramework.FrameworkVersion)
                     targetVersion = currentFramework.FrameworkVersion;
             }
 
@@ -334,7 +354,7 @@ namespace NUnit.Engine.Services
                         else if (CheckInstallDword(versionKey))
                         {
                             // Versons 1.1, 2.0, 3.0 and 3.5 are possible here
-                            _availableRuntimes.Add(new RuntimeFramework(RuntimeType.Net, new Version(name.Substring(1, 3))));
+                            _availableRuntimes.Add(new RuntimeFramework(Runtime.Net, new Version(name.Substring(1, 3))));
                         }
                     }
                 }
@@ -346,7 +366,7 @@ namespace NUnit.Engine.Services
             RegistryKey key = Registry.LocalMachine.OpenSubKey(@"Software\Microsoft\.NETFramework\policy\v1.0");
             if (key != null)
                 foreach (var build in key.GetValueNames())
-                    _availableRuntimes.Add(new RuntimeFramework(RuntimeType.Net, new Version("1.0." + build)));
+                    _availableRuntimes.Add(new RuntimeFramework(Runtime.Net, new Version("1.0." + build)));
         }
 
         private struct MinimumRelease
@@ -385,12 +405,12 @@ namespace NUnit.Engine.Services
 
                 if (CheckInstallDword(profileKey))
                 {
-                    _availableRuntimes.Add(new RuntimeFramework(RuntimeType.Net, new Version(4, 0), profile));
+                    _availableRuntimes.Add(new RuntimeFramework(Runtime.Net, new Version(4, 0), profile));
 
                     var release = (int)profileKey.GetValue("Release", 0);
                     foreach (var entry in ReleaseTable)
                         if (release >= entry.Release)
-                            _availableRuntimes.Add(new RuntimeFramework(RuntimeType.Net, entry.Version));
+                            _availableRuntimes.Add(new RuntimeFramework(Runtime.Net, entry.Version));
 
                     break;     //If full profile found don't check for client profile
                 }
@@ -404,7 +424,7 @@ namespace NUnit.Engine.Services
 
         private void FindDefaultMonoFramework()
         {
-            if (RuntimeFramework.CurrentFramework.Runtime == RuntimeType.Mono)
+            if (RuntimeFramework.CurrentFramework.Runtime == Runtime.Mono)
                 UseCurrentMonoFramework();
             else if (Environment.OSVersion.Platform == PlatformID.Win32NT)
                 FindBestMonoFrameworkOnWindows();
@@ -413,7 +433,7 @@ namespace NUnit.Engine.Services
         private void UseCurrentMonoFramework()
         {
             var current = RuntimeFramework.CurrentFramework;
-            Debug.Assert(current.Runtime == RuntimeType.Mono && current.MonoPrefix != null && current.MonoVersion != null);
+            Debug.Assert(current.Runtime == Runtime.Mono && current.MonoPrefix != null && current.MonoVersion != null);
 
             // Multiple profiles are no longer supported with Mono 4.0
             if (current.MonoVersion.Major < 4 && FindAllMonoProfiles(current.MonoVersion, current.MonoPrefix) > 0)
@@ -509,7 +529,7 @@ namespace NUnit.Engine.Services
 
         private void AddMonoFramework(Version frameworkVersion, Version monoVersion, string monoPrefix, string profile)
         {
-            var framework = new RuntimeFramework(RuntimeType.Mono, frameworkVersion, profile)
+            var framework = new RuntimeFramework(Runtime.Mono, frameworkVersion, profile)
             {
                 MonoVersion = monoVersion,
                 MonoPrefix = monoPrefix,
