@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -24,16 +24,20 @@
 namespace NUnit.Engine
 {
     /// <summary>
-    /// Enumeration identifying a common language
-    /// runtime implementation.
+    /// Enumeration identifying all known (to the engine) runtimes
     /// </summary>
     public enum RuntimeType
     {
         /// <summary>Any supported runtime framework</summary>
+        // TODO: Remove this, since it's not a runtime!
         Any,
         /// <summary>Microsoft .NET Framework</summary>
         Net,
         /// <summary>Mono</summary>
-        Mono
+        // TODO: Determine if Mono should be a separate runtime
+        // type or just a specific instance of .NET Framework.
+        Mono,
+        /// <summary>NetCore</summary>
+        NetCore
     }
 }
