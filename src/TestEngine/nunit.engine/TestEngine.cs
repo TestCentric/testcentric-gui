@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2011 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -79,7 +79,6 @@ namespace NUnit.Engine
                 // For example, ResultService uses ExtensionService, so ExtensionService is added
                 // later.
                 Services.Add(new SettingsService(true));
-                Services.Add(new RecentFilesService());
                 Services.Add(new TestFilterService());
 #if !NETSTANDARD1_6
                 Services.Add(new ExtensionService());
