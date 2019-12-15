@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2018 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -34,7 +34,6 @@ namespace NUnit.TestUtilities.Fakes
 
         // Simulate Engine internal services, which are always present
         private SettingsService _settings = new SettingsService();
-        private RecentFilesService _recentFiles = new RecentFilesService();
         private ExtensionService _extensions = new ExtensionService();
         private ResultService _resultService = new ResultService();
         private AvailableRuntimesService _availableRuntimes = new AvailableRuntimesService();
@@ -46,7 +45,6 @@ namespace NUnit.TestUtilities.Fakes
         public MockTestEngine()
         {
             _services.AddService<ISettings>(_settings);
-            _services.AddService<IRecentFiles>(_recentFiles);
             _services.AddService<IExtensionService>(_extensions);
             _services.AddService<IResultService>(_resultService);
             _services.AddService<IAvailableRuntimes>(_availableRuntimes);
