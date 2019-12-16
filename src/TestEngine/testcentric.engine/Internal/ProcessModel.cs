@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2011 Charlie Poole, Rob Prouse
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -41,11 +41,6 @@ namespace NUnit.Engine.Internal
         /// Run tests directly in the NUnit process
         /// </summary>
         InProcess,
-        /// <summary>
-        /// Run tests directly in the NUnit process
-        /// </summary>
-        [Obsolete("Use InProcess instead")]
-        Single = InProcess,
         /// <summary>
         /// Run tests in a single separate process
         /// </summary>
