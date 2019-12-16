@@ -48,10 +48,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCentric.Gui.Exe", "src\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "choco", "choco", "{7A082D44-4669-485E-AB71-5475978EE240}"
 	ProjectSection(SolutionItems) = preProject
-		choco\testcemtroc.choco.addins = choco\testcemtroc.choco.addins
 		choco\testcentric-agent-x86.exe.ignore = choco\testcentric-agent-x86.exe.ignore
 		choco\testcentric-agent.exe.ignore = choco\testcentric-agent.exe.ignore
 		choco\testcentric-gui.nuspec = choco\testcentric-gui.nuspec
+		choco\testcentric.choco.addins = choco\testcentric.choco.addins
 		choco\VERIFICATION.txt = choco\VERIFICATION.txt
 	EndProjectSection
 EndProject

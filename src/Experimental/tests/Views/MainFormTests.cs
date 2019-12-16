@@ -57,7 +57,7 @@ namespace TestCentric.Gui.Views
 
             Assert.NotNull(processModel, "ProcessModel not set properly");
             Assert.That(processModel.MenuItems.Select((p) => p.Text),
-                Is.EqualTo(new string[] { "Default", "InProcess", "Separate", "Multiple" }));
+                Is.EqualTo(new string[] { "Default", "InProcess *", "Separate", "Multiple" }));
             Assert.That(processModel.MenuItems.Select((p) => p.Tag),
                 Is.EqualTo(new string[] { "DEFAULT", "InProcess", "Separate", "Multiple" }));
         }
