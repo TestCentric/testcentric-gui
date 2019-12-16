@@ -50,7 +50,7 @@ namespace TestCentric.Gui
             this.Add("run", "Automatically run the loaded tests.",
                 v => RunAllTests = v != null);
 
-            this.Add("process=", "{PROCESS} isolation for test assemblies. Values: InProcess, Separate, Multiple. If not specified, defaults to Separate for a single assembly or Multiple for more than one.",
+            this.Add("process=", "{PROCESS} isolation for test assemblies. Values: InProcess, Separate, Multiple. If not specified, defaults to Separate for a single assembly or Multiple for more than one. Option Single is permitted but DEPRECATED and will be removed in a future release.",
                 v =>
                 {
                     if (CheckRequiredValue(v, "--process", "InProcess", "Separate", "Multiple"))
@@ -67,7 +67,7 @@ namespace TestCentric.Gui
                         MaxAgents = val;
                 });
 
-            this.Add("inprocess", "Synonym for --process.InProcess.",
+            this.Add("inprocess", "Synonym for --process.InProcess. DEPRECATED: This option will be removed in a future release.",
                 v => ProcessModel = "Single");
 
             this.Add("domain=", "{DOMAIN} isolation for test assemblies. Values: None, Single, Multiple. If not specified, defaults to Single for a single assembly or Multiple for more than one.",

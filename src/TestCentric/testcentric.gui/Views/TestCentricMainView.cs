@@ -422,7 +422,7 @@ namespace TestCentric.Gui.Views
             // 
             this.inProcessMenuItem.Index = 1;
             this.inProcessMenuItem.Tag = "InProcess";
-            this.inProcessMenuItem.Text = "InProcess";
+            this.inProcessMenuItem.Text = "InProcess (DEPRECATED)";
             // 
             // singleProcessMenuItem
             // 
