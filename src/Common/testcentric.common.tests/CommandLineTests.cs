@@ -65,7 +65,7 @@ namespace TestCentric.Gui.Tests
         [TestCase("ProcessModel", "--process:InProcess")]
         [TestCase("ProcessModel", "--process:Separate")]
         [TestCase("ProcessModel", "--process:Multiple")]
-        [TestCase("ProcessModel", "--inprocess", "Single")]
+        [TestCase("ProcessModel", "--inprocess", "InProcess")]
         [TestCase("DomainUsage", "--domain:None")]
         [TestCase("DomainUsage", "--domain:Single")]
         [TestCase("DomainUsage", "--domain:Multiple")]

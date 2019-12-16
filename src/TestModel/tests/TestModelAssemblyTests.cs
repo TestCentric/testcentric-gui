@@ -67,7 +67,6 @@ namespace TestCentric.Gui.Model
             Assert.False(_model.HasResults, "HasResults");
 
             var testRun = _model.Tests;
-            TestContext.Error.WriteLine(testRun.Xml.OuterXml);
             Assert.That(testRun.Xml.Name, Is.EqualTo("test-run"), "Expected test-run element");
             Assert.That(testRun.RunState, Is.EqualTo(RunState.Runnable), "RunState of test-run");
             Assert.That(testRun.TestCount, Is.EqualTo(MockAssembly.Tests), "TestCount of test-run");
