@@ -206,8 +206,6 @@ namespace NUnit.Engine.Services
                 var imageTargetFrameworkName = new System.Runtime.Versioning.FrameworkName(imageTargetFrameworkNameSetting);
 
                 targetRuntime = Runtime.FromFrameworkIdentifier(imageTargetFrameworkName.Identifier);
-                if (targetRuntime == null)
-                    throw new NUnitEngineException("Unrecognized Target Framework Identifier: " + imageTargetFrameworkName.Identifier);
 
                 // TODO: temporary exception thrown until we implement .NET Core
                 if (targetRuntime == Runtime.NetCore)
