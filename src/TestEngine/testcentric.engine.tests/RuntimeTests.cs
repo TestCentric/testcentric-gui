@@ -44,6 +44,13 @@ namespace NUnit.Engine
         {
             var runtime = Runtime.Parse(name);
             Assert.That(runtime.FrameworkIdentifier, Is.EqualTo(identifier));
+
+            // HACK: Until we resolve issues with the Mono and Any runtimes
+            if (runtime != Runtime.Any && runtime != Runtime.Mono)
+            {
+                var roundtrip = Runtime.FromFrameworkIdentifier(identifier);
+                Assert.That(roundtrip, Is.EqualTo(runtime));
+            }
         }
 
         [TestCaseSource(nameof(KNOWN_RUNTIMES))]
