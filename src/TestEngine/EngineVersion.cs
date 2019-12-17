@@ -23,6 +23,6 @@
 
 using System.Reflection;
 
-[assembly: AssemblyProduct("NUnit Engine")]
-[assembly: AssemblyVersion("3.11.0")]
-[assembly: AssemblyInformationalVersion("3.11.0")]
+[assembly: AssemblyProduct("TestCentric Engine")]
+[assembly: AssemblyVersion("0.1.0")]
+[assembly: AssemblyInformationalVersion("0.1.0")]

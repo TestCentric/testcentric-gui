@@ -34,7 +34,7 @@ namespace NUnit.Engine
     /// </summary>
     public static class TestEngineActivator
     {
-        internal static readonly Version DefaultMinimumVersion = new Version(3, 0);
+        internal static readonly Version DefaultMinimumVersion = new Version(0, 0);
 
         private const string DefaultAssemblyName = "testcentric.engine.dll";
         internal const string DefaultTypeName = "NUnit.Engine.TestEngine";
