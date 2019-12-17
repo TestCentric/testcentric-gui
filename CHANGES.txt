@@ -1,4 +1,52 @@
-﻿TestCentric Runner for NUnit 1.1.0 - November 9, 2019
+﻿TestCentric Runner for NUnit 1.2.0 - December 17, 2019
+
+This release is primarily marked by the elimination of our 
+dependency on the NUnit Engine in preparation for moving
+forward with features that require engine changes.
+
+GUI
+
+ * Inprocess test execution has been deprecated
+
+Experimental GUI
+
+ * The GUI font may be changed from the View menu
+
+ * One or more files may be added to those open
+
+ * Rerun on Change has been implemented
+
+Test Model
+ 
+Engine
+
+ * We now use the TestCentric Engine, Version 0.1, replacing the NUnit Engine. 
+ The new engine is based on the NUnit 3.11 engine, with modifications.
+
+ * Engine recognizes and runs assemblies that target .NET Framework 4.6 and up.
+
+ * Engine now recognizes .NET Core assemblies and gives an error message
+ if the user attempts to open one.
+
+ * The RecentFilesService is no longer available.
+
+Issues Resolved
+
+ * 215 Experimental GUI: Allow setting the gui font
+ * 217 Experimental GUI: Add files to those already open
+ * 233 Experimental GUI: Rerun on Change
+ * 426 Switch to use of separate TestCentric Engine build
+ * 445 Better error message when attempting to load .NET Core assemblies
+ * 447 FIXED: Engine will not recognize .NET Framework versions beyond 4.5
+ * 449 FIXED: GUI window doesn't retain size between runs
+ * 454 Deprecate in-process execution
+ * 455 Remove RecentFilesService from engine
+ * 456 Rename engine to testcentric engine
+ * 461 Convert all projects to use Package References
+ * 470 Remove deprecated "Single" option for ProcessModel
+ * 473 Establish Initial Version for TestCentric engine
+
+TestCentric Runner for NUnit 1.1.0 - November 9, 2019
 
 General
 
