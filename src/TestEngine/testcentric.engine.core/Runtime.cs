@@ -1,5 +1,5 @@
 // ***********************************************************************
-// Copyright (c) 2018 Charlie Poole, Rob Prouse
+// Copyright (c) 2019 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
 // a copy of this software and associated documentation files (the
@@ -22,6 +22,9 @@
 // ***********************************************************************
 
 using System;
+#if !NET20
+using System.Linq;
+#endif
 
 namespace NUnit.Engine
 {
@@ -58,15 +61,15 @@ namespace NUnit.Engine
                     break;
                 case RuntimeType.Net:
                     DisplayName = ".NET";
-                    FrameworkIdentifier = ".NETFramework";
+                    FrameworkIdentifier = FrameworkIdentifiers.Net;
                     break;
                 case RuntimeType.Mono:
                     DisplayName = "Mono";
-                    FrameworkIdentifier = ".NETFramework";
+                    FrameworkIdentifier = FrameworkIdentifiers.Net;
                     break;
                 case RuntimeType.NetCore:
                     DisplayName = ".NETCore";
-                    FrameworkIdentifier = ".NETCoreApp";
+                    FrameworkIdentifier = FrameworkIdentifiers.NetCoreApp;
                     break;
             }
         }
@@ -115,11 +118,15 @@ namespace NUnit.Engine
         /// <returns>True if name represents a known runtime, otherwise false</returns>
         public static bool IsKnownRuntime(string name)
         {
+#if !NET20
+            return KnownRuntimes.Any(r => String.Equals(r, name, StringComparison.OrdinalIgnoreCase));
+#else
             foreach (string item in KnownRuntimes)
                 if (item.ToLower() == name.ToLower())
                     return true;
 
             return false;
+#endif
         }
 
         public static Runtime Parse(string s)
@@ -132,13 +139,13 @@ namespace NUnit.Engine
         {
             switch(s)
             {
-                case ".NETFramework":
+                case FrameworkIdentifiers.Net:
                     return Runtime.Net;
-                case ".NETCoreApp":
+                case FrameworkIdentifiers.NetCoreApp:
                     return Runtime.NetCore;
-                default:
-                    return null;
             }
+
+            throw new NUnitEngineException("Unrecognized Target Framework Identifier: " + s);
         }
 
         public override string ToString()
@@ -178,11 +185,4 @@ namespace NUnit.Engine
             return left._runtimeType != right._runtimeType;
         }
     }
-
-    public static class FrameworkIdentifiers
-    {
-        public const string Net = ".NETFramework";
-        public const string NetCoreApp = ".NETCoreApp";
-    }
-
 }
