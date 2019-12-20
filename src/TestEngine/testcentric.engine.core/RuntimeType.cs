@@ -28,9 +28,6 @@ namespace NUnit.Engine
     /// </summary>
     public enum RuntimeType
     {
-        /// <summary>Any supported runtime framework</summary>
-        // TODO: Remove this, since it's not a runtime!
-        Any,
         /// <summary>Microsoft .NET Framework</summary>
         Net,
         /// <summary>Mono</summary>

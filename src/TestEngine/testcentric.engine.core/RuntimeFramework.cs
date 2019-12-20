@@ -27,6 +27,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.Versioning;
 using Microsoft.Win32;
+using NUnit.Common;
 
 namespace NUnit.Engine
 {
@@ -39,12 +40,6 @@ namespace NUnit.Engine
     [Serializable]
     public sealed class RuntimeFramework : IRuntimeFramework
     {
-        /// <summary>
-        /// DefaultVersion is an empty Version, used to indicate that
-        /// NUnit should select the CLR version to use for the test.
-        /// </summary>
-        public static readonly Version DefaultVersion = new Version(0, 0);
-
         private static RuntimeFramework _currentFramework;
 
         /// <summary>
@@ -75,23 +70,16 @@ namespace NUnit.Engine
             Runtime = runtime;
             FrameworkVersion = ClrVersion = version;
 
-            // Version 0.0 means any version so we can't deduce anything
-            if (version != DefaultVersion)
-            {
-                if (IsFrameworkVersion(version))
-                    ClrVersion = GetClrVersionForFramework(version);
-                else
-                    FrameworkVersion = GetFrameworkVersionForClr(version);
-            }
+            if (IsFrameworkVersion(version))
+                ClrVersion = GetClrVersionForFramework(version);
+            else
+                FrameworkVersion = GetFrameworkVersionForClr(version);
 
             Profile = profile;
 
             DisplayName = GetDefaultDisplayName(Runtime, FrameworkVersion, profile);
 
-            // TODO: Expand to other frameworks. Consider use of a pseudo
-            // FrameworkName to represent Any Version or Runtime
-            if (Runtime != Runtime.Any && FrameworkVersion != DefaultVersion)
-                FrameworkName = new FrameworkName(Runtime.FrameworkIdentifier, FrameworkVersion);
+            FrameworkName = new FrameworkName(Runtime.FrameworkIdentifier, FrameworkVersion);
         }
 
         private bool IsFrameworkVersion(Version v)
@@ -103,7 +91,7 @@ namespace NUnit.Engine
 
         private Version GetClrVersionForFramework(Version frameworkVersion)
         {
-            if (Runtime == Runtime.Net || Runtime == Runtime.Any)
+            if (Runtime == Runtime.Net)
             {
                 switch (frameworkVersion.Major)
                 {
@@ -277,18 +265,7 @@ namespace NUnit.Engine
         {
             get
             {
-                if (this.AllowAnyVersion)
-                {
-                    return Runtime.ToString().ToLower();
-                }
-                else
-                {
-                    string vstring = FrameworkVersion.ToString();
-                    if (Runtime == Runtime.Any)
-                        return "v" + vstring;
-                    else
-                        return Runtime.ToString().ToLower() + "-" + vstring;
-                }
+                return Runtime.ToString().ToLower() + "-" + FrameworkVersion.ToString();
             }
         }
 
@@ -307,7 +284,7 @@ namespace NUnit.Engine
         /// <summary>
         /// The CLR version for this runtime framework
         /// </summary>
-        public Version ClrVersion { get; set; }
+        public Version ClrVersion { get; private set; }
 
         /// <summary>
         /// The Profile for this framework, where relevant.
@@ -315,15 +292,6 @@ namespace NUnit.Engine
         /// values for each Runtime.
         /// </summary>
         public string Profile { get; private set; }
-
-        /// <summary>
-        /// Return true if any CLR version may be used in
-        /// matching this RuntimeFramework object.
-        /// </summary>
-        public bool AllowAnyVersion
-        {
-            get { return this.ClrVersion == DefaultVersion; }
-        }
 
         /// <summary>
         /// Returns the Display name for this framework
@@ -340,30 +308,13 @@ namespace NUnit.Engine
         /// <returns></returns>
         public static RuntimeFramework Parse(string s)
         {
-            Runtime runtime = Runtime.Any;
-            Version version = DefaultVersion;
+            Guard.ArgumentNotNullOrEmpty(s, nameof(s));
 
             string[] parts = s.Split(new char[] { '-' });
-            if (parts.Length == 2)
-            {
-                runtime = Runtime.Parse(parts[0]);
-                string vstring = parts[1];
-                if (vstring != "")
-                    version = new Version(vstring);
-            }
-            else if (char.ToLower(s[0]) == 'v')
-            {
-                version = new Version(s.Substring(1));
-            }
-            else if (Runtime.IsKnownRuntime(s))
-            {
-                runtime = Runtime.Parse(s);
-            }
-            else
-            {
-                version = new Version(s);
-            }
+            Guard.ArgumentValid(parts.Length == 2 && parts[0].Length > 0 && parts[1].Length > 0, "RuntimeFramework id not in correct format", nameof(s));
 
+            var runtime = Runtime.Parse(parts[0]);
+            var version = new Version(parts[1]);
             return new RuntimeFramework(runtime, version);
         }
 
@@ -379,6 +330,16 @@ namespace NUnit.Engine
                 runtimeFramework = null;
                 return false;
             }
+        }
+
+        public static RuntimeFramework FromFrameworkName(string frameworkName)
+        {
+            return FromFrameworkName(new FrameworkName(frameworkName));
+        }
+
+        public static RuntimeFramework FromFrameworkName(FrameworkName frameworkName)
+        {
+            return new RuntimeFramework(Runtime.FromFrameworkIdentifier(frameworkName.Identifier), frameworkName.Version, frameworkName.Profile);
         }
 
         /// <summary>
@@ -402,13 +363,8 @@ namespace NUnit.Engine
         /// <returns><c>true</c> on match, otherwise <c>false</c></returns>
         public bool Supports(RuntimeFramework target)
         {
-            if (this.Runtime != Runtime.Any
-                && target.Runtime != Runtime.Any
-                && this.Runtime != target.Runtime)
+            if (this.Runtime != target.Runtime)
                 return false;
-
-            if (this.AllowAnyVersion || target.AllowAnyVersion)
-                return true;
 
             return VersionsMatch(this.ClrVersion, target.ClrVersion)
                 && this.FrameworkVersion.Major >= target.FrameworkVersion.Major
@@ -422,14 +378,7 @@ namespace NUnit.Engine
 
         private static string GetDefaultDisplayName(Runtime runtime, Version version, string profile)
         {
-            string displayName;
-
-            if (version == DefaultVersion)
-                displayName = runtime.DisplayName;
-            else if (runtime == Runtime.Any)
-                displayName = "v" + version.ToString();
-            else
-                displayName = runtime.DisplayName + " " + version.ToString();
+            string displayName = runtime.DisplayName + " " + version.ToString();
 
             if (!string.IsNullOrEmpty(profile) && profile != "Full")
                 displayName += " - " + profile;

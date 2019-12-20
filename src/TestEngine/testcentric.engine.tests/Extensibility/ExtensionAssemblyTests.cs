@@ -72,11 +72,7 @@ namespace NUnit.Engine.Extensibility
         [Test]
         public void TargetFramework()
         {
-            Assert.Multiple(() =>
-            {
-                Assert.That(_ea.TargetFramework, Has.Property(nameof(RuntimeFramework.Runtime)).EqualTo(Runtime.Any));
-                Assert.That(_ea.TargetFramework, Has.Property(nameof(RuntimeFramework.FrameworkVersion)).EqualTo(new Version(2, 0)));
-            });
+            Assert.That(_ea.TargetFramework.ToString, Is.EqualTo("net-2.0"));
         }
 #endif
     }

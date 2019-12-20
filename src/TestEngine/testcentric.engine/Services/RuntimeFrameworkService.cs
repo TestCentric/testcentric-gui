@@ -197,37 +197,33 @@ namespace NUnit.Engine.Services
 
             string imageTargetFrameworkNameSetting = package.GetSetting(InternalEnginePackageSettings.ImageTargetFrameworkName, "");
 
-            Runtime targetRuntime = Runtime.Any;
-            Version targetVersion = RuntimeFramework.DefaultVersion;
+            RuntimeFramework targetFramework;
 
             // HACK: handling the TargetFrameworkName does not currently work outside of windows
             if (Environment.OSVersion.Platform == PlatformID.Win32NT && imageTargetFrameworkNameSetting.Length > 0)
             {
-                var imageTargetFrameworkName = new System.Runtime.Versioning.FrameworkName(imageTargetFrameworkNameSetting);
-
-                targetRuntime = Runtime.FromFrameworkIdentifier(imageTargetFrameworkName.Identifier);
+                targetFramework = RuntimeFramework.FromFrameworkName(imageTargetFrameworkNameSetting);
 
                 // TODO: temporary exception thrown until we implement .NET Core
-                if (targetRuntime == Runtime.NetCore)
+                if (targetFramework.Runtime == Runtime.NetCore)
                     throw new NotImplementedException("The GUI does not yet support .NET Core tests");
-
-                targetVersion = imageTargetFrameworkName.Version;
             }
-
-            if (targetRuntime == Runtime.Any)
-                targetRuntime = currentFramework.Runtime;
-
-            if (targetVersion == RuntimeFramework.DefaultVersion)
-                targetVersion = package.GetSetting(InternalEnginePackageSettings.ImageRuntimeVersion, currentFramework.FrameworkVersion);
-
-            if (!IsAvailable(new RuntimeFramework(targetRuntime, targetVersion)))
+            else
             {
-                log.Debug("Preferred version {0} is not installed or this NUnit installation does not support it", targetVersion);
-                if (targetRuntime == currentFramework.Runtime && targetVersion < currentFramework.FrameworkVersion)
-                    targetVersion = currentFramework.FrameworkVersion;
+                var targetVersion = package.GetSetting(InternalEnginePackageSettings.ImageRuntimeVersion, currentFramework.FrameworkVersion);
+                targetFramework = new RuntimeFramework(currentFramework.Runtime, targetVersion);
             }
 
-            RuntimeFramework targetFramework = new RuntimeFramework(targetRuntime, targetVersion);
+            if (!IsAvailable(targetFramework))
+            {
+                log.Debug("Preferred target framework {0} is not available.", targetFramework);
+                if (currentFramework.Supports(targetFramework))
+                {
+                    targetFramework = currentFramework;
+                    log.Debug($"Using {currentFramework}");
+                }
+            }
+
             package.Settings[EnginePackageSettings.RuntimeFramework] = targetFramework.ToString();
 
             log.Debug($"Test will use {targetFramework} for {package.Name}");
