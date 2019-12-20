@@ -132,7 +132,7 @@ namespace NUnit.Engine.Extensibility
             sub.AssemblyName.Returns(assemblyName);
             sub.AssemblyVersion.Returns(assemblyVersion ?? new Version(1, 0));
             targetFramework = targetFramework ?? new Version(2, 0);
-            sub.TargetFramework.Returns(new RuntimeFramework(Runtime.Any, targetFramework));
+            sub.TargetFramework.Returns(new RuntimeFramework(Runtime.Net, targetFramework));
             sub.FromWildCard.Returns(fromWildcard);
             return sub;
         }

@@ -46,7 +46,7 @@ namespace NUnit.Engine
             Assert.That(runtime.FrameworkIdentifier, Is.EqualTo(identifier));
 
             // HACK: Until we resolve issues with the Mono and Any runtimes
-            if (runtime != Runtime.Any && runtime != Runtime.Mono)
+            if (runtime != Runtime.Mono)
             {
                 var roundtrip = Runtime.FromFrameworkIdentifier(identifier);
                 Assert.That(roundtrip, Is.EqualTo(runtime));
@@ -119,17 +119,17 @@ namespace NUnit.Engine
         public static void InequalityOperator(string name)
         {
             var rt1 = Runtime.Parse(name);
-            var rt2 = name == "Any"
-                ? Runtime.Parse("Net")
-                : Runtime.Parse("Any");
+            var rt2 = name == "Net"
+                ? Runtime.Parse("NetCore")
+                : Runtime.Parse("Net");
             Assert.That(rt1 != rt2, "rt1 != rt2");
         }
 
         private static string[] KNOWN_RUNTIMES = new string[]
-            { "Any", "Net", "Mono", "NetCore"};
+            { "Net", "Mono", "NetCore"};
         private static string[] DISPLAY_NAMES = new string[]
-            { "Any", ".NET", "Mono", ".NETCore" };
+            { ".NET", "Mono", ".NETCore" };
         private static string[] FRAMEWORK_IDENTIFIERS = new string[]
-            { null, ".NETFramework", ".NETFramework", ".NETCoreApp" };
+            { ".NETFramework", ".NETFramework", ".NETCoreApp" };
     }
 }

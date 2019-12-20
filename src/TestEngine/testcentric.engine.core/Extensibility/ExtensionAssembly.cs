@@ -63,8 +63,15 @@ namespace NUnit.Engine.Extensibility
 #if !NETSTANDARD2_0
         public RuntimeFramework TargetFramework
         {
-            // TODO: Construct from CLR Version?
-            get { return new RuntimeFramework(Runtime.Any, _targetFrameworkHelper.TargetRuntimeVersion); }
+            get
+            {
+                var frameworkName = _targetFrameworkHelper.FrameworkName;
+                if (frameworkName != null)
+                    return RuntimeFramework.FromFrameworkName(frameworkName);
+
+                // No TargetFrameworkAttribute - Assume .NET Framework
+                return new RuntimeFramework(Runtime.Net, _targetFrameworkHelper.TargetRuntimeVersion);
+            }
         }
 #endif
 
