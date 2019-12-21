@@ -66,7 +66,7 @@ namespace NUnit.Engine.Runners
         private bool _disposed;
 
         private TestEventDispatcher _eventDispatcher = new TestEventDispatcher();
-        private WorkItemTracker _workItemTracker = new WorkItemTracker();
+        private WorkItemTracker _workItemTracker = new WorkItemTracker();       
 
         private const int WAIT_FOR_CANCEL_TO_COMPLETE = 5000;
 
@@ -82,16 +82,16 @@ namespace NUnit.Engine.Runners
             _projectService = _services.GetService<IProjectService>();
             _testRunnerFactory = _services.GetService<ITestRunnerFactory>();
 
-#if !NETSTANDARD1_6 && !NETSTANDARD2_0
-            _runtimeService = _services.GetService<IRuntimeFrameworkService>();
-#endif
 #if !NETSTANDARD1_6
             _extensionService = _services.GetService<ExtensionService>();
-#endif
+#if !NETSTANDARD2_0
+            _runtimeService = _services.GetService<IRuntimeFrameworkService>();
 
             // Last chance to catch invalid settings in package,
             // in case the client runner missed them.
-            ValidatePackageSettings();
+            new TestPackageValidator(_runtimeService).Validate(package);
+#endif
+#endif
         }
 
         /// <summary>
@@ -371,43 +371,6 @@ namespace NUnit.Engine.Runners
                 _projectService != null
                 && !string.IsNullOrEmpty(package.FullName)
                 && _projectService.CanLoadFrom(package.FullName);
-        }
-
-        // Any Errors thrown from this method indicate that the client
-        // runner is putting invalid values into the package.
-        private void ValidatePackageSettings()
-        {
-#if !NETSTANDARD1_6 && !NETSTANDARD2_0  // TODO: How do we validate runtime framework for .NET Standard 2.0?
-            var processModel = TestPackage.GetSetting(EnginePackageSettings.ProcessModel, "Default").ToLower();
-            var runningInProcess = processModel == "single" || processModel == "inprocess";
-            var frameworkSetting = TestPackage.GetSetting(EnginePackageSettings.RuntimeFramework, "");
-            var runAsX86 = TestPackage.GetSetting(EnginePackageSettings.RunAsX86, false);
-
-            if (frameworkSetting.Length > 0)
-            {
-                // Check requested framework is actually available
-                var runtimeService = _services.GetService<IRuntimeFrameworkService>();
-                if (!runtimeService.IsAvailable(frameworkSetting))
-                    throw new NUnitEngineException(string.Format("The requested framework {0} is unknown or not available.", frameworkSetting));
-
-                // If running in process, check requested framework is compatible
-                if (runningInProcess)
-                {
-                    var currentFramework = RuntimeFramework.CurrentFramework;
-
-                    RuntimeFramework requestedFramework;
-                    if (!RuntimeFramework.TryParse(frameworkSetting, out requestedFramework))
-                        throw new NUnitEngineException("Invalid or unknown framework requested: " + frameworkSetting);
-
-                    if (!currentFramework.Supports(requestedFramework))
-                        throw new NUnitEngineException(string.Format(
-                            "Cannot run {0} framework in process already running {1}.", frameworkSetting, currentFramework));
-                }
-            }
-
-            if (runningInProcess && runAsX86 && IntPtr.Size == 8)
-                throw new NUnitEngineException("Cannot run tests in process - a 32 bit process is required.");
-#endif
         }
 
         /// <summary>
