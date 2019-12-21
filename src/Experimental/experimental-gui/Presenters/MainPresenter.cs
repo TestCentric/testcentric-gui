@@ -106,10 +106,31 @@ namespace TestCentric.Gui.Presenters
             _view.SaveResultsCommand.Execute += () => SaveResults();
             _view.ReloadTestsCommand.Execute += _model.ReloadTests;
             _view.RecentProjectsMenu.Popup += PopulateRecentProjectsMenu;
-            _view.SelectedRuntime.SelectionChanged += SelectedRuntime_SelectionChanged;
-            _view.ProcessModel.SelectionChanged += ProcessModel_SelectionChanged;
-            _view.DomainUsage.SelectionChanged += DomainUsage_SelectionChanged;
-            _view.RunAsX86.CheckedChanged += LoadAsX86_CheckedChanged;
+
+            _view.SelectedRuntime.SelectionChanged += () =>
+            {
+                OverridePackageSetting(EnginePackageSettings.RuntimeFramework, _view.SelectedRuntime.SelectedItem);
+            };
+
+            _view.ProcessModel.SelectionChanged += () =>
+            {
+                OverridePackageSetting(EnginePackageSettings.ProcessModel, _view.ProcessModel.SelectedItem);
+            };
+
+            _view.DomainUsage.SelectionChanged += () =>
+            {
+                OverridePackageSetting(EnginePackageSettings.DomainUsage, _view.DomainUsage.SelectedItem);
+            };
+
+            _view.RunAsX86.CheckedChanged += () =>
+            {
+                var key = EnginePackageSettings.RunAsX86;
+                if (_view.RunAsX86.Checked)
+                    OverridePackageSetting(key, true);
+                else
+                    OverridePackageSetting(key, null);
+            };
+
             _view.ExitCommand.Execute += () => Application.Exit();
 
             _view.IncreaseFontCommand.Execute += () =>
@@ -278,30 +299,6 @@ namespace TestCentric.Gui.Presenters
             }
         }
 
-        private void SelectedRuntime_SelectionChanged()
-        {
-            OverridePackageSetting(EnginePackageSettings.RuntimeFramework, _view.SelectedRuntime.SelectedItem);
-        }
-
-        private void ProcessModel_SelectionChanged()
-        {
-            OverridePackageSetting(EnginePackageSettings.ProcessModel, _view.ProcessModel.SelectedItem);
-        }
-
-        private void DomainUsage_SelectionChanged()
-        {
-            OverridePackageSetting(EnginePackageSettings.DomainUsage, _view.DomainUsage.SelectedItem);
-        }
-
-        private void LoadAsX86_CheckedChanged()
-        {
-            var key = EnginePackageSettings.RunAsX86;
-            if (_view.RunAsX86.Checked)
-                OverridePackageSetting(key, true);
-            else
-                OverridePackageSetting(key, null);
-        }
-
         private void OverridePackageSetting(string key, object setting)
         {
             if (setting == null || setting as string == "DEFAULT")
@@ -309,10 +306,11 @@ namespace TestCentric.Gui.Presenters
             else
                 _model.PackageOverrides[key] = setting;
 
-            string message = string.Format("New {0} setting will not take effect until you reload.\r\n\r\n\t\tReload Now?", key);
-
-            if (_view.MessageDisplay.Ask(message) == DialogResult.Yes)
-                _model.ReloadTests();
+            // Even though the _model has a Reload method, we cannot use it because Reload
+            // does not re-create the Engine.  Since we just changed a setting, we must
+            // re-create the Engine by unloading/reloading the tests. We make a copy of
+            // __model.TestFiles because the method does an unload before it loads.
+            _model.LoadTests(new List<string>(_model.TestFiles));
         }
 
         private void ApplyFont(Font font)

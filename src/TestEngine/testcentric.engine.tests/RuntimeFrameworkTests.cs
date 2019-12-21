@@ -94,6 +94,15 @@ namespace NUnit.Engine
             Assert.That(framework.DisplayName, Is.EqualTo(data.displayName));
         }
 
+        [TestCaseSource(nameof(frameworkData))]
+        public void CanCreateFromFrameworkName(FrameworkData data)
+        {
+            Assume.That(data.runtime != Runtime.Mono);
+
+            var framework = RuntimeFramework.FromFrameworkName(data.frameworkName);
+            Assert.That(framework.ToString(), Is.EqualTo(data.representation));
+        }
+
         [TestCaseSource(nameof(matchData))]
         public bool CanMatchRuntimes(RuntimeFramework f1, RuntimeFramework f2)
         {
@@ -148,52 +157,20 @@ namespace NUnit.Engine
                 new RuntimeFramework(Runtime.Net, new Version(2,0,50727)),
                 new RuntimeFramework(Runtime.Net, new Version(2,0,40607)))
                 .Returns(false),
-            new TestCaseData(
-                new RuntimeFramework(Runtime.Mono, new Version(2,0)),
-                new RuntimeFramework(Runtime.Any, new Version(2,0)))
-                .Returns(true),
-            new TestCaseData(
-                new RuntimeFramework(Runtime.Any, new Version(2,0)),
-                new RuntimeFramework(Runtime.Mono, new Version(2,0)))
-                .Returns(true),
-            new TestCaseData(
-                new RuntimeFramework(Runtime.Any, new Version(2,0)),
-                new RuntimeFramework(Runtime.Any, new Version(2,0)))
-                .Returns(true),
-            new TestCaseData(
-                new RuntimeFramework(Runtime.Any, new Version(2,0)),
-                new RuntimeFramework(Runtime.Any, new Version(4,0)))
-                .Returns(false),
-            new TestCaseData(
-                new RuntimeFramework(Runtime.Net, RuntimeFramework.DefaultVersion),
-                new RuntimeFramework(Runtime.Net, new Version(2,0)))
-                .Returns(true),
-            new TestCaseData(
-                new RuntimeFramework(Runtime.Net, new Version(2,0)),
-                new RuntimeFramework(Runtime.Net, RuntimeFramework.DefaultVersion))
-                .Returns(true),
-            new TestCaseData(
-                new RuntimeFramework(Runtime.Any, RuntimeFramework.DefaultVersion),
-                new RuntimeFramework(Runtime.Net, new Version(2,0)))
-                .Returns(true),
-            new TestCaseData(
-                new RuntimeFramework(Runtime.Net, new Version(2,0)),
-                new RuntimeFramework(Runtime.Any, RuntimeFramework.DefaultVersion))
-                .Returns(true)
             };
 
         private static readonly TestCaseData[] CanLoadData = {
             new TestCaseData(
-                new RuntimeFramework(Runtime.Any, new Version(2,0)),
-                new RuntimeFramework(Runtime.Any, new Version(2,0)))
+                new RuntimeFramework(Runtime.Net, new Version(2,0)),
+                new RuntimeFramework(Runtime.Net, new Version(2,0)))
                 .Returns(true),
             new TestCaseData(
-                new RuntimeFramework(Runtime.Any, new Version(2,0)),
-                new RuntimeFramework(Runtime.Any, new Version(4,0)))
+                new RuntimeFramework(Runtime.Net, new Version(2,0)),
+                new RuntimeFramework(Runtime.Net, new Version(4,0)))
                 .Returns(false),
             new TestCaseData(
-                new RuntimeFramework(Runtime.Any, new Version(4,0)),
-                new RuntimeFramework(Runtime.Any, new Version(2,0)))
+                new RuntimeFramework(Runtime.Net, new Version(4,0)),
+                new RuntimeFramework(Runtime.Net, new Version(2,0)))
                 .Returns(true)
             };
 #pragma warning restore 414
@@ -244,22 +221,15 @@ namespace NUnit.Engine
             new FrameworkData(Runtime.Net, new Version(4,7,1), new Version(4,0,30319), "net-4.7.1", ".NET 4.7.1", ".NETFramework,Version=4.7.1"),
             new FrameworkData(Runtime.Net, new Version(4,7,2), new Version(4,0,30319), "net-4.7.2", ".NET 4.7.2", ".NETFramework,Version=4.7.2"),
             new FrameworkData(Runtime.Net, new Version(4,8), new Version(4,0,30319), "net-4.8", ".NET 4.8", ".NETFramework,Version=4.8"),
-            new FrameworkData(Runtime.Net, RuntimeFramework.DefaultVersion, RuntimeFramework.DefaultVersion, "net", ".NET", null),
             new FrameworkData(Runtime.Mono, new Version(1,0), new Version(1,1,4322), "mono-1.0", "Mono 1.0", ".NETFramework,Version=1.0"),
             new FrameworkData(Runtime.Mono, new Version(2,0), new Version(2,0,50727), "mono-2.0", "Mono 2.0", ".NETFramework,Version=2.0"),
             new FrameworkData(Runtime.Mono, new Version(3,5), new Version(2,0,50727), "mono-3.5", "Mono 3.5", ".NETFramework,Version=3.5"),
             new FrameworkData(Runtime.Mono, new Version(4,0), new Version(4,0,30319), "mono-4.0", "Mono 4.0", ".NETFramework,Version=4.0"),
-            new FrameworkData(Runtime.Mono, RuntimeFramework.DefaultVersion, RuntimeFramework.DefaultVersion, "mono", "Mono", null),
             new FrameworkData(Runtime.NetCore, new Version(1,0), new Version(1,0,1234), "netcore-1.0", ".NETCore 1.0", ".NETCoreApp,Version=1.0"),
             new FrameworkData(Runtime.NetCore, new Version(1,1), new Version(1,1,1234), "netcore-1.1", ".NETCore 1.1", ".NETCoreApp,Version=1.1"),
             new FrameworkData(Runtime.NetCore, new Version(2,0), new Version(2,0,1234), "netcore-2.0", ".NETCore 2.0", ".NETCoreApp,Version=2.0"),
             new FrameworkData(Runtime.NetCore, new Version(2,1), new Version(2,1,1234), "netcore-2.1", ".NETCore 2.1", ".NETCoreApp,Version=2.1"),
             new FrameworkData(Runtime.NetCore, new Version(3,0), new Version(3,0,1234), "netcore-3.0", ".NETCore 3.0", ".NETCoreApp,Version=3.0"),
-            new FrameworkData(Runtime.Any, new Version(1,1), new Version(1,1,4322), "v1.1", "v1.1", null),
-            new FrameworkData(Runtime.Any, new Version(2,0), new Version(2,0,50727), "v2.0", "v2.0", null),
-            new FrameworkData(Runtime.Any, new Version(3,5), new Version(2,0,50727), "v3.5", "v3.5", null),
-            new FrameworkData(Runtime.Any, new Version(4,0), new Version(4,0,30319), "v4.0", "v4.0", null),
-            new FrameworkData(Runtime.Any, RuntimeFramework.DefaultVersion, RuntimeFramework.DefaultVersion, "any", "Any", null)
         };
 #pragma warning restore 414
     }

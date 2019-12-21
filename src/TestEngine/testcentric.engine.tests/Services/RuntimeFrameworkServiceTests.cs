@@ -136,7 +136,7 @@ namespace NUnit.Engine.Services
                 }
                 else
                 {
-                    Assert.That(net20Package.Settings[EnginePackageSettings.RuntimeFramework], Is.EqualTo("mono-4.0"));
+                    Assert.That(net20Package.Settings[EnginePackageSettings.RuntimeFramework], Is.EqualTo("mono-2.0"));
                     Assert.That(net40Package.Settings[EnginePackageSettings.RuntimeFramework], Is.EqualTo("mono-4.0"));
                     Assert.That(topLevelPackage.Settings[EnginePackageSettings.RuntimeFramework], Is.EqualTo("mono-4.0"));
                 }

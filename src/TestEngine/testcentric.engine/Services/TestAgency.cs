@@ -96,20 +96,11 @@ namespace NUnit.Engine.Services
 
         private Process LaunchAgentProcess(TestPackage package, Guid agentId)
         {
-            RuntimeFramework targetRuntime;
             string runtimeSetting = package.GetSetting(EnginePackageSettings.RuntimeFramework, "");
-            if (runtimeSetting.Length > 0)
-            {
-                if (!RuntimeFramework.TryParse(runtimeSetting, out targetRuntime))
-                    throw new NUnitEngineException("Invalid or unknown framework requested: " + runtimeSetting);
-            }
-            else
-            {
-                targetRuntime = RuntimeFramework.CurrentFramework;
-            }
+            // TEMPORARY Guard in preparation for removing Runtime.Any
+            Guard.OperationValid(runtimeSetting.Length > 0, "LaunchAgentProcess called with no runtime specified");
 
-            if (targetRuntime.Runtime == Runtime.Any)
-                targetRuntime = new RuntimeFramework(RuntimeFramework.CurrentFramework.Runtime, targetRuntime.ClrVersion);
+            var targetRuntime = RuntimeFramework.Parse(runtimeSetting);
 
             bool useX86Agent = package.GetSetting(EnginePackageSettings.RunAsX86, false);
             bool debugTests = package.GetSetting(EnginePackageSettings.DebugTests, false);
