@@ -55,10 +55,6 @@ namespace NUnit.Engine
             // Properties are completely determined by the RuntimeType
             switch(runtimeType)
             {
-                case RuntimeType.Any:
-                    DisplayName = "Any";
-                    // FrameworkIdentifier is left as null
-                    break;
                 case RuntimeType.Net:
                     DisplayName = ".NET";
                     FrameworkIdentifier = FrameworkIdentifiers.Net;
@@ -73,9 +69,6 @@ namespace NUnit.Engine
                     break;
             }
         }
-
-        /// <summary>Any supported runtime framework</summary>
-        public static Runtime Any { get; } = new Runtime(RuntimeType.Any);
 
         /// <summary>Microsoft .NET Framework</summary>
         public static Runtime Net { get; } = new Runtime(RuntimeType.Net);
@@ -95,9 +88,6 @@ namespace NUnit.Engine
         public bool Matches(Runtime targetRuntime)
         {
             var targetType = targetRuntime._runtimeType;
-
-            if (_runtimeType == RuntimeType.Any || targetType == RuntimeType.Any)
-                return true;
 
             if (_runtimeType == targetType)
                 return true;

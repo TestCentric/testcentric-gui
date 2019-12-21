@@ -19,9 +19,22 @@
     <PackageReference Include="System.Xml.XPath.XmlDocument" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="ExecutionPlatform.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="..\EngineVersion.cs" LinkBase="Properties" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\testcentric.engine.api\testcentric.engine.api.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.6'">
+    <PackageReference Include="Microsoft.Win32.Registry.AccessControl">
+      <Version>4.7.0</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="Microsoft.Win32.Registry.AccessControl">
+      <Version>4.7.0</Version>
+    </PackageReference>
   </ItemGroup>
 </Project>

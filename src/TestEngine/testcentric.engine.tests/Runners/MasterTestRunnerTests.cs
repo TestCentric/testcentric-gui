@@ -112,6 +112,7 @@ namespace NUnit.Engine.Runners
             // Add all services needed
             _services = new ServiceContext();
 #if !NETCOREAPP1_1
+            // TODO: Replace with a fake or mock. Requires changing MasterTestRunner and IExtensionService.
             _services.Add(new ExtensionService());
             var projectService = new FakeProjectService();
             var mockPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "mock-assembly.dll");
