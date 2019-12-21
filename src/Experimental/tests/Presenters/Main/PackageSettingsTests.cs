@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2017 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -21,6 +21,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
+using System.Collections.Generic;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -30,6 +31,14 @@ namespace TestCentric.Gui.Presenters.Main
 
     public class PackageSettingsTests : MainPresenterTestBase
     {
+        static readonly string[] _files = new string[] { "one", "two", "three" };
+
+        [SetUp]
+        public void SetUp()
+        {
+            Model.TestFiles.Returns(new List<string>(_files));
+        }
+
         [TestCase("Single")]
         [TestCase("Multiple")]
         [TestCase("InProcess")]
