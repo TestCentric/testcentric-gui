@@ -6,11 +6,11 @@
 using System.Reflection;
 
 //
-// Common Information for the NUnit assemblies
+// Common Information for the TestCentric Engine assemblies
 //
-[assembly: AssemblyTrademark("NUnit is a trademark of NUnit Software")]
-[assembly: AssemblyCompany("NUnit Software")]
-[assembly: AssemblyCopyright("Copyright (c) 2019 Charlie Poole, Rob Prouse")]
+[assembly: AssemblyTrademark("TestCentric is a trademark of TestCentric Software")]
+[assembly: AssemblyCompany("TestCentric")]
+[assembly: AssemblyCopyright("Copyright (c) 2019 Charlie Poole and TestCentric Engine contributors")]
 
 #if DEBUG
 #if NET35

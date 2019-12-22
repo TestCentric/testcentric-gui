@@ -1,3 +1,8 @@
+// ***********************************************************************
+// Copyright (c) Charlie Poole and TestCentric Engine contributors.
+// Licensed under the MIT License. See LICENSE.txt in root directory.
+// ***********************************************************************
+
 #if !NETCOREAPP1_1 && !NETCOREAPP2_1
 using System.Diagnostics;
 using NUnit.Engine.TestUtilities;
