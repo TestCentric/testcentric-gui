@@ -547,25 +547,11 @@ namespace TestCentric.Gui.Model
 
             foreach (var runtime in Services.GetService<IAvailableRuntimes>().AvailableRuntimes)
             {
-                // Nothing below 2.0
-                if (runtime.ClrVersion.Major < 2)
+                // We don't support anything below .NET Framework 2.0
+                if (runtime.Id.StartsWith("net-") && runtime.ClrVersion.Major < 2)
                     continue;
 
-                // Remove erroneous entries for 4.5 Client profile
-                if (IsErroneousNet45ClientProfile(runtime))
-                    continue;
-
-                // Skip duplicates
-                var duplicate = false;
-                foreach (var rt in runtimes)
-                    if (rt.DisplayName == runtime.DisplayName)
-                    {
-                        duplicate = true;
-                        break;
-                    }
-
-                if (!duplicate)
-                    runtimes.Add(runtime);
+                runtimes.Add(runtime);
             }
 
             runtimes.Sort((x, y) => x.DisplayName.CompareTo(y.DisplayName));
@@ -584,12 +570,6 @@ namespace TestCentric.Gui.Model
             }
 
             return runtimes;
-        }
-
-        // Some early versions of the engine return .NET 4.5 Client profile, which doesn't really exist
-        private static bool IsErroneousNet45ClientProfile(IRuntimeFramework runtime)
-        {
-            return runtime.FrameworkVersion.Major == 4 && runtime.FrameworkVersion.Minor > 0 && runtime.Profile == "Client";
         }
 
         public IList<string> GetAvailableCategories()

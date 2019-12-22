@@ -372,6 +372,11 @@ namespace TestCentric.Gui.Presenters
                     if (text.EndsWith(" - Full"))
                         text = text.Substring(0, text.Length - 7);
                     var menuItem = new ToolStripMenuItem(text) { Tag = runtime.ToString() };
+
+                    // .NET Core execution is NYI
+                    if (text.StartsWith(".NETCore"))
+                        menuItem.Enabled = false;
+
                     _view.SelectRuntimeMenu.MenuItems.Add(menuItem);
                 }
 

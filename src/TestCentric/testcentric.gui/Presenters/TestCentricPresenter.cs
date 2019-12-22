@@ -350,6 +350,10 @@ namespace TestCentric.Gui.Presenters
                         MenuItem item = new MenuItem(framework.DisplayName);
                         item.Tag = framework.Id;
                         runtimeMenu.MenuItems.Add(item);
+
+                        // .NET Core execution is NYI
+                        if (framework.DisplayName.StartsWith(".NETCore"))
+                            item.Enabled = false;
                     }
 
                     _view.SelectedRuntime.Refresh();

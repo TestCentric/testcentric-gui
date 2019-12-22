@@ -302,6 +302,7 @@ namespace NUnit.Engine.Services
                 FindDotNetFrameworks();
 
             FindDefaultMonoFramework();
+            FindDotNetCoreFrameworks();
         }
 
         // Note: this method cannot be generalized past V4, because (a)  it has
@@ -515,6 +516,40 @@ namespace NUnit.Engine.Services
             };
 
             _availableRuntimes.Add(framework);
+        }
+
+        private void FindDotNetCoreFrameworks()
+        {
+            const string WINDOWS_INSTALL_DIR = "C:\\Program Files\\dotnet\\";
+            const string LINUX_INSTALL_DIR = "/usr/shared/dotnet/";
+            string INSTALL_DIR = Path.DirectorySeparatorChar == '\\'
+                ? WINDOWS_INSTALL_DIR
+                : LINUX_INSTALL_DIR;
+
+            if (!Directory.Exists(INSTALL_DIR))
+                return;
+            if (!File.Exists(Path.Combine(INSTALL_DIR, "dotnet.exe")))
+                return;
+
+            string runtimeDir = Path.Combine(INSTALL_DIR, "shared\\Microsoft.NETCore.App");
+            if (!Directory.Exists(runtimeDir))
+                return;
+
+            var runtimes = new List<RuntimeFramework>();
+            int count = 0;
+            
+            foreach (var dir in new DirectoryInfo(runtimeDir).GetDirectories())
+            {
+                var fullVersion = new Version(dir.Name);
+                var newVersion = new Version(fullVersion.Major, fullVersion.Minor);
+                if (count > 0 && runtimes[count - 1].FrameworkVersion == newVersion)
+                        continue;
+
+                runtimes.Add(new RuntimeFramework(Runtime.NetCore, newVersion));
+                count++;
+            }
+
+            _availableRuntimes.AddRange(runtimes);
         }
 
         #endregion
