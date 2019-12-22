@@ -1,4 +1,9 @@
-﻿using System.Reflection;
+// ***********************************************************************
+// Copyright (c) Charlie Poole and TestCentric Engine contributors.
+// Licensed under the MIT License. See LICENSE.txt in root directory.
+// ***********************************************************************
+
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
