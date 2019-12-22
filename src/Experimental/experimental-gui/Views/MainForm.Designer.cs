@@ -134,7 +134,7 @@ namespace TestCentric.Gui.Views
             this.tabPage1.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPage1.Size = new System.Drawing.Size(349, 336);
+            this.tabPage1.Size = new System.Drawing.Size(350, 336);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Properties";
             this.toolTip1.SetToolTip(this.tabPage1, "This tab displays the properties of the test, which NUnit V2 displayed in the Pro" +
@@ -161,7 +161,7 @@ namespace TestCentric.Gui.Views
             this.propertiesView.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
             this.propertiesView.Properties = "";
             this.propertiesView.RunState = "";
-            this.propertiesView.Size = new System.Drawing.Size(345, 332);
+            this.propertiesView.Size = new System.Drawing.Size(346, 332);
             this.propertiesView.SkipReason = "";
             this.propertiesView.TabIndex = 2;
             this.propertiesView.TestCount = "";
@@ -324,7 +324,7 @@ namespace TestCentric.Gui.Views
             // defaultProcessToolStripMenuItem
             // 
             this.defaultProcessToolStripMenuItem.Name = "defaultProcessToolStripMenuItem";
-            this.defaultProcessToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.defaultProcessToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
             this.defaultProcessToolStripMenuItem.Tag = "DEFAULT";
             this.defaultProcessToolStripMenuItem.Text = "Default";
             this.defaultProcessToolStripMenuItem.ToolTipText = "Each assembly is loaded in it\'s own process.";
@@ -332,16 +332,16 @@ namespace TestCentric.Gui.Views
             // inProcessToolStripMenuItem
             // 
             this.inProcessToolStripMenuItem.Name = "inProcessToolStripMenuItem";
-            this.inProcessToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.inProcessToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
             this.inProcessToolStripMenuItem.Tag = "InProcess";
-            this.inProcessToolStripMenuItem.Text = "InProcess *";
+            this.inProcessToolStripMenuItem.Text = "InProcess (DEPRECATED)";
             this.inProcessToolStripMenuItem.ToolTipText = "Test assemblies are loaded directly in the Gui process. DEPRECATED: This option w" +
     "ill be removed in a future release.";
             // 
             // separateProcessToolStripMenuItem
             // 
             this.separateProcessToolStripMenuItem.Name = "separateProcessToolStripMenuItem";
-            this.separateProcessToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.separateProcessToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
             this.separateProcessToolStripMenuItem.Tag = "Separate";
             this.separateProcessToolStripMenuItem.Text = "Separate";
             this.separateProcessToolStripMenuItem.ToolTipText = "All test assemblies are loaded in the same process, separate from the NUnit proce" +
@@ -350,7 +350,7 @@ namespace TestCentric.Gui.Views
             // multipleProcessToolStripMenuItem
             // 
             this.multipleProcessToolStripMenuItem.Name = "multipleProcessToolStripMenuItem";
-            this.multipleProcessToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.multipleProcessToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
             this.multipleProcessToolStripMenuItem.Tag = "Multiple";
             this.multipleProcessToolStripMenuItem.Text = "Multiple";
             this.multipleProcessToolStripMenuItem.ToolTipText = "Each assembly is loaded in it\'s own process.";
@@ -358,13 +358,13 @@ namespace TestCentric.Gui.Views
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(203, 6);
             // 
             // loadAsX86ToolStripMenuItem
             // 
             this.loadAsX86ToolStripMenuItem.CheckOnClick = true;
             this.loadAsX86ToolStripMenuItem.Name = "loadAsX86ToolStripMenuItem";
-            this.loadAsX86ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.loadAsX86ToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
             this.loadAsX86ToolStripMenuItem.Text = "Run as X86";
             this.loadAsX86ToolStripMenuItem.ToolTipText = "If checked, forces loading of the test assembly in 32-bit mode.";
             // 
@@ -748,7 +748,7 @@ namespace TestCentric.Gui.Views
             this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(357, 362);
+            this.tabControl1.Size = new System.Drawing.Size(358, 362);
             this.tabControl1.TabIndex = 1;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.TabControlSelectedIndexChanged);
             // 
@@ -759,7 +759,7 @@ namespace TestCentric.Gui.Views
             this.tabPage2.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPage2.Size = new System.Drawing.Size(349, 336);
+            this.tabPage2.Size = new System.Drawing.Size(350, 336);
             this.tabPage2.TabIndex = 4;
             this.tabPage2.Text = "XML";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -775,7 +775,7 @@ namespace TestCentric.Gui.Views
             this.xmlView.Name = "xmlView";
             this.xmlView.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
             this.xmlView.SelectedText = "";
-            this.xmlView.Size = new System.Drawing.Size(345, 332);
+            this.xmlView.Size = new System.Drawing.Size(346, 332);
             this.xmlView.TabIndex = 2;
             this.xmlView.TestXml = null;
             this.xmlView.WordWrap = false;
@@ -785,7 +785,7 @@ namespace TestCentric.Gui.Views
             this.tabPage3.Controls.Add(this.textOutputView);
             this.tabPage3.Location = new System.Drawing.Point(4, 4);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(349, 336);
+            this.tabPage3.Size = new System.Drawing.Size(350, 336);
             this.tabPage3.TabIndex = 5;
             this.tabPage3.Text = "Text Output";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -795,7 +795,7 @@ namespace TestCentric.Gui.Views
             this.textOutputView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textOutputView.Location = new System.Drawing.Point(0, 0);
             this.textOutputView.Name = "textOutputView";
-            this.textOutputView.Size = new System.Drawing.Size(349, 336);
+            this.textOutputView.Size = new System.Drawing.Size(350, 336);
             this.textOutputView.TabIndex = 0;
             this.textOutputView.WordWrap = true;
             // 

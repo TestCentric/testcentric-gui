@@ -223,6 +223,7 @@ namespace TestCentric.Gui.Presenters
             _view.SaveAsCommand.Enabled = canCloseOrSave;
             _view.SaveResultsCommand.Enabled = canCloseOrSave && _model.HasResults;
             _view.ReloadTestsCommand.Enabled = canCloseOrSave;
+            _view.SelectRuntimeMenu.Enabled = !isTestRunning && _view.ProcessModel.SelectedItem != "InProcess";
             _view.RecentProjectsMenu.Enabled = !isTestRunning;
             _view.ExitCommand.Enabled = true;
 

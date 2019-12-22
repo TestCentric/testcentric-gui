@@ -724,7 +724,7 @@ namespace TestCentric.Gui.Presenters
             _view.CloseCommand.Enabled = testLoaded && !testRunning;
             _view.AddTestFilesCommand.Enabled = testLoaded && !testRunning;
             _view.ReloadTestsCommand.Enabled = testLoaded && !testRunning;
-            _view.RuntimeMenu.Enabled = !testRunning && !testLoading;
+            _view.RuntimeMenu.Enabled = !testRunning && !testLoading && _view.ProcessModel.SelectedItem != "InProcess";
             _view.RecentFilesMenu.Enabled = !testRunning && !testLoading;
             _view.ExitCommand.Enabled = !testLoading;
             _view.SaveResultsCommand.Enabled = _view.SaveResultsAsMenu.Enabled = !testRunning && !testLoading && _model.HasResults;
