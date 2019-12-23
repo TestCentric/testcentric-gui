@@ -12,7 +12,7 @@ namespace NUnit.Engine.Helpers
     [TestFixture]
     public class AssemblyHelperTests
     {
-        private static readonly string THIS_ASSEMBLY_PATH = "testcentric.engine.tests.dll";
+        private static readonly string THIS_ASSEMBLY_PATH = "testcentric.engine.core.tests.dll";
 
         [Test]
         public void GetPathForAssembly()

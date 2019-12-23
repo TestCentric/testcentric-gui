@@ -9,7 +9,7 @@ using NUnit.Framework;
 
 namespace NUnit.Engine.Services
 {
-    using Fakes;
+    //using Fakes;
 
     public class InProcessTestRunnerFactoryTests
     {
