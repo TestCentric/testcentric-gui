@@ -18,7 +18,7 @@ namespace NUnit.Engine.Services
         static string path2 = TestPath("/test/bin/debug/test2.dll");
         static string path3 = TestPath("/test/utils/test3.dll");
 
-        const string STANDARD_CONFIG_FILE = "testcentric.engine.tests.dll.config";
+        const string STANDARD_CONFIG_FILE = "testcentric.engine.core.tests.dll.config";
         const string ALTERNATE_CONFIG_FILE = "alt.config";
 
         [Test]
