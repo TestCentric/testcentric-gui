@@ -10,10 +10,10 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Xml;
-using NUnit.Engine.Helpers;
-using NUnit.Engine.Services;
+using TestCentric.Engine.Helpers;
+using TestCentric.Engine.Services;
 
-namespace NUnit.Engine.Runners
+namespace TestCentric.Engine.Runners
 {
     /// <summary>
     /// MasterTestRunner implements the ITestRunner interface, which

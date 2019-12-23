@@ -5,7 +5,7 @@
 
 using System;
 
-namespace NUnit.Engine.Extensibility
+namespace TestCentric.Engine.Extensibility
 {
     /// <summary>
     /// The ExtensionAttribute is used to identify a class that is intended
@@ -15,7 +15,7 @@ namespace NUnit.Engine.Extensibility
     public class ExtensionAttribute : Attribute
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="NUnit.Engine.Extensibility.ExtensionAttribute"/> class.
+        /// Initializes a new instance of the <see cref="TestCentric.Engine.Extensibility.ExtensionAttribute"/> class.
         /// </summary>
         public ExtensionAttribute()
         {

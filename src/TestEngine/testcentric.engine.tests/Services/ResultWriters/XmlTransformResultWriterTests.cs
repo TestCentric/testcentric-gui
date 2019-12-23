@@ -7,7 +7,7 @@
 using System.IO;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Services.ResultWriters
+namespace TestCentric.Engine.Services.ResultWriters
 {
     public class XmlTransformResultWriterTests : XmlOutputTest
     {

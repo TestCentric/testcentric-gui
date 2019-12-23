@@ -5,7 +5,7 @@
 
 using NUnit.Framework;
 
-namespace NUnit.Engine.Integration
+namespace TestCentric.Engine.Integration
 {
     [TestFixture, Category("Integration")]
     public abstract class IntegrationTests

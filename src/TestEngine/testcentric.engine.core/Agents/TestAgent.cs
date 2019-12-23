@@ -6,7 +6,7 @@
 #if !NETSTANDARD1_6 && !NETSTANDARD2_0
 using System;
 
-namespace NUnit.Engine.Agents
+namespace TestCentric.Engine.Agents
 {
     /// <summary>
     /// Abstract base for all types of TestAgents.

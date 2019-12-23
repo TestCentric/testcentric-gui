@@ -6,7 +6,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace NUnit.Engine.Runners
+namespace TestCentric.Engine.Runners
 {
     /// <summary>
     /// TestEventDispatcher is used to send test events to a number of listeners

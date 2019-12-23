@@ -9,9 +9,9 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.Versioning;
 using Microsoft.Win32;
-using NUnit.Common;
+using TestCentric.Common;
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     using Helpers;
 

@@ -4,9 +4,9 @@
 // ***********************************************************************
 
 using System.Xml;
-using NUnit.Engine.Extensibility;
+using TestCentric.Engine.Extensibility;
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     /// <summary>
     /// IResultWriterService provides result writers for a specified

@@ -8,12 +8,12 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
-using NUnit.Tests.Assemblies;
+using TestCentric.Tests.Assemblies;
+using TestCentric.Engine.Extensibility;
+using TestCentric.Engine.Helpers;
 using NUnit.Framework;
-using NUnit.Engine.Extensibility;
-using NUnit.Engine.Helpers;
 
-namespace NUnit.Engine.Drivers
+namespace TestCentric.Engine.Drivers
 {
     [TestOf(typeof(NUnitNetStandardDriver))]
     public class NUnitNetStandardDriverTests

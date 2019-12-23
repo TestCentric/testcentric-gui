@@ -7,10 +7,10 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using NUnit.Engine.Extensibility;
-using NUnit.Engine.Internal;
+using TestCentric.Engine.Extensibility;
+using TestCentric.Engine.Internal;
 
-namespace NUnit.Engine.Drivers
+namespace TestCentric.Engine.Drivers
 {
     public class NUnit2DriverFactory : IDriverFactory
     {

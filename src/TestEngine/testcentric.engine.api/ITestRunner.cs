@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Xml;
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     /// <summary>
     /// Interface implemented by all test runners.

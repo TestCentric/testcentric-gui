@@ -9,7 +9,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Xml;
 
-namespace NUnit.Engine.Helpers
+namespace TestCentric.Engine.Helpers
 {
     /// <summary>
     /// ResultHelper provides static methods for working with

@@ -5,7 +5,7 @@
 
 using System;
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     /// <summary>
     /// A Test Runner factory can supply a suitable test runner for a given package

@@ -7,15 +7,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
-using NUnit.Engine.Helpers;
+using TestCentric.Engine.Helpers;
+using NUnit.Framework;
 
-namespace NUnit.Engine.Services.ResultWriters
+namespace TestCentric.Engine.Services.ResultWriters
 {
-    using Engine;
-    using Engine.Internal;
-    using Framework;
-
     using Runner = NUnit.Framework.Api.NUnitTestAssemblyRunner;
     using Builder = NUnit.Framework.Api.DefaultTestAssemblyBuilder;
     using TestListener = NUnit.Framework.Internal.TestListener;

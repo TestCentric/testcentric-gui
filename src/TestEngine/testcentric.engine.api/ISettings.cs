@@ -5,7 +5,7 @@
 
 using System;
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     /// <summary>
     /// Event handler for settings changes

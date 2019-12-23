@@ -5,7 +5,7 @@
 
 using System.IO;
 
-namespace NUnit.Engine.Internal
+namespace TestCentric.Engine.Internal
 {
     /// <summary>
     /// A trace listener that writes to a separate file per domain

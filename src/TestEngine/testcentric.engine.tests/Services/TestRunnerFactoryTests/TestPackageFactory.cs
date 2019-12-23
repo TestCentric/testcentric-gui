@@ -3,7 +3,7 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-namespace NUnit.Engine.Services.TestRunnerFactoryTests
+namespace TestCentric.Engine.Services.TestRunnerFactoryTests
 {
     internal static class TestPackageFactory
     {

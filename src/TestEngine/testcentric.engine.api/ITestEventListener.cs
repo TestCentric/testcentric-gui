@@ -3,9 +3,9 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-using NUnit.Engine.Extensibility;
+using TestCentric.Engine.Extensibility;
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     /// <summary>
     /// The ITestListener interface is used to receive notices of significant

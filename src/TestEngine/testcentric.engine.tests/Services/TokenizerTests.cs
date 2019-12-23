@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     public class TokenizerTests
     {

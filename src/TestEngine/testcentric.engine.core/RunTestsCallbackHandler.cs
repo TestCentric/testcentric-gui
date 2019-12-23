@@ -8,7 +8,7 @@ using System;
 using System.Diagnostics;
 using System.Web.UI;
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     public class RunTestsCallbackHandler : MarshalByRefObject, ICallbackEventHandler
     {

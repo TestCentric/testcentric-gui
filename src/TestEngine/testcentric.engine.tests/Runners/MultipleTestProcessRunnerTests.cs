@@ -7,7 +7,7 @@
 using System;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Runners
+namespace TestCentric.Engine.Runners
 {
     public class MultipleTestProcessRunnerTests
     {

@@ -13,7 +13,7 @@ using System.Xml;
 using System.Xml.Linq;
 #endif
 
-namespace NUnit.Engine.Internal
+namespace TestCentric.Engine.Internal
 {
     /// <summary>
     /// SettingsStore extends SettingsGroup to provide for

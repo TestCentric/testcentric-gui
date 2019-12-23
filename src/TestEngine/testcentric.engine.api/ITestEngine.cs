@@ -6,7 +6,7 @@
 using System;
 using System.Xml;
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     /// <summary>
     /// ITestEngine represents an instance of the test engine.

@@ -6,7 +6,7 @@
 #if !NETSTANDARD1_6
 using System;
 
-namespace NUnit.Engine.Extensibility
+namespace TestCentric.Engine.Extensibility
 {
     internal interface IExtensionAssembly
     {

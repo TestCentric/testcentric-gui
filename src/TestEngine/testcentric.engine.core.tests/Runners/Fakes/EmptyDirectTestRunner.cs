@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace NUnit.Engine.Runners.Fakes
+namespace TestCentric.Engine.Runners.Fakes
 {
     internal class EmptyDirectTestRunner : Engine.Runners.DirectTestRunner
     {

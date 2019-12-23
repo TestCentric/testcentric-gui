@@ -6,7 +6,7 @@
 using System;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Services
+namespace TestCentric.Engine.Services
 {
     using Fakes;
 

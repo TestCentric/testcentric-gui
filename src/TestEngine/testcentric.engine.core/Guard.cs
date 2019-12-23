@@ -5,7 +5,7 @@
 
 using System;
 
-namespace NUnit.Common
+namespace TestCentric.Common
 {
     /// <summary>
     /// Class used to guard against unexpected argument values

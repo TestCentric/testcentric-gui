@@ -9,12 +9,12 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using NUnit.Framework;
-using NUnit.Tests.Assemblies;
-using NUnit.Engine.Helpers;
-using NUnit.Engine.Services;
-using NUnit.Engine.Services.Fakes;
+using TestCentric.Tests.Assemblies;
+using TestCentric.Engine.Helpers;
+using TestCentric.Engine.Services;
+using TestCentric.Engine.Services.Fakes;
 
-namespace NUnit.Engine.Runners
+namespace TestCentric.Engine.Runners
 {
     [TestFixtureSource(nameof(FixtureData))]
     public class MasterTestRunnerTests : ITestEventListener

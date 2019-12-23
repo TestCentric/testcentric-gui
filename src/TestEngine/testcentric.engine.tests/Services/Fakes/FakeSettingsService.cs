@@ -4,9 +4,9 @@
 // ***********************************************************************
 
 using System;
-using NUnit.Engine.Internal;
+using TestCentric.Engine.Internal;
 
-namespace NUnit.Engine.Services.Fakes
+namespace TestCentric.Engine.Services.Fakes
 {
     public class FakeSettingsService : SettingsStore, IService
     {

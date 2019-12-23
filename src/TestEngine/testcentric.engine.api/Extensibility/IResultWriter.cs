@@ -6,7 +6,7 @@
 using System.IO;
 using System.Xml;
 
-namespace NUnit.Engine.Extensibility
+namespace TestCentric.Engine.Extensibility
 {
     /// <summary>
     /// Common interface for objects that process and write out test results

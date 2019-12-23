@@ -5,10 +5,10 @@
 
 #if !NETCOREAPP1_1 && !NETCOREAPP2_1
 using System.Diagnostics;
-using NUnit.Engine.TestUtilities;
+using TestCentric.Engine.TestUtilities;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Integration
+namespace TestCentric.Engine.Integration
 {
     public sealed class RemoteAgentTests : IntegrationTests
     {

@@ -5,9 +5,9 @@
 
 #if !NETSTANDARD1_6
 using System;
-using NUnit.Common;
+using TestCentric.Common;
 
-namespace NUnit.Engine.Extensibility
+namespace TestCentric.Engine.Extensibility
 {
     internal static class ExtensionSelector
     {

@@ -4,10 +4,10 @@
 // ***********************************************************************
 
 using System;
-using NUnit.Engine.Internal;
-using NUnit.Engine.Runners;
+using TestCentric.Engine.Internal;
+using TestCentric.Engine.Runners;
 
-namespace NUnit.Engine.Services.TestRunnerFactoryTests.Results
+namespace TestCentric.Engine.Services.TestRunnerFactoryTests.Results
 {
 #if !NETCOREAPP
     internal static class Net20ExpectedRunnerResults

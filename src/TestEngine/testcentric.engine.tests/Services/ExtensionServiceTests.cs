@@ -7,13 +7,13 @@
 using System;
 using System.Linq;
 using NUnit.Framework;
-using NUnit.Engine.Extensibility;
+using TestCentric.Engine.Extensibility;
 using System.IO;
 using System.Reflection;
 using System.Collections.Generic;
-using NUnit.Engine.Helpers;
+using TestCentric.Engine.Helpers;
 
-namespace NUnit.Engine.Services
+namespace TestCentric.Engine.Services
 {
     public class ExtensionServiceTests
     {
@@ -87,12 +87,12 @@ namespace NUnit.Engine.Services
 
 #pragma warning disable 414
         private static readonly string[] KnownExtensions = {
-            "NUnit.Engine.DummyFrameworkDriverExtension",
-            "NUnit.Engine.DummyProjectLoaderExtension",
-            "NUnit.Engine.DummyResultWriterExtension",
-            "NUnit.Engine.DummyEventListenerExtension",
-            "NUnit.Engine.DummyServiceExtension",
-            "NUnit.Engine.V2DriverExtension"
+            "TestCentric.Engine.DummyFrameworkDriverExtension",
+            "TestCentric.Engine.DummyProjectLoaderExtension",
+            "TestCentric.Engine.DummyResultWriterExtension",
+            "TestCentric.Engine.DummyEventListenerExtension",
+            "TestCentric.Engine.DummyServiceExtension",
+            "TestCentric.Engine.V2DriverExtension"
         };
 #pragma warning restore 414
 
@@ -119,17 +119,17 @@ namespace NUnit.Engine.Services
         public void ExtensionMayBeDisabledByDefault()
         {
             Assert.That(_serviceInterface.Extensions,
-                Has.One.Property(nameof(ExtensionNode.TypeName)).EqualTo("NUnit.Engine.DummyDisabledExtension")
+                Has.One.Property(nameof(ExtensionNode.TypeName)).EqualTo("TestCentric.Engine.DummyDisabledExtension")
                    .And.Property(nameof(ExtensionNode.Enabled)).False);
         }
 
         [Test]
         public void DisabledExtensionMayBeEnabled()
         {
-            _serviceInterface.EnableExtension("NUnit.Engine.DummyDisabledExtension", true);
+            _serviceInterface.EnableExtension("TestCentric.Engine.DummyDisabledExtension", true);
 
             Assert.That(_serviceInterface.Extensions,
-                Has.One.Property(nameof(ExtensionNode.TypeName)).EqualTo("NUnit.Engine.DummyDisabledExtension")
+                Has.One.Property(nameof(ExtensionNode.TypeName)).EqualTo("TestCentric.Engine.DummyDisabledExtension")
                    .And.Property(nameof(ExtensionNode.Enabled)).True);
         }
 

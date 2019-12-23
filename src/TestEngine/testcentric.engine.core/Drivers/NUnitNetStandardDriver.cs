@@ -7,12 +7,12 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using NUnit.Engine.Internal;
+using TestCentric.Engine.Internal;
 using System.Reflection;
-using NUnit.Engine.Extensibility;
+using TestCentric.Engine.Extensibility;
 using Mono.Cecil;
 
-namespace NUnit.Engine.Drivers
+namespace TestCentric.Engine.Drivers
 {
     /// <summary>
     /// NUnitNetStandardDriver is used by the test-runner to load and run

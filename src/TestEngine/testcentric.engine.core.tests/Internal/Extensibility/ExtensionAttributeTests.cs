@@ -6,7 +6,7 @@
 using System;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Extensibility
+namespace TestCentric.Engine.Extensibility
 {
     public class ExtensionAttributeTests
     {

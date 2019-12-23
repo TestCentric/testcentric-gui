@@ -8,7 +8,7 @@ using System;
 using System.IO;
 using System.Reflection;
 
-namespace NUnit.Engine.Helpers
+namespace TestCentric.Engine.Helpers
 {
     /// <summary>
     /// AssemblyHelper provides static methods for working

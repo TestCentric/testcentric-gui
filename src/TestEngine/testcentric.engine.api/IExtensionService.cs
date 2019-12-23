@@ -5,9 +5,9 @@
 
 using System;
 using System.Collections.Generic;
-using NUnit.Engine.Extensibility;
+using TestCentric.Engine.Extensibility;
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     /// <summary>
     /// The IExtensionService interface allows a runner to manage extensions.

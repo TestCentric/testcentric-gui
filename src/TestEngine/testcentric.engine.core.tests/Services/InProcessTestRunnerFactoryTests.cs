@@ -4,10 +4,10 @@
 // ***********************************************************************
 
 using System;
-using NUnit.Engine.Runners;
+using TestCentric.Engine.Runners;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Services
+namespace TestCentric.Engine.Services
 {
     //using Fakes;
 

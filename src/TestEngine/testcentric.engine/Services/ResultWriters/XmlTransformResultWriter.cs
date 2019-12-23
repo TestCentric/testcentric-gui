@@ -9,10 +9,10 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Xsl;
-using NUnit.Common;
-using NUnit.Engine.Extensibility;
+using TestCentric.Common;
+using TestCentric.Engine.Extensibility;
 
-namespace NUnit.Engine.Services
+namespace TestCentric.Engine.Services
 {
     public class XmlTransformResultWriter : IResultWriter
     {

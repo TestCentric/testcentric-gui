@@ -6,9 +6,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using NUnit.Engine.Runners;
+using TestCentric.Engine.Runners;
 
-namespace NUnit.Engine.Services.TestRunnerFactoryTests
+namespace TestCentric.Engine.Services.TestRunnerFactoryTests
 {
     public class RunnerResult
     {

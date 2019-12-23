@@ -3,7 +3,7 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-namespace NUnit.Engine.Services
+namespace TestCentric.Engine.Services
 {
     public class TestFilterService : Service, ITestFilterService
     {
