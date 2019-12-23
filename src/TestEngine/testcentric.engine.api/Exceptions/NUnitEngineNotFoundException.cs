@@ -5,7 +5,7 @@
 
 using System;
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     /// <summary>
     /// The exception that is thrown if a valid test engine is not found

@@ -8,7 +8,7 @@ using System;
 using System.Runtime.Serialization;
 #endif
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     /// <summary>
     /// NUnitEngineException is thrown when the engine has been

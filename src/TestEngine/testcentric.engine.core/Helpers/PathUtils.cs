@@ -8,7 +8,7 @@ using System.IO;
 using System.Text;
 using System.Collections.Generic;
 
-namespace NUnit.Engine.Helpers
+namespace TestCentric.Engine.Helpers
 {
     /// <summary>
     /// Static methods for manipulating project paths, including both directories

@@ -8,7 +8,7 @@ using System;
 using System.IO;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Integration
+namespace TestCentric.Engine.Integration
 {
     internal sealed class MockAssemblyInDirectoryWithFramework : IDisposable
     {

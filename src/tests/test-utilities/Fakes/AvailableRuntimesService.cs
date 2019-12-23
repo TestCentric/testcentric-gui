@@ -22,9 +22,9 @@
 // ***********************************************************************
 
 using System.Collections.Generic;
-using NUnit.Engine;
+using TestCentric.Engine;
 
-namespace NUnit.TestUtilities.Fakes
+namespace TestCentric.TestUtilities.Fakes
 {
     public class AvailableRuntimesService : IAvailableRuntimes
     {

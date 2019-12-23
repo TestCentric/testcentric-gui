@@ -8,7 +8,7 @@ using System;
 using System.Runtime.Versioning;
 using NUnit.Framework;
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     using Helpers;
 

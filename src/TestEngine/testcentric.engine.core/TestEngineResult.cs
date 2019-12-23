@@ -7,9 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Xml;
-using NUnit.Engine.Internal;
+using TestCentric.Engine.Internal;
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     /// <summary>
     /// Wrapper class for the xml-formatted results produced

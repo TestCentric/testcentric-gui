@@ -23,10 +23,10 @@
 
 using System;
 using System.Collections.Generic;
-using NUnit.Engine;
-using NUnit.Engine.Extensibility;
+using TestCentric.Engine;
+using TestCentric.Engine.Extensibility;
 
-namespace NUnit.TestUtilities.Fakes
+namespace TestCentric.TestUtilities.Fakes
 {
     public class ExtensionService : IExtensionService
     {
@@ -41,17 +41,17 @@ namespace NUnit.TestUtilities.Fakes
             // ExtensionPoints are all known, so we add in constructor. Extensions
             // may vary, so we use a method to add them.
             _extensionPoints.Add(new ExtensionPoint(
-                "/NUnit/Engine/NUnitV2Driver", "NUnit.Engine.Extensibility.IDriverFactory", "Driver for NUnit tests using the V2 framework."));
+                "/NUnit/Engine/NUnitV2Driver", "TestCentric.Engine.Extensibility.IDriverFactory", "Driver for NUnit tests using the V2 framework."));
             _extensionPoints.Add(new ExtensionPoint(
-                "/NUnit/Engine/TypeExtensions/IService", "NUnit.Engine.Extensibility.IService", "Provides a service within the engine and possibly externally as well."));
+                "/NUnit/Engine/TypeExtensions/IService", "TestCentric.Engine.Extensibility.IService", "Provides a service within the engine and possibly externally as well."));
             _extensionPoints.Add(new ExtensionPoint(
-                "/NUnit/Engine/TypeExtensions/ITestEventListener", "NUnit.Engine.Extensibility.ITestEventListener", "Allows an extension to process progress reports and other events from the test."));
+                "/NUnit/Engine/TypeExtensions/ITestEventListener", "TestCentric.Engine.Extensibility.ITestEventListener", "Allows an extension to process progress reports and other events from the test."));
             _extensionPoints.Add(new ExtensionPoint(
-                "/NUnit/Engine/TypeExtensions/IDriverFactory", "NUnit.Engine.Extensibility.IDriverFactory", "Supplies a driver to run tests that use a specific test framework."));
+                "/NUnit/Engine/TypeExtensions/IDriverFactory", "TestCentric.Engine.Extensibility.IDriverFactory", "Supplies a driver to run tests that use a specific test framework."));
             _extensionPoints.Add(new ExtensionPoint(
-                "/NUnit/Engine/TypeExtensions/IProjectLoader", "NUnit.Engine.Extensibility.IProjectLoader", "Recognizes and loads assemblies from various types of project formats."));
+                "/NUnit/Engine/TypeExtensions/IProjectLoader", "TestCentric.Engine.Extensibility.IProjectLoader", "Recognizes and loads assemblies from various types of project formats."));
             _extensionPoints.Add(new ExtensionPoint(
-                "/NUnit/Engine/TypeExtensions/IResultWriter", "NUnit.Engine.Extensibility.IResultWriter", "Supplies a writer to write the result of a test to a file using a specific format."));
+                "/NUnit/Engine/TypeExtensions/IResultWriter", "TestCentric.Engine.Extensibility.IResultWriter", "Supplies a writer to write the result of a test to a file using a specific format."));
         }
 
         public void AddExtensions(params IExtensionNode[] extensions)

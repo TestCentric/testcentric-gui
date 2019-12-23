@@ -6,7 +6,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace NUnit.Engine.Extensibility
+namespace TestCentric.Engine.Extensibility
 {
     /// <summary>
     /// The IExtensionNode interface is implemented by a class that represents a
@@ -20,7 +20,7 @@ namespace NUnit.Engine.Extensibility
         string TypeName { get; }
 
         /// <summary>
-        /// Gets a value indicating whether this <see cref="NUnit.Engine.Extensibility.IExtensionNode"/> is enabled.
+        /// Gets a value indicating whether this <see cref="TestCentric.Engine.Extensibility.IExtensionNode"/> is enabled.
         /// </summary>
         /// <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
         bool Enabled { get; }

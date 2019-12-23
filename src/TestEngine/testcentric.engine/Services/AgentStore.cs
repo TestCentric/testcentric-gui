@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace NUnit.Engine.Services
+namespace TestCentric.Engine.Services
 {
     /// <summary>
     /// Defines the agent tracking operations that must be done atomically.

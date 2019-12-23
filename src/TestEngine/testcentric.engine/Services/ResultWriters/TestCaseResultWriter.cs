@@ -6,9 +6,9 @@
 using System.IO;
 using System.Text;
 using System.Xml;
-using NUnit.Engine.Extensibility;
+using TestCentric.Engine.Extensibility;
 
-namespace NUnit.Engine.Services
+namespace TestCentric.Engine.Services
 {
     public class TestCaseResultWriter : IResultWriter
     {

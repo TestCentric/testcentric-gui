@@ -5,7 +5,7 @@
 
 using System.Collections.Generic;
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     /// <summary>
     /// Interface that returns a list of available runtime frameworks.

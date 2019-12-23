@@ -5,7 +5,7 @@
 
 using System;
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     /// <summary>
     /// Interface implemented by objects representing a runtime framework.

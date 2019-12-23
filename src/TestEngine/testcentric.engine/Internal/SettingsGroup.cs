@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 
-namespace NUnit.Engine.Internal
+namespace TestCentric.Engine.Internal
 {
     /// <summary>
     /// SettingsGroup is the base class representing a group

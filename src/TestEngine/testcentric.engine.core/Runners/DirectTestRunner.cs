@@ -6,11 +6,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using NUnit.Engine.Extensibility;
-using NUnit.Engine.Helpers;
-using NUnit.Engine.Internal;
+using TestCentric.Engine.Extensibility;
+using TestCentric.Engine.Helpers;
+using TestCentric.Engine.Internal;
 
-namespace NUnit.Engine.Runners
+namespace TestCentric.Engine.Runners
 {
     /// <summary>
     /// DirectTestRunner is the abstract base for runners

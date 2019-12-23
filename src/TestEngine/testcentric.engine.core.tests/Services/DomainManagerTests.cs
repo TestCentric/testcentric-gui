@@ -7,9 +7,9 @@
 using System;
 using System.IO;
 using NUnit.Framework;
-using NUnit.Tests.Assemblies;
+using TestCentric.Tests.Assemblies;
 
-namespace NUnit.Engine.Services
+namespace TestCentric.Engine.Services
 {
     public class DomainManagerTests
     {

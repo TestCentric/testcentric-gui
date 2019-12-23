@@ -8,7 +8,7 @@ using System;
 using System.Runtime.Versioning;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Compatibility
+namespace TestCentric.Engine.Compatibility
 {
     /// <summary>
     /// Tests of our compatible implementation of FrameworkName, based on corefx implementation

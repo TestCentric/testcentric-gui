@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) 2016 Charlie Poole
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -24,9 +24,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using NUnit.Engine;
+using TestCentric.Engine;
 
-namespace NUnit.Gui.Presenters
+namespace TestCentric.Gui.Presenters
 {
     // TODO: With latest changes, this is no longer used.
     // Keeping it for a while, as we may end up wanting

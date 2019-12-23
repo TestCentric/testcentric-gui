@@ -8,7 +8,7 @@ using System;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Extensibility
+namespace TestCentric.Engine.Extensibility
 {
     internal class ExtensionSelectorTests
     {

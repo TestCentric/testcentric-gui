@@ -23,7 +23,7 @@
 
     using System.Collections.Generic;
     using System.Windows.Forms;
-    using NUnit.Engine;
+    using TestCentric.Engine;
 
 namespace TestCentric.Gui.Presenters
 {

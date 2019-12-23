@@ -14,11 +14,11 @@ using System.Diagnostics;
 using System.Security;
 using System.Security.Policy;
 using System.Security.Principal;
-using NUnit.Common;
-using NUnit.Engine.Internal;
-using NUnit.Engine.Helpers;
+using TestCentric.Common;
+using TestCentric.Engine.Internal;
+using TestCentric.Engine.Helpers;
 
-namespace NUnit.Engine.Services
+namespace TestCentric.Engine.Services
 {
     /// <summary>
     /// The DomainManager class handles the creation and unloading

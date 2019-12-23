@@ -6,7 +6,7 @@
 using System;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Api
+namespace TestCentric.Engine.Api
 {
     public class TestFilterTests
     {

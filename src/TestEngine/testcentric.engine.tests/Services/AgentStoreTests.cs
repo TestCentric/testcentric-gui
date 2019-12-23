@@ -10,7 +10,7 @@ using System.Diagnostics;
 using System.Threading;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Services
+namespace TestCentric.Engine.Services
 {
     public static partial class AgentStoreTests
     {

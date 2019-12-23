@@ -27,7 +27,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using NUnit.Engine;
+using TestCentric.Engine;
 
 namespace TestCentric.Gui.Model
 {
@@ -38,8 +38,8 @@ namespace TestCentric.Gui.Model
         static Logger log = InternalTrace.GetLogger(typeof(TestModel));
 
         private const string PROJECT_LOADER_EXTENSION_PATH = "/NUnit/Engine/TypeExtensions/IProjectLoader";
-        private const string NUNIT_PROJECT_LOADER = "NUnit.Engine.Services.ProjectLoaders.NUnitProjectLoader";
-        private const string VISUAL_STUDIO_PROJECT_LOADER = "NUnit.Engine.Services.ProjectLoaders.VisualStudioProjectLoader";
+        private const string NUNIT_PROJECT_LOADER = "TestCentric.Engine.Services.ProjectLoaders.NUnitProjectLoader";
+        private const string VISUAL_STUDIO_PROJECT_LOADER = "TestCentric.Engine.Services.ProjectLoaders.VisualStudioProjectLoader";
 
         // Our event dispatcher. Events are exposed through the Events
         // property. This is used when firing events from the model.

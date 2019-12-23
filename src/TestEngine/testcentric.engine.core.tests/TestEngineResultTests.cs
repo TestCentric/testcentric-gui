@@ -4,10 +4,10 @@
 // ***********************************************************************
 
 using System.Xml;
-using NUnit.Engine.Helpers;
+using TestCentric.Engine.Helpers;
 using NUnit.Framework;
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     [TestFixture]
     public class TestEngineResultTests

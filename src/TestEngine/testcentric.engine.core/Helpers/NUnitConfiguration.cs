@@ -8,9 +8,9 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
-using NUnit.Engine.Helpers;
+using TestCentric.Engine.Helpers;
 
-namespace NUnit.Engine.Helpers
+namespace TestCentric.Engine.Helpers
 {
     /// <summary>
     /// Provides static methods for accessing configuration info

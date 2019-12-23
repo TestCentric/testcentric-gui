@@ -5,9 +5,9 @@
 
 using System;
 using System.Collections.Generic;
-using NUnit.Engine.Helpers;
+using TestCentric.Engine.Helpers;
 
-namespace NUnit.Engine.Runners
+namespace TestCentric.Engine.Runners
 {
     /// <summary>
     /// AggregatingTestRunner runs tests using multiple

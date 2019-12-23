@@ -5,7 +5,7 @@
 
 using System.Text;
 
-namespace NUnit.Engine.Helpers
+namespace TestCentric.Engine.Helpers
 {
     public static class ProcessUtils
     {

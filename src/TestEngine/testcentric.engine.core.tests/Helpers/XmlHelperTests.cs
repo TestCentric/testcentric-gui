@@ -6,7 +6,7 @@
 using System.Xml;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Helpers
+namespace TestCentric.Engine.Helpers
 {
     public class XmlHelperTests
     {

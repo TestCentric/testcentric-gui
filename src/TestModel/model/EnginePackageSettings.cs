@@ -21,7 +21,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     /// <summary>
     /// EngineSettings contains constant values that

@@ -22,9 +22,9 @@
 // ***********************************************************************
 
 using System;
-using NUnit.Engine.Internal;
+using TestCentric.Engine.Internal;
 
-namespace NUnit.Engine.Services.Tests
+namespace TestCentric.Engine.Services.Tests
 {
     public class FakeSettingsService : SettingsStore, IService
     {

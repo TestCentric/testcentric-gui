@@ -5,7 +5,7 @@
 
 using System;
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     /// <summary>
     /// IServiceLocator allows clients to locate any NUnit services

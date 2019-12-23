@@ -10,7 +10,7 @@ using NUnit.Framework;
 using System.Drawing;
 #endif
 
-namespace NUnit.Engine.Internal
+namespace TestCentric.Engine.Internal
 {
     [TestFixture]
     public class SettingsGroupTests

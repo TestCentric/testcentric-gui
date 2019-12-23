@@ -5,10 +5,10 @@
 
 using System;
 using System.IO;
-using NUnit.Engine.Helpers;
-using NUnit.Engine.Internal;
+using TestCentric.Engine.Helpers;
+using TestCentric.Engine.Internal;
 
-namespace NUnit.Engine.Services
+namespace TestCentric.Engine.Services
 {
     /// <summary>
     /// Summary description for UserSettingsService.

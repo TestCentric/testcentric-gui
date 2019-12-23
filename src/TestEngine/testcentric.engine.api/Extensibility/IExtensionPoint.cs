@@ -6,7 +6,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace NUnit.Engine.Extensibility
+namespace TestCentric.Engine.Extensibility
 {
     /// <summary>
     /// An ExtensionPoint represents a single point in the TestEngine

@@ -12,7 +12,7 @@ using System.Reflection;
 using System.Linq;
 #endif
 
-namespace NUnit.Engine.Extensibility
+namespace TestCentric.Engine.Extensibility
 {
     /// <summary>
     /// The ExtensionNode class represents a single extension being installed
@@ -52,7 +52,7 @@ namespace NUnit.Engine.Extensibility
         public IRuntimeFramework TargetFramework { get; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="NUnit.Engine.Extensibility.ExtensionNode"/> is enabled.
+        /// Gets or sets a value indicating whether this <see cref="TestCentric.Engine.Extensibility.ExtensionNode"/> is enabled.
         /// </summary>
         /// <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
         public bool Enabled	{ get; set; }

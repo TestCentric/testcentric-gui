@@ -6,9 +6,9 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using NUnit.Engine.Internal;
+using TestCentric.Engine.Internal;
 
-namespace NUnit.Engine.Services
+namespace TestCentric.Engine.Services
 {
     /// <summary>
     /// ServiceManager handles access to all services - global

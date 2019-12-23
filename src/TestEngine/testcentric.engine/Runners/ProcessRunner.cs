@@ -7,11 +7,11 @@
 using System;
 using System.Diagnostics;
 using System.Net.Sockets;
-using NUnit.Engine.Internal;
-using NUnit.Engine.Services;
-using NUnit.Engine.Helpers;
+using TestCentric.Engine.Internal;
+using TestCentric.Engine.Services;
+using TestCentric.Engine.Helpers;
 
-namespace NUnit.Engine.Runners
+namespace TestCentric.Engine.Runners
 {
     /// <summary>
     /// ProcessRunner loads and runs a set of tests in a single agent process.

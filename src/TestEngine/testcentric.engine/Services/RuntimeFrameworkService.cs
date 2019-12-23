@@ -11,11 +11,11 @@ using System.IO;
 using System.Reflection;
 using Microsoft.Win32;
 using Mono.Cecil;
-using NUnit.Common;
-using NUnit.Engine.Helpers;
-using NUnit.Engine.Internal;
+using TestCentric.Common;
+using TestCentric.Engine.Helpers;
+using TestCentric.Engine.Internal;
 
-namespace NUnit.Engine.Services
+namespace TestCentric.Engine.Services
 {
     public class RuntimeFrameworkService : Service, IRuntimeFrameworkService, IAvailableRuntimes
     {

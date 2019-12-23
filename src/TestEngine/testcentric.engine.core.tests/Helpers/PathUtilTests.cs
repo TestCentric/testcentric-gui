@@ -8,7 +8,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Helpers
+namespace TestCentric.Engine.Helpers
 {
 	[TestFixture]
 	public class PathUtilTests : PathUtils

@@ -7,12 +7,12 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
-using NUnit.Engine.Helpers;
+using TestCentric.Engine.Helpers;
+using TestCentric.Tests.Assemblies;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
-using NUnit.Tests.Assemblies;
 
-namespace NUnit.Engine.Drivers
+namespace TestCentric.Engine.Drivers
 {
     // Functional tests of the NUnitFrameworkDriver calling into the framework.
     public class NUnit3FrameworkDriverTests

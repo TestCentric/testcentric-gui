@@ -42,7 +42,7 @@ namespace TestCentric.Gui.Presenters
         {
             _view = Substitute.For<ITestTreeView>();
             _model = Substitute.For<ITestModel>();
-            _model.Services.UserSettings.Returns(new NUnit.TestUtilities.Fakes.UserSettings());
+            _model.Services.UserSettings.Returns(new TestCentric.TestUtilities.Fakes.UserSettings());
 
             _presenter = new TreeViewPresenter(_view, _model);
 

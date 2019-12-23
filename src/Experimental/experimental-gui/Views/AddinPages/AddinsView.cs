@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
-using NUnit.Engine.Extensibility;
+using TestCentric.Engine.Extensibility;
 
 namespace TestCentric.Gui.Views.AddinPages
 {

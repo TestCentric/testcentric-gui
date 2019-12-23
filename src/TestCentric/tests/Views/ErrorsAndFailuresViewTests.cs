@@ -23,7 +23,7 @@
 
 using System.Windows.Forms;
 using NUnit.Framework;
-using NUnit.TestUtilities;
+using TestCentric.TestUtilities;
 
 namespace TestCentric.Gui.Views
 {

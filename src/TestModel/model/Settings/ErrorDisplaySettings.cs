@@ -22,7 +22,7 @@
 // ***********************************************************************
 
 using System.Windows.Forms;
-using NUnit.Engine;
+using TestCentric.Engine;
 
 namespace TestCentric.Gui.Model.Settings
 {

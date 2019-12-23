@@ -22,7 +22,7 @@
 // ***********************************************************************
 
 using System.Windows.Forms;
-using NUnit.Engine;
+using TestCentric.Engine;
 using NUnit.Framework;
 using NSubstitute;
 
@@ -43,7 +43,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         {
             _view = Substitute.For<ITestTreeView>();
             _model = Substitute.For<ITestModel>();
-            _settings = new NUnit.TestUtilities.Fakes.UserSettings();
+            _settings = new TestCentric.TestUtilities.Fakes.UserSettings();
             _model.Services.UserSettings.Returns(_settings);
 
             _strategy = GetDisplayStrategy();

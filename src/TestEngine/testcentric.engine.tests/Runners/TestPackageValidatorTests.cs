@@ -11,7 +11,7 @@ using NUnit.Framework;
 using NSubstitute;
 
 #if !NETCOREAPP1_1 && !NETCOREAPP2_1
-namespace NUnit.Engine.Runners
+namespace TestCentric.Engine.Runners
 {
     public class TestPackageValidatorTests
     {
