@@ -24,7 +24,7 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
-using NUnit.Engine;
+using TestCentric.Engine;
 
 namespace TestCentric.Gui.Model
 {

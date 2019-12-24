@@ -21,7 +21,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
-using NUnit.Engine.Extensibility;
+using TestCentric.Engine.Extensibility;
 
 namespace TestCentric.Gui.Views
 {

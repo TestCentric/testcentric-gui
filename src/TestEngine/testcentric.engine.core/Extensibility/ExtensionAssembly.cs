@@ -7,9 +7,9 @@
 using System;
 using System.IO;
 using Mono.Cecil;
-using NUnit.Engine.Internal;
+using TestCentric.Engine.Internal;
 
-namespace NUnit.Engine.Extensibility
+namespace TestCentric.Engine.Extensibility
 {
     internal class ExtensionAssembly : IExtensionAssembly
     {

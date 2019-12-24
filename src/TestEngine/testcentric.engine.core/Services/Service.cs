@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace NUnit.Engine.Services
+namespace TestCentric.Engine.Services
 {
     /// <summary>
     /// Abstract base class for services that can use it. Some Services

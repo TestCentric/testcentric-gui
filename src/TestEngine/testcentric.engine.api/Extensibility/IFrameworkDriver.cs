@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Xml;
 
-namespace NUnit.Engine.Extensibility
+namespace TestCentric.Engine.Extensibility
 {
     /// <summary>
     /// The IFrameworkDriver interface is implemented by a class that

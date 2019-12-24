@@ -22,10 +22,10 @@
 // ***********************************************************************
 
 using System;
-using NUnit.Engine;
-using NUnit.Engine.Extensibility;
+using TestCentric.Engine;
+using TestCentric.Engine.Extensibility;
 
-namespace NUnit.TestUtilities.Fakes
+namespace TestCentric.TestUtilities.Fakes
 {
     public class ResultService : IResultService
     {

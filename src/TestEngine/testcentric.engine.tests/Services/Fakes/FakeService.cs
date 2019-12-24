@@ -3,7 +3,7 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-namespace NUnit.Engine.Services.Fakes
+namespace TestCentric.Engine.Services.Fakes
 {
     public class FakeService : IService
     {

@@ -8,12 +8,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Mono.Cecil;
-using NUnit.Common;
-using NUnit.Engine.Drivers;
-using NUnit.Engine.Extensibility;
-using NUnit.Engine.Helpers;
+using TestCentric.Common;
+using TestCentric.Engine.Drivers;
+using TestCentric.Engine.Extensibility;
+using TestCentric.Engine.Helpers;
 
-namespace NUnit.Engine.Services
+namespace TestCentric.Engine.Services
 {
     /// <summary>
     /// The DriverService provides drivers able to load and run tests

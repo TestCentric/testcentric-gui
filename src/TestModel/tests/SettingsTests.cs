@@ -28,8 +28,8 @@ using System.Reflection;
 using System.Security.Principal;
 using System.Windows.Forms;
 using NUnit.Framework;
-using NUnit.Engine;
-using NUnit.TestUtilities.Fakes;
+using TestCentric.Engine;
+using TestCentric.TestUtilities.Fakes;
 
 namespace TestCentric.Gui.Model.Settings
 {

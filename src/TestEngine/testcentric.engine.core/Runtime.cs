@@ -8,7 +8,7 @@ using System;
 using System.Linq;
 #endif
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     /// <summary>
     /// Runtime class represents a specific Runtime, which may be

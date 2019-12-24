@@ -6,10 +6,10 @@
 #if !NETSTANDARD1_6
 using System.Collections.Generic;
 using System.IO;
-using NUnit.Common;
-using NUnit.Engine.Extensibility;
+using TestCentric.Common;
+using TestCentric.Engine.Extensibility;
 
-namespace NUnit.Engine.Services
+namespace TestCentric.Engine.Services
 {
     /// <summary>
     /// Summary description for ProjectService.

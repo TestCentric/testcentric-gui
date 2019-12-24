@@ -8,9 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
-using NUnit.Common;
+using TestCentric.Common;
 
-namespace NUnit.Engine.Runners
+namespace TestCentric.Engine.Runners
 {
     public class ParallelTaskWorkerPool
     {

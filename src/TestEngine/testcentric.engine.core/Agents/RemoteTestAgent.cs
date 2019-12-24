@@ -8,10 +8,10 @@ using System;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
 using System.Threading;
-using NUnit.Engine.Internal;
-using NUnit.Engine.Helpers;
+using TestCentric.Engine.Internal;
+using TestCentric.Engine.Helpers;
 
-namespace NUnit.Engine.Agents
+namespace TestCentric.Engine.Agents
 {
     /// <summary>
     /// RemoteTestAgent represents a remote agent executing in another process

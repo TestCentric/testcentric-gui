@@ -3,7 +3,7 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-namespace NUnit.Common
+namespace TestCentric.Common
 {
     internal static class AgentExitCodes
     {

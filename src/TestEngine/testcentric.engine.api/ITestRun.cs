@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     /// <summary>
     /// The ITestRun class represents an ongoing test run.

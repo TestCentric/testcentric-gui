@@ -23,7 +23,7 @@
 
 using System.Collections.Generic;
 using System.IO;
-using NUnit.Engine;
+using TestCentric.Engine;
 using NUnit.Framework;
 using NSubstitute;
 

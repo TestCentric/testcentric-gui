@@ -7,7 +7,7 @@
 using System.Reflection;
 using NUnitLite;
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     class Program
     {

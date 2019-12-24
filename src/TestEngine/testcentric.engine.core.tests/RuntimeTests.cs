@@ -6,7 +6,7 @@
 using System.Reflection;
 using NUnit.Framework;
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     public static class RuntimeTests
     {

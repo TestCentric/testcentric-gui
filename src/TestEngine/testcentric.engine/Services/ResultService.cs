@@ -5,9 +5,9 @@
 
 using System;
 using System.Collections.Generic;
-using NUnit.Engine.Extensibility;
+using TestCentric.Engine.Extensibility;
 
-namespace NUnit.Engine.Services
+namespace TestCentric.Engine.Services
 {
     public class ResultService : Service, IResultService
     {

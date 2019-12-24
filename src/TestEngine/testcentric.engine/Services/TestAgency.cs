@@ -9,12 +9,12 @@ using System.IO;
 using System.Threading;
 using System.Diagnostics;
 using System.Text;
-using NUnit.Common;
-using NUnit.Engine.Agents;
-using NUnit.Engine.Internal;
-using NUnit.Engine.Helpers;
+using TestCentric.Common;
+using TestCentric.Engine.Agents;
+using TestCentric.Engine.Internal;
+using TestCentric.Engine.Helpers;
 
-namespace NUnit.Engine.Services
+namespace TestCentric.Engine.Services
 {
     /// <summary>
     /// The TestAgency class provides RemoteTestAgents

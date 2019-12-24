@@ -26,7 +26,7 @@ using System.Collections;
 using System.Windows.Forms;
 using NUnit.Framework;
 
-namespace NUnit.TestUtilities
+namespace TestCentric.TestUtilities
 {
     /// <summary>
     /// TestFixtures that test Forms inherit from this class.

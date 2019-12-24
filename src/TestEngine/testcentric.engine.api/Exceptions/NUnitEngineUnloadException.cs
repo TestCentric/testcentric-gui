@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 #endif
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
 
     /// <summary>

@@ -23,7 +23,7 @@
 
 using System;
 using NUnit.Framework;
-using NUnit.Engine.Services.Tests;
+using TestCentric.Engine.Services.Tests;
 
 namespace TestCentric.Gui.Model.Services
 {

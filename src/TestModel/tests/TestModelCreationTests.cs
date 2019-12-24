@@ -26,9 +26,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NUnit.Engine;
+using TestCentric.Engine;
 using NUnit.Framework;
-using NUnit.TestUtilities.Fakes;
+using TestCentric.TestUtilities.Fakes;
 
 namespace TestCentric.Gui.Model
 {

@@ -25,8 +25,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
-using NUnit.Engine;
-using NUnit.Engine.Extensibility;
+using TestCentric.Engine;
+using TestCentric.Engine.Extensibility;
 
 namespace TestCentric.Gui
 {

@@ -3,7 +3,7 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     /// <summary>
     /// InternalEngineSettings contains constant values that

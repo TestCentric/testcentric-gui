@@ -4,7 +4,7 @@
 // ***********************************************************************
 
 #if !NETSTANDARD1_6 && !NETSTANDARD2_0
-namespace NUnit.Engine.Services
+namespace TestCentric.Engine.Services
 {
     /// <summary>
     /// Enumeration used to report AgentStatus

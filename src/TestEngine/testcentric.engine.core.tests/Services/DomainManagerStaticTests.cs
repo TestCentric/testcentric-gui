@@ -10,7 +10,7 @@ using System.Configuration;
 using System.IO;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Services
+namespace TestCentric.Engine.Services
 {
     public static class DomainManagerStaticTests
     {

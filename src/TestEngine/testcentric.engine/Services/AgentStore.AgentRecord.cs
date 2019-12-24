@@ -7,7 +7,7 @@
 using System;
 using System.Diagnostics;
 
-namespace NUnit.Engine.Services
+namespace TestCentric.Engine.Services
 {
     internal sealed partial class AgentStore
     {

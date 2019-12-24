@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NUnit.Engine.Services.TestRunnerFactoryTests
+namespace TestCentric.Engine.Services.TestRunnerFactoryTests
 {
     internal class RunnerResultComparer : IEqualityComparer<RunnerResult>
     {

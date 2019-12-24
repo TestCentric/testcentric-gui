@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     public static class FrameworkIdentifiers
     {

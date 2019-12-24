@@ -9,7 +9,7 @@ using System.IO;
 using System.Reflection;
 using Microsoft.Win32;
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     /// <summary>
     /// TestEngineActivator creates an instance of the test engine and returns an ITestEngine interface.
@@ -19,13 +19,13 @@ namespace NUnit.Engine
         internal static readonly Version DefaultMinimumVersion = new Version(0, 0);
 
         private const string DefaultAssemblyName = "testcentric.engine.dll";
-        internal const string DefaultTypeName = "NUnit.Engine.TestEngine";
+        internal const string DefaultTypeName = "TestCentric.Engine.TestEngine";
 
 #if NETSTANDARD1_6
         /// <summary>
         /// Create an instance of the test engine.
         /// </summary>
-        /// <returns>An <see cref="NUnit.Engine.ITestEngine"/></returns>
+        /// <returns>An <see cref="TestCentric.Engine.ITestEngine"/></returns>
         public static ITestEngine CreateInstance()
         {
             var apiLocation = typeof(TestEngineActivator).GetTypeInfo().Assembly.Location;
@@ -40,7 +40,7 @@ namespace NUnit.Engine
         /// <summary>
         /// Create an instance of the test engine.
         /// </summary>
-        /// <returns>An <see cref="NUnit.Engine.ITestEngine"/></returns>
+        /// <returns>An <see cref="TestCentric.Engine.ITestEngine"/></returns>
         public static ITestEngine CreateInstance()
         {
             var apiLocation = typeof(TestEngineActivator).Assembly.Location;
@@ -57,7 +57,7 @@ namespace NUnit.Engine
         /// </summary>
         /// <param name="unused">This parameter is no longer used but has not been removed to ensure API compatibility.</param>
         /// <exception cref="NUnitEngineNotFoundException">Thrown when a test engine of the required minimum version is not found</exception>
-        /// <returns>An <see cref="NUnit.Engine.ITestEngine"/></returns>
+        /// <returns>An <see cref="TestCentric.Engine.ITestEngine"/></returns>
         public static ITestEngine CreateInstance(bool unused = false)
         {
             return CreateInstance(DefaultMinimumVersion, unused);

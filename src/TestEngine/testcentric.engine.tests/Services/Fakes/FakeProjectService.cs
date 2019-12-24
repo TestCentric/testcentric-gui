@@ -6,9 +6,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using NUnit.Engine.Extensibility;
+using TestCentric.Engine.Extensibility;
 
-namespace NUnit.Engine.Services.Fakes
+namespace TestCentric.Engine.Services.Fakes
 {
     public class FakeProjectService : FakeService, IProjectService
     {

@@ -4,9 +4,9 @@
 // ***********************************************************************
 
 #if !NETSTANDARD1_6 && !NETSTANDARD2_0
-using NUnit.Engine.Services;
+using TestCentric.Engine.Services;
 
-namespace NUnit.Engine.Runners
+namespace TestCentric.Engine.Runners
 {
     /// <summary>
     /// TestDomainRunner loads and runs tests in a separate

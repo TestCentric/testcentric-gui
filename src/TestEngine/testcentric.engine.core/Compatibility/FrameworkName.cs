@@ -5,7 +5,7 @@
 
 #if NET20 || NET35
 using System.Diagnostics;
-using NUnit.Common;
+using TestCentric.Common;
 
 namespace System.Runtime.Versioning
 {

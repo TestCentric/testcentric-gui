@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
-namespace NUnit.Engine.TestUtilities
+namespace TestCentric.Engine.TestUtilities
 {
     public static class StackEnumerator
     {

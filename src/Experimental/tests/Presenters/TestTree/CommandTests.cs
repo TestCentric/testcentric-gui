@@ -22,7 +22,7 @@
 // ***********************************************************************
 
 using System.Windows.Forms;
-using NUnit.Engine;
+using TestCentric.Engine;
 using NUnit.Framework;
 using NSubstitute;
 

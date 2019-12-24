@@ -24,7 +24,7 @@
 using System.Drawing;
 using System.ComponentModel;
 using NUnit.Framework;
-using NUnit.Engine;
+using TestCentric.Engine;
 using NSubstitute;
 
 namespace TestCentric.Gui.Model

@@ -7,7 +7,7 @@ using System;
 using System.Xml;
 using NUnit.Framework;
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     public class AsyncTestEngineResultTests
     {

@@ -4,7 +4,7 @@
 // ***********************************************************************
 
 #if !NETSTANDARD1_6 && !NETSTANDARD2_0
-namespace NUnit.Engine.Internal
+namespace TestCentric.Engine.Internal
 {
     /// <summary>
     /// Represents the manner in which test assemblies use

@@ -7,9 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using NUnit.Common;
+using TestCentric.Common;
 
-namespace NUnit.Engine.Helpers
+namespace TestCentric.Engine.Helpers
 {
     /// <summary>
     /// DirectoryFinder is a utility class used for extended wildcard

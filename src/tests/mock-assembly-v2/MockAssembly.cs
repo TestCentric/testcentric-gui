@@ -7,7 +7,7 @@
 using System;
 using NUnit.Framework;
 
-namespace NUnit.Tests
+namespace TestCentric.Tests
 {
     namespace Assemblies
     {

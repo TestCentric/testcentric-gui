@@ -22,7 +22,7 @@
 // ***********************************************************************
 
 using System.Drawing;
-using NUnit.Engine;
+using TestCentric.Engine;
 
 namespace TestCentric.Gui.Model.Settings
 {

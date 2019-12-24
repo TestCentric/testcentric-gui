@@ -6,9 +6,9 @@
 #if !NETCOREAPP1_1
 using System;
 using System.IO;
-using NUnit.Engine.TestUtilities;
+using TestCentric.Engine.TestUtilities;
 
-namespace NUnit.Engine.Integration
+namespace TestCentric.Engine.Integration
 {
     internal sealed class DirectoryWithNeededAssemblies : IDisposable
     {

@@ -7,11 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NUnit.Engine.Internal;
-using NUnit.Engine.Services.TestRunnerFactoryTests.Results;
+using TestCentric.Engine.Internal;
+using TestCentric.Engine.Services.TestRunnerFactoryTests.Results;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Services.TestRunnerFactoryTests.TestCases
+namespace TestCentric.Engine.Services.TestRunnerFactoryTests.TestCases
 {
 #if !NETCOREAPP
     internal class Net20MixedProjectAndAssemblyTestCases

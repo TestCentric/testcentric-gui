@@ -6,7 +6,7 @@
 using System.IO;
 using NUnit.Framework;
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     [NonParallelizable]
     class WorkingDirectoryTests

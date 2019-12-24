@@ -22,9 +22,9 @@
 // ***********************************************************************
 
 using System.IO;
-using NUnit.Engine;
+using TestCentric.Engine;
 using NUnit.Framework;
-using NUnit.Tests.Assemblies;
+using TestCentric.Tests.Assemblies;
 
 namespace TestCentric.Gui.Model
 {

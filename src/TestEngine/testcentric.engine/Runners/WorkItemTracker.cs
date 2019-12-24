@@ -7,9 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Xml;
-using NUnit.Engine.Helpers;
+using TestCentric.Engine.Helpers;
 
-namespace NUnit.Engine.Runners
+namespace TestCentric.Engine.Runners
 {
     /// <summary>
     /// WorkItemTracker examines test events and keeps track of those

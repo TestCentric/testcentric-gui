@@ -5,10 +5,10 @@
 
 using System;
 using System.Reflection;
-using NUnit.Common;
-using NUnit.Engine.Extensibility;
+using TestCentric.Common;
+using TestCentric.Engine.Extensibility;
 
-namespace NUnit.Engine.Drivers
+namespace TestCentric.Engine.Drivers
 {
     public class NUnit3DriverFactory : IDriverFactory
     {

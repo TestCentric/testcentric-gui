@@ -24,7 +24,7 @@
 
 namespace NUnit.UiException.Tests.data
 {
-    public class TestResource : NUnit.TestUtilities.TempResourceFile
+    public class TestResource : TestCentric.TestUtilities.TempResourceFile
     {
         public TestResource(string name)
             : base(typeof(TestResource), name)

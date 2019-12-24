@@ -5,7 +5,7 @@
 
 using NUnit.Framework;
 
-namespace NUnit.Tests
+namespace TestCentric.Tests
 {
     public class AccessesCurrentTestContextDuringDiscovery
     {

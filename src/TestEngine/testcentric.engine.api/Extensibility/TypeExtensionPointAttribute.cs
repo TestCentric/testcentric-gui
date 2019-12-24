@@ -5,7 +5,7 @@
 
 using System;
 
-namespace NUnit.Engine.Extensibility
+namespace TestCentric.Engine.Extensibility
 {
     /// <summary>
     /// TypeExtensionPointAttribute is used to bind an extension point

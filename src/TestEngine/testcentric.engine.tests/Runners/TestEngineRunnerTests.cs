@@ -7,11 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
-using NUnit.Engine.Helpers;
+using TestCentric.Engine.Helpers;
 using NUnit.Framework;
-using NUnit.Tests.Assemblies;
+using TestCentric.Tests.Assemblies;
 
-namespace NUnit.Engine.Runners
+namespace TestCentric.Engine.Runners
 {
     // Temporarily commenting out Process tests due to
     // intermittent errors, probably due to the test

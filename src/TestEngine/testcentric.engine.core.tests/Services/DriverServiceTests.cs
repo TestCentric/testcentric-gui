@@ -6,9 +6,9 @@
 using System;
 using System.IO;
 using NUnit.Framework;
-using NUnit.Engine.Drivers;
+using TestCentric.Engine.Drivers;
 
-namespace NUnit.Engine.Services
+namespace TestCentric.Engine.Services
 {
     [TestFixture]
     public class DriverServiceTests

@@ -8,10 +8,10 @@ using System.IO;
 using System.Xml;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
-using NUnit.Engine.Helpers;
-using NUnit.Engine.Extensibility;
+using TestCentric.Engine.Helpers;
+using TestCentric.Engine.Extensibility;
 
-namespace NUnit.Engine.Drivers
+namespace TestCentric.Engine.Drivers
 {
     // Functional tests of the NUnitFrameworkDriver calling into the framework.
     public abstract class NotRunnableFrameworkDriverTests

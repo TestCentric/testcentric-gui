@@ -4,9 +4,9 @@
 // ***********************************************************************
 
 using System;
-using NUnit.Common;
+using TestCentric.Common;
 
-namespace NUnit.Engine.Runners
+namespace TestCentric.Engine.Runners
 {
     public class TestExecutionTask : ITestExecutionTask
     {

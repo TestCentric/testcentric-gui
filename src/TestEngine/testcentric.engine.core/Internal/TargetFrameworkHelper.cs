@@ -6,7 +6,7 @@
 using System;
 using Mono.Cecil;
 
-namespace NUnit.Engine.Internal
+namespace TestCentric.Engine.Internal
 {
     public class TargetFrameworkHelper
     {

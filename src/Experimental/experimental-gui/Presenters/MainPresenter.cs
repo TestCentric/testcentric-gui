@@ -26,7 +26,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using NUnit.Engine;
+using TestCentric.Engine;
 using TestCentric.Gui.Model.Settings;
 
 namespace TestCentric.Gui.Presenters
