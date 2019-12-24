@@ -1,8 +1,7 @@
-// ****************************************************************
-// This is free software licensed under the NUnit license. You
-// may obtain a copy of the license as well as information regarding
-// copyright ownership at http://nunit.org.
-// ****************************************************************
+// ***********************************************************************
+// Copyright (c) Charlie Poole and TestCentric GUI contributors.
+// Licensed under the MIT License. See LICENSE.txt in root directory.
+// ***********************************************************************
 
 using System;
 using System.Collections;
