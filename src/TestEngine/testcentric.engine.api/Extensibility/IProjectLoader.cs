@@ -5,7 +5,7 @@
 
 using System;
 
-namespace NUnit.Engine.Extensibility
+namespace TestCentric.Engine.Extensibility
 {
     /// <summary>
     /// The IProjectLoader interface is implemented by any class

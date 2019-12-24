@@ -7,7 +7,7 @@
 using System;
 using System.Web.UI;
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     public class CallbackHandler : MarshalByRefObject, ICallbackEventHandler
     {

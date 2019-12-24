@@ -9,7 +9,7 @@ using System.IO;
 using System.Threading;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Integration
+namespace TestCentric.Engine.Integration
 {
     internal sealed class RunnerInDirectoryWithoutFramework : IDisposable
     {

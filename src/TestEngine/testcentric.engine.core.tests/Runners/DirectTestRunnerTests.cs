@@ -7,10 +7,10 @@ using System;
 using System.Collections.Generic;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
-using NUnit.Engine.Extensibility;
+using TestCentric.Engine.Extensibility;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Runners
+namespace TestCentric.Engine.Runners
 {
     using Fakes;
 

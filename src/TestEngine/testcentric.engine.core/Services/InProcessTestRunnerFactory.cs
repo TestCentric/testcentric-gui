@@ -3,11 +3,11 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-using NUnit.Engine.Helpers;
-using NUnit.Engine.Internal;
-using NUnit.Engine.Runners;
+using TestCentric.Engine.Helpers;
+using TestCentric.Engine.Internal;
+using TestCentric.Engine.Runners;
 
-namespace NUnit.Engine.Services
+namespace TestCentric.Engine.Services
 {
     /// <summary>
     /// InProcessTestRunnerFactory handles creation of a suitable test

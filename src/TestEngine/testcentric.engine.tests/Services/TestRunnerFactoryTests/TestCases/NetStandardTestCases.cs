@@ -4,10 +4,10 @@
 // ***********************************************************************
 
 using System.Collections.Generic;
-using NUnit.Engine.Runners;
+using TestCentric.Engine.Runners;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Services.TestRunnerFactoryTests.TestCases
+namespace TestCentric.Engine.Services.TestRunnerFactoryTests.TestCases
 {
 #if NETCOREAPP1_1 || NETCOREAPP2_1
     internal static class NetStandardTestCases

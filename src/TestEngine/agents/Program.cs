@@ -8,14 +8,14 @@ using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Security;
-using NUnit.Common;
-using NUnit.Engine;
-using NUnit.Engine.Agents;
-using NUnit.Engine.Internal;
-using NUnit.Engine.Services;
-using NUnit.Engine.Helpers;
+using TestCentric.Common;
+using TestCentric.Engine;
+using TestCentric.Engine.Agents;
+using TestCentric.Engine.Internal;
+using TestCentric.Engine.Services;
+using TestCentric.Engine.Helpers;
 
-namespace NUnit.Agent
+namespace TestCentric.Agent
 {
     public class NUnitTestAgent
     {

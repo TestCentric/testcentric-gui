@@ -5,11 +5,11 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Engine.Runners;
-using NUnit.Engine.Services.TestRunnerFactoryTests.TestCases;
+using TestCentric.Engine.Runners;
+using TestCentric.Engine.Services.TestRunnerFactoryTests.TestCases;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Services.TestRunnerFactoryTests
+namespace TestCentric.Engine.Services.TestRunnerFactoryTests
 {
     using Fakes;
 

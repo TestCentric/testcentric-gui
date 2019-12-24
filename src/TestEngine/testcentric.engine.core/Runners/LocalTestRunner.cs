@@ -5,7 +5,7 @@
 
 using System;
 
-namespace NUnit.Engine.Runners
+namespace TestCentric.Engine.Runners
 {
     /// <summary>
     /// LocalTestRunner runs tests in the current application domain.

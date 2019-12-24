@@ -4,9 +4,9 @@
 // ***********************************************************************
 
 using System;
-using NUnit.Engine.Extensibility;
+using TestCentric.Engine.Extensibility;
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     /// <summary>
     /// The IDriverService interface is implemented by the driver service, which is able

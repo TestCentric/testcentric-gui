@@ -6,9 +6,9 @@
 using System;
 using System.Threading;
 using System.Xml;
-using NUnit.Common;
+using TestCentric.Common;
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     /// <summary>
     /// The TestRun class encapsulates an ongoing test run.

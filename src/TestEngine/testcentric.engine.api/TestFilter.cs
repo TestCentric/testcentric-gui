@@ -6,7 +6,7 @@
 using System;
 using System.Xml;
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     /// <summary>
     /// Abstract base for all test filters. A filter is represented

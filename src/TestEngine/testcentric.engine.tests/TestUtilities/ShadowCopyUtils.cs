@@ -11,7 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace NUnit.Engine.TestUtilities
+namespace TestCentric.Engine.TestUtilities
 {
     public static class ShadowCopyUtils
     {

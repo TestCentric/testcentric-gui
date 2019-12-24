@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Services
+namespace TestCentric.Engine.Services
 {
     public class SettingsServiceTests
     {

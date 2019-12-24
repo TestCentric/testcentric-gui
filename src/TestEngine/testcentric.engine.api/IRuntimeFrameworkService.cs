@@ -6,7 +6,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     /// <summary>
     /// Implemented by a type that provides information about the

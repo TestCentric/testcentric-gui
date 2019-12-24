@@ -5,7 +5,7 @@
 
 using System;
 
-namespace NUnit.Engine.Internal
+namespace TestCentric.Engine.Internal
 {
     /// <summary>
     /// InternalTrace provides facilities for tracing the execution

@@ -6,7 +6,7 @@
 using System;
 using System.Threading;
 
-namespace NUnit.Engine.TestUtilities
+namespace TestCentric.Engine.TestUtilities
 {
     public static class On
     {

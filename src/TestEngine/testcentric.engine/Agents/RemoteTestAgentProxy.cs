@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace NUnit.Engine.Agents
+namespace TestCentric.Engine.Agents
 {
     /// <summary>
     /// RemoteTestAgentProxy wraps a RemoteTestAgent so that certain

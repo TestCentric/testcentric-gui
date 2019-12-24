@@ -7,7 +7,7 @@ using System;
 using System.IO;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Services
+namespace TestCentric.Engine.Services
 {
     public class ResultServiceTests
     {

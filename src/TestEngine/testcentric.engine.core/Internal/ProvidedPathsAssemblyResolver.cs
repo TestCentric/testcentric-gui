@@ -10,7 +10,7 @@ using System.Reflection;
 using System.IO;
 using System.Diagnostics;
 
-namespace NUnit.Engine.Internal
+namespace TestCentric.Engine.Internal
 {
     public class ProvidedPathsAssemblyResolver
     {

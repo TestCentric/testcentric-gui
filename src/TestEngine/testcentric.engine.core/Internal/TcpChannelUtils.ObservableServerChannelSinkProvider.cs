@@ -10,7 +10,7 @@ using System.IO;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Messaging;
 
-namespace NUnit.Engine.Internal
+namespace TestCentric.Engine.Internal
 {
     partial class TcpChannelUtils
     {

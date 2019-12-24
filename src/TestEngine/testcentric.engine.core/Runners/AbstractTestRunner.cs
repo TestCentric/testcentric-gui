@@ -5,9 +5,9 @@
 
 using System;
 using System.ComponentModel;
-using NUnit.Engine.Services;
+using TestCentric.Engine.Services;
 
-namespace NUnit.Engine.Runners
+namespace TestCentric.Engine.Runners
 {
     /// <summary>
     /// AbstractTestRunner is the base class for all internal runners

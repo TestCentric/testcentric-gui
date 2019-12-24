@@ -5,7 +5,7 @@
 
 using System.Collections.Generic;
 
-namespace NUnit.Engine.Extensibility
+namespace TestCentric.Engine.Extensibility
 {
     /// <summary>
     /// Interface for the various project types that the engine can load.

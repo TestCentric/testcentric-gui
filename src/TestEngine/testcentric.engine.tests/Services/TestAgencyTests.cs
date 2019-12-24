@@ -6,7 +6,7 @@
 #if !NETCOREAPP1_1 && !NETCOREAPP2_1
 using NUnit.Framework;
 
-namespace NUnit.Engine.Services
+namespace TestCentric.Engine.Services
 {
     using Fakes;
 

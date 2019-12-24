@@ -6,7 +6,7 @@
 using System.IO;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Api
+namespace TestCentric.Engine.Api
 {
     public class TestPackageTests_SingleAssembly
     {

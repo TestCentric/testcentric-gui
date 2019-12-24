@@ -5,7 +5,7 @@
 
 using System;
 
-namespace NUnit.Engine.Extensibility
+namespace TestCentric.Engine.Extensibility
 {
     /// <summary>
     /// The ExtensionPropertyAttribute is used to specify named properties for an extension.

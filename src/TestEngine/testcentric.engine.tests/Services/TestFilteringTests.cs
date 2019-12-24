@@ -7,9 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
-using NUnit.Tests.Assemblies;
+using TestCentric.Tests.Assemblies;
 
-namespace NUnit.Engine.Services
+namespace TestCentric.Engine.Services
 {
     using Drivers;
 
@@ -38,13 +38,13 @@ namespace NUnit.Engine.Services
 
         // TODO: Uncomment the "double negative" tests when we are using an updated framework that handles them correctly.
         [TestCase("<filter/>", MockAssembly.Tests)]
-        [TestCase("<filter><test>NUnit.Tests.Assemblies.MockTestFixture</test></filter>", MockTestFixture.Tests)]
-        //[TestCase("<filter><not><not><test>NUnit.Tests.Assemblies.MockTestFixture</test></not></not></filter>", MockTestFixture.Tests)]
-        [TestCase("<filter><test>NUnit.Tests.Assemblies.MockTestFixture.IgnoreTest</test></filter>", 1)]
-        //[TestCase("<filter><not><not><test>NUnit.Tests.Assemblies.MockTestFixture.IgnoreTest</test></not></not></filter>", 1)]
-        [TestCase("<filter><class>NUnit.Tests.Assemblies.MockTestFixture</class></filter>", MockTestFixture.Tests)]
+        [TestCase("<filter><test>TestCentric.Tests.Assemblies.MockTestFixture</test></filter>", MockTestFixture.Tests)]
+        //[TestCase("<filter><not><not><test>TestCentric.Tests.Assemblies.MockTestFixture</test></not></not></filter>", MockTestFixture.Tests)]
+        [TestCase("<filter><test>TestCentric.Tests.Assemblies.MockTestFixture.IgnoreTest</test></filter>", 1)]
+        //[TestCase("<filter><not><not><test>TestCentric.Tests.Assemblies.MockTestFixture.IgnoreTest</test></not></not></filter>", 1)]
+        [TestCase("<filter><class>TestCentric.Tests.Assemblies.MockTestFixture</class></filter>", MockTestFixture.Tests)]
         [TestCase("<filter><name>IgnoreTest</name></filter>", 1)]
-        [TestCase("<filter><name>MockTestFixture</name></filter>", MockTestFixture.Tests + NUnit.Tests.TestAssembly.MockTestFixture.Tests)]
+        [TestCase("<filter><name>MockTestFixture</name></filter>", MockTestFixture.Tests + TestCentric.Tests.TestAssembly.MockTestFixture.Tests)]
         [TestCase("<filter><method>IgnoreTest</method></filter>", 1)]
         [TestCase("<filter><cat>FixtureCategory</cat></filter>", MockTestFixture.Tests)]
         //[TestCase("<filter><not><not><cat>FixtureCategory</cat></not></not></filter>", MockTestFixture.Tests)]
@@ -53,8 +53,8 @@ namespace NUnit.Engine.Services
             Assert.That(_driver.CountTestCases(filter), Is.EqualTo(count));
         }
 
-        [TestCase("NUnit.Tests.Assemblies.MockTestFixture", MockTestFixture.Tests, TestName = "{m}_MockTestFixture")]
-        [TestCase("NUnit.Tests.Assemblies.MockTestFixture.IgnoreTest", 1, TestName = "{m}_MockTest4")]
+        [TestCase("TestCentric.Tests.Assemblies.MockTestFixture", MockTestFixture.Tests, TestName = "{m}_MockTestFixture")]
+        [TestCase("TestCentric.Tests.Assemblies.MockTestFixture.IgnoreTest", 1, TestName = "{m}_MockTest4")]
         public void UsingTestFilterBuilderAddTest(string testName, int count)
         {
             var builder = new TestFilterBuilder();
@@ -64,11 +64,11 @@ namespace NUnit.Engine.Services
 
         }
 
-        [TestCase("test==NUnit.Tests.Assemblies.MockTestFixture", MockTestFixture.Tests, TestName = "{m}_MockTestFixture")]
-        [TestCase("test==NUnit.Tests.Assemblies.MockTestFixture.IgnoreTest", 1, TestName = "{m}_MockTest4")]
-        [TestCase("class==NUnit.Tests.Assemblies.MockTestFixture", MockTestFixture.Tests)]
+        [TestCase("test==TestCentric.Tests.Assemblies.MockTestFixture", MockTestFixture.Tests, TestName = "{m}_MockTestFixture")]
+        [TestCase("test==TestCentric.Tests.Assemblies.MockTestFixture.IgnoreTest", 1, TestName = "{m}_MockTest4")]
+        [TestCase("class==TestCentric.Tests.Assemblies.MockTestFixture", MockTestFixture.Tests)]
         [TestCase("name==IgnoreTest", 1)]
-        [TestCase("name==MockTestFixture", MockTestFixture.Tests + NUnit.Tests.TestAssembly.MockTestFixture.Tests)]
+        [TestCase("name==MockTestFixture", MockTestFixture.Tests + TestCentric.Tests.TestAssembly.MockTestFixture.Tests)]
         [TestCase("method==IgnoreTest", 1)]
         [TestCase("cat==FixtureCategory", MockTestFixture.Tests)]
         public void UsingTestFilterBuilderSelectWhere(string expression, int count)

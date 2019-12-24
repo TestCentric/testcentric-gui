@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace NUnit.Engine.Runners
+namespace TestCentric.Engine.Runners
 {
     public interface ITestExecutionTask
     {

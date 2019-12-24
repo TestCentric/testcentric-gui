@@ -6,7 +6,7 @@
 using System;
 using System.IO;
 
-namespace NUnit.Engine.Internal
+namespace TestCentric.Engine.Internal
 {
     /// <summary>
     /// Provides internal logging to the NUnit framework

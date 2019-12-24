@@ -5,10 +5,10 @@
 
 using System.Collections.Generic;
 using System.IO;
-using NUnit.Engine.Extensibility;
+using TestCentric.Engine.Extensibility;
 using System.Reflection;
 
-namespace NUnit.Engine.Drivers
+namespace TestCentric.Engine.Drivers
 {
     public abstract class NotRunnableFrameworkDriver : IFrameworkDriver
     {

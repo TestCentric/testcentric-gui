@@ -10,7 +10,7 @@ using System.Text;
 // Missing XML Docs
 #pragma warning disable 1591
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     public class TestSelectionParser
     {

@@ -7,10 +7,10 @@ using System;
 using System.Text;
 using System.Xml;
 using System.IO;
-using NUnit.Engine.Extensibility;
-using NUnit.Engine.Helpers;
+using TestCentric.Engine.Extensibility;
+using TestCentric.Engine.Helpers;
 
-namespace NUnit.Engine.Services
+namespace TestCentric.Engine.Services
 {
     using Internal;
 

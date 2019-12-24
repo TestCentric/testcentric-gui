@@ -6,7 +6,7 @@
 #if !NETCOREAPP1_1 && !NETCOREAPP2_0
 using System;
 
-namespace NUnit.Engine.Services
+namespace TestCentric.Engine.Services
 {
     public partial class AgentStoreTests
     {

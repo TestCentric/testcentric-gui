@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
-namespace NUnit.Engine.TestUtilities
+namespace TestCentric.Engine.TestUtilities
 {
     public static class ProcessRunner
     {

@@ -8,10 +8,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using NUnit.Engine.Internal;
-using NUnit.Engine.Services;
+using TestCentric.Engine.Internal;
+using TestCentric.Engine.Services;
 
-namespace NUnit.Engine
+namespace TestCentric.Engine
 {
     /// <summary>
     /// The TestEngine provides services that allow a client

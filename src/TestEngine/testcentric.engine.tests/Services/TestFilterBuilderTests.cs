@@ -5,10 +5,10 @@
 
 using System;
 using System.Xml;
-using NUnit.Engine;
+using TestCentric.Engine;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Services
+namespace TestCentric.Engine.Services
 {
     public class TestFilterBuilderTests
     {

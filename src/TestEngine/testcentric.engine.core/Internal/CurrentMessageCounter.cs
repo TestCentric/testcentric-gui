@@ -5,7 +5,7 @@
 
 using System.Threading;
 
-namespace NUnit.Engine.Internal
+namespace TestCentric.Engine.Internal
 {
     public sealed class CurrentMessageCounter
     {

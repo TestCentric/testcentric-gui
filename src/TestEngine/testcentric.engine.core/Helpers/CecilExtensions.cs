@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using Mono.Cecil;
 
-namespace NUnit.Engine.Helpers
+namespace TestCentric.Engine.Helpers
 {
     /// <summary>
     /// Extension methods that make it easier to work with Mono.Cecil.

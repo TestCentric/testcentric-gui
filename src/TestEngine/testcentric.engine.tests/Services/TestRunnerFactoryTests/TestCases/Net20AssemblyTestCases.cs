@@ -6,12 +6,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NUnit.Engine.Internal;
-using NUnit.Engine.Runners;
-using NUnit.Engine.Services.TestRunnerFactoryTests.Results;
+using TestCentric.Engine.Internal;
+using TestCentric.Engine.Runners;
+using TestCentric.Engine.Services.TestRunnerFactoryTests.Results;
 using NUnit.Framework;
 
-namespace NUnit.Engine.Services.TestRunnerFactoryTests.TestCases
+namespace TestCentric.Engine.Services.TestRunnerFactoryTests.TestCases
 {
 #if !NETCOREAPP
     internal static class Net20AssemblyTestCases

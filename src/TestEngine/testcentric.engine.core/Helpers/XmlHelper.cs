@@ -14,7 +14,7 @@ namespace System.Runtime.CompilerServices
     sealed class ExtensionAttribute : Attribute { }
 }
 
-namespace NUnit.Engine.Helpers
+namespace TestCentric.Engine.Helpers
 {
     /// <summary>
     /// XmlHelper provides static methods for basic XML operations.
