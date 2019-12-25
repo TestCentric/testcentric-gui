@@ -90,7 +90,9 @@ string ALL_TESTS = "*.Tests.dll";
 string ENGINE_TESTS = "testcentric.engine.tests";
 string[] ENGINE_RUNTIMES = new string[] {"net35", "netcoreapp2.1"};
 string ENGINE_CORE_TESTS = "testcentric.engine.core.tests";
-string[] ENGINE_CORE_RUNTIMES = new string[] {"net35", "netcoreapp2.1", "netcoreapp1.1"};
+string[] ENGINE_CORE_RUNTIMES = IsRunningOnWindows()
+	? new string[] {"net35", "netcoreapp2.1", "netcoreapp1.1"}
+	: new string[] {"net35", "netcoreapp2.1"};
 
 //////////////////////////////////////////////////////////////////////
 // SETUP AND TEARDOWN
