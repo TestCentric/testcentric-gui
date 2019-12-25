@@ -69,9 +69,8 @@ string PACKAGE_DIR = PROJECT_DIR + "package/";
 string PACKAGE_TEST_DIR = PACKAGE_DIR + "test/";
 string CHOCO_DIR = PROJECT_DIR + "choco/";
 string BIN_DIR = PROJECT_DIR + "bin/" + configuration + "/";
-string ENGINE_BIN_DIR = PROJECT_DIR + "src/TestEngine/bin/" + configuration + "/";
-string ENGINE_BIN_DIR_NET20 = ENGINE_BIN_DIR + "net20/";
-string ENGINE_BIN_DIR_NET35 = ENGINE_BIN_DIR + "net35/";
+string BIN_DIR_NET20 = BIN_DIR + "net20/";
+string BIN_DIR_NET35 = BIN_DIR + "net35/";
 
 // Packaging
 string PACKAGE_NAME = "testcentric-gui";
@@ -166,7 +165,6 @@ Task("Clean")
     .Does(() =>
 {
     CleanDirectory(BIN_DIR);
-	CleanDirectory(ENGINE_BIN_DIR);
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -201,7 +199,7 @@ Task("Build")
     CopyFileToDirectory("NOTICES.txt", BIN_DIR);
     CopyFileToDirectory("CHANGES.txt", BIN_DIR);
 
-	CopyFiles(ENGINE_BIN_DIR_NET20 + "testcentric-agent*", ENGINE_BIN_DIR_NET35);
+	CopyFiles(BIN_DIR_NET20 + "testcentric-agent*", BIN_DIR_NET35);
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -231,7 +229,7 @@ private void RunNUnitLite(string testName, string framework)
 {
 	bool isDotNetCore = framework.StartsWith("netcoreapp");
 	string ext = isDotNetCore ? ".dll" : ".exe";
-	string testPath = ENGINE_BIN_DIR + framework + "/" + testName + ext;
+	string testPath = BIN_DIR + framework + "/" + testName + ext;
 
 	int rc = isDotNetCore
 		? StartProcess("dotnet", testPath)
