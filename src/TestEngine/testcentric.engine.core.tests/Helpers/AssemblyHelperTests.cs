@@ -12,7 +12,12 @@ namespace TestCentric.Engine.Helpers
     [TestFixture]
     public class AssemblyHelperTests
     {
-        private static readonly string THIS_ASSEMBLY_PATH = "testcentric.engine.core.tests.dll";
+        private static readonly string THIS_ASSEMBLY_PATH =
+#if NET35
+            "testcentric.engine.core.tests.exe";
+#else
+            "testcentric.engine.core.tests.dll";
+#endif
 
         [Test]
         public void GetPathForAssembly()
