@@ -18,7 +18,12 @@ namespace TestCentric.Engine.Services
         static string path2 = TestPath("/test/bin/debug/test2.dll");
         static string path3 = TestPath("/test/utils/test3.dll");
 
-        const string STANDARD_CONFIG_FILE = "testcentric.engine.core.tests.dll.config";
+        const string STANDARD_CONFIG_FILE =
+#if NET35
+            "testcentric.engine.core.tests.exe.config";
+#else
+            "testcentric.engine.core.tests.dll.config";
+#endif
         const string ALTERNATE_CONFIG_FILE = "alt.config";
 
         [Test]

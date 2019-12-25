@@ -47,8 +47,8 @@ namespace TestCentric.Engine.Services
         [TestCase("mock-assembly.pdb", true, typeof(InvalidAssemblyFrameworkDriver))]
         [TestCase("junk.dll", false, typeof(InvalidAssemblyFrameworkDriver))]
         [TestCase("junk.dll", true, typeof(InvalidAssemblyFrameworkDriver))]
-        [TestCase("testcentric.engine.dll", false, typeof(InvalidAssemblyFrameworkDriver))]
-        [TestCase("testcentric.engine.dll", true, typeof(SkippedAssemblyFrameworkDriver))]
+        [TestCase("testcentric.engine.core.dll", false, typeof(InvalidAssemblyFrameworkDriver))]
+        [TestCase("testcentric.engine.core.dll", true, typeof(SkippedAssemblyFrameworkDriver))]
         [TestCase("notest-assembly.dll", true, typeof(SkippedAssemblyFrameworkDriver))]
         public void CorrectDriverIsUsed(string fileName, bool skipNonTestAssemblies, Type expectedType)
         {

@@ -3,7 +3,6 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-#if !NET35
 using System.Reflection;
 using NUnitLite;
 
@@ -13,8 +12,11 @@ namespace TestCentric.Engine
     {
         static int Main(string[] args)
         {
+#if NET35
+            return new AutoRun().Execute(args);
+#else
             return new TextRunner(typeof(Program).GetTypeInfo().Assembly).Execute(args);
+#endif
         }
     }
 }
-#endif

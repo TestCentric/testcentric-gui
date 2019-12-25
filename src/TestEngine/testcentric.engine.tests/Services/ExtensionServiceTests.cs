@@ -141,10 +141,11 @@ namespace TestCentric.Engine.Services
 
 #if NETCOREAPP2_1
             string other = "net35"; // Attempt to load the .NET 3.5 version of the extensions from the .NET Core 2.0 tests
+            var assemblyName = Path.Combine(GetSiblingDirectory(other), "testcentric.engine.tests.exe");
 #elif NET35
             string other = "netcoreapp2.1"; // Attempt to load the .NET Core 2.1 version of the extensions from the .NET 3.5 tests
-#endif
             var assemblyName = Path.Combine(GetSiblingDirectory(other), "testcentric.engine.tests.dll");
+#endif
             Assert.That(assemblyName, Does.Exist);
 
             var service = new ExtensionService();

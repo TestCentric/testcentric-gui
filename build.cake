@@ -1,4 +1,4 @@
-#tool nuget:?package=NUnit.ConsoleRunner&version=3.9.0
+#tool nuget:?package=NUnit.ConsoleRunner&version=3.10.0
 #tool nuget:?package=GitVersion.CommandLine&version=5.0.0
 #addin nuget:?package=Cake.Incubator&version=5.0.1
 
@@ -69,8 +69,9 @@ string PACKAGE_DIR = PROJECT_DIR + "package/";
 string PACKAGE_TEST_DIR = PACKAGE_DIR + "test/";
 string CHOCO_DIR = PROJECT_DIR + "choco/";
 string BIN_DIR = PROJECT_DIR + "bin/" + configuration + "/";
-string ENGINE_BIN_DIR = PROJECT_DIR + "src/TestEngine/bin/" + configuration + "/net20/";
-string ENGINE_TESTS_BIN_DIR = PROJECT_DIR + "src/TestEngine/bin/" + configuration + "/net35/";
+string ENGINE_BIN_DIR = PROJECT_DIR + "src/TestEngine/bin/" + configuration + "/";
+string ENGINE_BIN_DIR_NET20 = ENGINE_BIN_DIR + "net20/";
+string ENGINE_BIN_DIR_NET35 = ENGINE_BIN_DIR + "net35/";
 
 // Packaging
 string PACKAGE_NAME = "testcentric-gui";
@@ -78,16 +79,23 @@ string PACKAGE_NAME = "testcentric-gui";
 // Solution
 string SOLUTION = "testcentric-gui.sln";
 
-// Testing
+// GUI Testing
 string GUI_RUNNER = "testcentric.exe";
 string EXPERIMENTAL_RUNNER = "tc-next.exe";
 string GUI_TESTS = "TestCentric.Gui.Tests.dll";
 string EXPERIMENTAL_TESTS = "Experimental.Gui.Tests.dll";
 string ALL_TESTS = "*.Tests.dll";
 
+// Engine Testing
+string ENGINE_TESTS = "testcentric.engine.tests";
+string[] ENGINE_RUNTIMES = new string[] {"net35", "netcoreapp2.1"};
+string ENGINE_CORE_TESTS = "testcentric.engine.core.tests";
+string[] ENGINE_CORE_RUNTIMES = new string[] {"net35", "netcoreapp2.1", "netcoreapp1.1"};
+
 //////////////////////////////////////////////////////////////////////
-// SETUP
+// SETUP AND TEARDOWN
 //////////////////////////////////////////////////////////////////////
+
 Setup(context =>
 {
 	// TODO: Make GitVersion work on Linux
@@ -144,6 +152,10 @@ Setup(context =>
     Information("Building {0} version {1} of TestCentric GUI.", configuration, packageVersion);
 });
 
+// If we run target Test, we catch errors here in teardown.
+// If we run packaging, the CheckTestErrors Task is run instead.
+Teardown(context => CheckTestErrors(ref ErrorDetail));
+
 //////////////////////////////////////////////////////////////////////
 // CLEAN
 //////////////////////////////////////////////////////////////////////
@@ -153,7 +165,6 @@ Task("Clean")
 {
     CleanDirectory(BIN_DIR);
 	CleanDirectory(ENGINE_BIN_DIR);
-	CleanDirectory(ENGINE_TESTS_BIN_DIR);
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -188,23 +199,98 @@ Task("Build")
     CopyFileToDirectory("NOTICES.txt", BIN_DIR);
     CopyFileToDirectory("CHANGES.txt", BIN_DIR);
 
-	CopyFiles(ENGINE_BIN_DIR + "testcentric-agent*", ENGINE_TESTS_BIN_DIR);
+	CopyFiles(ENGINE_BIN_DIR_NET20 + "testcentric-agent*", ENGINE_BIN_DIR_NET35);
 });
 
 //////////////////////////////////////////////////////////////////////
-// TEST
+// TESTS
 //////////////////////////////////////////////////////////////////////
 
+var ErrorDetail = new List<string>();
 
-Task("Test")
+Task("CheckTestErrors")
+    .Description("Checks for errors running the test suites")
+    .Does(() => CheckTestErrors(ref ErrorDetail));
+
+void CheckTestErrors(ref List<string> errorDetail)
+{
+    if(errorDetail.Count != 0)
+    {
+        var copyError = new List<string>();
+        copyError = errorDetail.Select(s => s).ToList();
+        errorDetail.Clear();
+        throw new Exception("One or more unit tests failed, breaking the build.\n"
+                              + copyError.Aggregate((x,y) => x + "\n" + y));
+    }
+}
+
+// Run tests using NUnitLite
+private void RunNUnitLite(string testName, string framework)
+{
+	bool isDotNetCore = framework.StartsWith("netcoreapp");
+	string ext = isDotNetCore ? ".dll" : ".exe";
+	string testPath = ENGINE_BIN_DIR + framework + "/" + testName + ext;
+
+	int rc = isDotNetCore
+		? StartProcess("dotnet", testPath)
+		: StartProcess(testPath);
+
+	if (rc > 0)
+		ErrorDetail.Add(string.Format($"{testName}: {rc} tests failed running under {framework}"));
+	else if (rc < 0)
+		ErrorDetail.Add(string.Format($"{testName} returned rc = {rc} running under {framework}"));
+}
+
+//////////////////////////////////////////////////////////////////////
+// TESTS OF TESTCENTRIC.ENGINE
+//////////////////////////////////////////////////////////////////////
+
+var testEngineTask = Task("TestEngine")
+	.Description("Tests the TestCentric Engine");
+
+foreach (var runtime in ENGINE_RUNTIMES)
+{
+	var task = Task("TestEngine on " + runtime)
+		.Description("Tests the Engine on " + runtime)
+		.IsDependentOn("Build")
+		.OnError(exception => { ErrorDetail.Add(exception.Message); })
+		.Does(() =>
+		{
+			RunNUnitLite(ENGINE_TESTS, "net35");
+		});
+
+	testEngineTask.IsDependentOn(task);	
+}
+
+//////////////////////////////////////////////////////////////////////
+// TESTS OF TESTCENTRIC.ENGINE.CORE
+//////////////////////////////////////////////////////////////////////
+
+var testEngineCoreTask = Task("TestEngineCore")
+	.Description("Tests the TestCentric Engine Core");
+
+foreach (var runtime in ENGINE_CORE_RUNTIMES)
+{
+	var task = Task("TestEngineCore on " + runtime)
+		.Description("Tests the Engine Core on " + runtime)
+		.IsDependentOn("Build")
+		.OnError(exception => { ErrorDetail.Add(exception.Message); })
+		.Does(() =>
+		{
+			RunNUnitLite(ENGINE_CORE_TESTS, runtime);
+		});
+
+	testEngineCoreTask.IsDependentOn(task);	
+}
+
+//////////////////////////////////////////////////////////////////////
+// TESTS OF THE GUI
+//////////////////////////////////////////////////////////////////////
+
+Task("TestGui")
     .IsDependentOn("Build")
     .Does(() =>
 {
-	// Keeping this separate until binaries are all merged
-    NUnit3(ENGINE_TESTS_BIN_DIR + "*.tests.dll", new NUnit3Settings {
-        NoResults = true
-        });
-
     NUnit3(BIN_DIR + ALL_TESTS, new NUnit3Settings {
         NoResults = true
         });
@@ -318,7 +404,8 @@ Task("CreatePackageTestDirectory")
 // ZIP PACKAGE TEST
 //////////////////////////////////////////////////////////////////////
 
-Task("ZipPackageTest")
+Task("TestZipPackage")
+	.IsDependentOn("PackageZip")
 	.IsDependentOn("CreatePackageTestDirectory")
 	.Does(() =>
 	{
@@ -393,6 +480,7 @@ Task("ChocolateyInstall")
 //////////////////////////////////////////////////////////////////////
 
 Task("ChocolateyTest")
+	.IsDependentOn("PackageChocolatey")
 	.IsDependentOn("CreatePackageTestDirectory")
 	.Does(() =>
 	{
@@ -406,7 +494,7 @@ Task("ChocolateyTest")
 	});
 
 //////////////////////////////////////////////////////////////////////
-// HELPER METHODS
+// HELPER METHODS - TESTS
 //////////////////////////////////////////////////////////////////////
 
 // Copy all files needed to run tests from one directory to another
@@ -449,30 +537,36 @@ private void CheckTestResult(string resultFile)
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
 
+Task("Test")
+	.IsDependentOn("TestEngineCore")
+	.IsDependentOn("TestEngine")
+	.IsDependentOn("TestGui");
+
 Task("Package")
+	.IsDependentOn("CheckTestErrors")
     .IsDependentOn("PackageZip")
     .IsDependentOn("PackageChocolatey");
 
-Task("PackageTests")
-	.IsDependentOn("ZipPackageTest");
+Task("TestPackages")
+	.IsDependentOn("TestZipPackage");
 
 Task("Appveyor")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
     .IsDependentOn("Package")
-	.IsDependentOn("PackageTests");
+	.IsDependentOn("TestPackages");
 
 Task("Travis")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
     .IsDependentOn("PackageZip")
-	.IsDependentOn("ZipPackageTest");
+	.IsDependentOn("TestZipPackage");
 
 Task("All")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
     .IsDependentOn("Package")
-	.IsDependentOn("PackageTests");
+	.IsDependentOn("TestPackages");
 
 Task("Default")
     .IsDependentOn("Test");
