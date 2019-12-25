@@ -22,7 +22,7 @@ namespace TestCentric.Engine.Runners
         // runner is putting invalid values into the package.
         public void Validate(TestPackage package)
         {
-#if !NETSTANDARD1_6 && !NETSTANDARD2_0  // TODO: How do we validate runtime framework for .NET Standard 2.0?
+#if !NETSTANDARD2_0  // TODO: How do we validate runtime framework for .NET Standard 2.0?
             var processModel = package.GetSetting(EnginePackageSettings.ProcessModel, "Default").ToLower();
             var runningInProcess = processModel == "inprocess";
             var frameworkSetting = package.GetSetting(EnginePackageSettings.RuntimeFramework, "");

@@ -16,13 +16,10 @@ namespace TestCentric.Engine.Services
     /// </summary>
     public class DefaultTestRunnerFactory : InProcessTestRunnerFactory, ITestRunnerFactory
     {
-#if !NETSTANDARD1_6
         private IProjectService _projectService;
-#endif
 
         public override void StartService()
         {
-#if !NETSTANDARD1_6
             // TestRunnerFactory requires the ProjectService
             _projectService = ServiceContext.GetService<IProjectService>();
 
@@ -30,9 +27,6 @@ namespace TestCentric.Engine.Services
             Status = _projectService != null && ((IService)_projectService).Status == ServiceStatus.Started
                 ? ServiceStatus.Started
                 : ServiceStatus.Error;
-#else
-            Status = ServiceStatus.Started;
-#endif
         }
 
         /// <summary>
@@ -45,14 +39,13 @@ namespace TestCentric.Engine.Services
         /// <returns>A TestRunner</returns>
         public override ITestEngineRunner MakeTestRunner(TestPackage package)
         {
-#if NETSTANDARD1_6 || NETSTANDARD2_0
+#if NETSTANDARD2_0
             if (package.SubPackages.Count > 1)
                 return new AggregatingTestRunner(ServiceContext, package);
 
             return base.MakeTestRunner(package);
         }
 #else
-
             ProcessModel processModel = GetTargetProcessModel(package);
 
             switch (processModel)
@@ -92,7 +85,7 @@ namespace TestCentric.Engine.Services
         }
 #endif
 
-#if !NETSTANDARD1_6 && !NETSTANDARD2_0
+#if !NETSTANDARD2_0
         /// <summary>
         /// Get the specified target process model for the package.
         /// </summary>

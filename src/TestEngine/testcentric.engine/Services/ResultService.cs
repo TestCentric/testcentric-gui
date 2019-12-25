@@ -11,14 +11,8 @@ namespace TestCentric.Engine.Services
 {
     public class ResultService : Service, IResultService
     {
-#if NETSTANDARD1_6
-        private readonly string[] BUILT_IN_FORMATS = new string[] { "nunit3", "cases" };
-#else
         private readonly string[] BUILT_IN_FORMATS = new string[] { "nunit3", "cases", "user" };
-#endif
-#if !NETSTANDARD1_6
         private IEnumerable<ExtensionNode> _extensionNodes;
-#endif
 
         private string[] _formats;
         public string[] Formats
@@ -29,11 +23,9 @@ namespace TestCentric.Engine.Services
                 {
                     var formatList = new List<string>(BUILT_IN_FORMATS);
 
-#if !NETSTANDARD1_6
                     foreach (var node in _extensionNodes)
                         foreach (var format in node.GetValues("Format"))
                             formatList.Add(format);
-#endif
 
                     _formats = formatList.ToArray();
                 }
@@ -56,17 +48,13 @@ namespace TestCentric.Engine.Services
                     return new NUnit3XmlResultWriter();
                 case "cases":
                     return new TestCaseResultWriter();
-#if !NETSTANDARD1_6
                 case "user":
                     return new XmlTransformResultWriter(args);
-#endif
                 default:
-#if !NETSTANDARD1_6
                     foreach (var node in _extensionNodes)
                         foreach (var supported in node.GetValues("Format"))
                             if (supported == format)
                                 return node.ExtensionObject as IResultWriter;
-#endif
                     return null;
             }
         }
@@ -75,12 +63,11 @@ namespace TestCentric.Engine.Services
         {
             try
             {
-#if !NETSTANDARD1_6
                 var extensionService = ServiceContext.GetService<ExtensionService>();
 
                 if (extensionService != null && extensionService.Status == ServiceStatus.Started)
                     _extensionNodes = extensionService.GetExtensionNodes<IResultWriter>();
-#endif
+
                 // If there is no extension service, we start anyway using builtin writers
                 Status = ServiceStatus.Started;
             }
