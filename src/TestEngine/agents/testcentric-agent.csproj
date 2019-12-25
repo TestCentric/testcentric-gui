@@ -7,6 +7,7 @@
     <ApplicationIcon>..\..\..\nunit.ico</ApplicationIcon>
     <GenerateSupportedRuntime>false</GenerateSupportedRuntime>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+    <OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net20'">
     <Reference Include="System.Runtime.Remoting" />
