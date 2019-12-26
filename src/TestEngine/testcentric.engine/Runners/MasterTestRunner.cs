@@ -37,11 +37,9 @@ namespace TestCentric.Engine.Runners
 
         private ITestEngineRunner _engineRunner;
         private readonly IServiceLocator _services;
-#if !NETSTANDARD1_6
         private readonly ExtensionService _extensionService;
 #if !NETSTANDARD2_0
         private readonly IRuntimeFrameworkService _runtimeService;
-#endif
 #endif
         private readonly IProjectService _projectService;
         private ITestRunnerFactory _testRunnerFactory;
@@ -64,7 +62,6 @@ namespace TestCentric.Engine.Runners
             _projectService = _services.GetService<IProjectService>();
             _testRunnerFactory = _services.GetService<ITestRunnerFactory>();
 
-#if !NETSTANDARD1_6
             _extensionService = _services.GetService<ExtensionService>();
 #if !NETSTANDARD2_0
             _runtimeService = _services.GetService<IRuntimeFrameworkService>();
@@ -72,7 +69,6 @@ namespace TestCentric.Engine.Runners
             // Last chance to catch invalid settings in package,
             // in case the client runner missed them.
             new TestPackageValidator(_runtimeService).Validate(package);
-#endif
 #endif
         }
 
@@ -157,8 +153,6 @@ namespace TestCentric.Engine.Runners
             return RunTests(listener, filter).Xml;
         }
 
-
-#if !NETSTANDARD1_6
         /// <summary>
         /// Start a run of the tests in the loaded TestPackage. The tests are run
         /// asynchronously and the listener interface is notified as it progresses.
@@ -170,7 +164,6 @@ namespace TestCentric.Engine.Runners
         {
             return RunTestsAsync(listener, filter);
         }
-#endif
 
         /// <summary>
         /// Cancel the ongoing test run. If no  test is running, the call is ignored.
@@ -255,7 +248,7 @@ namespace TestCentric.Engine.Runners
                 // Info will be left behind in the package about
                 // each contained assembly, which will subsequently
                 // be used to determine how to run the assembly.
-#if !NETSTANDARD1_6 && !NETSTANDARD2_0
+#if !NETSTANDARD2_0
                 _runtimeService.SelectRuntimeFramework(TestPackage);
 #endif
 
@@ -394,23 +387,16 @@ namespace TestCentric.Engine.Runners
 
             if (listener != null)
                 _eventDispatcher.Listeners.Add(listener);
-#if !NETSTANDARD1_6
             foreach (var extension in _extensionService.GetExtensions<ITestEventListener>())
                 _eventDispatcher.Listeners.Add(extension);
-#endif
 
             IsTestRunning = true;
             
             string clrVersion;
             string engineVersion;
 
-#if !NETSTANDARD1_6
             clrVersion = Environment.Version.ToString();
             engineVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-#else
-            clrVersion =  Microsoft.DotNet.InternalAbstractions.RuntimeEnvironment.GetRuntimeIdentifier();
-            engineVersion = typeof(MasterTestRunner).GetTypeInfo().Assembly.GetName().Version.ToString();
-#endif
             var startTime = DateTime.UtcNow;
             long startTicks = Stopwatch.GetTimestamp();
 
@@ -422,9 +408,7 @@ namespace TestCentric.Engine.Runners
                 startRunNode.AddAttribute("engine-version", engineVersion);
                 startRunNode.AddAttribute("clr-version", clrVersion);
 
-#if !NETSTANDARD1_6
                 InsertCommandLineElement(startRunNode);
-#endif
 
                 _eventDispatcher.OnTestEvent(startRunNode.OuterXml);
 
@@ -433,9 +417,7 @@ namespace TestCentric.Engine.Runners
                 // These are inserted in reverse order, since each is added as the first child.
                 InsertFilterElement(result.Xml, filter);
 
-#if !NETSTANDARD1_6
                 InsertCommandLineElement(result.Xml);
-#endif
 
                 result.Xml.AddAttribute("engine-version", engineVersion);
                 result.Xml.AddAttribute("clr-version", clrVersion);
@@ -472,7 +454,6 @@ namespace TestCentric.Engine.Runners
             }
         }
 
-#if !NETSTANDARD1_6
         private AsyncTestEngineResult RunTestsAsync(ITestEventListener listener, TestFilter filter)
         {
             var testRun = new AsyncTestEngineResult();
@@ -506,7 +487,6 @@ namespace TestCentric.Engine.Runners
             var cdata = doc.CreateCDataSection(Environment.CommandLine);
             cmd.AppendChild(cdata);
         }
-#endif
 
         private static void InsertFilterElement(XmlNode resultNode, TestFilter filter)
         {
