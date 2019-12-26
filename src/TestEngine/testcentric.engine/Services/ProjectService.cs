@@ -3,7 +3,6 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-#if !NETSTANDARD1_6
 using System.Collections.Generic;
 using System.IO;
 using TestCentric.Common;
@@ -140,4 +139,3 @@ namespace TestCentric.Engine.Services
         }
     }
 }
-#endif
