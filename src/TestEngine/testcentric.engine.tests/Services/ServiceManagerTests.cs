@@ -12,21 +12,21 @@ namespace TestCentric.Engine.Services
 
     public class ServiceManagerTests
     {
-        private IService _settingsService;
+        private IService _service1;
         private ServiceManager _serviceManager;
 
-        private IService _projectService;
+        private IService _service2;
 
         [SetUp]
-        public void SetUp()
+        public void SetUpServiceManager()
         {
             _serviceManager = new ServiceManager();
 
-            _settingsService = new FakeSettingsService();
-            _serviceManager.AddService(_settingsService);
+            _service1 = new DummyService1();
+            _serviceManager.AddService(_service1);
 
-            _projectService = new Fakes.FakeProjectService();
-            _serviceManager.AddService(_projectService);
+            _service2 = new DummyService2();
+            _serviceManager.AddService(_service2);
         }
 
         [Test]
@@ -34,25 +34,25 @@ namespace TestCentric.Engine.Services
         {
             _serviceManager.StartServices();
 
-            IService service = _serviceManager.GetService(typeof(ISettings));
+            IService service = _serviceManager.GetService(typeof(IDummy1));
             Assert.That(service.Status, Is.EqualTo(ServiceStatus.Started));
-            service = _serviceManager.GetService(typeof(IProjectService));
+            service = _serviceManager.GetService(typeof(IDummy2));
             Assert.That(service.Status, Is.EqualTo(ServiceStatus.Started));
         }
 
         [Test]
         public void InitializationFailure()
         {
-            ((FakeSettingsService)_settingsService).FailToStart = true;
-            Assert.That(() => _serviceManager.StartServices(), 
-                Throws.InstanceOf<InvalidOperationException>().And.Message.Contains("FakeSettingsService"));
+            ((FakeService)_service1).FailToStart = true;
+            Assert.That(() => _serviceManager.StartServices(),
+                Throws.InstanceOf<InvalidOperationException>().And.Message.Contains(_service1.GetType().Name));
         }
 
         [Test]
         public void TerminationFailure()
         {
-            ((FakeSettingsService)_settingsService).FailedToStop = true;
-            _settingsService.StartService();
+            ((FakeService)_service1).FailedToStop = true;
+            _service1.StartService();
 
             Assert.DoesNotThrow(() => _serviceManager.StopServices());
         }
@@ -60,15 +60,20 @@ namespace TestCentric.Engine.Services
         [Test]
         public void AccessServiceByClass()
         {
-            IService service = _serviceManager.GetService(typeof(FakeSettingsService));
-            Assert.That(service, Is.SameAs(_settingsService));
+            IService service = _serviceManager.GetService(typeof(DummyService1));
+            Assert.That(service, Is.SameAs(_service1));
         }
 
         [Test]
         public void AccessServiceByInterface()
         {
-            IService service = _serviceManager.GetService(typeof(ISettings));
-            Assert.That(service, Is.SameAs(_settingsService));
+            IService service = _serviceManager.GetService(typeof(IDummy1));
+            Assert.That(service, Is.SameAs(_service1));
         }
+
+        private interface IDummy1 { }
+        private interface IDummy2 { }
+        private class DummyService1 : FakeService, IDummy1 { }
+        private class DummyService2 : FakeService, IDummy2 { }
     }
 }
