@@ -153,7 +153,6 @@ namespace TestCentric.Engine.Runners
             return RunTests(listener, filter).Xml;
         }
 
-
         /// <summary>
         /// Start a run of the tests in the loaded TestPackage. The tests are run
         /// asynchronously and the listener interface is notified as it progresses.
@@ -411,12 +410,14 @@ namespace TestCentric.Engine.Runners
                 startRunNode.AddAttribute("clr-version", clrVersion);
 
                 InsertCommandLineElement(startRunNode);
+
                 _eventDispatcher.OnTestEvent(startRunNode.OuterXml);
 
                 TestEngineResult result = PrepareResult(GetEngineRunner().Run(_eventDispatcher, filter)).MakeTestRunResult(TestPackage);
 
                 // These are inserted in reverse order, since each is added as the first child.
                 InsertFilterElement(result.Xml, filter);
+
                 InsertCommandLineElement(result.Xml);
 
                 result.Xml.AddAttribute("engine-version", engineVersion);

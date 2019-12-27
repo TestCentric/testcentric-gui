@@ -46,7 +46,6 @@ namespace TestCentric.Engine.Services
             return base.MakeTestRunner(package);
         }
 #else
-
             ProcessModel processModel = GetTargetProcessModel(package);
 
             switch (processModel)
