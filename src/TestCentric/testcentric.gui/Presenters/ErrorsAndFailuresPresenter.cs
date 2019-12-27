@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric GUI contributors.
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
@@ -23,7 +23,7 @@ namespace TestCentric.Gui.Presenters
         {
             _view = view;
             _model = model;
-            _settings = model.Services.UserSettings;
+            _settings = model.Settings;
 
             _view.Font = _settings.Gui.FixedFont;
             _view.SplitterPosition = _settings.Gui.ErrorDisplay.SplitterPosition;
@@ -70,7 +70,7 @@ namespace TestCentric.Gui.Presenters
                         AddResult(e.Result);
             };
 
-            _model.Services.UserSettings.Changed += (object sender, SettingsEventArgs e) =>
+            _model.Settings.Changed += (object sender, SettingsEventArgs e) =>
             {
                 _view.Font = _settings.Gui.FixedFont;
             };
@@ -79,7 +79,7 @@ namespace TestCentric.Gui.Presenters
 
             _view.SplitterPositionChanged += (object sender, EventArgs e) =>
             {
-                _model.Services.UserSettings.Gui.ErrorDisplay.SplitterPosition = _view.SplitterPosition;
+                _model.Settings.Gui.ErrorDisplay.SplitterPosition = _view.SplitterPosition;
             };
 
             _view.SourceCodeSplitOrientationChanged += (object sender, EventArgs e) =>

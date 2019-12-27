@@ -6,8 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using TestCentric.Engine;
-
+using TestCentric.Gui.Model.Settings;
 namespace TestCentric.Gui.Presenters
 {
     // TODO: With latest changes, this is no longer used.

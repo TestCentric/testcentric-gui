@@ -9,6 +9,9 @@ using TestCentric.Engine;
 
 namespace TestCentric.Gui.Model
 {
+    using Services;
+    using Settings;
+
     public interface ITestModel : IDisposable
     {
         #region General Properties
@@ -20,6 +23,10 @@ namespace TestCentric.Gui.Model
         ITestEvents Events { get; }
 
         ITestServices Services { get; }
+
+        UserSettings Settings { get; }
+
+        RecentFiles RecentFiles { get; }
 
         // Project Support
         bool NUnitProjectSupport { get; }

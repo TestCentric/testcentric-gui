@@ -57,12 +57,15 @@
     <Compile Include="ITestServices.cs" />
     <Compile Include="Services\AssemblyWatcher.cs" />
     <Compile Include="Services\IAsemblyWatcher.cs" />
+    <Compile Include="Settings\ISettings.cs" />
     <Compile Include="Services\RecentFiles.cs" />
+    <Compile Include="Services\SettingsService.cs" />
+    <Compile Include="Settings\SettingsStore.cs" />
     <Compile Include="Settings\ErrorDisplaySettings.cs" />
     <Compile Include="Settings\MainFormSettings.cs" />
     <Compile Include="Settings\MiniFormSettings.cs" />
     <Compile Include="Settings\RecentProjectsSettings.cs" />
-    <Compile Include="SettingsGroup.cs" />
+    <Compile Include="Settings\SettingsGroup.cs" />
     <Compile Include="Settings\TestTreeSettings.cs" />
     <Compile Include="Settings\TextOutputSettings.cs" />
     <Compile Include="Settings\GuiSettings.cs" />

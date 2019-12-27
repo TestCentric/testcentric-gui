@@ -9,7 +9,7 @@ using System.IO;
 using System.Xml.Schema;
 using NUnit.Framework;
 
-namespace TestCentric.Engine.Internal
+namespace TestCentric.Gui.Model.Settings
 {
     [TestFixture]
     public class SettingsStoreTests

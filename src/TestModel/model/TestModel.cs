@@ -14,6 +14,7 @@ using TestCentric.Engine;
 namespace TestCentric.Gui.Model
 {
     using Services;
+    using Settings;
 
     public class TestModel : ITestModel
     {
@@ -30,6 +31,8 @@ namespace TestCentric.Gui.Model
         // Check if the loaded Assemblies has been changed
         private AssemblyWatcher _assemblyWatcher;
 
+        private SettingsService _settingsService;
+
         private bool _lastRunWasDebugRun;
 
         #region Constructor and Creation
@@ -37,7 +40,15 @@ namespace TestCentric.Gui.Model
         public TestModel(ITestEngine testEngine, string applicationPrefix=null)
         {
             TestEngine = testEngine;
-            Services = new TestServices(testEngine, applicationPrefix);
+            _settingsService = new SettingsService(true);
+            _events = new TestEventDispatcher(this);
+            _assemblyWatcher = new AssemblyWatcher();
+
+            _settingsService.LoadSettings();
+            Settings = new UserSettings(_settingsService, applicationPrefix);
+            RecentFiles = new RecentFiles(_settingsService, applicationPrefix);
+
+            Services = new TestServices(testEngine);
 
             foreach (var node in Services.ExtensionService.GetExtensionNodes(PROJECT_LOADER_EXTENSION_PATH))
             {
@@ -46,9 +57,6 @@ namespace TestCentric.Gui.Model
                 else if (node.TypeName == VISUAL_STUDIO_PROJECT_LOADER)
                     VisualStudioSupport = true;
             }
-
-            _events = new TestEventDispatcher(this);
-            _assemblyWatcher = new AssemblyWatcher();
         }
 
         public static ITestModel CreateTestModel(ITestEngine testEngine, CommandLineOptions options)
@@ -101,6 +109,10 @@ namespace TestCentric.Gui.Model
 
         // Services provided either by the model itself or by the engine
         public ITestServices Services { get; }
+
+        public UserSettings Settings { get; }
+
+        public RecentFiles RecentFiles { get; }
 
         // Project Support
         public bool NUnitProjectSupport { get; }
@@ -221,7 +233,7 @@ namespace TestCentric.Gui.Model
             _events.FireTestLoaded(Tests);
 
             foreach (var subPackage in TestPackage.SubPackages)
-                Services.RecentFiles.Latest = subPackage.FullName;
+                RecentFiles.Latest = subPackage.FullName;
         }
 
         private Dictionary<string, TestPackage> _packageMap = new Dictionary<string, TestPackage>();
@@ -466,6 +478,9 @@ namespace TestCentric.Gui.Model
 
                 if (_assemblyWatcher != null)
                     _assemblyWatcher.Dispose();
+
+                if (_settingsService != null)
+                    _settingsService.SaveSettings();
             }
             catch (NUnitEngineUnloadException)
             {
@@ -491,7 +506,7 @@ namespace TestCentric.Gui.Model
         public TestPackage MakeTestPackage(IList<string> testFiles)
         {
             var package = new TestPackage(testFiles);
-            var engineSettings = Services.UserSettings.Engine;
+            var engineSettings = Settings.Engine;
 
             // We use AddSetting rather than just setting the value because
             // it propagates the setting to all subprojects.

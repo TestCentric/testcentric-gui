@@ -4,7 +4,6 @@
 // ***********************************************************************
 
 using System.Drawing;
-using TestCentric.Engine;
 
 namespace TestCentric.Gui.Model.Settings
 {

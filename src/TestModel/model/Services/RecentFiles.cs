@@ -5,7 +5,7 @@
 
 using System;
 using System.Collections.Generic;
-using TestCentric.Engine;
+using TestCentric.Gui.Model.Settings;
 
 namespace TestCentric.Gui.Model.Services
 {

@@ -68,8 +68,8 @@ namespace TestCentric.Gui.Presenters
             _model = model;
             _options = options;
 
-            _settings = _model.Services.UserSettings;
-            _recentFiles = _model.Services.RecentFiles;
+            _settings = _model.Settings;
+            _recentFiles = _model.RecentFiles;
 
             _view.Font = _settings.Gui.Font;
             _view.ResultTabs.SelectedIndex = _settings.Gui.SelectedTab;
@@ -217,7 +217,7 @@ namespace TestCentric.Gui.Presenters
                 if (_options.DomainUsage != null)
                     _view.DomainUsage.SelectedItem = _options.DomainUsage;
                 if (_options.MaxAgents >= 0)
-                    _model.Services.UserSettings.Engine.Agents = _options.MaxAgents;
+                    _model.Settings.Engine.Agents = _options.MaxAgents;
                 _view.RunAsX86.Checked = _options.RunAsX86;
             };
 
@@ -387,7 +387,7 @@ namespace TestCentric.Gui.Presenters
 
                 menuItems.Clear();
                 int num = 0;
-                foreach (string entry in _model.Services.RecentFiles.Entries)
+                foreach (string entry in _model.RecentFiles.Entries)
                 {
                     var menuText = string.Format("{0} {1}", ++num, entry);
                     var menuItem = new MenuItem(menuText);

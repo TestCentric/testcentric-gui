@@ -46,16 +46,18 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Settings\FakeSettingsService.cs" />
     <Compile Include="Services\AssemblyWatcherTests.cs" />
     <Compile Include="AvailableRuntimesTest.cs" />
-    <Compile Include="FakeSettingsService.cs" />
-    <Compile Include="Services\RecentFilesTests.cs" />
     <Compile Include="ResultNodeTests.cs" />
     <Compile Include="ResultStateTests.cs" />
     <Compile Include="ResultSummaryCreatorTests.cs" />
     <Compile Include="ResultSummaryReporterTests.cs" />
-    <Compile Include="SettingsGroupTests.cs" />
-    <Compile Include="SettingsTests.cs" />
+    <Compile Include="Services\RecentFilesTests.cs" />
+    <Compile Include="Services\SettingsServiceTests.cs" />
+    <Compile Include="Settings\SettingsGroupTests.cs" />
+    <Compile Include="Settings\SettingsTests.cs" />
+    <Compile Include="Settings\SettingsStoreTests.cs" />
     <Compile Include="TestModelAssemblyTests.cs" />
     <Compile Include="MakeTestPackageTests.cs" />
     <Compile Include="TestModelCreationTests.cs" />

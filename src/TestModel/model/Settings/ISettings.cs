@@ -5,7 +5,7 @@
 
 using System;
 
-namespace TestCentric.Engine
+namespace TestCentric.Gui.Model.Settings
 {
     /// <summary>
     /// Event handler for settings changes

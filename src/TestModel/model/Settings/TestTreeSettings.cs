@@ -3,8 +3,6 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-using TestCentric.Engine;
-
 namespace TestCentric.Gui.Model.Settings
 {
     public class TestTreeSettings : SettingsGroup

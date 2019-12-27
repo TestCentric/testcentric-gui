@@ -104,7 +104,6 @@
     <Compile Include="Fakes\AvailableRuntimesService.cs" />
     <Compile Include="Fakes\ResultService.cs" />
     <Compile Include="Fakes\ServiceLocator.cs" />
-    <Compile Include="Fakes\SettingsService.cs" />
     <Compile Include="Fakes\MockTestEngine.cs" />
     <Compile Include="Fakes\RuntimeFramework.cs" />
     <Compile Include="FormTester.cs" />

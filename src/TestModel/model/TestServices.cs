@@ -19,24 +19,17 @@ namespace TestCentric.Gui.Model
         private IServiceLocator _services;
         private ITestEngine _testEngine;
 
-        public TestServices(ITestEngine testEngine, string applicationPrefix=null)
+        public TestServices(ITestEngine testEngine)
         {
             _testEngine = testEngine;
             _services = testEngine.Services;
 
-            var settings = _services.GetService<ISettings>();
-            UserSettings = new UserSettings(settings, applicationPrefix);
-            RecentFiles = new RecentFiles(settings, applicationPrefix);
             ExtensionService = GetService<IExtensionService>();
             ResultService = GetService<IResultService>();
             ProjectService = GetService<IProjectService>();
         }
 
         #region ITestServices Implementation
-
-        public UserSettings UserSettings { get; }
-
-        public RecentFiles RecentFiles { get; }
 
         public IExtensionService ExtensionService { get; }
 

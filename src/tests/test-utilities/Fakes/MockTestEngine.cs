@@ -15,7 +15,6 @@ namespace TestCentric.TestUtilities.Fakes
         private ServiceLocator _services = new ServiceLocator();
 
         // Simulate Engine internal services, which are always present
-        private SettingsService _settings = new SettingsService();
         private ExtensionService _extensions = new ExtensionService();
         private ResultService _resultService = new ResultService();
         private AvailableRuntimesService _availableRuntimes = new AvailableRuntimesService();
@@ -26,7 +25,6 @@ namespace TestCentric.TestUtilities.Fakes
 
         public MockTestEngine()
         {
-            _services.AddService<ISettings>(_settings);
             _services.AddService<IExtensionService>(_extensions);
             _services.AddService<IResultService>(_resultService);
             _services.AddService<IAvailableRuntimes>(_availableRuntimes);
@@ -39,12 +37,6 @@ namespace TestCentric.TestUtilities.Fakes
         public MockTestEngine WithService<TService>(TService service)
         {
             _services.AddService<TService>(service);
-            return this;
-        }
-
-        public MockTestEngine WithSetting(string key, object value)
-        {
-            _settings.SaveSetting(key, value);
             return this;
         }
 

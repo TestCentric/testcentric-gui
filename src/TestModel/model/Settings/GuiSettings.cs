@@ -4,7 +4,6 @@
 // ***********************************************************************
 
 using System.Drawing;
-using TestCentric.Engine;
 
 namespace TestCentric.Gui.Model.Settings
 {
@@ -91,9 +90,9 @@ namespace TestCentric.Gui.Model.Settings
             set { SaveSetting(nameof(FixedFont), value); }
         }
 
-        public InternalTraceLevel InternalTraceLevel
+        public Engine.InternalTraceLevel InternalTraceLevel
         {
-            get { return GetSetting(nameof(InternalTraceLevel), InternalTraceLevel.Off); }
+            get { return GetSetting(nameof(InternalTraceLevel), Engine.InternalTraceLevel.Off); }
             set { SaveSetting(nameof(InternalTraceLevel), value); }
         }
     }

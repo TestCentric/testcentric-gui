@@ -28,7 +28,7 @@ namespace TestCentric.Gui.Model.Settings
         [SetUp]
         public void SetUp()
         {
-            ISettings settingsService = new TestModel(new MockTestEngine()).Services.UserSettings;
+            ISettings settingsService = new SettingsStore();
             _userSettings = new UserSettings(settingsService, APPLICATION_PREFIX);
             settingsService.Changed += (object s, SettingsEventArgs e) => { _changeEvent = e; };
         }
