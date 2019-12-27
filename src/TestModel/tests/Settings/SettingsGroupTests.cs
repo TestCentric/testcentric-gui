@@ -3,13 +3,10 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-using System.Drawing;
-using System.ComponentModel;
 using NUnit.Framework;
-using TestCentric.Engine;
 using NSubstitute;
 
-namespace TestCentric.Gui.Model
+namespace TestCentric.Gui.Model.Settings
 {
     [TestFixture]
     public class SettingsGroupTests

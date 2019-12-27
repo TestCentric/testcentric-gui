@@ -26,7 +26,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             _view = Substitute.For<ITestTreeView>();
             _model = Substitute.For<ITestModel>();
             _settings = new TestCentric.TestUtilities.Fakes.UserSettings();
-            _model.Services.UserSettings.Returns(_settings);
+            _model.Settings.Returns(_settings);
 
             _strategy = GetDisplayStrategy();
         }

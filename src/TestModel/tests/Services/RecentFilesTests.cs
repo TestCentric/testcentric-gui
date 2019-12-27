@@ -5,7 +5,7 @@
 
 using System;
 using NUnit.Framework;
-using TestCentric.Engine.Services.Tests;
+using TestCentric.Gui.Model.Settings;
 
 namespace TestCentric.Gui.Model.Services
 {
@@ -22,7 +22,7 @@ namespace TestCentric.Gui.Model.Services
         [SetUp]
         public void SetUp()
         {
-            _recentFiles = new RecentFiles(new FakeSettingsService(), "Testing.");
+            _recentFiles = new RecentFiles(new SettingsStore(), "Testing.");
         }
 
         [Test]

@@ -40,7 +40,7 @@ namespace TestCentric.Gui
         {
             Presenter = presenter;
             Model = model;
-            Settings = model.Services.UserSettings;
+            Settings = model.Settings;
         }
 
         public SettingsDialogBase()

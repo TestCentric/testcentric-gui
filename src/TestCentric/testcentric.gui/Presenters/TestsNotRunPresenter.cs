@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric GUI contributors.
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
@@ -37,7 +37,7 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.TestReloaded += (TestNodeEventArgs e) =>
             {
-                if (_model.Services.UserSettings.Gui.ClearResultsOnReload)
+                if (_model.Settings.Gui.ClearResultsOnReload)
                     _view.Clear();
             };
 

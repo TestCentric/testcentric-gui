@@ -55,7 +55,7 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.TestReloaded += (TestNodeEventArgs e) =>
             {
-                Initialize(_model.Services.UserSettings.Gui.ClearResultsOnReload);
+                Initialize(_model.Settings.Gui.ClearResultsOnReload);
             };
 
             _model.Events.RunStarting += (RunStartingEventArgs e) =>
@@ -112,7 +112,7 @@ namespace TestCentric.Gui.Presenters
 
         private void Initialize(bool clearDisplay = false)
         {
-            _labels = _model.Services.UserSettings.Gui.TextOutput.Labels;
+            _labels = _model.Settings.Gui.TextOutput.Labels;
             _displayBeforeTest = _labels == "ALL" || _labels == "BEFORE" || _labels == "BEFOREANDAFTER";
             _displayAfterTest = _labels == "AFTER" || _labels == "BEFOREANDAFTER";
             _displayBeforeOutput = _displayBeforeTest || _displayAfterTest || _labels == "ON";

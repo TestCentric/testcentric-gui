@@ -4,7 +4,6 @@
 // ***********************************************************************
 
 using System.Windows.Forms;
-using TestCentric.Engine;
 
 namespace TestCentric.Gui.Model.Settings
 {

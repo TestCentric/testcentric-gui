@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric GUI contributors.
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
@@ -21,7 +21,7 @@ namespace TestCentric.Gui.Presenters
         {
             _model = model;
             _view = view;
-            _settings = model.Services.UserSettings;
+            _settings = model.Settings;
 
             WireUpEvents();
         }

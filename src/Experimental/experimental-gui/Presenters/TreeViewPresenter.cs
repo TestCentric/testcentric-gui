@@ -34,7 +34,7 @@ namespace TestCentric.Gui.Presenters
             _view = treeView;
             _model = model;
 
-            Settings = _model.Services.UserSettings.Gui.TestTree;
+            Settings = _model.Settings.Gui.TestTree;
 
             _view.AlternateImageSet = (string)Settings.AlternateImageSet;
 
@@ -73,7 +73,7 @@ namespace TestCentric.Gui.Presenters
             _model.Events.TestFinished += (ea) => _strategy.OnTestFinished(ea.Result);
             _model.Events.SuiteFinished += (ea) => _strategy.OnTestFinished(ea.Result);
 
-            _model.Services.UserSettings.Changed += (s, e) =>
+            _model.Settings.Changed += (s, e) =>
             {
                 if (e.SettingName == "Gui.TestTree.AlternateImageSet")
                     _view.AlternateImageSet = Settings.AlternateImageSet;
@@ -136,7 +136,7 @@ namespace TestCentric.Gui.Presenters
             {
                 using (var dlg = new TestParametersDialog())
                 {
-                    dlg.Font = _model.Services.UserSettings.Gui.Font;
+                    dlg.Font = _model.Settings.Gui.Font;
                     dlg.StartPosition = FormStartPosition.CenterParent;
 
                     if (_model.PackageOverrides.ContainsKey("TestParametersDictionary"))
@@ -175,7 +175,7 @@ namespace TestCentric.Gui.Presenters
 
         private void RunAllTests()
         {
-            if (_model.Services.UserSettings.Engine.ReloadOnRun)
+            if (_model.Settings.Engine.ReloadOnRun)
                 _model.ReloadTests();
 
             _model.RunAllTests();
@@ -183,7 +183,7 @@ namespace TestCentric.Gui.Presenters
 
         private void RunTests(ITestItem testItem)
         {
-            if (_model.Services.UserSettings.Engine.ReloadOnRun)
+            if (_model.Settings.Engine.ReloadOnRun)
                 _model.ReloadTests();
 
             _model.RunTests(testItem);

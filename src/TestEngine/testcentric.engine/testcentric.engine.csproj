@@ -20,6 +20,11 @@
     <PackageReference Include="System.Xml.XPath.XmlDocument" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="Internal\SettingsGroup.cs" />
+    <Compile Remove="Internal\SettingsStore.cs" />
+    <Compile Remove="Services\SettingsService.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="..\EngineVersion.cs" LinkBase="Properties" />
     <Compile Include="..\agents\AgentExitCodes.cs" LinkBase="Agents" />
   </ItemGroup>

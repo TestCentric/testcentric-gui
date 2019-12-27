@@ -17,8 +17,6 @@ namespace TestCentric.Gui.Model
     /// </summary>
     public interface ITestServices : IServiceLocator
     {
-        UserSettings UserSettings { get; }
-        RecentFiles RecentFiles { get; }
         IExtensionService ExtensionService { get; }
         IResultService ResultService { get; }
         IProjectService ProjectService { get; }

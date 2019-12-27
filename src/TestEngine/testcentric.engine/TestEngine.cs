@@ -58,9 +58,6 @@ namespace TestCentric.Engine
             if (Services.ServiceCount == 0)
             {
                 // Services that depend on other services must be added after their dependencies
-                // For example, ResultService uses ExtensionService, so ExtensionService is added
-                // later.
-                Services.Add(new SettingsService(true));
                 Services.Add(new TestFilterService());
                 Services.Add(new ExtensionService());
                 Services.Add(new ProjectService());

@@ -3,10 +3,12 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-namespace TestCentric.TestUtilities.Fakes
+using System;
+using TestCentric.Engine.Internal;
+
+namespace TestCentric.Gui.Model.Settings
 {
-    public class UserSettings : TestCentric.Gui.Model.Settings.UserSettings
+    public class FakeSettingsService : SettingsStore
     {
-        public UserSettings() : base(new TestCentric.Gui.Model.Settings.SettingsStore()) { }
     }
 }

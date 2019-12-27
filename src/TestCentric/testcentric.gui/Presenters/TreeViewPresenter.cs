@@ -51,7 +51,7 @@ namespace TestCentric.Gui.Presenters
             _view = view;
             _tree = view.Tree;
             _model = model;
-            _settings = model.Services.UserSettings;
+            _settings = model.Settings;
             _projectService = model.Services.GetService<IProjectService>();
 
             _view.AlternateImageSet = (string)_settings.Gui.TestTree.AlternateImageSet;
@@ -76,7 +76,7 @@ namespace TestCentric.Gui.Presenters
 
                 LoadTests(GetTopDisplayNode(e.Test));
 
-                if (_model.Services.UserSettings.Gui.TestTree.SaveVisualState)
+                if (_model.Settings.Gui.TestTree.SaveVisualState)
                 {
                     string fileName = VisualState.GetVisualStateFileName(_model.TestFiles[0]);
                     if (File.Exists(fileName) && new FileInfo(fileName).Length > 0)

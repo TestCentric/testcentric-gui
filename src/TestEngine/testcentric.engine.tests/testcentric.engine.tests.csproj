@@ -17,6 +17,12 @@
     <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="Internal\SettingsGroupTests.cs" />
+    <Compile Remove="Internal\SettingsStoreTests.cs" />
+    <Compile Remove="Services\Fakes\FakeSettingsService.cs" />
+    <Compile Remove="Services\SettingsServiceTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="NSubstitute" Version="2.0.3" />
     <PackageReference Include="NUnit" Version="3.11.0" />
     <PackageReference Include="NUnitLite" Version="3.11.0" />
@@ -49,6 +55,9 @@
     <None Update="TextSummary.xslt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Internal\" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <ItemGroup>

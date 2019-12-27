@@ -32,7 +32,7 @@ namespace TestCentric.Gui.Presenters
         {
             _view = view;
             _model = model;
-            _settings = _model.Services.UserSettings;
+            _settings = _model.Settings;
             _options = options;
 
             InitializeMainMenu();
@@ -56,7 +56,7 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.TestChanged += (ea) =>
             {
-                if (_model.Services.UserSettings.Engine.ReloadOnChange)
+                if (_model.Settings.Engine.ReloadOnChange)
                     _model.ReloadTests();
             };
 
@@ -253,16 +253,16 @@ namespace TestCentric.Gui.Presenters
             if (_options.DomainUsage != null)
                 _view.DomainUsage.SelectedItem = _options.DomainUsage;
             if (_options.MaxAgents >= 0)
-                _model.Services.UserSettings.Engine.Agents = _options.MaxAgents;
+                _model.Settings.Engine.Agents = _options.MaxAgents;
             _view.RunAsX86.Checked = _options.RunAsX86;
 
             if (_options.InputFiles.Count > 0)
             {
                 _model.LoadTests(_options.InputFiles);
             }
-            else if (!_options.NoLoad && _model.Services.RecentFiles.Entries.Count > 0)
+            else if (!_options.NoLoad && _model.RecentFiles.Entries.Count > 0)
             {
-                var entry = _model.Services.RecentFiles.Entries[0];
+                var entry = _model.RecentFiles.Entries[0];
                 if (!string.IsNullOrEmpty(entry) && System.IO.File.Exists(entry))
                     _model.LoadTests(new[] { entry });
             }
@@ -373,7 +373,7 @@ namespace TestCentric.Gui.Presenters
                 _view.RecentProjectsMenu.MenuItems.Clear();
 
                 int num = 0;
-                foreach (string entry in _model.Services.RecentFiles.Entries)
+                foreach (string entry in _model.RecentFiles.Entries)
                 {
                     var menuText = string.Format("{0} {1}", ++num, entry);
                     var menuItem = new ToolStripMenuItem(menuText);

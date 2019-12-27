@@ -31,7 +31,7 @@ namespace TestCentric.Gui.Presenters
             _view = Substitute.For<TView>();
             _model = Substitute.For<ITestModel>();
             _settings = new FakeUserSettings();
-            _model.Services.UserSettings.Returns(_settings);
+            _model.Settings.Returns(_settings);
             _model.TestFiles.Returns(new List<string>());
         }
 

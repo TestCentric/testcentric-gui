@@ -22,7 +22,7 @@ namespace TestCentric.Gui.Presenters.Main
         {
             View = Substitute.For<IMainView>();
             Model = Substitute.For<ITestModel>();
-            Model.Services.UserSettings.Returns(new TestCentric.TestUtilities.Fakes.UserSettings());
+            Model.Settings.Returns(new TestCentric.TestUtilities.Fakes.UserSettings());
 
             Presenter = new MainPresenter(View, Model, new CommandLineOptions());
         }

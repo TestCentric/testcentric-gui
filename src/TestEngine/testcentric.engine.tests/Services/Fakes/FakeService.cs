@@ -30,5 +30,9 @@ namespace TestCentric.Engine.Services.Fakes
         // Set to true to cause the service to give
         // an error result when started
         public bool FailToStart { get; set; }
+
+        // Set to true to cause the service to give
+        // an error result when stopped
+        public bool FailedToStop { get; set; }
     }
 }
