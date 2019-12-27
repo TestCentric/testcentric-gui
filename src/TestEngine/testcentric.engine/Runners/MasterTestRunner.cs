@@ -387,6 +387,7 @@ namespace TestCentric.Engine.Runners
 
             if (listener != null)
                 _eventDispatcher.Listeners.Add(listener);
+
             foreach (var extension in _extensionService.GetExtensions<ITestEventListener>())
                 _eventDispatcher.Listeners.Add(extension);
 
