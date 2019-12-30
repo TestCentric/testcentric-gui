@@ -40,10 +40,12 @@ namespace TestCentric.Engine.Services
         public override ITestEngineRunner MakeTestRunner(TestPackage package)
         {
 #if NETSTANDARD2_0
+            //if (package.SubPackages.Count == 1)
+            //    return MakeTestRunner(package.SubPackages[0]);
             if (package.SubPackages.Count > 1)
                 return new AggregatingTestRunner(ServiceContext, package);
 
-            return base.MakeTestRunner(package);
+            return new LocalTestRunner(ServiceContext, package);
         }
 #else
             ProcessModel processModel = GetTargetProcessModel(package);
