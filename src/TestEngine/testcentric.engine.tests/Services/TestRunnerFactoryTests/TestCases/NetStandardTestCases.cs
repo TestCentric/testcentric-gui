@@ -54,8 +54,7 @@ namespace TestCentric.Engine.Services.TestRunnerFactoryTests.TestCases
                 yield return new TestRunnerFactoryData(
                     "SingleProject (list ctor)",
                     new TestPackage(new[] { "a.nunit" }),
-                    RunnerResult.LocalTestRunner
-                );
+                    RunnerResult.LocalTestRunner);
 
                 yield return new TestRunnerFactoryData(
                     "Single project (string ctor)",
@@ -85,15 +84,7 @@ namespace TestCentric.Engine.Services.TestRunnerFactoryTests.TestCases
                         TestRunner = typeof(AggregatingTestRunner),
                         SubRunners = new List<RunnerResult>
                         {
-                            new RunnerResult
-                            {
-                                TestRunner = typeof(AggregatingTestRunner),
-                                SubRunners = new List<RunnerResult>
-                                {
-                                    RunnerResult.LocalTestRunner,
-                                    RunnerResult.LocalTestRunner
-                                }
-                            },
+                            RunnerResult.LocalTestRunner,
                             RunnerResult.LocalTestRunner
                         }
                     }
@@ -107,15 +98,8 @@ namespace TestCentric.Engine.Services.TestRunnerFactoryTests.TestCases
                         TestRunner = typeof(AggregatingTestRunner),
                         SubRunners = new List<RunnerResult>
                         {
-                            new RunnerResult
-                            {
-                                TestRunner = typeof(AggregatingTestRunner),
-                                SubRunners = new List<RunnerResult>
-                                {
-                                    RunnerResult.LocalTestRunner,
-                                    RunnerResult.LocalTestRunner
-                                }
-                            },
+                            RunnerResult.LocalTestRunner,
+                            RunnerResult.LocalTestRunner,
                             RunnerResult.LocalTestRunner
                         }
                     }
@@ -129,15 +113,7 @@ namespace TestCentric.Engine.Services.TestRunnerFactoryTests.TestCases
                         TestRunner = typeof(AggregatingTestRunner),
                         SubRunners = new List<RunnerResult>
                         {
-                            new RunnerResult
-                            {
-                                TestRunner = typeof(AggregatingTestRunner),
-                                SubRunners = new List<RunnerResult>
-                                {
-                                    RunnerResult.LocalTestRunner,
-                                    RunnerResult.LocalTestRunner
-                                }
-                            },
+                            RunnerResult.LocalTestRunner,
                             RunnerResult.LocalTestRunner,
                             RunnerResult.LocalTestRunner
                         }
@@ -154,32 +130,25 @@ namespace TestCentric.Engine.Services.TestRunnerFactoryTests.TestCases
                         {
                             RunnerResult.LocalTestRunner,
                             RunnerResult.LocalTestRunner,
-                            new RunnerResult
-                            {
-                                TestRunner = typeof(AggregatingTestRunner),
-                                SubRunners = new List<RunnerResult>
-                                {
-                                    RunnerResult.LocalTestRunner,
-                                    RunnerResult.LocalTestRunner
-                                }
-                            }
-                        }
-                    }
-                );
-
-                yield return new TestRunnerFactoryData(
-                    "Two unknown extensions",
-                    new TestPackage(new[] { "a.junk", "b.junk" }),
-                    new RunnerResult
-                    {
-                        TestRunner = typeof(AggregatingTestRunner),
-                        SubRunners = new[]
-                        {
                             RunnerResult.LocalTestRunner,
                             RunnerResult.LocalTestRunner
                         }
                     }
                 );
+
+                //yield return new TestRunnerFactoryData(
+                //    "Two unknown extensions",
+                //    new TestPackage(new[] { "a.junk", "b.junk" }),
+                //    new RunnerResult
+                //    {
+                //        TestRunner = typeof(AggregatingTestRunner),
+                //        SubRunners = new[]
+                //        {
+                //            RunnerResult.LocalTestRunner,
+                //            RunnerResult.LocalTestRunner
+                //        }
+                //    }
+                //);
 
                 yield return new TestRunnerFactoryData(
                     "One assembly, one project, one unknown",
@@ -191,15 +160,7 @@ namespace TestCentric.Engine.Services.TestRunnerFactoryTests.TestCases
                         {
                             RunnerResult.LocalTestRunner,
                             RunnerResult.LocalTestRunner,
-                            new RunnerResult
-                            {
-                                TestRunner = typeof(AggregatingTestRunner),
-                                SubRunners = new List<RunnerResult>
-                                {
-                                    RunnerResult.LocalTestRunner,
-                                    RunnerResult.LocalTestRunner
-                                }
-                            }
+                            RunnerResult.LocalTestRunner
                         }
                     }
                 );

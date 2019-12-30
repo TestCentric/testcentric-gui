@@ -250,13 +250,13 @@ var testEngineTask = Task("TestEngine")
 
 foreach (var runtime in ENGINE_RUNTIMES)
 {
-	var task = Task("TestEngine on " + runtime)
+	var task = Task("TestEngine_" + runtime)
 		.Description("Tests the Engine on " + runtime)
 		.IsDependentOn("Build")
 		.OnError(exception => { ErrorDetail.Add(exception.Message); })
 		.Does(() =>
 		{
-			RunNUnitLite(ENGINE_TESTS, "net35");
+			RunNUnitLite(ENGINE_TESTS, runtime);
 		});
 
 	testEngineTask.IsDependentOn(task);	
@@ -271,7 +271,7 @@ var testEngineCoreTask = Task("TestEngineCore")
 
 foreach (var runtime in ENGINE_CORE_RUNTIMES)
 {
-	var task = Task("TestEngineCore on " + runtime)
+	var task = Task("TestEngineCore_" + runtime)
 		.Description("Tests the Engine Core on " + runtime)
 		.IsDependentOn("Build")
 		.OnError(exception => { ErrorDetail.Add(exception.Message); })
