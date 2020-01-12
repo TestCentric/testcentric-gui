@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="Current">
+  <PropertyGroup>
+    <RootNamespace>NUnit.Engine</RootNamespace>
+    <TargetFrameworks>net20;netstandard1.6;netstandard2.0</TargetFrameworks>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\nunit.snk</AssemblyOriginatorKeyFile>
+    <OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
+    <DefineConstants>TRACE;TESTCENTRIC</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Mono.Cecil.Cil\Symbols.cs" />
+    <Compile Remove="Mono.Cecil.Metadata\Buffers.cs" />
+    <Compile Remove="Mono.Cecil.PE\GoodImageReader.cs" />
+    <Compile Remove="Mono.Cecil\SecurityDeclaration.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Mono.Cecil.Cil\" />
+  </ItemGroup>
+</Project>
