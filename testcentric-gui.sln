@@ -97,6 +97,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testcentric-agent-x86", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testcentric.engine.core.tests", "src\TestEngine\testcentric.engine.core.tests\testcentric.engine.core.tests.csproj", "{5952A5E6-0F93-4A63-A1E4-62EDC47CF9E7}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testcentric.engine.metadata", "src\TestEngine\testcentric.engine.metadata\testcentric.engine.metadata.csproj", "{F31DC0FC-241A-4208-8281-28A7874EA84B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -203,6 +205,10 @@ Global
 		{5952A5E6-0F93-4A63-A1E4-62EDC47CF9E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5952A5E6-0F93-4A63-A1E4-62EDC47CF9E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5952A5E6-0F93-4A63-A1E4-62EDC47CF9E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F31DC0FC-241A-4208-8281-28A7874EA84B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F31DC0FC-241A-4208-8281-28A7874EA84B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F31DC0FC-241A-4208-8281-28A7874EA84B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F31DC0FC-241A-4208-8281-28A7874EA84B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -234,6 +240,7 @@ Global
 		{FCCE65B8-D7DF-42AB-A520-C0AB4358F055} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
 		{DEDFA50A-7D77-44A3-8441-AF8DFDA48410} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
 		{5952A5E6-0F93-4A63-A1E4-62EDC47CF9E7} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
+		{F31DC0FC-241A-4208-8281-28A7874EA84B} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CDFF439B-8888-4133-8734-86F4F899BC40}
