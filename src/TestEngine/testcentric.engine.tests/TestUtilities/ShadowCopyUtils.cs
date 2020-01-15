@@ -3,8 +3,6 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-#if !NETCOREAPP1_1
-
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -41,4 +39,3 @@ namespace TestCentric.Engine.TestUtilities
         }
     }
 }
-#endif

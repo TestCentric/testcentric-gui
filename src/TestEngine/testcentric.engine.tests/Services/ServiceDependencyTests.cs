@@ -33,7 +33,6 @@ namespace TestCentric.Engine.Services
             Assert.That(service.Status, Is.EqualTo(ServiceStatus.Error));
         }
 
-#if !NETCOREAPP1_1
         [Test]
         public void DefaultTestRunnerFactory_ProjectServiceMissing()
         {
@@ -42,6 +41,5 @@ namespace TestCentric.Engine.Services
             service.StartService();
             Assert.That(service.Status, Is.EqualTo(ServiceStatus.Error));
         }
-#endif
     }
 }

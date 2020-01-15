@@ -9,7 +9,7 @@ using NUnit.Framework;
 
 namespace TestCentric.Engine.Services.TestRunnerFactoryTests.TestCases
 {
-#if NETCOREAPP1_1 || NETCOREAPP2_1
+#if NETCOREAPP2_1
     internal static class NetStandardTestCases
     {
         public class TestRunnerFactoryData : TestCaseData
