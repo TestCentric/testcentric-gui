@@ -38,6 +38,7 @@ namespace TestCentric.Engine.Runners
         private ITestEngineRunner _engineRunner;
         private readonly IServiceLocator _services;
         private readonly ExtensionService _extensionService;
+        private readonly PackageSettingsService _packageManager;
 #if !NETSTANDARD2_0
         private readonly IRuntimeFrameworkService _runtimeService;
 #endif
@@ -63,6 +64,7 @@ namespace TestCentric.Engine.Runners
             _testRunnerFactory = _services.GetService<ITestRunnerFactory>();
 
             _extensionService = _services.GetService<ExtensionService>();
+            _packageManager = _services.GetService<PackageSettingsService>();
 #if !NETSTANDARD2_0
             _runtimeService = _services.GetService<IRuntimeFrameworkService>();
 
@@ -243,6 +245,10 @@ namespace TestCentric.Engine.Runners
                 // Expand them so that they contain subprojects for
                 // each contained assembly.
                 EnsurePackagesAreExpanded(TestPackage);
+
+                // Update packages to reflect the target runtime
+                // and test framework usage of each assembly.
+                _packageManager.UpdatePackage(TestPackage);
 
                 // Use SelectRuntimeFramework for its side effects.
                 // Info will be left behind in the package about

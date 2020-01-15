@@ -104,6 +104,7 @@ namespace TestCentric.Engine.Runners
             projectService.Add("project3.nunit", notestsPath);
             projectService.Add("project4.nunit", notestsPath, notestsPath);
             _services.Add(projectService);
+            _services.Add(new PackageSettingsService());
 #if !NETCOREAPP2_1
             _services.Add(new DomainManager());
             _services.Add(new RuntimeFrameworkService());
