@@ -54,6 +54,9 @@ namespace TestCentric.Engine.Services
         {
             Guard.ArgumentNotNull(package, nameof(package));
 
+            // Expand any packages for projects
+            ExpandProjectPackages(package);
+
             if (package.SubPackages.Count > 0)
             {
                 // First update subpackages, recursively
@@ -67,6 +70,23 @@ namespace TestCentric.Engine.Services
             else if (File.Exists(package.FullName) && PathUtils.IsAssemblyFileType(package.FullName))
             {
                 ApplyImageSettings(package);
+            }
+        }
+
+        private void ExpandProjectPackages(TestPackage package)
+        {
+            if (package == null) throw new ArgumentNullException("package");
+
+            foreach (var subPackage in package.SubPackages)
+            {
+                ExpandProjectPackages(subPackage);
+            }
+
+            if (package.SubPackages.Count == 0 &&
+                !string.IsNullOrEmpty(package.FullName) &&
+                _projectService.CanLoadFrom(package.FullName))
+            {
+                _projectService.ExpandProjectPackage(package);
             }
         }
 
