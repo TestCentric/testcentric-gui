@@ -82,8 +82,8 @@ namespace TestCentric.Engine.Services
         /// <returns>A string representing the selected RuntimeFramework</returns>
         public string SelectRuntimeFramework(TestPackage package)
         {
-            // Evaluate package target framework
-            ApplyImageData(package);
+            //// Evaluate package target framework
+            //ApplyImageData(package);
 
             var targetFramework = SelectRuntimeFrameworkInner(package);
             return targetFramework.ToString();

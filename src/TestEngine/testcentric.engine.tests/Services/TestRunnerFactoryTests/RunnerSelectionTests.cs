@@ -46,6 +46,7 @@ namespace TestCentric.Engine.Services.TestRunnerFactoryTests
             var fakeRuntimeService = new FakeRuntimeService();
             ((IService)fakeRuntimeService).StartService();
             _services.Add(fakeRuntimeService);
+            _services.Add(new PackageSettingsService());
             Assert.That(((IService)fakeRuntimeService).Status, Is.EqualTo(ServiceStatus.Started));
         }
 
