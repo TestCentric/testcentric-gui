@@ -15,7 +15,7 @@ namespace TestCentric.Engine
     [Extension]
     public class DummyFrameworkDriverExtension : IDriverFactory
     {
-#if NETCOREAPP1_1 || NETCOREAPP2_1
+#if NETCOREAPP2_1
         public IFrameworkDriver GetDriver(AssemblyName reference)
 #else
         public IFrameworkDriver GetDriver(AppDomain domain, AssemblyName reference)

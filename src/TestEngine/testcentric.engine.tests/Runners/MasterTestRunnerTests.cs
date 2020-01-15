@@ -56,13 +56,7 @@ namespace TestCentric.Engine.Runners
             // 1. These tests document current behavior. In some cases we may want to change that behavior.
             // 2. The .NET Standard builds don't seem to handle notest-assembly correctly, so those entries are commented out.
             // 3. The .NET Standard 1.6 build is not intended to handle projects.
-#if NETCOREAPP1_1
-            new TestRunData( "mock-assembly.dll", MockAssemblyData ),
-            new TestRunData( "mock-assembly.dll,mock-assembly.dll", MockAssemblyData, MockAssemblyData ),
-            //new TestRunData( "notest-assembly.dll", NoTestAssemblyData ),
-            //new TestRunData( "notest-assembly.dll,notest-assembly.dll", NoTestAssemblyData, NoTestAssemblyData ),
-            //new TestRunData( "mock-assembly.dll,notest-assembly.dll", MockAssemblyData, NoTestAssemblyData )
-#elif NETCOREAPP2_1
+#if NETCOREAPP2_1
             new TestRunData( "mock-assembly.dll", MockAssemblyData ),
             new TestRunData( "mock-assembly.dll,mock-assembly.dll", MockAssemblyData, MockAssemblyData ),
             //new TestRunData( "notest-assembly.dll", NoTestAssemblyData ),
@@ -93,7 +87,7 @@ namespace TestCentric.Engine.Runners
 
             // Add all services needed
             _services = new ServiceContext();
-#if !NETCOREAPP1_1
+
             // TODO: Replace with a fake or mock. Requires changing MasterTestRunner and IExtensionService.
             _services.Add(new ExtensionService());
             var projectService = new FakeProjectService();
@@ -108,7 +102,6 @@ namespace TestCentric.Engine.Runners
 #if !NETCOREAPP2_1
             _services.Add(new DomainManager());
             _services.Add(new RuntimeFrameworkService());
-#endif
 #endif
             _services.Add(new DriverService());
             _services.Add(new DefaultTestRunnerFactory());
@@ -183,7 +176,6 @@ namespace TestCentric.Engine.Runners
             CheckTestRunEvents();
         }
 
-#if !NETCOREAPP1_1
         [Test]
         public void RunAsync()
         {
@@ -198,7 +190,6 @@ namespace TestCentric.Engine.Runners
 
             CheckTestRunEvents();
         }
-#endif
 
         private void CheckResult(XmlNode result, ResultData expected)
         {

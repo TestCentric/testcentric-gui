@@ -10,7 +10,7 @@ using System.Text;
 using NUnit.Framework;
 using NSubstitute;
 
-#if !NETCOREAPP1_1 && !NETCOREAPP2_1
+#if !NETCOREAPP2_1
 namespace TestCentric.Engine.Runners
 {
     public class TestPackageValidatorTests
