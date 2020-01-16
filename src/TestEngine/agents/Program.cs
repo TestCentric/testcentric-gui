@@ -102,7 +102,6 @@ namespace TestCentric.Agent
             };
 
             // Custom Service Initialization
-            engine.Services.Add(new ExtensionService());
             engine.Services.Add(new DomainManager());
             engine.Services.Add(new InProcessTestRunnerFactory());
             engine.Services.Add(new DriverService());

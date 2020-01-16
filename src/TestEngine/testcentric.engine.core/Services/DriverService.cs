@@ -103,20 +103,20 @@ namespace TestCentric.Engine.Services
 
             try
             {
-#if NET20 || NETSTANDARD2_0
-                var extensionService = ServiceContext.GetService<ExtensionService>();
-                if (extensionService != null)
-                {
-                    foreach (IDriverFactory factory in extensionService.GetExtensions<IDriverFactory>())
-                        _factories.Add(factory);
+//#if NET20 || NETSTANDARD2_0
+//                var extensionService = ServiceContext.GetService<ExtensionService>();
+//                if (extensionService != null)
+//                {
+//                    foreach (IDriverFactory factory in extensionService.GetExtensions<IDriverFactory>())
+//                        _factories.Add(factory);
 
-#if NET20
-                    var node = extensionService.GetExtensionNode("/NUnit/Engine/NUnitV2Driver");
-                    if (node != null)
-                        _factories.Add(new NUnit2DriverFactory(node));
-#endif
-                }
-#endif
+//#if NET20
+//                    var node = extensionService.GetExtensionNode("/NUnit/Engine/NUnitV2Driver");
+//                    if (node != null)
+//                        _factories.Add(new NUnit2DriverFactory(node));
+//#endif
+//                }
+//#endif
 
                 _factories.Add(new NUnit3DriverFactory());
 

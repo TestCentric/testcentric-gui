@@ -20,6 +20,7 @@
     <PackageReference Include="System.Xml.XPath.XmlDocument" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="Drivers\NUnit2DriverFactory.cs" />
     <Compile Remove="ExecutionPlatform.cs" />
   </ItemGroup>
   <ItemGroup>

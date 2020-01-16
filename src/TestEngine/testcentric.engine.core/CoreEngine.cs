@@ -83,12 +83,8 @@ namespace TestCentric.Engine
                 // Services that depend on other services must be added after their dependencies
                 // For example, ResultService uses ExtensionService, so ExtensionService is added
                 // later.
-                Services.Add(new DriverService());
-#if !NETSTANDARD1_6
-                Services.Add(new ExtensionService());
-#if !NETSTANDARD2_0
+#if !NETSTANDARD
                 Services.Add(new DomainManager());
-#endif
 #endif
                 Services.Add(new InProcessTestRunnerFactory());
             }

@@ -3,7 +3,7 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-#if NETSTANDARD
+#if NETSTANDARD1_6 || NETSTANDARD2_0
 using System;
 using System.Linq;
 using System.Collections.Generic;
