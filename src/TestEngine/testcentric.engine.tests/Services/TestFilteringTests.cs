@@ -26,14 +26,16 @@ namespace TestCentric.Engine.Services
         [SetUp]
         public void LoadAssembly()
         {
-            var mockAssemblyPath = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, MOCK_ASSEMBLY);
+            var testAssemblyName = typeof(NUnit.Framework.TestAttribute).Assembly.GetName();
 #if NETCOREAPP2_1
-            _driver = new NUnitNetStandardDriver();
+            var mockAssemblyName = typeof(MockAssembly).Assembly.GetName();
+            _driver = new NUnitNetStandardDriver(testAssemblyName);
+            _driver.Load(mockAssemblyName.FullName, new Dictionary<string, object>());
 #else
-            var assemblyName = typeof(NUnit.Framework.TestAttribute).Assembly.GetName();
-            _driver = new NUnit3FrameworkDriver(AppDomain.CurrentDomain, assemblyName);
-#endif
+            var mockAssemblyPath = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, MOCK_ASSEMBLY);
+            _driver = new NUnit3FrameworkDriver(AppDomain.CurrentDomain, testAssemblyName);
             _driver.Load(mockAssemblyPath, new Dictionary<string, object>());
+#endif
         }
 
         // TODO: Uncomment the "double negative" tests when we are using an updated framework that handles them correctly.

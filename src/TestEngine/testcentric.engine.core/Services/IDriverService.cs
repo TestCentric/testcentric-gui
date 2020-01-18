@@ -21,7 +21,7 @@ namespace TestCentric.Engine
         /// <param name="assemblyPath">The full path to the test assembly</param>
         /// <param name="skipNonTestAssemblies">True if non-test assemblies should simply be skipped rather than reporting an error</param>
         /// <returns></returns>
-        IFrameworkDriver GetDriver(string assemblyPath, bool skipNonTestAssemblies);
+        IFrameworkDriver GetDriver(TestPackage package);
 #else
         /// <summary>
         /// Get a driver suitable for loading and running tests in the specified assembly.
@@ -31,7 +31,7 @@ namespace TestCentric.Engine
         /// <param name="targetFramework">The value of any TargetFrameworkAttribute on the assembly, or null</param>
         /// <param name="skipNonTestAssemblies">True if non-test assemblies should simply be skipped rather than reporting an error</param>
         /// <returns></returns>
-        IFrameworkDriver GetDriver(AppDomain domain, string assemblyPath, string targetFramework, bool skipNonTestAssemblies);
+        IFrameworkDriver GetDriver(AppDomain domain, TestPackage package);
 #endif
     }
 }

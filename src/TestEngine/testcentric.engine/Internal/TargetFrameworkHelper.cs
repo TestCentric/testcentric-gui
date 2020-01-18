@@ -32,6 +32,20 @@ namespace TestCentric.Engine.Internal
             _module = _assemblyDef.MainModule;
         }
 
+        public string FullName
+        {
+            get { return _assemblyDef.Name.FullName; }
+        }
+  
+        public bool HasAttribute(string attrName)
+        {
+            foreach (var attr in _assemblyDef.CustomAttributes)
+                if (attr.AttributeType.FullName == attrName)
+                    return true;
+
+            return false;
+        }
+
         public bool RequiresX86
         {
             get
@@ -77,19 +91,9 @@ namespace TestCentric.Engine.Internal
             }
         }
 
-
         public bool RequiresAssemblyResolver
         {
-            get
-            {
-                foreach (var attr in _assemblyDef.CustomAttributes)
-                {
-                    if (attr.AttributeType.FullName == "NUnit.Framework.TestAssemblyDirectoryResolveAttribute")
-                        return true;
-                }
-
-                return false;
-            }
+            get { return HasAttribute("NUnit.Framework.TestAssemblyDirectoryResolveAttribute"); }
         }
     }
 }

@@ -29,10 +29,8 @@ namespace TestCentric.Engine.Runners
             driverService.GetDriver(
 #if !NETCOREAPP1_1
                 AppDomain.CurrentDomain,
-                string.Empty,
 #endif 
-                string.Empty, 
-                false).ReturnsForAnyArgs(_driver);
+                null).ReturnsForAnyArgs(_driver);
 
             var serviceLocator = Substitute.For<IServiceLocator>();
             serviceLocator.GetService<IDriverService>().Returns(driverService);

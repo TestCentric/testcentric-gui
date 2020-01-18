@@ -28,20 +28,27 @@ namespace TestCentric.Engine.Services
         /// </summary>
         /// <param name="domain">The application domain to use for the tests</param>
         /// <param name="assemblyPath">The full path to the test assembly</param>
-        /// <param name="targetFramework">The value of any TargetFrameworkAttribute on the assembly, or null</param>
-        /// <param name="skipNonTestAssemblies">True if non-test assemblies should simply be skipped rather than reporting an error</param>
         /// <returns></returns>
 #if NETSTANDARD1_6
-        public IFrameworkDriver GetDriver(string assemblyPath, bool skipNonTestAssemblies)
+        public IFrameworkDriver GetDriver(TestPackage package)
 #else
-        public IFrameworkDriver GetDriver(AppDomain domain, string assemblyPath, string targetFramework, bool skipNonTestAssemblies)
+        public IFrameworkDriver GetDriver(AppDomain domain, TestPackage package)
 #endif
         {
+            var assemblyPath = package.FullName;
+
             if (!File.Exists(assemblyPath))
                 return new InvalidAssemblyFrameworkDriver(assemblyPath, "File not found: " + assemblyPath);
 
             if (!PathUtils.IsAssemblyFileType(assemblyPath))
                 return new InvalidAssemblyFrameworkDriver(assemblyPath, "File type is not supported");
+
+            bool skipNonTestAssemblies = package.GetSetting(EnginePackageSettings.SkipNonTestAssemblies, false);
+            bool isNonTestAssembly = package.GetSetting(InternalEnginePackageSettings.ImageNonTestAssembly, false);
+            string targetFramework = package.GetSetting(InternalEnginePackageSettings.ImageTargetFrameworkName, (string)null);
+
+            if (skipNonTestAssemblies && isNonTestAssembly)
+                return new SkippedAssemblyFrameworkDriver(assemblyPath);
 
 #if !NETSTANDARD1_6 && !NETSTANDARD2_0
             if (targetFramework != null)
@@ -60,13 +67,6 @@ namespace TestCentric.Engine.Services
             try
             {
                 var assemblyDef = AssemblyDefinition.ReadAssembly(assemblyPath);
-
-                if (skipNonTestAssemblies)
-                {
-                    foreach (var attr in assemblyDef.CustomAttributes)
-                        if (attr.AttributeType.FullName == "NUnit.Framework.NonTestAssemblyAttribute")
-                            return new SkippedAssemblyFrameworkDriver(assemblyPath);
-                }
 
                 var references = new List<AssemblyName>();
                 foreach (var cecilRef in assemblyDef.MainModule.AssemblyReferences)

@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using TestCentric.Engine.Internal;
 using System.Reflection;
 using TestCentric.Engine.Extensibility;
-using Mono.Cecil;
 
 namespace TestCentric.Engine.Drivers
 {
@@ -40,6 +39,13 @@ namespace TestCentric.Engine.Drivers
         object _frameworkController;
         Type _frameworkControllerType;
 
+        AssemblyName _frameworkReference;
+
+        public NUnitNetStandardDriver(AssemblyName frameworkReference)
+        {
+            _frameworkReference = frameworkReference;
+        }
+
         /// <summary>
         /// An id prefix that will be passed to the test framework and used as part of the
         /// test ids created.
@@ -50,23 +56,18 @@ namespace TestCentric.Engine.Drivers
         /// Loads the tests in an assembly.
         /// </summary>
         /// <param name="frameworkAssembly">The NUnit Framework that the tests reference</param>
-        /// <param name="testAssembly">The test assembly</param>
+        /// <param name="testAssemblyName">The FullName of the test Assembly</param>
         /// <param name="settings">The test settings</param>
         /// <returns>An Xml string representing the loaded test</returns>
-        public string Load(string testAssembly, IDictionary<string, object> settings)
+        public string Load(string testAssemblyName, IDictionary<string, object> settings)
         {
             var idPrefix = string.IsNullOrEmpty(ID) ? "" : ID + "-";
 
-            var assemblyRef = AssemblyDefinition.ReadAssembly(testAssembly);
-            _testAssembly = Assembly.Load(new AssemblyName(assemblyRef.FullName));
+            _testAssembly = Assembly.Load(new AssemblyName(testAssemblyName));
             if(_testAssembly == null)
-                throw new NUnitEngineException(string.Format(FAILED_TO_LOAD_TEST_ASSEMBLY, assemblyRef.FullName));
+                throw new NUnitEngineException(string.Format(FAILED_TO_LOAD_TEST_ASSEMBLY, testAssemblyName));
 
-            var nunitRef = assemblyRef.MainModule.AssemblyReferences.Where(reference => reference.Name.Equals("nunit.framework", StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
-            if (nunitRef == null)
-                throw new NUnitEngineException(FAILED_TO_LOAD_NUNIT);
-
-            var nunit = Assembly.Load(new AssemblyName(nunitRef.FullName));
+            var nunit = Assembly.Load(_frameworkReference);
             if (nunit == null)
                 throw new NUnitEngineException(FAILED_TO_LOAD_NUNIT);
 

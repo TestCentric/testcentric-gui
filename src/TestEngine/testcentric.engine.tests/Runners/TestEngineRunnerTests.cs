@@ -49,6 +49,8 @@ namespace TestCentric.Engine.Runners
             _services = new ServiceContext();
             _services.Add(new Services.ExtensionService());
             _services.Add(new Services.ProjectService());
+            var packageSettingsService = new Services.PackageSettingsService();
+            _services.Add(packageSettingsService);
 #if !NETCOREAPP2_1
             _services.Add(new Services.DomainManager());
             _services.Add(new Services.RuntimeFrameworkService());
@@ -67,6 +69,8 @@ namespace TestCentric.Engine.Runners
             }
 
             _package = new TestPackage(assemblies);
+
+            packageSettingsService.UpdatePackage(_package);
 
             // HACK: Depends on the fact that all TestEngineRunners support this constructor
             _runner = (TRunner)Activator.CreateInstance(typeof(TRunner), _services, _package);

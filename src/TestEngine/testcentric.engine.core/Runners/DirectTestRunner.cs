@@ -127,12 +127,17 @@ namespace TestCentric.Engine.Runners
                     _assemblyResolver.AddPathFromFile(testFile);
                 }
 
-                IFrameworkDriver driver = driverService.GetDriver(TestDomain, testFile, targetFramework, skipNonTestAssemblies);
+                IFrameworkDriver driver = driverService.GetDriver(TestDomain, subPackage);
 #else
-                IFrameworkDriver driver = driverService.GetDriver(testFile, skipNonTestAssemblies);
+                IFrameworkDriver driver = driverService.GetDriver(subPackage);
 #endif
                 driver.ID = TestPackage.ID;
+#if NETSTANDARD1_6 || NETSTANDARD2_0
+                var testAssemblyName = subPackage.GetSetting(InternalEnginePackageSettings.ImageAssemblyName, "");
+                result.Add(LoadDriver(driver, testAssemblyName, subPackage));
+#else
                 result.Add(LoadDriver(driver, testFile, subPackage));
+#endif
                 _drivers.Add(driver);
             }
             return result;

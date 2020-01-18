@@ -13,6 +13,9 @@ namespace TestCentric.Engine
     /// </summary>
     public static class InternalEnginePackageSettings
     {
+        public const string ImageAssemblyName = "ImageAssemblyName";
+        public const string ImageNonTestAssembly = "ImageNonTestAssembly";
+
         /// <summary>
         /// If the package represents an assembly, then this is the CLR version
         /// stored in the assembly image. If it represents a project or other

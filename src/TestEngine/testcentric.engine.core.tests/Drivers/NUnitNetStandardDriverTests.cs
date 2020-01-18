@@ -3,11 +3,11 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-#if NETCOREAPP
+#if NETCOREAPP2_1
 
 using System;
 using System.Collections.Generic;
-using System.Xml;
+using System.Reflection;
 using TestCentric.Tests.Assemblies;
 using TestCentric.Engine.Extensibility;
 using TestCentric.Engine.Helpers;
@@ -26,20 +26,22 @@ namespace TestCentric.Engine.Drivers
         private IDictionary<string, object> _settings = new Dictionary<string, object>();
 
         private IFrameworkDriver _driver;
-        private string _mockAssemblyPath;
+        private AssemblyName _mockAssemblyName;
 
         [SetUp]
         public void CreateDriver()
         {
-            _mockAssemblyPath = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, MOCK_ASSEMBLY);
-            _driver = new NUnitNetStandardDriver();
+            _mockAssemblyName = typeof(MockAssembly).Assembly.GetName();
+
+            var testAssemblyName = typeof(NUnit.Framework.TestAttribute).Assembly.GetName();
+            _driver = new NUnitNetStandardDriver(testAssemblyName);
 
         }
 
         [Test]
         public void Load_GoodFile_ReturnsRunnableSuite()
         {
-            var result = XmlHelper.CreateXmlNode(_driver.Load(_mockAssemblyPath, _settings));
+            var result = XmlHelper.CreateXmlNode(_driver.Load(_mockAssemblyName.FullName, _settings));
 
             Assert.That(result.Name, Is.EqualTo("test-suite"));
             Assert.That(result.GetAttribute("type"), Is.EqualTo("Assembly"));
@@ -51,7 +53,7 @@ namespace TestCentric.Engine.Drivers
         [Test]
         public void Explore_AfterLoad_ReturnsRunnableSuite()
         {
-            _driver.Load(_mockAssemblyPath, _settings);
+            _driver.Load(_mockAssemblyName.FullName, _settings);
             var result = XmlHelper.CreateXmlNode(_driver.Explore(TestFilter.Empty.Text));
 
             Assert.That(result.Name, Is.EqualTo("test-suite"));
@@ -74,7 +76,7 @@ namespace TestCentric.Engine.Drivers
         [Test]
         public void CountTestsAction_AfterLoad_ReturnsCorrectCount()
         {
-            _driver.Load(_mockAssemblyPath, _settings);
+            _driver.Load(_mockAssemblyName.FullName, _settings);
             Assert.That(_driver.CountTestCases(TestFilter.Empty.Text), Is.EqualTo(MockAssembly.Tests));
         }
 
@@ -91,7 +93,7 @@ namespace TestCentric.Engine.Drivers
         [Test]
         public void RunTestsAction_AfterLoad_ReturnsRunnableSuite()
         {
-            _driver.Load(_mockAssemblyPath, _settings);
+            _driver.Load(_mockAssemblyName.FullName, _settings);
             var result = XmlHelper.CreateXmlNode(_driver.Run(new NullListener(), TestFilter.Empty.Text));
 
             Assert.That(result.Name, Is.EqualTo("test-suite"));

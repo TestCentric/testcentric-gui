@@ -101,6 +101,8 @@ namespace TestCentric.Engine.Services
 
             var assembly = new TargetFrameworkHelper(package.FullName);
 
+            package.Settings[InternalEnginePackageSettings.ImageAssemblyName] = assembly.FullName;
+
             var targetVersion = assembly.TargetRuntimeVersion;
             if (targetVersion.Major > 0)
             {
@@ -126,6 +128,11 @@ namespace TestCentric.Engine.Services
             if (assembly.RequiresAssemblyResolver)
             {
                 log.Debug($"Assembly {package.FullName} requires default app domain assembly resolver");
+            }
+
+            if (assembly.HasAttribute("NUnit.Framework.NonTestAssembly"))
+            {
+                package.Settings[InternalEnginePackageSettings.ImageNonTestAssembly] = true;
             }
         }
     }

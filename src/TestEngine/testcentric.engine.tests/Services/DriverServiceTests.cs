@@ -52,15 +52,17 @@ namespace TestCentric.Engine.Services
         [TestCase("notest-assembly.dll", true, typeof(SkippedAssemblyFrameworkDriver))]
         public void CorrectDriverIsUsed(string fileName, bool skipNonTestAssemblies, Type expectedType)
         {
+            var package = new TestPackage(Path.Combine(TestContext.CurrentContext.TestDirectory, fileName));
+            // HACK: Temporary till we finalize the driver service interface
+            if (fileName == "notest-assembly.dll")
+                package.Settings[InternalEnginePackageSettings.ImageNonTestAssembly] = true;
+            package.Settings[EnginePackageSettings.SkipNonTestAssemblies] = skipNonTestAssemblies;
+
             var driver = _driverService.GetDriver(
 #if !NETCOREAPP1_1
                 AppDomain.CurrentDomain,
 #endif
-                Path.Combine(TestContext.CurrentContext.TestDirectory, fileName),
-#if !NETCOREAPP1_1
-                null,
-#endif
-                skipNonTestAssemblies);
+                package);
 
             Assert.That(driver, Is.InstanceOf(expectedType));
         }
