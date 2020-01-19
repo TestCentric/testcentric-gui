@@ -34,10 +34,13 @@ namespace TestCentric.Engine.Services
         static Logger log = InternalTrace.GetLogger(typeof(PackageSettingsService));
 
         private IProjectService _projectService;
+        //private IDriverService _driverService;
 
         public override void StartService()
         {
             _projectService = ServiceContext.GetService<IProjectService>();
+            //_driverService = ServiceContext.GetService<IDriverService>();
+
             if (_projectService == null)
                 Status = ServiceStatus.Error;
         }
@@ -95,7 +98,7 @@ namespace TestCentric.Engine.Services
         /// apply it to the package using special internal keywords.
         /// </summary>
         /// <param name="package"></param>
-        static void ApplyImageSettings(TestPackage package)
+        void ApplyImageSettings(TestPackage package)
         {
             Guard.ArgumentNotNull(package, nameof(package));
 
@@ -133,6 +136,12 @@ namespace TestCentric.Engine.Services
             if (assembly.HasAttribute("NUnit.Framework.NonTestAssembly"))
             {
                 package.Settings[InternalEnginePackageSettings.ImageNonTestAssembly] = true;
+            }
+
+            foreach (var reference in assembly.AssemblyReferences)
+            {
+                if (reference.Name == "nunit.framework")
+                    package.Settings[InternalEnginePackageSettings.ImageTestFrameworkName] = reference.FullName;
             }
         }
     }

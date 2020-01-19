@@ -7,13 +7,11 @@
     <OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net20'">
-    <PackageReference Include="Mono.Cecil" Version="0.9.6.1" />
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.6' or '$(TargetFramework)'=='netstandard2.0'">
     <PackageReference Include="Microsoft.DotNet.InternalAbstractions" Version="1.0.0" />
-    <PackageReference Include="Mono.Cecil" Version="0.10.0" />
     <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
     <PackageReference Include="System.Reflection" Version="4.3.0" />
     <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
@@ -22,6 +20,8 @@
   <ItemGroup>
     <Compile Remove="Drivers\NUnit2DriverFactory.cs" />
     <Compile Remove="ExecutionPlatform.cs" />
+    <Compile Remove="Services\DriverService.cs" />
+    <Compile Remove="Services\IDriverService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\EngineVersion.cs" LinkBase="Properties" />

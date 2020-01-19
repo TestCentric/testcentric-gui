@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Generic;
 using Mono.Cecil;
 
 namespace TestCentric.Engine.Internal
@@ -94,6 +95,11 @@ namespace TestCentric.Engine.Internal
         public bool RequiresAssemblyResolver
         {
             get { return HasAttribute("NUnit.Framework.TestAssemblyDirectoryResolveAttribute"); }
+        }
+
+        public IEnumerable<AssemblyNameReference> AssemblyReferences
+        {
+            get { return _module.AssemblyReferences; }
         }
     }
 }

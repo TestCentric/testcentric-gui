@@ -67,7 +67,6 @@ namespace TestCentric.Engine
                 Services.Add(new RuntimeFrameworkService());
                 Services.Add(new TestAgency());
 #endif
-                Services.Add(new DriverService());
                 Services.Add(new ResultService());
                 Services.Add(new DefaultTestRunnerFactory());
             }

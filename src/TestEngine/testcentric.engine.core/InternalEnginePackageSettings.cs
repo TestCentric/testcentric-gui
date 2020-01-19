@@ -15,6 +15,7 @@ namespace TestCentric.Engine
     {
         public const string ImageAssemblyName = "ImageAssemblyName";
         public const string ImageNonTestAssembly = "ImageNonTestAssembly";
+        public const string ImageTestFrameworkName = "ImageTestFrameworkName";
 
         /// <summary>
         /// If the package represents an assembly, then this is the CLR version

@@ -6,6 +6,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
+using TestCentric.Engine.Drivers;
 using TestCentric.Engine.Extensibility;
 using TestCentric.Engine.Helpers;
 using TestCentric.Engine.Internal;
@@ -39,7 +41,7 @@ namespace TestCentric.Engine.Runners
         // should create intermediate result nodes for each project.
         //
         // TODO: We really should detect and give a meaningful message if the user 
-        // tries to load incopatible frameworks in the same AppDomain.
+        // tries to load incompatible frameworks in the same AppDomain.
 
         private readonly List<IFrameworkDriver> _drivers = new List<IFrameworkDriver>();
 
@@ -107,37 +109,35 @@ namespace TestCentric.Engine.Runners
             // a set of assemblies as subpackages or even an arbitrary
             // hierarchy of packages and subpackages with assemblies
             // found in the terminal nodes.
-            var packagesToLoad = TestPackage.Select(p => !p.HasSubPackages());
-
-            var driverService = Services.GetService<IDriverService>();
-
-            foreach (var subPackage in packagesToLoad)
+            foreach (var subPackage in TestPackage.Select(p => !p.HasSubPackages()))
             {
-                var testFile = subPackage.FullName;
-
-                string targetFramework = subPackage.GetSetting(InternalEnginePackageSettings.ImageTargetFrameworkName, (string)null);
-                bool skipNonTestAssemblies = subPackage.GetSetting(EnginePackageSettings.SkipNonTestAssemblies, false);
-
 #if !NETSTANDARD1_6
                 if (_assemblyResolver != null && !TestDomain.IsDefaultAppDomain()
                     && subPackage.GetSetting(InternalEnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver, false))
                 {
                     // It's OK to do this in the loop because the Add method
                     // checks to see if the path is already present.
-                    _assemblyResolver.AddPathFromFile(testFile);
+                    _assemblyResolver.AddPathFromFile(subPackage.FullName);
+                }
+#endif
+
+                var driver = GetDriver(subPackage);
+                driver.ID = TestPackage.ID;
+
+                try
+                {
+#if NETSTANDARD
+                    var testAssemblyName = subPackage.GetSetting(InternalEnginePackageSettings.ImageAssemblyName, "");
+                    result.Add(driver.Load(testAssemblyName, subPackage.Settings));
+#else
+                    result.Add(driver.Load(subPackage.FullName, subPackage.Settings));
+#endif
+                }
+                catch (Exception ex) when (!(ex is NUnitEngineException))
+                {
+                    throw new NUnitEngineException("An exception occurred in the driver while loading tests.", ex);
                 }
 
-                IFrameworkDriver driver = driverService.GetDriver(TestDomain, subPackage);
-#else
-                IFrameworkDriver driver = driverService.GetDriver(subPackage);
-#endif
-                driver.ID = TestPackage.ID;
-#if NETSTANDARD1_6 || NETSTANDARD2_0
-                var testAssemblyName = subPackage.GetSetting(InternalEnginePackageSettings.ImageAssemblyName, "");
-                result.Add(LoadDriver(driver, testAssemblyName, subPackage));
-#else
-                result.Add(LoadDriver(driver, testFile, subPackage));
-#endif
                 _drivers.Add(driver);
             }
             return result;
@@ -248,6 +248,60 @@ namespace TestCentric.Engine.Runners
         {
             if (!IsPackageLoaded)
                 LoadResult = LoadPackage();
+        }
+
+        // HACK: Temp replacement for driver service while code is
+        // in process of changing and driver service is disabled.
+        private IFrameworkDriver GetDriver(TestPackage package)
+        {
+            var assemblyPath = package.FullName;
+
+            if (!File.Exists(assemblyPath))
+                return new InvalidAssemblyFrameworkDriver(assemblyPath, "File not found: " + assemblyPath);
+
+            if (!PathUtils.IsAssemblyFileType(assemblyPath))
+                return new InvalidAssemblyFrameworkDriver(assemblyPath, "File type is not supported");
+
+            bool skipNonTestAssemblies = package.GetSetting(EnginePackageSettings.SkipNonTestAssemblies, false);
+            bool isNonTestAssembly = package.GetSetting(InternalEnginePackageSettings.ImageNonTestAssembly, false);
+            // TODO: Should ImageTargetFrameworkName be required?
+            string targetFramework = package.GetSetting(InternalEnginePackageSettings.ImageTargetFrameworkName, (string)null);
+
+#if !NETSTANDARD
+            if (targetFramework != null)
+            {
+                // This takes care of an issue with Roslyn. It may get fixed, but we still
+                // have to deal with assemblies having this setting. I'm assuming that
+                // any true Portable assembly would have a Profile as part of its name.
+                var platform = targetFramework == ".NETPortable,Version=v5.0"
+                    ? ".NETStandard"
+                    : targetFramework.Split(new char[] { ',' })[0];
+                if (platform == "Silverlight" || platform == ".NETPortable" || platform == ".NETStandard" || platform == ".NETCompactFramework")
+                    return new InvalidAssemblyFrameworkDriver(assemblyPath, platform + " test assemblies are not supported by this version of the engine");
+            }
+#endif
+
+            if (skipNonTestAssemblies && isNonTestAssembly)
+                return new SkippedAssemblyFrameworkDriver(assemblyPath);
+
+            if (package.Settings.ContainsKey(InternalEnginePackageSettings.ImageTestFrameworkName))
+            {
+                string testFrameworkName = (string)package.Settings[InternalEnginePackageSettings.ImageTestFrameworkName];
+                var frameworkReference = new AssemblyName(testFrameworkName);
+
+#if NETSTANDARD
+                return new NUnitNetStandardDriver(frameworkReference);
+#else
+                return new NUnit3FrameworkDriver(TestDomain, frameworkReference);
+#endif
+            }
+
+            if (skipNonTestAssemblies)
+                return new SkippedAssemblyFrameworkDriver(assemblyPath);
+            else
+                return new InvalidAssemblyFrameworkDriver(assemblyPath,
+                    $"No suitable tests found in '{assemblyPath}'.\n" +
+                    "Either assembly contains no tests or proper test driver has not been found.");
         }
     }
 }

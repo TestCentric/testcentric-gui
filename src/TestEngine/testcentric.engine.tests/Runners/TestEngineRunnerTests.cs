@@ -56,7 +56,7 @@ namespace TestCentric.Engine.Runners
             _services.Add(new Services.RuntimeFrameworkService());
             _services.Add(new Services.TestAgency("ProcessRunnerTests", 0));
 #endif
-            _services.Add(new Services.DriverService());
+            //_services.Add(new Services.DriverService());
             _services.Add(new Services.DefaultTestRunnerFactory());
             _services.ServiceManager.StartServices();
 

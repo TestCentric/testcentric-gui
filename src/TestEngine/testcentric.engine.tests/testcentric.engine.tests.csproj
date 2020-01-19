@@ -19,6 +19,7 @@
   <ItemGroup>
     <Compile Remove="Internal\SettingsGroupTests.cs" />
     <Compile Remove="Internal\SettingsStoreTests.cs" />
+    <Compile Remove="Services\DriverServiceTests.cs" />
     <Compile Remove="Services\Fakes\FakeSettingsService.cs" />
     <Compile Remove="Services\SettingsServiceTests.cs" />
   </ItemGroup>

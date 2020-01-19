@@ -103,7 +103,7 @@ namespace TestCentric.Engine.Runners
             _services.Add(new DomainManager());
             _services.Add(new RuntimeFrameworkService());
 #endif
-            _services.Add(new DriverService());
+            //_services.Add(new DriverService());
             _services.Add(new DefaultTestRunnerFactory());
             _services.ServiceManager.StartServices();
 

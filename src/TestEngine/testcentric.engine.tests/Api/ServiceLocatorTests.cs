@@ -20,7 +20,7 @@ namespace TestCentric.Engine.Api
             _testEngine.InternalTraceLevel = InternalTraceLevel.Off;
         }
 
-        [TestCase(typeof(IDriverService))]
+        [TestCase(typeof(IProjectService))]
         public void CanAccessService(Type serviceType)
         {
             IService service = _testEngine.Services.GetService(serviceType) as IService;
