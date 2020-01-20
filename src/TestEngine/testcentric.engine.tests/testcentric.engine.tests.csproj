@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <RootNamespace>NUnit.Engine</RootNamespace>
+    <RootNamespace>TestCentric.Engine</RootNamespace>
     <TargetFrameworks>net35;netcoreapp2.1</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <SignAssembly>true</SignAssembly>

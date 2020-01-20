@@ -38,6 +38,7 @@ namespace TestCentric.Engine.Runners
         private ITestEngineRunner _engineRunner;
         private readonly IServiceLocator _services;
         private readonly ExtensionService _extensionService;
+        private readonly PackageSettingsService _packageSettingsService;
 #if !NETSTANDARD2_0
         private readonly IRuntimeFrameworkService _runtimeService;
 #endif
@@ -63,6 +64,7 @@ namespace TestCentric.Engine.Runners
             _testRunnerFactory = _services.GetService<ITestRunnerFactory>();
 
             _extensionService = _services.GetService<ExtensionService>();
+            _packageSettingsService = _services.GetService<PackageSettingsService>();
 #if !NETSTANDARD2_0
             _runtimeService = _services.GetService<IRuntimeFrameworkService>();
 
@@ -239,10 +241,9 @@ namespace TestCentric.Engine.Runners
         {
             if (_engineRunner == null)
             {
-                // Some files in the top level package may be projects.
-                // Expand them so that they contain subprojects for
-                // each contained assembly.
-                EnsurePackagesAreExpanded(TestPackage);
+                // Expand projects and update package settings to reflect the
+                // target runtime and test framework usage of each assembly.
+                _packageSettingsService.UpdatePackage(TestPackage);
 
                 // Use SelectRuntimeFramework for its side effects.
                 // Info will be left behind in the package about
@@ -321,31 +322,6 @@ namespace TestCentric.Engine.Runners
             }
             
             return topLevelResult;
-        }
-
-        private void EnsurePackagesAreExpanded(TestPackage package)
-        {
-            if (package == null) throw new ArgumentNullException("package");
-
-            foreach (var subPackage in package.SubPackages)
-            {
-                EnsurePackagesAreExpanded(subPackage);
-            }
-
-            if (package.SubPackages.Count == 0 && IsProjectPackage(package))
-            {
-                _projectService.ExpandProjectPackage(package);
-            }
-        }
-
-        private bool IsProjectPackage(TestPackage package)
-        {
-            if (package == null) throw new ArgumentNullException("package");
-
-            return
-                _projectService != null
-                && !string.IsNullOrEmpty(package.FullName)
-                && _projectService.CanLoadFrom(package.FullName);
         }
 
         /// <summary>

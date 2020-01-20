@@ -17,7 +17,7 @@ namespace TestCentric.Engine.Runners
     // intermittent errors, probably due to the test
     // fixture rather than the engine.
     [TestFixture(typeof(LocalTestRunner))]
-#if !NETCOREAPP1_1 && !NETCOREAPP2_1
+#if !NETCOREAPP2_1
     [TestFixture(typeof(TestDomainRunner))]
     //[TestFixture(typeof(ProcessRunner))]
     [TestFixture(typeof(MultipleTestDomainRunner), 1)]
@@ -47,14 +47,12 @@ namespace TestCentric.Engine.Runners
         {
             // Add all services needed by any of our TestEngineRunners
             _services = new ServiceContext();
-#if !NETCOREAPP1_1
             _services.Add(new Services.ExtensionService());
             _services.Add(new Services.ProjectService());
 #if !NETCOREAPP2_1
             _services.Add(new Services.DomainManager());
             _services.Add(new Services.RuntimeFrameworkService());
             _services.Add(new Services.TestAgency("ProcessRunnerTests", 0));
-#endif
 #endif
             _services.Add(new Services.DriverService());
             _services.Add(new Services.DefaultTestRunnerFactory());
@@ -115,7 +113,6 @@ namespace TestCentric.Engine.Runners
             CheckPackageLoading();
         }
 
-#if !NETCOREAPP1_1
         [Test]
         public void RunAsync()
         {
@@ -131,7 +128,6 @@ namespace TestCentric.Engine.Runners
             CheckRunResult(asyncResult.EngineResult);
             CheckPackageLoading();
         }
-#endif
 
         private void CheckPackageLoading()
         {

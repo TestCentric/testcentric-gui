@@ -8,12 +8,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Xml;
 
-namespace System.Runtime.CompilerServices
-{
-    [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class | AttributeTargets.Method)]
-    sealed class ExtensionAttribute : Attribute { }
-}
-
 namespace TestCentric.Engine.Helpers
 {
     /// <summary>

@@ -6,7 +6,8 @@
 using System.Reflection;
 
 //
-// Common Information for the TestCentric Engine assemblies
+// Common Information for the TestCentric Engine 
+
 //
 [assembly: AssemblyTrademark("TestCentric is a trademark of TestCentric Software")]
 [assembly: AssemblyCompany("TestCentric")]

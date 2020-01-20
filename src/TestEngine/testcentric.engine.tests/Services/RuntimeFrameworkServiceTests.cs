@@ -3,7 +3,7 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-#if !NETCOREAPP1_1 && !NETCOREAPP2_1
+#if !NETCOREAPP2_1
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,13 +14,17 @@ namespace TestCentric.Engine.Services
     public class RuntimeFrameworkServiceTests
     {
         private RuntimeFrameworkService _runtimeService;
+        private PackageSettingsService _packageManager;
 
         [SetUp]
         public void CreateServiceContext()
         {
             var services = new ServiceContext();
+            services.Add(new Fakes.FakeProjectService());
             _runtimeService = new RuntimeFrameworkService();
             services.Add(_runtimeService);
+            _packageManager = new PackageSettingsService();
+            services.Add(_packageManager);
             services.ServiceManager.StartServices();
         }
 
@@ -45,6 +49,7 @@ namespace TestCentric.Engine.Services
             FileAssert.Exists(assemblyPath, $"File not found: {assemblyPath}");
             var package = new TestPackage(assemblyPath);
 
+            _packageManager.UpdatePackage(package);
             var runtimeFramework = _runtimeService.SelectRuntimeFramework(package);
 
             Assert.That(package.GetSetting("RuntimeFramework", ""), Is.EqualTo(runtimeFramework));
@@ -103,6 +108,7 @@ namespace TestCentric.Engine.Services
 
             var platform = Environment.OSVersion.Platform;
 
+            _packageManager.UpdatePackage(topLevelPackage);
             _runtimeService.SelectRuntimeFramework(topLevelPackage);
 
             Assert.Multiple(() =>

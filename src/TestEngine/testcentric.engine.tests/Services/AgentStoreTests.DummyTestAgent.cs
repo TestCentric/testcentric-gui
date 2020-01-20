@@ -3,7 +3,7 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-#if !NETCOREAPP1_1 && !NETCOREAPP2_0
+#if !NETCOREAPP2_1
 using System;
 
 namespace TestCentric.Engine.Services

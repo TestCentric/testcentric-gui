@@ -82,8 +82,8 @@ namespace TestCentric.Engine.Services
         /// <returns>A string representing the selected RuntimeFramework</returns>
         public string SelectRuntimeFramework(TestPackage package)
         {
-            // Evaluate package target framework
-            ApplyImageData(package);
+            //// Evaluate package target framework
+            //ApplyImageData(package);
 
             var targetFramework = SelectRuntimeFrameworkInner(package);
             return targetFramework.ToString();
@@ -210,90 +210,6 @@ namespace TestCentric.Engine.Services
 
             log.Debug($"Test will use {targetFramework} for {package.Name}");
             return targetFramework;
-        }
-
-
-        /// <summary>
-        /// Use Mono.Cecil to get information about all assemblies and
-        /// apply it to the package using special internal keywords.
-        /// </summary>
-        /// <param name="package"></param>
-        private static void ApplyImageData(TestPackage package)
-        {
-            string packageName = package.FullName;
-
-            Version targetVersion = new Version(0, 0);
-            string frameworkName = null;
-            bool requiresX86 = false;
-            bool requiresAssemblyResolver = false;
-
-            // We are doing two jobs here: (1) in the else clause (below)
-            // we get information about a single assembly and record it,
-            // (2) in the if clause, we recursively examine all subpackages
-            // and then apply policies for promulgating each setting to
-            // a containing package. We could implement the policy part at
-            // a higher level, but it seems simplest to do it right here.
-            if (package.SubPackages.Count > 0)
-            {
-                foreach (var subPackage in package.SubPackages)
-                {
-                    ApplyImageData(subPackage);
-
-                    // Collect the highest version required
-                    Version v = subPackage.GetSetting(InternalEnginePackageSettings.ImageRuntimeVersion, new Version(0, 0));
-                    if (v > targetVersion) targetVersion = v;
-
-                    // Collect highest framework name
-                    // TODO: This assumes lexical ordering is valid - check it
-                    string fn = subPackage.GetSetting(InternalEnginePackageSettings.ImageTargetFrameworkName, "");
-                    if (fn != "")
-                    {
-                        if (frameworkName == null || fn.CompareTo(frameworkName) < 0)
-                            frameworkName = fn;
-                    }
-
-                    // If any assembly requires X86, then the aggregate package requires it
-                    if (subPackage.GetSetting(InternalEnginePackageSettings.ImageRequiresX86, false))
-                        requiresX86 = true;
-
-                    if (subPackage.GetSetting(InternalEnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver, false))
-                        requiresAssemblyResolver = true;
-                }
-            }
-            else if (File.Exists(packageName) && PathUtils.IsAssemblyFileType(packageName))
-            {
-                var assembly = new TargetFrameworkHelper(packageName);
-
-                targetVersion = assembly.TargetRuntimeVersion;
-                log.Debug($"Assembly {packageName} uses version {targetVersion}");
-
-                frameworkName = assembly.FrameworkName;
-                log.Debug($"Assembly {packageName} targets {frameworkName}");
-
-                if (assembly.RequiresX86)
-                {
-                    requiresX86 = true;
-                    log.Debug($"Assembly {packageName} will be run x86");
-                }
-
-                if (assembly.RequiresAssemblyResolver)
-                {
-                    requiresAssemblyResolver = true;
-                    log.Debug($"Assembly {packageName} requires default app domain assembly resolver");
-                }
-            }
-
-            if (targetVersion.Major > 0)
-                package.Settings[InternalEnginePackageSettings.ImageRuntimeVersion] = targetVersion;
-
-            if (!string.IsNullOrEmpty(frameworkName))
-                package.Settings[InternalEnginePackageSettings.ImageTargetFrameworkName] = frameworkName;
-
-            package.Settings[InternalEnginePackageSettings.ImageRequiresX86] = requiresX86;
-            if (requiresX86)
-                package.Settings[EnginePackageSettings.RunAsX86] = true;
-
-            package.Settings[InternalEnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver] = requiresAssemblyResolver;
         }
 
         private void FindAvailableRuntimes()

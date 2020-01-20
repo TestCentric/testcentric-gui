@@ -23,30 +23,23 @@ namespace TestCentric.Engine.Services.TestRunnerFactoryTests
     /// </summary>
     public class RunnerSelectionTests
     {
-        private DefaultTestRunnerFactory _factory;
         private ServiceContext _services;
 
         [OneTimeSetUp]
         public void SetUp()
         {
             _services = new ServiceContext();
-#if !NETCOREAPP1_1
-            _services.Add(new ExtensionService());
-            var projectService = new FakeProjectService();
-            ((IService)projectService).StartService();
-            projectService.Add(TestPackageFactory.FakeProject, "a.dll", "b.dll");
-            _services.Add(projectService);
-            Assert.That(((IService)projectService).Status, Is.EqualTo(ServiceStatus.Started));
-#endif
-            _factory = new DefaultTestRunnerFactory();
-            _services.Add(_factory);
-            _factory.StartService();
-            Assert.That(_factory.Status, Is.EqualTo(ServiceStatus.Started));
 
-            var fakeRuntimeService = new FakeRuntimeService();
-            ((IService)fakeRuntimeService).StartService();
-            _services.Add(fakeRuntimeService);
-            Assert.That(((IService)fakeRuntimeService).Status, Is.EqualTo(ServiceStatus.Started));
+            var projectService = new FakeProjectService();
+            projectService.Add(TestPackageFactory.FakeProject, "a.dll", "b.dll");
+
+            _services.Add(new ExtensionService());
+            _services.Add(projectService);
+            _services.Add(new DefaultTestRunnerFactory());
+            _services.Add(new FakeRuntimeService());
+            _services.Add(new PackageSettingsService());
+
+            _services.ServiceManager.StartServices();
         }
 
         [TestCaseSource(nameof(TestCases))]
