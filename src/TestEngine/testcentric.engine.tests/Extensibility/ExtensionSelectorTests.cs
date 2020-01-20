@@ -110,7 +110,7 @@ namespace TestCentric.Engine.Extensibility
             bool fromWildcard = false)
         {
             var sub = Substitute.For<IExtensionAssembly>();
-            sub.AssemblyName.Returns(assemblyName);
+            sub.Name.Returns(assemblyName);
             sub.AssemblyVersion.Returns(assemblyVersion ?? new Version(1, 0));
             targetFramework = targetFramework ?? new Version(2, 0);
             sub.TargetFramework.Returns(new RuntimeFramework(Runtime.Net, targetFramework));

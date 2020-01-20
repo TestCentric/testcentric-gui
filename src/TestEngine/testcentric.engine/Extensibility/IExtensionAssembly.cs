@@ -11,7 +11,7 @@ namespace TestCentric.Engine.Extensibility
     internal interface IExtensionAssembly
     {
         bool FromWildCard { get; }
-        string AssemblyName { get; }
+        string Name { get; }
         Version AssemblyVersion { get; }
 #if !NETSTANDARD2_0
         RuntimeFramework TargetFramework { get; }

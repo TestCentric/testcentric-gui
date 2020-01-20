@@ -393,7 +393,7 @@ namespace TestCentric.Engine.Services
         /// </summary>
         internal void FindExtensionsInAssembly(ExtensionAssembly assembly)
         {
-            log.Info("Scanning {0} assembly for Extensions", assembly.FilePath);
+            log.Info("Scanning {0} assembly for Extensions", assembly.AssemblyPath);
 
             if (CanLoadTargetFramework(Assembly.GetEntryAssembly(), assembly))
             {
@@ -427,7 +427,7 @@ namespace TestCentric.Engine.Services
                     if (versionArg != null && new Version((string)versionArg) > ENGINE_VERSION)
                         continue;
 
-                    var node = new ExtensionNode(assembly.FilePath, assembly.AssemblyVersion, type.FullName, assemblyTargetFramework);
+                    var node = new ExtensionNode(assembly.AssemblyPath, assembly.AssemblyVersion, type.FullName, assemblyTargetFramework);
                     node.Path = extensionAttr.GetNamedArgument("Path") as string;
                     node.Description = extensionAttr.GetNamedArgument("Description") as string;
 
@@ -494,23 +494,23 @@ namespace TestCentric.Engine.Services
             if (runnerAsm == null)
                 return true;
 
-            var extHelper = new TargetFrameworkHelper(extensionAsm.FilePath);
-            var runnerHelper = new TargetFrameworkHelper(runnerAsm.Location);
-            if (runnerHelper.FrameworkName?.StartsWith(".NETStandard") == true)
+            var extensionAssembly = AssemblyView.ReadAssembly(extensionAsm.AssemblyPath);
+            var runnerAssembly = AssemblyView.ReadAssembly(runnerAsm.Location);
+            if (runnerAssembly.FrameworkName?.StartsWith(".NETStandard") == true)
             {
                 throw new NUnitEngineException($"{runnerAsm.FullName} test runner must target .NET Core or .NET Framework, not .NET Standard");
             }
-            else if (runnerHelper.FrameworkName?.StartsWith(".NETCoreApp") == true)
+            else if (runnerAssembly.FrameworkName?.StartsWith(".NETCoreApp") == true)
             {
-                if (extHelper.FrameworkName?.StartsWith(".NETStandard") != true && extHelper.FrameworkName?.StartsWith(".NETCoreApp") != true)
+                if (extensionAssembly.FrameworkName?.StartsWith(".NETStandard") != true && extensionAssembly.FrameworkName?.StartsWith(".NETCoreApp") != true)
                 {
-                    log.Info($".NET Core runners require .NET Core or .NET Standard extension for {extensionAsm.FilePath}");
+                    log.Info($".NET Core runners require .NET Core or .NET Standard extension for {extensionAsm.AssemblyPath}");
                     return false;
                 }
             }
-            else if (extHelper.FrameworkName?.StartsWith(".NETCoreApp") == true)
+            else if (extensionAssembly.FrameworkName?.StartsWith(".NETCoreApp") == true)
             {
-                log.Info($".NET Framework runners cannot load .NET Core extension {extensionAsm.FilePath}");
+                log.Info($".NET Framework runners cannot load .NET Core extension {extensionAsm.AssemblyPath}");
                 return false;
             }
 

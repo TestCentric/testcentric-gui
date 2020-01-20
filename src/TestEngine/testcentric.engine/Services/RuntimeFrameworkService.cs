@@ -3,14 +3,13 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-#if !NETSTANDARD2_0
+#if !NETSTANDARD
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using Microsoft.Win32;
-using Mono.Cecil;
 using TestCentric.Common;
 using TestCentric.Engine.Helpers;
 using TestCentric.Engine.Internal;

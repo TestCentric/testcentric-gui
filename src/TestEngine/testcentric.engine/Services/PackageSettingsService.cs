@@ -94,15 +94,15 @@ namespace TestCentric.Engine.Services
         }
 
         /// <summary>
-        /// Use Mono.Cecil to get information about an assembly and
-        /// apply it to the package using special internal keywords.
+        /// Inspect an assembly to extract information and add it
+        /// to the package using special internal settings.
         /// </summary>
         /// <param name="package"></param>
         void ApplyImageSettings(TestPackage package)
         {
             Guard.ArgumentNotNull(package, nameof(package));
 
-            var assembly = new TargetFrameworkHelper(package.FullName);
+            var assembly = AssemblyView.ReadAssembly(package.FullName);
 
             package.Settings[InternalEnginePackageSettings.ImageAssemblyName] = assembly.FullName;
 

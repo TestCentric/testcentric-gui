@@ -16,7 +16,7 @@ namespace TestCentric.Engine.Extensibility
         /// </summary>
         public static bool IsDuplicateOf(this IExtensionAssembly first, IExtensionAssembly second)
         {
-            return first.AssemblyName == second.AssemblyName;
+            return first.Name == second.Name;
         }
 
         /// <summary>

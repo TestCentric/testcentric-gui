@@ -3,7 +3,6 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-#if !NETCOREAPP1_1
 using System;
 using System.Reflection;
 using NUnit.Framework;
@@ -27,9 +26,15 @@ namespace TestCentric.Engine.Extensibility
         }
 
         [Test]
-        public void AssemblyDefinition()
+        public void Name()
         {
-            Assert.That(_ea.Assembly.FullName, Is.EqualTo(THIS_ASSEMBLY_FULL_NAME));
+            Assert.That(_ea.Name, Is.EqualTo(THIS_ASSEMBLY_NAME));
+        }
+
+        [Test]
+        public void FullName()
+        {
+            Assert.That(_ea.FullName, Is.EqualTo(THIS_ASSEMBLY_FULL_NAME));
         }
 
         [Test]
@@ -39,24 +44,19 @@ namespace TestCentric.Engine.Extensibility
         }
 
         [Test]
-        public void AssemblyName()
-        {
-            Assert.That(_ea.AssemblyName, Is.EqualTo(THIS_ASSEMBLY_NAME));
-        }
-
-        [Test]
         public void AssemblyVersion()
         {
             Assert.That(_ea.AssemblyVersion, Is.EqualTo(THIS_ASSEMBLY_VERSION));
         }
 
-#if !NETCOREAPP2_1
         [Test]
         public void TargetFramework()
         {
+#if NETCOREAPP2_1
+            Assert.That(_ea.TargetFramework.ToString, Is.EqualTo("netcore-2.1"));
+#else
             Assert.That(_ea.TargetFramework.ToString, Is.EqualTo("net-2.0"));
-        }
 #endif
+        }
     }
 }
-#endif
