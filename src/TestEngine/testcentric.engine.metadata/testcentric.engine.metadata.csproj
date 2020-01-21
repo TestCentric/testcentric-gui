@@ -8,12 +8,8 @@
     <DefineConstants>TRACE;TESTCENTRIC</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Mono.Cecil.Cil\Symbols.cs" />
     <Compile Remove="Mono.Cecil.Metadata\Buffers.cs" />
     <Compile Remove="Mono.Cecil.PE\GoodImageReader.cs" />
     <Compile Remove="Mono.Cecil\SecurityDeclaration.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Mono.Cecil.Cil\" />
   </ItemGroup>
 </Project>
