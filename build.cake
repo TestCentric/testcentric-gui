@@ -316,6 +316,7 @@ var baseFiles = new string[]
     BIN_DIR + "nunit.uiexception.dll",
     BIN_DIR + "TestCentric.Gui.Model.dll",
     BIN_DIR + "testcentric.engine.api.dll",
+    BIN_DIR + "testcentric.engine.metadata.dll",
     BIN_DIR + "testcentric.engine.core.dll",
     BIN_DIR + "testcentric.engine.dll",
     BIN_DIR + "Mono.Cecil.dll",
