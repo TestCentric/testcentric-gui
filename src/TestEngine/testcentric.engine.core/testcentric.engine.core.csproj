@@ -4,7 +4,7 @@
     <TargetFrameworks>net20;netstandard1.6;netstandard2.0</TargetFrameworks>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\nunit.snk</AssemblyOriginatorKeyFile>
-    <OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
+    <OutputPath>..\..\..\bin\$(Configuration)\engine\</OutputPath>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net20'">
     <Reference Include="System.Runtime.Remoting" />
