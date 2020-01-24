@@ -9,7 +9,7 @@
     <IntermediateOutputPath>obj\$(Configuration)\x86\</IntermediateOutputPath>
     <GenerateSupportedRuntime>false</GenerateSupportedRuntime>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
-    <OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
+    <OutputPath>..\..\..\bin\$(Configuration)\agents\</OutputPath>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net20'">
     <Reference Include="System.Runtime.Remoting" />
@@ -23,15 +23,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <AgentFiles Include="$(TargetDir)testcentric-agent-x86.exe;$(TargetDir)testcentric-agent-x86.pdb;$(TargetDir)testcentric-agent-x86.exe.config" />
-    <AgentDirectory Include="$(SolutionDir)bin\$(ConfigurationName)\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\testcentric.engine.api\testcentric.engine.api.csproj" />
     <ProjectReference Include="..\testcentric.engine.core\testcentric.engine.core.csproj" />
   </ItemGroup>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Message Importance="high" Text="Copying @(AgentFiles) to @(AgentDirectory)" />
-    <Copy SourceFiles="@(AgentFiles)" DestinationFolder="@(AgentDirectory)" />
-  </Target>
 </Project>

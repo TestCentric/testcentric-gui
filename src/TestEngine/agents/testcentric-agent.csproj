@@ -1,13 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <RootNamespace>nunit.agent</RootNamespace>
+    <RootNamespace>TestCentric.Agent</RootNamespace>
     <TargetFrameworks>net20</TargetFrameworks>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>..\..\..\nunit.ico</ApplicationIcon>
     <GenerateSupportedRuntime>false</GenerateSupportedRuntime>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
-    <OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
+    <OutputPath>..\..\..\bin\$(Configuration)\agents\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net20|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net20'">
     <Reference Include="System.Runtime.Remoting" />
@@ -21,10 +24,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <AgentFiles Include="$(TargetDir)testcentric-agent.exe;$(TargetDir)testcentric-agent.pdb;$(TargetDir)testcentric-agent.exe.config" />
-    <AgentDirectory Include="$(SolutionDir)bin\$(ConfigurationName)\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\testcentric.engine.api\testcentric.engine.api.csproj" />
     <ProjectReference Include="..\testcentric.engine.core\testcentric.engine.core.csproj" />
   </ItemGroup>
@@ -33,8 +32,4 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Message Importance="high" Text="Copying @(AgentFiles) to @(AgentDirectory)" />
-    <Copy SourceFiles="@(AgentFiles)" DestinationFolder="@(AgentDirectory)" />
-  </Target>
 </Project>
