@@ -207,7 +207,7 @@ namespace TestCentric.Engine.Services
             Assembly netFramework = typeof(ExtensionService).Assembly;
 
             var extNetFramework = new ExtensionAssembly(netFramework.Location, false);
-            var extNetStandard = new ExtensionAssembly(Path.Combine(GetSiblingDirectory("netstandard2.0"), "testcentric.engine.core.dll"), false);
+            var extNetStandard = new ExtensionAssembly(Path.Combine(TestContext.CurrentContext.TestDirectory, "testcentric.engine.core.dll"), false);
 
             yield return new TestCaseData(new FrameworkCombo(netFramework, extNetFramework)).SetName("ValidCombo(.NET Framework, .NET Framework)");
             yield return new TestCaseData(new FrameworkCombo(netFramework, extNetStandard)).SetName("ValidCombo(.NET Framework, .NET Standard)");
@@ -228,10 +228,11 @@ namespace TestCentric.Engine.Services
 #else
             Assembly netFramework = typeof(ExtensionService).Assembly;
 
-            var extNetStandard = new ExtensionAssembly(Path.Combine(GetSiblingDirectory("netstandard2.0"), "testcentric.engine.core.dll"), false);
-            var extNetCore = new ExtensionAssembly(Path.Combine(GetSiblingDirectory("netcoreapp2.1"), "testcentric.engine.tests.dll"), false);
+            var netCoreAppDir = GetSiblingDirectory("netcoreapp2.1");
+            var extNetStandard = new ExtensionAssembly(Path.Combine(netCoreAppDir, "testcentric.engine.core.dll"), false);
+            var extNetCoreApp = new ExtensionAssembly(Path.Combine(netCoreAppDir, "testcentric.engine.tests.dll"), false);
 
-            yield return new TestCaseData(new FrameworkCombo(netFramework, extNetCore)).SetName("InvalidCombo(.NET Framework, .NET Core)");
+            yield return new TestCaseData(new FrameworkCombo(netFramework, extNetCoreApp)).SetName("InvalidCombo(.NET Framework, .NET Core)");
 #endif
 
         }

@@ -40,6 +40,7 @@ namespace TestCentric.Engine
                 case RuntimeType.Net:
                     DisplayName = ".NET";
                     FrameworkIdentifier = FrameworkIdentifiers.Net;
+                    TargetFrameworkMoniker = "net";
                     break;
                 case RuntimeType.Mono:
                     DisplayName = "Mono";
@@ -66,6 +67,8 @@ namespace TestCentric.Engine
         public string DisplayName { get; private set; }
 
         public string FrameworkIdentifier { get; private set; }
+
+        public string TargetFrameworkMoniker { get; private set; }
 
         public bool Matches(Runtime targetRuntime)
         {

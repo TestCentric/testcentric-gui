@@ -2,7 +2,7 @@
   <PropertyGroup>
     <RootNamespace>notest_assembly</RootNamespace>
     <TargetFrameworks>net35;netcoreapp1.1;netcoreapp2.1</TargetFrameworks>
-    <OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
+    <OutputPath>..\..\..\bin\$(Configuration)\engine-tests\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="NUnit" Version="3.11.0" />
