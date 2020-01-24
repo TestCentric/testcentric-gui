@@ -40,9 +40,10 @@ namespace TestCentric.Engine.Services
             Assert.That(_runtimeService.Status, Is.EqualTo(ServiceStatus.Started));
         }
 
+        // TODO: Review whether this test is contributing anything
         [TestCase("mock-assembly.dll", false)]
-        [TestCase("testcentric-agent.exe", false)]
-        [TestCase("testcentric-agent-x86.exe", true)]
+        [TestCase("../../agents/net20/testcentric-agent.exe", false)]
+        [TestCase("../../agents/net20/testcentric-agent-x86.exe", true)]
         public void SelectRuntimeFramework(string assemblyName, bool runAsX86)
         {
             var assemblyPath = Path.Combine(TestContext.CurrentContext.TestDirectory, assemblyName);

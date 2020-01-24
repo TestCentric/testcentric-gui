@@ -92,6 +92,7 @@ string ENGINE_CORE_TESTS = "testcentric.engine.core.tests";
 string[] ENGINE_CORE_RUNTIMES = IsRunningOnWindows()
 	? new string[] {"net35", "netcoreapp2.1", "netcoreapp1.1"}
 	: new string[] {"net35", "netcoreapp2.1"};
+string[] AGENT_RUNTIMES =new string[] { "net20" };
 
 //////////////////////////////////////////////////////////////////////
 // SETUP AND TEARDOWN
@@ -194,12 +195,6 @@ Task("Build")
     {
         MSBuild(SOLUTION, msBuildSettings);
     }
-
-    CopyFileToDirectory("LICENSE.txt", BIN_DIR);
-    CopyFileToDirectory("NOTICES.txt", BIN_DIR);
-    CopyFileToDirectory("CHANGES.txt", BIN_DIR);
-
-	CopyFiles(BIN_DIR_NET20 + "testcentric-agent*", BIN_DIR_NET35);
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -225,11 +220,13 @@ void CheckTestErrors(ref List<string> errorDetail)
 }
 
 // Run tests using NUnitLite
-private void RunNUnitLite(string testName, string framework)
+private void RunNUnitLite(string testName, string framework, string directory)
 {
 	bool isDotNetCore = framework.StartsWith("netcoreapp");
 	string ext = isDotNetCore ? ".dll" : ".exe";
-	string testPath = BIN_DIR + framework + "/" + testName + ext;
+	string testPath = directory + testName + ext;
+
+	Information($"Trying to run {testPath}");
 
 	int rc = isDotNetCore
 		? StartProcess("dotnet", testPath)
@@ -256,7 +253,7 @@ foreach (var runtime in ENGINE_RUNTIMES)
 		.OnError(exception => { ErrorDetail.Add(exception.Message); })
 		.Does(() =>
 		{
-			RunNUnitLite(ENGINE_TESTS, runtime);
+			RunNUnitLite(ENGINE_TESTS, runtime, BIN_DIR + $"engine-tests/{runtime}/");
 		});
 
 	testEngineTask.IsDependentOn(task);	
@@ -277,7 +274,7 @@ foreach (var runtime in ENGINE_CORE_RUNTIMES)
 		.OnError(exception => { ErrorDetail.Add(exception.Message); })
 		.Does(() =>
 		{
-			RunNUnitLite(ENGINE_CORE_TESTS, runtime);
+			RunNUnitLite(ENGINE_CORE_TESTS, runtime, BIN_DIR + $"engine-tests/{runtime}/");
 		});
 
 	testEngineCoreTask.IsDependentOn(task);	
@@ -300,11 +297,15 @@ Task("TestGui")
 // PACKAGING
 //////////////////////////////////////////////////////////////////////
 
+var RootFiles = new string[]
+{
+    "LICENSE.txt",
+    "NOTICES.txt",
+    "CHANGES.txt"
+};
+
 var baseFiles = new string[]
 {
-    BIN_DIR + "LICENSE.txt",
-    BIN_DIR + "NOTICES.txt",
-    BIN_DIR + "CHANGES.txt",
     BIN_DIR + "testcentric.exe",
     BIN_DIR + "testcentric.exe.config",
     BIN_DIR + "tc-next.exe",
@@ -319,7 +320,11 @@ var baseFiles = new string[]
     BIN_DIR + "testcentric.engine.metadata.dll",
     BIN_DIR + "testcentric.engine.core.dll",
     BIN_DIR + "testcentric.engine.dll",
-    BIN_DIR + "Mono.Cecil.dll",
+    BIN_DIR + "Mono.Cecil.dll"
+};
+
+var AgentFiles = new string[]
+{
     BIN_DIR + "testcentric-agent.exe",
     BIN_DIR + "testcentric-agent.exe.config",
     BIN_DIR + "testcentric-agent-x86.exe",
@@ -334,7 +339,7 @@ var chocoFiles = new string[]
     CHOCO_DIR + "testcentric.choco.addins"
 };
 
-var pdbFiles = new string[]
+var PdbFiles = new string[]
 {
     BIN_DIR + "testcentric.pdb",
     BIN_DIR + "tc-next.pdb",
@@ -344,23 +349,56 @@ var pdbFiles = new string[]
     BIN_DIR + "Experimental.Gui.Runner.pdb",
     BIN_DIR + "nunit.uiexception.pdb",
     BIN_DIR + "TestCentric.Gui.Model.pdb",
+    BIN_DIR + "testcentric.engine.api.pdb",
+    BIN_DIR + "testcentric.engine.metadata.pdb",
+    BIN_DIR + "testcentric.engine.core.pdb",
+    BIN_DIR + "testcentric.engine.pdb",
 };
+
+//////////////////////////////////////////////////////////////////////
+// CREATE PACKAGE IMAGE
+//////////////////////////////////////////////////////////////////////
+
+string CurrentImageDir;
+
+Task("CreateImage")
+	.IsDependentOn("Build")
+    .Description("Copies all files into the image directory")
+    .Does(() =>
+    {
+        CreateDirectory(PACKAGE_DIR);
+
+		CurrentImageDir = $"{PACKAGE_DIR}{PACKAGE_NAME}-{packageVersion}/";
+        CleanDirectory(CurrentImageDir);
+        CopyFiles(RootFiles, CurrentImageDir);
+
+        string imageBinDir = CurrentImageDir + "bin/";
+        CreateDirectory(imageBinDir);
+		CopyFiles(baseFiles, imageBinDir);
+		if (!usingXBuild)
+			CopyFiles(PdbFiles, imageBinDir);
+
+		CopyDirectory(BIN_DIR + "Images", imageBinDir + "Images");
+
+		foreach (var runtime in AGENT_RUNTIMES)
+        {
+            var targetDir = imageBinDir + "agents/" + Directory(runtime);
+            var sourceDir = BIN_DIR + "agents/" + Directory(runtime);
+            CopyDirectory(sourceDir, targetDir);
+		}
+    });
 
 //////////////////////////////////////////////////////////////////////
 // PACKAGE ZIP
 //////////////////////////////////////////////////////////////////////
 
 Task("PackageZip")
-    .IsDependentOn("Build")
+    .IsDependentOn("CreateImage")
     .Does(() =>
     {
-        CreateDirectory(PACKAGE_DIR);
-
-        var zipFiles = new List<string>(baseFiles);
-        if (!usingXBuild)
-            zipFiles.AddRange(pdbFiles);
-
-        Zip(BIN_DIR, File(PACKAGE_DIR + PACKAGE_NAME + "-" + packageVersion + ".zip"), zipFiles);
+        var zipFiles = GetFiles(CurrentImageDir + "**/*.*");
+		var fileName = PACKAGE_DIR + PACKAGE_NAME + "-" + packageVersion + ".zip";
+        Zip(CurrentImageDir, File(fileName), zipFiles);
     });
 
 //////////////////////////////////////////////////////////////////////
@@ -368,19 +406,24 @@ Task("PackageZip")
 //////////////////////////////////////////////////////////////////////
 
 Task("PackageChocolatey")
-    .IsDependentOn("Build")
+    .IsDependentOn("CreateImage")
     .Does(() =>
     {
-        CreateDirectory(PACKAGE_DIR);
-
         var content = new List<ChocolateyNuSpecContent>();
-        var sources = usingXBuild
-            ? new[] { baseFiles, chocoFiles }
-            : new[] { baseFiles, chocoFiles, pdbFiles };
+		int index = CurrentImageDir.Length;
 
-        foreach (var source in sources)
-            foreach (string file in source)
-                content.Add(new ChocolateyNuSpecContent() { Source = file, Target = "tools" });
+		foreach (var file in GetFiles(CurrentImageDir + "**/*.*"))
+		{
+			var source = file.FullPath;
+			var target = System.IO.Path.GetDirectoryName(file.FullPath.Substring(index));
+
+			if (target == "" || target == "bin")
+				target = "tools";
+			else if (target.StartsWith("bin" + System.IO.Path.DirectorySeparatorChar))
+				target = "tools" + target.Substring(3);
+
+			content.Add(new ChocolateyNuSpecContent() { Source = file.FullPath, Target = target });
+		}
 
         ChocolateyPack(CHOCO_DIR + PACKAGE_NAME + ".nuspec", 
             new ChocolateyPackSettings()
@@ -397,7 +440,7 @@ Task("CreatePackageTestDirectory")
 		CleanDirectory(PACKAGE_TEST_DIR);
 
 		Unzip(File(PACKAGE_DIR + PACKAGE_NAME + "-" + packageVersion + ".zip"), PACKAGE_TEST_DIR);
-		CopyTestFiles(BIN_DIR, PACKAGE_TEST_DIR);
+		CopyTestFiles(BIN_DIR, PACKAGE_TEST_DIR + "bin/");
 	});
 
 

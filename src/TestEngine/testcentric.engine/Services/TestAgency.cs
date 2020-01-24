@@ -78,12 +78,12 @@ namespace TestCentric.Engine.Services
 
         private Process LaunchAgentProcess(TestPackage package, Guid agentId)
         {
+            // Target Runtime must be specified by this point
             string runtimeSetting = package.GetSetting(EnginePackageSettings.RuntimeFramework, "");
-            // TEMPORARY Guard in preparation for removing Runtime.Any
             Guard.OperationValid(runtimeSetting.Length > 0, "LaunchAgentProcess called with no runtime specified");
-
             var targetRuntime = RuntimeFramework.Parse(runtimeSetting);
 
+            // Access other package settings
             bool useX86Agent = package.GetSetting(EnginePackageSettings.RunAsX86, false);
             bool debugTests = package.GetSetting(EnginePackageSettings.DebugTests, false);
             bool debugAgent = package.GetSetting(EnginePackageSettings.DebugAgent, false);
@@ -194,7 +194,8 @@ namespace TestCentric.Engine.Services
                 ? "testcentric-agent-x86.exe"
                 : "testcentric-agent.exe";
 
-            return Path.Combine(engineDir, agentName);
+            // HACK: For now, just use the .NET 2.0 agent
+            return Path.Combine(engineDir, "agents/net20/" + agentName);
         }
 
         private void OnAgentExit(Process process, Guid agentId)
