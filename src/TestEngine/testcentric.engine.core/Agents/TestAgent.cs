@@ -3,8 +3,9 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-#if !NETSTANDARD1_6 && !NETSTANDARD2_0
+#if !NETSTANDARD1_6
 using System;
+using System.Threading;
 
 namespace TestCentric.Engine.Agents
 {
@@ -16,8 +17,7 @@ namespace TestCentric.Engine.Agents
     /// </summary>
     public abstract class TestAgent : MarshalByRefObject, ITestAgent, IDisposable
     {
-        private readonly Guid agentId;
-        private readonly IServiceLocator services;
+        internal readonly ManualResetEvent StopSignal = new ManualResetEvent(false);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TestAgent"/> class.
@@ -26,25 +26,19 @@ namespace TestCentric.Engine.Agents
         /// <param name="services">The services available to the agent.</param>
         public TestAgent(Guid agentId, IServiceLocator services)
         {
-            this.agentId = agentId;
-            this.services = services;
+            Id = agentId;
+            Services = services;
         }
 
         /// <summary>
         /// The services available to the agent
         /// </summary>
-        protected IServiceLocator Services
-        {
-            get { return services; }
-        }
+        protected IServiceLocator Services { get; }
 
         /// <summary>
         /// Gets a Guid that uniquely identifies this agent.
         /// </summary>
-        public Guid Id
-        {
-            get { return agentId; }
-        }
+        public Guid Id { get; }
 
         /// <summary>
         /// Starts the agent, performing any required initialization
@@ -61,6 +55,11 @@ namespace TestCentric.Engine.Agents
         ///  Creates a test runner
         /// </summary>
         public abstract ITestEngineRunner CreateRunner(TestPackage package);
+
+        public bool WaitForStop(int timeout)
+        {
+            return StopSignal.WaitOne(timeout);
+        }
 
         public void Dispose()
         {
