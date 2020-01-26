@@ -4,20 +4,17 @@
 // ***********************************************************************
 
 using System;
-using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Security;
 using TestCentric.Common;
-using TestCentric.Engine;
-using TestCentric.Engine.Agents;
 using TestCentric.Engine.Internal;
 using TestCentric.Engine.Services;
 using TestCentric.Engine.Helpers;
 
-namespace TestCentric.Agent
+namespace TestCentric.Engine.Agents
 {
-    public class NUnitTestAgent
+    public class TestCentricAgent
     {
         static Guid AgentId;
         static string AgencyUrl;
@@ -66,7 +63,7 @@ namespace TestCentric.Agent
 
             var logName = $"testcentric-agent_{pid}.log";
             InternalTrace.Initialize(Path.Combine(workDirectory, logName), traceLevel);
-            log = InternalTrace.GetLogger(typeof(NUnitTestAgent));
+            log = InternalTrace.GetLogger(typeof(TestCentricAgent));
 
             if (debugArgPassed)
                 TryLaunchDebugger();
@@ -103,7 +100,9 @@ namespace TestCentric.Agent
 
             // Custom Service Initialization
             engine.Services.Add(new ExtensionService());
+#if !NETCOREAPP
             engine.Services.Add(new DomainManager());
+#endif
             engine.Services.Add(new InProcessTestRunnerFactory());
             engine.Services.Add(new DriverService());
 
@@ -112,8 +111,13 @@ namespace TestCentric.Agent
             engine.InitializeServices();
 
             log.Info("Starting RemoteTestAgent");
-            Agent = new RemoteTestAgent(AgentId, AgencyUrl, engine.Services);
-
+            Agent = new RemoteTestAgent(AgentId, engine.Services);
+            Agent.Transport =
+#if NET20
+                new RemotingTransport(Agent, AgencyUrl);
+#else
+                new NetCoreTransport(Agent);
+#endif
             try
             {
                 if (Agent.Start())
