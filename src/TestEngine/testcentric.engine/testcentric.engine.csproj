@@ -1,17 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RootNamespace>TestCentric.Engine</RootNamespace>
-    <TargetFrameworks>net20;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\nunit.snk</AssemblyOriginatorKeyFile>
     <OutputPath>..\..\..\bin\$(Configuration)\engine\</OutputPath>
   </PropertyGroup>
-  <ItemGroup Condition="'$(TargetFramework)'=='net20'">
-    <PackageReference Include="Mono.Cecil" Version="0.9.6.1" />
+  <ItemGroup Condition="'$(TargetFramework)'=='net45'">
+    <PackageReference Include="Mono.Cecil" Version="0.10.0" />
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Web" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.6' or '$(TargetFramework)'=='netstandard2.0'">
+  <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
     <PackageReference Include="Microsoft.DotNet.InternalAbstractions" Version="1.0.0" />
     <PackageReference Include="Mono.Cecil" Version="0.10.0" />
     <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />

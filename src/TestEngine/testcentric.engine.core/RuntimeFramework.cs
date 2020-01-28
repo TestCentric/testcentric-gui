@@ -10,6 +10,9 @@ using System.Reflection;
 using System.Runtime.Versioning;
 using Microsoft.Win32;
 using TestCentric.Common;
+#if NET20
+using FrameworkName = TestCentric.Engine.Compatibility.FrameworkName;
+#endif
 
 namespace TestCentric.Engine
 {
