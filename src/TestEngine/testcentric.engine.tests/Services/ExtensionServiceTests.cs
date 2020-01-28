@@ -139,9 +139,9 @@ namespace TestCentric.Engine.Services
             Assume.That(Assembly.GetEntryAssembly(), Is.Not.Null, "Entry assembly is null, framework loading validation will be skipped.");
 
 #if NETCOREAPP2_1
-            string other = "net35"; // Attempt to load the .NET 3.5 version of the extensions from the .NET Core 2.0 tests
+            string other = "net45"; // Attempt to load the .NET 3.5 version of the extensions from the .NET Core 2.0 tests
             var assemblyName = Path.Combine(GetSiblingDirectory(other), "testcentric.engine.tests.exe");
-#elif NET35
+#elif NET45
             string other = "netcoreapp2.1"; // Attempt to load the .NET Core 2.1 version of the extensions from the .NET 3.5 tests
             var assemblyName = Path.Combine(GetSiblingDirectory(other), "testcentric.engine.tests.dll");
 #endif
@@ -222,7 +222,7 @@ namespace TestCentric.Engine.Services
 
             var extNetStandard = new ExtensionAssembly(netstandard.Location, false);
             var extNetCore = new ExtensionAssembly(netcore.Location, false);
-            var extNetFramework = new ExtensionAssembly(Path.Combine(GetSiblingDirectory("net35"), "testcentric.engine.dll"), false);
+            var extNetFramework = new ExtensionAssembly(Path.Combine(GetSiblingDirectory("net45"), "testcentric.engine.dll"), false);
 
             yield return new TestCaseData(new FrameworkCombo(netcore, extNetFramework)).SetName("InvalidCombo(.NET Core, .NET Framework)");
 #else
@@ -245,7 +245,7 @@ namespace TestCentric.Engine.Services
 
             var extNetStandard = new ExtensionAssembly(netstandard.Location, false);
             var extNetCore = new ExtensionAssembly(netcore.Location, false);
-            var extNetFramework = new ExtensionAssembly(Path.Combine(GetSiblingDirectory("net35"), "testcentric.engine.dll"), false);
+            var extNetFramework = new ExtensionAssembly(Path.Combine(GetSiblingDirectory("net45"), "testcentric.engine.dll"), false);
 
             yield return new TestCaseData(new FrameworkCombo(netstandard, extNetStandard)).SetName("InvalidCombo(.NET Standard, .NET Standard)");
             yield return new TestCaseData(new FrameworkCombo(netstandard, extNetCore)).SetName("InvalidCombo(.NET Standard, .NET Core)");

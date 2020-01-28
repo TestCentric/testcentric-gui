@@ -5,8 +5,8 @@
 
 #if !NETCOREAPP1_1 && !NETCOREAPP2_1
 using System;
-using System.Runtime.Versioning;
 using NUnit.Framework;
+using FrameworkName = TestCentric.Engine.Compatibility.FrameworkName;
 
 namespace TestCentric.Engine
 {
