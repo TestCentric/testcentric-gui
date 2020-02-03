@@ -6,7 +6,11 @@
 #if !NETCOREAPP1_1 && !NETCOREAPP2_1
 using System;
 using NUnit.Framework;
+#if NET20 || NET35
 using FrameworkName = TestCentric.Engine.Compatibility.FrameworkName;
+#else
+using FrameworkName = System.Runtime.Versioning.FrameworkName;
+#endif
 
 namespace TestCentric.Engine
 {

@@ -19,7 +19,7 @@ namespace TestCentric.Engine.Services
         static string path3 = TestPath("/test/utils/test3.dll");
 
         const string STANDARD_CONFIG_FILE =
-#if NET35
+#if NETFRAMEWORK
             "testcentric.engine.core.tests.exe.config";
 #else
             "testcentric.engine.core.tests.dll.config";

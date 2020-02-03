@@ -13,7 +13,7 @@ namespace TestCentric.Engine.Helpers
     public class AssemblyHelperTests
     {
         private static readonly string THIS_ASSEMBLY_PATH =
-#if NET35
+#if NETFRAMEWORK
             "testcentric.engine.core.tests.exe";
 #else
             "testcentric.engine.core.tests.dll";

@@ -46,22 +46,25 @@ namespace TestCentric.Engine.Services
             }
 
             string domainName = "domain-" + hashCode + package.Name;
-            // Setup the Evidence
-            Evidence evidence = new Evidence(AppDomain.CurrentDomain.Evidence);
-            if (evidence.Count == 0)
-            {
-                Zone zone = new Zone(SecurityZone.MyComputer);
-                evidence.AddHost(zone);
-                Assembly assembly = Assembly.GetExecutingAssembly();
-                Url url = new Url(assembly.CodeBase);
-                evidence.AddHost(url);
-                Hash hash = new Hash(assembly);
-                evidence.AddHost(hash);
-            }
+// TODO: Make sure this is not needed before deleting
+//            // Setup the Evidence
+//            Evidence evidence = new Evidence(AppDomain.CurrentDomain.Evidence);
+//#pragma warning disable 618
+//            if (evidence.Count == 0)
+//            {
+//                Zone zone = new Zone(SecurityZone.MyComputer);
+//                evidence.AddHost(zone);
+//                Assembly assembly = Assembly.GetExecutingAssembly();
+//                Url url = new Url(assembly.CodeBase);
+//                evidence.AddHost(url);
+//                Hash hash = new Hash(assembly);
+//                evidence.AddHost(hash);
+//            }
+//#pragma warning restore 618
 
             log.Info("Creating application domain " + domainName);
 
-            AppDomain runnerDomain = AppDomain.CreateDomain(domainName, evidence, setup);
+            AppDomain runnerDomain = AppDomain.CreateDomain(domainName, /*evidence*/null, setup);
 
             // Set PrincipalPolicy for the domain if called for in the package settings
             if (package.Settings.ContainsKey(EnginePackageSettings.PrincipalPolicy))
