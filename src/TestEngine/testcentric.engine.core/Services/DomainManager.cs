@@ -48,6 +48,7 @@ namespace TestCentric.Engine.Services
             string domainName = "domain-" + hashCode + package.Name;
             // Setup the Evidence
             Evidence evidence = new Evidence(AppDomain.CurrentDomain.Evidence);
+#pragma warning disable 618
             if (evidence.Count == 0)
             {
                 Zone zone = new Zone(SecurityZone.MyComputer);
@@ -58,6 +59,7 @@ namespace TestCentric.Engine.Services
                 Hash hash = new Hash(assembly);
                 evidence.AddHost(hash);
             }
+#pragma warning restore 618
 
             log.Info("Creating application domain " + domainName);
 
