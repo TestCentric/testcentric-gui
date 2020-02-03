@@ -150,7 +150,7 @@ namespace TestCentric.Engine.Drivers
             {
                 return _testDomain.CreateInstanceAndUnwrap(
                     _reference.FullName, typeName, false, 0,
-#if !NET_4_0
+#if NET20
                     null, args, null, null, null);
 #else
                 null, args, null, null );
