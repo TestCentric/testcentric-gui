@@ -131,8 +131,10 @@ namespace TestCentric.Engine.Extensibility
                 return null;
             }
             return Activator.CreateInstance(typeinfo.AsType(), args);
-#else
+#elif NET20
             return AppDomain.CurrentDomain.CreateInstanceFromAndUnwrap(AssemblyPath, TypeName, false, 0, null, args, null, null, null);
+#else
+            return AppDomain.CurrentDomain.CreateInstanceFromAndUnwrap(AssemblyPath, TypeName, false, 0, null, args, null, null);
 #endif
         }
 
