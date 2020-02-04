@@ -128,7 +128,7 @@ namespace TestCentric.Engine.Internal
             _writer.WriteLine(TraceFmt,
                 DateTime.Now.ToString(TimeFmt),
                 level,
-#if NET20
+#if NET20 || NET30 || NET35 || NET40
                 System.Threading.Thread.CurrentThread.ManagedThreadId,
 #else
                 Environment.CurrentManagedThreadId,
