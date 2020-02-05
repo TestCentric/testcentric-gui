@@ -17,7 +17,7 @@ namespace TestCentric.Engine.Services
     {
         private readonly Dictionary<Guid, AgentRecord> _agentsById = new Dictionary<Guid, AgentRecord>();
 
-        public void Start(Guid agentId, Process process)
+        public void AddAgent(Guid agentId, Process process)
         {
             lock (_agentsById)
             {
