@@ -28,7 +28,7 @@ namespace TestCentric.Engine.Services
     {
         private static readonly Logger log = InternalTrace.GetLogger(typeof(TestAgency));
 
-        private readonly AgentStore _agents = new AgentStore();
+        private readonly AgentStore _agentStore = new AgentStore();
 
         private IRuntimeFrameworkService _runtimeService;
 
@@ -36,33 +36,9 @@ namespace TestCentric.Engine.Services
 
         public TestAgency( string uri, int port ) : base( uri, port ) { }
 
-        //public override void Stop()
-        //{
-        //    foreach( KeyValuePair<Guid,AgentRecord> pair in agentData )
-        //    {
-        //        AgentRecord r = pair.Value;
-
-        //        if ( !r.Process.HasExited )
-        //        {
-        //            if ( r.Agent != null )
-        //            {
-        //                r.Agent.Stop();
-        //                r.Process.WaitForExit(10000);
-        //            }
-
-        //            if ( !r.Process.HasExited )
-        //                r.Process.Kill();
-        //        }
-        //    }
-
-        //    agentData.Clear();
-
-        //    base.Stop ();
-        //}
-
         public void Register(ITestAgent agent)
         {
-            _agents.Register(agent);
+            _agentStore.Register(agent);
         }
 
         public ITestAgent GetAgent(TestPackage package, int waitTime)
@@ -73,7 +49,7 @@ namespace TestCentric.Engine.Services
 
         internal bool IsAgentProcessActive(Guid agentId, out Process process)
         {
-            return _agents.IsAgentProcessActive(agentId, out process);
+            return _agentStore.IsAgentProcessActive(agentId, out process);
         }
 
         private Process LaunchAgentProcess(TestPackage package, Guid agentId)
@@ -150,14 +126,21 @@ namespace TestCentric.Engine.Services
             log.Debug("Launched Agent process {0} - see testcentric-agent_{0}.log", p.Id);
             log.Debug("Command line: \"{0}\" {1}", p.StartInfo.FileName, p.StartInfo.Arguments);
 
-            _agents.Start(agentId, p);
+            _agentStore.AddAgent(agentId, p);
             return p;
         }
 
         private ITestAgent CreateRemoteAgent(TestPackage package, int waitTime)
         {
             var agentId = Guid.NewGuid();
-            var process = LaunchAgentProcess(package, agentId);
+            var process = new AgentProcess(this, package, agentId);
+            process.Exited += (sender, e) => OnAgentExit((Process)sender, agentId);
+
+            process.Start();
+            log.Debug("Launched Agent process {0} - see testcentric-agent_{0}.log", process.Id);
+            log.Debug("Command line: \"{0}\" {1}", process.StartInfo.FileName, process.StartInfo.Arguments);
+
+            _agentStore.AddAgent(agentId, process);
 
             log.Debug($"Waiting for agent {agentId:B} to register");
 
@@ -169,7 +152,7 @@ namespace TestCentric.Engine.Services
             {
                 Thread.Sleep(pollTime);
 
-                if (_agents.IsReady(agentId, out var agent))
+                if (_agentStore.IsReady(agentId, out var agent))
                 {
                     log.Debug($"Returning new agent {agentId:B}");
                     return new RemoteTestAgentProxy(agent, agentId);
@@ -178,6 +161,30 @@ namespace TestCentric.Engine.Services
 
             return null;
         }
+        //private ITestAgent CreateRemoteAgent(TestPackage package, int waitTime)
+        //{
+        //    var agentId = Guid.NewGuid();
+        //    var process = LaunchAgentProcess(package, agentId);
+
+        //    log.Debug($"Waiting for agent {agentId:B} to register");
+
+        //    const int pollTime = 200;
+
+        //    // Wait for agent registration based on the agent actually getting processor time to avoid falling over
+        //    // under process starvation.
+        //    while (waitTime > process.TotalProcessorTime.TotalMilliseconds && !process.HasExited)
+        //    {
+        //        Thread.Sleep(pollTime);
+
+        //        if (_agents.IsReady(agentId, out var agent))
+        //        {
+        //            log.Debug($"Returning new agent {agentId:B}");
+        //            return new RemoteTestAgentProxy(agent, agentId);
+        //        }
+        //    }
+
+        //    return null;
+        //}
 
         private static string GetTestAgentExePath(RuntimeFramework targetRuntime, bool requires32Bit)
         {
@@ -201,7 +208,7 @@ namespace TestCentric.Engine.Services
 
         private void OnAgentExit(Process process, Guid agentId)
         {
-            _agents.MarkTerminated(agentId);
+            _agentStore.MarkTerminated(agentId);
 
             string errorMsg;
 
