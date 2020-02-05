@@ -113,7 +113,7 @@ namespace TestCentric.Engine.Agents
             log.Info("Starting RemoteTestAgent");
             Agent = new RemoteTestAgent(AgentId, engine.Services);
             Agent.Transport =
-#if NET20
+#if NET20 || NET40
                 new RemotingTransport(Agent, AgencyUrl);
 #else
                 new NetCoreTransport(Agent);
