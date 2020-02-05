@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RootNamespace>TestCentric.Engine</RootNamespace>
-    <TargetFrameworks>net20;net45;netstandard1.6;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net20;net40;netstandard1.6;netstandard2.0</TargetFrameworks>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\nunit.snk</AssemblyOriginatorKeyFile>
     <OutputPath>..\..\..\bin\$(Configuration)\engine\</OutputPath>
@@ -10,7 +10,7 @@
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Web" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)'=='net45'">
+  <ItemGroup Condition="'$(TargetFramework)'=='net40'">
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Web" />
   </ItemGroup>

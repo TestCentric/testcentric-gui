@@ -3,7 +3,7 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-#if NET20
+#if NETFRAMEWORK
 using System;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;

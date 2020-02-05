@@ -2,7 +2,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <RootNamespace>nunit.agent</RootNamespace>
-    <TargetFrameworks>net20;netcoreapp2.1</TargetFrameworks>
+    <TargetFrameworks>net20;net40;netcoreapp2.1</TargetFrameworks>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>..\..\..\nunit.ico</ApplicationIcon>
     <PlatformTarget>x86</PlatformTarget>
@@ -12,6 +12,9 @@
     <OutputPath>..\..\..\bin\$(Configuration)\agents\</OutputPath>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net20'">
+    <Reference Include="System.Runtime.Remoting" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='net40'">
     <Reference Include="System.Runtime.Remoting" />
   </ItemGroup>
   <ItemGroup>

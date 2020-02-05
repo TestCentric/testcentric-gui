@@ -139,11 +139,9 @@ namespace TestCentric.Engine.Services
             Assume.That(Assembly.GetEntryAssembly(), Is.Not.Null, "Entry assembly is null, framework loading validation will be skipped.");
 
 #if NETCOREAPP2_1
-            string other = "net45"; // Attempt to load the .NET 3.5 version of the extensions from the .NET Core 2.0 tests
-            var assemblyName = Path.Combine(GetSiblingDirectory(other), "testcentric.engine.tests.exe");
-#elif NET45
-            string other = "netcoreapp2.1"; // Attempt to load the .NET Core 2.1 version of the extensions from the .NET 3.5 tests
-            var assemblyName = Path.Combine(GetSiblingDirectory(other), "testcentric.engine.tests.dll");
+            var assemblyName = Path.Combine(GetNetFrameworkSiblingDirectory(), "testcentric.engine.tests.exe");
+#elif NET40
+            var assemblyName = Path.Combine(GetNetCoreSiblingDirectory(), "testcentric.engine.tests.dll");
 #endif
             Assert.That(assemblyName, Does.Exist);
 
@@ -222,13 +220,13 @@ namespace TestCentric.Engine.Services
 
             var extNetStandard = new ExtensionAssembly(netstandard.Location, false);
             var extNetCore = new ExtensionAssembly(netcore.Location, false);
-            var extNetFramework = new ExtensionAssembly(Path.Combine(GetSiblingDirectory("net45"), "testcentric.engine.dll"), false);
+            var extNetFramework = new ExtensionAssembly(Path.Combine(GetNetFrameworkSiblingDirectory(), "testcentric.engine.dll"), false);
 
             yield return new TestCaseData(new FrameworkCombo(netcore, extNetFramework)).SetName("InvalidCombo(.NET Core, .NET Framework)");
 #else
             Assembly netFramework = typeof(ExtensionService).Assembly;
 
-            var netCoreAppDir = GetSiblingDirectory("netcoreapp2.1");
+            var netCoreAppDir = GetNetCoreSiblingDirectory();
             var extNetStandard = new ExtensionAssembly(Path.Combine(netCoreAppDir, "testcentric.engine.core.dll"), false);
             var extNetCoreApp = new ExtensionAssembly(Path.Combine(netCoreAppDir, "testcentric.engine.tests.dll"), false);
 
@@ -245,7 +243,7 @@ namespace TestCentric.Engine.Services
 
             var extNetStandard = new ExtensionAssembly(netstandard.Location, false);
             var extNetCore = new ExtensionAssembly(netcore.Location, false);
-            var extNetFramework = new ExtensionAssembly(Path.Combine(GetSiblingDirectory("net45"), "testcentric.engine.dll"), false);
+            var extNetFramework = new ExtensionAssembly(Path.Combine(GetNetFrameworkSiblingDirectory(), "testcentric.engine.dll"), false);
 
             yield return new TestCaseData(new FrameworkCombo(netstandard, extNetStandard)).SetName("InvalidCombo(.NET Standard, .NET Standard)");
             yield return new TestCaseData(new FrameworkCombo(netstandard, extNetCore)).SetName("InvalidCombo(.NET Standard, .NET Core)");
@@ -267,6 +265,16 @@ namespace TestCentric.Engine.Services
         {
             var file = new FileInfo(AssemblyHelper.GetAssemblyPath(typeof(ExtensionServiceTests).Assembly));
             return Path.Combine(file.Directory.Parent.FullName, dir);
+        }
+
+        private static string GetNetFrameworkSiblingDirectory()
+        {
+            return GetSiblingDirectory("net40");
+        }
+
+        private static string GetNetCoreSiblingDirectory()
+        {
+            return GetSiblingDirectory("netcoreapp2.1");
         }
     }
 }
