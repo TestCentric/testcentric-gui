@@ -12,7 +12,7 @@ namespace TestCentric.Engine
     {
         static int Main(string[] args)
         {
-#if NET35
+#if NETFRAMEWORK
             return new AutoRun().Execute(args);
 #else
             return new TextRunner(typeof(Program).GetTypeInfo().Assembly).Execute(args);
