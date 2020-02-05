@@ -110,7 +110,7 @@ namespace TestCentric.Engine.Services
                     string.Format("The {0} framework is not available", targetRuntime),
                     "framework");
 
-            string agentExePath = GetTestAgentExePath(useX86Agent);
+            string agentExePath = GetTestAgentExePath(targetRuntime, useX86Agent);
 
             if (!File.Exists(agentExePath))
                 throw new FileNotFoundException(
@@ -137,12 +137,6 @@ namespace TestCentric.Engine.Services
             else if (targetRuntime.Runtime == Runtime.Net)
             {
                 p.StartInfo.FileName = agentExePath;
-                // Override the COMPLUS_Version env variable, this would cause CLR meta host to run a CLR of the specific version
-                string envVar = "v" + targetRuntime.ClrVersion.ToString(3);
-                p.StartInfo.EnvironmentVariables["COMPLUS_Version"] = envVar;
-                // Leave a marker that we have changed this variable, so that the agent could restore it for any code or child processes running within the agent
-                string cpvOriginal = Environment.GetEnvironmentVariable("COMPLUS_Version");
-                p.StartInfo.EnvironmentVariables["TestAgency_COMPLUS_Version_Original"] = string.IsNullOrEmpty(cpvOriginal) ? "NULL" : cpvOriginal;
                 p.StartInfo.Arguments = arglist;
                 p.StartInfo.LoadUserProfile = loadUserProfile;
             }
@@ -185,7 +179,7 @@ namespace TestCentric.Engine.Services
             return null;
         }
 
-        private static string GetTestAgentExePath(bool requires32Bit)
+        private static string GetTestAgentExePath(RuntimeFramework targetRuntime, bool requires32Bit)
         {
             string engineDir = NUnitConfiguration.EngineDirectory;
             if (engineDir == null) return null;
@@ -194,8 +188,15 @@ namespace TestCentric.Engine.Services
                 ? "testcentric-agent-x86.exe"
                 : "testcentric-agent.exe";
 
-            // HACK: For now, just use the .NET 2.0 agent
-            return Path.Combine(engineDir, "agents/net20/" + agentName);
+            switch (targetRuntime.Runtime.FrameworkIdentifier)
+            {
+                case FrameworkIdentifiers.Net:
+                    return targetRuntime.FrameworkVersion.Major >= 4
+                        ? Path.Combine(engineDir, "agents/net40/" + agentName)
+                        : Path.Combine(engineDir, "agents/net20/" + agentName);
+                default:
+                    return Path.Combine(engineDir, "agents/net40/" + agentName);
+           }
         }
 
         private void OnAgentExit(Process process, Guid agentId)
