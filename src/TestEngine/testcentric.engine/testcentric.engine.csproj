@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RootNamespace>TestCentric.Engine</RootNamespace>
-    <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net40;netstandard2.0</TargetFrameworks>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\nunit.snk</AssemblyOriginatorKeyFile>
     <OutputPath>..\..\..\bin\$(Configuration)\engine\</OutputPath>
   </PropertyGroup>
-  <ItemGroup Condition="'$(TargetFramework)'=='net45'">
+  <ItemGroup Condition="'$(TargetFramework)'=='net40'">
     <PackageReference Include="Mono.Cecil" Version="0.10.0" />
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Web" />
@@ -32,7 +32,7 @@
     <ProjectReference Include="..\testcentric.engine.api\testcentric.engine.api.csproj" />
     <ProjectReference Include="..\testcentric.engine.core\testcentric.engine.core.csproj" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)'=='net20'">
+  <ItemGroup Condition="'$(TargetFramework)'=='net40'">
     <Content Include="nunit.engine.addins">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
