@@ -98,9 +98,9 @@ namespace TestCentric.Engine.Agents
             Agent = new RemoteTestAgent(AgentId, engine.Services);
             Agent.Transport =
 #if NET20 || NET40
-                new RemotingTransport(Agent, AgencyUrl);
+                new TestAgentRemotingTransport(Agent, AgencyUrl);
 #else
-                new NetCoreTransport(Agent);
+                new TestAgentNetCoreTransport(Agent);
 #endif
             try
             {
