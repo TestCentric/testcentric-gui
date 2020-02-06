@@ -14,9 +14,9 @@ using TestCentric.Engine.Internal;
 namespace TestCentric.Engine.Agents
 {
 
-    public class RemotingTransport : TestAgentTransport, ITestAgent, ITestEngineRunner
+    public class TestAgentRemotingTransport : TestAgentTransport, ITestAgent, ITestEngineRunner
     {
-        private static readonly Logger log = InternalTrace.GetLogger(typeof(RemotingTransport));
+        private static readonly Logger log = InternalTrace.GetLogger(typeof(TestAgentRemotingTransport));
 
         private readonly string _agencyUrl;
         private ITestEngineRunner _runner;
@@ -25,7 +25,7 @@ namespace TestCentric.Engine.Agents
         private ITestAgency _agency;
         private readonly CurrentMessageCounter _currentMessageCounter = new CurrentMessageCounter();
 
-        public RemotingTransport(RemoteTestAgent agent, string agencyUrl)
+        public TestAgentRemotingTransport(RemoteTestAgent agent, string agencyUrl)
             : base(agent)
         {
             _agencyUrl = agencyUrl;
