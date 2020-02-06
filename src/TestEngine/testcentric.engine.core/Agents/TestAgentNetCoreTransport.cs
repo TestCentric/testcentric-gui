@@ -8,9 +8,9 @@ using System;
 
 namespace TestCentric.Engine.Agents
 {
-    public class NetCoreTransport : TestAgentTransport
+    public class TestAgentNetCoreTransport : TestAgentTransport
     {
-        public NetCoreTransport(RemoteTestAgent agent) : base(agent) { }
+        public TestAgentNetCoreTransport(RemoteTestAgent agent) : base(agent) { }
 
         // TODO: Start and Stop essentially do nothing in .NET Core
         // at this point. They need to be implemented using an appropriate
