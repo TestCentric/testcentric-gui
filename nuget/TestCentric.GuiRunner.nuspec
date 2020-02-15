@@ -2,25 +2,21 @@
 <!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
-    <id>testcentric-gui</id>
-    <version>0.0.0</version>
+    <id>TestCentric.GuiRunner</id>
     <title>TestCentric Runner for NUnit</title>
+    <version>0.0.0</version>
+    <authors>Charlie Poole</authors>
+    <owners>Charlie Poole</owners>
+    <license type="file">LICENSE.txt</license>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectUrl>http://test-centric.org</projectUrl>
+    <repository type="git" url="https://github.com/TestCentric/testcentric-gui"/>
+    <iconUrl>https://cdn.rawgit.com/TestCentric/resources/master/images/icon/nunit_256.png</iconUrl>
     <summary>TestCentric GUI runner for the NUnit 3 unit-testing framework.</summary>
     <description>
       This package includes the TestCentric GUI runner and incorporates the NUnit test engine.
     </description>
-    <projectUrl>http://test-centric.org</projectUrl>
-    <projectSourceUrl>https://github.com/TestCentric/testcentric-gui</projectSourceUrl>
-    <docsUrl>https://github.com/TestCentric/testcentric-gui/wiki</docsUrl>
-    <bugTrackerUrl>https://github.com/TestCentric/testcentric-gui/issues</bugTrackerUrl>
-    <iconUrl>https://cdn.rawgit.com/nunit/resources/master/images/icon/nunit_256.png</iconUrl>
-    <packageSourceUrl>https://github.com/TestCentric/testcentric-gui</packageSourceUrl>
     <releaseNotes>https://raw.githubusercontent.com/TestCentric/testcentric-gui/master/CHANGES.txt</releaseNotes>
-    <mailingListUrl>https://groups.google.com/forum/#!forum/nunit-discuss</mailingListUrl>
-    <licenseUrl>https://raw.githubusercontent.com/TestCentric/testcentric-gui/master/LICENSE.txt</licenseUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <authors>Charlie Poole</authors>
-    <owners>Charlie Poole</owners>
     <language>en-US</language>
     <tags>testcentric nunit gui runner test centric testing tdd</tags>
     <copyright>Copyright (c) 2018-2019 Charlie Poole</copyright>
