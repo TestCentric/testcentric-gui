@@ -67,6 +67,7 @@ if (usingXBuild)
 string PROJECT_DIR = Context.Environment.WorkingDirectory.FullPath + "/";
 string PACKAGE_DIR = PROJECT_DIR + "package/";
 string PACKAGE_TEST_DIR = PACKAGE_DIR + "test/";
+string NUGET_DIR = PROJECT_DIR + "nuget/";
 string CHOCO_DIR = PROJECT_DIR + "choco/";
 string BIN_DIR = PROJECT_DIR + "bin/" + configuration + "/";
 string BIN_DIR_NET20 = BIN_DIR + "net20/";
@@ -74,6 +75,11 @@ string BIN_DIR_NET35 = BIN_DIR + "net35/";
 
 // Packaging
 string PACKAGE_NAME = "testcentric-gui";
+string NUGET_PACKAGE_NAME = "TestCentric.GuiRunner";
+
+string ZipPackage => PACKAGE_DIR + PACKAGE_NAME + "-" + packageVersion + ".zip";
+string NuGetPackage => PACKAGE_DIR + NUGET_PACKAGE_NAME + "." + packageVersion + ".nupkg";
+string ChocolateyPackage => PACKAGE_DIR + PACKAGE_NAME + "." + packageVersion + ".nupkg";
 
 // Solution
 string SOLUTION = "testcentric-gui.sln";
@@ -323,22 +329,6 @@ var baseFiles = new string[]
     BIN_DIR + "Mono.Cecil.dll"
 };
 
-var AgentFiles = new string[]
-{
-    BIN_DIR + "testcentric-agent.exe",
-    BIN_DIR + "testcentric-agent.exe.config",
-    BIN_DIR + "testcentric-agent-x86.exe",
-    BIN_DIR + "testcentric-agent-x86.exe.config"
-};
-
-var chocoFiles = new string[]
-{
-    CHOCO_DIR + "VERIFICATION.txt",
-    CHOCO_DIR + "testcentric-agent.exe.ignore",
-    CHOCO_DIR + "testcentric-agent-x86.exe.ignore",
-    CHOCO_DIR + "testcentric.choco.addins"
-};
-
 var PdbFiles = new string[]
 {
     BIN_DIR + "testcentric.pdb",
@@ -386,6 +376,9 @@ Task("CreateImage")
             var sourceDir = BIN_DIR + "agents/" + Directory(runtime);
             CopyDirectory(sourceDir, targetDir);
 		}
+
+		// NOTE: Chocolatey files are not copied into the image directory
+		// but are added to the chocolatey package separately.
     });
 
 //////////////////////////////////////////////////////////////////////
@@ -396,9 +389,10 @@ Task("PackageZip")
     .IsDependentOn("CreateImage")
     .Does(() =>
     {
+		Information("Creating package " + ZipPackage);
+
         var zipFiles = GetFiles(CurrentImageDir + "**/*.*");
-		var fileName = PACKAGE_DIR + PACKAGE_NAME + "-" + packageVersion + ".zip";
-        Zip(CurrentImageDir, File(fileName), zipFiles);
+        Zip(CurrentImageDir, File(ZipPackage), zipFiles);
     });
 
 //////////////////////////////////////////////////////////////////////
@@ -409,7 +403,7 @@ Task("PackageNuGet")
 	.IsDependentOn("CreateImage")
 	.Does(() =>
 	{
-		CreateDirectory(PACKAGE_DIR);
+		Information("Creating package " + NuGetPackage);
 
         var content = new List<NuSpecContent>();
 		int index = CurrentImageDir.Length;
@@ -429,7 +423,7 @@ Task("PackageNuGet")
 			content.Add(new NuSpecContent() { Source = file.FullPath, Target = target });
 		}
 
-        NuGetPack("nuget/TestCentric.GuiRunner.nuspec", new NuGetPackSettings()
+        NuGetPack(NUGET_DIR + NUGET_PACKAGE_NAME + ".nuspec", new NuGetPackSettings()
         {
             Version = packageVersion,
             OutputDirectory = PACKAGE_DIR,
@@ -446,6 +440,8 @@ Task("PackageChocolatey")
     .IsDependentOn("CreateImage")
     .Does(() =>
     {
+		Information("Creating package " + ChocolateyPackage);
+
         var content = new List<ChocolateyNuSpecContent>();
 		int index = CurrentImageDir.Length;
 
@@ -489,10 +485,10 @@ Task("TestZipPackage")
 	{
 		CleanDirectory(PACKAGE_TEST_DIR);
 
-		Unzip(File(PACKAGE_DIR + "TestCentric.GuiRunner-" + packageVersion + ".nupkg"), PACKAGE_TEST_DIR);
-		CopyTestFiles(BIN_DIR, PACKAGE_TEST_DIR + "tools/");
+		Unzip(File(ZipPackage), PACKAGE_TEST_DIR);
+		CopyTestFiles(BIN_DIR, PACKAGE_TEST_DIR + "bin/");
 
-		NUnit3(PACKAGE_TEST_DIR + "tools/" + ALL_TESTS);
+		NUnit3(PACKAGE_TEST_DIR + "bin/" + ALL_TESTS);
 	});
 
 //////////////////////////////////////////////////////////////////////
@@ -505,10 +501,10 @@ Task("TestNuGetPackage")
 	{
 		CleanDirectory(PACKAGE_TEST_DIR);
 
-		Unzip(File(PACKAGE_DIR + PACKAGE_NAME + "-" + packageVersion + ".zip"), PACKAGE_TEST_DIR);
-		CopyTestFiles(BIN_DIR, PACKAGE_TEST_DIR + "bin/");
+		Unzip(File(NuGetPackage), PACKAGE_TEST_DIR);
+		CopyTestFiles(BIN_DIR, PACKAGE_TEST_DIR + "tools/");
 
-		NUnit3(PACKAGE_TEST_DIR + "bin/" + ALL_TESTS);
+		NUnit3(PACKAGE_TEST_DIR + "tools/" + ALL_TESTS);
 	});
 
 //////////////////////////////////////////////////////////////////////
@@ -549,7 +545,7 @@ Task("ZipGuiTest")
 	{
 		CleanDirectory(PACKAGE_TEST_DIR);
 
-		Unzip(File(PACKAGE_DIR + "TestCentric.GuiRunner-" + packageVersion + ".nupkg"), PACKAGE_TEST_DIR);
+		Unzip(File(ZipPackage), PACKAGE_TEST_DIR);
 		CopyTestFiles(BIN_DIR, PACKAGE_TEST_DIR + "tools/");
 
 		StartProcess(PACKAGE_TEST_DIR + GUI_RUNNER, PACKAGE_TEST_DIR + GUI_TESTS + " --run");
