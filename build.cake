@@ -402,7 +402,44 @@ Task("PackageZip")
     });
 
 //////////////////////////////////////////////////////////////////////
-// PACKAGE CHOCOLATEY
+// PACKAGE FOR NUGET.ORG
+//////////////////////////////////////////////////////////////////////
+
+Task("PackageNuGet")
+	.IsDependentOn("CreateImage")
+	.Does(() =>
+	{
+		CreateDirectory(PACKAGE_DIR);
+
+        var content = new List<NuSpecContent>();
+		int index = CurrentImageDir.Length;
+
+		foreach (var file in GetFiles(CurrentImageDir + "**/*.*"))
+		{
+			var source = file.FullPath;
+			var target = System.IO.Path.GetDirectoryName(file.FullPath.Substring(index));
+
+			if (target == "bin")
+				target = "tools";
+			else if (target.StartsWith("bin" + System.IO.Path.DirectorySeparatorChar))
+				target = "tools" + target.Substring(3);
+
+			Information("Source=" + file.FullPath);
+			Information("Target=" + target);
+			content.Add(new NuSpecContent() { Source = file.FullPath, Target = target });
+		}
+
+        NuGetPack("nuget/TestCentric.GuiRunner.nuspec", new NuGetPackSettings()
+        {
+            Version = packageVersion,
+            OutputDirectory = PACKAGE_DIR,
+            NoPackageAnalysis = true,
+			Files = content
+        });
+	});
+
+//////////////////////////////////////////////////////////////////////
+// PACKAGE FOR CHOCOLATEY
 //////////////////////////////////////////////////////////////////////
 
 Task("PackageChocolatey")
@@ -425,7 +462,15 @@ Task("PackageChocolatey")
 			content.Add(new ChocolateyNuSpecContent() { Source = file.FullPath, Target = target });
 		}
 
-        ChocolateyPack(CHOCO_DIR + PACKAGE_NAME + ".nuspec", 
+		content.AddRange(new ChocolateyNuSpecContent[]
+		{
+			new ChocolateyNuSpecContent() { Source = CHOCO_DIR + "VERIFICATION.txt", Target = "tools" },
+			new ChocolateyNuSpecContent() { Source = CHOCO_DIR + "testcentric-agent.exe.ignore", Target = "tools" },
+			new ChocolateyNuSpecContent() { Source = CHOCO_DIR + "testcentric-agent-x86.exe.ignore", Target = "tools" },
+			new ChocolateyNuSpecContent() { Source = CHOCO_DIR + "testcentric.choco.addins", Target = "tools" }
+		});
+			
+		ChocolateyPack(CHOCO_DIR + PACKAGE_NAME + ".nuspec", 
             new ChocolateyPackSettings()
             {
                 Version = packageVersion,
@@ -434,26 +479,36 @@ Task("PackageChocolatey")
             });
     });
 
-Task("CreatePackageTestDirectory")
-	.Does(() =>
-	{
-		CleanDirectory(PACKAGE_TEST_DIR);
-
-		Unzip(File(PACKAGE_DIR + PACKAGE_NAME + "-" + packageVersion + ".zip"), PACKAGE_TEST_DIR);
-		CopyTestFiles(BIN_DIR, PACKAGE_TEST_DIR + "bin/");
-	});
-
-
 //////////////////////////////////////////////////////////////////////
 // ZIP PACKAGE TEST
 //////////////////////////////////////////////////////////////////////
 
 Task("TestZipPackage")
 	.IsDependentOn("PackageZip")
-	.IsDependentOn("CreatePackageTestDirectory")
 	.Does(() =>
 	{
-		NUnit3(PACKAGE_TEST_DIR + ALL_TESTS);
+		CleanDirectory(PACKAGE_TEST_DIR);
+
+		Unzip(File(PACKAGE_DIR + "TestCentric.GuiRunner-" + packageVersion + ".nupkg"), PACKAGE_TEST_DIR);
+		CopyTestFiles(BIN_DIR, PACKAGE_TEST_DIR + "tools/");
+
+		NUnit3(PACKAGE_TEST_DIR + "tools/" + ALL_TESTS);
+	});
+
+//////////////////////////////////////////////////////////////////////
+// NUGET PACKAGE TEST
+//////////////////////////////////////////////////////////////////////
+
+Task("TestNuGetPackage")
+	.IsDependentOn("PackageNuGet")
+	.Does(() =>
+	{
+		CleanDirectory(PACKAGE_TEST_DIR);
+
+		Unzip(File(PACKAGE_DIR + PACKAGE_NAME + "-" + packageVersion + ".zip"), PACKAGE_TEST_DIR);
+		CopyTestFiles(BIN_DIR, PACKAGE_TEST_DIR + "bin/");
+
+		NUnit3(PACKAGE_TEST_DIR + "bin/" + ALL_TESTS);
 	});
 
 //////////////////////////////////////////////////////////////////////
@@ -489,9 +544,14 @@ Task("ExperimentalGuiTest")
 //////////////////////////////////////////////////////////////////////
 
 Task("ZipGuiTest")
-	.IsDependentOn("CreatePackageTestDirectory")
+	.IsDependentOn("PackageZip")
 	.Does(() =>
 	{
+		CleanDirectory(PACKAGE_TEST_DIR);
+
+		Unzip(File(PACKAGE_DIR + "TestCentric.GuiRunner-" + packageVersion + ".nupkg"), PACKAGE_TEST_DIR);
+		CopyTestFiles(BIN_DIR, PACKAGE_TEST_DIR + "tools/");
+
 		StartProcess(PACKAGE_TEST_DIR + GUI_RUNNER, PACKAGE_TEST_DIR + GUI_TESTS + " --run");
 		CheckTestResult("TestResult.xml");
 	});
@@ -501,9 +561,14 @@ Task("ZipGuiTest")
 //////////////////////////////////////////////////////////////////////
 
 Task("ZipExperimentalGuiTest")
-	.IsDependentOn("CreatePackageTestDirectory")
+	.IsDependentOn("PackageZip")
 	.Does(() =>
 	{
+		CleanDirectory(PACKAGE_TEST_DIR);
+
+		Unzip(File(PACKAGE_DIR + "TestCentric.GuiRunner-" + packageVersion + ".nupkg"), PACKAGE_TEST_DIR);
+		CopyTestFiles(BIN_DIR, PACKAGE_TEST_DIR + "tools/");
+
 		StartProcess(PACKAGE_TEST_DIR + EXPERIMENTAL_RUNNER, PACKAGE_TEST_DIR + EXPERIMENTAL_TESTS + " --run");
 		CheckTestResult("TestResult.xml");
 	});
@@ -525,9 +590,13 @@ Task("ChocolateyInstall")
 
 Task("ChocolateyTest")
 	.IsDependentOn("PackageChocolatey")
-	.IsDependentOn("CreatePackageTestDirectory")
 	.Does(() =>
 	{
+		CleanDirectory(PACKAGE_TEST_DIR);
+
+		Unzip(File(PACKAGE_DIR + "TestCentric.GuiRunner-" + packageVersion + ".nupkg"), PACKAGE_TEST_DIR);
+		CopyTestFiles(BIN_DIR, PACKAGE_TEST_DIR + "tools/");
+
 		// TODO: When starting the commands that chocolatey has shimmed, the StartProcess
 		// call returns immediately, so we can't check the test result. For now, we just
 		// run the tests and inspect manually but we need to figure out how to wait for
@@ -589,6 +658,7 @@ Task("Test")
 Task("Package")
 	.IsDependentOn("CheckTestErrors")
     .IsDependentOn("PackageZip")
+	.IsDependentOn("PackageNuget")
     .IsDependentOn("PackageChocolatey");
 
 Task("TestPackages")
