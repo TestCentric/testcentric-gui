@@ -3,22 +3,20 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>TestCentric.GuiRunner</id>
-    <title>TestCentric Runner for NUnit</title>
     <version>0.0.0</version>
+    <description>This package includes the TestCentric GUI runner and test engine.</description>
     <authors>Charlie Poole</authors>
     <owners>Charlie Poole</owners>
-    <license type="file">LICENSE.txt</license>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <projectUrl>http://test-centric.org</projectUrl>
-    <repository type="git" url="https://github.com/TestCentric/testcentric-gui"/>
+    <license type="expression">MIT</license>
     <iconUrl>https://cdn.rawgit.com/TestCentric/resources/master/images/icon/nunit_256.png</iconUrl>
-    <summary>TestCentric GUI runner for the NUnit 3 unit-testing framework.</summary>
-    <description>
-      This package includes the TestCentric GUI runner and incorporates the NUnit test engine.
-    </description>
+    <icon>testcentric.png</icon>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <releaseNotes>https://raw.githubusercontent.com/TestCentric/testcentric-gui/master/CHANGES.txt</releaseNotes>
+    <copyright>Copyright (c) 2018-2020 Charlie Poole</copyright>
     <language>en-US</language>
     <tags>testcentric nunit gui runner test centric testing tdd</tags>
-    <copyright>Copyright (c) 2018-2019 Charlie Poole</copyright>
+    <repository type="git" url="https://github.com/TestCentric/testcentric-gui"/>
+    <title>TestCentric Runner for NUnit</title>
   </metadata>
 </package>
