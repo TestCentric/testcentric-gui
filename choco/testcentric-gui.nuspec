@@ -6,14 +6,11 @@
     <version>0.0.0</version>
     <title>TestCentric Runner for NUnit</title>
     <summary>TestCentric GUI runner for the NUnit 3 unit-testing framework.</summary>
-    <description>
-      This package includes the TestCentric GUI runner and incorporates the NUnit test engine.
-    </description>
     <projectUrl>http://test-centric.org</projectUrl>
     <projectSourceUrl>https://github.com/TestCentric/testcentric-gui</projectSourceUrl>
     <docsUrl>https://github.com/TestCentric/testcentric-gui/wiki</docsUrl>
     <bugTrackerUrl>https://github.com/TestCentric/testcentric-gui/issues</bugTrackerUrl>
-    <iconUrl>https://cdn.rawgit.com/nunit/resources/master/images/icon/nunit_256.png</iconUrl>
+    <iconUrl>https://raw.githubusercontent.com/TestCentric/testcentric-gui/master/testcentric.png</iconUrl>
     <packageSourceUrl>https://github.com/TestCentric/testcentric-gui</packageSourceUrl>
     <releaseNotes>https://raw.githubusercontent.com/TestCentric/testcentric-gui/master/CHANGES.txt</releaseNotes>
     <mailingListUrl>https://groups.google.com/forum/#!forum/nunit-discuss</mailingListUrl>
@@ -24,5 +21,24 @@
     <language>en-US</language>
     <tags>testcentric nunit gui runner test centric testing tdd</tags>
     <copyright>Copyright (c) 2018-2019 Charlie Poole</copyright>
+    <description>
+The TestCentric Runner for NUnit (**TestCentric**) is a GUI runner aimed at eventually supporting a range of .NET testing frameworks. In the 1.x release series, we are concentrating on support of NUnit tests. The user interface is based on the layout and feature set of the of the original NUnit GUI, with the internals modified so as to run NUnit 3 tests.
+
+This package includes the both the standard TestCentric GUI runner (`testcentric.exe`) and an experiental runner (`tc-next.exe`) which is available for... wait for it... experimentation! The package incorporates the TestCentric test engine, a modified version of the NUnit engine.
+
+### Features
+
+Most features of the NUnit V2 Gui runner are supported. See CHANGES.txt for more detailed information.
+
+NUnit engine extensions are supported but no extensions are bundled with the GUI itself. They must be installed separately **using chocolatey**. In particular, to run NUnit V2 tests, you should install the **NUnit V2 Framework Driver Extension**.
+
+**Warning:** When using the GUI chocolatey package, **only** chocolatey-packaged extensions will be availble. This is by design.
+
+### Prerequisites
+
+**TestCentric** requires .NET 4.5 or later in order to function, although your tests may run in a separate process under other framework versions.
+
+Projects with tests to be run under **TestCentric** must already have some version of the NUnit framework installed separtely.
+    </description>
   </metadata>
 </package>
