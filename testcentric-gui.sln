@@ -101,6 +101,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testcentric-agent-x86", "sr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{23ED18B0-608C-4CB5-A70E-CB95C8B0231C}"
 	ProjectSection(SolutionItems) = preProject
+		nuget.changes.txt = nuget.changes.txt
 		nuget\testcentric-agent.addins = nuget\testcentric-agent.addins
 		nuget\testcentric-gui.addins = nuget\testcentric-gui.addins
 		nuget\TestCentric.GuiRunner.nuspec = nuget\TestCentric.GuiRunner.nuspec
