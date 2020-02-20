@@ -422,6 +422,9 @@ Task("PackageNuGet")
 			content.Add(new NuSpecContent() { Source = file.FullPath, Target = target });
 		}
 
+		// Icon goes in the root
+		content.Add(new NuSpecContent() { Source = PROJECT_DIR + "testcentric.png" });
+
 		// Use addins file tailored for nuget install
 		content.Add(new NuSpecContent() { Source = NUGET_DIR + "testcentric-gui.addins", Target = "tools" });
 		foreach (string runtime in AGENT_RUNTIMES)
