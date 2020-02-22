@@ -219,7 +219,16 @@ namespace TestCentric.Gui.Model
             _lastRunWasDebugRun = false;
 
             Runner = TestEngine.GetRunner(TestPackage);
-            Tests = new TestNode(Runner.Explore(TestFilter.Empty));
+
+            try
+            {
+                Tests = new TestNode(Runner.Explore(TestFilter.Empty));
+            }
+            catch(Exception ex)
+            {
+                _events.FireTestLoadFailure(ex);
+                return;
+            }
 
             MapTestsToPackages();
             AvailableCategories = GetAvailableCategories();

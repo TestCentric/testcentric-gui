@@ -31,4 +31,7 @@
     <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
     <PackageReference Include="System.Xml.XPath.XmlDocument" Version="4.3.0" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Transports\Remoting\" />
+  </ItemGroup>
 </Project>

@@ -4,54 +4,22 @@
 // ***********************************************************************
 
 using System.Collections.Generic;
-using System.IO;
 using TestCentric.Engine.Extensibility;
-using System.Reflection;
+using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Drivers
 {
     public abstract class NotRunnableFrameworkDriver : IFrameworkDriver
     {
-        private const string LOAD_RESULT_FORMAT =
-            "<test-suite type='{0}' id='{1}' name='{2}' fullname='{3}' testcasecount='0' runstate='{4}'>" +
-                "<properties>" +
-                    "<property name='_SKIPREASON' value='{5}'/>" +
-                "</properties>" +
-            "</test-suite>";
-
-        private const string RUN_RESULT_FORMAT =
-            "<test-suite type='{0}' id='{1}' name='{2}' fullname='{3}' testcasecount='0' runstate='{4}' result='{5}' label='{6}'>" +
-                "<properties>" +
-                    "<property name='_SKIPREASON' value='{7}'/>" +
-                "</properties>" +
-                "<reason>" +
-                    "<message>{7}</message>" +
-                "</reason>" +
-            "</test-suite>";
-
-        private string _name;
-        private string _fullname;
-        private string _message;
-        private string _type;
-
-        protected string _runstate;
-        protected string _result;
-        protected string _label;
-
-        public NotRunnableFrameworkDriver(string assemblyPath, string message)
-        {
-            _name = Escape(Path.GetFileName(assemblyPath));
-            _fullname = Escape(Path.GetFullPath(assemblyPath));
-            _message = Escape(message);
-            _type = new List<string> { ".dll", ".exe" }.Contains(Path.GetExtension(assemblyPath)) ? "Assembly" : "Unknown";
-        }
+        protected abstract NotRunnableAssemblyResult Result { get; }
 
         public string ID { get; set; }
 
-        
+        protected string TestID => string.IsNullOrEmpty(ID) ? "1" : ID + "-1";
+
         public string Load(string assemblyPath, IDictionary<string, object> settings)
         {
-            return GetLoadResult();
+            return Result.LoadResult;
         }
 
         public int CountTestCases(string filter)
@@ -61,66 +29,50 @@ namespace TestCentric.Engine.Drivers
 
         public string Run(ITestEventListener listener, string filter)
         {
-            return string.Format(RUN_RESULT_FORMAT, 
-                _type, TestID, _name, _fullname, _runstate, _result, _label, _message);
+            return Result.RunResult;
         }
 
         public string Explore(string filter)
         {
-            return GetLoadResult();
+            return Result.LoadResult;
         }
 
         public void StopRun(bool force)
         {
         }
-
-        private static string Escape(string original)
-        {
-            return original
-                .Replace("&", "&amp;")
-                .Replace("\"", "&quot;")
-                .Replace("'", "&apos;")
-                .Replace("<", "&lt;")
-                .Replace(">", "&gt;");
-        }
-
-        private string GetLoadResult()
-        {
-            return string.Format(
-                LOAD_RESULT_FORMAT,
-                _type, TestID, _name, _fullname, _runstate, _message);
-        }
-
-        private string TestID
-        {
-            get
-            {
-                return string.IsNullOrEmpty(ID)
-                    ? "1"
-                    : ID + "-1";
-            }
-        }
     }
 
-    public class InvalidAssemblyFrameworkDriver :NotRunnableFrameworkDriver
+    public class InvalidAssemblyFrameworkDriver : NotRunnableFrameworkDriver
     {
+        private string _assemblyPath;
+        private string _message;
+
         public InvalidAssemblyFrameworkDriver(string assemblyPath, string message)
-            : base(assemblyPath, message)
         {
-            _runstate = "NotRunnable";
-            _result = "Failed";
-            _label = "Invalid";
+            _assemblyPath = assemblyPath;
+            _message = message;
         }
+
+        protected override NotRunnableAssemblyResult Result => 
+            new InvalidAssemblyResult(_assemblyPath, _message)
+            {
+                TestID = TestID
+            };
     }
 
     public class SkippedAssemblyFrameworkDriver : NotRunnableFrameworkDriver
     {
+        private string _assemblyPath;
+
         public SkippedAssemblyFrameworkDriver(string assemblyPath)
-            : base(assemblyPath, "Skipping non-test assembly")
         {
-            _runstate = "Runnable";
-            _result = "Skipped";
-            _label = "NoTests";
+            _assemblyPath = assemblyPath;
         }
+
+        protected override NotRunnableAssemblyResult Result => 
+            new SkippedAssemblyResult(_assemblyPath)
+            {
+                TestID = TestID
+            };
     }
 }

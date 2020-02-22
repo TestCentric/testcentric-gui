@@ -8,13 +8,14 @@ using System;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
 using System.Threading;
+using TestCentric.Engine.Agents;
 using TestCentric.Engine.Helpers;
 using TestCentric.Engine.Internal;
 
-namespace TestCentric.Engine.Agents
+namespace TestCentric.Engine.Transports.Remoting
 {
 
-    public class TestAgentRemotingTransport : TestAgentTransport, ITestAgent, ITestEngineRunner
+    public class TestAgentRemotingTransport : MarshalByRefObject, ITestAgentTransport, ITestAgent, ITestEngineRunner
     {
         private static readonly Logger log = InternalTrace.GetLogger(typeof(TestAgentRemotingTransport));
 
@@ -26,12 +27,16 @@ namespace TestCentric.Engine.Agents
         private readonly CurrentMessageCounter _currentMessageCounter = new CurrentMessageCounter();
 
         public TestAgentRemotingTransport(RemoteTestAgent agent, string agencyUrl)
-            : base(agent)
         {
+            Agent = agent;
             _agencyUrl = agencyUrl;
         }
 
-        public override bool Start()
+        public TestAgent Agent { get; }
+
+        public Guid Id => Agent.Id;
+
+        public bool Start()
         {
             log.Info("Agent starting");
 
@@ -63,7 +68,7 @@ namespace TestCentric.Engine.Agents
             return true;
         }
 
-        public override void Stop()
+        public void Stop()
         {
             log.Info("Stopping");
 
@@ -84,19 +89,19 @@ namespace TestCentric.Engine.Agents
 
                 // Signal to other threads that it's okay to exit the process or start a new channel, etc.
                 log.Info("Set stop signal");
-                _agent.StopSignal.Set();
+                Agent.StopSignal.Set();
             });
         }
 
-        public override ITestEngineRunner CreateRunner(TestPackage package)
+        public ITestEngineRunner CreateRunner(TestPackage package)
         {
-            _runner = _agent.CreateRunner(package);
+            _runner = Agent.CreateRunner(package);
             return this;
         }
 
         public void Dispose()
         {
-            _agent.Dispose();
+            Agent.Dispose();
             _runner.Dispose();
         }
 

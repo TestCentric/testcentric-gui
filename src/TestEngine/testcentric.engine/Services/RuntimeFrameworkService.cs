@@ -82,10 +82,8 @@ namespace TestCentric.Engine.Services
         /// <returns>A string representing the selected RuntimeFramework</returns>
         public string SelectRuntimeFramework(TestPackage package)
         {
-            //// Evaluate package target framework
-            //ApplyImageData(package);
-
             var targetFramework = SelectRuntimeFrameworkInner(package);
+
             return targetFramework.ToString();
         }
 
@@ -185,10 +183,6 @@ namespace TestCentric.Engine.Services
             if (Environment.OSVersion.Platform == PlatformID.Win32NT && imageTargetFrameworkNameSetting.Length > 0)
             {
                 targetFramework = RuntimeFramework.FromFrameworkName(imageTargetFrameworkNameSetting);
-
-                // TODO: temporary exception thrown until we implement .NET Core
-                if (targetFramework.Runtime == Runtime.NetCore)
-                    throw new NotImplementedException("The GUI does not yet support .NET Core tests");
             }
             else
             {
@@ -204,6 +198,10 @@ namespace TestCentric.Engine.Services
                     targetFramework = currentFramework;
                     log.Debug($"Using {currentFramework}");
                 }
+                else
+                {
+                    throw new NotImplementedException($"The GUI does not yet support {targetFramework.FrameworkName.FullName} tests.");
+                }
             }
 
             package.Settings[EnginePackageSettings.RuntimeFramework] = targetFramework.ToString();
@@ -218,7 +216,9 @@ namespace TestCentric.Engine.Services
                 FindDotNetFrameworks();
 
             FindDefaultMonoFramework();
+#if NETCORE_SUPPORT
             FindDotNetCoreFrameworks();
+#endif
         }
 
         // Note: this method cannot be generalized past V4, because (a)  it has
@@ -434,6 +434,7 @@ namespace TestCentric.Engine.Services
             _availableRuntimes.Add(framework);
         }
 
+#if NETCORE_SUPPORT
         private void FindDotNetCoreFrameworks()
         {
             const string WINDOWS_INSTALL_DIR = "C:\\Program Files\\dotnet\\";
@@ -467,8 +468,9 @@ namespace TestCentric.Engine.Services
 
             _availableRuntimes.AddRange(runtimes);
         }
+#endif
 
-        #endregion
+#endregion
     }
 }
 #endif
