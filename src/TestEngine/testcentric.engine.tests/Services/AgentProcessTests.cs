@@ -30,18 +30,20 @@ namespace TestCentric.Engine.Services
             _package.Settings[EnginePackageSettings.RuntimeFramework] = "net-4.5";
         }
 
-        [TestCase("net-4.5", false, "agents/net20/testcentric-agent.exe")]
-        [TestCase("net-4.5", true, "agents/net20/testcentric-agent-x86.exe")]
-        [TestCase("net-4.0", false, "agents/net20/testcentric-agent.exe")]
-        [TestCase("net-4.0", true, "agents/net20/testcentric-agent-x86.exe")]
+        [TestCase("net-4.5", false, "agents/net40/testcentric-agent.exe")]
+        [TestCase("net-4.5", true, "agents/net40/testcentric-agent-x86.exe")]
+        [TestCase("net-4.0", false, "agents/net40/testcentric-agent.exe")]
+        [TestCase("net-4.0", true, "agents/net40/testcentric-agent-x86.exe")]
         [TestCase("net-3.5", false, "agents/net20/testcentric-agent.exe")]
         [TestCase("net-3.5", true, "agents/net20/testcentric-agent-x86.exe")]
         [TestCase("net-2.0", false, "agents/net20/testcentric-agent.exe")]
         [TestCase("net-2.0", true, "agents/net20/testcentric-agent-x86.exe")]
+#if NETCORE_SUPPORT
         [TestCase("netcore-2.1", false, "agents/netcoreapp2.1/testcentric-agent.dll")]
         [TestCase("netcore-2.1", true, "agents/netcoreapp2.1/testcentric-agent-x86.dll")]
         [TestCase("netcore-1.1", false, "agents/netcoreapp1.1/testcentric-agent.dll")]
         [TestCase("netcore-1.1", true, "agents/netcoreapp1.1/testcentric-agent-x86.dll")]
+#endif
         public void AgentSelection(string runtime, bool x86, string agentPath)
         {
             _package.Settings[EnginePackageSettings.RuntimeFramework] = runtime;
@@ -88,7 +90,6 @@ namespace TestCentric.Engine.Services
             {
                 Assert.That(startInfo.FileName, Is.EqualTo(process.AgentExePath));
                 Assert.That(startInfo.Arguments, Is.EqualTo(process.AgentArgs.ToString()));
-                Assert.That(startInfo.EnvironmentVariables["COMPLUS_Version"], Is.EqualTo($"v{targetRuntime.ClrVersion.ToString(3)}"));
             }
         }
 

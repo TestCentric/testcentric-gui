@@ -16,6 +16,7 @@ namespace TestCentric.Gui.Model
     public delegate void TestOutputEventHandler(TestOutputEventArgs args);
     public delegate void UnhandledExceptionEventHandler(UnhandledExceptionEventArgs args);
     public delegate void TestFilesLoadingEventHandler(TestFilesLoadingEventArgs args);
+    public delegate void TestLoadFailureEventHandler(TestLoadFailureEventArgs args);
 
     /// <summary>
     /// ITestEvents provides events for all actions in the model, both those
@@ -33,6 +34,8 @@ namespace TestCentric.Gui.Model
         event TestNodeEventHandler TestLoaded;
         event TestNodeEventHandler TestReloaded;
         event TestEventHandler TestUnloaded;
+
+        event TestLoadFailureEventHandler TestLoadFailure;
 
         // Events related to running tests
         event RunStartingEventHandler RunStarting;

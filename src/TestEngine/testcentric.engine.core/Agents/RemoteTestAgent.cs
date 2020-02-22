@@ -3,10 +3,10 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-#if !NETSTANDARD1_6
 using System;
 using TestCentric.Common;
 using TestCentric.Engine.Internal;
+using TestCentric.Engine.Transports;
 
 namespace TestCentric.Engine.Agents
 {
@@ -27,7 +27,7 @@ namespace TestCentric.Engine.Agents
         public RemoteTestAgent(Guid agentId, IServiceLocator services)
             : base(agentId, services) { }
 
-        public TestAgentTransport Transport;
+        public ITestAgentTransport Transport;
 
         public int ProcessId => System.Diagnostics.Process.GetCurrentProcess().Id;
 
@@ -48,4 +48,3 @@ namespace TestCentric.Engine.Agents
         }
     }
 }
-#endif

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "testcentric.engine.tests": {
+      "commandName": "Project",
+      "commandLineArgs": "--test TestCentric.Engine.Services.AgentProcessTests"
+    }
+  }
+}

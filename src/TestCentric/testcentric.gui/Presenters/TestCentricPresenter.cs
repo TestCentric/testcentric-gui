@@ -152,6 +152,14 @@ namespace TestCentric.Gui.Presenters
                 UpdateViewCommands();
             };
 
+            _model.Events.TestLoadFailure += (TestLoadFailureEventArgs e) =>
+            {
+                if (_longOpDisplay != null)
+                    _longOpDisplay.Dispose();
+
+                _view.MessageDisplay.Error(e.Exception.Message);
+            };
+
             _model.Events.RunStarting += (RunStartingEventArgs e) =>
             {
                 UpdateViewCommands();

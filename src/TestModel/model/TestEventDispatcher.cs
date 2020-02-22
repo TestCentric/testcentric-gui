@@ -72,6 +72,11 @@ namespace TestCentric.Gui.Model
             TestReloaded?.Invoke(new TestNodeEventArgs(testNode));
         }
 
+        public void FireTestLoadFailure(Exception ex)
+        {
+            TestLoadFailure?.Invoke(new TestLoadFailureEventArgs(ex));
+        }
+
         public void FireSelectedItemChanged(ITestItem testItem)
         {
             SelectedItemChanged?.Invoke(new TestItemEventArgs(testItem));
@@ -95,6 +100,8 @@ namespace TestCentric.Gui.Model
         public event TestNodeEventHandler TestLoaded;
         public event TestNodeEventHandler TestReloaded;
         public event TestEventHandler TestUnloaded;
+
+        public event TestLoadFailureEventHandler TestLoadFailure;
 
         // Test running events
         public event RunStartingEventHandler RunStarting;

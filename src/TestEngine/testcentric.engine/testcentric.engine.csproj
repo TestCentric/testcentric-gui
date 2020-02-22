@@ -37,4 +37,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Transports\Tcp\" />
+  </ItemGroup>
 </Project>

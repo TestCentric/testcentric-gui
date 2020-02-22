@@ -96,4 +96,14 @@ namespace TestCentric.Gui.Model
 
         public IList<string> TestFilesLoading { get; }
     }
+
+    public class TestLoadFailureEventArgs : EventArgs
+    {
+        public TestLoadFailureEventArgs(Exception ex)
+        {
+            Exception = ex;
+        }
+
+        public Exception Exception;
+    }
 }
