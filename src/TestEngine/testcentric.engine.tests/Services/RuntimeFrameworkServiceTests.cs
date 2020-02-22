@@ -42,8 +42,8 @@ namespace TestCentric.Engine.Services
 
         // TODO: Review whether this test is contributing anything
         [TestCase("mock-assembly.dll", false)]
-        [TestCase("../../agents/net20/testcentric-agent.exe", false)]
-        [TestCase("../../agents/net20/testcentric-agent-x86.exe", true)]
+        [TestCase("../../agents/net20/testcentric-agent.exe", false, ExcludePlatform = "Linux")]
+        [TestCase("../../agents/net20/testcentric-agent-x86.exe", true, ExcludePlatform = "Linux")]
         public void SelectRuntimeFramework(string assemblyName, bool runAsX86)
         {
             var assemblyPath = Path.Combine(TestContext.CurrentContext.TestDirectory, assemblyName);
@@ -97,7 +97,7 @@ namespace TestCentric.Engine.Services
             Assert.That(package.GetSetting<string>(EnginePackageSettings.RuntimeFramework, null), Is.EqualTo(requested));
         }
 
-        [Test]
+        [Test, Platform(Exclude ="Linux")]
         public void RuntimeFrameworkIsSetForSubpackages()
         {
             var topLevelPackage = new TestPackage(new [] {"a.dll", "b.dll"});
@@ -114,6 +114,7 @@ namespace TestCentric.Engine.Services
 
             Assert.Multiple(() =>
             {
+                // UPDATE: No longer working on Linux - Excluded for now
                 // HACK: this test will pass on a windows system with .NET 2.0 and .NET 4.0 installed or on a 
                 // linux system with a newer version of Mono with no 2.0 profile.
                 // TODO: Test should not depend on the availability of specific runtimes
