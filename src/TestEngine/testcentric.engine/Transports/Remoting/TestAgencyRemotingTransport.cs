@@ -15,8 +15,9 @@ using System.Runtime.Remoting.Channels.Tcp;
 using TestCentric.Common;
 using TestCentric.Engine.Helpers;
 using TestCentric.Engine.Internal;
+using TestCentric.Engine.Services;
 
-namespace TestCentric.Engine.Services.Transports
+namespace TestCentric.Engine.Transports.Remoting
 {
     /// <summary>
     /// Summary description for TestAgencyRemotingTransport.

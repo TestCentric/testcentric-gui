@@ -3,7 +3,6 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-#if !NETSTANDARD1_6
 using System;
 using System.Threading;
 
@@ -15,7 +14,7 @@ namespace TestCentric.Engine.Agents
     /// loading and running tests in a particular
     /// context such as an application domain or process.
     /// </summary>
-    public abstract class TestAgent : MarshalByRefObject, ITestAgent, IDisposable
+    public abstract class TestAgent : ITestAgent, IDisposable
     {
         internal readonly ManualResetEvent StopSignal = new ManualResetEvent(false);
 
@@ -82,14 +81,5 @@ namespace TestCentric.Engine.Agents
                 _disposed = true;
             }
         }
-
-        /// <summary>
-        /// Overridden to cause object to live indefinitely
-        /// </summary>
-        public override object InitializeLifetimeService()
-        {
-            return null;
-        }
     }
 }
-#endif
