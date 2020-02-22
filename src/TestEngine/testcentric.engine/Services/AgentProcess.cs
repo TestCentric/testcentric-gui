@@ -60,12 +60,6 @@ namespace TestCentric.Engine.Services
             else if (TargetRuntime.Runtime == Runtime.Net)
             {
                 StartInfo.FileName = AgentExePath;
-                // Override the COMPLUS_Version env variable, this would cause CLR meta host to run a CLR of the specific version
-                string envVar = "v" + TargetRuntime.ClrVersion.ToString(3);
-                StartInfo.EnvironmentVariables["COMPLUS_Version"] = envVar;
-                // Leave a marker that we have changed this variable, so that the agent could restore it for any code or child processes running within the agent
-                string cpvOriginal = Environment.GetEnvironmentVariable("COMPLUS_Version");
-                StartInfo.EnvironmentVariables["TestAgency_COMPLUS_Version_Original"] = string.IsNullOrEmpty(cpvOriginal) ? "NULL" : cpvOriginal;
                 StartInfo.Arguments = AgentArgs.ToString();
                 StartInfo.LoadUserProfile = loadUserProfile;
             }
@@ -109,8 +103,17 @@ namespace TestCentric.Engine.Services
             switch (targetRuntime.Runtime.FrameworkIdentifier)
             {
                 case ".NETFramework":
-                    return Path.Combine(engineDir, "agents/net20/" + agentName + ".exe");
+                    switch (targetRuntime.FrameworkVersion.Major)
+                    {
+                        case 2:
+                        case 3:
+                            return Path.Combine(engineDir, "agents/net20/" + agentName + ".exe");
+                        case 4:
+                            return Path.Combine(engineDir, "agents/net40/" + agentName + ".exe");
+                    }
+                    break;
 
+#if NETCORE_SUPPORT // Future support
                 case ".NETCoreApp":
                     switch (targetRuntime.FrameworkVersion.Major)
                     {
@@ -119,14 +122,12 @@ namespace TestCentric.Engine.Services
 
                         case 2:
                             return Path.Combine(engineDir, "agents/netcoreapp2.1/" + agentName + ".dll");
-
-                        default:
-                            throw new InvalidOperationException($"Unsupported runtime: {targetRuntime.Runtime}");
                     }
-
-                default:
-                    throw new InvalidOperationException($"Unsupported runtime type: {targetRuntime.Runtime.FrameworkIdentifier}");
+                    break;
+#endif
             }
+
+            throw new InvalidOperationException($"Unsupported runtime: {targetRuntime.Runtime}");
         }
     }
 }

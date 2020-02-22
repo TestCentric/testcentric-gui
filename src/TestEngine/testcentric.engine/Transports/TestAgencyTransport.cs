@@ -8,8 +8,9 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using TestCentric.Engine.Helpers;
+using TestCentric.Engine.Services;
 
-namespace TestCentric.Engine.Services.Transports
+namespace TestCentric.Engine.Transports
 {
     public abstract class TestAgencyTransport : MarshalByRefObject, ITestAgency, IDisposable
     {
