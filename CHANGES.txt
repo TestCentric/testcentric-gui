@@ -19,14 +19,14 @@ Engine
 
  * The UserSettings service is no longer part of the engine but is handled
    directly in the GUI. This is not considered a breaking change, since
-   since the engine is not yet released separately from the GUI.
+   the engine is not yet released separately from the GUI.
 
- * A new PackageSettings service has been added to the engine. It's job
+ * A new PackageSettings service has been added to the engine. Its job
    is to analyze all packages, examine assemblies and set default
    parameters for executing them.
 
  * A pair of agents are provided for .NET 4.0 in addition to the existing
-   .NET 2.0 agents. The engine is also now built for both .NET 2.0 and 4.0
+   .NET 2.0 agents. In addition, the engine is now built for both runtimes
    and agents use the appropriate version. The GUI itself uses the 4.0 engine.
 
 Issues Resolved
