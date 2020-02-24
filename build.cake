@@ -549,6 +549,77 @@ Task("TestChocolateyPackage")
 	});
 
 //////////////////////////////////////////////////////////////////////
+// EXPERIMENTAL COMMANDS FOR PUBLISHING PACKAGES
+//////////////////////////////////////////////////////////////////////
+
+Task("PublishToMyGet")
+	.Does(() =>
+	{
+		PublishToMyGet(NuGetPackage);
+		PublishToMyGet(ChocolateyPackage);
+	});
+
+Task("PublishToNuGet")
+	.Does(() =>
+	{
+		PublishToNuGet(NuGetPackage);
+	});
+
+Task("PublishToChocolatey")
+	.Does(() =>
+	{
+		PublishToChocolatey(ChocolateyPackage);
+	});
+
+	string MYGET_API_KEY = EnvironmentVariable("MYGET_API_KEY");
+	string MYGET_PUSH_URL = "https://www.myget.org/F/testcentric/api/v2";
+	string NUGET_API_KEY = EnvironmentVariable("NUGET_API_KEY");
+	string NUGET_PUSH_URL = "https://api.nuget.org/v3/index.json";
+	string CHOCO_API_KEY = EnvironmentVariable("CHOCO_API_KEY");
+	string CHOCO_PUSH_URL = "https://push.chocolatey.org/";
+
+	private void PublishToMyGet(string packageName)
+	{
+		EnsurePackageExists(packageName);
+
+		Information($"Publishing {packageName} to myget.org.");
+		NuGetPush(packageName, new NuGetPushSettings() { ApiKey=MYGET_API_KEY, Source=MYGET_PUSH_URL });
+	}
+
+	private void PublishToNuGet(string packageName)
+	{
+		EnsurePackageExists(packageName);
+
+		Information($"Publishing {packageName} to nuget.org.");
+		NuGetPush(packageName, new NuGetPushSettings() { ApiKey=NUGET_API_KEY, Source=NUGET_PUSH_URL });
+	}
+
+	private void PublishToChocolatey(string packageName)
+	{
+		EnsurePackageExists(packageName);
+		EnsureKeyIsSet(CHOCO_API_KEY);
+
+		Information($"Publishing {packageName} to chocolatey.");
+		ChocolateyPush(packageName, new ChocolateyPushSettings() { ApiKey=CHOCO_API_KEY, Source=CHOCO_PUSH_URL });
+	}
+
+	private void EnsurePackageExists(string path)
+	{
+		if (!FileExists(path))
+		{
+			var packageName = System.IO.Path.GetFileName(path);
+			throw new InvalidOperationException(
+			  $"Package not found: {packageName}.\nCode may have changed since package was last built.");
+		}
+	}
+
+	private void EnsureKeyIsSet(string apiKey)
+	{
+		if (string.IsNullOrEmpty(apiKey))
+			throw new InvalidOperationException("The Api Key has not been set.");
+	}
+
+//////////////////////////////////////////////////////////////////////
 // INTERACTIVE TESTS FOR USE IN DEVELOPMENT
 //////////////////////////////////////////////////////////////////////
 
