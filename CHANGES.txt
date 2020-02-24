@@ -38,14 +38,12 @@ Issues Resolved
  * 479 Refactor RuntimeFramework to eliminate unneeded selection options
  * 480 Determine versions of .NET Core we want to support.
  * 483 Disable Runtime menu when running in process
- * 484 Recognize .NET Core as available and display in GUI runtime menu.
  * 487 Determine supported platforms for the engine.
  * 488 Integrate engine build output
  * 489 Run tests for .NET Core
  * 499 Engine Tests don't run under .NET Core 2.1
  * 502 Create new Service to manage PackageSettings
  * 505 Reorganize output to allow agents for various runtimes and both 32-bit and 64-bit execution
- * 508 Create agent process executable for .NET Core 2.1.
  * 513 Modify logic of TestAgency to initiate correct agents
  * 514 Upgrade engine to target .NET 4.0
  * 517 Net40 engine.core build
