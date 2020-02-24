@@ -54,6 +54,13 @@ namespace TestCentric.Gui.Presenters
                 _view.OnTestAssembliesLoaded();
             };
 
+            _model.Events.TestLoadFailure += (TestLoadFailureEventArgs e) =>
+            {
+                // TODO: Name of view method should really be changed
+                _view.OnTestAssembliesLoaded();
+                _view.MessageDisplay.Error(e.Exception.Message);
+            };
+
             _model.Events.TestChanged += (ea) =>
             {
                 if (_model.Settings.Engine.ReloadOnChange)
