@@ -1,4 +1,60 @@
-﻿TestCentric Runner for NUnit 1.2.0 - December 17, 2019
+﻿TestCentric Runner for NUnit 1.3.0 - February 23, 2019
+
+General
+
+ * A NuGet package is now available on nuget.org. While we continue to
+   recommend use of the chocolatey.org package for most developers, because
+   it provides a central installation point for use with all projects, a
+   number of users requested a nuget package as well.
+
+   NOTE: Whichever installation package you use, you should install any
+   needed extensions using the same package source.
+
+GUI
+
+ * The runtime selection menu is now disabled when tests are being run in
+   process, since no other runtime is available within the GUI process.
+
+Engine
+
+ * The UserSettings service is no longer part of the engine but is handled
+   directly in the GUI. This is not considered a breaking change, since
+   the engine is not yet released separately from the GUI.
+
+ * A new PackageSettings service has been added to the engine. Its job
+   is to analyze all packages, examine assemblies and set default
+   parameters for executing them.
+
+ * A pair of agents are provided for .NET 4.0 in addition to the existing
+   .NET 2.0 agents. In addition, the engine is now built for both runtimes
+   and agents use the appropriate version. The GUI itself uses the 4.0 engine.
+
+Issues Resolved
+
+ * 457 Remove UserSettings from the engine
+ * 466 Update Copyright headers in all files
+ * 475 Engine Tests will only run in process under GUI
+ * 476 Eliminate use of Mono.Cecil from engine core assembly
+ * 479 Refactor RuntimeFramework to eliminate unneeded selection options
+ * 480 Determine versions of .NET Core we want to support.
+ * 483 Disable Runtime menu when running in process
+ * 487 Determine supported platforms for the engine.
+ * 488 Integrate engine build output
+ * 489 Run tests for .NET Core
+ * 499 Engine Tests don't run under .NET Core 2.1
+ * 502 Create new Service to manage PackageSettings
+ * 505 Reorganize output to allow agents for various runtimes and both 32-bit and 64-bit execution
+ * 513 Modify logic of TestAgency to initiate correct agents
+ * 514 Upgrade engine to target .NET 4.0
+ * 517 Net40 engine.core build
+ * 518 Create agent process executable for .NET Framework 4.0 and higher
+ * 522 Update nuget and chocolatey packages
+ * 523 Create a nuget package for the GUI
+ * 528 Chocolatey package should use TestCentric icon
+ * 526 Update nuget package
+ * 531 Create tasks in build script for publishing packages
+
+TestCentric Runner for NUnit 1.2.0 - December 17, 2019
 
 This release is primarily marked by the elimination of our 
 dependency on the NUnit Engine in preparation for moving
