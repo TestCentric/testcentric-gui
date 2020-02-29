@@ -15,14 +15,14 @@ public class BuildParameters
 		NuGetDirectory = $"{baseDir}nuget/";
 		ChocoDirectory = $"{baseDir}choco/";
 		PackageDirectory = $"{baseDir}package/";
-		ImageDirectory = $"{PackageDirectory}image/{PACKAGE_NAME}-{PackageVersion}/";
+		ImageDirectory = PackageDirectory + "image/";
 		ZipTestDirectory = PackageDirectory + "test/zip/";
 		NuGetTestDirectory = PackageDirectory + "test/nuget/";
 		ChocolateyTestDirectory = PackageDirectory + "test/choco/";
 
-		ZipPackage = $"{PackageDirectory}{PACKAGE_NAME}-{PackageVersion}.zip";
-		NuGetPackage = $"{PackageDirectory}{NUGET_PACKAGE_NAME}.{PackageVersion}.nupkg";
-		ChocolateyPackage = $"{PackageDirectory}{PACKAGE_NAME}.{PackageVersion}.nupkg";
+		//ZipPackage = $"{PackageDirectory}{PACKAGE_NAME}-{PackageVersion}.zip";
+		//NuGetPackage = $"{PackageDirectory}{NUGET_PACKAGE_NAME}.{PackageVersion}.nupkg";
+		//ChocolateyPackage = $"{PackageDirectory}{PACKAGE_NAME}.{PackageVersion}.nupkg";
 
 		UsingXBuild = context.EnvironmentVariable("USE_XBUILD") != null;
 
@@ -73,9 +73,10 @@ public class BuildParameters
 	public string NuGetTestDirectory { get; } 
 	public string ChocolateyTestDirectory { get; } 
 
-	public string ZipPackage { get; }
-	public string NuGetPackage { get; }
-	public string ChocolateyPackage { get; }
+	// Values need to track changing PackageVersion
+	public string ZipPackage => $"{PackageDirectory}{PACKAGE_NAME}-{PackageVersion}.zip";
+	public string NuGetPackage => $"{PackageDirectory}{NUGET_PACKAGE_NAME}.{PackageVersion}.nupkg";
+	public string ChocolateyPackage => $"{PackageDirectory}{PACKAGE_NAME}.{PackageVersion}.nupkg";
 
 	public bool UsingXBuild { get; }
 	public MSBuildSettings MSBuildSettings { get; }
