@@ -2,10 +2,33 @@
 #tool nuget:?package=GitVersion.CommandLine&version=5.0.0
 #tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.3.1"
 
-#load ./build/settings.cake
+#load "./build/parameters.cake"
+#load "./build/helpers.cake"
 
 using System.Xml;
 using System.Text.RegularExpressions;
+
+//////////////////////////////////////////////////////////////////////
+// CONSTANTS
+//////////////////////////////////////////////////////////////////////
+
+const string SOLUTION = "testcentric-gui.sln";
+
+const string PACKAGE_NAME = "testcentric-gui";
+const string NUGET_PACKAGE_NAME = "TestCentric.GuiRunner";
+
+const string GUI_RUNNER = "testcentric.exe";
+const string GUI_TESTS = "TestCentric.Gui.Tests.dll";
+const string EXPERIMENTAL_RUNNER = "tc-next.exe";
+const string EXPERIMENTAL_TESTS = "Experimental.Gui.Tests.dll";
+const string MODEL_TESTS = "TestCentric.Gui.Model.Tests.dll";
+const string ALL_TESTS = "*.Tests.dll";
+
+//////////////////////////////////////////////////////////////////////
+// BUILD PARAMETERS
+//////////////////////////////////////////////////////////////////////
+
+var Parameters = new BuildParameters(Context);
 
 //////////////////////////////////////////////////////////////////////
 // SETUP AND TEARDOWN
@@ -28,10 +51,10 @@ Setup(context =>
 		// Default based on GitVersion.yml. This gives us a tag of dev
 		// for master, ci for features, pr for pull requests and rc
 		// for release branches.
-		packageVersion = gitVersion.LegacySemVerPadded;
+		Parameters.PackageVersion = gitVersion.LegacySemVerPadded;
 
 		// Full release versions and PRs need no further handling
-		int dash = packageVersion.IndexOf('-');
+		int dash = Parameters.PackageVersion.IndexOf('-');
 		bool isPreRelease = dash > 0;
 
 		string label = gitVersion.PreReleaseLabel;
@@ -55,14 +78,14 @@ Setup(context =>
 			if (suffix.Length > 21)
 				suffix = suffix.Substring(0, 21);
 
-			packageVersion = gitVersion.MajorMinorPatch + suffix;
+			Parameters.PackageVersion = gitVersion.MajorMinorPatch + suffix;
 		}
 
 		if (BuildSystem.IsRunningOnAppVeyor)
-			AppVeyor.UpdateBuildVersion(packageVersion + "-" + AppVeyor.Environment.Build.Number);
+			AppVeyor.UpdateBuildVersion(Parameters.PackageVersion + "-" + AppVeyor.Environment.Build.Number);
 	}
 
-    Information("Building {0} version {1} of TestCentric GUI.", configuration, packageVersion);
+    Information("Building {0} version {1} of TestCentric GUI.", Parameters.Configuration, Parameters.PackageVersion);
 });
 
 // If we run target Test, we catch errors here in teardown.
@@ -76,7 +99,7 @@ Teardown(context => CheckTestErrors(ref ErrorDetail));
 Task("Clean")
     .Does(() =>
 {
-    CleanDirectory(BIN_DIR);
+    CleanDirectory(Parameters.OutputDirectory);
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -86,7 +109,7 @@ Task("Clean")
 Task("RestorePackages")
     .Does(() =>
 {
-    NuGetRestore(SOLUTION, nugetRestoreSettings);
+    NuGetRestore(SOLUTION, Parameters.RestoreSettings);
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -98,13 +121,13 @@ Task("Build")
     .IsDependentOn("RestorePackages")
     .Does(() =>
 {
-    if(usingXBuild)
+    if(Parameters.UsingXBuild)
     {
-        XBuild(SOLUTION, xBuildSettings);
+        XBuild(SOLUTION, Parameters.XBuildSettings);
     }
     else
     {
-        MSBuild(SOLUTION, msBuildSettings);
+        MSBuild(SOLUTION, Parameters.MSBuildSettings);
     }
 });
 
@@ -118,37 +141,6 @@ Task("CheckTestErrors")
     .Description("Checks for errors running the test suites")
     .Does(() => CheckTestErrors(ref ErrorDetail));
 
-void CheckTestErrors(ref List<string> errorDetail)
-{
-    if(errorDetail.Count != 0)
-    {
-        var copyError = new List<string>();
-        copyError = errorDetail.Select(s => s).ToList();
-        errorDetail.Clear();
-        throw new Exception("One or more unit tests failed, breaking the build.\n"
-                              + copyError.Aggregate((x,y) => x + "\n" + y));
-    }
-}
-
-// Run tests using NUnitLite
-private void RunNUnitLite(string testName, string framework, string directory)
-{
-	bool isDotNetCore = framework.StartsWith("netcoreapp");
-	string ext = isDotNetCore ? ".dll" : ".exe";
-	string testPath = directory + testName + ext;
-
-	Information($"Trying to run {testPath}");
-
-	int rc = isDotNetCore
-		? StartProcess("dotnet", testPath)
-		: StartProcess(testPath);
-
-	if (rc > 0)
-		ErrorDetail.Add(string.Format($"{testName}: {rc} tests failed running under {framework}"));
-	else if (rc < 0)
-		ErrorDetail.Add(string.Format($"{testName} returned rc = {rc} running under {framework}"));
-}
-
 //////////////////////////////////////////////////////////////////////
 // TESTS OF TESTCENTRIC.ENGINE
 //////////////////////////////////////////////////////////////////////
@@ -156,7 +148,7 @@ private void RunNUnitLite(string testName, string framework, string directory)
 var testEngineTask = Task("TestEngine")
 	.Description("Tests the TestCentric Engine");
 
-foreach (var runtime in ENGINE_RUNTIMES)
+foreach (var runtime in Parameters.SupportedEngineRuntimes)
 {
 	var task = Task("TestEngine_" + runtime)
 		.Description("Tests the Engine on " + runtime)
@@ -164,7 +156,7 @@ foreach (var runtime in ENGINE_RUNTIMES)
 		.OnError(exception => { ErrorDetail.Add(exception.Message); })
 		.Does(() =>
 		{
-			RunNUnitLite(ENGINE_TESTS, runtime, BIN_DIR + $"engine-tests/{runtime}/");
+			RunNUnitLite("testcentric.engine.tests", runtime, $"{Parameters.OutputDirectory}engine-tests/{runtime}/");
 		});
 
 	testEngineTask.IsDependentOn(task);	
@@ -177,7 +169,7 @@ foreach (var runtime in ENGINE_RUNTIMES)
 var testEngineCoreTask = Task("TestEngineCore")
 	.Description("Tests the TestCentric Engine Core");
 
-foreach (var runtime in ENGINE_CORE_RUNTIMES)
+foreach (var runtime in Parameters.SupportedCoreRuntimes)
 {
 	var task = Task("TestEngineCore_" + runtime)
 		.Description("Tests the Engine Core on " + runtime)
@@ -185,7 +177,7 @@ foreach (var runtime in ENGINE_CORE_RUNTIMES)
 		.OnError(exception => { ErrorDetail.Add(exception.Message); })
 		.Does(() =>
 		{
-			RunNUnitLite(ENGINE_CORE_TESTS, runtime, BIN_DIR + $"engine-tests/{runtime}/");
+			RunNUnitLite("testcentric.engine.core.tests", runtime, $"{Parameters.OutputDirectory}engine-tests/{runtime}/");
 		});
 
 	testEngineCoreTask.IsDependentOn(task);	
@@ -199,9 +191,10 @@ Task("TestGui")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    NUnit3(BIN_DIR + ALL_TESTS, new NUnit3Settings {
-        NoResults = true
-        });
+    NUnit3(
+	    Parameters.OutputDirectory + ALL_TESTS,
+	    new NUnit3Settings { NoResults = true }
+	);
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -217,37 +210,37 @@ var RootFiles = new string[]
 
 var baseFiles = new string[]
 {
-    BIN_DIR + "testcentric.exe",
-    BIN_DIR + "testcentric.exe.config",
-    BIN_DIR + "tc-next.exe",
-    BIN_DIR + "tc-next.exe.config",
-    BIN_DIR + "TestCentric.Common.dll",
-    BIN_DIR + "TestCentric.Gui.Components.dll",
-    BIN_DIR + "TestCentric.Gui.Runner.dll",
-    BIN_DIR + "Experimental.Gui.Runner.dll",
-    BIN_DIR + "nunit.uiexception.dll",
-    BIN_DIR + "TestCentric.Gui.Model.dll",
-    BIN_DIR + "testcentric.engine.api.dll",
-    BIN_DIR + "testcentric.engine.metadata.dll",
-    BIN_DIR + "testcentric.engine.core.dll",
-    BIN_DIR + "testcentric.engine.dll",
-    BIN_DIR + "Mono.Cecil.dll"
+    Parameters.OutputDirectory + "testcentric.exe",
+    Parameters.OutputDirectory + "testcentric.exe.config",
+    Parameters.OutputDirectory + "tc-next.exe",
+    Parameters.OutputDirectory + "tc-next.exe.config",
+    Parameters.OutputDirectory + "TestCentric.Common.dll",
+    Parameters.OutputDirectory + "TestCentric.Gui.Components.dll",
+    Parameters.OutputDirectory + "TestCentric.Gui.Runner.dll",
+    Parameters.OutputDirectory + "Experimental.Gui.Runner.dll",
+    Parameters.OutputDirectory + "nunit.uiexception.dll",
+    Parameters.OutputDirectory + "TestCentric.Gui.Model.dll",
+    Parameters.OutputDirectory + "testcentric.engine.api.dll",
+    Parameters.OutputDirectory + "testcentric.engine.metadata.dll",
+    Parameters.OutputDirectory + "testcentric.engine.core.dll",
+    Parameters.OutputDirectory + "testcentric.engine.dll",
+    Parameters.OutputDirectory + "Mono.Cecil.dll"
 };
 
 var PdbFiles = new string[]
 {
-    BIN_DIR + "testcentric.pdb",
-    BIN_DIR + "tc-next.pdb",
-    BIN_DIR + "TestCentric.Common.pdb",
-    BIN_DIR + "TestCentric.Gui.Components.pdb",
-    BIN_DIR + "TestCentric.Gui.Runner.pdb",
-    BIN_DIR + "Experimental.Gui.Runner.pdb",
-    BIN_DIR + "nunit.uiexception.pdb",
-    BIN_DIR + "TestCentric.Gui.Model.pdb",
-    BIN_DIR + "testcentric.engine.api.pdb",
-    BIN_DIR + "testcentric.engine.metadata.pdb",
-    BIN_DIR + "testcentric.engine.core.pdb",
-    BIN_DIR + "testcentric.engine.pdb",
+    Parameters.OutputDirectory + "testcentric.pdb",
+    Parameters.OutputDirectory + "tc-next.pdb",
+    Parameters.OutputDirectory + "TestCentric.Common.pdb",
+    Parameters.OutputDirectory + "TestCentric.Gui.Components.pdb",
+    Parameters.OutputDirectory + "TestCentric.Gui.Runner.pdb",
+    Parameters.OutputDirectory + "Experimental.Gui.Runner.pdb",
+    Parameters.OutputDirectory + "nunit.uiexception.pdb",
+    Parameters.OutputDirectory + "TestCentric.Gui.Model.pdb",
+    Parameters.OutputDirectory + "testcentric.engine.api.pdb",
+    Parameters.OutputDirectory + "testcentric.engine.metadata.pdb",
+    Parameters.OutputDirectory + "testcentric.engine.core.pdb",
+    Parameters.OutputDirectory + "testcentric.engine.pdb",
 };
 
 //////////////////////////////////////////////////////////////////////
@@ -259,23 +252,23 @@ Task("CreateImage")
     .Description("Copies all files into the image directory")
     .Does(() =>
     {
-        CreateDirectory(PACKAGE_DIR);
+        CreateDirectory("./package");
 
-        CleanDirectory(CurrentImageDir);
-        CopyFiles(RootFiles, CurrentImageDir);
+        CleanDirectory(Parameters.ImageDirectory);
+        CopyFiles(RootFiles, Parameters.ImageDirectory);
 
-        string imageBinDir = CurrentImageDir + "bin/";
+        string imageBinDir = Parameters.ImageDirectory + "bin/";
         CreateDirectory(imageBinDir);
 		CopyFiles(baseFiles, imageBinDir);
-		if (!usingXBuild)
+		if (!Parameters.UsingXBuild)
 			CopyFiles(PdbFiles, imageBinDir);
 
-		CopyDirectory(BIN_DIR + "Images", imageBinDir + "Images");
+		CopyDirectory(Parameters.OutputDirectory + "Images", imageBinDir + "Images");
 
-		foreach (var runtime in AGENT_RUNTIMES)
+		foreach (var runtime in Parameters.SupportedAgentRuntimes)
         {
             var targetDir = imageBinDir + "agents/" + Directory(runtime);
-            var sourceDir = BIN_DIR + "agents/" + Directory(runtime);
+            var sourceDir = Parameters.OutputDirectory + "agents/" + Directory(runtime);
             CopyDirectory(sourceDir, targetDir);
 		}
 
@@ -291,10 +284,10 @@ Task("PackageZip")
     .IsDependentOn("CreateImage")
     .Does(() =>
     {
-		Information("Creating package " + ZipPackage);
+		Information("Creating package " + Parameters.ZipPackage);
 
-        var zipFiles = GetFiles(CurrentImageDir + "**/*.*");
-        Zip(CurrentImageDir, File(ZipPackage), zipFiles);
+        var zipFiles = GetFiles(Parameters.ImageDirectory + "**/*.*");
+        Zip(Parameters.ImageDirectory, File(Parameters.ZipPackage), zipFiles);
     });
 
 //////////////////////////////////////////////////////////////////////
@@ -305,15 +298,15 @@ Task("PackageNuGet")
 	.IsDependentOn("CreateImage")
 	.Does(() =>
 	{
-		Information("Creating package " + NuGetPackage);
+		Information("Creating package " + Parameters.NuGetPackage);
 
         var content = new List<NuSpecContent>();
-		int index = CurrentImageDir.Length;
+		int index = Parameters.ImageDirectory.Length;
 
-		foreach (var file in GetFiles(CurrentImageDir + "**/*.*"))
+		foreach (var file in GetFiles(Parameters.ImageDirectory + "**/*.*"))
 		{
 			var source = file.FullPath;
-			var target = System.IO.Path.GetDirectoryName(file.FullPath.Substring(index));
+			var target = System.IO.Path.GetDirectoryName(source.Substring(index));
 
 			if (target == "bin")
 				target = "tools";
@@ -324,17 +317,17 @@ Task("PackageNuGet")
 		}
 
 		// Icon goes in the root
-		content.Add(new NuSpecContent() { Source = PROJECT_DIR + "testcentric.png" });
+		content.Add(new NuSpecContent() { Source = "../testcentric.png" });
 
 		// Use addins file tailored for nuget install
-		content.Add(new NuSpecContent() { Source = NUGET_DIR + "testcentric-gui.addins", Target = "tools" });
-		foreach (string runtime in AGENT_RUNTIMES)
-			content.Add(new NuSpecContent() {Source = NUGET_DIR + "testcentric-agent.addins", Target = $"tools/agents/{runtime}" }); 
+		content.Add(new NuSpecContent() { Source = "testcentric-gui.addins", Target = "tools" });
+		foreach (string runtime in Parameters.SupportedAgentRuntimes)
+			content.Add(new NuSpecContent() {Source = "testcentric-agent.addins", Target = $"tools/agents/{runtime}" }); 
 
-        NuGetPack(NUGET_DIR + NUGET_PACKAGE_NAME + ".nuspec", new NuGetPackSettings()
+        NuGetPack($"{Parameters.NuGetDirectory}/{NUGET_PACKAGE_NAME}.nuspec", new NuGetPackSettings()
         {
-            Version = packageVersion,
-            OutputDirectory = PACKAGE_DIR,
+            Version = Parameters.PackageVersion,
+            OutputDirectory = Parameters.PackageDirectory,
             NoPackageAnalysis = true,
 			Files = content
         });
@@ -348,12 +341,12 @@ Task("PackageChocolatey")
     .IsDependentOn("CreateImage")
     .Does(() =>
     {
-		Information("Creating package " + ChocolateyPackage);
+		Information("Creating package " + Parameters.ChocolateyPackage);
 
         var content = new List<ChocolateyNuSpecContent>();
-		int index = CurrentImageDir.Length;
+		int index = Parameters.ImageDirectory.Length;
 
-		foreach (var file in GetFiles(CurrentImageDir + "**/*.*"))
+		foreach (var file in GetFiles(Parameters.ImageDirectory + "**/*.*"))
 		{
 			var source = file.FullPath;
 			var target = System.IO.Path.GetDirectoryName(file.FullPath.Substring(index));
@@ -368,17 +361,17 @@ Task("PackageChocolatey")
 
 		content.AddRange(new ChocolateyNuSpecContent[]
 		{
-			new ChocolateyNuSpecContent() { Source = CHOCO_DIR + "VERIFICATION.txt", Target = "tools" },
-			new ChocolateyNuSpecContent() { Source = CHOCO_DIR + "testcentric-agent.exe.ignore", Target = "tools" },
-			new ChocolateyNuSpecContent() { Source = CHOCO_DIR + "testcentric-agent-x86.exe.ignore", Target = "tools" },
-			new ChocolateyNuSpecContent() { Source = CHOCO_DIR + "testcentric.choco.addins", Target = "tools" }
+			new ChocolateyNuSpecContent() { Source = "VERIFICATION.txt", Target = "tools" },
+			new ChocolateyNuSpecContent() { Source = "testcentric-agent.exe.ignore", Target = "tools" },
+			new ChocolateyNuSpecContent() { Source = "testcentric-agent-x86.exe.ignore", Target = "tools" },
+			new ChocolateyNuSpecContent() { Source = "testcentric.choco.addins", Target = "tools" }
 		});
 			
-		ChocolateyPack(CHOCO_DIR + PACKAGE_NAME + ".nuspec", 
+		ChocolateyPack($"{Parameters.ChocoDirectory}/{PACKAGE_NAME}.nuspec", 
             new ChocolateyPackSettings()
             {
-                Version = packageVersion,
-                OutputDirectory = PACKAGE_DIR,
+                Version = Parameters.PackageVersion,
+                OutputDirectory = Parameters.PackageDirectory,
                 Files = content
             });
     });
@@ -391,14 +384,14 @@ Task("TestZipPackage")
 	.IsDependentOn("PackageZip")
 	.Does(() =>
 	{
-		Information("Testing package " + ZipPackage);
+		Information("Testing package " + Parameters.ZipPackage);
 
-		CleanDirectory(ZIP_TEST_DIR);
+		CleanDirectory(Parameters.ZipTestDirectory);
 
-		Unzip(File(ZipPackage), ZIP_TEST_DIR);
-		CopyTestFiles(BIN_DIR, ZIP_TEST_DIR + "bin/");
+		Unzip(File(Parameters.ZipPackage), Parameters.ZipTestDirectory);
+		CopyTestFiles(Parameters.OutputDirectory, Parameters.ZipTestDirectory + "bin/");
 
-		NUnit3(ZIP_TEST_DIR + "bin/" + ALL_TESTS);
+		NUnit3(Parameters.ZipTestDirectory + MODEL_TESTS);
 	});
 
 //////////////////////////////////////////////////////////////////////
@@ -409,27 +402,17 @@ Task("TestNuGetPackage")
 	.IsDependentOn("PackageNuGet")
 	.Does(() =>
 	{
-		Information("Testing package " + NuGetPackage);
+		Information("Testing package " + Parameters.NuGetPackage);
 
-		CleanDirectory(NUGET_TEST_DIR);
-		Unzip(File(NuGetPackage), NUGET_TEST_DIR);
+		CleanDirectory(Parameters.NuGetTestDirectory);
+		Unzip(File(Parameters.NuGetPackage), Parameters.NuGetTestDirectory);
 
-		CheckNuGetContent(NUGET_TEST_DIR);
+		CheckNuGetContent(Parameters.NuGetTestDirectory);
 
-		CopyTestFiles(BIN_DIR, NUGET_TEST_DIR + "tools/");
+		CopyTestFiles(Parameters.OutputDirectory, Parameters.NuGetTestDirectory + "tools/");
 
-		NUnit3(NUGET_TEST_DIR + "tools/" + ALL_TESTS);
+		NUnit3(Parameters.NuGetTestDirectory + "tools/" + MODEL_TESTS);
 	});
-
-private void CheckNuGetContent(string nugetDir)
-{
-	if (!DirectoryExists(nugetDir))
-		throw new Exception($"Directory {nugetDir} not found!");
-		
-	string addinsFile = nugetDir + "tools/testcentric-gui.addins";
-	if (!FileExists(addinsFile))
-		throw new Exception($"File {addinsFile} not found in the package.");
-}
 
 //////////////////////////////////////////////////////////////////////
 // CHOCOLATEY PACKAGE TEST
@@ -439,14 +422,14 @@ Task("TestChocolateyPackage")
 	.IsDependentOn("PackageChocolatey")
 	.Does(() =>
 	{
-		Information("Testing package " + ChocolateyPackage);
+		Information("Testing package " + Parameters.ChocolateyPackage);
 
-		CleanDirectory(CHOCO_TEST_DIR);
+		CleanDirectory(Parameters.ChocolateyTestDirectory);
 
-		Unzip(File(ChocolateyPackage), CHOCO_TEST_DIR);
-		CopyTestFiles(BIN_DIR, CHOCO_TEST_DIR + "tools/");
+		Unzip(File(Parameters.ChocolateyPackage), Parameters.ChocolateyTestDirectory);
+		CopyTestFiles(Parameters.OutputDirectory, Parameters.ChocolateyTestDirectory + "tools/");
 
-		NUnit3(CHOCO_TEST_DIR + "tools/" + ALL_TESTS);
+		NUnit3(Parameters.ChocolateyTestDirectory + "tools/" + MODEL_TESTS);
 	});
 
 //////////////////////////////////////////////////////////////////////
@@ -456,69 +439,21 @@ Task("TestChocolateyPackage")
 Task("PublishToMyGet")
 	.Does(() =>
 	{
-		PublishToMyGet(NuGetPackage);
-		PublishToMyGet(ChocolateyPackage);
+		PublishToMyGet(Parameters.NuGetPackage);
+		PublishToMyGet(Parameters.ChocolateyPackage);
 	});
 
 Task("PublishToNuGet")
 	.Does(() =>
 	{
-		PublishToNuGet(NuGetPackage);
+		PublishToNuGet(Parameters.NuGetPackage);
 	});
 
 Task("PublishToChocolatey")
 	.Does(() =>
 	{
-		PublishToChocolatey(ChocolateyPackage);
+		PublishToChocolatey(Parameters.ChocolateyPackage);
 	});
-
-	string MYGET_API_KEY = EnvironmentVariable("MYGET_API_KEY");
-	string MYGET_PUSH_URL = "https://www.myget.org/F/testcentric/api/v2";
-	string NUGET_API_KEY = EnvironmentVariable("NUGET_API_KEY");
-	string NUGET_PUSH_URL = "https://api.nuget.org/v3/index.json";
-	string CHOCO_API_KEY = EnvironmentVariable("CHOCO_API_KEY");
-	string CHOCO_PUSH_URL = "https://push.chocolatey.org/";
-
-	private void PublishToMyGet(string packageName)
-	{
-		EnsurePackageExists(packageName);
-
-		Information($"Publishing {packageName} to myget.org.");
-		NuGetPush(packageName, new NuGetPushSettings() { ApiKey=MYGET_API_KEY, Source=MYGET_PUSH_URL });
-	}
-
-	private void PublishToNuGet(string packageName)
-	{
-		EnsurePackageExists(packageName);
-
-		Information($"Publishing {packageName} to nuget.org.");
-		NuGetPush(packageName, new NuGetPushSettings() { ApiKey=NUGET_API_KEY, Source=NUGET_PUSH_URL });
-	}
-
-	private void PublishToChocolatey(string packageName)
-	{
-		EnsurePackageExists(packageName);
-		EnsureKeyIsSet(CHOCO_API_KEY);
-
-		Information($"Publishing {packageName} to chocolatey.");
-		ChocolateyPush(packageName, new ChocolateyPushSettings() { ApiKey=CHOCO_API_KEY, Source=CHOCO_PUSH_URL });
-	}
-
-	private void EnsurePackageExists(string path)
-	{
-		if (!FileExists(path))
-		{
-			var packageName = System.IO.Path.GetFileName(path);
-			throw new InvalidOperationException(
-			  $"Package not found: {packageName}.\nCode may have changed since package was last built.");
-		}
-	}
-
-	private void EnsureKeyIsSet(string apiKey)
-	{
-		if (string.IsNullOrEmpty(apiKey))
-			throw new InvalidOperationException("The Api Key has not been set.");
-	}
 
 //////////////////////////////////////////////////////////////////////
 // INTERACTIVE TESTS FOR USE IN DEVELOPMENT
@@ -532,7 +467,9 @@ Task("GuiTest")
     .IsDependentOn("Build")
     .Does(() =>
 {
-		StartProcess(BIN_DIR + GUI_RUNNER, BIN_DIR + GUI_TESTS + " --run");
+		StartProcess(
+		  Parameters.OutputDirectory + GUI_RUNNER, 
+		  Parameters.OutputDirectory + GUI_TESTS + " --run");
 		CheckTestResult("TestResult.xml");
 });
 
@@ -544,7 +481,9 @@ Task("ExperimentalGuiTest")
     .IsDependentOn("Build")
     .Does(() =>
 {
-		StartProcess(BIN_DIR + EXPERIMENTAL_RUNNER, BIN_DIR + EXPERIMENTAL_TESTS + " --run");
+		StartProcess(
+		  Parameters.OutputDirectory + EXPERIMENTAL_RUNNER, 
+		  Parameters.OutputDirectory + EXPERIMENTAL_TESTS + " --run");
 		CheckTestResult("TestResult.xml");
 });
 
@@ -556,12 +495,16 @@ Task("ZipGuiTest")
 	.IsDependentOn("PackageZip")
 	.Does(() =>
 	{
-		CleanDirectory(ZIP_TEST_DIR);
+		var testDir = Parameters.ZipTestDirectory;
+		CleanDirectory(testDir);
 
-		Unzip(File(ZipPackage), ZIP_TEST_DIR);
-		CopyTestFiles(BIN_DIR, ZIP_TEST_DIR + "tools/");
+		Unzip(File(Parameters.ZipPackage), testDir);
+		CopyTestFiles(Parameters.OutputDirectory, testDir + "tools/");
 
-		StartProcess(ZIP_TEST_DIR + GUI_RUNNER, ZIP_TEST_DIR + GUI_TESTS + " --run");
+		StartProcess(
+		  testDir + GUI_RUNNER, 
+		  testDir + GUI_TESTS + " --run");
+
 		CheckTestResult("TestResult.xml");
 	});
 
@@ -573,12 +516,15 @@ Task("ZipExperimentalGuiTest")
 	.IsDependentOn("PackageZip")
 	.Does(() =>
 	{
-		CleanDirectory(ZIP_TEST_DIR);
+		CleanDirectory(Parameters.ZipTestDirectory);
 
-		Unzip(File(PACKAGE_DIR + "TestCentric.GuiRunner-" + packageVersion + ".nupkg"), ZIP_TEST_DIR);
-		CopyTestFiles(BIN_DIR, ZIP_TEST_DIR + "tools/");
+		Unzip(File(Parameters.NuGetPackage), Parameters.ZipTestDirectory);
+		CopyTestFiles(Parameters.OutputDirectory, Parameters.ZipTestDirectory + "tools/");
 
-		StartProcess(ZIP_TEST_DIR + EXPERIMENTAL_RUNNER, ZIP_TEST_DIR + EXPERIMENTAL_TESTS + " --run");
+		StartProcess(
+		  Parameters.ZipTestDirectory + EXPERIMENTAL_RUNNER,
+		  Parameters.ZipTestDirectory + EXPERIMENTAL_TESTS + " --run");
+
 		CheckTestResult("TestResult.xml");
 	});
 
@@ -589,7 +535,7 @@ Task("ZipExperimentalGuiTest")
 Task("ChocolateyInstall")
 	.Does(() =>
 	{
-		if (StartProcess("choco", $"install -f -y -s {PACKAGE_DIR} {PACKAGE_NAME}") != 0)
+		if (StartProcess("choco", $"install -f -y -s {Parameters.PackageDirectory} {PACKAGE_NAME}") != 0)
 			throw new Exception("Failed to install package. Must run this command as administrator.");
 	});
 
@@ -601,59 +547,20 @@ Task("ChocolateyTest")
 	.IsDependentOn("PackageChocolatey")
 	.Does(() =>
 	{
-		CleanDirectory(CHOCO_TEST_DIR);
+		var testDir = Parameters.ChocolateyTestDirectory;
+		CleanDirectory(testDir);
 
-		Unzip(File(ChocolateyPackage), CHOCO_TEST_DIR);
-		CopyTestFiles(BIN_DIR, CHOCO_TEST_DIR + "tools/");
+		Unzip(File(Parameters.ChocolateyPackage), testDir);
+		CopyTestFiles(Parameters.OutputDirectory, testDir + "tools/");
 
 		// TODO: When starting the commands that chocolatey has shimmed, the StartProcess
 		// call returns immediately, so we can't check the test result. For now, we just
 		// run the tests and inspect manually but we need to figure out how to wait for
 		// the process to complete.
-		StartProcess("testcentric", CHOCO_TEST_DIR + "TestCentric.Gui.Tests.dll --run");
-		StartProcess("tc-next", CHOCO_TEST_DIR + "Experimental.Gui.Tests.dll --run");
+		StartProcess(GUI_RUNNER, testDir + GUI_TESTS + " --run");
+		StartProcess(EXPERIMENTAL_RUNNER, testDir + EXPERIMENTAL_TESTS + " --run");
 		//CheckTestResult("TestResult.xml");
 	});
-
-//////////////////////////////////////////////////////////////////////
-// HELPER METHODS - TESTS
-//////////////////////////////////////////////////////////////////////
-
-// Copy all files needed to run tests from one directory to another
-private void CopyTestFiles(string fromDir, string toDir)
-{
-	CopyFiles(fromDir + "*.Tests.*", toDir);
-	CopyFiles(fromDir + "nunit.framework.*", toDir);
-	CopyFiles(fromDir + "mock-assembly.*", toDir);
-	CopyFiles(fromDir + "test-utilities.*", toDir);
-	CopyFiles(fromDir + "System.Threading.Tasks.*", toDir);
-	CopyFiles(fromDir + "NSubstitute.*", toDir);
-	CopyFiles(fromDir + "Castle.Core.*", toDir);
-}
-
-// Examine the result file to make sure a test run passed
-private void CheckTestResult(string resultFile)
-{
-	var doc = new XmlDocument();
-	doc.Load(resultFile);
-
-	XmlNode testRun = doc.DocumentElement;
-	if (testRun.Name != "test-run")
-		throw new Exception("The test-run element was not found.");
-
-	string result = testRun.Attributes["result"]?.Value;
-	if (result == null)
-		throw new Exception("The test-run element has no result attribute.");
-
-	if (result == "Failed")
-	{
-		string msg = "The test run failed.";
-		string failed = testRun.Attributes["failed"]?.Value;
-		if (failed != null)
-			msg += $" {int.Parse(failed)} tests failed";
-		throw new Exception(msg);
-	}
-}
 
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
@@ -700,4 +607,4 @@ Task("Default")
 // EXECUTION
 //////////////////////////////////////////////////////////////////////
 
-RunTarget(target);
+RunTarget(Parameters.Target);
