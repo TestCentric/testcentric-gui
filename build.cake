@@ -25,67 +25,22 @@ const string MODEL_TESTS = "TestCentric.Gui.Model.Tests.dll";
 const string ALL_TESTS = "*.Tests.dll";
 
 //////////////////////////////////////////////////////////////////////
-// BUILD PARAMETERS
-//////////////////////////////////////////////////////////////////////
-
-var Parameters = new BuildParameters(Context);
-
-//////////////////////////////////////////////////////////////////////
 // SETUP AND TEARDOWN
 //////////////////////////////////////////////////////////////////////
 
-Setup(context =>
+BuildParameters Parameters;
+
+Setup<BuildParameters>((context) =>
 {
-	// TODO: Make GitVersion work on Linux
-	if (IsRunningOnWindows())
-	{
-		var gitVersion = GitVersion();
+	var parameters = new BuildParameters(context);
 
-		Information("GitVersion Properties:");
 
-		string branchName = gitVersion.BranchName;
-		// We don't currently use this pattern, but check in case we do later.
-		if (branchName.StartsWith ("feature/"))
-			branchName = branchName.Substring(8);
+	if (BuildSystem.IsRunningOnAppVeyor)
+			AppVeyor.UpdateBuildVersion(parameters.PackageVersion + "-" + AppVeyor.Environment.Build.Number);
 
-		// Default based on GitVersion.yml. This gives us a tag of dev
-		// for master, ci for features, pr for pull requests and rc
-		// for release branches.
-		Parameters.PackageVersion = gitVersion.LegacySemVerPadded;
+    Information("Building {0} version {1} of TestCentric GUI.", parameters.Configuration, parameters.PackageVersion);
 
-		// Full release versions and PRs need no further handling
-		int dash = Parameters.PackageVersion.IndexOf('-');
-		bool isPreRelease = dash > 0;
-
-		string label = gitVersion.PreReleaseLabel;
-		bool isPR = label == "pr"; // Set in our GitVersion.yml
-
-		if (isPreRelease && !isPR)
-		{
-			// This handles non-standard branch names.
-			if (label == branchName)
-				label = "ci";
-
-			string suffix = "-" + label + gitVersion.CommitsSinceVersionSourcePadded;
-
-			if (label == "ci")
-			{
-				branchName = Regex.Replace(branchName, "[^0-9A-Za-z-]+", "-");
-				suffix += "-" + branchName;
-			}
-
-			// Nuget limits "special version part" to 20 chars. Add one for the hyphen.
-			if (suffix.Length > 21)
-				suffix = suffix.Substring(0, 21);
-
-			Parameters.PackageVersion = gitVersion.MajorMinorPatch + suffix;
-		}
-
-		if (BuildSystem.IsRunningOnAppVeyor)
-			AppVeyor.UpdateBuildVersion(Parameters.PackageVersion + "-" + AppVeyor.Environment.Build.Number);
-	}
-
-    Information("Building {0} version {1} of TestCentric GUI.", Parameters.Configuration, Parameters.PackageVersion);
+	return parameters;
 });
 
 // If we run target Test, we catch errors here in teardown.
@@ -97,9 +52,9 @@ Teardown(context => CheckTestErrors(ref ErrorDetail));
 //////////////////////////////////////////////////////////////////////
 
 Task("Clean")
-    .Does(() =>
+    .Does<BuildParameters>((parameters) =>
 {
-    CleanDirectory(Parameters.OutputDirectory);
+    CleanDirectory(parameters.OutputDirectory);
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -107,9 +62,9 @@ Task("Clean")
 //////////////////////////////////////////////////////////////////////
 
 Task("RestorePackages")
-    .Does(() =>
+    .Does<BuildParameters>((parameters) =>
 {
-    NuGetRestore(SOLUTION, Parameters.RestoreSettings);
+    NuGetRestore(SOLUTION, parameters.RestoreSettings);
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -119,16 +74,12 @@ Task("RestorePackages")
 Task("Build")
 	.IsDependentOn("Clean")
     .IsDependentOn("RestorePackages")
-    .Does(() =>
+    .Does<BuildParameters>((parameters) =>
 {
-    if(Parameters.UsingXBuild)
-    {
-        XBuild(SOLUTION, Parameters.XBuildSettings);
-    }
+    if(parameters.UsingXBuild)
+        XBuild(SOLUTION, parameters.XBuildSettings);
     else
-    {
-        MSBuild(SOLUTION, Parameters.MSBuildSettings);
-    }
+        MSBuild(SOLUTION, parameters.MSBuildSettings);
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -145,43 +96,25 @@ Task("CheckTestErrors")
 // TESTS OF TESTCENTRIC.ENGINE
 //////////////////////////////////////////////////////////////////////
 
-var testEngineTask = Task("TestEngine")
-	.Description("Tests the TestCentric Engine");
-
-foreach (var runtime in Parameters.SupportedEngineRuntimes)
-{
-	var task = Task("TestEngine_" + runtime)
-		.Description("Tests the Engine on " + runtime)
-		.IsDependentOn("Build")
-		.OnError(exception => { ErrorDetail.Add(exception.Message); })
-		.Does(() =>
-		{
-			RunNUnitLite("testcentric.engine.tests", runtime, $"{Parameters.OutputDirectory}engine-tests/{runtime}/");
-		});
-
-	testEngineTask.IsDependentOn(task);	
-}
+Task("TestEngine")
+	.Description("Tests the TestCentric Engine")
+	.Does<BuildParameters>((parameters) =>
+	{
+		foreach (var runtime in parameters.SupportedEngineRuntimes)
+			RunNUnitLite("testcentric.engine.tests", runtime, $"{parameters.OutputDirectory}engine-tests/{runtime}/");
+	});
 
 //////////////////////////////////////////////////////////////////////
 // TESTS OF TESTCENTRIC.ENGINE.CORE
 //////////////////////////////////////////////////////////////////////
 
-var testEngineCoreTask = Task("TestEngineCore")
-	.Description("Tests the TestCentric Engine Core");
-
-foreach (var runtime in Parameters.SupportedCoreRuntimes)
-{
-	var task = Task("TestEngineCore_" + runtime)
-		.Description("Tests the Engine Core on " + runtime)
-		.IsDependentOn("Build")
-		.OnError(exception => { ErrorDetail.Add(exception.Message); })
-		.Does(() =>
-		{
-			RunNUnitLite("testcentric.engine.core.tests", runtime, $"{Parameters.OutputDirectory}engine-tests/{runtime}/");
-		});
-
-	testEngineCoreTask.IsDependentOn(task);	
-}
+Task("TestEngineCore")
+	.Description("Tests the TestCentric Engine Core")
+	.Does<BuildParameters>((parameters) =>
+	{
+		foreach (var runtime in parameters.SupportedCoreRuntimes)
+			RunNUnitLite("testcentric.engine.core.tests", runtime, $"{parameters.OutputDirectory}engine-tests/{runtime}/");
+	});
 
 //////////////////////////////////////////////////////////////////////
 // TESTS OF THE GUI
@@ -189,13 +122,13 @@ foreach (var runtime in Parameters.SupportedCoreRuntimes)
 
 Task("TestGui")
     .IsDependentOn("Build")
-    .Does(() =>
-{
-    NUnit3(
-	    Parameters.OutputDirectory + ALL_TESTS,
-	    new NUnit3Settings { NoResults = true }
-	);
-});
+    .Does<BuildParameters>((parameters) =>
+	{
+		NUnit3(
+			parameters.OutputDirectory + ALL_TESTS,
+			new NUnit3Settings { NoResults = true }
+		);
+	});
 
 //////////////////////////////////////////////////////////////////////
 // PACKAGING
@@ -210,37 +143,37 @@ var RootFiles = new string[]
 
 var baseFiles = new string[]
 {
-    Parameters.OutputDirectory + "testcentric.exe",
-    Parameters.OutputDirectory + "testcentric.exe.config",
-    Parameters.OutputDirectory + "tc-next.exe",
-    Parameters.OutputDirectory + "tc-next.exe.config",
-    Parameters.OutputDirectory + "TestCentric.Common.dll",
-    Parameters.OutputDirectory + "TestCentric.Gui.Components.dll",
-    Parameters.OutputDirectory + "TestCentric.Gui.Runner.dll",
-    Parameters.OutputDirectory + "Experimental.Gui.Runner.dll",
-    Parameters.OutputDirectory + "nunit.uiexception.dll",
-    Parameters.OutputDirectory + "TestCentric.Gui.Model.dll",
-    Parameters.OutputDirectory + "testcentric.engine.api.dll",
-    Parameters.OutputDirectory + "testcentric.engine.metadata.dll",
-    Parameters.OutputDirectory + "testcentric.engine.core.dll",
-    Parameters.OutputDirectory + "testcentric.engine.dll",
-    Parameters.OutputDirectory + "Mono.Cecil.dll"
+    "testcentric.exe",
+    "testcentric.exe.config",
+    "tc-next.exe",
+    "tc-next.exe.config",
+    "TestCentric.Common.dll",
+    "TestCentric.Gui.Components.dll",
+    "TestCentric.Gui.Runner.dll",
+    "Experimental.Gui.Runner.dll",
+    "nunit.uiexception.dll",
+    "TestCentric.Gui.Model.dll",
+    "testcentric.engine.api.dll",
+    "testcentric.engine.metadata.dll",
+    "testcentric.engine.core.dll",
+    "testcentric.engine.dll",
+    "Mono.Cecil.dll"
 };
 
 var PdbFiles = new string[]
 {
-    Parameters.OutputDirectory + "testcentric.pdb",
-    Parameters.OutputDirectory + "tc-next.pdb",
-    Parameters.OutputDirectory + "TestCentric.Common.pdb",
-    Parameters.OutputDirectory + "TestCentric.Gui.Components.pdb",
-    Parameters.OutputDirectory + "TestCentric.Gui.Runner.pdb",
-    Parameters.OutputDirectory + "Experimental.Gui.Runner.pdb",
-    Parameters.OutputDirectory + "nunit.uiexception.pdb",
-    Parameters.OutputDirectory + "TestCentric.Gui.Model.pdb",
-    Parameters.OutputDirectory + "testcentric.engine.api.pdb",
-    Parameters.OutputDirectory + "testcentric.engine.metadata.pdb",
-    Parameters.OutputDirectory + "testcentric.engine.core.pdb",
-    Parameters.OutputDirectory + "testcentric.engine.pdb",
+    "testcentric.pdb",
+    "tc-next.pdb",
+    "TestCentric.Common.pdb",
+    "TestCentric.Gui.Components.pdb",
+    "TestCentric.Gui.Runner.pdb",
+    "Experimental.Gui.Runner.pdb",
+    "nunit.uiexception.pdb",
+    "TestCentric.Gui.Model.pdb",
+    "testcentric.engine.api.pdb",
+    "testcentric.engine.metadata.pdb",
+    "testcentric.engine.core.pdb",
+    "testcentric.engine.pdb",
 };
 
 //////////////////////////////////////////////////////////////////////
@@ -250,25 +183,33 @@ var PdbFiles = new string[]
 Task("CreateImage")
 	.IsDependentOn("Build")
     .Description("Copies all files into the image directory")
-    .Does(() =>
+    .Does<BuildParameters>((parameters) =>
     {
-        CreateDirectory("./package");
+        CreateDirectory(parameters.PackageDirectory);
 
-        CleanDirectory(Parameters.ImageDirectory);
-        CopyFiles(RootFiles, Parameters.ImageDirectory);
+		string imageDir = parameters.ImageDirectory;
+		string imageBinDir = imageDir + "bin/";
 
-        string imageBinDir = Parameters.ImageDirectory + "bin/";
+        CleanDirectory(imageDir);
+
+		//CreatePackageImage(imageDir);
+        CopyFiles(RootFiles, imageDir);
+
         CreateDirectory(imageBinDir);
-		CopyFiles(baseFiles, imageBinDir);
-		if (!Parameters.UsingXBuild)
-			CopyFiles(PdbFiles, imageBinDir);
 
-		CopyDirectory(Parameters.OutputDirectory + "Images", imageBinDir + "Images");
+		var copyFiles = new List<string>(baseFiles);
+		if (!parameters.UsingXBuild)
+			copyFiles.AddRange(PdbFiles);
 
-		foreach (var runtime in Parameters.SupportedAgentRuntimes)
+		foreach (string file in copyFiles)
+			CopyFileToDirectory(parameters.OutputDirectory + file, imageBinDir);
+
+		CopyDirectory(parameters.OutputDirectory + "Images", imageBinDir + "Images");
+
+		foreach (var runtime in parameters.SupportedAgentRuntimes)
         {
             var targetDir = imageBinDir + "agents/" + Directory(runtime);
-            var sourceDir = Parameters.OutputDirectory + "agents/" + Directory(runtime);
+            var sourceDir = parameters.OutputDirectory + "agents/" + Directory(runtime);
             CopyDirectory(sourceDir, targetDir);
 		}
 
@@ -282,12 +223,12 @@ Task("CreateImage")
 
 Task("PackageZip")
     .IsDependentOn("CreateImage")
-    .Does(() =>
+    .Does<BuildParameters>((parameters) =>
     {
-		Information("Creating package " + Parameters.ZipPackage);
+		Information("Creating package " + parameters.ZipPackage);
 
-        var zipFiles = GetFiles(Parameters.ImageDirectory + "**/*.*");
-        Zip(Parameters.ImageDirectory, File(Parameters.ZipPackage), zipFiles);
+        var zipFiles = GetFiles(parameters.ImageDirectory + "**/*.*");
+        Zip(parameters.ImageDirectory, parameters.ZipPackage, zipFiles);
     });
 
 //////////////////////////////////////////////////////////////////////
@@ -296,14 +237,14 @@ Task("PackageZip")
 
 Task("PackageNuGet")
 	.IsDependentOn("CreateImage")
-	.Does(() =>
+	.Does<BuildParameters>((parameters) =>
 	{
-		Information("Creating package " + Parameters.NuGetPackage);
+		Information("Creating package " + parameters.NuGetPackage);
 
         var content = new List<NuSpecContent>();
-		int index = Parameters.ImageDirectory.Length;
+		int index = parameters.ImageDirectory.Length;
 
-		foreach (var file in GetFiles(Parameters.ImageDirectory + "**/*.*"))
+		foreach (var file in GetFiles(parameters.ImageDirectory + "**/*.*"))
 		{
 			var source = file.FullPath;
 			var target = System.IO.Path.GetDirectoryName(source.Substring(index));
@@ -321,13 +262,13 @@ Task("PackageNuGet")
 
 		// Use addins file tailored for nuget install
 		content.Add(new NuSpecContent() { Source = "testcentric-gui.addins", Target = "tools" });
-		foreach (string runtime in Parameters.SupportedAgentRuntimes)
+		foreach (string runtime in parameters.SupportedAgentRuntimes)
 			content.Add(new NuSpecContent() {Source = "testcentric-agent.addins", Target = $"tools/agents/{runtime}" }); 
 
-        NuGetPack($"{Parameters.NuGetDirectory}/{NUGET_PACKAGE_NAME}.nuspec", new NuGetPackSettings()
+        NuGetPack($"{parameters.NuGetDirectory}/{NUGET_PACKAGE_NAME}.nuspec", new NuGetPackSettings()
         {
-            Version = Parameters.PackageVersion,
-            OutputDirectory = Parameters.PackageDirectory,
+            Version = parameters.PackageVersion,
+            OutputDirectory = parameters.PackageDirectory,
             NoPackageAnalysis = true,
 			Files = content
         });
@@ -339,14 +280,14 @@ Task("PackageNuGet")
 
 Task("PackageChocolatey")
     .IsDependentOn("CreateImage")
-    .Does(() =>
+    .Does<BuildParameters>((parameters) =>
     {
-		Information("Creating package " + Parameters.ChocolateyPackage);
+		Information("Creating package " + parameters.ChocolateyPackage);
 
         var content = new List<ChocolateyNuSpecContent>();
-		int index = Parameters.ImageDirectory.Length;
+		int index = parameters.ImageDirectory.Length;
 
-		foreach (var file in GetFiles(Parameters.ImageDirectory + "**/*.*"))
+		foreach (var file in GetFiles(parameters.ImageDirectory + "**/*.*"))
 		{
 			var source = file.FullPath;
 			var target = System.IO.Path.GetDirectoryName(file.FullPath.Substring(index));
@@ -367,11 +308,11 @@ Task("PackageChocolatey")
 			new ChocolateyNuSpecContent() { Source = "testcentric.choco.addins", Target = "tools" }
 		});
 			
-		ChocolateyPack($"{Parameters.ChocoDirectory}/{PACKAGE_NAME}.nuspec", 
+		ChocolateyPack($"{parameters.ChocoDirectory}/{PACKAGE_NAME}.nuspec", 
             new ChocolateyPackSettings()
             {
-                Version = Parameters.PackageVersion,
-                OutputDirectory = Parameters.PackageDirectory,
+                Version = parameters.PackageVersion,
+                OutputDirectory = parameters.PackageDirectory,
                 Files = content
             });
     });
@@ -382,16 +323,16 @@ Task("PackageChocolatey")
 
 Task("TestZipPackage")
 	.IsDependentOn("PackageZip")
-	.Does(() =>
+	.Does<BuildParameters>((parameters) =>
 	{
-		Information("Testing package " + Parameters.ZipPackage);
+		Information("Testing package " + parameters.ZipPackage);
 
-		CleanDirectory(Parameters.ZipTestDirectory);
+		CleanDirectory(parameters.ZipTestDirectory);
 
-		Unzip(File(Parameters.ZipPackage), Parameters.ZipTestDirectory);
-		CopyTestFiles(Parameters.OutputDirectory, Parameters.ZipTestDirectory + "bin/");
+		Unzip(parameters.ZipPackage, parameters.ZipTestDirectory);
+		CopyTestFiles(parameters.OutputDirectory, parameters.ZipTestDirectory + "bin/");
 
-		NUnit3(Parameters.ZipTestDirectory + MODEL_TESTS);
+		NUnit3(parameters.ZipTestDirectory + MODEL_TESTS);
 	});
 
 //////////////////////////////////////////////////////////////////////
@@ -400,18 +341,18 @@ Task("TestZipPackage")
 
 Task("TestNuGetPackage")
 	.IsDependentOn("PackageNuGet")
-	.Does(() =>
+	.Does<BuildParameters>((parameters) =>
 	{
-		Information("Testing package " + Parameters.NuGetPackage);
+		Information("Testing package " + parameters.NuGetPackage);
 
-		CleanDirectory(Parameters.NuGetTestDirectory);
-		Unzip(File(Parameters.NuGetPackage), Parameters.NuGetTestDirectory);
+		CleanDirectory(parameters.NuGetTestDirectory);
+		Unzip(parameters.NuGetPackage, parameters.NuGetTestDirectory);
 
-		CheckNuGetContent(Parameters.NuGetTestDirectory);
+		CheckNuGetContent(parameters.NuGetTestDirectory);
 
-		CopyTestFiles(Parameters.OutputDirectory, Parameters.NuGetTestDirectory + "tools/");
+		CopyTestFiles(parameters.OutputDirectory, parameters.NuGetTestDirectory + "tools/");
 
-		NUnit3(Parameters.NuGetTestDirectory + "tools/" + MODEL_TESTS);
+		NUnit3(parameters.NuGetTestDirectory + "tools/" + MODEL_TESTS);
 	});
 
 //////////////////////////////////////////////////////////////////////
@@ -420,16 +361,16 @@ Task("TestNuGetPackage")
 
 Task("TestChocolateyPackage")
 	.IsDependentOn("PackageChocolatey")
-	.Does(() =>
+	.Does<BuildParameters>((parameters) =>
 	{
-		Information("Testing package " + Parameters.ChocolateyPackage);
+		Information("Testing package " + parameters.ChocolateyPackage);
 
-		CleanDirectory(Parameters.ChocolateyTestDirectory);
+		CleanDirectory(parameters.ChocolateyTestDirectory);
 
-		Unzip(File(Parameters.ChocolateyPackage), Parameters.ChocolateyTestDirectory);
-		CopyTestFiles(Parameters.OutputDirectory, Parameters.ChocolateyTestDirectory + "tools/");
+		Unzip(parameters.ChocolateyPackage, parameters.ChocolateyTestDirectory);
+		CopyTestFiles(parameters.OutputDirectory, parameters.ChocolateyTestDirectory + "tools/");
 
-		NUnit3(Parameters.ChocolateyTestDirectory + "tools/" + MODEL_TESTS);
+		NUnit3(parameters.ChocolateyTestDirectory + "tools/" + MODEL_TESTS);
 	});
 
 //////////////////////////////////////////////////////////////////////
@@ -437,22 +378,22 @@ Task("TestChocolateyPackage")
 //////////////////////////////////////////////////////////////////////
 
 Task("PublishToMyGet")
-	.Does(() =>
+	.Does<BuildParameters>((parameters) =>
 	{
-		PublishToMyGet(Parameters.NuGetPackage);
-		PublishToMyGet(Parameters.ChocolateyPackage);
+		PublishToMyGet(parameters.NuGetPackage);
+		PublishToMyGet(parameters.ChocolateyPackage);
 	});
 
 Task("PublishToNuGet")
-	.Does(() =>
+	.Does<BuildParameters>((parameters) =>
 	{
-		PublishToNuGet(Parameters.NuGetPackage);
+		PublishToNuGet(parameters.NuGetPackage);
 	});
 
 Task("PublishToChocolatey")
-	.Does(() =>
+	.Does<BuildParameters>((parameters) =>
 	{
-		PublishToChocolatey(Parameters.ChocolateyPackage);
+		PublishToChocolatey(parameters.ChocolateyPackage);
 	});
 
 //////////////////////////////////////////////////////////////////////
@@ -465,11 +406,11 @@ Task("PublishToChocolatey")
 
 Task("GuiTest")
     .IsDependentOn("Build")
-    .Does(() =>
+    .Does<BuildParameters>((parameters) =>
 {
 		StartProcess(
-		  Parameters.OutputDirectory + GUI_RUNNER, 
-		  Parameters.OutputDirectory + GUI_TESTS + " --run");
+		  parameters.OutputDirectory + GUI_RUNNER, 
+		  parameters.OutputDirectory + GUI_TESTS + " --run");
 		CheckTestResult("TestResult.xml");
 });
 
@@ -479,11 +420,11 @@ Task("GuiTest")
 
 Task("ExperimentalGuiTest")
     .IsDependentOn("Build")
-    .Does(() =>
+    .Does<BuildParameters>((parameters) =>
 {
 		StartProcess(
-		  Parameters.OutputDirectory + EXPERIMENTAL_RUNNER, 
-		  Parameters.OutputDirectory + EXPERIMENTAL_TESTS + " --run");
+		  parameters.OutputDirectory + EXPERIMENTAL_RUNNER, 
+		  parameters.OutputDirectory + EXPERIMENTAL_TESTS + " --run");
 		CheckTestResult("TestResult.xml");
 });
 
@@ -493,13 +434,13 @@ Task("ExperimentalGuiTest")
 
 Task("ZipGuiTest")
 	.IsDependentOn("PackageZip")
-	.Does(() =>
+	.Does<BuildParameters>((parameters) =>
 	{
-		var testDir = Parameters.ZipTestDirectory;
+		var testDir = parameters.ZipTestDirectory;
 		CleanDirectory(testDir);
 
-		Unzip(File(Parameters.ZipPackage), testDir);
-		CopyTestFiles(Parameters.OutputDirectory, testDir + "tools/");
+		Unzip(parameters.ZipPackage, testDir);
+		CopyTestFiles(parameters.OutputDirectory, testDir + "tools/");
 
 		StartProcess(
 		  testDir + GUI_RUNNER, 
@@ -514,16 +455,16 @@ Task("ZipGuiTest")
 
 Task("ZipExperimentalGuiTest")
 	.IsDependentOn("PackageZip")
-	.Does(() =>
+	.Does<BuildParameters>((parameters) =>
 	{
-		CleanDirectory(Parameters.ZipTestDirectory);
+		CleanDirectory(parameters.ZipTestDirectory);
 
-		Unzip(File(Parameters.NuGetPackage), Parameters.ZipTestDirectory);
-		CopyTestFiles(Parameters.OutputDirectory, Parameters.ZipTestDirectory + "tools/");
+		Unzip(parameters.NuGetPackage, parameters.ZipTestDirectory);
+		CopyTestFiles(parameters.OutputDirectory, parameters.ZipTestDirectory + "tools/");
 
 		StartProcess(
-		  Parameters.ZipTestDirectory + EXPERIMENTAL_RUNNER,
-		  Parameters.ZipTestDirectory + EXPERIMENTAL_TESTS + " --run");
+		  parameters.ZipTestDirectory + EXPERIMENTAL_RUNNER,
+		  parameters.ZipTestDirectory + EXPERIMENTAL_TESTS + " --run");
 
 		CheckTestResult("TestResult.xml");
 	});
@@ -533,9 +474,9 @@ Task("ZipExperimentalGuiTest")
 //////////////////////////////////////////////////////////////////////
 
 Task("ChocolateyInstall")
-	.Does(() =>
+	.Does<BuildParameters>((parameters) =>
 	{
-		if (StartProcess("choco", $"install -f -y -s {Parameters.PackageDirectory} {PACKAGE_NAME}") != 0)
+		if (StartProcess("choco", $"install -f -y -s {parameters.PackageDirectory} {PACKAGE_NAME}") != 0)
 			throw new Exception("Failed to install package. Must run this command as administrator.");
 	});
 
@@ -545,13 +486,13 @@ Task("ChocolateyInstall")
 
 Task("ChocolateyTest")
 	.IsDependentOn("PackageChocolatey")
-	.Does(() =>
+	.Does<BuildParameters>((parameters) =>
 	{
-		var testDir = Parameters.ChocolateyTestDirectory;
+		var testDir = parameters.ChocolateyTestDirectory;
 		CleanDirectory(testDir);
 
-		Unzip(File(Parameters.ChocolateyPackage), testDir);
-		CopyTestFiles(Parameters.OutputDirectory, testDir + "tools/");
+		Unzip(parameters.ChocolateyPackage, testDir);
+		CopyTestFiles(parameters.OutputDirectory, testDir + "tools/");
 
 		// TODO: When starting the commands that chocolatey has shimmed, the StartProcess
 		// call returns immediately, so we can't check the test result. For now, we just
@@ -607,4 +548,4 @@ Task("Default")
 // EXECUTION
 //////////////////////////////////////////////////////////////////////
 
-RunTarget(Parameters.Target);
+RunTarget(Argument("target", "Default"));
