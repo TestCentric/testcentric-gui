@@ -7,7 +7,7 @@ public class BuildParameters
 	public BuildParameters(ICakeContext context)
 	{
 		Configuration = context.Argument("configuration", "Release");
-		PackageVersion = SelectPackageVersion(context);
+		PackageVersion = GetPackageVersion(context);
 
 		var baseDir = context.Environment.WorkingDirectory.FullPath + "/";
 		OutputDirectory = $"{baseDir}bin/{Configuration}/";
@@ -84,7 +84,7 @@ public class BuildParameters
 	public string[] SupportedCoreRuntimes { get; }
 	public string[] SupportedAgentRuntimes { get; }
 
-	private string SelectPackageVersion(ICakeContext context)
+	private string GetPackageVersion(ICakeContext context)
 	{
 		var packageVersion = context.Argument("packageVersion", "1.3.0");
 
@@ -135,8 +135,3 @@ public class BuildParameters
 		return packageVersion;
 	}
 }
-
-//////////////////////////////////////////////////////////////////////
-// BUILD SETTINGS
-//////////////////////////////////////////////////////////////////////
-

@@ -134,48 +134,6 @@ Task("TestGui")
 // PACKAGING
 //////////////////////////////////////////////////////////////////////
 
-var RootFiles = new string[]
-{
-    "LICENSE.txt",
-    "NOTICES.txt",
-    "CHANGES.txt"
-};
-
-var baseFiles = new string[]
-{
-    "testcentric.exe",
-    "testcentric.exe.config",
-    "tc-next.exe",
-    "tc-next.exe.config",
-    "TestCentric.Common.dll",
-    "TestCentric.Gui.Components.dll",
-    "TestCentric.Gui.Runner.dll",
-    "Experimental.Gui.Runner.dll",
-    "nunit.uiexception.dll",
-    "TestCentric.Gui.Model.dll",
-    "testcentric.engine.api.dll",
-    "testcentric.engine.metadata.dll",
-    "testcentric.engine.core.dll",
-    "testcentric.engine.dll",
-    "Mono.Cecil.dll"
-};
-
-var PdbFiles = new string[]
-{
-    "testcentric.pdb",
-    "tc-next.pdb",
-    "TestCentric.Common.pdb",
-    "TestCentric.Gui.Components.pdb",
-    "TestCentric.Gui.Runner.pdb",
-    "Experimental.Gui.Runner.pdb",
-    "nunit.uiexception.pdb",
-    "TestCentric.Gui.Model.pdb",
-    "testcentric.engine.api.pdb",
-    "testcentric.engine.metadata.pdb",
-    "testcentric.engine.core.pdb",
-    "testcentric.engine.pdb",
-};
-
 //////////////////////////////////////////////////////////////////////
 // CREATE PACKAGE IMAGE
 //////////////////////////////////////////////////////////////////////
@@ -187,34 +145,7 @@ Task("CreateImage")
     {
         CreateDirectory(parameters.PackageDirectory);
 
-		string imageDir = parameters.ImageDirectory;
-		string imageBinDir = imageDir + "bin/";
-
-        CleanDirectory(imageDir);
-
-		//CreatePackageImage(imageDir);
-        CopyFiles(RootFiles, imageDir);
-
-        CreateDirectory(imageBinDir);
-
-		var copyFiles = new List<string>(baseFiles);
-		if (!parameters.UsingXBuild)
-			copyFiles.AddRange(PdbFiles);
-
-		foreach (string file in copyFiles)
-			CopyFileToDirectory(parameters.OutputDirectory + file, imageBinDir);
-
-		CopyDirectory(parameters.OutputDirectory + "Images", imageBinDir + "Images");
-
-		foreach (var runtime in parameters.SupportedAgentRuntimes)
-        {
-            var targetDir = imageBinDir + "agents/" + Directory(runtime);
-            var sourceDir = parameters.OutputDirectory + "agents/" + Directory(runtime);
-            CopyDirectory(sourceDir, targetDir);
-		}
-
-		// NOTE: Files specific to a particular package are not copied
-		// into the image directory but are added separately.
+		CreateImage(parameters);
     });
 
 //////////////////////////////////////////////////////////////////////
