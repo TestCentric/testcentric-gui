@@ -50,14 +50,15 @@ void CheckTestErrors(ref List<string> errorDetail)
     }
 }
 
-// Run tests using NUnitLite
 private void RunNUnitLite(string testName, string framework, string directory)
 {
 	bool isDotNetCore = framework.StartsWith("netcoreapp");
 	string ext = isDotNetCore ? ".dll" : ".exe";
 	string testPath = directory + testName + ext;
 
-	Information($"Trying to run {testPath}");
+	Information("========================================");
+	Information("Running tests under " + framework);
+	Information("========================================");
 
 	int rc = isDotNetCore
 		? StartProcess("dotnet", testPath)
@@ -93,7 +94,7 @@ private void CheckNuGetContent(string nugetDir)
 	string CHOCO_API_KEY = EnvironmentVariable("CHOCO_API_KEY");
 	string CHOCO_PUSH_URL = "https://push.chocolatey.org/";
 
-	private void PublishToMyGet(string packageName)
+	private void PublishToMyGet(FilePath packageName)
 	{
 		EnsurePackageExists(packageName);
 
@@ -101,7 +102,7 @@ private void CheckNuGetContent(string nugetDir)
 		NuGetPush(packageName, new NuGetPushSettings() { ApiKey=MYGET_API_KEY, Source=MYGET_PUSH_URL });
 	}
 
-	private void PublishToNuGet(string packageName)
+	private void PublishToNuGet(FilePath packageName)
 	{
 		EnsurePackageExists(packageName);
 
@@ -109,7 +110,7 @@ private void CheckNuGetContent(string nugetDir)
 		NuGetPush(packageName, new NuGetPushSettings() { ApiKey=NUGET_API_KEY, Source=NUGET_PUSH_URL });
 	}
 
-	private void PublishToChocolatey(string packageName)
+	private void PublishToChocolatey(FilePath packageName)
 	{
 		EnsurePackageExists(packageName);
 		EnsureKeyIsSet(CHOCO_API_KEY);
@@ -118,11 +119,11 @@ private void CheckNuGetContent(string nugetDir)
 		ChocolateyPush(packageName, new ChocolateyPushSettings() { ApiKey=CHOCO_API_KEY, Source=CHOCO_PUSH_URL });
 	}
 
-	private void EnsurePackageExists(string path)
+	private void EnsurePackageExists(FilePath path)
 	{
 		if (!FileExists(path))
 		{
-			var packageName = System.IO.Path.GetFileName(path);
+			var packageName = path.GetFilename();
 			throw new InvalidOperationException(
 			  $"Package not found: {packageName}.\nCode may have changed since package was last built.");
 		}

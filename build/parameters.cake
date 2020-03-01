@@ -6,9 +6,8 @@ public class BuildParameters
 {
 	public BuildParameters(ICakeContext context)
 	{
-		Target = context.Argument("target", "Default");
 		Configuration = context.Argument("configuration", "Release");
-		PackageVersion = context.Argument("packageVersion", "1.3.0");
+		PackageVersion = SelectPackageVersion(context);
 
 		var baseDir = context.Environment.WorkingDirectory.FullPath + "/";
 		OutputDirectory = $"{baseDir}bin/{Configuration}/";
@@ -20,9 +19,9 @@ public class BuildParameters
 		NuGetTestDirectory = PackageDirectory + "test/nuget/";
 		ChocolateyTestDirectory = PackageDirectory + "test/choco/";
 
-		//ZipPackage = $"{PackageDirectory}{PACKAGE_NAME}-{PackageVersion}.zip";
-		//NuGetPackage = $"{PackageDirectory}{NUGET_PACKAGE_NAME}.{PackageVersion}.nupkg";
-		//ChocolateyPackage = $"{PackageDirectory}{PACKAGE_NAME}.{PackageVersion}.nupkg";
+		ZipPackage = new FilePath($"{PackageDirectory}{PACKAGE_NAME}-{PackageVersion}.zip");
+		NuGetPackage = new FilePath($"{PackageDirectory}{NUGET_PACKAGE_NAME}.{PackageVersion}.nupkg");
+		ChocolateyPackage = new FilePath($"{PackageDirectory}{PACKAGE_NAME}.{PackageVersion}.nupkg");
 
 		UsingXBuild = context.EnvironmentVariable("USE_XBUILD") != null;
 
@@ -60,9 +59,8 @@ public class BuildParameters
 		SupportedAgentRuntimes = new string[] { "net20" };
 	}
 
-	public string Target { get; }
 	public string Configuration { get; }
-	public string PackageVersion { get; set; }
+	public string PackageVersion { get; }
 
 	public string OutputDirectory { get; }
 	public string NuGetDirectory { get; }
@@ -73,10 +71,9 @@ public class BuildParameters
 	public string NuGetTestDirectory { get; } 
 	public string ChocolateyTestDirectory { get; } 
 
-	// Values need to track changing PackageVersion
-	public string ZipPackage => $"{PackageDirectory}{PACKAGE_NAME}-{PackageVersion}.zip";
-	public string NuGetPackage => $"{PackageDirectory}{NUGET_PACKAGE_NAME}.{PackageVersion}.nupkg";
-	public string ChocolateyPackage => $"{PackageDirectory}{PACKAGE_NAME}.{PackageVersion}.nupkg";
+	public FilePath ZipPackage { get; }
+	public FilePath NuGetPackage { get; }
+	public FilePath ChocolateyPackage { get; }
 
 	public bool UsingXBuild { get; }
 	public MSBuildSettings MSBuildSettings { get; }
@@ -87,6 +84,56 @@ public class BuildParameters
 	public string[] SupportedCoreRuntimes { get; }
 	public string[] SupportedAgentRuntimes { get; }
 
+	private string SelectPackageVersion(ICakeContext context)
+	{
+		var packageVersion = context.Argument("packageVersion", "1.3.0");
+
+		// TODO: Make GitVersion work on Linux
+		if (context.IsRunningOnWindows())
+		{
+			var gitVersion = context.GitVersion();
+
+			string branchName = gitVersion.BranchName;
+			// We don't currently use this pattern, but check in case we do later.
+			if (branchName.StartsWith ("feature/"))
+				branchName = branchName.Substring(8);
+
+			// Default based on GitVersion.yml. This gives us a tag of dev
+			// for master, ci for features, pr for pull requests and rc
+			// for release branches.
+			packageVersion = gitVersion.LegacySemVerPadded;
+
+			// Full release versions and PRs need no further handling
+			int dash = packageVersion.IndexOf('-');
+			bool isPreRelease = dash > 0;
+
+			string label = gitVersion.PreReleaseLabel;
+			bool isPR = label == "pr"; // Set in our GitVersion.yml
+
+			if (isPreRelease && !isPR)
+			{
+				// This handles non-standard branch names.
+				if (label == branchName)
+					label = "ci";
+
+				string suffix = "-" + label + gitVersion.CommitsSinceVersionSourcePadded;
+
+				if (label == "ci")
+				{
+					branchName = Regex.Replace(branchName, "[^0-9A-Za-z-]+", "-");
+					suffix += "-" + branchName;
+				}
+
+				// Nuget limits "special version part" to 20 chars. Add one for the hyphen.
+				if (suffix.Length > 21)
+					suffix = suffix.Substring(0, 21);
+
+				packageVersion = gitVersion.MajorMinorPatch + suffix;
+			}
+		}
+
+		return packageVersion;
+	}
 }
 
 //////////////////////////////////////////////////////////////////////
