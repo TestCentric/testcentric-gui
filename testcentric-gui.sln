@@ -107,6 +107,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{23ED18B0
 		nuget\TestCentric.GuiRunner.nuspec = nuget\TestCentric.GuiRunner.nuspec
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{6C9280F6-6159-4E15-BDC6-F24A3A94F721}"
+	ProjectSection(SolutionItems) = preProject
+		build\helpers.cake = build\helpers.cake
+		build\parameters.cake = build\parameters.cake
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -250,6 +256,7 @@ Global
 		{0318C4A5-3664-4521-8A90-75F064000D74} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
 		{8175BD4B-1994-4D4E-AE55-74B0C5689296} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
 		{23ED18B0-608C-4CB5-A70E-CB95C8B0231C} = {A65042E1-D8BC-48DD-8DE1-F0991F07EA77}
+		{6C9280F6-6159-4E15-BDC6-F24A3A94F721} = {A65042E1-D8BC-48DD-8DE1-F0991F07EA77}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CDFF439B-8888-4133-8734-86F4F899BC40}
