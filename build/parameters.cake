@@ -19,9 +19,13 @@ public class BuildParameters
 		NuGetTestDirectory = PackageDirectory + "test/nuget/";
 		ChocolateyTestDirectory = PackageDirectory + "test/choco/";
 
-		ZipPackage = new FilePath($"{PackageDirectory}{PACKAGE_NAME}-{PackageVersion}.zip");
-		NuGetPackage = new FilePath($"{PackageDirectory}{NUGET_PACKAGE_NAME}.{PackageVersion}.nupkg");
-		ChocolateyPackage = new FilePath($"{PackageDirectory}{PACKAGE_NAME}.{PackageVersion}.nupkg");
+		ZipPackageName = $"{PACKAGE_NAME}-{PackageVersion}.zip";
+		NuGetPackageName = $"{NUGET_PACKAGE_NAME}.{PackageVersion}.nupkg";
+		ChocolateyPackageName = $"{PACKAGE_NAME}.{PackageVersion}.nupkg";
+
+		ZipPackage = new FilePath(PackageDirectory + ZipPackageName);
+		NuGetPackage = new FilePath(PackageDirectory + NuGetPackageName);
+		ChocolateyPackage = new FilePath(PackageDirectory + ChocolateyPackageName);
 
 		UsingXBuild = context.EnvironmentVariable("USE_XBUILD") != null;
 
@@ -70,6 +74,10 @@ public class BuildParameters
 	public string ZipTestDirectory { get; } 
 	public string NuGetTestDirectory { get; } 
 	public string ChocolateyTestDirectory { get; } 
+
+	public string ZipPackageName { get; }
+	public string NuGetPackageName { get; }
+	public string ChocolateyPackageName { get; }
 
 	public FilePath ZipPackage { get; }
 	public FilePath NuGetPackage { get; }

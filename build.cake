@@ -3,6 +3,7 @@
 #tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.3.1"
 
 #load "./build/parameters.cake"
+#load "./build/package-checks.cake"
 #load "./build/helpers.cake"
 
 using System.Xml;
@@ -149,7 +150,7 @@ Task("CreateImage")
     });
 
 //////////////////////////////////////////////////////////////////////
-// PACKAGE ZIP
+// ZIP PACKAGE
 //////////////////////////////////////////////////////////////////////
 
 Task("PackageZip")
@@ -162,8 +163,46 @@ Task("PackageZip")
         Zip(parameters.ImageDirectory, parameters.ZipPackage, zipFiles);
     });
 
+Task("CheckZipPackage")
+	.IsDependentOn("PackageZip")
+	.Does<BuildParameters>((parameters) =>
+	{
+		CleanDirectory(parameters.ZipTestDirectory);
+		Unzip(parameters.ZipPackage, parameters.ZipTestDirectory);
+
+		var checker = new PackageChecker(parameters.ZipPackageName, parameters.ZipTestDirectory);
+
+		if (!checker.RunChecks(
+			HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt"),
+			HasDirectory("bin").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES),
+			HasDirectory("bin/agents/net20").WithFiles(AGENT_FILES),
+			HasDirectory("bin/agents/net40").WithFiles(AGENT_FILES),
+			HasDirectory("bin/Images").WithFiles("DebugTests.png", "RunTests.png"),
+			HasDirectory("bin/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
+			HasDirectory("bin/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
+			HasDirectory("bin/Images/Tree/Default").WithFiles(TREE_ICONS_PNG),
+			HasDirectory("bin/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG)))
+		{
+			ErrorDetail.Add($"Package check failed for {parameters.ZipPackageName}");
+		}
+	});
+
+Task("TestZipPackage")
+	.IsDependentOn("CheckZipPackage")
+	.Does<BuildParameters>((parameters) =>
+	{
+		Information("Testing package " + parameters.ZipPackage);
+
+		CleanDirectory(parameters.ZipTestDirectory);
+
+		Unzip(parameters.ZipPackage, parameters.ZipTestDirectory);
+		CopyTestFiles(parameters.OutputDirectory, parameters.ZipTestDirectory + "bin/");
+
+		NUnit3(parameters.ZipTestDirectory + MODEL_TESTS);
+	});
+
 //////////////////////////////////////////////////////////////////////
-// PACKAGE FOR NUGET.ORG
+// NUGET PACKAGE
 //////////////////////////////////////////////////////////////////////
 
 Task("PackageNuGet")
@@ -185,6 +224,9 @@ Task("PackageNuGet")
 			else if (target.StartsWith("bin" + System.IO.Path.DirectorySeparatorChar))
 				target = "tools" + target.Substring(3);
 
+			if (target.IndexOf("Visual") != -1)
+				Console.WriteLine($"Adding Source = {file.FullPath}\nTarget = {target}");
+
 			content.Add(new NuSpecContent() { Source = file.FullPath, Target = target });
 		}
 
@@ -205,8 +247,43 @@ Task("PackageNuGet")
         });
 	});
 
+Task("CheckNuGetPackage")
+	.IsDependentOn("PackageNuGet")
+	.Does<BuildParameters>((parameters) =>
+	{
+		CleanDirectory(parameters.NuGetTestDirectory);
+		Unzip(parameters.NuGetPackage, parameters.NuGetTestDirectory);
+
+		var checker = new PackageChecker(parameters.NuGetPackageName, parameters.NuGetTestDirectory);
+
+		if (!checker.RunChecks(
+			HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "testcentric.png"),
+			HasDirectory("tools").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFiles("testcentric-gui.addins"),
+			HasDirectory("tools/agents/net20").WithFiles(AGENT_FILES),
+			HasDirectory("tools/agents/net40").WithFiles(AGENT_FILES),
+			HasDirectory("tools/Images").WithFiles("DebugTests.png", "RunTests.png"),
+			HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
+			HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
+			HasDirectory("tools/Images/Tree/Default").WithFiles(TREE_ICONS_PNG),
+			HasDirectory("tools/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG)))
+		{
+			ErrorDetail.Add($"Package check failed for {parameters.NuGetPackageName}");
+		}
+	});
+
+Task("TestNuGetPackage")
+	.IsDependentOn("CheckNuGetPackage")
+	.Does<BuildParameters>((parameters) =>
+	{
+		Information("Testing package " + parameters.NuGetPackage);
+
+		CopyTestFiles(parameters.OutputDirectory, parameters.NuGetTestDirectory + "tools/");
+
+		NUnit3(parameters.NuGetTestDirectory + "tools/" + MODEL_TESTS);
+	});
+
 //////////////////////////////////////////////////////////////////////
-// PACKAGE FOR CHOCOLATEY
+// CHOCOLATEY PACKAGE
 //////////////////////////////////////////////////////////////////////
 
 Task("PackageChocolatey")
@@ -228,6 +305,9 @@ Task("PackageChocolatey")
 			else if (target.StartsWith("bin" + System.IO.Path.DirectorySeparatorChar))
 				target = "tools" + target.Substring(3);
 
+			if (target.IndexOf("Visual") != -1)
+				Console.WriteLine($"Adding Source = {file.FullPath}\nTarget = {target}");
+
 			content.Add(new ChocolateyNuSpecContent() { Source = file.FullPath, Target = target });
 		}
 
@@ -248,50 +328,31 @@ Task("PackageChocolatey")
             });
     });
 
-//////////////////////////////////////////////////////////////////////
-// ZIP PACKAGE TEST
-//////////////////////////////////////////////////////////////////////
-
-Task("TestZipPackage")
-	.IsDependentOn("PackageZip")
+Task("CheckChocolateyPackage")
+	.IsDependentOn("PackageChocolatey")
 	.Does<BuildParameters>((parameters) =>
 	{
-		Information("Testing package " + parameters.ZipPackage);
+		CleanDirectory(parameters.ChocolateyTestDirectory);
+		Unzip(parameters.ChocolateyPackage, parameters.ChocolateyTestDirectory);
 
-		CleanDirectory(parameters.ZipTestDirectory);
+		var checker = new PackageChecker(parameters.ChocolateyPackageName, parameters.ChocolateyTestDirectory);
 
-		Unzip(parameters.ZipPackage, parameters.ZipTestDirectory);
-		CopyTestFiles(parameters.OutputDirectory, parameters.ZipTestDirectory + "bin/");
-
-		NUnit3(parameters.ZipTestDirectory + MODEL_TESTS);
+		if (!checker.RunChecks(
+			HasDirectory("tools").WithFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "VERIFICATION.txt", "testcentric.choco.addins").AndFiles(GUI_FILES).AndFiles(ENGINE_FILES),
+			HasDirectory("tools/agents/net20").WithFiles(AGENT_FILES),
+			HasDirectory("tools/agents/net40").WithFiles(AGENT_FILES),
+			HasDirectory("tools/Images").WithFiles("DebugTests.png", "RunTests.png"),
+			HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
+			HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
+			HasDirectory("tools/Images/Tree/Default").WithFiles(TREE_ICONS_PNG),
+			HasDirectory("tools/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG)))
+		{
+			ErrorDetail.Add($"Package check failed for {parameters.ChocolateyPackageName}");
+		}
 	});
-
-//////////////////////////////////////////////////////////////////////
-// NUGET PACKAGE TEST
-//////////////////////////////////////////////////////////////////////
-
-Task("TestNuGetPackage")
-	.IsDependentOn("PackageNuGet")
-	.Does<BuildParameters>((parameters) =>
-	{
-		Information("Testing package " + parameters.NuGetPackage);
-
-		CleanDirectory(parameters.NuGetTestDirectory);
-		Unzip(parameters.NuGetPackage, parameters.NuGetTestDirectory);
-
-		CheckNuGetContent(parameters.NuGetTestDirectory);
-
-		CopyTestFiles(parameters.OutputDirectory, parameters.NuGetTestDirectory + "tools/");
-
-		NUnit3(parameters.NuGetTestDirectory + "tools/" + MODEL_TESTS);
-	});
-
-//////////////////////////////////////////////////////////////////////
-// CHOCOLATEY PACKAGE TEST
-//////////////////////////////////////////////////////////////////////
 
 Task("TestChocolateyPackage")
-	.IsDependentOn("PackageChocolatey")
+	.IsDependentOn("CheckChocolateyPackage")
 	.Does<BuildParameters>((parameters) =>
 	{
 		Information("Testing package " + parameters.ChocolateyPackage);
@@ -449,7 +510,14 @@ Task("Package")
 	.IsDependentOn("PackageNuget")
     .IsDependentOn("PackageChocolatey");
 
+Task("CheckPackages")
+	.IsDependentOn("Package")
+	.IsDependentOn("CheckZipPackage")
+	.IsDependentOn("CheckNuGetPackage")
+	.IsDependentOn("CheckChocolateyPackage");
+
 Task("TestPackages")
+	.IsDependentOn("CheckPackages")
 	.IsDependentOn("TestZipPackage")
 	.IsDependentOn("TestNuGetPackage")
 	.IsDependentOn("TestChocolateyPackage");
@@ -458,6 +526,7 @@ Task("Appveyor")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
     .IsDependentOn("Package")
+	.IsDependentOn("CheckPackages")
 	.IsDependentOn("TestPackages");
 
 Task("Travis")
@@ -470,6 +539,7 @@ Task("All")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
     .IsDependentOn("Package")
+	.IsDependentOn("CheckPackages")
 	.IsDependentOn("TestPackages");
 
 Task("Default")

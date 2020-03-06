@@ -45,7 +45,7 @@ void CheckTestErrors(ref List<string> errorDetail)
         var copyError = new List<string>();
         copyError = errorDetail.Select(s => s).ToList();
         errorDetail.Clear();
-        throw new Exception("One or more unit tests failed, breaking the build.\n"
+        throw new Exception("One or more tests failed, breaking the build.\n"
                               + copyError.Aggregate((x,y) => x + "\n" + y));
     }
 }
@@ -65,9 +65,9 @@ private void RunNUnitLite(string testName, string framework, string directory)
 		: StartProcess(testPath);
 
 	if (rc > 0)
-		ErrorDetail.Add(string.Format($"{testName}: {rc} tests failed running under {framework}"));
+		ErrorDetail.Add($"{testName}: {rc} tests failed running under {framework}");
 	else if (rc < 0)
-		ErrorDetail.Add(string.Format($"{testName} returned rc = {rc} running under {framework}"));
+		ErrorDetail.Add($"{testName} returned rc = {rc} running under {framework}");
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -148,63 +148,50 @@ private void CreateImage(BuildParameters parameters)
 	// into the image directory but are added separately.
 }
 
-private void CheckNuGetContent(string nugetDir)
-{
-	if (!DirectoryExists(nugetDir))
-		throw new Exception($"Directory {nugetDir} not found!");
+string MYGET_API_KEY = EnvironmentVariable("MYGET_API_KEY");
+string MYGET_PUSH_URL = "https://www.myget.org/F/testcentric/api/v2";
+string NUGET_API_KEY = EnvironmentVariable("NUGET_API_KEY");
+string NUGET_PUSH_URL = "https://api.nuget.org/v3/index.json";
+string CHOCO_API_KEY = EnvironmentVariable("CHOCO_API_KEY");
+string CHOCO_PUSH_URL = "https://push.chocolatey.org/";
 
-	if (!FileExists(nugetDir + "testcentric.png"))
-		throw new Exception($"File 'testcentric.png' not found in the package");
-		
-	string addinsFile = nugetDir + "tools/testcentric-gui.addins";
-	if (!FileExists(addinsFile))
-		throw new Exception($"File {addinsFile} not found in the package.");
+private void PublishToMyGet(FilePath packageName)
+{
+	EnsurePackageExists(packageName);
+
+	Information($"Publishing {packageName} to myget.org.");
+	NuGetPush(packageName, new NuGetPushSettings() { ApiKey=MYGET_API_KEY, Source=MYGET_PUSH_URL });
 }
 
-	string MYGET_API_KEY = EnvironmentVariable("MYGET_API_KEY");
-	string MYGET_PUSH_URL = "https://www.myget.org/F/testcentric/api/v2";
-	string NUGET_API_KEY = EnvironmentVariable("NUGET_API_KEY");
-	string NUGET_PUSH_URL = "https://api.nuget.org/v3/index.json";
-	string CHOCO_API_KEY = EnvironmentVariable("CHOCO_API_KEY");
-	string CHOCO_PUSH_URL = "https://push.chocolatey.org/";
+private void PublishToNuGet(FilePath packageName)
+{
+	EnsurePackageExists(packageName);
 
-	private void PublishToMyGet(FilePath packageName)
+	Information($"Publishing {packageName} to nuget.org.");
+	NuGetPush(packageName, new NuGetPushSettings() { ApiKey=NUGET_API_KEY, Source=NUGET_PUSH_URL });
+}
+
+private void PublishToChocolatey(FilePath packageName)
+{
+	EnsurePackageExists(packageName);
+	EnsureKeyIsSet(CHOCO_API_KEY);
+
+	Information($"Publishing {packageName} to chocolatey.");
+	ChocolateyPush(packageName, new ChocolateyPushSettings() { ApiKey=CHOCO_API_KEY, Source=CHOCO_PUSH_URL });
+}
+
+private void EnsurePackageExists(FilePath path)
+{
+	if (!FileExists(path))
 	{
-		EnsurePackageExists(packageName);
-
-		Information($"Publishing {packageName} to myget.org.");
-		NuGetPush(packageName, new NuGetPushSettings() { ApiKey=MYGET_API_KEY, Source=MYGET_PUSH_URL });
+		var packageName = path.GetFilename();
+		throw new InvalidOperationException(
+			$"Package not found: {packageName}.\nCode may have changed since package was last built.");
 	}
+}
 
-	private void PublishToNuGet(FilePath packageName)
-	{
-		EnsurePackageExists(packageName);
-
-		Information($"Publishing {packageName} to nuget.org.");
-		NuGetPush(packageName, new NuGetPushSettings() { ApiKey=NUGET_API_KEY, Source=NUGET_PUSH_URL });
-	}
-
-	private void PublishToChocolatey(FilePath packageName)
-	{
-		EnsurePackageExists(packageName);
-		EnsureKeyIsSet(CHOCO_API_KEY);
-
-		Information($"Publishing {packageName} to chocolatey.");
-		ChocolateyPush(packageName, new ChocolateyPushSettings() { ApiKey=CHOCO_API_KEY, Source=CHOCO_PUSH_URL });
-	}
-
-	private void EnsurePackageExists(FilePath path)
-	{
-		if (!FileExists(path))
-		{
-			var packageName = path.GetFilename();
-			throw new InvalidOperationException(
-			  $"Package not found: {packageName}.\nCode may have changed since package was last built.");
-		}
-	}
-
-	private void EnsureKeyIsSet(string apiKey)
-	{
-		if (string.IsNullOrEmpty(apiKey))
-			throw new InvalidOperationException("The Api Key has not been set.");
-	}
+private void EnsureKeyIsSet(string apiKey)
+{
+	if (string.IsNullOrEmpty(apiKey))
+		throw new InvalidOperationException("The Api Key has not been set.");
+}
