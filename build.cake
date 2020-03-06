@@ -345,7 +345,7 @@ Task("CheckChocolateyPackage")
 			HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
 			HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
 			HasDirectory("tools/Images/Tree/Default").WithFiles(TREE_ICONS_PNG),
-			HasDirectory("tools/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG)))
+			HasDirectory("tools/Images/Tree/Visual%20Studio").WithFiles(TREE_ICONS_PNG)))
 		{
 			ErrorDetail.Add($"Package check failed for {parameters.ChocolateyPackageName}");
 		}

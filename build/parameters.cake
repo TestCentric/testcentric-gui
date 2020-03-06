@@ -60,7 +60,7 @@ public class BuildParameters
 		SupportedCoreRuntimes = context.IsRunningOnWindows()
 			? new string[] {"net40", "net35", "netcoreapp2.1", "netcoreapp1.1"}
 			: new string[] {"net40", "net35", "netcoreapp2.1"};
-		SupportedAgentRuntimes = new string[] { "net20" };
+		SupportedAgentRuntimes = new string[] { "net20", "net40" };
 	}
 
 	public string Configuration { get; }
