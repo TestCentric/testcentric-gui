@@ -68,7 +68,12 @@ namespace TestCentric.Gui.Presenters
             };
 
             _model.Events.RunStarting += (ea) => InitializeMainMenu();
-            _model.Events.RunFinished += (ea) => InitializeMainMenu();
+            _model.Events.RunFinished += (ea) =>
+            {
+                InitializeMainMenu();
+                if (_options.Unattended)
+                    _view.Close();
+            };
 
             // View Events
             _view.Load += MainForm_Load;
@@ -276,6 +281,9 @@ namespace TestCentric.Gui.Presenters
 
             if (_options.RunAllTests && _model.IsPackageLoaded)
                 _model.RunAllTests();
+            // Currently, --unattended without --run does nothing except exit.
+            else if (_options.Unattended)
+                _view.Close();
         }
 
         private void MainForm_Closing()

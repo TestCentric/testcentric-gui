@@ -25,6 +25,7 @@ namespace TestCentric.Gui.Views
         Size Size { get; set; }
         bool IsMaximized { get; set; }
         Font Font { get; set; }
+        void Close();
 
         event CommandHandler MainViewClosing;
         event DragEventHandler DragDropFiles;
