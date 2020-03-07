@@ -34,6 +34,7 @@ namespace TestCentric.Gui.Tests
         [TestCase("DomainUsage", null)]
         [TestCase("InternalTraceLevel", null)]
         [TestCase("DebugAgent", false)]
+        [TestCase("Unattended", false)]
         public void DefaultOptionValues(string propertyName, object val)
         {
             var property = GetPropertyInfo(propertyName);
@@ -44,6 +45,7 @@ namespace TestCentric.Gui.Tests
 
         [TestCase("NoLoad", "--noload", true)]
         [TestCase("RunAllTests", "--run", true)]
+        [TestCase("Unattended", "--unattended", true)]
         [TestCase("ProcessModel", "--process:InProcess")]
         [TestCase("ProcessModel", "--process:Separate")]
         [TestCase("ProcessModel", "--process:Multiple")]

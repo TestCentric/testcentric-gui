@@ -197,6 +197,10 @@ namespace TestCentric.Gui.Presenters
 
                 //if (e.Result.Outcome.Status == TestStatus.Failed)
                 //    _view.Activate();
+                
+                // If we were running unattended, it's time to close
+                if (_options.Unattended)
+                    _view.Close();
             };
 
             _settings.Changed += (s, e) =>
@@ -263,6 +267,9 @@ namespace TestCentric.Gui.Presenters
                 // Run loaded test automatically if called for
                 if (_model.IsPackageLoaded && _options.RunAllTests)
                     RunAllTests();
+                // Currently, --unattended without --run does nothing except exit.
+                else if (_options.Unattended)
+                    _view.Close();
             };
 
             _view.SplitterPositionChanged += (s, e) =>

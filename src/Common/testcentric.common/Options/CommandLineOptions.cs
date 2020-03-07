@@ -32,6 +32,9 @@ namespace TestCentric.Gui
             this.Add("run", "Automatically run the loaded tests.",
                 v => RunAllTests = v != null);
 
+            this.Add("unattended", "Unattended execution: perform requested actions, then exit.",
+                v => Unattended = v != null);
+
             this.Add("process=", "{PROCESS} isolation for test assemblies. Values: InProcess, Separate, Multiple. If not specified, defaults to Separate for a single assembly or Multiple for more than one. Option InProcess is permitted but DEPRECATED and will be removed in a future release.",
                 v =>
                 {
@@ -106,6 +109,7 @@ namespace TestCentric.Gui
         public bool ShowHelp { get; private set; }
         public bool NoLoad { get; private set; }
         public bool RunAllTests { get; private set; }
+        public bool Unattended { get; private set; }
 
         // Select tests
 
