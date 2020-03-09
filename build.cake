@@ -4,6 +4,7 @@
 
 #load "./build/parameters.cake"
 #load "./build/package-checks.cake"
+#load "./build/testing.cake"
 #load "./build/helpers.cake"
 
 using System.Xml;
@@ -131,7 +132,7 @@ Task("TestGui")
 		);
 	});
 
-//////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
 // PACKAGING
 //////////////////////////////////////////////////////////////////////
 
@@ -157,18 +158,25 @@ Task("PackageZip")
     .IsDependentOn("CreateImage")
     .Does<BuildParameters>((parameters) =>
     {
-		Information("Creating package " + parameters.ZipPackage);
+		Information("Creating package " + parameters.ZipPackageName);
 
         var zipFiles = GetFiles(parameters.ImageDirectory + "**/*.*");
         Zip(parameters.ImageDirectory, parameters.ZipPackage, zipFiles);
     });
 
-Task("CheckZipPackage")
+Task("CreateZipTestDirectory")
 	.IsDependentOn("PackageZip")
 	.Does<BuildParameters>((parameters) =>
 	{
 		CleanDirectory(parameters.ZipTestDirectory);
 		Unzip(parameters.ZipPackage, parameters.ZipTestDirectory);
+	});
+
+Task("CheckZipPackage")
+	.IsDependentOn("CreateZipTestDirectory")
+	.Does<BuildParameters>((parameters) =>
+	{
+		Information("Checking package " + parameters.ZipPackageName);
 
 		var checker = new PackageChecker(parameters.ZipPackageName, parameters.ZipTestDirectory);
 
@@ -188,17 +196,12 @@ Task("CheckZipPackage")
 	});
 
 Task("TestZipPackage")
-	.IsDependentOn("CheckZipPackage")
+	.IsDependentOn("CreateZipTestDirectory")
 	.Does<BuildParameters>((parameters) =>
 	{
-		Information("Testing package " + parameters.ZipPackage);
+		Information("Testing package " + parameters.ZipPackageName);
 
-		CleanDirectory(parameters.ZipTestDirectory);
-
-		Unzip(parameters.ZipPackage, parameters.ZipTestDirectory);
-		CopyTestFiles(parameters.OutputDirectory, parameters.ZipTestDirectory + "bin/");
-
-		NUnit3(parameters.ZipTestDirectory + MODEL_TESTS);
+		RunGuiAndReportResults(parameters.ZipTestDirectory + "bin/" + GUI_RUNNER, MODEL_TESTS, parameters.OutputDirectory);
 	});
 
 //////////////////////////////////////////////////////////////////////
@@ -209,7 +212,7 @@ Task("PackageNuGet")
 	.IsDependentOn("CreateImage")
 	.Does<BuildParameters>((parameters) =>
 	{
-		Information("Creating package " + parameters.NuGetPackage);
+		Information("Creating package " + parameters.NuGetPackageName);
 
         var content = new List<NuSpecContent>();
 		int index = parameters.ImageDirectory.Length;
@@ -247,10 +250,20 @@ Task("PackageNuGet")
         });
 	});
 
-Task("CheckNuGetPackage")
+Task("CreateNuGetTestDirectory")
 	.IsDependentOn("PackageNuGet")
 	.Does<BuildParameters>((parameters) =>
 	{
+		CleanDirectory(parameters.NuGetTestDirectory);
+		Unzip(parameters.NuGetPackage, parameters.NuGetTestDirectory);
+	});
+
+Task("CheckNuGetPackage")
+	.IsDependentOn("CreateNuGetTestDirectory")
+	.Does<BuildParameters>((parameters) =>
+	{
+		Information("Checking package " + parameters.NuGetPackageName);
+
 		CleanDirectory(parameters.NuGetTestDirectory);
 		Unzip(parameters.NuGetPackage, parameters.NuGetTestDirectory);
 
@@ -272,14 +285,12 @@ Task("CheckNuGetPackage")
 	});
 
 Task("TestNuGetPackage")
-	.IsDependentOn("CheckNuGetPackage")
+	.IsDependentOn("CreateNuGetTestDirectory")
 	.Does<BuildParameters>((parameters) =>
 	{
-		Information("Testing package " + parameters.NuGetPackage);
+		Information("Testing package " + parameters.NuGetPackageName);
 
-		CopyTestFiles(parameters.OutputDirectory, parameters.NuGetTestDirectory + "tools/");
-
-		NUnit3(parameters.NuGetTestDirectory + "tools/" + MODEL_TESTS);
+		RunGuiAndReportResults(parameters.NuGetTestDirectory + "tools/" + GUI_RUNNER, MODEL_TESTS, parameters.OutputDirectory);
 	});
 
 //////////////////////////////////////////////////////////////////////
@@ -290,7 +301,7 @@ Task("PackageChocolatey")
     .IsDependentOn("CreateImage")
     .Does<BuildParameters>((parameters) =>
     {
-		Information("Creating package " + parameters.ChocolateyPackage);
+		Information("Creating package " + parameters.ChocolateyPackageName);
 
         var content = new List<ChocolateyNuSpecContent>();
 		int index = parameters.ImageDirectory.Length;
@@ -328,10 +339,20 @@ Task("PackageChocolatey")
             });
     });
 
-Task("CheckChocolateyPackage")
+Task("CreateChocolateyTestDirectory")
 	.IsDependentOn("PackageChocolatey")
 	.Does<BuildParameters>((parameters) =>
 	{
+		CleanDirectory(parameters.ChocolateyTestDirectory);
+		Unzip(parameters.ChocolateyPackage, parameters.ChocolateyTestDirectory);
+	});
+
+Task("CheckChocolateyPackage")
+	.IsDependentOn("CreateChocolateyTestDirectory")
+	.Does<BuildParameters>((parameters) =>
+	{
+		Information("Checking package " + parameters.ChocolateyPackageName);
+
 		CleanDirectory(parameters.ChocolateyTestDirectory);
 		Unzip(parameters.ChocolateyPackage, parameters.ChocolateyTestDirectory);
 
@@ -352,17 +373,12 @@ Task("CheckChocolateyPackage")
 	});
 
 Task("TestChocolateyPackage")
-	.IsDependentOn("CheckChocolateyPackage")
+	.IsDependentOn("CreateChocolateyTestDirectory")
 	.Does<BuildParameters>((parameters) =>
 	{
-		Information("Testing package " + parameters.ChocolateyPackage);
+		Information("Testing package " + parameters.ChocolateyPackageName);
 
-		CleanDirectory(parameters.ChocolateyTestDirectory);
-
-		Unzip(parameters.ChocolateyPackage, parameters.ChocolateyTestDirectory);
-		CopyTestFiles(parameters.OutputDirectory, parameters.ChocolateyTestDirectory + "tools/");
-
-		NUnit3(parameters.ChocolateyTestDirectory + "tools/" + MODEL_TESTS);
+		RunGuiAndReportResults(parameters.ChocolateyTestDirectory + "tools/" + GUI_RUNNER, MODEL_TESTS, parameters.OutputDirectory);
 	});
 
 //////////////////////////////////////////////////////////////////////
@@ -399,12 +415,9 @@ Task("PublishToChocolatey")
 Task("GuiTest")
     .IsDependentOn("Build")
     .Does<BuildParameters>((parameters) =>
-{
-		StartProcess(
-		  parameters.OutputDirectory + GUI_RUNNER, 
-		  parameters.OutputDirectory + GUI_TESTS + " --run");
-		CheckTestResult("TestResult.xml");
-});
+	{
+		StartProcess(parameters.OutputDirectory + GUI_RUNNER);
+	});
 
 //////////////////////////////////////////////////////////////////////
 // EXPERIMENTAL GUI TEST
@@ -414,52 +427,8 @@ Task("ExperimentalGuiTest")
     .IsDependentOn("Build")
     .Does<BuildParameters>((parameters) =>
 {
-		StartProcess(
-		  parameters.OutputDirectory + EXPERIMENTAL_RUNNER, 
-		  parameters.OutputDirectory + EXPERIMENTAL_TESTS + " --run");
-		CheckTestResult("TestResult.xml");
+		StartProcess(parameters.OutputDirectory + EXPERIMENTAL_RUNNER);
 });
-
-//////////////////////////////////////////////////////////////////////
-// ZIP GUI TEST (USES ZIP PACKAGE)
-//////////////////////////////////////////////////////////////////////
-
-Task("ZipGuiTest")
-	.IsDependentOn("PackageZip")
-	.Does<BuildParameters>((parameters) =>
-	{
-		var testDir = parameters.ZipTestDirectory;
-		CleanDirectory(testDir);
-
-		Unzip(parameters.ZipPackage, testDir);
-		CopyTestFiles(parameters.OutputDirectory, testDir + "tools/");
-
-		StartProcess(
-		  testDir + GUI_RUNNER, 
-		  testDir + GUI_TESTS + " --run");
-
-		CheckTestResult("TestResult.xml");
-	});
-
-//////////////////////////////////////////////////////////////////////
-// ZIP EXPERIMENTAL GUI TEST (USES ZIP PACKAGE)
-//////////////////////////////////////////////////////////////////////
-
-Task("ZipExperimentalGuiTest")
-	.IsDependentOn("PackageZip")
-	.Does<BuildParameters>((parameters) =>
-	{
-		CleanDirectory(parameters.ZipTestDirectory);
-
-		Unzip(parameters.NuGetPackage, parameters.ZipTestDirectory);
-		CopyTestFiles(parameters.OutputDirectory, parameters.ZipTestDirectory + "tools/");
-
-		StartProcess(
-		  parameters.ZipTestDirectory + EXPERIMENTAL_RUNNER,
-		  parameters.ZipTestDirectory + EXPERIMENTAL_TESTS + " --run");
-
-		CheckTestResult("TestResult.xml");
-	});
 
 //////////////////////////////////////////////////////////////////////
 // CHOCOLATEY INSTALL (MUST RUN AS ADMIN)
@@ -480,19 +449,9 @@ Task("ChocolateyTest")
 	.IsDependentOn("PackageChocolatey")
 	.Does<BuildParameters>((parameters) =>
 	{
-		var testDir = parameters.ChocolateyTestDirectory;
-		CleanDirectory(testDir);
-
-		Unzip(parameters.ChocolateyPackage, testDir);
-		CopyTestFiles(parameters.OutputDirectory, testDir + "tools/");
-
-		// TODO: When starting the commands that chocolatey has shimmed, the StartProcess
-		// call returns immediately, so we can't check the test result. For now, we just
-		// run the tests and inspect manually but we need to figure out how to wait for
-		// the process to complete.
-		StartProcess(GUI_RUNNER, testDir + GUI_TESTS + " --run");
-		StartProcess(EXPERIMENTAL_RUNNER, testDir + EXPERIMENTAL_TESTS + " --run");
-		//CheckTestResult("TestResult.xml");
+		// Start both runners
+		StartProcess(GUI_RUNNER);
+		StartProcess(EXPERIMENTAL_RUNNER);
 	});
 
 //////////////////////////////////////////////////////////////////////
@@ -531,9 +490,7 @@ Task("Appveyor")
 
 Task("Travis")
     .IsDependentOn("Build")
-    .IsDependentOn("Test")
-    .IsDependentOn("PackageZip")
-	.IsDependentOn("TestZipPackage");
+    .IsDependentOn("Test");
 
 Task("All")
     .IsDependentOn("Build")

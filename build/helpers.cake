@@ -2,42 +2,6 @@
 // TESTING
 //////////////////////////////////////////////////////////////////////
 
-// Copy all files needed to run tests from one directory to another
-private void CopyTestFiles(string fromDir, string toDir)
-{
-	CopyFiles(fromDir + "*.Tests.*", toDir);
-	CopyFiles(fromDir + "nunit.framework.*", toDir);
-	CopyFiles(fromDir + "mock-assembly.*", toDir);
-	CopyFiles(fromDir + "test-utilities.*", toDir);
-	CopyFiles(fromDir + "System.Threading.Tasks.*", toDir);
-	CopyFiles(fromDir + "NSubstitute.*", toDir);
-	CopyFiles(fromDir + "Castle.Core.*", toDir);
-}
-
-// Examine the result file to make sure a test run passed
-private void CheckTestResult(string resultFile)
-{
-	var doc = new XmlDocument();
-	doc.Load(resultFile);
-
-	XmlNode testRun = doc.DocumentElement;
-	if (testRun.Name != "test-run")
-		throw new Exception("The test-run element was not found.");
-
-	string result = testRun.Attributes["result"]?.Value;
-	if (result == null)
-		throw new Exception("The test-run element has no result attribute.");
-
-	if (result == "Failed")
-	{
-		string msg = "The test run failed.";
-		string failed = testRun.Attributes["failed"]?.Value;
-		if (failed != null)
-			msg += $" {int.Parse(failed)} tests failed";
-		throw new Exception(msg);
-	}
-}
-
 void CheckTestErrors(ref List<string> errorDetail)
 {
     if(errorDetail.Count != 0)
