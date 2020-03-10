@@ -3,9 +3,8 @@
 #tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.3.1"
 
 #load "./build/parameters.cake"
-#load "./build/package-checks.cake"
 #load "./build/testing.cake"
-#load "./build/helpers.cake"
+#load "./build/packaging.cake"
 
 using System.Xml;
 using System.Text.RegularExpressions;
