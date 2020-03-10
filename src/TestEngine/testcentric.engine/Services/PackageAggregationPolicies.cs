@@ -49,7 +49,7 @@ namespace TestCentric.Engine.Services
 
                 var runtime = new FrameworkName(fn);
                 if (targetRuntime == null ||
-                    targetRuntime.FullName == runtime.FullName && targetRuntime.Version < runtime.Version)
+                    targetRuntime.Identifier == runtime.Identifier && targetRuntime.Version < runtime.Version)
                 {
                     targetRuntime = runtime;
                 }
@@ -69,7 +69,7 @@ namespace TestCentric.Engine.Services
 
             foreach (var subpackage in package.SubPackages)
             {
-                if (package.GetSetting(InternalEnginePackageSettings.ImageRequiresX86, false))
+                if (subpackage.GetSetting(InternalEnginePackageSettings.ImageRequiresX86, false))
                     requiresX86 = true;
             }
 
