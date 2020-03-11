@@ -19,9 +19,6 @@
     <Reference Include="System.Runtime.Remoting" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\EngineVersion.cs" LinkBase="Properties" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="..\..\..\nunit.ico">
       <Link>nunit.ico</Link>
     </Content>
