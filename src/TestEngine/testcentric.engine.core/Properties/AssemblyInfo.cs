@@ -1,21 +1,13 @@
+// ***********************************************************************
+// Copyright (c) Charlie Poole and TestCentric Engine contributors.
+// Licensed under the MIT License. See LICENSE.txt in root directory.
+// ***********************************************************************
+
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
-// General Information about an assembly is controlled through the following
-// set of attributes. Change these attribute values to modify the information
-// associated with an assembly.
-#if NETSTANDARD1_6
-[assembly: AssemblyTitle("NUnit .NET Standard Engine Core")]
-#else
 [assembly: AssemblyTitle("NUnit Engine Core")]
-#endif
-[assembly: AssemblyCulture("")]
-
-// Setting ComVisible to false makes the types in this assembly not visible
-// to COM components.  If you need to access a type in this assembly from
-// COM, set the ComVisible attribute to true on that type.
-[assembly: ComVisible(false)]
+[assembly: AssemblyDescription("Lower level of engine")]
 
 [assembly: InternalsVisibleTo("testcentric.engine.tests, PublicKey=" +
     "002400000480000094000000060200000024000052534131000400000100010031eea370b1984b" +

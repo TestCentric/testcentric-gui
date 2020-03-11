@@ -111,9 +111,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\CommonAssemblyInfo.cs">
-      <Link>CommonAssemblyInfo.cs</Link>
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Presenters\ErrorsAndFailuresPresenterTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\ErrorsAndFailuresViewTests.cs" />
     <Compile Include="LongRunningOperationDisplayTests.cs" />
     <Compile Include="Presenters\PresenterTestBase.cs" />

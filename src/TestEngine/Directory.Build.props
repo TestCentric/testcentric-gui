@@ -7,9 +7,4 @@
     <LangVersion>7</LangVersion>
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Include="..\CommonEngineAssemblyInfo.cs" LinkBase="Properties" />
-  </ItemGroup>
-
 </Project>

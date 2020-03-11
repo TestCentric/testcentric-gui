@@ -4,8 +4,10 @@
 // ***********************************************************************
 
 using System.Reflection;
+using System.Runtime.InteropServices;
 
-[assembly: AssemblyProduct("NUnit Engine API")]
-[assembly: AssemblyVersion("3.0.0.0")]
-[assembly: AssemblyInformationalVersion("3.11.0")]
-[assembly: AssemblyFileVersion("3.11.0")]
+[assembly: AssemblyTitle("NUnit.Engine.Metadata")]
+[assembly: AssemblyDescription("Metadata access for the core engine")]
+
+// The following GUID is for the ID of the typelib if this project is exposed to COM
+[assembly: Guid("85ac5e79-5156-47d6-be33-064ca397b271")]
