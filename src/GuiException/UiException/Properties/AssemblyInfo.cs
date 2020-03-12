@@ -6,10 +6,8 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: NUnit.Framework.NonTestAssembly]
-
-[assembly: AssemblyTitle("TestCentric.Gui.Properties")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("NUnit.UiException")]
+[assembly: AssemblyDescription("Stack display from NUnit")]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("E32CB1E0-D31E-403B-888A-2EB674425A4A")]
+[assembly: Guid("543fe7cf-3809-433f-9eb4-488b7d6b8a7a")]

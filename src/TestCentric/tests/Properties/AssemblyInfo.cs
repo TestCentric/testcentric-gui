@@ -4,7 +4,10 @@
 // ***********************************************************************
 
 using System.Reflection;
+using System.Runtime.InteropServices;
 
-[assembly: AssemblyProduct("TestCentric Engine")]
-[assembly: AssemblyVersion("0.2.1")]
-[assembly: AssemblyInformationalVersion("0.2.1")]
+[assembly: AssemblyTitle("TestCentric Gui Tests")]
+[assembly: AssemblyDescription("Tests of the TestCentric GUI")]
+
+// The following GUID is for the ID of the typelib if this project is exposed to COM
+[assembly: Guid("b5b242c5-dc5e-49ce-957c-13177f8bedb6")]
