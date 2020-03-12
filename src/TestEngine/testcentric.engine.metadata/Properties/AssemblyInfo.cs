@@ -4,7 +4,10 @@
 // ***********************************************************************
 
 using System.Reflection;
+using System.Runtime.InteropServices;
 
-[assembly: AssemblyProduct("TestCentric Engine")]
-[assembly: AssemblyVersion("0.2.1")]
-[assembly: AssemblyInformationalVersion("0.2.1")]
+[assembly: AssemblyTitle("NUnit.Engine.Metadata")]
+[assembly: AssemblyDescription("Metadata access for the core engine")]
+
+// The following GUID is for the ID of the typelib if this project is exposed to COM
+[assembly: Guid("85ac5e79-5156-47d6-be33-064ca397b271")]

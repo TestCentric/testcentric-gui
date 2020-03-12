@@ -25,7 +25,6 @@
     <Compile Remove="Services\SettingsService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\EngineVersion.cs" LinkBase="Properties" />
     <Compile Include="..\agents\AgentExitCodes.cs" LinkBase="Agents" />
   </ItemGroup>
   <ItemGroup>
