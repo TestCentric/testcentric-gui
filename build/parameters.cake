@@ -6,8 +6,22 @@ public class BuildParameters
 {
 	public BuildParameters(ICakeContext context)
 	{
-		Configuration = context.Argument("configuration", "Release");
-		PackageVersion = GetPackageVersion(context);
+		Configuration = context.Argument("configuration", DEFAULT_CONFIGURATION);
+		PackageVersion = context.Argument("packageVersion", DEFAULT_VERSION);
+		bool versionProvided = context.HasArgument("packageVersion");
+
+		var dash = PackageVersion.IndexOf('-');
+		var version = dash > 0
+			? PackageVersion.Substring(0, dash)
+			: PackageVersion;
+		
+		AssemblyVersion = version + ".0";
+		AssemblyFileVersion =  version;
+		AssemblyInformationalVersion = PackageVersion;
+
+		// TODO: Make GitVersion work on Linux
+		if (!versionProvided && context.IsRunningOnWindows())
+			UpdateVersionInfo(context.GitVersion());
 
 		var baseDir = context.Environment.WorkingDirectory.FullPath + "/";
 		OutputDirectory = $"{baseDir}bin/{Configuration}/";
@@ -64,7 +78,10 @@ public class BuildParameters
 	}
 
 	public string Configuration { get; }
-	public string PackageVersion { get; }
+	public string PackageVersion { get; private set; }
+	public string AssemblyVersion { get; private set; }
+	public string AssemblyFileVersion { get; private set; }
+	public string AssemblyInformationalVersion { get; private set; }
 
 	public string OutputDirectory { get; }
 	public string NuGetDirectory { get; }
@@ -92,54 +109,49 @@ public class BuildParameters
 	public string[] SupportedCoreRuntimes { get; }
 	public string[] SupportedAgentRuntimes { get; }
 
-	private string GetPackageVersion(ICakeContext context)
+	private void UpdateVersionInfo(GitVersion gitVersion)
 	{
-		var packageVersion = context.Argument("packageVersion", "1.3.0");
+		string branchName = gitVersion.BranchName;
+		// We don't currently use this pattern, but check in case we do later.
+		if (branchName.StartsWith ("feature/"))
+			branchName = branchName.Substring(8);
 
-		// TODO: Make GitVersion work on Linux
-		if (context.IsRunningOnWindows())
+		// Default based on GitVersion.yml. This gives us a tag of dev
+		// for master, ci for features, pr for pull requests and rc
+		// for release branches.
+		var packageVersion = gitVersion.LegacySemVerPadded;
+
+		// Full release versions and PRs need no further handling
+		int dash = packageVersion.IndexOf('-');
+		bool isPreRelease = dash > 0;
+
+		string label = gitVersion.PreReleaseLabel;
+		bool isPR = label == "pr"; // Set in our GitVersion.yml
+
+		if (isPreRelease && !isPR)
 		{
-			var gitVersion = context.GitVersion();
+			// This handles non-standard branch names.
+			if (label == branchName)
+				label = "ci";
 
-			string branchName = gitVersion.BranchName;
-			// We don't currently use this pattern, but check in case we do later.
-			if (branchName.StartsWith ("feature/"))
-				branchName = branchName.Substring(8);
+			string suffix = "-" + label + gitVersion.CommitsSinceVersionSourcePadded;
 
-			// Default based on GitVersion.yml. This gives us a tag of dev
-			// for master, ci for features, pr for pull requests and rc
-			// for release branches.
-			packageVersion = gitVersion.LegacySemVerPadded;
-
-			// Full release versions and PRs need no further handling
-			int dash = packageVersion.IndexOf('-');
-			bool isPreRelease = dash > 0;
-
-			string label = gitVersion.PreReleaseLabel;
-			bool isPR = label == "pr"; // Set in our GitVersion.yml
-
-			if (isPreRelease && !isPR)
+			if (label == "ci")
 			{
-				// This handles non-standard branch names.
-				if (label == branchName)
-					label = "ci";
-
-				string suffix = "-" + label + gitVersion.CommitsSinceVersionSourcePadded;
-
-				if (label == "ci")
-				{
-					branchName = Regex.Replace(branchName, "[^0-9A-Za-z-]+", "-");
-					suffix += "-" + branchName;
-				}
-
-				// Nuget limits "special version part" to 20 chars. Add one for the hyphen.
-				if (suffix.Length > 21)
-					suffix = suffix.Substring(0, 21);
-
-				packageVersion = gitVersion.MajorMinorPatch + suffix;
+				branchName = Regex.Replace(branchName, "[^0-9A-Za-z-]+", "-");
+				suffix += "-" + branchName;
 			}
+
+			// Nuget limits "special version part" to 20 chars. Add one for the hyphen.
+			if (suffix.Length > 21)
+				suffix = suffix.Substring(0, 21);
+
+			packageVersion = gitVersion.MajorMinorPatch + suffix;
 		}
 
-		return packageVersion;
+		PackageVersion = packageVersion;
+		AssemblyVersion = gitVersion.AssemblySemVer;
+		AssemblyFileVersion = gitVersion.MajorMinorPatch;
+		AssemblyInformationalVersion = packageVersion;
 	}
 }

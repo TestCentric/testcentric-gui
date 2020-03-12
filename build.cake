@@ -3,6 +3,7 @@
 #tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.3.1"
 
 #load "./build/parameters.cake"
+#load "./build/versioning.cake"
 #load "./build/testing.cake"
 #load "./build/packaging.cake"
 
@@ -12,6 +13,12 @@ using System.Text.RegularExpressions;
 //////////////////////////////////////////////////////////////////////
 // CONSTANTS
 //////////////////////////////////////////////////////////////////////
+
+// NOTE: Since GitVersion is only used when running under
+// Windows, the default version should be updated to the 
+// next version after each release.
+const string DEFAULT_VERSION = "1.3.2";
+const string DEFAULT_CONFIGURATION = "Release";
 
 const string SOLUTION = "testcentric-gui.sln";
 
@@ -69,12 +76,26 @@ Task("RestorePackages")
 });
 
 //////////////////////////////////////////////////////////////////////
+// UPDATE ASSEMBLYINFO
+//////////////////////////////////////////////////////////////////////
+
+Task("UpdateAssemblyInfo")
+	.Does<BuildParameters>((parameters) =>
+{
+	var major = new Version(parameters.AssemblyVersion).Major;
+	PatchAssemblyInfo("src/CommonAssemblyInfo.cs", parameters.AssemblyVersion, parameters.AssemblyFileVersion, parameters.AssemblyInformationalVersion);
+    PatchAssemblyInfo("src/TestEngine/CommonEngineAssemblyInfo.cs", parameters.AssemblyVersion, parameters.AssemblyFileVersion, parameters.AssemblyInformationalVersion);
+    PatchAssemblyInfo("src/TestEngine/testcentric.engine.api/Properties/AssemblyInfo.cs", major + ".0.0.0", parameters.AssemblyFileVersion, parameters.AssemblyInformationalVersion);
+});
+
+//////////////////////////////////////////////////////////////////////
 // BUILD
 //////////////////////////////////////////////////////////////////////
 
 Task("Build")
 	.IsDependentOn("Clean")
     .IsDependentOn("RestorePackages")
+	.IsDependentOn("UpdateAssemblyInfo")
     .Does<BuildParameters>((parameters) =>
 {
     if(parameters.UsingXBuild)
