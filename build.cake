@@ -3,9 +3,6 @@
 #tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.3.1"
 
 #load "./build/parameters.cake"
-#load "./build/versioning.cake"
-#load "./build/testing.cake"
-#load "./build/packaging.cake"
 
 using System.Xml;
 using System.Text.RegularExpressions;
@@ -83,9 +80,9 @@ Task("UpdateAssemblyInfo")
 	.Does<BuildParameters>((parameters) =>
 {
 	var major = new Version(parameters.AssemblyVersion).Major;
-	PatchAssemblyInfo("src/CommonAssemblyInfo.cs", parameters.AssemblyVersion, parameters.AssemblyFileVersion, parameters.AssemblyInformationalVersion);
-    PatchAssemblyInfo("src/TestEngine/CommonEngineAssemblyInfo.cs", parameters.AssemblyVersion, parameters.AssemblyFileVersion, parameters.AssemblyInformationalVersion);
-    PatchAssemblyInfo("src/TestEngine/testcentric.engine.api/Properties/AssemblyInfo.cs", major + ".0.0.0", parameters.AssemblyFileVersion, parameters.AssemblyInformationalVersion);
+	parameters.Versions.PatchAssemblyInfo("src/CommonAssemblyInfo.cs");
+    parameters.Versions.PatchAssemblyInfo("src/TestEngine/CommonEngineAssemblyInfo.cs");
+    parameters.Versions.PatchAssemblyInfo("src/TestEngine/testcentric.engine.api/Properties/AssemblyInfo.cs", major + ".0.0.0");
 });
 
 //////////////////////////////////////////////////////////////////////
