@@ -29,11 +29,13 @@ const string EXPERIMENTAL_TESTS = "Experimental.Gui.Tests.dll";
 const string MODEL_TESTS = "TestCentric.Gui.Model.Tests.dll";
 const string ALL_TESTS = "*.Tests.dll";
 
+const string MYGET_PUSH_URL = "https://www.myget.org/F/testcentric/api/v2";
+const string NUGET_PUSH_URL = "https://api.nuget.org/v3/index.json";
+const string CHOCO_PUSH_URL = "https://push.chocolatey.org/";
+
 //////////////////////////////////////////////////////////////////////
 // SETUP AND TEARDOWN
 //////////////////////////////////////////////////////////////////////
-
-BuildParameters Parameters;
 
 Setup<BuildParameters>((context) =>
 {
@@ -399,26 +401,62 @@ Task("TestChocolateyPackage")
 	});
 
 //////////////////////////////////////////////////////////////////////
-// EXPERIMENTAL COMMANDS FOR PUBLISHING PACKAGES
+// PUBLISH PACKAGES
 //////////////////////////////////////////////////////////////////////
 
-Task("PublishToMyGet")
+/*Task("PublishPackages")
+	.WithCriteria<BuildParameters>((context, parameters) => parameters.ShouldPublishPackages)
 	.Does<BuildParameters>((parameters) =>
 	{
-		PublishToMyGet(parameters.NuGetPackage);
-		PublishToMyGet(parameters.ChocolateyPackage);
+		var publisher = parameters.Publisher;
+
+		if (parameters.ShouldPublishToMyGet)
+		{
+			publisher.PublishToMyGet(parameters.NuGetPackage);
+			publisher.PublishToMyGet(parameters.ChocolateyPackage);
+		}
+
+		if (parameters.ShouldPublishToNuGet)
+		{
+			parameters.Publisher.PublishToNuGet(parameters.NuGetPackage);
+		}
+
+		if (parameters.ShouldPublishToChocolatey)
+		{
+			parameters.Publisher.PublishToChocolatey(parameters.ChocolateyPackage);
+		}
+	});*/
+	
+Task("PublishToMyGet")
+	.WithCriteria<BuildParameters>((context, parameters) => parameters.ShouldPublishToMyGet)
+	.Does<BuildParameters>((parameters) =>
+	{
+		var packages = new[] { parameters.NuGetPackage, parameters.ChocolateyPackage };
+		var apiKey = parameters.MyGetApiKey;
+
+		foreach (var package in packages)
+		{
+			if (!FileExists(package))
+				throw new InvalidOperationException(
+					$"Package not found: {package.GetFilename()}.\nCode may have changed since package was last built.");
+
+        	Information($"Publishing {package} to myget.org.");
+        	NuGetPush(package, new NuGetPushSettings() { ApiKey=apiKey, Source=MYGET_PUSH_URL });
+		}
 	});
 
 Task("PublishToNuGet")
+	.WithCriteria<BuildParameters>((context, parameters) => parameters.ShouldPublishToNuGet)
 	.Does<BuildParameters>((parameters) =>
 	{
-		PublishToNuGet(parameters.NuGetPackage);
+		parameters.Publisher.PublishToNuGet(parameters.NuGetPackage);
 	});
 
 Task("PublishToChocolatey")
+	.WithCriteria<BuildParameters>((context, parameters) => parameters.ShouldPublishToChocolatey)
 	.Does<BuildParameters>((parameters) =>
 	{
-		PublishToChocolatey(parameters.ChocolateyPackage);
+		parameters.Publisher.PublishToChocolatey(parameters.ChocolateyPackage);
 	});
 
 //////////////////////////////////////////////////////////////////////
@@ -498,12 +536,19 @@ Task("TestPackages")
 	.IsDependentOn("TestNuGetPackage")
 	.IsDependentOn("TestChocolateyPackage");
 
-Task("Appveyor")
+Task("PublishPackages")
+	.IsDependentOn("TestPackages")
+	.IsDependentOn("PublishToMyGet")
+	.IsDependentOn("PublishToNuGet")
+	.IsDependentOn("PublishToChocolatey");
+
+Task("AppVeyor")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
     .IsDependentOn("Package")
 	.IsDependentOn("CheckPackages")
-	.IsDependentOn("TestPackages");
+	.IsDependentOn("TestPackages")
+	.IsDependentOn("PublishPackages");
 
 Task("Travis")
     .IsDependentOn("Build")
@@ -514,7 +559,8 @@ Task("All")
     .IsDependentOn("Test")
     .IsDependentOn("Package")
 	.IsDependentOn("CheckPackages")
-	.IsDependentOn("TestPackages");
+	.IsDependentOn("TestPackages")
+	.IsDependentOn("PublishPackages");
 
 Task("Default")
     .IsDependentOn("Test");
