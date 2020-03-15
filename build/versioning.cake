@@ -15,11 +15,13 @@ public class BuildVersion
 	{
         _parameters = parameters;
 
-		bool hasVersionArgument = context.HasArgument("packageVersion");
+		HasVersionArgument = context.HasArgument("packageVersion");
+        HasPublishArgument = context.HasArgument("publish");
+
 		bool onWindows = context.IsRunningOnWindows();
 
 		// TODO: Get GitVersion to work on Linux
-		string packageVersion = hasVersionArgument || !onWindows
+		string packageVersion = HasVersionArgument || !onWindows
 			? context.Argument("packageVersion", DEFAULT_VERSION)
 			: GetPackageVersion(context.GitVersion());
 
@@ -51,6 +53,9 @@ public class BuildVersion
 		AssemblyFileVersion =  SemVer;
 		AssemblyInformationalVersion = packageVersion;
 	}
+
+    public bool HasVersionArgument { get; }
+    public bool HasPublishArgument { get; }
 
 	public string PackageVersion { get; }
 	public string AssemblyVersion { get; }
