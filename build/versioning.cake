@@ -2,13 +2,15 @@ using System.Text.RegularExpressions;
 
 public class BuildVersion
 {
-	public string PackageVersion;
-	public string AssemblyVersion;
-	public string AssemblyFileVersion;
-	public string AssemblyInformationalVersion;
-
     private BuildParameters _parameters;
 
+    // NOTE: This is complicated because (1) the user may have specified 
+    // the package version on the command-line and (2) GitVersion may
+    // or may not be available. We'll work on solving (2) by getting
+    // GitVersion to run for us on Linux, but (1) will alwas remain.
+    //
+    // We simplify things a by figuring out the full package version and
+    // then parsing it to provide information that is used in the build.
 	public BuildVersion(ISetupContext context, BuildParameters parameters)
 	{
         _parameters = parameters;
@@ -21,16 +23,44 @@ public class BuildVersion
 			? context.Argument("packageVersion", DEFAULT_VERSION)
 			: GetPackageVersion(context.GitVersion());
 
-		var dash = packageVersion.IndexOf('-');
-		var version = dash > 0
-			? packageVersion.Substring(0, dash)
-			: packageVersion;
-		
+		int dash = packageVersion.IndexOf('-');
+        IsPreRelease = dash > 0;
+
+        string version = packageVersion;
+        string suffix = "";
+        string label = "";
+
+        if (IsPreRelease)
+        {
+            version = packageVersion.Substring(0, dash);
+            suffix = packageVersion.Substring(dash+1);
+            foreach (char c in suffix)
+            {
+                if (char.IsDigit(c))
+                    break;
+                label += c;
+            } 
+        }
+
+        SemVer = new Version(version).ToString(3);
+        PreReleaseLabel = label;
+        PreReleaseSuffix = suffix;
+
 		PackageVersion = packageVersion;
-		AssemblyVersion = version + ".0";
-		AssemblyFileVersion =  version;
+		AssemblyVersion = SemVer + ".0";
+		AssemblyFileVersion =  SemVer;
 		AssemblyInformationalVersion = packageVersion;
 	}
+
+	public string PackageVersion { get; }
+	public string AssemblyVersion { get; }
+	public string AssemblyFileVersion { get; }
+	public string AssemblyInformationalVersion { get; }
+
+    public string SemVer { get; }
+    public bool IsPreRelease { get; }
+    public string PreReleaseLabel { get; }
+    public string PreReleaseSuffix { get; }
 
 	private static string GetPackageVersion(GitVersion gitVersion)
 	{

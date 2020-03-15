@@ -1,7 +1,7 @@
 image: Visual Studio 2019
 
 build_script: 
-  - ps: .\build.ps1 -Target "Appveyor" -Configuration "Release"
+  - ps: .\build.ps1 -Target "AppVeyor" -Configuration "Release"
   
 # disable built-in tests.
 test: off
@@ -10,12 +10,6 @@ artifacts:
 - path: package\*.zip
 - path: package\*.nupkg
 
-deploy:
-  - provider: NuGet
-    server: https://www.myget.org/F/testcentric/api/v2
-    api_key:
-      secure: wtAvJDVl2tfwiVcyLExFHLvZVfUWiQRHsfdHBFCNEATeCHo1Nd8JP642PfY8xhji
-    skip_symbols: true
-    on:
-      branch: master
-      APPVEYOR_REPO_NAME: TestCentric/testcentric-gui
+environment:
+  MYGET_API_KEY:
+    secure: wtAvJDVl2tfwiVcyLExFHLvZVfUWiQRHsfdHBFCNEATeCHo1Nd8JP642PfY8xhji

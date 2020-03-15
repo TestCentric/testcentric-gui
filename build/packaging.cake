@@ -76,52 +76,59 @@ private void CreateImage(BuildParameters parameters)
 	// into the image directory but are added separately.
 }
 
-string MYGET_API_KEY = EnvironmentVariable("MYGET_API_KEY");
-string MYGET_PUSH_URL = "https://www.myget.org/F/testcentric/api/v2";
-string NUGET_API_KEY = EnvironmentVariable("NUGET_API_KEY");
-string NUGET_PUSH_URL = "https://api.nuget.org/v3/index.json";
-string CHOCO_API_KEY = EnvironmentVariable("CHOCO_API_KEY");
-string CHOCO_PUSH_URL = "https://push.chocolatey.org/";
-
-private void PublishToMyGet(FilePath packageName)
+public class Publisher
 {
-	EnsurePackageExists(packageName);
+    private ICakeContext _context;
+    private BuildParameters _parameters;
 
-	Information($"Publishing {packageName} to myget.org.");
-	NuGetPush(packageName, new NuGetPushSettings() { ApiKey=MYGET_API_KEY, Source=MYGET_PUSH_URL });
-}
+    public Publisher(ICakeContext context, BuildParameters parameters)
+    {
+        _context = context;
+        _parameters = parameters;
+    }
 
-private void PublishToNuGet(FilePath packageName)
-{
-	EnsurePackageExists(packageName);
+    public void Publish()
+    {
+        if (_parameters.ShouldPublishToMyGet)
+        {
+            PublishToMyGet(_parameters.NuGetPackage);
+            PublishToMyGet(_parameters.ChocolateyPackage);
+        }
+    }
 
-	Information($"Publishing {packageName} to nuget.org.");
-	NuGetPush(packageName, new NuGetPushSettings() { ApiKey=NUGET_API_KEY, Source=NUGET_PUSH_URL });
-}
+    public void PublishToMyGet(FilePath packageName)
+    {
+        EnsurePackageExists(packageName);
 
-private void PublishToChocolatey(FilePath packageName)
-{
-	EnsurePackageExists(packageName);
-	EnsureKeyIsSet(CHOCO_API_KEY);
+        Console.WriteLine($"Publishing {packageName} to myget.org.");
+        _context.NuGetPush(packageName, new NuGetPushSettings() { ApiKey=_parameters.MyGetApiKey, Source=MYGET_PUSH_URL });
+    }
 
-	Information($"Publishing {packageName} to chocolatey.");
-	ChocolateyPush(packageName, new ChocolateyPushSettings() { ApiKey=CHOCO_API_KEY, Source=CHOCO_PUSH_URL });
-}
+    public void PublishToNuGet(FilePath packageName)
+    {
+        EnsurePackageExists(packageName);
 
-private void EnsurePackageExists(FilePath path)
-{
-	if (!FileExists(path))
-	{
-		var packageName = path.GetFilename();
-		throw new InvalidOperationException(
-			$"Package not found: {packageName}.\nCode may have changed since package was last built.");
-	}
-}
+        Console.WriteLine($"Publishing {packageName} to nuget.org.");
+        _context.NuGetPush(packageName, new NuGetPushSettings() { ApiKey=_parameters.NuGetApiKey, Source=NUGET_PUSH_URL });
+    }
 
-private void EnsureKeyIsSet(string apiKey)
-{
-	if (string.IsNullOrEmpty(apiKey))
-		throw new InvalidOperationException("The Api Key has not been set.");
+    public void PublishToChocolatey(FilePath packageName)
+    {
+        EnsurePackageExists(packageName);
+
+        Console.WriteLine($"Publishing {packageName} to chocolatey.");
+        _context.ChocolateyPush(packageName, new ChocolateyPushSettings() { ApiKey=_parameters.ChocolateyApiKey, Source=CHOCO_PUSH_URL });
+    }
+
+    private void EnsurePackageExists(FilePath path)
+    {
+        if (!_context.FileExists(path))
+        {
+            var packageName = path.GetFilename();
+            throw new InvalidOperationException(
+                $"Package not found: {packageName}.\nCode may have changed since package was last built.");
+        }
+    }
 }
 
 string[] ENGINE_FILES = { 

@@ -15,6 +15,13 @@ public class BuildParameters
 		Configuration = context.Argument("configuration", DEFAULT_CONFIGURATION);
 		Versions = new BuildVersion(context, this);
 		ProjectDirectory = context.Environment.WorkingDirectory.FullPath + "/";
+
+		MyGetApiKey = _context.EnvironmentVariable("MYGET_API_KEY");
+		NuGetApiKey = _context.EnvironmentVariable("NUGET_API_KEY");
+		ChocolateyApiKey = _context.EnvironmentVariable("CHOCO_API_KEY");
+		
+		Publisher = new Publisher(context, this);
+
 		UsingXBuild = context.EnvironmentVariable("USE_XBUILD") != null;
 
 		MSBuildSettings = new MSBuildSettings {
@@ -57,6 +64,9 @@ public class BuildParameters
 	public bool IsRunningOnUnix => _context.IsRunningOnUnix();
 	public bool IsRunningOnWindows => _context.IsRunningOnWindows();
 
+	public bool IsRunningOnAppVeyor => _buildSystem.AppVeyor.IsRunningOnAppVeyor;
+	public bool IsPullRequest => _buildSystem.IsPullRequest;
+
 	public string ProjectDirectory { get; }
 	public string OutputDirectory => ProjectDirectory + "bin/" + Configuration + "/";
 	public string NuGetDirectory => ProjectDirectory + "nuget/";
@@ -75,6 +85,16 @@ public class BuildParameters
 	public FilePath NuGetPackage => new FilePath(PackageDirectory + NuGetPackageName);
 	public FilePath ChocolateyPackage => new FilePath(PackageDirectory + ChocolateyPackageName);
 
+	public Publisher Publisher { get; }
+
+	public string MyGetApiKey { get; }
+	public string NuGetApiKey { get; }
+	public string ChocolateyApiKey { get; }
+
+	public bool ShouldPublishPackages => ShouldPublishToMyGet || ShouldPublishToNuGet || ShouldPublishToChocolatey;
+	public bool ShouldPublishToMyGet =>	IsRunningOnAppVeyor && Versions.PreReleaseLabel == "dev";
+	public bool ShouldPublishToNuGet => false;
+	public bool ShouldPublishToChocolatey => false;
 
 	public bool UsingXBuild { get; }
 	public MSBuildSettings MSBuildSettings { get; }
