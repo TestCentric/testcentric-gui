@@ -1,4 +1,17 @@
-﻿TestCentric Runner for NUnit 1.3.1 - March 6, 2020
+﻿TestCentric Runner for NUnit 1.3.2 - March 15, 2020
+
+This release corrects a new bug found in the 1.3.0 release and makes a
+number of improvements in the automation of the release process.
+
+Issues Resolved
+
+ * 428 Update assemblyinfo automatically
+ * 525 Create a nuget organization for TestCentric
+ * 534 Automate packaging and deployment
+ * 540 Support for unattended execution of the GUI
+ * 542 FIXED: Default process model for 32 bit v1.3.1
+
+TestCentric Runner for NUnit 1.3.1 - March 6, 2020
 
 This release corrects a critical problem in the 1.3.0 release. None of the
 1.3.0 packages included agents for use under .NET 4.0 and higher. This
