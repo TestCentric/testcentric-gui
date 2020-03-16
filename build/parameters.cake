@@ -4,6 +4,16 @@
 
 public class BuildParameters
 {
+	// URLs for uploading packages
+	private const string MYGET_PUSH_URL = "https://www.myget.org/F/testcentric/api/v2";
+	private const string NUGET_PUSH_URL = "https://api.nuget.org/v3/index.json";
+	private const string CHOCO_PUSH_URL = "https://push.chocolatey.org/";
+
+	// Environment Variable names holding API keys
+	private const string MYGET_API_KEY = "MYGET_API_KEY";
+	private const string NUGET_API_KEY = "NUGET_API_KEY";
+	private const string CHOCO_API_KEY = "CHOCO_API_KEY";
+
 	private ISetupContext _context;
 	private BuildSystem _buildSystem;
 
@@ -21,9 +31,9 @@ public class BuildParameters
 		ShouldPublishToMyGet = publishAllowed && Versions.IsPreRelease && (Versions.PreReleaseLabel == "dev" || Versions.PreReleaseLabel == "rc");
 		ShouldPublishToNuGet = ShouldPublishToChocolatey = publishAllowed && !Versions.IsPreRelease;
 
-		MyGetApiKey = _context.EnvironmentVariable("MYGET_API_KEY");
-		NuGetApiKey = _context.EnvironmentVariable("NUGET_API_KEY");
-		ChocolateyApiKey = _context.EnvironmentVariable("CHOCO_API_KEY");
+		MyGetApiKey = _context.EnvironmentVariable(MYGET_API_KEY);
+		NuGetApiKey = _context.EnvironmentVariable(NUGET_API_KEY);
+		ChocolateyApiKey = _context.EnvironmentVariable(CHOCO_API_KEY);
 		
 		Publisher = new Publisher(context, this);
 
@@ -92,6 +102,10 @@ public class BuildParameters
 
 	public Publisher Publisher { get; }
 
+	public string MyGetPushUrl => MYGET_PUSH_URL;
+	public string NuGetPushUrl => NUGET_PUSH_URL;
+	public string ChocolateyPushUrl => CHOCO_PUSH_URL;
+	
 	public string MyGetApiKey { get; }
 	public string NuGetApiKey { get; }
 	public string ChocolateyApiKey { get; }
@@ -110,4 +124,57 @@ public class BuildParameters
 		? new string[] {"net40", "net35", "netcoreapp2.1", "netcoreapp1.1"}
 		: new string[] {"net40", "net35", "netcoreapp2.1"};
 	public string[] SupportedAgentRuntimes => new string[] { "net20", "net40" };
+
+	public void DumpSettings()
+	{
+		Console.WriteLine("\nARGUMENTS");
+		Console.WriteLine("HasVersionArgument:           " + Versions.HasVersionArgument);
+		Console.WriteLine("HasPublishArgument:           " + Versions.HasPublishArgument);
+
+		Console.WriteLine("ENVIRONMENT");
+		Console.WriteLine("IsLocalBuild:                 " + IsLocalBuild);
+		Console.WriteLine("IsRunningOnWindows:           " + IsRunningOnWindows);
+		Console.WriteLine("IsRunningOnUnix:              " + IsRunningOnUnix);
+		Console.WriteLine("IsRunningOnAppVeyor:          " + IsRunningOnAppVeyor);
+
+		Console.WriteLine("\nVERSIONING");
+		Console.WriteLine("PackageVersion:               " + PackageVersion);
+		Console.WriteLine("AssemblyVersion:              " + AssemblyVersion);
+		Console.WriteLine("AssemblyFileVersion:          " + AssemblyFileVersion);
+		Console.WriteLine("AssemblyInformationalVersion: " + AssemblyInformationalVersion);
+		Console.WriteLine("SemVer:                       " + Versions.SemVer);
+		Console.WriteLine("IsPreRelease:                 " + Versions.IsPreRelease);
+		Console.WriteLine("PreReleaseLabel:              " + Versions.PreReleaseLabel);
+		Console.WriteLine("PreReleaseSuffix:             " + Versions.PreReleaseSuffix);
+		Console.WriteLine("IsPullRequest:                " + IsPullRequest);
+
+		Console.WriteLine("\nDIRECTORIES");
+		Console.WriteLine("Project:   " + ProjectDirectory);
+		Console.WriteLine("Output:    " + OutputDirectory);
+		Console.WriteLine("NuGet:     " + NuGetDirectory);
+		Console.WriteLine("Choco:     " + ChocoDirectory);
+		Console.WriteLine("Package:   " + PackageDirectory);
+		Console.WriteLine("Image:     " + ImageDirectory);
+		Console.WriteLine("ZipTest:   " + ZipTestDirectory);
+		Console.WriteLine("NuGetTest: " + NuGetTestDirectory);
+		Console.WriteLine("ChocoTest: " + ChocolateyTestDirectory);
+
+		Console.WriteLine("\nBUILD");
+		Console.WriteLine("Build With:      " + (UsingXBuild ? "XBuild" : "MSBuild"));
+		Console.WriteLine("Configuration:   " + Configuration);
+		Console.WriteLine("Engine Runtimes: " + string.Join(", ", SupportedEngineRuntimes));
+		Console.WriteLine("Core Runtimes:   " + string.Join(", ", SupportedCoreRuntimes));
+		Console.WriteLine("Agent Runtimes:  " + string.Join(", ", SupportedAgentRuntimes));
+
+		Console.WriteLine("\nPACKAGING");
+		Console.WriteLine("MyGetPushUrl              " + MyGetPushUrl);
+		Console.WriteLine("NuGetPushUrl              " + NuGetPushUrl);
+		Console.WriteLine("ChocolateyPushUrl         " + ChocolateyPushUrl);
+		Console.WriteLine("MyGetApiKey               " + MyGetApiKey);
+		Console.WriteLine("NuGetApiKey               " + NuGetApiKey);
+		Console.WriteLine("ChocolateyApiKey          " + ChocolateyApiKey);
+		Console.WriteLine("ShouldPublishToMyGet      " + ShouldPublishToChocolatey);
+		Console.WriteLine("ShouldPublishToNuGet      " + ShouldPublishToChocolatey);
+		Console.WriteLine("ShouldPublishToChocolatey " + ShouldPublishToChocolatey);
+	}
 }

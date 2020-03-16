@@ -15,14 +15,14 @@ public class BuildVersion
 	{
         _parameters = parameters;
 
-		HasVersionArgument = context.HasArgument("packageVersion");
+		HasVersionArgument = context.HasArgument("version");
         HasPublishArgument = context.HasArgument("publish");
 
 		bool onWindows = context.IsRunningOnWindows();
 
 		// TODO: Get GitVersion to work on Linux
 		string packageVersion = HasVersionArgument || !onWindows
-			? context.Argument("packageVersion", DEFAULT_VERSION)
+			? context.Argument("version", DEFAULT_VERSION)
 			: GetPackageVersion(context.GitVersion());
 
 		int dash = packageVersion.IndexOf('-');

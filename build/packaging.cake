@@ -101,7 +101,7 @@ public class Publisher
         EnsurePackageExists(packageName);
 
         Console.WriteLine($"Publishing {packageName} to myget.org.");
-        _context.NuGetPush(packageName, new NuGetPushSettings() { ApiKey=_parameters.MyGetApiKey, Source=MYGET_PUSH_URL });
+        _context.NuGetPush(packageName, new NuGetPushSettings() { ApiKey=_parameters.MyGetApiKey, Source=_parameters.MyGetPushUrl });
     }
 
     public void PublishToNuGet(FilePath packageName)
@@ -109,7 +109,7 @@ public class Publisher
         EnsurePackageExists(packageName);
 
         Console.WriteLine($"Publishing {packageName} to nuget.org.");
-        _context.NuGetPush(packageName, new NuGetPushSettings() { ApiKey=_parameters.NuGetApiKey, Source=NUGET_PUSH_URL });
+        _context.NuGetPush(packageName, new NuGetPushSettings() { ApiKey=_parameters.NuGetApiKey, Source=_parameters.NuGetPushUrl });
     }
 
     public void PublishToChocolatey(FilePath packageName)
@@ -117,7 +117,7 @@ public class Publisher
         EnsurePackageExists(packageName);
 
         Console.WriteLine($"Publishing {packageName} to chocolatey.");
-        _context.ChocolateyPush(packageName, new ChocolateyPushSettings() { ApiKey=_parameters.ChocolateyApiKey, Source=CHOCO_PUSH_URL });
+        _context.ChocolateyPush(packageName, new ChocolateyPushSettings() { ApiKey=_parameters.ChocolateyApiKey, Source=_parameters.ChocolateyPushUrl });
     }
 
     private void EnsurePackageExists(FilePath path)
