@@ -29,10 +29,6 @@ const string EXPERIMENTAL_TESTS = "Experimental.Gui.Tests.dll";
 const string MODEL_TESTS = "TestCentric.Gui.Model.Tests.dll";
 const string ALL_TESTS = "*.Tests.dll";
 
-const string MYGET_PUSH_URL = "https://www.myget.org/F/testcentric/api/v2";
-const string NUGET_PUSH_URL = "https://api.nuget.org/v3/index.json";
-const string CHOCO_PUSH_URL = "https://push.chocolatey.org/";
-
 //////////////////////////////////////////////////////////////////////
 // SETUP AND TEARDOWN
 //////////////////////////////////////////////////////////////////////
@@ -53,6 +49,16 @@ Setup<BuildParameters>((context) =>
 // If we run target Test, we catch errors here in teardown.
 // If we run packaging, the CheckTestErrors Task is run instead.
 Teardown(context => CheckTestErrors(ref ErrorDetail));
+
+//////////////////////////////////////////////////////////////////////
+// DUMP SETTINGS
+//////////////////////////////////////////////////////////////////////
+
+Task("DumpSettings")
+	.Does<BuildParameters>((parameters) =>
+{
+	parameters.DumpSettings();
+});
 
 //////////////////////////////////////////////////////////////////////
 // CLEAN
@@ -433,6 +439,7 @@ Task("PublishToMyGet")
 	{
 		var packages = new[] { parameters.NuGetPackage, parameters.ChocolateyPackage };
 		var apiKey = parameters.MyGetApiKey;
+		var url = parameters.MyGetPushUrl;
 
 		foreach (var package in packages)
 		{
@@ -441,7 +448,7 @@ Task("PublishToMyGet")
 					$"Package not found: {package.GetFilename()}.\nCode may have changed since package was last built.");
 
         	Information($"Publishing {package} to myget.org.");
-        	NuGetPush(package, new NuGetPushSettings() { ApiKey=apiKey, Source=MYGET_PUSH_URL });
+        	NuGetPush(package, new NuGetPushSettings() { ApiKey=apiKey, Source=url });
 		}
 	});
 
@@ -543,6 +550,7 @@ Task("PublishPackages")
 	.IsDependentOn("PublishToChocolatey");
 
 Task("AppVeyor")
+	.IsDependentOn("DumpSettings")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
     .IsDependentOn("Package")
@@ -555,6 +563,7 @@ Task("Travis")
     .IsDependentOn("Test");
 
 Task("All")
+	.IsDependentOn("DumpSettings")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
     .IsDependentOn("Package")
