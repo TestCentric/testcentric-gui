@@ -16,10 +16,23 @@ public class BuildParameters
 	private const string CHOCO_API_KEY = "CHOCO_API_KEY";
 	private const string TEST_API_KEY = "TEST_API_KEY";
 
+	// Pre-release labels that we publish
+	private const string LABELS_WE_PUBLISH_ON_MYGET = "dev/alpha/beta/rc";
+	private const string LABELS_WE_PUBLISH_ON_NUGET = "";
+	private const string LABELS_WE_PUBLISH_ON_CHOCOLATEY = "";
+
 	private ISetupContext _context;
 	private BuildSystem _buildSystem;
 
-	public BuildParameters(ISetupContext context)
+	public static BuildParameters Create(ISetupContext context)
+	{
+		var parameters = new BuildParameters(context);
+		parameters.Validate();
+
+		return parameters;
+	}
+
+	private BuildParameters(ISetupContext context)
 	{
 		_context = context;
 		_buildSystem = _context.BuildSystem();
@@ -29,14 +42,10 @@ public class BuildParameters
 
 		Versions = new BuildVersion(context, this);
 	
-		ShouldPublishToMyGet = Versions.IsPreRelease && (Versions.PreReleaseLabel == "dev" || Versions.PreReleaseLabel == "rc");
-		ShouldPublishToNuGet = ShouldPublishToChocolatey = !Versions.IsPreRelease;
-		ShouldPublishToTestSite = !Versions.IsPreRelease || Versions.PreReleaseLabel == "dev" || Versions.PreReleaseLabel == "rc";
-
 		MyGetApiKey = _context.EnvironmentVariable(MYGET_API_KEY);
 		NuGetApiKey = _context.EnvironmentVariable(NUGET_API_KEY);
 		ChocolateyApiKey = _context.EnvironmentVariable(CHOCO_API_KEY);
-		TestApiKey = _context.EnvironmentVariable(TEST_API_KEY);
+		TestSiteApiKey = _context.EnvironmentVariable(TEST_API_KEY);
 		
 		UsingXBuild = context.EnvironmentVariable("USE_XBUILD") != null;
 
@@ -105,18 +114,18 @@ public class BuildParameters
 	public string MyGetPushUrl => MYGET_PUSH_URL;
 	public string NuGetPushUrl => NUGET_PUSH_URL;
 	public string ChocolateyPushUrl => CHOCO_PUSH_URL;
-	public string TestPushUrl => TEST_PUSH_URL;
+	public string TestSitePushUrl => TEST_PUSH_URL;
 	
 	public string MyGetApiKey { get; }
 	public string NuGetApiKey { get; }
 	public string ChocolateyApiKey { get; }
-	public string TestApiKey { get; }
+	public string TestSiteApiKey { get; }
 
-	public bool ShouldPublishToMyGet { get; }
-	public bool ShouldPublishToNuGet { get; }
-	public bool ShouldPublishToChocolatey { get; }
-	public bool ShouldPublishToTestSite { get; }
-
+	public bool ShouldPublishPackages => ShouldPublishToMyGet || ShouldPublishToNuGet || ShouldPublishToChocolatey;
+	public bool ShouldPublishToMyGet => Versions.IsPreRelease && LABELS_WE_PUBLISH_ON_MYGET.Contains(Versions.PreReleaseLabel);
+	public bool ShouldPublishToNuGet => !Versions.IsPreRelease;
+	public bool ShouldPublishToChocolatey => !Versions.IsPreRelease;
+	
 	public bool UsingXBuild { get; }
 	public MSBuildSettings MSBuildSettings { get; }
 	public XBuildSettings XBuildSettings { get; }
@@ -127,6 +136,29 @@ public class BuildParameters
 		? new string[] {"net40", "net35", "netcoreapp2.1", "netcoreapp1.1"}
 		: new string[] {"net40", "net35", "netcoreapp2.1"};
 	public string[] SupportedAgentRuntimes => new string[] { "net20", "net40" };
+
+	private void Validate()
+	{
+		var errors = new List<string>();
+
+		if (ShouldPublishToMyGet && string.IsNullOrEmpty(MyGetApiKey))
+			errors.Add("MyGet ApiKey was not set.");
+		if (ShouldPublishToNuGet && string.IsNullOrEmpty(NuGetApiKey))
+			errors.Add("NuGet ApiKey was not set.");
+		if (ShouldPublishToChocolatey && string.IsNullOrEmpty(ChocolateyApiKey))
+			errors.Add("Chocolatey ApiKey was not set.");
+
+		if (errors.Count > 0)
+		{
+			DumpSettings();
+
+			var msg = new StringBuilder("Parameter validation failed! See settings above.\n\nErrors found:\n");
+			foreach (var error in errors)
+				msg.AppendLine("  " + error);
+
+			throw new InvalidOperationException(msg.ToString());
+		}
+	}
 
 	public void DumpSettings()
 	{
@@ -169,11 +201,11 @@ public class BuildParameters
 		Console.WriteLine("MyGetPushUrl:              " + MyGetPushUrl);
 		Console.WriteLine("NuGetPushUrl:              " + NuGetPushUrl);
 		Console.WriteLine("ChocolateyPushUrl:         " + ChocolateyPushUrl);
-		Console.WriteLine("TestPushUrl:               " + TestPushUrl);
+		Console.WriteLine("TestSitePushUrl:           " + TestSitePushUrl);
 		Console.WriteLine("MyGetApiKey:               " + MyGetApiKey);
 		Console.WriteLine("NuGetApiKey:               " + NuGetApiKey);
 		Console.WriteLine("ChocolateyApiKey:          " + ChocolateyApiKey);
-		Console.WriteLine("TestApiKey:                " + TestApiKey);
+		Console.WriteLine("TestSiteApiKey:            " + TestSiteApiKey);
 		Console.WriteLine("ShouldPublishToMyGet:      " + ShouldPublishToMyGet);
 		Console.WriteLine("ShouldPublishToNuGet:      " + ShouldPublishToNuGet);
 		Console.WriteLine("ShouldPublishToChocolatey: " + ShouldPublishToChocolatey);

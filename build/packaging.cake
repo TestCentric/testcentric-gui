@@ -76,6 +76,25 @@ private void CreateImage(BuildParameters parameters)
 	// into the image directory but are added separately.
 }
 
+private void PushNuGetPackage(FilePath package, string apiKey, string url)
+{
+	CheckPackageExists(package);
+	NuGetPush(package, new NuGetPushSettings() { ApiKey=apiKey, Source=url });
+}
+
+private void PushChocolateyPackage(FilePath package, string apiKey, string url)
+{
+	CheckPackageExists(package);
+	ChocolateyPush(package, new ChocolateyPushSettings() { ApiKey=apiKey, Source=url });
+}
+
+private void CheckPackageExists(FilePath package)
+{
+	if (!FileExists(package))
+		throw new InvalidOperationException(
+			$"Package not found: {package.GetFilename()}.\nCode may have changed since package was last built.");
+}
+
 string[] ENGINE_FILES = { 
     "testcentric.engine.dll", "testcentric.engine.core.dll", "testcentric.engine.api.dll", "testcentric.engine.metadata.dll", "Mono.Cecil.dll"};
 string[] AGENT_FILES = { 
