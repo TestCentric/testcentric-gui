@@ -76,61 +76,6 @@ private void CreateImage(BuildParameters parameters)
 	// into the image directory but are added separately.
 }
 
-public class Publisher
-{
-    private ICakeContext _context;
-    private BuildParameters _parameters;
-
-    public Publisher(ICakeContext context, BuildParameters parameters)
-    {
-        _context = context;
-        _parameters = parameters;
-    }
-
-    public void Publish()
-    {
-        if (_parameters.ShouldPublishToMyGet)
-        {
-            PublishToMyGet(_parameters.NuGetPackage);
-            PublishToMyGet(_parameters.ChocolateyPackage);
-        }
-    }
-
-    public void PublishToMyGet(FilePath packageName)
-    {
-        EnsurePackageExists(packageName);
-
-        Console.WriteLine($"Publishing {packageName} to myget.org.");
-        _context.NuGetPush(packageName, new NuGetPushSettings() { ApiKey=_parameters.MyGetApiKey, Source=MYGET_PUSH_URL });
-    }
-
-    public void PublishToNuGet(FilePath packageName)
-    {
-        EnsurePackageExists(packageName);
-
-        Console.WriteLine($"Publishing {packageName} to nuget.org.");
-        _context.NuGetPush(packageName, new NuGetPushSettings() { ApiKey=_parameters.NuGetApiKey, Source=NUGET_PUSH_URL });
-    }
-
-    public void PublishToChocolatey(FilePath packageName)
-    {
-        EnsurePackageExists(packageName);
-
-        Console.WriteLine($"Publishing {packageName} to chocolatey.");
-        _context.ChocolateyPush(packageName, new ChocolateyPushSettings() { ApiKey=_parameters.ChocolateyApiKey, Source=CHOCO_PUSH_URL });
-    }
-
-    private void EnsurePackageExists(FilePath path)
-    {
-        if (!_context.FileExists(path))
-        {
-            var packageName = path.GetFilename();
-            throw new InvalidOperationException(
-                $"Package not found: {packageName}.\nCode may have changed since package was last built.");
-        }
-    }
-}
-
 string[] ENGINE_FILES = { 
     "testcentric.engine.dll", "testcentric.engine.core.dll", "testcentric.engine.api.dll", "testcentric.engine.metadata.dll", "Mono.Cecil.dll"};
 string[] AGENT_FILES = { 

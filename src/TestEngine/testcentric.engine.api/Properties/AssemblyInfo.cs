@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 #endif
 
 [assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.3.2")]
-[assembly: AssemblyInformationalVersion("1.3.2-rc999-testing")]
+[assembly: AssemblyFileVersion("1.3.3")]
+[assembly: AssemblyInformationalVersion("1.3.3-ci00003-issue-551")]
