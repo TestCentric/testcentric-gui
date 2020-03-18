@@ -15,14 +15,9 @@ public class BuildVersion
 	{
         _parameters = parameters;
 
-		HasVersionArgument = context.HasArgument("version");
-        HasPublishArgument = context.HasArgument("publish");
-
-		bool onWindows = context.IsRunningOnWindows();
-
 		// TODO: Get GitVersion to work on Linux
-		string packageVersion = HasVersionArgument || !onWindows
-			? context.Argument("version", DEFAULT_VERSION)
+		string packageVersion = context.HasArgument("asVersion") || !parameters.IsRunningOnWindows
+			? context.Argument("asVersion", DEFAULT_VERSION)
 			: GetPackageVersion(context.GitVersion());
 
 		int dash = packageVersion.IndexOf('-');
@@ -38,7 +33,7 @@ public class BuildVersion
             suffix = packageVersion.Substring(dash+1);
             foreach (char c in suffix)
             {
-                if (char.IsDigit(c))
+                if (!char.IsLetter(c))
                     break;
                 label += c;
             } 
@@ -53,9 +48,6 @@ public class BuildVersion
 		AssemblyFileVersion =  SemVer;
 		AssemblyInformationalVersion = packageVersion;
 	}
-
-    public bool HasVersionArgument { get; }
-    public bool HasPublishArgument { get; }
 
 	public string PackageVersion { get; }
 	public string AssemblyVersion { get; }

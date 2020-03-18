@@ -8,11 +8,13 @@ public class BuildParameters
 	private const string MYGET_PUSH_URL = "https://www.myget.org/F/testcentric/api/v2";
 	private const string NUGET_PUSH_URL = "https://api.nuget.org/v3/index.json";
 	private const string CHOCO_PUSH_URL = "https://push.chocolatey.org/";
+	private const string TEST_PUSH_URL = "https://www.myget.org/F/testcentric-upload-test/api/v2";
 
 	// Environment Variable names holding API keys
 	private const string MYGET_API_KEY = "MYGET_API_KEY";
 	private const string NUGET_API_KEY = "NUGET_API_KEY";
 	private const string CHOCO_API_KEY = "CHOCO_API_KEY";
+	private const string TEST_API_KEY = "TEST_API_KEY";
 
 	private ISetupContext _context;
 	private BuildSystem _buildSystem;
@@ -26,17 +28,16 @@ public class BuildParameters
 		ProjectDirectory = context.Environment.WorkingDirectory.FullPath + "/";
 
 		Versions = new BuildVersion(context, this);
-
-		bool publishAllowed = IsRunningOnAppVeyor || IsLocalBuild && Versions.HasPublishArgument;
-		ShouldPublishToMyGet = publishAllowed && Versions.IsPreRelease && (Versions.PreReleaseLabel == "dev" || Versions.PreReleaseLabel == "rc");
-		ShouldPublishToNuGet = ShouldPublishToChocolatey = publishAllowed && !Versions.IsPreRelease;
+	
+		ShouldPublishToMyGet = Versions.IsPreRelease && (Versions.PreReleaseLabel == "dev" || Versions.PreReleaseLabel == "rc");
+		ShouldPublishToNuGet = ShouldPublishToChocolatey = !Versions.IsPreRelease;
+		ShouldPublishToTestSite = !Versions.IsPreRelease || Versions.PreReleaseLabel == "dev" || Versions.PreReleaseLabel == "rc";
 
 		MyGetApiKey = _context.EnvironmentVariable(MYGET_API_KEY);
 		NuGetApiKey = _context.EnvironmentVariable(NUGET_API_KEY);
 		ChocolateyApiKey = _context.EnvironmentVariable(CHOCO_API_KEY);
+		TestApiKey = _context.EnvironmentVariable(TEST_API_KEY);
 		
-		Publisher = new Publisher(context, this);
-
 		UsingXBuild = context.EnvironmentVariable("USE_XBUILD") != null;
 
 		MSBuildSettings = new MSBuildSettings {
@@ -69,6 +70,7 @@ public class BuildParameters
 	}
 
 	public string Configuration { get; }
+
 	public BuildVersion Versions { get; }
 	public string PackageVersion => Versions.PackageVersion;
 	public string AssemblyVersion => Versions.AssemblyVersion;
@@ -100,19 +102,20 @@ public class BuildParameters
 	public FilePath NuGetPackage => new FilePath(PackageDirectory + NuGetPackageName);
 	public FilePath ChocolateyPackage => new FilePath(PackageDirectory + ChocolateyPackageName);
 
-	public Publisher Publisher { get; }
-
 	public string MyGetPushUrl => MYGET_PUSH_URL;
 	public string NuGetPushUrl => NUGET_PUSH_URL;
 	public string ChocolateyPushUrl => CHOCO_PUSH_URL;
+	public string TestPushUrl => TEST_PUSH_URL;
 	
 	public string MyGetApiKey { get; }
 	public string NuGetApiKey { get; }
 	public string ChocolateyApiKey { get; }
+	public string TestApiKey { get; }
 
 	public bool ShouldPublishToMyGet { get; }
 	public bool ShouldPublishToNuGet { get; }
 	public bool ShouldPublishToChocolatey { get; }
+	public bool ShouldPublishToTestSite { get; }
 
 	public bool UsingXBuild { get; }
 	public MSBuildSettings MSBuildSettings { get; }
@@ -127,10 +130,6 @@ public class BuildParameters
 
 	public void DumpSettings()
 	{
-		Console.WriteLine("\nARGUMENTS");
-		Console.WriteLine("HasVersionArgument:           " + Versions.HasVersionArgument);
-		Console.WriteLine("HasPublishArgument:           " + Versions.HasPublishArgument);
-
 		Console.WriteLine("ENVIRONMENT");
 		Console.WriteLine("IsLocalBuild:                 " + IsLocalBuild);
 		Console.WriteLine("IsRunningOnWindows:           " + IsRunningOnWindows);
@@ -167,14 +166,16 @@ public class BuildParameters
 		Console.WriteLine("Agent Runtimes:  " + string.Join(", ", SupportedAgentRuntimes));
 
 		Console.WriteLine("\nPACKAGING");
-		Console.WriteLine("MyGetPushUrl              " + MyGetPushUrl);
-		Console.WriteLine("NuGetPushUrl              " + NuGetPushUrl);
-		Console.WriteLine("ChocolateyPushUrl         " + ChocolateyPushUrl);
-		Console.WriteLine("MyGetApiKey               " + MyGetApiKey);
-		Console.WriteLine("NuGetApiKey               " + NuGetApiKey);
-		Console.WriteLine("ChocolateyApiKey          " + ChocolateyApiKey);
-		Console.WriteLine("ShouldPublishToMyGet      " + ShouldPublishToChocolatey);
-		Console.WriteLine("ShouldPublishToNuGet      " + ShouldPublishToChocolatey);
-		Console.WriteLine("ShouldPublishToChocolatey " + ShouldPublishToChocolatey);
+		Console.WriteLine("MyGetPushUrl:              " + MyGetPushUrl);
+		Console.WriteLine("NuGetPushUrl:              " + NuGetPushUrl);
+		Console.WriteLine("ChocolateyPushUrl:         " + ChocolateyPushUrl);
+		Console.WriteLine("TestPushUrl:               " + TestPushUrl);
+		Console.WriteLine("MyGetApiKey:               " + MyGetApiKey);
+		Console.WriteLine("NuGetApiKey:               " + NuGetApiKey);
+		Console.WriteLine("ChocolateyApiKey:          " + ChocolateyApiKey);
+		Console.WriteLine("TestApiKey:                " + TestApiKey);
+		Console.WriteLine("ShouldPublishToMyGet:      " + ShouldPublishToMyGet);
+		Console.WriteLine("ShouldPublishToNuGet:      " + ShouldPublishToNuGet);
+		Console.WriteLine("ShouldPublishToChocolatey: " + ShouldPublishToChocolatey);
 	}
 }
