@@ -4,6 +4,17 @@
 
 #load "./build/parameters.cake"
 
+//////////////////////////////////////////////////////////////////////
+// ARGUMENTS (In addition to the standard Cake arguments)
+//
+// --asVersion=VERSION
+//     Specifies the full package version, incliding any pre-release
+//     suffix. This version is used directly instead of the default
+//     version from the script or that calculated by GitVersion.
+//     Note that all other versions (AssemblyVersion, etc.) are
+//     derived from the package version.
+//////////////////////////////////////////////////////////////////////
+
 using System.Xml;
 using System.Text.RegularExpressions;
 
@@ -14,7 +25,7 @@ using System.Text.RegularExpressions;
 // NOTE: Since GitVersion is only used when running under
 // Windows, the default version should be updated to the 
 // next version after each release.
-const string DEFAULT_VERSION = "1.3.2";
+const string DEFAULT_VERSION = "1.3.3";
 const string DEFAULT_CONFIGURATION = "Release";
 
 const string SOLUTION = "testcentric-gui.sln";
@@ -28,10 +39,6 @@ const string EXPERIMENTAL_RUNNER = "tc-next.exe";
 const string EXPERIMENTAL_TESTS = "Experimental.Gui.Tests.dll";
 const string MODEL_TESTS = "TestCentric.Gui.Model.Tests.dll";
 const string ALL_TESTS = "*.Tests.dll";
-
-const string MYGET_PUSH_URL = "https://www.myget.org/F/testcentric/api/v2";
-const string NUGET_PUSH_URL = "https://api.nuget.org/v3/index.json";
-const string CHOCO_PUSH_URL = "https://push.chocolatey.org/";
 
 //////////////////////////////////////////////////////////////////////
 // SETUP AND TEARDOWN
@@ -53,6 +60,16 @@ Setup<BuildParameters>((context) =>
 // If we run target Test, we catch errors here in teardown.
 // If we run packaging, the CheckTestErrors Task is run instead.
 Teardown(context => CheckTestErrors(ref ErrorDetail));
+
+//////////////////////////////////////////////////////////////////////
+// DUMP SETTINGS
+//////////////////////////////////////////////////////////////////////
+
+Task("DumpSettings")
+	.Does<BuildParameters>((parameters) =>
+{
+	parameters.DumpSettings();
+});
 
 //////////////////////////////////////////////////////////////////////
 // CLEAN
@@ -404,60 +421,64 @@ Task("TestChocolateyPackage")
 // PUBLISH PACKAGES
 //////////////////////////////////////////////////////////////////////
 
-/*Task("PublishPackages")
-	.WithCriteria<BuildParameters>((context, parameters) => parameters.ShouldPublishPackages)
-	.Does<BuildParameters>((parameters) =>
-	{
-		var publisher = parameters.Publisher;
-
-		if (parameters.ShouldPublishToMyGet)
-		{
-			publisher.PublishToMyGet(parameters.NuGetPackage);
-			publisher.PublishToMyGet(parameters.ChocolateyPackage);
-		}
-
-		if (parameters.ShouldPublishToNuGet)
-		{
-			parameters.Publisher.PublishToNuGet(parameters.NuGetPackage);
-		}
-
-		if (parameters.ShouldPublishToChocolatey)
-		{
-			parameters.Publisher.PublishToChocolatey(parameters.ChocolateyPackage);
-		}
-	});*/
-	
 Task("PublishToMyGet")
+	.Description("Publishes nuget and chocolatey packages to myget")
+	.IsDependentOn("TestNuGetPackage")
+	.IsDependentOn("TestChocolateyPackage")
 	.WithCriteria<BuildParameters>((context, parameters) => parameters.ShouldPublishToMyGet)
 	.Does<BuildParameters>((parameters) =>
 	{
-		var packages = new[] { parameters.NuGetPackage, parameters.ChocolateyPackage };
-		var apiKey = parameters.MyGetApiKey;
-
-		foreach (var package in packages)
-		{
-			if (!FileExists(package))
-				throw new InvalidOperationException(
-					$"Package not found: {package.GetFilename()}.\nCode may have changed since package was last built.");
-
-        	Information($"Publishing {package} to myget.org.");
-        	NuGetPush(package, new NuGetPushSettings() { ApiKey=apiKey, Source=MYGET_PUSH_URL });
-		}
+		PushNuGetPackage(parameters.NuGetPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
+		PushChocolateyPackage(parameters.ChocolateyPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
 	});
 
 Task("PublishToNuGet")
+	.Description("Publishes the nuget package to nuget.org")
+	.IsDependentOn("TestNuGetPackage")
 	.WithCriteria<BuildParameters>((context, parameters) => parameters.ShouldPublishToNuGet)
 	.Does<BuildParameters>((parameters) =>
 	{
-		parameters.Publisher.PublishToNuGet(parameters.NuGetPackage);
+		PushNuGetPackage(parameters.NuGetPackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
 	});
 
 Task("PublishToChocolatey")
+	.Description("Publishes the chocolatey package to chocolatey.org")
+	.IsDependentOn("TestChocolateyPackage")
 	.WithCriteria<BuildParameters>((context, parameters) => parameters.ShouldPublishToChocolatey)
 	.Does<BuildParameters>((parameters) =>
 	{
-		parameters.Publisher.PublishToChocolatey(parameters.ChocolateyPackage);
+		PushChocolateyPackage(parameters.ChocolateyPackage, parameters.ChocolateyApiKey, parameters.ChocolateyPushUrl);
 	});
+
+Task("PublishToTestSite")
+	.Description("Publishes nuget and chocolatey packages to the test site (currently the MyGet testcentric-upload-test feed)")
+	.IsDependentOn("TestNuGetPackage")
+	.IsDependentOn("TestChocolateyPackage")
+	.WithCriteria<BuildParameters>((context, parameters) => parameters.ShouldPublishToTestSite)
+	.Does<BuildParameters>((parameters) =>
+	{
+		PushNuGetPackage(parameters.NuGetPackage, parameters.TestApiKey, parameters.TestPushUrl);
+		PushChocolateyPackage(parameters.ChocolateyPackage, parameters.TestApiKey, parameters.TestPushUrl);
+	});
+
+private void PushNuGetPackage(FilePath package, string apiKey, string url)
+{
+	CheckPackageExists(package);
+	NuGetPush(package, new NuGetPushSettings() { ApiKey=apiKey, Source=url });
+}
+
+private void PushChocolateyPackage(FilePath package, string apiKey, string url)
+{
+	CheckPackageExists(package);
+	ChocolateyPush(package, new ChocolateyPushSettings() { ApiKey=apiKey, Source=url });
+}
+
+private void CheckPackageExists(FilePath package)
+{
+	if (!FileExists(package))
+		throw new InvalidOperationException(
+			$"Package not found: {package.GetFilename()}.\nCode may have changed since package was last built.");
+}
 
 //////////////////////////////////////////////////////////////////////
 // INTERACTIVE TESTS FOR USE IN DEVELOPMENT
@@ -543,24 +564,26 @@ Task("PublishPackages")
 	.IsDependentOn("PublishToChocolatey");
 
 Task("AppVeyor")
+	.IsDependentOn("DumpSettings")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
     .IsDependentOn("Package")
 	.IsDependentOn("CheckPackages")
 	.IsDependentOn("TestPackages")
-	.IsDependentOn("PublishPackages");
+	.IsDependentOn("PublishToTestSite");
 
 Task("Travis")
     .IsDependentOn("Build")
     .IsDependentOn("Test");
 
 Task("All")
+	.IsDependentOn("DumpSettings")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
     .IsDependentOn("Package")
 	.IsDependentOn("CheckPackages")
 	.IsDependentOn("TestPackages")
-	.IsDependentOn("PublishPackages");
+	.IsDependentOn("PublishToTestSite");
 
 Task("Default")
     .IsDependentOn("Test");
