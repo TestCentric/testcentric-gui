@@ -37,6 +37,9 @@ public class BuildParameters
 		_context = context;
 		_buildSystem = _context.BuildSystem();
 
+		Target = _context.TargetTask.Name;
+		TasksToExecute = _context.TasksToExecute.Select(t => t.Name);
+
 		Configuration = context.Argument("configuration", DEFAULT_CONFIGURATION);
 		ProjectDirectory = context.Environment.WorkingDirectory.FullPath + "/";
 
@@ -77,6 +80,9 @@ public class BuildParameters
 				"https://www.myget.org/F/nunit/api/v3/index.json"
 			};
 	}
+
+	public string Target { get; }
+	public IEnumerable<string> TasksToExecute { get; }
 
 	public string Configuration { get; }
 
@@ -121,10 +127,12 @@ public class BuildParameters
 	public string ChocolateyApiKey { get; }
 	public string TestSiteApiKey { get; }
 
+	public bool IsPublishing => TasksToExecute.Contains("PublishPackages");
+
 	public bool ShouldPublishPackages => ShouldPublishToMyGet || ShouldPublishToNuGet || ShouldPublishToChocolatey;
-	public bool ShouldPublishToMyGet => Versions.IsPreRelease && LABELS_WE_PUBLISH_ON_MYGET.Contains(Versions.PreReleaseLabel);
-	public bool ShouldPublishToNuGet => !Versions.IsPreRelease;
-	public bool ShouldPublishToChocolatey => !Versions.IsPreRelease;
+	public bool ShouldPublishToMyGet => IsPublishing && Versions.IsPreRelease && LABELS_WE_PUBLISH_ON_MYGET.Contains(Versions.PreReleaseLabel);
+	public bool ShouldPublishToNuGet => IsPublishing && !Versions.IsPreRelease;
+	public bool ShouldPublishToChocolatey => IsPublishing && !Versions.IsPreRelease;
 	
 	public bool UsingXBuild { get; }
 	public MSBuildSettings MSBuildSettings { get; }
@@ -162,7 +170,11 @@ public class BuildParameters
 
 	public void DumpSettings()
 	{
-		Console.WriteLine("ENVIRONMENT");
+		Console.WriteLine("\nTASKS");
+		Console.WriteLine("Target:                       " + Target);
+		Console.WriteLine("TasksToExecute:               " + string.Join(", ", TasksToExecute));
+
+		Console.WriteLine("\nENVIRONMENT");
 		Console.WriteLine("IsLocalBuild:                 " + IsLocalBuild);
 		Console.WriteLine("IsRunningOnWindows:           " + IsRunningOnWindows);
 		Console.WriteLine("IsRunningOnUnix:              " + IsRunningOnUnix);
@@ -206,6 +218,9 @@ public class BuildParameters
 		Console.WriteLine("NuGetApiKey:               " + NuGetApiKey);
 		Console.WriteLine("ChocolateyApiKey:          " + ChocolateyApiKey);
 		Console.WriteLine("TestSiteApiKey:            " + TestSiteApiKey);
+
+		Console.WriteLine("\nPUBLISHING");
+		Console.WriteLine("IsPublishing:              " + IsPublishing);
 		Console.WriteLine("ShouldPublishToMyGet:      " + ShouldPublishToMyGet);
 		Console.WriteLine("ShouldPublishToNuGet:      " + ShouldPublishToNuGet);
 		Console.WriteLine("ShouldPublishToChocolatey: " + ShouldPublishToChocolatey);
