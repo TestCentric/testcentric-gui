@@ -18,8 +18,8 @@ public class BuildParameters
 
 	// Pre-release labels that we publish
 	private const string LABELS_WE_PUBLISH_ON_MYGET = "dev/alpha/beta/rc";
-	private const string LABELS_WE_PUBLISH_ON_NUGET = "";
-	private const string LABELS_WE_PUBLISH_ON_CHOCOLATEY = "";
+	private const string LABELS_WE_PUBLISH_ON_NUGET = "dev/alpha/beta/rc";
+	private const string LABELS_WE_PUBLISH_ON_CHOCOLATEY = "dev/alpha/beta/rc";
 
 	private ISetupContext _context;
 	private BuildSystem _buildSystem;
@@ -130,9 +130,9 @@ public class BuildParameters
 	public bool IsPublishing => TasksToExecute.Contains("PublishPackages");
 
 	public bool ShouldPublishPackages => ShouldPublishToMyGet || ShouldPublishToNuGet || ShouldPublishToChocolatey;
-	public bool ShouldPublishToMyGet => IsPublishing && Versions.IsPreRelease && LABELS_WE_PUBLISH_ON_MYGET.Contains(Versions.PreReleaseLabel);
-	public bool ShouldPublishToNuGet => IsPublishing && !Versions.IsPreRelease;
-	public bool ShouldPublishToChocolatey => IsPublishing && !Versions.IsPreRelease;
+	public bool ShouldPublishToMyGet => IsPublishing && (!Versions.IsPreRelease || LABELS_WE_PUBLISH_ON_MYGET.Contains(Versions.PreReleaseLabel));
+	public bool ShouldPublishToNuGet => IsPublishing && (!Versions.IsPreRelease || LABELS_WE_PUBLISH_ON_NUGET.Contains(Versions.PreReleaseLabel));
+	public bool ShouldPublishToChocolatey => IsPublishing && (!Versions.IsPreRelease || LABELS_WE_PUBLISH_ON_CHOCOLATEY.Contains(Versions.PreReleaseLabel));
 	
 	public bool UsingXBuild { get; }
 	public MSBuildSettings MSBuildSettings { get; }
