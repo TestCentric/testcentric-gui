@@ -8,18 +8,16 @@ public class BuildParameters
 	private const string MYGET_PUSH_URL = "https://www.myget.org/F/testcentric/api/v2";
 	private const string NUGET_PUSH_URL = "https://api.nuget.org/v3/index.json";
 	private const string CHOCO_PUSH_URL = "https://push.chocolatey.org/";
-	private const string TEST_PUSH_URL = "https://www.myget.org/F/testcentric-upload-test/api/v2";
 
 	// Environment Variable names holding API keys
 	private const string MYGET_API_KEY = "MYGET_API_KEY";
 	private const string NUGET_API_KEY = "NUGET_API_KEY";
 	private const string CHOCO_API_KEY = "CHOCO_API_KEY";
-	private const string TEST_API_KEY = "TEST_API_KEY";
-
+	
 	// Pre-release labels that we publish
 	private const string LABELS_WE_PUBLISH_ON_MYGET = "dev/alpha/beta/rc";
-	private const string LABELS_WE_PUBLISH_ON_NUGET = "dev/alpha/beta/rc";
-	private const string LABELS_WE_PUBLISH_ON_CHOCOLATEY = "dev/alpha/beta/rc";
+	private const string LABELS_WE_PUBLISH_ON_NUGET = "alpha/beta/rc";
+	private const string LABELS_WE_PUBLISH_ON_CHOCOLATEY = "alpha/beta/rc";
 
 	private ISetupContext _context;
 	private BuildSystem _buildSystem;
@@ -48,7 +46,6 @@ public class BuildParameters
 		MyGetApiKey = _context.EnvironmentVariable(MYGET_API_KEY);
 		NuGetApiKey = _context.EnvironmentVariable(NUGET_API_KEY);
 		ChocolateyApiKey = _context.EnvironmentVariable(CHOCO_API_KEY);
-		TestSiteApiKey = _context.EnvironmentVariable(TEST_API_KEY);
 		
 		UsingXBuild = context.EnvironmentVariable("USE_XBUILD") != null;
 
@@ -97,7 +94,6 @@ public class BuildParameters
 	public bool IsRunningOnWindows => _context.IsRunningOnWindows();
 
 	public bool IsRunningOnAppVeyor => _buildSystem.AppVeyor.IsRunningOnAppVeyor;
-	public bool IsPullRequest => _buildSystem.IsPullRequest;
 
 	public string ProjectDirectory { get; }
 	public string OutputDirectory => ProjectDirectory + "bin/" + Configuration + "/";
@@ -120,7 +116,6 @@ public class BuildParameters
 	public string MyGetPushUrl => MYGET_PUSH_URL;
 	public string NuGetPushUrl => NUGET_PUSH_URL;
 	public string ChocolateyPushUrl => CHOCO_PUSH_URL;
-	public string TestSitePushUrl => TEST_PUSH_URL;
 	
 	public string MyGetApiKey { get; }
 	public string NuGetApiKey { get; }
@@ -180,6 +175,8 @@ public class BuildParameters
 		Console.WriteLine("IsRunningOnUnix:              " + IsRunningOnUnix);
 		Console.WriteLine("IsRunningOnAppVeyor:          " + IsRunningOnAppVeyor);
 
+		Console.WriteLine("\nGIT");
+
 		Console.WriteLine("\nVERSIONING");
 		Console.WriteLine("PackageVersion:               " + PackageVersion);
 		Console.WriteLine("AssemblyVersion:              " + AssemblyVersion);
@@ -189,7 +186,6 @@ public class BuildParameters
 		Console.WriteLine("IsPreRelease:                 " + Versions.IsPreRelease);
 		Console.WriteLine("PreReleaseLabel:              " + Versions.PreReleaseLabel);
 		Console.WriteLine("PreReleaseSuffix:             " + Versions.PreReleaseSuffix);
-		Console.WriteLine("IsPullRequest:                " + IsPullRequest);
 
 		Console.WriteLine("\nDIRECTORIES");
 		Console.WriteLine("Project:   " + ProjectDirectory);
@@ -213,11 +209,9 @@ public class BuildParameters
 		Console.WriteLine("MyGetPushUrl:              " + MyGetPushUrl);
 		Console.WriteLine("NuGetPushUrl:              " + NuGetPushUrl);
 		Console.WriteLine("ChocolateyPushUrl:         " + ChocolateyPushUrl);
-		Console.WriteLine("TestSitePushUrl:           " + TestSitePushUrl);
 		Console.WriteLine("MyGetApiKey:               " + MyGetApiKey);
 		Console.WriteLine("NuGetApiKey:               " + NuGetApiKey);
 		Console.WriteLine("ChocolateyApiKey:          " + ChocolateyApiKey);
-		Console.WriteLine("TestSiteApiKey:            " + TestSiteApiKey);
 
 		Console.WriteLine("\nPUBLISHING");
 		Console.WriteLine("IsPublishing:              " + IsPublishing);
