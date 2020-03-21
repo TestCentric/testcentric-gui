@@ -16,9 +16,9 @@ public class BuildVersion
         _parameters = parameters;
 
 		// TODO: Get GitVersion to work on Linux
-		string packageVersion = context.HasArgument("asVersion") || !parameters.IsRunningOnWindows
-			? context.Argument("asVersion", DEFAULT_VERSION)
-			: GetPackageVersion(context.GitVersion());
+        string packageVersion = context.HasArgument("asVersion")
+            ? context.Argument("asVersion", DEFAULT_VERSION)
+            : packageVersion = CalculatePackageVersion(context);
 
 		int dash = packageVersion.IndexOf('-');
         IsPreRelease = dash > 0;
@@ -59,47 +59,49 @@ public class BuildVersion
     public string PreReleaseLabel { get; }
     public string PreReleaseSuffix { get; }
 
-	private static string GetPackageVersion(GitVersion gitVersion)
+	private static string CalculatePackageVersion(ISetupContext context)
 	{
+        var gitVersion = context.GitVersion();
+		string label = gitVersion.PreReleaseLabel;
+
+        // Non pre-release is easy
+        if (string.IsNullOrEmpty(label))
+            return gitVersion.MajorMinorPatch;
+
 		string branchName = gitVersion.BranchName;
 		// We don't currently use this pattern, but check in case we do later.
 		if (branchName.StartsWith ("feature/"))
 			branchName = branchName.Substring(8);
+        
+        // Arbitrary branch names are ci builds
+        if (label == branchName)
+            label = "ci";
 
-		// Default based on GitVersion.yml. This gives us a tag of dev
-		// for master, ci for features, pr for pull requests and rc
-		// for release branches.
-		var packageVersion = gitVersion.LegacySemVerPadded;
+        string suffix = "-" + label + gitVersion.CommitsSinceVersionSourcePadded;
 
-		// Full release versions and PRs need no further handling
-		int dash = packageVersion.IndexOf('-');
-		bool isPreRelease = dash > 0;
+        switch(label)
+        {
+            case "ci":
+                branchName = Regex.Replace(branchName, "[^0-9A-Za-z-]+", "-");
+                suffix += "-" + branchName;
+    			// Nuget limits "special version part" to 20 chars. Add one for the hyphen.
+                if (suffix.Length > 21)
+                    suffix = suffix.Substring(0, 21);
+                return gitVersion.MajorMinorPatch + suffix;
 
-		string label = gitVersion.PreReleaseLabel;
-		bool isPR = label == "pr"; // Set in our GitVersion.yml
+            case "dev":
+                return gitVersion.MajorMinorPatch + suffix;
 
-		if (isPreRelease && !isPR)
-		{
-			// This handles non-standard branch names.
-			if (label == branchName)
-				label = "ci";
+            case "pr":
+                return gitVersion.LegacySemVerPadded;
 
-			string suffix = "-" + label + gitVersion.CommitsSinceVersionSourcePadded;
+            case "rc":
+            case "alpha":
+            case "beta":
+            default:
+                return gitVersion.LegacySemVer;
+        }
 
-			if (label == "ci")
-			{
-				branchName = Regex.Replace(branchName, "[^0-9A-Za-z-]+", "-");
-				suffix += "-" + branchName;
-			}
-
-			// Nuget limits "special version part" to 20 chars. Add one for the hyphen.
-			if (suffix.Length > 21)
-				suffix = suffix.Substring(0, 21);
-
-			packageVersion = gitVersion.MajorMinorPatch + suffix;
-		}
-
-		return packageVersion;
 	}
 
     public void PatchAssemblyInfo(string sourceFile, string assemblyVersion = null)

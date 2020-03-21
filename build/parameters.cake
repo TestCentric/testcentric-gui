@@ -94,7 +94,6 @@ public class BuildParameters
 	public bool IsRunningOnWindows => _context.IsRunningOnWindows();
 
 	public bool IsRunningOnAppVeyor => _buildSystem.AppVeyor.IsRunningOnAppVeyor;
-	public bool IsPullRequest => _buildSystem.IsPullRequest;
 
 	public string ProjectDirectory { get; }
 	public string OutputDirectory => ProjectDirectory + "bin/" + Configuration + "/";
@@ -176,6 +175,8 @@ public class BuildParameters
 		Console.WriteLine("IsRunningOnUnix:              " + IsRunningOnUnix);
 		Console.WriteLine("IsRunningOnAppVeyor:          " + IsRunningOnAppVeyor);
 
+		Console.WriteLine("\nGIT");
+
 		Console.WriteLine("\nVERSIONING");
 		Console.WriteLine("PackageVersion:               " + PackageVersion);
 		Console.WriteLine("AssemblyVersion:              " + AssemblyVersion);
@@ -185,7 +186,6 @@ public class BuildParameters
 		Console.WriteLine("IsPreRelease:                 " + Versions.IsPreRelease);
 		Console.WriteLine("PreReleaseLabel:              " + Versions.PreReleaseLabel);
 		Console.WriteLine("PreReleaseSuffix:             " + Versions.PreReleaseSuffix);
-		Console.WriteLine("IsPullRequest:                " + IsPullRequest);
 
 		Console.WriteLine("\nDIRECTORIES");
 		Console.WriteLine("Project:   " + ProjectDirectory);
