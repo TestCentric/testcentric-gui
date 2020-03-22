@@ -451,27 +451,35 @@ Task("PublishPackages")
 // INTERACTIVE TESTS FOR USE IN DEVELOPMENT
 //////////////////////////////////////////////////////////////////////
 
+Task("MustBeLocalBuild")
+	.Description("Throw an exception if this is not a local build")
+	.Does<BuildParameters>((parameters) =>
+	{
+		if (!parameters.IsLocalBuild)
+			throw new InvalidOperationException($"The {parameters.Target} task is interactive and may only be run locally.");
+	});
+
 //////////////////////////////////////////////////////////////////////
-// GUI TEST
+// RUN THE STANDARD GUI
 //////////////////////////////////////////////////////////////////////
 
-Task("GuiTest")
-    .IsDependentOn("Build")
+Task("RunTestCentric")
+    .IsDependentOn("MustBeLocalBuild")
     .Does<BuildParameters>((parameters) =>
 	{
 		StartProcess(parameters.OutputDirectory + GUI_RUNNER);
 	});
 
 //////////////////////////////////////////////////////////////////////
-// EXPERIMENTAL GUI TEST
+// RUN THE EXPERIMENTAL GUI
 //////////////////////////////////////////////////////////////////////
 
-Task("ExperimentalGuiTest")
-    .IsDependentOn("Build")
+Task("RunExperimental")
+    .IsDependentOn("MustBeLocalBuild")
     .Does<BuildParameters>((parameters) =>
-{
+	{
 		StartProcess(parameters.OutputDirectory + EXPERIMENTAL_RUNNER);
-});
+	});
 
 //////////////////////////////////////////////////////////////////////
 // CHOCOLATEY INSTALL (MUST RUN AS ADMIN)
@@ -481,20 +489,7 @@ Task("ChocolateyInstall")
 	.Does<BuildParameters>((parameters) =>
 	{
 		if (StartProcess("choco", $"install -f -y -s {parameters.PackageDirectory} {PACKAGE_NAME}") != 0)
-			throw new Exception("Failed to install package. Must run this command as administrator.");
-	});
-
-//////////////////////////////////////////////////////////////////////
-// CHOCOLATEY TEST (AFTER INSTALL)
-//////////////////////////////////////////////////////////////////////
-
-Task("ChocolateyTest")
-	.IsDependentOn("PackageChocolatey")
-	.Does<BuildParameters>((parameters) =>
-	{
-		// Start both runners
-		StartProcess(GUI_RUNNER);
-		StartProcess(EXPERIMENTAL_RUNNER);
+			throw new InvalidOperationException("Failed to install package. Must run this command as administrator.");
 	});
 
 //////////////////////////////////////////////////////////////////////
