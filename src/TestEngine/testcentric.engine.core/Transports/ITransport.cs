@@ -3,14 +3,11 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-using NUnit.Engine;
-using TestCentric.Engine.Agents;
-
 namespace TestCentric.Engine.Transports
 {
-    public interface ITestAgentTransport : ITransport
+    public interface ITransport
     {
-        TestAgent Agent { get; }
-        ITestEngineRunner CreateRunner(TestPackage package);
+        bool Start();
+        void Stop();
     }
 }
