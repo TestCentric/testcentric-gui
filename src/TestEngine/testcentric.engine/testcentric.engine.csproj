@@ -23,6 +23,8 @@
     <Compile Remove="Internal\SettingsGroup.cs" />
     <Compile Remove="Internal\SettingsStore.cs" />
     <Compile Remove="Services\SettingsService.cs" />
+    <Compile Remove="Services\TestAgencyRemotingTransport.cs" />
+    <Compile Remove="Services\TestAgencyTransport.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\agents\AgentExitCodes.cs" LinkBase="Agents" />
