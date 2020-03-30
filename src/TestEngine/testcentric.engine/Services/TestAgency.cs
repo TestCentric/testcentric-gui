@@ -11,7 +11,7 @@ using TestCentric.Common;
 using TestCentric.Engine.Agents;
 using TestCentric.Engine.Internal;
 using NUnit.Engine;
-using TestCentric.Engine.Transports.Remoting;
+using TestCentric.Engine.Communication.Transports.Remoting;
 
 namespace TestCentric.Engine.Services
 {

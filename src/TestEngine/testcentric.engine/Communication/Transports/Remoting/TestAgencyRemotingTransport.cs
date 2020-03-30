@@ -17,7 +17,7 @@ using TestCentric.Engine.Helpers;
 using TestCentric.Engine.Internal;
 using TestCentric.Engine.Services;
 
-namespace TestCentric.Engine.Transports.Remoting
+namespace TestCentric.Engine.Communication.Transports.Remoting
 {
     /// <summary>
     /// Summary description for TestAgencyRemotingTransport.

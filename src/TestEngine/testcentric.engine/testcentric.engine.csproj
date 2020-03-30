@@ -20,13 +20,6 @@
     <PackageReference Include="System.Xml.XPath.XmlDocument" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="Internal\SettingsGroup.cs" />
-    <Compile Remove="Internal\SettingsStore.cs" />
-    <Compile Remove="Services\SettingsService.cs" />
-    <Compile Remove="Services\TestAgencyRemotingTransport.cs" />
-    <Compile Remove="Services\TestAgencyTransport.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="..\agents\AgentExitCodes.cs" LinkBase="Agents" />
     <Compile Include="..\CommonEngineAssemblyInfo.cs" Link="Properties\CommonEngineAssemblyInfo.cs" />
   </ItemGroup>
@@ -34,9 +27,11 @@
     <ProjectReference Include="..\testcentric.engine.core\testcentric.engine.core.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Transports\Tcp\" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="NUnit.Engine.Api" Version="3.11.1" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='net40'">
+    <Content Include="nunit.engine.addins">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>
