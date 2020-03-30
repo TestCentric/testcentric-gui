@@ -7,7 +7,7 @@ using System;
 using NUnit.Engine;
 using TestCentric.Engine.Agents;
 
-namespace TestCentric.Engine.Transports.Tcp
+namespace TestCentric.Engine.Communication.Transports.Tcp
 {
     // Placeholder class representing future TCP transport.
     // At this point, we are assuming will work for all build

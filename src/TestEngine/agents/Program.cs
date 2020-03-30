@@ -99,9 +99,9 @@ namespace TestCentric.Engine.Agents
             Agent = new RemoteTestAgent(AgentId, engine.Services);
             Agent.Transport =
 #if NETFRAMEWORK
-                new TestCentric.Engine.Transports.Remoting.TestAgentRemotingTransport(Agent, AgencyUrl);
+                new TestCentric.Engine.Communication.Transports.Remoting.TestAgentRemotingTransport(Agent, AgencyUrl);
 #else
-                new TestCentric.Engine.Transports.Tcp.TestAgentTcpTransport(Agent);
+                new TestCentric.Engine.Communication.Transports.Tcp.TestAgentTcpTransport(Agent);
 #endif
             try
             {

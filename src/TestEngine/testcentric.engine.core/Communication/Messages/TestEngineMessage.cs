@@ -3,11 +3,14 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-namespace TestCentric.Engine.Transports
+using System;
+
+namespace TestCentric.Engine.Communication.Messages
 {
-    public interface ITransport
+#if !NETSTANDARD1_6
+    [Serializable]
+#endif
+    public abstract class TestEngineMessage
     {
-        bool Start();
-        void Stop();
     }
 }
