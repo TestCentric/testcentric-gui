@@ -9,7 +9,7 @@ using NUnit.Framework;
 
 namespace TestCentric.Engine
 {
-    [NonParallelizable]
+    [NonParallelizable, Platform(Exclude = "netcore", Reason = "Can't locate engine in other directory under .NET Core")]
     class WorkingDirectoryTests
     {
         private string _origWorkingDir;

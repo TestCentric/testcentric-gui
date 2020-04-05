@@ -22,11 +22,11 @@ namespace TestCentric.Engine.Communication.Transports.Remoting
     /// <summary>
     /// Summary description for TestAgencyRemotingTransport.
     /// </summary>
-    public class TestAgencyRemotingTransport : MarshalByRefObject, ITransport, ITestAgency, IDisposable
+    public class TestAgencyRemotingTransport : MarshalByRefObject, ITestAgencyTransport, ITestAgency, IDisposable
     {
         private static readonly Logger log = InternalTrace.GetLogger(typeof(TestAgencyRemotingTransport));
 
-        private TestAgency _agency;
+        private ITestAgency _agency;
         private string _uri;
         private int _port;
 
@@ -35,7 +35,7 @@ namespace TestCentric.Engine.Communication.Transports.Remoting
 
         private object _theLock = new object();
 
-        public TestAgencyRemotingTransport(TestAgency agency, string uri, int port)
+        public TestAgencyRemotingTransport(ITestAgency agency, string uri, int port)
         {
             Guard.ArgumentNotNull(agency, nameof(agency));
             Guard.ArgumentNotNullOrEmpty(uri, nameof(uri));

@@ -27,9 +27,6 @@ namespace TestCentric.Engine.Runners
         // level, the ProcessRunner should create an XML node for the entire
         // project, aggregating the assembly results.
 
-        private const int NORMAL_TIMEOUT = 30000;               // 30 seconds
-        private const int DEBUG_TIMEOUT = NORMAL_TIMEOUT * 10;  // 5 minutes
-
         private static readonly Logger log = InternalTrace.GetLogger(typeof(ProcessRunner));
 
         private ITestAgent _agent;
@@ -51,7 +48,7 @@ namespace TestCentric.Engine.Runners
         {
             try
             {
-                CreateAgentAndRunner();
+                CreateAgentAndRunnerIfNeeded();
                 return _remoteRunner.Explore(filter);
             }
             catch (Exception e)
@@ -72,7 +69,7 @@ namespace TestCentric.Engine.Runners
 
             try
             {
-                CreateAgentAndRunner();
+                CreateAgentAndRunnerIfNeeded();
 
                 return _remoteRunner.Load();
             }
@@ -116,7 +113,7 @@ namespace TestCentric.Engine.Runners
         /// <returns>The count of test cases</returns>
         public override int CountTestCases(TestFilter filter)
         {
-            CreateAgentAndRunner();
+            CreateAgentAndRunnerIfNeeded();
 
             return _remoteRunner.CountTestCases(filter);
         }
@@ -133,7 +130,7 @@ namespace TestCentric.Engine.Runners
 
             try
             {
-                CreateAgentAndRunner();
+                CreateAgentAndRunnerIfNeeded();
 
                 var result = _remoteRunner.Run(listener, filter);
                 log.Info("Done running " + TestPackage.Name);
@@ -160,7 +157,7 @@ namespace TestCentric.Engine.Runners
 
             try
             {
-                CreateAgentAndRunner();
+                CreateAgentAndRunnerIfNeeded();
 
                 return _remoteRunner.RunAsync(listener, filter);
             }
@@ -276,15 +273,11 @@ namespace TestCentric.Engine.Runners
             }
         }
 
-        private void CreateAgentAndRunner()
+        private void CreateAgentAndRunnerIfNeeded()
         {
             if (_agent == null)
             {
-                // Increase the timeout to give time to attach a debugger
-                bool debug = TestPackage.GetSetting(EnginePackageSettings.DebugAgent, false) ||
-                             TestPackage.GetSetting(EnginePackageSettings.PauseBeforeRun, false);
-
-                _agent = _agency.GetAgent(TestPackage, debug ? DEBUG_TIMEOUT : NORMAL_TIMEOUT);
+                _agent = _agency.GetAgent(TestPackage);
 
                 if (_agent == null)
                     throw new NUnitEngineException("Unable to acquire remote process agent");

@@ -5,10 +5,12 @@
 
 #if NETSTANDARD
 using System;
+using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using TestCentric.Engine.Internal;
 using System.Reflection;
+using TestCentric.Engine.Internal;
+using TestCentric.Engine.Extensibility;
 using Mono.Cecil;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
@@ -59,15 +61,23 @@ namespace TestCentric.Engine.Drivers
             var idPrefix = string.IsNullOrEmpty(ID) ? "" : ID + "-";
 
             var assemblyRef = AssemblyDefinition.ReadAssembly(testAssembly);
+#if NETSTANDARD1_6
             _testAssembly = Assembly.Load(new AssemblyName(assemblyRef.FullName));
-            if(_testAssembly == null)
+#else
+            _testAssembly = Assembly.LoadFrom(testAssembly);
+#endif
+            if (_testAssembly == null)
                 throw new NUnitEngineException(string.Format(FAILED_TO_LOAD_TEST_ASSEMBLY, assemblyRef.FullName));
 
             var nunitRef = assemblyRef.MainModule.AssemblyReferences.Where(reference => reference.Name.Equals("nunit.framework", StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
             if (nunitRef == null)
                 throw new NUnitEngineException(FAILED_TO_LOAD_NUNIT);
 
+#if NETSTANDARD1_6
             var nunit = Assembly.Load(new AssemblyName(nunitRef.FullName));
+#else
+            var nunit = Assembly.LoadFrom(Path.Combine(Path.GetDirectoryName(testAssembly), nunitRef.Name + ".dll"));
+#endif
             if (nunit == null)
                 throw new NUnitEngineException(FAILED_TO_LOAD_NUNIT);
 

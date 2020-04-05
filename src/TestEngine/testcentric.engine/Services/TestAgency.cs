@@ -12,6 +12,7 @@ using TestCentric.Engine.Agents;
 using TestCentric.Engine.Internal;
 using NUnit.Engine;
 using TestCentric.Engine.Communication.Transports.Remoting;
+using TestCentric.Engine.Communication.Transports.Tcp;
 
 namespace TestCentric.Engine.Services
 {
@@ -27,21 +28,26 @@ namespace TestCentric.Engine.Services
     {
         private static readonly Logger log = InternalTrace.GetLogger(typeof(TestAgency));
 
+        private const int NORMAL_TIMEOUT = 30000;               // 30 seconds
+        private const int DEBUG_TIMEOUT = NORMAL_TIMEOUT * 10;  // 5 minutes
+
         private readonly AgentStore _agentStore = new AgentStore();
 
         private IRuntimeFrameworkService _runtimeService;
 
         // Transports used for various target runtimes
         private TestAgencyRemotingTransport _remotingTransport; // .NET Framework
-        // TODO: Add one for .NET Core
+        private TestAgencyTcpTransport _tcpTransport; // .NET Standard 2.0
 
         public TestAgency() : this( "TestAgency", 0 ) { }
 
         internal virtual string RemotingUrl => _remotingTransport.ServerUrl;
+        internal virtual string TcpEndPoint => _tcpTransport.ServerUrl;
 
         public TestAgency(string uri, int port )
         {
             _remotingTransport = new TestAgencyRemotingTransport(this, uri, port);
+            _tcpTransport = new TestAgencyTcpTransport(this, port);
         }
 
         public void Register(ITestAgent agent)
@@ -49,7 +55,7 @@ namespace TestCentric.Engine.Services
             _agentStore.Register(agent);
         }
 
-        public ITestAgent GetAgent(TestPackage package, int waitTime)
+        public ITestAgent GetAgent(TestPackage package)
         {
             // Target Runtime must be specified by this point
             string runtimeSetting = package.GetSetting(EnginePackageSettings.RuntimeFramework, "");
@@ -62,7 +68,7 @@ namespace TestCentric.Engine.Services
                     "framework");
 
             // TODO: Decide if we should reuse agents
-            return CreateRemoteAgent(package, waitTime);
+            return CreateRemoteAgent(package, targetRuntime);
         }
 
         internal bool IsAgentProcessActive(Guid agentId, out Process process)
@@ -70,7 +76,7 @@ namespace TestCentric.Engine.Services
             return _agentStore.IsAgentProcessActive(agentId, out process);
         }
 
-        private ITestAgent CreateRemoteAgent(TestPackage package, int waitTime)
+        private ITestAgent CreateRemoteAgent(TestPackage package, RuntimeFramework targetRuntime)
         {
             var agentId = Guid.NewGuid();
             var process = new AgentProcess(this, package, agentId);
@@ -86,6 +92,12 @@ namespace TestCentric.Engine.Services
 
             const int pollTime = 200;
 
+            // Increase the timeout to give time to attach a debugger
+            bool debug = package.GetSetting(EnginePackageSettings.DebugAgent, false) ||
+                         package.GetSetting(EnginePackageSettings.PauseBeforeRun, false);
+
+            int waitTime = debug ? DEBUG_TIMEOUT : NORMAL_TIMEOUT;
+
             // Wait for agent registration based on the agent actually getting processor time to avoid falling over
             // under process starvation.
             while (waitTime > process.TotalProcessorTime.TotalMilliseconds && !process.HasExited)
@@ -95,7 +107,18 @@ namespace TestCentric.Engine.Services
                 if (_agentStore.IsReady(agentId, out var agent))
                 {
                     log.Debug($"Returning new agent {agentId:B}");
-                    return new RemoteTestAgentProxy(agent, agentId);
+
+                    switch (targetRuntime.Runtime.FrameworkIdentifier)
+                    {
+                        case ".NETFramework":
+                            return new TestAgentRemotingProxy(agent, agentId);
+
+                        case ".NETCoreApp":
+                            return agent;
+
+                        default:
+                            throw new InvalidOperationException($"Invalid runtime: {targetRuntime.Runtime.FrameworkIdentifier}");
+                    }
                 }
             }
 
@@ -143,11 +166,14 @@ namespace TestCentric.Engine.Services
 
         public ServiceStatus Status { get; private set; }
 
+        // TODO: it would be better if we had a list of transports to start and stop!
+
         public void StopService()
         {
             try
             {
                 _remotingTransport.Stop();
+                _tcpTransport.Stop();
             }
             finally
             {
@@ -164,6 +190,7 @@ namespace TestCentric.Engine.Services
             try
             {
                 _remotingTransport.Start();
+                _tcpTransport.Start();
                 Status = ServiceStatus.Started;
             }
             catch

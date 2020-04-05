@@ -13,17 +13,24 @@ namespace TestCentric.Engine.Services
 
     public class TestAgencyTests
     {
+        private ServiceContext _services;
         private TestAgency _testAgency;
 
         [SetUp]
-        public void CreateServiceContext()
+        public void StartServices()
         {
-            var services = new ServiceContext();
-            services.Add(new FakeRuntimeService());
+            _services = new ServiceContext();
+            _services.Add(new FakeRuntimeService());
             // Use a different URI to avoid conflicting with the "real" TestAgency
             _testAgency = new TestAgency("TestAgencyTest", 0);
-            services.Add(_testAgency);
-            services.ServiceManager.StartServices();
+            _services.Add(_testAgency);
+            _services.ServiceManager.StartServices();
+        }
+
+        [TearDown]
+        public void StopServices()
+        {
+            _services.ServiceManager.StopServices();
         }
 
         [Test]
