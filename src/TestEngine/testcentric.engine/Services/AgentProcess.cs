@@ -32,7 +32,11 @@ namespace TestCentric.Engine.Services
             bool loadUserProfile = package.GetSetting(EnginePackageSettings.LoadUserProfile, false);
             string workDirectory = package.GetSetting(EnginePackageSettings.WorkDirectory, string.Empty);
 
-            AgentArgs = new StringBuilder($"{agentId} {agency.RemotingUrl} --pid={Process.GetCurrentProcess().Id}");
+            string agencyUrl = TargetRuntime.Runtime == Runtime.NetCore
+                ? agency.TcpEndPoint
+                : agency.RemotingUrl;
+
+            AgentArgs = new StringBuilder($"{agentId} {agencyUrl} --pid={Process.GetCurrentProcess().Id}");
 
             // Set options that need to be in effect before the package
             // is loaded by using the command line.
@@ -63,6 +67,11 @@ namespace TestCentric.Engine.Services
                 StartInfo.FileName = AgentExePath;
                 StartInfo.Arguments = AgentArgs.ToString();
                 StartInfo.LoadUserProfile = loadUserProfile;
+            }
+            else if (TargetRuntime.Runtime == Runtime.NetCore)
+            {
+                StartInfo.FileName = "dotnet";
+                StartInfo.Arguments = $"\"{AgentExePath}\" {AgentArgs}";
             }
             else
             {
@@ -114,7 +123,6 @@ namespace TestCentric.Engine.Services
                     }
                     break;
 
-#if NETCORE_SUPPORT // Future support
                 case ".NETCoreApp":
                     switch (targetRuntime.FrameworkVersion.Major)
                     {
@@ -125,7 +133,6 @@ namespace TestCentric.Engine.Services
                             return Path.Combine(engineDir, "agents/netcoreapp2.1/" + agentName + ".dll");
                     }
                     break;
-#endif
             }
 
             throw new InvalidOperationException($"Unsupported runtime: {targetRuntime.Runtime}");

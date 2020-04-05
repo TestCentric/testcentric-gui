@@ -101,7 +101,7 @@ namespace TestCentric.Engine.Agents
 #if NETFRAMEWORK
                 new TestCentric.Engine.Communication.Transports.Remoting.TestAgentRemotingTransport(Agent, AgencyUrl);
 #else
-                new TestCentric.Engine.Communication.Transports.Tcp.TestAgentTcpTransport(Agent);
+                new TestCentric.Engine.Communication.Transports.Tcp.TestAgentTcpTransport(Agent, AgencyUrl);
 #endif
             try
             {
