@@ -68,12 +68,10 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
                     {
                         // Upon connection, remote agent must immediately send its Id as identification.
                         // Guid is sent as a raw byte array, without any preceding length specified.
-                        var buf = new byte[GUID_BUFFER_SIZE];
-                        if (clientSocket.Receive(buf) == GUID_BUFFER_SIZE)
-                        {
-                            Guid id = new Guid(buf);
-                            ClientConnected?.Invoke(clientSocket, id);
-                        }
+                        byte[] bytes = ReadBytes(clientSocket, GUID_BUFFER_SIZE);
+
+                        Guid id = new Guid(bytes);
+                        ClientConnected?.Invoke(clientSocket, id);
                     }
                 }
                 catch
@@ -100,6 +98,21 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
                     }
                 }
             }
+        }
+
+        private static byte[] ReadBytes(Socket clientSocket, int numBytes)
+        {
+            var buf = new byte[numBytes];
+            var bytes = new byte[numBytes];
+            int count = 0;
+            while (count < numBytes)
+            {
+                int n = clientSocket.Receive(buf);
+                Array.Copy(buf, 0, bytes, count, n);
+                count += n;
+            }
+
+            return bytes;
         }
     }
 }
