@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using NUnit.Framework;
 
 namespace TestCentric.Engine.Communication.Transports.Tcp
@@ -40,6 +41,7 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
                 client.Connect(_server.EndPoint);
                 client.Client.Send(new Guid().ToByteArray());
 
+                Thread.Sleep(1); // Allow the connection event to run
                 Assert.That(_serverConnections.Count, Is.EqualTo(1), "Should have received 1 connection event");
                 Assert.That(_serverConnections[0].Connected, "Server is not connected to client");
 
@@ -74,6 +76,7 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
                 client.Client.Send(new Guid().ToByteArray());
             }
 
+            Thread.Sleep(1); // Allow the connection events to run
             Assert.That(_serverConnections.Count, Is.EqualTo(num), $"Should have received {num} connection events");
 
             for (int i = 0; i < num; i++)
