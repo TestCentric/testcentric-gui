@@ -203,6 +203,11 @@ private class DirectoryCheck : Check
         return this;
     }
 
+	public DirectoryCheck AndFile(string file)
+	{
+		return AndFiles(file);
+	}
+
     public override bool Apply(string dir)
     {
         if (!System.IO.Directory.Exists(dir + _path))

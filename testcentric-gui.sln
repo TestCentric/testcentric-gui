@@ -49,6 +49,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "choco", "choco", "{7A082D44-4669-485E-AB71-5475978EE240}"
 	ProjectSection(SolutionItems) = preProject
 		choco\testcentric-agent-x86.exe.ignore = choco\testcentric-agent-x86.exe.ignore
+		choco\testcentric-agent.choco.addins = choco\testcentric-agent.choco.addins
 		choco\testcentric-agent.exe.ignore = choco\testcentric-agent.exe.ignore
 		choco\testcentric-gui.nuspec = choco\testcentric-gui.nuspec
 		choco\testcentric.choco.addins = choco\testcentric.choco.addins
@@ -101,10 +102,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testcentric-agent-x86", "sr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{23ED18B0-608C-4CB5-A70E-CB95C8B0231C}"
 	ProjectSection(SolutionItems) = preProject
-		nuget.changes.txt = nuget.changes.txt
-		nuget\testcentric-agent.addins = nuget\testcentric-agent.addins
-		nuget\testcentric-gui.addins = nuget\testcentric-gui.addins
+		nuget\testcentric-agent.nuget.addins = nuget\testcentric-agent.nuget.addins
 		nuget\TestCentric.GuiRunner.nuspec = nuget\TestCentric.GuiRunner.nuspec
+		nuget\testcentric.nuget.addins = nuget\testcentric.nuget.addins
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{6C9280F6-6159-4E15-BDC6-F24A3A94F721}"
