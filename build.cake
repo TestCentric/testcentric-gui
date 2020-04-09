@@ -276,9 +276,9 @@ Task("PackageNuGet")
 		content.Add(new NuSpecContent() { Source = "../testcentric.png" });
 
 		// Use addins file tailored for nuget install
-		content.Add(new NuSpecContent() { Source = "testcentric-gui.addins", Target = "tools" });
+		content.Add(new NuSpecContent() { Source = "testcentric.nuget.addins", Target = "tools" });
 		foreach (string runtime in parameters.SupportedAgentRuntimes)
-			content.Add(new NuSpecContent() {Source = "testcentric-agent.addins", Target = $"tools/agents/{runtime}" }); 
+			content.Add(new NuSpecContent() {Source = "testcentric-agent.nuget.addins", Target = $"tools/agents/{runtime}" }); 
 
         NuGetPack($"{parameters.NuGetDirectory}/{NUGET_PACKAGE_NAME}.nuspec", new NuGetPackSettings()
         {
@@ -310,9 +310,9 @@ Task("CheckNuGetPackage")
 
 		if (!checker.RunChecks(
 			HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "testcentric.png"),
-			HasDirectory("tools").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFiles("testcentric-gui.addins"),
-			HasDirectory("tools/agents/net20").WithFiles(AGENT_FILES),
-			HasDirectory("tools/agents/net40").WithFiles(AGENT_FILES),
+			HasDirectory("tools").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.nuget.addins"),
+			HasDirectory("tools/agents/net20").WithFiles(AGENT_FILES).AndFile("testcentric-agent.nuget.addins"),
+			HasDirectory("tools/agents/net40").WithFiles(AGENT_FILES).AndFile("testcentric-agent.nuget.addins"),
 			HasDirectory("tools/Images").WithFiles("DebugTests.png", "RunTests.png"),
 			HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
 			HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
@@ -368,6 +368,9 @@ Task("PackageChocolatey")
 			new ChocolateyNuSpecContent() { Source = "testcentric-agent-x86.exe.ignore", Target = "tools" },
 			new ChocolateyNuSpecContent() { Source = "testcentric.choco.addins", Target = "tools" }
 		});
+
+		foreach (string runtime in parameters.SupportedAgentRuntimes)
+			content.Add(new ChocolateyNuSpecContent() {Source = "testcentric-agent.choco.addins", Target = $"tools/agents/{runtime}" }); 
 			
 		ChocolateyPack($"{parameters.ChocoDirectory}/{PACKAGE_NAME}.nuspec", 
             new ChocolateyPackSettings()
@@ -398,9 +401,9 @@ Task("CheckChocolateyPackage")
 		var checker = new PackageChecker(parameters.ChocolateyPackageName, parameters.ChocolateyTestDirectory);
 
 		if (!checker.RunChecks(
-			HasDirectory("tools").WithFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "VERIFICATION.txt", "testcentric.choco.addins").AndFiles(GUI_FILES).AndFiles(ENGINE_FILES),
-			HasDirectory("tools/agents/net20").WithFiles(AGENT_FILES),
-			HasDirectory("tools/agents/net40").WithFiles(AGENT_FILES),
+			HasDirectory("tools").WithFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "VERIFICATION.txt", "testcentric.choco.addins").AndFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.choco.addins"),
+			HasDirectory("tools/agents/net20").WithFiles(AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
+			HasDirectory("tools/agents/net40").WithFiles(AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
 			HasDirectory("tools/Images").WithFiles("DebugTests.png", "RunTests.png"),
 			HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
 			HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
