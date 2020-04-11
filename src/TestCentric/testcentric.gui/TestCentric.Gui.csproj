@@ -91,14 +91,13 @@
       <Project>{ac6dfb0e-c717-4fc4-b918-d6b789061212}</Project>
       <Name>TestCentric.Gui.Components</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\TestEngine\testcentric.engine.api\testcentric.engine.api.csproj">
-      <Project>{97c6e923-621b-4b77-a084-4d2679152340}</Project>
-      <Name>testcentric.engine.api</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\TestModel\model\TestCentric.Gui.Model.csproj">
       <Project>{e978a8d7-e4a4-4de9-94df-d82bd764936b}</Project>
       <Name>TestCentric.Gui.Model</Name>
     </ProjectReference>
+    <Reference Include="nunit.engine.api, Version=3.0.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\NUnit.Engine.Api.3.11.1\lib\net20\nunit.engine.api.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -364,6 +363,7 @@
     <Content Include="Images\Tree\Visual Studio\Success.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="packages.config" />
     <None Include="Resources\picturebox1.Image.bmp" />
     <EmbeddedResource Include="Images\unpinned.gif" />
     <EmbeddedResource Include="Images\pinned.gif" />

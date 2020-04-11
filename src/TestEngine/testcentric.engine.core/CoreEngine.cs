@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using NUnit.Engine;
 using TestCentric.Engine.Helpers;
 using TestCentric.Engine.Internal;
 using TestCentric.Engine.Services;

@@ -5,6 +5,7 @@
 
 using System;
 using System.Runtime.Versioning;
+using NUnit.Engine;
 
 namespace TestCentric.Engine.Services
 {

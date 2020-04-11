@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System.IO;
+using NUnit.Engine;
 using NUnit.Framework;
 
 namespace TestCentric.Engine
@@ -26,10 +27,10 @@ namespace TestCentric.Engine
             Directory.SetCurrentDirectory(_origWorkingDir);
         }
 
-        [Test]
-        public void EngineCanBeCreatedFromAnyWorkingDirectory()
-        {
-            Assert.That(() => TestEngineActivator.CreateInstance(), Throws.Nothing);
-        }
+        //[Test]
+        //public void EngineCanBeCreatedFromAnyWorkingDirectory()
+        //{
+        //    Assert.That(() => TestEngineActivator.CreateInstance(), Throws.Nothing);
+        //}
     }
 }

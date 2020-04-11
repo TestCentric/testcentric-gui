@@ -4,9 +4,8 @@
 // ***********************************************************************
 
 using System.IO;
-using System.Text;
 using System.Xml;
-using TestCentric.Engine.Extensibility;
+using NUnit.Engine.Extensibility;
 
 namespace TestCentric.Engine.Services
 {

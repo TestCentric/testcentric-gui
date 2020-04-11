@@ -5,7 +5,7 @@
 
 using System.Text;
 using System.Windows.Forms;
-using TestCentric.Engine;
+using NUnit.Engine;
 
 namespace TestCentric.Gui.Presenters
 {

@@ -70,10 +70,6 @@
       <Project>{b69057f3-0663-4763-a3ec-50d463578b94}</Project>
       <Name>TestCentric.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\TestEngine\testcentric.engine.api\testcentric.engine.api.csproj">
-      <Project>{97c6e923-621b-4b77-a084-4d2679152340}</Project>
-      <Name>testcentric.engine.api</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\TestEngine\testcentric.engine.core\testcentric.engine.core.csproj">
       <Project>{987b26c9-023d-4ecf-8a36-05f1b652b57f}</Project>
       <Name>testcentric.engine.core</Name>
@@ -107,6 +103,9 @@
     </PackageReference>
     <PackageReference Include="NUnit">
       <Version>3.11.0</Version>
+    </PackageReference>
+    <PackageReference Include="NUnit.Engine.Api">
+      <Version>3.11.1</Version>
     </PackageReference>
     <PackageReference Include="System.Threading.Tasks.Extensions">
       <Version>4.5.1</Version>

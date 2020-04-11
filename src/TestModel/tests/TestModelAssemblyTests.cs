@@ -4,9 +4,9 @@
 // ***********************************************************************
 
 using System.IO;
-using TestCentric.Engine;
 using NUnit.Framework;
 using TestCentric.Tests.Assemblies;
+using NUnit.Engine;
 
 namespace TestCentric.Gui.Model
 {

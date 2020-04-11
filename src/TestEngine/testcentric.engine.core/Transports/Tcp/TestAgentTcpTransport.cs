@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System;
+using NUnit.Engine;
 using TestCentric.Engine.Agents;
 
 namespace TestCentric.Engine.Transports.Tcp

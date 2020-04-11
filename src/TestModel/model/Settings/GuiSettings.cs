@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System.Drawing;
+using NUnit.Engine;
 
 namespace TestCentric.Gui.Model.Settings
 {
@@ -90,9 +91,9 @@ namespace TestCentric.Gui.Model.Settings
             set { SaveSetting(nameof(FixedFont), value); }
         }
 
-        public Engine.InternalTraceLevel InternalTraceLevel
+        public InternalTraceLevel InternalTraceLevel
         {
-            get { return GetSetting(nameof(InternalTraceLevel), Engine.InternalTraceLevel.Off); }
+            get { return GetSetting(nameof(InternalTraceLevel), InternalTraceLevel.Off); }
             set { SaveSetting(nameof(InternalTraceLevel), value); }
         }
     }

@@ -5,6 +5,7 @@
 
 using System;
 using Mono.Cecil;
+using NUnit.Engine;
 
 namespace TestCentric.Engine.Internal
 {

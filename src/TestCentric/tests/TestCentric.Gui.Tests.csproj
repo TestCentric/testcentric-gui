@@ -67,10 +67,6 @@
       <Project>{b69057f3-0663-4763-a3ec-50d463578b94}</Project>
       <Name>TestCentric.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\TestEngine\testcentric.engine.api\testcentric.engine.api.csproj">
-      <Project>{97c6e923-621b-4b77-a084-4d2679152340}</Project>
-      <Name>testcentric.engine.api</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\TestModel\model\TestCentric.Gui.Model.csproj">
       <Project>{e978a8d7-e4a4-4de9-94df-d82bd764936b}</Project>
       <Name>TestCentric.Gui.Model</Name>

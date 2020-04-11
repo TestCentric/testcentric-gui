@@ -7,8 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
-using TestCentric.Engine;
-using TestCentric.Engine.Extensibility;
+using NUnit.Engine;
+using NUnit.Engine.Extensibility;
 
 namespace TestCentric.Gui
 {

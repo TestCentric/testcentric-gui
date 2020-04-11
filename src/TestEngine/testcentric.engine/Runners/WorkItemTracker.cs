@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Xml;
+using NUnit.Engine;
 using TestCentric.Engine.Helpers;
 
 namespace TestCentric.Engine.Runners

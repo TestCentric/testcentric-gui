@@ -5,6 +5,7 @@
 
 #if !NETSTANDARD2_0
 using System;
+using NUnit.Engine;
 
 namespace TestCentric.Engine.Runners
 {

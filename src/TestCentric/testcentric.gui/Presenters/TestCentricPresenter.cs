@@ -20,6 +20,7 @@ namespace TestCentric.Gui.Presenters
     using Model.Settings;
     using Views;
     using Dialogs;
+    using NUnit.Engine;
 
     /// <summary>
     /// TestCentricPresenter does all file opening and closing that
