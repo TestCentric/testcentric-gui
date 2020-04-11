@@ -95,10 +95,10 @@ private void CheckPackageExists(FilePath package)
 }
 
 string[] ENGINE_FILES = { 
-    "testcentric.engine.dll", "testcentric.engine.core.dll", "testcentric.engine.api.dll", "testcentric.engine.metadata.dll", "Mono.Cecil.dll"};
+    "testcentric.engine.dll", "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll", "Mono.Cecil.dll"};
 string[] AGENT_FILES = { 
     "testcentric-agent.exe", "testcentric-agent.exe.config", "testcentric-agent-x86.exe", "testcentric-agent-x86.exe.config",
-    "testcentric.engine.core.dll", "testcentric.engine.api.dll", "testcentric.engine.metadata.dll" };
+    "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll" };
 string[] GUI_FILES = {
 	"testcentric.exe", "testcentric.exe.config", "tc-next.exe", "tc-next.exe.config", "nunit.uiexception.dll",
 	"TestCentric.Gui.Runner.dll", "Experimental.Gui.Runner.dll", "TestCentric.Gui.Model.dll", "TestCentric.Common.dll" };
