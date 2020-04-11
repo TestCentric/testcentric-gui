@@ -9,7 +9,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Xsl;
 using TestCentric.Common;
-using TestCentric.Engine.Extensibility;
+using NUnit.Engine.Extensibility;
 
 namespace TestCentric.Engine.Services
 {

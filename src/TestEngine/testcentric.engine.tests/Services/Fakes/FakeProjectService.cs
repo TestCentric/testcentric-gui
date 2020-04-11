@@ -6,7 +6,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using TestCentric.Engine.Extensibility;
+using NUnit.Engine;
+using NUnit.Engine.Extensibility;
 
 namespace TestCentric.Engine.Services.Fakes
 {

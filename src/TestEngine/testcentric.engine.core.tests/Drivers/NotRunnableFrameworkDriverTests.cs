@@ -6,10 +6,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using NUnit.Engine;
+using NUnit.Engine.Extensibility;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 using TestCentric.Engine.Helpers;
-using TestCentric.Engine.Extensibility;
 
 namespace TestCentric.Engine.Drivers
 {
@@ -103,7 +103,7 @@ namespace TestCentric.Engine.Drivers
 
         private static string GetSkipReason(XmlNode result)
         {
-            var propNode = result.SelectSingleNode(string.Format("properties/property[@name='{0}']", PropertyNames.SkipReason));
+            var propNode = result.SelectSingleNode(string.Format("properties/property[@name='{0}']", NUnit.Framework.Internal.PropertyNames.SkipReason));
             return propNode == null ? null : propNode.GetAttribute("value");
         }
 

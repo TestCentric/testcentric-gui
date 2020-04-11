@@ -3,7 +3,7 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-using System;
+using NUnit.Engine.Extensibility;
 using NUnit.Framework;
 
 namespace TestCentric.Engine.Extensibility

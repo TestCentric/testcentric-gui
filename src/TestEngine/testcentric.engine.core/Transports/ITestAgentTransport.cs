@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using NUnit.Engine;
 using TestCentric.Engine.Agents;
 
 namespace TestCentric.Engine.Transports

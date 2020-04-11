@@ -3,10 +3,8 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-using System;
-using System.Xml;
-using TestCentric.Engine;
 using NUnit.Framework;
+using NUnit.Engine;
 
 namespace TestCentric.Engine.Services
 {

@@ -5,7 +5,7 @@
 
 using System;
 using System.Collections.Generic;
-using TestCentric.Engine.Extensibility;
+using NUnit.Engine.Extensibility;
 
 namespace TestCentric.Engine
 {

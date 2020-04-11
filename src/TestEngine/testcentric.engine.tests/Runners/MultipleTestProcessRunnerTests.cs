@@ -5,6 +5,7 @@
 
 #if !NETCOREAPP2_1
 using System;
+using NUnit.Engine;
 using NUnit.Framework;
 
 namespace TestCentric.Engine.Runners

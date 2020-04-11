@@ -11,6 +11,7 @@ using System.IO;
 using System.Reflection;
 using Microsoft.Win32;
 using Mono.Cecil;
+using NUnit.Engine;
 using TestCentric.Common;
 using TestCentric.Engine.Helpers;
 using TestCentric.Engine.Internal;

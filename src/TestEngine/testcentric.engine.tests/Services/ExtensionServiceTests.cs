@@ -5,12 +5,14 @@
 
 using System;
 using System.Linq;
-using NUnit.Framework;
-using TestCentric.Engine.Extensibility;
 using System.IO;
 using System.Reflection;
 using System.Collections.Generic;
+using NUnit.Engine;
+using NUnit.Engine.Extensibility;
+using NUnit.Framework;
 using TestCentric.Engine.Helpers;
+using TestCentric.Engine.Extensibility;
 
 namespace TestCentric.Engine.Services
 {

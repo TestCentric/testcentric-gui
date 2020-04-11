@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using NSubstitute;
+using NUnit.Engine;
 
 #if !NETCOREAPP2_1
 namespace TestCentric.Engine.Runners

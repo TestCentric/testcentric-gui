@@ -5,6 +5,7 @@
 
 using System;
 using System.IO;
+using NUnit.Engine;
 
 namespace TestCentric.Engine.Internal
 {
