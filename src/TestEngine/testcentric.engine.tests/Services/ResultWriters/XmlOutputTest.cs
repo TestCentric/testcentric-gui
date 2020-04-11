@@ -39,7 +39,7 @@ namespace TestCentric.Engine.Services.ResultWriters
             return Path.Combine(TestContext.CurrentContext.TestDirectory, fileName);
         }
 
-        //[OneTimeSetUp]
+        [OneTimeSetUp]
         public void InitializeTestEngineResult()
         {
 
@@ -47,7 +47,7 @@ namespace TestCentric.Engine.Services.ResultWriters
 
             // Create a fresh copy of the engine, since we can't use the
             // one that is running this test.
-            engine = TestEngineActivator.CreateInstance();
+            engine = new TestEngine(); ;
             engine.InternalTraceLevel = InternalTraceLevel.Off;
 
             // Create a new DefaultAssemblyRunner, which is actually a framework class,
