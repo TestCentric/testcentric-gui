@@ -104,7 +104,6 @@ Task("UpdateAssemblyInfo")
 	var major = new Version(parameters.AssemblyVersion).Major;
 	parameters.Versions.PatchAssemblyInfo("src/CommonAssemblyInfo.cs");
     parameters.Versions.PatchAssemblyInfo("src/TestEngine/CommonEngineAssemblyInfo.cs");
-    parameters.Versions.PatchAssemblyInfo("src/TestEngine/testcentric.engine.api/Properties/AssemblyInfo.cs", major + ".0.0.0");
 });
 
 //////////////////////////////////////////////////////////////////////
