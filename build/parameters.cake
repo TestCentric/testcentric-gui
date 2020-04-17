@@ -1,5 +1,6 @@
 #load "./versioning.cake"
 #load "./testing.cake"
+#load "./test-results.cake"
 #load "./packaging.cake"
 
 public class BuildParameters
@@ -42,7 +43,7 @@ public class BuildParameters
 		ProjectDirectory = context.Environment.WorkingDirectory.FullPath + "/";
 
 		Versions = new BuildVersion(context, this);
-	
+
 		MyGetApiKey = _context.EnvironmentVariable(MYGET_API_KEY);
 		NuGetApiKey = _context.EnvironmentVariable(NUGET_API_KEY);
 		ChocolateyApiKey = _context.EnvironmentVariable(CHOCO_API_KEY);
@@ -81,6 +82,8 @@ public class BuildParameters
 	public string Target { get; }
 	public IEnumerable<string> TasksToExecute { get; }
 
+	public ICakeContext Context => _context;
+
 	public string Configuration { get; }
 
 	public BuildVersion Versions { get; }
@@ -97,13 +100,15 @@ public class BuildParameters
 
 	public string ProjectDirectory { get; }
 	public string OutputDirectory => ProjectDirectory + "bin/" + Configuration + "/";
+	public string ZipDirectory => ProjectDirectory + "zip/";
 	public string NuGetDirectory => ProjectDirectory + "nuget/";
 	public string ChocoDirectory => ProjectDirectory + "choco/";
 	public string PackageDirectory => ProjectDirectory + "package/";
 	public string ImageDirectory => PackageDirectory + "image/";
-	public string ZipTestDirectory => PackageDirectory + "test/zip/";
-	public string NuGetTestDirectory => PackageDirectory + "test/nuget/";
-	public string ChocolateyTestDirectory => PackageDirectory + "test/choco/";
+	public string TestDirectory => PackageDirectory + "test/";
+	public string ZipTestDirectory => TestDirectory + "zip/";
+	public string NuGetTestDirectory => TestDirectory + "nuget/";
+	public string ChocolateyTestDirectory => TestDirectory + "choco/";
 
 	public string ZipPackageName => PACKAGE_NAME + "-" + PackageVersion + ".zip";
 	public string NuGetPackageName => NUGET_PACKAGE_NAME + "." + PackageVersion + ".nupkg";
@@ -128,7 +133,7 @@ public class BuildParameters
 	public bool ShouldPublishToMyGet => IsPublishing && (!Versions.IsPreRelease || LABELS_WE_PUBLISH_ON_MYGET.Contains(Versions.PreReleaseLabel));
 	public bool ShouldPublishToNuGet => IsPublishing && (!Versions.IsPreRelease || LABELS_WE_PUBLISH_ON_NUGET.Contains(Versions.PreReleaseLabel));
 	public bool ShouldPublishToChocolatey => IsPublishing && (!Versions.IsPreRelease || LABELS_WE_PUBLISH_ON_CHOCOLATEY.Contains(Versions.PreReleaseLabel));
-	
+
 	public bool UsingXBuild { get; }
 	public MSBuildSettings MSBuildSettings { get; }
 	public XBuildSettings XBuildSettings { get; }

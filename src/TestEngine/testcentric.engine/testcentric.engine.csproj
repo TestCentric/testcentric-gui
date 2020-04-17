@@ -31,11 +31,6 @@
   <ItemGroup>
     <ProjectReference Include="..\testcentric.engine.core\testcentric.engine.core.csproj" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)'=='net40'">
-    <Content Include="nunit.engine.addins">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
   <ItemGroup>
     <Folder Include="Transports\Tcp\" />
   </ItemGroup>
