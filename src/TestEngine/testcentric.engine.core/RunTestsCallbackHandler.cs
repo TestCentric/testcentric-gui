@@ -7,6 +7,7 @@
 using System;
 using System.Diagnostics;
 using System.Web.UI;
+using NUnit.Engine;
 
 namespace TestCentric.Engine
 {

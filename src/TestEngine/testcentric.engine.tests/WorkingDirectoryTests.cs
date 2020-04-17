@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System.IO;
+using NUnit.Engine;
 using NUnit.Framework;
 
 namespace TestCentric.Engine
@@ -29,7 +30,7 @@ namespace TestCentric.Engine
         [Test]
         public void EngineCanBeCreatedFromAnyWorkingDirectory()
         {
-            Assert.That(() => TestEngineActivator.CreateInstance(), Throws.Nothing);
+            Assert.That(() => new TestEngine(), Throws.Nothing);
         }
     }
 }

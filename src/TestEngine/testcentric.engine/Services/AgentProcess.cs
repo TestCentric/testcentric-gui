@@ -8,6 +8,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using NUnit.Engine;
 using TestCentric.Engine.Helpers;
 using TestCentric.Engine.Internal;
 

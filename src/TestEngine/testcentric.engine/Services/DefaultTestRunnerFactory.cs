@@ -3,8 +3,8 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
+using NUnit.Engine;
 using TestCentric.Engine.Helpers;
-using TestCentric.Engine.Internal;
 using TestCentric.Engine.Runners;
 
 namespace TestCentric.Engine.Services
@@ -16,18 +16,18 @@ namespace TestCentric.Engine.Services
     /// </summary>
     public class DefaultTestRunnerFactory : InProcessTestRunnerFactory, ITestRunnerFactory
     {
-        private IProjectService _projectService;
+        //private IProjectService _projectService;
 
-        public override void StartService()
-        {
-            // TestRunnerFactory requires the ProjectService
-            _projectService = ServiceContext.GetService<IProjectService>();
+        //public override void StartService()
+        //{
+        //    // TestRunnerFactory requires the ProjectService
+        //    _projectService = ServiceContext.GetService<IProjectService>();
 
-            // Anything returned from ServiceContext is known to be an IService
-            Status = _projectService != null && ((IService)_projectService).Status == ServiceStatus.Started
-                ? ServiceStatus.Started
-                : ServiceStatus.Error;
-        }
+        //    // Anything returned from ServiceContext is known to be an IService
+        //    Status = _projectService != null && ((IService)_projectService).Status == ServiceStatus.Started
+        //        ? ServiceStatus.Started
+        //        : ServiceStatus.Error;
+        //}
 
         /// <summary>
         /// Returns a test runner based on the settings in a TestPackage.

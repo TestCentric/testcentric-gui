@@ -4,7 +4,8 @@
 // ***********************************************************************
 
 using System.Collections.Generic;
-using TestCentric.Engine.Extensibility;
+using NUnit.Engine;
+using NUnit.Engine.Extensibility;
 using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Drivers

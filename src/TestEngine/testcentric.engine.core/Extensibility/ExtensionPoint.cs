@@ -6,6 +6,8 @@
 #if !NETSTANDARD1_6
 using System;
 using System.Collections.Generic;
+using NUnit.Engine;
+using NUnit.Engine.Extensibility;
 
 namespace TestCentric.Engine.Extensibility
 {

@@ -6,6 +6,7 @@
 #if !NETCOREAPP1_1 && !NETCOREAPP2_1
 using System;
 using System.IO;
+using NUnit.Engine;
 using NUnit.Framework;
 using TestCentric.Tests.Assemblies;
 

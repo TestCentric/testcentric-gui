@@ -26,9 +26,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\agents\AgentExitCodes.cs" LinkBase="Agents" />
+    <Compile Include="..\CommonEngineAssemblyInfo.cs" Link="Properties\CommonEngineAssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\testcentric.engine.api\testcentric.engine.api.csproj" />
     <ProjectReference Include="..\testcentric.engine.core\testcentric.engine.core.csproj" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net40'">
@@ -38,5 +38,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Transports\Tcp\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NUnit.Engine.Api" Version="3.11.1" />
   </ItemGroup>
 </Project>

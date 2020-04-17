@@ -5,8 +5,7 @@
 
 #if !NETSTANDARD2_0
 using System;
-using System.Collections.Generic;
-using System.Text;
+using NUnit.Engine;
 
 namespace TestCentric.Engine.Agents
 {

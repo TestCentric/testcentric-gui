@@ -11,6 +11,7 @@ using TestCentric.Common;
 using TestCentric.Engine.Internal;
 using TestCentric.Engine.Services;
 using TestCentric.Engine.Helpers;
+using NUnit.Engine;
 
 namespace TestCentric.Engine.Agents
 {

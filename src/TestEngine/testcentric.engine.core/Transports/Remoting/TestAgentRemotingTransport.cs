@@ -8,6 +8,7 @@ using System;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
 using System.Threading;
+using NUnit.Engine;
 using TestCentric.Engine.Agents;
 using TestCentric.Engine.Helpers;
 using TestCentric.Engine.Internal;

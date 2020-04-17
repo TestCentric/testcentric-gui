@@ -12,6 +12,7 @@ using NUnit.Framework;
 namespace TestCentric.Engine.Services
 {
     using Fakes;
+    using NUnit.Engine;
 
     public class PackageAggregationPolicyTests
     {

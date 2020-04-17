@@ -5,7 +5,7 @@
 
 using System;
 using System.ComponentModel;
-using TestCentric.Engine.Services;
+using NUnit.Engine;
 
 namespace TestCentric.Engine.Runners
 {

@@ -7,13 +7,11 @@ using System;
 using System.Text;
 using System.Xml;
 using System.IO;
-using TestCentric.Engine.Extensibility;
+using NUnit.Engine.Extensibility;
 using TestCentric.Engine.Helpers;
 
 namespace TestCentric.Engine.Services
 {
-    using Internal;
-
     /// <summary>
     /// NUnit3XmlResultWriter is responsible for writing the results
     /// of a test to a file in NUnit 3 format.
