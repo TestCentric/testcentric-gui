@@ -18,12 +18,14 @@
     <Reference Include="System.Runtime.Remoting" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\CommonEngineAssemblyInfo.cs" Link="Properties\CommonEngineAssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="..\..\..\nunit.ico">
       <Link>nunit.ico</Link>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\testcentric.engine.api\testcentric.engine.api.csproj" />
     <ProjectReference Include="..\testcentric.engine.core\testcentric.engine.core.csproj" />
   </ItemGroup>
 </Project>

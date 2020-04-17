@@ -5,8 +5,8 @@
 
 using System;
 using System.Reflection;
+using NUnit.Engine.Extensibility;
 using TestCentric.Common;
-using TestCentric.Engine.Extensibility;
 
 namespace TestCentric.Engine.Drivers
 {

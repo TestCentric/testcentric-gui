@@ -3,10 +3,10 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-using System;
 using System.Collections.Generic;
 using System.IO;
 using TestCentric.Engine.Helpers;
+using NUnit.Engine;
 using NUnit.Framework;
 
 namespace TestCentric.Engine.Services.ResultWriters
@@ -47,7 +47,7 @@ namespace TestCentric.Engine.Services.ResultWriters
 
             // Create a fresh copy of the engine, since we can't use the
             // one that is running this test.
-            engine = TestEngineActivator.CreateInstance();
+            engine = new TestEngine(); ;
             engine.InternalTraceLevel = InternalTraceLevel.Off;
 
             // Create a new DefaultAssemblyRunner, which is actually a framework class,

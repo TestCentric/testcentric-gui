@@ -12,6 +12,8 @@ TestResults
 *.suo
 *.user
 *.sln.docstates
+*.project.lock.json
+launchSettings.json
 
 # Build results
 [Dd]ebug/

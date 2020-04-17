@@ -6,6 +6,7 @@
 using System;
 using System.IO;
 using System.Runtime.Versioning;
+using NUnit.Engine;
 using TestCentric.Common;
 using TestCentric.Engine.Helpers;
 using TestCentric.Engine.Internal;

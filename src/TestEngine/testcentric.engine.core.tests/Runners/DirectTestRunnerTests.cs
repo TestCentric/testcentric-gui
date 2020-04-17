@@ -7,7 +7,8 @@ using System;
 using System.Collections.Generic;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
-using TestCentric.Engine.Extensibility;
+using NUnit.Engine;
+using NUnit.Engine.Extensibility;
 using NUnit.Framework;
 
 namespace TestCentric.Engine.Runners

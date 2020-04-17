@@ -15,6 +15,7 @@ using System.Runtime.Remoting.Channels.Tcp;
 using TestCentric.Common;
 using TestCentric.Engine.Helpers;
 using TestCentric.Engine.Internal;
+using NUnit.Engine;
 
 namespace TestCentric.Engine.Services
 {

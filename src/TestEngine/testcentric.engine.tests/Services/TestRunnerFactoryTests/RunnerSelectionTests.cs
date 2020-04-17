@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TestCentric.Engine.Runners;
 using TestCentric.Engine.Services.TestRunnerFactoryTests.TestCases;
+using NUnit.Engine;
 using NUnit.Framework;
 
 namespace TestCentric.Engine.Services.TestRunnerFactoryTests

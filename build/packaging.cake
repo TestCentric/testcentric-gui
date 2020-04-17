@@ -21,7 +21,7 @@ var baseFiles = new string[]
     "Experimental.Gui.Runner.dll",
     "nunit.uiexception.dll",
     "TestCentric.Gui.Model.dll",
-    "testcentric.engine.api.dll",
+    "nunit.engine.api.dll",
     "testcentric.engine.metadata.dll",
     "testcentric.engine.core.dll",
     "testcentric.engine.dll",
@@ -38,7 +38,6 @@ var PdbFiles = new string[]
     "Experimental.Gui.Runner.pdb",
     "nunit.uiexception.pdb",
     "TestCentric.Gui.Model.pdb",
-    "testcentric.engine.api.pdb",
     "testcentric.engine.metadata.pdb",
     "testcentric.engine.core.pdb",
     "testcentric.engine.pdb",
@@ -96,10 +95,10 @@ private void CheckPackageExists(FilePath package)
 }
 
 string[] ENGINE_FILES = { 
-    "testcentric.engine.dll", "testcentric.engine.core.dll", "testcentric.engine.api.dll", "testcentric.engine.metadata.dll", "Mono.Cecil.dll"};
+    "testcentric.engine.dll", "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll", "Mono.Cecil.dll"};
 string[] AGENT_FILES = { 
     "testcentric-agent.exe", "testcentric-agent.exe.config", "testcentric-agent-x86.exe", "testcentric-agent-x86.exe.config",
-    "testcentric.engine.core.dll", "testcentric.engine.api.dll", "testcentric.engine.metadata.dll" };
+    "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll" };
 string[] GUI_FILES = {
 	"testcentric.exe", "testcentric.exe.config", "tc-next.exe", "tc-next.exe.config", "nunit.uiexception.dll",
 	"TestCentric.Gui.Runner.dll", "Experimental.Gui.Runner.dll", "TestCentric.Gui.Model.dll", "TestCentric.Common.dll" };
@@ -202,6 +201,11 @@ private class DirectoryCheck : Check
         _files.Add(file);
         return this;
     }
+
+	public DirectoryCheck AndFile(string file)
+	{
+		return AndFiles(file);
+	}
 
     public override bool Apply(string dir)
     {

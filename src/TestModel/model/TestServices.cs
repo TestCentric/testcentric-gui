@@ -4,7 +4,7 @@
 // ***********************************************************************
 
 using System;
-using TestCentric.Engine;
+using NUnit.Engine;
 
 namespace TestCentric.Gui.Model
 {
@@ -26,7 +26,7 @@ namespace TestCentric.Gui.Model
 
             ExtensionService = GetService<IExtensionService>();
             ResultService = GetService<IResultService>();
-            ProjectService = GetService<IProjectService>();
+            //ProjectService = GetService<IProjectService>();
         }
 
         #region ITestServices Implementation
@@ -35,7 +35,8 @@ namespace TestCentric.Gui.Model
 
         public IResultService ResultService { get; }
 
-        public IProjectService ProjectService { get; }
+        // TODO: Figure out how to deal with this
+        //public IProjectService ProjectService { get; }
 
         #endregion
 

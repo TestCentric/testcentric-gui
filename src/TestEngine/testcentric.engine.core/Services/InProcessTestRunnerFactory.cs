@@ -3,6 +3,7 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
+using NUnit.Engine;
 using TestCentric.Engine.Helpers;
 using TestCentric.Engine.Internal;
 using TestCentric.Engine.Runners;

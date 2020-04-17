@@ -1,11 +1,11 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric GUI contributors.
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
 using System;
-using TestCentric.Engine;
-using TestCentric.Engine.Extensibility;
+using NUnit.Engine;
+using NUnit.Engine.Extensibility;
 
 namespace TestCentric.TestUtilities.Fakes
 {

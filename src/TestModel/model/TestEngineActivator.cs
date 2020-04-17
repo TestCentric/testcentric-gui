@@ -1,22 +1,40 @@
 // ***********************************************************************
-// Copyright (c) Charlie Poole and TestCentric Engine contributors.
-// Licensed under the MIT License. See LICENSE.txt in root directory.
+// Copyright (c) 2011 Charlie Poole, Rob Prouse
+//
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject to
+// the following conditions:
+//
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+// LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+// WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Microsoft.Win32;
+using NUnit.Engine;
 
-namespace TestCentric.Engine
+namespace TestCentric.Gui.Model
 {
     /// <summary>
     /// TestEngineActivator creates an instance of the test engine and returns an ITestEngine interface.
     /// </summary>
     public static class TestEngineActivator
     {
-        internal static readonly Version DefaultMinimumVersion = new Version(0, 0);
+        internal static readonly Version DefaultMinimumVersion = new Version(1, 0);
 
         private const string DefaultAssemblyName = "testcentric.engine.dll";
         internal const string DefaultTypeName = "TestCentric.Engine.TestEngine";
@@ -25,7 +43,7 @@ namespace TestCentric.Engine
         /// <summary>
         /// Create an instance of the test engine.
         /// </summary>
-        /// <returns>An <see cref="TestCentric.Engine.ITestEngine"/></returns>
+        /// <returns>An <see cref="NUnit.Engine.ITestEngine"/></returns>
         public static ITestEngine CreateInstance()
         {
             var apiLocation = typeof(TestEngineActivator).GetTypeInfo().Assembly.Location;
@@ -40,7 +58,7 @@ namespace TestCentric.Engine
         /// <summary>
         /// Create an instance of the test engine.
         /// </summary>
-        /// <returns>An <see cref="TestCentric.Engine.ITestEngine"/></returns>
+        /// <returns>An <see cref="NUnit.Engine.ITestEngine"/></returns>
         public static ITestEngine CreateInstance()
         {
             var apiLocation = typeof(TestEngineActivator).Assembly.Location;
@@ -57,7 +75,7 @@ namespace TestCentric.Engine
         /// </summary>
         /// <param name="unused">This parameter is no longer used but has not been removed to ensure API compatibility.</param>
         /// <exception cref="NUnitEngineNotFoundException">Thrown when a test engine of the required minimum version is not found</exception>
-        /// <returns>An <see cref="TestCentric.Engine.ITestEngine"/></returns>
+        /// <returns>An <see cref="NUnit.Engine.ITestEngine"/></returns>
         public static ITestEngine CreateInstance(bool unused = false)
         {
             return CreateInstance(DefaultMinimumVersion, unused);
@@ -77,7 +95,7 @@ namespace TestCentric.Engine
                 Assembly engine = FindNewestEngine(minVersion);
                 if (engine == null)
                 {
-                    throw new NUnitEngineNotFoundException(minVersion);
+                    throw new NUnitEngineNotFoundException();
                 }
                 return (ITestEngine)AppDomain.CurrentDomain.CreateInstanceFromAndUnwrap(engine.CodeBase, DefaultTypeName);
             }
@@ -99,7 +117,7 @@ namespace TestCentric.Engine
             string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, DefaultAssemblyName);
             Assembly newestAssemblyFound = CheckPathForEngine(path, minVersion, ref newestVersionFound, null);
 
-            // Check Probing Path is not found in Base Directory. This
+            // Check Probing Path if not found in Base Directory. This
             // allows the console or other runner to be executed with
             // a different application base and still function. In
             // particular, we do this in some tests of NUnit.

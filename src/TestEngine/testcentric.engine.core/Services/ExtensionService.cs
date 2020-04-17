@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Mono.Cecil;
+using NUnit.Engine;
+using NUnit.Engine.Extensibility;
 using TestCentric.Engine.Extensibility;
 using TestCentric.Engine.Helpers;
 using TestCentric.Engine.Internal;
@@ -418,7 +420,7 @@ namespace TestCentric.Engine.Services
 
                 foreach (var type in assembly.MainModule.GetTypes())
                 {
-                    CustomAttribute extensionAttr = type.GetAttribute("TestCentric.Engine.Extensibility.ExtensionAttribute");
+                    CustomAttribute extensionAttr = type.GetAttribute("NUnit.Engine.Extensibility.ExtensionAttribute");
 
                     if (extensionAttr == null)
                         continue;
@@ -437,7 +439,7 @@ namespace TestCentric.Engine.Services
 
                     log.Info("  Found ExtensionAttribute on Type " + type.Name);
 
-                    foreach (var attr in type.GetAttributes("TestCentric.Engine.Extensibility.ExtensionPropertyAttribute"))
+                    foreach (var attr in type.GetAttributes("NUnit.Engine.Extensibility.ExtensionPropertyAttribute"))
                     {
                         string name = attr.ConstructorArguments[0].Value as string;
                         string value = attr.ConstructorArguments[1].Value as string;

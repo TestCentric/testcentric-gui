@@ -3,14 +3,10 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-using System;
-using TestCentric.Engine;
+using NUnit.Engine;
 
 namespace TestCentric.Gui.Model
 {
-    using Services;
-    using Settings;
-
     /// <summary>
     /// ITestServices extends IServiceLocator in order to
     /// conveniently cache commonly used services.
@@ -19,6 +15,7 @@ namespace TestCentric.Gui.Model
     {
         IExtensionService ExtensionService { get; }
         IResultService ResultService { get; }
-        IProjectService ProjectService { get; }
+        // TODO: Figure out how to handle this
+        //IProjectService ProjectService { get; }
     }
 }

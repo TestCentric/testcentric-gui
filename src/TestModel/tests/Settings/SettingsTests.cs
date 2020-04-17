@@ -4,14 +4,11 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Reflection;
 using System.Security.Principal;
 using System.Windows.Forms;
+using NUnit.Engine;
 using NUnit.Framework;
-using TestCentric.Engine;
-using TestCentric.TestUtilities.Fakes;
 
 namespace TestCentric.Gui.Model.Settings
 {

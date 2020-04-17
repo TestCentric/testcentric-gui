@@ -5,8 +5,8 @@
 
 using System;
 using System.Collections.Generic;
-using TestCentric.Engine;
-using TestCentric.Engine.Extensibility;
+using NUnit.Engine;
+using NUnit.Engine.Extensibility;
 
 namespace TestCentric.TestUtilities.Fakes
 {

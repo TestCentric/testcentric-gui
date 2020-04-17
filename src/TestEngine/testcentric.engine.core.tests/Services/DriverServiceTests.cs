@@ -5,6 +5,7 @@
 
 using System;
 using System.IO;
+using NUnit.Engine;
 using NUnit.Framework;
 using TestCentric.Engine.Drivers;
 

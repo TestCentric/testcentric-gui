@@ -9,6 +9,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.Versioning;
 using Microsoft.Win32;
+using NUnit.Engine;
 using TestCentric.Common;
 #if NET20
 using FrameworkName = TestCentric.Engine.Compatibility.FrameworkName;
@@ -16,8 +17,6 @@ using FrameworkName = TestCentric.Engine.Compatibility.FrameworkName;
 
 namespace TestCentric.Engine
 {
-    using Helpers;
-
     /// <summary>
     /// RuntimeFramework represents a particular version
     /// of a common language runtime implementation.

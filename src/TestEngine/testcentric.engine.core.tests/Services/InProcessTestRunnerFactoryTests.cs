@@ -6,6 +6,7 @@
 using System;
 using TestCentric.Engine.Runners;
 using NUnit.Framework;
+using NUnit.Engine;
 
 namespace TestCentric.Engine.Services
 {

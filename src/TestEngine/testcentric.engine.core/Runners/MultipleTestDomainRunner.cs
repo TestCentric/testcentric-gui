@@ -4,6 +4,8 @@
 // ***********************************************************************
 
 #if !NETSTANDARD1_6 && !NETSTANDARD2_0
+using NUnit.Engine;
+
 namespace TestCentric.Engine.Runners
 {
     /// <summary>

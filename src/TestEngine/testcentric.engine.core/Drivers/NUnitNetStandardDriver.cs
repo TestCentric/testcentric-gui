@@ -9,8 +9,9 @@ using System.Linq;
 using System.Collections.Generic;
 using TestCentric.Engine.Internal;
 using System.Reflection;
-using TestCentric.Engine.Extensibility;
 using Mono.Cecil;
+using NUnit.Engine;
+using NUnit.Engine.Extensibility;
 
 namespace TestCentric.Engine.Drivers
 {

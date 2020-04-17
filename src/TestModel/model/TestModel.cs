@@ -8,7 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
+using NUnit.Engine;
 using TestCentric.Engine;
 
 namespace TestCentric.Gui.Model
@@ -303,13 +303,14 @@ namespace TestCentric.Gui.Model
             var originalSubPackages = new List<TestPackage>(package.SubPackages);
             package.SubPackages.Clear();
 
-            package.Settings[EnginePackageSettings.ActiveConfig] = config;
-            Services.ProjectService.ExpandProjectPackage(package);
+            // TODO: Get this back in place or fix in the engine
+            //package.Settings[EnginePackageSettings.ActiveConfig] = config;
+            //Services.ProjectService.ExpandProjectPackage(package);
 
-            foreach (var subPackage in package.SubPackages)
-                foreach (var original in originalSubPackages)
-                    if (subPackage.Name == original.Name)
-                        subPackage.SetID(original.ID);
+            //foreach (var subPackage in package.SubPackages)
+            //    foreach (var original in originalSubPackages)
+            //        if (subPackage.Name == original.Name)
+            //            subPackage.SetID(original.ID);
 
             ReloadTests();
         }
@@ -410,26 +411,26 @@ namespace TestCentric.Gui.Model
                 : null;
         }
 
-        public string GetActiveConfig(TestPackage package)
-        {
-            string activeConfig = package.GetSetting(EnginePackageSettings.ActiveConfig, "");
+        //public string GetActiveConfig(TestPackage package)
+        //{
+        //    string activeConfig = package.GetSetting(EnginePackageSettings.ActiveConfig, "");
 
-            if (string.IsNullOrEmpty(activeConfig))
-            {
-                var project = Services.ProjectService.LoadFrom(package.FullName);
-                activeConfig = project.ActiveConfigName;
+        //    if (string.IsNullOrEmpty(activeConfig))
+        //    {
+        //        var project = Services.ProjectService.LoadFrom(package.FullName);
+        //        activeConfig = project.ActiveConfigName;
 
-                if (string.IsNullOrEmpty(activeConfig) && project.ConfigNames.Count > 0)
-                    activeConfig = project.ConfigNames.FirstOrDefault();
-            }
+        //        if (string.IsNullOrEmpty(activeConfig) && project.ConfigNames.Count > 0)
+        //            activeConfig = project.ConfigNames.FirstOrDefault();
+        //    }
 
-            return activeConfig;
-        }
+        //    return activeConfig;
+        //}
 
-        public IList<string> GetConfigNames(TestPackage package)
-        {
-            return Services.ProjectService.LoadFrom(package.FullName).ConfigNames;
-        }
+        //public IList<string> GetConfigNames(TestPackage package)
+        //{
+        //    return Services.ProjectService.LoadFrom(package.FullName).ConfigNames;
+        //}
 
         public void ClearResults()
         {
