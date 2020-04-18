@@ -10,7 +10,6 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
 using TestCentric.Engine.Internal;
-using TestCentric.Engine.Extensibility;
 using Mono.Cecil;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
