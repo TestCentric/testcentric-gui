@@ -29,9 +29,4 @@
   <ItemGroup>
     <PackageReference Include="NUnit.Engine.Api" Version="3.11.1" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)'=='net40'">
-    <Content Include="nunit.engine.addins">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
 </Project>

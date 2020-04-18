@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using NUnit.Engine;
 using NUnit.Framework;
 using TestCentric.Engine.Communication.Messages;
 
