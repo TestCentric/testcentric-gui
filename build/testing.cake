@@ -4,7 +4,7 @@
 
 const string DEFAULT_RESULT_FILE = "TestResult.xml";
 
-void CheckTestErrors(ref List<string> errorDetail)
+static void CheckTestErrors(ref List<string> errorDetail)
 {
     if(errorDetail.Count != 0)
     {
@@ -132,10 +132,13 @@ public abstract class PackageTester : GuiTester
 
 		PackageTests = new List<PackageTest>();
 
+		// Level 1 tests are run each time we build the packages
 		PackageTests.Add(new PackageTest(1, StandardRunner,
 			MODEL_TESTS,
 			ExpectedResult.Success,
 			"Run tests of the TestCentric model"));
+
+		// Level 2 tests are run for PRs and when packages will be published
 		PackageTests.Add(new PackageTest(1, ExperimentalRunner,
 			MODEL_TESTS,
 			ExpectedResult.Success,
@@ -144,9 +147,9 @@ public abstract class PackageTester : GuiTester
 			V2_MOCK_ASSEMBLY,
 			V2_MOCK_ASSEMBLY_RESULT,
 			"Run mock-assembly tests using NUnit V2"));
-		PackageTests.Add( new PackageTest(1, StandardRunner,
-			"engine-tests/net35/testcentric.engine.core.tests.dll engine-tests/net40/testcentric.engine.core.tests.dll",
-			ExpectedResult.Success, "Run two builds of the engine core tests together"));
+		PackageTests.Add( new PackageTest(2, StandardRunner,
+			"engine-tests/net35/testcentric.engine.core.tests.exe engine-tests/net40/testcentric.engine.core.tests.exe",
+			new ExpectedResult("Skipped"), "Run two builds of the engine core tests together"));
 	}
 
 	protected abstract string PackageName { get; }
@@ -174,6 +177,8 @@ public abstract class PackageTester : GuiTester
 		RunChecks();
 
 		RunPackageTests();
+
+		CheckTestErrors(ref ErrorDetail);
 	}
 
 	private void CreateTestDirectory()
@@ -203,7 +208,7 @@ public abstract class PackageTester : GuiTester
         }
 
         if (!allPassed)
-     		ErrorDetail.Add($"Package check failed for {PackageName}");
+     		throw new Exception($"Package check failed for {PackageName}");
     }
 
 	// Default implementation does nothing - override as needed.
@@ -234,6 +239,8 @@ public abstract class PackageTester : GuiTester
 				break;
 		}
 		
+		bool anyErrors = false;
+
 		foreach (var packageTest in PackageTests)
 		{
 			if (packageTest.Level > 0 && packageTest.Level <= level)
@@ -244,9 +251,14 @@ public abstract class PackageTester : GuiTester
 				RunGuiUnattended(packageTest.Runner, packageTest.Arguments);
 
 				var reporter = new ResultReporter(_parameters.OutputDirectory + DEFAULT_RESULT_FILE);
-				reporter.Report(packageTest.ExpectedResult);
+				anyErrors |= reporter.Report(packageTest.ExpectedResult) > 0;
 			}
 		}
+
+		// All package tests are run even if one of them fails. If there are
+		// any errors,  we stop the run at this point.
+		if (anyErrors)
+			throw new Exception("One or more package tests had errors!");
 	}
 
 	protected void DisplayBanner(string message)

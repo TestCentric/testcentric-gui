@@ -55,10 +55,10 @@ public class ExpectedResult : ResultSummary
 
 	public static ExpectedResult Success => new ExpectedResult("Passed");
 	public static ExpectedResult Failure => new ExpectedResult("Failed");
-
+	
     private int _errorCount;
 
-	public void CheckResult(ResultSummary actual)
+	public int CheckResult(ResultSummary actual)
 	{
         _errorCount = 0;
 
@@ -73,6 +73,8 @@ public class ExpectedResult : ResultSummary
 
         if (_errorCount == 0)
             Console.WriteLine("SUCCESS: Test Result matches expected result!");
+
+		return _errorCount;
 	}
 
     private void CheckCounter(string label, int expected, int actual)
@@ -113,7 +115,7 @@ public class ResultReporter
 
 	public ResultSummary Summary { get; }
 
-	public void Report(ExpectedResult expectedResult)
+	public int Report(ExpectedResult expectedResult)
 	{
 		if (Summary.Failed + Summary.Warnings > 0)
 		{
@@ -131,7 +133,7 @@ public class ResultReporter
 		Console.WriteLine($"  Test Count: {Summary.Total}, Passed: {Summary.Passed}, Failed: {Summary.Failed}"
 			+$" Warnings: {Summary.Warnings}, Inconclusive: {Summary.Inconclusive}, Skipped: {Summary.Skipped}\n");
 
-		expectedResult.CheckResult(Summary);
+		return  expectedResult.CheckResult(Summary);
 	}
 
 	private void WriteErrorsFailuresAndWarnings(XmlNode resultNode, ref int index, int level)
