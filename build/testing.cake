@@ -159,6 +159,17 @@ public abstract class PackageTester : GuiTester
 		Skipped = 4
 	};
 
+	private const string TWO_MOCK_ASSEMBLIES = NET35_MOCK_ASSEMBLY + " " + NETCORE21_MOCK_ASSEMBLY;
+	private static readonly ExpectedResult TWO_MOCK_ASSEMBLIES_RESULT = new ExpectedResult("Failed")
+	{
+		Total = 72,
+		Passed = 46,
+		Failed = 10,
+		Warnings = 0,
+		Inconclusive = 2,
+		Skipped = 14
+	};
+
 	protected BuildParameters _parameters;
 
 	public PackageTester(BuildParameters parameters)
@@ -183,17 +194,19 @@ public abstract class PackageTester : GuiTester
 			"Run mock-assembly.dll under .NET Core 2.1"));
 
 		// Level 2 tests are run for PRs and when packages will be published
-		PackageTests.Add(new PackageTest(2, ExperimentalRunner,
-			MODEL_TESTS,
-			ExpectedResult.Success,
-			"Run tests of the TestCentric model using the Experimental Runner"));
-		PackageTests.Add(new PackageTest(2, StandardRunner,
+		// TODO: Ensure that experimental runner saves results and handles --unattended
+		// PackageTests.Add(new PackageTest(1, ExperimentalRunner,
+		// 	MODEL_TESTS,
+		// 	ExpectedResult.Success,
+		// 	"Run tests of the TestCentric model using the Experimental Runner"));
+		PackageTests.Add(new PackageTest(1, StandardRunner,
 			V2_MOCK_ASSEMBLY,
 			V2_MOCK_ASSEMBLY_RESULT,
 			"Run mock-assembly tests using NUnit V2"));
-		PackageTests.Add( new PackageTest(2, StandardRunner,
-			"engine-tests/net35/testcentric.engine.core.tests.exe engine-tests/net40/testcentric.engine.core.tests.exe",
-			new ExpectedResult("Skipped"), "Run two builds of the engine core tests together"));
+		PackageTests.Add( new PackageTest(1, StandardRunner,
+			TWO_MOCK_ASSEMBLIES,
+			TWO_MOCK_ASSEMBLIES_RESULT,
+			"Run multiple builds of mock-assembly.dll"));
 	}
 
 	protected abstract string PackageName { get; }

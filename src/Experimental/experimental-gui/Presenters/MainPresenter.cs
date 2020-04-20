@@ -70,6 +70,7 @@ namespace TestCentric.Gui.Presenters
             _model.Events.RunStarting += (ea) => InitializeMainMenu();
             _model.Events.RunFinished += (ea) =>
             {
+                SaveResults();
                 InitializeMainMenu();
                 if (_options.Unattended)
                     _view.Close();
