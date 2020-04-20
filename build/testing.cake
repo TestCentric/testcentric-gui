@@ -58,6 +58,9 @@ public class GuiTester
 
 	public void RunGui(string runnerPath, string arguments)
 	{
+		Console.WriteLine("Running GUI at " + runnerPath);
+		Console.WriteLine("  Working directory: " + _parameters.OutputDirectory);
+		Console.WriteLine("  Arguments: " + arguments);
 		_parameters.Context.StartProcess(runnerPath, new ProcessSettings()
 		{
 			Arguments = arguments,
@@ -112,8 +115,41 @@ public abstract class PackageTester : GuiTester
 	protected const string MODEL_TESTS = "TestCentric.Gui.Model.Tests.dll";
 	protected const string ENGINE_CORE_TESTS = "testcentric.engine.core.tests.dll";
 
-	protected const string V2_MOCK_ASSEMBLY = "v2-tests/mock-assembly.dll";
-	protected static readonly ExpectedResult V2_MOCK_ASSEMBLY_RESULT = new ExpectedResult("Failed")
+	private const string NET45_MOCK_ASSEMBLY = "mock-assembly.dll";
+	private static readonly ExpectedResult NET45_MOCK_ASSEMBLY_RESULT = new ExpectedResult("Failed")
+	{
+		Total = 31,
+		Passed = 18,
+		Failed = 5,
+		Warnings = 0,
+		Inconclusive = 1,
+		Skipped = 7
+	};
+
+	private const string NET35_MOCK_ASSEMBLY = "engine-tests/net35/mock-assembly.dll";
+	private static readonly ExpectedResult NET35_MOCK_ASSEMBLY_RESULT = new ExpectedResult("Failed")
+	{
+		Total = 36,
+		Passed = 23,
+		Failed = 5,
+		Warnings = 0,
+		Inconclusive = 1,
+		Skipped = 7
+	};
+
+	private const string NETCORE21_MOCK_ASSEMBLY = "engine-tests/netcoreapp2.1/mock-assembly.dll";
+	private static readonly ExpectedResult NETCORE21_MOCK_ASSEMBLY_RESULT = new ExpectedResult("Failed")
+	{
+		Total = 36,
+		Passed = 23,
+		Failed = 5,
+		Warnings = 0,
+		Inconclusive = 1,
+		Skipped = 7
+	};
+
+	private const string V2_MOCK_ASSEMBLY = "v2-tests/mock-assembly.dll";
+	private static readonly ExpectedResult V2_MOCK_ASSEMBLY_RESULT = new ExpectedResult("Failed")
 	{
 		Total = 28,
 		Passed = 18,
@@ -134,16 +170,24 @@ public abstract class PackageTester : GuiTester
 
 		// Level 1 tests are run each time we build the packages
 		PackageTests.Add(new PackageTest(1, StandardRunner,
-			MODEL_TESTS,
-			ExpectedResult.Success,
-			"Run tests of the TestCentric model"));
+			NET45_MOCK_ASSEMBLY,
+			NET45_MOCK_ASSEMBLY_RESULT,
+			"Run mock-assembly.dll under .NET 4.5"));
+		PackageTests.Add(new PackageTest(1, StandardRunner,
+			NET35_MOCK_ASSEMBLY,
+			NET35_MOCK_ASSEMBLY_RESULT,
+			"Run mock-assembly.dll under .NET 3.5"));
+		PackageTests.Add(new PackageTest(1, StandardRunner,
+			NETCORE21_MOCK_ASSEMBLY,
+			NETCORE21_MOCK_ASSEMBLY_RESULT,
+			"Run mock-assembly.dll under .NET Core 2.1"));
 
 		// Level 2 tests are run for PRs and when packages will be published
-		PackageTests.Add(new PackageTest(1, ExperimentalRunner,
+		PackageTests.Add(new PackageTest(2, ExperimentalRunner,
 			MODEL_TESTS,
 			ExpectedResult.Success,
 			"Run tests of the TestCentric model using the Experimental Runner"));
-		PackageTests.Add(new PackageTest(1, StandardRunner,
+		PackageTests.Add(new PackageTest(2, StandardRunner,
 			V2_MOCK_ASSEMBLY,
 			V2_MOCK_ASSEMBLY_RESULT,
 			"Run mock-assembly tests using NUnit V2"));
@@ -216,34 +260,35 @@ public abstract class PackageTester : GuiTester
 
 	public void RunPackageTests()
 	{
-		// Installs whatever extensions are needed for this type of package
-		InstallEngineExtensions();
-
 		var label = _parameters.Versions.IsPreRelease ? _parameters.Versions.PreReleaseLabel : "NONE";
-		int level;
+		int testLevel;
 		switch (label)
 		{
 			case "NONE":
 			case "rc":
 			case "alpha":
 			case "beta":
-				level = 3;
+				testLevel = 3;
 				break;
 			case "dev":
 			case "pr":
-				level = 2;
+				testLevel = 2;
 				break;
 			case "ci":
 			default:
-				level = 1;
+				testLevel = 1;
 				break;
 		}
-		
+
+		// Only level 2 and up tests require extensions
+		if (testLevel >= 2)
+			InstallEngineExtensions();
+
 		bool anyErrors = false;
 
 		foreach (var packageTest in PackageTests)
 		{
-			if (packageTest.Level > 0 && packageTest.Level <= level)
+			if (packageTest.Level > 0 && packageTest.Level <= testLevel)
 			{
 				DisplayBanner(packageTest.Description);
 				DisplayTestEnvironment(packageTest);
