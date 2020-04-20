@@ -53,9 +53,6 @@ public class ExpectedResult : ResultSummary
 		Total = Passed = Failed = Warnings = Inconclusive = Skipped = -1;
 	}
 
-	public static ExpectedResult Success => new ExpectedResult("Passed");
-	public static ExpectedResult Failure => new ExpectedResult("Failed");
-	
     private int _errorCount;
 
 	public int CheckResult(ResultSummary actual)

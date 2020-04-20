@@ -83,7 +83,7 @@ public struct PackageTest
 	public string Arguments;
 	public ExpectedResult ExpectedResult;
 	
-	public PackageTest(int level, string runner, string arguments, ExpectedResult expectedResult, string description)
+	public PackageTest(int level, string description, string runner, string arguments, ExpectedResult expectedResult)
 	{
 		Level = level;
 		Description = description;
@@ -110,66 +110,6 @@ public abstract class PackageTester : GuiTester
     protected static readonly string[] TREE_ICONS_PNG = {
         "Success.png", "Failure.png", "Ignored.png", "Inconclusive.png", "Skipped.png" };
 
-	protected const string GUI_TESTS = "TestCentric.Gui.Tests.dll";
-	protected const string EXPERIMENTAL_TESTS = "Experimental.Gui.Tests.dll";
-	protected const string MODEL_TESTS = "TestCentric.Gui.Model.Tests.dll";
-	protected const string ENGINE_CORE_TESTS = "testcentric.engine.core.tests.dll";
-
-	private const string NET45_MOCK_ASSEMBLY = "mock-assembly.dll";
-	private static readonly ExpectedResult NET45_MOCK_ASSEMBLY_RESULT = new ExpectedResult("Failed")
-	{
-		Total = 31,
-		Passed = 18,
-		Failed = 5,
-		Warnings = 0,
-		Inconclusive = 1,
-		Skipped = 7
-	};
-
-	private const string NET35_MOCK_ASSEMBLY = "engine-tests/net35/mock-assembly.dll";
-	private static readonly ExpectedResult NET35_MOCK_ASSEMBLY_RESULT = new ExpectedResult("Failed")
-	{
-		Total = 36,
-		Passed = 23,
-		Failed = 5,
-		Warnings = 0,
-		Inconclusive = 1,
-		Skipped = 7
-	};
-
-	private const string NETCORE21_MOCK_ASSEMBLY = "engine-tests/netcoreapp2.1/mock-assembly.dll";
-	private static readonly ExpectedResult NETCORE21_MOCK_ASSEMBLY_RESULT = new ExpectedResult("Failed")
-	{
-		Total = 36,
-		Passed = 23,
-		Failed = 5,
-		Warnings = 0,
-		Inconclusive = 1,
-		Skipped = 7
-	};
-
-	private const string V2_MOCK_ASSEMBLY = "v2-tests/mock-assembly.dll";
-	private static readonly ExpectedResult V2_MOCK_ASSEMBLY_RESULT = new ExpectedResult("Failed")
-	{
-		Total = 28,
-		Passed = 18,
-		Failed = 5,
-		Warnings = 0,
-		Inconclusive = 1,
-		Skipped = 4
-	};
-
-	private const string TWO_MOCK_ASSEMBLIES = NET35_MOCK_ASSEMBLY + " " + NETCORE21_MOCK_ASSEMBLY;
-	private static readonly ExpectedResult TWO_MOCK_ASSEMBLIES_RESULT = new ExpectedResult("Failed")
-	{
-		Total = 72,
-		Passed = 46,
-		Failed = 10,
-		Warnings = 0,
-		Inconclusive = 2,
-		Skipped = 14
-	};
-
 	protected BuildParameters _parameters;
 
 	public PackageTester(BuildParameters parameters)
@@ -180,33 +120,72 @@ public abstract class PackageTester : GuiTester
 		PackageTests = new List<PackageTest>();
 
 		// Level 1 tests are run each time we build the packages
-		PackageTests.Add(new PackageTest(1, StandardRunner,
-			NET45_MOCK_ASSEMBLY,
-			NET45_MOCK_ASSEMBLY_RESULT,
-			"Run mock-assembly.dll under .NET 4.5"));
-		PackageTests.Add(new PackageTest(1, StandardRunner,
-			NET35_MOCK_ASSEMBLY,
-			NET35_MOCK_ASSEMBLY_RESULT,
-			"Run mock-assembly.dll under .NET 3.5"));
-		PackageTests.Add(new PackageTest(1, StandardRunner,
-			NETCORE21_MOCK_ASSEMBLY,
-			NETCORE21_MOCK_ASSEMBLY_RESULT,
-			"Run mock-assembly.dll under .NET Core 2.1"));
+		PackageTests.Add(new PackageTest(2, "Re-run tests of the TestCentric model", StandardRunner,
+			"TestCentric.Gui.Model.Tests.dll",
+			new ExpectedResult("Passed")));
+		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET 4.5", StandardRunner,
+			"mock-assembly.dll",
+			new ExpectedResult("Failed")
+			{
+				Total = 31,
+				Passed = 18,
+				Failed = 5,
+				Warnings = 0,
+				Inconclusive = 1,
+				Skipped = 7
+			}));
+		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET 3.5", StandardRunner,
+			"engine-tests/net35/mock-assembly.dll",
+			new ExpectedResult("Failed")
+			{
+				Total = 36,
+				Passed = 23,
+				Failed = 5,
+				Warnings = 0,
+				Inconclusive = 1,
+				Skipped = 7
+			}));
+		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET Core 2.1", StandardRunner,
+			"engine-tests/netcoreapp2.1/mock-assembly.dll",
+			new ExpectedResult("Failed")
+			{
+				Total = 36,
+				Passed = 23,
+				Failed = 5,
+				Warnings = 0,
+				Inconclusive = 1,
+				Skipped = 7
+			}));
 
 		// Level 2 tests are run for PRs and when packages will be published
+
 		// TODO: Ensure that experimental runner saves results and handles --unattended
-		// PackageTests.Add(new PackageTest(1, ExperimentalRunner,
-		// 	MODEL_TESTS,
-		// 	ExpectedResult.Success,
+		// PackageTests.Add(new PackageTest(2, ExperimentalRunner,
+		// 	"TestCentric.Gui.Model.Tests.dll",
+		// 	new ExpectedResult("Passed"),
 		// 	"Run tests of the TestCentric model using the Experimental Runner"));
-		PackageTests.Add(new PackageTest(1, StandardRunner,
-			V2_MOCK_ASSEMBLY,
-			V2_MOCK_ASSEMBLY_RESULT,
-			"Run mock-assembly tests using NUnit V2"));
-		PackageTests.Add( new PackageTest(1, StandardRunner,
-			TWO_MOCK_ASSEMBLIES,
-			TWO_MOCK_ASSEMBLIES_RESULT,
-			"Run multiple builds of mock-assembly.dll"));
+		PackageTests.Add(new PackageTest(2, "Run mock-assembly.dll built for NUnit V2", StandardRunner,
+			"v2-tests/mock-assembly.dll",
+			new ExpectedResult("Failed")
+			{
+				Total = 28,
+				Passed = 18,
+				Failed = 5,
+				Warnings = 0,
+				Inconclusive = 1,
+				Skipped = 4
+			}));
+		PackageTests.Add( new PackageTest(2, "Run different builds of mock-assembly.dll together", StandardRunner,
+			"engine-tests/net35/mock-assembly.dll engine-tests/netcoreapp2.1/mock-assembly.dll",
+			new ExpectedResult("Failed")
+			{
+				Total = 72,
+				Passed = 46,
+				Failed = 10,
+				Warnings = 0,
+				Inconclusive = 2,
+				Skipped = 14
+			}));
 	}
 
 	protected abstract string PackageName { get; }
