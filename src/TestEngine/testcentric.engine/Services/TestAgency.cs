@@ -110,10 +110,10 @@ namespace TestCentric.Engine.Services
 
                     switch (targetRuntime.Runtime.FrameworkIdentifier)
                     {
-                        case ".NETFramework":
+                        case FrameworkIdentifiers.NetFramework:
                             return new TestAgentRemotingProxy(agent, agentId);
 
-                        case ".NETCoreApp":
+                        case FrameworkIdentifiers.NetCoreApp:
                             return agent;
 
                         default:

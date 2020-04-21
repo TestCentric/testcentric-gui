@@ -12,8 +12,8 @@ using TestCentric.Engine.Communication.Protocols;
 namespace TestCentric.Engine.Communication.Transports.Tcp
 {
     /// <summary>
-    /// RemoteTestAgentProxy wraps a RemoteTestAgent so that certain
-    /// of its properties may be accessed without remoting.
+    /// TestAgentTcpProxy wraps a RemoteTestAgent so that certain
+    /// of its properties may be accessed directly.
     /// </summary>
     internal class TestAgentTcpProxy : ITestAgent, ITestEngineRunner
     {
