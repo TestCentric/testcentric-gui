@@ -58,9 +58,6 @@ public class GuiTester
 
 	public void RunGui(string runnerPath, string arguments)
 	{
-		Console.WriteLine("Running GUI at " + runnerPath);
-		Console.WriteLine("  Working directory: " + _parameters.OutputDirectory);
-		Console.WriteLine("  Arguments: " + arguments);
 		_parameters.Context.StartProcess(runnerPath, new ProcessSettings()
 		{
 			Arguments = arguments,
@@ -111,11 +108,13 @@ public abstract class PackageTester : GuiTester
         "Success.png", "Failure.png", "Ignored.png", "Inconclusive.png", "Skipped.png" };
 
 	protected BuildParameters _parameters;
+	private ICakeContext _context;
 
 	public PackageTester(BuildParameters parameters)
 		: base(parameters) 
 	{
 		_parameters = parameters;
+		_context = parameters.Context;
 
 		PackageTests = new List<PackageTest>();
 
@@ -147,6 +146,17 @@ public abstract class PackageTester : GuiTester
 			}));
 		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET Core 2.1", StandardRunner,
 			"engine-tests/netcoreapp2.1/mock-assembly.dll",
+			new ExpectedResult("Failed")
+			{
+				Total = 36,
+				Passed = 23,
+				Failed = 5,
+				Warnings = 0,
+				Inconclusive = 1,
+				Skipped = 7
+			}));
+		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET Core 3.1", StandardRunner,
+			"engine-tests/netcoreapp3.1/mock-assembly.dll",
 			new ExpectedResult("Failed")
 			{
 				Total = 36,
@@ -220,8 +230,8 @@ public abstract class PackageTester : GuiTester
 	private void CreateTestDirectory()
 	{
 		Console.WriteLine("Unzipping package to directory\n  " + PackageTestDirectory);
-		_parameters.Context.CleanDirectory(PackageTestDirectory);
-		_parameters.Context.Unzip(PackageUnderTest, PackageTestDirectory);
+		_context.CleanDirectory(PackageTestDirectory);
+		_context.Unzip(PackageUnderTest, PackageTestDirectory);
 	}
 
     public void RunChecks()
@@ -282,12 +292,19 @@ public abstract class PackageTester : GuiTester
 		{
 			if (packageTest.Level > 0 && packageTest.Level <= testLevel)
 			{
+				var resultFile = _parameters.OutputDirectory + DEFAULT_RESULT_FILE;
+				// Delete result file ahead of time so we don't mistakenly
+				// read a left-over file from another test run. Leave the
+				// file after the run in case we need it to debug a failure.
+				if (_context.FileExists(resultFile))
+					_context.DeleteFile(resultFile);
+				
 				DisplayBanner(packageTest.Description);
 				DisplayTestEnvironment(packageTest);
 
 				RunGuiUnattended(packageTest.Runner, packageTest.Arguments);
 
-				var reporter = new ResultReporter(_parameters.OutputDirectory + DEFAULT_RESULT_FILE);
+				var reporter = new ResultReporter(resultFile);
 				anyErrors |= reporter.Report(packageTest.ExpectedResult) > 0;
 			}
 		}

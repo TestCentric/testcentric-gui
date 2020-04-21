@@ -49,7 +49,7 @@ namespace TestCentric.Gui.Model.Services
 
         [Test]
         // TODO: Exclusion should really only apply to Mono on Windows
-        [Platform(Exclude = "Mono")]
+        [Platform(Exclude = "Mono,Win10")]
         public void MultipleCloselySpacedChangesTriggerWatcherOnlyOnce()
         {
             for (int i = 0; i < 3; i++)
