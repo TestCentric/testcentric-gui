@@ -122,6 +122,10 @@ namespace TestCentric.Engine.Services
                         case 2:
                             agentPath = Path.Combine(engineDir, "agents/netcoreapp2.1/" + agentName + ".dll");
                             break;
+
+                        case 3:
+                            agentPath = Path.Combine(engineDir, "agents/netcoreapp3.1/" + agentName + ".dll");
+                            break;
                     }
                     break;
             }
