@@ -59,13 +59,10 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
         public TMessage GetNextMessage<TMessage>() where TMessage : TestEngineMessage
         {
             var receivedMessage = GetNextMessage();
-            var receivedType = receivedMessage.GetType();
-
             var expectedMessage = receivedMessage as TMessage;
-            var expectedType = typeof(TMessage);
 
             if (expectedMessage == null)
-                throw new InvalidOperationException($"Expected a {expectedType} but received a {receivedType}");
+                throw new InvalidOperationException($"Expected a {typeof(TMessage)} but received a {receivedMessage.GetType()}");
 
             return expectedMessage;
         }

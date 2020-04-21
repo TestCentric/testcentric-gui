@@ -99,7 +99,7 @@ namespace TestCentric.Engine.Services
 
             switch (targetRuntime.Runtime.FrameworkIdentifier)
             {
-                case ".NETFramework":
+                case FrameworkIdentifiers.NetFramework:
                     switch (targetRuntime.FrameworkVersion.Major)
                     {
                         case 2:
@@ -112,7 +112,7 @@ namespace TestCentric.Engine.Services
                     }
                     break;
 
-                case ".NETCoreApp":
+                case FrameworkIdentifiers.NetCoreApp:
                     switch (targetRuntime.FrameworkVersion.Major)
                     {
                         case 1:
