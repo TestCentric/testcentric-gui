@@ -40,12 +40,12 @@ namespace TestCentric.Engine
             {
                 case RuntimeType.Net:
                     DisplayName = ".NET";
-                    FrameworkIdentifier = FrameworkIdentifiers.Net;
+                    FrameworkIdentifier = FrameworkIdentifiers.NetFramework;
                     TargetFrameworkMoniker = "net";
                     break;
                 case RuntimeType.Mono:
                     DisplayName = "Mono";
-                    FrameworkIdentifier = FrameworkIdentifiers.Net;
+                    FrameworkIdentifier = FrameworkIdentifiers.NetFramework;
                     break;
                 case RuntimeType.NetCore:
                     DisplayName = ".NETCore";
@@ -115,7 +115,7 @@ namespace TestCentric.Engine
         {
             switch(s)
             {
-                case FrameworkIdentifiers.Net:
+                case FrameworkIdentifiers.NetFramework:
                     return Runtime.Net;
                 case FrameworkIdentifiers.NetCoreApp:
                     return Runtime.NetCore;

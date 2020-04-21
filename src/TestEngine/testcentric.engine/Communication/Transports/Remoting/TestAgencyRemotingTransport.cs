@@ -17,15 +17,16 @@ using TestCentric.Engine.Helpers;
 using TestCentric.Engine.Internal;
 using TestCentric.Engine.Services;
 
-namespace TestCentric.Engine.Transports.Remoting
+namespace TestCentric.Engine.Communication.Transports.Remoting
 {
     /// <summary>
     /// Summary description for TestAgencyRemotingTransport.
     /// </summary>
-    public class TestAgencyRemotingTransport : TestAgencyTransport
+    public class TestAgencyRemotingTransport : MarshalByRefObject, ITestAgencyTransport, ITestAgency, IDisposable
     {
         private static readonly Logger log = InternalTrace.GetLogger(typeof(TestAgencyRemotingTransport));
 
+        private ITestAgency _agency;
         private string _uri;
         private int _port;
 
@@ -34,41 +35,43 @@ namespace TestCentric.Engine.Transports.Remoting
 
         private object _theLock = new object();
 
-        public TestAgencyRemotingTransport(TestAgency agency, string uri, int port)
-            : base (agency)
+        public TestAgencyRemotingTransport(ITestAgency agency, string uri, int port)
         {
+            Guard.ArgumentNotNull(agency, nameof(agency));
+            Guard.ArgumentNotNullOrEmpty(uri, nameof(uri));
+
+            _agency = agency;
             _uri = uri;
             _port = port;
         }
 
         public string ServerUrl => string.Format("tcp://127.0.0.1:{0}/{1}", _port, _uri);
 
-        public override void Start()
+        public bool Start()
         {
-            if (_uri != null && _uri != string.Empty)
+            lock (_theLock)
             {
-                lock (_theLock)
-                {
-                    _channel = TcpChannelUtils.GetTcpChannel(_uri + "Channel", _port, 100);
+                _channel = TcpChannelUtils.GetTcpChannel(_uri + "Channel", _port, 100);
 
-                    RemotingServices.Marshal(this, _uri);
-                    _isMarshalled = true;
-                }
+                RemotingServices.Marshal(this, _uri);
+                _isMarshalled = true;
+            }
 
-                if (_port == 0)
+            if (_port == 0)
+            {
+                ChannelDataStore store = this._channel.ChannelData as ChannelDataStore;
+                if (store != null)
                 {
-                    ChannelDataStore store = this._channel.ChannelData as ChannelDataStore;
-                    if (store != null)
-                    {
-                        string channelUri = store.ChannelUris[0];
-                        _port = int.Parse(channelUri.Substring(channelUri.LastIndexOf(':') + 1));
-                    }
+                    string channelUri = store.ChannelUris[0];
+                    _port = int.Parse(channelUri.Substring(channelUri.LastIndexOf(':') + 1));
                 }
             }
+
+            return true;
         }
 
         [System.Runtime.Remoting.Messaging.OneWay]
-        public override void Stop()
+        public void Stop()
         {
             lock( _theLock )
             {
@@ -96,12 +99,44 @@ namespace TestCentric.Engine.Transports.Remoting
             }
         }
 
+        public void Register(ITestAgent agent)
+        {
+            _agency.Register(agent);
+        }
+
         public void WaitForStop()
         {
             lock( _theLock )
             {
                 Monitor.Wait( _theLock );
             }
+        }
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+            Dispose(true);
+        }
+
+        private bool _disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                    Stop();
+
+                _disposed = true;
+            }
+        }
+
+        /// <summary>
+        /// Overridden to cause object to live indefinitely
+        /// </summary>
+        public override object InitializeLifetimeService()
+        {
+            return null;
         }
     }
 }

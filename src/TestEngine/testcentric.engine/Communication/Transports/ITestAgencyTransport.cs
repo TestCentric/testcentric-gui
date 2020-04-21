@@ -3,12 +3,10 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-namespace TestCentric.Engine
+namespace TestCentric.Engine.Communication.Transports
 {
-    public static class FrameworkIdentifiers
+    public interface ITestAgencyTransport : ITransport
     {
-        public const string NetFramework = ".NETFramework";
-        public const string NetCoreApp = ".NETCoreApp";
-        public const string NetStndard = ".NETStandard";
+        string ServerUrl { get; }
     }
 }

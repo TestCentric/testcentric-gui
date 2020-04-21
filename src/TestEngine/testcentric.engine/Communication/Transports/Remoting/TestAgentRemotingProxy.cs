@@ -7,17 +7,17 @@
 using System;
 using NUnit.Engine;
 
-namespace TestCentric.Engine.Agents
+namespace TestCentric.Engine.Communication.Transports.Remoting
 {
     /// <summary>
     /// RemoteTestAgentProxy wraps a RemoteTestAgent so that certain
     /// of its properties may be accessed without remoting.
     /// </summary>
-    internal class RemoteTestAgentProxy : ITestAgent
+    internal class TestAgentRemotingProxy : ITestAgent
     {
         private ITestAgent _remoteAgent;
 
-        public RemoteTestAgentProxy(ITestAgent remoteAgent, Guid id)
+        public TestAgentRemotingProxy(ITestAgent remoteAgent, Guid id)
         {
             _remoteAgent = remoteAgent;
 

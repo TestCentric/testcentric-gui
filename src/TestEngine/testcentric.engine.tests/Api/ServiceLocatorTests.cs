@@ -17,8 +17,15 @@ namespace TestCentric.Engine.Api
         [OneTimeSetUp]
         public void CreateEngine()
         {
+            // TODO: We should really be using the actual engine for this test
             _testEngine = new TestEngine();
             _testEngine.InternalTraceLevel = InternalTraceLevel.Off;
+        }
+
+        [OneTimeTearDown]
+        public void DisposeEngine()
+        {
+            _testEngine.Dispose();
         }
 
         [TestCase(typeof(IDriverService))]

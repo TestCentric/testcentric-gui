@@ -4,7 +4,7 @@
 
 const string DEFAULT_RESULT_FILE = "TestResult.xml";
 
-void CheckTestErrors(ref List<string> errorDetail)
+static void CheckTestErrors(ref List<string> errorDetail)
 {
     if(errorDetail.Count != 0)
     {
@@ -58,6 +58,9 @@ public class GuiTester
 
 	public void RunGui(string runnerPath, string arguments)
 	{
+		Console.WriteLine("Running GUI at " + runnerPath);
+		Console.WriteLine("  Working directory: " + _parameters.OutputDirectory);
+		Console.WriteLine("  Arguments: " + arguments);
 		_parameters.Context.StartProcess(runnerPath, new ProcessSettings()
 		{
 			Arguments = arguments,
@@ -80,7 +83,7 @@ public struct PackageTest
 	public string Arguments;
 	public ExpectedResult ExpectedResult;
 	
-	public PackageTest(int level, string runner, string arguments, ExpectedResult expectedResult, string description)
+	public PackageTest(int level, string description, string runner, string arguments, ExpectedResult expectedResult)
 	{
 		Level = level;
 		Description = description;
@@ -107,22 +110,6 @@ public abstract class PackageTester : GuiTester
     protected static readonly string[] TREE_ICONS_PNG = {
         "Success.png", "Failure.png", "Ignored.png", "Inconclusive.png", "Skipped.png" };
 
-	protected const string GUI_TESTS = "TestCentric.Gui.Tests.dll";
-	protected const string EXPERIMENTAL_TESTS = "Experimental.Gui.Tests.dll";
-	protected const string MODEL_TESTS = "TestCentric.Gui.Model.Tests.dll";
-	protected const string ENGINE_CORE_TESTS = "testcentric.engine.core.tests.dll";
-
-	protected const string V2_MOCK_ASSEMBLY = "v2-tests/mock-assembly.dll";
-	protected static readonly ExpectedResult V2_MOCK_ASSEMBLY_RESULT = new ExpectedResult("Failed")
-	{
-		Total = 28,
-		Passed = 18,
-		Failed = 5,
-		Warnings = 0,
-		Inconclusive = 1,
-		Skipped = 4
-	};
-
 	protected BuildParameters _parameters;
 
 	public PackageTester(BuildParameters parameters)
@@ -132,21 +119,73 @@ public abstract class PackageTester : GuiTester
 
 		PackageTests = new List<PackageTest>();
 
-		PackageTests.Add(new PackageTest(1, StandardRunner,
-			MODEL_TESTS,
-			ExpectedResult.Success,
-			"Run tests of the TestCentric model"));
-		PackageTests.Add(new PackageTest(1, ExperimentalRunner,
-			MODEL_TESTS,
-			ExpectedResult.Success,
-			"Run tests of the TestCentric model using the Experimental Runner"));
-		PackageTests.Add(new PackageTest(1, StandardRunner,
-			V2_MOCK_ASSEMBLY,
-			V2_MOCK_ASSEMBLY_RESULT,
-			"Run mock-assembly tests using NUnit V2"));
-		PackageTests.Add( new PackageTest(1, StandardRunner,
-			"engine-tests/net35/testcentric.engine.core.tests.dll engine-tests/net40/testcentric.engine.core.tests.dll",
-			ExpectedResult.Success, "Run two builds of the engine core tests together"));
+		// Level 1 tests are run each time we build the packages
+		PackageTests.Add(new PackageTest(2, "Re-run tests of the TestCentric model", StandardRunner,
+			"TestCentric.Gui.Model.Tests.dll",
+			new ExpectedResult("Passed")));
+		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET 4.5", StandardRunner,
+			"mock-assembly.dll",
+			new ExpectedResult("Failed")
+			{
+				Total = 31,
+				Passed = 18,
+				Failed = 5,
+				Warnings = 0,
+				Inconclusive = 1,
+				Skipped = 7
+			}));
+		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET 3.5", StandardRunner,
+			"engine-tests/net35/mock-assembly.dll",
+			new ExpectedResult("Failed")
+			{
+				Total = 36,
+				Passed = 23,
+				Failed = 5,
+				Warnings = 0,
+				Inconclusive = 1,
+				Skipped = 7
+			}));
+		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET Core 2.1", StandardRunner,
+			"engine-tests/netcoreapp2.1/mock-assembly.dll",
+			new ExpectedResult("Failed")
+			{
+				Total = 36,
+				Passed = 23,
+				Failed = 5,
+				Warnings = 0,
+				Inconclusive = 1,
+				Skipped = 7
+			}));
+
+		// Level 2 tests are run for PRs and when packages will be published
+
+		// TODO: Ensure that experimental runner saves results and handles --unattended
+		// PackageTests.Add(new PackageTest(2, ExperimentalRunner,
+		// 	"TestCentric.Gui.Model.Tests.dll",
+		// 	new ExpectedResult("Passed"),
+		// 	"Run tests of the TestCentric model using the Experimental Runner"));
+		PackageTests.Add(new PackageTest(2, "Run mock-assembly.dll built for NUnit V2", StandardRunner,
+			"v2-tests/mock-assembly.dll",
+			new ExpectedResult("Failed")
+			{
+				Total = 28,
+				Passed = 18,
+				Failed = 5,
+				Warnings = 0,
+				Inconclusive = 1,
+				Skipped = 4
+			}));
+		PackageTests.Add( new PackageTest(2, "Run different builds of mock-assembly.dll together", StandardRunner,
+			"engine-tests/net35/mock-assembly.dll engine-tests/netcoreapp2.1/mock-assembly.dll",
+			new ExpectedResult("Failed")
+			{
+				Total = 72,
+				Passed = 46,
+				Failed = 10,
+				Warnings = 0,
+				Inconclusive = 2,
+				Skipped = 14
+			}));
 	}
 
 	protected abstract string PackageName { get; }
@@ -174,6 +213,8 @@ public abstract class PackageTester : GuiTester
 		RunChecks();
 
 		RunPackageTests();
+
+		CheckTestErrors(ref ErrorDetail);
 	}
 
 	private void CreateTestDirectory()
@@ -203,7 +244,7 @@ public abstract class PackageTester : GuiTester
         }
 
         if (!allPassed)
-     		ErrorDetail.Add($"Package check failed for {PackageName}");
+     		throw new Exception($"Package check failed for {PackageName}");
     }
 
 	// Default implementation does nothing - override as needed.
@@ -211,32 +252,35 @@ public abstract class PackageTester : GuiTester
 
 	public void RunPackageTests()
 	{
-		// Installs whatever extensions are needed for this type of package
-		InstallEngineExtensions();
-
 		var label = _parameters.Versions.IsPreRelease ? _parameters.Versions.PreReleaseLabel : "NONE";
-		int level;
+		int testLevel;
 		switch (label)
 		{
 			case "NONE":
 			case "rc":
 			case "alpha":
 			case "beta":
-				level = 3;
+				testLevel = 3;
 				break;
 			case "dev":
 			case "pr":
-				level = 2;
+				testLevel = 2;
 				break;
 			case "ci":
 			default:
-				level = 1;
+				testLevel = 1;
 				break;
 		}
-		
+
+		// Only level 2 and up tests require extensions
+		if (testLevel >= 2)
+			InstallEngineExtensions();
+
+		bool anyErrors = false;
+
 		foreach (var packageTest in PackageTests)
 		{
-			if (packageTest.Level > 0 && packageTest.Level <= level)
+			if (packageTest.Level > 0 && packageTest.Level <= testLevel)
 			{
 				DisplayBanner(packageTest.Description);
 				DisplayTestEnvironment(packageTest);
@@ -244,9 +288,14 @@ public abstract class PackageTester : GuiTester
 				RunGuiUnattended(packageTest.Runner, packageTest.Arguments);
 
 				var reporter = new ResultReporter(_parameters.OutputDirectory + DEFAULT_RESULT_FILE);
-				reporter.Report(packageTest.ExpectedResult);
+				anyErrors |= reporter.Report(packageTest.ExpectedResult) > 0;
 			}
 		}
+
+		// All package tests are run even if one of them fails. If there are
+		// any errors,  we stop the run at this point.
+		if (anyErrors)
+			throw new Exception("One or more package tests had errors!");
 	}
 
 	protected void DisplayBanner(string message)

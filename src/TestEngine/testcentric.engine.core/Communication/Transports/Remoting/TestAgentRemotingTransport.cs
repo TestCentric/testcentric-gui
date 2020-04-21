@@ -13,7 +13,7 @@ using TestCentric.Engine.Agents;
 using TestCentric.Engine.Helpers;
 using TestCentric.Engine.Internal;
 
-namespace TestCentric.Engine.Transports.Remoting
+namespace TestCentric.Engine.Communication.Transports.Remoting
 {
 
     public class TestAgentRemotingTransport : MarshalByRefObject, ITestAgentTransport, ITestAgent, ITestEngineRunner

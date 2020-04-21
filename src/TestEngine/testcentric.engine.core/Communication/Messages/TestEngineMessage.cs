@@ -3,12 +3,14 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-namespace TestCentric.Engine
+using System;
+
+namespace TestCentric.Engine.Communication.Messages
 {
-    public static class FrameworkIdentifiers
+#if !NETSTANDARD1_6
+    [Serializable]
+#endif
+    public abstract class TestEngineMessage
     {
-        public const string NetFramework = ".NETFramework";
-        public const string NetCoreApp = ".NETCoreApp";
-        public const string NetStndard = ".NETStandard";
     }
 }
