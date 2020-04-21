@@ -135,6 +135,7 @@ Task("CheckTestErrors")
 
 Task("TestEngine")
 	.Description("Tests the TestCentric Engine")
+	.IsDependentOn("Build")
 	.Does<BuildParameters>((parameters) =>
 	{
 		foreach (var runtime in parameters.SupportedEngineRuntimes)
@@ -147,6 +148,7 @@ Task("TestEngine")
 
 Task("TestEngineCore")
 	.Description("Tests the TestCentric Engine Core")
+	.IsDependentOn("Build")
 	.Does<BuildParameters>((parameters) =>
 	{
 		foreach (var runtime in parameters.SupportedCoreRuntimes)

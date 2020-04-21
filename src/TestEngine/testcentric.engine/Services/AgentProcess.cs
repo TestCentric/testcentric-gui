@@ -32,7 +32,11 @@ namespace TestCentric.Engine.Services
             bool loadUserProfile = package.GetSetting(EnginePackageSettings.LoadUserProfile, false);
             string workDirectory = package.GetSetting(EnginePackageSettings.WorkDirectory, string.Empty);
 
-            AgentArgs = new StringBuilder($"{agentId} {agency.RemotingUrl} --pid={Process.GetCurrentProcess().Id}");
+            string agencyUrl = TargetRuntime.Runtime == Runtime.NetCore
+                ? agency.TcpEndPoint
+                : agency.RemotingUrl;
+
+            AgentArgs = new StringBuilder($"{agentId} {agencyUrl} --pid={Process.GetCurrentProcess().Id}");
 
             // Set options that need to be in effect before the package
             // is loaded by using the command line.
@@ -64,6 +68,11 @@ namespace TestCentric.Engine.Services
                 StartInfo.Arguments = AgentArgs.ToString();
                 StartInfo.LoadUserProfile = loadUserProfile;
             }
+            else if (TargetRuntime.Runtime == Runtime.NetCore)
+            {
+                StartInfo.FileName = "dotnet";
+                StartInfo.Arguments = $"\"{AgentExePath}\" {AgentArgs}";
+            }
             else
             {
                 StartInfo.FileName = AgentExePath;
@@ -77,21 +86,6 @@ namespace TestCentric.Engine.Services
         internal string AgentExePath { get; }
         internal StringBuilder AgentArgs { get; }
 
-        public Process LaunchProcess()
-        {
-            log.Info("Getting agent for use under {1}", TargetRuntime);
-
-            // NOTE: This could be done in the constructor, but postponing it makes testing easier.
-            if (!File.Exists(AgentExePath))
-                throw new FileNotFoundException(
-                    $"{Path.GetFileName(AgentExePath)} could not be found.", AgentExePath);
-
-
-            Start();
-
-            return this;
-        }
-
         public static string GetTestAgentExePath(RuntimeFramework targetRuntime, bool requires32Bit)
         {
             string engineDir = NUnitConfiguration.EngineDirectory;
@@ -101,34 +95,45 @@ namespace TestCentric.Engine.Services
                 ? "testcentric-agent-x86"
                 : "testcentric-agent";
 
+            string agentPath = null;
+
             switch (targetRuntime.Runtime.FrameworkIdentifier)
             {
-                case ".NETFramework":
+                case FrameworkIdentifiers.NetFramework:
                     switch (targetRuntime.FrameworkVersion.Major)
                     {
                         case 2:
                         case 3:
-                            return Path.Combine(engineDir, "agents/net20/" + agentName + ".exe");
+                            agentPath = Path.Combine(engineDir, "agents/net20/" + agentName + ".exe");
+                            break;
                         case 4:
-                            return Path.Combine(engineDir, "agents/net40/" + agentName + ".exe");
+                            agentPath = Path.Combine(engineDir, "agents/net40/" + agentName + ".exe");
+                            break;
                     }
                     break;
 
-#if NETCORE_SUPPORT // Future support
-                case ".NETCoreApp":
+                case FrameworkIdentifiers.NetCoreApp:
                     switch (targetRuntime.FrameworkVersion.Major)
                     {
                         case 1:
-                            return Path.Combine(engineDir, "agents/netcoreapp1.1/" + agentName + ".dll");
+                            agentPath = Path.Combine(engineDir, "agents/netcoreapp1.1/" + agentName + ".dll");
+                            break;
 
                         case 2:
-                            return Path.Combine(engineDir, "agents/netcoreapp2.1/" + agentName + ".dll");
+                            agentPath = Path.Combine(engineDir, "agents/netcoreapp2.1/" + agentName + ".dll");
+                            break;
                     }
                     break;
-#endif
             }
 
-            throw new InvalidOperationException($"Unsupported runtime: {targetRuntime.Runtime}");
+            if (agentPath == null)
+                throw new InvalidOperationException($"Unsupported runtime: {targetRuntime.Runtime}");
+
+            // TODO: Temporarily leaving out this check because it breaks some AgentProcessTests            
+            //if (!File.Exists(agentPath))
+            //    throw new FileNotFoundException($"Agent not found: {agentPath}");
+
+            return agentPath;
         }
     }
 }

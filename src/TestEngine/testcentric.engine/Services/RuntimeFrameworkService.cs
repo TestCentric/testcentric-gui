@@ -217,9 +217,7 @@ namespace TestCentric.Engine.Services
                 FindDotNetFrameworks();
 
             FindDefaultMonoFramework();
-#if NETCORE_SUPPORT
             FindDotNetCoreFrameworks();
-#endif
         }
 
         // Note: this method cannot be generalized past V4, because (a)  it has
@@ -435,7 +433,6 @@ namespace TestCentric.Engine.Services
             _availableRuntimes.Add(framework);
         }
 
-#if NETCORE_SUPPORT
         private void FindDotNetCoreFrameworks()
         {
             const string WINDOWS_INSTALL_DIR = "C:\\Program Files\\dotnet\\";
@@ -469,7 +466,6 @@ namespace TestCentric.Engine.Services
 
             _availableRuntimes.AddRange(runtimes);
         }
-#endif
 
 #endregion
     }
