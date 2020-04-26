@@ -98,7 +98,7 @@ namespace TestCentric.Gui.Views
         private TabPage outputTab;
         private ErrorsAndFailuresView errorsAndFailuresView1;
         private TestsNotRunView testsNotRunView1;
-        private MenuItem menuItem4;
+        private MenuItem recentFilesDummyMenuItem;
         private MenuItem menuItem5;
         private MenuItem processModelMenuItem;
         private MenuItem domainUsageMenuItem;
@@ -115,6 +115,7 @@ namespace TestCentric.Gui.Views
         private MenuItem saveResultsAsMenuItem;
         private MenuItem menuItem3;
         private MenuItem runParametersMenuItem;
+        private MenuItem runtimeDummyMenuItem;
         private TextOutputView textOutputView1;
 
         #endregion
@@ -143,7 +144,7 @@ namespace TestCentric.Gui.Views
             AddTestFilesCommand = new MenuCommand(addTestFileMenuItem);
             ReloadTestsCommand = new MenuCommand(reloadTestsMenuItem);
             RuntimeMenu = new PopupMenu(runtimeMenuItem);
-            SelectedRuntime = new CheckedMenuGroup(runtimeMenuItem);
+            //SelectedRuntime = new CheckedMenuGroup(runtimeMenuItem);
             ProcessModel = new CheckedMenuGroup(
                 defaultProcessMenuItem, inProcessMenuItem, singleProcessMenuItem, multipleProcessMenuItem);
             DomainUsage = new CheckedMenuGroup(
@@ -218,6 +219,7 @@ namespace TestCentric.Gui.Views
             this.reloadTestsMenuItem = new System.Windows.Forms.MenuItem();
             this.menuItem5 = new System.Windows.Forms.MenuItem();
             this.runtimeMenuItem = new System.Windows.Forms.MenuItem();
+            this.runtimeDummyMenuItem = new System.Windows.Forms.MenuItem();
             this.processModelMenuItem = new System.Windows.Forms.MenuItem();
             this.defaultProcessMenuItem = new System.Windows.Forms.MenuItem();
             this.inProcessMenuItem = new System.Windows.Forms.MenuItem();
@@ -231,7 +233,7 @@ namespace TestCentric.Gui.Views
             this.multipleDomainMenuItem = new System.Windows.Forms.MenuItem();
             this.menuItem2 = new System.Windows.Forms.MenuItem();
             this.recentFilesMenu = new System.Windows.Forms.MenuItem();
-            this.menuItem4 = new System.Windows.Forms.MenuItem();
+            this.recentFilesDummyMenuItem = new System.Windows.Forms.MenuItem();
             this.fileMenuSeparator4 = new System.Windows.Forms.MenuItem();
             this.exitMenuItem = new System.Windows.Forms.MenuItem();
             this.viewMenu = new System.Windows.Forms.MenuItem();
@@ -380,7 +382,14 @@ namespace TestCentric.Gui.Views
             // runtimeMenuItem
             // 
             this.runtimeMenuItem.Index = 6;
+            this.runtimeMenuItem.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.runtimeDummyMenuItem});
             this.runtimeMenuItem.Text = "Select R&untime";
+            // 
+            // runtimeDummyMenuItem
+            // 
+            this.runtimeDummyMenuItem.Index = 0;
+            this.runtimeDummyMenuItem.Text = "Dummy  entry to force Popup";
             // 
             // processModelMenuItem
             // 
@@ -464,13 +473,13 @@ namespace TestCentric.Gui.Views
             // 
             this.recentFilesMenu.Index = 10;
             this.recentFilesMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItem4});
+            this.recentFilesDummyMenuItem});
             this.recentFilesMenu.Text = "Recent &Files";
             // 
-            // menuItem4
+            // recentFilesDummyMenuItem
             // 
-            this.menuItem4.Index = 0;
-            this.menuItem4.Text = "Dummy Entry to force PopUp initially";
+            this.recentFilesDummyMenuItem.Index = 0;
+            this.recentFilesDummyMenuItem.Text = "Dummy Entry to force PopUp initially";
             // 
             // fileMenuSeparator4
             // 
@@ -1009,7 +1018,6 @@ namespace TestCentric.Gui.Views
         public ICommand AddTestFilesCommand { get; }
         public ICommand ReloadTestsCommand { get; }
         public IMenu RuntimeMenu { get; }
-        public ISelection SelectedRuntime { get; }
         public ISelection ProcessModel { get; private set; }
         public IChecked RunAsX86 { get; private set; }
         public ISelection DomainUsage { get; private set; }

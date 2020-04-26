@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using NUnit.Engine;
-using TestCentric.Engine;
+using TestCentric.Common;
 
 namespace TestCentric.Gui.Model
 {

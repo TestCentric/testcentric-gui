@@ -45,22 +45,7 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
                 Assert.That(_serverConnections.Count, Is.EqualTo(1), "Should have received 1 connection event");
                 Assert.That(_serverConnections[0].Connected, "Server is not connected to client");
 
-                Assert.True(client.Connected, "Client is not connectedToServer");
-            }
-        }
-
-        [Test]
-        public void SingleClientSend()
-        {
-            using (TcpClient client = new TcpClient())
-            {
-                byte[] buffer = new byte[256];
-                new Random().NextBytes(buffer);
-
-                client.Connect(_server.EndPoint);
-                client.GetStream().Write(buffer, 0, 256);
-
-                //byte[] bytes = new byte[256];
+                Assert.True(client.Connected, "Client is not connected to server");
             }
         }
 

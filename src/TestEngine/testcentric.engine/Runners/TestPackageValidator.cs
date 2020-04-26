@@ -24,7 +24,7 @@ namespace TestCentric.Engine.Runners
 #if !NETSTANDARD2_0  // TODO: How do we validate runtime framework for .NET Standard 2.0?
             var processModel = package.GetSetting(EnginePackageSettings.ProcessModel, "Default").ToLower();
             var runningInProcess = processModel == "inprocess";
-            var frameworkSetting = package.GetSetting(EnginePackageSettings.RuntimeFramework, "");
+            var frameworkSetting = package.GetSetting(EnginePackageSettings.RequestedRuntimeFramework, "");
             var runAsX86 = package.GetSetting(EnginePackageSettings.RunAsX86, false);
 
             if (frameworkSetting.Length > 0)

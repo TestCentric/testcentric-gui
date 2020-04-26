@@ -36,7 +36,6 @@ namespace TestCentric.Gui.Views
             SaveResultsCommand = new ToolStripMenuElement(saveResultsToolStripMenuItem);
             ReloadTestsCommand = new ToolStripMenuElement(reloadTestsToolStripMenuItem);
             SelectRuntimeMenu = new ToolStripMenuElement(selectRuntimeToolStripMenuItem);
-            SelectedRuntime = new CheckedToolStripMenuGroup(selectRuntimeToolStripMenuItem);
             ProcessModel = new CheckedToolStripMenuGroup("processModel",
                 defaultProcessToolStripMenuItem, inProcessToolStripMenuItem, separateProcessToolStripMenuItem, multipleProcessToolStripMenuItem);
             DomainUsage = new CheckedToolStripMenuGroup("domainUsage",
@@ -93,7 +92,6 @@ namespace TestCentric.Gui.Views
         public ICommand SaveResultsCommand { get; private set; }
         public ICommand ReloadTestsCommand { get; private set; }
         public IToolStripMenu SelectRuntimeMenu { get; private set; }
-        public ISelection SelectedRuntime { get; private set; }
         public ISelection ProcessModel { get; private set; }
         public IChecked RunAsX86 { get; private set; }
         public ISelection DomainUsage { get; private set; }

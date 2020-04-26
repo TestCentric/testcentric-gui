@@ -57,6 +57,7 @@
     <Compile Include="Presenters\GroupDisplayStrategy.cs" />
     <Compile Include="Presenters\DurationGrouping.cs" />
     <Compile Include="Presenters\OutcomeGrouping.cs" />
+    <Compile Include="Presenters\RuntimeSelectionController.cs" />
     <Compile Include="Presenters\TextOutputPresenter.cs" />
     <Compile Include="Presenters\TestGroup.cs" />
     <Compile Include="Presenters\FixtureListDisplayStrategy.cs" />

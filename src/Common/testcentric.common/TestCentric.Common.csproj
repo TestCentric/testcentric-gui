@@ -40,6 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnginePackageSettings.cs" />
+    <Compile Include="Guard.cs" />
     <Compile Include="Options\CommandLineOptions.cs" />
     <Compile Include="Options\Options.external.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -52,6 +54,7 @@
     <Compile Include="InternalTraceWriter.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="StackTraceFilter.cs" />
+    <Compile Include="TestPackageExtensions.cs" />
     <Compile Include="XmlHelper.cs" />
   </ItemGroup>
   <ItemGroup>

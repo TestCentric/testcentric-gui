@@ -21,16 +21,16 @@ namespace TestCentric.Gui.Views
             _view = new MainForm();
         }
 
-        [Test]
-        public void SelectedRuntimeTest()
-        {
-            var selectedRuntime = _view.SelectedRuntime as CheckedToolStripMenuGroup;
+        //[Test]
+        //public void SelectedRuntimeTest()
+        //{
+        //    var selectedRuntime = _view.SelectedRuntime as CheckedToolStripMenuGroup;
 
-            Assert.NotNull(selectedRuntime, "SelectedRuntime not set properly");
-            Assert.NotNull(selectedRuntime.TopMenu, "TopMenu is not set");
-            Assert.That(selectedRuntime.MenuItems.Select((p) => p.Text), Is.EqualTo(new string[] { "Default" }));
-            Assert.That(selectedRuntime.MenuItems.Select((p) => p.Tag), Is.EqualTo(new string[] { "DEFAULT" }));
-        }
+        //    Assert.NotNull(selectedRuntime, "SelectedRuntime not set properly");
+        //    Assert.NotNull(selectedRuntime.TopMenu, "TopMenu is not set");
+        //    Assert.That(selectedRuntime.MenuItems.Select((p) => p.Text), Is.EqualTo(new string[] { "Default" }));
+        //    Assert.That(selectedRuntime.MenuItems.Select((p) => p.Tag), Is.EqualTo(new string[] { "DEFAULT" }));
+        //}
 
         [Test]
         public void ProcessModelTest()

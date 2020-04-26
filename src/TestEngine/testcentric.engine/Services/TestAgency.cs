@@ -58,7 +58,7 @@ namespace TestCentric.Engine.Services
         public ITestAgent GetAgent(TestPackage package)
         {
             // Target Runtime must be specified by this point
-            string runtimeSetting = package.GetSetting(EnginePackageSettings.RuntimeFramework, "");
+            string runtimeSetting = package.GetSetting(EnginePackageSettings.TargetRuntimeFramework, "");
             Guard.OperationValid(runtimeSetting.Length > 0, "LaunchAgentProcess called with no runtime specified");
 
             var targetRuntime = RuntimeFramework.Parse(runtimeSetting);
