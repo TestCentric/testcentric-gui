@@ -106,12 +106,12 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
                         filter = (TestFilter)command.Arguments[0];
                         SendResult(_runner.Run(this, filter));
                         break;
-#if !NETSTANDARD1_6
+
                     case "RunAsync":
                         filter = (TestFilter)command.Arguments[0];
                         _runner.RunAsync(this, filter);
                         break;
-#endif
+
                     case "Stop":
                         keepRunning = false;
                         break;

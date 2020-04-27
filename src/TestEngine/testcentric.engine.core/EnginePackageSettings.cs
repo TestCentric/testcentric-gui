@@ -13,6 +13,8 @@ namespace TestCentric
     /// </summary>
     public static class EnginePackageSettings
     {
+        #region Set by the Runner - Used by the Engine
+
         /// <summary>
         /// The name of the config to use in loading a project.
         /// If not specified, the first config found is used.
@@ -83,7 +85,13 @@ namespace TestCentric
         /// are strings like "net-4.5", "mono-4.0", etc. Default is to
         /// use the target framework for which an assembly was built.
         /// </summary>
-        public const string RuntimeFramework = "RuntimeFramework";
+        public const string RequestedRuntimeFramework = "RequestedRuntimeFramework";
+
+        /// <summary>
+        /// Indicates the Target runtime selected for use by the engine,
+        /// based on the requested runtime and assembly metadata.
+        /// </summary>
+        public const string TargetRuntimeFramework = "TargetRuntimeFramework";
 
         /// <summary>
         /// Bool flag indicating that the test should be run in a 32-bit process 
@@ -137,5 +145,35 @@ namespace TestCentric
         /// This path is provided to tests by the framework TestContext.
         /// </summary>
         public const string WorkDirectory = "WorkDirectory";
+
+        #endregion
+
+        #region Set and Used by the Engine - Visible to the Runner
+
+        /// <summary>
+        /// If the package represents an assembly, then this is the CLR version
+        /// stored in the assembly image. If it represents a project or other
+        /// group of assemblies, it is the maximum version for all the assemblies.
+        /// </summary>
+        public const string ImageRuntimeVersion = "ImageRuntimeVersion";
+
+        /// <summary>
+        /// True if any assembly in the package requires running as a 32-bit
+        /// process when on a 64-bit system.
+        /// </summary>
+        public const string ImageRequiresX86 = "ImageRequiresX86";
+
+        /// <summary>
+        /// True if any assembly in the package requires a special assembly resolution hook
+        /// in the default application domain in order to find dependent assemblies.
+        /// </summary>
+        public const string ImageRequiresDefaultAppDomainAssemblyResolver = "ImageRequiresDefaultAppDomainAssemblyResolver";
+
+        /// <summary>
+        /// The FrameworkName specified on a TargetFrameworkAttribute for the assembly
+        /// </summary>
+        public const string ImageTargetFrameworkName = "ImageTargetFrameworkName";
+
+        #endregion
     }
 }

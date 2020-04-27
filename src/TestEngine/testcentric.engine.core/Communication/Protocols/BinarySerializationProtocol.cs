@@ -142,7 +142,7 @@ namespace TestCentric.Engine.Communication.Protocols
             _receiveMemoryStream.Position = 0;
 
             //If stream has less than 4 bytes, that means we can not even read length of the message
-            //So, return false to wait more bytes from remore application.
+            //So, return false to wait more for bytes from remorte application.
             if (_receiveMemoryStream.Length < 4)
             {
                 return false;

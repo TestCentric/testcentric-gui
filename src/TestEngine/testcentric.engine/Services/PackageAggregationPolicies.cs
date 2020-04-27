@@ -16,7 +16,7 @@ namespace TestCentric.Engine.Services
 
     class UseHighestImageRuntimeVersion : PackageAggregationPolicy
     {
-        static readonly string VERSION_SETTING = InternalEnginePackageSettings.ImageRuntimeVersion;
+        static readonly string VERSION_SETTING = EnginePackageSettings.ImageRuntimeVersion;
 
         public override void ApplyTo(TestPackage package)
         {
@@ -36,7 +36,7 @@ namespace TestCentric.Engine.Services
 
     class UseHighestVersionOfSameRuntimeType : PackageAggregationPolicy
     {
-        static readonly string TARGET_FRAMEWORK_SETTING = InternalEnginePackageSettings.ImageTargetFrameworkName;
+        static readonly string TARGET_FRAMEWORK_SETTING = EnginePackageSettings.ImageTargetFrameworkName;
 
         public override void ApplyTo(TestPackage package)
         {
@@ -46,18 +46,26 @@ namespace TestCentric.Engine.Services
             {
                 string fn = subpackage.GetSetting(TARGET_FRAMEWORK_SETTING, string.Empty);
                 if (fn == string.Empty)
-                    continue;
+                {
+                    targetRuntime = null;
+                    break;
+                }
 
                 var runtime = new FrameworkName(fn);
-                if (targetRuntime == null ||
-                    targetRuntime.Identifier == runtime.Identifier && targetRuntime.Version < runtime.Version)
-                {
+                if (targetRuntime == null)
                     targetRuntime = runtime;
+                else if (targetRuntime.Identifier != runtime.Identifier)
+                {
+                    targetRuntime = null;
+                    break;
                 }
-                // TODO: Should we add an else that notes the runtimes are not compatible?
+                else if (targetRuntime.Version < runtime.Version)
+                    targetRuntime = runtime;
             }
 
-            if (targetRuntime != null)
+            if (targetRuntime == null)
+                package.Settings.Remove(TARGET_FRAMEWORK_SETTING);
+            else
                 package.Settings[TARGET_FRAMEWORK_SETTING] = targetRuntime.FullName;
         }
     }
@@ -70,13 +78,13 @@ namespace TestCentric.Engine.Services
 
             foreach (var subpackage in package.SubPackages)
             {
-                if (subpackage.GetSetting(InternalEnginePackageSettings.ImageRequiresX86, false))
+                if (subpackage.GetSetting(EnginePackageSettings.ImageRequiresX86, false))
                     requiresX86 = true;
             }
 
             if (requiresX86)
             {
-                package.Settings[InternalEnginePackageSettings.ImageRequiresX86] = true;
+                package.Settings[EnginePackageSettings.ImageRequiresX86] = true;
                 package.Settings[EnginePackageSettings.RunAsX86] = true;
             }
         }
@@ -90,12 +98,12 @@ namespace TestCentric.Engine.Services
 
             foreach (var subpackage in package.SubPackages)
             {
-                if (subpackage.GetSetting(InternalEnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver, false))
+                if (subpackage.GetSetting(EnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver, false))
                     requiresResolver = true;
             }
 
             if (requiresResolver)
-                package.Settings[InternalEnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver] = true;
+                package.Settings[EnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver] = true;
         }
     }
 }

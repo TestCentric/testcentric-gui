@@ -115,12 +115,12 @@ namespace TestCentric.Engine.Runners
             {
                 var testFile = subPackage.FullName;
 
-                string targetFramework = subPackage.GetSetting(InternalEnginePackageSettings.ImageTargetFrameworkName, (string)null);
+                string targetFramework = subPackage.GetSetting(EnginePackageSettings.ImageTargetFrameworkName, (string)null);
                 bool skipNonTestAssemblies = subPackage.GetSetting(EnginePackageSettings.SkipNonTestAssemblies, false);
 
 #if !NETSTANDARD1_6
                 if (_assemblyResolver != null && !TestDomain.IsDefaultAppDomain()
-                    && subPackage.GetSetting(InternalEnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver, false))
+                    && subPackage.GetSetting(EnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver, false))
                 {
                     // It's OK to do this in the loop because the Add method
                     // checks to see if the path is already present.
