@@ -69,7 +69,7 @@ namespace TestCentric.Gui.Presenters
 
             // Go through all menu items and check one
             bool isItemChecked = false;
-            foreach (MenuItem item in menuItems)
+            foreach (ToolStripMenuItem item in menuItems)
             {
                 if ((string)item.Tag == requestedRuntimeSetting)
                     item.Checked = isItemChecked = true;
