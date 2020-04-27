@@ -8,22 +8,26 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
-using TestCentric.Engine;
+using TestCentric.Common;
 using TestCentric.Gui.Model.Settings;
 
 namespace TestCentric.Gui.Presenters
 {
+    using System.Runtime.Versioning;
     using Model;
     using Views;
     using Views.AddinPages;
 
     public class MainPresenter : System.IDisposable
     {
+        static readonly Logger log = InternalTrace.GetLogger("MainPresenter");
+
         IMainView _view;
         ITestModel _model;
         UserSettings _settings;
         CommandLineOptions _options;
 
+        private readonly RuntimeSelectionController _runtimeSelectionController;
         private Dictionary<string, TreeNode> _nodeIndex = new Dictionary<string, TreeNode>();
 
         #region Construction and Initialization
@@ -34,6 +38,8 @@ namespace TestCentric.Gui.Presenters
             _model = model;
             _settings = _model.Settings;
             _options = options;
+
+            _runtimeSelectionController = new RuntimeSelectionController(view.SelectRuntimeMenu, model);
 
             InitializeMainMenu();
 
@@ -101,11 +107,6 @@ namespace TestCentric.Gui.Presenters
             _view.SaveResultsCommand.Execute += () => SaveResults();
             _view.ReloadTestsCommand.Execute += _model.ReloadTests;
             _view.RecentProjectsMenu.Popup += PopulateRecentProjectsMenu;
-
-            _view.SelectedRuntime.SelectionChanged += () =>
-            {
-                OverridePackageSetting(EnginePackageSettings.RuntimeFramework, _view.SelectedRuntime.SelectedItem);
-            };
 
             _view.ProcessModel.SelectionChanged += () =>
             {
@@ -218,13 +219,13 @@ namespace TestCentric.Gui.Presenters
             _view.SaveAsCommand.Enabled = canCloseOrSave;
             _view.SaveResultsCommand.Enabled = canCloseOrSave && _model.HasResults;
             _view.ReloadTestsCommand.Enabled = canCloseOrSave;
-            _view.SelectRuntimeMenu.Enabled = !isTestRunning && _view.ProcessModel.SelectedItem != "InProcess";
+            _view.SelectRuntimeMenu.Enabled = !isTestRunning && _runtimeSelectionController.AllowRuntimeSelection();
             _view.RecentProjectsMenu.Enabled = !isTestRunning;
             _view.ExitCommand.Enabled = true;
 
             PopulateRecentProjectsMenu();
 
-            PopulateSelectedRuntimeMenu();
+            _view.SelectRuntimeMenu.Popup += () => _runtimeSelectionController.PopulateMenu();
 
             // Project Menu
             _view.ProjectMenu.Enabled = _view.ProjectMenu.Visible = _model.HasTests;
@@ -333,7 +334,11 @@ namespace TestCentric.Gui.Presenters
         {
             var files = _view.DialogManager.SelectMultipleFiles("Open Project", CreateOpenFileFilter());
             if (files.Count > 0)
+            {
+                // HACK: We are loading new files, cancel any runtime override
+                _model.PackageOverrides.Remove(EnginePackageSettings.RequestedRuntimeFramework);
                 _model.LoadTests(files);
+            }
         }
 
         public void SaveResults()
@@ -359,29 +364,6 @@ namespace TestCentric.Gui.Presenters
 
         #region Menu Popup Handlers
 
-        private void PopulateSelectedRuntimeMenu()
-        {
-            if (_view.SelectRuntimeMenu.MenuItems != null && _view.SelectRuntimeMenu.MenuItems.Count == 1)
-            {
-                foreach (var runtime in _model.AvailableRuntimes)
-                {
-                    var text = runtime.DisplayName;
-                    // Don't use Full suffix, but keep Client if present
-                    if (text.EndsWith(" - Full"))
-                        text = text.Substring(0, text.Length - 7);
-                    var menuItem = new ToolStripMenuItem(text) { Tag = runtime.ToString() };
-
-                    // .NET Core execution is NYI
-                    if (text.StartsWith(".NETCore"))
-                        menuItem.Enabled = false;
-
-                    _view.SelectRuntimeMenu.MenuItems.Add(menuItem);
-                }
-
-                _view.SelectedRuntime.Refresh();
-            }
-        }
-
         private void PopulateRecentProjectsMenu()
         {
             if (_view.RecentProjectsMenu.MenuItems != null) // Null when mocked
@@ -393,7 +375,12 @@ namespace TestCentric.Gui.Presenters
                 {
                     var menuText = string.Format("{0} {1}", ++num, entry);
                     var menuItem = new ToolStripMenuItem(menuText);
-                    menuItem.Click += (s, e) => _model.LoadTests(new[] { entry });
+                    menuItem.Click += (s, e) =>
+                    {
+                        // HACK: We are loading new files, cancel any runtime override
+                        _model.PackageOverrides.Remove(EnginePackageSettings.RequestedRuntimeFramework);
+                        _model.LoadTests(new[] { entry });
+                    };
                     _view.RecentProjectsMenu.MenuItems.Add(menuItem);
                 }
             }

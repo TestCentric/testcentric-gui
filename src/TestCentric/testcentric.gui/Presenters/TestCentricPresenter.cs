@@ -8,10 +8,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Text;
-using System.Threading;
 using System.Windows.Forms;
-using TestCentric.Engine;
+using TestCentric.Common;
 
 namespace TestCentric.Gui.Presenters
 {
@@ -38,6 +38,8 @@ namespace TestCentric.Gui.Presenters
     /// </summary>
     public class TestCentricPresenter
     {
+        private static readonly Logger log = InternalTrace.GetLogger(nameof(TestCentricPresenter));
+
         #region Instance Variables
 
         private readonly IMainView _view;
@@ -49,6 +51,8 @@ namespace TestCentric.Gui.Presenters
         private readonly UserSettings _settings;
 
         private readonly RecentFiles _recentFiles;
+
+        private readonly RuntimeSelectionController _runtimeSelectionController;
 
         // Our nunit project watcher
         //private FileWatcher projectWatcher;
@@ -71,6 +75,7 @@ namespace TestCentric.Gui.Presenters
 
             _settings = _model.Settings;
             _recentFiles = _model.RecentFiles;
+            _runtimeSelectionController = new RuntimeSelectionController(_view.RuntimeMenu, _model);
 
             _view.Font = _settings.Gui.Font;
             _view.ResultTabs.SelectedIndex = _settings.Gui.SelectedTab;
@@ -328,34 +333,7 @@ namespace TestCentric.Gui.Presenters
 
                 _view.ReloadTestsCommand.Enabled = isPackageLoaded && !isTestRunning;
 
-                var frameworks = _model.AvailableRuntimes;
-                var runtimeMenu = _view.RuntimeMenu;
-
-                runtimeMenu.Visible = frameworks.Count > 1;
-
-                if (runtimeMenu.Visible && runtimeMenu.Enabled && runtimeMenu.MenuItems.Count == 0)
-                {
-                    var defaultMenuItem = new MenuItem("Default");
-                    defaultMenuItem.Name = "defaultMenuItem";
-                    defaultMenuItem.Tag = "DEFAULT";
-                    defaultMenuItem.Checked = true;
-
-                    runtimeMenu.MenuItems.Add(defaultMenuItem);
-
-                    // TODO: Disable selections that are not supported for the target?
-                    foreach (IRuntimeFramework framework in frameworks)
-                    {
-                        MenuItem item = new MenuItem(framework.DisplayName);
-                        item.Tag = framework.Id;
-                        runtimeMenu.MenuItems.Add(item);
-
-                        // .NET Core execution is NYI
-                        if (framework.DisplayName.StartsWith(".NETCore"))
-                            item.Enabled = false;
-                    }
-
-                    _view.SelectedRuntime.Refresh();
-                }
+                _view.RuntimeMenu.Visible = _model.AvailableRuntimes.Count > 1;
 
                 _view.RecentFilesMenu.Enabled = !isTestRunning;
 
@@ -365,15 +343,12 @@ namespace TestCentric.Gui.Presenters
                 //}
             };
 
+            _view.RuntimeMenu.Popup += () => _runtimeSelectionController.PopulateMenu();
+
             _view.OpenCommand.Execute += () => OpenProject();
             _view.CloseCommand.Execute += () => CloseProject();
             _view.AddTestFilesCommand.Execute += () => AddTestFiles();
             _view.ReloadTestsCommand.Execute += () => ReloadTests();
-
-            _view.SelectedRuntime.SelectionChanged += () =>
-            {
-                ChangePackageSettingAndReload(EnginePackageSettings.RuntimeFramework, _view.SelectedRuntime.SelectedItem);
-            };
 
             _view.ProcessModel.SelectionChanged += () =>
             {
@@ -409,6 +384,8 @@ namespace TestCentric.Gui.Presenters
                     var menuItem = new MenuItem(menuText);
                     menuItem.Click += (sender, ea) =>
                     {
+                        // HACK: We are loading new files, cancel any runtime override
+                        _model.PackageOverrides.Remove(EnginePackageSettings.RequestedRuntimeFramework);
                         string path = ((MenuItem)sender).Text.Substring(2);
                         _model.LoadTests(new[] { path });
                     };
@@ -563,7 +540,11 @@ namespace TestCentric.Gui.Presenters
         {
             var files = _view.DialogManager.SelectMultipleFiles("Open Project", CreateOpenFileFilter());
             if (files.Count > 0)
+            {
+                // HACK: We are loading new files, cancel any runtime override
+                _model.PackageOverrides.Remove(EnginePackageSettings.RequestedRuntimeFramework);
                 LoadTests(files);
+            }
         }
 
         public void LoadTests(string testFileName)
@@ -726,7 +707,7 @@ namespace TestCentric.Gui.Presenters
             _view.CloseCommand.Enabled = testLoaded && !testRunning;
             _view.AddTestFilesCommand.Enabled = testLoaded && !testRunning;
             _view.ReloadTestsCommand.Enabled = testLoaded && !testRunning;
-            _view.RuntimeMenu.Enabled = !testRunning && !testLoading && _view.ProcessModel.SelectedItem != "InProcess";
+            _view.RuntimeMenu.Enabled = testLoaded && !testRunning && !testLoading && _runtimeSelectionController.AllowRuntimeSelection();
             _view.RecentFilesMenu.Enabled = !testRunning && !testLoading;
             _view.ExitCommand.Enabled = !testLoading;
             _view.SaveResultsCommand.Enabled = _view.SaveResultsAsMenu.Enabled = !testRunning && !testLoading && _model.HasResults;

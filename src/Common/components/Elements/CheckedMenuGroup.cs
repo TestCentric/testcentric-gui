@@ -50,8 +50,6 @@ namespace TestCentric.Gui.Elements
                 foreach (MenuItem menuItem in TopMenu.MenuItems)
                     MenuItems.Add(menuItem);
             }
-
-            InitializeMenuItems();
         }
 
         private void InitializeMenuItems()

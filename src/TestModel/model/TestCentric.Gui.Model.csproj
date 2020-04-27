@@ -78,7 +78,6 @@
     <Compile Include="TestSelection.cs" />
     <Compile Include="TestServices.cs" />
     <Compile Include="TestEventDispatcher.cs" />
-    <Compile Include="EnginePackageSettings.cs" />
     <Compile Include="ITestItem.cs" />
     <Compile Include="ITestModel.cs" />
     <Compile Include="ResultNode.cs" />

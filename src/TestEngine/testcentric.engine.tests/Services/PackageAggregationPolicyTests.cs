@@ -41,15 +41,15 @@ namespace TestCentric.Engine.Services
 
             Assert.Multiple(() =>
             {
-                Assert.That(package.GetSetting(InternalEnginePackageSettings.ImageRuntimeVersion, ""), Is.EqualTo(""));
-                Assert.That(package.GetSetting(InternalEnginePackageSettings.ImageTargetFrameworkName, ""), Is.EqualTo(""));
-                Assert.False(package.GetSetting(InternalEnginePackageSettings.ImageRequiresX86, false));
-                Assert.False(package.GetSetting(InternalEnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver, false));
+                Assert.That(package.GetSetting(EnginePackageSettings.ImageRuntimeVersion, ""), Is.EqualTo(""));
+                Assert.That(package.GetSetting(EnginePackageSettings.ImageTargetFrameworkName, ""), Is.EqualTo(""));
+                Assert.False(package.GetSetting(EnginePackageSettings.ImageRequiresX86, false));
+                Assert.False(package.GetSetting(EnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver, false));
 
-                Assert.That(subPackage.GetSetting(InternalEnginePackageSettings.ImageRuntimeVersion, ""), Is.EqualTo(""));
-                Assert.That(subPackage.GetSetting(InternalEnginePackageSettings.ImageTargetFrameworkName, ""), Is.EqualTo(""));
-                Assert.False(subPackage.GetSetting(InternalEnginePackageSettings.ImageRequiresX86, false));
-                Assert.False(subPackage.GetSetting(InternalEnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver, false));
+                Assert.That(subPackage.GetSetting(EnginePackageSettings.ImageRuntimeVersion, ""), Is.EqualTo(""));
+                Assert.That(subPackage.GetSetting(EnginePackageSettings.ImageTargetFrameworkName, ""), Is.EqualTo(""));
+                Assert.False(subPackage.GetSetting(EnginePackageSettings.ImageRequiresX86, false));
+                Assert.False(subPackage.GetSetting(EnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver, false));
             });
         }
 
@@ -59,42 +59,35 @@ namespace TestCentric.Engine.Services
             var package = new TestPackage(new string[] { "one.dll", "two.dll", "three.dll" });
 
             // Leave subpackage 0 empty
-            package.SubPackages[1].Settings[InternalEnginePackageSettings.ImageRuntimeVersion] = new Version(4, 0, 30319);
-            package.SubPackages[2].Settings[InternalEnginePackageSettings.ImageRuntimeVersion] = new Version(2, 0, 50727);
+            package.SubPackages[1].Settings[EnginePackageSettings.ImageRuntimeVersion] = new Version(4, 0, 30319);
+            package.SubPackages[2].Settings[EnginePackageSettings.ImageRuntimeVersion] = new Version(2, 0, 50727);
 
             _packageService.UpdatePackage(package);
 
-            Assert.That(package.Settings[InternalEnginePackageSettings.ImageRuntimeVersion], Is.EqualTo(new Version(4, 0, 30319)));
+            Assert.That(package.Settings[EnginePackageSettings.ImageRuntimeVersion], Is.EqualTo(new Version(4, 0, 30319)));
         }
 
-        [Test]
-        public void UseHighestVersionOfSameRuntimeType()
+        [TestCase(".NETFramework,Version=2.0.50727", ".NETFramework,Version=v4.0.30319", ".NETFramework,Version=4.0.30319",
+            ExpectedResult = ".NETFramework,Version=v4.0.30319")]
+        [TestCase(".NETCoreApp,Version=2.1", ".NETCoreApp,Version=v3.1", ".NETCoreApp,Version=3.1",
+            ExpectedResult = ".NETCoreApp,Version=v3.1")]
+        [TestCase(".NETFramework,Version=2.0.50727", ".NETFramework,Version=v4.0.30319", "NONE",
+            ExpectedResult = "NONE")]
+        [TestCase(".NETFramework,Version=2.0.50727", ".NETFramework,Version=v4.0.30319", ".NETCoreApp,Version=3.1",
+            ExpectedResult = "NONE")]
+        public string UseHighestVersionOfSameRuntimeType(params string[] subPackageRuntimes)
         {
-            var package = new TestPackage(new string[] { "one.dll", "two.dll", "three.dll" });
-
-            package.SubPackages[0].Settings[InternalEnginePackageSettings.ImageTargetFrameworkName] = ".NETFramework,Version=2.0.50727";
-            package.SubPackages[1].Settings[InternalEnginePackageSettings.ImageTargetFrameworkName] = ".NETFramework,Version=v4.0.30319";
-            package.SubPackages[2].Settings[InternalEnginePackageSettings.ImageTargetFrameworkName] = ".NETFramework,Version=4.0.30319";
-
+            var package = new TestPackage("PACKAGE");
+            foreach (string runtime in subPackageRuntimes)
+            {
+                var subPackage = new TestPackage("SUBPACKAGE");
+                if (runtime != "NONE")
+                    subPackage.Settings[EnginePackageSettings.ImageTargetFrameworkName] = runtime;
+                package.AddSubPackage(subPackage);
+            }
             _packageService.UpdatePackage(package);
 
-            Assert.That(package.Settings[InternalEnginePackageSettings.ImageTargetFrameworkName], Is.EqualTo(".NETFramework,Version=v4.0.30319"));
-        }
-
-        [Test, Ignore("Not yet implemented")]
-        public void DiferentRuntimeTypesMayNotBeAggregated()
-        {
-            var package = new TestPackage(new string[] { "one.dll", "two.dll", "three.dll" });
-
-            package.SubPackages[0].Settings[InternalEnginePackageSettings.ImageTargetFrameworkName] = ".NETFramework,Version=2.0.50727";
-            package.SubPackages[1].Settings[InternalEnginePackageSettings.ImageTargetFrameworkName] = ".NetCoreApp,Version=v3.1";
-            package.SubPackages[2].Settings[InternalEnginePackageSettings.ImageTargetFrameworkName] = ".NETFramework,Version=4.0.30319";
-
-            _packageService.UpdatePackage(package);
-
-            // We need to decide how aggregate packages should indicate that the contained assemblies
-            // are able to run or not run in the same project or AppDomain
-            Assert.That(package.Settings[InternalEnginePackageSettings.ImageTargetFrameworkName], Is.Null);
+            return package.GetSetting(EnginePackageSettings.ImageTargetFrameworkName, "NONE");
         }
 
         [Test]
@@ -102,11 +95,11 @@ namespace TestCentric.Engine.Services
         {
             var package = new TestPackage(new string[] { "one.dll", "two.dll", "three.dll" });
 
-            package.SubPackages[1].Settings[InternalEnginePackageSettings.ImageRequiresX86] = true;
+            package.SubPackages[1].Settings[EnginePackageSettings.ImageRequiresX86] = true;
 
             _packageService.UpdatePackage(package);
 
-            Assert.True(package.GetSetting(InternalEnginePackageSettings.ImageRequiresX86, false));
+            Assert.True(package.GetSetting(EnginePackageSettings.ImageRequiresX86, false));
         }
 
         [Test]
@@ -114,11 +107,11 @@ namespace TestCentric.Engine.Services
         {
             var package = new TestPackage(new string[] { "one.dll", "two.dll", "three.dll" });
 
-            package.SubPackages[1].Settings[InternalEnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver] = true;
+            package.SubPackages[1].Settings[EnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver] = true;
 
             _packageService.UpdatePackage(package);
 
-            Assert.True(package.GetSetting(InternalEnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver, false));
+            Assert.True(package.GetSetting(EnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver, false));
         }
     }
 }

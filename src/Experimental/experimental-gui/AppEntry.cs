@@ -8,7 +8,7 @@ using System.IO;
 using System.Windows.Forms;
 using Mono.Options;
 using NUnit.Engine;
-using TestCentric.Engine;
+using TestCentric.Common;
 
 namespace TestCentric.Gui
 {

@@ -5,7 +5,6 @@
 
 using System.Collections.Generic;
 using System.IO;
-using TestCentric.Engine;
 using NUnit.Framework;
 using NSubstitute;
 

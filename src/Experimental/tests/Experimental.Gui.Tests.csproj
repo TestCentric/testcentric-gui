@@ -50,6 +50,7 @@
     <Compile Include="Presenters\Main\WhenTestsAreLoading.cs" />
     <Compile Include="Presenters\Main\WhenTestsAreReloaded.cs" />
     <Compile Include="Presenters\PresenterTestBase.cs" />
+    <Compile Include="Presenters\RuntimeSelectionControllerTests.cs" />
     <Compile Include="Presenters\TestGroupTests.cs" />
     <Compile Include="Presenters\StatusBarPresenterTests.cs" />
     <Compile Include="Presenters\TestPropertiesPresenterTests.cs" />

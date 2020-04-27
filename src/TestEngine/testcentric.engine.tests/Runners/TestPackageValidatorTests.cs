@@ -52,7 +52,7 @@ namespace TestCentric.Engine.Runners
         [Test]
         public void RequestedFrameworkInvalid()
         {
-            _package.AddSetting(EnginePackageSettings.RuntimeFramework, INVALID_RUNTIME);
+            _package.AddSetting(EnginePackageSettings.RequestedRuntimeFramework, INVALID_RUNTIME);
             var exception = Assert.Catch<NUnitEngineException>(() => Validate());
             Assert.That(exception.Message, Is.EqualTo($"The requested framework {INVALID_RUNTIME} is unknown or not available."));
         }
@@ -60,7 +60,7 @@ namespace TestCentric.Engine.Runners
         [Test]
         public void RequestedFrameworkValid()
         {
-            _package.AddSetting(EnginePackageSettings.RuntimeFramework, VALID_RUNTIME);
+            _package.AddSetting(EnginePackageSettings.RequestedRuntimeFramework, VALID_RUNTIME);
             Assert.That(() => Validate(), Throws.Nothing);
         }
 
@@ -68,7 +68,7 @@ namespace TestCentric.Engine.Runners
         public void RequestedFrameworkInValidInProcess()
         {
             _package.AddSetting(EnginePackageSettings.ProcessModel, "InProcess");
-            _package.AddSetting(EnginePackageSettings.RuntimeFramework, "netcore-3.0");
+            _package.AddSetting(EnginePackageSettings.RequestedRuntimeFramework, "netcore-3.0");
             var exception = Assert.Catch<NUnitEngineException>(() => Validate());
             Assert.That(exception.Message, Is.EqualTo($"Cannot run netcore-3.0 framework in process already running {CURRENT_RUNTIME}."));
         }
@@ -77,7 +77,7 @@ namespace TestCentric.Engine.Runners
         public void RequestedFrameworkValidInProcess()
         {
             _package.AddSetting(EnginePackageSettings.ProcessModel, "InProcess");
-            _package.AddSetting(EnginePackageSettings.RuntimeFramework, CURRENT_RUNTIME);
+            _package.AddSetting(EnginePackageSettings.RequestedRuntimeFramework, CURRENT_RUNTIME);
             Assert.That(() => Validate(), Throws.Nothing);
         }
 

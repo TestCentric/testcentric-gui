@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using NUnit.Engine;
-using TestCentric.Engine;
 
 namespace TestCentric.Gui.Model
 {

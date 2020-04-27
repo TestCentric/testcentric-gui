@@ -54,7 +54,7 @@ namespace TestCentric.Engine.Services
             _packageManager.UpdatePackage(package);
             var runtimeFramework = _runtimeService.SelectRuntimeFramework(package);
 
-            Assert.That(package.GetSetting("RuntimeFramework", ""), Is.EqualTo(runtimeFramework));
+            Assert.That(package.GetSetting("TargetRuntimeFramework", ""), Is.EqualTo(runtimeFramework));
             Assert.That(package.GetSetting("RunAsX86", false), Is.EqualTo(runAsX86));
         }
 
@@ -90,12 +90,12 @@ namespace TestCentric.Engine.Services
         public void EngineOptionPreferredOverImageTarget(string framework, int majorVersion, int minorVersion, string requested)
         {
             var package = new TestPackage("test");
-            package.AddSetting(InternalEnginePackageSettings.ImageTargetFrameworkName, framework);
-            package.AddSetting(InternalEnginePackageSettings.ImageRuntimeVersion, new Version(majorVersion, minorVersion));
-            package.AddSetting(EnginePackageSettings.RuntimeFramework, requested);
+            package.AddSetting(EnginePackageSettings.ImageTargetFrameworkName, framework);
+            package.AddSetting(EnginePackageSettings.ImageRuntimeVersion, new Version(majorVersion, minorVersion));
+            package.AddSetting(EnginePackageSettings.RequestedRuntimeFramework, requested);
 
             _runtimeService.SelectRuntimeFramework(package);
-            Assert.That(package.GetSetting<string>(EnginePackageSettings.RuntimeFramework, null), Is.EqualTo(requested));
+            Assert.That(package.GetSetting<string>(EnginePackageSettings.TargetRuntimeFramework, null), Is.EqualTo(requested));
         }
 
         [Test, Platform(Exclude ="Linux")]
@@ -104,9 +104,9 @@ namespace TestCentric.Engine.Services
             var topLevelPackage = new TestPackage(new [] {"a.dll", "b.dll"});
 
             var net20Package = topLevelPackage.SubPackages[0];
-            net20Package.Settings.Add(InternalEnginePackageSettings.ImageRuntimeVersion, new Version("2.0.50727"));
+            net20Package.Settings.Add(EnginePackageSettings.ImageRuntimeVersion, new Version("2.0.50727"));
             var net40Package = topLevelPackage.SubPackages[1];
-            net40Package.Settings.Add(InternalEnginePackageSettings.ImageRuntimeVersion, new Version("4.0.30319"));
+            net40Package.Settings.Add(EnginePackageSettings.ImageRuntimeVersion, new Version("4.0.30319"));
 
             var platform = Environment.OSVersion.Platform;
 
@@ -121,15 +121,15 @@ namespace TestCentric.Engine.Services
                 // TODO: Test should not depend on the availability of specific runtimes
                 if (platform == PlatformID.Win32NT)
                 {
-                    Assert.That(net20Package.Settings[EnginePackageSettings.RuntimeFramework], Is.EqualTo("net-2.0"));
-                    Assert.That(net40Package.Settings[EnginePackageSettings.RuntimeFramework], Is.EqualTo("net-4.0"));
-                    Assert.That(topLevelPackage.Settings[EnginePackageSettings.RuntimeFramework], Is.EqualTo("net-4.0"));
+                    Assert.That(net20Package.Settings[EnginePackageSettings.TargetRuntimeFramework], Is.EqualTo("net-2.0"));
+                    Assert.That(net40Package.Settings[EnginePackageSettings.TargetRuntimeFramework], Is.EqualTo("net-4.0"));
+                    Assert.That(topLevelPackage.Settings[EnginePackageSettings.TargetRuntimeFramework], Is.EqualTo("net-4.0"));
                 }
                 else
                 {
-                    Assert.That(net20Package.Settings[EnginePackageSettings.RuntimeFramework], Is.EqualTo("mono-2.0"));
-                    Assert.That(net40Package.Settings[EnginePackageSettings.RuntimeFramework], Is.EqualTo("mono-4.0"));
-                    Assert.That(topLevelPackage.Settings[EnginePackageSettings.RuntimeFramework], Is.EqualTo("mono-4.0"));
+                    Assert.That(net20Package.Settings[EnginePackageSettings.TargetRuntimeFramework], Is.EqualTo("mono-2.0"));
+                    Assert.That(net40Package.Settings[EnginePackageSettings.TargetRuntimeFramework], Is.EqualTo("mono-4.0"));
+                    Assert.That(topLevelPackage.Settings[EnginePackageSettings.TargetRuntimeFramework], Is.EqualTo("mono-4.0"));
                 }
             });
         }

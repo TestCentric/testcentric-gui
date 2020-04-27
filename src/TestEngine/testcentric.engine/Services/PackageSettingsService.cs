@@ -106,24 +106,24 @@ namespace TestCentric.Engine.Services
             if (targetVersion.Major > 0)
             {
                 log.Debug($"Assembly {package.FullName} uses version {targetVersion}");
-                package.Settings[InternalEnginePackageSettings.ImageRuntimeVersion] = targetVersion;
+                package.Settings[EnginePackageSettings.ImageRuntimeVersion] = targetVersion;
             }
 
             var frameworkName = assembly.FrameworkName;
             if (!string.IsNullOrEmpty(frameworkName))
             {
                 log.Debug($"Assembly {package.FullName} targets {frameworkName}");
-                package.Settings[InternalEnginePackageSettings.ImageTargetFrameworkName] = frameworkName;
+                package.Settings[EnginePackageSettings.ImageTargetFrameworkName] = frameworkName;
             }
 
-            package.Settings[InternalEnginePackageSettings.ImageRequiresX86] = assembly.RequiresX86;
+            package.Settings[EnginePackageSettings.ImageRequiresX86] = assembly.RequiresX86;
             if (assembly.RequiresX86)
             {
                 log.Debug($"Assembly {package.FullName} will be run x86");
                 package.Settings[EnginePackageSettings.RunAsX86] = true;
             }
 
-            package.Settings[InternalEnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver] = assembly.RequiresAssemblyResolver;
+            package.Settings[EnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver] = assembly.RequiresAssemblyResolver;
             if (assembly.RequiresAssemblyResolver)
             {
                 log.Debug($"Assembly {package.FullName} requires default app domain assembly resolver");

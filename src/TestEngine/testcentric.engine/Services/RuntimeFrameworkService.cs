@@ -158,7 +158,7 @@ namespace TestCentric.Engine.Services
             RuntimeFramework currentFramework = RuntimeFramework.CurrentFramework;
             log.Debug("Current framework is " + currentFramework);
 
-            string requestedFrameworkSetting = package.GetSetting(EnginePackageSettings.RuntimeFramework, "");
+            string requestedFrameworkSetting = package.GetSetting(EnginePackageSettings.RequestedRuntimeFramework, "");
 
             if (requestedFrameworkSetting.Length > 0)
             {
@@ -171,12 +171,13 @@ namespace TestCentric.Engine.Services
                 if (!IsAvailable(requestedFramework))
                     throw new NUnitEngineException("Requested framework is not available: " + requestedFrameworkSetting);
 
+                package.Settings[EnginePackageSettings.TargetRuntimeFramework] = requestedFrameworkSetting;
                 return requestedFramework;
             }
 
             log.Debug($"No specific framework requested for {package.Name}");
 
-            string imageTargetFrameworkNameSetting = package.GetSetting(InternalEnginePackageSettings.ImageTargetFrameworkName, "");
+            string imageTargetFrameworkNameSetting = package.GetSetting(EnginePackageSettings.ImageTargetFrameworkName, "");
 
             RuntimeFramework targetFramework;
 
@@ -187,7 +188,7 @@ namespace TestCentric.Engine.Services
             }
             else
             {
-                var targetVersion = package.GetSetting(InternalEnginePackageSettings.ImageRuntimeVersion, currentFramework.FrameworkVersion);
+                var targetVersion = package.GetSetting(EnginePackageSettings.ImageRuntimeVersion, currentFramework.FrameworkVersion);
                 targetFramework = new RuntimeFramework(currentFramework.Runtime, targetVersion);
             }
 
@@ -205,7 +206,7 @@ namespace TestCentric.Engine.Services
                 }
             }
 
-            package.Settings[EnginePackageSettings.RuntimeFramework] = targetFramework.ToString();
+            package.Settings[EnginePackageSettings.TargetRuntimeFramework] = targetFramework.ToString();
 
             log.Debug($"Test will use {targetFramework} for {package.Name}");
             return targetFramework;
