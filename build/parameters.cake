@@ -16,9 +16,9 @@ public class BuildParameters
 	private const string CHOCO_API_KEY = "CHOCO_API_KEY";
 	
 	// Pre-release labels that we publish
-	private const string LABELS_WE_PUBLISH_ON_MYGET = "dev/alpha/beta/rc";
-	private const string LABELS_WE_PUBLISH_ON_NUGET = "alpha/beta/rc";
-	private const string LABELS_WE_PUBLISH_ON_CHOCOLATEY = "alpha/beta/rc";
+	private static readonly string[] LABELS_WE_PUBLISH_ON_MYGET = { "dev", "pre" };
+	private static readonly string[] LABELS_WE_PUBLISH_ON_NUGET = { "alpha", "beta", "rc" };
+	private static readonly string[] LABELS_WE_PUBLISH_ON_CHOCOLATEY = { "alpha", "beta", "rc" };
 
 	private ISetupContext _context;
 	private BuildSystem _buildSystem;
