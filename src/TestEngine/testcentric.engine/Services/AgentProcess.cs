@@ -116,8 +116,9 @@ namespace TestCentric.Engine.Services
                     switch (targetRuntime.FrameworkVersion.Major)
                     {
                         case 1:
-                            agentPath = Path.Combine(engineDir, "agents/netcoreapp1.1/" + agentName + ".dll");
-                            break;
+                            // TODO: For now, we don't have a .NET Core 1.1 agent and default to 2.1
+                            //agentPath = Path.Combine(engineDir, "agents/netcoreapp1.1/" + agentName + ".dll");
+                            //break;
 
                         case 2:
                             agentPath = Path.Combine(engineDir, "agents/netcoreapp2.1/" + agentName + ".dll");

@@ -166,6 +166,17 @@ public abstract class PackageTester : GuiTester
 				Inconclusive = 1,
 				Skipped = 7
 			}));
+		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET Core 1.1", StandardRunner,
+			"engine-tests/netcoreapp1.1/mock-assembly.dll",
+			new ExpectedResult("Failed")
+			{
+				Total = 36,
+				Passed = 23,
+				Failed = 5,
+				Warnings = 0,
+				Inconclusive = 1,
+				Skipped = 7
+			}));
 
 		// Level 2 tests are run for PRs and when packages will be published
 
