@@ -427,17 +427,11 @@ Task("PackageChocolatey")
 	.IsDependentOn("BuildChocolateyPackage")
 	.IsDependentOn("TestChocolateyPackage");
 
-Task("TestPackages")
-	.IsDependentOn("TestZipPackage")
-	.IsDependentOn("TestNuGetPackage")
-	.IsDependentOn("TestChocolateyPackage");
-
 Task("AppVeyor")
 	.IsDependentOn("DumpSettings")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
     .IsDependentOn("Package")
-	.IsDependentOn("TestPackages")
 	.IsDependentOn("PublishPackages");
 
 Task("Travis")
@@ -448,9 +442,7 @@ Task("All")
 	.IsDependentOn("DumpSettings")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
-    .IsDependentOn("Package")
-	.IsDependentOn("TestPackages")
-	.IsDependentOn("PublishPackages");
+    .IsDependentOn("Package");
 
 Task("Default")
     .IsDependentOn("Test");
