@@ -6,6 +6,6 @@ branches:
   master:
     tag: dev
   release:
-    tag: rc
+    tag: pre
   pull-request:
     tag: pr

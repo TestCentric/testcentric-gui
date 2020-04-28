@@ -90,6 +90,7 @@ public class BuildVersion
                 return gitVersion.MajorMinorPatch + suffix;
 
             case "dev":
+            case "pre":
                 return gitVersion.MajorMinorPatch + suffix;
 
             case "pr":
