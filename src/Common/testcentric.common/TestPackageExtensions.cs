@@ -40,6 +40,26 @@ namespace TestCentric.Common
             return selection;
         }
 
+        public static string GetActiveConfig(this TestPackage package)
+        {
+            return package.GetSetting(EnginePackageSettings.ActiveConfig, string.Empty);
+        }
+
+        public static void SetActiveConfig(this TestPackage package, string configName)
+        {
+            package.Settings[EnginePackageSettings.ActiveConfig] = configName;
+        }
+
+        public static string[] GetConfigNames(this TestPackage package)
+        {
+            return package.GetSetting(EnginePackageSettings.ConfigNames, new string[0]);
+        }
+
+        public static void SetConfigNames(this TestPackage package, string[] configNames)
+        {
+            package.Settings[EnginePackageSettings.ConfigNames] = configNames;
+        }
+
         public static string GetProcessModel(this TestPackage package)
         {
             return package.GetSetting(EnginePackageSettings.ProcessModel, "Default");

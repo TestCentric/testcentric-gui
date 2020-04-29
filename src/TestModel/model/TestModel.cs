@@ -300,12 +300,9 @@ namespace TestCentric.Gui.Model
 
         public void ReloadPackage(TestPackage package, string config)
         {
-            var originalSubPackages = new List<TestPackage>(package.SubPackages);
-            package.SubPackages.Clear();
-
-            // TODO: Get this back in place or fix in the engine
-            //package.Settings[EnginePackageSettings.ActiveConfig] = config;
-            //Services.ProjectService.ExpandProjectPackage(package);
+            //var originalSubPackages = new List<TestPackage>(package.SubPackages);
+            //package.SubPackages.Clear();
+            package.SetActiveConfig(config);
 
             //foreach (var subPackage in package.SubPackages)
             //    foreach (var original in originalSubPackages)
@@ -410,27 +407,6 @@ namespace TestCentric.Gui.Model
                 ? _packageMap[id] 
                 : null;
         }
-
-        //public string GetActiveConfig(TestPackage package)
-        //{
-        //    string activeConfig = package.GetSetting(EnginePackageSettings.ActiveConfig, "");
-
-        //    if (string.IsNullOrEmpty(activeConfig))
-        //    {
-        //        var project = Services.ProjectService.LoadFrom(package.FullName);
-        //        activeConfig = project.ActiveConfigName;
-
-        //        if (string.IsNullOrEmpty(activeConfig) && project.ConfigNames.Count > 0)
-        //            activeConfig = project.ConfigNames.FirstOrDefault();
-        //    }
-
-        //    return activeConfig;
-        //}
-
-        //public IList<string> GetConfigNames(TestPackage package)
-        //{
-        //    return Services.ProjectService.LoadFrom(package.FullName).ConfigNames;
-        //}
 
         public void ClearResults()
         {
