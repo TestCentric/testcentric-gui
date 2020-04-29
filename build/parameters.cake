@@ -44,6 +44,28 @@ public class BuildParameters
 
 		Versions = new BuildVersion(context, this);
 
+		if (context.HasArgument("testLevel"))
+			PackageTestLevel = context.Argument("testLevel", 1);
+		else if (!Versions.IsPreRelease)
+			PackageTestLevel = 3;
+		else switch (Versions.PreReleaseLabel)
+		{
+			case "pre":
+			case "rc":
+			case "alpha":
+			case "beta":
+				PackageTestLevel = 3;
+				break;
+			case "dev":
+			case "pr":
+				PackageTestLevel = 2;
+				break;
+			case "ci":
+			default:
+				PackageTestLevel = 1;
+				break;
+		}
+
 		MyGetApiKey = _context.EnvironmentVariable(MYGET_API_KEY);
 		NuGetApiKey = _context.EnvironmentVariable(NUGET_API_KEY);
 		ChocolateyApiKey = _context.EnvironmentVariable(CHOCO_API_KEY);
@@ -91,6 +113,8 @@ public class BuildParameters
 	public string AssemblyVersion => Versions.AssemblyVersion;
 	public string AssemblyFileVersion => Versions.AssemblyFileVersion;
 	public string AssemblyInformationalVersion => Versions.AssemblyInformationalVersion;
+
+	public int PackageTestLevel { get; }
 
 	public bool IsLocalBuild => _buildSystem.IsLocalBuild;
 	public bool IsRunningOnUnix => _context.IsRunningOnUnix();

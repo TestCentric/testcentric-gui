@@ -14,6 +14,15 @@
 //     Note that all other versions (AssemblyVersion, etc.) are
 //     derived from the package version.
 //
+// --testLevel=LEVEL
+//     Specifies the level of package testing, which is normally set
+//     automatically for different types of builds like CI, PR, etc.
+//     Used by developers to test packages locally without creating
+//     a PR or publishing the package. Defined levels are
+//       1 = Normal CI tests run every time you build a package
+//       2 = Adds more tests for PRs and Dev builds uploaded to MyGet
+//       3 = Adds even more tests prior to publishing a release
+//
 // NOTE: Cake syntax requires the `=` character. Neither a space
 //       nor a colon will work!
 //////////////////////////////////////////////////////////////////////

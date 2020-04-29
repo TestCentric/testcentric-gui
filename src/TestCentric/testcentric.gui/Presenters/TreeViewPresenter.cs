@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using TestCentric.Common;
 
 namespace TestCentric.Gui.Presenters
 {
@@ -37,7 +38,6 @@ namespace TestCentric.Gui.Presenters
         private UserSettings _settings;
         private ITreeView _tree;
         private TestNodeFilter _treeFilter = TestNodeFilter.Empty;
-        //private IProjectService _projectService;
 
         /// <summary>
         /// Hashtable provides direct access to TestNodes
@@ -52,7 +52,6 @@ namespace TestCentric.Gui.Presenters
             _tree = view.Tree;
             _model = model;
             _settings = model.Settings;
-            //_projectService = model.Services.GetService<IProjectService>();
 
             _view.AlternateImageSet = (string)_settings.Gui.TestTree.AlternateImageSet;
 
@@ -276,22 +275,22 @@ namespace TestCentric.Gui.Presenters
                 if (test.IsProject)
                 {
                     TestPackage package = _model.GetPackageForTest(test.Id);
-                    //string activeConfig = _model.GetActiveConfig(package);
-                    //var configNames = _model.GetConfigNames(package);
+                    string activeConfig = package.GetActiveConfig();
+                    var configNames = package.GetConfigNames();
 
-                    //if (configNames.Count > 0)
-                    //{
-                    //    _view.ActiveConfiguration.MenuItems.Clear();
-                    //    foreach (string config in configNames)
-                    //    {
-                    //        var configEntry = new MenuItem(config);
-                    //        configEntry.Checked = config == activeConfig;
-                    //        configEntry.Click += (sender, e) => _model.ReloadPackage(package, ((MenuItem)sender).Text);
-                    //        _view.ActiveConfiguration.MenuItems.Add(configEntry);
-                    //    }
+                    if (configNames.Length > 0)
+                    {
+                        _view.ActiveConfiguration.MenuItems.Clear();
+                        foreach (string config in configNames)
+                        {
+                            var configEntry = new MenuItem(config);
+                            configEntry.Checked = config == activeConfig;
+                            configEntry.Click += (sender, e) => _model.ReloadPackage(package, ((MenuItem)sender).Text);
+                            _view.ActiveConfiguration.MenuItems.Add(configEntry);
+                        }
 
-                    //    _view.ActiveConfiguration.Visible = _view.ActiveConfiguration.Enabled = true;
-                    //}
+                        _view.ActiveConfiguration.Visible = _view.ActiveConfiguration.Enabled = true;
+                    }
                 }
             }
         }

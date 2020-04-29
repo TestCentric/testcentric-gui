@@ -23,8 +23,8 @@ namespace TestCentric.Gui
 
         public CommandLineOptions(params string[] args)
         {
-            //this.Add("config=", "Project {CONFIG} to load (e.g.: Debug).",
-            //    v => ActiveConfig = v);
+            this.Add("config=", "Project {CONFIG} to load (e.g.: Debug).",
+                v => ActiveConfig = v);
 
             this.Add("noload", "Suppress loading of the most recent test file.",
                 v => NoLoad = v != null);

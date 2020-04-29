@@ -26,7 +26,6 @@ namespace TestCentric.Gui.Model
 
             ExtensionService = GetService<IExtensionService>();
             ResultService = GetService<IResultService>();
-            //ProjectService = GetService<IProjectService>();
         }
 
         #region ITestServices Implementation
@@ -34,9 +33,6 @@ namespace TestCentric.Gui.Model
         public IExtensionService ExtensionService { get; }
 
         public IResultService ResultService { get; }
-
-        // TODO: Figure out how to deal with this
-        //public IProjectService ProjectService { get; }
 
         #endregion
 

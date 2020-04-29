@@ -79,14 +79,16 @@ public struct PackageTest
 	public string Runner;
 	public string Arguments;
 	public ExpectedResult ExpectedResult;
+	public string[] ExtensionsNeeded;
 	
-	public PackageTest(int level, string description, string runner, string arguments, ExpectedResult expectedResult)
+	public PackageTest(int level, string description, string runner, string arguments, ExpectedResult expectedResult, params string[] extensionsNeeded)
 	{
 		Level = level;
 		Description = description;
 		Runner = runner;
 		Arguments = arguments;
 		ExpectedResult = expectedResult;
+		ExtensionsNeeded = extensionsNeeded;
 	}
 }
 
@@ -195,7 +197,8 @@ public abstract class PackageTester : GuiTester
 				Warnings = 0,
 				Inconclusive = 1,
 				Skipped = 4
-			}));
+			},
+			NUnitV2Driver));
 		PackageTests.Add( new PackageTest(2, "Run different builds of mock-assembly.dll together", StandardRunner,
 			"engine-tests/net35/mock-assembly.dll engine-tests/netcoreapp2.1/mock-assembly.dll",
 			new ExpectedResult("Failed")
@@ -207,12 +210,20 @@ public abstract class PackageTester : GuiTester
 				Inconclusive = 2,
 				Skipped = 14
 			}));
+		PackageTests.Add( new PackageTest(2, "Run an NUnit project, specifying Release config", StandardRunner,
+			"../../GuiTests.nunit --config=Release",
+			new ExpectedResult("Passed"),
+			NUnitProjectLoader));
 	}
 
 	protected abstract string PackageName { get; }
 	protected abstract FilePath PackageUnderTest { get; }
 	protected abstract string PackageTestDirectory { get; }
 	protected abstract string PackageTestBinDirectory { get; }
+	protected abstract string ExtensionInstallDirectory { get; }
+
+	protected virtual string NUnitV2Driver => "NUnit.Extension.NUnitV2Driver";
+	protected virtual string NUnitProjectLoader => "NUnit.Extension.NUnitProjectLoader";
 
 	// PackageChecks differ for each package type.
 	protected abstract PackageCheck[] PackageChecks { get; }
@@ -233,7 +244,7 @@ public abstract class PackageTester : GuiTester
 
 		RunChecks();
 
-		RunPackageTests();
+		RunPackageTests(_parameters.PackageTestLevel);
 
 		CheckTestErrors(ref ErrorDetail);
 	}
@@ -245,7 +256,7 @@ public abstract class PackageTester : GuiTester
 		_context.Unzip(PackageUnderTest, PackageTestDirectory);
 	}
 
-    public void RunChecks()
+    private void RunChecks()
     {
 		DisplayBanner("Checking Package Content");
 
@@ -268,41 +279,33 @@ public abstract class PackageTester : GuiTester
      		throw new Exception($"Package check failed for {PackageName}");
     }
 
-	// Default implementation does nothing - override as needed.
-	public virtual void InstallEngineExtensions() { }
-
-	public void RunPackageTests()
+	private void CheckExtensionIsInstalled(string extension)
 	{
-		var label = _parameters.Versions.IsPreRelease ? _parameters.Versions.PreReleaseLabel : "NONE";
-		int testLevel;
-		switch (label)
+		bool alreadyInstalled = _context.GetDirectories($"{ExtensionInstallDirectory}{extension}.*").Count > 0;
+
+		if (!alreadyInstalled)
 		{
-			case "NONE":
-			case "rc":
-			case "alpha":
-			case "beta":
-				testLevel = 3;
-				break;
-			case "dev":
-			case "pr":
-				testLevel = 2;
-				break;
-			case "ci":
-			default:
-				testLevel = 1;
-				break;
+			DisplayBanner($"Installing {extension}");
+			InstallEngineExtension(extension);
 		}
+	}
 
-		// Only level 2 and up tests require extensions
-		if (testLevel >= 2)
-			InstallEngineExtensions();
+	protected abstract void InstallEngineExtension(string extension);
 
+	private void RunPackageTests(int testLevel)
+	{
 		bool anyErrors = false;
+		int testCount = 0;
 
 		foreach (var packageTest in PackageTests)
 		{
 			if (packageTest.Level > 0 && packageTest.Level <= testLevel)
 			{
+				++testCount;
+
+				foreach (string extension in packageTest.ExtensionsNeeded)
+					CheckExtensionIsInstalled(extension);
+
 				var resultFile = _parameters.OutputDirectory + DEFAULT_RESULT_FILE;
 				// Delete result file ahead of time so we don't mistakenly
 				// read a left-over file from another test run. Leave the
@@ -320,13 +323,15 @@ public abstract class PackageTester : GuiTester
 			}
 		}
 
+		Console.WriteLine($"\nRan {testCount} package tests on {PackageName}");
+
 		// All package tests are run even if one of them fails. If there are
 		// any errors,  we stop the run at this point.
 		if (anyErrors)
 			throw new Exception("One or more package tests had errors!");
 	}
 
-	protected void DisplayBanner(string message)
+	private void DisplayBanner(string message)
 	{
 		Console.WriteLine("\n========================================");;
 		Console.WriteLine(message);
@@ -357,13 +362,8 @@ public class ZipPackageTester : PackageTester
 	protected override FilePath PackageUnderTest => _parameters.ZipPackage;
 	protected override string PackageTestDirectory => _parameters.ZipTestDirectory;
 	protected override string PackageTestBinDirectory => PackageTestDirectory + "bin/";
-
-	public override void InstallEngineExtensions()
-	{
-		DisplayBanner("Installing V2 Driver Extension");
-		_parameters.Context.NuGetInstall("NUnit.Extension.NUnitV2Driver", new NuGetInstallSettings() { OutputDirectory = PackageTestBinDirectory + "addins/"});
-	}
-
+	protected override string ExtensionInstallDirectory => PackageTestBinDirectory + "addins/";
+	
 	protected override PackageCheck[] PackageChecks => new PackageCheck[]
 	{
 		HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt"),
@@ -376,6 +376,12 @@ public class ZipPackageTester : PackageTester
 		HasDirectory("bin/Images/Tree/Default").WithFiles(TREE_ICONS_PNG),
 		HasDirectory("bin/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG)
 	};
+
+	protected override void InstallEngineExtension(string extension)
+	{
+		_parameters.Context.NuGetInstall(extension,
+			new NuGetInstallSettings() { OutputDirectory = ExtensionInstallDirectory});
+	}
 }
 
 public class NuGetPackageTester : PackageTester
@@ -386,6 +392,7 @@ public class NuGetPackageTester : PackageTester
 	protected override FilePath PackageUnderTest => _parameters.NuGetPackage;
 	protected override string PackageTestDirectory => _parameters.NuGetTestDirectory;
 	protected override string PackageTestBinDirectory => PackageTestDirectory + "tools/";
+	protected override string ExtensionInstallDirectory => _parameters.TestDirectory;
 	
 	protected override PackageCheck[] PackageChecks => new PackageCheck[]
 	{
@@ -400,10 +407,10 @@ public class NuGetPackageTester : PackageTester
 		HasDirectory("tools/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG)
 	};
 
-	public override void InstallEngineExtensions()
+	protected override void InstallEngineExtension(string extension)
 	{
-		DisplayBanner("Installing V2 Driver Extension");
-		_parameters.Context.NuGetInstall("NUnit.Extension.NUnitV2Driver", new NuGetInstallSettings() { OutputDirectory = PackageTestDirectory + "../"});
+		_parameters.Context.NuGetInstall(extension,
+			new NuGetInstallSettings() { OutputDirectory = ExtensionInstallDirectory});
 	}
 }
 
@@ -415,7 +422,12 @@ public class ChocolateyPackageTester : PackageTester
 	protected override FilePath PackageUnderTest => _parameters.ChocolateyPackage;
 	protected override string PackageTestDirectory => _parameters.ChocolateyTestDirectory;
 	protected override string PackageTestBinDirectory => PackageTestDirectory + "tools/";
+	protected override string ExtensionInstallDirectory => _parameters.TestDirectory;
 	
+	// Chocolatey packages have a different naming convention from NuGet
+	protected override string NUnitV2Driver => "nunit-extension-nunit-v2-driver";
+	protected override string NUnitProjectLoader => "nunit-extension-nunit-project-loader";
+
 	protected override PackageCheck[] PackageChecks => new PackageCheck[]
 	{
 		HasDirectory("tools").WithFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "VERIFICATION.txt", "testcentric.choco.addins").AndFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.choco.addins"),
@@ -428,11 +440,15 @@ public class ChocolateyPackageTester : PackageTester
 		HasDirectory("tools/Images/Tree/Visual%20Studio").WithFiles(TREE_ICONS_PNG)
 	};
 
-	public override void InstallEngineExtensions()
+	protected override void InstallEngineExtension(string extension)
 	{
-		DisplayBanner("Installing V2 Driver Extension");
-		// We install using NuGet because Chocolatey requires running as administrator
-		_parameters.Context.NuGetInstall("nunit-extension-nunit-v2-driver", new NuGetInstallSettings() { Source = new [] { "https://chocolatey.org/api/v2/" }, OutputDirectory = PackageTestDirectory + "../"});
+		// Install with NuGet because choco requires administrator access
+		_parameters.Context.NuGetInstall(extension,
+			new NuGetInstallSettings()
+			{
+				Source = new [] { "https://chocolatey.org/api/v2/" },
+				OutputDirectory = ExtensionInstallDirectory
+			});
 	}
 }
 
