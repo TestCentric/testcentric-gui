@@ -96,5 +96,11 @@ namespace TestCentric.Gui.Model.Settings
             get { return GetSetting(nameof(InternalTraceLevel), InternalTraceLevel.Off); }
             set { SaveSetting(nameof(InternalTraceLevel), value); }
         }
+
+        public string ProjectEditorPath
+        {
+            get { return (string)GetSetting(nameof(ProjectEditorPath)); }
+            set { SaveSetting(nameof(ProjectEditorPath), value); }
+        }
     }
 }
