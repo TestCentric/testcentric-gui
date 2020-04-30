@@ -35,7 +35,8 @@ namespace TestCentric.Gui
             this.pinButton = new System.Windows.Forms.CheckBox();
             this.testName = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.hiddenProperties = new System.Windows.Forms.CheckBox();
+            this.packageSettingsLabel = new System.Windows.Forms.Label();
+            this.packageSettings = new System.Windows.Forms.ListBox();
             this.description = new TestCentric.Gui.Controls.ExpandingLabel();
             this.categories = new System.Windows.Forms.Label();
             this.properties = new System.Windows.Forms.ListBox();
@@ -52,6 +53,7 @@ namespace TestCentric.Gui
             this.descriptionLabel = new System.Windows.Forms.Label();
             this.fullName = new TestCentric.Gui.Controls.ExpandingLabel();
             this.fullNameLabel = new System.Windows.Forms.Label();
+            this.hiddenProperties = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.assertCount = new System.Windows.Forms.Label();
             this.messageLabel = new System.Windows.Forms.Label();
@@ -75,7 +77,7 @@ namespace TestCentric.Gui
             // 
             this.pinButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.pinButton.Appearance = System.Windows.Forms.Appearance.Button;
-            this.pinButton.Location = new System.Drawing.Point(416, 10);
+            this.pinButton.Location = new System.Drawing.Point(468, 10);
             this.pinButton.Name = "pinButton";
             this.pinButton.Size = new System.Drawing.Size(20, 20);
             this.pinButton.TabIndex = 2;
@@ -92,7 +94,8 @@ namespace TestCentric.Gui
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.hiddenProperties);
+            this.groupBox1.Controls.Add(this.packageSettingsLabel);
+            this.groupBox1.Controls.Add(this.packageSettings);
             this.groupBox1.Controls.Add(this.description);
             this.groupBox1.Controls.Add(this.categories);
             this.groupBox1.Controls.Add(this.properties);
@@ -109,23 +112,30 @@ namespace TestCentric.Gui
             this.groupBox1.Controls.Add(this.descriptionLabel);
             this.groupBox1.Controls.Add(this.fullName);
             this.groupBox1.Controls.Add(this.fullNameLabel);
+            this.groupBox1.Controls.Add(this.hiddenProperties);
             this.groupBox1.Location = new System.Drawing.Point(12, 39);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(424, 218);
+            this.groupBox1.Size = new System.Drawing.Size(476, 314);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Test Details";
             // 
-            // hiddenProperties
+            // packageSettingsLabel
             // 
-            this.hiddenProperties.AutoSize = true;
-            this.hiddenProperties.Location = new System.Drawing.Point(139, 192);
-            this.hiddenProperties.Name = "hiddenProperties";
-            this.hiddenProperties.Size = new System.Drawing.Size(144, 17);
-            this.hiddenProperties.TabIndex = 16;
-            this.hiddenProperties.Text = "Display hidden properties";
-            this.hiddenProperties.UseVisualStyleBackColor = true;
-            this.hiddenProperties.CheckedChanged += new System.EventHandler(this.hiddenProperties_CheckedChanged);
+            this.packageSettingsLabel.AutoSize = true;
+            this.packageSettingsLabel.Location = new System.Drawing.Point(13, 235);
+            this.packageSettingsLabel.Name = "packageSettingsLabel";
+            this.packageSettingsLabel.Size = new System.Drawing.Size(94, 13);
+            this.packageSettingsLabel.TabIndex = 18;
+            this.packageSettingsLabel.Text = "Package Settings:";
+            // 
+            // packageSettings
+            // 
+            this.packageSettings.FormattingEnabled = true;
+            this.packageSettings.Location = new System.Drawing.Point(16, 253);
+            this.packageSettings.Name = "packageSettings";
+            this.packageSettings.Size = new System.Drawing.Size(448, 69);
+            this.packageSettings.TabIndex = 17;
             // 
             // description
             // 
@@ -147,9 +157,9 @@ namespace TestCentric.Gui
             // 
             this.properties.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.properties.Location = new System.Drawing.Point(104, 143);
+            this.properties.Location = new System.Drawing.Point(16, 162);
             this.properties.Name = "properties";
-            this.properties.Size = new System.Drawing.Size(308, 43);
+            this.properties.Size = new System.Drawing.Size(448, 69);
             this.properties.TabIndex = 15;
             // 
             // propertiesLabel
@@ -257,6 +267,16 @@ namespace TestCentric.Gui
             this.fullNameLabel.TabIndex = 2;
             this.fullNameLabel.Text = "Full Name:";
             // 
+            // hiddenProperties
+            // 
+            this.hiddenProperties.Location = new System.Drawing.Point(186, 143);
+            this.hiddenProperties.Name = "hiddenProperties";
+            this.hiddenProperties.Size = new System.Drawing.Size(149, 16);
+            this.hiddenProperties.TabIndex = 16;
+            this.hiddenProperties.Text = "Display hidden properties";
+            this.hiddenProperties.UseVisualStyleBackColor = true;
+            this.hiddenProperties.CheckedChanged += new System.EventHandler(this.hiddenProperties_CheckedChanged);
+            // 
             // groupBox2
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -267,9 +287,9 @@ namespace TestCentric.Gui
             this.groupBox2.Controls.Add(this.stackTraceLabel);
             this.groupBox2.Controls.Add(this.message);
             this.groupBox2.Controls.Add(this.stackTrace);
-            this.groupBox2.Location = new System.Drawing.Point(12, 263);
+            this.groupBox2.Location = new System.Drawing.Point(15, 377);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(424, 136);
+            this.groupBox2.Size = new System.Drawing.Size(476, 166);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Result";
@@ -284,7 +304,7 @@ namespace TestCentric.Gui
             // 
             // messageLabel
             // 
-            this.messageLabel.Location = new System.Drawing.Point(18, 47);
+            this.messageLabel.Location = new System.Drawing.Point(10, 47);
             this.messageLabel.Name = "messageLabel";
             this.messageLabel.Size = new System.Drawing.Size(80, 17);
             this.messageLabel.TabIndex = 2;
@@ -292,7 +312,7 @@ namespace TestCentric.Gui
             // 
             // elapsedTime
             // 
-            this.elapsedTime.Location = new System.Drawing.Point(18, 26);
+            this.elapsedTime.Location = new System.Drawing.Point(10, 26);
             this.elapsedTime.Name = "elapsedTime";
             this.elapsedTime.Size = new System.Drawing.Size(192, 16);
             this.elapsedTime.TabIndex = 0;
@@ -300,9 +320,9 @@ namespace TestCentric.Gui
             // 
             // stackTraceLabel
             // 
-            this.stackTraceLabel.Location = new System.Drawing.Point(18, 70);
+            this.stackTraceLabel.Location = new System.Drawing.Point(10, 69);
             this.stackTraceLabel.Name = "stackTraceLabel";
-            this.stackTraceLabel.Size = new System.Drawing.Size(80, 15);
+            this.stackTraceLabel.Size = new System.Drawing.Size(72, 14);
             this.stackTraceLabel.TabIndex = 4;
             this.stackTraceLabel.Text = "Stack:";
             // 
@@ -314,23 +334,23 @@ namespace TestCentric.Gui
             this.message.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
             this.message.Location = new System.Drawing.Point(106, 47);
             this.message.Name = "message";
-            this.message.Size = new System.Drawing.Size(306, 17);
+            this.message.Size = new System.Drawing.Size(358, 17);
             this.message.TabIndex = 3;
             // 
             // stackTrace
             // 
             this.stackTrace.CopySupported = true;
             this.stackTrace.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
-            this.stackTrace.Location = new System.Drawing.Point(106, 70);
+            this.stackTrace.Location = new System.Drawing.Point(10, 89);
             this.stackTrace.Name = "stackTrace";
-            this.stackTrace.Size = new System.Drawing.Size(306, 50);
+            this.stackTrace.Size = new System.Drawing.Size(440, 73);
             this.stackTrace.TabIndex = 5;
             // 
             // TestPropertiesDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(448, 410);
+            this.ClientSize = new System.Drawing.Size(500, 548);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.testName);
@@ -378,5 +398,7 @@ namespace TestCentric.Gui
         private ExpandingLabel message;
         private ExpandingLabel stackTrace;
         private System.Windows.Forms.CheckBox hiddenProperties;
+        private System.Windows.Forms.Label packageSettingsLabel;
+        private System.Windows.Forms.ListBox packageSettings;
     }
 }

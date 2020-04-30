@@ -91,6 +91,8 @@ namespace TestCentric.Gui
 
             FillPropertyList();
 
+            FillPackageSettingsList();
+
             elapsedTime.Text = "Execution Time:";
             assertCount.Text = "Assert Count:";
             message.Text = "";
@@ -124,8 +126,10 @@ namespace TestCentric.Gui
             CreateRow(categoriesLabel, categories);
             CreateRow(testCaseCountLabel, testCaseCount, shouldRunLabel, shouldRun);
             CreateRow(ignoreReasonLabel, ignoreReason);
-            CreateRow(propertiesLabel, properties);
-            CreateRow(hiddenProperties);
+            CreateRow(propertiesLabel, hiddenProperties);
+            CreateRow(properties);
+            CreateRow(packageSettingsLabel);
+            CreateRow(packageSettings);
 
             groupBox1.ClientSize = new Size(
                 groupBox1.ClientSize.Width, maxY + 12);
@@ -137,7 +141,8 @@ namespace TestCentric.Gui
 
             CreateRow(elapsedTime, assertCount);
             CreateRow(messageLabel, message);
-            CreateRow(stackTraceLabel, stackTrace);
+            CreateRow(stackTraceLabel);
+            CreateRow(stackTrace);
 
             groupBox2.ClientSize = new Size(
                 groupBox2.ClientSize.Width, this.maxY + 12);
@@ -155,6 +160,23 @@ namespace TestCentric.Gui
             {
                 properties.Items.Add(entry);
             }
+        }
+
+        private void FillPackageSettingsList()
+        {
+            packageSettings.Items.Clear();
+            var package = _treeNode.TestPackage;
+
+            if (package != null)
+                foreach (string key in package.Settings.Keys)
+                {
+                    object val = package.Settings[key] ?? "<null>";
+                    if (val == string.Empty)
+                        val = "<empty>";
+                    else if (val is string[])
+                        val = string.Join(",", val as string[]);
+                    packageSettings.Items.Add($"{key} = {val}");
+                }
         }
 
         #endregion

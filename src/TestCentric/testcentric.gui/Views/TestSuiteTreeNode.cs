@@ -9,6 +9,7 @@ using System.Windows.Forms;
 namespace TestCentric.Gui.Views
 {
     using Model;
+    using NUnit.Engine;
 
     /// <summary>
     /// Type safe TreeNode for use in the TestSuiteTreeView. 
@@ -37,18 +38,20 @@ namespace TestCentric.Gui.Views
         /// <summary>
         /// Construct a TestNode given a test
         /// </summary>
-        public TestSuiteTreeNode(TestNode test) : base(test.Name)
+        public TestSuiteTreeNode(TestNode test, TestPackage package=null) : base(test.Name)
         {
             Test = test;
+            TestPackage = package;
             UpdateImageIndex();
         }
 
         /// <summary>
         /// Construct a TestNode given a TestResult
         /// </summary>
-        public TestSuiteTreeNode(ResultNode result) : base(result.Name)
+        public TestSuiteTreeNode(ResultNode result, TestPackage package = null) : base(result.Name)
         {
             Test = Result = result;
+            TestPackage = package;
             UpdateImageIndex();
         }
 
@@ -59,6 +62,11 @@ namespace TestCentric.Gui.Views
         /// Test represented by this node
         /// </summary>
         public TestNode Test { get; set; }
+
+        /// <summary>
+        /// TestPackage this test represents or null if none
+        /// </summary>
+        public TestPackage TestPackage { get; set; }
 
         /// <summary>
         /// Test result for this node
