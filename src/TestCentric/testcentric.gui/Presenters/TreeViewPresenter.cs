@@ -331,7 +331,8 @@ namespace TestCentric.Gui.Presenters
 
         private TestSuiteTreeNode BuildTestTree(TestNode testNode, InitialTreeExpansion displayStyle, bool highlight)
         {
-            var treeNode = new TestSuiteTreeNode(testNode);
+            var package = _model.GetPackageForTest(testNode.Id);
+            var treeNode = new TestSuiteTreeNode(testNode, package);
             if (highlight) treeNode.ForeColor = Color.Blue;
             _treeMap.Add(testNode.Id, treeNode);
             treeNode.Tag = testNode.Id;
