@@ -240,6 +240,13 @@ namespace TestCentric.Gui.Presenters
                     theoryNode.ShowFailedAssumptions = _view.ShowFailedAssumptions.Checked;
             };
 
+            _view.EditProject.Execute += () =>
+            {
+                TestSuiteTreeNode targetNode = _view.ContextNode ?? (TestSuiteTreeNode)_view.Tree.SelectedNode;
+                string projectPath = targetNode.TestPackage.FullName;
+                EditProject(projectPath);
+            };
+
             _view.ExpandAllCommand.Execute += () => _view.Tree.ExpandAll();
 
             _view.CollapseAllCommand.Execute += () => _view.Tree.CollapseAll();
@@ -263,6 +270,7 @@ namespace TestCentric.Gui.Presenters
             if (targetNode != null)
             {
                 TestNode test = targetNode.Test;
+                TestPackage package = targetNode.TestPackage;
 
                 _view.RunCommand.DefaultItem = _view.RunCommand.Enabled && targetNode.Included &&
                     (test.RunState == RunState.Runnable || test.RunState == RunState.Explicit);
@@ -271,12 +279,16 @@ namespace TestCentric.Gui.Presenters
                 _view.ShowFailedAssumptions.Visible = _view.ShowFailedAssumptions.Enabled = theoryNode != null;
                 _view.ShowFailedAssumptions.Checked = theoryNode?.ShowFailedAssumptions ?? false;
 
-                _view.ActiveConfiguration.Visible = _view.ActiveConfiguration.Enabled = false;
-                if (test.IsProject)
+                bool showProjectMenu = package != null && test.IsProject;
+
+                _view.ProjectMenu.Visible = _view.ProjectMenu.Enabled = showProjectMenu;
+                _view.ActiveConfiguration.Visible = _view.ActiveConfiguration.Enabled = showProjectMenu;
+                _view.EditProject.Visible = _view.EditProject.Enabled = showProjectMenu && Path.GetExtension(package.FullName) == ".nunit";
+
+                if (showProjectMenu)
                 {
-                    TestPackage package = _model.GetPackageForTest(test.Id);
                     string activeConfig = package.GetActiveConfig();
-                    var configNames = package.GetConfigNames();
+                    string[] configNames = package.GetConfigNames();
 
                     if (configNames.Length > 0)
                     {
@@ -293,6 +305,19 @@ namespace TestCentric.Gui.Presenters
                     }
                 }
             }
+        }
+
+        private void EditProject(string projectPath)
+        {
+            const string Q = "\"";
+            string editorPath = "nunit-editor.exe";
+
+            Process p = new Process();
+
+            p.StartInfo.FileName = Q + editorPath + Q;
+            p.StartInfo.Arguments = Q + projectPath + Q;
+
+            p.Start();
         }
 
         public void LoadTests(TestNode topLevelTest)

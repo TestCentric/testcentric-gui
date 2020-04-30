@@ -171,7 +171,7 @@ namespace TestCentric.Gui
                 foreach (string key in package.Settings.Keys)
                 {
                     object val = package.Settings[key] ?? "<null>";
-                    if (val == string.Empty)
+                    if ((string)val == string.Empty)
                         val = "<empty>";
                     else if (val is string[])
                         val = string.Join(",", val as string[]);

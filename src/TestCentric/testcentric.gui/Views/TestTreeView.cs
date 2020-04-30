@@ -41,7 +41,9 @@ namespace TestCentric.Gui.Views
 
             RunCommand = new MenuCommand(runMenuItem);
             ShowFailedAssumptions = new CheckedMenuItem(failedAssumptionsMenuItem);
+            ProjectMenu = new PopupMenu(projectMenuItem);
             ActiveConfiguration = new PopupMenu(activeConfigurationMenuItem);
+            EditProject = new MenuCommand(editProjectMenuItem);
             PropertiesCommand = new MenuCommand(propertiesMenuItem);
             ShowCheckBoxes = new CheckedMenuItem(showCheckBoxesMenuItem);
             ExpandAllCommand = new MenuCommand(expandAllMenuItem);
@@ -111,7 +113,9 @@ namespace TestCentric.Gui.Views
 
         public IMenuCommand RunCommand { get; private set; }
         public IChecked ShowFailedAssumptions { get; private set; }
+        public IMenu ProjectMenu { get; private set; }
         public IMenu ActiveConfiguration { get; private set; }
+        public ICommand EditProject { get; private set; }
         public ICommand PropertiesCommand { get; private set; }
         public IChecked ShowCheckBoxes { get; private set; }
         public ICommand ExpandAllCommand { get; private set; }
