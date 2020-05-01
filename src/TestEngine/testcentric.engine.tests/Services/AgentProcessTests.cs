@@ -135,6 +135,18 @@ namespace TestCentric.Engine.Services
             Assert.That(agentProcess.AgentArgs.ToString(), Is.EqualTo(REQUIRED_ARGS + " --work=WORKDIRECTORY"));
         }
 
+        [TestCase(".NetFramework,Version=2.0")]
+        [TestCase(".NetFramework,Version=4.5")]
+        [TestCase(".NetFramework,Version=4.8")]
+        [TestCase(".NetCoreApp,Version=2.1")]
+        [TestCase(".NetCoreApp,Version=2.1")]
+        [TestCase(".NetCoreApp,Version=2.1")]
+        public void WorkingDirectory(string targetRuntime)
+        {
+            _package.Settings[EnginePackageSettings.ImageTargetFrameworkName] = targetRuntime;
+            Assert.That(GetAgentProcess().StartInfo.WorkingDirectory, Is.EqualTo(Environment.CurrentDirectory));
+        }
+
         private AgentProcess GetAgentProcess()
         {
             return new AgentProcess(_agency, _package, AGENT_ID);
