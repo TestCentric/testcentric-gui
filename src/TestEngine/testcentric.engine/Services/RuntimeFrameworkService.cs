@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Microsoft.Win32;
 using Mono.Cecil;
@@ -451,21 +452,51 @@ namespace TestCentric.Engine.Services
             if (!Directory.Exists(runtimeDir))
                 return;
 
-            var runtimes = new List<RuntimeFramework>();
-            int count = 0;
-            
-            foreach (var dir in new DirectoryInfo(runtimeDir).GetDirectories())
-            {
-                var fullVersion = new Version(dir.Name);
-                var newVersion = new Version(fullVersion.Major, fullVersion.Minor);
-                if (count > 0 && runtimes[count - 1].FrameworkVersion == newVersion)
-                        continue;
-
-                runtimes.Add(new RuntimeFramework(Runtime.NetCore, newVersion));
-                count++;
-            }
+            var dirNames = new DirectoryInfo(runtimeDir).GetDirectories().Select((dir) => dir.Name);
+            var runtimes = GetNetCoreRuntimesFromDirectoryNames(dirNames);
 
             _availableRuntimes.AddRange(runtimes);
+        }
+
+        // Internal for testing
+        internal IList<RuntimeFramework> GetNetCoreRuntimesFromDirectoryNames(IEnumerable<string> dirNames)
+        {
+            const string VERSION_CHARS = ".0123456789";
+            var runtimes = new List<RuntimeFramework>();
+
+            foreach (string dirName in dirNames)
+            {
+                int len = 0;
+                foreach (char c in dirName)
+                {
+                    if (VERSION_CHARS.Contains(c))
+                        len++;
+                    else
+                        break;
+                }
+
+                if (len == 0)
+                    continue;
+                
+                Version fullVersion = null;
+                try
+                {
+                    fullVersion = new Version(dirName.Substring(0, len));
+                }
+                catch
+                {
+                    continue;
+                }
+
+                var newVersion = new Version(fullVersion.Major, fullVersion.Minor);
+                int count = runtimes.Count;
+                if (count > 0 && runtimes[count - 1].FrameworkVersion == newVersion)
+                    continue;
+
+                runtimes.Add(new RuntimeFramework(Runtime.NetCore, newVersion));
+            }
+
+            return runtimes;
         }
 
 #endregion
