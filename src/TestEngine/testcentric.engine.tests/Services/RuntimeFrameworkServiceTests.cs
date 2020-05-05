@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using NUnit.Engine;
 using NUnit.Framework;
 
@@ -132,6 +133,16 @@ namespace TestCentric.Engine.Services
                     Assert.That(topLevelPackage.Settings[EnginePackageSettings.TargetRuntimeFramework], Is.EqualTo("mono-4.0"));
                 }
             });
+        }
+
+        [TestCase("1.1", "2.1", "3.1", ExpectedResult = new[] { "netcore-1.1", "netcore-2.1", "netcore-3.1" })]
+        [TestCase("1.1.14", "2.1.508", "3.1.201", ExpectedResult = new[] { "netcore-1.1", "netcore-2.1", "netcore-3.1" })]
+        [TestCase("1.1.14", "2.1.202", "2.1.508", "2.1.509", "2.1.512", "3.1.201", ExpectedResult = new[] { "netcore-1.1", "netcore-2.1", "netcore-3.1" })]
+        [TestCase("1.0.1", "2.0.7", "2.0.9", "2.1.2", "2.1.3-servicing-26724-03", "2.1.4", "2.1.5", ExpectedResult = new[] { "netcore-1.0", "netcore-2.0", "netcore-2.1" })]
+        [TestCase("1.0.1", "2.0.7", "2.0.9", "2.1.3-servicing-26724-03", ExpectedResult = new[] { "netcore-1.0", "netcore-2.0", "netcore-2.1" })]
+        public string[] GetNetCoreRuntimesFromDirectoryNames(params string[] dirNames)
+        {
+            return _runtimeService.GetNetCoreRuntimesFromDirectoryNames(dirNames).Select((r) => r.Id).ToArray();
         }
     }
 }
