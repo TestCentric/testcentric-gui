@@ -13,7 +13,7 @@ assignees: ''
 
 <!-- Please fill out the sections below by removing the items that don't apply. For example, for category, leave only one of the defined categories. -->
 
-__Category:__ API | Platform Support | Services | Functionality | Implementation
+__Category:__ API | Platform Support | Services | Functionality | Implementation | Build
 __Visibility:__ Users | Third-party Developers | Engine Extenders | Internal
 __Resolution:__ Pending | No Action | Fix in TestCentric | Fix in NUnit
 
