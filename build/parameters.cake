@@ -14,7 +14,13 @@ public class BuildParameters
 	private const string MYGET_API_KEY = "MYGET_API_KEY";
 	private const string NUGET_API_KEY = "NUGET_API_KEY";
 	private const string CHOCO_API_KEY = "CHOCO_API_KEY";
-	
+
+	// Environment Variable names holding GitHub identity of user
+	// These are only used to publish the website when running locally	
+	private const string GITHUB_USER_ID = "USER_ID";
+	private const string GITHUB_USER_EMAIL = "USER_EMAIL";
+	private const string GITHUB_PASSWORD = "GITHUB_PASSWORD";
+
 	// Pre-release labels that we publish
 	private static readonly string[] LABELS_WE_PUBLISH_ON_MYGET = { "dev", "pre" };
 	private static readonly string[] LABELS_WE_PUBLISH_ON_NUGET = { "alpha", "beta", "rc" };
@@ -69,6 +75,10 @@ public class BuildParameters
 		MyGetApiKey = _context.EnvironmentVariable(MYGET_API_KEY);
 		NuGetApiKey = _context.EnvironmentVariable(NUGET_API_KEY);
 		ChocolateyApiKey = _context.EnvironmentVariable(CHOCO_API_KEY);
+
+		GitHubUserId = _context.EnvironmentVariable(GITHUB_USER_ID);
+		GitHubUserEmail = _context.EnvironmentVariable(GITHUB_USER_EMAIL);
+		GitHubPassword = _context.EnvironmentVariable(GITHUB_PASSWORD);
 		
 		UsingXBuild = context.EnvironmentVariable("USE_XBUILD") != null;
 
@@ -133,6 +143,9 @@ public class BuildParameters
 	public string ZipTestDirectory => TestDirectory + "zip/";
 	public string NuGetTestDirectory => TestDirectory + "nuget/";
 	public string ChocolateyTestDirectory => TestDirectory + "choco/";
+	public string WebDirectory => ProjectDirectory + "web/";
+	public string WebOutputDirectory => WebDirectory + "output/";
+	public string WebDeployDirectory => ProjectDirectory + "../testcentric-gui.deploy/";
 
 	public string ZipPackageName => PACKAGE_NAME + "-" + PackageVersion + ".zip";
 	public string NuGetPackageName => NUGET_PACKAGE_NAME + "." + PackageVersion + ".nupkg";
@@ -149,8 +162,7 @@ public class BuildParameters
 	public string MyGetApiKey { get; }
 	public string NuGetApiKey { get; }
 	public string ChocolateyApiKey { get; }
-	public string TestSiteApiKey { get; }
-
+	
 	public bool IsPublishing => TasksToExecute.Contains("PublishPackages");
 
 	public bool ShouldPublishPackages => ShouldPublishToMyGet || ShouldPublishToNuGet || ShouldPublishToChocolatey;
@@ -168,6 +180,12 @@ public class BuildParameters
 		? new string[] {"net40", "net35", "netcoreapp2.1", "netcoreapp1.1"}
 		: new string[] {"net40", "net35", "netcoreapp2.1"};
 	public string[] SupportedAgentRuntimes => new string[] { "net20", "net40", "netcoreapp2.1", "netcoreapp3.1" };
+
+	public string ProjectUri => "https://github.com/TestCentric/testcentric-gui";
+	public string WebDeployBranch => "gh-pages";
+	public string GitHubUserId { get; }
+	public string GitHubUserEmail { get; }
+	public string GitHubPassword { get; }
 
 	private void Validate()
 	{

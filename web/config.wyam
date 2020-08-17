@@ -1,0 +1,11 @@
+#recipe Docs
+
+using System.IO;
+
+// Customize your settings and add new ones here
+Settings[Keys.Host] = "test-centric.org";
+Settings[Keys.LinkRoot] = "/testcentric-gui";
+Settings[DocsKeys.Title] = "TestCentric";
+Settings[DocsKeys.Logo] = "/assets/img/tcguilogo.png";
+
+// Add any pipeline customizations here
