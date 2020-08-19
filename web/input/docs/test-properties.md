@@ -8,7 +8,7 @@ which causes it to remain open as the user clicks on different tests.
 
 ![Context Menu](/testcentric-gui/assets/img/testPropertiesDialog.png)
 
-### Header
+## Header
 The header at the top of the dialog shows the status of the test and its name.
 
 If the test has not been run, the status may be one of 
@@ -28,47 +28,47 @@ If the test has been run, it may show any valid result, including
 part is potentially user-extensible, so a complete list is not possible.
 
 
-### Test Details
+## Test Details
 This section is present for every test.
 
-#### Test Type
+### Test Type
 The type of test, such as Test Case, Test Fixture, etc.
 
-#### Full Name
+### Full Name
 The full name of the test.
 
-#### Description
+### Description
 Any description provided by the definition of the test.
 
-#### Categories
+### Categories
 A list of categories applied to the test
 
-#### Test Count
+### Test Count
 The number of test cases included in this test
 
-#### Should Run?
+### Should Run?
 Yes if the test should be executed, otherwise No
 
-#### Reason
+### Reason
 The reason given for not executing the test, if present
 
-#### Properties
+### Properties
 A list of properties defined for this test
 
-#### Display hidden properties
+### Display hidden properties
 Check this box to cause any hidden (internal) properties to be included in the list of properties.
 
-### Results
+## Results
 This section only appears if the test was actually executed.
 
-#### Execution Time
+### Execution Time
 The time in seconds that it took for the test to run.
 
-#### Assert Count
+### Assert Count
 The number of assertions executed by the test.
 
-#### Message
+### Message
 The failure or other message issued by the test
 
-#### Stack
+### Stack
 Stack trace, if present.

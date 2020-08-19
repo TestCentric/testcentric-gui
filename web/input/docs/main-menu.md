@@ -1,7 +1,7 @@
 Description: Explains commands available in the main menu of the runner.
 Order: 2
 ---
-## File Menu
+# File Menu
 
 ![File Menu](/testcentric-gui/assets/img/filemenu.png)
 
@@ -9,42 +9,42 @@ Order: 2
 Closes any open project, prompting the user to save it if it has been changed and then opens a
 FileSave dialog to allow selecting the name and location of the new project.
 
-#### Open Project...
+## Open Project...
 Closes any open project, prompting the user to save it if it has been changed and then opens a
 FileOpen dialog to allow selecting the name and location of an assembly or a test project.--->
 
-#### Open...
+## Open...
 Closes any open files and then displays a FileOpen dialog to allow selecting the name and location
 of an assembly or supported project file.
 
-#### Close
+## Close
 Closes any open files.
 <!---Closes any open project, prompting the user to save it if it has been changed.--->
 
-#### Add Test File...
+## Add Test File...
 Displays a FileOpen dialog to allow selecting the name and location of an assembly or
 supported project file, which is then added to the currently open file set.
 
-<!---#### Save
+<!---## Save
 Saves the currently open project. Opens the Save As dialog if this is the first time the project
 is being saved.
 
-#### Save As...
+## Save As...
 Opens a FileSave dialog to allow specifying the name and location to which the project
 should be saved.
 
-#### Reload Project
+## Reload Project
 Completely reloads the current project by closing and re-opening it.--->
 
-#### Reload Tests
+## Reload Tests
 Reloads the tests, merging any changes into the tree.
 
-#### Select Runtime
+## Select Runtime
 Displays a list of runtime versions you may select in order to reload
 the tests using that runtime. This submenu is only present if you have
 more than one runtime version available.
 
-#### Process Model
+## Process Model
 Allows the user to select how Processes are used loading and running the tests. Note that any selection other than **Default** will override process settings specified in an NUnit or other project file.
 
 * **Default**
@@ -62,7 +62,7 @@ Each test assembly is run in its own process, in parallel with other assemblies.
 * **Run as X86**
 Force the tests to run in a 32-bit process or processes. This setting may be selected in combination with any of the other settings with the exception of **In Process**.
 
-#### Domain Usage
+## Domain Usage
 Allows the user to select how AppDomains are used in loading and running the tests. Note that any selection other than **Default** will override domain settings specified in an NUnit or other project file.
 
 * **Default**
@@ -74,27 +74,27 @@ Tests are all run in the same AppDomain. When running in process, that AppDomain
 * **Multiple**
 Each test assembly is run in its own AppDomain. This setting is not permitted when running each assembly in a separate process, since there is only one test assembly per process.
 
-#### Recent Files...
+## Recent Files...
 Displays a list of recently opened projects and assemblies from which the user is able to select one for opening.
 
-#### Exit
+## Exit
 Closes and exits the application. If a test is running, the user is given the opportunity to
 cancel it and or to allow it to continue.
 <!---If the open project has any pending changes, the user
 is given the opportunity to save it--->
 
-## View Menu
+# View Menu
 
 ![View Menu](/testcentric-gui/assets/img/viewmenu.png)
 
-#### Full Gui
+## Full Gui
 Displays the complete gui - as in prior versions of NUnit. This includes the
    errors and failures and other tabs and the progress bar.
    
-#### Mini Gui
+## Mini Gui
 Switches the display to the mini-gui, which consists of the tree display only.
 
-### GUI Font
+## GUI Font
 Displays a submenu that allows changing the general font used by the GUI.
 
  * **Increase**
@@ -113,7 +113,7 @@ Displays a submenu that allows changing the general font used by the GUI.
 
    Restores the default font.
 
-#### Fixed Font
+## Fixed Font
 Displays a submenu that allows changing the fixed font used to display
 console output from the tests.
 
@@ -132,28 +132,32 @@ console output from the tests.
 <!---<h4>Assembly Details...</h4>
 <p>Displays information about loaded test assemblies.</p>--->
 
-#### Status Bar
+## Status Bar
 Displays or hides the status bar.
 
-## Tests Menu
+# Tests Menu
 
 ![Tests Menu](/testcentric-gui/assets/img/testsmenu.png)
 
-<h4>Run All</h4>
-<p>Runs all the tests.</p>
+## Run All
 
-<h4>Run Selected</h4>
-<p>Runs the test or tests that are selected in the tree. If checkboxes are visible,
+Runs all the tests.
+
+## Run Selected
+
+Runs the test or tests that are selected in the tree. If checkboxes are visible,
 any checked tests are run by preference. This is the same function provided by
-the Run button.</p>
+the Run button.
 
-<h4>Run Failed</h4>
-<p>Runs only the tests that failed on the previous run.</p>
+## Run Failed
 
-<h4>Stop Run</h4>
-<p>Stops the test run. This is the same function provided by the Stop button.</p>
+Runs only the tests that failed on the previous run.
 
-## Tools Menu
+## Stop Run
+
+Stops the test run. This is the same function provided by the Stop button.
+
+# Tools Menu
 
 ![Tools Menu](/testcentric-gui/assets/img/toolsmenu.png)
 
@@ -161,7 +165,8 @@ the Run button.</p>
 <p>Displays information about loaded test assemblies.</p>
 
 <h4>Save Results as XML...</h4>--->
-#### Save Test Results...
+
+## Save Test Results...
 Opens a FileSave Dialog for saving the test results as an nunit3-formatted XML file.
 
 <!---<h4>Exception Details...</h4>
@@ -170,21 +175,26 @@ Opens a FileSave Dialog for saving the test results as an nunit3-formatted XML f
 <h4>Open Log Directory...</h4>
 <p>Opens the directory containing logs.--->
 
-#### Extensions...
-Displays the [[Extensions Dialog]].
+## Extensions...
 
-#### Settings...
-Displays the [[Settings Dialog]].
+Displays the [Extensions Dialog](/testcentric-gui/docs/extensions-dialog.html).
 
-## Help Menu
+## Settings...
+
+Displays the [Settings Dialog](/testcentric-gui/docs/settings-dialog.html).
+
+# Help Menu
 
 ![Help Menu](/testcentric-gui/assets/img/helpmenu.png)
 
-#### TestCentric Help
+## TestCentric Help
+
 Displays the TestCentric documentation.
 
-#### NUnit Help
+## NUnit Help
+
 Displays the NUnit documentation.
 
-#### About TestCentric...
+## About TestCentric...
+
 Displays info about your version of TestCentric.
