@@ -27,4 +27,4 @@ Collapses all the nodes in the tree.
 Expands nodes in the tree as far as fixtures only, hiding the tests under each fixture. 
 
 #### Properties
-Displays the <a href="testProperties.html">Test Properties</a> for the selected test node.
+Displays the [Test Properties](/testcentric-gui/docs/testProperties.html) for the selected test node.

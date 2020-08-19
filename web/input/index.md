@@ -30,7 +30,9 @@ To use the **zip** distribution, you should simply unzip the contents into a con
 
 # Versioning
 
-The **TestCentric GUI** uses semantic versioning, with specific exceptions and clarification regarding what is considered a breaking change. See the [VERSIONING](./VERSIONING.md) file for more information. The current version is 1.4.0.
+The **TestCentric GUI** uses semantic versioning, with specific exceptions and clarification
+regarding what is considered a breaking change. See the VERSIONING file in the root of the
+distribution for more information. The current version is 1.4.0.
 
 # License
 
