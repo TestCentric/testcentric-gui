@@ -1,6 +1,12 @@
 Description: Explains commands available in the main menu of the runner.
 Order: 2
 ---
+<!-- Page-specific styles -->
+<style>
+    h1 {clear: both}
+    img {float: right; margin-left: 20px; margin-bottom: 20px}
+</style>
+
 # File Menu
 
 ![File Menu](/testcentric-gui/assets/img/filemenu.png)
@@ -14,14 +20,17 @@ Closes any open project, prompting the user to save it if it has been changed an
 FileOpen dialog to allow selecting the name and location of an assembly or a test project.--->
 
 ## Open...
+
 Closes any open files and then displays a FileOpen dialog to allow selecting the name and location
 of an assembly or supported project file.
 
 ## Close
+
 Closes any open files.
 <!---Closes any open project, prompting the user to save it if it has been changed.--->
 
 ## Add Test File...
+
 Displays a FileOpen dialog to allow selecting the name and location of an assembly or
 supported project file, which is then added to the currently open file set.
 
@@ -37,9 +46,11 @@ should be saved.
 Completely reloads the current project by closing and re-opening it.--->
 
 ## Reload Tests
+
 Reloads the tests, merging any changes into the tree.
 
 ## Select Runtime
+
 Displays a list of runtime versions you may select in order to reload
 the tests using that runtime. This submenu is only present if you have
 more than one runtime version available.

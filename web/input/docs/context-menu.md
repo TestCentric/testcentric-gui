@@ -1,6 +1,11 @@
 Description: Explains commands available in the context menu displayed by the test tree.
 Order: 3
 ---
+<!-- Page-specific styles -->
+<style>
+    img {float: right; margin-left: 20px; margin-bottom: 20px}
+</style>
+
 The context menu is displayed when one of the tree nodes is right-clicked.
 
 ![Context Menu](/testcentric-gui/assets/img/contextmenu.png)

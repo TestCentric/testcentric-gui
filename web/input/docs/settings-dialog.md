@@ -2,7 +2,10 @@ Description: Displays settings that control TestCentric and allows changing them
 Order: 5
 ---
 
-<!-- Gui Settings - General -->
+<!-- Page-specific styles -->
+<style>
+  img {float:right; margin-left: 20px; margin-bottom: 20px; max-width: 500px}
+</style>
 
 # Gui Settings - General
 

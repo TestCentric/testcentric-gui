@@ -15,10 +15,10 @@ machine must have installed the  runtime, which is targeted by your tests.
 
 # Installation
 
-The GUI** is released in three package formats, **chocolatey**, **nuget** and **zip**, all
+The GUI is released in three package formats, **chocolatey**, **nuget** and **zip**, all
 available from the [GitHub project](https://github.com/TestCentric/testcentric-gui/releases)
 site. The **nunit package** is also available from [nunit.org](https://nunit.org) and the
-**chocolatey** package from, [chocolatey.org](https://chocolatey.org).
+**chocolatey** package from [chocolatey.org](https://chocolatey.org).
 
 The **chocolatey** package provides the best user experience and is the recommended way to install the **TestCentric** GUI on developer machines. Extensions installed via **chocolatey**
 will be recognized.
@@ -31,11 +31,14 @@ To use the **zip** distribution, you should simply unzip the contents into a con
 # Versioning
 
 The **TestCentric GUI** uses semantic versioning, with specific exceptions and clarification
-regarding what is considered a breaking change. See the VERSIONING file in the root of the
+regarding what is considered a breaking change. See the VERSIONING.md file in the root of the
 distribution for more information. The current version is 1.4.0.
 
 # License
 
-The GUI is Open Source software, released under the MIT / X11 license. See LICENSE for a copy of the license.
+The GUI is Open Source software, released under the MIT / X11 license. See LICENSE.txt in the root of the distribution or view it [here](/testcentric-gui/docs/license.html).
 
-The software bundles a modified copy of the NUnit test engine, which is also licensed under the MIT / X11 license. In addition, the first version of the GUI is based in part on the NUnit 2.x GUI runner, released under the NUnit license. See NOTICES.txt for copyright information.
+The software bundles a modified copy of the NUnit test engine, which is also licensed under the
+MIT / X11 license. In addition, the first version of the GUI is based in part on the NUnit 2.x
+GUI runner, released under the NUnit license. See NOTICES.txt in the root of the distribution
+for more information.

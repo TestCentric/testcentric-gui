@@ -1,6 +1,11 @@
 Description: Displays details about an individual test and its execution.
 Order: 7
 ---
+<!-- Page-specific styles -->
+<style>
+  img {float:right; margin-left: 20px; margin-bottom: 20px; max-width: 400px}
+</style>
+
 The Test Properties Dialog is displayed using either the View | Properties menu item on the main
 menu or the Properties item on the context menu. It shows information about the test and - if it
 has been run - about the results. The dialog contains a "pin" button in the upper right corner,
