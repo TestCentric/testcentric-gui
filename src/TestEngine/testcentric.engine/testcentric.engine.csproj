@@ -7,7 +7,6 @@
     <OutputPath>..\..\..\bin\$(Configuration)\engine\</OutputPath>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net40'">
-    <PackageReference Include="Mono.Cecil" Version="0.10.0" />
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Web" />
   </ItemGroup>
@@ -25,6 +24,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\testcentric.engine.core\testcentric.engine.core.csproj" />
+    <ProjectReference Include="..\testcentric.engine.metadata\testcentric.engine.metadata.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NUnit.Engine.Api" Version="3.11.1" />
