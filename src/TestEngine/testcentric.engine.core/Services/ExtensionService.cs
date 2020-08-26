@@ -101,7 +101,7 @@ namespace TestCentric.Engine.Services
         /// <summary>
         /// Get an ExtensionPoint based on a Cecil TypeReference.
         /// </summary>
-        public ExtensionPoint GetExtensionPoint(TypeReference type)
+        private ExtensionPoint GetExtensionPoint(TypeReference type)
         {
             foreach (var ep in _extensionPoints)
                 if (ep.TypeName == type.FullName)
@@ -391,7 +391,7 @@ namespace TestCentric.Engine.Services
         /// <summary>
         /// Scan a single assembly for extensions marked by ExtensionAttribute.
         /// For each extension, create an ExtensionNode and link it to the
-        /// correct ExtensionPoint. Public for testing.
+        /// correct ExtensionPoint. Internal for testing.
         /// </summary>
         internal void FindExtensionsInAssembly(ExtensionAssembly assembly)
         {
@@ -401,22 +401,6 @@ namespace TestCentric.Engine.Services
             {
 
                 IRuntimeFramework assemblyTargetFramework = null;
-#if !NETSTANDARD2_0
-                //var currentFramework = RuntimeFramework.CurrentFramework;
-                //assemblyTargetFramework = assembly.TargetFramework;
-                //if (!currentFramework.CanLoad(assemblyTargetFramework))
-                //{
-                //    if (!assembly.FromWildCard)
-                //    {
-                //        throw new NUnitEngineException($"Extension {assembly.FilePath} targets {assemblyTargetFramework.DisplayName}, which is not available.");
-                //    }
-                //    else
-                //    {
-                //        log.Info($"Assembly {assembly.FilePath} targets {assemblyTargetFramework.DisplayName}, which is not available. Assembly found via wildcard.");
-                //        return;
-                //    }
-                //}
-#endif
 
                 foreach (var type in assembly.MainModule.GetTypes())
                 {
@@ -496,21 +480,21 @@ namespace TestCentric.Engine.Services
             if (runnerAsm == null)
                 return true;
 
-            var extHelper = new TargetFrameworkHelper(extensionAsm.FilePath);
-            var runnerHelper = new TargetFrameworkHelper(runnerAsm.Location);
-            if (runnerHelper.FrameworkName?.StartsWith(".NETStandard") == true)
+            var extensionFrameworkName = AssemblyDefinition.ReadAssembly(extensionAsm.FilePath).GetFrameworkName();
+            var runnerFrameworkName = AssemblyDefinition.ReadAssembly(runnerAsm.Location).GetFrameworkName();
+            if (runnerFrameworkName?.StartsWith(".NETStandard") == true)
             {
                 throw new NUnitEngineException($"{runnerAsm.FullName} test runner must target .NET Core or .NET Framework, not .NET Standard");
             }
-            else if (runnerHelper.FrameworkName?.StartsWith(".NETCoreApp") == true)
+            else if (runnerFrameworkName?.StartsWith(".NETCoreApp") == true)
             {
-                if (extHelper.FrameworkName?.StartsWith(".NETStandard") != true && extHelper.FrameworkName?.StartsWith(".NETCoreApp") != true)
+                if (extensionFrameworkName?.StartsWith(".NETStandard") != true && extensionFrameworkName?.StartsWith(".NETCoreApp") != true)
                 {
                     log.Info($".NET Core runners require .NET Core or .NET Standard extension for {extensionAsm.FilePath}");
                     return false;
                 }
             }
-            else if (extHelper.FrameworkName?.StartsWith(".NETCoreApp") == true)
+            else if (extensionFrameworkName?.StartsWith(".NETCoreApp") == true)
             {
                 log.Info($".NET Framework runners cannot load .NET Core extension {extensionAsm.FilePath}");
                 return false;
