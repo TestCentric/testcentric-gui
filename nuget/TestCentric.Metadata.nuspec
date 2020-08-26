@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>TestCentric.Metadata</id>
+    <version>0.0.0</version>
+    <description>This package includes the TestCentric metadata assembly, which forms part of the TestCentric engine. It is provided in a separate package for the benefit of other projects, which may find it useful.</description>
+    <authors>Charlie Poole</authors>
+    <owners>Charlie Poole</owners>
+    <projectUrl>http://test-centric.org</projectUrl>
+    <license type="expression">MIT</license>
+    <iconUrl>https://cdn.rawgit.com/TestCentric/resources/master/images/icon/nunit_256.png</iconUrl>
+    <icon>testcentric.png</icon>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <releaseNotes>https://raw.githubusercontent.com/TestCentric/testcentric-gui/master/CHANGES.txt</releaseNotes>
+    <copyright>Copyright (c) 2018-2020 Charlie Poole</copyright>
+    <language>en-US</language>
+    <tags>testcentric nunit gui runner test centric testing tdd metadata mono cecil</tags>
+    <repository type="git" url="https://github.com/TestCentric/testcentric-gui"/>
+    <title>TestCentric Metadata Assembly</title>
+  </metadata>
+  <files>
+	<file src="../LICENSE.txt" />
+	<file src="../testcentric.png" />
+	<file src="../bin/release/engine/net20/testcentric.engine.metadata.dll" target="lib/net20" />
+	<file src="../bin/release/engine/net40/testcentric.engine.metadata.dll" target="lib/net40" />
+	<file src="../bin/release/engine/netstandard1.6/testcentric.engine.metadata.dll" target="lib/netstandard1.6" />
+	<file src="../bin/release/engine/netstandard2.0/testcentric.engine.metadata.dll" target="lib/netstandard2.0" />
+  </files>
+</package>
