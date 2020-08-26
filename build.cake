@@ -341,6 +341,26 @@ Task("TestChocolateyPackage")
 	});
 
 //////////////////////////////////////////////////////////////////////
+// METADATA PACKAGE
+//////////////////////////////////////////////////////////////////////
+
+// NOTE: The testcentric.engine.metadata assembly is included in all the
+// main packages. It is also published separately as a nuget package for
+// use in other projects, which may want to make use of it.
+
+Task("BuildMetadataPackage")
+	.IsDependentOn("Build")
+	.Does<BuildParameters>((parameters) =>
+	{
+        NuGetPack($"{parameters.NuGetDirectory}/TestCentric.Metadata.nuspec", new NuGetPackSettings()
+        {
+            Version = parameters.PackageVersion,
+            OutputDirectory = parameters.PackageDirectory,
+            NoPackageAnalysis = true
+        });
+	});
+
+//////////////////////////////////////////////////////////////////////
 // PUBLISH PACKAGES
 //////////////////////////////////////////////////////////////////////
 
@@ -473,7 +493,8 @@ Task("Package")
 	.IsDependentOn("CheckTestErrors")
     .IsDependentOn("PackageZip")
 	.IsDependentOn("PackageNuget")
-    .IsDependentOn("PackageChocolatey");
+    .IsDependentOn("PackageChocolatey")
+	.IsDependentOn("BuildMetadataPackage");
 
 Task("PackageZip")
 	.IsDependentOn("BuildZipPackage")
