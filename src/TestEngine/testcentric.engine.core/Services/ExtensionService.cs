@@ -240,21 +240,12 @@ namespace TestCentric.Engine.Services
             TypeDefinition typeDef = typeRef.Resolve();
 
 
-//#if NETSTANDARD2_0
             foreach (InterfaceImplementation iface in typeDef.Interfaces)
             {
                 ep = DeduceExtensionPointFromType(iface.InterfaceType);
                 if (ep != null)
                     return ep;
             }
-//#else
-//            foreach (TypeReference iface in typeDef.Interfaces)
-//            {
-//                ep = DeduceExtensionPointFromType(iface);
-//                if (ep != null)
-//                    return ep;
-//            }
-//#endif
 
             TypeReference baseType = typeDef.BaseType;
             return baseType != null && baseType.FullName != "System.Object"
