@@ -46,6 +46,7 @@ const string SOLUTION = "testcentric-gui.sln";
 
 const string PACKAGE_NAME = "testcentric-gui";
 const string NUGET_PACKAGE_NAME = "TestCentric.GuiRunner";
+const string METADATA_PACKAGE_NAME = "TestCentric.Metadata";
 
 const string GUI_RUNNER = "testcentric.exe";
 const string EXPERIMENTAL_RUNNER = "tc-next.exe";
@@ -373,12 +374,14 @@ Task("PublishPackages")
 		if (parameters.ShouldPublishToMyGet)
 		{
 			PushNuGetPackage(parameters.NuGetPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
+			PushNuGetPackage(parameters.MetadataPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
 			PushChocolateyPackage(parameters.ChocolateyPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
 		}
 
 		if (parameters.ShouldPublishToNuGet)
 		{
 			PushNuGetPackage(parameters.NuGetPackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
+			PushNuGetPackage(parameters.MetadataPackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
 		}
 
 		if (parameters.ShouldPublishToChocolatey)
