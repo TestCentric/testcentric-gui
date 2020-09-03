@@ -367,27 +367,33 @@ Task("BuildMetadataPackage")
 
 Task("PublishPackages")
 	.Description("Publish nuget and chocolatey packages according to the current settings")
-	//.IsDependentOn("TestPackages")
-	.WithCriteria<BuildParameters>((context, parameters) => parameters.ShouldPublishPackages)
 	.Does<BuildParameters>((parameters) =>
 	{
+		bool nothingToPublish = true;
+
 		if (parameters.ShouldPublishToMyGet)
 		{
 			PushNuGetPackage(parameters.NuGetPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
 			PushNuGetPackage(parameters.MetadataPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
 			PushChocolateyPackage(parameters.ChocolateyPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
+			nothingToPublish = false;
 		}
 
 		if (parameters.ShouldPublishToNuGet)
 		{
 			PushNuGetPackage(parameters.NuGetPackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
 			PushNuGetPackage(parameters.MetadataPackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
+			nothingToPublish = false;
 		}
 
 		if (parameters.ShouldPublishToChocolatey)
 		{
 			PushChocolateyPackage(parameters.ChocolateyPackage, parameters.ChocolateyApiKey, parameters.ChocolateyPushUrl);
+			nothingToPublish = false;
 		}
+
+		if (nothingToPublish)
+			Information("Nothing to publish from this run.");
 	});
 
 //////////////////////////////////////////////////////////////////////

@@ -165,12 +165,9 @@ public class BuildParameters
 	public string NuGetApiKey { get; }
 	public string ChocolateyApiKey { get; }
 	
-	public bool IsPublishing => TasksToExecute.Contains("PublishPackages");
-
-	public bool ShouldPublishPackages => ShouldPublishToMyGet || ShouldPublishToNuGet || ShouldPublishToChocolatey;
-	public bool ShouldPublishToMyGet => IsPublishing && (!Versions.IsPreRelease || LABELS_WE_PUBLISH_ON_MYGET.Contains(Versions.PreReleaseLabel));
-	public bool ShouldPublishToNuGet => IsPublishing && (!Versions.IsPreRelease || LABELS_WE_PUBLISH_ON_NUGET.Contains(Versions.PreReleaseLabel));
-	public bool ShouldPublishToChocolatey => IsPublishing && (!Versions.IsPreRelease || LABELS_WE_PUBLISH_ON_CHOCOLATEY.Contains(Versions.PreReleaseLabel));
+	public bool ShouldPublishToMyGet => !Versions.IsPreRelease || LABELS_WE_PUBLISH_ON_MYGET.Contains(Versions.PreReleaseLabel);
+	public bool ShouldPublishToNuGet => !Versions.IsPreRelease || LABELS_WE_PUBLISH_ON_NUGET.Contains(Versions.PreReleaseLabel);
+	public bool ShouldPublishToChocolatey => !Versions.IsPreRelease || LABELS_WE_PUBLISH_ON_CHOCOLATEY.Contains(Versions.PreReleaseLabel);
 
 	public bool UsingXBuild { get; }
 	public MSBuildSettings MSBuildSettings { get; }
@@ -263,7 +260,6 @@ public class BuildParameters
 		Console.WriteLine("ChocolateyApiKey:          " + ChocolateyApiKey);
 
 		Console.WriteLine("\nPUBLISHING");
-		Console.WriteLine("IsPublishing:              " + IsPublishing);
 		Console.WriteLine("ShouldPublishToMyGet:      " + ShouldPublishToMyGet);
 		Console.WriteLine("ShouldPublishToNuGet:      " + ShouldPublishToNuGet);
 		Console.WriteLine("ShouldPublishToChocolatey: " + ShouldPublishToChocolatey);
