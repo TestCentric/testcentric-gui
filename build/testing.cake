@@ -97,7 +97,7 @@ public struct PackageTest
 public abstract class PackageTester : GuiTester
 {
     protected static readonly string[] ENGINE_FILES = { 
-        "testcentric.engine.dll", "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll", "Mono.Cecil.dll"};
+        "testcentric.engine.dll", "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll"};
     protected static readonly string[] AGENT_FILES = { 
         "testcentric-agent.exe", "testcentric-agent.exe.config", "testcentric-agent-x86.exe", "testcentric-agent-x86.exe.config",
         "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll" };

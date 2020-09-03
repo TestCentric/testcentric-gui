@@ -7,13 +7,11 @@
     <OutputPath>..\..\..\bin\$(Configuration)\engine\</OutputPath>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net40'">
-    <PackageReference Include="Mono.Cecil" Version="0.10.0" />
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
     <PackageReference Include="Microsoft.DotNet.InternalAbstractions" Version="1.0.0" />
-    <PackageReference Include="Mono.Cecil" Version="0.10.0" />
     <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
     <PackageReference Include="System.Reflection" Version="4.3.0" />
     <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
@@ -25,6 +23,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\testcentric.engine.core\testcentric.engine.core.csproj" />
+    <ProjectReference Include="..\testcentric.engine.metadata\testcentric.engine.metadata.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NUnit.Engine.Api" Version="3.11.1" />

@@ -5,7 +5,7 @@
 
 using System;
 using System.IO;
-using System.Runtime.Versioning;
+using Mono.Cecil;
 using NUnit.Engine;
 using TestCentric.Common;
 using TestCentric.Engine.Helpers;
@@ -100,31 +100,32 @@ namespace TestCentric.Engine.Services
         {
             Guard.ArgumentNotNull(package, nameof(package));
 
-            var assembly = new TargetFrameworkHelper(package.FullName);
+            var assembly = AssemblyDefinition.ReadAssembly(package.FullName);
 
-            var targetVersion = assembly.TargetRuntimeVersion;
+            var targetVersion = assembly.GetRuntimeVersion();
             if (targetVersion.Major > 0)
             {
                 log.Debug($"Assembly {package.FullName} uses version {targetVersion}");
                 package.Settings[EnginePackageSettings.ImageRuntimeVersion] = targetVersion;
             }
 
-            var frameworkName = assembly.FrameworkName;
+            var frameworkName = assembly.GetFrameworkName();
             if (!string.IsNullOrEmpty(frameworkName))
             {
                 log.Debug($"Assembly {package.FullName} targets {frameworkName}");
                 package.Settings[EnginePackageSettings.ImageTargetFrameworkName] = frameworkName;
             }
 
-            package.Settings[EnginePackageSettings.ImageRequiresX86] = assembly.RequiresX86;
-            if (assembly.RequiresX86)
+            package.Settings[EnginePackageSettings.ImageRequiresX86] = assembly.RequiresX86();
+            if (assembly.RequiresX86())
             {
                 log.Debug($"Assembly {package.FullName} will be run x86");
                 package.Settings[EnginePackageSettings.RunAsX86] = true;
             }
 
-            package.Settings[EnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver] = assembly.RequiresAssemblyResolver;
-            if (assembly.RequiresAssemblyResolver)
+            bool requiresAssemblyResolver = assembly.HasAttribute("NUnit.Framework.TestAssemblyDirectoryResolveAttribute");
+            package.Settings[EnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver] = requiresAssemblyResolver;
+            if (requiresAssemblyResolver)
             {
                 log.Debug($"Assembly {package.FullName} requires default app domain assembly resolver");
             }

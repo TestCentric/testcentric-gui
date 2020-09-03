@@ -25,7 +25,6 @@ var baseFiles = new string[]
     "testcentric.engine.metadata.dll",
     "testcentric.engine.core.dll",
     "testcentric.engine.dll",
-    "Mono.Cecil.dll"
 };
 
 var PdbFiles = new string[]

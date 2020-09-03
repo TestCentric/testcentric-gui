@@ -53,7 +53,7 @@ namespace TestCentric.Engine.Runners
         public void RequestedFrameworkInvalid()
         {
             _package.AddSetting(EnginePackageSettings.RequestedRuntimeFramework, INVALID_RUNTIME);
-            var exception = Assert.Catch<NUnitEngineException>(() => Validate());
+            var exception = Assert.Catch<Exception>(() => Validate());
             Assert.That(exception.Message, Is.EqualTo($"The requested framework {INVALID_RUNTIME} is unknown or not available."));
         }
 

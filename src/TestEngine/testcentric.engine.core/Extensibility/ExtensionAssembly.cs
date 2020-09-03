@@ -7,20 +7,16 @@
 using System;
 using System.IO;
 using Mono.Cecil;
-using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Extensibility
 {
     internal class ExtensionAssembly : IExtensionAssembly
     {
-        private readonly TargetFrameworkHelper _targetFrameworkHelper;
-
         public ExtensionAssembly(string filePath, bool fromWildCard)
         {
             FilePath = filePath;
             FromWildCard = fromWildCard;
             Assembly = GetAssemblyDefinition();
-            _targetFrameworkHelper = new TargetFrameworkHelper(Assembly);
         }
 
         public string FilePath { get; }
@@ -47,12 +43,12 @@ namespace TestCentric.Engine.Extensibility
         {
             get
             {
-                var frameworkName = _targetFrameworkHelper.FrameworkName;
+                var frameworkName = Assembly.GetFrameworkName();
                 if (frameworkName != null)
                     return RuntimeFramework.FromFrameworkName(frameworkName);
 
                 // No TargetFrameworkAttribute - Assume .NET Framework
-                return new RuntimeFramework(Runtime.Net, _targetFrameworkHelper.TargetRuntimeVersion);
+                return new RuntimeFramework(Runtime.Net, Assembly.GetRuntimeVersion());
             }
         }
 #endif

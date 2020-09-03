@@ -150,10 +150,12 @@ public class BuildParameters
 	public string ZipPackageName => PACKAGE_NAME + "-" + PackageVersion + ".zip";
 	public string NuGetPackageName => NUGET_PACKAGE_NAME + "." + PackageVersion + ".nupkg";
 	public string ChocolateyPackageName => PACKAGE_NAME + "." + PackageVersion + ".nupkg";
+	public string MetadataPackageName => METADATA_PACKAGE_NAME + "." + PackageVersion + ".nupkg";
 
 	public FilePath ZipPackage => new FilePath(PackageDirectory + ZipPackageName);
 	public FilePath NuGetPackage => new FilePath(PackageDirectory + NuGetPackageName);
 	public FilePath ChocolateyPackage => new FilePath(PackageDirectory + ChocolateyPackageName);
+	public FilePath MetadataPackage => new FilePath(PackageDirectory + MetadataPackageName);
 
 	public string MyGetPushUrl => MYGET_PUSH_URL;
 	public string NuGetPushUrl => NUGET_PUSH_URL;
