@@ -1,6 +1,23 @@
 Description: Displays the Release Notes showing changes made in each release of TestCentric.
 Order: 9
 ---
+### TestCentric Runner for NUnit 1.4.1 - September 3, 2020
+
+This is primarily a bug fix release, the exception being the use of our own metadata
+assembly which is being published as a separate nuget package for use by others.
+
+#### Engine
+
+ * The Mono.Cecil package is no longer a dependency. A new assembly incorporates Mono
+   source code and provides the specific introspection features needed by the engine.
+
+#### Issues Resolved
+
+ * 577 Carry CurrentDirectory over to agent processes
+ * 579 1.4.0 Unhandled exception
+ * 585 Metadata Assembly
+ * 595 InvalidCastException, "Properties" context menu entry
+
 ### TestCentric Runner for NUnit 1.4.0 - April 30, 2020
 
 This release introduces execution of .NET Core tests along with .NET Framework and 
