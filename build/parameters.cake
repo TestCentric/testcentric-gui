@@ -164,7 +164,11 @@ public class BuildParameters
 	public string MyGetApiKey { get; }
 	public string NuGetApiKey { get; }
 	public string ChocolateyApiKey { get; }
-	
+
+	public bool IsMyGetApiKeyAvailable => !string.IsNullOrEmpty(MyGetApiKey);
+	public bool IsNuGetApiKeyAvailable => !string.IsNullOrEmpty(NuGetApiKey);
+	public bool IsChocolateyApiKeyAvailable => !string.IsNullOrEmpty(ChocolateyApiKey);
+
 	public bool ShouldPublishToMyGet => !Versions.IsPreRelease || LABELS_WE_PUBLISH_ON_MYGET.Contains(Versions.PreReleaseLabel);
 	public bool ShouldPublishToNuGet => !Versions.IsPreRelease || LABELS_WE_PUBLISH_ON_NUGET.Contains(Versions.PreReleaseLabel);
 	public bool ShouldPublishToChocolatey => !Versions.IsPreRelease || LABELS_WE_PUBLISH_ON_CHOCOLATEY.Contains(Versions.PreReleaseLabel);
@@ -190,12 +194,15 @@ public class BuildParameters
 	{
 		var errors = new List<string>();
 
-		if (ShouldPublishToMyGet && string.IsNullOrEmpty(MyGetApiKey))
-			errors.Add("MyGet ApiKey was not set.");
-		if (ShouldPublishToNuGet && string.IsNullOrEmpty(NuGetApiKey))
-			errors.Add("NuGet ApiKey was not set.");
-		if (ShouldPublishToChocolatey && string.IsNullOrEmpty(ChocolateyApiKey))
-			errors.Add("Chocolatey ApiKey was not set.");
+		if (TasksToExecute.Contains("PublishPackages"))
+		{
+			if (ShouldPublishToMyGet && !IsMyGetApiKeyAvailable)
+				errors.Add("MyGet ApiKey was not set.");
+			if (ShouldPublishToNuGet && !IsNuGetApiKeyAvailable)
+				errors.Add("NuGet ApiKey was not set.");
+			if (ShouldPublishToChocolatey && !IsChocolateyApiKeyAvailable)
+				errors.Add("Chocolatey ApiKey was not set.");
+		}
 
 		if (errors.Count > 0)
 		{
@@ -255,9 +262,9 @@ public class BuildParameters
 		Console.WriteLine("MyGetPushUrl:              " + MyGetPushUrl);
 		Console.WriteLine("NuGetPushUrl:              " + NuGetPushUrl);
 		Console.WriteLine("ChocolateyPushUrl:         " + ChocolateyPushUrl);
-		Console.WriteLine("MyGetApiKey:               " + MyGetApiKey);
-		Console.WriteLine("NuGetApiKey:               " + NuGetApiKey);
-		Console.WriteLine("ChocolateyApiKey:          " + ChocolateyApiKey);
+		Console.WriteLine("MyGetApiKey:               " + (IsMyGetApiKeyAvailable ? "AVAILABLE" : "NOT AVAILABLE"));
+		Console.WriteLine("NuGetApiKey:               " + (IsNuGetApiKeyAvailable ? "AVAILABLE" : "NOT AVAILABLE"));
+		Console.WriteLine("ChocolateyApiKey:          " + (IsChocolateyApiKeyAvailable ? "AVAILABLE" : "NOT AVAILABLE"));
 
 		Console.WriteLine("\nPUBLISHING");
 		Console.WriteLine("ShouldPublishToMyGet:      " + ShouldPublishToMyGet);
