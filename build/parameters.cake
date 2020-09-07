@@ -2,6 +2,7 @@
 #load "./testing.cake"
 #load "./test-results.cake"
 #load "./packaging.cake"
+#load "./website.cake"
 
 public class BuildParameters
 {
@@ -17,8 +18,8 @@ public class BuildParameters
 
 	// Environment Variable names holding GitHub identity of user
 	// These are only used to publish the website when running locally	
-	private const string GITHUB_USER_ID = "USER_ID";
-	private const string GITHUB_USER_EMAIL = "USER_EMAIL";
+	// private const string GITHUB_USER_ID = "GITHUB_USER_ID";
+	// private const string GITHUB_USER_EMAIL = "GITHUB_USER_EMAIL";
 	private const string GITHUB_PASSWORD = "GITHUB_PASSWORD";
 
 	// Pre-release labels that we publish
@@ -76,8 +77,8 @@ public class BuildParameters
 		NuGetApiKey = _context.EnvironmentVariable(NUGET_API_KEY);
 		ChocolateyApiKey = _context.EnvironmentVariable(CHOCO_API_KEY);
 
-		GitHubUserId = _context.EnvironmentVariable(GITHUB_USER_ID);
-		GitHubUserEmail = _context.EnvironmentVariable(GITHUB_USER_EMAIL);
+		// GitHubUserId = _context.EnvironmentVariable(GITHUB_USER_ID);
+		// GitHubUserEmail = _context.EnvironmentVariable(GITHUB_USER_EMAIL);
 		GitHubPassword = _context.EnvironmentVariable(GITHUB_PASSWORD);
 		
 		UsingXBuild = context.EnvironmentVariable("USE_XBUILD") != null;
@@ -99,7 +100,7 @@ public class BuildParameters
 
 		RestoreSettings = new NuGetRestoreSettings();
 		// Older Mono version was not picking up the testcentric source
-		// TOOD: Check if this is still needed
+		// TODO: Check if this is still needed
 		if (UsingXBuild)
 			RestoreSettings.Source = new string [] {
 				"https://www.myget.org/F/testcentric/api/v2/",
@@ -164,11 +165,18 @@ public class BuildParameters
 	public string MyGetApiKey { get; }
 	public string NuGetApiKey { get; }
 	public string ChocolateyApiKey { get; }
-	
-	public bool ShouldPublishToMyGet => !Versions.IsPreRelease || LABELS_WE_PUBLISH_ON_MYGET.Contains(Versions.PreReleaseLabel);
-	public bool ShouldPublishToNuGet => !Versions.IsPreRelease || LABELS_WE_PUBLISH_ON_NUGET.Contains(Versions.PreReleaseLabel);
-	public bool ShouldPublishToChocolatey => !Versions.IsPreRelease || LABELS_WE_PUBLISH_ON_CHOCOLATEY.Contains(Versions.PreReleaseLabel);
 
+	public bool IsMyGetApiKeyAvailable => !string.IsNullOrEmpty(MyGetApiKey);
+	public bool IsNuGetApiKeyAvailable => !string.IsNullOrEmpty(NuGetApiKey);
+	public bool IsChocolateyApiKeyAvailable => !string.IsNullOrEmpty(ChocolateyApiKey);
+
+	public bool IsPreRelease => Versions.IsPreRelease;
+	public bool IsFinalRelease => !IsPreRelease;
+	public bool ShouldPublishToMyGet => IsFinalRelease || LABELS_WE_PUBLISH_ON_MYGET.Contains(Versions.PreReleaseLabel);
+	public bool ShouldPublishToNuGet => IsFinalRelease || LABELS_WE_PUBLISH_ON_NUGET.Contains(Versions.PreReleaseLabel);
+	public bool ShouldPublishToChocolatey => IsFinalRelease || LABELS_WE_PUBLISH_ON_CHOCOLATEY.Contains(Versions.PreReleaseLabel);
+	public bool IsProductionRelease => ShouldPublishToNuGet || ShouldPublishToChocolatey;
+	
 	public bool UsingXBuild { get; }
 	public MSBuildSettings MSBuildSettings { get; }
 	public XBuildSettings XBuildSettings { get; }
@@ -182,20 +190,33 @@ public class BuildParameters
 
 	public string ProjectUri => "https://github.com/TestCentric/testcentric-gui";
 	public string WebDeployBranch => "gh-pages";
-	public string GitHubUserId { get; }
-	public string GitHubUserEmail { get; }
+	public string GitHubUserId => "charliepoole";
+	public string GitHubUserEmail => "charliepoole@gmail.com";
 	public string GitHubPassword { get; }
 
 	private void Validate()
 	{
 		var errors = new List<string>();
 
-		if (ShouldPublishToMyGet && string.IsNullOrEmpty(MyGetApiKey))
-			errors.Add("MyGet ApiKey was not set.");
-		if (ShouldPublishToNuGet && string.IsNullOrEmpty(NuGetApiKey))
-			errors.Add("NuGet ApiKey was not set.");
-		if (ShouldPublishToChocolatey && string.IsNullOrEmpty(ChocolateyApiKey))
-			errors.Add("Chocolatey ApiKey was not set.");
+		if (TasksToExecute.Contains("PublishPackages"))
+		{
+			if (ShouldPublishToMyGet && !IsMyGetApiKeyAvailable)
+				errors.Add("MyGet ApiKey was not set.");
+			if (ShouldPublishToNuGet && !IsNuGetApiKeyAvailable)
+				errors.Add("NuGet ApiKey was not set.");
+			if (ShouldPublishToChocolatey && !IsChocolateyApiKeyAvailable)
+				errors.Add("Chocolatey ApiKey was not set.");
+		}
+
+		if (TasksToExecute.Contains("DeployWebsite"))
+        {
+			if (string.IsNullOrEmpty(GitHubUserId))
+				errors.Add("GitHub user id was not set");
+			if (string.IsNullOrEmpty(GitHubUserEmail))
+				errors.Add("GitHub user email was not set");
+			if (string.IsNullOrEmpty(GitHubPassword))
+				errors.Add("GitHub password was not set");
+		}
 
 		if (errors.Count > 0)
 		{
@@ -255,9 +276,9 @@ public class BuildParameters
 		Console.WriteLine("MyGetPushUrl:              " + MyGetPushUrl);
 		Console.WriteLine("NuGetPushUrl:              " + NuGetPushUrl);
 		Console.WriteLine("ChocolateyPushUrl:         " + ChocolateyPushUrl);
-		Console.WriteLine("MyGetApiKey:               " + MyGetApiKey);
-		Console.WriteLine("NuGetApiKey:               " + NuGetApiKey);
-		Console.WriteLine("ChocolateyApiKey:          " + ChocolateyApiKey);
+		Console.WriteLine("MyGetApiKey:               " + (IsMyGetApiKeyAvailable ? "AVAILABLE" : "NOT AVAILABLE"));
+		Console.WriteLine("NuGetApiKey:               " + (IsNuGetApiKeyAvailable ? "AVAILABLE" : "NOT AVAILABLE"));
+		Console.WriteLine("ChocolateyApiKey:          " + (IsChocolateyApiKeyAvailable ? "AVAILABLE" : "NOT AVAILABLE"));
 
 		Console.WriteLine("\nPUBLISHING");
 		Console.WriteLine("ShouldPublishToMyGet:      " + ShouldPublishToMyGet);
