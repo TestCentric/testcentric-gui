@@ -1,8 +1,10 @@
 #tool nuget:?package=NUnit.ConsoleRunner&version=3.10.0
 #tool nuget:?package=GitVersion.CommandLine&version=5.0.0
 #tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.3.1"
+#tool nuget:?package=Wyam&version=2.2.9
 
 #addin nuget:?package=Cake.Git&version=0.22.0
+#addin nuget:?package=Cake.Wyam&version=2.2.9
 
 #load "./build/parameters.cake"
 
@@ -31,6 +33,8 @@
 
 using System.Xml;
 using System.Text.RegularExpressions;
+using System.Reflection;
+using System.Threading.Tasks;
 
 //////////////////////////////////////////////////////////////////////
 // CONSTANTS
@@ -442,54 +446,6 @@ Task("ChocolateyInstall")
 	});
 
 //////////////////////////////////////////////////////////////////////
-// WEBSITE TARGETS
-//////////////////////////////////////////////////////////////////////
-
-Task("BuildWebsite")
-    .Does<BuildParameters>((parameters) => StartProcess(WYAM, new ProcessSettings()
-    {
-        Arguments = "build",
-        WorkingDirectory = parameters.WebDirectory
-    }));
-
-Task("PreviewWebsite")
-    .IsDependentOn("BuildWebsite")
-    .Does<BuildParameters>((parameters) => 
-		StartProcess(WYAM, $"preview {parameters.WebOutputDirectory} --virtual-dir /testcentric-gui"));
-
-Task("DeployWebsite")
-    .IsDependentOn("BuildWebsite")
-    .Does<BuildParameters>((parameters) => 
-    {
-		string deployDir = parameters.WebDeployDirectory;
-		string deployBranch = parameters.WebDeployBranch;
-		string userId = parameters.GitHubUserId;
-		string userEmail = parameters.GitHubUserEmail;
-		string userPassword = parameters.GitHubPassword;
-
-        if(FileExists("./CNAME"))
-            CopyFile("./CNAME", "output/CNAME");
-
-		if (DirectoryExists(deployDir))
-			DeleteDirectory(deployDir, new DeleteDirectorySettings {
-				Recursive = true,
-				Force = true
-			});
-
-        GitClone(parameters.ProjectUri, deployDir, new GitCloneSettings()
-        {
-            Checkout = true,
-            BranchName = deployBranch
-        });
-
-        CopyDirectory(parameters.WebOutputDirectory, deployDir);
-
-        GitAddAll(deployDir);
-        GitCommit(deployDir, userId, userEmail, "Deploy site to GitHub Pages");
-        GitPush(deployDir, userId, userPassword, deployBranch);
-    });
-
-//////////////////////////////////////////////////////////////////////
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
 
@@ -517,12 +473,16 @@ Task("PackageChocolatey")
 	.IsDependentOn("BuildChocolateyPackage")
 	.IsDependentOn("TestChocolateyPackage");
 
+Task("Publish")
+	.IsDependentOn("PublishPackages")
+	.IsDependentOn("UpdateWebsite");
+
 Task("AppVeyor")
 	.IsDependentOn("DumpSettings")
-    .IsDependentOn("Build")
-    .IsDependentOn("Test")
-    .IsDependentOn("Package")
-	.IsDependentOn("PublishPackages");
+	.IsDependentOn("Build")
+	.IsDependentOn("Test")
+	.IsDependentOn("Package")
+	.IsDependentOn("Publish");
 
 Task("Travis")
     .IsDependentOn("Build")
