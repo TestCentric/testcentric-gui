@@ -156,7 +156,8 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.RunStarting += (e) =>
             {
-                (_view.Tree.TopNode as TestSuiteTreeNode)?.ClearResults();
+                foreach (var node in _view.Tree.Nodes)
+                    ((TestSuiteTreeNode)node).ClearResults();
                 _view.RunCommand.Enabled = false;
                 _view.CheckPropertiesDialog();
             };
@@ -228,9 +229,17 @@ namespace TestCentric.Gui.Presenters
 
             _view.ShowCheckBoxes.CheckedChanged += () => _view.CheckBoxes = _view.ShowCheckBoxes.Checked;
 
-            _view.ClearAllCheckBoxes.Execute += () => ClearAllCheckBoxes(_view.Tree.TopNode);
+            _view.ClearAllCheckBoxes.Execute += () =>
+            {
+                foreach (TreeNode node in _view.Tree.Nodes)
+                    ClearAllCheckBoxes(node);
+            };
 
-            _view.CheckFailedTests.Execute += () => CheckFailedTests(_view.Tree.TopNode);
+            _view.CheckFailedTests.Execute += () =>
+            {
+                foreach (TreeNode node in _view.Tree.Nodes)
+                    CheckFailedTests(node);
+            };
 
             _view.ShowFailedAssumptions.CheckedChanged += () =>
             {
