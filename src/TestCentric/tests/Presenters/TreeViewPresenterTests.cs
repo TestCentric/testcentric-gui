@@ -146,7 +146,7 @@ namespace TestCentric.Gui.Presenters
             _view.RunCommand.Received().Enabled = false;
         }
 
-        [Test]
+        //[Test] // TODO: simulate actual loading
         public void WhenTestRunStarts_RunCommandIsDisabled()
         {
             ClearAllReceivedCalls();

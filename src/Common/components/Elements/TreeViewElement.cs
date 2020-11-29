@@ -74,9 +74,7 @@ namespace TestCentric.Gui.Elements
         {
             get
             {
-                TreeNode topNode = null;
-                InvokeIfRequired(() => topNode = _treeView.TopNode);
-                return topNode;
+                return _treeView.TopNode;
             }
             set
             {
@@ -84,24 +82,13 @@ namespace TestCentric.Gui.Elements
             }
         }
 
-        public int VisibleCount
-        {
-            get
-            {
-                int visibleCount = 0;
-                InvokeIfRequired(() => visibleCount = _treeView.VisibleCount);
-                return visibleCount;
-            }
-        }
-
+        public int VisibleCount => _treeView.VisibleCount;
 
         public TreeNode SelectedNode
         {
             get
             {
-                TreeNode selectedNode = null;
-                InvokeIfRequired(() => selectedNode = _treeView.SelectedNode);
-                return selectedNode;
+                return _treeView.SelectedNode;
             }
             set
             {
@@ -109,15 +96,7 @@ namespace TestCentric.Gui.Elements
             }
         }
 
-        public TreeNodeCollection Nodes
-        {
-            get
-            {
-                TreeNodeCollection nodes = null;
-                InvokeIfRequired(() => nodes = _treeView.Nodes);
-                return nodes;
-            }
-        }
+        public TreeNodeCollection Nodes => _treeView.Nodes;
 
         public IList<TreeNode> CheckedNodes => GetCheckedNodes();
 
