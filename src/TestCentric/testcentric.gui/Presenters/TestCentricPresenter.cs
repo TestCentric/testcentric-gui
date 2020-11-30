@@ -175,6 +175,9 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.RunFinished += (TestResultEventArgs e) =>
             {
+                if (_longOpDisplay != null)
+                    _longOpDisplay.Dispose();
+
                 UpdateViewCommands();
 
                 ResultSummary summary = ResultSummaryCreator.FromResultNode(e.Result);
@@ -290,7 +293,7 @@ namespace TestCentric.Gui.Presenters
                     if (_model.IsTestRunning)
                     {
                         DialogResult dialogResult = _view.MessageDisplay.Ask(
-                            "A test is running, do you want to stop the test and exit?");
+                            "A test is running, do you want to forcibly stop the test and exit?");
 
                         if (dialogResult == DialogResult.No)
                         {
@@ -298,7 +301,7 @@ namespace TestCentric.Gui.Presenters
                             return;
                         }
 
-                        _model.CancelTestRun(true);
+                        _model.StopTestRun(true);
                     }
 
                     if (CloseProject() == DialogResult.Cancel)
@@ -321,7 +324,7 @@ namespace TestCentric.Gui.Presenters
             };
 
             _view.RunButton.Execute += () => RunSelectedTests();
-            _view.StopButton.Execute += () => CancelRun();
+            _view.StopButton.Execute += () => StopRun();
 
             _view.FileMenu.Popup += () =>
             {
@@ -451,7 +454,8 @@ namespace TestCentric.Gui.Presenters
             _view.RunSelectedCommand.Execute += () => RunSelectedTests();
             _view.RunFailedCommand.Execute += () => RunFailedTests();
 
-            _view.StopRunCommand.Execute += () => CancelRun();
+            _view.StopRunCommand.Execute += () => StopRun();
+
             _view.TestParametersCommand.Execute += () =>
             {
                 using (var dlg = new TestParametersDialog())
@@ -671,15 +675,27 @@ namespace TestCentric.Gui.Presenters
                 _model.RunTests(new TestSelection(tests));
         }
 
-        internal void CancelRun()
+        internal void StopRun()
         {
-            if (_model.IsTestRunning)
+            const int INITIAL_WAIT_TIME = 15000;
+            const int MESSAGE_WAIT_TIME = 30000;
+
+            var runComplete = new System.Threading.AutoResetEvent(false);
+            _model.Events.RunFinished += (e) => runComplete.Set();
+
+            _longOpDisplay = _view.LongOperationDisplay("Waiting for all running tests to complete.");
+            _model.StopTestRun(false);
+            runComplete.WaitOne(INITIAL_WAIT_TIME);
+
+            while (_model.IsTestRunning)
             {
                 DialogResult dialogResult = _view.MessageDisplay.Ask(
-                    "Do you want to cancel the running test?");
+                    "One or more tests are still running. Do you want to force cancellation? Enter 'Yes' to forcibly cancel the run, 'No' to keep waiting.");
 
                 if (dialogResult == DialogResult.Yes)
-                    _model.CancelTestRun(true);
+                    _model.StopTestRun(true);
+
+                runComplete.WaitOne(MESSAGE_WAIT_TIME);
             }
         }
 

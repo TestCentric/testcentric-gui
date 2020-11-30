@@ -377,7 +377,7 @@ namespace TestCentric.Gui.Model
             }
         }
 
-        public void CancelTestRun(bool force)
+        public void StopTestRun(bool force)
         {
             Runner.StopRun(force);
         }
