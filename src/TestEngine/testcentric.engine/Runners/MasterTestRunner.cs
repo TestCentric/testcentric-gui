@@ -176,30 +176,38 @@ namespace TestCentric.Engine.Runners
         {
             _engineRunner.StopRun(force);
 
-            // Frameworks should handle StopRun(true) by cancelling all tests and notifying
-            // us of the completion of any tests that were running. However, this feature
-            // may be absent in some frameworks or may be broken and we may not pass on the
-            // notifications needed by some runners. In fact, such a bug is present in the
-            // NUnit framework through release 3.12 and motivated the following code.
-            //
-            // We try to make up for the potential problem here by notifying the listeners 
-            // of the completion of every pending WorkItem, one that started but never
-            // sent a completion event. Since we have so far only noted this failure wrt
-            // test suites and fixtures, those are the only ones we currently track.
-            //
-            // Note that this code only deals with notifications. If the framework did not
-            // actually stop the run, that's a different problem, which has to be handled
-            // at a lower level within the engine.
-
-            if (force && !_workItemTracker.WaitForCompletion(WAIT_FOR_CANCEL_TO_COMPLETE))
+            if (force)
             {
-                _workItemTracker.IssuePendingNotifications(_eventDispatcher);
+                // Frameworks should handle StopRun(true) by cancelling all tests and notifying
+                // us of the completion of any tests that were running. However, this feature
+                // may be absent in some frameworks or may be broken and we may not pass on the
+                // notifications needed by some runners. In fact, such a bug is present in the
+                // NUnit framework through release 3.12 and motivated the following code.
+                //
+                // We try to make up for the potential problem here by notifying the listeners 
+                // of the completion of every pending WorkItem, that is, one that started but
+                // never sent a completion event.
 
-                // Indicate we are no longer running
-                IsTestRunning = false;
+                if (!_workItemTracker.WaitForCompletion(WAIT_FOR_CANCEL_TO_COMPLETE))
+                {
+                    _workItemTracker.IssuePendingNotifications(_eventDispatcher);
 
-                // Signal completion of the run
-                _eventDispatcher.OnTestEvent($"<test-run id='{TestPackage.ID}' result='Failed' label='Cancelled' />");
+                    // Indicate we are no longer running
+                    IsTestRunning = false;
+
+                    // Signal completion of the run
+                    _eventDispatcher.OnTestEvent($"<test-run id='{TestPackage.ID}' result='Failed' label='Cancelled' />");
+                }
+
+                // The code above only deals with notifications. Here we actually make sure
+                // that the test stops completely by unloading all tests. Since we do this
+                // through the engine runner, not the master runner itself, the tests will 
+                // be loaded again whenever needed, which allows us to re-run the tests.
+                // NOTE: It would be desirable for us to avoid doing this unless it is actually
+                // necessary but unfortunately there is no way to distinguish failure to
+                // terminate from failure to send a notice.
+
+                _engineRunner.Unload();
             }
         }
 
