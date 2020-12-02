@@ -1,9 +1,9 @@
-using System.Threading;
 using NUnit.Framework;
 
 namespace NUnit.Tests
 {
-    public class HangingFixture
+    // The tests in this fixture run without delay, usually before we get a chance to stop the run
+    public class FastFixture
     {
         [SetUp]
         public void SetUp()
@@ -18,14 +18,9 @@ namespace NUnit.Tests
         }
 
         [Test]
-        public void HangingTest()
+        public void TestMethod([Range(1, 5)] int i)
         {
-            TestContext.Progress.WriteLine("Test starting");
-            while (true)
-            {
-                Thread.Sleep(3000);
-                TestContext.Progress.WriteLine("Test continuing");
-            }
+            TestContext.Progress.WriteLine($"Test executing");
         }
     }
 }
