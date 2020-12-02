@@ -107,7 +107,7 @@ namespace TestCentric.Gui.Model
         // Debug just the specified ITestItem
         void DebugTests(ITestItem testItem);
 
-        // Cancel the running test
+        // Stop the running test
         void StopTestRun(bool force);
 
         // Save the results of the last run in the specified format
