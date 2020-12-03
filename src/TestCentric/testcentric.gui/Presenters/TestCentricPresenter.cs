@@ -8,8 +8,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime.Versioning;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using TestCentric.Common;
 
@@ -20,7 +20,6 @@ namespace TestCentric.Gui.Presenters
     using Model.Settings;
     using Views;
     using Dialogs;
-    using NUnit.Engine;
 
     /// <summary>
     /// TestCentricPresenter does all file opening and closing that
@@ -655,34 +654,6 @@ namespace TestCentric.Gui.Presenters
                 _model.RunTests(new TestSelection(tests));
         }
 
-        internal void StopTests()
-        {
-            const int INITIAL_WAIT_TIME = 15000;
-            const int MESSAGE_WAIT_TIME = 30000;
-
-            var runComplete = new System.Threading.AutoResetEvent(false);
-            _model.Events.RunFinished += (e) => runComplete.Set();
-            bool forced = false;
-
-            new LongRunningOperationDisplay(_model, "Waiting for all running tests to complete.");
-            _model.StopTestRun(false);
-            runComplete.WaitOne(INITIAL_WAIT_TIME);
-
-            while (_model.IsTestRunning)
-            {
-                DialogResult dialogResult = _view.MessageDisplay.Ask(
-                    "One or more tests are still running. Do you want to force cancellation? Enter 'Yes' to forcibly cancel the run, 'No' to keep waiting.");
-
-                if (dialogResult == DialogResult.Yes)
-                    break;
-                else
-                    runComplete.WaitOne(MESSAGE_WAIT_TIME);
-            }
-
-            if (_model.IsTestRunning)
-                _model.StopTestRun(true);
-        }
-
         #endregion
 
         #endregion
@@ -828,6 +799,41 @@ namespace TestCentric.Gui.Presenters
         private static Font DecreaseFont(Font font)
         {
             return new Font(font.FontFamily, font.SizeInPoints / 1.2f, font.Style);
+        }
+
+        private void StopTests()
+        {
+            // We must monitor this on a separate thread to avoid blockking
+            // the UI thread while we wait for the tests to complete.
+            var thread = new Thread(StopTestsProc);
+            thread.Start();
+        }
+
+        private void StopTestsProc()
+        {
+            const int INITIAL_WAIT_TIME = 15000;
+            const int MESSAGE_WAIT_TIME = 30000;
+
+            var runcomplete = new AutoResetEvent(false);
+            _model.Events.RunFinished += (e) => runcomplete.Set();
+
+            new LongRunningOperationDisplay(_model, "Waiting for all running tests to complete.");
+            _model.StopTestRun(false);
+            runcomplete.WaitOne(INITIAL_WAIT_TIME);
+
+            while (_model.IsTestRunning)
+            {
+                DialogResult dialogResult = _view.MessageDisplay.Ask(
+                    "One or more tests are still running. Do you want to force cancellation? Enter 'Yes' to forcibly cancel the run, 'No' to keep waiting.");
+
+                if (dialogResult == DialogResult.Yes)
+                    break;
+                else
+                    runcomplete.WaitOne(MESSAGE_WAIT_TIME);
+            }
+
+            if (_model.IsTestRunning)
+                _model.StopTestRun(true);
         }
 
         #endregion
