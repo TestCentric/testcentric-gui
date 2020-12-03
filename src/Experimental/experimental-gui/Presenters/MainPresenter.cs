@@ -179,12 +179,12 @@ namespace TestCentric.Gui.Presenters
             var message = args.TestFilesLoading.Count == 1 ?
                 $"Loading Assembly: {args.TestFilesLoading[0]}" :
                 $"Loading {args.TestFilesLoading.Count} Assemblies...";
-            new LongRunningOperationDisplay(message);
+            _view.LongRunningOperation.Display(message);
         }
 
         private void NotifyTestsReloading(TestEventArgs args)
         {
-            new LongRunningOperationDisplay("Reloading Tests...");
+            _view.LongRunningOperation.Display("Reloading Tests...");
         }
 
         private void MainForm_DragDrop(string[] files)

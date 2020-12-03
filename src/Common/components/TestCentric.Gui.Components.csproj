@@ -91,6 +91,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="IDialogManager.cs" />
+    <Compile Include="ILongRunningOperationDisplay.cs" />
     <Compile Include="LongRunningOperationDisplay.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -104,11 +104,14 @@ namespace TestCentric.Gui.Presenters
                     $"Loading Assembly: {e.TestFilesLoading[0]}" :
                     $"Loading {e.TestFilesLoading.Count} Assemblies...";
 
-                new LongRunningOperationDisplay(_model, message);
+                _view.LongRunningOperation.Display(message);
+                //new LongRunningOperationDisplay(_model, message);
             };
 
             _model.Events.TestLoaded += (TestNodeEventArgs e) =>
             {
+                _view.LongRunningOperation.Hide();
+
                 UpdateViewCommands();
 
                 var files = _model.TestFiles;
@@ -132,11 +135,13 @@ namespace TestCentric.Gui.Presenters
             {
                 UpdateViewCommands();
 
-                new LongRunningOperationDisplay(_model, "Reloading...");
+                _view.LongRunningOperation.Display("Reloading...");
             };
 
             _model.Events.TestReloaded += (TestNodeEventArgs e) =>
             {
+                _view.LongRunningOperation.Hide();
+
                 if (_settings.Gui.ClearResultsOnReload)
                     _view.RunSummary.Text = null;
 
@@ -145,6 +150,8 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.TestLoadFailure += (TestLoadFailureEventArgs e) =>
             {
+                _view.LongRunningOperation.Hide();
+
                 _view.MessageDisplay.Error(e.Exception.Message);
             };
 
@@ -157,6 +164,8 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.RunFinished += (TestResultEventArgs e) =>
             {
+                _view.LongRunningOperation.Hide();
+
                 UpdateViewCommands();
 
                 ResultSummary summary = ResultSummaryCreator.FromResultNode(e.Result);
@@ -803,8 +812,12 @@ namespace TestCentric.Gui.Presenters
 
         private void StopTests()
         {
-            // We must monitor this on a separate thread to avoid blockking
-            // the UI thread while we wait for the tests to complete.
+            _view.StopButton.Enabled = false;
+            _view.StopRunCommand.Enabled = false;
+            _view.LongRunningOperation.Display("Waiting for all running tests to complete.");
+
+            // We must monitor stopping of the tests on a separate thread
+            // to avoid blocking the UI thread.
             var thread = new Thread(StopTestsProc);
             thread.Start();
         }
@@ -817,7 +830,6 @@ namespace TestCentric.Gui.Presenters
             var runcomplete = new AutoResetEvent(false);
             _model.Events.RunFinished += (e) => runcomplete.Set();
 
-            new LongRunningOperationDisplay(_model, "Waiting for all running tests to complete.");
             _model.StopTestRun(false);
             runcomplete.WaitOne(INITIAL_WAIT_TIME);
 
@@ -828,8 +840,8 @@ namespace TestCentric.Gui.Presenters
 
                 if (dialogResult == DialogResult.Yes)
                     break;
-                else
-                    runcomplete.WaitOne(MESSAGE_WAIT_TIME);
+
+                runcomplete.WaitOne(MESSAGE_WAIT_TIME);
             }
 
             if (_model.IsTestRunning)

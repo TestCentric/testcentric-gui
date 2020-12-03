@@ -197,17 +197,14 @@ namespace TestCentric.Engine.Runners
 
                     // Signal completion of the run
                     _eventDispatcher.OnTestEvent($"<test-run id='{TestPackage.ID}' result='Failed' label='Cancelled' />");
+
+                    // Since we were not notified of the completion of some items, we can't trust
+                    // that they were actually stopped by the framework. To make sure nothing is
+                    // left running, we unload the tests. By unloading only the lower-level engine
+                    // runner and not the MasterTestRunner itself, we allow the tests to be loaded
+
+                    _engineRunner.Unload();
                 }
-
-                // The code above only deals with notifications. Here we actually make sure
-                // that the test stops completely by unloading all tests. Since we do this
-                // through the engine runner, not the master runner itself, the tests will 
-                // be loaded again whenever needed, which allows us to re-run the tests.
-                // NOTE: It would be desirable for us to avoid doing this unless it is actually
-                // necessary but unfortunately there is no way to distinguish failure to
-                // terminate from failure to send a notice.
-
-                _engineRunner.Unload();
             }
         }
 

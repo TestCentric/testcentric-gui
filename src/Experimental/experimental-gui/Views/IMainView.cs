@@ -89,5 +89,6 @@ namespace TestCentric.Gui.Views
 
         // Messages
         IMessageDisplay MessageDisplay { get; }
+        LongRunningOperationDisplay LongRunningOperation { get; }
     }
 }

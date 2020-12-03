@@ -69,6 +69,7 @@ namespace TestCentric.Gui.Views
 
             DialogManager = new DialogManager();
             MessageDisplay = new MessageDisplay();
+            LongRunningOperation = new LongRunningOperationDisplay(this);
         }
 
         #region Public Properties
@@ -123,6 +124,7 @@ namespace TestCentric.Gui.Views
 
         public IDialogManager DialogManager { get; private set; }
         public IMessageDisplay MessageDisplay { get; private set; }
+        public LongRunningOperationDisplay LongRunningOperation { get; private set; }
 
         #endregion
 

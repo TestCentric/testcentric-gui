@@ -184,6 +184,7 @@ namespace TestCentric.Gui.Views
             AboutCommand = new MenuCommand(aboutMenuItem);
 
             DialogManager = new DialogManager();
+            LongRunningOperation = new LongRunningOperationDisplay(this);
         }
 
         protected override void Dispose(bool disposing)
@@ -1056,6 +1057,7 @@ namespace TestCentric.Gui.Views
         public ICommand AboutCommand { get; }
 
         public IDialogManager DialogManager { get; }
+        public ILongRunningOperationDisplay LongRunningOperation { get;  }
 
         #region Subordinate Views contained in main form
 

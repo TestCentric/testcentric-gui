@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using NUnit.Framework;
+using NSubstitute;
 
 namespace TestCentric.Gui.Presenters.Main
 {
@@ -18,6 +19,7 @@ namespace TestCentric.Gui.Presenters.Main
         [SetUp]
         public void CreatePresenter()
         {
+            _view.LongRunningOperation.Returns(Substitute.For<ILongRunningOperationDisplay>());
 
             Presenter = new TestCentricPresenter(_view, _model, new CommandLineOptions());
         }

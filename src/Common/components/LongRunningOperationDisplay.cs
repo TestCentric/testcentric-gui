@@ -11,37 +11,15 @@ namespace TestCentric.Gui
 {
     using Model;
 
-    public class LongRunningOperationDisplay : Form
+    public class LongRunningOperationDisplay : Form, ILongRunningOperationDisplay
     {
         private Label operation;
-        private readonly Cursor originalCursor;
-        private bool disposed = false;
 
-        public LongRunningOperationDisplay(ITestModel model, string text)
-            : this(text)
+        public LongRunningOperationDisplay(Form owner)
         {
-            // The display doesn't understand the reason it's called.
-            // It removes itself if any of the following events occurs.
-            model.Events.TestLoaded += x => Dispose();
-            model.Events.TestReloaded += x => Dispose();
-            model.Events.TestLoadFailure += x => Dispose();
-            model.Events.RunFinished += x => Dispose();
-        }
-
-        public LongRunningOperationDisplay(string text)
-        {
-            Owner = ActiveForm;
-            originalCursor = Owner.Cursor;
-
             InitializeComponent();
 
-            operation.Text = text;
-
-            Show();
-            Invalidate();
-            Update();
-
-            Application.DoEvents();
+            Owner = owner;
         }
 
         private void InitializeComponent()
@@ -77,9 +55,9 @@ namespace TestCentric.Gui
 
         }
 
-        protected override void OnLoad(EventArgs e)
+        public void Display(string text)
         {
-            base.OnLoad(e);
+            operation.Text = text;
 
             ClientSize = new Size(320, 60);
             var origin = Owner.Location;
@@ -88,19 +66,9 @@ namespace TestCentric.Gui
                 (Owner.Size.Height - Size.Height) / 2);
 
             Location = origin;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (!disposed)
-            {
-                if (disposing)
-                    Owner.Cursor = originalCursor;
-
-                base.Dispose(disposing);
-
-                disposed = true;
-            }
+            Show();
+            Invalidate();
+            Update();
         }
     }
 }
