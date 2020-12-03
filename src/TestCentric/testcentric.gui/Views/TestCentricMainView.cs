@@ -1057,11 +1057,6 @@ namespace TestCentric.Gui.Views
 
         public IDialogManager DialogManager { get; }
 
-        public LongRunningOperationDisplay LongOperationDisplay(string text)
-        {
-            return new LongRunningOperationDisplay(this, text);
-        }
-
         #region Subordinate Views contained in main form
 
         public TestTreeView TreeView { get { return treeView; } }

@@ -105,13 +105,11 @@ namespace TestCentric.Gui.Presenters
                     $"Loading Assembly: {e.TestFilesLoading[0]}" :
                     $"Loading {e.TestFilesLoading.Count} Assemblies...";
 
-                ShowLongRunningOperation(message);
+                new LongRunningOperationDisplay(_model, message);
             };
 
             _model.Events.TestLoaded += (TestNodeEventArgs e) =>
             {
-                HideLongRunningOperation();
-
                 UpdateViewCommands();
 
                 var files = _model.TestFiles;
@@ -135,15 +133,11 @@ namespace TestCentric.Gui.Presenters
             {
                 UpdateViewCommands();
 
-                ShowLongRunningOperation("Reloading...");
+                new LongRunningOperationDisplay(_model, "Reloading...");
             };
 
             _model.Events.TestReloaded += (TestNodeEventArgs e) =>
             {
-                HideLongRunningOperation();
-
-                //SetTitleBar(TestProject.Name);
-
                 if (_settings.Gui.ClearResultsOnReload)
                     _view.RunSummary.Text = null;
 
@@ -152,8 +146,6 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.TestLoadFailure += (TestLoadFailureEventArgs e) =>
             {
-                HideLongRunningOperation();
-
                 _view.MessageDisplay.Error(e.Exception.Message);
             };
 
@@ -166,8 +158,6 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.RunFinished += (TestResultEventArgs e) =>
             {
-                HideLongRunningOperation();
-
                 UpdateViewCommands();
 
                 ResultSummary summary = ResultSummaryCreator.FromResultNode(e.Result);
@@ -674,7 +664,7 @@ namespace TestCentric.Gui.Presenters
             _model.Events.RunFinished += (e) => runComplete.Set();
             bool forced = false;
 
-            ShowLongRunningOperation("Waiting for all running tests to complete.");
+            new LongRunningOperationDisplay(_model, "Waiting for all running tests to complete.");
             _model.StopTestRun(false);
             runComplete.WaitOne(INITIAL_WAIT_TIME);
 
@@ -838,17 +828,6 @@ namespace TestCentric.Gui.Presenters
         private static Font DecreaseFont(Font font)
         {
             return new Font(font.FontFamily, font.SizeInPoints / 1.2f, font.Style);
-        }
-
-        private void ShowLongRunningOperation(string msg)
-        {
-            _longOpDisplay = _view.LongOperationDisplay(msg);
-        }
-
-        private void HideLongRunningOperation()
-        {
-            _longOpDisplay?.Dispose();
-            _longOpDisplay = null;
         }
 
         #endregion

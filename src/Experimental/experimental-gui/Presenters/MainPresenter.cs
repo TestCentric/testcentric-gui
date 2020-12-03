@@ -57,13 +57,10 @@ namespace TestCentric.Gui.Presenters
             _model.Events.TestReloaded += (ea) =>
             {
                 InitializeMainMenu();
-                _view.OnTestAssembliesLoaded();
             };
 
             _model.Events.TestLoadFailure += (TestLoadFailureEventArgs e) =>
             {
-                // TODO: Name of view method should really be changed
-                _view.OnTestAssembliesLoaded();
                 _view.MessageDisplay.Error(e.Exception.Message);
             };
 
@@ -182,12 +179,12 @@ namespace TestCentric.Gui.Presenters
             var message = args.TestFilesLoading.Count == 1 ?
                 $"Loading Assembly: {args.TestFilesLoading[0]}" :
                 $"Loading {args.TestFilesLoading.Count} Assemblies...";
-            _view.OnTestAssembliesLoading(message);
+            new LongRunningOperationDisplay(message);
         }
 
         private void NotifyTestsReloading(TestEventArgs args)
         {
-            _view.OnTestAssembliesLoading("Reloading Tests...");
+            new LongRunningOperationDisplay("Reloading Tests...");
         }
 
         private void MainForm_DragDrop(string[] files)
@@ -206,8 +203,6 @@ namespace TestCentric.Gui.Presenters
 
         private void InitializeMainMenu()
         {
-            _view.OnTestAssembliesLoaded();
-
             bool isTestRunning = _model.IsTestRunning;
             bool canCloseOrSave = _model.HasTests && !isTestRunning;
 

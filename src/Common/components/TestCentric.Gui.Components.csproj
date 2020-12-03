@@ -121,5 +121,11 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\TestModel\model\TestCentric.Gui.Model.csproj">
+      <Project>{e978a8d7-e4a4-4de9-94df-d82bd764936b}</Project>
+      <Name>TestCentric.Gui.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
