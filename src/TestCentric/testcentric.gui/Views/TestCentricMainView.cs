@@ -116,6 +116,8 @@ namespace TestCentric.Gui.Views
         private MenuItem menuItem3;
         private MenuItem runParametersMenuItem;
         private MenuItem runtimeDummyMenuItem;
+        private MenuItem forceStopMenuItem;
+        private Button forceStopButton;
         private TextOutputView textOutputView1;
 
         #endregion
@@ -134,6 +136,7 @@ namespace TestCentric.Gui.Views
             // UI Elements on main form
             RunButton = new ButtonElement(runButton);
             StopButton = new ButtonElement(stopButton);
+            ForceStopButton = new ButtonElement(forceStopButton);
             RunSummary = new ControlElement(runSummary);
             ResultTabs = new TabSelector(resultTabs);
 
@@ -169,6 +172,7 @@ namespace TestCentric.Gui.Views
             RunSelectedCommand = new MenuCommand(runSelectedMenuItem);
             RunFailedCommand = new MenuCommand(runFailedMenuItem);
             StopRunCommand = new MenuCommand(stopRunMenuItem);
+            ForceStopCommand = new MenuCommand(forceStopMenuItem);
             TestParametersCommand = new MenuCommand(runParametersMenuItem);
 
             // Initialize Tools Menu Comands
@@ -297,6 +301,8 @@ namespace TestCentric.Gui.Views
             this.treeView = new TestCentric.Gui.Views.TestTreeView();
             this.categoryPage = new System.Windows.Forms.TabPage();
             this.categoryPanel = new System.Windows.Forms.Panel();
+            this.forceStopButton = new System.Windows.Forms.Button();
+            this.forceStopMenuItem = new System.Windows.Forms.MenuItem();
             this.rightPanel.SuspendLayout();
             this.resultTabs.SuspendLayout();
             this.errorTab.SuspendLayout();
@@ -612,7 +618,8 @@ namespace TestCentric.Gui.Views
             this.menuItem3,
             this.runParametersMenuItem,
             this.testMenuSeparator,
-            this.stopRunMenuItem});
+            this.stopRunMenuItem,
+            this.forceStopMenuItem});
             this.testMenu.Text = "&Tests";
             // 
             // runAllMenuItem
@@ -822,6 +829,7 @@ namespace TestCentric.Gui.Views
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.forceStopButton);
             this.groupBox1.Controls.Add(this.runSummary);
             this.groupBox1.Controls.Add(this.stopButton);
             this.groupBox1.Controls.Add(this.runButton);
@@ -951,6 +959,20 @@ namespace TestCentric.Gui.Views
             this.categoryPanel.Size = new System.Drawing.Size(213, 399);
             this.categoryPanel.TabIndex = 0;
             // 
+            // forceStopButton
+            // 
+            this.forceStopButton.Location = stopButton.Location;
+            this.forceStopButton.Name = "forceStopButton";
+            this.forceStopButton.Size = new System.Drawing.Size(75, 31);
+            this.forceStopButton.TabIndex = 6;
+            this.forceStopButton.Text = "Force Stop";
+            this.forceStopButton.UseVisualStyleBackColor = true;
+            // 
+            // forceStopMenuItem
+            // 
+            this.forceStopMenuItem.Index = 7;
+            this.forceStopMenuItem.Text = "Force Stop";
+            // 
             // TestCentricMainView
             // 
             this.ClientSize = new System.Drawing.Size(744, 431);
@@ -1009,6 +1031,7 @@ namespace TestCentric.Gui.Views
         // UI Elements
         public ICommand RunButton { get; }
         public ICommand StopButton { get; }
+        public ICommand ForceStopButton { get; }
         public IControlElement RunSummary { get; }
         public ISelection ResultTabs { get; }
 
@@ -1041,6 +1064,7 @@ namespace TestCentric.Gui.Views
         public ICommand RunSelectedCommand { get; }
         public ICommand RunFailedCommand { get; }
         public ICommand StopRunCommand { get; }
+        public ICommand ForceStopCommand { get; }
         public ICommand TestParametersCommand { get; }
 
         // Tools Menu Items

@@ -24,6 +24,7 @@ namespace TestCentric.Gui.Views
         // UI Elements
         ICommand RunButton { get; }
         ICommand StopButton { get; }
+        ICommand ForceStopButton { get; }
         IControlElement RunSummary { get; }
         ISelection ResultTabs { get; }
 
@@ -56,6 +57,7 @@ namespace TestCentric.Gui.Views
         ICommand RunSelectedCommand { get; }
         ICommand RunFailedCommand { get; }
         ICommand StopRunCommand { get; }
+        ICommand ForceStopCommand { get; }
         ICommand TestParametersCommand { get; }
 
         // Tools Menu Items
