@@ -13,11 +13,24 @@ using TestCentric.Engine.Helpers;
 namespace TestCentric.Engine.Runners
 {
     /// <summary>
-    /// WorkItemTracker examines test events and keeps track of those
+    /// Test Frameworks, don't always handle cancellation. Those that do may
+    /// not always handle it correctly. In fact, even NUnit itself, through 
+    /// at least release 3.12, fails to cancel a test that's in an infinite
+    /// loop. In addition, it's possible for user code to defeat cancellation,
+    /// even forced cancellation or kill.
+    /// 
+    /// The engine needs to protect itself from such problems by assuring that
+    /// any test for which cancellation is requested is fully cancelled, with
+    /// nothing left behind. Further, it needs to generate notifications to
+    /// tell the runner what happened.
+    /// 
+    /// WorkItemTracker examines test events and keeps track of those tests
     /// that have started but not yet finished. It implements ITestEventListener
     /// in order to capture events and provides a property to return a list of 
     /// all item ids that have started but not yet finished and a Clear() method
-    /// to clear the contents of that list.
+    /// to clear the contents of that list. It allows waiting for all items to
+    /// complete. Once the test has been cancelled, it provide notifications
+    /// to the runner so the information may be displayed.
     /// </summary>
     internal class WorkItemTracker : ITestEventListener
     {
@@ -47,22 +60,25 @@ namespace TestCentric.Engine.Runners
 
                 // Signal completion of all pending suites, in reverse order
                 while (count > 0)
-                    listener.OnTestEvent(CreateTestSuiteElement(_itemsInProcess[--count]).OuterXml);
+                    listener.OnTestEvent(CreateNotification(_itemsInProcess[--count]));
             }
         }
 
-        private static XmlNode CreateTestSuiteElement(XmlNode startSuiteElement)
+        private static string CreateNotification(XmlNode startElement)
         {
-            XmlNode testSuiteElement = XmlHelper.CreateTopLevelElement("test-suite");
-            testSuiteElement.AddAttribute("type", startSuiteElement.GetAttribute("type"));
-            testSuiteElement.AddAttribute("id", startSuiteElement.GetAttribute("id"));
-            testSuiteElement.AddAttribute("name", startSuiteElement.GetAttribute("name"));
-            testSuiteElement.AddAttribute("fullame", startSuiteElement.GetAttribute("fullname"));
-            testSuiteElement.AddAttribute("result", "Failed");
-            testSuiteElement.AddAttribute("label", "Cancelled");
-            XmlNode failure = testSuiteElement.AddElement("failure");
+            bool isSuite = startElement.Name == "start-suite";
+
+            XmlNode notification = XmlHelper.CreateTopLevelElement(isSuite ? "test-suite" : "test-case");
+            if (isSuite)
+                notification.AddAttribute("type", startElement.GetAttribute("type"));
+            notification.AddAttribute("id", startElement.GetAttribute("id"));
+            notification.AddAttribute("name", startElement.GetAttribute("name"));
+            notification.AddAttribute("fullame", startElement.GetAttribute("fullname"));
+            notification.AddAttribute("result", "Failed");
+            notification.AddAttribute("label", "Cancelled");
+            XmlNode failure = notification.AddElement("failure");
             XmlNode message = failure.AddElementWithCDataSection("message", "Test run cancelled by user");
-            return testSuiteElement;
+            return notification.OuterXml;
         }
 
         void ITestEventListener.OnTestEvent(string report)
@@ -73,10 +89,12 @@ namespace TestCentric.Engine.Runners
             {
                 switch (xmlNode.Name)
                 {
+                    case "start-test":
                     case "start-suite":
                         _itemsInProcess.Add(xmlNode);
                         break;
 
+                    case "test-case":
                     case "test-suite":
                         string id = xmlNode.GetAttribute("id");
                         RemoveItem(id);
