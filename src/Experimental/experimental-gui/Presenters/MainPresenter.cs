@@ -49,18 +49,36 @@ namespace TestCentric.Gui.Presenters
         private void WireUpEvents()
         {
             // Model Events
-            _model.Events.TestsLoading += NotifyTestsLoading;
-            _model.Events.TestLoaded += (ea) => InitializeMainMenu();
+            _model.Events.TestsLoading += (ea) =>
+            {
+                var message = ea.TestFilesLoading.Count == 1 ?
+                    $"Loading Assembly: {ea.TestFilesLoading[0]}" :
+                    $"Loading {ea.TestFilesLoading.Count} Assemblies...";
+                _view.LongRunningOperation.Display(message);
+            };
+
+            _model.Events.TestLoaded += (ea) =>
+            {
+                _view.LongRunningOperation.Hide();
+                InitializeMainMenu();
+            };
+
             _model.Events.TestUnloaded += (ea) => InitializeMainMenu();
-            _model.Events.TestsReloading += NotifyTestsReloading;
+            
+            _model.Events.TestsReloading += (ea) =>
+            {
+                _view.LongRunningOperation.Display("Reloading Tests...");
+            };
 
             _model.Events.TestReloaded += (ea) =>
             {
+                _view.LongRunningOperation.Hide();
                 InitializeMainMenu();
             };
 
             _model.Events.TestLoadFailure += (TestLoadFailureEventArgs e) =>
             {
+                _view.LongRunningOperation.Hide();
                 _view.MessageDisplay.Error(e.Exception.Message);
             };
 
@@ -71,8 +89,11 @@ namespace TestCentric.Gui.Presenters
             };
 
             _model.Events.RunStarting += (ea) => InitializeMainMenu();
+
             _model.Events.RunFinished += (ea) =>
             {
+                _view.LongRunningOperation.Hide();
+
                 SaveResults();
                 InitializeMainMenu();
                 if (_options.Unattended)
@@ -172,19 +193,6 @@ namespace TestCentric.Gui.Presenters
                 { MessageBox.Show("This will show the About Box", "Not Yet Implemented"); };
 
             _view.MainViewClosing += () => _model.Dispose();
-        }
-
-        private void NotifyTestsLoading(TestFilesLoadingEventArgs args)
-        {
-            var message = args.TestFilesLoading.Count == 1 ?
-                $"Loading Assembly: {args.TestFilesLoading[0]}" :
-                $"Loading {args.TestFilesLoading.Count} Assemblies...";
-            _view.LongRunningOperation.Display(message);
-        }
-
-        private void NotifyTestsReloading(TestEventArgs args)
-        {
-            _view.LongRunningOperation.Display("Reloading Tests...");
         }
 
         private void MainForm_DragDrop(string[] files)

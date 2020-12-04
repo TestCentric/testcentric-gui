@@ -21,6 +21,7 @@ namespace TestCentric.Gui.Presenters.Main
         public void CreatePresenter()
         {
             View = Substitute.For<IMainView>();
+            View.LongRunningOperation.Returns(Substitute.For<ILongRunningOperationDisplay>());
             Model = Substitute.For<ITestModel>();
             Model.Settings.Returns(new TestCentric.TestUtilities.Fakes.UserSettings());
 

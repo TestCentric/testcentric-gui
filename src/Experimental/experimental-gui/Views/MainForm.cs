@@ -124,7 +124,7 @@ namespace TestCentric.Gui.Views
 
         public IDialogManager DialogManager { get; private set; }
         public IMessageDisplay MessageDisplay { get; private set; }
-        public LongRunningOperationDisplay LongRunningOperation { get; private set; }
+        public ILongRunningOperationDisplay LongRunningOperation { get; private set; }
 
         #endregion
 
