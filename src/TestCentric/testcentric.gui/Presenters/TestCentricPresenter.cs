@@ -816,7 +816,6 @@ namespace TestCentric.Gui.Presenters
             return new Font(font.FontFamily, font.SizeInPoints / 1.2f, font.Style);
         }
 
-#if true
         private void StopTests()
         {
             _view.StopButton.Enabled = _view.StopRunCommand.Enabled = false;
@@ -836,44 +835,6 @@ namespace TestCentric.Gui.Presenters
         {
             _view.ForceStopButton.Enabled = _view.ForceStopCommand.Enabled = false;
             _model.StopTestRun(true);
-        }
-#else
-        private void StopTests()
-        {
-            _view.StopButton.Enabled = _view.StopRunCommand.Enabled = false;
-            _view.LongRunningOperation.Display("Waiting for all running tests to complete.");
-
-            // We must monitor stopping of the tests on a separate thread
-            // to avoid blocking the UI thread.
-            var thread = new Thread(StopTestsProc);
-            thread.Start();
-        }
-#endif
-
-        private void StopTestsProc()
-        {
-            const int INITIAL_WAIT_TIME = 15000;
-            const int MESSAGE_WAIT_TIME = 30000;
-
-            var runcomplete = new AutoResetEvent(false);
-            _model.Events.RunFinished += (e) => runcomplete.Set();
-
-            _model.StopTestRun(false);
-            runcomplete.WaitOne(INITIAL_WAIT_TIME);
-
-            while (_model.IsTestRunning)
-            {
-                DialogResult dialogResult = _view.MessageDisplay.Ask(
-                    "One or more tests are still running. Do you want to force cancellation? Enter 'Yes' to forcibly cancel the run, 'No' to keep waiting.");
-
-                if (dialogResult == DialogResult.Yes)
-                    break;
-
-                runcomplete.WaitOne(MESSAGE_WAIT_TIME);
-            }
-
-            if (_model.IsTestRunning)
-                _model.StopTestRun(true);
         }
 
 #endregion
