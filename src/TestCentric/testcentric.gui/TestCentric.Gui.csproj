@@ -146,6 +146,7 @@
     <Compile Include="Presenters\TextOutputPresenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestNodeFilters.cs" />
+    <Compile Include="Views\ILongRunningOperation.cs" />
     <Compile Include="Views\IMainView.cs" />
     <Compile Include="Views\TestCentricMainView.cs">
       <SubType>Form</SubType>

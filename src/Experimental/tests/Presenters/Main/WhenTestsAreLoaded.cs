@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric GUI contributors.
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
@@ -34,11 +34,6 @@ namespace TestCentric.Gui.Presenters.Main
             View.NewProjectCommand.Received().Enabled = true;
         }
 #endif
-        [Test]
-        public void View_Receives_TestAssembliesLoaded()
-        {
-            View.Received().OnTestAssembliesLoaded();
-        }
 
         [Test]
         public void OpenProject_IsEnabled()

@@ -22,7 +22,8 @@ namespace TestCentric.Gui.Tests
         public void CreateDisplay()
         {
             _view = new TestCentricMainView();
-            _display = _view.LongOperationDisplay("Loading...");
+            _display = new LongRunningOperationDisplay(_view as Form);
+            _display.Display("Loading...");
         }
 
         [OneTimeTearDown]

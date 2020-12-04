@@ -8,8 +8,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime.Versioning;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using TestCentric.Common;
 
@@ -20,7 +20,6 @@ namespace TestCentric.Gui.Presenters
     using Model.Settings;
     using Views;
     using Dialogs;
-    using NUnit.Engine;
 
     /// <summary>
     /// TestCentricPresenter does all file opening and closing that
@@ -105,16 +104,12 @@ namespace TestCentric.Gui.Presenters
                     $"Loading Assembly: {e.TestFilesLoading[0]}" :
                     $"Loading {e.TestFilesLoading.Count} Assemblies...";
 
-                _longOpDisplay = _view.LongOperationDisplay(message);
+                _view.LongRunningOperation.Display(message);
             };
 
             _model.Events.TestLoaded += (TestNodeEventArgs e) =>
             {
-                if (_longOpDisplay != null)
-                {
-                    _longOpDisplay.Dispose();
-                    _longOpDisplay = null;
-                }
+                _view.LongRunningOperation.Hide();
 
                 UpdateViewCommands();
 
@@ -139,18 +134,12 @@ namespace TestCentric.Gui.Presenters
             {
                 UpdateViewCommands();
 
-                _longOpDisplay = _view.LongOperationDisplay("Reloading...");
+                _view.LongRunningOperation.Display("Reloading...");
             };
 
             _model.Events.TestReloaded += (TestNodeEventArgs e) =>
             {
-                if (_longOpDisplay != null)
-                {
-                    _longOpDisplay.Dispose();
-                    _longOpDisplay = null;
-                }
-
-                //SetTitleBar(TestProject.Name);
+                _view.LongRunningOperation.Hide();
 
                 if (_settings.Gui.ClearResultsOnReload)
                     _view.RunSummary.Text = null;
@@ -160,8 +149,7 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.TestLoadFailure += (TestLoadFailureEventArgs e) =>
             {
-                if (_longOpDisplay != null)
-                    _longOpDisplay.Dispose();
+                _view.LongRunningOperation.Hide();
 
                 _view.MessageDisplay.Error(e.Exception.Message);
             };
@@ -175,6 +163,8 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.RunFinished += (TestResultEventArgs e) =>
             {
+                _view.LongRunningOperation.Hide();
+
                 UpdateViewCommands();
 
                 ResultSummary summary = ResultSummaryCreator.FromResultNode(e.Result);
@@ -290,7 +280,7 @@ namespace TestCentric.Gui.Presenters
                     if (_model.IsTestRunning)
                     {
                         DialogResult dialogResult = _view.MessageDisplay.Ask(
-                            "A test is running, do you want to stop the test and exit?");
+                            "A test is running, do you want to forcibly stop the test and exit?");
 
                         if (dialogResult == DialogResult.No)
                         {
@@ -298,7 +288,7 @@ namespace TestCentric.Gui.Presenters
                             return;
                         }
 
-                        _model.CancelTestRun(true);
+                        _model.StopTestRun(true);
                     }
 
                     if (CloseProject() == DialogResult.Cancel)
@@ -321,7 +311,8 @@ namespace TestCentric.Gui.Presenters
             };
 
             _view.RunButton.Execute += () => RunSelectedTests();
-            _view.StopButton.Execute += () => CancelRun();
+            _view.StopButton.Execute += () => StopTests();
+            _view.ForceStopButton.Execute += () => ForceStop();
 
             _view.FileMenu.Popup += () =>
             {
@@ -451,7 +442,9 @@ namespace TestCentric.Gui.Presenters
             _view.RunSelectedCommand.Execute += () => RunSelectedTests();
             _view.RunFailedCommand.Execute += () => RunFailedTests();
 
-            _view.StopRunCommand.Execute += () => CancelRun();
+            _view.StopRunCommand.Execute += () => StopTests();
+            _view.ForceStopCommand.Execute += () => ForceStop();
+
             _view.TestParametersCommand.Execute += () =>
             {
                 using (var dlg = new TestParametersDialog())
@@ -671,18 +664,6 @@ namespace TestCentric.Gui.Presenters
                 _model.RunTests(new TestSelection(tests));
         }
 
-        internal void CancelRun()
-        {
-            if (_model.IsTestRunning)
-            {
-                DialogResult dialogResult = _view.MessageDisplay.Ask(
-                    "Do you want to cancel the running test?");
-
-                if (dialogResult == DialogResult.Yes)
-                    _model.CancelTestRun(true);
-            }
-        }
-
         #endregion
 
         #endregion
@@ -700,8 +681,13 @@ namespace TestCentric.Gui.Presenters
             _view.RunFailedCommand.Enabled = testLoaded && !testRunning && _model.HasResults;
             _view.TestParametersCommand.Enabled = testLoaded && !testRunning;
 
-            _view.StopButton.Enabled = testRunning;
-            _view.StopRunCommand.Enabled = testRunning;
+            _view.StopButton.Visible = _view.StopRunCommand.Visible = true;
+            _view.StopButton.Enabled = _view.StopRunCommand.Enabled = testRunning;
+
+            // ForceStop button and command are only visible and enabled briefly,
+            // as part of the process of stopping the test run.
+            _view.ForceStopButton.Visible = _view.ForceStopCommand.Visible = false;
+            _view.ForceStopButton.Enabled = _view.ForceStopCommand.Enabled = false;
 
             _view.OpenCommand.Enabled = !testRunning && !testLoading;
             _view.CloseCommand.Enabled = testLoaded && !testRunning;
@@ -830,6 +816,27 @@ namespace TestCentric.Gui.Presenters
             return new Font(font.FontFamily, font.SizeInPoints / 1.2f, font.Style);
         }
 
-        #endregion
+        private void StopTests()
+        {
+            _view.StopButton.Enabled = _view.StopRunCommand.Enabled = false;
+
+            _view.LongRunningOperation.Display("Waiting for all running tests to complete.");
+            _model.StopTestRun(false);
+
+            _view.StopButton.Visible = _view.StopRunCommand.Visible = false;
+            _view.ForceStopButton.Visible = _view.ForceStopCommand.Visible = true;
+
+            // Prevent an accidental extra click on newly visible button
+            Thread.Sleep(400);
+            _view.ForceStopButton.Enabled = _view.ForceStopCommand.Enabled = true;
+        }
+
+        private void ForceStop()
+        {
+            _view.ForceStopButton.Enabled = _view.ForceStopCommand.Enabled = false;
+            _model.StopTestRun(true);
+        }
+
+#endregion
     }
 }

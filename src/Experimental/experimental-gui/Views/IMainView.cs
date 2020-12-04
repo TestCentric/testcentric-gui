@@ -89,8 +89,6 @@ namespace TestCentric.Gui.Views
 
         // Messages
         IMessageDisplay MessageDisplay { get; }
-
-        void OnTestAssembliesLoading(string message);
-        void OnTestAssembliesLoaded();
+        ILongRunningOperationDisplay LongRunningOperation { get; }
     }
 }

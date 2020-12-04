@@ -24,6 +24,7 @@ namespace TestCentric.Gui.Views
         // UI Elements
         ICommand RunButton { get; }
         ICommand StopButton { get; }
+        ICommand ForceStopButton { get; }
         IControlElement RunSummary { get; }
         ISelection ResultTabs { get; }
 
@@ -56,6 +57,7 @@ namespace TestCentric.Gui.Views
         ICommand RunSelectedCommand { get; }
         ICommand RunFailedCommand { get; }
         ICommand StopRunCommand { get; }
+        ICommand ForceStopCommand { get; }
         ICommand TestParametersCommand { get; }
 
         // Tools Menu Items
@@ -75,6 +77,7 @@ namespace TestCentric.Gui.Views
         TestTreeView TreeView { get; }
         StatusBarView StatusBarView { get; }
         IMessageDisplay MessageDisplay { get; }
+        ILongRunningOperationDisplay LongRunningOperation { get; }
 
         // Dialog Manager
         IDialogManager DialogManager { get; }
@@ -82,7 +85,6 @@ namespace TestCentric.Gui.Views
         // Methods used by Presenter
         void Configure(bool useFullGui);
         void SetTitleBar(string fileName);
-        LongRunningOperationDisplay LongOperationDisplay(string text);
 
         // Form methods that we have to use
         void Activate();
