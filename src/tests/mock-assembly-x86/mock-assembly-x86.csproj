@@ -4,7 +4,8 @@
 		<TargetFramework>net45</TargetFramework>
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\..\nunit.snk</AssemblyOriginatorKeyFile>
-		<OutputPath>..\..\..\bin\$(Configuration)\engine-tests\</OutputPath>
+		<OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<PlatformTarget>x86</PlatformTarget>
 	</PropertyGroup>

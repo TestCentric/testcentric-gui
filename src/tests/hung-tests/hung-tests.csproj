@@ -2,9 +2,8 @@
 	<PropertyGroup>
 		<RootNamespace>NUnit.Tests</RootNamespace>
 		<TargetFramework>net45</TargetFramework>
-		<SignAssembly>true</SignAssembly>
-		<AssemblyOriginatorKeyFile>..\..\nunit.snk</AssemblyOriginatorKeyFile>
-		<OutputPath>..\..\..\bin\$(Configuration)\engine-tests\</OutputPath>
+		<OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
 	<ItemGroup>
