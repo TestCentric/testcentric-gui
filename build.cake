@@ -435,7 +435,11 @@ Task("CreateDraftRelease")
 	{
 		Version versionFromBranch;
 		if (!Version.TryParse(branchName.Substring(8), out versionFromBranch))
-			throw new InvalidOperationException($"Branch name {branchName} incorporates an invalid version format.");
+		{	string msg = $"Branch name {branchName} incorporates an invalid version format. ";
+			if (branchName.IndexOf("-") >0)
+				msg += "Note that pre-release versions are not yet supported for release branches.";
+			throw new InvalidOperationException(msg);
+		}
 
 		if (versionFromBranch.Build < 0)
 			throw new InvalidOperationException("Release branch must specify three version components.");
@@ -534,9 +538,9 @@ Task("AppVeyor")
 	.IsDependentOn("Test")
 	.IsDependentOn("BuildPackages")
 	.IsDependentOn("TestPackages")
-	//.IsDependentOn("PublishPackages")
-	.IsDependentOn("CreateDraftRelease");
-	//.IsDependentOn("UpdateWebsite");
+	.IsDependentOn("PublishPackages")
+	.IsDependentOn("CreateDraftRelease")
+	.IsDependentOn("UpdateWebsite");
 
 Task("Travis")
     .IsDependentOn("Build")

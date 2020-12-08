@@ -2,7 +2,6 @@
 #load "./testing.cake"
 #load "./test-results.cake"
 #load "./packaging.cake"
-#load "./releasing.cake"
 #load "./website.cake"
 
 public class BuildParameters
@@ -19,8 +18,6 @@ public class BuildParameters
 
 	// Environment Variable names holding GitHub identity of user
 	// These are only used to publish the website when running locally	
-	// private const string GITHUB_USER_ID = "GITHUB_USER_ID";
-	// private const string GITHUB_USER_EMAIL = "GITHUB_USER_EMAIL";
 	private const string GITHUB_PASSWORD = "GITHUB_PASSWORD";
 	// Access token is used by GitReleaseManager
 	private const string GITHUB_ACCESS_TOKEN = "GITHUB_ACCESS_TOKEN";
@@ -58,8 +55,6 @@ public class BuildParameters
 
 		UsingXBuild = context.EnvironmentVariable("USE_XBUILD") != null;
 
-		// GitHubUserId = _context.EnvironmentVariable(GITHUB_USER_ID);
-		// GitHubUserEmail = _context.EnvironmentVariable(GITHUB_USER_EMAIL);
 		GitHubPassword = _context.EnvironmentVariable(GITHUB_PASSWORD);
 		GitHubAccessToken = _context.EnvironmentVariable(GITHUB_ACCESS_TOKEN);
 		
@@ -218,6 +213,12 @@ public class BuildParameters
 				errors.Add("NuGet ApiKey was not set.");
 			if (ShouldPublishToChocolatey && !IsChocolateyApiKeyAvailable)
 				errors.Add("Chocolatey ApiKey was not set.");
+		}
+
+		if (TasksToExecute.Contains("CreateDraftRelease"))
+		{
+			if (string.IsNullOrEmpty(GitHubAccessToken))
+				errors.Add("GitHub Access Token was not set.");
 		}
 
 		if (TasksToExecute.Contains("DeployWebsite"))
