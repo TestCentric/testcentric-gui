@@ -173,14 +173,15 @@ public class BuildParameters
 	public bool IsChocolateyApiKeyAvailable => !string.IsNullOrEmpty(ChocolateyApiKey);
 
     public string BranchName => BuildVersion.BranchName;
-	public bool IsReleaseBuild => BuildVersion.IsReleaseBuild;
-	//public string ReleaseMilestone => ReleaseManager.ReleaseMilestone;
+	public bool IsReleaseBranch => BuildVersion.IsReleaseBranch;
 
 	public bool IsPreRelease => BuildVersion.IsPreRelease;
-	public bool IsFinalRelease => !IsPreRelease;
-	public bool ShouldPublishToMyGet => IsFinalRelease || LABELS_WE_PUBLISH_ON_MYGET.Contains(BuildVersion.PreReleaseLabel);
-	public bool ShouldPublishToNuGet => IsFinalRelease || LABELS_WE_PUBLISH_ON_NUGET.Contains(BuildVersion.PreReleaseLabel);
-	public bool ShouldPublishToChocolatey => IsFinalRelease || LABELS_WE_PUBLISH_ON_CHOCOLATEY.Contains(BuildVersion.PreReleaseLabel);
+	public bool ShouldPublishToMyGet => !IsPreRelease && !IsReleaseBranch || 
+		LABELS_WE_PUBLISH_ON_MYGET.Contains(BuildVersion.PreReleaseLabel);
+	public bool ShouldPublishToNuGet => !IsPreRelease && !IsReleaseBranch ||
+		LABELS_WE_PUBLISH_ON_NUGET.Contains(BuildVersion.PreReleaseLabel);
+	public bool ShouldPublishToChocolatey => !IsPreRelease && !IsReleaseBranch ||
+		LABELS_WE_PUBLISH_ON_CHOCOLATEY.Contains(BuildVersion.PreReleaseLabel);
 	public bool IsProductionRelease => ShouldPublishToNuGet || ShouldPublishToChocolatey;
 	
 	public bool UsingXBuild { get; }
@@ -267,7 +268,7 @@ public class BuildParameters
 
 		Console.WriteLine("\nRELEASING");
 		Console.WriteLine("BranchName:                   " + BranchName);
-		Console.WriteLine("IsReleaseBuild:               " + IsReleaseBuild);
+		Console.WriteLine("IsReleaseBranch:              " + IsReleaseBranch);
 		//Console.WriteLine("ReleaseMilestone:             " + ReleaseMilestone);
 
 		Console.WriteLine("\nDIRECTORIES");

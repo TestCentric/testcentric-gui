@@ -409,7 +409,7 @@ Task("PublishPackages")
 
 Task("CreateDraftRelease")
 	.IsDependentOn("BuildPackages")
-	.WithCriteria<BuildParameters>((context, parameters) => parameters.IsReleaseBuild)
+	.WithCriteria<BuildParameters>((context, parameters) => parameters.IsReleaseBranch)
 	.Does<BuildParameters>((parameters) =>
 	{
 		// Exit if any PackageTests failed

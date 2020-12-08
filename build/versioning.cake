@@ -20,12 +20,12 @@ public class BuildVersion
         _gitVersion = context.GitVersion();
 
         BranchName = _gitVersion.BranchName;
-        IsReleaseBuild = BranchName.StartsWith("release-");
+        IsReleaseBranch = BranchName.StartsWith("release-");
 
 		// TODO: Get GitVersion to work on Linux
         string packageVersion = context.HasArgument("asVersion")
             ? context.Argument("asVersion", DEFAULT_VERSION)
-            : IsReleaseBuild
+            : IsReleaseBranch
                 ? BranchName.Substring(8)
                 : CalculatePackageVersion();
 
@@ -60,7 +60,7 @@ public class BuildVersion
 	}
 
     public string BranchName { get; }
-    public bool IsReleaseBuild { get; }
+    public bool IsReleaseBranch { get; }
 
 	public string PackageVersion { get; }
 	public string AssemblyVersion { get; }
