@@ -19,3 +19,5 @@ environment:
     secure: aDsu1U+umVYFVybjkBVtVQsatSj3QKbD7VkGQci9mNF3493g9Giao/GABISIaHjT
   GITHUB_PASSWORD:
     secure: 2eNz23Eb1L40g2LPmlPqog==
+  GITHUB_ACCESS_TOKEN:
+    secure: pxZJzzwCBB46Ey3tRoJI90RC10KnK1pgucafZagYsLL8JNJz6RwcHf0DIH01nWnL

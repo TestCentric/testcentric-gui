@@ -2,6 +2,7 @@
 #load "./testing.cake"
 #load "./test-results.cake"
 #load "./packaging.cake"
+#load "./releasing.cake"
 #load "./website.cake"
 
 public class BuildParameters
@@ -21,6 +22,8 @@ public class BuildParameters
 	// private const string GITHUB_USER_ID = "GITHUB_USER_ID";
 	// private const string GITHUB_USER_EMAIL = "GITHUB_USER_EMAIL";
 	private const string GITHUB_PASSWORD = "GITHUB_PASSWORD";
+	// Access token is used by GitReleaseManager
+	private const string GITHUB_ACCESS_TOKEN = "GITHUB_ACCESS_TOKEN";
 
 	// Pre-release labels that we publish
 	private static readonly string[] LABELS_WE_PUBLISH_ON_MYGET = { "dev", "pre" };
@@ -49,13 +52,25 @@ public class BuildParameters
 		Configuration = context.Argument("configuration", DEFAULT_CONFIGURATION);
 		ProjectDirectory = context.Environment.WorkingDirectory.FullPath + "/";
 
-		Versions = new BuildVersion(context, this);
+		MyGetApiKey = _context.EnvironmentVariable(MYGET_API_KEY);
+		NuGetApiKey = _context.EnvironmentVariable(NUGET_API_KEY);
+		ChocolateyApiKey = _context.EnvironmentVariable(CHOCO_API_KEY);
+
+		UsingXBuild = context.EnvironmentVariable("USE_XBUILD") != null;
+
+		// GitHubUserId = _context.EnvironmentVariable(GITHUB_USER_ID);
+		// GitHubUserEmail = _context.EnvironmentVariable(GITHUB_USER_EMAIL);
+		GitHubPassword = _context.EnvironmentVariable(GITHUB_PASSWORD);
+		GitHubAccessToken = _context.EnvironmentVariable(GITHUB_ACCESS_TOKEN);
+		
+		BuildVersion = new BuildVersion(context, this);
+		ReleaseManager = new ReleaseManager(context, this);
 
 		if (context.HasArgument("testLevel"))
 			PackageTestLevel = context.Argument("testLevel", 1);
-		else if (!Versions.IsPreRelease)
+		else if (!BuildVersion.IsPreRelease)
 			PackageTestLevel = 3;
-		else switch (Versions.PreReleaseLabel)
+		else switch (BuildVersion.PreReleaseLabel)
 		{
 			case "pre":
 			case "rc":
@@ -72,16 +87,6 @@ public class BuildParameters
 				PackageTestLevel = 1;
 				break;
 		}
-
-		MyGetApiKey = _context.EnvironmentVariable(MYGET_API_KEY);
-		NuGetApiKey = _context.EnvironmentVariable(NUGET_API_KEY);
-		ChocolateyApiKey = _context.EnvironmentVariable(CHOCO_API_KEY);
-
-		// GitHubUserId = _context.EnvironmentVariable(GITHUB_USER_ID);
-		// GitHubUserEmail = _context.EnvironmentVariable(GITHUB_USER_EMAIL);
-		GitHubPassword = _context.EnvironmentVariable(GITHUB_PASSWORD);
-		
-		UsingXBuild = context.EnvironmentVariable("USE_XBUILD") != null;
 
 		MSBuildSettings = new MSBuildSettings {
 			Verbosity = Verbosity.Minimal,
@@ -119,11 +124,13 @@ public class BuildParameters
 
 	public string Configuration { get; }
 
-	public BuildVersion Versions { get; }
-	public string PackageVersion => Versions.PackageVersion;
-	public string AssemblyVersion => Versions.AssemblyVersion;
-	public string AssemblyFileVersion => Versions.AssemblyFileVersion;
-	public string AssemblyInformationalVersion => Versions.AssemblyInformationalVersion;
+	public BuildVersion BuildVersion { get; }
+	public string PackageVersion => BuildVersion.PackageVersion;
+	public string AssemblyVersion => BuildVersion.AssemblyVersion;
+	public string AssemblyFileVersion => BuildVersion.AssemblyFileVersion;
+	public string AssemblyInformationalVersion => BuildVersion.AssemblyInformationalVersion;
+
+	public ReleaseManager ReleaseManager { get; }
 
 	public int PackageTestLevel { get; }
 
@@ -170,11 +177,15 @@ public class BuildParameters
 	public bool IsNuGetApiKeyAvailable => !string.IsNullOrEmpty(NuGetApiKey);
 	public bool IsChocolateyApiKeyAvailable => !string.IsNullOrEmpty(ChocolateyApiKey);
 
-	public bool IsPreRelease => Versions.IsPreRelease;
+    public string BranchName => BuildVersion.BranchName;
+	public bool IsReleaseBuild => BuildVersion.IsReleaseBuild;
+	public string ReleaseMilestone => ReleaseManager.ReleaseMilestone;
+
+	public bool IsPreRelease => BuildVersion.IsPreRelease;
 	public bool IsFinalRelease => !IsPreRelease;
-	public bool ShouldPublishToMyGet => IsFinalRelease || LABELS_WE_PUBLISH_ON_MYGET.Contains(Versions.PreReleaseLabel);
-	public bool ShouldPublishToNuGet => IsFinalRelease || LABELS_WE_PUBLISH_ON_NUGET.Contains(Versions.PreReleaseLabel);
-	public bool ShouldPublishToChocolatey => IsFinalRelease || LABELS_WE_PUBLISH_ON_CHOCOLATEY.Contains(Versions.PreReleaseLabel);
+	public bool ShouldPublishToMyGet => IsFinalRelease || LABELS_WE_PUBLISH_ON_MYGET.Contains(BuildVersion.PreReleaseLabel);
+	public bool ShouldPublishToNuGet => IsFinalRelease || LABELS_WE_PUBLISH_ON_NUGET.Contains(BuildVersion.PreReleaseLabel);
+	public bool ShouldPublishToChocolatey => IsFinalRelease || LABELS_WE_PUBLISH_ON_CHOCOLATEY.Contains(BuildVersion.PreReleaseLabel);
 	public bool IsProductionRelease => ShouldPublishToNuGet || ShouldPublishToChocolatey;
 	
 	public bool UsingXBuild { get; }
@@ -193,6 +204,7 @@ public class BuildParameters
 	public string GitHubUserId => "charliepoole";
 	public string GitHubUserEmail => "charliepoole@gmail.com";
 	public string GitHubPassword { get; }
+	public string GitHubAccessToken { get; }
 
 	private void Validate()
 	{
@@ -242,17 +254,20 @@ public class BuildParameters
 		Console.WriteLine("IsRunningOnUnix:              " + IsRunningOnUnix);
 		Console.WriteLine("IsRunningOnAppVeyor:          " + IsRunningOnAppVeyor);
 
-		Console.WriteLine("\nGIT");
-
 		Console.WriteLine("\nVERSIONING");
 		Console.WriteLine("PackageVersion:               " + PackageVersion);
 		Console.WriteLine("AssemblyVersion:              " + AssemblyVersion);
 		Console.WriteLine("AssemblyFileVersion:          " + AssemblyFileVersion);
 		Console.WriteLine("AssemblyInformationalVersion: " + AssemblyInformationalVersion);
-		Console.WriteLine("SemVer:                       " + Versions.SemVer);
-		Console.WriteLine("IsPreRelease:                 " + Versions.IsPreRelease);
-		Console.WriteLine("PreReleaseLabel:              " + Versions.PreReleaseLabel);
-		Console.WriteLine("PreReleaseSuffix:             " + Versions.PreReleaseSuffix);
+		Console.WriteLine("SemVer:                       " + BuildVersion.SemVer);
+		Console.WriteLine("IsPreRelease:                 " + BuildVersion.IsPreRelease);
+		Console.WriteLine("PreReleaseLabel:              " + BuildVersion.PreReleaseLabel);
+		Console.WriteLine("PreReleaseSuffix:             " + BuildVersion.PreReleaseSuffix);
+
+		Console.WriteLine("\nRELEASING");
+		Console.WriteLine("BranchName:                   " + BranchName);
+		Console.WriteLine("IsReleaseBuild:               " + IsReleaseBuild);
+		Console.WriteLine("ReleaseMilestone:             " + ReleaseMilestone);
 
 		Console.WriteLine("\nDIRECTORIES");
 		Console.WriteLine("Project:   " + ProjectDirectory);
