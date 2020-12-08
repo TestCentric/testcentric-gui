@@ -218,7 +218,7 @@ public class BuildParameters
 
 		if (TasksToExecute.Contains("CreateDraftRelease"))
 		{
-			if (string.IsNullOrEmpty(GitHubAccessToken))
+			if (IsReleaseBranch && string.IsNullOrEmpty(GitHubAccessToken))
 				errors.Add("GitHub Access Token was not set.");
 		}
 
