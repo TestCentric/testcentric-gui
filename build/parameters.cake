@@ -64,7 +64,7 @@ public class BuildParameters
 		GitHubAccessToken = _context.EnvironmentVariable(GITHUB_ACCESS_TOKEN);
 		
 		BuildVersion = new BuildVersion(context, this);
-		ReleaseManager = new ReleaseManager(context, this);
+		//ReleaseManager = new ReleaseManager(context, this);
 
 		if (context.HasArgument("testLevel"))
 			PackageTestLevel = context.Argument("testLevel", 1);
@@ -130,7 +130,7 @@ public class BuildParameters
 	public string AssemblyFileVersion => BuildVersion.AssemblyFileVersion;
 	public string AssemblyInformationalVersion => BuildVersion.AssemblyInformationalVersion;
 
-	public ReleaseManager ReleaseManager { get; }
+	//public ReleaseManager ReleaseManager { get; }
 
 	public int PackageTestLevel { get; }
 
@@ -179,7 +179,7 @@ public class BuildParameters
 
     public string BranchName => BuildVersion.BranchName;
 	public bool IsReleaseBuild => BuildVersion.IsReleaseBuild;
-	public string ReleaseMilestone => ReleaseManager.ReleaseMilestone;
+	//public string ReleaseMilestone => ReleaseManager.ReleaseMilestone;
 
 	public bool IsPreRelease => BuildVersion.IsPreRelease;
 	public bool IsFinalRelease => !IsPreRelease;
@@ -267,7 +267,7 @@ public class BuildParameters
 		Console.WriteLine("\nRELEASING");
 		Console.WriteLine("BranchName:                   " + BranchName);
 		Console.WriteLine("IsReleaseBuild:               " + IsReleaseBuild);
-		Console.WriteLine("ReleaseMilestone:             " + ReleaseMilestone);
+		//Console.WriteLine("ReleaseMilestone:             " + ReleaseMilestone);
 
 		Console.WriteLine("\nDIRECTORIES");
 		Console.WriteLine("Project:   " + ProjectDirectory);
