@@ -116,8 +116,8 @@ Task("UpdateAssemblyInfo")
 	.Does<BuildParameters>((parameters) =>
 {
 	var major = new Version(parameters.AssemblyVersion).Major;
-	parameters.Versions.PatchAssemblyInfo("src/CommonAssemblyInfo.cs");
-    parameters.Versions.PatchAssemblyInfo("src/TestEngine/CommonEngineAssemblyInfo.cs");
+	parameters.BuildVersion.PatchAssemblyInfo("src/CommonAssemblyInfo.cs");
+    parameters.BuildVersion.PatchAssemblyInfo("src/TestEngine/CommonEngineAssemblyInfo.cs");
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -401,6 +401,17 @@ Task("PublishPackages")
 	});
 
 //////////////////////////////////////////////////////////////////////
+// CREATE A DRAFT RELEASE
+//////////////////////////////////////////////////////////////////////
+
+Task("CreateDraftRelease")
+	.Does<BuildParameters>((parameters) =>
+	{
+		if (parameters.IsReleaseBuild)
+			parameters.ReleaseManager.CreateDraftRelease();
+	});
+
+//////////////////////////////////////////////////////////////////////
 // INTERACTIVE TESTS FOR USE IN DEVELOPMENT
 //////////////////////////////////////////////////////////////////////
 
@@ -475,6 +486,7 @@ Task("PackageChocolatey")
 
 Task("Publish")
 	.IsDependentOn("PublishPackages")
+	.IsDependentOn("CreateDraftRelease")
 	.IsDependentOn("UpdateWebsite");
 
 Task("AppVeyor")
