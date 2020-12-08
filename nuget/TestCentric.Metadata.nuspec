@@ -22,9 +22,9 @@
   <files>
 	<file src="../LICENSE.txt" />
 	<file src="../testcentric.png" />
-	<file src="../bin/release/engine/net20/testcentric.engine.metadata.dll" target="lib/net20" />
-	<file src="../bin/release/engine/net40/testcentric.engine.metadata.dll" target="lib/net40" />
-	<file src="../bin/release/engine/netstandard1.6/testcentric.engine.metadata.dll" target="lib/netstandard1.6" />
-	<file src="../bin/release/engine/netstandard2.0/testcentric.engine.metadata.dll" target="lib/netstandard2.0" />
+	<file src="../bin/Release/engine/net20/testcentric.engine.metadata.dll" target="lib/net20" />
+	<file src="../bin/Release/engine/net40/testcentric.engine.metadata.dll" target="lib/net40" />
+	<file src="../bin/Release/engine/netstandard1.6/testcentric.engine.metadata.dll" target="lib/netstandard1.6" />
+	<file src="../bin/Release/engine/netstandard2.0/testcentric.engine.metadata.dll" target="lib/netstandard2.0" />
   </files>
 </package>

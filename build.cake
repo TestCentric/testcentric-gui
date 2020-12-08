@@ -1,5 +1,6 @@
 #tool nuget:?package=NUnit.ConsoleRunner&version=3.10.0
 #tool nuget:?package=GitVersion.CommandLine&version=5.0.0
+#tool nuget:?package=GitReleaseManager&version=0.11.0
 #tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.3.1"
 #tool nuget:?package=Wyam&version=2.2.9
 
@@ -116,8 +117,8 @@ Task("UpdateAssemblyInfo")
 	.Does<BuildParameters>((parameters) =>
 {
 	var major = new Version(parameters.AssemblyVersion).Major;
-	parameters.Versions.PatchAssemblyInfo("src/CommonAssemblyInfo.cs");
-    parameters.Versions.PatchAssemblyInfo("src/TestEngine/CommonEngineAssemblyInfo.cs");
+	parameters.BuildVersion.PatchAssemblyInfo("src/CommonAssemblyInfo.cs");
+    parameters.BuildVersion.PatchAssemblyInfo("src/TestEngine/CommonEngineAssemblyInfo.cs");
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -295,6 +296,7 @@ Task("TestNuGetPackage")
 
 Task("BuildChocolateyPackage")
     .IsDependentOn("CreateImage")
+	.WithCriteria(IsRunningOnWindows())
     .Does<BuildParameters>((parameters) =>
     {
 		Information("Creating package " + parameters.ChocolateyPackageName);
@@ -340,6 +342,7 @@ Task("BuildChocolateyPackage")
 
 Task("TestChocolateyPackage")
 	.IsDependentOn("BuildChocolateyPackage")
+	.WithCriteria(IsRunningOnWindows())
 	.Does<BuildParameters>((parameters) =>
 	{
 		new ChocolateyPackageTester(parameters).RunAllTests();
@@ -401,6 +404,56 @@ Task("PublishPackages")
 	});
 
 //////////////////////////////////////////////////////////////////////
+// CREATE A DRAFT RELEASE
+//////////////////////////////////////////////////////////////////////
+
+Task("CreateDraftRelease")
+	.IsDependentOn("BuildPackages")
+	.WithCriteria<BuildParameters>((context, parameters) => parameters.IsReleaseBranch)
+	.Does<BuildParameters>((parameters) =>
+	{
+		// Exit if any PackageTests failed
+		CheckTestErrors(ref ErrorDetail);
+
+		string releaseName = $"TestCentric {parameters.BuildVersion.SemVer}";
+		string milestone = GetMilestoneFromBranchName(parameters.BranchName);
+		string assets = IsRunningOnWindows()
+			? $"\"{parameters.ZipPackage},{parameters.NuGetPackage},{parameters.ChocolateyPackage},{parameters.MetadataPackage}\""
+        	: $"\"{parameters.ZipPackage},{parameters.NuGetPackage}\"";
+
+		Information($"Creating draft release {releaseName} from milestone {milestone}");
+
+		GitReleaseManagerCreate(parameters.GitHubAccessToken, "TestCentric", "testcentric-gui", new GitReleaseManagerCreateSettings()
+		{
+			Name = releaseName,
+			Milestone = milestone,
+			Assets = assets
+		});
+	});
+
+	private static string GetMilestoneFromBranchName(string branchName)
+	{
+		Version versionFromBranch;
+		if (!Version.TryParse(branchName.Substring(8), out versionFromBranch))
+		{	string msg = $"Branch name {branchName} incorporates an invalid version format. ";
+			if (branchName.IndexOf("-") >0)
+				msg += "Note that pre-release versions are not yet supported for release branches.";
+			throw new InvalidOperationException(msg);
+		}
+
+		if (versionFromBranch.Build < 0)
+			throw new InvalidOperationException("Release branch must specify three version components.");
+
+		string milestone = versionFromBranch.Build <= 0
+			? versionFromBranch.ToString(2)
+			: versionFromBranch.ToString(3);
+		// if (_parameters.IsPreRelease)
+		//     milestone += $"-{_parameters.BuildVersion.PreReleaseSuffix}";
+
+		return milestone;
+	}
+
+//////////////////////////////////////////////////////////////////////
 // INTERACTIVE TESTS FOR USE IN DEVELOPMENT
 //////////////////////////////////////////////////////////////////////
 
@@ -454,12 +507,18 @@ Task("Test")
 	.IsDependentOn("TestEngine")
 	.IsDependentOn("TestGui");
 
-Task("Package")
+Task("BuildPackages")
 	.IsDependentOn("CheckTestErrors")
-    .IsDependentOn("PackageZip")
-	.IsDependentOn("PackageNuget")
-    .IsDependentOn("PackageChocolatey")
+    .IsDependentOn("BuildZipPackage")
+	.IsDependentOn("BuildNuGetPackage")
+    .IsDependentOn("BuildChocolateyPackage")
 	.IsDependentOn("BuildMetadataPackage");
+
+Task("TestPackages")
+	.IsDependentOn("BuildPackages")
+    .IsDependentOn("TestZipPackage")
+	.IsDependentOn("TestNuGetPackage")
+    .IsDependentOn("TestChocolateyPackage");
 
 Task("PackageZip")
 	.IsDependentOn("BuildZipPackage")
@@ -473,16 +532,15 @@ Task("PackageChocolatey")
 	.IsDependentOn("BuildChocolateyPackage")
 	.IsDependentOn("TestChocolateyPackage");
 
-Task("Publish")
-	.IsDependentOn("PublishPackages")
-	.IsDependentOn("UpdateWebsite");
-
 Task("AppVeyor")
 	.IsDependentOn("DumpSettings")
 	.IsDependentOn("Build")
 	.IsDependentOn("Test")
-	.IsDependentOn("Package")
-	.IsDependentOn("Publish");
+	.IsDependentOn("BuildPackages")
+	.IsDependentOn("TestPackages")
+	.IsDependentOn("PublishPackages")
+	.IsDependentOn("CreateDraftRelease")
+	.IsDependentOn("UpdateWebsite");
 
 Task("Travis")
     .IsDependentOn("Build")
@@ -492,7 +550,8 @@ Task("All")
 	.IsDependentOn("DumpSettings")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
-    .IsDependentOn("Package");
+    .IsDependentOn("BuildPackages")
+	.IsDependentOn("TestPackages");
 
 Task("Default")
     .IsDependentOn("Test");

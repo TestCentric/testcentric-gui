@@ -2,7 +2,9 @@ using System.Text.RegularExpressions;
 
 public class BuildVersion
 {
+    private ISetupContext _context;
     private BuildParameters _parameters;
+    private GitVersion _gitVersion;
 
     // NOTE: This is complicated because (1) the user may have specified 
     // the package version on the command-line and (2) GitVersion may
@@ -13,23 +15,30 @@ public class BuildVersion
     // then parsing it to provide information that is used in the build.
 	public BuildVersion(ISetupContext context, BuildParameters parameters)
 	{
+        _context = context;
         _parameters = parameters;
+        _gitVersion = context.GitVersion();
+
+        BranchName = _gitVersion.BranchName;
+        IsReleaseBranch = BranchName.StartsWith("release-");
 
 		// TODO: Get GitVersion to work on Linux
         string packageVersion = context.HasArgument("asVersion")
             ? context.Argument("asVersion", DEFAULT_VERSION)
-            : packageVersion = CalculatePackageVersion(context);
+            : IsReleaseBranch
+                ? BranchName.Substring(8)
+                : CalculatePackageVersion();
 
 		int dash = packageVersion.IndexOf('-');
         IsPreRelease = dash > 0;
 
-        string version = packageVersion;
+        string versionPart = packageVersion;
         string suffix = "";
         string label = "";
 
         if (IsPreRelease)
         {
-            version = packageVersion.Substring(0, dash);
+            versionPart = packageVersion.Substring(0, dash);
             suffix = packageVersion.Substring(dash+1);
             foreach (char c in suffix)
             {
@@ -39,7 +48,8 @@ public class BuildVersion
             } 
         }
 
-        SemVer = new Version(version).ToString(3);
+        Version version = new Version(versionPart);
+        SemVer = version.ToString(3);
         PreReleaseLabel = label;
         PreReleaseSuffix = suffix;
 
@@ -48,6 +58,9 @@ public class BuildVersion
 		AssemblyFileVersion =  SemVer;
 		AssemblyInformationalVersion = packageVersion;
 	}
+
+    public string BranchName { get; }
+    public bool IsReleaseBranch { get; }
 
 	public string PackageVersion { get; }
 	public string AssemblyVersion { get; }
@@ -59,16 +72,15 @@ public class BuildVersion
     public string PreReleaseLabel { get; }
     public string PreReleaseSuffix { get; }
 
-	private static string CalculatePackageVersion(ISetupContext context)
+	private string CalculatePackageVersion()
 	{
-        var gitVersion = context.GitVersion();
-		string label = gitVersion.PreReleaseLabel;
+		string label = _gitVersion.PreReleaseLabel;
 
         // Non pre-release is easy
         if (string.IsNullOrEmpty(label))
-            return gitVersion.MajorMinorPatch;
+            return _gitVersion.MajorMinorPatch;
 
-		string branchName = gitVersion.BranchName;
+		string branchName = _gitVersion.BranchName;
 		// We don't currently use this pattern, but check in case we do later.
 		if (branchName.StartsWith ("feature/"))
 			branchName = branchName.Substring(8);
@@ -77,7 +89,7 @@ public class BuildVersion
         if (label == branchName)
             label = "ci";
 
-        string suffix = "-" + label + gitVersion.CommitsSinceVersionSourcePadded;
+        string suffix = "-" + label + _gitVersion.CommitsSinceVersionSourcePadded;
 
         switch(label)
         {
@@ -87,22 +99,21 @@ public class BuildVersion
     			// Nuget limits "special version part" to 20 chars. Add one for the hyphen.
                 if (suffix.Length > 21)
                     suffix = suffix.Substring(0, 21);
-                return gitVersion.MajorMinorPatch + suffix;
+                return _gitVersion.MajorMinorPatch + suffix;
 
             case "dev":
             case "pre":
-                return gitVersion.MajorMinorPatch + suffix;
+                return _gitVersion.MajorMinorPatch + suffix;
 
             case "pr":
-                return gitVersion.LegacySemVerPadded;
+                return _gitVersion.LegacySemVerPadded;
 
             case "rc":
             case "alpha":
             case "beta":
             default:
-                return gitVersion.LegacySemVer;
+                return _gitVersion.LegacySemVer;
         }
-
 	}
 
     public void PatchAssemblyInfo(string sourceFile, string assemblyVersion = null)
