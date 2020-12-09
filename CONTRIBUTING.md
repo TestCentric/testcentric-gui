@@ -54,7 +54,7 @@ Once you are ready to have your work reviewed, create a Pull Request (PR) on Git
 
 ## License
 
-TestCentric is under the [MIT license](https://github.com/nunit/nunit/blob/master/LICENSE.txt). By contributing to TestCentric, you assert that:
+TestCentric is under the [MIT license](https://github.com/nunit/nunit/blob/main/LICENSE.txt). By contributing to TestCentric, you assert that:
 
 - The contribution is your own original work.
 - You have the right to assign the copyright for the work (it is not owned by your employer or you have been given copyright assignment in writing).

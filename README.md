@@ -1,6 +1,6 @@
 # TestCentric Runner for NUnit - Version 1.0
 
-[![Build status](https://ci.appveyor.com/api/projects/status/i7ymql47e8bo2rel/branch/master?svg=true)](https://ci.appveyor.com/project/CharliePoole/testcentric-gui/branch/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/i7ymql47e8bo2rel/branch/main?svg=true)](https://ci.appveyor.com/project/CharliePoole/testcentric-gui/branch/main)
 
 The **TestCentric Runner for NUnit** (aka **TestCentric**) is a GUI runner aimed at eventually supporting a range of .NET testing frameworks. In the version 1.0 release, we are concentrating on support of `NUnit` tests.
 

@@ -36,7 +36,7 @@ choco install testcentric-gui --pre
 
 ### Installing a Development Release
 
-We currently create development releases each time a change is merged to master. This is a special type of pre-release using the `dev` suffix and located on our `MyGet` feed.
+We currently create development releases each time a change is merged to main. This is a special type of pre-release using the `dev` suffix and located on our `MyGet` feed.
 .
 ```
 choco install testcentric-gui --pre -s http://www.myget.org/F/testcentric
