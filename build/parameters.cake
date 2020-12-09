@@ -176,12 +176,12 @@ public class BuildParameters
 	public bool IsReleaseBranch => BuildVersion.IsReleaseBranch;
 
 	public bool IsPreRelease => BuildVersion.IsPreRelease;
-	public bool ShouldPublishToMyGet => !IsPreRelease && !IsReleaseBranch || 
-		LABELS_WE_PUBLISH_ON_MYGET.Contains(BuildVersion.PreReleaseLabel);
-	public bool ShouldPublishToNuGet => !IsPreRelease && !IsReleaseBranch ||
-		LABELS_WE_PUBLISH_ON_NUGET.Contains(BuildVersion.PreReleaseLabel);
-	public bool ShouldPublishToChocolatey => !IsPreRelease && !IsReleaseBranch ||
-		LABELS_WE_PUBLISH_ON_CHOCOLATEY.Contains(BuildVersion.PreReleaseLabel);
+	public bool ShouldPublishToMyGet => !IsReleaseBranch &&
+		(!IsPreRelease || LABELS_WE_PUBLISH_ON_MYGET.Contains(BuildVersion.PreReleaseLabel));
+	public bool ShouldPublishToNuGet => !IsReleaseBranch &&
+		(!IsPreRelease || LABELS_WE_PUBLISH_ON_NUGET.Contains(BuildVersion.PreReleaseLabel));
+	public bool ShouldPublishToChocolatey => !IsReleaseBranch &&
+		(!IsPreRelease || LABELS_WE_PUBLISH_ON_CHOCOLATEY.Contains(BuildVersion.PreReleaseLabel));
 	public bool IsProductionRelease => ShouldPublishToNuGet || ShouldPublishToChocolatey;
 	
 	public bool UsingXBuild { get; }
