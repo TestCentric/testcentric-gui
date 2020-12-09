@@ -10,11 +10,11 @@
     <projectSourceUrl>https://github.com/TestCentric/testcentric-gui</projectSourceUrl>
     <docsUrl>https://github.com/TestCentric/testcentric-gui/wiki</docsUrl>
     <bugTrackerUrl>https://github.com/TestCentric/testcentric-gui/issues</bugTrackerUrl>
-    <iconUrl>https://raw.githubusercontent.com/TestCentric/testcentric-gui/master/testcentric.png</iconUrl>
+    <iconUrl>https://raw.githubusercontent.com/TestCentric/testcentric-gui/main/testcentric.png</iconUrl>
     <packageSourceUrl>https://github.com/TestCentric/testcentric-gui</packageSourceUrl>
-    <releaseNotes>https://raw.githubusercontent.com/TestCentric/testcentric-gui/master/CHANGES.txt</releaseNotes>
+    <releaseNotes>https://raw.githubusercontent.com/TestCentric/testcentric-gui/main/CHANGES.txt</releaseNotes>
     <mailingListUrl>https://groups.google.com/forum/#!forum/nunit-discuss</mailingListUrl>
-    <licenseUrl>https://raw.githubusercontent.com/TestCentric/testcentric-gui/master/LICENSE.txt</licenseUrl>
+    <licenseUrl>https://raw.githubusercontent.com/TestCentric/testcentric-gui/main/LICENSE.txt</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <authors>Charlie Poole</authors>
     <owners>Charlie Poole</owners>
