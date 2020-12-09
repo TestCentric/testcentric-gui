@@ -3,7 +3,8 @@ legacy-semver-padding: 5
 build-metadata-padding: 5
 commits-since-version-source-padding: 5
 branches:
-  main:
+  master:
+    regex: ^main$
     tag: dev
   release:
     tag: pre
