@@ -29,6 +29,28 @@ The test tree uses both colors and symbols to indicate the test status.
 
 **Note:** Tests marked with the `IgnoreAttribute` are shown in yellow immediately upon loading. Similarly, non-runnable tests (e.g.: wrong argument type) are shown in red immediately, without waiting for the user to press Run. Other statuses are not shown until after the test is run.
 
+# Run and Stop Buttons
+
+Clicking **Run** causes the test selected in the tree display to run. If the selected test contains
+subordinate tests nested beneath it, they all run as well. If the topmost tree node is selected, then
+all the tests are run. When checkboxes are enabled in the tree display, multiple non-nested tests may
+be selected.
+
+While a test is running the **Stop** button is enabled. Clicking it causes the tests to stop in an
+orderly fashion. No new test cases are started but all those currently running are allowed to complete.
+Any both individual and one-time teardown methods are allowed to execute so that the tests may clean up
+after themselves and dispose of any resources.
+
+While the orderly stop is in progress, the **Stop** button label changes to **Forced Stop**. This is
+intended to be used in situations where the framework in use or the tests themselves are preventing
+an orderly stop from completing. For example, a test with an infinite loop might otherwise never 
+terminate. Once **Forced Stop** is clicked, the runner instructs the test framework to terminate
+execution forcibly,
+
+Some frameworks may not be able to force termination, either because the framework doesn't have that
+feature or because of a bug. After waiting 5 seconds for forced termination to complete, the GUI will
+itself terminate all tests by or unloading any test AppDomains or Processes, which have not terminated.
+
 # Progress Bar
 
 The progress bar shows the progress of the test. It is colored according to the "worst" result obtained: red if there were any failures, yellow if some tests were ignored and green for success.

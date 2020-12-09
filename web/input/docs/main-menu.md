@@ -166,7 +166,8 @@ Runs only the tests that failed on the previous run.
 
 ## Stop Run
 
-Stops the test run. This is the same function provided by the Stop button.
+Stops the test run. This is the same function provided by the Stop button. See
+the [Main Window](/testcentric-gui/docs/main-window.html) page for a detailed description.
 
 # Tools Menu
 
