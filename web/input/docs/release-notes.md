@@ -1,6 +1,30 @@
 Description: Displays the Release Notes showing changes made in each release of TestCentric.
 Order: 9
 ---
+### TestCentric Runner for NUnit 1.5.0 - December 8, 2020
+
+This release includes one major new feature. The Stop button now triggers a non-forced
+stop, running all teardowns. It then gives the user the option of a forced stop in case
+the run does not terminate. In addition, it incorporates major build improvements, which
+will make it easier to do more frequent releases in the future.
+
+#### Feature
+
+ * Implement two stage Stop, first trying non-forced and then letting user select forced stop.
+
+#### Bugs
+
+ * Version 1.4.1 release zip file is missing
+ * Clear All  and Check Failed checkboxes do not work correctly
+ * Results not being cleared in tree for each new run
+
+#### Build
+
+ * Automate final release process
+ * Convert projects to new format
+ * Add CodeQL analysis to the build
+ * Automatically update website
+
 ### TestCentric Runner for NUnit 1.4.1 - September 3, 2020
 
 This is primarily a bug fix release, the exception being the use of our own metadata
