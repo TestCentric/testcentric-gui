@@ -1,4 +1,4 @@
-Description: Displays the Release Notes showing changes made in each release of TestCentric.
+Description: Displays the <a href="release-notes.html">Release Notes</a> showing changes made in each release of TestCentric.
 Order: 9
 ---
 ### TestCentric Runner for NUnit 1.5.0 - December 8, 2020
@@ -10,20 +10,20 @@ will make it easier to do more frequent releases in the future.
 
 #### Feature
 
- * Implement two stage Stop, first trying non-forced and then letting user select forced stop.
+ * 374 Implement two stage Stop, first trying non-forced and then letting user select forced stop.
 
 #### Bugs
 
- * Version 1.4.1 release zip file is missing
- * Clear All  and Check Failed checkboxes do not work correctly
- * Results not being cleared in tree for each new run
+ * 613 Version 1.4.1 release zip file is missing
+ * 607 Clear All  and Check Failed checkboxes do not work correctly
+ * 605 Results not being cleared in tree for each new run
 
 #### Build
 
- * Automate final release process
- * Convert projects to new format
- * Add CodeQL analysis to the build
- * Automatically update website
+ * 612 Automate final release process
+ * 611 Convert projects to new format
+ * 602 Add CodeQL analysis to the build
+ * 599 Automatically update website
 
 ### TestCentric Runner for NUnit 1.4.1 - September 3, 2020
 

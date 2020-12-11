@@ -1,4 +1,4 @@
-Description: Displays the TestCentric Runner license.
+Description: Displays the <a href="license.html">TestCentric Runner license</a>.
 Order: 10
 ---
 Copyright (c) 2018-2020 Charlie Poole
