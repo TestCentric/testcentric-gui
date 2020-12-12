@@ -35,7 +35,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0F939442
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test-utilities", "src\tests\test-utilities\test-utilities.csproj", "{3E63AD0F-24D4-46BE-BEE4-5A3299847D86}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mock-assembly", "src\tests\mock-assembly\mock-assembly.csproj", "{2E368281-3BA8-4050-B05E-0E0E43F8F446}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mock-assembly", "src\tests\mock-assembly\mock-assembly.csproj", "{2E368281-3BA8-4050-B05E-0E0E43F8F446}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCentric.Gui.Model.Tests", "src\TestModel\tests\TestCentric.Gui.Model.Tests.csproj", "{49D8D9F5-FD8D-4B4F-800C-68DCEE9AE166}"
 EndProject
@@ -77,7 +77,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCentric.Gui.Components"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestEngine", "TestEngine", "{EA14AF63-0F5D-4938-9C87-6EC67A961DB3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mock-assembly-v2", "src\tests\mock-assembly-v2\mock-assembly-v2.csproj", "{713E77FC-8CB1-46BC-93C8-33D1D302159C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mock-assembly-v2", "src\tests\mock-assembly-v2\mock-assembly-v2.csproj", "{713E77FC-8CB1-46BC-93C8-33D1D302159C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCentric.Common.Tests", "src\Common\testcentric.common.tests\TestCentric.Common.Tests.csproj", "{59C1C5EF-78B3-4E26-9B49-3032C57DC6F8}"
 EndProject
@@ -117,7 +117,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{6C9280F6
 		build\website.cake = build\website.cake
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mock-assembly-x86", "src\tests\mock-assembly-x86\mock-assembly-x86.csproj", "{80A66FA1-65B5-4AA5-B8BB-8908D0B04598}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mock-assembly-x86", "src\tests\mock-assembly-x86\mock-assembly-x86.csproj", "{80A66FA1-65B5-4AA5-B8BB-8908D0B04598}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "zip", "zip", "{76D01D8E-B522-45D8-9835-B0F0FAE48A0A}"
 	ProjectSection(SolutionItems) = preProject
@@ -247,7 +247,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3E87A106-EB20-4147-84C8-95B0BB43A1D4} = {35A92AA3-A1E6-426E-8D96-322F3EBF1C8D}
-		{C68900CC-C4E4-48D5-A2AC-267726E75C60} = {35A92AA3-A1E6-426E-8D96-322F3EBF1C8D}
 		{3E63AD0F-24D4-46BE-BEE4-5A3299847D86} = {0F939442-8450-41CF-8BB7-FAA00866F4E4}
 		{2E368281-3BA8-4050-B05E-0E0E43F8F446} = {0F939442-8450-41CF-8BB7-FAA00866F4E4}
 		{49D8D9F5-FD8D-4B4F-800C-68DCEE9AE166} = {C68900CC-C4E4-48D5-A2AC-267726E75C60}

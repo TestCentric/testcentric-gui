@@ -1,132 +1,27 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AC6DFB0E-C717-4FC4-B918-D6B789061212}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>TestCentric.Gui.Components</RootNamespace>
-    <AssemblyName>TestCentric.Gui.Components</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\testcentric.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\..\..\bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\..\bin\Release</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DebugType>pdbonly</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="nunit.engine.api, Version=3.0.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NUnit.Engine.Api.3.11.1\lib\net20\nunit.engine.api.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Drawing" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\CommonAssemblyInfo.cs">
-      <Link>Properties\CommonAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="DialogManager.cs" />
-    <Compile Include="Dialogs\ExtensionDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\ParameterDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\ParameterDialog.Designer.cs">
-      <DependentUpon>ParameterDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\TestParametersDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\TestParametersDialog.Designer.cs">
-      <DependentUpon>TestParametersDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Elements\ButtonElement.cs" />
-    <Compile Include="Elements\CheckBoxElement.cs" />
-    <Compile Include="Elements\CheckedToolStripMenuGroup.cs" />
-    <Compile Include="Elements\CheckedMenuGroup.cs" />
-    <Compile Include="Elements\CheckedMenuItem.cs" />
-    <Compile Include="Elements\ControlElement.cs" />
-    <Compile Include="Elements\IChecked.cs" />
-    <Compile Include="Elements\ICommand.cs" />
-    <Compile Include="Elements\IControlElement.cs" />
-    <Compile Include="Elements\IListBox.cs" />
-    <Compile Include="Elements\IToolStripMenu.cs" />
-    <Compile Include="Elements\IMenu.cs" />
-    <Compile Include="Elements\ISelection.cs" />
-    <Compile Include="Elements\IToolTip.cs" />
-    <Compile Include="Elements\ITreeView.cs" />
-    <Compile Include="Elements\IViewElement.cs" />
-    <Compile Include="Elements\ListBoxElement.cs" />
-    <Compile Include="Elements\MenuCommand.cs" />
-    <Compile Include="Elements\SplitButtonElement.cs" />
-    <Compile Include="Elements\ToolStripMenuElement.cs" />
-    <Compile Include="Elements\MenuElement.cs" />
-    <Compile Include="Elements\PopupMenu.cs" />
-    <Compile Include="Elements\TabSelector.cs" />
-    <Compile Include="Elements\ToolStripElement.cs" />
-    <Compile Include="Elements\TreeViewElement.cs" />
-    <Compile Include="Controls\ExpandingLabel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\TestCentricProgressBar.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Controls\TipWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="IDialogManager.cs" />
-    <Compile Include="ILongRunningOperationDisplay.cs" />
-    <Compile Include="LongRunningOperationDisplay.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Controls\ExpandingLabel.resx">
-      <DependentUpon>ExpandingLabel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Controls\TipWindow.resx">
-      <DependentUpon>TipWindow.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\ExtensionDialog.resx">
-      <DependentUpon>ExtensionDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\ParameterDialog.resx">
-      <DependentUpon>ParameterDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\TestParametersDialog.resx">
-      <DependentUpon>TestParametersDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="LongRunningOperationDisplay.resx">
-      <DependentUpon>LongRunningOperationDisplay.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\TestModel\model\TestCentric.Gui.Model.csproj">
-      <Project>{e978a8d7-e4a4-4de9-94df-d82bd764936b}</Project>
-      <Name>TestCentric.Gui.Model</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<RootNamespace>TestCentric.Gui.Components</RootNamespace>
+		<AssemblyName>TestCentric.Gui.Components</AssemblyName>
+		<TargetFramework>net45</TargetFramework>
+		<OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>..\..\testcentric.snk</AssemblyOriginatorKeyFile>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	</PropertyGroup>
+	<ItemGroup>
+		<Reference Include="System.Windows.Forms" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\TestModel\model\TestCentric.Gui.Model.csproj">
+			<Project>{e978a8d7-e4a4-4de9-94df-d82bd764936b}</Project>
+			<Name>TestCentric.Gui.Model</Name>
+		</ProjectReference>
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="NUnit.Engine.Api">
+			<Version>3.11.1</Version>
+		</PackageReference>
+	</ItemGroup>
 </Project>
