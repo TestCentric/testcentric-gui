@@ -53,12 +53,6 @@ namespace TestCentric.Gui.Presenters
 
         private readonly RuntimeSelectionController _runtimeSelectionController;
 
-        // Our nunit project watcher
-        //private FileWatcher projectWatcher;
-
-        // Current Long operation display, if any, or null
-        private LongRunningOperationDisplay _longOpDisplay;
-
         private List<string> _resultFormats = new List<string>();
 
         #endregion

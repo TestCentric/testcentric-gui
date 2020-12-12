@@ -2,8 +2,6 @@
 // TESTING HELPER METHODS
 //////////////////////////////////////////////////////////////////////
 
-const string DEFAULT_RESULT_FILE = "TestResult.xml";
-
 static void CheckTestErrors(ref List<string> errorDetail)
 {
     if(errorDetail.Count != 0)
@@ -308,7 +306,7 @@ public abstract class PackageTester : GuiTester
 				foreach (string extension in packageTest.ExtensionsNeeded)
 					CheckExtensionIsInstalled(extension);
 
-				var resultFile = _parameters.OutputDirectory + DEFAULT_RESULT_FILE;
+				var resultFile = _parameters.OutputDirectory + DEFAULT_TEST_RESULT_FILE;
 				// Delete result file ahead of time so we don't mistakenly
 				// read a left-over file from another test run. Leave the
 				// file after the run in case we need it to debug a failure.

@@ -38,28 +38,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 
 //////////////////////////////////////////////////////////////////////
-// CONSTANTS
-//////////////////////////////////////////////////////////////////////
-
-// NOTE: Since GitVersion is only used when running under
-// Windows, the default version should be updated to the 
-// next version after each release.
-const string DEFAULT_VERSION = "1.3.3";
-const string DEFAULT_CONFIGURATION = "Release";
-
-const string SOLUTION = "testcentric-gui.sln";
-
-const string PACKAGE_NAME = "testcentric-gui";
-const string NUGET_PACKAGE_NAME = "TestCentric.GuiRunner";
-const string METADATA_PACKAGE_NAME = "TestCentric.Metadata";
-
-const string GUI_RUNNER = "testcentric.exe";
-const string EXPERIMENTAL_RUNNER = "tc-next.exe";
-const string ALL_TESTS = "*.Tests.dll";
-
-const string WYAM = "wyam";
-
-//////////////////////////////////////////////////////////////////////
 // SETUP AND TEARDOWN
 //////////////////////////////////////////////////////////////////////
 
