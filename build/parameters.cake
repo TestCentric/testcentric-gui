@@ -1,3 +1,4 @@
+#load "./utilities.cake"
 #load "./versioning.cake"
 #load "./testing.cake"
 #load "./test-results.cake"
@@ -136,6 +137,7 @@ public class BuildParameters
 	public bool IsRunningOnAppVeyor => _buildSystem.AppVeyor.IsRunningOnAppVeyor;
 
 	public string ProjectDirectory { get; }
+	public string SourceDirectory => ProjectDirectory + "src/";
 	public string OutputDirectory => ProjectDirectory + "bin/" + Configuration + "/";
 	public string ZipDirectory => ProjectDirectory + "zip/";
 	public string NuGetDirectory => ProjectDirectory + "nuget/";
@@ -274,6 +276,7 @@ public class BuildParameters
 		Console.WriteLine("\nDIRECTORIES");
 		Console.WriteLine("Project:   " + ProjectDirectory);
 		Console.WriteLine("Output:    " + OutputDirectory);
+		Console.WriteLine("Source:    " + SourceDirectory);
 		Console.WriteLine("NuGet:     " + NuGetDirectory);
 		Console.WriteLine("Choco:     " + ChocoDirectory);
 		Console.WriteLine("Package:   " + PackageDirectory);

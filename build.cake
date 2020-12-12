@@ -99,6 +99,13 @@ Task("Clean")
     CleanDirectory(parameters.OutputDirectory);
 });
 
+Task("CleanAll")
+	.IsDependentOn("Clean")
+	.Does<BuildParameters>((parameters) =>
+	{
+		DeleteObjectDirectories(parameters);
+	});
+
 //////////////////////////////////////////////////////////////////////
 // RESTORE NUGET PACKAGES
 //////////////////////////////////////////////////////////////////////
