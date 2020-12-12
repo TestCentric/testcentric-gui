@@ -2,12 +2,13 @@ Title: TestCentric Runner
 Description: TestCentric Runner is a GUI test runner aimed at eventually supporting a range of .NET testing frameworks. As of the current 1.4.0 release, it supports NUnit tests.
 Order: 1
 ---
+@foreach(IDocument child in Model.DocumentList(Keys.Children).OrderBy(x => x.Get<int>(DocsKeys.Order, 1000)))
+{
+    <h2>@(child.String(Keys.Title))</h2>
+    if(child.ContainsKey(DocsKeys.Description))
+    {
+        <p>@Html.Raw(child.String(DocsKeys.Description))</p>
+    }
 
-<p>TestCentric Runner is a GUI test runner for the .NET world. The current release (version 1.4.0)
-   supports the NUnit 3 and NUnit V2 test frameworks. Future releases will eventually support
-   other frameworks.</p>
-
-<p>The current release is similar in appearance of the NUnit V2 GUI Runner,
-   but has internal modifications to allow it to run NUnit 3 tests.</p>
-
-@Html.Partial("_ChildPages")
+    @Html.Partial("_ChildPages", child)
+}

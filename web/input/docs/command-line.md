@@ -1,5 +1,5 @@
 Description: Shows to run TestCentric from the command line and lists available options.
-Order: 8
+Order: 4
 ---
 **TestCentric** is invoked from the command line as follows:
 
