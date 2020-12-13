@@ -95,9 +95,6 @@
       <Project>{e978a8d7-e4a4-4de9-94df-d82bd764936b}</Project>
       <Name>TestCentric.Gui.Model</Name>
     </ProjectReference>
-    <Reference Include="nunit.engine.api, Version=3.0.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NUnit.Engine.Api.3.11.1\lib\net20\nunit.engine.api.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -374,7 +371,6 @@
     <Content Include="Images\Tree\Visual Studio\Success.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="packages.config" />
     <None Include="Resources\picturebox1.Image.bmp" />
     <EmbeddedResource Include="Images\unpinned.gif" />
     <EmbeddedResource Include="Images\pinned.gif" />
@@ -395,6 +391,11 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NUnit.Engine.Api">
+      <Version>3.11.1</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
