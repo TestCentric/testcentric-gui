@@ -1,407 +1,104 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
-  <PropertyGroup>
-    <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{3FF340D5-D3B4-4DF0-BAF1-98B3C00B6148}</ProjectGuid>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <AssemblyKeyContainerName>
-    </AssemblyKeyContainerName>
-    <AssemblyName>TestCentric.Gui.Runner</AssemblyName>
-    <DefaultClientScript>JScript</DefaultClientScript>
-    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
-    <DefaultTargetSchema>IE50</DefaultTargetSchema>
-    <OutputType>Library</OutputType>
-    <RootNamespace>TestCentric.Gui</RootNamespace>
-    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>..\..\..\bin\Debug\</OutputPath>
-    <BaseAddress>285212672</BaseAddress>
-    <ConfigurationOverrideFile>
-    </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <DocumentationFile>
-    </DocumentationFile>
-    <DebugSymbols>true</DebugSymbols>
-    <FileAlignment>4096</FileAlignment>
-    <NoWarn>1699</NoWarn>
-    <Optimize>false</Optimize>
-    <RegisterForComInterop>false</RegisterForComInterop>
-    <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <WarningLevel>4</WarningLevel>
-    <DebugType>full</DebugType>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>..\..\..\bin\Release\</OutputPath>
-    <BaseAddress>285212672</BaseAddress>
-    <ConfigurationOverrideFile>
-    </ConfigurationOverrideFile>
-    <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>
-    </DocumentationFile>
-    <FileAlignment>4096</FileAlignment>
-    <NoWarn>1699</NoWarn>
-    <Optimize>true</Optimize>
-    <RegisterForComInterop>false</RegisterForComInterop>
-    <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <WarningLevel>4</WarningLevel>
-    <DebugType>pdbonly</DebugType>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\testcentric.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Common\components\TestCentric.Gui.Components.csproj">
-      <Project>{ac6dfb0e-c717-4fc4-b918-d6b789061212}</Project>
-      <Name>TestCentric.Gui.Components</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\TestModel\model\TestCentric.Gui.Model.csproj">
-      <Project>{e978a8d7-e4a4-4de9-94df-d82bd764936b}</Project>
-      <Name>TestCentric.Gui.Model</Name>
-    </ProjectReference>
-    <Reference Include="System">
-      <Name>System</Name>
-    </Reference>
-    <Reference Include="System.Data">
-      <Name>System.Data</Name>
-    </Reference>
-    <Reference Include="System.Drawing">
-      <Name>System.Drawing</Name>
-    </Reference>
-    <Reference Include="System.Windows.Forms">
-      <Name>System.Windows.Forms</Name>
-    </Reference>
-    <Reference Include="System.Xml">
-      <Name>System.XML</Name>
-    </Reference>
-    <ProjectReference Include="..\..\GuiException\UiException\nunit.uiexception.dll.csproj">
-      <Project>{3E87A106-EB20-4147-84C8-95B0BB43A1D4}</Project>
-      <Name>nunit.uiexception.dll</Name>
-    </ProjectReference>
-    <Reference Include="System.Configuration" />
-    <ProjectReference Include="..\..\Common\testcentric.common\TestCentric.Common.csproj">
-      <Project>{B69057F3-0663-4763-A3EC-50D463578B94}</Project>
-      <Name>TestCentric.Common</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\CommonAssemblyInfo.cs">
-      <Link>Properties\CommonAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="Dialogs\AboutBox.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AppEntry.cs" />
-    <Compile Include="Dialogs\SettingsDialog.cs" />
-    <Compile Include="Dialogs\SettingsDialogBase.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\TreeBasedSettingsDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Presenters\ErrorsAndFailuresPresenter.cs" />
-    <Compile Include="Presenters\RuntimeSelectionController.cs" />
-    <Compile Include="Presenters\TestsNotRunPresenter.cs" />
-    <Compile Include="Presenters\ProgressBarPresenter.cs" />
-    <Compile Include="Presenters\StatusBarPresenter.cs" />
-    <Compile Include="Presenters\TextOutputPresenter.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestNodeFilters.cs" />
-    <Compile Include="Views\ILongRunningOperation.cs" />
-    <Compile Include="Views\IMainView.cs" />
-    <Compile Include="Views\TestCentricMainView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="TestCentricFormBase.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Presenters\TestCentricPresenter.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="SettingsPages\AdvancedLoaderSettingsPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="SettingsPages\AssemblyReloadSettingsPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="SettingsPages\GuiSettingsPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="SettingsPages\ProjectEditorSettingsPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="SettingsPages\ProjectEditorSettingsPage.Designer.cs">
-      <DependentUpon>ProjectEditorSettingsPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SettingsPages\SettingsPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="SettingsPages\TextOutputSettingsPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="SettingsPages\TreeSettingsPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Dialogs\TestPropertiesDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\TestPropertiesDialog.Designer.cs">
-      <DependentUpon>TestPropertiesDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\TestResultItem.cs" />
-    <Compile Include="Views\ErrorsAndFailuresView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Views\IErrorsAndFailuresView.cs" />
-    <Compile Include="Views\ITestsNotRunView.cs" />
-    <Compile Include="Views\IProgressBarView.cs" />
-    <Compile Include="Views\IStatusBarView.cs" />
-    <Compile Include="Views\ITextOutputView.cs" />
-    <Compile Include="Views\ProgressBarView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Views\ProgressBarView.Designer.cs">
-      <DependentUpon>ProgressBarView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\StatusBarView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Views\StatusBarView.Designer.cs">
-      <DependentUpon>StatusBarView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\TestsNotRunView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Views\TestsNotRunView.Designer.cs">
-      <DependentUpon>TestsNotRunView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\TextOutputView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Views\TextOutputView.Designer.cs">
-      <DependentUpon>TextOutputView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UserControlView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="VisualState.cs" />
-    <Compile Include="WaitCursor.cs" />
-    <EmbeddedResource Include="Dialogs\AboutBox.resx">
-      <DependentUpon>AboutBox.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\SettingsDialog.resx">
-      <DependentUpon>SettingsDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\SettingsDialogBase.resx">
-      <DependentUpon>SettingsDialogBase.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\TreeBasedSettingsDialog.resx">
-      <DependentUpon>TreeBasedSettingsDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\TestCentricMainView.resx">
-      <DependentUpon>TestCentricMainView.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SettingsPages\AdvancedLoaderSettingsPage.resx">
-      <DependentUpon>AdvancedLoaderSettingsPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SettingsPages\AssemblyReloadSettingsPage.resx">
-      <DependentUpon>AssemblyReloadSettingsPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SettingsPages\GuiSettingsPage.resx">
-      <DependentUpon>GuiSettingsPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SettingsPages\ProjectEditorSettingsPage.resx">
-      <DependentUpon>ProjectEditorSettingsPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SettingsPages\SettingsPage.resx">
-      <DependentUpon>SettingsPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SettingsPages\TextOutputSettingsPage.resx">
-      <DependentUpon>TextOutputSettingsPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SettingsPages\TreeSettingsPage.resx">
-      <DependentUpon>TreeSettingsPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\TestPropertiesDialog.resx">
-      <DependentUpon>TestPropertiesDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\ErrorsAndFailuresView.resx">
-      <DependentUpon>ErrorsAndFailuresView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\ProgressBarView.resx">
-      <DependentUpon>ProgressBarView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\StatusBarView.resx">
-      <DependentUpon>StatusBarView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\TestsNotRunView.resx">
-      <DependentUpon>TestsNotRunView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\TextOutputView.resx">
-      <DependentUpon>TextOutputView.cs</DependentUpon>
-    </EmbeddedResource>
-    <Compile Include="Presenters\TreeViewPresenter.cs" />
-    <Compile Include="Views\ITestTreeView.cs" />
-    <Compile Include="Views\CategoryView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <EmbeddedResource Include="Views\TestTree.resx">
-      <DependentUpon>CategoryView.cs</DependentUpon>
-    </EmbeddedResource>
-    <Compile Include="Views\TestSuiteTreeNode.cs" />
-    <Compile Include="Views\TestTreeView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Views\TestTreeView.Designer.cs">
-      <DependentUpon>TestTreeView.cs</DependentUpon>
-    </Compile>
-    <EmbeddedResource Include="Views\TestTreeView.resx">
-      <DependentUpon>TestTreeView.cs</DependentUpon>
-    </EmbeddedResource>
-    <Compile Include="Views\ICategoryView.cs" />
-    <Compile Include="Presenters\CategoryPresenter.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\..\..\testcentric.ico">
-      <Link>testcentric.ico</Link>
-    </Content>
-    <Content Include="Images\Ellipsis.gif" />
-    <Content Include="Images\Tree\Circles\Failure.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Tree\Circles\Ignored.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Tree\Circles\Inconclusive.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Tree\Circles\Skipped.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Tree\Circles\Success.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Tree\Classic\Failure.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Tree\Classic\Ignored.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Tree\Classic\Inconclusive.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Tree\Classic\Skipped.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Tree\Classic\Success.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Tree\Default\Failure.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Tree\Default\Ignored.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Tree\Default\Inconclusive.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Tree\Default\Skipped.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Tree\Default\Success.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Tree\Visual Studio\Failure.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Tree\Visual Studio\Ignored.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Tree\Visual Studio\Inconclusive.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Tree\Visual Studio\Skipped.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Tree\Visual Studio\Success.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <None Include="Resources\picturebox1.Image.bmp" />
-    <EmbeddedResource Include="Images\unpinned.gif" />
-    <EmbeddedResource Include="Images\pinned.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
-      <Visible>False</Visible>
-      <ProductName>Windows Installer 3.1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="NUnit.Engine.Api">
-      <Version>3.11.1</Version>
-    </PackageReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<RootNamespace>TestCentric.Gui</RootNamespace>
+		<AssemblyName>TestCentric.Gui.Runner</AssemblyName>
+		<TargetFramework>net45</TargetFramework>
+		<OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>..\..\testcentric.snk</AssemblyOriginatorKeyFile>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	</PropertyGroup>
+	<ItemGroup>
+		<Reference Include="System.Windows.Forms" />
+	</ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\Common\components\TestCentric.Gui.Components.csproj">
+            <Name>TestCentric.Gui.Components</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\..\TestModel\model\TestCentric.Gui.Model.csproj">
+            <Name>TestCentric.Gui.Model</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\..\GuiException\UiException\nunit.uiexception.dll.csproj">
+            <Name>nunit.uiexception.dll</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\..\Common\testcentric.common\TestCentric.Common.csproj">
+            <Name>TestCentric.Common</Name>
+        </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="..\..\CommonAssemblyInfo.cs">
+            <Link>Properties\CommonAssemblyInfo.cs</Link>
+        </Compile>
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="..\..\..\testcentric.ico">
+            <Link>testcentric.ico</Link>
+        </Content>
+        <Content Include="Images\Ellipsis.gif" />
+        <Content Include="Images\Tree\Circles\Failure.jpg">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Circles\Ignored.jpg">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Circles\Inconclusive.jpg">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Circles\Skipped.jpg">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Circles\Success.jpg">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Classic\Failure.jpg">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Classic\Ignored.jpg">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Classic\Inconclusive.jpg">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Classic\Skipped.jpg">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Classic\Success.jpg">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Default\Failure.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Default\Ignored.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Default\Inconclusive.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Default\Skipped.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Default\Success.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Visual Studio\Failure.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Visual Studio\Ignored.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Visual Studio\Inconclusive.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Visual Studio\Skipped.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Visual Studio\Success.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="NUnit.Engine.Api" Version="3.11.1" />
+    </ItemGroup>
 </Project>
