@@ -1,273 +1,61 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9E15166C-D2B7-4B24-AB1C-1C69FFCEC9D3}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TestCentric.Gui</RootNamespace>
-    <AssemblyName>Experimental.Gui.Runner</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\testcentric.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\..\..\bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\..\bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\CommonAssemblyInfo.cs">
-      <Link>Properties\CommonAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="Presenters\CategoryGrouping.cs" />
-    <Compile Include="Presenters\GroupDisplayStrategy.cs" />
-    <Compile Include="Presenters\DurationGrouping.cs" />
-    <Compile Include="Presenters\OutcomeGrouping.cs" />
-    <Compile Include="Presenters\RuntimeSelectionController.cs" />
-    <Compile Include="Presenters\TextOutputPresenter.cs" />
-    <Compile Include="Presenters\TestGroup.cs" />
-    <Compile Include="Presenters\FixtureListDisplayStrategy.cs" />
-    <Compile Include="Presenters\NUnitTreeDisplayStrategy.cs" />
-    <Compile Include="Presenters\TestGrouping.cs" />
-    <Compile Include="Presenters\TestListDisplayStrategy.cs" />
-    <Compile Include="Presenters\TestPropertiesPresenter.cs" />
-    <Compile Include="Presenters\StatusBarPresenter.cs" />
-    <Compile Include="Presenters\DisplayStrategy.cs" />
-    <Compile Include="Presenters\XmlPresenter.cs" />
-    <Compile Include="Presenters\InitialTreeExpansion.cs" />
-    <Compile Include="Views\AddinPages\AddinsView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\AddinPages\AddinsView.Designer.cs">
-      <DependentUpon>AddinsView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\AddinPages\ExtensionNodeView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Views\AddinPages\ExtensionPointView.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Views\IAddinsView.cs" />
-    <Compile Include="Views\IDialog.cs" />
-    <Compile Include="Views\IMainView.cs" />
-    <Compile Include="Views\IProgressBarView.cs" />
-    <Compile Include="Views\ISettingsDialog.cs" />
-    <Compile Include="Views\IStatusBarView.cs" />
-    <Compile Include="Views\ITestPropertiesVIew.cs" />
-    <Compile Include="Views\ITestTreeView.cs" />
-    <Compile Include="Views\ITextOutputView.cs" />
-    <Compile Include="Views\IView.cs" />
-    <Compile Include="Views\IXmlView.cs" />
-    <Compile Include="Views\SettingsDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\SettingsDialog.Designer.cs">
-      <DependentUpon>SettingsDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SettingsPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Views\SettingsPage.Designer.cs">
-      <DependentUpon>SettingsPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SettingsPages\AssemblyReloadSettingsPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Views\SettingsPages\AssemblyReloadSettingsPage.Designer.cs">
-      <DependentUpon>AssemblyReloadSettingsPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SettingsPages\GuiSettingsPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Views\SettingsPages\GuiSettingsPage.Designer.cs">
-      <DependentUpon>GuiSettingsPage.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SettingsPages\TextOutputSettingsPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Views\SettingsPages\TreeSettingsPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Views\TestPropertiesView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Views\TestPropertiesView.Designer.cs">
-      <DependentUpon>TestPropertiesView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\TestTreeView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Views\TestTreeView.Designer.cs">
-      <DependentUpon>TestTreeView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ProgressBarView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Views\ProgressBarView.Designer.cs">
-      <DependentUpon>ProgressBarView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\StatusBarView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Views\StatusBarView.Designer.cs">
-      <DependentUpon>StatusBarView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Presenters\ProgressBarPresenter.cs" />
-    <Compile Include="Presenters\TreeViewPresenter.cs" />
-    <Compile Include="Views\MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Views\MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Presenters\MainPresenter.cs" />
-    <Compile Include="AppEntry.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\TextOutputView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Views\TextOutputView.Designer.cs">
-      <DependentUpon>TextOutputView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Views\XmlView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Views\XmlView.Designer.cs">
-      <DependentUpon>XmlView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Xml2RtfConverter.cs" />
-    <EmbeddedResource Include="Views\AddinPages\AddinsView.resx">
-      <DependentUpon>AddinsView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <EmbeddedResource Include="Views\SettingsDialog.resx">
-      <DependentUpon>SettingsDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\SettingsPages\AssemblyReloadSettingsPage.resx">
-      <DependentUpon>AssemblyReloadSettingsPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\SettingsPages\GuiSettingsPage.resx">
-      <DependentUpon>GuiSettingsPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\SettingsPages\TextOutputSettingsPage.resx">
-      <DependentUpon>TextOutputSettingsPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\SettingsPages\TreeSettingsPage.resx">
-      <DependentUpon>TreeSettingsPage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\TestPropertiesView.resx">
-      <DependentUpon>TestPropertiesView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\TestTreeView.resx">
-      <DependentUpon>TestTreeView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\ProgressBarView.resx">
-      <DependentUpon>ProgressBarView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\StatusBarView.resx">
-      <DependentUpon>StatusBarView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\TextOutputView.resx">
-      <DependentUpon>TextOutputView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\XmlView.resx">
-      <DependentUpon>XmlView.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Common\components\TestCentric.Gui.Components.csproj">
-      <Project>{ac6dfb0e-c717-4fc4-b918-d6b789061212}</Project>
-      <Name>TestCentric.Gui.Components</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Common\testcentric.common\TestCentric.Common.csproj">
-      <Project>{b69057f3-0663-4763-a3ec-50d463578b94}</Project>
-      <Name>TestCentric.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\TestModel\model\TestCentric.Gui.Model.csproj">
-      <Project>{e978a8d7-e4a4-4de9-94df-d82bd764936b}</Project>
-      <Name>TestCentric.Gui.Model</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\..\..\testcentric.ico">
-      <Link>testcentric.ico</Link>
-    </Content>
-    <Content Include="Images\DebugTests.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\RunTests.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Tree\Default\Failure.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Tree\Default\Warning.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Tree\Default\Inconclusive.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Tree\Default\Skipped.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\Tree\Default\Success.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="NUnit.Engine.Api">
-      <Version>3.11.1</Version>
-    </PackageReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<RootNamespace>TestCentric.Gui</RootNamespace>
+		<AssemblyName>Experimental.Gui.Runner</AssemblyName>
+		<TargetFramework>net45</TargetFramework>
+		<OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>..\..\testcentric.snk</AssemblyOriginatorKeyFile>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	</PropertyGroup>
+    <ItemGroup>
+        <Reference Include="System.Windows.Forms" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="..\..\CommonAssemblyInfo.cs">
+            <Link>Properties\CommonAssemblyInfo.cs</Link>
+        </Compile>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\Common\components\TestCentric.Gui.Components.csproj">
+            <Name>TestCentric.Gui.Components</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\..\Common\testcentric.common\TestCentric.Common.csproj">
+            <Name>TestCentric.Common</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\..\TestModel\model\TestCentric.Gui.Model.csproj">
+            <Name>TestCentric.Gui.Model</Name>
+        </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="..\..\..\testcentric.ico">
+          <Link>testcentric.ico</Link>
+        </Content>
+        <Content Include="Images\DebugTests.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\RunTests.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Default\Failure.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Default\Warning.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Default\Inconclusive.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Default\Skipped.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Default\Success.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="NUnit.Engine.Api" Version="3.11.1" />
+    </ItemGroup>
 </Project>
