@@ -1,123 +1,43 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{96279B6C-981E-428F-B184-0831136ADD31}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TestCentric.Gui</RootNamespace>
-    <AssemblyName>Experimental.Gui.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\..\..\bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\..\bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\CommonAssemblyInfo.cs">
-      <Link>Properties\CommonAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="Presenters\Main\PackageSettingsTests.cs" />
-    <Compile Include="Presenters\Main\WhenTestsAreLoading.cs" />
-    <Compile Include="Presenters\Main\WhenTestsAreReloaded.cs" />
-    <Compile Include="Presenters\PresenterTestBase.cs" />
-    <Compile Include="Presenters\RuntimeSelectionControllerTests.cs" />
-    <Compile Include="Presenters\TestGroupTests.cs" />
-    <Compile Include="Presenters\StatusBarPresenterTests.cs" />
-    <Compile Include="Presenters\TestPropertiesPresenterTests.cs" />
-    <Compile Include="Presenters\TestTree\CommandTests.cs" />
-    <Compile Include="Presenters\TestTree\NUnitTreeDisplayStrategyTests.cs" />
-    <Compile Include="Presenters\TestTree\TestTreePresenterTestBase.cs" />
-    <Compile Include="Presenters\TestTree\WhenPresenterIsCreated.cs" />
-    <Compile Include="Presenters\TestTree\WhenTestRunBegins.cs" />
-    <Compile Include="Presenters\TestTree\WhenTestRunCompletes.cs" />
-    <Compile Include="Presenters\TestTree\WhenTestsAreReloaded.cs" />
-    <Compile Include="Presenters\TestTree\WhenTestsAreLoaded.cs" />
-    <Compile Include="Presenters\TestTree\WhenTestsAreUnloaded.cs" />
-    <Compile Include="Presenters\TextOutputPresenterTests.cs" />
-    <Compile Include="Presenters\TreeViewPresenterTests.cs" />
-    <Compile Include="Presenters\Main\WhenPresenterIsCreated.cs" />
-    <Compile Include="Presenters\Main\CommandTests.cs" />
-    <Compile Include="Presenters\Main\WhenTestRunCompletes.cs" />
-    <Compile Include="Presenters\Main\WhenTestRunBegins.cs" />
-    <Compile Include="Presenters\Main\MainPresenterTestBase.cs" />
-    <Compile Include="Presenters\Main\WhenTestsAreLoaded.cs" />
-    <Compile Include="Presenters\Main\WhenTestsAreUnloaded.cs" />
-    <Compile Include="Presenters\ProgressBarPresenterTests.cs" />
-    <Compile Include="Presenters\UserSettingsFake.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\CommonViewTests.cs" />
-    <Compile Include="Views\MainFormTests.cs" />
-    <Compile Include="XmlRtfConverterTests.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Common\components\TestCentric.Gui.Components.csproj">
-      <Project>{ac6dfb0e-c717-4fc4-b918-d6b789061212}</Project>
-      <Name>TestCentric.Gui.Components</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Common\testcentric.common\TestCentric.Common.csproj">
-      <Project>{b69057f3-0663-4763-a3ec-50d463578b94}</Project>
-      <Name>TestCentric.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\tests\mock-assembly\mock-assembly.csproj">
-      <Project>{2e368281-3ba8-4050-b05e-0e0e43f8f446}</Project>
-      <Name>mock-assembly</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\tests\test-utilities\test-utilities.csproj">
-      <Project>{3e63ad0f-24d4-46be-bee4-5a3299847d86}</Project>
-      <Name>test-utilities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\experimental-gui\Experimental.Gui.csproj">
-      <Project>{9e15166c-d2b7-4b24-ab1c-1c69ffcec9d3}</Project>
-      <Name>Experimental.Gui</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\TestModel\model\TestCentric.Gui.Model.csproj">
-      <Project>{e978a8d7-e4a4-4de9-94df-d82bd764936b}</Project>
-      <Name>TestCentric.Gui.Model</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="NSubstitute">
-      <Version>4.0.0</Version>
-    </PackageReference>
-    <PackageReference Include="NUnit">
-      <Version>3.11.0</Version>
-    </PackageReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<RootNamespace>TestCentric.Gui</RootNamespace>
+		<AssemblyName>Experimental.Gui.Tests</AssemblyName>
+		<TargetFramework>net45</TargetFramework>
+		<OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	</PropertyGroup>
+	<ItemGroup>
+		<Reference Include="System.Windows.Forms" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Include="..\..\CommonAssemblyInfo.cs">
+			<Link>Properties\CommonAssemblyInfo.cs</Link>
+		</Compile>
+	</ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\Common\components\TestCentric.Gui.Components.csproj">
+            <Name>TestCentric.Gui.Components</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\..\Common\testcentric.common\TestCentric.Common.csproj">
+            <Name>TestCentric.Common</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\..\tests\mock-assembly\mock-assembly.csproj">
+            <Name>mock-assembly</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\..\tests\test-utilities\test-utilities.csproj">
+            <Name>test-utilities</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\experimental-gui\Experimental.Gui.csproj">
+            <Name>Experimental.Gui</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\..\TestModel\model\TestCentric.Gui.Model.csproj">
+            <Name>TestCentric.Gui.Model</Name>
+        </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="NSubstitute" Version="4.0.0" />
+        <PackageReference Include="NUnit" Version="3.11.1" />
+    </ItemGroup>
 </Project>
