@@ -35,13 +35,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0F939442
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test-utilities", "src\tests\test-utilities\test-utilities.csproj", "{3E63AD0F-24D4-46BE-BEE4-5A3299847D86}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mock-assembly", "src\tests\mock-assembly\mock-assembly.csproj", "{2E368281-3BA8-4050-B05E-0E0E43F8F446}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mock-assembly", "src\tests\mock-assembly\mock-assembly.csproj", "{2E368281-3BA8-4050-B05E-0E0E43F8F446}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCentric.Gui.Model.Tests", "src\TestModel\tests\TestCentric.Gui.Model.Tests.csproj", "{49D8D9F5-FD8D-4B4F-800C-68DCEE9AE166}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestCentric.Gui.Model.Tests", "src\TestModel\tests\TestCentric.Gui.Model.Tests.csproj", "{49D8D9F5-FD8D-4B4F-800C-68DCEE9AE166}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nunit.uiexception.tests", "src\GuiException\tests\nunit.uiexception.tests.csproj", "{092486D0-6AB9-4134-932F-0FDA10704455}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCentric.Gui.Model", "src\TestModel\model\TestCentric.Gui.Model.csproj", "{E978A8D7-E4A4-4DE9-94DF-D82BD764936B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestCentric.Gui.Model", "src\TestModel\model\TestCentric.Gui.Model.csproj", "{E978A8D7-E4A4-4DE9-94DF-D82BD764936B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestCentric", "TestCentric", "{26735BF4-848E-4B3D-BA4D-E1366986F5BD}"
 EndProject
@@ -63,7 +63,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCentric.Gui", "src\Test
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{0C0A29CA-1A18-4B1A-9262-F41C01E7E30F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCentric.Common", "src\Common\testcentric.common\TestCentric.Common.csproj", "{B69057F3-0663-4763-A3EC-50D463578B94}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestCentric.Common", "src\Common\testcentric.common\TestCentric.Common.csproj", "{B69057F3-0663-4763-A3EC-50D463578B94}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Experimental", "Experimental", "{57B0C862-C6E4-42FA-9FFC-591CCA51FD27}"
 EndProject
@@ -73,13 +73,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experimental.Gui.Exe", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experimental.Gui.Tests", "src\Experimental\tests\Experimental.Gui.Tests.csproj", "{96279B6C-981E-428F-B184-0831136ADD31}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCentric.Gui.Components", "src\Common\components\TestCentric.Gui.Components.csproj", "{AC6DFB0E-C717-4FC4-B918-D6B789061212}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestCentric.Gui.Components", "src\Common\components\TestCentric.Gui.Components.csproj", "{AC6DFB0E-C717-4FC4-B918-D6B789061212}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestEngine", "TestEngine", "{EA14AF63-0F5D-4938-9C87-6EC67A961DB3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mock-assembly-v2", "src\tests\mock-assembly-v2\mock-assembly-v2.csproj", "{713E77FC-8CB1-46BC-93C8-33D1D302159C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mock-assembly-v2", "src\tests\mock-assembly-v2\mock-assembly-v2.csproj", "{713E77FC-8CB1-46BC-93C8-33D1D302159C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCentric.Common.Tests", "src\Common\testcentric.common.tests\TestCentric.Common.Tests.csproj", "{59C1C5EF-78B3-4E26-9B49-3032C57DC6F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestCentric.Common.Tests", "src\Common\testcentric.common.tests\TestCentric.Common.Tests.csproj", "{59C1C5EF-78B3-4E26-9B49-3032C57DC6F8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mock-assembly", "src\TestEngine\mock-assembly\mock-assembly.csproj", "{4A110EEC-7C79-4B44-9F6C-38259366076D}"
 EndProject
@@ -109,15 +109,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{23ED18B0
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{6C9280F6-6159-4E15-BDC6-F24A3A94F721}"
 	ProjectSection(SolutionItems) = preProject
+		build\constants.cake = build\constants.cake
 		build\packaging.cake = build\packaging.cake
 		build\parameters.cake = build\parameters.cake
 		build\test-results.cake = build\test-results.cake
 		build\testing.cake = build\testing.cake
+		build\utilities.cake = build\utilities.cake
 		build\versioning.cake = build\versioning.cake
 		build\website.cake = build\website.cake
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mock-assembly-x86", "src\tests\mock-assembly-x86\mock-assembly-x86.csproj", "{80A66FA1-65B5-4AA5-B8BB-8908D0B04598}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mock-assembly-x86", "src\tests\mock-assembly-x86\mock-assembly-x86.csproj", "{80A66FA1-65B5-4AA5-B8BB-8908D0B04598}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "zip", "zip", "{76D01D8E-B522-45D8-9835-B0F0FAE48A0A}"
 	ProjectSection(SolutionItems) = preProject
@@ -247,7 +249,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3E87A106-EB20-4147-84C8-95B0BB43A1D4} = {35A92AA3-A1E6-426E-8D96-322F3EBF1C8D}
-		{C68900CC-C4E4-48D5-A2AC-267726E75C60} = {35A92AA3-A1E6-426E-8D96-322F3EBF1C8D}
 		{3E63AD0F-24D4-46BE-BEE4-5A3299847D86} = {0F939442-8450-41CF-8BB7-FAA00866F4E4}
 		{2E368281-3BA8-4050-B05E-0E0E43F8F446} = {0F939442-8450-41CF-8BB7-FAA00866F4E4}
 		{49D8D9F5-FD8D-4B4F-800C-68DCEE9AE166} = {C68900CC-C4E4-48D5-A2AC-267726E75C60}

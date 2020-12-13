@@ -1,117 +1,32 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E978A8D7-E4A4-4DE9-94DF-D82BD764936B}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TestCentric.Gui.Model</RootNamespace>
-    <AssemblyName>TestCentric.Gui.Model</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\..\..\bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\..\bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\testcentric.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-  <PropertyGroup>
-    <RunPostBuildEvent>Always</RunPostBuildEvent>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="nunit.engine.api, Version=3.0.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NUnit.Engine.Api.3.11.1\lib\net20\nunit.engine.api.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\CommonAssemblyInfo.cs">
-      <Link>Properties\CommonAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="Filters.cs" />
-    <Compile Include="ITestEvents.cs" />
-    <Compile Include="ITestServices.cs" />
-    <Compile Include="Services\AssemblyWatcher.cs" />
-    <Compile Include="Services\IAsemblyWatcher.cs" />
-    <Compile Include="Settings\ISettings.cs" />
-    <Compile Include="Services\RecentFiles.cs" />
-    <Compile Include="Services\SettingsService.cs" />
-    <Compile Include="Settings\SettingsStore.cs" />
-    <Compile Include="Settings\ErrorDisplaySettings.cs" />
-    <Compile Include="Settings\MainFormSettings.cs" />
-    <Compile Include="Settings\MiniFormSettings.cs" />
-    <Compile Include="Settings\RecentProjectsSettings.cs" />
-    <Compile Include="Settings\SettingsGroup.cs" />
-    <Compile Include="Settings\TestTreeSettings.cs" />
-    <Compile Include="Settings\TextOutputSettings.cs" />
-    <Compile Include="Settings\GuiSettings.cs" />
-    <Compile Include="Settings\EngineSettings.cs" />
-    <Compile Include="Settings\UserSettings.cs" />
-    <Compile Include="TestEngineActivator.cs" />
-    <Compile Include="TestSelection.cs" />
-    <Compile Include="TestServices.cs" />
-    <Compile Include="TestEventDispatcher.cs" />
-    <Compile Include="ITestItem.cs" />
-    <Compile Include="ITestModel.cs" />
-    <Compile Include="ResultNode.cs" />
-    <Compile Include="ResultState.cs" />
-    <Compile Include="ResultSummary.cs" />
-    <Compile Include="ResultSummaryCreator.cs" />
-    <Compile Include="ResultSummaryReporter.cs" />
-    <Compile Include="RunState.cs" />
-    <Compile Include="TestEventArgs.cs" />
-    <Compile Include="TestModel.cs" />
-    <Compile Include="TestNode.cs" />
-    <Compile Include="TestStartNotice.cs" />
-    <Compile Include="TestStatus.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Common\testcentric.common\TestCentric.Common.csproj">
-      <Project>{b69057f3-0663-4763-a3ec-50d463578b94}</Project>
-      <Name>TestCentric.Common</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<RootNamespace>TestCentric.Gui.Model</RootNamespace>
+		<AssemblyName>TestCentric.Gui.Model</AssemblyName>
+		<TargetFramework>net45</TargetFramework>
+		<OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>..\..\testcentric.snk</AssemblyOriginatorKeyFile>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	</PropertyGroup>
+	<ItemGroup>
+		<Reference Include="System.Windows.Forms" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Include="..\..\CommonAssemblyInfo.cs">
+			<Link>Properties\CommonAssemblyInfo.cs</Link>
+		</Compile>
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\Common\testcentric.common\TestCentric.Common.csproj">
+			<Project>{b69057f3-0663-4763-a3ec-50d463578b94}</Project>
+			<Name>TestCentric.Common</Name>
+		</ProjectReference>
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="NUnit.Engine.Api">
+			<Version>3.11.1</Version>
+		</PackageReference>
+	</ItemGroup>
 </Project>

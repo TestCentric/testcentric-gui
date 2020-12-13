@@ -1,115 +1,45 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{49D8D9F5-FD8D-4B4F-800C-68DCEE9AE166}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TestCentric.Gui.Model</RootNamespace>
-    <AssemblyName>TestCentric.Gui.Model.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\..\..\bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\..\bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\CommonAssemblyInfo.cs">
-      <Link>Properties\CommonAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="Settings\FakeSettingsService.cs" />
-    <Compile Include="Services\AssemblyWatcherTests.cs" />
-    <Compile Include="AvailableRuntimesTest.cs" />
-    <Compile Include="ResultNodeTests.cs" />
-    <Compile Include="ResultStateTests.cs" />
-    <Compile Include="ResultSummaryCreatorTests.cs" />
-    <Compile Include="ResultSummaryReporterTests.cs" />
-    <Compile Include="Services\RecentFilesTests.cs" />
-    <Compile Include="Services\SettingsServiceTests.cs" />
-    <Compile Include="Settings\SettingsGroupTests.cs" />
-    <Compile Include="Settings\SettingsTests.cs" />
-    <Compile Include="Settings\SettingsStoreTests.cs" />
-    <Compile Include="TestModelAssemblyTests.cs" />
-    <Compile Include="MakeTestPackageTests.cs" />
-    <Compile Include="TestModelCreationTests.cs" />
-    <Compile Include="TestNodeTests.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestSelectionTests.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Common\testcentric.common\TestCentric.Common.csproj">
-      <Project>{b69057f3-0663-4763-a3ec-50d463578b94}</Project>
-      <Name>TestCentric.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\TestEngine\testcentric.engine.core\testcentric.engine.core.csproj">
-      <Project>{987b26c9-023d-4ecf-8a36-05f1b652b57f}</Project>
-      <Name>testcentric.engine.core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\TestEngine\testcentric.engine\testcentric.engine.csproj">
-      <Project>{0bf010fe-fa9d-4131-a832-e88c12a131dd}</Project>
-      <Name>testcentric.engine</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\tests\mock-assembly\mock-assembly.csproj">
-      <Project>{2e368281-3ba8-4050-b05e-0e0e43f8f446}</Project>
-      <Name>mock-assembly</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\tests\test-utilities\test-utilities.csproj">
-      <Project>{3e63ad0f-24d4-46be-bee4-5a3299847d86}</Project>
-      <Name>test-utilities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\model\TestCentric.Gui.Model.csproj">
-      <Project>{e978a8d7-e4a4-4de9-94df-d82bd764936b}</Project>
-      <Name>TestCentric.Gui.Model</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="NSubstitute">
-      <Version>4.0.0</Version>
-    </PackageReference>
-    <PackageReference Include="NUnit">
-      <Version>3.11.0</Version>
-    </PackageReference>
-    <PackageReference Include="NUnit.Engine.Api">
-      <Version>3.11.1</Version>
-    </PackageReference>
-    <PackageReference Include="System.Threading.Tasks.Extensions">
-      <Version>4.5.1</Version>
-    </PackageReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<RootNamespace>TestCentric.Gui.Model</RootNamespace>
+		<AssemblyName>TestCentric.Gui.Model.Tests</AssemblyName>
+		<TargetFramework>net45</TargetFramework>
+		<OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	</PropertyGroup>
+    <ItemGroup>
+        <Reference Include="System.Windows.Forms" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="..\..\CommonAssemblyInfo.cs">
+            <Link>Properties\CommonAssemblyInfo.cs</Link>
+        </Compile>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\Common\testcentric.common\TestCentric.Common.csproj">
+          <Name>TestCentric.Common</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\..\TestEngine\testcentric.engine.core\testcentric.engine.core.csproj">
+          <Name>testcentric.engine.core</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\..\TestEngine\testcentric.engine\testcentric.engine.csproj">
+          <Name>testcentric.engine</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\..\tests\mock-assembly\mock-assembly.csproj">
+          <Name>mock-assembly</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\..\tests\test-utilities\test-utilities.csproj">
+          <Name>test-utilities</Name>
+        </ProjectReference>
+        <ProjectReference Include="..\model\TestCentric.Gui.Model.csproj">
+          <Name>TestCentric.Gui.Model</Name>
+        </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="NSubstitute" Version="4.0.0" />
+        <PackageReference Include="NUnit" Version="3.11.0" />
+        <PackageReference Include="NUnit.Engine.Api" Version="3.11.1" />
+        <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.1" />
+    </ItemGroup>
 </Project>
