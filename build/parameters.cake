@@ -187,11 +187,11 @@ public class BuildParameters
 
 		if (TasksToExecute.Contains("PublishPackages"))
 		{
-			if (ShouldPublishToMyGet && !string.IsNullOrEmpty(MyGetApiKey))
+			if (ShouldPublishToMyGet && string.IsNullOrEmpty(MyGetApiKey))
 				validationErrors.Add("MyGet ApiKey was not set.");
-			if (ShouldPublishToNuGet && !string.IsNullOrEmpty(NuGetApiKey))
+			if (ShouldPublishToNuGet && string.IsNullOrEmpty(NuGetApiKey))
 				validationErrors.Add("NuGet ApiKey was not set.");
-			if (ShouldPublishToChocolatey && !string.IsNullOrEmpty(ChocolateyApiKey))
+			if (ShouldPublishToChocolatey && string.IsNullOrEmpty(ChocolateyApiKey))
 				validationErrors.Add("Chocolatey ApiKey was not set.");
 		}
 
