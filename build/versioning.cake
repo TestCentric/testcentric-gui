@@ -25,9 +25,7 @@ public class BuildVersion
 		// TODO: Get GitVersion to work on Linux
         string packageVersion = context.HasArgument("asVersion")
             ? context.Argument("asVersion", DEFAULT_VERSION)
-            : IsReleaseBranch
-                ? BranchName.Substring(8)
-                : CalculatePackageVersion();
+            : CalculatePackageVersion();
 
 		int dash = packageVersion.IndexOf('-');
         IsPreRelease = dash > 0;

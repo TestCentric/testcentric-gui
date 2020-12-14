@@ -106,8 +106,6 @@ public class BuildParameters
 	public string AssemblyFileVersion => BuildVersion.AssemblyFileVersion;
 	public string AssemblyInformationalVersion => BuildVersion.AssemblyInformationalVersion;
 
-	//public ReleaseManager ReleaseManager { get; }
-
 	public int PackageTestLevel { get; }
 
 	public bool IsLocalBuild => _buildSystem.IsLocalBuild;
@@ -141,6 +139,9 @@ public class BuildParameters
 	public FilePath NuGetPackage => new FilePath(PackageDirectory + NuGetPackageName);
 	public FilePath ChocolateyPackage => new FilePath(PackageDirectory + ChocolateyPackageName);
 	public FilePath MetadataPackage => new FilePath(PackageDirectory + MetadataPackageName);
+	public string GitHubReleaseAssets => _context.IsRunningOnWindows()
+		? $"\"{ZipPackage},{NuGetPackage},{ChocolateyPackage},{MetadataPackage}\""
+        : $"\"{ZipPackage},{NuGetPackage}\"";
 
 	public string MyGetPushUrl => MYGET_PUSH_URL;
 	public string NuGetPushUrl => NUGET_PUSH_URL;
@@ -158,12 +159,12 @@ public class BuildParameters
 	public bool IsReleaseBranch => BuildVersion.IsReleaseBranch;
 
 	public bool IsPreRelease => BuildVersion.IsPreRelease;
-	public bool ShouldPublishToMyGet => !IsReleaseBranch &&
-		(!IsPreRelease || LABELS_WE_PUBLISH_ON_MYGET.Contains(BuildVersion.PreReleaseLabel));
-	public bool ShouldPublishToNuGet => !IsReleaseBranch &&
-		(!IsPreRelease || LABELS_WE_PUBLISH_ON_NUGET.Contains(BuildVersion.PreReleaseLabel));
-	public bool ShouldPublishToChocolatey => !IsReleaseBranch &&
-		(!IsPreRelease || LABELS_WE_PUBLISH_ON_CHOCOLATEY.Contains(BuildVersion.PreReleaseLabel));
+	public bool ShouldPublishToMyGet =>
+		!IsPreRelease || LABELS_WE_PUBLISH_ON_MYGET.Contains(BuildVersion.PreReleaseLabel);
+	public bool ShouldPublishToNuGet =>
+		!IsPreRelease || LABELS_WE_PUBLISH_ON_NUGET.Contains(BuildVersion.PreReleaseLabel);
+	public bool ShouldPublishToChocolatey =>
+		!IsPreRelease || LABELS_WE_PUBLISH_ON_CHOCOLATEY.Contains(BuildVersion.PreReleaseLabel);
 	public bool IsProductionRelease => ShouldPublishToNuGet || ShouldPublishToChocolatey;
 	
 	public bool UsingXBuild { get; }
@@ -251,7 +252,6 @@ public class BuildParameters
 		Console.WriteLine("\nRELEASING");
 		Console.WriteLine("BranchName:                   " + BranchName);
 		Console.WriteLine("IsReleaseBranch:              " + IsReleaseBranch);
-		//Console.WriteLine("ReleaseMilestone:             " + ReleaseMilestone);
 
 		Console.WriteLine("\nDIRECTORIES");
 		Console.WriteLine("Project:   " + ProjectDirectory);
