@@ -393,22 +393,28 @@ Task("PublishPackages")
 //////////////////////////////////////////////////////////////////////
 
 Task("CreateDraftRelease")
-	.WithCriteria<BuildParameters>((context, parameters) => parameters.IsReleaseBranch)
 	.Does<BuildParameters>((parameters) =>
 	{
-		// Exit if any PackageTests failed
-		CheckTestErrors(ref ErrorDetail);
-
-		string releaseName = $"TestCentric {parameters.BuildVersion.SemVer}";
-		string milestone = GetMilestoneFromBranchName(parameters.BranchName);
-
-		Information($"Creating draft release {releaseName} from milestone {milestone}");
-
-		GitReleaseManagerCreate(parameters.GitHubAccessToken, GITHUB_OWNER, GITHUB_REPO, new GitReleaseManagerCreateSettings()
+		if (parameters.IsReleaseBranch)
 		{
-			Name = releaseName,
-			Milestone = milestone
-		});
+			// Exit if any PackageTests failed
+			CheckTestErrors(ref ErrorDetail);
+
+			string releaseName = $"TestCentric {parameters.BuildVersion.SemVer}";
+			string milestone = GetMilestoneFromBranchName(parameters.BranchName);
+
+			Information($"Creating draft release {releaseName} from milestone {milestone}");
+
+			GitReleaseManagerCreate(parameters.GitHubAccessToken, GITHUB_OWNER, GITHUB_REPO, new GitReleaseManagerCreateSettings()
+			{
+				Name = releaseName,
+				Milestone = milestone
+			});
+		}
+		else
+		{
+			Information("Skipping Release creation because this is not a release branch");
+		}
 	});
 
 	private static string GetMilestoneFromBranchName(string branchName)
