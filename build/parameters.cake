@@ -151,10 +151,6 @@ public class BuildParameters
 	public string NuGetApiKey { get; }
 	public string ChocolateyApiKey { get; }
 
-	public bool IsMyGetApiKeyAvailable => !string.IsNullOrEmpty(MyGetApiKey);
-	public bool IsNuGetApiKeyAvailable => !string.IsNullOrEmpty(NuGetApiKey);
-	public bool IsChocolateyApiKeyAvailable => !string.IsNullOrEmpty(ChocolateyApiKey);
-
     public string BranchName => BuildVersion.BranchName;
 	public bool IsReleaseBranch => BuildVersion.IsReleaseBranch;
 
@@ -187,40 +183,37 @@ public class BuildParameters
 
 	private void Validate()
 	{
-		var errors = new List<string>();
+		var validationErrors = new List<string>();
 
 		if (TasksToExecute.Contains("PublishPackages"))
 		{
-			if (ShouldPublishToMyGet && !IsMyGetApiKeyAvailable)
-				errors.Add("MyGet ApiKey was not set.");
-			if (ShouldPublishToNuGet && !IsNuGetApiKeyAvailable)
-				errors.Add("NuGet ApiKey was not set.");
-			if (ShouldPublishToChocolatey && !IsChocolateyApiKeyAvailable)
-				errors.Add("Chocolatey ApiKey was not set.");
+			if (ShouldPublishToMyGet && !string.IsNullOrEmpty(MyGetApiKey))
+				validationErrors.Add("MyGet ApiKey was not set.");
+			if (ShouldPublishToNuGet && !string.IsNullOrEmpty(NuGetApiKey))
+				validationErrors.Add("NuGet ApiKey was not set.");
+			if (ShouldPublishToChocolatey && !string.IsNullOrEmpty(ChocolateyApiKey))
+				validationErrors.Add("Chocolatey ApiKey was not set.");
 		}
 
-		if (TasksToExecute.Contains("CreateDraftRelease"))
+		if (TasksToExecute.Contains("CreateDraftRelease") && (IsReleaseBranch || IsProductionRelease))
 		{
-			if (IsReleaseBranch && string.IsNullOrEmpty(GitHubAccessToken))
-				errors.Add("GitHub Access Token was not set.");
+			if (string.IsNullOrEmpty(GitHubAccessToken))
+				validationErrors.Add("GitHub Access Token was not set.");		
 		}
 
 		if (TasksToExecute.Contains("DeployWebsite"))
         {
-			if (string.IsNullOrEmpty(GitHubUserId))
-				errors.Add("GitHub user id was not set");
-			if (string.IsNullOrEmpty(GitHubUserEmail))
-				errors.Add("GitHub user email was not set");
+			// We use a password rather than an access token for the website
 			if (string.IsNullOrEmpty(GitHubPassword))
-				errors.Add("GitHub password was not set");
+				validationErrors.Add("GitHub password was not set");
 		}
 
-		if (errors.Count > 0)
+		if (validationErrors.Count > 0)
 		{
 			DumpSettings();
 
 			var msg = new StringBuilder("Parameter validation failed! See settings above.\n\nErrors found:\n");
-			foreach (var error in errors)
+			foreach (var error in validationErrors)
 				msg.AppendLine("  " + error);
 
 			throw new InvalidOperationException(msg.ToString());
@@ -276,9 +269,9 @@ public class BuildParameters
 		Console.WriteLine("MyGetPushUrl:              " + MyGetPushUrl);
 		Console.WriteLine("NuGetPushUrl:              " + NuGetPushUrl);
 		Console.WriteLine("ChocolateyPushUrl:         " + ChocolateyPushUrl);
-		Console.WriteLine("MyGetApiKey:               " + (IsMyGetApiKeyAvailable ? "AVAILABLE" : "NOT AVAILABLE"));
-		Console.WriteLine("NuGetApiKey:               " + (IsNuGetApiKeyAvailable ? "AVAILABLE" : "NOT AVAILABLE"));
-		Console.WriteLine("ChocolateyApiKey:          " + (IsChocolateyApiKeyAvailable ? "AVAILABLE" : "NOT AVAILABLE"));
+		Console.WriteLine("MyGetApiKey:               " + (!string.IsNullOrEmpty(MyGetApiKey) ? "AVAILABLE" : "NOT AVAILABLE"));
+		Console.WriteLine("NuGetApiKey:               " + (!string.IsNullOrEmpty(NuGetApiKey) ? "AVAILABLE" : "NOT AVAILABLE"));
+		Console.WriteLine("ChocolateyApiKey:          " + (!string.IsNullOrEmpty(ChocolateyApiKey) ? "AVAILABLE" : "NOT AVAILABLE"));
 
 		Console.WriteLine("\nPUBLISHING");
 		Console.WriteLine("ShouldPublishToMyGet:      " + ShouldPublishToMyGet);
