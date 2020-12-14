@@ -38,6 +38,7 @@ issue-labels-include:
 - Enhancement
 - Bug
 - Build
+- Documentation
 #- Duplicate
 #- Help Wanted
 #- Improvement
@@ -52,9 +53,9 @@ issue-labels-alias:
 - name: Build
   header: Build
   plural: Build
-#- name: Documentation
-#  header: Documentation
-#  plural: Documentation
+- name: Documentation
+  header: Documentation
+  plural: Documentation
 ## The labels that will NOT be used when including issues in release notes.
 #issue-labels-exclude:
 #- Internal Refactoring

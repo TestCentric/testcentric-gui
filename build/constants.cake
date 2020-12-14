@@ -33,7 +33,9 @@ private const string NUGET_API_KEY = "NUGET_API_KEY";
 private const string CHOCO_API_KEY = "CHOCO_API_KEY";
 
 // Environment Variable names holding GitHub identity of user
-// These are only used to publish the website when running locally	
+// These are only used to publish the website when running locally
+private const string GITHUB_OWNER = "TestCentric";
+private const string GITHUB_REPO = "testcentric-gui";	
 private const string GITHUB_PASSWORD = "GITHUB_PASSWORD";
 // Access token is used by GitReleaseManager
 private const string GITHUB_ACCESS_TOKEN = "GITHUB_ACCESS_TOKEN";

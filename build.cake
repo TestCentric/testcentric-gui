@@ -393,7 +393,6 @@ Task("PublishPackages")
 //////////////////////////////////////////////////////////////////////
 
 Task("CreateDraftRelease")
-	.IsDependentOn("BuildPackages")
 	.WithCriteria<BuildParameters>((context, parameters) => parameters.IsReleaseBranch)
 	.Does<BuildParameters>((parameters) =>
 	{
@@ -402,17 +401,13 @@ Task("CreateDraftRelease")
 
 		string releaseName = $"TestCentric {parameters.BuildVersion.SemVer}";
 		string milestone = GetMilestoneFromBranchName(parameters.BranchName);
-		string assets = IsRunningOnWindows()
-			? $"\"{parameters.ZipPackage},{parameters.NuGetPackage},{parameters.ChocolateyPackage},{parameters.MetadataPackage}\""
-        	: $"\"{parameters.ZipPackage},{parameters.NuGetPackage}\"";
 
 		Information($"Creating draft release {releaseName} from milestone {milestone}");
 
-		GitReleaseManagerCreate(parameters.GitHubAccessToken, "TestCentric", "testcentric-gui", new GitReleaseManagerCreateSettings()
+		GitReleaseManagerCreate(parameters.GitHubAccessToken, GITHUB_OWNER, GITHUB_REPO, new GitReleaseManagerCreateSettings()
 		{
 			Name = releaseName,
-			Milestone = milestone,
-			Assets = assets
+			Milestone = milestone
 		});
 	});
 
@@ -437,6 +432,27 @@ Task("CreateDraftRelease")
 
 		return milestone;
 	}
+
+//////////////////////////////////////////////////////////////////////
+// CREATE A PRODUCTION RELEASE
+//////////////////////////////////////////////////////////////////////
+
+Task("CreateProductionRelease")
+	.WithCriteria<BuildParameters>((context, parameters) => parameters.IsProductionRelease)
+	.Does<BuildParameters>((parameters) =>
+	{
+		// Exit if any PackageTests failed
+		CheckTestErrors(ref ErrorDetail);
+
+		string token = parameters.GitHubAccessToken;
+		string tagName = parameters.BuildVersion.SemVer;
+		string assets = parameters.GitHubReleaseAssets;
+
+		Information($"Publishing release {tagName} to GitHub");
+
+		GitReleaseManagerAddAssets(token, GITHUB_OWNER, GITHUB_REPO, tagName, assets);
+		GitReleaseManagerClose(token, GITHUB_OWNER, GITHUB_REPO, tagName);
+	});
 
 //////////////////////////////////////////////////////////////////////
 // INTERACTIVE TESTS FOR USE IN DEVELOPMENT
