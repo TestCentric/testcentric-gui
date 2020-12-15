@@ -444,20 +444,26 @@ Task("CreateDraftRelease")
 //////////////////////////////////////////////////////////////////////
 
 Task("CreateProductionRelease")
-	.WithCriteria<BuildParameters>((context, parameters) => parameters.IsProductionRelease)
 	.Does<BuildParameters>((parameters) =>
 	{
-		// Exit if any PackageTests failed
-		CheckTestErrors(ref ErrorDetail);
+		if (parameters.IsProductionRelease)
+		{
+			// Exit if any PackageTests failed
+			CheckTestErrors(ref ErrorDetail);
 
-		string token = parameters.GitHubAccessToken;
-		string tagName = parameters.BuildVersion.SemVer;
-		string assets = parameters.GitHubReleaseAssets;
+			string token = parameters.GitHubAccessToken;
+			string tagName = parameters.BuildVersion.SemVer;
+			string assets = parameters.GitHubReleaseAssets;
 
-		Information($"Publishing release {tagName} to GitHub");
+			Information($"Publishing release {tagName} to GitHub");
 
-		GitReleaseManagerAddAssets(token, GITHUB_OWNER, GITHUB_REPO, tagName, assets);
-		GitReleaseManagerClose(token, GITHUB_OWNER, GITHUB_REPO, tagName);
+			GitReleaseManagerAddAssets(token, GITHUB_OWNER, GITHUB_REPO, tagName, assets);
+			GitReleaseManagerClose(token, GITHUB_OWNER, GITHUB_REPO, tagName);
+		}
+		else
+		{
+			Information("Skipping CreateProductionRelease because this is not a production release");
+		}
 	});
 
 //////////////////////////////////////////////////////////////////////
@@ -542,12 +548,13 @@ Task("PackageChocolatey")
 Task("AppVeyor")
 	.IsDependentOn("DumpSettings")
 	.IsDependentOn("Build")
-	.IsDependentOn("Test")
+	//.IsDependentOn("Test")
 	.IsDependentOn("BuildPackages")
-	.IsDependentOn("TestPackages")
-	.IsDependentOn("PublishPackages")
-	.IsDependentOn("CreateDraftRelease")
-	.IsDependentOn("UpdateWebsite");
+	//.IsDependentOn("TestPackages")
+	//.IsDependentOn("PublishPackages")
+	//.IsDependentOn("CreateDraftRelease")
+	//.IsDependentOn("UpdateWebsite");
+	.IsDependentOn("CreateProductionRelease");
 
 Task("Travis")
     .IsDependentOn("Build")
