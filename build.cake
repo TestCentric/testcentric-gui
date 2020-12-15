@@ -548,13 +548,13 @@ Task("PackageChocolatey")
 Task("AppVeyor")
 	.IsDependentOn("DumpSettings")
 	.IsDependentOn("Build")
-	//.IsDependentOn("Test")
+	.IsDependentOn("Test")
 	.IsDependentOn("BuildPackages")
-	//.IsDependentOn("TestPackages")
-	//.IsDependentOn("PublishPackages")
-	//.IsDependentOn("CreateDraftRelease")
-	//.IsDependentOn("UpdateWebsite");
-	.IsDependentOn("CreateProductionRelease");
+	.IsDependentOn("TestPackages")
+	.IsDependentOn("PublishPackages")
+	.IsDependentOn("CreateDraftRelease")
+	.IsDependentOn("CreateProductionRelease")
+	.IsDependentOn("UpdateWebsite");
 
 Task("Travis")
     .IsDependentOn("Build")
