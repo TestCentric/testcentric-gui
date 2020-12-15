@@ -29,16 +29,16 @@ namespace TestCentric.Gui.Views
         ISelection ResultTabs { get; }
 
         // File Menu Items
-        IMenu FileMenu { get; }
+        IToolStripMenu FileMenu { get; }
         ICommand OpenCommand { get; }
         ICommand CloseCommand { get; }
         ICommand AddTestFilesCommand { get; }
         ICommand ReloadTestsCommand { get; }
-        IMenu RuntimeMenu { get; }
+        IToolStripMenu RuntimeMenu { get; }
         ISelection ProcessModel { get; }
         IChecked RunAsX86 { get; }
         ISelection DomainUsage { get; }
-        IMenu RecentFilesMenu { get; }
+        IToolStripMenu RecentFilesMenu { get; }
         ICommand ExitCommand { get; }
 
         // View Menu Items
@@ -61,9 +61,9 @@ namespace TestCentric.Gui.Views
         ICommand TestParametersCommand { get; }
 
         // Tools Menu Items
-        IMenu ToolsMenu { get; }
+        IToolStripMenu ToolsMenu { get; }
         ICommand SaveResultsCommand { get; }
-        IMenu SaveResultsAsMenu { get; }
+        IToolStripMenu SaveResultsAsMenu { get; }
         ICommand OpenWorkDirectoryCommand { get; }
         ICommand ExtensionsCommand { get; }
         ICommand SettingsCommand { get; }
