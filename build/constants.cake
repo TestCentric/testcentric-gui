@@ -5,7 +5,7 @@
 // NOTE: Since GitVersion is only used when running under
 // Windows, the default version should be updated to the 
 // next version after each release.
-const string DEFAULT_VERSION = "1.5.1";
+const string DEFAULT_VERSION = "1.5.2";
 const string DEFAULT_CONFIGURATION = "Release";
 
 const string SOLUTION = "testcentric-gui.sln";
