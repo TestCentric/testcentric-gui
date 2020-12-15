@@ -31,8 +31,8 @@ namespace TestCentric.Gui.Views
         public ErrorBrowser errorBrowser;
         private SourceCodeDisplay sourceCode;
         public System.Windows.Forms.Splitter tabSplitter;
-        private System.Windows.Forms.ContextMenu detailListContextMenu;
-        private System.Windows.Forms.MenuItem copyDetailMenuItem;
+        private System.Windows.Forms.ContextMenuStrip detailListContextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem copyDetailMenuItem;
 
         /// <summary> 
         /// Required designer variable.
@@ -92,8 +92,8 @@ namespace TestCentric.Gui.Views
             this.errorBrowser = new NUnit.UiException.Controls.ErrorBrowser();
             this.sourceCode = new SourceCodeDisplay();
             this.stackTraceDisplay = new StackTraceDisplay();
-            this.detailListContextMenu = new System.Windows.Forms.ContextMenu();
-            this.copyDetailMenuItem = new System.Windows.Forms.MenuItem();
+            this.detailListContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
+            this.copyDetailMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SuspendLayout();
             // 
             // detailList
@@ -146,12 +146,11 @@ namespace TestCentric.Gui.Views
             //
             // detailListContextMenu
             // 
-            this.detailListContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.detailListContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripMenuItem[] {
                 this.copyDetailMenuItem});
             // 
             // copyDetailMenuItem
             // 
-            this.copyDetailMenuItem.Index = 0;
             this.copyDetailMenuItem.Text = "Copy";
             this.copyDetailMenuItem.Click += new System.EventHandler(this.copyDetailMenuItem_Click);
             // 
@@ -275,7 +274,7 @@ namespace TestCentric.Gui.Views
         {
             TestResultItem resultItem = (TestResultItem)detailList.SelectedItem;
             errorBrowser.StackTraceSource = resultItem.StackTrace;
-            detailList.ContextMenu = detailListContextMenu;
+            detailList.ContextMenuStrip = detailListContextMenuStrip;
         }
 
         private void detailList_MeasureItem(object sender, System.Windows.Forms.MeasureItemEventArgs e)
