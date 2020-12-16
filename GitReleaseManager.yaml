@@ -1,17 +1,44 @@
-## Configuration values used when creating new releases
-#create:
-#  include-footer: true
-#  footer-heading: Where to get it
-#  footer-content: >-
-#    You can download this release from
-#
-#    [chocolatey](https://chocolatey.org/packages/chocolateyGUI/{milestone})
-#  footer-includes-milestone: false
-#  milestone-replace-text: '{milestone}'
-#  include-sha-section: false
-#  sha-section-heading: SHA256 Hashes of the release artifacts
-#  sha-section-line-format: '- `{1}	{0}`'
-#  allow-update-to-published: false
+# The labels that will be used to include issues in release notes.
+issue-labels-include:
+- Feature
+- Enhancement
+- Bug
+- Build
+- Documentation
+# The labels that will NOT be used when including issues in release notes.
+issue-labels-exclude:
+- Internal Refactoring
+# Overrides default pluralization and header names for specific labels.
+issue-labels-alias:
+- name: Build
+  header: Build
+  plural: Build
+- name: Documentation
+  header: Documentation
+  plural: Documentation
+# Configuration values used when creating new releases
+create:
+  include-footer: true
+  footer-heading: Packages
+  footer-content: >-
+    There are three different downloads for the GUI.
+    <ul>
+    <li>For a chocolatey install: `testcentric-gui.{milestone}.nupkg`
+    <li>For a nuget install: `TestCentric.GuiRunner.{milestone}.nupkg`
+    <li>For a zip install in a directory of your choice: `testcentric-gui-{milestone}.zip`
+    </ul>
+    You may also download the TestCentric GUI from
+    [chocolatey.org](https://chocolatey.org/packages/testcentric-gui/) 
+    or [nuget.org](https://nuget.org/packages/TestCentric.GuiRunner/).
+    <br><br>
+    **Note:** `TestCentric.Metadata.{milestone}.nupkg` is for our internal use
+    and is not needed to run TestCentric.
+  footer-includes-milestone: true
+  milestone-replace-text: '{milestone}'
+  include-sha-section: true
+  sha-section-heading: "SHA256 Hashes of the release artifacts"
+  sha-section-line-format: "- `{1}\t{0}`"
+  allow-update-to-published: false
 ## Configuration values used when exporting release notes
 #export:
 #  include-created-date-in-title: false
@@ -20,43 +47,14 @@
 #  regex-text: '### Where to get it(\r\n)*You can .*\.'
 #  multiline-regex: false
 ## Configuration values used when closing a milestone
-#close:
-## Whether to add comments to issues closed and with the published milestone release.
-#  use-issue-comments: false
-#  issue-comment: |-
-#    :tada: This issue has been resolved in version {milestone} :tada:
-#
-#    The release is available on:
-#
-#    - [NuGet package(@{milestone})](https://nuget.org/packages/{repository}/{milestone})
-#    - [GitHub release](https://github.com/{owner}/{repository}/releases/tag/{milestone})
-#
-#    Your **[GitReleaseManager](https://github.com/GitTools/GitReleaseManager)** bot :package::rocket:
-## The labels that will be used to include issues in release notes.
-issue-labels-include:
-- Feature
-- Enhancement
-- Bug
-- Build
-- Documentation
-#- Duplicate
-#- Help Wanted
-#- Improvement
-#- Invalid
-#- Question
-#- WontFix
-## The labels that will NOT be used when including issues in release notes.
-#issue-labels-exclude:
-#- Internal Refactoring
-## Overrides default pluralization and header names for specific labels.
-issue-labels-alias:
-- name: Build
-  header: Build
-  plural: Build
-- name: Documentation
-  header: Documentation
-  plural: Documentation
-## The labels that will NOT be used when including issues in release notes.
-#issue-labels-exclude:
-#- Internal Refactoring
-#
+close:
+# Whether to add comments to issues closed with the published milestone release.
+  use-issue-comments: true
+  issue-comment: |-
+    :tada: This issue has been resolved in version {milestone} :tada:
+
+    The release is available on:
+
+    - [GitHub Release](https://github.com/{owner}/{repository}/releases/tag/{milestone})
+    - [NuGet Package](https://www.nuget.org/packages/TestCentric.GuiRunner/{milestone})
+    - [Chocolatey Package](https://chocolatey.org/packages/testcentric-gui/{milestone})
