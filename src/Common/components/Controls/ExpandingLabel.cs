@@ -113,7 +113,7 @@ namespace TestCentric.Gui.Controls
             {
                 copySupported = value;
                 if (copySupported)
-                    base.ContextMenu = null;
+                    base.ContextMenuStrip = null;
             }
         }
 
@@ -132,17 +132,18 @@ namespace TestCentric.Gui.Controls
                 {
                     if (value == null || value == string.Empty)
                     {
-                        if (this.ContextMenu != null)
+                        if (this.ContextMenuStrip != null)
                         {
-                            this.ContextMenu.Dispose();
-                            this.ContextMenu = null;
+                            this.ContextMenuStrip.Dispose();
+                            this.ContextMenuStrip = null;
                         }
                     }
                     else
                     {
-                        this.ContextMenu = new System.Windows.Forms.ContextMenu();
-                        MenuItem copyMenuItem = new MenuItem("Copy", new EventHandler(CopyToClipboard));
-                        this.ContextMenu.MenuItems.Add(copyMenuItem);
+                        this.ContextMenuStrip = new System.Windows.Forms.ContextMenuStrip();
+                        ToolStripMenuItem copyMenuItem = new ToolStripMenuItem("Copy");
+                        copyMenuItem.Click += new EventHandler(CopyToClipboard);
+                        this.ContextMenuStrip.Items.Add(copyMenuItem);
                     }
                 }
             }
