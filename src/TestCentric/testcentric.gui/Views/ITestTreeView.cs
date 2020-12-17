@@ -17,7 +17,7 @@ namespace TestCentric.Gui.Views
     {
         event FileDropEventHandler FileDrop;
 
-        ContextMenu ContextMenu { get; }
+        ContextMenuStrip ContextMenuStrip { get; }
 
         ICommand RunCommand { get; }
         IChecked ShowFailedAssumptions { get; }

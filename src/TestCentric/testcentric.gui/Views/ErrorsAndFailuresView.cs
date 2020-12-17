@@ -250,7 +250,7 @@ namespace TestCentric.Gui.Views
             InvokeIfRequired(() =>
             {
                 detailList.Items.Clear();
-                detailList.ContextMenu = null;
+                detailList.ContextMenuStrip = null;
                 errorBrowser.StackTraceSource = "";
             });
         }

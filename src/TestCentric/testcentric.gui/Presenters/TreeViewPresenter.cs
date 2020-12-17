@@ -225,7 +225,7 @@ namespace TestCentric.Gui.Presenters
                     _model.RunTests(new TestSelection(_view.SelectedTests));
             };
 
-            _view.Tree.ContextMenu.Popup += (s, e) => InitializeContextMenu();
+            _view.Tree.ContextMenuStrip.Opened += (s, e) => InitializeContextMenu();
 
             _view.ShowCheckBoxes.CheckedChanged += () => _view.CheckBoxes = _view.ShowCheckBoxes.Checked;
 
