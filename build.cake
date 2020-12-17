@@ -417,7 +417,7 @@ Task("CreateDraftRelease")
 		}
 	});
 
-	private static string GetMilestoneFromBranchName(string branchName)
+	private string GetMilestoneFromBranchName(string branchName)
 	{
 		Version versionFromBranch;
 		if (!Version.TryParse(branchName.Substring(8), out versionFromBranch))
@@ -430,9 +430,8 @@ Task("CreateDraftRelease")
 		if (versionFromBranch.Build < 0)
 			throw new InvalidOperationException("Release branch must specify three version components.");
 
-		string milestone = versionFromBranch.Build <= 0
-			? versionFromBranch.ToString(2)
-			: versionFromBranch.ToString(3);
+		string milestone = versionFromBranch.ToString(3);
+
 		// if (_parameters.IsPreRelease)
 		//     milestone += $"-{_parameters.BuildVersion.PreReleaseSuffix}";
 
