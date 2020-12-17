@@ -19,10 +19,10 @@ namespace TestCentric.Gui.Views
 
         ContextMenu ContextMenu { get; }
 
-        IMenuCommand RunCommand { get; }
+        ICommand RunCommand { get; }
         IChecked ShowFailedAssumptions { get; }
-        IMenu ProjectMenu { get; }
-        IMenu ActiveConfiguration { get; }
+        IToolStripMenu ProjectMenu { get; }
+        IToolStripMenu ActiveConfiguration { get; }
         ICommand EditProject { get; }
         ICommand PropertiesCommand { get; }
         IChecked ShowCheckBoxes { get; }

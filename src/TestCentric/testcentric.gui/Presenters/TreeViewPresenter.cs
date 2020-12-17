@@ -281,8 +281,8 @@ namespace TestCentric.Gui.Presenters
                 TestNode test = targetNode.Test;
                 TestPackage package = targetNode.TestPackage;
 
-                _view.RunCommand.DefaultItem = _view.RunCommand.Enabled && targetNode.Included &&
-                    (test.RunState == RunState.Runnable || test.RunState == RunState.Explicit);
+                //_view.RunCommand.DefaultItem = _view.RunCommand.Enabled && targetNode.Included &&
+                //    (test.RunState == RunState.Runnable || test.RunState == RunState.Explicit);
 
                 TestSuiteTreeNode theoryNode = targetNode.GetTheoryNode();
                 _view.ShowFailedAssumptions.Visible = _view.ShowFailedAssumptions.Enabled = theoryNode != null;
@@ -304,9 +304,9 @@ namespace TestCentric.Gui.Presenters
                         _view.ActiveConfiguration.MenuItems.Clear();
                         foreach (string config in configNames)
                         {
-                            var configEntry = new MenuItem(config);
+                            var configEntry = new ToolStripMenuItem(config);
                             configEntry.Checked = config == activeConfig;
-                            configEntry.Click += (sender, e) => _model.ReloadPackage(package, ((MenuItem)sender).Text);
+                            configEntry.Click += (sender, e) => _model.ReloadPackage(package, ((ToolStripMenuItem)sender).Text);
                             _view.ActiveConfiguration.MenuItems.Add(configEntry);
                         }
 
