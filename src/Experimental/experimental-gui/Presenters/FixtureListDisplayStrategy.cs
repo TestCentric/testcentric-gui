@@ -25,7 +25,7 @@ namespace TestCentric.Gui.Presenters
 
             // Ugly Hack! We should not be referencing view components here.
             // TODO: Create a better interface for a CheckedMenuGroup
-            var checkedMenuGroup = _view.GroupBy as TestCentric.Gui.Elements.CheckedMenuGroup;
+            var checkedMenuGroup = _view.GroupBy as TestCentric.Gui.Elements.CheckedToolStripMenuGroup;
             if (checkedMenuGroup != null)
                 checkedMenuGroup.EnableItem("FIXTURE", false);
         }
