@@ -35,6 +35,7 @@ Task("UpdateWebsite")
 	{
 		if (parameters.IsProductionRelease)
 		{
+			BuildWebsite(parameters.WebDirectory);
 			DeployWebsite(parameters);
 		}
 		else
