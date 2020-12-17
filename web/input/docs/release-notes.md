@@ -1,6 +1,24 @@
 Description: Displays the <a href="release-notes.html">Release Notes</a> showing changes made in each release of TestCentric.
 Order: 9
 ---
+### TestCentric Runner for NUnit 1.5.2 - December 16, 2020
+
+#### Build
+
+* 626  Tailor content of Release Note created by release build
+
+### TestCentric Runner for NUnit 1.5.1 - December 14, 2020
+
+#### Build
+
+* 617 Migrate "master" branch to "main"
+* 616 Improvements to the Release Process
+* 324 Convert to use new VS project format
+
+#### Documentation
+
+* 603 Add Getting Started section to the documentation
+
 ### TestCentric Runner for NUnit 1.5.0 - December 8, 2020
 
 This release includes one major new feature. The Stop button now triggers a non-forced
