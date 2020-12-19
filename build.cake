@@ -552,8 +552,7 @@ Task("AppVeyor")
 	.IsDependentOn("TestPackages")
 	.IsDependentOn("PublishPackages")
 	.IsDependentOn("CreateDraftRelease")
-	.IsDependentOn("CreateProductionRelease")
-	.IsDependentOn("UpdateWebsite");
+	.IsDependentOn("CreateProductionRelease");
 
 Task("Travis")
     .IsDependentOn("Build")
