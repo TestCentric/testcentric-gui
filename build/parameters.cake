@@ -4,7 +4,6 @@
 #load "./testing.cake"
 #load "./test-results.cake"
 #load "./packaging.cake"
-#load "./website.cake"
 
 public class BuildParameters
 {
@@ -36,7 +35,6 @@ public class BuildParameters
 
 		UsingXBuild = context.EnvironmentVariable("USE_XBUILD") != null;
 
-		GitHubPassword = _context.EnvironmentVariable(GITHUB_PASSWORD);
 		GitHubAccessToken = _context.EnvironmentVariable(GITHUB_ACCESS_TOKEN);
 		
 		BuildVersion = new BuildVersion(context, this);
