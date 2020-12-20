@@ -24,7 +24,7 @@ namespace TestCentric.Gui
         private string _key;
         private string _title;
 
-        private MessageDisplay _messageDisplay;
+        private MessageBoxDisplay _messageDisplay;
 
         // Constructor used by the Windows.Forms Designer
         public SettingsPage()
@@ -43,7 +43,7 @@ namespace TestCentric.Gui
             _title = key;
             int dot = key.LastIndexOf('.');
             if (dot >= 0) _title = key.Substring(dot + 1);
-            _messageDisplay = new MessageDisplay("NUnit Settings");
+            _messageDisplay = new MessageBoxDisplay("NUnit Settings");
         }
 
         /// <summary> 

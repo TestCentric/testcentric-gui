@@ -10,17 +10,17 @@ using System.Windows.Forms;
 namespace TestCentric.Gui
 {
     /// <summary>
-    /// Summary description for MessageDisplay.
+    /// MessageBoxDisplay provides a simple implementation of IMessageDisplay using MessageBox.
     /// </summary>
-    public class MessageDisplay : IMessageDisplay
+    public class MessageBoxDisplay : IMessageDisplay
     {
         private static readonly string DEFAULT_CAPTION = "TestCentric";
 
         private readonly string caption;
 
-        public MessageDisplay() : this(DEFAULT_CAPTION) { }
+        public MessageBoxDisplay() : this(DEFAULT_CAPTION) { }
 
-        public MessageDisplay(string caption)
+        public MessageBoxDisplay(string caption)
         {
             this.caption = caption;
         }

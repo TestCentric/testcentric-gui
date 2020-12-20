@@ -201,7 +201,7 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.UnhandledException += (UnhandledExceptionEventArgs e) =>
             {
-                var display = new MessageDisplay("TestCentric - Internal Error");
+                var display = new MessageBoxDisplay("TestCentric - Internal Error");
                 display.Error($"{e.Message}\n\n{e.StackTrace}");
             };
 
