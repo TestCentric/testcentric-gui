@@ -366,12 +366,12 @@ namespace TestCentric.Gui.Presenters
                 foreach (string entry in _model.RecentFiles.Entries)
                 {
                     var menuText = string.Format("{0} {1}", ++num, entry);
-                    var menuItem = new MenuItem(menuText);
+                    var menuItem = new ToolStripMenuItem(menuText);
                     menuItem.Click += (sender, ea) =>
                     {
                         // HACK: We are loading new files, cancel any runtime override
                         _model.PackageOverrides.Remove(EnginePackageSettings.RequestedRuntimeFramework);
-                        string path = ((MenuItem)sender).Text.Substring(2);
+                        string path = ((ToolStripMenuItem)sender).Text.Substring(2);
                         _model.LoadTests(new[] { path });
                     };
                     menuItems.Add(menuItem);
@@ -466,7 +466,7 @@ namespace TestCentric.Gui.Presenters
 
                 foreach (string format in _resultFormats)
                 {
-                    MenuItem formatItem = new MenuItem(format);
+                    var formatItem = new ToolStripMenuItem(format);
                     formatItem.Click += (s, e) => SaveResults(format);
                     _view.SaveResultsAsMenu.MenuItems.Add(formatItem);
                 }

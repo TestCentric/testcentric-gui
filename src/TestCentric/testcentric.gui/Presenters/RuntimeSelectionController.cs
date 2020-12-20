@@ -9,10 +9,10 @@ namespace TestCentric.Gui.Presenters
 {
     public class RuntimeSelectionController
     {
-        private IMenu _runtimeMenu;
+        private IToolStripMenu _runtimeMenu;
         private ITestModel _model;
 
-        public RuntimeSelectionController(IMenu runtimeMenu, ITestModel model)
+        public RuntimeSelectionController(IToolStripMenu runtimeMenu, ITestModel model)
         {
             _runtimeMenu = runtimeMenu;
             _model = model;
@@ -46,7 +46,7 @@ namespace TestCentric.Gui.Presenters
             var menuItems = _runtimeMenu.MenuItems;
             menuItems.Clear();
 
-            var defaultMenuItem = new MenuItem("Default")
+            var defaultMenuItem = new ToolStripMenuItem("Default")
             {
                 Name = "defaultMenuItem",
                 Tag = "DEFAULT"
@@ -60,7 +60,7 @@ namespace TestCentric.Gui.Presenters
             foreach (var runtime in _model.AvailableRuntimes)
             {
                 if (runtime.Id.StartsWith(validRuntimePrefix))
-                    menuItems.Add(new MenuItem(runtime.DisplayName)
+                    menuItems.Add(new ToolStripMenuItem(runtime.DisplayName)
                     {
                         Tag = runtime.Id,
                         Enabled = runtime.FrameworkVersion >= imageTargetRuntime.Version
@@ -69,7 +69,7 @@ namespace TestCentric.Gui.Presenters
 
             // Go through all menu items and check one
             bool isItemChecked = false;
-            foreach (MenuItem item in menuItems)
+            foreach (ToolStripMenuItem item in menuItems)
             {
                 if ((string)item.Tag == requestedRuntimeSetting)
                     item.Checked = isItemChecked = true;

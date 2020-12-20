@@ -39,16 +39,16 @@ namespace TestCentric.Gui.Views
         {
             InitializeComponent();
 
-            RunCommand = new MenuCommand(runMenuItem);
-            ShowFailedAssumptions = new CheckedMenuItem(failedAssumptionsMenuItem);
-            ProjectMenu = new PopupMenu(projectMenuItem);
-            ActiveConfiguration = new PopupMenu(activeConfigurationMenuItem);
-            EditProject = new MenuCommand(editProjectMenuItem);
-            PropertiesCommand = new MenuCommand(propertiesMenuItem);
-            ShowCheckBoxes = new CheckedMenuItem(showCheckBoxesMenuItem);
-            ExpandAllCommand = new MenuCommand(expandAllMenuItem);
-            CollapseAllCommand = new MenuCommand(collapseAllMenuItem);
-            HideTestsCommand = new MenuCommand(hideTestsMenuItem);
+            RunCommand = new ToolStripMenuElement(runMenuItem);
+            ShowFailedAssumptions = new ToolStripMenuElement(failedAssumptionsMenuItem);
+            ProjectMenu = new ToolStripMenuElement(projectMenuItem);
+            ActiveConfiguration = new ToolStripMenuElement(activeConfigurationMenuItem);
+            EditProject = new ToolStripMenuElement(editProjectMenuItem);
+            PropertiesCommand = new ToolStripMenuElement(propertiesMenuItem);
+            ShowCheckBoxes = new ToolStripMenuElement(showCheckBoxesMenuItem);
+            ExpandAllCommand = new ToolStripMenuElement(expandAllMenuItem);
+            CollapseAllCommand = new ToolStripMenuElement(collapseAllMenuItem);
+            HideTestsCommand = new ToolStripMenuElement(hideTestsMenuItem);
             ClearAllCheckBoxes = new ButtonElement(clearAllButton);
             CheckFailedTests = new ButtonElement(checkFailedButton);
             Tree = new TreeViewElement(tree);
@@ -102,7 +102,7 @@ namespace TestCentric.Gui.Views
                     : DragDropEffects.None;
             };
 
-            treeMenu.Collapse += (s, e) => ContextNode = null;
+            //treeMenu.Collapse += (s, e) => ContextNode = null;
         }
 
         #endregion
@@ -111,10 +111,10 @@ namespace TestCentric.Gui.Views
 
         public event FileDropEventHandler FileDrop;
 
-        public IMenuCommand RunCommand { get; private set; }
+        public ICommand RunCommand { get; private set; }
         public IChecked ShowFailedAssumptions { get; private set; }
-        public IMenu ProjectMenu { get; private set; }
-        public IMenu ActiveConfiguration { get; private set; }
+        public IToolStripMenu ProjectMenu { get; private set; }
+        public IToolStripMenu ActiveConfiguration { get; private set; }
         public ICommand EditProject { get; private set; }
         public ICommand PropertiesCommand { get; private set; }
         public IChecked ShowCheckBoxes { get; private set; }

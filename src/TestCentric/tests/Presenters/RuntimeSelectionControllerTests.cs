@@ -18,7 +18,7 @@ namespace TestCentric.Gui.Presenters
 {
     public class RuntimeSelectionControllerTests
     {
-        private IMenu _menu;
+        private IToolStripMenu _menu;
         private ITestModel _model;
         private TestPackage _package;
         private RuntimeSelectionController _controller;
@@ -26,7 +26,7 @@ namespace TestCentric.Gui.Presenters
         [SetUp]
         public void Initialize()
         {
-            _menu = new PopupMenu(new MenuItem("Runtimes"));
+            _menu = new ToolStripMenuElement(new ToolStripMenuItem("Runtimes"));
             _model = Substitute.For<ITestModel>();
             _model.AvailableRuntimes.Returns(AvailableRuntimes);
             _package = new TestPackage("dummy.dll");
@@ -89,7 +89,7 @@ namespace TestCentric.Gui.Presenters
 
             for (int index = 0; index < _menu.MenuItems.Count; index++)
             {
-                var item = _menu.MenuItems[index] as MenuItem;
+                var item = _menu.MenuItems[index] as ToolStripMenuItem;
                 Assert.That(item.Enabled, Is.EqualTo(shouldBeEnabled[index]), $"Incorrect value for item.Enabled at index {index}");
                 Assert.That(item.Checked, Is.EqualTo(index == 0), $"Incorrect value for item.Checked at index {index}");
             }
@@ -101,7 +101,7 @@ namespace TestCentric.Gui.Presenters
             {
                 var result = new List<string>();
 
-                foreach (MenuItem item in _menu.MenuItems)
+                foreach (ToolStripMenuItem item in _menu.MenuItems)
                     result.Add((string)item.Tag);
 
                 return result;

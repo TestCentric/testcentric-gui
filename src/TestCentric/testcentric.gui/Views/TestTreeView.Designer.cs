@@ -32,22 +32,22 @@ namespace TestCentric.Gui.Views
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TestTreeView));
             this.treePanel = new System.Windows.Forms.Panel();
             this.tree = new System.Windows.Forms.TreeView();
-            this.treeMenu = new System.Windows.Forms.ContextMenu();
-            this.runMenuItem = new System.Windows.Forms.MenuItem();
-            this.propertiesMenuItem = new System.Windows.Forms.MenuItem();
-            this.failedAssumptionsMenuItem = new System.Windows.Forms.MenuItem();
-            this.menuItem1 = new System.Windows.Forms.MenuItem();
-            this.showCheckBoxesMenuItem = new System.Windows.Forms.MenuItem();
-            this.expandAllMenuItem = new System.Windows.Forms.MenuItem();
-            this.collapseAllMenuItem = new System.Windows.Forms.MenuItem();
-            this.hideTestsMenuItem = new System.Windows.Forms.MenuItem();
+            this.treeMenu = new System.Windows.Forms.ContextMenuStrip();
+            this.runMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.propertiesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.failedAssumptionsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.showCheckBoxesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.expandAllMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.collapseAllMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.hideTestsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.treeImages = new System.Windows.Forms.ImageList(this.components);
             this.buttonPanel = new System.Windows.Forms.Panel();
             this.checkFailedButton = new System.Windows.Forms.Button();
             this.clearAllButton = new System.Windows.Forms.Button();
-            this.projectMenuItem = new System.Windows.Forms.MenuItem();
-            this.activeConfigurationMenuItem = new System.Windows.Forms.MenuItem();
-            this.editProjectMenuItem = new System.Windows.Forms.MenuItem();
+            this.projectMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.activeConfigurationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editProjectMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.treePanel.SuspendLayout();
             this.buttonPanel.SuspendLayout();
             this.SuspendLayout();
@@ -64,7 +64,7 @@ namespace TestCentric.Gui.Views
             // tree
             // 
             this.tree.AllowDrop = true;
-            this.tree.ContextMenu = this.treeMenu;
+            this.tree.ContextMenuStrip = this.treeMenu;
             this.tree.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tree.HideSelection = false;
             this.tree.ImageIndex = 0;
@@ -77,7 +77,7 @@ namespace TestCentric.Gui.Views
             // 
             // treeMenu
             // 
-            this.treeMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.treeMenu.Items.AddRange(new System.Windows.Forms.ToolStripMenuItem[] {
             this.runMenuItem,
             this.propertiesMenuItem,
             this.failedAssumptionsMenuItem,
@@ -90,60 +90,49 @@ namespace TestCentric.Gui.Views
             // 
             // runMenuItem
             // 
-            this.runMenuItem.Index = 0;
             this.runMenuItem.Text = "&Run";
             // 
             // propertiesMenuItem
             // 
-            this.propertiesMenuItem.Index = 1;
             this.propertiesMenuItem.Text = "&Properties";
             // 
             // failedAssumptionsMenuItem
             // 
-            this.failedAssumptionsMenuItem.Index = 2;
             this.failedAssumptionsMenuItem.Text = "Show Failed Assumptions";
             // 
             // projectMenuItem
             // 
-            this.projectMenuItem.Index = 3;
-            this.projectMenuItem.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.projectMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripMenuItem[] {
             this.activeConfigurationMenuItem,
             this.editProjectMenuItem});
             this.projectMenuItem.Text = "Project";
             // 
             // activeConfigurationMenuItem
             // 
-            this.activeConfigurationMenuItem.Index = 0;
             this.activeConfigurationMenuItem.Text = "Configuration";
             // 
             // editProjectMenuItem
             // 
-            this.editProjectMenuItem.Index = 1;
             this.editProjectMenuItem.Text = "Edit...";
             // 
             // menuItem1
             // 
-            this.menuItem1.Index = 4;
             this.menuItem1.Text = "-";
             // 
             // showCheckBoxesMenuItem
             // 
-            this.showCheckBoxesMenuItem.Index = 5;
             this.showCheckBoxesMenuItem.Text = "Show CheckBoxes";
             // 
             // expandAllMenuItem
             // 
-            this.expandAllMenuItem.Index = 6;
             this.expandAllMenuItem.Text = "Expand All";
             // 
             // collapseAllMenuItem
             // 
-            this.collapseAllMenuItem.Index = 7;
             this.collapseAllMenuItem.Text = "Collapse All";
             // 
             // hideTestsMenuItem
             // 
-            this.hideTestsMenuItem.Index = 8;
             this.hideTestsMenuItem.Text = "Hide Tests";
             // 
             // treeImages
@@ -206,17 +195,17 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.Panel buttonPanel;
         private System.Windows.Forms.Button clearAllButton;
         private System.Windows.Forms.Button checkFailedButton;
-        private System.Windows.Forms.ContextMenu treeMenu;
-        private System.Windows.Forms.MenuItem runMenuItem;
-        private System.Windows.Forms.MenuItem failedAssumptionsMenuItem;
-        private System.Windows.Forms.MenuItem propertiesMenuItem;
-        private System.Windows.Forms.MenuItem showCheckBoxesMenuItem;
-        private System.Windows.Forms.MenuItem expandAllMenuItem;
-        private System.Windows.Forms.MenuItem collapseAllMenuItem;
-        private System.Windows.Forms.MenuItem hideTestsMenuItem;
-        private System.Windows.Forms.MenuItem menuItem1;
-        private System.Windows.Forms.MenuItem projectMenuItem;
-        private System.Windows.Forms.MenuItem activeConfigurationMenuItem;
-        private System.Windows.Forms.MenuItem editProjectMenuItem;
+        private System.Windows.Forms.ContextMenuStrip treeMenu;
+        private System.Windows.Forms.ToolStripMenuItem runMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem failedAssumptionsMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem propertiesMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showCheckBoxesMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem expandAllMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem collapseAllMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem hideTestsMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menuItem1;
+        private System.Windows.Forms.ToolStripMenuItem projectMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem activeConfigurationMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem editProjectMenuItem;
     }
 }
