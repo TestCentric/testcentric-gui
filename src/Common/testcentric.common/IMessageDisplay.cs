@@ -4,17 +4,16 @@
 // ***********************************************************************
 
 using System;
-using System.Windows.Forms;
 
 namespace TestCentric.Gui
 {
     public interface IMessageDisplay
     {
-        DialogResult Error(string message);
-        DialogResult Error(string message, Exception exception);
+        void Error(string message);
+        void Error(string message, Exception exception);
 
-        DialogResult Info(string message);
+        void Info(string message);
 
-        DialogResult Ask(string message);
+        bool Ask(string message);
     }
 }

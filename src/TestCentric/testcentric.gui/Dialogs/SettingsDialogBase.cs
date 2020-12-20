@@ -161,10 +161,7 @@ namespace TestCentric.Gui
         {
             if (Model.IsPackageLoaded && HasChangesRequiringReload)
             {
-                DialogResult answer = MessageDisplay.Ask(
-                    "Some changes will only take effect when you reload the test project. Do you want to reload now?");
-
-                if (answer == DialogResult.Yes)
+                if (MessageDisplay.Ask("Some changes will only take effect when you reload the test project. Do you want to reload now?"))
                     _reloadProjectOnClose = true;
             }
 

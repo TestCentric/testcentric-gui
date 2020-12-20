@@ -27,37 +27,25 @@ namespace TestCentric.Gui
 
         #region Public Methods
 
-        #region Error
-
-        public DialogResult Error(string message)
+        public void Error(string message)
         {
-            return MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Stop);
         }
 
-        public DialogResult Error(string message, Exception exception)
+        public void Error(string message, Exception exception)
         {
-            return MessageBox.Show(BuildMessage(message, exception), caption, MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            MessageBox.Show(BuildMessage(message, exception), caption, MessageBoxButtons.OK, MessageBoxIcon.Stop);
         }
 
-        #endregion
-
-        #region Info
-
-        public DialogResult Info(string message)
+        public void Info(string message)
         {
-            return MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        #endregion
-
-        #region Ask
-
-        public DialogResult Ask(string message)
+        public bool Ask(string message)
         {
-            return MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            return MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
         }
-
-        #endregion
 
         #endregion
 
