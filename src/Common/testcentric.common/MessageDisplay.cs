@@ -27,15 +27,6 @@ namespace TestCentric.Gui
 
         #region Public Methods
 
-        #region Display
-
-        public DialogResult Display(string message)
-        {
-            return MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.None);
-        }
-
-        #endregion
-
         #region Error
 
         public DialogResult Error(string message)
@@ -45,7 +36,7 @@ namespace TestCentric.Gui
 
         public DialogResult Error(string message, Exception exception)
         {
-            return MessageBox.Show(BuildMessage(message, exception, false), caption, MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            return MessageBox.Show(BuildMessage(message, exception), caption, MessageBoxButtons.OK, MessageBoxIcon.Stop);
         }
 
         #endregion
@@ -88,13 +79,9 @@ namespace TestCentric.Gui
             return sb.ToString();
         }
 
-        private static string BuildMessage(string message, Exception exception, bool isFatal)
+        private static string BuildMessage(string message, Exception exception)
         {
-            string msg = message + Environment.NewLine + Environment.NewLine + BuildMessage(exception);
-
-            return isFatal
-                ? msg
-                : msg + Environment.NewLine + Environment.NewLine + "For further information, use the Exception Details menu item.";
+            return message + Environment.NewLine + Environment.NewLine + BuildMessage(exception);
         }
 
         #endregion

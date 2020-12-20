@@ -10,8 +10,6 @@ namespace TestCentric.Gui
 {
     public interface IMessageDisplay
     {
-        DialogResult Display(string message);
-
         DialogResult Error(string message);
         DialogResult Error(string message, Exception exception);
 
