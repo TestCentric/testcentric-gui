@@ -31,12 +31,7 @@ namespace TestCentric.Gui
 
         public DialogResult Display(string message)
         {
-            return Display(message, MessageBoxButtons.OK);
-        }
-
-        public DialogResult Display(string message, MessageBoxButtons buttons)
-        {
-            return MessageBox.Show(message, caption, buttons, MessageBoxIcon.None);
+            return MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.None);
         }
 
         #endregion
@@ -45,27 +40,12 @@ namespace TestCentric.Gui
 
         public DialogResult Error(string message)
         {
-            return Error(message, MessageBoxButtons.OK);
-        }
-
-        public DialogResult Error(string message, MessageBoxButtons buttons)
-        {
-            return MessageBox.Show(message, caption, buttons, MessageBoxIcon.Stop);
+            return MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Stop);
         }
 
         public DialogResult Error(string message, Exception exception)
         {
-            return Error(message, exception, MessageBoxButtons.OK);
-        }
-
-        public DialogResult Error(string message, Exception exception, MessageBoxButtons buttons)
-        {
-            return Error(BuildMessage(message, exception, false), buttons);
-        }
-
-        public DialogResult FatalError(string message, Exception exception)
-        {
-            return Error(BuildMessage(message, exception, true), MessageBoxButtons.OK);
+            return MessageBox.Show(BuildMessage(message, exception, false), caption, MessageBoxButtons.OK, MessageBoxIcon.Stop);
         }
 
         #endregion
@@ -74,12 +54,7 @@ namespace TestCentric.Gui
 
         public DialogResult Info(string message)
         {
-            return Info(message, MessageBoxButtons.OK);
-        }
-
-        public DialogResult Info(string message, MessageBoxButtons buttons)
-        {
-            return MessageBox.Show(message, caption, buttons, MessageBoxIcon.Information);
+            return MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         #endregion
@@ -88,12 +63,7 @@ namespace TestCentric.Gui
 
         public DialogResult Ask(string message)
         {
-            return Ask(message, MessageBoxButtons.YesNo);
-        }
-
-        public DialogResult Ask(string message, MessageBoxButtons buttons)
-        {
-            return MessageBox.Show(message, caption, buttons, MessageBoxIcon.Question);
+            return MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
         }
 
         #endregion
