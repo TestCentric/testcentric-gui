@@ -7,13 +7,15 @@ using System;
 
 namespace TestCentric.Gui
 {
+    /// <summary>
+    /// Interface implemented by objects, which know how to display a message
+    /// </summary>
     public interface IMessageDisplay
     {
         void Error(string message);
-        void Error(string message, Exception exception);
 
         void Info(string message);
 
-        bool Ask(string message);
+        bool YesNo(string message);
     }
 }

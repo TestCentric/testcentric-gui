@@ -10,66 +10,72 @@ using System.Windows.Forms;
 namespace TestCentric.Gui
 {
     /// <summary>
-    /// MessageBoxDisplay provides a simple implementation of IMessageDisplay using MessageBox.
+    /// MessageBoxDisplay provides a simple implementation of IMessageDisplay using
+    /// a Windows MessageBox. Additionally, it provides static methods for a displaying
+    /// a MessageBox without exposing implementation details to the caller.
     /// </summary>
     public class MessageBoxDisplay : IMessageDisplay
     {
         private static readonly string DEFAULT_CAPTION = "TestCentric";
 
-        private readonly string caption;
+        private readonly string _caption;
 
         public MessageBoxDisplay() : this(DEFAULT_CAPTION) { }
 
         public MessageBoxDisplay(string caption)
         {
-            this.caption = caption;
+            _caption = caption;
         }
 
-        #region Public Methods
+        #region Static Methods to Display a MessageBox
 
-        public void Error(string message)
+        public static void Error(string message)
+        {
+            Error(message, DEFAULT_CAPTION);
+        }
+
+        public static void Error(string message, string caption)
         {
             MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Stop);
         }
 
-        public void Error(string message, Exception exception)
+        public static void Info(string message)
         {
-            MessageBox.Show(BuildMessage(message, exception), caption, MessageBoxButtons.OK, MessageBoxIcon.Stop);
+            Info(message, DEFAULT_CAPTION);
         }
 
-        public void Info(string message)
+        public static void Info(string message, string caption)
         {
             MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        public bool Ask(string message)
+        public static bool YesNo(string message)
+        {
+            return YesNo(message, DEFAULT_CAPTION);
+        }
+
+        public static bool YesNo(string message, string caption)
         {
             return MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
         }
 
         #endregion
 
-        #region Helper Methods
+        #region IMessageDisplay Implementation
 
-        private static string BuildMessage(Exception exception)
+        void IMessageDisplay.Error(string message)
         {
-            Exception ex = exception;
-            StringBuilder sb = new StringBuilder();
-
-            sb.AppendFormat("{0} : {1}", ex.GetType().ToString(), ex.Message);
-
-            while (ex.InnerException != null)
-            {
-                ex = ex.InnerException;
-                sb.AppendFormat("\r----> {0} : {1}", ex.GetType().ToString(), ex.Message);
-            }
-
-            return sb.ToString();
+            Error(message, _caption);
         }
 
-        private static string BuildMessage(string message, Exception exception)
+        void IMessageDisplay.Info(string message)
         {
-            return message + Environment.NewLine + Environment.NewLine + BuildMessage(exception);
+            Info(message, _caption);
+        }
+
+        bool IMessageDisplay.YesNo(string message)
+        {
+            return YesNo(message, _caption);
         }
 
         #endregion
