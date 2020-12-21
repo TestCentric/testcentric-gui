@@ -88,7 +88,7 @@ namespace TestCentric.Gui.Presenters
                         }
                         catch (Exception ex)
                         {
-                            new MessageDisplay().Error(
+                            MessageBoxDisplay.Error(
                                 $"Unable to load visual state from {fileName}{Environment.NewLine}{ex.Message}");
                         }
                     }

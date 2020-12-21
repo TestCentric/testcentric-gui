@@ -201,8 +201,7 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.UnhandledException += (UnhandledExceptionEventArgs e) =>
             {
-                var display = new MessageDisplay("TestCentric - Internal Error");
-                display.Error($"{e.Message}\n\n{e.StackTrace}");
+                MessageBoxDisplay.Error($"{e.Message}\n\n{e.StackTrace}", "TestCentric - Internal Error");
             };
 
             #endregion
@@ -273,10 +272,7 @@ namespace TestCentric.Gui.Presenters
                 {
                     if (_model.IsTestRunning)
                     {
-                        DialogResult dialogResult = _view.MessageDisplay.Ask(
-                            "A test is running, do you want to forcibly stop the test and exit?");
-
-                        if (dialogResult == DialogResult.No)
+                        if (!_view.MessageDisplay.YesNo("A test is running, do you want to forcibly stop the test and exit?"))
                         {
                             e.Cancel = true;
                             return;
@@ -594,7 +590,7 @@ namespace TestCentric.Gui.Presenters
                 }
                 catch (Exception exception)
                 {
-                    _view.MessageDisplay.Error("Unable to Save Results", exception);
+                    _view.MessageDisplay.Error("Unable to Save Results\n\n" + MessageBuilder.FromException(exception));
                 }
             }
         }

@@ -68,7 +68,7 @@ namespace TestCentric.Gui.Views
             TestName = new ControlElement(testName);
 
             DialogManager = new DialogManager();
-            MessageDisplay = new MessageDisplay();
+            MessageDisplay = new MessageBoxDisplay();
             LongRunningOperation = new LongRunningOperationDisplay(this);
         }
 

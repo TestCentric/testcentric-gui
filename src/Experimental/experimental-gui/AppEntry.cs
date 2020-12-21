@@ -128,7 +128,7 @@ namespace TestCentric.Gui
 
         private static IMessageDisplay MessageDisplay
         {
-            get { return new MessageDisplay("TestCentric Experimental Runner for NUnit"); }
+            get { return new MessageBoxDisplay("TestCentric Experimental Runner for NUnit"); }
         }
     }
 }

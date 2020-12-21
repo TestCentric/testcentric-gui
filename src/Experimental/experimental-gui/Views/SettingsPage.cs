@@ -26,7 +26,7 @@ namespace TestCentric.Gui.Views
 
             this.Key = key;
             this.Settings = settings;
-            this.MessageDisplay = new MessageDisplay("NUnit Settings");
+            this.MessageDisplay = new MessageBoxDisplay("NUnit Settings");
         }
 
         #region Properties

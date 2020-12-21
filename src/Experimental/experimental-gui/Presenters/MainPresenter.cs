@@ -358,7 +358,7 @@ namespace TestCentric.Gui.Presenters
                 }
                 catch (Exception exception)
                 {
-                    _view.MessageDisplay.Error("Unable to Save Results", exception);
+                    _view.MessageDisplay.Error("Unable to Save Results\n\n" + MessageBuilder.FromException(exception));
                 }
             }
         }
