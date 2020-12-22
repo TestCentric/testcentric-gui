@@ -334,6 +334,10 @@ namespace TestCentric.Gui.Views
             this.testMenu,
             this.toolsMenu,
             this.helpItem});
+            this.mainMenu.Dock = System.Windows.Forms.DockStyle.Top;
+            this.mainMenu.Location = new System.Drawing.Point(0, 0);
+            this.mainMenu.Size = new System.Drawing.Size(744, 24);
+            this.statusBar.TabIndex = 0;
             // 
             // fileMenu
             // 
@@ -672,7 +676,7 @@ namespace TestCentric.Gui.Views
             // 
             // treeSplitter
             // 
-            this.treeSplitter.Location = new System.Drawing.Point(240, 0);
+            this.treeSplitter.Location = new System.Drawing.Point(240, 24);
             this.treeSplitter.MinSize = 240;
             this.treeSplitter.Name = "treeSplitter";
             this.treeSplitter.Size = new System.Drawing.Size(6, 407);
@@ -685,7 +689,7 @@ namespace TestCentric.Gui.Views
             this.rightPanel.Controls.Add(this.resultTabs);
             this.rightPanel.Controls.Add(this.groupBox1);
             this.rightPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rightPanel.Location = new System.Drawing.Point(246, 0);
+            this.rightPanel.Location = new System.Drawing.Point(246, 24);
             this.rightPanel.Name = "rightPanel";
             this.rightPanel.Size = new System.Drawing.Size(498, 407);
             this.rightPanel.TabIndex = 3;
@@ -831,7 +835,7 @@ namespace TestCentric.Gui.Views
             // 
             this.leftPanel.Controls.Add(this.tabs);
             this.leftPanel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.leftPanel.Location = new System.Drawing.Point(0, 0);
+            this.leftPanel.Location = new System.Drawing.Point(0, 24);
             this.leftPanel.Name = "leftPanel";
             this.leftPanel.Size = new System.Drawing.Size(240, 407);
             this.leftPanel.TabIndex = 4;
@@ -915,6 +919,7 @@ namespace TestCentric.Gui.Views
             this.Controls.Add(this.treeSplitter);
             this.Controls.Add(this.leftPanel);
             this.Controls.Add(this.statusBar);
+            this.Controls.Add(this.mainMenu);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.mainMenu;
             this.MinimumSize = new System.Drawing.Size(160, 32);
