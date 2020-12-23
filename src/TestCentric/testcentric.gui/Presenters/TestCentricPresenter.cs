@@ -488,13 +488,12 @@ namespace TestCentric.Gui.Presenters
 
             _view.TestCentricHelpCommand.Execute += () =>
             {
-                _view.MessageDisplay.Error("Not Yet Implemented");
-
+                System.Diagnostics.Process.Start("https://test-centric.org/testcentric-gui");
             };
 
             _view.NUnitHelpCommand.Execute += () =>
             {
-                System.Diagnostics.Process.Start("https://github.com/nunit/docs/wiki/NUnit-Documentation");
+                System.Diagnostics.Process.Start("https://docs.nunit.org/articles/nunit/intro.html");
             };
 
             _view.AboutCommand.Execute += () =>
