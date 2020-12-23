@@ -13,10 +13,9 @@ using TestCentric.Gui.Model.Settings;
 
 namespace TestCentric.Gui.Presenters
 {
-    using System.Runtime.Versioning;
     using Model;
     using Views;
-    using Views.AddinPages;
+    using Dialogs;
 
     public class MainPresenter : System.IDisposable
     {

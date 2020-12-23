@@ -3,7 +3,7 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-namespace TestCentric.Gui
+namespace TestCentric.Gui.Dialogs
 {
     using Model;
     using Presenters;

@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui
 {
+    using Dialogs;
     using Model.Settings;
 
     /// <summary>

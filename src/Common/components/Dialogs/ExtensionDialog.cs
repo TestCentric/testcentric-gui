@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
 
-namespace TestCentric.Gui
+namespace TestCentric.Gui.Dialogs
 {
     /// <summary>
     /// Summary description for AddinDialog.

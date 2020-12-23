@@ -5,7 +5,7 @@
 
 using System.Windows.Forms;
 
-namespace TestCentric.Gui
+namespace TestCentric.Gui.Dialogs
 {
     using Model;
     using Presenters;

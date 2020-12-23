@@ -9,7 +9,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
-namespace TestCentric.Gui
+namespace TestCentric.Gui.Dialogs
 {
     using Model;
     using Views;
@@ -30,8 +30,8 @@ namespace TestCentric.Gui
         {
             InitializeComponent();
 
-            pinnedImage = new Bitmap(typeof(TestPropertiesDialog), "Images.pinned.gif");
-            unpinnedImage = new Bitmap(typeof(TestPropertiesDialog), "Images.unpinned.gif");
+            pinnedImage = new Bitmap(GetType().Assembly.GetManifestResourceStream("TestCentric.Gui.Images.pinned.gif"));
+            unpinnedImage = new Bitmap(GetType().Assembly.GetManifestResourceStream("TestCentric.Gui.Images.unpinned.gif"));
             pinButton.Image = unpinnedImage;
         }
 
