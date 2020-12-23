@@ -45,7 +45,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestCentric.Gui.Model", "sr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestCentric", "TestCentric", "{26735BF4-848E-4B3D-BA4D-E1366986F5BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCentric.Gui.Exe", "src\TestCentric\testcentric.exe\TestCentric.Gui.Exe.csproj", "{AAB186A4-FA3D-404D-AD78-7EB5BB861655}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestCentric.Gui.Exe", "src\TestCentric\testcentric.exe\TestCentric.Gui.Exe.csproj", "{AAB186A4-FA3D-404D-AD78-7EB5BB861655}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "choco", "choco", "{7A082D44-4669-485E-AB71-5475978EE240}"
 	ProjectSection(SolutionItems) = preProject
@@ -57,9 +57,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "choco", "choco", "{7A082D44
 		choco\VERIFICATION.txt = choco\VERIFICATION.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCentric.Gui.Tests", "src\TestCentric\tests\TestCentric.Gui.Tests.csproj", "{AAD27267-DE1F-4F61-A1FB-D1680A5B8001}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestCentric.Gui.Tests", "src\TestCentric\tests\TestCentric.Gui.Tests.csproj", "{AAD27267-DE1F-4F61-A1FB-D1680A5B8001}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCentric.Gui", "src\TestCentric\testcentric.gui\TestCentric.Gui.csproj", "{3FF340D5-D3B4-4DF0-BAF1-98B3C00B6148}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestCentric.Gui", "src\TestCentric\testcentric.gui\TestCentric.Gui.csproj", "{3FF340D5-D3B4-4DF0-BAF1-98B3C00B6148}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{0C0A29CA-1A18-4B1A-9262-F41C01E7E30F}"
 EndProject
@@ -67,11 +67,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestCentric.Common", "src\C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Experimental", "Experimental", "{57B0C862-C6E4-42FA-9FFC-591CCA51FD27}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experimental.Gui", "src\Experimental\experimental-gui\Experimental.Gui.csproj", "{9E15166C-D2B7-4B24-AB1C-1C69FFCEC9D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Experimental.Gui", "src\Experimental\experimental-gui\Experimental.Gui.csproj", "{9E15166C-D2B7-4B24-AB1C-1C69FFCEC9D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experimental.Gui.Exe", "src\Experimental\experimental-exe\Experimental.Gui.Exe.csproj", "{D5556639-F04B-4389-92C8-E110D6688BA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Experimental.Gui.Exe", "src\Experimental\experimental-exe\Experimental.Gui.Exe.csproj", "{D5556639-F04B-4389-92C8-E110D6688BA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experimental.Gui.Tests", "src\Experimental\tests\Experimental.Gui.Tests.csproj", "{96279B6C-981E-428F-B184-0831136ADD31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Experimental.Gui.Tests", "src\Experimental\tests\Experimental.Gui.Tests.csproj", "{96279B6C-981E-428F-B184-0831136ADD31}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestCentric.Gui.Components", "src\Common\components\TestCentric.Gui.Components.csproj", "{AC6DFB0E-C717-4FC4-B918-D6B789061212}"
 EndProject

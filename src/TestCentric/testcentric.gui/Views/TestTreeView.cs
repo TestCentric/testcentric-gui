@@ -13,6 +13,7 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
+    using Dialogs;
     using Elements;
     using Model;
 

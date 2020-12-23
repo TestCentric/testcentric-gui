@@ -1,4 +1,4 @@
-namespace TestCentric.Gui
+namespace TestCentric.Gui.Dialogs
 {
     using Controls;
 

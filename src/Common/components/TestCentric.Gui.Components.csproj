@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<RootNamespace>TestCentric.Gui.Components</RootNamespace>
+		<RootNamespace>TestCentric.Gui</RootNamespace>
 		<AssemblyName>TestCentric.Gui.Components</AssemblyName>
 		<TargetFramework>net45</TargetFramework>
 		<OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>

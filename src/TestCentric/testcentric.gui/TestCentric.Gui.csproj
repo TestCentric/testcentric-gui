@@ -11,6 +11,10 @@
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	</PropertyGroup>
 	<ItemGroup>
+	  <None Remove="Images\pinned.gif" />
+	  <None Remove="Images\unpinned.gif" />
+	</ItemGroup>
+	<ItemGroup>
 		<Reference Include="System.Windows.Forms" />
 	</ItemGroup>
     <ItemGroup>
@@ -99,6 +103,23 @@
         </Content>
     </ItemGroup>
     <ItemGroup>
+      <EmbeddedResource Include="Images\pinned.gif" />
+      <EmbeddedResource Include="Images\unpinned.gif" />
+    </ItemGroup>
+    <ItemGroup>
         <PackageReference Include="NUnit.Engine.Api" Version="3.11.1" />
+    </ItemGroup>
+    <ItemGroup>
+      <Compile Update="Properties\Resources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Resources.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Update="Properties\Resources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
     </ItemGroup>
 </Project>

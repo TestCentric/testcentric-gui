@@ -7,7 +7,7 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace TestCentric.Gui
+namespace TestCentric.Gui.Dialogs
 {
     public class AboutBox : Form
     {
