@@ -52,7 +52,7 @@ namespace TestCentric.Gui.Dialogs
                     versionText += string.Format(" ({0})", configText);
             }
 
-            string copyrightText = "Copyright (C) 2018-2019 Charlie Poole.";
+            string copyrightText = "Copyright (C) 2018-2020 Charlie Poole and TestCentric Runner contributors";
             objectAttrs = executingAssembly.GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
             if (objectAttrs.Length > 0)
                 copyrightText = ((AssemblyCopyrightAttribute)objectAttrs[0]).Copyright;
@@ -120,7 +120,7 @@ namespace TestCentric.Gui.Dialogs
             // 
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.LinkArea = new System.Windows.Forms.LinkArea(0, 21);
-            this.linkLabel1.Location = new System.Drawing.Point(230, 92);
+            this.linkLabel1.Location = new System.Drawing.Point(230, 102);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(62, 17);
             this.linkLabel1.TabIndex = 5;
@@ -131,11 +131,11 @@ namespace TestCentric.Gui.Dialogs
             // 
             // copyright
             // 
-            this.copyright.Location = new System.Drawing.Point(164, 61);
+            this.copyright.Location = new System.Drawing.Point(164, 63);
             this.copyright.Name = "copyright";
-            this.copyright.Size = new System.Drawing.Size(215, 19);
+            this.copyright.Size = new System.Drawing.Size(215, 28);
             this.copyright.TabIndex = 10;
-            this.copyright.Text = "Copyright (c) Charlie Poole 2018.";
+            this.copyright.Text = "Copyright";
             // 
             // label2
             // 
@@ -158,7 +158,7 @@ namespace TestCentric.Gui.Dialogs
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(164, 122);
+            this.label1.Location = new System.Drawing.Point(164, 126);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(98, 13);
             this.label1.TabIndex = 13;
@@ -167,7 +167,7 @@ namespace TestCentric.Gui.Dialogs
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(164, 90);
+            this.label3.Location = new System.Drawing.Point(164, 100);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(67, 13);
             this.label3.TabIndex = 14;
@@ -176,7 +176,7 @@ namespace TestCentric.Gui.Dialogs
             // linkLabel2
             // 
             this.linkLabel2.AutoSize = true;
-            this.linkLabel2.Location = new System.Drawing.Point(261, 123);
+            this.linkLabel2.Location = new System.Drawing.Point(261, 127);
             this.linkLabel2.Name = "linkLabel2";
             this.linkLabel2.Size = new System.Drawing.Size(66, 13);
             this.linkLabel2.TabIndex = 15;
@@ -231,13 +231,13 @@ namespace TestCentric.Gui.Dialogs
 
         private void linkLabel1_LinkClicked(object sender, System.Windows.Forms.LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("http://test-centric.com");
+            System.Diagnostics.Process.Start("http://test-centric.org");
             linkLabel1.LinkVisited = true;
         }
 
         private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://opensource.org/licenses/MIT");
+            System.Diagnostics.Process.Start("http://test-centric.org/testcentric-gui/license");
             linkLabel2.LinkVisited = true;
         }
     }

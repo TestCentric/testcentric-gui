@@ -250,11 +250,12 @@
 </value>
   </data>
   <data name="label4.Text" xml:space="preserve">
-    <value>TestCentric 1.0 is based on the NUnit V2 GUI, modified to support NUnit 3 and higher tests.
+    <value>TestCentric 1.x is based on the NUnit V2 GUI, modified to support NUnit 3.0 and higher tests.
 
-The runner uses the NUnit test engine and some features require an engine extension to be installed. This includes the ability to open NUnit and Visual Studio projects, to run NUnit V2 tests and to save results in V2 format.
+The runner includes a modified version of the NUnit test engine. Existing NUnit engine extensions may be installed and will be used by the runner.
 
-Use Tools | Extensions to see what extensions are currently installed.</value>
+Use Tools | Extensions to see which extensions are currently installed.
+</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
