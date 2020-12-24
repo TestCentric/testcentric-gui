@@ -22,7 +22,7 @@ process.
 2. Make any changes needed for the release, add and commit them.
    Note that there may not be any changes at this point.
 
-3. Push the new branch, for example: `push -u origin release-1.5.0`
+3. Push the new branch, for example: `git push -u origin release-1.5.0`
 
 4. Use the browser to view the draft release that has been created
    on GitHub. All closed issues should appear and the text should

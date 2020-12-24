@@ -3,11 +3,12 @@ issue-labels-include:
 - Feature
 - Enhancement
 - Bug
+- Internal Refactoring
 - Build
 - Documentation
 # The labels that will NOT be used when including issues in release notes.
-issue-labels-exclude:
-- Internal Refactoring
+#issue-labels-exclude:
+#- Internal Refactoring
 # Overrides default pluralization and header names for specific labels.
 issue-labels-alias:
 - name: Build

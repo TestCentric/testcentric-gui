@@ -1,4 +1,6 @@
-﻿TestCentric Runner for NUnit 1.5.2 - December 16, 2020
+﻿TestCentric Runner for NUnit 1.5.3 - December 23, 2020
+
+TestCentric Runner for NUnit 1.5.2 - December 16, 2020
 
 Build
 
