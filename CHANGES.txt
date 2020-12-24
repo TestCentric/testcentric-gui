@@ -1,20 +1,30 @@
-﻿TestCentric Runner for NUnit 1.5.2 - December 16, 2020
+﻿TestCentric Runner for NUnit 1.5.3 - December 23, 2020
 
-Build
+This release fixes a critical issue in 1.5.2
+
+Issues Resolved
+
+* 631 Website not being rebuilt for production release
+* 632 Move website for gui into testcentric.github.io
+* 637 Document process for creating a release
+* 638 Testcentric 1.5.2: About testcentric throws an unhandled exception
+* 641 Update AboutBox text and ensure it all fits
+* 642 Dashes rather than separators in menus
+
+TestCentric Runner for NUnit 1.5.2 - December 16, 2020
+
+Issues Resolved
 
 * 626  Tailor content of Release Note created by release build
 
 TestCentric Runner for NUnit 1.5.1 - December 14, 2020
 
-Build
+Issues Resolved
 
-* 617 Migrate "master" branch to "main"
-* 616 Improvements to the Release Process
 * 324 Convert to use new VS project format
-
-Documentation
-
 * 603 Add Getting Started section to the documentation
+* 616 Improvements to the Release Process
+* 617 Migrate "master" branch to "main"
 
 TestCentric Runner for NUnit 1.5.0 - December 8, 2020
 
