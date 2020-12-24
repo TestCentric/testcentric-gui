@@ -50,8 +50,6 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.ToolStripMenuItem fileMenu;
         private System.Windows.Forms.ToolStripMenuItem openMenuItem;
         private System.Windows.Forms.ToolStripMenuItem recentFilesMenu;
-        private System.Windows.Forms.ToolStripMenuItem fileMenuSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem fileMenuSeparator4;
         private System.Windows.Forms.ToolStripMenuItem closeMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitMenuItem;
 
@@ -76,19 +74,12 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.ToolStripMenuItem runSelectedMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runFailedMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stopRunMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem viewMenuSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem viewMenuSeparator3;
-        private System.Windows.Forms.ToolStripMenuItem fontMenuSeparator;
-        private System.Windows.Forms.ToolStripMenuItem testMenuSeparator;
         private System.Windows.Forms.ToolStripMenuItem guiFontMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fixedFontMenuItem;
         private System.Windows.Forms.ToolStripMenuItem increaseFixedFontMenuItem;
         private System.Windows.Forms.ToolStripMenuItem decreaseFixedFontMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem menuItem1;
         private System.Windows.Forms.ToolStripMenuItem restoreFixedFontMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reloadTestsMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem menuItem2;
-        private System.Windows.Forms.ToolStripMenuItem toolsMenuSeparator1;
         private ToolStripMenuItem runtimeMenuItem;
         private ToolStripMenuItem addTestFileMenuItem;
         private ToolStripMenuItem extensionsMenuItem;
@@ -99,25 +90,34 @@ namespace TestCentric.Gui.Views
         private ErrorsAndFailuresView errorsAndFailuresView1;
         private TestsNotRunView testsNotRunView1;
         private ToolStripMenuItem recentFilesDummyMenuItem;
-        private ToolStripMenuItem menuItem5;
         private ToolStripMenuItem processModelMenuItem;
         private ToolStripMenuItem domainUsageMenuItem;
         private ToolStripMenuItem defaultProcessMenuItem;
         private ToolStripMenuItem inProcessMenuItem;
         private ToolStripMenuItem singleProcessMenuItem;
         private ToolStripMenuItem multipleProcessMenuItem;
-        private ToolStripMenuItem menuItem11;
         private ToolStripMenuItem runAsX86MenuItem;
         private ToolStripMenuItem defaultDomainMenuItem;
         private ToolStripMenuItem singleDomainMenuItem;
         private ToolStripMenuItem multipleDomainMenuItem;
         private ToolStripMenuItem openWorkDirectoryMenuItem;
         private ToolStripMenuItem saveResultsAsMenuItem;
-        private ToolStripMenuItem menuItem3;
         private ToolStripMenuItem runParametersMenuItem;
         private ToolStripMenuItem runtimeDummyMenuItem;
         private ToolStripMenuItem forceStopMenuItem;
         private Button forceStopButton;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripSeparator toolStripSeparator2;
+        private ToolStripSeparator toolStripSeparator3;
+        private ToolStripSeparator toolStripSeparator4;
+        private ToolStripSeparator toolStripSeparator12;
+        private ToolStripSeparator toolStripSeparator8;
+        private ToolStripSeparator toolStripSeparator10;
+        private ToolStripSeparator toolStripSeparator11;
+        private ToolStripSeparator toolStripSeparator9;
+        private ToolStripSeparator toolStripSeparator5;
+        private ToolStripSeparator toolStripSeparator6;
+        private ToolStripSeparator toolStripSeparator7;
         private TextOutputView textOutputView1;
 
         #endregion
@@ -220,9 +220,9 @@ namespace TestCentric.Gui.Views
             this.openMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addTestFileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.fileMenuSeparator1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.reloadTestsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuItem5 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.runtimeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runtimeDummyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.processModelMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -230,48 +230,48 @@ namespace TestCentric.Gui.Views
             this.inProcessMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.singleProcessMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.multipleProcessMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuItem11 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
             this.runAsX86MenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.domainUsageMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.defaultDomainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.singleDomainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.multipleDomainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.recentFilesMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.recentFilesDummyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.fileMenuSeparator4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.exitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.fullGuiMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.miniGuiMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewMenuSeparator1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.guiFontMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.increaseFontMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.decreaseFontMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.fontMenuSeparator = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
             this.fontChangeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.defaultFontMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fixedFontMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.increaseFixedFontMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.decreaseFixedFontMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
             this.restoreFixedFontMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewMenuSeparator3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
             this.statusBarMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.runAllMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runSelectedMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runFailedMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.runParametersMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.testMenuSeparator = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.stopRunMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.forceStopMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.saveResultsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveResultsAsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openWorkDirectoryMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolsMenuSeparator1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.extensionsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -346,15 +346,15 @@ namespace TestCentric.Gui.Views
             this.openMenuItem,
             this.closeMenuItem,
             this.addTestFileMenuItem,
-            this.fileMenuSeparator1,
+            this.toolStripSeparator1,
             this.reloadTestsMenuItem,
-            this.menuItem5,
+            this.toolStripSeparator2,
             this.runtimeMenuItem,
             this.processModelMenuItem,
             this.domainUsageMenuItem,
-            this.menuItem2,
+            this.toolStripSeparator3,
             this.recentFilesMenu,
-            this.fileMenuSeparator4,
+            this.toolStripSeparator4,
             this.exitMenuItem});
             this.fileMenu.Name = "fileMenu";
             this.fileMenu.Size = new System.Drawing.Size(37, 20);
@@ -379,11 +379,10 @@ namespace TestCentric.Gui.Views
             this.addTestFileMenuItem.Size = new System.Drawing.Size(179, 22);
             this.addTestFileMenuItem.Text = "&Add Test File...";
             // 
-            // fileMenuSeparator1
+            // toolStripSeparator1
             // 
-            this.fileMenuSeparator1.Name = "fileMenuSeparator1";
-            this.fileMenuSeparator1.Size = new System.Drawing.Size(179, 22);
-            this.fileMenuSeparator1.Text = "-";
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(176, 6);
             // 
             // reloadTestsMenuItem
             // 
@@ -392,11 +391,10 @@ namespace TestCentric.Gui.Views
             this.reloadTestsMenuItem.Size = new System.Drawing.Size(179, 22);
             this.reloadTestsMenuItem.Text = "&Reload Tests";
             // 
-            // menuItem5
+            // toolStripSeparator2
             // 
-            this.menuItem5.Name = "menuItem5";
-            this.menuItem5.Size = new System.Drawing.Size(179, 22);
-            this.menuItem5.Text = "-";
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(176, 6);
             // 
             // runtimeMenuItem
             // 
@@ -419,7 +417,7 @@ namespace TestCentric.Gui.Views
             this.inProcessMenuItem,
             this.singleProcessMenuItem,
             this.multipleProcessMenuItem,
-            this.menuItem11,
+            this.toolStripSeparator12,
             this.runAsX86MenuItem});
             this.processModelMenuItem.Name = "processModelMenuItem";
             this.processModelMenuItem.Size = new System.Drawing.Size(179, 22);
@@ -453,11 +451,10 @@ namespace TestCentric.Gui.Views
             this.multipleProcessMenuItem.Tag = "Multiple";
             this.multipleProcessMenuItem.Text = "Multiple";
             // 
-            // menuItem11
+            // toolStripSeparator12
             // 
-            this.menuItem11.Name = "menuItem11";
-            this.menuItem11.Size = new System.Drawing.Size(204, 22);
-            this.menuItem11.Text = "-";
+            this.toolStripSeparator12.Name = "toolStripSeparator12";
+            this.toolStripSeparator12.Size = new System.Drawing.Size(201, 6);
             // 
             // runAsX86MenuItem
             // 
@@ -496,11 +493,10 @@ namespace TestCentric.Gui.Views
             this.multipleDomainMenuItem.Tag = "Multiple";
             this.multipleDomainMenuItem.Text = "Multiple";
             // 
-            // menuItem2
+            // toolStripSeparator3
             // 
-            this.menuItem2.Name = "menuItem2";
-            this.menuItem2.Size = new System.Drawing.Size(179, 22);
-            this.menuItem2.Text = "-";
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(176, 6);
             // 
             // recentFilesMenu
             // 
@@ -516,11 +512,10 @@ namespace TestCentric.Gui.Views
             this.recentFilesDummyMenuItem.Size = new System.Drawing.Size(271, 22);
             this.recentFilesDummyMenuItem.Text = "Dummy Entry to force PopUp initially";
             // 
-            // fileMenuSeparator4
+            // toolStripSeparator4
             // 
-            this.fileMenuSeparator4.Name = "fileMenuSeparator4";
-            this.fileMenuSeparator4.Size = new System.Drawing.Size(179, 22);
-            this.fileMenuSeparator4.Text = "-";
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(176, 6);
             // 
             // exitMenuItem
             // 
@@ -533,10 +528,10 @@ namespace TestCentric.Gui.Views
             this.viewMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fullGuiMenuItem,
             this.miniGuiMenuItem,
-            this.viewMenuSeparator1,
+            this.toolStripSeparator8,
             this.guiFontMenuItem,
             this.fixedFontMenuItem,
-            this.viewMenuSeparator3,
+            this.toolStripSeparator9,
             this.statusBarMenuItem});
             this.viewMenu.Name = "viewMenu";
             this.viewMenu.Size = new System.Drawing.Size(44, 20);
@@ -558,18 +553,17 @@ namespace TestCentric.Gui.Views
             this.miniGuiMenuItem.Tag = "Mini";
             this.miniGuiMenuItem.Text = "&Mini GUI";
             // 
-            // viewMenuSeparator1
+            // toolStripSeparator8
             // 
-            this.viewMenuSeparator1.Name = "viewMenuSeparator1";
-            this.viewMenuSeparator1.Size = new System.Drawing.Size(129, 22);
-            this.viewMenuSeparator1.Text = "-";
+            this.toolStripSeparator8.Name = "toolStripSeparator8";
+            this.toolStripSeparator8.Size = new System.Drawing.Size(126, 6);
             // 
             // guiFontMenuItem
             // 
             this.guiFontMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.increaseFontMenuItem,
             this.decreaseFontMenuItem,
-            this.fontMenuSeparator,
+            this.toolStripSeparator10,
             this.fontChangeMenuItem,
             this.defaultFontMenuItem});
             this.guiFontMenuItem.Name = "guiFontMenuItem";
@@ -588,11 +582,10 @@ namespace TestCentric.Gui.Views
             this.decreaseFontMenuItem.Size = new System.Drawing.Size(124, 22);
             this.decreaseFontMenuItem.Text = "&Decrease";
             // 
-            // fontMenuSeparator
+            // toolStripSeparator10
             // 
-            this.fontMenuSeparator.Name = "fontMenuSeparator";
-            this.fontMenuSeparator.Size = new System.Drawing.Size(124, 22);
-            this.fontMenuSeparator.Text = "-";
+            this.toolStripSeparator10.Name = "toolStripSeparator10";
+            this.toolStripSeparator10.Size = new System.Drawing.Size(121, 6);
             // 
             // fontChangeMenuItem
             // 
@@ -611,7 +604,7 @@ namespace TestCentric.Gui.Views
             this.fixedFontMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.increaseFixedFontMenuItem,
             this.decreaseFixedFontMenuItem,
-            this.menuItem1,
+            this.toolStripSeparator11,
             this.restoreFixedFontMenuItem});
             this.fixedFontMenuItem.Name = "fixedFontMenuItem";
             this.fixedFontMenuItem.Size = new System.Drawing.Size(129, 22);
@@ -629,11 +622,10 @@ namespace TestCentric.Gui.Views
             this.decreaseFixedFontMenuItem.Size = new System.Drawing.Size(121, 22);
             this.decreaseFixedFontMenuItem.Text = "&Decrease";
             // 
-            // menuItem1
+            // toolStripSeparator11
             // 
-            this.menuItem1.Name = "menuItem1";
-            this.menuItem1.Size = new System.Drawing.Size(121, 22);
-            this.menuItem1.Text = "-";
+            this.toolStripSeparator11.Name = "toolStripSeparator11";
+            this.toolStripSeparator11.Size = new System.Drawing.Size(118, 6);
             // 
             // restoreFixedFontMenuItem
             // 
@@ -641,11 +633,10 @@ namespace TestCentric.Gui.Views
             this.restoreFixedFontMenuItem.Size = new System.Drawing.Size(121, 22);
             this.restoreFixedFontMenuItem.Text = "&Restore";
             // 
-            // viewMenuSeparator3
+            // toolStripSeparator9
             // 
-            this.viewMenuSeparator3.Name = "viewMenuSeparator3";
-            this.viewMenuSeparator3.Size = new System.Drawing.Size(129, 22);
-            this.viewMenuSeparator3.Text = "-";
+            this.toolStripSeparator9.Name = "toolStripSeparator9";
+            this.toolStripSeparator9.Size = new System.Drawing.Size(126, 6);
             // 
             // statusBarMenuItem
             // 
@@ -661,9 +652,9 @@ namespace TestCentric.Gui.Views
             this.runAllMenuItem,
             this.runSelectedMenuItem,
             this.runFailedMenuItem,
-            this.menuItem3,
+            this.toolStripSeparator5,
             this.runParametersMenuItem,
-            this.testMenuSeparator,
+            this.toolStripSeparator6,
             this.stopRunMenuItem,
             this.forceStopMenuItem});
             this.testMenu.Name = "testMenu";
@@ -692,11 +683,10 @@ namespace TestCentric.Gui.Views
             this.runFailedMenuItem.Size = new System.Drawing.Size(165, 22);
             this.runFailedMenuItem.Text = "Run &Failed";
             // 
-            // menuItem3
+            // toolStripSeparator5
             // 
-            this.menuItem3.Name = "menuItem3";
-            this.menuItem3.Size = new System.Drawing.Size(165, 22);
-            this.menuItem3.Text = "-";
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(162, 6);
             // 
             // runParametersMenuItem
             // 
@@ -704,11 +694,10 @@ namespace TestCentric.Gui.Views
             this.runParametersMenuItem.Size = new System.Drawing.Size(165, 22);
             this.runParametersMenuItem.Text = "Test Parameters...";
             // 
-            // testMenuSeparator
+            // toolStripSeparator6
             // 
-            this.testMenuSeparator.Name = "testMenuSeparator";
-            this.testMenuSeparator.Size = new System.Drawing.Size(165, 22);
-            this.testMenuSeparator.Text = "-";
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(162, 6);
             // 
             // stopRunMenuItem
             // 
@@ -728,7 +717,7 @@ namespace TestCentric.Gui.Views
             this.saveResultsMenuItem,
             this.saveResultsAsMenuItem,
             this.openWorkDirectoryMenuItem,
-            this.toolsMenuSeparator1,
+            this.toolStripSeparator7,
             this.extensionsMenuItem,
             this.settingsMenuItem});
             this.toolsMenu.Name = "toolsMenu";
@@ -753,11 +742,10 @@ namespace TestCentric.Gui.Views
             this.openWorkDirectoryMenuItem.Size = new System.Drawing.Size(194, 22);
             this.openWorkDirectoryMenuItem.Text = "Open Work Directory...";
             // 
-            // toolsMenuSeparator1
+            // toolStripSeparator7
             // 
-            this.toolsMenuSeparator1.Name = "toolsMenuSeparator1";
-            this.toolsMenuSeparator1.Size = new System.Drawing.Size(194, 22);
-            this.toolsMenuSeparator1.Text = "-";
+            this.toolStripSeparator7.Name = "toolStripSeparator7";
+            this.toolStripSeparator7.Size = new System.Drawing.Size(191, 6);
             // 
             // extensionsMenuItem
             // 
@@ -799,6 +787,7 @@ namespace TestCentric.Gui.Views
             // helpMenuSeparator1
             // 
             this.helpMenuSeparator1.Name = "helpMenuSeparator1";
+            this.helpMenuSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // aboutMenuItem
             // 
