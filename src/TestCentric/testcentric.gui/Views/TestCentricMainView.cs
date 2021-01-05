@@ -774,25 +774,25 @@ namespace TestCentric.Gui.Views
             // 
             this.testCentricHelpMenuItem.Name = "testCentricHelpMenuItem";
             this.testCentricHelpMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            this.testCentricHelpMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.testCentricHelpMenuItem.Size = new System.Drawing.Size(177, 22);
             this.testCentricHelpMenuItem.Text = "TestCentric ...";
             // 
             // nunitHelpMenuItem
             // 
             this.nunitHelpMenuItem.Name = "nunitHelpMenuItem";
             this.nunitHelpMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F1)));
-            this.nunitHelpMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.nunitHelpMenuItem.Size = new System.Drawing.Size(177, 22);
             this.nunitHelpMenuItem.Text = "NUnit ...";
             // 
             // helpMenuSeparator1
             // 
             this.helpMenuSeparator1.Name = "helpMenuSeparator1";
-            this.helpMenuSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.helpMenuSeparator1.Size = new System.Drawing.Size(174, 6);
             // 
             // aboutMenuItem
             // 
             this.aboutMenuItem.Name = "aboutMenuItem";
-            this.aboutMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aboutMenuItem.Size = new System.Drawing.Size(177, 22);
             this.aboutMenuItem.Text = "&About TestCentric...";
             // 
             // treeSplitter
@@ -890,8 +890,8 @@ namespace TestCentric.Gui.Views
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.forceStopButton);
             this.groupBox1.Controls.Add(this.runSummary);
+            this.groupBox1.Controls.Add(this.forceStopButton);
             this.groupBox1.Controls.Add(this.stopButton);
             this.groupBox1.Controls.Add(this.runButton);
             this.groupBox1.Controls.Add(this.progressBar);
@@ -904,7 +904,7 @@ namespace TestCentric.Gui.Views
             // 
             // forceStopButton
             // 
-            this.forceStopButton.Location = this.stopButton.Location;
+            this.forceStopButton.Location = new System.Drawing.Point(75, 16);
             this.forceStopButton.Name = "forceStopButton";
             this.forceStopButton.Size = new System.Drawing.Size(75, 31);
             this.forceStopButton.TabIndex = 6;
