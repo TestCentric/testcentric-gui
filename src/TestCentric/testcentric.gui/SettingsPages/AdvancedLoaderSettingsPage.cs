@@ -6,6 +6,7 @@
 using System;
 using System.Security.Principal;
 using System.Windows.Forms;
+using TestCentric.Common;
 
 namespace TestCentric.Gui.SettingsPages
 {
@@ -254,17 +255,28 @@ namespace TestCentric.Gui.SettingsPages
 
         public override void ApplySettings()
         {
-            Settings.Engine.Agents = numberOfAgentsCheckBox.Checked
-                ? (int)numberOfAgentsUpDown.Value
-                : 0;
+            // TODO: We shouldn't need to change each item in three places!
 
-            Settings.Engine.ShadowCopyFiles = !disableShadowCopyCheckBox.Checked;
+            int numAgents = numberOfAgentsCheckBox.Checked
+                ? (int)numberOfAgentsUpDown.Value : 0;
+            Settings.Engine.Agents = numAgents;
+            Model.PackageOverrides[EnginePackageSettings.MaxAgents] = numAgents;
+            Model.TestPackage.AddSetting(EnginePackageSettings.MaxAgents, numAgents);
 
-            Settings.Engine.SetPrincipalPolicy = principalPolicyCheckBox.Checked;
+            bool shadowCopyFiles = !disableShadowCopyCheckBox.Checked;
+            Settings.Engine.ShadowCopyFiles = shadowCopyFiles;
+            Model.PackageOverrides[EnginePackageSettings.ShadowCopyFiles] = shadowCopyFiles;
+            Model.TestPackage.AddSetting(EnginePackageSettings.ShadowCopyFiles, shadowCopyFiles);
 
-            Settings.Engine.PrincipalPolicy = principalPolicyCheckBox.Checked
+            bool setPrincipalPolicy = principalPolicyCheckBox.Checked;
+            Settings.Engine.SetPrincipalPolicy = setPrincipalPolicy;
+
+            string principalPolicy = principalPolicyCheckBox.Checked
                 ? (string)principalPolicyListBox.SelectedItem
                 : nameof(PrincipalPolicy.UnauthenticatedPrincipal);
+            Settings.Engine.PrincipalPolicy = principalPolicy;
+            Model.PackageOverrides[EnginePackageSettings.PrincipalPolicy] = principalPolicy;
+            Model.TestPackage.AddSetting(EnginePackageSettings.PrincipalPolicy, principalPolicy);
         }
 
         public override bool HasChangesRequiringReload
