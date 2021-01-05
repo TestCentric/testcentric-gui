@@ -255,40 +255,25 @@ namespace TestCentric.Gui.SettingsPages
 
         public override void ApplySettings()
         {
-            // TODO: We shouldn't need to change each item in three places!
-
             int numAgents = numberOfAgentsCheckBox.Checked
                 ? (int)numberOfAgentsUpDown.Value : 0;
+            if (numAgents != Settings.Engine.Agents)
+                PackageSettingChanges[EnginePackageSettings.MaxAgents] = numAgents;
             Settings.Engine.Agents = numAgents;
-            Model.PackageOverrides[EnginePackageSettings.MaxAgents] = numAgents;
-            Model.TestPackage.AddSetting(EnginePackageSettings.MaxAgents, numAgents);
 
             bool shadowCopyFiles = !disableShadowCopyCheckBox.Checked;
+            if (shadowCopyFiles != Settings.Engine.ShadowCopyFiles)
+                PackageSettingChanges[EnginePackageSettings.ShadowCopyFiles] = shadowCopyFiles;
             Settings.Engine.ShadowCopyFiles = shadowCopyFiles;
-            Model.PackageOverrides[EnginePackageSettings.ShadowCopyFiles] = shadowCopyFiles;
-            Model.TestPackage.AddSetting(EnginePackageSettings.ShadowCopyFiles, shadowCopyFiles);
-
-            bool setPrincipalPolicy = principalPolicyCheckBox.Checked;
-            Settings.Engine.SetPrincipalPolicy = setPrincipalPolicy;
 
             string principalPolicy = principalPolicyCheckBox.Checked
                 ? (string)principalPolicyListBox.SelectedItem
                 : nameof(PrincipalPolicy.UnauthenticatedPrincipal);
+            if (principalPolicy != Settings.Engine.PrincipalPolicy)
+                PackageSettingChanges[EnginePackageSettings.PrincipalPolicy] = principalPolicy;
             Settings.Engine.PrincipalPolicy = principalPolicy;
-            Model.PackageOverrides[EnginePackageSettings.PrincipalPolicy] = principalPolicy;
-            Model.TestPackage.AddSetting(EnginePackageSettings.PrincipalPolicy, principalPolicy);
-        }
 
-        public override bool HasChangesRequiringReload
-        {
-            get
-            {
-                return numberOfAgentsUpDown.Value != Settings.Engine.Agents
-                    || disableShadowCopyCheckBox.Checked == Settings.Engine.ShadowCopyFiles // Use == because the checkbox disables
-                    || principalPolicyCheckBox.Checked != Settings.Engine.SetPrincipalPolicy
-                    || (string)principalPolicyListBox.SelectedItem != Settings.Engine.PrincipalPolicy;
-
-            }
+            Settings.Engine.SetPrincipalPolicy = principalPolicyCheckBox.Checked;
         }
 
         private void numberOfAgentsCheckBox_CheckedChanged(object sender, EventArgs e)

@@ -4,10 +4,12 @@
 // ***********************************************************************
 
 using System.Collections;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Dialogs
 {
+    using System;
     using Model;
     using Model.Settings;
     using Presenters;
@@ -41,6 +43,14 @@ namespace TestCentric.Gui.Dialogs
             Presenter = presenter;
             Model = model;
             Settings = model.Settings;
+            PackageSettingChanges = new Dictionary<string, object>();
+        }
+
+        protected override void OnActivated(EventArgs e)
+        {
+            base.OnActivated(e);
+
+            PackageSettingChanges.Clear();
         }
 
         public SettingsDialogBase()
@@ -133,6 +143,8 @@ namespace TestCentric.Gui.Dialogs
 
         public UserSettings Settings { get; }
 
+        public IDictionary<string, object> PackageSettingChanges { get; }
+
         public SettingsPageCollection SettingsPages
         {
             get { return pageList; }
@@ -146,6 +158,12 @@ namespace TestCentric.Gui.Dialogs
             foreach (SettingsPage page in pageList)
                 if (page.SettingsLoaded)
                     page.ApplySettings();
+
+            foreach(var entry in PackageSettingChanges)
+            {
+                Model.PackageOverrides[entry.Key] = entry.Value;
+                Model.TestPackage.AddSetting(entry.Key, entry.Value);
+            }
         }
         #endregion
 
@@ -159,33 +177,19 @@ namespace TestCentric.Gui.Dialogs
 
         private void okButton_Click(object sender, System.EventArgs e)
         {
-            if (Model.IsPackageLoaded && HasChangesRequiringReload)
+            ApplySettings();
+
+            // NOTE: Currently, all changes require reload. If this changes
+            // we will need to add some filtering here.
+            if (Model.IsPackageLoaded && PackageSettingChanges.Count > 0)
             {
                 if (MessageDisplay.YesNo("Some changes will only take effect when you reload the test project. Do you want to reload now?"))
                     _reloadProjectOnClose = true;
             }
 
-            ApplySettings();
-
             DialogResult = DialogResult.OK;
 
             Close();
-        }
-
-        #endregion
-
-        #region Helper Methods
-
-        private bool HasChangesRequiringReload
-        {
-            get
-            {
-                foreach (SettingsPage page in pageList)
-                    if (page.SettingsLoaded && page.HasChangesRequiringReload)
-                        return true;
-
-                return false;
-            }
         }
 
         #endregion
