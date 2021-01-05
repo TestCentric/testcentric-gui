@@ -9,6 +9,7 @@ using System.Windows.Forms;
 namespace TestCentric.Gui
 {
     using Dialogs;
+    using Model;
     using Model.Settings;
 
     /// <summary>
@@ -89,6 +90,7 @@ namespace TestCentric.Gui
             get { return _messageDisplay; }
         }
 
+        protected ITestModel Model { get; private set; }
         protected UserSettings Settings { get; private set; }
 
         #endregion
@@ -132,6 +134,7 @@ namespace TestCentric.Gui
                 if (dlg.Settings == null)
                     throw new InvalidOperationException("The Settings Dialog was not properly initialized");
 
+                Model = dlg.Model;
                 Settings = dlg.Settings;
 
                 LoadSettings();
