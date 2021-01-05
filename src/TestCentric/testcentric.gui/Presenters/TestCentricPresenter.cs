@@ -816,7 +816,7 @@ namespace TestCentric.Gui.Presenters
             _view.ForceStopButton.Visible = _view.ForceStopCommand.Visible = true;
 
             // Prevent an accidental extra click on newly visible button
-            Thread.Sleep(400);
+            Thread.Sleep(1000);
             _view.ForceStopButton.Enabled = _view.ForceStopCommand.Enabled = true;
         }
 
