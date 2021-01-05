@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui
@@ -80,11 +81,6 @@ namespace TestCentric.Gui
             get { return Settings != null; }
         }
 
-        public virtual bool HasChangesRequiringReload
-        {
-            get { return false; }
-        }
-
         public IMessageDisplay MessageDisplay
         {
             get { return _messageDisplay; }
@@ -92,6 +88,8 @@ namespace TestCentric.Gui
 
         protected ITestModel Model { get; private set; }
         protected UserSettings Settings { get; private set; }
+
+        protected IDictionary<string, object> PackageSettingChanges { get; private set; }
 
         #endregion
 
@@ -136,6 +134,7 @@ namespace TestCentric.Gui
 
                 Model = dlg.Model;
                 Settings = dlg.Settings;
+                PackageSettingChanges = dlg.PackageSettingChanges;
 
                 LoadSettings();
             }
