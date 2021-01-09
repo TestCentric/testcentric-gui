@@ -9,6 +9,6 @@ namespace TestCentric.Engine
     {
         public const string NetFramework = ".NETFramework";
         public const string NetCoreApp = ".NETCoreApp";
-        public const string NetStndard = ".NETStandard";
+        public const string NetStandard = ".NETStandard";
     }
 }
