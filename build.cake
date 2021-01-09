@@ -1,7 +1,7 @@
 #tool nuget:?package=NUnit.ConsoleRunner&version=3.10.0
 #tool nuget:?package=GitVersion.CommandLine&version=5.0.0
 #tool nuget:?package=GitReleaseManager&version=0.11.0
-#tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.3.1"
+#tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.8.0"
 #tool nuget:?package=Wyam&version=2.2.9
 
 #addin nuget:?package=Cake.Git&version=0.22.0
