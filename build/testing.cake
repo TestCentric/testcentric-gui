@@ -94,12 +94,15 @@ public struct PackageTest
 // have one package of each type (Zip, NuGet, Chocolatey).
 public abstract class PackageTester : GuiTester
 {
-    protected static readonly string[] ENGINE_FILES = { 
-        "testcentric.engine.dll", "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll"};
-    protected static readonly string[] AGENT_FILES = { 
-        "testcentric-agent.exe", "testcentric-agent.exe.config", "testcentric-agent-x86.exe", "testcentric-agent-x86.exe.config",
-        "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll" };
-    protected static readonly string[] GUI_FILES = {
+	protected static readonly string[] ENGINE_FILES = {
+		"testcentric.engine.dll", "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll"};
+	protected static readonly string[] ENGINE_CORE_FILES = {
+		"testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll" };
+	protected static readonly string[] NET_FRAMEWORK_AGENT_FILES = {
+		"testcentric-agent.exe", "testcentric-agent.exe.config", "testcentric-agent-x86.exe", "testcentric-agent-x86.exe.config" };
+	protected static readonly string[] NET_CORE_AGENT_FILES = {
+		"testcentric-agent.dll", "testcentric-agent.dll.config", "testcentric-agent-x86.dll", "testcentric-agent-x86.dll.config" };
+	protected static readonly string[] GUI_FILES = {
         "testcentric.exe", "testcentric.exe.config", "tc-next.exe", "tc-next.exe.config", "nunit.uiexception.dll",
         "TestCentric.Gui.Runner.dll", "Experimental.Gui.Runner.dll", "TestCentric.Gui.Model.dll", "TestCentric.Common.dll" };
     protected static readonly string[] TREE_ICONS_JPG = {
@@ -368,8 +371,11 @@ public class ZipPackageTester : PackageTester
 	{
 		HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt"),
 		HasDirectory("bin").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.zip.addins"),
-		HasDirectory("bin/agents/net20").WithFiles(AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
-		HasDirectory("bin/agents/net40").WithFiles(AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
+		HasDirectory("bin/agents/net20").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
+		HasDirectory("bin/agents/net40").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
+		HasDirectory("bin/agents/netcoreapp2.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
+		HasDirectory("bin/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
+		HasDirectory("bin/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
 		HasDirectory("bin/Images").WithFiles("DebugTests.png", "RunTests.png"),
 		HasDirectory("bin/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
 		HasDirectory("bin/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
@@ -398,8 +404,11 @@ public class NuGetPackageTester : PackageTester
 	{
 		HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "testcentric.png"),
 		HasDirectory("tools").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.nuget.addins"),
-		HasDirectory("tools/agents/net20").WithFiles(AGENT_FILES).AndFile("testcentric-agent.nuget.addins"),
-		HasDirectory("tools/agents/net40").WithFiles(AGENT_FILES).AndFile("testcentric-agent.nuget.addins"),
+		HasDirectory("tools/agents/net20").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
+		HasDirectory("tools/agents/net40").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
+		HasDirectory("tools/agents/netcoreapp2.1").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
+		HasDirectory("tools/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
+		HasDirectory("tools/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
 		HasDirectory("tools/Images").WithFiles("DebugTests.png", "RunTests.png"),
 		HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
 		HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
@@ -431,8 +440,11 @@ public class ChocolateyPackageTester : PackageTester
 	protected override PackageCheck[] PackageChecks => new PackageCheck[]
 	{
 		HasDirectory("tools").WithFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "VERIFICATION.txt", "testcentric.choco.addins").AndFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.choco.addins"),
-		HasDirectory("tools/agents/net20").WithFiles(AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
-		HasDirectory("tools/agents/net40").WithFiles(AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
+		HasDirectory("tools/agents/net20").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
+		HasDirectory("tools/agents/net40").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
+		HasDirectory("tools/agents/netcoreapp2.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
+		HasDirectory("tools/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
+		HasDirectory("tools/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
 		HasDirectory("tools/Images").WithFiles("DebugTests.png", "RunTests.png"),
 		HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
 		HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),

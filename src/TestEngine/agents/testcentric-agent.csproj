@@ -8,6 +8,7 @@
     <GenerateSupportedRuntime>false</GenerateSupportedRuntime>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
     <OutputPath>..\..\..\bin\$(Configuration)\agents\</OutputPath>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net20|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>

@@ -10,6 +10,7 @@
     <GenerateSupportedRuntime>false</GenerateSupportedRuntime>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
     <OutputPath>..\..\..\bin\$(Configuration)\agents\</OutputPath>
+	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net20'">
     <Reference Include="System.Runtime.Remoting" />
