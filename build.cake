@@ -1,7 +1,7 @@
 #tool nuget:?package=NUnit.ConsoleRunner&version=3.10.0
 #tool nuget:?package=GitVersion.CommandLine&version=5.0.0
 #tool nuget:?package=GitReleaseManager&version=0.11.0
-#tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.3.1"
+#tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.8.0"
 #tool nuget:?package=Wyam&version=2.2.9
 
 #addin nuget:?package=Cake.Git&version=0.22.0
@@ -201,19 +201,25 @@ Task("BuildZipPackage")
 		Information("Creating package " + parameters.ZipPackageName);
 
 		// TODO: We copy in and then delete zip-specific addins files because Zip command
-		// requires all files to be in the dirctory that is zipped. Ideally, the image
-		// directory should be used exclusively for the zip package.
-		CopyFileToDirectory(parameters.ZipDirectory + "testcentric.zip.addins", parameters.ImageDirectory + "bin/");
-		CopyFileToDirectory(parameters.ZipDirectory + "testcentric-agent.zip.addins", parameters.ImageDirectory + "bin/agents/net20");
-		CopyFileToDirectory(parameters.ZipDirectory + "testcentric-agent.zip.addins", parameters.ImageDirectory + "bin/agents/net40");
-        
-		var zipFiles = GetFiles(parameters.ImageDirectory + "**/*.*");
-        Zip(parameters.ImageDirectory, parameters.ZipPackage, zipFiles);
+		// requires all files to be in the directory that is zipped. Ideally, the image
+		// directory should be used exclusively for the zip package to avoid having to
+		// add and delete these files.
+		try
+		{
+			CopyFileToDirectory(parameters.ZipDirectory + "testcentric.zip.addins", parameters.ImageDirectory + "bin/");
+			foreach (string runtime in parameters.SupportedAgentRuntimes)
+				CopyFileToDirectory(parameters.ZipDirectory + "testcentric-agent.zip.addins", $"{parameters.ImageDirectory}bin/agents/{runtime}");
 
-		DeleteFile(parameters.ImageDirectory + "bin/testcentric.zip.addins");
-		DeleteFile(parameters.ImageDirectory + "bin/agents/net20/testcentric-agent.zip.addins");
-		DeleteFile(parameters.ImageDirectory + "bin/agents/net40/testcentric-agent.zip.addins");
-    });
+			var zipFiles = GetFiles(parameters.ImageDirectory + "**/*.*");
+			Zip(parameters.ImageDirectory, parameters.ZipPackage, zipFiles);
+		}
+		finally
+		{
+			DeleteFile(parameters.ImageDirectory + "bin/testcentric.zip.addins");
+			foreach (string runtime in parameters.SupportedAgentRuntimes)
+				DeleteFile($"{parameters.ImageDirectory}bin/agents/{runtime}/testcentric-agent.zip.addins");
+		}
+	});
 
 Task("TestZipPackage")
 	.IsDependentOn("BuildZipPackage")
@@ -513,6 +519,10 @@ Task("ChocolateyInstall")
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
+
+Task("Package")
+	.IsDependentOn("BuildPackages")
+	.IsDependentOn("TestPackages");
 
 Task("Test")
 	.IsDependentOn("TestEngineCore")
