@@ -241,6 +241,7 @@ namespace TestCentric.Tests
         public void SomeTest() { }
     }
 
+#if !NET_5_0
     [TestFixture]
     public class FixtureWithTestCases
     {
@@ -260,6 +261,7 @@ namespace TestCentric.Tests
         {
         }
     }
+#endif
 
     [TestFixture(5)]
     [TestFixture(42)]

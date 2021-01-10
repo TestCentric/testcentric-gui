@@ -72,9 +72,15 @@ namespace TestCentric.Engine.Agents
             LocateAgencyProcess(agencyPid);
 
             log.Info("Agent process {0} starting", pid);
+
+            // TODO: CurrentFramework throws under .NET 5.0
+#if NET5_0
+            log.Info("Running under .NET 5.0");
+#else
             log.Info("Running under version {0}, {1}",
                 Environment.Version,
                 RuntimeFramework.CurrentFramework.DisplayName);
+#endif
 
             // Create CoreEngine
             var engine = new CoreEngine

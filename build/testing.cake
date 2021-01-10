@@ -180,6 +180,17 @@ public abstract class PackageTester : GuiTester
 				Inconclusive = 1,
 				Skipped = 7
 			}));
+		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET 5.0", StandardRunner,
+			"engine-tests/net5.0/mock-assembly.dll",
+			new ExpectedResult("Failed")
+			{
+				Total = 32,
+				Passed = 19,
+				Failed = 5,
+				Warnings = 0,
+				Inconclusive = 1,
+				Skipped = 7
+			}));
 
 		// Level 2 tests are run for PRs and when packages will be published
 
