@@ -1,4 +1,20 @@
-﻿TestCentric Runner for NUnit 1.5.3 - December 23, 2020
+﻿TestCentric Runner for NUnit 1.6.0 - January 10, 2021
+
+The main feature of this release is the addition of an agent for running tests under .NET 5.0.
+Since the runner itself targets the .NET Framework, this feature is only available when tests
+are run out of process. By default, tests targeting .NET 5.0 will run under that agent, provided
+that .NET 5.0 is installed. The File menu also allows running tests built for earlier versions
+of .NET Core under .NET 5.0.
+
+Issues Resolved
+
+* 593 GetExecutingAssembly() returns the path of appdata folder instead of actual location
+* 640 Review tests of Dialogs
+* 648 misaligned Force Stop button
+* 651 Add a .NET 5.0 agent to the build
+* 653 Export Draft Release for use in CHANGES file and on website
+
+TestCentric Runner for NUnit 1.5.3 - December 23, 2020
 
 This release fixes a critical issue in 1.5.2
 
