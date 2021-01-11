@@ -39,14 +39,14 @@ create:
   sha-section-heading: "SHA256 Hashes of the release artifacts"
   sha-section-line-format: "- `{1}\t{0}`"
   allow-update-to-published: false
-## Configuration values used when exporting release notes
-#export:
-#  include-created-date-in-title: false
-#  created-date-string-format: MMMM dd, yyyy
-#  perform-regex-removal: false
+# Configuration values used when exporting release notes
+export:
+  include-created-date-in-title: true
+  created-date-string-format: MMMM dd, yyyy
+  perform-regex-removal: false
 #  regex-text: '### Where to get it(\r\n)*You can .*\.'
 #  multiline-regex: false
-## Configuration values used when closing a milestone
+# Configuration values used when closing a milestone
 close:
 # Whether to add comments to issues closed with the published milestone release.
   use-issue-comments: true
