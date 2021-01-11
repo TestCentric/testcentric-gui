@@ -416,6 +416,9 @@ Task("CreateDraftRelease")
 				Name = releaseName,
 				Milestone = milestone
 			});
+
+			GitReleaseManagerExport(parameters.GitHubAccessToken, GITHUB_OWNER, GITHUB_REPO, "DraftRelease.md",
+				new GitReleaseManagerExportSettings() { TagName = milestone });
 		}
 		else
 		{
