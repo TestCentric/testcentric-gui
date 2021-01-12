@@ -1,8 +1,7 @@
 {
   "profiles": {
     "testcentric.engine.core.tests": {
-      "commandName": "Project",
-      "commandLineArgs": "--test TestCentric.Engine.Communication.Protocols"
+      "commandName": "Project"
     }
   }
 }
