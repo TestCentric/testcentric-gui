@@ -17,103 +17,48 @@ namespace TestCentric.Engine
     /// add a new member to the RuntimeType enum and then update
     /// the SetProperties method in this class.
     /// </summary>
-    public class Runtime
+    public abstract class Runtime
     {
-        private RuntimeType _runtimeType;
+        #region Instances
 
-        static Runtime()
-        {
-            KnownRuntimes = Enum.GetNames(typeof(RuntimeType));
-        }
-
-        private Runtime(RuntimeType runtimeType)
-        {
-            SetProperties(runtimeType);
-        }
-
-        private void SetProperties(RuntimeType runtimeType)
-        {
-            _runtimeType = runtimeType;
-
-            // Properties are completely determined by the RuntimeType
-            switch(runtimeType)
-            {
-                case RuntimeType.Net:
-                    DisplayName = ".NET";
-                    FrameworkIdentifier = FrameworkIdentifiers.NetFramework;
-                    TargetFrameworkMoniker = "net";
-                    break;
-                case RuntimeType.Mono:
-                    DisplayName = "Mono";
-                    FrameworkIdentifier = FrameworkIdentifiers.NetFramework;
-                    break;
-                case RuntimeType.NetCore:
-                    DisplayName = ".NETCore";
-                    FrameworkIdentifier = FrameworkIdentifiers.NetCoreApp;
-                    break;
-            }
-        }
+        // NOTE: The following are the only instances, which should
+        // ever exist, since the nested classes are private.
 
         /// <summary>Microsoft .NET Framework</summary>
-        public static Runtime Net { get; } = new Runtime(RuntimeType.Net);
+        public static Runtime Net { get; } = new NetFrameworkRuntime();
 
         /// <summary>Mono</summary>
-        public static Runtime Mono { get; } = new Runtime(RuntimeType.Mono);
+        public static Runtime Mono { get; } = new MonoRuntime();
 
         /// <summary>NetCore</summary>
-        public static Runtime NetCore { get; } = new Runtime(RuntimeType.NetCore);
+        public static Runtime NetCore { get; } = new NetCoreRuntime();
 
-        public static string[] KnownRuntimes { get; }
+        #endregion
 
-        public string DisplayName { get; private set; }
+        public abstract string DisplayName { get; }
 
-        public string FrameworkIdentifier { get; private set; }
+        public abstract string FrameworkIdentifier { get; }
 
-        public string TargetFrameworkMoniker { get; private set; }
-
-        public bool Matches(Runtime targetRuntime)
-        {
-            var targetType = targetRuntime._runtimeType;
-
-            if (_runtimeType == targetType)
-                return true;
-
-            if (_runtimeType == RuntimeType.Net && targetType == RuntimeType.Mono)
-                return true;
-
-            if (_runtimeType == RuntimeType.Mono && targetType == RuntimeType.Net)
-                return true;
-
-            return false;
-        }
-
-        /// <summary>
-        /// Check to see if a Runtime of the supplied name exists
-        /// </summary>
-        /// <param name="name">Name of the Runtime to check</param>
-        /// <returns>True if name represents a known runtime, otherwise false</returns>
-        public static bool IsKnownRuntime(string name)
-        {
-#if !NET20
-            return KnownRuntimes.Any(r => String.Equals(r, name, StringComparison.OrdinalIgnoreCase));
-#else
-            foreach (string item in KnownRuntimes)
-                if (item.ToLower() == name.ToLower())
-                    return true;
-
-            return false;
-#endif
-        }
+        public abstract bool Matches(Runtime targetRuntime);
 
         public static Runtime Parse(string s)
         {
-            var runtimeType = (RuntimeType)System.Enum.Parse(typeof(RuntimeType), s, true);
-            return new Runtime(runtimeType);
+            switch (s.ToLower())
+            {
+                case "net":
+                    return Runtime.Net;
+                case "mono":
+                    return Runtime.Mono;
+                case "netcore":
+                    return Runtime.NetCore;
+                default:
+                    throw new NUnitEngineException($"Invalid runtime specified: {s}");
+            }
         }
 
         public static Runtime FromFrameworkIdentifier(string s)
         {
-            switch(s)
+            switch (s)
             {
                 case FrameworkIdentifiers.NetFramework:
                     return Runtime.Net;
@@ -124,41 +69,31 @@ namespace TestCentric.Engine
             throw new NUnitEngineException("Unrecognized Target Framework Identifier: " + s);
         }
 
-        public override string ToString()
+        private class NetFrameworkRuntime : Runtime
         {
-            return _runtimeType.ToString();
+            public override string DisplayName => ".NET";
+            public override string FrameworkIdentifier => FrameworkIdentifiers.NetFramework;
+
+            public override string ToString() => "Net";
+            public override bool Matches(Runtime targetRuntime) => targetRuntime is NetFrameworkRuntime;
         }
 
-        public override bool Equals(object obj)
+        private class MonoRuntime : Runtime
         {
-            if (obj != null && obj is Runtime)
-            {
-                var other = obj as Runtime;
-                return _runtimeType.Equals(other._runtimeType);
-            }
+            public override string DisplayName => "Mono";
+            public override string FrameworkIdentifier => FrameworkIdentifiers.NetFramework;
 
-            return false;
+            public override string ToString() => "Mono";
+            public override bool Matches(Runtime targetRuntime) => targetRuntime is NetFrameworkRuntime;
         }
 
-        public override int GetHashCode()
+        private class NetCoreRuntime : Runtime
         {
-            return _runtimeType.GetHashCode();
-        }
+            public override string DisplayName => ".NETCore";
+            public override string FrameworkIdentifier => FrameworkIdentifiers.NetCoreApp;
 
-        public static bool operator ==(Runtime left, Runtime right)
-        {
-            if (left is null)
-                return right is null;
-
-            if (right is null)
-                return false;
-
-            return left._runtimeType == right._runtimeType;
-        }
-
-        public static bool operator !=(Runtime left, Runtime right)
-        {
-            return left._runtimeType != right._runtimeType;
+            public override string ToString() => "NetCore";
+            public override bool Matches(Runtime targetRuntime) => targetRuntime is NetCoreRuntime;
         }
     }
 }
