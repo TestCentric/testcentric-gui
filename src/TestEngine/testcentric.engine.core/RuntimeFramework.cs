@@ -52,25 +52,14 @@ namespace TestCentric.Engine
         public RuntimeFramework(Runtime runtime, Version version, string profile)
         {
             Runtime = runtime;
-            FrameworkVersion = ClrVersion = version;
-
-            if (IsFrameworkVersion(version))
-                ClrVersion = GetClrVersionForFramework(version);
-            else
-                FrameworkVersion = GetFrameworkVersionForClr(version);
+            FrameworkVersion = version;
+            ClrVersion = GetClrVersionForFramework(version);
 
             Profile = profile;
 
             DisplayName = GetDefaultDisplayName(Runtime, FrameworkVersion, profile);
 
             FrameworkName = new FrameworkName(Runtime.FrameworkIdentifier, FrameworkVersion);
-        }
-
-        private bool IsFrameworkVersion(Version v)
-        {
-            // All known framework versions have either two components or
-            // three. If three, then the Build is currently less than 3.
-            return v.Build < 3 && v.Revision == -1;
         }
 
         private Version GetClrVersionForFramework(Version frameworkVersion)
@@ -115,13 +104,6 @@ namespace TestCentric.Engine
             }
 
             throw new ArgumentException("Unknown framework version " + frameworkVersion.ToString(), "version");
-        }
-
-        private Version GetFrameworkVersionForClr(Version clrVersion)
-        {
-            return Runtime == Runtime.Mono && clrVersion.Major == 1
-                ? new Version(1, 0)
-                : new Version(clrVersion.Major, clrVersion.Minor);
         }
 
         /// <summary>

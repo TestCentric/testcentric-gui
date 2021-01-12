@@ -50,20 +50,6 @@ namespace TestCentric.Engine
         }
 
         [TestCaseSource(nameof(frameworkData))]
-        public void CanCreateUsingClrVersion(FrameworkData data)
-        {
-            // Versions 3.x and 4.5 or higher can't be created using CLR version
-            Assume.That(data.frameworkVersion.Major != 3);
-            Assume.That(data.frameworkVersion.Major != 4 || data.frameworkVersion.Minor == 0);
-
-            RuntimeFramework framework = new RuntimeFramework(data.runtime, data.clrVersion);
-            Assert.That(framework.Runtime, Is.EqualTo(data.runtime));
-            Assert.That(framework.FrameworkVersion, Is.EqualTo(data.frameworkVersion));
-            Assert.That(framework.ClrVersion, Is.EqualTo(data.clrVersion));
-            Assert.That(framework.FrameworkName, Is.EqualTo(data.frameworkName));
-        }
-
-        [TestCaseSource(nameof(frameworkData))]
         public void CanParseRuntimeFramework(FrameworkData data)
         {
             RuntimeFramework framework = RuntimeFramework.Parse(data.representation);
@@ -121,28 +107,12 @@ namespace TestCentric.Engine
                 .Returns(true),
             new TestCaseData(
                 new RuntimeFramework(Runtime.Net, new Version(2,0)),
-                new RuntimeFramework(Runtime.Net, new Version(2,0,50727)))
-                .Returns(true),
-            new TestCaseData(
-                new RuntimeFramework(Runtime.Net, new Version(2,0,50727)),
-                new RuntimeFramework(Runtime.Net, new Version(2,0)))
-                .Returns(true),
-            new TestCaseData(
-                new RuntimeFramework(Runtime.Net, new Version(2,0,50727)),
-                new RuntimeFramework(Runtime.Net, new Version(2,0)))
-                .Returns(true),
-            new TestCaseData(
-                new RuntimeFramework(Runtime.Net, new Version(2,0)),
                 new RuntimeFramework(Runtime.Mono, new Version(2,0)))
                 .Returns(false),
             new TestCaseData(
                 new RuntimeFramework(Runtime.Net, new Version(2,0)),
                 new RuntimeFramework(Runtime.Net, new Version(1,1)))
-                .Returns(false),
-            new TestCaseData(
-                new RuntimeFramework(Runtime.Net, new Version(2,0,50727)),
-                new RuntimeFramework(Runtime.Net, new Version(2,0,40607)))
-                .Returns(false),
+                .Returns(false)
             };
 
         private static readonly TestCaseData[] CanLoadData = {

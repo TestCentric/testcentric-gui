@@ -187,7 +187,8 @@ namespace TestCentric.Engine.Services
             }
             else
             {
-                var targetVersion = package.GetSetting(EnginePackageSettings.ImageRuntimeVersion, currentFramework.FrameworkVersion);
+                var runtimeVersion = package.GetSetting(EnginePackageSettings.ImageRuntimeVersion, currentFramework.FrameworkVersion);
+                var targetVersion = new Version(runtimeVersion.Major, runtimeVersion.Minor);
                 targetFramework = new RuntimeFramework(currentFramework.Runtime, targetVersion);
             }
 
