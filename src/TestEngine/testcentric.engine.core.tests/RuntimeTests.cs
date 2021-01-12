@@ -36,20 +36,6 @@ namespace TestCentric.Engine
         }
 
         [TestCaseSource(nameof(KNOWN_RUNTIMES))]
-        public static void IsKnownRuntime(string name)
-        {
-            Assert.That(Runtime.IsKnownRuntime(name));
-        }
-
-        [Test]
-        public static void KnownRuntimes()
-        {
-            // If this fails, it most likely means a new runtime was added
-            // without updating the tests!
-            Assert.That(Runtime.KnownRuntimes, Is.EqualTo(KNOWN_RUNTIMES));
-        }
-
-        [TestCaseSource(nameof(KNOWN_RUNTIMES))]
         public static void PublicPropertyExists(string name)
         {
             PropertyInfo prop = typeof(Runtime).GetProperty(name,
