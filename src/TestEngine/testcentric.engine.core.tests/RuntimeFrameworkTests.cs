@@ -181,11 +181,11 @@ namespace TestCentric.Engine
             new FrameworkData(Runtime.Mono, new Version(2,0), new Version(2,0,50727), "mono-2.0", "Mono 2.0", ".NETFramework,Version=2.0"),
             new FrameworkData(Runtime.Mono, new Version(3,5), new Version(2,0,50727), "mono-3.5", "Mono 3.5", ".NETFramework,Version=3.5"),
             new FrameworkData(Runtime.Mono, new Version(4,0), new Version(4,0,30319), "mono-4.0", "Mono 4.0", ".NETFramework,Version=4.0"),
-            new FrameworkData(Runtime.NetCore, new Version(1,0), new Version(1,0,1234), "netcore-1.0", ".NETCore 1.0", ".NETCoreApp,Version=1.0"),
-            new FrameworkData(Runtime.NetCore, new Version(1,1), new Version(1,1,1234), "netcore-1.1", ".NETCore 1.1", ".NETCoreApp,Version=1.1"),
-            new FrameworkData(Runtime.NetCore, new Version(2,0), new Version(2,0,1234), "netcore-2.0", ".NETCore 2.0", ".NETCoreApp,Version=2.0"),
-            new FrameworkData(Runtime.NetCore, new Version(2,1), new Version(2,1,1234), "netcore-2.1", ".NETCore 2.1", ".NETCoreApp,Version=2.1"),
-            new FrameworkData(Runtime.NetCore, new Version(3,0), new Version(3,0,1234), "netcore-3.0", ".NETCore 3.0", ".NETCoreApp,Version=3.0"),
+            new FrameworkData(Runtime.NetCore, new Version(1,0), new Version(4,0,30319), "netcore-1.0", ".NETCore 1.0", ".NETCoreApp,Version=1.0"),
+            new FrameworkData(Runtime.NetCore, new Version(1,1), new Version(4,0,30319), "netcore-1.1", ".NETCore 1.1", ".NETCoreApp,Version=1.1"),
+            new FrameworkData(Runtime.NetCore, new Version(2,0), new Version(4,0,30319), "netcore-2.0", ".NETCore 2.0", ".NETCoreApp,Version=2.0"),
+            new FrameworkData(Runtime.NetCore, new Version(2,1), new Version(4,0,30319), "netcore-2.1", ".NETCore 2.1", ".NETCoreApp,Version=2.1"),
+            new FrameworkData(Runtime.NetCore, new Version(3,0), new Version(3,1,10), "netcore-3.0", ".NETCore 3.0", ".NETCoreApp,Version=3.0"),
         };
 #pragma warning restore 414
     }
