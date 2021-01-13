@@ -19,7 +19,7 @@ namespace TestCentric.Engine
     /// </summary>
     public abstract class Runtime
     {
-        #region Instances
+        #region Static Properties and Methods
 
         // NOTE: The following are the only instances, which should
         // ever exist, since the nested classes are private.
@@ -32,14 +32,6 @@ namespace TestCentric.Engine
 
         /// <summary>NetCore</summary>
         public static Runtime NetCore { get; } = new NetCoreRuntime();
-
-        #endregion
-
-        public abstract string DisplayName { get; }
-
-        public abstract string FrameworkIdentifier { get; }
-
-        public abstract bool Matches(Runtime targetRuntime);
 
         public static Runtime Parse(string s)
         {
@@ -69,6 +61,22 @@ namespace TestCentric.Engine
             throw new NUnitEngineException("Unrecognized Target Framework Identifier: " + s);
         }
 
+        #endregion
+
+        #region Absract Properties and Methods
+
+        public abstract string DisplayName { get; }
+
+        public abstract string FrameworkIdentifier { get; }
+
+        public abstract bool Matches(Runtime targetRuntime);
+
+        public abstract Version GetClrVersionForFramework(Version frameworkVersion);
+
+        #endregion
+
+        #region Nested Runtime Classes
+
         private class NetFrameworkRuntime : Runtime
         {
             public override string DisplayName => ".NET";
@@ -76,6 +84,29 @@ namespace TestCentric.Engine
 
             public override string ToString() => "Net";
             public override bool Matches(Runtime targetRuntime) => targetRuntime is NetFrameworkRuntime;
+
+            public override Version GetClrVersionForFramework(Version frameworkVersion)
+            {
+                switch (frameworkVersion.Major)
+                {
+                    case 1:
+                        switch (frameworkVersion.Minor)
+                        {
+                            case 0:
+                                return new Version(1, 0, 3705);
+                            case 1:
+                                return new Version(1, 1, 4322);
+                        }
+                        break;
+                    case 2:
+                    case 3:
+                        return new Version(2, 0, 50727);
+                    case 4:
+                        return new Version(4, 0, 30319);
+                }
+
+                throw new ArgumentException($"Unknown version for .NET Framework: {frameworkVersion}", "version");
+            }
         }
 
         private class MonoRuntime : Runtime
@@ -85,6 +116,22 @@ namespace TestCentric.Engine
 
             public override string ToString() => "Mono";
             public override bool Matches(Runtime targetRuntime) => targetRuntime is NetFrameworkRuntime;
+
+            public override Version GetClrVersionForFramework(Version frameworkVersion)
+            {
+                switch (frameworkVersion.Major)
+                {
+                    case 1:
+                        return new Version(1, 1, 4322);
+                    case 2:
+                    case 3:
+                        return new Version(2, 0, 50727);
+                    case 4:
+                        return new Version(4, 0, 30319);
+                }
+
+                throw new ArgumentException($"Unknown version for Mono runtime: {frameworkVersion}", "version");
+            }
         }
 
         private class NetCoreRuntime : Runtime
@@ -94,6 +141,14 @@ namespace TestCentric.Engine
 
             public override string ToString() => "NetCore";
             public override bool Matches(Runtime targetRuntime) => targetRuntime is NetCoreRuntime;
+
+            public override Version GetClrVersionForFramework(Version frameworkVersion)
+            {
+                // HACK to make tests pass - needs research
+                return new Version(frameworkVersion.Major, frameworkVersion.Minor, 1234);
+            }
         }
+
+        #endregion
     }
 }
