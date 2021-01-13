@@ -48,7 +48,8 @@ namespace TestCentric.Engine.Extensibility
                     return RuntimeFramework.FromFrameworkName(frameworkName);
 
                 // No TargetFrameworkAttribute - Assume .NET Framework
-                return new RuntimeFramework(Runtime.Net, Assembly.GetRuntimeVersion());
+                var runtimeVersion = Assembly.GetRuntimeVersion();
+                return new RuntimeFramework(Runtime.Net, new Version(runtimeVersion.Major, runtimeVersion.Minor));
             }
         }
 #endif

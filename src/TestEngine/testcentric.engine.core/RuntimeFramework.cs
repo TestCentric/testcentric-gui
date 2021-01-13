@@ -52,76 +52,14 @@ namespace TestCentric.Engine
         public RuntimeFramework(Runtime runtime, Version version, string profile)
         {
             Runtime = runtime;
-            FrameworkVersion = ClrVersion = version;
-
-            if (IsFrameworkVersion(version))
-                ClrVersion = GetClrVersionForFramework(version);
-            else
-                FrameworkVersion = GetFrameworkVersionForClr(version);
+            FrameworkVersion = version;
+            ClrVersion = runtime.GetClrVersionForFramework(version);
 
             Profile = profile;
 
             DisplayName = GetDefaultDisplayName(Runtime, FrameworkVersion, profile);
 
             FrameworkName = new FrameworkName(Runtime.FrameworkIdentifier, FrameworkVersion);
-        }
-
-        private bool IsFrameworkVersion(Version v)
-        {
-            // All known framework versions have either two components or
-            // three. If three, then the Build is currently less than 3.
-            return v.Build < 3 && v.Revision == -1;
-        }
-
-        private Version GetClrVersionForFramework(Version frameworkVersion)
-        {
-            if (Runtime == Runtime.Net)
-            {
-                switch (frameworkVersion.Major)
-                {
-                    case 1:
-                        switch (frameworkVersion.Minor)
-                        {
-                            case 0:
-                                return new Version(1, 0, 3705);
-                            case 1:
-                                return new Version(1, 1, 4322);
-                        }
-                        break;
-                    case 2:
-                    case 3:
-                        return new Version(2, 0, 50727);
-                    case 4:
-                        return new Version(4, 0, 30319);
-                }
-            }
-            else if (Runtime == Runtime.Mono)
-            {
-                switch (frameworkVersion.Major)
-                {
-                    case 1:
-                        return new Version(1, 1, 4322);
-                    case 2:
-                    case 3:
-                        return new Version(2, 0, 50727);
-                    case 4:
-                        return new Version(4, 0, 30319);
-                }
-            }
-            else if (Runtime == Runtime.NetCore)
-            {
-                // HACK to make tests pass - needs research
-                return new Version(FrameworkVersion.Major, FrameworkVersion.Minor, 1234);
-            }
-
-            throw new ArgumentException("Unknown framework version " + frameworkVersion.ToString(), "version");
-        }
-
-        private Version GetFrameworkVersionForClr(Version clrVersion)
-        {
-            return Runtime == Runtime.Mono && clrVersion.Major == 1
-                ? new Version(1, 0)
-                : new Version(clrVersion.Major, clrVersion.Minor);
         }
 
         /// <summary>
@@ -158,7 +96,7 @@ namespace TestCentric.Engine
                         }
                     }
                     else /* It's windows */
-                        if (major == 2)
+                    if (major == 2)
                     {
                         RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\.NETFramework");
                         if (key != null)
