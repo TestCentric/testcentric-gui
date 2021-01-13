@@ -96,7 +96,7 @@ namespace TestCentric.Engine
                         }
                     }
                     else /* It's windows */
-                        if (major == 2)
+                    if (major == 2)
                     {
                         RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\.NETFramework");
                         if (key != null)

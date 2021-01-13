@@ -144,8 +144,18 @@ namespace TestCentric.Engine
 
             public override Version GetClrVersionForFramework(Version frameworkVersion)
             {
-                // HACK to make tests pass - needs research
-                return new Version(frameworkVersion.Major, frameworkVersion.Minor, 1234);
+                switch(frameworkVersion.Major)
+                {
+                    case 1:
+                    case 2:
+                        return new Version(4, 0, 30319);
+                    case 3:
+                        return new Version(3, 1, 10);
+                    case 5:
+                        return new Version(5, 0, 1);
+                }
+
+                throw new ArgumentException($"Unknown .NET Core version: {frameworkVersion}", "version");
             }
         }
 
