@@ -50,20 +50,6 @@ namespace TestCentric.Engine
         }
 
         [TestCaseSource(nameof(frameworkData))]
-        public void CanCreateUsingClrVersion(FrameworkData data)
-        {
-            // Versions 3.x and 4.5 or higher can't be created using CLR version
-            Assume.That(data.frameworkVersion.Major != 3);
-            Assume.That(data.frameworkVersion.Major != 4 || data.frameworkVersion.Minor == 0);
-
-            RuntimeFramework framework = new RuntimeFramework(data.runtime, data.clrVersion);
-            Assert.That(framework.Runtime, Is.EqualTo(data.runtime));
-            Assert.That(framework.FrameworkVersion, Is.EqualTo(data.frameworkVersion));
-            Assert.That(framework.ClrVersion, Is.EqualTo(data.clrVersion));
-            Assert.That(framework.FrameworkName, Is.EqualTo(data.frameworkName));
-        }
-
-        [TestCaseSource(nameof(frameworkData))]
         public void CanParseRuntimeFramework(FrameworkData data)
         {
             RuntimeFramework framework = RuntimeFramework.Parse(data.representation);
@@ -121,28 +107,12 @@ namespace TestCentric.Engine
                 .Returns(true),
             new TestCaseData(
                 new RuntimeFramework(Runtime.Net, new Version(2,0)),
-                new RuntimeFramework(Runtime.Net, new Version(2,0,50727)))
-                .Returns(true),
-            new TestCaseData(
-                new RuntimeFramework(Runtime.Net, new Version(2,0,50727)),
-                new RuntimeFramework(Runtime.Net, new Version(2,0)))
-                .Returns(true),
-            new TestCaseData(
-                new RuntimeFramework(Runtime.Net, new Version(2,0,50727)),
-                new RuntimeFramework(Runtime.Net, new Version(2,0)))
-                .Returns(true),
-            new TestCaseData(
-                new RuntimeFramework(Runtime.Net, new Version(2,0)),
                 new RuntimeFramework(Runtime.Mono, new Version(2,0)))
                 .Returns(false),
             new TestCaseData(
                 new RuntimeFramework(Runtime.Net, new Version(2,0)),
                 new RuntimeFramework(Runtime.Net, new Version(1,1)))
-                .Returns(false),
-            new TestCaseData(
-                new RuntimeFramework(Runtime.Net, new Version(2,0,50727)),
-                new RuntimeFramework(Runtime.Net, new Version(2,0,40607)))
-                .Returns(false),
+                .Returns(false)
             };
 
         private static readonly TestCaseData[] CanLoadData = {
@@ -211,11 +181,11 @@ namespace TestCentric.Engine
             new FrameworkData(Runtime.Mono, new Version(2,0), new Version(2,0,50727), "mono-2.0", "Mono 2.0", ".NETFramework,Version=2.0"),
             new FrameworkData(Runtime.Mono, new Version(3,5), new Version(2,0,50727), "mono-3.5", "Mono 3.5", ".NETFramework,Version=3.5"),
             new FrameworkData(Runtime.Mono, new Version(4,0), new Version(4,0,30319), "mono-4.0", "Mono 4.0", ".NETFramework,Version=4.0"),
-            new FrameworkData(Runtime.NetCore, new Version(1,0), new Version(1,0,1234), "netcore-1.0", ".NETCore 1.0", ".NETCoreApp,Version=1.0"),
-            new FrameworkData(Runtime.NetCore, new Version(1,1), new Version(1,1,1234), "netcore-1.1", ".NETCore 1.1", ".NETCoreApp,Version=1.1"),
-            new FrameworkData(Runtime.NetCore, new Version(2,0), new Version(2,0,1234), "netcore-2.0", ".NETCore 2.0", ".NETCoreApp,Version=2.0"),
-            new FrameworkData(Runtime.NetCore, new Version(2,1), new Version(2,1,1234), "netcore-2.1", ".NETCore 2.1", ".NETCoreApp,Version=2.1"),
-            new FrameworkData(Runtime.NetCore, new Version(3,0), new Version(3,0,1234), "netcore-3.0", ".NETCore 3.0", ".NETCoreApp,Version=3.0"),
+            new FrameworkData(Runtime.NetCore, new Version(1,0), new Version(4,0,30319), "netcore-1.0", ".NETCore 1.0", ".NETCoreApp,Version=1.0"),
+            new FrameworkData(Runtime.NetCore, new Version(1,1), new Version(4,0,30319), "netcore-1.1", ".NETCore 1.1", ".NETCoreApp,Version=1.1"),
+            new FrameworkData(Runtime.NetCore, new Version(2,0), new Version(4,0,30319), "netcore-2.0", ".NETCore 2.0", ".NETCoreApp,Version=2.0"),
+            new FrameworkData(Runtime.NetCore, new Version(2,1), new Version(4,0,30319), "netcore-2.1", ".NETCore 2.1", ".NETCoreApp,Version=2.1"),
+            new FrameworkData(Runtime.NetCore, new Version(3,0), new Version(3,1,10), "netcore-3.0", ".NETCore 3.0", ".NETCoreApp,Version=3.0"),
         };
 #pragma warning restore 414
     }
