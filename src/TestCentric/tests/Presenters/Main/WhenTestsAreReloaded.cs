@@ -58,12 +58,6 @@ namespace TestCentric.Gui.Presenters.Main
         {
             View.ProcessModel.DidNotReceiveWithAnyArgs().SelectedItem = null;
         }
-
-        [Test]
-        public void DomainUsage_IsUnchanged()
-        {
-            View.DomainUsage.DidNotReceiveWithAnyArgs().SelectedItem = null;
-        }
 #endif
     }
 }

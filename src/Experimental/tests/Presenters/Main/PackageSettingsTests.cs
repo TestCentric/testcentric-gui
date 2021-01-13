@@ -44,28 +44,6 @@ namespace TestCentric.Gui.Presenters.Main
             Model.PackageOverrides.Received(1).Remove("ProcessModel");
         }
 
-        [TestCase("Single")]
-        [TestCase("Multiple")]
-        [TestCase("INVALID", Description = "Invalid Setting is passed on to the model")]
-        public void DomainUsage_SettingChanged(string value)
-        {
-            View.DomainUsage.SelectedItem.Returns(value);
-
-            View.DomainUsage.SelectionChanged += Raise.Event<CommandHandler>();
-
-            Model.PackageOverrides.Received(1)["DomainUsage"] = value;
-        }
-
-        [Test]
-        public void DomainUsage_SetToDefault()
-        {
-            View.DomainUsage.SelectedItem.Returns("DEFAULT");
-
-            View.DomainUsage.SelectionChanged += Raise.Event<CommandHandler>();
-
-            Model.PackageOverrides.Received(1).Remove("DomainUsage");
-        }
-
         //[TestCase("net-2.0")]
         //[TestCase("net-4.5")]
         //[TestCase("INVALID", Description = "Invalid Setting is passed on to the model")]

@@ -31,7 +31,6 @@ namespace TestCentric.Gui.Tests
         [TestCase("RunAsX86", false)]
         [TestCase("ShowHelp", false)]
         [TestCase("ProcessModel", null)]
-        [TestCase("DomainUsage", null)]
         [TestCase("InternalTraceLevel", null)]
         [TestCase("DebugAgent", false)]
         [TestCase("Unattended", false)]
@@ -50,9 +49,6 @@ namespace TestCentric.Gui.Tests
         [TestCase("ProcessModel", "--process:Separate")]
         [TestCase("ProcessModel", "--process:Multiple")]
         [TestCase("ProcessModel", "--inprocess", "InProcess")]
-        [TestCase("DomainUsage", "--domain:None")]
-        [TestCase("DomainUsage", "--domain:Single")]
-        [TestCase("DomainUsage", "--domain:Multiple")]
         [TestCase("WorkDirectory", "--work:PathToWorkDirectory")]
         [TestCase("RunAsX86", "--x86", true)]
         [TestCase("MaxAgents", "--agents:8", 8)]
@@ -85,7 +81,6 @@ namespace TestCentric.Gui.Tests
         //[TestCase("--config")]
         [TestCase("--process")]
         [TestCase("--agents")]
-        [TestCase("--domain")]
         [TestCase("--trace")]
         public void InvalidOptionsAreDetectedByMonoOptions(string option)
         {

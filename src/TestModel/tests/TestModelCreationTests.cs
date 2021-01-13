@@ -45,7 +45,6 @@ namespace TestCentric.Gui.Model
 
             var checker = new PackageOverridesChecker(model);
             checker.CheckSetting(options.ProcessModel, EnginePackageSettings.ProcessModel);
-            checker.CheckSetting(options.DomainUsage, EnginePackageSettings.DomainUsage);
             checker.CheckSetting(options.MaxAgents, EnginePackageSettings.MaxAgents);
             checker.CheckSetting(options.RunAsX86, EnginePackageSettings.RunAsX86);
         }

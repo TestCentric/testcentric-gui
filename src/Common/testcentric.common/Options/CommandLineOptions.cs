@@ -55,13 +55,6 @@ namespace TestCentric.Gui
             this.Add("inprocess", "Synonym for --process=InProcess. DEPRECATED: This option will be removed in a future release.",
                 v => ProcessModel = "InProcess");
 
-            this.Add("domain=", "{DOMAIN} isolation for test assemblies. Values: None, Single, Multiple. If not specified, defaults to Single for a single assembly or Multiple for more than one.",
-                v =>
-                {
-                    if (CheckRequiredValue(v, "--domain", "None", "Single", "Multiple"))
-                        DomainUsage = v;
-                });
-
             this.Add("work=", "{PATH} of the directory to use for output files. If not specified, defaults to the current directory.",
                 v =>
                 {
@@ -121,7 +114,6 @@ namespace TestCentric.Gui
         // How to Run Tests
 
         public string ProcessModel { get; private set; }
-        public string DomainUsage { get; private set; }
         public bool RunAsX86 { get; private set; }
         public int MaxAgents { get; private set; }
         public string InternalTraceLevel { get; private set; }

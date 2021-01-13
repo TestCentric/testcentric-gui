@@ -83,8 +83,6 @@ namespace TestCentric.Gui.Model
 
             if (options.ProcessModel != null)
                 model.PackageOverrides.Add(EnginePackageSettings.ProcessModel, options.ProcessModel);
-            if (options.DomainUsage != null)
-                model.PackageOverrides.Add(EnginePackageSettings.DomainUsage, options.DomainUsage);
             if (options.MaxAgents >= 0)
                 model.PackageOverrides.Add(EnginePackageSettings.MaxAgents, options.MaxAgents);
             if (options.RunAsX86)

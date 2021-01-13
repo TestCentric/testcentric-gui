@@ -91,15 +91,11 @@ namespace TestCentric.Gui.Views
         private TestsNotRunView testsNotRunView1;
         private ToolStripMenuItem recentFilesDummyMenuItem;
         private ToolStripMenuItem processModelMenuItem;
-        private ToolStripMenuItem domainUsageMenuItem;
         private ToolStripMenuItem defaultProcessMenuItem;
         private ToolStripMenuItem inProcessMenuItem;
         private ToolStripMenuItem singleProcessMenuItem;
         private ToolStripMenuItem multipleProcessMenuItem;
         private ToolStripMenuItem runAsX86MenuItem;
-        private ToolStripMenuItem defaultDomainMenuItem;
-        private ToolStripMenuItem singleDomainMenuItem;
-        private ToolStripMenuItem multipleDomainMenuItem;
         private ToolStripMenuItem openWorkDirectoryMenuItem;
         private ToolStripMenuItem saveResultsAsMenuItem;
         private ToolStripMenuItem runParametersMenuItem;
@@ -150,8 +146,6 @@ namespace TestCentric.Gui.Views
             //SelectedRuntime = new CheckedMenuGroup(runtimeMenuItem);
             ProcessModel = new CheckedToolStripMenuGroup("Process Model",
                 defaultProcessMenuItem, inProcessMenuItem, singleProcessMenuItem, multipleProcessMenuItem);
-            DomainUsage = new CheckedToolStripMenuGroup("Domain Usage",
-                defaultDomainMenuItem, singleDomainMenuItem, multipleDomainMenuItem);
             RunAsX86 = new ToolStripMenuElement(runAsX86MenuItem);
             RecentFilesMenu = new ToolStripMenuElement(recentFilesMenu);
             ExitCommand = new ToolStripMenuElement(exitMenuItem);
@@ -232,10 +226,6 @@ namespace TestCentric.Gui.Views
             this.multipleProcessMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
             this.runAsX86MenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.domainUsageMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.defaultDomainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.singleDomainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.multipleDomainMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.recentFilesMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.recentFilesDummyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -289,9 +279,9 @@ namespace TestCentric.Gui.Views
             this.outputTab = new System.Windows.Forms.TabPage();
             this.textOutputView1 = new TestCentric.Gui.Views.TextOutputView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.runSummary = new TestCentric.Gui.Controls.ExpandingLabel();
             this.forceStopButton = new System.Windows.Forms.Button();
             this.stopButton = new System.Windows.Forms.Button();
-            this.runSummary = new TestCentric.Gui.Controls.ExpandingLabel();
             this.runButton = new System.Windows.Forms.Button();
             this.progressBar = new TestCentric.Gui.Views.ProgressBarView();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -351,7 +341,6 @@ namespace TestCentric.Gui.Views
             this.toolStripSeparator2,
             this.runtimeMenuItem,
             this.processModelMenuItem,
-            this.domainUsageMenuItem,
             this.toolStripSeparator3,
             this.recentFilesMenu,
             this.toolStripSeparator4,
@@ -364,44 +353,44 @@ namespace TestCentric.Gui.Views
             // 
             this.openMenuItem.Name = "openMenuItem";
             this.openMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.openMenuItem.Size = new System.Drawing.Size(180, 22);
             this.openMenuItem.Text = "&Open...";
             // 
             // closeMenuItem
             // 
             this.closeMenuItem.Name = "closeMenuItem";
-            this.closeMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.closeMenuItem.Size = new System.Drawing.Size(180, 22);
             this.closeMenuItem.Text = "&Close";
             // 
             // addTestFileMenuItem
             // 
             this.addTestFileMenuItem.Name = "addTestFileMenuItem";
-            this.addTestFileMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.addTestFileMenuItem.Size = new System.Drawing.Size(180, 22);
             this.addTestFileMenuItem.Text = "&Add Test File...";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(176, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // reloadTestsMenuItem
             // 
             this.reloadTestsMenuItem.Name = "reloadTestsMenuItem";
             this.reloadTestsMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-            this.reloadTestsMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.reloadTestsMenuItem.Size = new System.Drawing.Size(180, 22);
             this.reloadTestsMenuItem.Text = "&Reload Tests";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(176, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
             // 
             // runtimeMenuItem
             // 
             this.runtimeMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.runtimeDummyMenuItem});
             this.runtimeMenuItem.Name = "runtimeMenuItem";
-            this.runtimeMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.runtimeMenuItem.Size = new System.Drawing.Size(180, 22);
             this.runtimeMenuItem.Text = "Select R&untime";
             // 
             // runtimeDummyMenuItem
@@ -420,7 +409,7 @@ namespace TestCentric.Gui.Views
             this.toolStripSeparator12,
             this.runAsX86MenuItem});
             this.processModelMenuItem.Name = "processModelMenuItem";
-            this.processModelMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.processModelMenuItem.Size = new System.Drawing.Size(180, 22);
             this.processModelMenuItem.Text = "Process Model";
             // 
             // defaultProcessMenuItem
@@ -462,48 +451,17 @@ namespace TestCentric.Gui.Views
             this.runAsX86MenuItem.Size = new System.Drawing.Size(204, 22);
             this.runAsX86MenuItem.Text = "Run as X86";
             // 
-            // domainUsageMenuItem
-            // 
-            this.domainUsageMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.defaultDomainMenuItem,
-            this.singleDomainMenuItem,
-            this.multipleDomainMenuItem});
-            this.domainUsageMenuItem.Name = "domainUsageMenuItem";
-            this.domainUsageMenuItem.Size = new System.Drawing.Size(179, 22);
-            this.domainUsageMenuItem.Text = "Domain Usage";
-            // 
-            // defaultDomainMenuItem
-            // 
-            this.defaultDomainMenuItem.Name = "defaultDomainMenuItem";
-            this.defaultDomainMenuItem.Size = new System.Drawing.Size(118, 22);
-            this.defaultDomainMenuItem.Tag = "Default";
-            this.defaultDomainMenuItem.Text = "Default";
-            // 
-            // singleDomainMenuItem
-            // 
-            this.singleDomainMenuItem.Name = "singleDomainMenuItem";
-            this.singleDomainMenuItem.Size = new System.Drawing.Size(118, 22);
-            this.singleDomainMenuItem.Tag = "Single";
-            this.singleDomainMenuItem.Text = "Single";
-            // 
-            // multipleDomainMenuItem
-            // 
-            this.multipleDomainMenuItem.Name = "multipleDomainMenuItem";
-            this.multipleDomainMenuItem.Size = new System.Drawing.Size(118, 22);
-            this.multipleDomainMenuItem.Tag = "Multiple";
-            this.multipleDomainMenuItem.Text = "Multiple";
-            // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(176, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
             // 
             // recentFilesMenu
             // 
             this.recentFilesMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.recentFilesDummyMenuItem});
             this.recentFilesMenu.Name = "recentFilesMenu";
-            this.recentFilesMenu.Size = new System.Drawing.Size(179, 22);
+            this.recentFilesMenu.Size = new System.Drawing.Size(180, 22);
             this.recentFilesMenu.Text = "Recent &Files";
             // 
             // recentFilesDummyMenuItem
@@ -515,12 +473,12 @@ namespace TestCentric.Gui.Views
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(176, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(177, 6);
             // 
             // exitMenuItem
             // 
             this.exitMenuItem.Name = "exitMenuItem";
-            this.exitMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.exitMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitMenuItem.Text = "E&xit";
             // 
             // viewMenu
@@ -902,6 +860,16 @@ namespace TestCentric.Gui.Views
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             // 
+            // runSummary
+            // 
+            this.runSummary.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.runSummary.AutoEllipsis = true;
+            this.runSummary.Location = new System.Drawing.Point(8, 89);
+            this.runSummary.Name = "runSummary";
+            this.runSummary.Size = new System.Drawing.Size(480, 21);
+            this.runSummary.TabIndex = 5;
+            // 
             // forceStopButton
             // 
             this.forceStopButton.Location = new System.Drawing.Point(75, 16);
@@ -919,16 +887,6 @@ namespace TestCentric.Gui.Views
             this.stopButton.Size = new System.Drawing.Size(64, 31);
             this.stopButton.TabIndex = 4;
             this.stopButton.Text = "&Stop";
-            // 
-            // runSummary
-            // 
-            this.runSummary.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.runSummary.AutoEllipsis = true;
-            this.runSummary.Location = new System.Drawing.Point(8, 89);
-            this.runSummary.Name = "runSummary";
-            this.runSummary.Size = new System.Drawing.Size(480, 21);
-            this.runSummary.TabIndex = 5;
             // 
             // runButton
             // 
@@ -1104,7 +1062,6 @@ namespace TestCentric.Gui.Views
         public IToolStripMenu RuntimeMenu { get; }
         public ISelection ProcessModel { get; private set; }
         public IChecked RunAsX86 { get; private set; }
-        public ISelection DomainUsage { get; private set; }
         public IToolStripMenu RecentFilesMenu { get; }
         public ICommand ExitCommand { get; }
 

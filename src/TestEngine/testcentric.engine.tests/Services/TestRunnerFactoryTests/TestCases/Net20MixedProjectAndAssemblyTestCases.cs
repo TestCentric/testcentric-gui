@@ -22,53 +22,42 @@ namespace TestCentric.Engine.Services.TestRunnerFactoryTests.TestCases
             {
                 foreach (var processModel in Enum.GetValues(typeof(ProcessModel)).Cast<ProcessModel>())
                 {
-                    foreach (var domainUsage in Enum.GetValues(typeof(DomainUsage)).Cast<DomainUsage>())
-                    {
-                        var testName = "One project, one assembly - " +
-                                       $"{nameof(EnginePackageSettings.ProcessModel)}:{processModel} " +
-                                       $"{nameof(EnginePackageSettings.DomainUsage)}:{domainUsage}";
+                    var testName = "One project, one assembly - " +
+                                    $"{nameof(EnginePackageSettings.ProcessModel)}:{processModel}";
 
-                        var package = TestPackageFactory.OneProjectOneAssembly();
-                        package.AddSetting(EnginePackageSettings.ProcessModel, processModel.ToString());
-                        package.AddSetting(EnginePackageSettings.DomainUsage, domainUsage.ToString());
+                    var package = TestPackageFactory.OneProjectOneAssembly();
+                    package.AddSetting(EnginePackageSettings.ProcessModel, processModel.ToString());
 
-                        var expected =
-                            Net20ExpectedRunnerResults.ResultFor(processModel, domainUsage, 3);
-                        yield return new TestCaseData(package, expected).SetName($"{{m}}({testName})");
+                    var expected =
+                        Net20ExpectedRunnerResults.ResultFor(processModel, 3);
+                    yield return new TestCaseData(package, expected).SetName($"{{m}}({testName})");
 
-                        testName = "Two projects, one assembly - " +
-                                   $"{nameof(EnginePackageSettings.ProcessModel)}:{processModel} " +
-                                   $"{nameof(EnginePackageSettings.DomainUsage)}:{domainUsage}";
+                    testName = "Two projects, one assembly - " +
+                                $"{nameof(EnginePackageSettings.ProcessModel)}:{processModel}";
 
-                        package = TestPackageFactory.TwoProjectsOneAssembly();
-                        package.AddSetting(EnginePackageSettings.ProcessModel, processModel.ToString());
-                        package.AddSetting(EnginePackageSettings.DomainUsage, domainUsage.ToString());
+                    package = TestPackageFactory.TwoProjectsOneAssembly();
+                    package.AddSetting(EnginePackageSettings.ProcessModel, processModel.ToString());
 
-                        expected = Net20ExpectedRunnerResults.ResultFor(processModel, domainUsage, 5);
-                        yield return new TestCaseData(package, expected).SetName($"{{m}}({testName})");
+                    expected = Net20ExpectedRunnerResults.ResultFor(processModel, 5);
+                    yield return new TestCaseData(package, expected).SetName($"{{m}}({testName})");
 
-                        testName = "Two assemblies, one project - " +
-                                   $"{nameof(EnginePackageSettings.ProcessModel)}:{processModel} " +
-                                   $"{nameof(EnginePackageSettings.DomainUsage)}:{domainUsage}";
+                    testName = "Two assemblies, one project - " +
+                                $"{nameof(EnginePackageSettings.ProcessModel)}:{processModel}";
 
-                        package = TestPackageFactory.TwoAssembliesOneProject();
-                        package.AddSetting(EnginePackageSettings.ProcessModel, processModel.ToString());
-                        package.AddSetting(EnginePackageSettings.DomainUsage, domainUsage.ToString());
+                    package = TestPackageFactory.TwoAssembliesOneProject();
+                    package.AddSetting(EnginePackageSettings.ProcessModel, processModel.ToString());
 
-                        expected = Net20ExpectedRunnerResults.ResultFor(processModel, domainUsage, 4);
-                        yield return new TestCaseData(package, expected).SetName($"{{m}}({testName})");
+                    expected = Net20ExpectedRunnerResults.ResultFor(processModel, 4);
+                    yield return new TestCaseData(package, expected).SetName($"{{m}}({testName})");
 
-                        testName = "One assembly, one project, one unknown - " +
-                                   $"{nameof(EnginePackageSettings.ProcessModel)}:{processModel} " +
-                                   $"{nameof(EnginePackageSettings.DomainUsage)}:{domainUsage}";
+                    testName = "One assembly, one project, one unknown - " +
+                                $"{nameof(EnginePackageSettings.ProcessModel)}:{processModel}";
 
-                        package = TestPackageFactory.OneAssemblyOneProjectOneUnknown();
-                        package.AddSetting(EnginePackageSettings.ProcessModel, processModel.ToString());
-                        package.AddSetting(EnginePackageSettings.DomainUsage, domainUsage.ToString());
+                    package = TestPackageFactory.OneAssemblyOneProjectOneUnknown();
+                    package.AddSetting(EnginePackageSettings.ProcessModel, processModel.ToString());
 
-                        expected = Net20ExpectedRunnerResults.ResultFor(processModel, domainUsage, 3);
-                        yield return new TestCaseData(package, expected).SetName($"{{m}}({testName})");
-                    }
+                    expected = Net20ExpectedRunnerResults.ResultFor(processModel, 3);
+                    yield return new TestCaseData(package, expected).SetName($"{{m}}({testName})");
                 }
             }
         }

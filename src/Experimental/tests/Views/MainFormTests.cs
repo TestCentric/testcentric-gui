@@ -43,17 +43,5 @@ namespace TestCentric.Gui.Views
             Assert.That(processModel.MenuItems.Select((p) => p.Tag),
                 Is.EqualTo(new string[] { "DEFAULT", "InProcess", "Separate", "Multiple" }));
         }
-
-        [Test]
-        public void DomainUsageTest()
-        {
-            var domainUsage = _view.DomainUsage as CheckedToolStripMenuGroup;
-
-            Assert.NotNull(domainUsage, "DomainUsage not set properly");
-            Assert.That(domainUsage.MenuItems.Select((p) => p.Text),
-                Is.EqualTo(new string[] { "Default", "Single", "Multiple" }));
-            Assert.That(domainUsage.MenuItems.Select((p) => p.Tag),
-                Is.EqualTo(new string[] { "DEFAULT", "Single", "Multiple" }));
-        }
     }
 }

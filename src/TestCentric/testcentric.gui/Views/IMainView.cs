@@ -37,7 +37,6 @@ namespace TestCentric.Gui.Views
         IToolStripMenu RuntimeMenu { get; }
         ISelection ProcessModel { get; }
         IChecked RunAsX86 { get; }
-        ISelection DomainUsage { get; }
         IToolStripMenu RecentFilesMenu { get; }
         ICommand ExitCommand { get; }
 
