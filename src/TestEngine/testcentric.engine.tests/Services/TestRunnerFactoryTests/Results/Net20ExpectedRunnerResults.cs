@@ -12,61 +12,31 @@ namespace TestCentric.Engine.Services.TestRunnerFactoryTests.Results
 #if !NETCOREAPP
     internal static class Net20ExpectedRunnerResults
     {
-        private static readonly string ExceptionMessage =
-            $"No expected Test result provided for this {nameof(ProcessModel)}/{nameof(DomainUsage)} combination.";
-
-        public static RunnerResult ResultFor(ProcessModel processModel, DomainUsage domainUsage, int numAssemblies)
+        public static RunnerResult ResultFor(ProcessModel processModel, int numAssemblies)
         {
             switch (processModel)
             {
+                default:
                 case ProcessModel.Default:
                 case ProcessModel.Multiple:
-                    switch (domainUsage)
-                    {
-                        case DomainUsage.Default:
-                        case DomainUsage.None:
-                        case DomainUsage.Single:
-                        case DomainUsage.Multiple:
-                            return numAssemblies > 1
-                                ? new RunnerResult()
-                                {
-                                    TestRunner = typeof(MultipleTestProcessRunner),
-                                    SubRunners = GetSubRunners(RunnerResult.ProcessRunner, numAssemblies)
-                                }
-                                : RunnerResult.ProcessRunner;
-                    }
-                    break;
+                    return numAssemblies > 1
+                        ? new RunnerResult()
+                        {
+                            TestRunner = typeof(MultipleTestProcessRunner),
+                            SubRunners = GetSubRunners(RunnerResult.ProcessRunner, numAssemblies)
+                        }
+                        : RunnerResult.ProcessRunner;
                 case ProcessModel.InProcess:
-                    switch (domainUsage)
-                    {
-                        case DomainUsage.Default:
-                        case DomainUsage.Multiple:
-                            return numAssemblies > 1
-                                ? new RunnerResult
-                                {
-                                    TestRunner = typeof(MultipleTestDomainRunner),
-                                    SubRunners = GetSubRunners(RunnerResult.TestDomainRunner, numAssemblies)
-                                }
-                                : RunnerResult.TestDomainRunner;
-                        case DomainUsage.None:
-                            return RunnerResult.LocalTestRunner;
-                        case DomainUsage.Single:
-                            return RunnerResult.TestDomainRunner;
-                    }
-                    break;
+                    return numAssemblies > 1
+                        ? new RunnerResult
+                        {
+                            TestRunner = typeof(MultipleTestDomainRunner),
+                            SubRunners = GetSubRunners(RunnerResult.TestDomainRunner, numAssemblies)
+                        }
+                        : RunnerResult.TestDomainRunner;
                 case ProcessModel.Separate:
-                    switch (domainUsage)
-                    {
-                        case DomainUsage.Default:
-                        case DomainUsage.None:
-                        case DomainUsage.Single:
-                        case DomainUsage.Multiple:
-                            return RunnerResult.ProcessRunner;
-                    }
-                    break;
+                    return RunnerResult.ProcessRunner;
             }
-
-            throw new ArgumentOutOfRangeException(nameof(domainUsage), domainUsage, ExceptionMessage);
         }
 
         private static RunnerResult[] GetSubRunners(RunnerResult subRunner, int count)
