@@ -53,57 +53,13 @@ namespace TestCentric.Engine
         {
             Runtime = runtime;
             FrameworkVersion = version;
-            ClrVersion = GetClrVersionForFramework(version);
+            ClrVersion = runtime.GetClrVersionForFramework(version);
 
             Profile = profile;
 
             DisplayName = GetDefaultDisplayName(Runtime, FrameworkVersion, profile);
 
             FrameworkName = new FrameworkName(Runtime.FrameworkIdentifier, FrameworkVersion);
-        }
-
-        private Version GetClrVersionForFramework(Version frameworkVersion)
-        {
-            if (Runtime == Runtime.Net)
-            {
-                switch (frameworkVersion.Major)
-                {
-                    case 1:
-                        switch (frameworkVersion.Minor)
-                        {
-                            case 0:
-                                return new Version(1, 0, 3705);
-                            case 1:
-                                return new Version(1, 1, 4322);
-                        }
-                        break;
-                    case 2:
-                    case 3:
-                        return new Version(2, 0, 50727);
-                    case 4:
-                        return new Version(4, 0, 30319);
-                }
-            }
-            else if (Runtime == Runtime.Mono)
-            {
-                switch (frameworkVersion.Major)
-                {
-                    case 1:
-                        return new Version(1, 1, 4322);
-                    case 2:
-                    case 3:
-                        return new Version(2, 0, 50727);
-                    case 4:
-                        return new Version(4, 0, 30319);
-                }
-            }
-            else if (Runtime == Runtime.NetCore)
-            {
-                // HACK to make tests pass - needs research
-                return new Version(FrameworkVersion.Major, FrameworkVersion.Minor, 1234);
-            }
-
-            throw new ArgumentException("Unknown framework version " + frameworkVersion.ToString(), "version");
         }
 
         /// <summary>
