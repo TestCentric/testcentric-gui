@@ -36,6 +36,7 @@ namespace TestCentric.Gui.Views
         ICommand ReloadTestsCommand { get; }
         IToolStripMenu RuntimeMenu { get; }
         ISelection ProcessModel { get; }
+        IChecked RunInProcess { get; }
         IChecked RunAsX86 { get; }
         ISelection DomainUsage { get; }
         IToolStripMenu RecentFilesMenu { get; }
