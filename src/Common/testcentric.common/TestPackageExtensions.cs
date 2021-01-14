@@ -3,7 +3,7 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-using System;
+using System.Runtime.Versioning;
 using System.Collections.Generic;
 using NUnit.Engine;
 
@@ -78,6 +78,18 @@ namespace TestCentric.Common
         public static bool HasImageTargetFrameworkName(this TestPackage package)
         {
             return HasSetting(package, EnginePackageSettings.ImageTargetFrameworkName);
+        }
+
+        public static bool IsNetFrameworkPackage(this TestPackage package)
+        {
+            return !HasImageTargetFrameworkName(package) // Implies .NET 2.0 or lower
+                || new FrameworkName(GetImageTargetFrameworkName(package)).Identifier == ".NETFramework";
+        }
+
+        public static bool IsNetCorePackage(this TestPackage package)
+        {
+            return HasImageTargetFrameworkName(package)
+                && new FrameworkName(GetImageTargetFrameworkName(package)).Identifier == ".NETCoreApp";
         }
 
         public static bool HasSetting(this TestPackage package, string name)
