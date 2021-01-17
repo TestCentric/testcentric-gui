@@ -92,7 +92,6 @@ namespace TestCentric.Gui.Views
         private ToolStripMenuItem recentFilesDummyMenuItem;
         private ToolStripMenuItem processModelMenuItem;
         private ToolStripMenuItem defaultProcessMenuItem;
-        private ToolStripMenuItem inProcessMenuItem;
         private ToolStripMenuItem singleProcessMenuItem;
         private ToolStripMenuItem multipleProcessMenuItem;
         private ToolStripMenuItem runAsX86MenuItem;
@@ -145,8 +144,7 @@ namespace TestCentric.Gui.Views
             RuntimeMenu = new ToolStripMenuElement(runtimeMenuItem);
             //SelectedRuntime = new CheckedMenuGroup(runtimeMenuItem);
             ProcessModel = new CheckedToolStripMenuGroup("Process Model",
-                defaultProcessMenuItem, inProcessMenuItem, singleProcessMenuItem, multipleProcessMenuItem);
-            RunInProcess = new ToolStripMenuElement(inProcessMenuItem);
+                defaultProcessMenuItem, singleProcessMenuItem, multipleProcessMenuItem);
             RunAsX86 = new ToolStripMenuElement(runAsX86MenuItem);
             RecentFilesMenu = new ToolStripMenuElement(recentFilesMenu);
             ExitCommand = new ToolStripMenuElement(exitMenuItem);
@@ -222,7 +220,6 @@ namespace TestCentric.Gui.Views
             this.runtimeDummyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.processModelMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.defaultProcessMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.inProcessMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.singleProcessMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.multipleProcessMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
@@ -404,7 +401,6 @@ namespace TestCentric.Gui.Views
             // 
             this.processModelMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.defaultProcessMenuItem,
-            this.inProcessMenuItem,
             this.singleProcessMenuItem,
             this.multipleProcessMenuItem,
             this.toolStripSeparator12,
@@ -416,40 +412,33 @@ namespace TestCentric.Gui.Views
             // defaultProcessMenuItem
             // 
             this.defaultProcessMenuItem.Name = "defaultProcessMenuItem";
-            this.defaultProcessMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.defaultProcessMenuItem.Size = new System.Drawing.Size(180, 22);
             this.defaultProcessMenuItem.Tag = "Default";
             this.defaultProcessMenuItem.Text = "Default";
-            // 
-            // inProcessMenuItem
-            // 
-            this.inProcessMenuItem.Name = "inProcessMenuItem";
-            this.inProcessMenuItem.Size = new System.Drawing.Size(204, 22);
-            this.inProcessMenuItem.Tag = "InProcess";
-            this.inProcessMenuItem.Text = "InProcess (DEPRECATED)";
             // 
             // singleProcessMenuItem
             // 
             this.singleProcessMenuItem.Name = "singleProcessMenuItem";
-            this.singleProcessMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.singleProcessMenuItem.Size = new System.Drawing.Size(180, 22);
             this.singleProcessMenuItem.Tag = "Separate";
             this.singleProcessMenuItem.Text = "Separate";
             // 
             // multipleProcessMenuItem
             // 
             this.multipleProcessMenuItem.Name = "multipleProcessMenuItem";
-            this.multipleProcessMenuItem.Size = new System.Drawing.Size(204, 22);
+            this.multipleProcessMenuItem.Size = new System.Drawing.Size(180, 22);
             this.multipleProcessMenuItem.Tag = "Multiple";
             this.multipleProcessMenuItem.Text = "Multiple";
             // 
             // toolStripSeparator12
             // 
             this.toolStripSeparator12.Name = "toolStripSeparator12";
-            this.toolStripSeparator12.Size = new System.Drawing.Size(201, 6);
+            this.toolStripSeparator12.Size = new System.Drawing.Size(177, 6);
             // 
             // runAsX86MenuItem
             // 
             this.runAsX86MenuItem.Name = "runAsX86MenuItem";
-            this.runAsX86MenuItem.Size = new System.Drawing.Size(204, 22);
+            this.runAsX86MenuItem.Size = new System.Drawing.Size(180, 22);
             this.runAsX86MenuItem.Text = "Run as X86";
             // 
             // toolStripSeparator3
@@ -1062,7 +1051,6 @@ namespace TestCentric.Gui.Views
         public ICommand ReloadTestsCommand { get; }
         public IToolStripMenu RuntimeMenu { get; }
         public ISelection ProcessModel { get; private set; }
-        public IChecked RunInProcess { get; private set; }
         public IChecked RunAsX86 { get; private set; }
         public IToolStripMenu RecentFilesMenu { get; }
         public ICommand ExitCommand { get; }

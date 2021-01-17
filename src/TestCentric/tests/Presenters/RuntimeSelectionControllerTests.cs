@@ -49,7 +49,6 @@ namespace TestCentric.Gui.Presenters
         [TestCase("Default", true)]
         [TestCase("Multiple", true)]
         [TestCase("Separate", true)]
-        [TestCase("InProcess", false)]
         public void RuntimeSelection_ProcessModel(string processModel, bool shouldBeAllowed)
         {
             _package.AddSetting(EnginePackageSettings.ImageTargetFrameworkName, "net-4.5");

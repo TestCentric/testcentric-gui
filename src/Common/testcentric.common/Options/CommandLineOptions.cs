@@ -35,10 +35,10 @@ namespace TestCentric.Gui
             this.Add("unattended", "Unattended execution: perform requested actions, then exit.",
                 v => Unattended = v != null);
 
-            this.Add("process=", "{PROCESS} isolation for test assemblies. Values: InProcess, Separate, Multiple. If not specified, defaults to Separate for a single assembly or Multiple for more than one. Option InProcess is permitted but DEPRECATED and will be removed in a future release.",
+            this.Add("process=", "{PROCESS} isolation for test assemblies. Values: Separate, Multiple. If not specified, defaults to Separate for a single assembly or Multiple for more than one.",
                 v =>
                 {
-                    if (CheckRequiredValue(v, "--process", "InProcess", "Separate", "Multiple"))
+                    if (CheckRequiredValue(v, "--process", "Separate", "Multiple"))
                         ProcessModel = v;
                 });
 
@@ -51,9 +51,6 @@ namespace TestCentric.Gui
                     if (CheckRequiredInt(v, "--agents", out int val))
                         MaxAgents = val;
                 });
-
-            this.Add("inprocess", "Synonym for --process=InProcess. DEPRECATED: This option will be removed in a future release.",
-                v => ProcessModel = "InProcess");
 
             this.Add("work=", "{PATH} of the directory to use for output files. If not specified, defaults to the current directory.",
                 v =>

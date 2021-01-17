@@ -22,8 +22,6 @@ namespace TestCentric.Gui.Model
         [TestCase("dummy.dll", "--process:Multiple", "--work=/Some/Directory", "==agents:32")]
         [TestCase("dummy.dll", "--process:Separate", "--X86")]
         [TestCase("dummy.dll", "--process:Single")]
-        [TestCase("dummy.dll", "--process:InProcess")]
-        [TestCase("dummy.dll", "--inprocess")]
         [TestCase("dummy.dll", "--agents:5")]
         [TestCase("dummy.dll", "--X86")]
         public void CreateTestModel(params string[] args)

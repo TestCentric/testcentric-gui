@@ -14,7 +14,6 @@ namespace TestCentric.Gui.Presenters.Main
     {
         [TestCase("Separate")]
         [TestCase("Multiple")]
-        [TestCase("InProcess")]
         [TestCase("INVALID", Description = "Invalid Setting is passed on to the model")]
         public void ProcessModel_SettingChanged(string value)
         {

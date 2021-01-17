@@ -679,7 +679,6 @@ namespace TestCentric.Gui.Presenters
             _view.RecentFilesMenu.Enabled = !testRunning && !testLoading;
             _view.ExitCommand.Enabled = !testLoading;
             _view.SaveResultsCommand.Enabled = _view.SaveResultsAsMenu.Enabled = !testRunning && !testLoading && _model.HasResults;
-            _view.RunInProcess.Enabled = testLoaded && _model.TestPackage.IsNetFrameworkPackage();
         }
 
         private string CreateOpenFileFilter()
