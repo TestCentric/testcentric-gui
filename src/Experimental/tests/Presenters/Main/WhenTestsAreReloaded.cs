@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric GUI contributors.
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
@@ -75,12 +75,6 @@ namespace TestCentric.Gui.Presenters.Main
         public void ProcessModel_IsUnchanged()
         {
             View.ProcessModel.DidNotReceiveWithAnyArgs().SelectedItem = null;
-        }
-
-        [Test]
-        public void DomainUsage_IsUnchanged()
-        {
-            View.DomainUsage.DidNotReceiveWithAnyArgs().SelectedItem = null;
         }
 
         [Test]

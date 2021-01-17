@@ -38,8 +38,6 @@ namespace TestCentric.Gui.Views
             SelectRuntimeMenu = new ToolStripMenuElement(selectRuntimeToolStripMenuItem);
             ProcessModel = new CheckedToolStripMenuGroup("processModel",
                 defaultProcessToolStripMenuItem, inProcessToolStripMenuItem, separateProcessToolStripMenuItem, multipleProcessToolStripMenuItem);
-            DomainUsage = new CheckedToolStripMenuGroup("domainUsage",
-                defaultDomainToolStripMenuItem, singleDomainToolStripMenuItem, multipleDomainToolStripMenuItem);
             RunAsX86 = new ToolStripMenuElement(loadAsX86ToolStripMenuItem);
             RecentProjectsMenu = new ToolStripMenuElement(recentProjectsToolStripMenuItem);
             ExitCommand = new ToolStripMenuElement(exitToolStripMenuItem);
@@ -95,7 +93,6 @@ namespace TestCentric.Gui.Views
         public IToolStripMenu SelectRuntimeMenu { get; private set; }
         public ISelection ProcessModel { get; private set; }
         public IChecked RunAsX86 { get; private set; }
-        public ISelection DomainUsage { get; private set; }
         public IToolStripMenu RecentProjectsMenu { get; private set; }
         public ICommand ExitCommand { get; private set; }
 

@@ -130,11 +130,6 @@ namespace TestCentric.Gui.Presenters
                 OverridePackageSetting(EnginePackageSettings.ProcessModel, _view.ProcessModel.SelectedItem);
             };
 
-            _view.DomainUsage.SelectionChanged += () =>
-            {
-                OverridePackageSetting(EnginePackageSettings.DomainUsage, _view.DomainUsage.SelectedItem);
-            };
-
             _view.RunAsX86.CheckedChanged += () =>
             {
                 var key = EnginePackageSettings.RunAsX86;
@@ -266,8 +261,6 @@ namespace TestCentric.Gui.Presenters
 
             if (_options.ProcessModel != null)
                 _view.ProcessModel.SelectedItem = _options.ProcessModel;
-            if (_options.DomainUsage != null)
-                _view.DomainUsage.SelectedItem = _options.DomainUsage;
             if (_options.MaxAgents >= 0)
                 _model.Settings.Engine.Agents = _options.MaxAgents;
             _view.RunAsX86.Checked = _options.RunAsX86;

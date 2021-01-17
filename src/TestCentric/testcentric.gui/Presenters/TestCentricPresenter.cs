@@ -215,8 +215,6 @@ namespace TestCentric.Gui.Presenters
                 var settings = _model.PackageOverrides;
                 if (_options.ProcessModel != null)
                     _view.ProcessModel.SelectedItem = _options.ProcessModel;
-                if (_options.DomainUsage != null)
-                    _view.DomainUsage.SelectedItem = _options.DomainUsage;
                 if (_options.MaxAgents >= 0)
                     _model.Settings.Engine.Agents = _options.MaxAgents;
                 _view.RunAsX86.Checked = _options.RunAsX86;
@@ -334,11 +332,6 @@ namespace TestCentric.Gui.Presenters
             _view.ProcessModel.SelectionChanged += () =>
             {
                 ChangePackageSettingAndReload(EnginePackageSettings.ProcessModel, _view.ProcessModel.SelectedItem);
-            };
-
-            _view.DomainUsage.SelectionChanged += () =>
-            {
-                ChangePackageSettingAndReload(EnginePackageSettings.DomainUsage, _view.DomainUsage.SelectedItem);
             };
 
             _view.RunAsX86.CheckedChanged += () =>

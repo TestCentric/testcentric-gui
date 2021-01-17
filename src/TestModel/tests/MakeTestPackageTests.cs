@@ -33,7 +33,6 @@ namespace TestCentric.Gui.Model
         }
 
         [TestCase(EnginePackageSettings.ProcessModel, "Single")]
-        [TestCase(EnginePackageSettings.DomainUsage, "Multiple")]
         [TestCase(EnginePackageSettings.RequestedRuntimeFramework, "net-2.0")]
         [TestCase(EnginePackageSettings.MaxAgents, 8)]
         [TestCase(EnginePackageSettings.ShadowCopyFiles, false)]
