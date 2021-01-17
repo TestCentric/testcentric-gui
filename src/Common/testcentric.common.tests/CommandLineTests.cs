@@ -95,7 +95,6 @@ namespace TestCentric.Gui.Tests
         [TestCase("--garbage")]
         [TestCase("--process:Unknown")]
         [TestCase("--agents:XYZ")]
-        [TestCase("--domain:Junk")]
         [TestCase("--trace:Something")]
         public void InvalidOptionsAreDetected(string option)
         {
