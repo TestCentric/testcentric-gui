@@ -22,6 +22,8 @@ namespace TestCentric.Gui.Presenters.Main
 
             TestNode testNode = new TestNode("<test-suite id='1'/>");
             _model.Tests.Returns(testNode);
+            _model.TestPackage.Returns(new NUnit.Engine.TestPackage("dummy.dll"));
+
             FireTestReloadedEvent(testNode);
         }
 

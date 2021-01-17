@@ -146,6 +146,7 @@ namespace TestCentric.Gui.Views
             //SelectedRuntime = new CheckedMenuGroup(runtimeMenuItem);
             ProcessModel = new CheckedToolStripMenuGroup("Process Model",
                 defaultProcessMenuItem, inProcessMenuItem, singleProcessMenuItem, multipleProcessMenuItem);
+            RunInProcess = new ToolStripMenuElement(inProcessMenuItem);
             RunAsX86 = new ToolStripMenuElement(runAsX86MenuItem);
             RecentFilesMenu = new ToolStripMenuElement(recentFilesMenu);
             ExitCommand = new ToolStripMenuElement(exitMenuItem);
@@ -1061,6 +1062,7 @@ namespace TestCentric.Gui.Views
         public ICommand ReloadTestsCommand { get; }
         public IToolStripMenu RuntimeMenu { get; }
         public ISelection ProcessModel { get; private set; }
+        public IChecked RunInProcess { get; private set; }
         public IChecked RunAsX86 { get; private set; }
         public IToolStripMenu RecentFilesMenu { get; }
         public ICommand ExitCommand { get; }
