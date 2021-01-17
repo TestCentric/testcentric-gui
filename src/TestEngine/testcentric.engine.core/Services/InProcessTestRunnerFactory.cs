@@ -30,26 +30,10 @@ namespace TestCentric.Engine.Services
 #if NETSTANDARD1_6 || NETSTANDARD2_0
             return new LocalTestRunner(ServiceContext, package);
 #else
-            DomainUsage domainUsage = (DomainUsage)System.Enum.Parse(
-                typeof(DomainUsage),
-                package.GetSetting(EnginePackageSettings.DomainUsage, "Default"));
-
-            switch (domainUsage)
-            {
-                default:
-                case DomainUsage.Default:
-                case DomainUsage.Multiple:
-                    if (package.AssemblyPackages().Count > 1)
-                        return new MultipleTestDomainRunner(this.ServiceContext, package);
-                    else
-                        return new TestDomainRunner(this.ServiceContext, package);
-
-                case DomainUsage.None:
-                    return new LocalTestRunner(ServiceContext, package);
-
-                case DomainUsage.Single:
-                    return new TestDomainRunner(ServiceContext, package);
-            }
+            if (package.AssemblyPackages().Count > 1)
+                return new MultipleTestDomainRunner(this.ServiceContext, package);
+            else
+                return new TestDomainRunner(this.ServiceContext, package);
 #endif
         }
 
