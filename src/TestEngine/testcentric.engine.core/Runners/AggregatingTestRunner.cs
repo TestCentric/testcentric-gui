@@ -20,12 +20,7 @@ namespace TestCentric.Engine.Runners
     public class AggregatingTestRunner : AbstractTestRunner
     {
         // AggregatingTestRunner combines the results from tests run by different
-        // runners. It may be used as a base class or through one of it's derived
-        // classes, MultipleTestDomainRunner and MultipleTestProcessRunner.
-        //
-        // The runners created by the derived class will (at least at the time
-        // of writing this comment) be either DirectTestRunners, ProcessRunners or
-        // AggregatingTestRunners.
+        // runners. It may be used as a base class or through a derived class.
         //
         // AggregatingTestRunner is used in the engine/runner process as well as in agent
         // processes. It may be called with a TestPackage that specifies a single 
