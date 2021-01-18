@@ -62,9 +62,6 @@ namespace TestCentric.Engine.Services
 
                 case ProcessModel.Separate:
                     return new ProcessRunner(this.ServiceContext, package);
-
-                case ProcessModel.InProcess:
-                    return base.MakeTestRunner(package);
             }
         }
 

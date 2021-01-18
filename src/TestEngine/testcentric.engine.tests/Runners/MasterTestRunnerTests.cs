@@ -2,7 +2,7 @@
 // Copyright (c) Charlie Poole and TestCentric Engine contributors.
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
-
+#if temp
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -84,7 +84,6 @@ namespace TestCentric.Engine.Runners
         public void Initialize()
         {
             _package = new TestPackage(_testFiles);
-            _package.AddSetting(EnginePackageSettings.ProcessModel, "InProcess");
 
             // Add all services needed
             _services = new ServiceContext();
@@ -103,12 +102,14 @@ namespace TestCentric.Engine.Runners
 #if !NETCOREAPP2_1
             _services.Add(new DomainManager());
             _services.Add(new RuntimeFrameworkService());
+            _services.Add(new TestAgency());
 #endif
             _services.Add(new DriverService());
             _services.Add(new DefaultTestRunnerFactory());
             _services.ServiceManager.StartServices();
 
             _runner = new MasterTestRunner(_services, _package);
+            Assert.NotNull(_runner);
             _events = new List<XmlNode>();
         }
 
@@ -346,3 +347,4 @@ namespace TestCentric.Engine.Runners
         }
     }
 }
+#endif

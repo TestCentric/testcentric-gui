@@ -26,14 +26,6 @@ namespace TestCentric.Engine.Services.TestRunnerFactoryTests.Results
                             SubRunners = GetSubRunners(RunnerResult.ProcessRunner, numAssemblies)
                         }
                         : RunnerResult.ProcessRunner;
-                case ProcessModel.InProcess:
-                    return numAssemblies > 1
-                        ? new RunnerResult
-                        {
-                            TestRunner = typeof(MultipleTestDomainRunner),
-                            SubRunners = GetSubRunners(RunnerResult.TestDomainRunner, numAssemblies)
-                        }
-                        : RunnerResult.TestDomainRunner;
                 case ProcessModel.Separate:
                     return RunnerResult.ProcessRunner;
             }
