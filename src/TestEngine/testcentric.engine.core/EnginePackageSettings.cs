@@ -66,16 +66,8 @@ namespace TestCentric
 
         /// <summary>
         /// The maximum number of test agents permitted to run simultaneously. 
-        /// Ignored if the ProcessModel is not set or defaulted to Multiple.
         /// </summary>
         public const string MaxAgents = "MaxAgents";
-
-        /// <summary>
-        /// Indicates how to allocate assemblies to processes. Values are:
-        /// "Default", "Single", "Separate", "Multiple". Default is "Multiple"
-        /// for more than one assembly, "Separate" for a single assembly.
-        /// </summary>
-        public const string ProcessModel = "ProcessModel";
 
         /// <summary>
         /// Indicates the desired runtime to use for the tests. Values 
