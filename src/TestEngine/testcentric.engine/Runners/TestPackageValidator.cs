@@ -23,7 +23,6 @@ namespace TestCentric.Engine.Runners
         {
 #if !NETSTANDARD2_0  // TODO: How do we validate runtime framework for .NET Standard 2.0?
             var processModel = package.GetSetting(EnginePackageSettings.ProcessModel, "Default").ToLower();
-            var runningInProcess = processModel == "inprocess";
             var frameworkSetting = package.GetSetting(EnginePackageSettings.RequestedRuntimeFramework, "");
             var runAsX86 = package.GetSetting(EnginePackageSettings.RunAsX86, false);
 
@@ -32,24 +31,7 @@ namespace TestCentric.Engine.Runners
                 // Check requested framework is actually available
                 if (!_runtimeService.IsAvailable(frameworkSetting))
                     throw new NUnitEngineException($"The requested framework {frameworkSetting} is unknown or not available.");
-
-                // If running in process, check requested framework is compatible
-                if (runningInProcess)
-                {
-                    var currentFramework = RuntimeFramework.CurrentFramework;
-
-                    RuntimeFramework requestedFramework;
-                    if (!RuntimeFramework.TryParse(frameworkSetting, out requestedFramework))
-                        throw new NUnitEngineException("Invalid or unknown framework requested: " + frameworkSetting);
-
-                    if (!currentFramework.Supports(requestedFramework))
-                        throw new NUnitEngineException(string.Format(
-                            "Cannot run {0} framework in process already running {1}.", frameworkSetting, currentFramework));
-                }
             }
-
-            if (runningInProcess && runAsX86 && IntPtr.Size == 8)
-                throw new NUnitEngineException("Cannot run tests in process - a 32 bit process is required.");
 #endif
         }
     }

@@ -140,7 +140,7 @@ namespace TestCentric.Engine.Services
                     break;
                 case AgentExitCodes.UNEXPECTED_EXCEPTION:
                     errorMsg = "Unhandled exception on remote test agent. " +
-                               "To debug, try running with the --inprocess flag, or using --trace=debug to output logs.";
+                               "To debug, try using --trace=debug to output logs.";
                     break;
                 case AgentExitCodes.FAILED_TO_START_REMOTE_AGENT:
                     errorMsg = "Failed to start remote test agent.";

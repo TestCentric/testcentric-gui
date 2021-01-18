@@ -10,8 +10,6 @@ using NUnit.Engine;
 
 namespace TestCentric.Engine.Services
 {
-    //using Fakes;
-
     public class InProcessTestRunnerFactoryTests
     {
         private InProcessTestRunnerFactory _factory;

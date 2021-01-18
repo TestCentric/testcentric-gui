@@ -22,10 +22,6 @@ namespace TestCentric.Engine.Services
         /// <summary>
         /// Run tests directly in the NUnit process
         /// </summary>
-        InProcess,
-        /// <summary>
-        /// Run tests in a single separate process
-        /// </summary>
         Separate,
         /// <summary>
         /// Run tests in a separate process per assembly

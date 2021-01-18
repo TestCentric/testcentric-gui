@@ -20,10 +20,6 @@ namespace TestCentric.Engine.Internal
         /// </summary>
         Default,
         /// <summary>
-        /// Run tests directly in the NUnit process
-        /// </summary>
-        InProcess,
-        /// <summary>
         /// Run tests in a single separate process
         /// </summary>
         Separate,
