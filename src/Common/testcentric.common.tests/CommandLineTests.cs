@@ -30,7 +30,6 @@ namespace TestCentric.Gui.Tests
         [TestCase("RunAllTests", false)]
         [TestCase("RunAsX86", false)]
         [TestCase("ShowHelp", false)]
-        [TestCase("ProcessModel", null)]
         [TestCase("InternalTraceLevel", null)]
         [TestCase("DebugAgent", false)]
         [TestCase("Unattended", false)]
@@ -45,8 +44,6 @@ namespace TestCentric.Gui.Tests
         [TestCase("NoLoad", "--noload", true)]
         [TestCase("RunAllTests", "--run", true)]
         [TestCase("Unattended", "--unattended", true)]
-        [TestCase("ProcessModel", "--process:Separate")]
-        [TestCase("ProcessModel", "--process:Multiple")]
         [TestCase("WorkDirectory", "--work:PathToWorkDirectory")]
         [TestCase("RunAsX86", "--x86", true)]
         [TestCase("MaxAgents", "--agents:8", 8)]
@@ -76,7 +73,6 @@ namespace TestCentric.Gui.Tests
             Assert.That(property.GetValue(options, null), Is.EqualTo(expected));
         }
 
-        [TestCase("--process")]
         [TestCase("--agents")]
         [TestCase("--trace")]
         public void InvalidOptionsAreDetectedByMonoOptions(string option)
@@ -90,7 +86,6 @@ namespace TestCentric.Gui.Tests
 
         [TestCase("--assembly:nunit.tests.dll")]
         [TestCase("--garbage")]
-        [TestCase("--process:Unknown")]
         [TestCase("--agents:XYZ")]
         [TestCase("--trace:Something")]
         public void InvalidOptionsAreDetected(string option)

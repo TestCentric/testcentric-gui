@@ -46,18 +46,6 @@ namespace TestCentric.Gui.Presenters
             Assert.False(_controller.AllowRuntimeSelection());
         }
 
-        [TestCase("Default", true)]
-        [TestCase("Multiple", true)]
-        [TestCase("Separate", true)]
-        public void RuntimeSelection_ProcessModel(string processModel, bool shouldBeAllowed)
-        {
-            _package.AddSetting(EnginePackageSettings.ImageTargetFrameworkName, "net-4.5");
-            _package.AddSetting(EnginePackageSettings.ProcessModel, processModel);
-            _model.TestPackage.Returns(_package);
-
-            Assert.That(_controller.AllowRuntimeSelection(), Is.EqualTo(shouldBeAllowed));
-        }
-
         [Test]
         public void PopulateMenu_WhenTestPackageIsNull_ThrowsInvalidOperationException()
         {

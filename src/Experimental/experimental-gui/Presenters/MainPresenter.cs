@@ -125,11 +125,6 @@ namespace TestCentric.Gui.Presenters
             _view.ReloadTestsCommand.Execute += _model.ReloadTests;
             _view.RecentProjectsMenu.Popup += PopulateRecentProjectsMenu;
 
-            _view.ProcessModel.SelectionChanged += () =>
-            {
-                OverridePackageSetting(EnginePackageSettings.ProcessModel, _view.ProcessModel.SelectedItem);
-            };
-
             _view.RunAsX86.CheckedChanged += () =>
             {
                 var key = EnginePackageSettings.RunAsX86;
@@ -259,8 +254,6 @@ namespace TestCentric.Gui.Presenters
             if (_options.InternalTraceLevel != null)
                 settings.Add(EnginePackageSettings.InternalTraceLevel, _options.InternalTraceLevel);
 
-            if (_options.ProcessModel != null)
-                _view.ProcessModel.SelectedItem = _options.ProcessModel;
             if (_options.MaxAgents >= 0)
                 _model.Settings.Engine.Agents = _options.MaxAgents;
             _view.RunAsX86.Checked = _options.RunAsX86;

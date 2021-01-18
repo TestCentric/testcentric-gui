@@ -19,9 +19,7 @@ namespace TestCentric.Gui.Model
         [TestCase("dummy.dll", "--trace=Warning")]
         [TestCase("dummy.dll", "--trace=Info", "--work=/Path/To/Directory")]
         [TestCase("dummy.dll", "--trace=Debug")]
-        [TestCase("dummy.dll", "--process:Multiple", "--work=/Some/Directory", "==agents:32")]
-        [TestCase("dummy.dll", "--process:Separate", "--X86")]
-        [TestCase("dummy.dll", "--process:Single")]
+        [TestCase("dummy.dll", "--work=/Some/Directory", "==agents:32")]
         [TestCase("dummy.dll", "--agents:5")]
         [TestCase("dummy.dll", "--X86")]
         public void CreateTestModel(params string[] args)
@@ -39,7 +37,6 @@ namespace TestCentric.Gui.Model
             Assert.That(engine.WorkDirectory, Is.EqualTo(options.WorkDirectory));
 
             var checker = new PackageOverridesChecker(model);
-            checker.CheckSetting(options.ProcessModel, EnginePackageSettings.ProcessModel);
             checker.CheckSetting(options.MaxAgents, EnginePackageSettings.MaxAgents);
             checker.CheckSetting(options.RunAsX86, EnginePackageSettings.RunAsX86);
         }

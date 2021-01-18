@@ -21,28 +21,6 @@ namespace TestCentric.Gui.Presenters.Main
             Model.TestFiles.Returns(new List<string>(_files));
         }
 
-        [TestCase("Single")]
-        [TestCase("Multiple")]
-        [TestCase("INVALID", Description = "Invalid Setting is passed on to the model")]
-        public void ProcessModel_SettingChanged(string value)
-        {
-            View.ProcessModel.SelectedItem.Returns(value);
-
-            View.ProcessModel.SelectionChanged += Raise.Event<CommandHandler>();
-
-            Model.PackageOverrides.Received(1)["ProcessModel"] = value;
-        }
-
-        [Test]
-        public void ProcessModel_SetToDefault()
-        {
-            View.ProcessModel.SelectedItem.Returns("DEFAULT");
-
-            View.ProcessModel.SelectionChanged += Raise.Event<CommandHandler>();
-
-            Model.PackageOverrides.Received(1).Remove("ProcessModel");
-        }
-
         //[TestCase("net-2.0")]
         //[TestCase("net-4.5")]
         //[TestCase("INVALID", Description = "Invalid Setting is passed on to the model")]

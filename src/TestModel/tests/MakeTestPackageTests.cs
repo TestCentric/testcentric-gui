@@ -32,7 +32,6 @@ namespace TestCentric.Gui.Model
             Assert.That(package.SubPackages.Select(p => p.Name), Is.EqualTo(testFiles));
         }
 
-        [TestCase(EnginePackageSettings.ProcessModel, "Single")]
         [TestCase(EnginePackageSettings.RequestedRuntimeFramework, "net-2.0")]
         [TestCase(EnginePackageSettings.MaxAgents, 8)]
         [TestCase(EnginePackageSettings.ShadowCopyFiles, false)]

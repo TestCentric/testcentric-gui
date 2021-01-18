@@ -72,12 +72,6 @@ namespace TestCentric.Gui.Presenters.Main
         }
 
         [Test]
-        public void ProcessModel_IsUnchanged()
-        {
-            View.ProcessModel.DidNotReceiveWithAnyArgs().SelectedItem = null;
-        }
-
-        [Test]
         public void RecentProjects_IsEnabled()
         {
             View.RecentProjectsMenu.Received().Enabled = true;

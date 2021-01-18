@@ -53,13 +53,5 @@ namespace TestCentric.Gui.Presenters.Main
         {
             ViewElement(propName).Received().Enabled = enabled;
         }
-
-#if NYI
-		[Test]
-        public void ProcessModel_IsUnchanged()
-        {
-            View.ProcessModel.DidNotReceiveWithAnyArgs().SelectedItem = null;
-        }
-#endif
     }
 }

@@ -12,28 +12,6 @@ namespace TestCentric.Gui.Presenters.Main
 
     public class PackageSettingsTests : MainPresenterTestBase
     {
-        [TestCase("Separate")]
-        [TestCase("Multiple")]
-        [TestCase("INVALID", Description = "Invalid Setting is passed on to the model")]
-        public void ProcessModel_SettingChanged(string value)
-        {
-            _view.ProcessModel.SelectedItem.Returns(value);
-
-            _view.ProcessModel.SelectionChanged += Raise.Event<CommandHandler>();
-
-            _model.PackageOverrides.Received(1)["ProcessModel"] = value;
-        }
-
-        [Test]
-        public void ProcessModel_SetToDefault()
-        {
-            _view.ProcessModel.SelectedItem.Returns("DEFAULT");
-
-            _view.ProcessModel.SelectionChanged += Raise.Event<CommandHandler>();
-
-            _model.PackageOverrides.Received(1).Remove("ProcessModel");
-        }
-
         //[TestCase("net-2.0")]
         //[TestCase("net-4.5")]
         //[TestCase("INVALID", Description = "Invalid Setting is passed on to the model")]

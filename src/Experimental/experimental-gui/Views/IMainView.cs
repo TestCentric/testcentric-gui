@@ -41,7 +41,6 @@ namespace TestCentric.Gui.Views
         ICommand SaveResultsCommand { get; }
         ICommand ReloadTestsCommand { get; }
         IToolStripMenu SelectRuntimeMenu { get; }
-        ISelection ProcessModel { get; }
         IChecked RunAsX86 { get; }
         IToolStripMenu RecentProjectsMenu { get; }
         ICommand ExitCommand { get; }
