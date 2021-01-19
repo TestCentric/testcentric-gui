@@ -10,8 +10,6 @@ using NUnit.Engine;
 
 namespace TestCentric.Engine.Services
 {
-    //using Fakes;
-
     public class InProcessTestRunnerFactoryTests
     {
         private InProcessTestRunnerFactory _factory;
@@ -37,8 +35,8 @@ namespace TestCentric.Engine.Services
         [TestCase("x.dll y.dll z.dll", typeof(LocalTestRunner))]
 #else
         [TestCase("x.dll", typeof(TestDomainRunner))]
-        [TestCase("x.dll y.dll", typeof(MultipleTestDomainRunner))]
-        [TestCase("x.dll y.dll z.dll", typeof(MultipleTestDomainRunner))]
+        [TestCase("x.dll y.dll", typeof(TestDomainRunner))]
+        [TestCase("x.dll y.dll z.dll", typeof(TestDomainRunner))]
 #endif
         public void CorrectRunnerIsUsed(string files, Type expectedType)
         {

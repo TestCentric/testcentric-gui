@@ -27,13 +27,10 @@ namespace TestCentric.Engine.Services
         /// <returns>An ITestEngineRunner</returns>
         public virtual ITestEngineRunner MakeTestRunner(TestPackage package)
         {
-#if NETSTANDARD1_6 || NETSTANDARD2_0
+#if NETSTANDARD
             return new LocalTestRunner(ServiceContext, package);
 #else
-            if (package.AssemblyPackages().Count > 1)
-                return new MultipleTestDomainRunner(this.ServiceContext, package);
-            else
-                return new TestDomainRunner(this.ServiceContext, package);
+            return new TestDomainRunner(ServiceContext, package);
 #endif
         }
 

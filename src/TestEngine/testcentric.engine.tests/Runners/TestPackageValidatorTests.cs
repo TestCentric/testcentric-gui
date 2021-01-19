@@ -64,40 +64,6 @@ namespace TestCentric.Engine.Runners
             Assert.That(() => Validate(), Throws.Nothing);
         }
 
-        [Test]
-        public void RequestedFrameworkInValidInProcess()
-        {
-            _package.AddSetting(EnginePackageSettings.ProcessModel, "InProcess");
-            _package.AddSetting(EnginePackageSettings.RequestedRuntimeFramework, "netcore-3.0");
-            var exception = Assert.Catch<NUnitEngineException>(() => Validate());
-            Assert.That(exception.Message, Is.EqualTo($"Cannot run netcore-3.0 framework in process already running {CURRENT_RUNTIME}."));
-        }
-
-        [Test]
-        public void RequestedFrameworkValidInProcess()
-        {
-            _package.AddSetting(EnginePackageSettings.ProcessModel, "InProcess");
-            _package.AddSetting(EnginePackageSettings.RequestedRuntimeFramework, CURRENT_RUNTIME);
-            Assert.That(() => Validate(), Throws.Nothing);
-        }
-
-        [Test, Platform("64-Bit")]
-        public void RunAsX86InvalidInProcess()
-        {
-            _package.AddSetting(EnginePackageSettings.ProcessModel, "InProcess");
-            _package.AddSetting(EnginePackageSettings.RunAsX86, true);
-            var exception = Assert.Catch<NUnitEngineException>(() => Validate());
-            Assert.That(exception.Message, Is.EqualTo("Cannot run tests in process - a 32 bit process is required."));
-        }
-
-        [Test, Platform("32-Bit")]
-        public void RunAsX86ValidInProcess()
-        {
-            _package.AddSetting(EnginePackageSettings.ProcessModel, "InProcess");
-            _package.AddSetting(EnginePackageSettings.RunAsX86, true);
-            Assert.That(() => Validate(), Throws.Nothing);
-        }
-
         private void Validate()
         {
             _validator.Validate(_package);
