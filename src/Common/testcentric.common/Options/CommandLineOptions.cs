@@ -35,13 +35,6 @@ namespace TestCentric.Gui
             this.Add("unattended", "Unattended execution: perform requested actions, then exit.",
                 v => Unattended = v != null);
 
-            this.Add("process=", "{PROCESS} isolation for test assemblies. Values: InProcess, Separate, Multiple. If not specified, defaults to Separate for a single assembly or Multiple for more than one. Option InProcess is permitted but DEPRECATED and will be removed in a future release.",
-                v =>
-                {
-                    if (CheckRequiredValue(v, "--process", "InProcess", "Separate", "Multiple"))
-                        ProcessModel = v;
-                });
-
             this.Add("x86", "Run tests in an X86 process on 64-bit systems.",
                 v => RunAsX86 = v != null);
 
@@ -51,9 +44,6 @@ namespace TestCentric.Gui
                     if (CheckRequiredInt(v, "--agents", out int val))
                         MaxAgents = val;
                 });
-
-            this.Add("inprocess", "Synonym for --process=InProcess. DEPRECATED: This option will be removed in a future release.",
-                v => ProcessModel = "InProcess");
 
             this.Add("work=", "{PATH} of the directory to use for output files. If not specified, defaults to the current directory.",
                 v =>
@@ -113,7 +103,6 @@ namespace TestCentric.Gui
 
         // How to Run Tests
 
-        public string ProcessModel { get; private set; }
         public bool RunAsX86 { get; private set; }
         public int MaxAgents { get; private set; }
         public string InternalTraceLevel { get; private set; }

@@ -31,17 +31,5 @@ namespace TestCentric.Gui.Views
         //    Assert.That(selectedRuntime.MenuItems.Select((p) => p.Text), Is.EqualTo(new string[] { "Default" }));
         //    Assert.That(selectedRuntime.MenuItems.Select((p) => p.Tag), Is.EqualTo(new string[] { "DEFAULT" }));
         //}
-
-        [Test]
-        public void ProcessModelTest()
-        {
-            var processModel = _view.ProcessModel as CheckedToolStripMenuGroup;
-
-            Assert.NotNull(processModel, "ProcessModel not set properly");
-            Assert.That(processModel.MenuItems.Select((p) => p.Text),
-                Is.EqualTo(new string[] { "Default", "InProcess (DEPRECATED)", "Separate", "Multiple" }));
-            Assert.That(processModel.MenuItems.Select((p) => p.Tag),
-                Is.EqualTo(new string[] { "DEFAULT", "InProcess", "Separate", "Multiple" }));
-        }
     }
 }

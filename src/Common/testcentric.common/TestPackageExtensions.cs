@@ -60,11 +60,6 @@ namespace TestCentric.Common
             package.Settings[EnginePackageSettings.ConfigNames] = configNames;
         }
 
-        public static string GetProcessModel(this TestPackage package)
-        {
-            return package.GetSetting(EnginePackageSettings.ProcessModel, "Default");
-        }
-
         public static string GetRequestedRuntimeFramework(this TestPackage package)
         {
             return package.GetSetting(EnginePackageSettings.RequestedRuntimeFramework, "DEFAULT");

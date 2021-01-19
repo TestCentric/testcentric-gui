@@ -213,8 +213,6 @@ namespace TestCentric.Gui.Presenters
                 InitializeDisplay(_settings.Gui.DisplayFormat);
 
                 var settings = _model.PackageOverrides;
-                if (_options.ProcessModel != null)
-                    _view.ProcessModel.SelectedItem = _options.ProcessModel;
                 if (_options.MaxAgents >= 0)
                     _model.Settings.Engine.Agents = _options.MaxAgents;
                 _view.RunAsX86.Checked = _options.RunAsX86;
@@ -328,11 +326,6 @@ namespace TestCentric.Gui.Presenters
             _view.CloseCommand.Execute += () => CloseProject();
             _view.AddTestFilesCommand.Execute += () => AddTestFiles();
             _view.ReloadTestsCommand.Execute += () => ReloadTests();
-
-            _view.ProcessModel.SelectionChanged += () =>
-            {
-                ChangePackageSettingAndReload(EnginePackageSettings.ProcessModel, _view.ProcessModel.SelectedItem);
-            };
 
             _view.RunAsX86.CheckedChanged += () =>
             {
@@ -679,7 +672,6 @@ namespace TestCentric.Gui.Presenters
             _view.RecentFilesMenu.Enabled = !testRunning && !testLoading;
             _view.ExitCommand.Enabled = !testLoading;
             _view.SaveResultsCommand.Enabled = _view.SaveResultsAsMenu.Enabled = !testRunning && !testLoading && _model.HasResults;
-            _view.RunInProcess.Enabled = testLoaded && _model.TestPackage.IsNetFrameworkPackage();
         }
 
         private string CreateOpenFileFilter()

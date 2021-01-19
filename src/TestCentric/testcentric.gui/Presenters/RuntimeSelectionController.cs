@@ -21,9 +21,7 @@ namespace TestCentric.Gui.Presenters
         public bool AllowRuntimeSelection()
         {
             var package = _model.TestPackage;
-            return package != null
-                && package.GetProcessModel() != "InProcess"
-                && package.HasImageTargetFrameworkName();
+            return package != null && package.HasImageTargetFrameworkName();
         }
 
         public void PopulateMenu()

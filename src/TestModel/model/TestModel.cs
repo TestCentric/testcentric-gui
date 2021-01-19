@@ -81,8 +81,6 @@ namespace TestCentric.Gui.Model
 
             model.PackageOverrides.Add(EnginePackageSettings.InternalTraceLevel, testEngine.InternalTraceLevel.ToString());
 
-            if (options.ProcessModel != null)
-                model.PackageOverrides.Add(EnginePackageSettings.ProcessModel, options.ProcessModel);
             if (options.MaxAgents >= 0)
                 model.PackageOverrides.Add(EnginePackageSettings.MaxAgents, options.MaxAgents);
             if (options.RunAsX86)
