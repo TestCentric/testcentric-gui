@@ -22,19 +22,28 @@ namespace TestCentric.Engine.Services
     [TestFixture("net-4.0", false)]
     [TestFixture("net-4.0", true)]
     [TestFixture("net-4.5", false)]
+    [TestFixture("netcore-1.1", false)]
+    [TestFixture("netcore-1.1", true)]
+    [TestFixture("netcore-2.1", false)]
+    [TestFixture("netcore-2.1", true)]
+    [TestFixture("netcore-3.1", false)]
+    [TestFixture("netcore-3.1", true)]
     [TestFixture("netcore-5.0", false)]
     [TestFixture("netcore-5.0", true)]
-    public class AgentProcessTests
+    public class AgentFactoryTests
     {
+        private static readonly Guid AGENTID = Guid.NewGuid();
+
         private string _runtime;
         private bool _x86; 
 
         private TestAgency _agency;
+        private AgentFactory _factory;
         private TestPackage _package;
         private const string REMOTING_URL = "tcp://127.0.0.1:1234/TestAgency";
         private readonly string REQUIRED_ARGS = $"{REMOTING_URL} --pid={Process.GetCurrentProcess().Id}";
 
-        public AgentProcessTests(string runtime, bool x86)
+        public AgentFactoryTests(string runtime, bool x86)
         {
             _runtime = runtime;
             _x86 = x86;
@@ -45,6 +54,7 @@ namespace TestCentric.Engine.Services
         {
             _agency = Substitute.For<TestAgency>();
             _agency.RemotingUrl.ReturnsForAnyArgs(REMOTING_URL);
+            _factory = new AgentFactory(_agency);
             _package = new TestPackage("junk.dll");
             _package.Settings[EnginePackageSettings.TargetRuntimeFramework] = _runtime;
             _package.Settings[EnginePackageSettings.RunAsX86] = _x86;
@@ -65,7 +75,7 @@ namespace TestCentric.Engine.Services
             if (_runtime.StartsWith("netcore"))
             {
                 Assert.That(agentProcess.StartInfo.FileName, Is.EqualTo("dotnet"));
-                Assert.That(agentProcess.StartInfo.Arguments, Does.StartWith($"\"{agentPath}"));
+                Assert.That(agentProcess.StartInfo.Arguments, Does.StartWith(agentPath));
             }
             else
                 Assert.That(agentProcess.StartInfo.FileName, Is.SamePath(agentPath));
@@ -85,30 +95,11 @@ namespace TestCentric.Engine.Services
         }
 
         [Test]
-        public void DebugTests()
-        {
-            _package.Settings[EnginePackageSettings.DebugTests] = true;
-            var agentProcess = GetAgentProcess();
-
-            // Not reflected in args because framework handles it
-            Assert.That(agentProcess.StartInfo.Arguments, Does.Not.Contain("--debug-tests"));
-        }
-
-        [Test]
         public void DebugAgent()
         {
             _package.Settings[EnginePackageSettings.DebugAgent] = true;
             var agentProcess = GetAgentProcess();
             Assert.That(agentProcess.StartInfo.Arguments, Does.Contain("--debug-agent"));
-        }
-
-
-        //[Test]
-        public void LoadUserProfile()
-        {
-            _package.Settings[EnginePackageSettings.LoadUserProfile] = true;
-            var agentProcess = GetAgentProcess();
-            Assert.That(agentProcess.StartInfo.Arguments, Is.EqualTo($"{agentProcess.AgentId} {REQUIRED_ARGS}"));
         }
 
         [Test]
@@ -139,7 +130,7 @@ namespace TestCentric.Engine.Services
             Assert.That(GetAgentProcess().StartInfo.WorkingDirectory, Is.EqualTo(Environment.CurrentDirectory));
         }
 
-        private AgentProcess GetAgentProcess() => TestAgency.CreateAgentProcess(_agency, _package);
+        private Process GetAgentProcess() => _factory.CreateProcess(_package, AGENTID);
 
         private string TargetRuntimeDirectory
         {
@@ -147,7 +138,7 @@ namespace TestCentric.Engine.Services
             {
                 if (_runtime == "netcore-5.0")
                     return "net5.0";
-                else if (_runtime.StartsWith("netcore3"))
+                else if (_runtime.StartsWith("netcore-3"))
                     return "netcoreapp3.1";
                 else if (_runtime.StartsWith("netcore"))
                     return "netcoreapp2.1";
