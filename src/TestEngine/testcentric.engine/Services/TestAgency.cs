@@ -5,10 +5,12 @@
 
 #if !NETSTANDARD2_0
 using System;
+using System.Text;
 using System.Threading;
 using System.Diagnostics;
 using TestCentric.Common;
 using TestCentric.Engine.Agents;
+using TestCentric.Engine.Helpers;
 using TestCentric.Engine.Internal;
 using NUnit.Engine;
 using TestCentric.Engine.Communication.Transports.Remoting;
@@ -39,10 +41,10 @@ namespace TestCentric.Engine.Services
         private TestAgencyRemotingTransport _remotingTransport; // .NET Framework
         private TestAgencyTcpTransport _tcpTransport; // .NET Standard 2.0
 
-        public TestAgency() : this( "TestAgency", 0 ) { }
-
         internal virtual string RemotingUrl => _remotingTransport.ServerUrl;
         internal virtual string TcpEndPoint => _tcpTransport.ServerUrl;
+
+        public TestAgency() : this("TestAgency", 0) { }
 
         public TestAgency(string uri, int port )
         {
@@ -61,32 +63,23 @@ namespace TestCentric.Engine.Services
             string runtimeSetting = package.GetSetting(EnginePackageSettings.TargetRuntimeFramework, "");
             Guard.OperationValid(runtimeSetting.Length > 0, "LaunchAgentProcess called with no runtime specified");
 
+            // If target runtime is not available, something went wrong earlier
             var targetRuntime = RuntimeFramework.Parse(runtimeSetting);
             if (!_runtimeService.IsAvailable(targetRuntime.Id))
                 throw new ArgumentException(
                     string.Format("The {0} framework is not available", targetRuntime),
                     "framework");
 
-            // TODO: Decide if we should reuse agents
-            return CreateRemoteAgent(package, targetRuntime);
-        }
+            var agentProcess = CreateAgentProcess(this, package);
+            var agentId = agentProcess.AgentId;
 
-        internal bool IsAgentProcessActive(Guid agentId, out Process process)
-        {
-            return _agentStore.IsAgentProcessActive(agentId, out process);
-        }
+            agentProcess.Exited += (sender, e) => OnAgentExit((Process)sender, ((AgentProcess)sender).AgentId);
 
-        private ITestAgent CreateRemoteAgent(TestPackage package, RuntimeFramework targetRuntime)
-        {
-            var agentId = Guid.NewGuid();
-            var process = new AgentProcess(this, package, agentId);
-            process.Exited += (sender, e) => OnAgentExit((Process)sender, agentId);
+            agentProcess.Start();
+            log.Debug("Launched Agent process {0} - see testcentric-agent_{0}.log", agentProcess.Id);
+            log.Debug("Command line: \"{0}\" {1}", agentProcess.StartInfo.FileName, agentProcess.StartInfo.Arguments);
 
-            process.Start();
-            log.Debug("Launched Agent process {0} - see testcentric-agent_{0}.log", process.Id);
-            log.Debug("Command line: \"{0}\" {1}", process.StartInfo.FileName, process.StartInfo.Arguments);
-
-            _agentStore.AddAgent(agentId, process);
+            _agentStore.AddAgent(agentId, agentProcess);
 
             log.Debug($"Waiting for agent {agentId:B} to register");
 
@@ -100,7 +93,7 @@ namespace TestCentric.Engine.Services
 
             // Wait for agent registration based on the agent actually getting processor time to avoid falling over
             // under process starvation.
-            while (waitTime > process.TotalProcessorTime.TotalMilliseconds && !process.HasExited)
+            while (waitTime > agentProcess.TotalProcessorTime.TotalMilliseconds && !agentProcess.HasExited)
             {
                 Thread.Sleep(pollTime);
 
@@ -123,6 +116,79 @@ namespace TestCentric.Engine.Services
             }
 
             return null;
+        }
+
+        internal static AgentProcess CreateAgentProcess(TestAgency agency, TestPackage package)
+        {
+            var process = new AgentProcess();
+
+            // Get target runtime
+            string runtimeSetting = package.GetSetting(EnginePackageSettings.TargetRuntimeFramework, "");
+            var targetRuntime = RuntimeFramework.Parse(runtimeSetting);
+
+            // Access other package settings
+            bool runAsX86 = package.GetSetting(EnginePackageSettings.RunAsX86, false);
+            bool debugTests = package.GetSetting(EnginePackageSettings.DebugTests, false);
+            bool debugAgent = package.GetSetting(EnginePackageSettings.DebugAgent, false);
+            string traceLevel = package.GetSetting(EnginePackageSettings.InternalTraceLevel, "Off");
+            bool loadUserProfile = package.GetSetting(EnginePackageSettings.LoadUserProfile, false);
+            string workDirectory = package.GetSetting(EnginePackageSettings.WorkDirectory, string.Empty);
+
+            string agencyUrl = targetRuntime.Runtime == Runtime.NetCore
+                ? agency.TcpEndPoint
+                : agency.RemotingUrl;
+
+            var sb = new StringBuilder($"{process.AgentId} {agencyUrl} --pid={Process.GetCurrentProcess().Id}");
+
+            // Set options that need to be in effect before the package
+            // is loaded by using the command line.
+            if (traceLevel != "Off")
+                sb.Append(" --trace=").EscapeProcessArgument(traceLevel);
+            if (debugAgent)
+                sb.Append(" --debug-agent");
+            if (workDirectory != string.Empty)
+                sb.Append(" --work=").EscapeProcessArgument(workDirectory);
+
+            string agentExePath = AgentProcess.GetTestAgentExePath(targetRuntime, runAsX86);
+            string agentArgs = sb.ToString();
+
+            log.Debug("Using testcentric-agent at " + agentExePath);
+
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.CreateNoWindow = true;
+            process.StartInfo.WorkingDirectory = Environment.CurrentDirectory;
+            process.EnableRaisingEvents = true;
+
+            if (targetRuntime.Runtime == Runtime.Mono)
+            {
+                process.StartInfo.FileName = targetRuntime.MonoExePath;
+                string monoOptions = "--runtime=v" + targetRuntime.ClrVersion.ToString(3);
+                if (debugTests || debugAgent) monoOptions += " --debug";
+                process.StartInfo.Arguments = string.Format("{0} \"{1}\" {2}", monoOptions, agentExePath, agentArgs);
+            }
+            else if (targetRuntime.Runtime == Runtime.Net)
+            {
+                process.StartInfo.FileName = agentExePath;
+                process.StartInfo.Arguments = agentArgs;
+                process.StartInfo.LoadUserProfile = loadUserProfile;
+            }
+            else if (targetRuntime.Runtime == Runtime.NetCore)
+            {
+                process.StartInfo.FileName = "dotnet";
+                process.StartInfo.Arguments = $"\"{agentExePath}\" {agentArgs}";
+            }
+            else
+            {
+                process.StartInfo.FileName = agentExePath;
+                process.StartInfo.Arguments = agentArgs;
+            }
+
+            return process;
+        }
+
+        internal bool IsAgentProcessActive(Guid agentId, out Process process)
+        {
+            return _agentStore.IsAgentProcessActive(agentId, out process);
         }
 
         internal void OnAgentExit(Process process, Guid agentId)
