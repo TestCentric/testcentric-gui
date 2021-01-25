@@ -36,7 +36,14 @@ namespace TestCentric.Engine.Services
         private readonly AgentStore _agentStore = new AgentStore();
 
         private IRuntimeFrameworkService _runtimeService;
-        private AgentFactory _agentLauncher;
+        private readonly IAgentLauncher[] _launchers = new IAgentLauncher[]
+        {
+            new Net20AgentLauncher(),
+            new Net40AgentLauncher(),
+            new NetCore21AgentLauncher(),
+            new NetCore31AgentLauncher(),
+            new Net50AgentLauncher()
+        };
 
         // Transports used for various target runtimes
         private TestAgencyRemotingTransport _remotingTransport; // .NET Framework
@@ -51,7 +58,6 @@ namespace TestCentric.Engine.Services
         {
             _remotingTransport = new TestAgencyRemotingTransport(this, uri, port);
             _tcpTransport = new TestAgencyTcpTransport(this, port);
-            _agentLauncher = new AgentFactory(this);
         }
 
         public void Register(ITestAgent agent)
@@ -73,9 +79,9 @@ namespace TestCentric.Engine.Services
                     "framework");
 
             var agentId = Guid.NewGuid();
-            var agentProcess = _agentLauncher.CreateProcess(package, agentId);
+            var agentProcess = CreateAgentProcess(agentId, package);
 
-            agentProcess.Exited += (sender, e) => OnAgentExit((Process)sender, ((AgentProcess)sender).AgentId);
+            agentProcess.Exited += (sender, e) => OnAgentExit((Process)sender);
 
             agentProcess.Start();
             log.Debug("Launched Agent process {0} - see testcentric-agent_{0}.log", agentProcess.Id);
@@ -120,14 +126,27 @@ namespace TestCentric.Engine.Services
             return null;
         }
 
+        private Process CreateAgentProcess(Guid agentId, TestPackage package)
+        {
+            foreach (var launcher in _launchers)
+            {
+                if (launcher.CanCreateProcess(package))
+                {
+                    return launcher.CreateProcess(agentId, this, package);
+                }
+            }
+
+            throw new NUnitEngineException($"No agent available for TestPackage {package.Name}");
+        }
+
         internal bool IsAgentProcessActive(Guid agentId, out Process process)
         {
             return _agentStore.IsAgentProcessActive(agentId, out process);
         }
 
-        internal void OnAgentExit(Process process, Guid agentId)
+        internal void OnAgentExit(Process process)
         {
-            _agentStore.MarkTerminated(agentId);
+            _agentStore.MarkProcessTerminated(process);
 
             string errorMsg;
 
