@@ -157,11 +157,12 @@ namespace TestCentric.Engine.Services
                 for (var i = 0; i < 1000; i++)
                 {
                     var id = Guid.NewGuid();
+                    var process = new Process();
 
                     Assert.That(database.IsAgentProcessActive(id, out _), Is.False);
                     Assert.That(database.IsReady(id, out _), Is.False);
 
-                    database.AddAgent(id, DummyProcess);
+                    database.AddAgent(id, process);
                     Assert.That(database.IsAgentProcessActive(id, out _), Is.True);
                     Assert.That(database.IsReady(id, out _), Is.False);
 
@@ -169,7 +170,7 @@ namespace TestCentric.Engine.Services
                     Assert.That(database.IsAgentProcessActive(id, out _), Is.True);
                     Assert.That(database.IsReady(id, out _), Is.True);
 
-                    database.MarkProcessTerminated(DummyProcess);
+                    database.MarkProcessTerminated(process);
                     Assert.That(database.IsAgentProcessActive(id, out _), Is.False);
                     Assert.That(database.IsReady(id, out _), Is.False);
                 }
