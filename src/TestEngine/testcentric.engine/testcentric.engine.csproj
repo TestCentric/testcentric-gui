@@ -19,6 +19,11 @@
     <PackageReference Include="System.Xml.XPath.XmlDocument" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="Internal\**" />
+    <EmbeddedResource Remove="Internal\**" />
+    <None Remove="Internal\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="..\agents\AgentExitCodes.cs" LinkBase="Agents" />
     <Compile Include="..\CommonEngineAssemblyInfo.cs" Link="Properties\CommonEngineAssemblyInfo.cs" />
   </ItemGroup>
@@ -28,8 +33,5 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NUnit.Engine.Api" Version="3.11.1" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Internal\" />
   </ItemGroup>
 </Project>

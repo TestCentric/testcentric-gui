@@ -5,10 +5,12 @@
 
 #if !NETSTANDARD2_0
 using System;
+using System.Text;
 using System.Threading;
 using System.Diagnostics;
 using TestCentric.Common;
 using TestCentric.Engine.Agents;
+using TestCentric.Engine.Helpers;
 using TestCentric.Engine.Internal;
 using NUnit.Engine;
 using TestCentric.Engine.Communication.Transports.Remoting;
@@ -34,15 +36,23 @@ namespace TestCentric.Engine.Services
         private readonly AgentStore _agentStore = new AgentStore();
 
         private IRuntimeFrameworkService _runtimeService;
+        private readonly IAgentLauncher[] _launchers = new IAgentLauncher[]
+        {
+            new Net20AgentLauncher(),
+            new Net40AgentLauncher(),
+            new NetCore21AgentLauncher(),
+            new NetCore31AgentLauncher(),
+            new Net50AgentLauncher()
+        };
 
         // Transports used for various target runtimes
         private TestAgencyRemotingTransport _remotingTransport; // .NET Framework
         private TestAgencyTcpTransport _tcpTransport; // .NET Standard 2.0
 
-        public TestAgency() : this( "TestAgency", 0 ) { }
-
         internal virtual string RemotingUrl => _remotingTransport.ServerUrl;
         internal virtual string TcpEndPoint => _tcpTransport.ServerUrl;
+
+        public TestAgency() : this("TestAgency", 0) { }
 
         public TestAgency(string uri, int port )
         {
@@ -61,32 +71,23 @@ namespace TestCentric.Engine.Services
             string runtimeSetting = package.GetSetting(EnginePackageSettings.TargetRuntimeFramework, "");
             Guard.OperationValid(runtimeSetting.Length > 0, "LaunchAgentProcess called with no runtime specified");
 
+            // If target runtime is not available, something went wrong earlier
             var targetRuntime = RuntimeFramework.Parse(runtimeSetting);
             if (!_runtimeService.IsAvailable(targetRuntime.Id))
                 throw new ArgumentException(
                     string.Format("The {0} framework is not available", targetRuntime),
                     "framework");
 
-            // TODO: Decide if we should reuse agents
-            return CreateRemoteAgent(package, targetRuntime);
-        }
-
-        internal bool IsAgentProcessActive(Guid agentId, out Process process)
-        {
-            return _agentStore.IsAgentProcessActive(agentId, out process);
-        }
-
-        private ITestAgent CreateRemoteAgent(TestPackage package, RuntimeFramework targetRuntime)
-        {
             var agentId = Guid.NewGuid();
-            var process = new AgentProcess(this, package, agentId);
-            process.Exited += (sender, e) => OnAgentExit((Process)sender, agentId);
+            var agentProcess = CreateAgentProcess(agentId, package);
 
-            process.Start();
-            log.Debug("Launched Agent process {0} - see testcentric-agent_{0}.log", process.Id);
-            log.Debug("Command line: \"{0}\" {1}", process.StartInfo.FileName, process.StartInfo.Arguments);
+            agentProcess.Exited += (sender, e) => OnAgentExit((Process)sender);
 
-            _agentStore.AddAgent(agentId, process);
+            agentProcess.Start();
+            log.Debug("Launched Agent process {0} - see testcentric-agent_{0}.log", agentProcess.Id);
+            log.Debug("Command line: \"{0}\" {1}", agentProcess.StartInfo.FileName, agentProcess.StartInfo.Arguments);
+
+            _agentStore.AddAgent(agentId, agentProcess);
 
             log.Debug($"Waiting for agent {agentId:B} to register");
 
@@ -100,7 +101,7 @@ namespace TestCentric.Engine.Services
 
             // Wait for agent registration based on the agent actually getting processor time to avoid falling over
             // under process starvation.
-            while (waitTime > process.TotalProcessorTime.TotalMilliseconds && !process.HasExited)
+            while (waitTime > agentProcess.TotalProcessorTime.TotalMilliseconds && !agentProcess.HasExited)
             {
                 Thread.Sleep(pollTime);
 
@@ -125,9 +126,27 @@ namespace TestCentric.Engine.Services
             return null;
         }
 
-        internal void OnAgentExit(Process process, Guid agentId)
+        private Process CreateAgentProcess(Guid agentId, TestPackage package)
         {
-            _agentStore.MarkTerminated(agentId);
+            foreach (var launcher in _launchers)
+            {
+                if (launcher.CanCreateProcess(package))
+                {
+                    return launcher.CreateProcess(agentId, this, package);
+                }
+            }
+
+            throw new NUnitEngineException($"No agent available for TestPackage {package.Name}");
+        }
+
+        internal bool IsAgentProcessActive(Guid agentId, out Process process)
+        {
+            return _agentStore.IsAgentProcessActive(agentId, out process);
+        }
+
+        internal void OnAgentExit(Process process)
+        {
+            _agentStore.MarkProcessTerminated(process);
 
             string errorMsg;
 

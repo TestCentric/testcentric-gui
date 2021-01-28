@@ -28,7 +28,7 @@ namespace TestCentric.Engine.Services
             database.Register(DummyAgent);
             Assert.That(() => database.AddAgent(DummyAgent.Id, DummyProcess), Throws.ArgumentException.With.Property("ParamName").EqualTo("agentId"));
 
-            database.MarkTerminated(DummyAgent.Id);
+            database.MarkProcessTerminated(DummyProcess);
             Assert.That(() => database.AddAgent(DummyAgent.Id, DummyProcess), Throws.ArgumentException.With.Property("ParamName").EqualTo("agentId"));
         }
 
@@ -56,7 +56,7 @@ namespace TestCentric.Engine.Services
             var database = new AgentStore();
 
             database.AddAgent(DummyAgent.Id, DummyProcess);
-            database.MarkTerminated(DummyAgent.Id);
+            database.MarkProcessTerminated(DummyProcess);
             Assert.That(() => database.Register(DummyAgent), Throws.ArgumentException.With.Property("ParamName").EqualTo("agent"));
         }
 
@@ -65,7 +65,7 @@ namespace TestCentric.Engine.Services
         {
             var database = new AgentStore();
 
-            Assert.That(() => database.MarkTerminated(DummyAgent.Id), Throws.ArgumentException.With.Property("ParamName").EqualTo("agentId"));
+            Assert.That(() => database.MarkProcessTerminated(DummyProcess), Throws.ArgumentException.With.Property("ParamName").EqualTo("process"));
         }
 
         [Test]
@@ -103,7 +103,7 @@ namespace TestCentric.Engine.Services
 
             database.AddAgent(DummyAgent.Id, DummyProcess);
             database.Register(DummyAgent);
-            database.MarkTerminated(DummyAgent.Id);
+            database.MarkProcessTerminated(DummyProcess);
             Assert.That(database.IsReady(DummyAgent.Id, out _), Is.False);
         }
 
@@ -143,7 +143,7 @@ namespace TestCentric.Engine.Services
 
             database.AddAgent(DummyAgent.Id, DummyProcess);
             database.Register(DummyAgent);
-            database.MarkTerminated(DummyAgent.Id);
+            database.MarkProcessTerminated(DummyProcess);
             Assert.That(database.IsAgentProcessActive(DummyAgent.Id, out _), Is.False);
         }
 
@@ -157,11 +157,12 @@ namespace TestCentric.Engine.Services
                 for (var i = 0; i < 1000; i++)
                 {
                     var id = Guid.NewGuid();
+                    var process = new Process();
 
                     Assert.That(database.IsAgentProcessActive(id, out _), Is.False);
                     Assert.That(database.IsReady(id, out _), Is.False);
 
-                    database.AddAgent(id, DummyProcess);
+                    database.AddAgent(id, process);
                     Assert.That(database.IsAgentProcessActive(id, out _), Is.True);
                     Assert.That(database.IsReady(id, out _), Is.False);
 
@@ -169,7 +170,7 @@ namespace TestCentric.Engine.Services
                     Assert.That(database.IsAgentProcessActive(id, out _), Is.True);
                     Assert.That(database.IsReady(id, out _), Is.True);
 
-                    database.MarkTerminated(id);
+                    database.MarkProcessTerminated(process);
                     Assert.That(database.IsAgentProcessActive(id, out _), Is.False);
                     Assert.That(database.IsReady(id, out _), Is.False);
                 }

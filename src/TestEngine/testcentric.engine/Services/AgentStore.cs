@@ -15,40 +15,43 @@ namespace TestCentric.Engine.Services
     /// </summary>
     internal sealed partial class AgentStore
     {
-        private readonly Dictionary<Guid, AgentRecord> _agentsById = new Dictionary<Guid, AgentRecord>();
+        private readonly object LOCK = new object();
+
+        private readonly Dictionary<Guid, AgentRecord> _agentIndex = new Dictionary<Guid, AgentRecord>();
+        private readonly Dictionary<Process, AgentRecord> _processIndex = new Dictionary<Process, AgentRecord>();
 
         public void AddAgent(Guid agentId, Process process)
         {
-            lock (_agentsById)
+            lock (LOCK)
             {
-                if (_agentsById.ContainsKey(agentId))
+                if (_agentIndex.ContainsKey(agentId))
                 {
                     throw new ArgumentException($"An agent has already been started with the ID '{agentId}'.", nameof(agentId));
                 }
 
-                _agentsById.Add(agentId, AgentRecord.Starting(process));
+                _agentIndex[agentId] = _processIndex[process] = AgentRecord.Starting(agentId, process);
             }
         }
 
         public void Register(ITestAgent agent)
         {
-            lock (_agentsById)
+            lock (LOCK)
             {
-                if (!_agentsById.TryGetValue(agent.Id, out var record)
+                if (!_agentIndex.TryGetValue(agent.Id, out var record)
                     || record.Status != AgentStatus.Starting)
                 {
                     throw new ArgumentException($"Agent {agent.Id} must have a status of {AgentStatus.Starting} in order to register, but the status was {record.Status}.", nameof(agent));
                 }
 
-                _agentsById[agent.Id] = record.Ready(agent);
+                _agentIndex[agent.Id] = _processIndex[record.Process] = record.Ready(agent);
             }
         }
 
         public bool IsReady(Guid agentId, out ITestAgent agent)
         {
-            lock (_agentsById)
+            lock (LOCK)
             {
-                if (_agentsById.TryGetValue(agentId, out var record)
+                if (_agentIndex.TryGetValue(agentId, out var record)
                     && record.Status == AgentStatus.Ready)
                 {
                     agent = record.Agent;
@@ -62,9 +65,9 @@ namespace TestCentric.Engine.Services
 
         public bool IsAgentProcessActive(Guid agentId, out Process process)
         {
-            lock (_agentsById)
+            lock (LOCK)
             {
-                if (_agentsById.TryGetValue(agentId, out var record)
+                if (_agentIndex.TryGetValue(agentId, out var record)
                     && record.Status != AgentStatus.Terminated)
                 {
                     process = record.Process;
@@ -76,16 +79,18 @@ namespace TestCentric.Engine.Services
             }
         }
 
-        public void MarkTerminated(Guid agentId)
+        public void MarkProcessTerminated(Process process)
         {
-            lock (_agentsById)
+            lock (LOCK)
             {
-                if (!_agentsById.TryGetValue(agentId, out var record))
-                {
-                    throw new ArgumentException($"An entry for agent {agentId} must exist in order to mark it as terminated.", nameof(agentId));
-                }
+                if (!_processIndex.TryGetValue(process, out var record))
+                    throw new ArgumentException("An entry for the process must exist in order to mark it as terminated.", nameof(process));
 
-                _agentsById[agentId] = record.Terminated();
+                if (record.Status == AgentStatus.Terminated)
+                    throw new ArgumentException("Process has already been marked as terminated");
+
+                var agentId = record.AgentId;
+                _agentIndex[agentId] = _processIndex[process] = record.Terminated();
             }
         }
     }
