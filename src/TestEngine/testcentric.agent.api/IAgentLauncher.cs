@@ -13,7 +13,7 @@ namespace TestCentric.Engine.Services
     public interface IAgentLauncher
     {
         bool CanCreateProcess(TestPackage package);
-        Process CreateProcess(Guid agentId, TestAgency agency, TestPackage package);
+        Process CreateProcess(Guid agentId, string agencyUrl, TestPackage package);
     }
 }
 #endif
