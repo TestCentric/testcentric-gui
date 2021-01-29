@@ -22,7 +22,7 @@ namespace TestCentric.Engine.Services
             return framework.Identifier == ".NETCoreApp" && framework.Version.Major <= 3;
         }
 
-        public Process CreateProcess(Guid agentId, TestAgency agency, TestPackage package)
+        public Process CreateProcess(Guid agentId, string agencyUrl, TestPackage package)
         {
             // Should not be called unless runtime is one we can handle
             if (!CanCreateProcess(package))
@@ -35,8 +35,6 @@ namespace TestCentric.Engine.Services
             string traceLevel = package.GetSetting(EnginePackageSettings.InternalTraceLevel, "Off");
             bool loadUserProfile = package.GetSetting(EnginePackageSettings.LoadUserProfile, false);
             string workDirectory = package.GetSetting(EnginePackageSettings.WorkDirectory, string.Empty);
-
-            string agencyUrl = agency.TcpEndPoint;
 
             var sb = new StringBuilder($"{agentId} {agencyUrl} --pid={Process.GetCurrentProcess().Id}");
 

@@ -38,7 +38,7 @@ namespace TestCentric.Engine.Services
         private IRuntimeFrameworkService _runtimeService;
         private readonly IAgentLauncher[] _launchers = new IAgentLauncher[]
         {
-            new Net20AgentLauncher(),
+            //new Net20AgentLauncher(),
             new Net40AgentLauncher(),
             new NetCore21AgentLauncher(),
             new NetCore31AgentLauncher(),
@@ -79,7 +79,8 @@ namespace TestCentric.Engine.Services
                     "framework");
 
             var agentId = Guid.NewGuid();
-            var agentProcess = CreateAgentProcess(agentId, package);
+            string agencyUrl = targetRuntime.FrameworkName.Identifier == ".NETFramework" ? RemotingUrl : TcpEndPoint;
+            var agentProcess = CreateAgentProcess(agentId, agencyUrl, package);
 
             agentProcess.Exited += (sender, e) => OnAgentExit((Process)sender);
 
@@ -126,13 +127,13 @@ namespace TestCentric.Engine.Services
             return null;
         }
 
-        private Process CreateAgentProcess(Guid agentId, TestPackage package)
+        private Process CreateAgentProcess(Guid agentId, string agencyUrl, TestPackage package)
         {
             foreach (var launcher in _launchers)
             {
                 if (launcher.CanCreateProcess(package))
                 {
-                    return launcher.CreateProcess(agentId, this, package);
+                    return launcher.CreateProcess(agentId, agencyUrl, package);
                 }
             }
 
