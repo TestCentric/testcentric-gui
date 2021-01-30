@@ -7,7 +7,6 @@
 using System;
 using System.Linq;
 using NUnit.Framework;
-using NSubstitute;
 using System.IO;
 using System.Diagnostics;
 using NUnit.Engine;
@@ -19,7 +18,6 @@ namespace TestCentric.Engine.Services
         protected static readonly Guid AGENTID = Guid.NewGuid();
 
         protected TLauncher _launcher;
-        protected TestAgency _agency;
         protected TestPackage _package;
         protected const string REMOTING_URL = "tcp://127.0.0.1:1234/TestAgency";
         protected readonly string REQUIRED_ARGS = $"{REMOTING_URL} --pid={Process.GetCurrentProcess().Id}";
@@ -36,8 +34,6 @@ namespace TestCentric.Engine.Services
         public void SetUp()
         {
             _launcher = (TLauncher)Activator.CreateInstance(typeof(TLauncher));
-            _agency = Substitute.For<TestAgency>();
-            _agency.RemotingUrl.ReturnsForAnyArgs(REMOTING_URL);
             _package = new TestPackage("junk.dll");
         }
 
@@ -67,17 +63,15 @@ namespace TestCentric.Engine.Services
             _package.Settings[EnginePackageSettings.TargetRuntimeFramework] = runtime;
             _package.Settings[EnginePackageSettings.RunAsX86] = false;
 
-            string agencyUrl = runtime.StartsWith("net-") ? _agency.RemotingUrl : _agency.TcpEndPoint;
-
             if (SupportedRuntimes.Contains(runtime))
             {
-                var process = _launcher.CreateProcess(AGENTID, agencyUrl, _package);
+                var process = _launcher.CreateProcess(AGENTID, REMOTING_URL, _package);
                 CheckStandardProcessSettings(process);
                 CheckAgentPath(process, false);
             }
             else
             {
-                Assert.That(_launcher.CreateProcess(AGENTID, agencyUrl, _package), Is.Null);
+                Assert.That(_launcher.CreateProcess(AGENTID, REMOTING_URL, _package), Is.Null);
             }
         }
 
@@ -89,16 +83,15 @@ namespace TestCentric.Engine.Services
             _package.Settings[EnginePackageSettings.TargetRuntimeFramework] = runtime;
             _package.Settings[EnginePackageSettings.RunAsX86] = true;
 
-            string agencyUrl = runtime.StartsWith("net-") ? _agency.RemotingUrl : _agency.TcpEndPoint;
             if (SupportedRuntimes.Contains(runtime))
             {
-                var process = _launcher.CreateProcess(AGENTID, agencyUrl, _package);
+                var process = _launcher.CreateProcess(AGENTID, REMOTING_URL, _package);
                 CheckStandardProcessSettings(process);
                 CheckAgentPath(process, true);
             }
             else
             {
-                Assert.That(_launcher.CreateProcess(AGENTID, agencyUrl, _package), Is.Null);
+                Assert.That(_launcher.CreateProcess(AGENTID, REMOTING_URL, _package), Is.Null);
             }
         }
 
@@ -123,10 +116,9 @@ namespace TestCentric.Engine.Services
         public void DebugAgentSetting()
         {
             var runtime = SupportedRuntimes[0];
-            var agencyUrl = runtime.StartsWith("net-") ? _agency.RemotingUrl : _agency.TcpEndPoint;
             _package.Settings[EnginePackageSettings.TargetRuntimeFramework] = runtime;
             _package.Settings[EnginePackageSettings.DebugAgent] = true;
-            var agentProcess = _launcher.CreateProcess(AGENTID, agencyUrl, _package);
+            var agentProcess = _launcher.CreateProcess(AGENTID, REMOTING_URL, _package);
             Assert.That(agentProcess.StartInfo.Arguments, Does.Contain("--debug-agent"));
         }
 
@@ -134,10 +126,9 @@ namespace TestCentric.Engine.Services
         public void TraceLevelSetting()
         {
             var runtime = SupportedRuntimes[0];
-            string agencyUrl = runtime.StartsWith("net-") ? _agency.RemotingUrl : _agency.TcpEndPoint;
             _package.Settings[EnginePackageSettings.TargetRuntimeFramework] = runtime;
             _package.Settings[EnginePackageSettings.InternalTraceLevel] = "Debug";
-            var agentProcess = _launcher.CreateProcess(AGENTID, agencyUrl, _package);
+            var agentProcess = _launcher.CreateProcess(AGENTID, REMOTING_URL, _package);
             Assert.That(agentProcess.StartInfo.Arguments, Does.Contain("--trace=Debug"));
         }
 
@@ -145,10 +136,9 @@ namespace TestCentric.Engine.Services
         public void WorkDirectorySetting()
         {
             var runtime = SupportedRuntimes[0];
-            string agencyUrl = runtime.StartsWith("net-") ? _agency.RemotingUrl : _agency.TcpEndPoint;
             _package.Settings[EnginePackageSettings.TargetRuntimeFramework] = runtime;
             _package.Settings[EnginePackageSettings.WorkDirectory] = "WORKDIRECTORY";
-            var agentProcess = _launcher.CreateProcess(AGENTID, agencyUrl, _package);
+            var agentProcess = _launcher.CreateProcess(AGENTID, REMOTING_URL, _package);
             Assert.That(agentProcess.StartInfo.Arguments, Does.Contain("--work=WORKDIRECTORY"));
         }
 
@@ -156,28 +146,12 @@ namespace TestCentric.Engine.Services
         public void LoadUserProfileSetting()
         {
             var runtime = SupportedRuntimes[0];
-            string agencyUrl = runtime.StartsWith("net-") ? _agency.RemotingUrl : _agency.TcpEndPoint;
             _package.Settings[EnginePackageSettings.TargetRuntimeFramework] = runtime;
             _package.Settings[EnginePackageSettings.LoadUserProfile] = true;
-            var agentProcess = _launcher.CreateProcess(AGENTID, agencyUrl, _package);
+            var agentProcess = _launcher.CreateProcess(AGENTID, REMOTING_URL, _package);
             Assert.True(agentProcess.StartInfo.LoadUserProfile);
         }
     }
-
-    //public class Net20AgentLauncherTests : AgentLauncherTests<Net20AgentLauncher>
-    //{
-    //    protected override string[] SupportedRuntimes => new string[] { "net-2.0", "net-3.0", "net-3.5" };
-
-    //    private string AgentDir = Path.Combine(TestContext.CurrentContext.TestDirectory, "agents/net20");
-    //    private string AgentName = "testcentric-agent.exe";
-    //    private string AgentNameX86 = "testcentric-agent-x86.exe";
-
-    //    protected override void CheckAgentPath(Process process, bool x86)
-    //    {
-    //        string agentPath = Path.Combine(AgentDir, x86 ? AgentNameX86 : AgentName);
-    //        Assert.That(process.StartInfo.FileName, Is.SamePath(agentPath));
-    //    }
-    //}
 
     public class Net40AgentLauncherTests : AgentLauncherTests<Net40AgentLauncher>
     {
