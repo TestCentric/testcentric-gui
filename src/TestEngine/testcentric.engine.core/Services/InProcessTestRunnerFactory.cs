@@ -16,6 +16,7 @@ namespace TestCentric.Engine.Services
     /// same process.
     /// </summary>
     public class InProcessTestRunnerFactory : Service, ITestRunnerFactory
+
     {
         /// <summary>
         /// Returns a test runner based on the settings in a TestPackage.
