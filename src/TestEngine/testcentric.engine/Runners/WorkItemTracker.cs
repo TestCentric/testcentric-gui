@@ -73,7 +73,7 @@ namespace TestCentric.Engine.Runners
                 notification.AddAttribute("type", startElement.GetAttribute("type"));
             notification.AddAttribute("id", startElement.GetAttribute("id"));
             notification.AddAttribute("name", startElement.GetAttribute("name"));
-            notification.AddAttribute("fullame", startElement.GetAttribute("fullname"));
+            notification.AddAttribute("fullname", startElement.GetAttribute("fullname"));
             notification.AddAttribute("result", "Failed");
             notification.AddAttribute("label", "Cancelled");
             XmlNode failure = notification.AddElement("failure");
