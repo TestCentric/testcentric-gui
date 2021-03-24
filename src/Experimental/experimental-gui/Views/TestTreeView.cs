@@ -56,7 +56,7 @@ namespace TestCentric.Gui.Views
             DebugContextCommand = new ToolStripMenuElement(this.debugMenuItem);
             DebugCheckedCommand = new ToolStripMenuElement(this.debugCheckedMenuItem);
             ActiveConfiguration = new ToolStripMenuElement(this.activeConfigMenuItem);
-            ShowCheckBoxes = new ToolStripMenuElement(showCheckboxesMenuItem);
+            ShowCheckBoxes = new CheckedToolStripMenuElement(showCheckboxesMenuItem);
             ExpandAllCommand = new ToolStripMenuElement(expandAllMenuItem);
             CollapseAllCommand = new ToolStripMenuElement(collapseAllMenuItem);
             CollapseToFixturesCommand = new ToolStripMenuElement(collapseToFixturesMenuItem);

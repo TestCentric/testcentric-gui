@@ -46,7 +46,7 @@ namespace TestCentric.Gui.Views
             ActiveConfiguration = new ToolStripMenuElement(activeConfigurationMenuItem);
             EditProject = new ToolStripMenuElement(editProjectMenuItem);
             PropertiesCommand = new ToolStripMenuElement(propertiesMenuItem);
-            ShowCheckBoxes = new ToolStripMenuElement(showCheckBoxesMenuItem);
+            ShowCheckBoxes = new CheckedToolStripMenuElement(showCheckBoxesMenuItem);
             ExpandAllCommand = new ToolStripMenuElement(expandAllMenuItem);
             CollapseAllCommand = new ToolStripMenuElement(collapseAllMenuItem);
             HideTestsCommand = new ToolStripMenuElement(hideTestsMenuItem);
