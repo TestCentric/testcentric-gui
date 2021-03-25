@@ -1,4 +1,31 @@
-﻿TestCentric Runner for NUnit 1.6.0 - January 10, 2021
+﻿TestCentric Runner for NUnit 1.6.2 - March 24, 2021
+
+Although version 1.6.1 was intended to be the last release in the 1.x series, a critical issue arose, which
+is fixed by this release of version 1.6.2.
+
+Bug
+
+* 673 Show CheckBoxes does not work
+
+TestCentric Runner for NUnit 1.6.1 - January 17, 2021
+
+The main change in this release is that the `InProcess` option is disabled when the loaded tests
+cannot all run in the Gui process under the .NET Framework 4.x and would otherwise cause an error.
+
+This is intended to be the last release in the TestCentric 1.x series. The next release, version 2.0,
+will contain breaking changes including the elimination of the `InProcess` option as well as of all
+`DomainUsage` options. In future, the use of AppDomains in platforms that support them will be treated
+as an implementation detail outside the control of the user.
+
+Enhancement
+
+* 661 InProcess menu item should be disabled if any .net core tests are loaded.
+
+Refactor
+
+* 658 Restructure or rewrite runtime framework detection code
+
+TestCentric Runner for NUnit 1.6.0 - January 10, 2021
 
 The main feature of this release is the addition of an agent for running tests under .NET 5.0.
 Since the runner itself targets the .NET Framework, this feature is only available when tests
