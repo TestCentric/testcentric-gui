@@ -36,7 +36,7 @@ namespace TestCentric.Gui.Views
             SaveResultsCommand = new ToolStripMenuElement(saveResultsToolStripMenuItem);
             ReloadTestsCommand = new ToolStripMenuElement(reloadTestsToolStripMenuItem);
             SelectRuntimeMenu = new ToolStripMenuElement(selectRuntimeToolStripMenuItem);
-            RunAsX86 = new ToolStripMenuElement(loadAsX86ToolStripMenuItem);
+            RunAsX86 = new CheckedToolStripMenuElement(loadAsX86ToolStripMenuItem);
             RecentProjectsMenu = new ToolStripMenuElement(recentProjectsToolStripMenuItem);
             ExitCommand = new ToolStripMenuElement(exitToolStripMenuItem);
 
@@ -47,7 +47,7 @@ namespace TestCentric.Gui.Views
             DecreaseFontCommand = new ToolStripMenuElement(decreaseToolStripMenuItem);
             ChangeFontCommand = new ToolStripMenuElement(changeToolStripMenuItem);
             RestoreFontCommand = new ToolStripMenuElement(restoreToolStripMenuItem);
-            StatusBarCommand = new ToolStripMenuElement(statusBarToolStripMenuItem);
+            StatusBarCommand = new CheckedToolStripMenuElement(statusBarToolStripMenuItem);
 
             // Project Menu
             ProjectMenu = new ToolStripMenuElement(projectToolStripMenuItem);
@@ -100,7 +100,7 @@ namespace TestCentric.Gui.Views
         public ICommand DecreaseFontCommand { get; private set; }
         public ICommand ChangeFontCommand { get; private set; }
         public ICommand RestoreFontCommand { get; private set; }
-        public ICommand StatusBarCommand { get; private set; }
+        public IChecked StatusBarCommand { get; private set; }
 
         // Project Menu
         public IToolStripMenu ProjectMenu { get; private set; }

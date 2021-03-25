@@ -133,6 +133,7 @@ namespace TestCentric.Gui.Views
             // showCheckBoxesMenuItem
             // 
             this.showCheckBoxesMenuItem.Name = "showCheckBoxesMenuItem";
+            this.showCheckBoxesMenuItem.CheckOnClick = true;
             this.showCheckBoxesMenuItem.Size = new System.Drawing.Size(209, 22);
             this.showCheckBoxesMenuItem.Text = "Show CheckBoxes";
             // 

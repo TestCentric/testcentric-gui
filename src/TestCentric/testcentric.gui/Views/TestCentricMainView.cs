@@ -138,7 +138,7 @@ namespace TestCentric.Gui.Views
             ReloadTestsCommand = new ToolStripMenuElement(reloadTestsMenuItem);
             RuntimeMenu = new ToolStripMenuElement(runtimeMenuItem);
             //SelectedRuntime = new CheckedMenuGroup(runtimeMenuItem);
-            RunAsX86 = new ToolStripMenuElement(runAsX86MenuItem);
+            RunAsX86 = new CheckedToolStripMenuElement(runAsX86MenuItem);
             RecentFilesMenu = new ToolStripMenuElement(recentFilesMenu);
             ExitCommand = new ToolStripMenuElement(exitMenuItem);
 
@@ -151,7 +151,7 @@ namespace TestCentric.Gui.Views
             IncreaseFixedFontCommand = new ToolStripMenuElement(increaseFixedFontMenuItem);
             DecreaseFixedFontCommand = new ToolStripMenuElement(decreaseFixedFontMenuItem);
             RestoreFixedFontCommand = new ToolStripMenuElement(restoreFixedFontMenuItem);
-            StatusBarCommand = new ToolStripMenuElement(statusBarMenuItem);
+            StatusBarCommand = new CheckedToolStripMenuElement(statusBarMenuItem);
 
             // Initialize Test Menu Commands
             RunAllCommand = new ToolStripMenuElement(runAllMenuItem);
@@ -533,6 +533,7 @@ namespace TestCentric.Gui.Views
             // statusBarMenuItem
             // 
             this.statusBarMenuItem.Checked = true;
+            this.statusBarMenuItem.CheckOnClick = true;
             this.statusBarMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.statusBarMenuItem.Name = "statusBarMenuItem";
             this.statusBarMenuItem.Size = new System.Drawing.Size(129, 22);
