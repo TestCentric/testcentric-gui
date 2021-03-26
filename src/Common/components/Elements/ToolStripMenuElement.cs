@@ -10,50 +10,22 @@ using System.Windows.Forms;
 namespace TestCentric.Gui.Elements
 {
     /// <summary>
-    /// MenuElement is the implemented here using a ToolStripItem 
-    /// but the view exposes each element using one of the three 
-    /// key interfaces (IMenu, ICommand or IChecked) which should
-    /// not contain any control-specific logic.
+    /// ToolStripMenuElement is the abstract base for all our menu
+    /// elements. It wraps a single ToolStripMenuItem. Use the appropriate
+    /// derived class depending on whether the element is a popup
+    /// menu, a checked menu item or simply invokes a command.
     /// </summary>
-    public class ToolStripMenuElement : ToolStripElement, IToolStripMenu, ICommand, IChecked
+    public abstract class ToolStripMenuElement : ToolStripElement
     {
-        public event CommandHandler Execute;
-        public event CommandHandler Popup;
-        public event CommandHandler CheckedChanged;
-
-        private ToolStripMenuItem _menuItem;
+        protected ToolStripMenuItem _menuItem;
 
         public ToolStripMenuElement(ToolStripMenuItem menuItem)
             : base(menuItem)
         {
             _menuItem = menuItem;
-
-            menuItem.Click += (s, e) => Execute?.Invoke();
-            menuItem.DropDownOpening += (s, e) => Popup?.Invoke();
-            menuItem.CheckedChanged += (s, e) => CheckedChanged?.Invoke();
         }
 
         public ToolStripMenuElement(string text) : this(new ToolStripMenuItem(text)) { }
-
-        public ToolStripMenuElement(string text, CommandHandler execute) : this(text)
-        {
-            this.Execute = execute;
-        }
-
-        public bool Checked
-        {
-            get { return _menuItem.Checked; }
-            set
-            {
-                if (_menuItem.Checked != value)
-                {
-                    InvokeIfRequired(() =>
-                    {
-                        _menuItem.Checked = value;
-                    });
-                }
-            }
-        }
 
         public ToolStripItemCollection MenuItems
         {

@@ -32,16 +32,16 @@ namespace TestCentric.Gui.Views
             InitializeComponent();
 
             RunButton = new SplitButtonElement(runButton);
-            RunAllCommand = new ToolStripMenuElement(runAllMenuItem);
-            RunSelectedCommand = new ToolStripMenuElement(runSelectedMenuItem);
-            RunFailedCommand = new ToolStripMenuElement(runFailedMenuItem);
-            TestParametersCommand = new ToolStripMenuElement(testParametersMenuItem);
-            StopRunCommand = new ToolStripMenuElement(stopRunMenuItem);
+            RunAllCommand = new CommandMenuElement(runAllMenuItem);
+            RunSelectedCommand = new CommandMenuElement(runSelectedMenuItem);
+            RunFailedCommand = new CommandMenuElement(runFailedMenuItem);
+            TestParametersCommand = new CommandMenuElement(testParametersMenuItem);
+            StopRunCommand = new CommandMenuElement(stopRunMenuItem);
 
             DebugButton = new SplitButtonElement(debugButton);
-            DebugAllCommand = new ToolStripMenuElement(debugAllMenuItem);
-            DebugSelectedCommand = new ToolStripMenuElement(debugSelectedMenuItem);
-            DebugFailedCommand = new ToolStripMenuElement(debugFailedMenuItem);
+            DebugAllCommand = new CommandMenuElement(debugAllMenuItem);
+            DebugSelectedCommand = new CommandMenuElement(debugSelectedMenuItem);
+            DebugFailedCommand = new CommandMenuElement(debugFailedMenuItem);
 
             FormatButton = new ToolStripElement(formatButton);
             DisplayFormat = new CheckedToolStripMenuGroup(
@@ -51,15 +51,15 @@ namespace TestCentric.Gui.Views
                 "testGrouping",
                 byAssemblyMenuItem, byFixtureMenuItem, byCategoryMenuItem, byExtendedCategoryMenuItem, byOutcomeMenuItem, byDurationMenuItem);
 
-            RunContextCommand = new ToolStripMenuElement(this.runMenuItem);
-            RunCheckedCommand = new ToolStripMenuElement(this.runCheckedMenuItem);
-            DebugContextCommand = new ToolStripMenuElement(this.debugMenuItem);
-            DebugCheckedCommand = new ToolStripMenuElement(this.debugCheckedMenuItem);
-            ActiveConfiguration = new ToolStripMenuElement(this.activeConfigMenuItem);
-            ShowCheckBoxes = new CheckedToolStripMenuElement(showCheckboxesMenuItem);
-            ExpandAllCommand = new ToolStripMenuElement(expandAllMenuItem);
-            CollapseAllCommand = new ToolStripMenuElement(collapseAllMenuItem);
-            CollapseToFixturesCommand = new ToolStripMenuElement(collapseToFixturesMenuItem);
+            RunContextCommand = new CommandMenuElement(this.runMenuItem);
+            RunCheckedCommand = new CommandMenuElement(this.runCheckedMenuItem);
+            DebugContextCommand = new CommandMenuElement(this.debugMenuItem);
+            DebugCheckedCommand = new CommandMenuElement(this.debugCheckedMenuItem);
+            ActiveConfiguration = new PopupMenuElement(this.activeConfigMenuItem);
+            ShowCheckBoxes = new CheckedMenuElement(showCheckboxesMenuItem);
+            ExpandAllCommand = new CommandMenuElement(expandAllMenuItem);
+            CollapseAllCommand = new CommandMenuElement(collapseAllMenuItem);
+            CollapseToFixturesCommand = new CommandMenuElement(collapseToFixturesMenuItem);
 
             Tree = new TreeViewElement(treeView);
             treeView.MouseDown += (s, e) =>

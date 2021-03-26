@@ -40,16 +40,16 @@ namespace TestCentric.Gui.Views
         {
             InitializeComponent();
 
-            RunCommand = new ToolStripMenuElement(runMenuItem);
-            ShowFailedAssumptions = new ToolStripMenuElement(failedAssumptionsMenuItem);
-            ProjectMenu = new ToolStripMenuElement(projectMenuItem);
-            ActiveConfiguration = new ToolStripMenuElement(activeConfigurationMenuItem);
-            EditProject = new ToolStripMenuElement(editProjectMenuItem);
-            PropertiesCommand = new ToolStripMenuElement(propertiesMenuItem);
-            ShowCheckBoxes = new CheckedToolStripMenuElement(showCheckBoxesMenuItem);
-            ExpandAllCommand = new ToolStripMenuElement(expandAllMenuItem);
-            CollapseAllCommand = new ToolStripMenuElement(collapseAllMenuItem);
-            HideTestsCommand = new ToolStripMenuElement(hideTestsMenuItem);
+            RunCommand = new CommandMenuElement(runMenuItem);
+            ShowFailedAssumptions = new CheckedMenuElement(failedAssumptionsMenuItem);
+            ProjectMenu = new PopupMenuElement(projectMenuItem);
+            ActiveConfiguration = new PopupMenuElement(activeConfigurationMenuItem);
+            EditProject = new CommandMenuElement(editProjectMenuItem);
+            PropertiesCommand = new CommandMenuElement(propertiesMenuItem);
+            ShowCheckBoxes = new CheckedMenuElement(showCheckBoxesMenuItem);
+            ExpandAllCommand = new CommandMenuElement(expandAllMenuItem);
+            CollapseAllCommand = new CommandMenuElement(collapseAllMenuItem);
+            HideTestsCommand = new CommandMenuElement(hideTestsMenuItem);
             ClearAllCheckBoxes = new ButtonElement(clearAllButton);
             CheckFailedTests = new ButtonElement(checkFailedButton);
             Tree = new TreeViewElement(tree);

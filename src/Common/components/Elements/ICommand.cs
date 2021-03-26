@@ -22,9 +22,4 @@ namespace TestCentric.Gui.Elements
         /// </summary>
         event CommandHandler Execute;
     }
-
-    public interface IMenuCommand : ICommand
-    {
-        bool DefaultItem { get; set; }
-    }
 }
