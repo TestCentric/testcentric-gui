@@ -8,10 +8,17 @@ using System.Windows.Forms;
 namespace TestCentric.Gui.Elements
 {
     /// <summary>
-    /// IMenu is implemented by a menu item that displays subitems.
+    /// CommandMenuElement represents a menu item, which
+    /// invokes a command when clicked.
     /// </summary>
-    public interface IToolStripMenu : IViewElement
+    public class CommandMenuElement : ToolStripMenuElement, ICommand
     {
-        ToolStripItemCollection MenuItems { get; }
+        public event CommandHandler Execute;
+
+        public CommandMenuElement(ToolStripMenuItem menuItem)
+            : base(menuItem)
+        {
+            menuItem.Click += (s, e) => Execute?.Invoke();
+        }
     }
 }

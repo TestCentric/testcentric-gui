@@ -131,47 +131,47 @@ namespace TestCentric.Gui.Views
             ResultTabs = new TabSelector(resultTabs);
 
             // Initialize File Menu Commands
-            FileMenu = new ToolStripMenuElement(fileMenu);
-            OpenCommand = new ToolStripMenuElement(openMenuItem);
-            CloseCommand = new ToolStripMenuElement(closeMenuItem);
-            AddTestFilesCommand = new ToolStripMenuElement(addTestFileMenuItem);
-            ReloadTestsCommand = new ToolStripMenuElement(reloadTestsMenuItem);
-            RuntimeMenu = new ToolStripMenuElement(runtimeMenuItem);
+            FileMenu = new PopupMenuElement(fileMenu);
+            OpenCommand = new CommandMenuElement(openMenuItem);
+            CloseCommand = new CommandMenuElement(closeMenuItem);
+            AddTestFilesCommand = new CommandMenuElement(addTestFileMenuItem);
+            ReloadTestsCommand = new CommandMenuElement(reloadTestsMenuItem);
+            RuntimeMenu = new PopupMenuElement(runtimeMenuItem);
             //SelectedRuntime = new CheckedMenuGroup(runtimeMenuItem);
-            RunAsX86 = new CheckedToolStripMenuElement(runAsX86MenuItem);
-            RecentFilesMenu = new ToolStripMenuElement(recentFilesMenu);
-            ExitCommand = new ToolStripMenuElement(exitMenuItem);
+            RunAsX86 = new CheckedMenuElement(runAsX86MenuItem);
+            RecentFilesMenu = new PopupMenuElement(recentFilesMenu);
+            ExitCommand = new CommandMenuElement(exitMenuItem);
 
             // Initialize View Menu Commands
             DisplayFormat = new CheckedToolStripMenuGroup("", fullGuiMenuItem, miniGuiMenuItem);
-            IncreaseFontCommand = new ToolStripMenuElement(increaseFontMenuItem);
-            DecreaseFontCommand = new ToolStripMenuElement(decreaseFontMenuItem);
-            ChangeFontCommand = new ToolStripMenuElement(fontChangeMenuItem);
-            RestoreFontCommand = new ToolStripMenuElement(defaultFontMenuItem);
-            IncreaseFixedFontCommand = new ToolStripMenuElement(increaseFixedFontMenuItem);
-            DecreaseFixedFontCommand = new ToolStripMenuElement(decreaseFixedFontMenuItem);
-            RestoreFixedFontCommand = new ToolStripMenuElement(restoreFixedFontMenuItem);
-            StatusBarCommand = new CheckedToolStripMenuElement(statusBarMenuItem);
+            IncreaseFontCommand = new CommandMenuElement(increaseFontMenuItem);
+            DecreaseFontCommand = new CommandMenuElement(decreaseFontMenuItem);
+            ChangeFontCommand = new CommandMenuElement(fontChangeMenuItem);
+            RestoreFontCommand = new CommandMenuElement(defaultFontMenuItem);
+            IncreaseFixedFontCommand = new CommandMenuElement(increaseFixedFontMenuItem);
+            DecreaseFixedFontCommand = new CommandMenuElement(decreaseFixedFontMenuItem);
+            RestoreFixedFontCommand = new CommandMenuElement(restoreFixedFontMenuItem);
+            StatusBarCommand = new CheckedMenuElement(statusBarMenuItem);
 
             // Initialize Test Menu Commands
-            RunAllCommand = new ToolStripMenuElement(runAllMenuItem);
-            RunSelectedCommand = new ToolStripMenuElement(runSelectedMenuItem);
-            RunFailedCommand = new ToolStripMenuElement(runFailedMenuItem);
-            StopRunCommand = new ToolStripMenuElement(stopRunMenuItem);
-            ForceStopCommand = new ToolStripMenuElement(forceStopMenuItem);
-            TestParametersCommand = new ToolStripMenuElement(runParametersMenuItem);
+            RunAllCommand = new CommandMenuElement(runAllMenuItem);
+            RunSelectedCommand = new CommandMenuElement(runSelectedMenuItem);
+            RunFailedCommand = new CommandMenuElement(runFailedMenuItem);
+            StopRunCommand = new CommandMenuElement(stopRunMenuItem);
+            ForceStopCommand = new CommandMenuElement(forceStopMenuItem);
+            TestParametersCommand = new CommandMenuElement(runParametersMenuItem);
 
             // Initialize Tools Menu Comands
-            ToolsMenu = new ToolStripMenuElement(toolsMenu);
-            SaveResultsCommand = new ToolStripMenuElement(saveResultsMenuItem);
-            SaveResultsAsMenu = new ToolStripMenuElement(saveResultsAsMenuItem);
-            OpenWorkDirectoryCommand = new ToolStripMenuElement(openWorkDirectoryMenuItem);
-            ExtensionsCommand = new ToolStripMenuElement(extensionsMenuItem);
-            SettingsCommand = new ToolStripMenuElement(settingsMenuItem);
+            ToolsMenu = new PopupMenuElement(toolsMenu);
+            SaveResultsCommand = new CommandMenuElement(saveResultsMenuItem);
+            SaveResultsAsMenu = new PopupMenuElement(saveResultsAsMenuItem);
+            OpenWorkDirectoryCommand = new CommandMenuElement(openWorkDirectoryMenuItem);
+            ExtensionsCommand = new CommandMenuElement(extensionsMenuItem);
+            SettingsCommand = new CommandMenuElement(settingsMenuItem);
 
-            TestCentricHelpCommand = new ToolStripMenuElement(testCentricHelpMenuItem);
-            NUnitHelpCommand = new ToolStripMenuElement(nunitHelpMenuItem);
-            AboutCommand = new ToolStripMenuElement(aboutMenuItem);
+            TestCentricHelpCommand = new CommandMenuElement(testCentricHelpMenuItem);
+            NUnitHelpCommand = new CommandMenuElement(nunitHelpMenuItem);
+            AboutCommand = new CommandMenuElement(aboutMenuItem);
 
             DialogManager = new DialogManager();
             LongRunningOperation = new LongRunningOperationDisplay(this);
@@ -995,14 +995,14 @@ namespace TestCentric.Gui.Views
         public ISelection ResultTabs { get; }
 
         // File Menu Items
-        public IToolStripMenu FileMenu { get; }
+        public IPopup FileMenu { get; }
         public ICommand OpenCommand { get; }
         public ICommand CloseCommand { get; }
         public ICommand AddTestFilesCommand { get; }
         public ICommand ReloadTestsCommand { get; }
-        public IToolStripMenu RuntimeMenu { get; }
+        public IPopup RuntimeMenu { get; }
         public IChecked RunAsX86 { get; private set; }
-        public IToolStripMenu RecentFilesMenu { get; }
+        public IPopup RecentFilesMenu { get; }
         public ICommand ExitCommand { get; }
 
         // View Menu Items
@@ -1025,9 +1025,9 @@ namespace TestCentric.Gui.Views
         public ICommand TestParametersCommand { get; }
 
         // Tools Menu Items
-        public IToolStripMenu ToolsMenu { get; }
+        public IPopup ToolsMenu { get; }
         public ICommand SaveResultsCommand { get; }
-        public IToolStripMenu SaveResultsAsMenu { get; }
+        public IPopup SaveResultsAsMenu { get; }
         public ICommand OpenWorkDirectoryCommand { get; }
         public ICommand ExtensionsCommand { get; }
         public ICommand SettingsCommand { get; }

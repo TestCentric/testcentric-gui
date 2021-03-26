@@ -31,7 +31,7 @@ namespace TestCentric.Gui.Views
         event DragEventHandler DragDropFiles;
 
         // File Menu
-        IToolStripMenu FileMenu { get; }
+        IPopup FileMenu { get; }
         ICommand NewProjectCommand { get; }
         ICommand OpenProjectCommand { get; }
         ICommand CloseCommand { get; }
@@ -40,9 +40,9 @@ namespace TestCentric.Gui.Views
         ICommand SaveAsCommand { get; }
         ICommand SaveResultsCommand { get; }
         ICommand ReloadTestsCommand { get; }
-        IToolStripMenu SelectRuntimeMenu { get; }
+        IPopup SelectRuntimeMenu { get; }
         IChecked RunAsX86 { get; }
-        IToolStripMenu RecentProjectsMenu { get; }
+        IPopup RecentProjectsMenu { get; }
         ICommand ExitCommand { get; }
 
         // View Menu

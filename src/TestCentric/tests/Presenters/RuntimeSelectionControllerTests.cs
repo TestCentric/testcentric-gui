@@ -26,7 +26,7 @@ namespace TestCentric.Gui.Presenters
         [SetUp]
         public void Initialize()
         {
-            _menu = new ToolStripMenuElement(new ToolStripMenuItem("Runtimes"));
+            _menu = new PopupMenuElement(new ToolStripMenuItem("Runtimes"));
             _model = Substitute.For<ITestModel>();
             _model.AvailableRuntimes.Returns(AvailableRuntimes);
             _package = new TestPackage("dummy.dll");

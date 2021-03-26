@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric GUI contributors.
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
@@ -24,8 +24,8 @@ namespace TestCentric.Gui.Views
             InitializeComponent();
 
             XmlPanel = new ControlElement(xmlPanel);
-            CopyToolStripMenuItem = new ToolStripMenuElement(copyToolStripMenuItem);
-            WordWrapToolStripMenuItem = new ToolStripMenuElement(wordWrapToolStripMenuItem);
+            CopyToolStripMenuItem = new CommandMenuElement(copyToolStripMenuItem);
+            WordWrapToolStripMenuItem = new CheckedMenuElement(wordWrapToolStripMenuItem);
             selectAllToolStripMenuItem.Click += (s, a) =>
             {
                 if (SelectAllCommand != null)

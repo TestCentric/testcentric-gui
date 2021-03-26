@@ -26,39 +26,39 @@ namespace TestCentric.Gui.Views
         private void InitializeViewElements()
         {
             // File Menu
-            FileMenu = new ToolStripMenuElement(fileToolStripMenuItem);
-            NewProjectCommand = new ToolStripMenuElement(newProjectToolStripMenuItem);
-            OpenProjectCommand = new ToolStripMenuElement(openProjectToolStripMenuItem);
-            CloseCommand = new ToolStripMenuElement(closeToolStripMenuItem);
-            AddTestFilesCommand = new ToolStripMenuElement(addTestFilesToolStripMenuItem);
-            SaveCommand = new ToolStripMenuElement(saveToolStripMenuItem);
-            SaveAsCommand = new ToolStripMenuElement(saveAsToolStripMenuItem);
-            SaveResultsCommand = new ToolStripMenuElement(saveResultsToolStripMenuItem);
-            ReloadTestsCommand = new ToolStripMenuElement(reloadTestsToolStripMenuItem);
-            SelectRuntimeMenu = new ToolStripMenuElement(selectRuntimeToolStripMenuItem);
-            RunAsX86 = new CheckedToolStripMenuElement(loadAsX86ToolStripMenuItem);
-            RecentProjectsMenu = new ToolStripMenuElement(recentProjectsToolStripMenuItem);
-            ExitCommand = new ToolStripMenuElement(exitToolStripMenuItem);
+            FileMenu = new PopupMenuElement(fileToolStripMenuItem);
+            NewProjectCommand = new CommandMenuElement(newProjectToolStripMenuItem);
+            OpenProjectCommand = new CommandMenuElement(openProjectToolStripMenuItem);
+            CloseCommand = new CommandMenuElement(closeToolStripMenuItem);
+            AddTestFilesCommand = new CommandMenuElement(addTestFilesToolStripMenuItem);
+            SaveCommand = new CommandMenuElement(saveToolStripMenuItem);
+            SaveAsCommand = new CommandMenuElement(saveAsToolStripMenuItem);
+            SaveResultsCommand = new CommandMenuElement(saveResultsToolStripMenuItem);
+            ReloadTestsCommand = new CommandMenuElement(reloadTestsToolStripMenuItem);
+            SelectRuntimeMenu = new PopupMenuElement(selectRuntimeToolStripMenuItem);
+            RunAsX86 = new CheckedMenuElement(loadAsX86ToolStripMenuItem);
+            RecentProjectsMenu = new PopupMenuElement(recentProjectsToolStripMenuItem);
+            ExitCommand = new CommandMenuElement(exitToolStripMenuItem);
 
             // View Menu
-            FullGuiCommand = new ToolStripMenuElement(fullGuiToolStripMenuItem);
-            MiniGuiCommand = new ToolStripMenuElement(miniGuiToolStripMenuItem);
-            IncreaseFontCommand = new ToolStripMenuElement(increaseToolStripMenuItem);
-            DecreaseFontCommand = new ToolStripMenuElement(decreaseToolStripMenuItem);
-            ChangeFontCommand = new ToolStripMenuElement(changeToolStripMenuItem);
-            RestoreFontCommand = new ToolStripMenuElement(restoreToolStripMenuItem);
-            StatusBarCommand = new CheckedToolStripMenuElement(statusBarToolStripMenuItem);
+            FullGuiCommand = new CommandMenuElement(fullGuiToolStripMenuItem);
+            MiniGuiCommand = new CommandMenuElement(miniGuiToolStripMenuItem);
+            IncreaseFontCommand = new CommandMenuElement(increaseToolStripMenuItem);
+            DecreaseFontCommand = new CommandMenuElement(decreaseToolStripMenuItem);
+            ChangeFontCommand = new CommandMenuElement(changeToolStripMenuItem);
+            RestoreFontCommand = new CommandMenuElement(restoreToolStripMenuItem);
+            StatusBarCommand = new CheckedMenuElement(statusBarToolStripMenuItem);
 
             // Project Menu
-            ProjectMenu = new ToolStripMenuElement(projectToolStripMenuItem);
+            ProjectMenu = new PopupMenuElement(projectToolStripMenuItem);
 
             // Tools Menu
-            SettingsCommand = new ToolStripMenuElement(settingsToolStripMenuItem);
-            ExtensionsCommand = new ToolStripMenuElement(extensionsToolStripMenuItem);
+            SettingsCommand = new CommandMenuElement(settingsToolStripMenuItem);
+            ExtensionsCommand = new CommandMenuElement(extensionsToolStripMenuItem);
 
             // Help Menu
-            NUnitHelpCommand = new ToolStripMenuElement(nUnitHelpToolStripMenuItem);
-            AboutNUnitCommand = new ToolStripMenuElement(aboutNUnitToolStripMenuItem);
+            NUnitHelpCommand = new CommandMenuElement(nUnitHelpToolStripMenuItem);
+            AboutNUnitCommand = new CommandMenuElement(aboutNUnitToolStripMenuItem);
 
             TestResult = new ControlElement(testResult);
             TestName = new ControlElement(testName);
@@ -79,7 +79,7 @@ namespace TestCentric.Gui.Views
         }
 
         // File Menu
-        public IToolStripMenu FileMenu { get; private set; }
+        public IPopup FileMenu { get; private set; }
         public ICommand NewProjectCommand { get; private set; }
         public ICommand OpenProjectCommand { get; private set; }
         public ICommand CloseCommand { get; private set; }
@@ -88,9 +88,9 @@ namespace TestCentric.Gui.Views
         public ICommand SaveAsCommand { get; private set; }
         public ICommand SaveResultsCommand { get; private set; }
         public ICommand ReloadTestsCommand { get; private set; }
-        public IToolStripMenu SelectRuntimeMenu { get; private set; }
+        public IPopup SelectRuntimeMenu { get; private set; }
         public IChecked RunAsX86 { get; private set; }
-        public IToolStripMenu RecentProjectsMenu { get; private set; }
+        public IPopup RecentProjectsMenu { get; private set; }
         public ICommand ExitCommand { get; private set; }
 
         // View Menu
