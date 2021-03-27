@@ -198,27 +198,27 @@ public abstract class PackageTester : GuiTester
 				Skipped = 7
 			}));
 
-		// Level 2 tests are run for PRs and when packages will be published
+        // Level 2 tests are run for PRs and when packages will be published
 
-		// TODO: Ensure that experimental runner saves results and handles --unattended
-		// PackageTests.Add(new PackageTest(2, "Run tests of the TestCentric model using the Experimental Runner", ExperimentalRunner,
-		//     "TestCentric.Gui.Model.Tests.dll",
-		//     new ExpectedResult("Passed"));
+        // TODO: Ensure that experimental runner saves results and handles --unattended
+        // PackageTests.Add(new PackageTest(2, "Run tests of the TestCentric model using the Experimental Runner", ExperimentalRunner,
+        //     "TestCentric.Gui.Model.Tests.dll",
+        //     new ExpectedResult("Passed"));
 
-		PackageTests.Add(new PackageTest(2, "Run mock-assembly.dll built for NUnit V2", StandardRunner,
-			"v2-tests/mock-assembly.dll",
-			new ExpectedResult("Failed")
-			{
-				Total = 28,
-				Passed = 18,
-				Failed = 5,
-				Warnings = 0,
-				Inconclusive = 1,
-				Skipped = 4
-			},
-			NUnitV2Driver));
+        //PackageTests.Add(new PackageTest(2, "Run mock-assembly.dll built for NUnit V2", StandardRunner,
+        //	"v2-tests/mock-assembly.dll",
+        //	new ExpectedResult("Failed")
+        //	{
+        //		Total = 28,
+        //		Passed = 18,
+        //		Failed = 5,
+        //		Warnings = 0,
+        //		Inconclusive = 1,
+        //		Skipped = 4
+        //	},
+        //	NUnitV2Driver));
 
-		PackageTests.Add( new PackageTest(2, "Run different builds of mock-assembly.dll together", StandardRunner,
+        PackageTests.Add( new PackageTest(2, "Run different builds of mock-assembly.dll together", StandardRunner,
 			"engine-tests/net35/mock-assembly.dll engine-tests/netcoreapp2.1/mock-assembly.dll",
 			new ExpectedResult("Failed")
 			{
