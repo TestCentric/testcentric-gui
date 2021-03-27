@@ -14,7 +14,7 @@ namespace TestCentric.Engine.Services
     /// runner for a given package to be loaded and run either in a
     /// separate process or within the same process.
     /// </summary>
-    public class DefaultTestRunnerFactory : InProcessTestRunnerFactory, ITestRunnerFactory
+    public class DefaultTestRunnerFactory : Service, ITestRunnerFactory
     {
         //private IProjectService _projectService;
 
@@ -37,7 +37,7 @@ namespace TestCentric.Engine.Services
         /// </summary>
         /// <param name="package">The TestPackage to be loaded and run</param>
         /// <returns>A TestRunner</returns>
-        public override ITestEngineRunner MakeTestRunner(TestPackage package)
+        public ITestEngineRunner MakeTestRunner(TestPackage package)
         {
 #if NETSTANDARD2_0
             //if (package.SubPackages.Count == 1)
@@ -46,20 +46,23 @@ namespace TestCentric.Engine.Services
                 return new AggregatingTestRunner(ServiceContext, package);
 
             return new LocalTestRunner(ServiceContext, package);
-        }
 #else
             if (package.AssemblyPackages().Count > 1)
                 return new MultipleTestProcessRunner(this.ServiceContext, package);
             else
                 return new ProcessRunner(this.ServiceContext, package);
+#endif
         }
 
         // TODO: Review this method once used by a gui - the implementation is
         // overly simplistic. It is not currently used by any known runner.
-        public override bool CanReuse(ITestEngineRunner runner, TestPackage package)
+        public bool CanReuse(ITestEngineRunner runner, TestPackage package)
         {
+#if NETSTANDARD2_0
+            return false;
+#else
             return runner is MultipleTestProcessRunner;
-        }
 #endif
+        }
     }
 }

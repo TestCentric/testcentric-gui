@@ -147,10 +147,18 @@ namespace TestCentric.Engine.Services
                 var thisAssembly = Assembly.GetExecutingAssembly();
                 var apiAssembly = typeof(ITestEngine).Assembly;
 
+                // TODO: We need a more general way to locate extension points
+                // without needing to know which assemblies contain them in advance.
+                // RootAssemblies could handle that if we initialized it somewhere
+                // but we don't do that currently.
                 foreach (var assembly in RootAssemblies)
                     FindExtensionPoints(assembly);
                 FindExtensionPoints(thisAssembly);
                 FindExtensionPoints(apiAssembly);
+#if NETFRAMEWORK
+                // Temp adhoc fix
+                FindExtensionPoints(typeof(IAgentLauncher).Assembly);
+#endif
 
                 // Create the list of possible extension assemblies,
                 // eliminating duplicates. Start in Engine directory.
