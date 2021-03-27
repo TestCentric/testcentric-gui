@@ -5,7 +5,7 @@
 
 #if !NETSTANDARD2_0
 using System;
-using System.Text;
+using System.Collections.Generic;
 using System.Threading;
 using System.Diagnostics;
 using TestCentric.Common;
@@ -36,14 +36,8 @@ namespace TestCentric.Engine.Services
         private readonly AgentStore _agentStore = new AgentStore();
 
         private IRuntimeFrameworkService _runtimeService;
-        private readonly IAgentLauncher[] _launchers = new IAgentLauncher[]
-        {
-            new Net20AgentLauncher(),
-            new Net40AgentLauncher(),
-            new NetCore21AgentLauncher(),
-            new NetCore31AgentLauncher(),
-            new Net50AgentLauncher()
-        };
+        private ExtensionService _extensionService;
+        private readonly List<IAgentLauncher> _launchers = new List<IAgentLauncher>();
 
         // Transports used for various target runtimes
         private TestAgencyRemotingTransport _remotingTransport; // .NET Framework
@@ -79,7 +73,8 @@ namespace TestCentric.Engine.Services
                     "framework");
 
             var agentId = Guid.NewGuid();
-            var agentProcess = CreateAgentProcess(agentId, package);
+            string agencyUrl = targetRuntime.FrameworkName.Identifier == ".NETFramework" ? RemotingUrl : TcpEndPoint;
+            var agentProcess = CreateAgentProcess(agentId, agencyUrl, package);
 
             agentProcess.Exited += (sender, e) => OnAgentExit((Process)sender);
 
@@ -126,13 +121,13 @@ namespace TestCentric.Engine.Services
             return null;
         }
 
-        private Process CreateAgentProcess(Guid agentId, TestPackage package)
+        private Process CreateAgentProcess(Guid agentId, string agencyUrl, TestPackage package)
         {
             foreach (var launcher in _launchers)
             {
                 if (launcher.CanCreateProcess(package))
                 {
-                    return launcher.CreateProcess(agentId, this, package);
+                    return launcher.CreateProcess(agentId, agencyUrl, package);
                 }
             }
 
@@ -203,11 +198,23 @@ namespace TestCentric.Engine.Services
         public void StartService()
         {
             _runtimeService = ServiceContext.GetService<IRuntimeFrameworkService>();
+            _extensionService = ServiceContext.GetService<ExtensionService>();
             if (_runtimeService == null)
                 Status = ServiceStatus.Error;
             else
             try
             {
+                // Add plugable agents first, so they can override the builtins
+                if (_extensionService != null)
+                    foreach (IAgentLauncher launcher in _extensionService.GetExtensions<IAgentLauncher>())
+                        _launchers.Add(launcher);
+
+                //_launchers.Add(new Net20AgentLauncher());
+                _launchers.Add(new Net40AgentLauncher());
+                _launchers.Add(new NetCore21AgentLauncher());
+                _launchers.Add(new NetCore31AgentLauncher());
+                _launchers.Add(new Net50AgentLauncher());
+
                 _remotingTransport.Start();
                 _tcpTransport.Start();
                 Status = ServiceStatus.Started;

@@ -125,6 +125,7 @@ public abstract class PackageTester : GuiTester
 		PackageTests.Add(new PackageTest(2, "Re-run tests of the TestCentric model", StandardRunner,
 			"TestCentric.Gui.Model.Tests.dll",
 			new ExpectedResult("Passed")));
+		
 		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET 4.5", StandardRunner,
 			"mock-assembly.dll",
 			new ExpectedResult("Failed")
@@ -136,6 +137,7 @@ public abstract class PackageTester : GuiTester
 				Inconclusive = 1,
 				Skipped = 7
 			}));
+		
 		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET 3.5", StandardRunner,
 			"engine-tests/net35/mock-assembly.dll",
 			new ExpectedResult("Failed")
@@ -147,6 +149,7 @@ public abstract class PackageTester : GuiTester
 				Inconclusive = 1,
 				Skipped = 7
 			}));
+		
 		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET Core 2.1", StandardRunner,
 			"engine-tests/netcoreapp2.1/mock-assembly.dll",
 			new ExpectedResult("Failed")
@@ -158,6 +161,7 @@ public abstract class PackageTester : GuiTester
 				Inconclusive = 1,
 				Skipped = 7
 			}));
+
 		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET Core 3.1", StandardRunner,
 			"engine-tests/netcoreapp3.1/mock-assembly.dll",
 			new ExpectedResult("Failed")
@@ -169,6 +173,7 @@ public abstract class PackageTester : GuiTester
 				Inconclusive = 1,
 				Skipped = 7
 			}));
+
 		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET Core 1.1", StandardRunner,
 			"engine-tests/netcoreapp1.1/mock-assembly.dll",
 			new ExpectedResult("Failed")
@@ -180,6 +185,7 @@ public abstract class PackageTester : GuiTester
 				Inconclusive = 1,
 				Skipped = 7
 			}));
+
 		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET 5.0", StandardRunner,
 			"engine-tests/net5.0/mock-assembly.dll",
 			new ExpectedResult("Failed")
@@ -192,26 +198,27 @@ public abstract class PackageTester : GuiTester
 				Skipped = 7
 			}));
 
-		// Level 2 tests are run for PRs and when packages will be published
+        // Level 2 tests are run for PRs and when packages will be published
 
-		// TODO: Ensure that experimental runner saves results and handles --unattended
-		// PackageTests.Add(new PackageTest(2, ExperimentalRunner,
-		// 	"TestCentric.Gui.Model.Tests.dll",
-		// 	new ExpectedResult("Passed"),
-		// 	"Run tests of the TestCentric model using the Experimental Runner"));
-		PackageTests.Add(new PackageTest(2, "Run mock-assembly.dll built for NUnit V2", StandardRunner,
-			"v2-tests/mock-assembly.dll",
-			new ExpectedResult("Failed")
-			{
-				Total = 28,
-				Passed = 18,
-				Failed = 5,
-				Warnings = 0,
-				Inconclusive = 1,
-				Skipped = 4
-			},
-			NUnitV2Driver));
-		PackageTests.Add( new PackageTest(2, "Run different builds of mock-assembly.dll together", StandardRunner,
+        // TODO: Ensure that experimental runner saves results and handles --unattended
+        // PackageTests.Add(new PackageTest(2, "Run tests of the TestCentric model using the Experimental Runner", ExperimentalRunner,
+        //     "TestCentric.Gui.Model.Tests.dll",
+        //     new ExpectedResult("Passed"));
+
+        //PackageTests.Add(new PackageTest(2, "Run mock-assembly.dll built for NUnit V2", StandardRunner,
+        //	"v2-tests/mock-assembly.dll",
+        //	new ExpectedResult("Failed")
+        //	{
+        //		Total = 28,
+        //		Passed = 18,
+        //		Failed = 5,
+        //		Warnings = 0,
+        //		Inconclusive = 1,
+        //		Skipped = 4
+        //	},
+        //	NUnitV2Driver));
+
+        PackageTests.Add( new PackageTest(2, "Run different builds of mock-assembly.dll together", StandardRunner,
 			"engine-tests/net35/mock-assembly.dll engine-tests/netcoreapp2.1/mock-assembly.dll",
 			new ExpectedResult("Failed")
 			{
@@ -222,6 +229,7 @@ public abstract class PackageTester : GuiTester
 				Inconclusive = 2,
 				Skipped = 14
 			}));
+
 		// TODO: Make test work on AppVeyor - currently runs locally only
 		if (_parameters.IsLocalBuild)
 			PackageTests.Add( new PackageTest(2, "Run an NUnit project, specifying Release config", StandardRunner,
