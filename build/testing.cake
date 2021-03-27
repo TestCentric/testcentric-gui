@@ -316,15 +316,12 @@ public abstract class PackageTester : GuiTester
 
 	private void RunPackageTests(int testLevel)
 	{
-		bool anyErrors = false;
-		int testCount = 0;
+		var reporter = new ResultReporter(PackageName);
 
 		foreach (var packageTest in PackageTests)
 		{
 			if (packageTest.Level > 0 && packageTest.Level <= testLevel)
 			{
-				++testCount;
-
 				foreach (string extension in packageTest.ExtensionsNeeded)
 					CheckExtensionIsInstalled(extension);
 
@@ -340,12 +337,27 @@ public abstract class PackageTester : GuiTester
 
 				RunGuiUnattended(packageTest.Runner, packageTest.Arguments);
 
-				var reporter = new ResultReporter(resultFile);
-				anyErrors |= reporter.Report(packageTest.ExpectedResult) > 0;
+				try
+                {
+					var result = new ActualResult(resultFile);
+					var report = new TestReport(packageTest, result);
+					reporter.AddReport(report);
+
+					Console.WriteLine(report.Errors.Count == 0
+						? "\nSUCCESS: Test Result matches expected result!"
+						: "\nERROR: Test Result not as expected!");
+				}
+				catch (Exception ex)
+                {
+					reporter.AddReport(new TestReport(packageTest, ex));
+
+					Console.WriteLine("\nERROR: No result found!");
+				}
 			}
 		}
 
-		Console.WriteLine($"\nRan {testCount} package tests on {PackageName}");
+		bool anyErrors = reporter.ReportResults();
+		Console.WriteLine();
 
 		// All package tests are run even if one of them fails. If there are
 		// any errors,  we stop the run at this point.
