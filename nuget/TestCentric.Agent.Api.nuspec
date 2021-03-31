@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>TestCentric.Agent.Api</id>
+    <version>0.0.0</version>
+    <description>This package includes the testcentric.agent.api assembly, used in creating pluggable agents.</description>
+    <authors>Charlie Poole</authors>
+    <owners>Charlie Poole</owners>
+    <projectUrl>http://test-centric.org</projectUrl>
+    <license type="expression">MIT</license>
+    <iconUrl>https://cdn.rawgit.com/TestCentric/resources/main/images/icon/nunit_256.png</iconUrl>
+    <icon>testcentric.png</icon>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <releaseNotes>https://raw.githubusercontent.com/TestCentric/testcentric-gui/main/CHANGES.txt</releaseNotes>
+    <copyright>Copyright (c) 2018-2020 Charlie Poole</copyright>
+    <language>en-US</language>
+    <tags>testcentric nunit gui runner test centric testing tdd pluggable agent</tags>
+    <repository type="git" url="https://github.com/TestCentric/testcentric-gui"/>
+    <title>TestCentric Agent Api Assembly</title>
+  </metadata>
+  <files>
+	<file src="../LICENSE.txt" />
+	<file src="../testcentric.png" />
+  <file src="../bin/Release/engine/net20/testcentric.agent.api.dll" target="lib/net20" />
+  <file src="../bin/Release/engine/net40/testcentric.agent.api.dll" target="lib/net40" />
+  <file src="../bin/Release/engine/netstandard1.6/testcentric.agent.api.dll" target="lib/netstandard1.6" />
+  <file src="../bin/Release/engine/netstandard2.0/testcentric.agent.api.dll" target="lib/netstandard2.0" />
+  </files>
+</package>
