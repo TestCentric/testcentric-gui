@@ -414,6 +414,7 @@ Task("PublishPackages")
 			PushNuGetPackage(parameters.NuGetPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
 			PushNuGetPackage(parameters.MetadataPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
 			PushNuGetPackage(parameters.EngineCorePackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
+			PushNuGetPackage(parameters.AgentApiPackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
 			PushChocolateyPackage(parameters.ChocolateyPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
 			nothingToPublish = false;
 		}
