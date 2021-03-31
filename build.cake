@@ -381,6 +381,25 @@ Task("BuildEngineCorePackage")
 	});
 
 //////////////////////////////////////////////////////////////////////
+// AGENT API PACKAGE
+//////////////////////////////////////////////////////////////////////
+
+// NOTE: The testcentric.agent.api assembly is required by the agent
+// launcher extension, which is part of any custom pluggable agent.
+
+Task("BuildAgentApiPackage")
+	.IsDependentOn("Build")
+	.Does<BuildParameters>((parameters) =>
+	{
+		NuGetPack($"{parameters.NuGetDirectory}/TestCentric.Agent.Api.nuspec", new NuGetPackSettings()
+		{
+			Version = parameters.PackageVersion,
+			OutputDirectory = parameters.PackageDirectory,
+			NoPackageAnalysis = true
+		});
+	});
+
+//////////////////////////////////////////////////////////////////////
 // PUBLISH PACKAGES
 //////////////////////////////////////////////////////////////////////
 
@@ -561,7 +580,8 @@ Task("BuildPackages")
 	.IsDependentOn("BuildNuGetPackage")
     .IsDependentOn("BuildChocolateyPackage")
 	.IsDependentOn("BuildMetadataPackage")
-	.IsDependentOn("BuildEngineCorePackage");
+	.IsDependentOn("BuildEngineCorePackage")
+	.IsDependentOn("BuildAgentApiPackage");
 
 Task("TestPackages")
 	.IsDependentOn("BuildPackages")
