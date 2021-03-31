@@ -423,6 +423,7 @@ Task("PublishPackages")
 			PushNuGetPackage(parameters.NuGetPackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
 			PushNuGetPackage(parameters.MetadataPackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
 			PushNuGetPackage(parameters.EngineCorePackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
+			PushNuGetPackage(parameters.AgentApiPackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
 			nothingToPublish = false;
 		}
 
