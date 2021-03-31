@@ -132,11 +132,13 @@ public class BuildParameters
 	public string NuGetPackageName => NUGET_PACKAGE_NAME + "." + PackageVersion + ".nupkg";
 	public string ChocolateyPackageName => PACKAGE_NAME + "." + PackageVersion + ".nupkg";
 	public string MetadataPackageName => METADATA_PACKAGE_NAME + "." + PackageVersion + ".nupkg";
+	public string EngineCorePackageName => ENGINE_CORE_PACKAGE_NAME + "." + PackageVersion + ".nupkg";
 
 	public FilePath ZipPackage => new FilePath(PackageDirectory + ZipPackageName);
 	public FilePath NuGetPackage => new FilePath(PackageDirectory + NuGetPackageName);
 	public FilePath ChocolateyPackage => new FilePath(PackageDirectory + ChocolateyPackageName);
 	public FilePath MetadataPackage => new FilePath(PackageDirectory + MetadataPackageName);
+	public FilePath EngineCorePackage => new FilePath(PackageDirectory + EngineCorePackageName);
 	public string GitHubReleaseAssets => _context.IsRunningOnWindows()
 		? $"\"{ZipPackage},{NuGetPackage},{ChocolateyPackage},{MetadataPackage}\""
         : $"\"{ZipPackage},{NuGetPackage}\"";
