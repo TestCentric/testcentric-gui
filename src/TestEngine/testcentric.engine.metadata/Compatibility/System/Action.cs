@@ -3,7 +3,7 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-#if NET20 || NET35
+#if NET20
 namespace System
 {
     public delegate void Action<T>(T arg);
