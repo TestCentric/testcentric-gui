@@ -1,6 +1,6 @@
 // ***********************************************************************
-// Copyright (c) Charlie Poole and TestCentric Engine contributors.
-// Licensed under the MIT License. See LICENSE.txt in root directory.
+// Copyright (c) Charlie Poole and TestCentric GUI contributors.
+// Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
 using System.Reflection;
@@ -23,4 +23,4 @@ using System.Reflection;
 
 [assembly: AssemblyVersion("2.0.0.0")]
 [assembly: AssemblyFileVersion("2.0.0")]
-[assembly: AssemblyInformationalVersion("2.0.0-ci00039-cleanup-meta")]
+[assembly: AssemblyInformationalVersion("2.0.0-ci00041-issue-682")]
