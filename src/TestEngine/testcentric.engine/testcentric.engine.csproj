@@ -17,10 +17,10 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\testcentric.engine.core\testcentric.engine.core.csproj" />
-    <ProjectReference Include="..\testcentric.engine.metadata\testcentric.engine.metadata.csproj" />
 	<ProjectReference Include="..\testcentric.agent.api\testcentric.agent.api.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NUnit.Engine.Api" Version="3.11.1" />
+    <PackageReference Include="TestCentric.Metadata" Version="1.7.0" />
   </ItemGroup>
 </Project>
