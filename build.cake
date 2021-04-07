@@ -114,6 +114,7 @@ Task("Build")
 	.IsDependentOn("Clean")
     .IsDependentOn("RestorePackages")
 	.IsDependentOn("UpdateAssemblyInfo")
+	.IsDependentOn("CheckHeaders")
     .Does<BuildParameters>((parameters) =>
 {
     if(parameters.UsingXBuild)
