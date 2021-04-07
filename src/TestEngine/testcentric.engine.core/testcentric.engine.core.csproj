@@ -20,19 +20,19 @@
     <Compile Include="..\CommonEngineAssemblyInfo.cs" Link="Properties\CommonEngineAssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-	<ProjectReference Include="..\testcentric.engine.metadata\testcentric.engine.metadata.csproj" />
 	<ProjectReference Include="..\testcentric.agent.api\testcentric.agent.api.csproj" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
 	<PackageReference Include="Microsoft.Win32.Registry.AccessControl" Version="4.7.0" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.6'">
-	<PackageReference Include="Microsoft.Win32.Registry.AccessControl" Version="4.7.0" />
-	<PackageReference Include="Microsoft.DotNet.InternalAbstractions" Version="1.0.0" />
+	  <PackageReference Include="Microsoft.Win32.Registry.AccessControl" Version="4.7.0" />
+	  <PackageReference Include="Microsoft.DotNet.InternalAbstractions" Version="1.0.0" />
     <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
     <PackageReference Include="System.Xml.XPath.XmlDocument" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NUnit.Engine.Api" Version="3.11.1" />
+    <PackageReference Include="TestCentric.Metadata" Version="1.7.0" />
   </ItemGroup>
 </Project>
