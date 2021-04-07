@@ -109,6 +109,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{23ED18B0
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{6C9280F6-6159-4E15-BDC6-F24A3A94F721}"
 	ProjectSection(SolutionItems) = preProject
+		build\check-headers.cake = build\check-headers.cake
 		build\constants.cake = build\constants.cake
 		build\packaging.cake = build\packaging.cake
 		build\parameters.cake = build\parameters.cake

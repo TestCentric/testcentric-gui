@@ -4,6 +4,7 @@
 #load "./testing.cake"
 #load "./test-results.cake"
 #load "./packaging.cake"
+#load "./check-headers.cake"
 
 public class BuildParameters
 {

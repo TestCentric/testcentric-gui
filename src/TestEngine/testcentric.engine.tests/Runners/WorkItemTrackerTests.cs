@@ -1,6 +1,6 @@
 // ***********************************************************************
-// Copyright (c) Charlie Poole and TestCentric Engine contributors.
-// Licensed under the MIT License. See LICENSE.txt in root directory.
+// Copyright (c) Charlie Poole and TestCentric GUI contributors.
+// Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
 using System.Collections.Generic;
