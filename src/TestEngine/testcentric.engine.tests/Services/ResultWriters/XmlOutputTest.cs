@@ -1,6 +1,6 @@
 // ***********************************************************************
-// Copyright (c) Charlie Poole and TestCentric Engine contributors.
-// Licensed under the MIT License. See LICENSE.txt in root directory.
+// Copyright (c) Charlie Poole and TestCentric GUI contributors.
+// Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
 #if !NETCOREAPP // TODO: Can't instantiate engine under .NET CORE since it's not in the agent directory

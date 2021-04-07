@@ -1,6 +1,6 @@
 ﻿// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric GUI contributors.
-// Licensed under the MIT License. See LICENSE.txt in root directory.
+// Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
 #if NET_3_5 || NET_4_0 || NET_4_5

@@ -26,9 +26,6 @@
     <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="Services\InProcessTestRunnerFactoryTests.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="..\CommonEngineAssemblyInfo.cs" Link="Properties\CommonEngineAssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
