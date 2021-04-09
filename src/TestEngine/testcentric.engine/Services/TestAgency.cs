@@ -125,8 +125,12 @@ namespace TestCentric.Engine.Services
         {
             foreach (var launcher in _launchers)
             {
+                var launcherName = launcher.GetType().Name;
+                log.Debug($"Examining launcher {launcherName}");
+
                 if (launcher.CanCreateProcess(package))
                 {
+                    log.Info($"Selected launcher {launcherName}");
                     return launcher.CreateProcess(agentId, agencyUrl, package);
                 }
             }
