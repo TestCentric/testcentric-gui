@@ -8,6 +8,7 @@ using NUnit.Engine;
 using TestCentric.Common;
 using TestCentric.Engine.Internal;
 using TestCentric.Engine.Communication.Transports;
+using TestCentric.Engine.Runners;
 
 namespace TestCentric.Engine.Agents
 {
@@ -45,7 +46,11 @@ namespace TestCentric.Engine.Agents
 
         public override ITestEngineRunner CreateRunner(TestPackage package)
         {
-            return Services.GetService<ITestRunnerFactory>().MakeTestRunner(package);
+#if NETFRAMEWORK
+            return new TestDomainRunner(Services, package);
+#else
+            return new LocalTestRunner(Services, package);
+#endif
         }
     }
 }
