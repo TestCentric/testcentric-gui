@@ -91,9 +91,6 @@ namespace TestCentric.Engine.Agents
 
             // Custom Service Initialization
             engine.Services.Add(new ExtensionService());
-#if !NETCOREAPP
-            engine.Services.Add(new DomainManager());
-#endif
             engine.Services.Add(new InProcessTestRunnerFactory());
             engine.Services.Add(new DriverService());
 
