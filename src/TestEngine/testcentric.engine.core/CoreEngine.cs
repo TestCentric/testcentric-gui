@@ -81,14 +81,10 @@ namespace TestCentric.Engine
             // If caller added services beforehand, we don't add any
             if (Services.ServiceCount == 0)
             {
-                // Services that depend on other services must be added after their dependencies
-                // For example, ResultService uses ExtensionService, so ExtensionService is added
-                // later.
                 Services.Add(new DriverService());
 #if !NETSTANDARD1_6
                 Services.Add(new ExtensionService());
 #endif
-                Services.Add(new InProcessTestRunnerFactory());
             }
 
             Services.ServiceManager.StartServices();
