@@ -10,7 +10,7 @@ using NUnit.Engine;
 using NUnit.Framework;
 using TestCentric.Tests.Assemblies;
 
-namespace TestCentric.Engine.Services
+namespace TestCentric.Engine.Internal
 {
     public class DomainManagerTests
     {
@@ -20,16 +20,7 @@ namespace TestCentric.Engine.Services
         [SetUp]
         public void CreateDomainManager()
         {
-            var context = new ServiceContext();
             _domainManager = new DomainManager();
-            context.Add(_domainManager);
-            context.ServiceManager.StartServices();
-        }
-
-        [Test]
-        public void ServiceIsStarted()
-        {
-            Assert.That(_domainManager.Status, Is.EqualTo(ServiceStatus.Started));
         }
 
         [Test, Platform("Linux,Net", Reason = "get_SetupInformation() fails on Windows+Mono")]

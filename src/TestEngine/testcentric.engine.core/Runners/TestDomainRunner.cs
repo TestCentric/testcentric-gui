@@ -5,7 +5,7 @@
 
 #if !NETSTANDARD1_6 && !NETSTANDARD2_0
 using NUnit.Engine;
-using TestCentric.Engine.Services;
+using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Runners
 {
@@ -19,7 +19,7 @@ namespace TestCentric.Engine.Runners
 
         public TestDomainRunner(IServiceLocator services, TestPackage package) : base(services, package)
         {
-            _domainManager = Services.GetService<DomainManager>();
+            _domainManager = new DomainManager();
         }
 
         protected override TestEngineResult LoadPackage()
