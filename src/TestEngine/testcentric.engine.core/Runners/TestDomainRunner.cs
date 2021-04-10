@@ -19,7 +19,7 @@ namespace TestCentric.Engine.Runners
 
         public TestDomainRunner(IServiceLocator services, TestPackage package) : base(services, package)
         {
-            _domainManager = Services.GetService<DomainManager>();
+            _domainManager = new DomainManager();
         }
 
         protected override TestEngineResult LoadPackage()

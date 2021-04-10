@@ -20,16 +20,7 @@ namespace TestCentric.Engine.Services
         [SetUp]
         public void CreateDomainManager()
         {
-            var context = new ServiceContext();
             _domainManager = new DomainManager();
-            context.Add(_domainManager);
-            context.ServiceManager.StartServices();
-        }
-
-        [Test]
-        public void ServiceIsStarted()
-        {
-            Assert.That(_domainManager.Status, Is.EqualTo(ServiceStatus.Started));
         }
 
         [Test, Platform("Linux,Net", Reason = "get_SetupInformation() fails on Windows+Mono")]
