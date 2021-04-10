@@ -100,7 +100,6 @@ namespace TestCentric.Engine.Runners
             _services.Add(projectService);
             _services.Add(new PackageSettingsService());
 #if !NETCOREAPP2_1
-            _services.Add(new DomainManager());
             _services.Add(new RuntimeFrameworkService());
             _services.Add(new TestAgency());
 #endif
