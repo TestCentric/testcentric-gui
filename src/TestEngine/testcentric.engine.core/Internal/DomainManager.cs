@@ -10,16 +10,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Reflection;
-using System.Diagnostics;
-using System.Security;
-using System.Security.Policy;
 using System.Security.Principal;
 using TestCentric.Common;
-using TestCentric.Engine.Internal;
 using TestCentric.Engine.Helpers;
 using NUnit.Engine;
 
-namespace TestCentric.Engine.Services
+namespace TestCentric.Engine.Internal
 {
     /// <summary>
     /// The DomainManager class handles the creation and unloading

@@ -10,7 +10,7 @@ using NUnit.Engine;
 using NUnit.Framework;
 using TestCentric.Tests.Assemblies;
 
-namespace TestCentric.Engine.Services
+namespace TestCentric.Engine.Internal
 {
     public class DomainManagerTests
     {
