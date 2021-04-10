@@ -64,7 +64,6 @@ namespace TestCentric.Engine
                 Services.Add(new ProjectService());
                 Services.Add(new PackageSettingsService());
 #if !NETSTANDARD2_0
-                Services.Add(new DomainManager());
                 Services.Add(new RuntimeFrameworkService());
                 Services.Add(new TestAgency());
 #endif

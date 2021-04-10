@@ -11,7 +11,7 @@ using System.IO;
 using NUnit.Engine;
 using NUnit.Framework;
 
-namespace TestCentric.Engine.Services
+namespace TestCentric.Engine.Internal
 {
     public static class DomainManagerStaticTests
     {

@@ -10,22 +10,18 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Reflection;
-using System.Diagnostics;
-using System.Security;
-using System.Security.Policy;
 using System.Security.Principal;
 using TestCentric.Common;
-using TestCentric.Engine.Internal;
 using TestCentric.Engine.Helpers;
 using NUnit.Engine;
 
-namespace TestCentric.Engine.Services
+namespace TestCentric.Engine.Internal
 {
     /// <summary>
     /// The DomainManager class handles the creation and unloading
     /// of domains as needed and keeps track of all existing domains.
     /// </summary>
-    public class DomainManager : Service
+    public class DomainManager
     {
         static Logger log = InternalTrace.GetLogger(typeof(DomainManager));
 
@@ -47,21 +43,6 @@ namespace TestCentric.Engine.Services
             }
 
             string domainName = "domain-" + hashCode + package.Name;
-// TODO: Make sure this is not needed before deleting
-//            // Setup the Evidence
-//            Evidence evidence = new Evidence(AppDomain.CurrentDomain.Evidence);
-//#pragma warning disable 618
-//            if (evidence.Count == 0)
-//            {
-//                Zone zone = new Zone(SecurityZone.MyComputer);
-//                evidence.AddHost(zone);
-//                Assembly assembly = Assembly.GetExecutingAssembly();
-//                Url url = new Url(assembly.CodeBase);
-//                evidence.AddHost(url);
-//                Hash hash = new Hash(assembly);
-//                evidence.AddHost(hash);
-//            }
-//#pragma warning restore 618
 
             log.Info("Creating application domain " + domainName);
 
