@@ -170,7 +170,7 @@ public class BuildParameters
 	public XBuildSettings XBuildSettings { get; }
 	public NuGetRestoreSettings RestoreSettings { get; }
 
-	public string[] SupportedEngineRuntimes => new string[] {"net40", "netcoreapp2.1"};
+	public string[] SupportedEngineRuntimes => new string[] {"net40"};
 	public string[] SupportedCoreRuntimes => IsRunningOnWindows
 		? new string[] {"net40", "net35", "netcoreapp2.1", "netcoreapp1.1"}
 		: new string[] {"net40", "net35", "netcoreapp2.1"};
