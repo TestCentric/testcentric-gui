@@ -141,9 +141,9 @@ namespace TestCentric.Engine.Services
             Assume.That(Assembly.GetEntryAssembly(), Is.Not.Null, "Entry assembly is null, framework loading validation will be skipped.");
 
 #if NETCOREAPP2_1
-            var assemblyName = Path.Combine(GetNetFrameworkSiblingDirectory(), "testcentric.engine.tests.exe");
+            var assemblyName = Path.Combine(GetNetFrameworkSiblingDirectory(), "testcentric.engine.core.tests.exe");
 #elif NET40
-            var assemblyName = Path.Combine(GetNetCoreSiblingDirectory(), "testcentric.engine.tests.dll");
+            var assemblyName = Path.Combine(GetNetCoreSiblingDirectory(), "testcentric.engine.core.tests.dll");
 #endif
             Assert.That(assemblyName, Does.Exist);
 
@@ -222,15 +222,16 @@ namespace TestCentric.Engine.Services
 
             var extNetStandard = new ExtensionAssembly(netstandard.Location, false);
             var extNetCore = new ExtensionAssembly(netcore.Location, false);
-            var extNetFramework = new ExtensionAssembly(Path.Combine(GetNetFrameworkSiblingDirectory(), "testcentric.engine.dll"), false);
+            var extNetFramework = new ExtensionAssembly(Path.Combine(GetNetFrameworkSiblingDirectory(), "testcentric.engine.core.dll"), false);
 
             yield return new TestCaseData(new FrameworkCombo(netcore, extNetFramework)).SetName("InvalidCombo(.NET Core, .NET Framework)");
 #else
             Assembly netFramework = typeof(ExtensionService).Assembly;
 
+
             var netCoreAppDir = GetNetCoreSiblingDirectory();
             var extNetStandard = new ExtensionAssembly(Path.Combine(netCoreAppDir, "testcentric.engine.core.dll"), false);
-            var extNetCoreApp = new ExtensionAssembly(Path.Combine(netCoreAppDir, "testcentric.engine.tests.dll"), false);
+            var extNetCoreApp = new ExtensionAssembly(Path.Combine(netCoreAppDir, "testcentric.engine.core.tests.dll"), false);
 
             yield return new TestCaseData(new FrameworkCombo(netFramework, extNetCoreApp)).SetName("InvalidCombo(.NET Framework, .NET Core)");
 #endif
