@@ -19,8 +19,8 @@ namespace TestCentric.Engine.Services
     /// 
     /// Several kinds of information expansion take place:
     /// 
-    /// 1. (Not Yet Implemented) Project Packages are expanded to have subpackages
-    /// for each included assembly. (Currently done separately by ProjectService.
+    /// 1. Project Packages are expanded, using the ProjectService, to have
+    /// subpackages for each included assembly.
     /// 
     /// 2. Assembly packages are annotated with internal properties that give info
     /// about how that assembly expects to be run.
@@ -35,11 +35,13 @@ namespace TestCentric.Engine.Services
         static Logger log = InternalTrace.GetLogger(typeof(PackageSettingsService));
 
         private IProjectService _projectService;
+        private ITestFrameworkService _testFrameworkService;
 
         public override void StartService()
         {
             _projectService = ServiceContext.GetService<IProjectService>();
-            if (_projectService == null)
+            _testFrameworkService = ServiceContext.GetService<ITestFrameworkService>();
+            if (_projectService == null || _testFrameworkService == null)
                 Status = ServiceStatus.Error;
         }
 
@@ -96,7 +98,7 @@ namespace TestCentric.Engine.Services
         /// apply it to the package using special internal keywords.
         /// </summary>
         /// <param name="package"></param>
-        static void ApplyImageSettings(TestPackage package)
+        private void ApplyImageSettings(TestPackage package)
         {
             Guard.ArgumentNotNull(package, nameof(package));
 
@@ -128,6 +130,12 @@ namespace TestCentric.Engine.Services
             if (requiresAssemblyResolver)
             {
                 log.Debug($"Assembly {package.FullName} requires default app domain assembly resolver");
+            }
+
+            var testFrameworkName = _testFrameworkService.GetFrameworkReference(package.FullName)?.FrameworkReference;
+            if (testFrameworkName != null)
+            {
+                package.Settings[EnginePackageSettings.ReferencedTestFramework] = testFrameworkName.FullName;
             }
         }
     }

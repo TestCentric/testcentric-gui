@@ -37,6 +37,7 @@ namespace TestCentric.Engine.Services.TestRunnerFactoryTests
             _services.Add(projectService);
             _services.Add(new DefaultTestRunnerFactory());
             _services.Add(new FakeRuntimeService());
+            _services.Add(new TestFrameworkService());
             _services.Add(new PackageSettingsService());
 
             _services.ServiceManager.StartServices();
