@@ -163,6 +163,11 @@ namespace TestCentric
         /// </summary>
         public const string ImageTargetFrameworkName = "ImageTargetFrameworkName";
 
+        /// <summary>
+        /// The full name of the test framework referenced by the assembly
+        /// </summary>
+        public const string ReferencedTestFramework = "ReferencedTestFramework";
+
         #endregion
     }
 }
