@@ -166,7 +166,17 @@ namespace TestCentric
         /// <summary>
         /// The full name of the test framework referenced by the assembly
         /// </summary>
-        public const string ReferencedTestFramework = "ReferencedTestFramework";
+        public const string ImageTestFrameworkReference = "ImageTestFrameworkReference";
+
+        /// <summary>
+        /// The AssemblyQualifiedName of the framework driver to be used.
+        /// </summary>
+        public const string ImageFrameworkDriverReference = "ImageFrameworkDriverReference";
+
+        /// <summary>
+        /// True if the NUnit.Framework.NonTestAssemblyAttribute is present
+        /// </summary>
+        public const string ImageNonTestAssemblyAttribute = "ImageNonTestAssemblyAttribute";
 
         #endregion
     }

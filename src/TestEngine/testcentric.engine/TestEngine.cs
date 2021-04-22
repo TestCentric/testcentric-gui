@@ -70,7 +70,7 @@ namespace TestCentric.Engine
 #endif
                 Services.Add(new DriverService());
                 Services.Add(new ResultService());
-                Services.Add(new DefaultTestRunnerFactory());
+                Services.Add(new TestRunnerFactory());
             }
 
             Services.ServiceManager.StartServices();
