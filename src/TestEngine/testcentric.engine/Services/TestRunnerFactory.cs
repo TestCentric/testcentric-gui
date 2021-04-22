@@ -3,6 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
+using System.IO;
 using NUnit.Engine;
 using TestCentric.Engine.Helpers;
 using TestCentric.Engine.Runners;
@@ -10,11 +11,11 @@ using TestCentric.Engine.Runners;
 namespace TestCentric.Engine.Services
 {
     /// <summary>
-    /// DefaultTestRunnerFactory handles creation of a suitable test
+    /// TestRunnerFactory handles creation of a suitable test
     /// runner for a given package to be loaded and run either in a
     /// separate process or within the same process.
     /// </summary>
-    public class DefaultTestRunnerFactory : Service, ITestRunnerFactory
+    public class TestRunnerFactory : Service, ITestRunnerFactory
     {
         //private IProjectService _projectService;
 
@@ -39,9 +40,10 @@ namespace TestCentric.Engine.Services
         /// <returns>A TestRunner</returns>
         public ITestEngineRunner MakeTestRunner(TestPackage package)
         {
+            if (package.SubPackages.Count == 1)
+                return MakeTestRunner(package.SubPackages[0]);
+
 #if NETSTANDARD2_0
-            //if (package.SubPackages.Count == 1)
-            //    return MakeTestRunner(package.SubPackages[0]);
             if (package.SubPackages.Count > 1)
                 return new AggregatingTestRunner(ServiceContext, package);
 
@@ -49,9 +51,23 @@ namespace TestCentric.Engine.Services
 #else
             if (package.AssemblyPackages().Count > 1)
                 return new MultipleTestProcessRunner(this.ServiceContext, package);
-            else
-                return new ProcessRunner(this.ServiceContext, package);
+
+            return MakeRunnerForSingleTestFile(package);
 #endif
+        }
+
+        private ITestEngineRunner MakeRunnerForSingleTestFile(TestPackage package)
+        {
+            if (!File.Exists(package.FullName))
+                return new InvalidAssemblyRunner(package, "File not found: " + package.FullName);
+
+            if (!PathUtils.IsAssemblyFileType(package.FullName))
+                return new InvalidAssemblyRunner(package, "File type is not supported");
+
+            if (package.GetSetting(EnginePackageSettings.ImageNonTestAssemblyAttribute, false))
+                return new SkippedAssemblyRunner(package);
+
+            return new ProcessRunner(this.ServiceContext, package);
         }
 
         // TODO: Review this method once used by a gui - the implementation is

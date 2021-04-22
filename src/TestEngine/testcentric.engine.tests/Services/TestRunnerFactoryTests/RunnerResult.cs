@@ -36,6 +36,8 @@ namespace TestCentric.Engine.Services.TestRunnerFactoryTests
             };
         }
 
+        public static RunnerResult InvalidAssemblyRunner => new RunnerResult { TestRunner = typeof(InvalidAssemblyRunner) };
+
         public Type TestRunner { get; set; }
 
         public ICollection<RunnerResult> SubRunners { get; set; } = new List<RunnerResult>();

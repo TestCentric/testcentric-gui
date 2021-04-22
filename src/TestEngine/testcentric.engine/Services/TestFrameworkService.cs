@@ -6,6 +6,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Mono.Cecil;
+using TestCentric.Common;
 using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Services
@@ -66,7 +67,11 @@ namespace TestCentric.Engine.Services
     {
         public TestFrameworkReference(AssemblyName frameworkReference)
         {
+            Guard.ArgumentNotNull(frameworkReference, nameof(frameworkReference));
+
             FrameworkReference = frameworkReference;
+            if (Name == "nunit.framework")
+                FrameworkDriver = typeof(Drivers.NUnit3FrameworkDriver).AssemblyQualifiedName;
         }
 
         /// <summary>
@@ -80,6 +85,12 @@ namespace TestCentric.Engine.Services
         /// Gets a reference to a known test framework, which was found
         /// in a test assembly or null if none was found.
         /// </summary>
-        public AssemblyName FrameworkReference { get; }
+        public AssemblyName FrameworkReference { get; set; }
+
+        /// <summary>
+        /// Gets the AssemblyQualifiedName of the framework driver
+        /// to be used for loading and running the tests.
+        /// </summary>
+        public string FrameworkDriver { get; }
     }
 }

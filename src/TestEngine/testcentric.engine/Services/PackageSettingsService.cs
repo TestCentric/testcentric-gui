@@ -115,6 +115,12 @@ namespace TestCentric.Engine.Services
             if (!string.IsNullOrEmpty(frameworkName))
             {
                 log.Debug($"Assembly {package.FullName} targets {frameworkName}");
+                // This takes care of an old issue with Roslyn
+                if (frameworkName == ".NETPortable,Version=v5.0")
+                {
+                    frameworkName = ".NETStandard,Version=v1.0";
+                    log.Debug($"Using {frameworkName} instead");
+                }
                 package.Settings[EnginePackageSettings.ImageTargetFrameworkName] = frameworkName;
             }
 
@@ -132,10 +138,19 @@ namespace TestCentric.Engine.Services
                 log.Debug($"Assembly {package.FullName} requires default app domain assembly resolver");
             }
 
-            var testFrameworkName = _testFrameworkService.GetFrameworkReference(package.FullName)?.FrameworkReference;
-            if (testFrameworkName != null)
+            bool nonTestAssembly = assembly.HasAttribute("NUnit.Framework.NonTestAssemblyAttribute");
+            if (nonTestAssembly)
             {
-                package.Settings[EnginePackageSettings.ReferencedTestFramework] = testFrameworkName.FullName;
+                log.Debug($"Assembly {package.FullName} has NonTestAssemblyAttribute");
+                package.Settings[EnginePackageSettings.ImageNonTestAssemblyAttribute] = true;
+            }
+
+            var testFrameworkReference = _testFrameworkService.GetFrameworkReference(package.FullName);
+            if (testFrameworkReference != null)
+            {
+                package.Settings[EnginePackageSettings.ImageTestFrameworkReference] = testFrameworkReference.FrameworkReference.FullName;
+                if (testFrameworkReference.FrameworkDriver != null)
+                    package.Settings[EnginePackageSettings.ImageFrameworkDriverReference] = testFrameworkReference.FrameworkDriver;
             }
         }
     }

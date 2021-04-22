@@ -53,7 +53,7 @@ namespace TestCentric.Engine.Runners
             _services.Add(new Services.TestAgency("ProcessRunnerTests", 0));
 #endif
             _services.Add(new Services.DriverService());
-            _services.Add(new Services.DefaultTestRunnerFactory());
+            _services.Add(new Services.TestRunnerFactory());
             _services.ServiceManager.StartServices();
 
             var mockAssemblyPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "mock-assembly.dll");

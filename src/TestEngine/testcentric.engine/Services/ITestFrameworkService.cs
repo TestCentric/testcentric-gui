@@ -42,5 +42,11 @@ namespace TestCentric.Engine.Services
         /// in a test assembly or returns null if none was found.
         /// </summary>
         AssemblyName FrameworkReference { get; }
+
+        /// <summary>
+        /// Gets the AssemblyQualifiedName of the framework driver
+        /// to be used for loading and running the tests.
+        /// </summary>
+        string FrameworkDriver { get; }
     }
 }

@@ -11,6 +11,7 @@ using NUnit.Framework;
 
 namespace TestCentric.Engine.Services.TestRunnerFactoryTests
 {
+    using System.IO;
     using Fakes;
 
     /// <summary>
@@ -35,7 +36,7 @@ namespace TestCentric.Engine.Services.TestRunnerFactoryTests
 
             _services.Add(new ExtensionService());
             _services.Add(projectService);
-            _services.Add(new DefaultTestRunnerFactory());
+            _services.Add(new TestRunnerFactory());
             _services.Add(new FakeRuntimeService());
             _services.Add(new TestFrameworkService());
             _services.Add(new PackageSettingsService());
@@ -61,6 +62,8 @@ namespace TestCentric.Engine.Services.TestRunnerFactoryTests
 
             return result;
         }
+
+        private static readonly string MOCK_ASSEMBLY = Path.Combine(TestContext.CurrentContext.TestDirectory, "mock-assembly.dll");
 
         public static IEnumerable<TestCaseData> TestCases
         {
@@ -116,16 +119,24 @@ namespace TestCentric.Engine.Services.TestRunnerFactoryTests
                 //    RunnerResult.AggregatingTestRunner(4)).SetName("OneAssemblyOneProjectOneUnknown");
 #else
                 yield return new TestCaseData(
-                    new TestPackage("a.dll"),
+                    new TestPackage(MOCK_ASSEMBLY),
                     RunnerResult.ProcessRunner).SetName("SingleAssembly_StringCtor");
 
                 yield return new TestCaseData(
-                    new TestPackage(new string[] { "a.dll" }),
+                    new TestPackage("a.dll"),
+                    RunnerResult.InvalidAssemblyRunner).SetName("SingleAssemblyNotFound_StringCtor");
+
+                yield return new TestCaseData(
+                    new TestPackage(new string[] { MOCK_ASSEMBLY }),
                     RunnerResult.ProcessRunner).SetName("SingleAssembly_ListCtor");
 
                 yield return new TestCaseData(
+                    new TestPackage(new string[] { "a.dll" }),
+                    RunnerResult.InvalidAssemblyRunner).SetName("SingleAssemblyNotFound_ListCtor");
+
+                yield return new TestCaseData(
                     new TestPackage("a.junk"),
-                    RunnerResult.ProcessRunner).SetName("SingleUnknown");
+                    RunnerResult.InvalidAssemblyRunner).SetName("SingleUnknown");
 
                 yield return new TestCaseData(
                     new TestPackage(new string[] { "a.dll", "b.dll" }),
