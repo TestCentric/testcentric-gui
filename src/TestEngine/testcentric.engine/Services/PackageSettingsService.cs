@@ -8,7 +8,6 @@ using System.IO;
 using Mono.Cecil;
 using NUnit.Engine;
 using TestCentric.Common;
-using TestCentric.Engine.Helpers;
 using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Services

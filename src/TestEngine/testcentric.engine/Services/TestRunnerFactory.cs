@@ -5,7 +5,7 @@
 
 using System.IO;
 using NUnit.Engine;
-using TestCentric.Engine.Helpers;
+using TestCentric.Engine.Internal;
 using TestCentric.Engine.Runners;
 
 namespace TestCentric.Engine.Services

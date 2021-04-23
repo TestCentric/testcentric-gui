@@ -10,7 +10,6 @@ using System.Net.Sockets;
 using NUnit.Engine;
 using TestCentric.Engine.Internal;
 using TestCentric.Engine.Services;
-using TestCentric.Engine.Helpers;
 
 namespace TestCentric.Engine.Runners
 {

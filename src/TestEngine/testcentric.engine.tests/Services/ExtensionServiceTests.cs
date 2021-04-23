@@ -12,6 +12,7 @@ using NUnit.Engine;
 using NUnit.Engine.Extensibility;
 using NUnit.Framework;
 using TestCentric.Engine.Helpers;
+using TestCentric.Engine.Internal;
 using TestCentric.Engine.Extensibility;
 
 namespace TestCentric.Engine.Services

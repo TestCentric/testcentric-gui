@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Xml;
 
-namespace TestCentric.Engine.Helpers
+namespace TestCentric.Engine.Internal
 {
     /// <summary>
     /// XmlHelper provides static methods for basic XML operations.

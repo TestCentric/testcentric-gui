@@ -11,7 +11,6 @@ using Mono.Cecil;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
 using TestCentric.Engine.Drivers;
-using TestCentric.Engine.Helpers;
 using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Runners

@@ -9,7 +9,7 @@ using System.IO;
 using System.Text;
 using TestCentric.Common;
 
-namespace TestCentric.Engine.Helpers
+namespace TestCentric.Engine.Internal
 {
     /// <summary>
     /// DirectoryFinder is a utility class used for extended wildcard

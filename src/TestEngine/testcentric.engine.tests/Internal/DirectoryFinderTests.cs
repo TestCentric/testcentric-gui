@@ -8,7 +8,7 @@ using System.IO;
 using System.Text;
 using NUnit.Framework;
 
-namespace TestCentric.Engine.Helpers
+namespace TestCentric.Engine.Internal
 {
     public class DirectoryFinderTests
     {
