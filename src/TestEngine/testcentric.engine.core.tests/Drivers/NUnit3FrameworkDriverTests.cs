@@ -7,7 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
-using TestCentric.Engine.Helpers;
+using TestCentric.Engine.Internal;
 using TestCentric.Tests.Assemblies;
 using NUnit.Framework;
 using NUnit.Engine;

@@ -7,16 +7,18 @@
 using System.IO;
 using NUnit.Framework;
 
-namespace TestCentric.Engine.Helpers
+namespace TestCentric.Engine.Internal
 {
     [TestFixture]
     public class AssemblyHelperTests
     {
+        // This has to be hard-coded, since we are testing the
+        // function that finds assembly paths!
         private static readonly string THIS_ASSEMBLY_PATH =
 #if NETFRAMEWORK
-            "testcentric.engine.core.tests.exe";
+            "testcentric.engine.tests.exe";
 #else
-            "testcentric.engine.core.tests.dll";
+            "testcentric.engine.tests.dll";
 #endif
 
         [Test]

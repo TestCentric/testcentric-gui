@@ -9,7 +9,7 @@ using System.Xml;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
 using NUnit.Framework;
-using TestCentric.Engine.Helpers;
+using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Runners
 {

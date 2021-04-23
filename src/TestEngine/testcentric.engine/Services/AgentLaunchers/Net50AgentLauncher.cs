@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 using NUnit.Engine;
-using TestCentric.Engine.Helpers;
+using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Services
 {

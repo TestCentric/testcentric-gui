@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using NUnit.Engine;
 
-namespace TestCentric.Engine.Helpers
+namespace TestCentric.Engine.Internal
 {
     public delegate bool TestPackageSelectorDelegate(TestPackage p);
 

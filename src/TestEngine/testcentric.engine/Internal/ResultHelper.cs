@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Xml;
 using NUnit.Engine;
 
-namespace TestCentric.Engine.Helpers
+namespace TestCentric.Engine.Internal
 {
     /// <summary>
     /// ResultHelper provides static methods for working with
