@@ -5,8 +5,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
+using TestCentric.Engine.Drivers;
 using TestCentric.Engine.Helpers;
 using TestCentric.Engine.Internal;
 
@@ -109,13 +111,12 @@ namespace TestCentric.Engine.Runners
             // found in the terminal nodes.
             var packagesToLoad = TestPackage.Select(p => !p.HasSubPackages());
 
-            var driverService = Services.GetService<IDriverService>();
-
             foreach (var subPackage in packagesToLoad)
             {
                 var testFile = subPackage.FullName;
 
                 string targetFramework = subPackage.GetSetting(EnginePackageSettings.ImageTargetFrameworkName, (string)null);
+                string testFramework = subPackage.GetSetting(EnginePackageSettings.ImageTestFrameworkReference, (string)null);
                 bool skipNonTestAssemblies = subPackage.GetSetting(EnginePackageSettings.SkipNonTestAssemblies, false);
 
 #if !NETSTANDARD1_6
@@ -126,11 +127,14 @@ namespace TestCentric.Engine.Runners
                     // checks to see if the path is already present.
                     _assemblyResolver.AddPathFromFile(testFile);
                 }
-
-                IFrameworkDriver driver = driverService.GetDriver(TestDomain, testFile, targetFramework, skipNonTestAssemblies);
-#else
-                IFrameworkDriver driver = driverService.GetDriver(testFile, skipNonTestAssemblies);
 #endif
+
+                var driver = new NUnit3DriverFactory().GetDriver(
+#if NETFRAMEWORK
+                    TestDomain,
+#endif
+                    new AssemblyName(testFramework));
+
                 driver.ID = TestPackage.ID;
                 result.Add(LoadDriver(driver, testFile, subPackage));
                 _drivers.Add(driver);
