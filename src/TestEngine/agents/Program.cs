@@ -91,7 +91,6 @@ namespace TestCentric.Engine.Agents
 
             // Custom Service Initialization
             engine.Services.Add(new ExtensionService());
-            engine.Services.Add(new DriverService());
 
             // Initialize Services
             log.Info("Initializing Services");

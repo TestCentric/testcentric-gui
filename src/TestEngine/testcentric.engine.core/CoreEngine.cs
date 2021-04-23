@@ -81,7 +81,6 @@ namespace TestCentric.Engine
             // If caller added services beforehand, we don't add any
             if (Services.ServiceCount == 0)
             {
-                Services.Add(new DriverService());
 #if !NETSTANDARD1_6
                 Services.Add(new ExtensionService());
 #endif

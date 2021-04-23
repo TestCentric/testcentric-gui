@@ -6,6 +6,7 @@
 using System;
 using NUnit.Engine;
 using NUnit.Framework;
+using TestCentric.Engine.Services;
 
 namespace TestCentric.Engine.Api
 
@@ -28,7 +29,7 @@ namespace TestCentric.Engine.Api
             _testEngine.Dispose();
         }
 
-        [TestCase(typeof(IDriverService))]
+        [TestCase(typeof(IProjectService))]
         public void CanAccessService(Type serviceType)
         {
             IService service = _testEngine.Services.GetService(serviceType) as IService;
