@@ -3,15 +3,13 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>TestCentric.Agent</RootNamespace>
     <TargetFrameworks>net20;net40;netcoreapp2.1;netcoreapp3.1;net5.0</TargetFrameworks>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-    <ApplicationIcon>..\..\..\nunit.ico</ApplicationIcon>
+    <ApplicationManifest>..\app.manifest</ApplicationManifest>
+    <ApplicationIcon>..\..\..\..\nunit.ico</ApplicationIcon>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <GenerateSupportedRuntime>false</GenerateSupportedRuntime>
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
-    <OutputPath>..\..\..\bin\$(Configuration)\agents\</OutputPath>
+    <OutputPath>..\..\..\..\bin\$(Configuration)\agents\</OutputPath>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net20|AnyCPU'">
-    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net20'">
     <Reference Include="System.Runtime.Remoting" />
@@ -20,15 +18,21 @@
     <Reference Include="System.Runtime.Remoting" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\CommonEngineAssemblyInfo.cs" Link="Properties\CommonEngineAssemblyInfo.cs" />
+    <Compile Include="..\..\CommonEngineAssemblyInfo.cs" Link="Properties\CommonEngineAssemblyInfo.cs" />
+    <Compile Include="..\AgentExitCodes.cs" Link="AgentExitCodes.cs" />
+    <Compile Include="..\Program.cs" Link="Program.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\..\nunit.ico">
+    <Content Include="..\..\..\..\nunit.ico">
       <Link>nunit.ico</Link>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\testcentric.engine.core\testcentric.engine.core.csproj" />
+    <None Include="..\app.config" Link="app.config" />
+    <None Include="..\app.manifest" Link="app.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\testcentric.engine.core\testcentric.engine.core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="app.config">
