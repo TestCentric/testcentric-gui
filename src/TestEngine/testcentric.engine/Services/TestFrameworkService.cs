@@ -70,8 +70,8 @@ namespace TestCentric.Engine.Services
             Guard.ArgumentNotNull(frameworkReference, nameof(frameworkReference));
 
             FrameworkReference = frameworkReference;
-            if (Name == "nunit.framework")
-                FrameworkDriver = typeof(Drivers.NUnit3FrameworkDriver).AssemblyQualifiedName;
+            //if (Name == "nunit.framework")
+            //    FrameworkDriver = typeof(Drivers.NUnit3FrameworkDriver).AssemblyQualifiedName;
         }
 
         /// <summary>
