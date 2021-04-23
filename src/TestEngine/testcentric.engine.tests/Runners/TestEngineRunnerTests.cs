@@ -10,6 +10,7 @@ using System.Xml;
 using NUnit.Engine;
 using NUnit.Framework;
 using TestCentric.Engine.Internal;
+using TestCentric.Engine.Services;
 using TestCentric.Tests.Assemblies;
 
 namespace TestCentric.Engine.Runners

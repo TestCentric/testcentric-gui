@@ -5,9 +5,8 @@
 
 using System;
 using NUnit.Engine;
-using TestCentric.Engine.Services;
 
-namespace TestCentric.Engine
+namespace TestCentric.Engine.Services
 {
     /// <summary>
     /// The ServiceContext is used by services, runners and
