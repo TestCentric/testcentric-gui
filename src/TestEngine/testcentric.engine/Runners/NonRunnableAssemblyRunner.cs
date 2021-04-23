@@ -12,7 +12,7 @@ namespace TestCentric.Engine.Runners
 {
     public abstract class NonRunnableAssemblyRunner : AbstractTestRunner
     {
-        public NonRunnableAssemblyRunner(TestPackage package) : base(new ServiceContext(), package) { }
+        public NonRunnableAssemblyRunner(TestPackage package) : base(package) { }
 
         protected abstract NotRunnableAssemblyResult Result { get; }
 

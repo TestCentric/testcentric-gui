@@ -24,16 +24,10 @@ namespace TestCentric.Engine.Agents
         /// </summary>
         /// <param name="agentId">The identifier of the agent.</param>
         /// <param name="services">The services available to the agent.</param>
-        public TestAgent(Guid agentId, IServiceLocator services)
+        public TestAgent(Guid agentId)
         {
             Id = agentId;
-            Services = services;
         }
-
-        /// <summary>
-        /// The services available to the agent
-        /// </summary>
-        protected IServiceLocator Services { get; }
 
         /// <summary>
         /// Gets a Guid that uniquely identifies this agent.

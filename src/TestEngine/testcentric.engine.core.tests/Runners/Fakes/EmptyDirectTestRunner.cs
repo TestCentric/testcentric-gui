@@ -8,9 +8,9 @@ using NUnit.Engine;
 
 namespace TestCentric.Engine.Runners.Fakes
 {
-    internal class EmptyDirectTestRunner : Engine.Runners.DirectTestRunner
+    internal class EmptyDirectTestRunner : Engine.Runners.TestAgentRunner
     {
-        public EmptyDirectTestRunner(IServiceLocator services, TestPackage package) : base(services, package)
+        public EmptyDirectTestRunner(IServiceLocator services, TestPackage package) : base(package)
         {
 #if !NETCOREAPP1_1
             TestDomain = AppDomain.CurrentDomain;

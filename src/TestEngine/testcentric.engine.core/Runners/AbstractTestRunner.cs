@@ -17,17 +17,10 @@ namespace TestCentric.Engine.Runners
     /// </summary>
     public abstract class AbstractTestRunner : ITestEngineRunner
     {
-        public AbstractTestRunner(IServiceLocator services, TestPackage package)
+        public AbstractTestRunner(TestPackage package)
         {
-            Services = services;
-            TestRunnerFactory = Services.GetService<ITestRunnerFactory>();
             TestPackage = package;
         }
-
-        /// <summary>
-        /// Our Service Context
-        /// </summary>
-        protected IServiceLocator Services { get; private set; }
 
         protected ITestRunnerFactory TestRunnerFactory { get; private set; }
 

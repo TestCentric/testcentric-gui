@@ -33,6 +33,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\testcentric.engine.core\testcentric.engine.core.csproj" />
+    <ProjectReference Include="..\testcentric.agent.core\testcentric.agent.core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="app.config">

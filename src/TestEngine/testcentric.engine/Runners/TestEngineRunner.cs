@@ -4,20 +4,19 @@
 // ***********************************************************************
 
 using System;
+using System.ComponentModel;
 using NUnit.Engine;
 
 namespace TestCentric.Engine.Runners
 {
-    /// <summary>
-    /// LocalTestRunner runs tests in the current application domain.
-    /// </summary>
-    public class LocalTestRunner : DirectTestRunner
+    public abstract class TestEngineRunner : AbstractTestRunner
     {
-        public LocalTestRunner(IServiceLocator services, TestPackage package) : base(services, package)
+        public TestEngineRunner(IServiceLocator services, TestPackage package)
+            : base(package)
         {
-#if !NETSTANDARD1_6
-            this.TestDomain = AppDomain.CurrentDomain;
-#endif
+            Services = services;
         }
+    
+        protected IServiceLocator Services { get; }
     }
 }

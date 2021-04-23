@@ -16,7 +16,7 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
 {
     public class TcpServer
     {
-        private static readonly Logger log = InternalTrace.GetLogger(typeof(TestAgentTcpTransport));
+        private static readonly Logger log = InternalTrace.GetLogger(typeof(TcpServer));
 
         private const int GUID_BUFFER_SIZE = 16;
 

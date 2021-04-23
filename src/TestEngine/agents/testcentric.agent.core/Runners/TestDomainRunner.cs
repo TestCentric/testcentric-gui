@@ -13,11 +13,11 @@ namespace TestCentric.Engine.Runners
     /// TestDomainRunner loads and runs tests in a separate
     /// domain whose lifetime it controls.
     /// </summary>
-    public class TestDomainRunner : DirectTestRunner
+    public class TestDomainRunner : TestAgentRunner
     {
         private DomainManager _domainManager;
 
-        public TestDomainRunner(IServiceLocator services, TestPackage package) : base(services, package)
+        public TestDomainRunner(TestPackage package) : base(package)
         {
             _domainManager = new DomainManager();
         }

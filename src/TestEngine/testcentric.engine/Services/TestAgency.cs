@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Diagnostics;
 using TestCentric.Common;
-using TestCentric.Engine.Agents;
 using TestCentric.Engine.Helpers;
 using TestCentric.Engine.Internal;
 using NUnit.Engine;
