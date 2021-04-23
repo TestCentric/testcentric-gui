@@ -23,24 +23,22 @@ namespace TestCentric.Engine.Services
 
 #pragma warning disable 414
         private static readonly string[] KnownExtensionPointPaths = {
-            "/NUnit/Engine/TypeExtensions/IDriverFactory",
             "/NUnit/Engine/TypeExtensions/IProjectLoader",
             "/NUnit/Engine/TypeExtensions/IResultWriter",
             "/NUnit/Engine/TypeExtensions/ITestEventListener",
-            "/NUnit/Engine/TypeExtensions/IService",
-            "/NUnit/Engine/NUnitV2Driver"
+            "/NUnit/Engine/TypeExtensions/IDriverFactory",
+            "/NUnit/Engine/TypeExtensions/IService"
         };
 
         private static readonly Type[] KnownExtensionPointTypes = {
-            typeof(IDriverFactory),
             typeof(IProjectLoader),
             typeof(IResultWriter),
             typeof(ITestEventListener),
-            typeof(IService),
-            typeof(IFrameworkDriver)
+            typeof(IDriverFactory),
+            typeof(IService)
         };
 
-        private static readonly int[] KnownExtensionPointCounts = { 1, 1, 1, 2, 1, 1 };
+        private static readonly int[] KnownExtensionPointCounts = { 1, 1, 2, 0, 1 };
 #pragma warning restore 414
 
         [SetUp]
@@ -52,7 +50,6 @@ namespace TestCentric.Engine.Services
             // in finding the extensions actually in use on the current system,
             // we simulate the start using this assemblies dummy extensions.
             _serviceClass.FindExtensionPoints(typeof(TestEngine).Assembly);
-            _serviceClass.FindExtensionPoints(typeof(CoreEngine).Assembly);
             _serviceClass.FindExtensionPoints(typeof(ITestEngine).Assembly);
 
             _serviceClass.FindExtensionsInAssembly(new ExtensionAssembly(GetType().Assembly.Location, false));
@@ -88,12 +85,10 @@ namespace TestCentric.Engine.Services
 
 #pragma warning disable 414
         private static readonly string[] KnownExtensions = {
-            "TestCentric.Engine.DummyFrameworkDriverExtension",
             "TestCentric.Engine.DummyProjectLoaderExtension",
             "TestCentric.Engine.DummyResultWriterExtension",
             "TestCentric.Engine.DummyEventListenerExtension",
-            "TestCentric.Engine.DummyServiceExtension",
-            "TestCentric.Engine.V2DriverExtension"
+            "TestCentric.Engine.DummyServiceExtension"
         };
 #pragma warning restore 414
 

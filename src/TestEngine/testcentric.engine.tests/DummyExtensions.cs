@@ -14,24 +14,6 @@ using NUnit.Engine.Extensibility;
 namespace TestCentric.Engine
 {
     [Extension]
-    public class DummyFrameworkDriverExtension : IDriverFactory
-    {
-#if NETCOREAPP2_1
-        public IFrameworkDriver GetDriver(AssemblyName reference)
-#else
-        public IFrameworkDriver GetDriver(AppDomain domain, AssemblyName reference)
-#endif
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool IsSupportedTestFramework(AssemblyName reference)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    [Extension]
     public class DummyProjectLoaderExtension : IProjectLoader
     {
         public bool CanLoadFrom(string path)
@@ -103,48 +85,6 @@ namespace TestCentric.Engine
         }
 
         public void StopService()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    [Extension]
-    public class V2DriverExtension : IFrameworkDriver
-    {
-        public string ID
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public int CountTestCases(string filter)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string Explore(string filter)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string Load(string testAssemblyPath, IDictionary<string, object> settings)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string Run(ITestEventListener listener, string filter)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void StopRun(bool force)
         {
             throw new NotImplementedException();
         }
