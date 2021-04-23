@@ -33,9 +33,9 @@ namespace TestCentric.Engine.Runners
         private ITestEngineRunner _remoteRunner;
         private TestAgency _agency;
 
-        public ProcessRunner(IServiceLocator services, TestPackage package) : base(services, package)
+        public ProcessRunner(IServiceLocator services, TestPackage package) : base(package)
         {
-            _agency = Services.GetService<TestAgency>();
+            _agency = services.GetService<TestAgency>();
         }
 
         /// <summary>

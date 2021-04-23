@@ -5,7 +5,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
+using Mono.Cecil;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
 using TestCentric.Engine.Drivers;
@@ -18,30 +20,24 @@ namespace TestCentric.Engine.Runners
     /// DirectTestRunner is the abstract base for runners
     /// that deal directly with a framework driver.
     /// </summary>
-    public abstract class DirectTestRunner : AbstractTestRunner
+    public abstract class TestAgentRunner : AbstractTestRunner
     {
-        // DirectTestRunner loads and runs tests in a particular AppDomain using
+        // TestAgentRunner loads and runs tests in a particular AppDomain using
         // one driver per assembly. All test assemblies are ultimately executed by
         // one of the derived classes of DirectTestRunner, either LocalTestRunner
         // or TestDomainRunner.
         //
-        // DirectTestRunner creates an appropriate framework driver for each assembly
+        // TestAgentRunner creates an appropriate framework driver for each assembly
         // included in the TestPackage. All frameworks loaded by the same DirectRunner
         // must be compatible, i.e. runnable within the same AppDomain.
         // 
-        // DirectTestRunner is used in the engine/runner process as well as in agent
+        // TestAgentRunner is used in the engine/runner process as well as in agent
         // processes. It may be called with a TestPackage that specifies a single 
         // assembly, multiple assemblies, a single project, multiple projects or
         // a mix of projects and assemblies. This variety of potential package
         // inputs complicates things. It arises from the fact that NUnit permits 
         // the caller to specify that all projects and assemblies should be loaded 
         // in the same AppDomain.
-        //
-        // TODO: When there are projects included in the TestPackage, DirectTestRUnner
-        // should create intermediate result nodes for each project.
-        //
-        // TODO: We really should detect and give a meaningful message if the user 
-        // tries to load incopatible frameworks in the same AppDomain.
 
         private readonly List<IFrameworkDriver> _drivers = new List<IFrameworkDriver>();
 
@@ -51,7 +47,7 @@ namespace TestCentric.Engine.Runners
         protected AppDomain TestDomain { get; set; }
 #endif
 
-        public DirectTestRunner(IServiceLocator services, TestPackage package) : base(services, package)
+        public TestAgentRunner(TestPackage package) : base(package)
         {
 #if !NETSTANDARD1_6
             // Bypass the resolver if not in the default AppDomain. This prevents trying to use the resolver within
@@ -116,7 +112,7 @@ namespace TestCentric.Engine.Runners
                 var testFile = subPackage.FullName;
 
                 string targetFramework = subPackage.GetSetting(EnginePackageSettings.ImageTargetFrameworkName, (string)null);
-                string testFramework = subPackage.GetSetting(EnginePackageSettings.ImageTestFrameworkReference, (string)null);
+                string frameworkReference = subPackage.GetSetting(EnginePackageSettings.ImageTestFrameworkReference, (string)null);
                 bool skipNonTestAssemblies = subPackage.GetSetting(EnginePackageSettings.SkipNonTestAssemblies, false);
 
 #if !NETSTANDARD1_6
@@ -127,19 +123,90 @@ namespace TestCentric.Engine.Runners
                     // checks to see if the path is already present.
                     _assemblyResolver.AddPathFromFile(testFile);
                 }
-#endif
 
-                var driver = new NUnit3DriverFactory().GetDriver(
-#if NETFRAMEWORK
-                    TestDomain,
+                //IFrameworkDriver driver = driverService?.GetDriver(TestDomain, testFile, targetFramework, skipNonTestAssemblies);
+                IFrameworkDriver driver = GetDriver(TestDomain, testFile, targetFramework, skipNonTestAssemblies);
+#else
+                //IFrameworkDriver driver = driverService?.GetDriver(testFile, skipNonTestAssemblies);
+                IFrameworkDriver driver = GetDriver(testFile, skipNonTestAssemblies);
 #endif
-                    new AssemblyName(testFramework));
-
                 driver.ID = TestPackage.ID;
                 result.Add(LoadDriver(driver, testFile, subPackage));
                 _drivers.Add(driver);
             }
             return result;
+        }
+
+        // TODO: This is a temporary fix while we decide how to handle
+        // loadable drivers outside of the context of DriverService
+#if NETSTANDARD1_6
+        public IFrameworkDriver GetDriver(string assemblyPath, bool skipNonTestAssemblies)
+#else
+        public IFrameworkDriver GetDriver(AppDomain domain, string assemblyPath, string targetFramework, bool skipNonTestAssemblies)
+#endif
+        {
+            if (!File.Exists(assemblyPath))
+                return new InvalidAssemblyFrameworkDriver(assemblyPath, "File not found: " + assemblyPath);
+
+            if (!PathUtils.IsAssemblyFileType(assemblyPath))
+                return new InvalidAssemblyFrameworkDriver(assemblyPath, "File type is not supported");
+
+#if !NETSTANDARD1_6 && !NETSTANDARD2_0
+            if (targetFramework != null)
+            {
+                // This takes care of an issue with Roslyn. It may get fixed, but we still
+                // have to deal with assemblies having this setting. I'm assuming that
+                // any true Portable assembly would have a Profile as part of its name.
+                var platform = targetFramework == ".NETPortable,Version=v5.0"
+                    ? ".NETStandard"
+                    : targetFramework.Split(new char[] { ',' })[0];
+                if (platform == "Silverlight" || platform == ".NETPortable" || platform == ".NETStandard" || platform == ".NETCompactFramework")
+                    return new InvalidAssemblyFrameworkDriver(assemblyPath, platform + " test assemblies are not supported by this version of the engine");
+            }
+#endif
+
+            try
+            {
+                var assemblyDef = AssemblyDefinition.ReadAssembly(assemblyPath);
+
+                if (skipNonTestAssemblies)
+                {
+                    foreach (var attr in assemblyDef.CustomAttributes)
+                        if (attr.AttributeType.FullName == "NUnit.Framework.NonTestAssemblyAttribute")
+                            return new SkippedAssemblyFrameworkDriver(assemblyPath);
+                }
+
+                var factories = new IDriverFactory[]
+                {
+                    new NUnit3DriverFactory(),
+                    //new NUnit2DriverFactory()
+                };
+
+                var frameworkAssemblyName = TestPackage.GetSetting(EnginePackageSettings.ImageTestFrameworkReference, (string)null);
+                if (frameworkAssemblyName != null)
+                {
+                    var referencedFramework = new AssemblyName(frameworkAssemblyName);
+                    foreach (var factory in factories)
+                    {
+                        if (factory.IsSupportedTestFramework(referencedFramework))
+#if NETSTANDARD1_6 || NETSTANDARD2_0
+                        return factory.GetDriver(referencedFramework);
+#else
+                            return factory.GetDriver(domain, referencedFramework);
+#endif
+                    }
+                }
+            }
+            catch (BadImageFormatException ex)
+            {
+                return new InvalidAssemblyFrameworkDriver(assemblyPath, ex.Message);
+            }
+
+            if (skipNonTestAssemblies)
+                return new SkippedAssemblyFrameworkDriver(assemblyPath);
+            else
+                return new InvalidAssemblyFrameworkDriver(assemblyPath, string.Format("No suitable tests found in '{0}'.\n" +
+                                                                              "Either assembly contains no tests or proper test driver has not been found.", assemblyPath));
         }
 
         private static string LoadDriver(IFrameworkDriver driver, string testFile, TestPackage subPackage)

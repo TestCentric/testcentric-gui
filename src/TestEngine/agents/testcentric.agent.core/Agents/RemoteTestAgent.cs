@@ -26,8 +26,8 @@ namespace TestCentric.Engine.Agents
         /// <summary>
         /// Construct a RemoteTestAgent
         /// </summary>
-        public RemoteTestAgent(Guid agentId, IServiceLocator services)
-            : base(agentId, services) { }
+        public RemoteTestAgent(Guid agentId)
+            : base(agentId) { }
 
         public ITestAgentTransport Transport;
 
@@ -47,9 +47,9 @@ namespace TestCentric.Engine.Agents
         public override ITestEngineRunner CreateRunner(TestPackage package)
         {
 #if NETFRAMEWORK
-            return new TestDomainRunner(Services, package);
+            return new TestDomainRunner(package);
 #else
-            return new LocalTestRunner(Services, package);
+            return new LocalTestRunner(package);
 #endif
         }
     }

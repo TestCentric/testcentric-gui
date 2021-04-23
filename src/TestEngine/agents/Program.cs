@@ -97,7 +97,7 @@ namespace TestCentric.Engine.Agents
             engine.InitializeServices();
 
             log.Info("Starting RemoteTestAgent");
-            Agent = new RemoteTestAgent(AgentId, engine.Services);
+            Agent = new RemoteTestAgent(AgentId);
             Agent.Transport =
 #if NETFRAMEWORK
                 new TestCentric.Engine.Communication.Transports.Remoting.TestAgentRemotingTransport(Agent, AgencyUrl);
