@@ -82,20 +82,6 @@ namespace TestCentric.Engine.Agents
                 RuntimeFramework.CurrentFramework.DisplayName);
 #endif
 
-            // Create CoreEngine
-            var engine = new CoreEngine
-            {
-                WorkDirectory = workDirectory,
-                InternalTraceLevel = traceLevel
-            };
-
-            // Custom Service Initialization
-            engine.Services.Add(new ExtensionService());
-
-            // Initialize Services
-            log.Info("Initializing Services");
-            engine.InitializeServices();
-
             log.Info("Starting RemoteTestAgent");
             Agent = new RemoteTestAgent(AgentId);
             Agent.Transport =
