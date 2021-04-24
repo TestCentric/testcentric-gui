@@ -22,8 +22,6 @@ namespace TestCentric.Engine.Runners
             TestPackage = package;
         }
 
-        protected ITestRunnerFactory TestRunnerFactory { get; private set; }
-
         /// <summary>
         /// The TestPackage for which this is the runner
         /// </summary>
