@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using NUnit.Engine;
 using TestCentric.Engine.Internal;
+using TestCentric.Engine.Services;
 
 namespace TestCentric.Engine.Runners
 {
@@ -38,6 +39,8 @@ namespace TestCentric.Engine.Runners
         // written and execution of other runners to continue.
         private readonly List<Exception> _unloadExceptions = new List<Exception>();
 
+        private readonly ITestRunnerFactory _testRunnerFactory;
+
         // Public for testing purposes
         public virtual int LevelOfParallelism
         {
@@ -64,6 +67,7 @@ namespace TestCentric.Engine.Runners
 
         public AggregatingTestRunner(IServiceLocator services, TestPackage package) : base(services, package)
         {
+            _testRunnerFactory = services.GetService<ITestRunnerFactory>();
         }
 
         /// <summary>
@@ -226,7 +230,7 @@ namespace TestCentric.Engine.Runners
 
         protected virtual ITestEngineRunner CreateRunner(TestPackage package)
         {
-            return TestRunnerFactory.MakeTestRunner(package);
+            return _testRunnerFactory.MakeTestRunner(package);
         }
 
         private static void LogResultsFromTask(TestExecutionTask task, List<TestEngineResult> results, List<Exception> unloadExceptions)
