@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using Mono.Cecil;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
 using TestCentric.Engine.Drivers;
@@ -166,15 +165,6 @@ namespace TestCentric.Engine.Runners
 
             try
             {
-                var assemblyDef = AssemblyDefinition.ReadAssembly(assemblyPath);
-
-                if (skipNonTestAssemblies)
-                {
-                    foreach (var attr in assemblyDef.CustomAttributes)
-                        if (attr.AttributeType.FullName == "NUnit.Framework.NonTestAssemblyAttribute")
-                            return new SkippedAssemblyFrameworkDriver(assemblyPath);
-                }
-
                 var factories = new IDriverFactory[]
                 {
                     new NUnit3DriverFactory(),
