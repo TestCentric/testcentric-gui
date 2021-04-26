@@ -9,6 +9,7 @@ using System.IO;
 using System.Reflection;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
+using TestCentric.Common;
 using TestCentric.Engine.Drivers;
 using TestCentric.Engine.Internal;
 
@@ -22,22 +23,13 @@ namespace TestCentric.Engine.Runners
     {
         // TestAgentRunner loads and runs tests in a particular AppDomain using
         // one driver per assembly. All test assemblies are ultimately executed by
-        // one of the derived classes of DirectTestRunner, either LocalTestRunner
+        // an agent using one of its derived classes, either LocalTestRunner
         // or TestDomainRunner.
         //
-        // TestAgentRunner creates an appropriate framework driver for each assembly
-        // included in the TestPackage. All frameworks loaded by the same DirectRunner
-        // must be compatible, i.e. runnable within the same AppDomain.
-        // 
-        // TestAgentRunner is used in the engine/runner process as well as in agent
-        // processes. It may be called with a TestPackage that specifies a single 
-        // assembly, multiple assemblies, a single project, multiple projects or
-        // a mix of projects and assemblies. This variety of potential package
-        // inputs complicates things. It arises from the fact that NUnit permits 
-        // the caller to specify that all projects and assemblies should be loaded 
-        // in the same AppDomain.
+        // TestAgentRunner creates an appropriate framework driver for the assembly
+        // specified in the TestPackage.
 
-        private readonly List<IFrameworkDriver> _drivers = new List<IFrameworkDriver>();
+        private IFrameworkDriver _driver;
 
 #if !NETSTANDARD1_6
         private ProvidedPathsAssemblyResolver _assemblyResolver;
@@ -47,6 +39,11 @@ namespace TestCentric.Engine.Runners
 
         public TestAgentRunner(TestPackage package) : base(package)
         {
+            Guard.ArgumentNotNull(package, nameof(package));
+            Guard.ArgumentValid(package.SubPackages.Count == 0, "Only one assembly may be loaded by an agent", nameof(package));
+            Guard.ArgumentValid(package.FullName != null, "Package may not be anonymous", nameof(package));
+            Guard.ArgumentValid(package.Name.EndsWith(".exe") || package.Name.EndsWith(".dll"), "Must be an assembly package", nameof(package));
+
 #if !NETSTANDARD1_6
             // Bypass the resolver if not in the default AppDomain. This prevents trying to use the resolver within
             // NUnit's own automated tests (in a test AppDomain) which does not make sense anyway.
@@ -70,25 +67,14 @@ namespace TestCentric.Engine.Runners
         {
             EnsurePackageIsLoaded();
 
-            var result = new TestEngineResult();
-
-            foreach (IFrameworkDriver driver in _drivers)
+            try
             {
-                string driverResult;
-
-                try
-                {
-                    driverResult = driver.Explore(filter.Text);
-                }
-                catch (Exception ex) when (!(ex is NUnitEngineException))
-                {
-                    throw new NUnitEngineException("An exception occurred in the driver while exploring tests.", ex);
-                }
-
-                result.Add(driverResult);
+                return new TestEngineResult(_driver.Explore(filter.Text));
             }
-
-            return result;
+            catch (Exception ex) when (!(ex is NUnitEngineException))
+            {
+                throw new NUnitEngineException("An exception occurred in the driver while exploring tests.", ex);
+            }
         }
 
         /// <summary>
@@ -97,42 +83,35 @@ namespace TestCentric.Engine.Runners
         /// <returns>A TestEngineResult.</returns>
         protected override TestEngineResult LoadPackage()
         {
-            var result = new TestEngineResult();
+            var testFile = TestPackage.FullName;
 
-            // DirectRunner may be called with a single-assembly package,
-            // a set of assemblies as subpackages or even an arbitrary
-            // hierarchy of packages and subpackages with assemblies
-            // found in the terminal nodes.
-            var packagesToLoad = TestPackage.Select(p => !p.HasSubPackages());
-
-            foreach (var subPackage in packagesToLoad)
-            {
-                var testFile = subPackage.FullName;
-
-                string targetFramework = subPackage.GetSetting(EnginePackageSettings.ImageTargetFrameworkName, (string)null);
-                string frameworkReference = subPackage.GetSetting(EnginePackageSettings.ImageTestFrameworkReference, (string)null);
-                bool skipNonTestAssemblies = subPackage.GetSetting(EnginePackageSettings.SkipNonTestAssemblies, false);
+            string targetFramework = TestPackage.GetSetting(EnginePackageSettings.ImageTargetFrameworkName, (string)null);
+            string frameworkReference = TestPackage.GetSetting(EnginePackageSettings.ImageTestFrameworkReference, (string)null);
+            bool skipNonTestAssemblies = TestPackage.GetSetting(EnginePackageSettings.SkipNonTestAssemblies, false);
 
 #if !NETSTANDARD1_6
-                if (_assemblyResolver != null && !TestDomain.IsDefaultAppDomain()
-                    && subPackage.GetSetting(EnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver, false))
-                {
-                    // It's OK to do this in the loop because the Add method
-                    // checks to see if the path is already present.
-                    _assemblyResolver.AddPathFromFile(testFile);
-                }
-
-                //IFrameworkDriver driver = driverService?.GetDriver(TestDomain, testFile, targetFramework, skipNonTestAssemblies);
-                IFrameworkDriver driver = GetDriver(TestDomain, testFile, targetFramework, skipNonTestAssemblies);
-#else
-                //IFrameworkDriver driver = driverService?.GetDriver(testFile, skipNonTestAssemblies);
-                IFrameworkDriver driver = GetDriver(testFile, skipNonTestAssemblies);
-#endif
-                driver.ID = TestPackage.ID;
-                result.Add(LoadDriver(driver, testFile, subPackage));
-                _drivers.Add(driver);
+            if (_assemblyResolver != null && !TestDomain.IsDefaultAppDomain()
+                && TestPackage.GetSetting(EnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver, false))
+            {
+                // It's OK to do this in the loop because the Add method
+                // checks to see if the path is already present.
+                _assemblyResolver.AddPathFromFile(testFile);
             }
-            return result;
+
+            _driver = GetDriver(TestDomain, testFile, targetFramework, skipNonTestAssemblies);
+#else
+            _driver = GetDriver(testFile, skipNonTestAssemblies);
+#endif
+            _driver.ID = TestPackage.ID;
+            
+            try
+            {
+                return new TestEngineResult(_driver.Load(testFile, TestPackage.Settings));
+            }
+            catch (Exception ex) when (!(ex is NUnitEngineException))
+            {
+                throw new NUnitEngineException("An exception occurred in the driver while loading tests.", ex);
+            }
         }
 
         // TODO: This is a temporary fix while we decide how to handle
@@ -198,18 +177,6 @@ namespace TestCentric.Engine.Runners
                                                                               "Either assembly contains no tests or proper test driver has not been found.", assemblyPath));
         }
 
-        private static string LoadDriver(IFrameworkDriver driver, string testFile, TestPackage subPackage)
-        {
-            try
-            {
-                return driver.Load(testFile, subPackage.Settings);
-            }
-            catch (Exception ex) when (!(ex is NUnitEngineException))
-            {
-                throw new NUnitEngineException("An exception occurred in the driver while loading tests.", ex);
-            }
-        }
-
         /// <summary>
         /// Count the test cases that would be run under
         /// the specified filter.
@@ -220,21 +187,14 @@ namespace TestCentric.Engine.Runners
         {
             EnsurePackageIsLoaded();
 
-            int count = 0;
-
-            foreach (IFrameworkDriver driver in _drivers)
+            try
             {
-                try
-                {
-                    count += driver.CountTestCases(filter.Text);
-                }
-                catch (Exception ex) when (!(ex is NUnitEngineException))
-                {
-                    throw new NUnitEngineException("An exception occurred in the driver while counting test cases.", ex);
-                }
+                return _driver.CountTestCases(filter.Text);
             }
-
-            return count;
+            catch (Exception ex) when (!(ex is NUnitEngineException))
+            {
+                throw new NUnitEngineException("An exception occurred in the driver while counting test cases.", ex);
+            }
         }
 
 
@@ -250,22 +210,15 @@ namespace TestCentric.Engine.Runners
         {
             EnsurePackageIsLoaded();
 
-            var result = new TestEngineResult();
+            string driverResult;
 
-            foreach (IFrameworkDriver driver in _drivers)
+            try
             {
-                string driverResult;
-
-                try
-                {
-                    driverResult = driver.Run(listener, filter.Text);
-                }
-                catch (Exception ex) when (!(ex is NUnitEngineException))
-                {
-                    throw new NUnitEngineException("An exception occurred in the driver while running tests.", ex);
-                }
-
-                result.Add(driverResult);
+                driverResult = _driver.Run(listener, filter.Text);
+            }
+            catch (Exception ex) when (!(ex is NUnitEngineException))
+            {
+                throw new NUnitEngineException("An exception occurred in the driver while running tests.", ex);
             }
 
 #if !NETSTANDARD1_6
@@ -275,7 +228,7 @@ namespace TestCentric.Engine.Runners
                     _assemblyResolver.RemovePathFromFile(package.FullName);
             }
 #endif
-            return result;
+            return new TestEngineResult(driverResult);
         }
 
         /// <summary>
@@ -286,16 +239,13 @@ namespace TestCentric.Engine.Runners
         {
             EnsurePackageIsLoaded();
 
-            foreach (IFrameworkDriver driver in _drivers)
+            try
             {
-                try
-                {
-                    driver.StopRun(force);
-                }
-                catch (Exception ex) when (!(ex is NUnitEngineException))
-                {
-                    throw new NUnitEngineException("An exception occurred in the driver while stopping the run.", ex);
-                }
+                _driver.StopRun(force);
+            }
+            catch (Exception ex) when (!(ex is NUnitEngineException))
+            {
+                throw new NUnitEngineException("An exception occurred in the driver while stopping the run.", ex);
             }
         }
 
