@@ -69,9 +69,11 @@ namespace TestCentric.Engine.Services
                 foreach (var policy in _aggregationPolicies)
                     policy.ApplyTo(package);
             }
-            else if (File.Exists(package.FullName) && PathUtils.IsAssemblyFileType(package.FullName))
+            else if (File.Exists(package.FullName))
             {
-                ApplyImageSettings(package);
+                var ext = Path.GetExtension(package.FullName).ToLowerInvariant();
+                if (ext == ".dll" || ext == ".exe")
+                    ApplyImageSettings(package);
             }
         }
 

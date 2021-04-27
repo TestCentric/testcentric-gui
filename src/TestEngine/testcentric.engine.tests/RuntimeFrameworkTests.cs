@@ -14,8 +14,6 @@ using FrameworkName = System.Runtime.Versioning.FrameworkName;
 
 namespace TestCentric.Engine
 {
-    using Helpers;
-
     [TestFixture]
     public class RuntimeFrameworkTests
     {

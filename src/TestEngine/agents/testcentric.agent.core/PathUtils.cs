@@ -14,26 +14,14 @@ namespace TestCentric.Engine.Internal
     /// Static methods for manipulating project paths, including both directories
     /// and files. Some synonyms for System.Path methods are included as well.
     /// </summary> 
-    public class PathUtils
+    public static class PathUtils
     {
         public const uint FILE_ATTRIBUTE_DIRECTORY  = 0x00000010;  
         public const uint FILE_ATTRIBUTE_NORMAL     = 0x00000080;  
         public const int MAX_PATH = 256;
 
-        protected static char DirectorySeparatorChar = Path.DirectorySeparatorChar;
-        protected static char AltDirectorySeparatorChar = Path.AltDirectorySeparatorChar;
-
-        /// <summary>
-        /// Returns a boolean indicating whether the specified path
-        /// is that of an assembly - that is a dll or exe file.
-        /// </summary>
-        /// <param name="path">Path to a file.</param>
-        /// <returns>True if the file extension is dll or exe, otherwise false.</returns>
-        public static bool IsAssemblyFileType(string path)
-        {
-            string extension = Path.GetExtension(path).ToLower();
-            return extension == ".dll" || extension == ".exe";
-        }
+        internal static char DirectorySeparatorChar = Path.DirectorySeparatorChar;
+        internal static char AltDirectorySeparatorChar = Path.AltDirectorySeparatorChar;
 
         /// <summary>
         /// Returns the relative path from a base directory to another
@@ -121,7 +109,7 @@ namespace TestCentric.Engine.Internal
             if (parts.Count > 1 && path.Length > 1 && parts[parts.Count - 1] == "")
                 parts.RemoveAt(parts.Count - 1);
 
-            return String.Join(DirectorySeparatorChar.ToString(), parts.ToArray());
+            return string.Join(DirectorySeparatorChar.ToString(), parts.ToArray());
         }
 
         /// <summary>

@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace TestCentric.Engine.Internal
 {
 	[TestFixture]
-	public class PathUtilTests : PathUtils
+	public class PathUtilTests
 	{
 		[Test]
 		public void CheckDefaults()
@@ -22,7 +22,7 @@ namespace TestCentric.Engine.Internal
 	}
 
 	[TestFixture]
-	public class PathUtilTests_Windows : PathUtils
+	public class PathUtilTests_Windows
 	{
 		[OneTimeSetUp]
 		public static void SetUpUnixSeparators()
@@ -114,7 +114,7 @@ namespace TestCentric.Engine.Internal
 	}
 
 	[TestFixture]
-	public class PathUtilTests_Unix : PathUtils
+	public class PathUtilTests_Unix
 	{
 		[OneTimeSetUp]
 		public static void SetUpUnixSeparators()

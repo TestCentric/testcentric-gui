@@ -9,9 +9,8 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using NUnit.Engine;
-using TestCentric.Engine.Internal;
 
-namespace TestCentric.Engine.Helpers
+namespace TestCentric.Engine.Internal
 {
     /// <summary>
     /// DomainDetailsBuilder provides human readable information on

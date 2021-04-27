@@ -53,7 +53,8 @@ namespace TestCentric.Engine.Services
             if (!File.Exists(package.FullName))
                 return new InvalidAssemblyRunner(package, "File not found: " + package.FullName);
 
-            if (!PathUtils.IsAssemblyFileType(package.FullName))
+            var ext = Path.GetExtension(package.FullName).ToLowerInvariant();
+            if (ext != ".dll" && ext != ".exe")
                 return new InvalidAssemblyRunner(package, "File type is not supported");
 
             if (package.GetSetting(EnginePackageSettings.ImageNonTestAssemblyAttribute, false))
