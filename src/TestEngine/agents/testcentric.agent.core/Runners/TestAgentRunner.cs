@@ -125,7 +125,8 @@ namespace TestCentric.Engine.Runners
             if (!File.Exists(assemblyPath))
                 return new InvalidAssemblyFrameworkDriver(assemblyPath, "File not found: " + assemblyPath);
 
-            if (!PathUtils.IsAssemblyFileType(assemblyPath))
+            var ext = Path.GetExtension(assemblyPath).ToLowerInvariant();
+            if (ext != ".dll" && ext != ".exe")
                 return new InvalidAssemblyFrameworkDriver(assemblyPath, "File type is not supported");
 
 #if !NETSTANDARD1_6 && !NETSTANDARD2_0

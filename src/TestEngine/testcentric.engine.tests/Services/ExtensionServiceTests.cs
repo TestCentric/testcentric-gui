@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
 using NUnit.Framework;
-using TestCentric.Engine.Helpers;
 using TestCentric.Engine.Internal;
 using TestCentric.Engine.Extensibility;
 

@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using NUnit.Engine;
 
 namespace TestCentric.Engine.Internal
@@ -18,7 +19,11 @@ namespace TestCentric.Engine.Internal
     {
         public static bool IsAssemblyPackage(this TestPackage package)
         {
-            return package.FullName != null && PathUtils.IsAssemblyFileType(package.FullName);
+            if (package.FullName == null)
+                return false;
+
+            var ext = Path.GetExtension(package.FullName).ToLowerInvariant();
+            return ext == ".dll" || ext== ".exe";
         }
 
         public static IList<TestPackage> AssemblyPackages(this TestPackage package)

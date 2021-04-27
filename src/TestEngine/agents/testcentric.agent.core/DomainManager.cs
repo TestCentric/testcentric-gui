@@ -12,7 +12,6 @@ using System.Threading;
 using System.Reflection;
 using System.Security.Principal;
 using TestCentric.Common;
-using TestCentric.Engine.Helpers;
 using NUnit.Engine;
 
 namespace TestCentric.Engine.Internal
