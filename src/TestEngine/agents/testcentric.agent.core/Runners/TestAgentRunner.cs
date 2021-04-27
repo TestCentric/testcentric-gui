@@ -170,11 +170,8 @@ namespace TestCentric.Engine.Runners
                 return new InvalidAssemblyFrameworkDriver(assemblyPath, ex.Message);
             }
 
-            if (skipNonTestAssemblies)
-                return new SkippedAssemblyFrameworkDriver(assemblyPath);
-            else
-                return new InvalidAssemblyFrameworkDriver(assemblyPath, string.Format("No suitable tests found in '{0}'.\n" +
-                                                                              "Either assembly contains no tests or proper test driver has not been found.", assemblyPath));
+            return new InvalidAssemblyFrameworkDriver(assemblyPath,
+                $"No suitable test driver found for '{assemblyPath}'");
         }
 
         /// <summary>

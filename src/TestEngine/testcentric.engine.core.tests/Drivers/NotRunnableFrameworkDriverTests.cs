@@ -131,20 +131,4 @@ namespace TestCentric.Engine.Drivers
             return new InvalidAssemblyFrameworkDriver(filePath, _expectedReason);
         }
     }
-
-    public class SkippedAssemblyFrameworkDriverTests : NotRunnableFrameworkDriverTests
-    {
-        public SkippedAssemblyFrameworkDriverTests()
-        {
-            _expectedRunState = "Runnable";
-            _expectedReason = "Skipping non-test assembly";
-            _expectedResult = "Skipped";
-            _expectedLabel = "NoTests";
-        }
-
-        protected override IFrameworkDriver CreateDriver(string filePath)
-        {
-            return new SkippedAssemblyFrameworkDriver(filePath);
-        }
-    }
 }
