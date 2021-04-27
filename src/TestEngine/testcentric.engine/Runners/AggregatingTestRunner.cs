@@ -42,9 +42,13 @@ namespace TestCentric.Engine.Runners
         private readonly ITestRunnerFactory _testRunnerFactory;
 
         // Public for testing purposes
-        public virtual int LevelOfParallelism
+        public int LevelOfParallelism
         {
-            get { return 1; }
+            get
+            {
+                var maxAgents = TestPackage.GetSetting(EnginePackageSettings.MaxAgents, Environment.ProcessorCount);
+                return Math.Min(maxAgents, TestPackage.SubPackages.Count);
+            }
         }
 
         // Exposed for use by tests
@@ -55,7 +59,7 @@ namespace TestCentric.Engine.Runners
                 if (_runners == null)
                 {
                     _runners = new List<ITestEngineRunner>();
-                    foreach (var subPackage in TestPackage.AssemblyPackages())
+                    foreach (var subPackage in TestPackage.TerminalPackages())
                     {
                         _runners.Add(CreateRunner(subPackage));
                     }
@@ -228,7 +232,7 @@ namespace TestCentric.Engine.Runners
                 throw new NUnitEngineUnloadException(_unloadExceptions);
         }
 
-        protected virtual ITestEngineRunner CreateRunner(TestPackage package)
+        private ITestEngineRunner CreateRunner(TestPackage package)
         {
             return _testRunnerFactory.MakeTestRunner(package);
         }
