@@ -40,20 +40,12 @@ namespace TestCentric.Engine.Services
         /// <returns>A TestRunner</returns>
         public ITestEngineRunner MakeTestRunner(TestPackage package)
         {
-            if (package.SubPackages.Count == 1)
-                return MakeTestRunner(package.SubPackages[0]);
+            var packageList = package.TerminalPackages();
 
-#if NETSTANDARD2_0
-            if (package.SubPackages.Count > 1)
+            if (packageList.Count > 1)
                 return new AggregatingTestRunner(ServiceContext, package);
 
-            return new LocalTestRunner(ServiceContext, package);
-#else
-            if (package.AssemblyPackages().Count > 1)
-                return new MultipleTestProcessRunner(this.ServiceContext, package);
-
-            return MakeRunnerForSingleTestFile(package);
-#endif
+            return MakeRunnerForSingleTestFile(packageList[0]);
         }
 
         private ITestEngineRunner MakeRunnerForSingleTestFile(TestPackage package)
@@ -67,18 +59,14 @@ namespace TestCentric.Engine.Services
             if (package.GetSetting(EnginePackageSettings.ImageNonTestAssemblyAttribute, false))
                 return new SkippedAssemblyRunner(package);
 
-            return new ProcessRunner(this.ServiceContext, package);
+            return new ProcessRunner(ServiceContext, package);
         }
 
-        // TODO: Review this method once used by a gui - the implementation is
-        // overly simplistic. It is not currently used by any known runner.
+        // TODO: Review this method once used by a gui - currently unused.
+        // The current implementation doesn't allow any runners to be reused.
         public bool CanReuse(ITestEngineRunner runner, TestPackage package)
         {
-#if NETSTANDARD2_0
             return false;
-#else
-            return runner is MultipleTestProcessRunner;
-#endif
         }
     }
 }

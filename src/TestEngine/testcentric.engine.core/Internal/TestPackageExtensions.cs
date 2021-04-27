@@ -26,6 +26,11 @@ namespace TestCentric.Engine.Internal
             return package.Select(p => p.IsAssemblyPackage());
         }
 
+        public static IList<TestPackage> TerminalPackages(this TestPackage package)
+        {
+            return package.Select(p => !p.HasSubPackages());
+        }
+
         public static bool HasSubPackages(this TestPackage package)
         {
             return package.SubPackages.Count > 0;

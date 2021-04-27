@@ -14,24 +14,22 @@ using TestCentric.Engine.Services;
 namespace TestCentric.Engine.Runners
 {
     /// <summary>
-    /// ProcessRunner loads and runs a set of tests in a single agent process.
+    /// ProcessRunner loads and runs a set of tests in a single remote 
+    /// agent process, which is launched on its behalf by TestAgency.
     /// </summary>
     public class ProcessRunner : AbstractTestRunner
     {
-        // ProcessRunner is given a TestPackage containing a single assembly
-        // multiple assemblies, a project, multiple projects or a mix. It loads
-        // and runs all tests in a single remote agent process.
-        //
-        // If the input contains projects, which are not summarized at a lower
-        // level, the ProcessRunner should create an XML node for the entire
-        // project, aggregating the assembly results.
-
         private static readonly Logger log = InternalTrace.GetLogger(typeof(ProcessRunner));
 
         private ITestAgent _agent;
         private ITestEngineRunner _remoteRunner;
         private TestAgency _agency;
 
+        /// <summary>
+        /// Construct a new ProcessRunner
+        /// </summary>
+        /// <param name="services">A ServiceLocator interface for use by the runner</param>
+        /// <param name="package">A TestPackage containing a single assembly</param>
         public ProcessRunner(IServiceLocator services, TestPackage package) : base(package)
         {
             _agency = services.GetService<TestAgency>();

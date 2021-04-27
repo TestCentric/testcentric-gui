@@ -11,7 +11,7 @@ using TestCentric.Engine.Services;
 
 namespace TestCentric.Engine.Runners
 {
-    public class MultipleTestProcessRunnerTests
+    public class AggregatingTestRunnerTests
     {
         [TestCase(1, null, 1)]
         [TestCase(1, 1, 1)]
@@ -27,26 +27,26 @@ namespace TestCentric.Engine.Runners
                 expected = Math.Min(assemblyCount, Environment.ProcessorCount);
 
             var runner = CreateRunner(assemblyCount, maxAgents);
-            Assert.That(runner, Has.Property(nameof(MultipleTestProcessRunner.LevelOfParallelism)).EqualTo(expected));
+            Assert.That(runner, Has.Property(nameof(AggregatingTestRunner.LevelOfParallelism)).EqualTo(expected));
         }
 
         [Test]
         public void CheckLevelOfParallelism_SingleAssembly()
         {
             var package = new TestPackage("junk.dll");
-            Assert.That(new MultipleTestProcessRunner(new ServiceContext(), package).LevelOfParallelism, Is.EqualTo(0));
+            Assert.That(new AggregatingTestRunner(new ServiceContext(), package).LevelOfParallelism, Is.EqualTo(0));
         }
 
         // Create a MultipleTestProcessRunner with a fake package consisting of
         // some number of assemblies and with an optional MaxAgents setting.
         // Zero means that MaxAgents is not specified.
-        MultipleTestProcessRunner CreateRunner(int assemblyCount, int? maxAgents)
+        AggregatingTestRunner CreateRunner(int assemblyCount, int? maxAgents)
         {
             // Currently, we can get away with null entries here
             var package = new TestPackage(new string[assemblyCount]);
             if (maxAgents != null)
                 package.Settings[EnginePackageSettings.MaxAgents] = maxAgents;
-            return new MultipleTestProcessRunner(new ServiceContext(), package);
+            return new AggregatingTestRunner(new ServiceContext(), package);
         }
     }
 }
