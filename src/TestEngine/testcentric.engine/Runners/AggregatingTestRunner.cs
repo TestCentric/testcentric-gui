@@ -18,20 +18,10 @@ namespace TestCentric.Engine.Runners
     /// if a derived class sets the LevelOfParallelism
     /// property in its constructor.
     /// </summary>
-    public class AggregatingTestRunner : TestEngineRunner
+    public class AggregatingTestRunner : AbstractTestRunner
     {
         // AggregatingTestRunner combines the results from tests run by different
-        // runners. It may be used as a base class or through a derived class.
-        //
-        // AggregatingTestRunner is used in the engine/runner process as well as in agent
-        // processes. It may be called with a TestPackage that specifies a single 
-        // assembly, multiple assemblies, a single project, multiple projects or
-        // a mix of projects and assemblies. Each file passed is handled by
-        // a single runner.
-        //
-        // TODO: Determine whether AggregatingTestRunner needs to create an XML result
-        // node for a project or if that responsibility can be delegated to the individual
-        // runners it creates.
+        // runners. Each file passed to it is handled by a single runner.
         private List<ITestEngineRunner> _runners;
 
         // Exceptions from unloading individual runners are caught and rethrown
@@ -69,7 +59,7 @@ namespace TestCentric.Engine.Runners
             }
         }
 
-        public AggregatingTestRunner(IServiceLocator services, TestPackage package) : base(services, package)
+        public AggregatingTestRunner(IServiceLocator services, TestPackage package) : base(package)
         {
             _testRunnerFactory = services.GetService<ITestRunnerFactory>();
         }
