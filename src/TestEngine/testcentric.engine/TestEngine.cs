@@ -19,22 +19,28 @@ namespace TestCentric.Engine
     /// program to interact with NUnit in order to explore,
     /// load and run tests.
     /// </summary>
-    public class TestEngine : CoreEngine, ITestEngine
+    public class TestEngine : ITestEngine
     {
+        private ServiceContext _services = new ServiceContext();
+
         /// <summary>
         /// Access the public IServiceLocator, first initializing
         /// the services if that has not already been done.
         /// </summary>
-        IServiceLocator ITestEngine.Services
+        public IServiceLocator Services
         {
             get
             {
-                if(!Services.ServiceManager.ServicesInitialized)
+                if(!_services.ServiceManager.ServicesInitialized)
                     Initialize();
 
-                return Services;
+                return _services;
             }
         }
+
+        public string WorkDirectory { get; set; } = Environment.CurrentDirectory;
+
+        public InternalTraceLevel InternalTraceLevel { get; set; } = InternalTraceLevel.Off;
 
         /// <summary>
         /// Initialize the engine. This includes initializing mono addins,
@@ -56,23 +62,23 @@ namespace TestCentric.Engine
             }
 
             // If caller added services beforehand, we don't add any
-            if (Services.ServiceCount == 0)
+            if (_services.ServiceCount == 0)
             {
                 // Services that depend on other services must be added after their dependencies
-                Services.Add(new TestFilterService());
-                Services.Add(new ExtensionService());
-                Services.Add(new ProjectService());
-                Services.Add(new PackageSettingsService());
+                _services.Add(new TestFilterService());
+                _services.Add(new ExtensionService());
+                _services.Add(new ProjectService());
+                _services.Add(new TestFrameworkService());
+                _services.Add(new PackageSettingsService());
 #if !NETSTANDARD2_0
-                Services.Add(new RuntimeFrameworkService());
-                Services.Add(new TestAgency());
+                _services.Add(new RuntimeFrameworkService());
+                _services.Add(new TestAgency());
 #endif
-                Services.Add(new DriverService());
-                Services.Add(new ResultService());
-                Services.Add(new DefaultTestRunnerFactory());
+                _services.Add(new ResultService());
+                _services.Add(new TestRunnerFactory());
             }
 
-            Services.ServiceManager.StartServices();
+            _services.ServiceManager.StartServices();
         }
 
         /// <summary>
@@ -83,10 +89,34 @@ namespace TestCentric.Engine
         /// <returns>An ITestRunner.</returns>
         public ITestRunner GetRunner(TestPackage package)
         {
-            if(!Services.ServiceManager.ServicesInitialized)
+            if(!_services.ServiceManager.ServicesInitialized)
                 Initialize();
 
             return new Runners.MasterTestRunner(Services, package);
         }
+
+        #region IDisposable Members
+
+        private bool _disposed = false;
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+            _services.ServiceManager.StopServices();
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                    _services.ServiceManager.Dispose();
+
+                _disposed = true;
+            }
+        }
+
+        #endregion
     }
 }

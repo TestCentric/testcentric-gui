@@ -11,7 +11,7 @@ using System.IO;
 using System.Reflection;
 using System.Xml;
 using NUnit.Engine;
-using TestCentric.Engine.Helpers;
+using TestCentric.Engine.Internal;
 using TestCentric.Engine.Services;
 
 namespace TestCentric.Engine.Runners
