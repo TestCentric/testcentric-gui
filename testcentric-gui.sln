@@ -136,6 +136,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testcentric-agent-x86", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testcentric.agent.core", "src\TestEngine\Agents\testcentric.agent.core\testcentric.agent.core.csproj", "{EBE0D42B-742F-463E-B875-3F11C3F3B00C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testcentric.agent.core.tests", "src\TestEngine\Agents\testcentric.agent.core.tests\testcentric.agent.core.tests.csproj", "{87670F39-5853-4F04-9867-E7F742DA2128}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -254,6 +256,10 @@ Global
 		{EBE0D42B-742F-463E-B875-3F11C3F3B00C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EBE0D42B-742F-463E-B875-3F11C3F3B00C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EBE0D42B-742F-463E-B875-3F11C3F3B00C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87670F39-5853-4F04-9867-E7F742DA2128}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87670F39-5853-4F04-9867-E7F742DA2128}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87670F39-5853-4F04-9867-E7F742DA2128}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87670F39-5853-4F04-9867-E7F742DA2128}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -292,6 +298,7 @@ Global
 		{68DC97D4-3B2D-46FA-B6F9-A9A052C2EBA7} = {804797D1-A019-4846-9295-F2F409434B43}
 		{93069114-A4EB-4ED6-A65D-CD0718A5171F} = {804797D1-A019-4846-9295-F2F409434B43}
 		{EBE0D42B-742F-463E-B875-3F11C3F3B00C} = {804797D1-A019-4846-9295-F2F409434B43}
+		{87670F39-5853-4F04-9867-E7F742DA2128} = {804797D1-A019-4846-9295-F2F409434B43}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CDFF439B-8888-4133-8734-86F4F899BC40}
