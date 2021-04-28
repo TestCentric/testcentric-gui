@@ -9,25 +9,31 @@
     <OutputPath>..\..\..\bin\$(Configuration)\engine-tests\</OutputPath>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
+  
   <ItemGroup Condition="'$(TargetFramework)'=='net35'">
     <Reference Include="System.Configuration" />
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Web" />
   </ItemGroup>
+  
   <ItemGroup Condition="'$(TargetFramework)'=='net40'">
     <Reference Include="System.Configuration" />
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Web" />
   </ItemGroup>
+  
   <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp1.1'">
     <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
   </ItemGroup>
+  
   <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp2.1'">
     <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
   </ItemGroup>
+  
   <ItemGroup>
     <Compile Include="..\CommonEngineAssemblyInfo.cs" Link="Properties\CommonEngineAssemblyInfo.cs" />
   </ItemGroup>
+  
   <ItemGroup>
     <PackageReference Include="NSubstitute" Version="2.0.3" />
     <PackageReference Include="NUnit" Version="3.11.0" />
@@ -44,10 +50,6 @@
     <Content Include="TransformWithDTD.xslt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="alt.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\mock-assembly\mock-assembly.csproj" />
@@ -58,6 +60,9 @@
     <None Update="TextSummary.xslt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Drivers\" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <ItemGroup>

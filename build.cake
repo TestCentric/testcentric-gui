@@ -160,6 +160,19 @@ Task("TestEngineCore")
 	});
 
 //////////////////////////////////////////////////////////////////////
+// TESTS OF TESTCENTRIC.AGENT.CORE
+//////////////////////////////////////////////////////////////////////
+
+Task("TestAgentCore")
+	.Description("Tests the TestCentric Engine Core")
+	.IsDependentOn("Build")
+	.Does<BuildParameters>((parameters) =>
+	{
+		foreach (var runtime in parameters.SupportedCoreRuntimes)
+			RunNUnitLite("testcentric.agent.core.tests", runtime, $"{parameters.OutputDirectory}engine-tests/{runtime}/");
+	});
+
+//////////////////////////////////////////////////////////////////////
 // TESTS OF THE GUI
 //////////////////////////////////////////////////////////////////////
 
@@ -552,6 +565,7 @@ Task("Package")
 
 Task("Test")
 	.IsDependentOn("TestEngineCore")
+	.IsDependentOn("TestAgentCore")
 	.IsDependentOn("TestEngine")
 	.IsDependentOn("TestGui");
 
