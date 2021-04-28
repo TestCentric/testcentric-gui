@@ -6,7 +6,7 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-[assembly: AssemblyTitle("NUnit Engine Core")]
+[assembly: AssemblyTitle("TestCentric Engine Core")]
 [assembly: AssemblyDescription("Lower level of engine")]
 
 [assembly: InternalsVisibleTo("testcentric.engine.tests, PublicKey=" +

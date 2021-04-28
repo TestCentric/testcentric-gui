@@ -23,8 +23,6 @@ namespace TestCentric.TestUtilities.Fakes
             // ExtensionPoints are all known, so we add in constructor. Extensions
             // may vary, so we use a method to add them.
             _extensionPoints.Add(new ExtensionPoint(
-                "/NUnit/Engine/NUnitV2Driver", "TestCentric.Engine.Extensibility.IDriverFactory", "Driver for NUnit tests using the V2 framework."));
-            _extensionPoints.Add(new ExtensionPoint(
                 "/NUnit/Engine/TypeExtensions/IService", "TestCentric.Engine.Extensibility.IService", "Provides a service within the engine and possibly externally as well."));
             _extensionPoints.Add(new ExtensionPoint(
                 "/NUnit/Engine/TypeExtensions/ITestEventListener", "TestCentric.Engine.Extensibility.ITestEventListener", "Allows an extension to process progress reports and other events from the test."));

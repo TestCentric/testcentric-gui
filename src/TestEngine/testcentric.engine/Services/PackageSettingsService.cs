@@ -8,7 +8,6 @@ using System.IO;
 using Mono.Cecil;
 using NUnit.Engine;
 using TestCentric.Common;
-using TestCentric.Engine.Helpers;
 using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Services
@@ -19,8 +18,8 @@ namespace TestCentric.Engine.Services
     /// 
     /// Several kinds of information expansion take place:
     /// 
-    /// 1. (Not Yet Implemented) Project Packages are expanded to have subpackages
-    /// for each included assembly. (Currently done separately by ProjectService.
+    /// 1. Project Packages are expanded, using the ProjectService, to have
+    /// subpackages for each included assembly.
     /// 
     /// 2. Assembly packages are annotated with internal properties that give info
     /// about how that assembly expects to be run.
@@ -35,11 +34,13 @@ namespace TestCentric.Engine.Services
         static Logger log = InternalTrace.GetLogger(typeof(PackageSettingsService));
 
         private IProjectService _projectService;
+        private ITestFrameworkService _testFrameworkService;
 
         public override void StartService()
         {
             _projectService = ServiceContext.GetService<IProjectService>();
-            if (_projectService == null)
+            _testFrameworkService = ServiceContext.GetService<ITestFrameworkService>();
+            if (_projectService == null || _testFrameworkService == null)
                 Status = ServiceStatus.Error;
         }
 
@@ -68,9 +69,11 @@ namespace TestCentric.Engine.Services
                 foreach (var policy in _aggregationPolicies)
                     policy.ApplyTo(package);
             }
-            else if (File.Exists(package.FullName) && PathUtils.IsAssemblyFileType(package.FullName))
+            else if (File.Exists(package.FullName))
             {
-                ApplyImageSettings(package);
+                var ext = Path.GetExtension(package.FullName).ToLowerInvariant();
+                if (ext == ".dll" || ext == ".exe")
+                    ApplyImageSettings(package);
             }
         }
 
@@ -96,7 +99,7 @@ namespace TestCentric.Engine.Services
         /// apply it to the package using special internal keywords.
         /// </summary>
         /// <param name="package"></param>
-        static void ApplyImageSettings(TestPackage package)
+        private void ApplyImageSettings(TestPackage package)
         {
             Guard.ArgumentNotNull(package, nameof(package));
 
@@ -113,6 +116,12 @@ namespace TestCentric.Engine.Services
             if (!string.IsNullOrEmpty(frameworkName))
             {
                 log.Debug($"Assembly {package.FullName} targets {frameworkName}");
+                // This takes care of an old issue with Roslyn
+                if (frameworkName == ".NETPortable,Version=v5.0")
+                {
+                    frameworkName = ".NETStandard,Version=v1.0";
+                    log.Debug($"Using {frameworkName} instead");
+                }
                 package.Settings[EnginePackageSettings.ImageTargetFrameworkName] = frameworkName;
             }
 
@@ -128,6 +137,21 @@ namespace TestCentric.Engine.Services
             if (requiresAssemblyResolver)
             {
                 log.Debug($"Assembly {package.FullName} requires default app domain assembly resolver");
+            }
+
+            bool nonTestAssembly = assembly.HasAttribute("NUnit.Framework.NonTestAssemblyAttribute");
+            if (nonTestAssembly)
+            {
+                log.Debug($"Assembly {package.FullName} has NonTestAssemblyAttribute");
+                package.Settings[EnginePackageSettings.ImageNonTestAssemblyAttribute] = true;
+            }
+
+            var testFrameworkReference = _testFrameworkService.GetFrameworkReference(package.FullName);
+            if (testFrameworkReference != null)
+            {
+                package.Settings[EnginePackageSettings.ImageTestFrameworkReference] = testFrameworkReference.FrameworkReference.FullName;
+                if (testFrameworkReference.FrameworkDriver != null)
+                    package.Settings[EnginePackageSettings.ImageFrameworkDriverReference] = testFrameworkReference.FrameworkDriver;
             }
         }
     }

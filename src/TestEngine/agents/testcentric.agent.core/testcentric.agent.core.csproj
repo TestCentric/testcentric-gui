@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>TestCentric.Agent</RootNamespace>
+    <TargetFrameworks>net20;net40;netstandard1.6;netstandard2.0</TargetFrameworks>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\..\nunit.snk</AssemblyOriginatorKeyFile>
+    <DebugType>Full</DebugType>
+    <OutputPath>..\..\..\..\bin\$(Configuration)\engine\</OutputPath>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='net20'">
+    <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Web" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='net40'">
+    <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Web" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\CommonEngineAssemblyInfo.cs" Link="Properties\CommonEngineAssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\testcentric.engine.core\testcentric.engine.core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NUnit.Engine.Api" Version="3.11.1" />
+    <PackageReference Include="TestCentric.Metadata" Version="1.7.0" />
+  </ItemGroup>
+
+</Project>

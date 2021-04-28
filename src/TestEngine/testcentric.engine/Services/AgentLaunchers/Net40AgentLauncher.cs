@@ -6,9 +6,10 @@
 #if NETFRAMEWORK
 using System;
 using System.Diagnostics;
+using System.Reflection;
 using System.Text;
 using NUnit.Engine;
-using TestCentric.Engine.Helpers;
+using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Services
 {
@@ -48,7 +49,8 @@ namespace TestCentric.Engine.Services
                 sb.Append(" --work=").EscapeProcessArgument(workDirectory);
 
             var agentName = runAsX86 ? "testcentric-agent-x86.exe" : "testcentric-agent.exe";
-            var agentPath = System.IO.Path.Combine(NUnitConfiguration.EngineDirectory, $"agents/net40/{agentName}");
+            var enginePath = AssemblyHelper.GetDirectoryName(Assembly.GetExecutingAssembly());
+            var agentPath = System.IO.Path.Combine(enginePath, $"agents/net40/{agentName}");
             var agentArgs = sb.ToString();
 
             var process = new Process();

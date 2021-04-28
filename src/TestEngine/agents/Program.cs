@@ -9,9 +9,8 @@ using System.IO;
 using System.Security;
 using TestCentric.Common;
 using TestCentric.Engine.Internal;
-using TestCentric.Engine.Services;
-using TestCentric.Engine.Helpers;
 using NUnit.Engine;
+using System.Runtime.InteropServices;
 
 namespace TestCentric.Engine.Agents
 {
@@ -73,32 +72,20 @@ namespace TestCentric.Engine.Agents
 
             log.Info("Agent process {0} starting", pid);
 
-            // TODO: CurrentFramework throws under .NET 5.0
 #if NET5_0
-            log.Info("Running under .NET 5.0");
-#else
-            log.Info("Running under version {0}, {1}",
-                Environment.Version,
-                RuntimeFramework.CurrentFramework.DisplayName);
+            log.Info($"Running .NET 5.0 agent under {RuntimeInformation.FrameworkDescription}");
+#elif NETCOREAPP3_1
+            log.Info($"Running .NET Core 3.1 agent under {RuntimeInformation.FrameworkDescription}");
+#elif NETCOREAPP2_1
+            log.Info($"Running .NET Core 2.1 agent under {RuntimeInformation.FrameworkDescription}");
+#elif NET40
+            log.Info("Running .NET Framework 4.0 agent");
+#elif NET20
+            log.Info("Running .NET Framework 2.0 agent");
 #endif
 
-            // Create CoreEngine
-            var engine = new CoreEngine
-            {
-                WorkDirectory = workDirectory,
-                InternalTraceLevel = traceLevel
-            };
-
-            // Custom Service Initialization
-            engine.Services.Add(new ExtensionService());
-            engine.Services.Add(new DriverService());
-
-            // Initialize Services
-            log.Info("Initializing Services");
-            engine.InitializeServices();
-
             log.Info("Starting RemoteTestAgent");
-            Agent = new RemoteTestAgent(AgentId, engine.Services);
+            Agent = new RemoteTestAgent(AgentId);
             Agent.Transport =
 #if NETFRAMEWORK
                 new TestCentric.Engine.Communication.Transports.Remoting.TestAgentRemotingTransport(Agent, AgencyUrl);

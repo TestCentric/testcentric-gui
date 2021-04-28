@@ -11,6 +11,7 @@ using NUnit.Framework;
 
 namespace TestCentric.Engine.Services.TestRunnerFactoryTests
 {
+    using System.IO;
     using Fakes;
 
     /// <summary>
@@ -23,6 +24,8 @@ namespace TestCentric.Engine.Services.TestRunnerFactoryTests
     /// </summary>
     public class RunnerSelectionTests
     {
+        static readonly string MOCK_ASSEMBLY = FullPathTo("mock-assembly.dll");
+
         private ServiceContext _services;
 
         [OneTimeSetUp]
@@ -31,24 +34,32 @@ namespace TestCentric.Engine.Services.TestRunnerFactoryTests
             _services = new ServiceContext();
 
             var projectService = new FakeProjectService();
-            projectService.Add("a.nunit", "a.dll", "b.dll");
+            projectService.Add("a.nunit", "a.dll");
+            projectService.Add("ab.nunit", "a.dll", "b.dll");
+            projectService.Add("m1.nunit", MOCK_ASSEMBLY);
+            projectService.Add("m2.nunit", MOCK_ASSEMBLY, MOCK_ASSEMBLY);
+            projectService.Add("m3.nunit", MOCK_ASSEMBLY, MOCK_ASSEMBLY, MOCK_ASSEMBLY);
+            projectService.Add("am.nunit", "a.dll", MOCK_ASSEMBLY);
+            projectService.Add("mb.nunit", MOCK_ASSEMBLY, "b.dll");
+            projectService.Add("amb.nunit", "a.dll", MOCK_ASSEMBLY, "b.dll");
+            projectService.Add("mbm.nunit", MOCK_ASSEMBLY, "b.dll", MOCK_ASSEMBLY);
 
             _services.Add(new ExtensionService());
             _services.Add(projectService);
-            _services.Add(new DefaultTestRunnerFactory());
+            _services.Add(new TestRunnerFactory());
             _services.Add(new FakeRuntimeService());
+            _services.Add(new TestFrameworkService());
             _services.Add(new PackageSettingsService());
 
             _services.ServiceManager.StartServices();
         }
 
         [TestCaseSource(nameof(TestCases))]
-        public void RunnerSelectionTest(TestPackage package, RunnerResult expected)
+        public void RunnerSelectionTest(TestPackage package, RunnerResult expectedResult)
         {
             var masterRunner = new MasterTestRunner(_services, package);
             var runner = masterRunner.GetEngineRunner();
-            var result = GetRunnerResult(runner);
-            Assert.That(result, Is.EqualTo(expected).Using(RunnerResultComparer.Instance));
+            Assert.That(GetRunnerResult(runner), Is.EqualTo(expectedResult));
         }
 
         private static RunnerResult GetRunnerResult(ITestEngineRunner runner)
@@ -83,27 +94,27 @@ namespace TestCentric.Engine.Services.TestRunnerFactoryTests
                     RunnerResult.AggregatingTestRunner(2)).SetName("TwoAssemblies");
 
                 yield return new TestCaseData(
-                    new TestPackage(new[] { "a.nunit" }),
+                    new TestPackage(new[] { "ab.nunit" }),
                     RunnerResult.LocalTestRunner).SetName("SingleProject_ListCtor");
 
                 yield return new TestCaseData(
-                    new TestPackage("a.nunit"),
+                    new TestPackage("ab.nunit"),
                     RunnerResult.AggregatingTestRunner(2)).SetName("SingleProject_StringConstructor");
 
                 yield return new TestCaseData(
-                    new TestPackage(new[] { "a.nunit", "a.nunit" }),
+                    new TestPackage(new[] { "ab.nunit", "ab.nunit" }),
                     RunnerResult.AggregatingTestRunner(4)).SetName("TwoProjects");
 
                 yield return new TestCaseData(
-                    new TestPackage(new string[] { "a.nunit", "b.dll" }),
+                    new TestPackage(new string[] { "ab.nunit", "b.dll" }),
                     RunnerResult.AggregatingTestRunner(3)).SetName("OneProjectOneAssembly");
 
                 yield return new TestCaseData(
-                    new TestPackage(new[] { "a.nunit", "b.nunit", "a.dll" }),
+                    new TestPackage(new[] { "ab.nunit", "ab.nunit", "a.dll" }),
                     RunnerResult.AggregatingTestRunner(3)).SetName("TwoProjectsOneAssembly");
 
                 yield return new TestCaseData(
-                    new TestPackage(new[] { "a.dll", "b.dll", "a.nunit" }),
+                    new TestPackage(new[] { "a.dll", "b.dll", "ab.nunit" }),
                     RunnerResult.AggregatingTestRunner(4)).SetName("TwoAssembliesOneProject");
 
                 //yield return new TestCaseData(
@@ -111,58 +122,116 @@ namespace TestCentric.Engine.Services.TestRunnerFactoryTests
                 //    RunnerResult.AggregatingTestRunner(2)).SetName("TwoUnknowns");
 
                 //yield return new TestCaseData(
-                //    new TestPackage(new[] { "a.junk", "a.dll", "a.nunit" }),
+                //    new TestPackage(new[] { "a.junk", "a.dll", "ab.nunit" }),
                 //    RunnerResult.AggregatingTestRunner(4)).SetName("OneAssemblyOneProjectOneUnknown");
 #else
-                yield return new TestCaseData(
-                    new TestPackage("a.dll"),
-                    RunnerResult.ProcessRunner).SetName("SingleAssembly_StringCtor");
+                yield return MakeTestCase("mock-assembly.dll",
+                    RunnerResult.ProcessRunner);
 
-                yield return new TestCaseData(
-                    new TestPackage(new string[] { "a.dll" }),
-                    RunnerResult.ProcessRunner).SetName("SingleAssembly_ListCtor");
+                yield return MakeTestCase(
+                    "a.dll", RunnerResult.InvalidAssemblyRunner);
 
-                yield return new TestCaseData(
-                    new TestPackage("a.junk"),
-                    RunnerResult.ProcessRunner).SetName("SingleUnknown");
+                yield return MakeTestCase("a.junk",
+                    RunnerResult.InvalidAssemblyRunner);
 
-                yield return new TestCaseData(
-                    new TestPackage(new string[] { "a.dll", "b.dll" }),
-                    RunnerResult.MultipleProcessRunner(2)).SetName("TwoAssemblies");
+                yield return MakeTestCase("mock-assembly.dll mock-assembly.dll",
+                    RunnerResult.AggregatingTestRunner(RunnerResult.ProcessRunner, 2));
 
-                //yield return new TestCaseData(
-                //    new TestPackage(new string[] { "a.junk", "b.junk" }),
-                //    RunnerResult.MultipleProcessRunner(2)).SetName("TwoUnknowns");
+                yield return MakeTestCase("a.dll b.dll",
+                    RunnerResult.AggregatingTestRunner(RunnerResult.InvalidAssemblyRunner, 2));
 
-                yield return new TestCaseData(
-                    new TestPackage("a.nunit"),
-                    RunnerResult.MultipleProcessRunner(2)).SetName("SingleProject_StringCtor");
+                yield return MakeTestCase("mock-assembly.dll missing.dll",
+                    RunnerResult.AggregatingTestRunner(
+                        RunnerResult.ProcessRunner,
+                        RunnerResult.InvalidAssemblyRunner));
 
-                yield return new TestCaseData(
-                    new TestPackage(new string[] { "a.nunit" }),
-                    RunnerResult.MultipleProcessRunner(2)).SetName("SingleProject_ListCtor");
+                yield return MakeTestCase("missing.dll mock-assembly.dll",
+                    RunnerResult.AggregatingTestRunner(
+                        RunnerResult.InvalidAssemblyRunner,
+                        RunnerResult.ProcessRunner));
 
-                yield return new TestCaseData(
-                    new TestPackage(new string[] { "a.nunit", "a.nunit" }),
-                    RunnerResult.MultipleProcessRunner(4)).SetName("TwoProjects");
+                yield return MakeTestCase("a.junk b.junk c.junk",
+                    RunnerResult.AggregatingTestRunner(RunnerResult.InvalidAssemblyRunner, 3));
 
-                yield return new TestCaseData(
-                    new TestPackage(new string[] { "a.nunit", "b.dll" }),
-                    RunnerResult.MultipleProcessRunner(3)).SetName("OneProjectOneAssembly");
+                yield return MakeTestCase("m1.nunit",
+                    RunnerResult.ProcessRunner);
 
-                yield return new TestCaseData(
-                    new TestPackage(new string[] { "a.nunit", "a.nunit", "b.dll" }),
-                    RunnerResult.MultipleProcessRunner(5)).SetName("TwoProjectsOneAssembly");
+                yield return MakeTestCase("m2.nunit",
+                    RunnerResult.AggregatingTestRunner(RunnerResult.ProcessRunner, 2));
 
-                yield return new TestCaseData(
-                    new TestPackage(new string[] { "a.dll", "b.dll", "a.nunit" }),
-                    RunnerResult.MultipleProcessRunner(4)).SetName("TwoAssembliesOneProject");
+                yield return MakeTestCase("m3.nunit",
+                    RunnerResult.AggregatingTestRunner(RunnerResult.ProcessRunner, 3));
 
-                yield return new TestCaseData(
-                    new TestPackage(new string[] { "a.dll", "a.nunit", "a.junk" }),
-                    RunnerResult.MultipleProcessRunner(3)).SetName("OneAssemblyOneProjectOneUnknown");
+                yield return MakeTestCase("am.nunit",
+                    RunnerResult.AggregatingTestRunner(
+                        RunnerResult.InvalidAssemblyRunner,
+                        RunnerResult.ProcessRunner));
+
+                yield return MakeTestCase("mb.nunit",
+                    RunnerResult.AggregatingTestRunner(
+                        RunnerResult.ProcessRunner,
+                        RunnerResult.InvalidAssemblyRunner));
+
+                yield return MakeTestCase("amb.nunit",
+                    RunnerResult.AggregatingTestRunner(
+                        RunnerResult.InvalidAssemblyRunner,
+                        RunnerResult.ProcessRunner,
+                        RunnerResult.InvalidAssemblyRunner));
+
+                yield return MakeTestCase("mbm.nunit",
+                    RunnerResult.AggregatingTestRunner(
+                        RunnerResult.ProcessRunner,
+                        RunnerResult.InvalidAssemblyRunner,
+                        RunnerResult.ProcessRunner));
+
+                yield return MakeTestCase("ab.nunit",
+                    RunnerResult.AggregatingTestRunner(RunnerResult.InvalidAssemblyRunner, 2));
+
+                yield return MakeTestCase("am.nunit mb.nunit",
+                    RunnerResult.AggregatingTestRunner(
+                        RunnerResult.InvalidAssemblyRunner,
+                        RunnerResult.ProcessRunner,
+                        RunnerResult.ProcessRunner,
+                        RunnerResult.InvalidAssemblyRunner));
+
+                yield return MakeTestCase("m2.nunit b.dll",
+                    RunnerResult.AggregatingTestRunner(
+                        RunnerResult.ProcessRunner,
+                        RunnerResult.ProcessRunner,
+                        RunnerResult.InvalidAssemblyRunner));
+
+                yield return MakeTestCase("ab.nunit m2.nunit b.dll",
+                    RunnerResult.AggregatingTestRunner(
+                        RunnerResult.InvalidAssemblyRunner,
+                        RunnerResult.InvalidAssemblyRunner,
+                        RunnerResult.ProcessRunner,
+                        RunnerResult.ProcessRunner,
+                        RunnerResult.InvalidAssemblyRunner));
+
+                yield return MakeTestCase("a.dll m2.nunit a.junk",
+                    RunnerResult.AggregatingTestRunner(
+                        RunnerResult.InvalidAssemblyRunner,
+                        RunnerResult.ProcessRunner,
+                        RunnerResult.ProcessRunner,
+                        RunnerResult.InvalidAssemblyRunner));
 #endif
             }
+        }
+
+        private static TestCaseData MakeTestCase(string files, RunnerResult result)
+        {
+            var paths = new List<string>();
+            foreach (var file in files.Split(new[] { ' ' }))
+                paths.Add(FullPathTo(file));
+
+            return new TestCaseData(
+                new TestPackage(paths), result)
+                    .SetArgDisplayNames(files);
+        }
+
+        private static string FullPathTo(string file)
+        {
+            return Path.Combine(TestContext.CurrentContext.TestDirectory, file);
         }
     }
 }

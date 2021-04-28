@@ -9,7 +9,7 @@ using System.Xml;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
 using NUnit.Framework;
-using TestCentric.Engine.Helpers;
+using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Drivers
 {
@@ -129,22 +129,6 @@ namespace TestCentric.Engine.Drivers
         protected override IFrameworkDriver CreateDriver(string filePath)
         {
             return new InvalidAssemblyFrameworkDriver(filePath, _expectedReason);
-        }
-    }
-
-    public class SkippedAssemblyFrameworkDriverTests : NotRunnableFrameworkDriverTests
-    {
-        public SkippedAssemblyFrameworkDriverTests()
-        {
-            _expectedRunState = "Runnable";
-            _expectedReason = "Skipping non-test assembly";
-            _expectedResult = "Skipped";
-            _expectedLabel = "NoTests";
-        }
-
-        protected override IFrameworkDriver CreateDriver(string filePath)
-        {
-            return new SkippedAssemblyFrameworkDriver(filePath);
         }
     }
 }

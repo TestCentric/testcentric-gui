@@ -26,6 +26,7 @@ namespace TestCentric.Engine.Services
 
             var context = new ServiceContext();
             context.Add(projectService);
+            context.Add(new TestFrameworkService());
             context.Add(_packageService);
 
             context.ServiceManager.StartServices();

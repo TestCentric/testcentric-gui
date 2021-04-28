@@ -13,7 +13,6 @@ using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
 using TestCentric.Common;
-using TestCentric.Engine.Helpers;
 using TestCentric.Engine.Internal;
 using TestCentric.Engine.Services;
 

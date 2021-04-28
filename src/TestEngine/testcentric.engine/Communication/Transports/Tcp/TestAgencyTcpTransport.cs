@@ -12,7 +12,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TestCentric.Common;
-using TestCentric.Engine.Helpers;
 using TestCentric.Engine.Internal;
 using TestCentric.Engine.Services;
 
