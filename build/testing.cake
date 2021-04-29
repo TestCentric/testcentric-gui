@@ -44,19 +44,19 @@ public class GuiTester
 		_parameters = parameters;
 	}
 
-	public void RunGuiUnattended(string runnerPath, string arguments)
+	public int RunGuiUnattended(string runnerPath, string arguments)
 	{
 		if (!arguments.Contains(" --run"))
 			arguments += " --run";
 		if (!arguments.Contains(" --unattended"))
 			arguments += " --unattended";
 
-		RunGui(runnerPath, arguments);
+		return RunGui(runnerPath, arguments);
 	}
 
-	public void RunGui(string runnerPath, string arguments)
+	public int RunGui(string runnerPath, string arguments)
 	{
-		_parameters.Context.StartProcess(runnerPath, new ProcessSettings()
+		return _parameters.Context.StartProcess(runnerPath, new ProcessSettings()
 		{
 			Arguments = arguments,
 			WorkingDirectory = _parameters.OutputDirectory
@@ -340,7 +340,7 @@ public abstract class PackageTester : GuiTester
 				try
                 {
 					var result = new ActualResult(resultFile);
-					var report = new TestReport(packageTest, result);
+					var report = new PackageTestReport(packageTest, result);
 					reporter.AddReport(report);
 
 					Console.WriteLine(report.Errors.Count == 0
@@ -349,7 +349,7 @@ public abstract class PackageTester : GuiTester
 				}
 				catch (Exception ex)
                 {
-					reporter.AddReport(new TestReport(packageTest, ex));
+					reporter.AddReport(new PackageTestReport(packageTest, ex));
 
 					Console.WriteLine("\nERROR: No result found!");
 				}

@@ -67,13 +67,13 @@ public class ActualResult : ResultSummary
 	}
 }
 
-public class TestReport
+public class PackageTestReport
 {
 	public PackageTest Test;
 	public ActualResult Result;
 	public List<string> Errors;
 
-	public TestReport(PackageTest test, ActualResult result)
+	public PackageTestReport(PackageTest test, ActualResult result)
 	{
 		Test = test;
 		Result = result;
@@ -95,7 +95,7 @@ public class TestReport
 		CheckCounter("Skipped", expected.Skipped, result.Skipped);
 	}
 
-	public TestReport(PackageTest test, Exception ex)
+	public PackageTestReport(PackageTest test, Exception ex)
 	{
 		Test = test;
 		Result = null;
@@ -160,14 +160,14 @@ public class TestReport
 public class ResultReporter
 {
 	private string _packageName;
-	private List<TestReport> _reports = new List<TestReport>();
+	private List<PackageTestReport> _reports = new List<PackageTestReport>();
 
 	public ResultReporter(string packageName)
 	{
 		_packageName = packageName;
 	}
 
-	public void AddReport(TestReport report)
+	public void AddReport(PackageTestReport report)
 	{
 		_reports.Add(report);
 	}

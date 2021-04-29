@@ -1,4 +1,3 @@
-#tool nuget:?package=NUnit.ConsoleRunner&version=3.10.0
 #tool nuget:?package=GitVersion.CommandLine&version=5.0.0
 #tool nuget:?package=GitReleaseManager&version=0.11.0
 #tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.8.0"
@@ -180,10 +179,19 @@ Task("TestGui")
     .IsDependentOn("Build")
     .Does<BuildParameters>((parameters) =>
 	{
-		NUnit3(
-			parameters.OutputDirectory + ALL_TESTS,
-			new NUnit3Settings { NoResults = true }
-		);
+		var guiTests = GetFiles(parameters.OutputDirectory + GUI_TESTS);
+		var args = new StringBuilder();
+		foreach (var test in guiTests)
+			args.Append($"\"{test}\" ");
+
+		var guiTester = new GuiTester(parameters);
+		guiTester.RunGuiUnattended(parameters.OutputDirectory + GUI_RUNNER, args.ToString());
+		var result = new ActualResult(parameters.OutputDirectory + "TestResult.xml");
+
+		new ConsoleReporter(result).Display();
+
+		if (result.OverallResult == "Failed")
+			throw new System.Exception("There were test failures or errors. See listing.");
 	});
 
 /////////////////////////////////////////////////////////////////////
