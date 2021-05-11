@@ -230,12 +230,16 @@ public abstract class PackageTester : GuiTester
 				Skipped = 14
 			}));
 
-		// TODO: Make test work on AppVeyor - currently runs locally only
-		if (_parameters.IsLocalBuild)
-			PackageTests.Add( new PackageTest(2, "Run an NUnit project, specifying Release config", StandardRunner,
-				"../../GuiTests.nunit --config=Release --trace=Debug",
-				new ExpectedResult("Passed"),
-				NUnitProjectLoader));
+			// TODO: Use --config option when it's supported by the extension.
+			// Current test relies on the fact that the Release config appears
+			// first in the project file.
+			if (_parameters.Configuration == "Release")
+			{
+				PackageTests.Add(new PackageTest(2, "Run an NUnit project", StandardRunner,
+					"../../GuiTests.nunit --trace=Debug",
+					new ExpectedResult("Passed"),
+					NUnitProjectLoader));
+			}
 	}
 
 	protected abstract string PackageName { get; }
