@@ -197,7 +197,7 @@ public abstract class PackageTester : GuiTester
 				Inconclusive = 1,
 				Skipped = 7,
 				Assemblies = new[] { "mock-assembly.dll" },
-				Runtimes = new[] { ".NET Core 4.6.30015" }
+				Runtimes = new[] { ".NET Core 4.6" }
 			}));
 
 		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET 5.0", StandardRunner,
