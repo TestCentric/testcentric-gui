@@ -124,8 +124,12 @@ public abstract class PackageTester : GuiTester
 		// Level 1 tests are run each time we build the packages
 		PackageTests.Add(new PackageTest(2, "Re-run tests of the TestCentric model", StandardRunner,
 			"TestCentric.Gui.Model.Tests.dll",
-			new ExpectedResult("Passed")));
-		
+			new ExpectedResult("Passed")
+			{
+				Assemblies = new[] { "TestCentric.Gui.Model.Tests.dll" },
+				Runtimes = new[] { "4.0.30319" }
+			})); ;
+
 		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET 4.5", StandardRunner,
 			"mock-assembly.dll",
 			new ExpectedResult("Failed")
@@ -135,7 +139,9 @@ public abstract class PackageTester : GuiTester
 				Failed = 5,
 				Warnings = 0,
 				Inconclusive = 1,
-				Skipped = 7
+				Skipped = 7,
+				Assemblies = new[] { "mock-assembly.dll" },
+				Runtimes = new[] { "4.0.30319" }
 			}));
 		
 		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET 3.5", StandardRunner,
@@ -147,7 +153,9 @@ public abstract class PackageTester : GuiTester
 				Failed = 5,
 				Warnings = 0,
 				Inconclusive = 1,
-				Skipped = 7
+				Skipped = 7,
+				Assemblies = new[] { "mock-assembly.dll" },
+				Runtimes = new[] { "2.0.50727" }
 			}));
 		
 		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET Core 2.1", StandardRunner,
@@ -159,7 +167,9 @@ public abstract class PackageTester : GuiTester
 				Failed = 5,
 				Warnings = 0,
 				Inconclusive = 1,
-				Skipped = 7
+				Skipped = 7,
+				Assemblies = new[] { "mock-assembly.dll" },
+				Runtimes = new[] { "4.0.30319" }
 			}));
 
 		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET Core 3.1", StandardRunner,
@@ -171,7 +181,9 @@ public abstract class PackageTester : GuiTester
 				Failed = 5,
 				Warnings = 0,
 				Inconclusive = 1,
-				Skipped = 7
+				Skipped = 7,
+				Assemblies = new[] { "mock-assembly.dll" },
+				Runtimes = new[] { "3.1" }
 			}));
 
 		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET Core 1.1", StandardRunner,
@@ -183,7 +195,9 @@ public abstract class PackageTester : GuiTester
 				Failed = 5,
 				Warnings = 0,
 				Inconclusive = 1,
-				Skipped = 7
+				Skipped = 7,
+				Assemblies = new[] { "mock-assembly.dll" },
+				Runtimes = new[] { ".NET Core 4.6.30015" }
 			}));
 
 		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET 5.0", StandardRunner,
@@ -195,7 +209,9 @@ public abstract class PackageTester : GuiTester
 				Failed = 5,
 				Warnings = 0,
 				Inconclusive = 1,
-				Skipped = 7
+				Skipped = 7,
+				Assemblies = new[] { "mock-assembly.dll" },
+				Runtimes = new[] { "5.0" }
 			}));
 
         // Level 2 tests are run for PRs and when packages will be published
@@ -227,7 +243,9 @@ public abstract class PackageTester : GuiTester
 				Failed = 10,
 				Warnings = 0,
 				Inconclusive = 2,
-				Skipped = 14
+				Skipped = 14,
+				Assemblies = new[] { "mock-assembly.dll", "mock-assembly.dll" },
+				Runtimes = new[] { "2.0.50727", "4.0.30319" }
 			}));
 
 			// TODO: Use --config option when it's supported by the extension.
@@ -237,7 +255,13 @@ public abstract class PackageTester : GuiTester
 			{
 				PackageTests.Add(new PackageTest(2, "Run an NUnit project", StandardRunner,
 					"../../GuiTests.nunit --trace=Debug",
-					new ExpectedResult("Passed"),
+					new ExpectedResult("Passed")
+					{
+						Assemblies = new[] { 
+							"TestCentric.Gui.Tests.dll",
+							"TestCentric.Gui.Model.Tests.dll" },
+						Runtimes = new[] { "4.0.30319", "4.0.30319" }
+					},
 					NUnitProjectLoader));
 			}
 	}

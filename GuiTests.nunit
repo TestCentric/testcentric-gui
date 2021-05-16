@@ -1,10 +1,10 @@
 ﻿<NUnitProject>
   <Config name="Release" appbase="bin/Release">
-    <assembly path="Testcentric.Gui.Tests.dll" />
-    <assembly path="Testcentric.Gui.Model.Tests.dll" />
+    <assembly path="TestCentric.Gui.Tests.dll" />
+    <assembly path="TestCentric.Gui.Model.Tests.dll" />
   </Config>
   <Config name="Debug" appbase="bin/Debug">
-    <assembly path="Testcentric.Gui.Tests.dll" />
-    <assembly path="Testcentric.Gui.Model.Tests.dll" />
+    <assembly path="TestCentric.Gui.Tests.dll" />
+    <assembly path="TestCentric.Gui.Model.Tests.dll" />
   </Config>
 </NUnitProject>

@@ -25,10 +25,14 @@ public class ExpectedResult : ResultSummary
 			throw new ArgumentNullException(nameof(overallResult));
 
 		OverallResult = overallResult;
+		
 		// Initialize counters to -1, indicating no expected value.
 		// Set properties of those items to be checked.
 		Total = Passed = Failed = Warnings = Inconclusive = Skipped = -1;
 	}
+
+	public string[] Assemblies { get; set; } = new string[0];
+	public string[] Runtimes { get; set; } = new string[0];
 }
 
 public class ActualResult : ResultSummary
@@ -49,9 +53,24 @@ public class ActualResult : ResultSummary
 		Warnings = IntAttribute(Xml, "warnings");
 		Inconclusive = IntAttribute(Xml, "inconclusive");
 		Skipped = IntAttribute(Xml, "skipped");
+
+		var assemblies = new List<string>();
+		var runtimes = new List<string>();
+
+		foreach (XmlNode node in Xml.SelectNodes("//test-suite[@type='Assembly']"))
+		{
+			assemblies.Add(GetAttribute(node, "name"));
+			runtimes.Add(GetAttribute(node.SelectSingleNode("environment"), "clr-version"));
+		}
+
+		Assemblies = assemblies.ToArray();
+		Runtimes = runtimes.ToArray();
 	}
 
 	public XmlNode Xml { get; }
+
+	public string[] Assemblies { get; }
+	public string[] Runtimes { get; }
 
 	private string GetAttribute(XmlNode node, string name)
 	{
@@ -62,7 +81,7 @@ public class ActualResult : ResultSummary
 	{
 		string s = GetAttribute(node, name);
 		// TODO: We should replace 0 with -1, representing a missing counter
-		// attribute, after issue #904 is fixed.
+		// attribute, after issue #707 is fixed.
 		return s == null ? 0 : int.Parse(s);
 	}
 }
@@ -93,6 +112,24 @@ public class PackageTestReport
 		CheckCounter("Warnings", expected.Warnings, result.Warnings);
 		CheckCounter("Inconclusive", expected.Inconclusive, result.Inconclusive);
 		CheckCounter("Skipped", expected.Skipped, result.Skipped);
+
+		string expectedAssemblies = string.Join(" ", expected.Assemblies);
+		string actualAssemblies = string.Join(" ", result.Assemblies);
+
+		if (expectedAssemblies != actualAssemblies)
+		{
+			Errors.Add($"     Expected assemblies {expectedAssemblies}\n    But was: {actualAssemblies}");
+			return;
+		}
+
+		for (int i = 0; i < expected.Assemblies.Length && i < expected.Runtimes.Length && i < result.Runtimes.Length; i++)
+        {
+			string assembly = expected.Assemblies[i];
+			string expectedRuntime = expected.Runtimes[i];
+			string resultRuntime = result.Runtimes[i];
+			if (!resultRuntime.StartsWith(expectedRuntime))
+				Errors.Add($"    Expected assembly {assembly} to use CLR {expectedRuntime}\n    But it ran under {resultRuntime}");
+        }
 	}
 
 	public PackageTestReport(PackageTest test, Exception ex)
@@ -133,10 +170,11 @@ public class PackageTestReport
 		foreach (XmlNode suite in suites)
 		{
 			// Narrow down to the specific failures we want
+			string runState = GetAttribute(suite, "runstate");
 			string suiteResult = GetAttribute(suite, "result");
 			string label = GetAttribute(suite, "label");
 			string site = suite.Attributes["site"]?.Value ?? "Test";
-			if (suiteResult == "Failed" && site == "Test" && label == "Invalid")
+			if (runState == "NotRunnable" || suiteResult == "Failed" && site == "Test" && (label == "Invalid" || label == "Error"))
 			{
 				string message = suite.SelectSingleNode("reason/message")?.InnerText;
 				Errors.Add($"     {message}");
