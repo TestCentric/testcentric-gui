@@ -10,8 +10,8 @@ namespace TestCentric.Engine.Internal
 {
     public class ResultHelperTests
     {
-        private const string resultText1 = "<test-assembly result=\"Passed\" total=\"23\" passed=\"23\" failed=\"0\" inconclusive=\"0\" skipped=\"0\" asserts=\"40\" />";
-        private const string resultText2 = "<test-assembly result=\"Failed\" total=\"42\" passed=\"31\" failed=\"4\" inconclusive=\"5\" skipped=\"2\" asserts=\"53\" />";
+        private const string resultText1 = "<test-assembly result=\"Passed\" total=\"23\" passed=\"23\" failed=\"0\" inconclusive=\"0\" skipped=\"0\" warnings=\"0\" asserts=\"40\" />";
+        private const string resultText2 = "<test-assembly result=\"Failed\" total=\"42\" passed=\"31\" failed=\"2\" inconclusive=\"5\" skipped=\"2\" warnings=\"2\" asserts=\"53\" />";
 
         private TestEngineResult result1;
         private TestEngineResult result2;
@@ -54,7 +54,8 @@ namespace TestCentric.Engine.Internal
             Assert.That(combinedNode.Attributes["result"].Value, Is.EqualTo("Failed"));
             Assert.That(combinedNode.Attributes["total"].Value, Is.EqualTo("42"));
             Assert.That(combinedNode.Attributes["passed"].Value, Is.EqualTo("31"));
-            Assert.That(combinedNode.Attributes["failed"].Value, Is.EqualTo("4"));
+            Assert.That(combinedNode.Attributes["failed"].Value, Is.EqualTo("2"));
+            Assert.That(combinedNode.Attributes["warnings"].Value, Is.EqualTo("2"));
             Assert.That(combinedNode.Attributes["inconclusive"].Value, Is.EqualTo("5"));
             Assert.That(combinedNode.Attributes["skipped"].Value, Is.EqualTo("2"));
             Assert.That(combinedNode.Attributes["asserts"].Value, Is.EqualTo("53"));
@@ -76,7 +77,8 @@ namespace TestCentric.Engine.Internal
             Assert.That(combinedNode.Attributes["result"].Value, Is.EqualTo("Failed"));
             Assert.That(combinedNode.Attributes["total"].Value, Is.EqualTo("65"));
             Assert.That(combinedNode.Attributes["passed"].Value, Is.EqualTo("54"));
-            Assert.That(combinedNode.Attributes["failed"].Value, Is.EqualTo("4"));
+            Assert.That(combinedNode.Attributes["failed"].Value, Is.EqualTo("2"));
+            Assert.That(combinedNode.Attributes["warnings"].Value, Is.EqualTo("2"));
             Assert.That(combinedNode.Attributes["inconclusive"].Value, Is.EqualTo("5"));
             Assert.That(combinedNode.Attributes["skipped"].Value, Is.EqualTo("2"));
             Assert.That(combinedNode.Attributes["asserts"].Value, Is.EqualTo("93"));
@@ -94,7 +96,8 @@ namespace TestCentric.Engine.Internal
             Assert.That(combined.Attributes["result"].Value, Is.EqualTo("Failed"));
             Assert.That(combined.Attributes["total"].Value, Is.EqualTo("65"));
             Assert.That(combined.Attributes["passed"].Value, Is.EqualTo("54"));
-            Assert.That(combined.Attributes["failed"].Value, Is.EqualTo("4"));
+            Assert.That(combined.Attributes["failed"].Value, Is.EqualTo("2"));
+            Assert.That(combined.Attributes["warnings"].Value, Is.EqualTo("2"));
             Assert.That(combined.Attributes["inconclusive"].Value, Is.EqualTo("5"));
             Assert.That(combined.Attributes["skipped"].Value, Is.EqualTo("2"));
             Assert.That(combined.Attributes["asserts"].Value, Is.EqualTo("93"));
@@ -118,8 +121,8 @@ namespace TestCentric.Engine.Internal
         [TestCase("Warning", "Failed", "Failed")]
         public void Aggregate_CalculatesAggregateResultCorrectly(string firstResult, string secondResult, string aggregateResult)
         {
-            string firstResultText = $"<test-assembly result=\"{firstResult}\" total=\"23\" passed=\"23\" failed=\"0\" inconclusive=\"0\" skipped=\"0\" asserts=\"40\" />";
-            string secondResultText = $"<test-assembly result=\"{secondResult}\" total=\"42\" passed=\"31\" failed=\"4\" inconclusive=\"5\" skipped=\"2\" asserts=\"53\" />";
+            string firstResultText = $"<test-assembly result=\"{firstResult}\" total=\"23\" passed=\"23\" failed=\"0\" inconclusive=\"0\" skipped=\"0\" warnings=\"0\" asserts=\"40\" />";
+            string secondResultText = $"<test-assembly result=\"{secondResult}\" total=\"42\" passed=\"31\" failed=\"2\" inconclusive=\"5\" skipped=\"2\" warnings=\"2\" asserts=\"53\" />";
 
             var firstEngineResult = new TestEngineResult(firstResultText);
             var secondEngineResult = new TestEngineResult(secondResultText);
