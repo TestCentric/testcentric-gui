@@ -66,10 +66,10 @@ public class BuildParameters
 
 		MSBuildSettings = new MSBuildSettings {
 			Verbosity = Verbosity.Minimal,
-			ToolVersion = MSBuildToolVersion.Default,//The highest available MSBuild tool version//VS2017
+			//ToolVersion = MSBuildToolVersion.Default,//The highest available MSBuild tool version//VS2017
 			Configuration = Configuration,
 			PlatformTarget = PlatformTarget.MSIL,
-			MSBuildPlatform = MSBuildPlatform.Automatic,
+			//MSBuildPlatform = MSBuildPlatform.Automatic,
 			DetailedSummary = true,
 		};
 
