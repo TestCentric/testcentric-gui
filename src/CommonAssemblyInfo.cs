@@ -12,7 +12,7 @@ using System.Reflection;
 [assembly: AssemblyProduct("TestCentric Runner for NUnit")]
 
 [assembly: AssemblyCompany("TestCentric Software")]
-[assembly: AssemblyCopyright("Copyright (C) 2018-2020 Charlie Poole and TestCentric Runner contributors")]
+[assembly: AssemblyCopyright("Copyright (C) 2018-2021 Charlie Poole and TestCentric contributors")]
 [assembly: AssemblyTrademark("TestCentric is a trademark of TestCentric Software")]
 
 #if DEBUG

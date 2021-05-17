@@ -52,7 +52,7 @@ namespace TestCentric.Gui.Dialogs
                     versionText += string.Format(" ({0})", configText);
             }
 
-            string copyrightText = "Copyright (C) 2018-2020 Charlie Poole and TestCentric Runner contributors";
+            string copyrightText = "Copyright (C) 2018-2021 Charlie Poole and TestCentric contributors";
             objectAttrs = executingAssembly.GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
             if (objectAttrs.Length > 0)
                 copyrightText = ((AssemblyCopyrightAttribute)objectAttrs[0]).Copyright;
