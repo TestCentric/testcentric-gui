@@ -250,9 +250,9 @@
 </value>
   </data>
   <data name="label4.Text" xml:space="preserve">
-    <value>TestCentric 1.x is based on the NUnit V2 GUI, modified to support NUnit 3.0 and higher tests.
+    <value>TestCentric emulates the appearance of the legacy NUnit GUI, but is modified internally to support NUnit 3.0 and higher tests.
 
-The runner includes a modified version of the NUnit test engine. Existing NUnit engine extensions may be installed and will be used by the runner.
+The runner includes a modified version of the NUnit test engine, which allows existing NUnit engine extensions to be installed.
 
 Use Tools | Extensions to see which extensions are currently installed.
 </value>
