@@ -122,14 +122,6 @@ public abstract class PackageTester : GuiTester
 		PackageTests = new List<PackageTest>();
 
 		// Level 1 tests are run each time we build the packages
-		PackageTests.Add(new PackageTest(2, "Re-run tests of the TestCentric model", StandardRunner,
-			"TestCentric.Gui.Model.Tests.dll",
-			new ExpectedResult("Passed")
-			{
-				Assemblies = new[] { "TestCentric.Gui.Model.Tests.dll" },
-				Runtimes = new[] { "4.0.30319" }
-			})); ;
-
 		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET 4.5", StandardRunner,
 			"mock-assembly.dll",
 			new ExpectedResult("Failed")
@@ -140,9 +132,8 @@ public abstract class PackageTester : GuiTester
 				Warnings = 0,
 				Inconclusive = 1,
 				Skipped = 7,
-				Assemblies = new[] { "mock-assembly.dll" },
-				Runtimes = new[] { "4.0.30319" }
-			}));
+				Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "net-4.5") }
+			})) ;
 		
 		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET 3.5", StandardRunner,
 			"engine-tests/net35/mock-assembly.dll",
@@ -154,8 +145,7 @@ public abstract class PackageTester : GuiTester
 				Warnings = 0,
 				Inconclusive = 1,
 				Skipped = 7,
-				Assemblies = new[] { "mock-assembly.dll" },
-				Runtimes = new[] { "2.0.50727" }
+				Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "net-2.0") }
 			}));
 		
 		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET Core 2.1", StandardRunner,
@@ -168,8 +158,7 @@ public abstract class PackageTester : GuiTester
 				Warnings = 0,
 				Inconclusive = 1,
 				Skipped = 7,
-				Assemblies = new[] { "mock-assembly.dll" },
-				Runtimes = new[] { "4.0.30319" }
+				Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "netcore-2.1") }
 			}));
 
 		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET Core 3.1", StandardRunner,
@@ -182,8 +171,7 @@ public abstract class PackageTester : GuiTester
 				Warnings = 0,
 				Inconclusive = 1,
 				Skipped = 7,
-				Assemblies = new[] { "mock-assembly.dll" },
-				Runtimes = new[] { "3.1" }
+				Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "netcore-3.1") }
 			}));
 
 		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET Core 1.1", StandardRunner,
@@ -196,8 +184,7 @@ public abstract class PackageTester : GuiTester
 				Warnings = 0,
 				Inconclusive = 1,
 				Skipped = 7,
-				Assemblies = new[] { "mock-assembly.dll" },
-				Runtimes = new[] { ".NET Core 4.6" }
+				Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "netcore-1.1") }
 			}));
 
 		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET 5.0", StandardRunner,
@@ -210,31 +197,10 @@ public abstract class PackageTester : GuiTester
 				Warnings = 0,
 				Inconclusive = 1,
 				Skipped = 7,
-				Assemblies = new[] { "mock-assembly.dll" },
-				Runtimes = new[] { "5.0" }
+				Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "netcore-5.0") }
 			}));
 
-        // Level 2 tests are run for PRs and when packages will be published
-
-        // TODO: Ensure that experimental runner saves results and handles --unattended
-        // PackageTests.Add(new PackageTest(2, "Run tests of the TestCentric model using the Experimental Runner", ExperimentalRunner,
-        //     "TestCentric.Gui.Model.Tests.dll",
-        //     new ExpectedResult("Passed"));
-
-        //PackageTests.Add(new PackageTest(2, "Run mock-assembly.dll built for NUnit V2", StandardRunner,
-        //	"v2-tests/mock-assembly.dll",
-        //	new ExpectedResult("Failed")
-        //	{
-        //		Total = 28,
-        //		Passed = 18,
-        //		Failed = 5,
-        //		Warnings = 0,
-        //		Inconclusive = 1,
-        //		Skipped = 4
-        //	},
-        //	NUnitV2Driver));
-
-        PackageTests.Add( new PackageTest(2, "Run different builds of mock-assembly.dll together", StandardRunner,
+		PackageTests.Add(new PackageTest(1, "Run different builds of mock-assembly.dll together", StandardRunner,
 			"engine-tests/net35/mock-assembly.dll engine-tests/netcoreapp2.1/mock-assembly.dll",
 			new ExpectedResult("Failed")
 			{
@@ -244,23 +210,50 @@ public abstract class PackageTester : GuiTester
 				Warnings = 0,
 				Inconclusive = 2,
 				Skipped = 14,
-				Assemblies = new[] { "mock-assembly.dll", "mock-assembly.dll" },
-				Runtimes = new[] { "2.0.50727", "4.0.30319" }
+				Assemblies = new[] {
+					new ExpectedAssemblyResult("mock-assembly.dll", "net-2.0"),
+					new ExpectedAssemblyResult("mock-assembly.dll", "netcore-2.1") }
 			}));
 
-			// TODO: Use --config option when it's supported by the extension.
-			// Current test relies on the fact that the Release config appears
-			// first in the project file.
-			if (_parameters.Configuration == "Release")
+		// Level 2 tests are run for PRs and when packages will be published
+
+		PackageTests.Add(new PackageTest(2, "Re-run tests of the TestCentric model using the package", StandardRunner,
+			"TestCentric.Gui.Model.Tests.dll",
+			new ExpectedResult("Passed")
+			{
+				Assemblies = new[] { new ExpectedAssemblyResult("TestCentric.Gui.Model.Tests.dll", "net-4.5") }
+			}));
+
+		// TODO: Ensure that experimental runner saves results and handles --unattended
+		// PackageTests.Add(new PackageTest(2, "Run tests of the TestCentric model using the Experimental Runner", ExperimentalRunner,
+		//     "TestCentric.Gui.Model.Tests.dll",
+		//     new ExpectedResult("Passed"));
+
+		//PackageTests.Add(new PackageTest(2, "Run mock-assembly.dll built for NUnit V2", StandardRunner,
+		//	"v2-tests/mock-assembly.dll",
+		//	new ExpectedResult("Failed")
+		//	{
+		//		Total = 28,
+		//		Passed = 18,
+		//		Failed = 5,
+		//		Warnings = 0,
+		//		Inconclusive = 1,
+		//		Skipped = 4
+		//	},
+		//	NUnitV2Driver));
+
+		// TODO: Use --config option when it's supported by the extension.
+		// Current test relies on the fact that the Release config appears
+		// first in the project file.
+		if (_parameters.Configuration == "Release")
 			{
 				PackageTests.Add(new PackageTest(2, "Run an NUnit project", StandardRunner,
 					"../../GuiTests.nunit --trace=Debug",
 					new ExpectedResult("Passed")
 					{
 						Assemblies = new[] { 
-							"TestCentric.Gui.Tests.dll",
-							"TestCentric.Gui.Model.Tests.dll" },
-						Runtimes = new[] { "4.0.30319", "4.0.30319" }
+							new ExpectedAssemblyResult("TestCentric.Gui.Tests.dll", "net-4.5"),
+							new ExpectedAssemblyResult("TestCentric.Gui.Model.Tests.dll", "net-4.5") }
 					},
 					NUnitProjectLoader));
 			}

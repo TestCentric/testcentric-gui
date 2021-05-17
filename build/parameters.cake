@@ -65,7 +65,7 @@ public class BuildParameters
 		}
 
 		MSBuildSettings = new MSBuildSettings {
-			Verbosity = Verbosity.Normal,
+			Verbosity = Verbosity.Minimal,
 			//ToolVersion = MSBuildToolVersion.Default,//The highest available MSBuild tool version//VS2017
 			Configuration = Configuration,
 			PlatformTarget = PlatformTarget.MSIL,
