@@ -66,8 +66,18 @@ namespace TestCentric.Engine.Services
             // The original package held overrides, so don't change them, but
             // do apply any settings specified within the project itself.
             foreach (string key in tempPackage.Settings.Keys)
-                if (!package.Settings.ContainsKey(key)) // Don't override settings from command line
-                    package.Settings[key] = tempPackage.Settings[key];
+            {
+                // If an obsolete setting is returned from an older version of
+                // a project loader extension, we ignore it entirely.
+                // TODO: Give a warning message
+                if (EnginePackageSettings.IsObsoleteSetting(key))
+                    continue;
+
+                if (package.Settings.ContainsKey(key)) // Don't override settings from command line
+                    continue;
+
+                package.Settings[key] = tempPackage.Settings[key];
+            }
 
             foreach (var subPackage in tempPackage.SubPackages)
                 package.AddSubPackage(subPackage);
