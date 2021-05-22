@@ -13,6 +13,13 @@ namespace TestCentric
     /// </summary>
     public static class EnginePackageSettings
     {
+        /// <summary>
+        /// Identify previously supported settings, which are no longer
+        /// supported, so that appropriate action may be taken.
+        /// </summary>
+        public static bool IsObsoleteSetting(string setting)
+            => setting == "ProcessModel" || setting == "DomainUsage";
+
         #region Set by the Runner - Used by the Engine
 
         /// <summary>

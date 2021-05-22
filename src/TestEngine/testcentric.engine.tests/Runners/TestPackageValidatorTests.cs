@@ -53,8 +53,41 @@ namespace TestCentric.Engine.Runners
         public void RequestedFrameworkInvalid()
         {
             _package.AddSetting(EnginePackageSettings.RequestedRuntimeFramework, INVALID_RUNTIME);
-            var exception = Assert.Catch<Exception>(() => Validate());
-            Assert.That(exception.Message, Is.EqualTo($"The requested framework {INVALID_RUNTIME} is unknown or not available."));
+
+            var exception = Assert.Throws<NUnitEngineException>(() => Validate());
+
+            CheckMessageContent(exception.Message, $"The requested framework {INVALID_RUNTIME} is unknown or not available.");
+        }
+
+        [TestCase("ProcessModel")]
+        [TestCase("DomainUsage")]
+        [TestCase("ProcessModel", "DomainUsage")]
+        public void ObsoletePackageSetting(params string[] settings)
+        {
+            foreach (var setting in settings)
+                _package.AddSetting(setting, "something"); // Test doesn't use the value
+
+            var exception = Assert.Throws<NUnitEngineException>(() => Validate());
+
+            var errors = new List<string>();
+            foreach (var setting in settings)
+                errors.Add($"The {setting} setting is no longer supported.");
+            CheckMessageContent(exception.Message, errors.ToArray());
+        }
+
+        [Test]
+        public void AllPossibleErrors()
+        {
+            _package.AddSetting(EnginePackageSettings.RequestedRuntimeFramework, INVALID_RUNTIME);
+            _package.AddSetting("ProcessModel", "something"); // Test doesn't use the value
+            _package.AddSetting("DomainUsage", "something"); // Test doesn't use the value
+
+            var exception = Assert.Throws<NUnitEngineException>(() => Validate());
+
+            CheckMessageContent(exception.Message,
+                $"The requested framework {INVALID_RUNTIME} is unknown or not available.",
+                "The ProcessModel setting is no longer supported.",
+                "The DomainUsage setting is no longer supported.");
         }
 
         [Test]
@@ -67,6 +100,14 @@ namespace TestCentric.Engine.Runners
         private void Validate()
         {
             _validator.Validate(_package);
+        }
+
+        private void CheckMessageContent(string message, params string[] errors)
+        {
+            Assert.That(message, Does.StartWith("The following errors were detected in the TestPackage:\n\n"));
+
+            foreach (string error in errors)
+                Assert.That(message, Contains.Substring($"\n* {error}\n"));
         }
     }
 }
