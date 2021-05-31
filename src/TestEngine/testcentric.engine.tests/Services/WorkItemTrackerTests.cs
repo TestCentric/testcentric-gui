@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using NUnit.Engine;
 using NUnit.Framework;
 
-namespace TestCentric.Engine.Runners.Tests
+namespace TestCentric.Engine.Services.Tests
 {
     public class WorkItemTrackerTests : ITestEventListener
     {
