@@ -51,7 +51,7 @@ namespace TestCentric.Engine.Runners
             _services.Add(new Services.ExtensionService());
             _services.Add(new Services.ProjectService());
             _services.Add(new Services.TestFrameworkService());
-            var packageSettingsService = new Services.PackageSettingsService();
+            var packageSettingsService = new Services.TestPackageAnalyzer();
             _services.Add(packageSettingsService);
 #if !NETCOREAPP2_1
             _services.Add(new Services.RuntimeFrameworkService());

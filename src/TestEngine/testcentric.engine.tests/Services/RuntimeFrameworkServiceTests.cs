@@ -16,7 +16,7 @@ namespace TestCentric.Engine.Services
     public class RuntimeFrameworkServiceTests
     {
         private RuntimeFrameworkService _runtimeService;
-        private PackageSettingsService _packageManager;
+        private TestPackageAnalyzer _packageAnalyzer;
 
         [SetUp]
         public void CreateServiceContext()
@@ -26,8 +26,8 @@ namespace TestCentric.Engine.Services
             _runtimeService = new RuntimeFrameworkService();
             services.Add(_runtimeService);
             services.Add(new TestFrameworkService());
-            _packageManager = new PackageSettingsService();
-            services.Add(_packageManager);
+            _packageAnalyzer = new TestPackageAnalyzer();
+            services.Add(_packageAnalyzer);
             services.ServiceManager.StartServices();
         }
 
@@ -53,7 +53,7 @@ namespace TestCentric.Engine.Services
             FileAssert.Exists(assemblyPath, $"File not found: {assemblyPath}");
             var package = new TestPackage(assemblyPath);
 
-            _packageManager.UpdatePackage(package);
+            _packageAnalyzer.UpdatePackage(package);
             var runtimeFramework = _runtimeService.SelectRuntimeFramework(package);
 
             Assert.That(package.GetSetting("TargetRuntimeFramework", ""), Is.EqualTo(runtimeFramework));
@@ -112,7 +112,7 @@ namespace TestCentric.Engine.Services
 
             var platform = Environment.OSVersion.Platform;
 
-            _packageManager.UpdatePackage(topLevelPackage);
+            _packageAnalyzer.UpdatePackage(topLevelPackage);
             _runtimeService.SelectRuntimeFramework(topLevelPackage);
 
             Assert.Multiple(() =>
@@ -125,13 +125,11 @@ namespace TestCentric.Engine.Services
                 {
                     Assert.That(net20Package.Settings[EnginePackageSettings.TargetRuntimeFramework], Is.EqualTo("net-2.0"));
                     Assert.That(net40Package.Settings[EnginePackageSettings.TargetRuntimeFramework], Is.EqualTo("net-4.0"));
-                    Assert.That(topLevelPackage.Settings[EnginePackageSettings.TargetRuntimeFramework], Is.EqualTo("net-4.0"));
                 }
                 else
                 {
                     Assert.That(net20Package.Settings[EnginePackageSettings.TargetRuntimeFramework], Is.EqualTo("mono-2.0"));
                     Assert.That(net40Package.Settings[EnginePackageSettings.TargetRuntimeFramework], Is.EqualTo("mono-4.0"));
-                    Assert.That(topLevelPackage.Settings[EnginePackageSettings.TargetRuntimeFramework], Is.EqualTo("mono-4.0"));
                 }
             });
         }

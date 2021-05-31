@@ -70,7 +70,7 @@ namespace TestCentric.Engine
                 _services.Add(new TestEventDispatcher());
                 _services.Add(new ProjectService());
                 _services.Add(new TestFrameworkService());
-                _services.Add(new PackageSettingsService());
+                _services.Add(new TestPackageAnalyzer());
 #if !NETSTANDARD2_0
                 _services.Add(new RuntimeFrameworkService());
                 _services.Add(new TestAgency());
