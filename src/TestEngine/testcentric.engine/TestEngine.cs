@@ -67,6 +67,7 @@ namespace TestCentric.Engine
                 // Services that depend on other services must be added after their dependencies
                 _services.Add(new TestFilterService());
                 _services.Add(new ExtensionService());
+                _services.Add(new TestEventDispatcher());
                 _services.Add(new ProjectService());
                 _services.Add(new TestFrameworkService());
                 _services.Add(new PackageSettingsService());

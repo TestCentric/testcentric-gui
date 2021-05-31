@@ -5,5 +5,4 @@
 
 using NUnit.Framework;
 
-[assembly: NonTestAssembly]
 [assembly: Parallelizable(ParallelScope.Fixtures)]
