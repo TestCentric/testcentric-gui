@@ -37,7 +37,7 @@ namespace TestCentric.Engine.Runners
 
         private ITestEngineRunner _engineRunner;
         private readonly IServiceLocator _services;
-        private readonly PackageSettingsService _packageSettingsService;
+        private readonly TestPackageAnalyzer _packageSettingsService;
 #if !NETSTANDARD2_0
         private readonly IRuntimeFrameworkService _runtimeService;
 #endif
@@ -61,7 +61,7 @@ namespace TestCentric.Engine.Runners
             _projectService = _services.GetService<IProjectService>();
             _testRunnerFactory = _services.GetService<ITestRunnerFactory>();
 
-            _packageSettingsService = _services.GetService<PackageSettingsService>();
+            _packageSettingsService = _services.GetService<TestPackageAnalyzer>();
 #if !NETSTANDARD2_0
             _runtimeService = _services.GetService<IRuntimeFrameworkService>();
 

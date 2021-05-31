@@ -13,8 +13,9 @@ using TestCentric.Engine.Internal;
 namespace TestCentric.Engine.Services
 {
     /// <summary>
-    /// The PackageExpansionService expands packages to ensure that all information
-    /// needed by lower levels of the engine is explicitly specified.
+    /// The TestPackageAnalyzer analyzes and expands packages in order to
+    /// ensure that all information needed by lower levels of the engine
+    /// is explicitly specified.
     /// 
     /// Several kinds of information expansion take place:
     /// 
@@ -24,14 +25,15 @@ namespace TestCentric.Engine.Services
     /// 2. Assembly packages are annotated with internal properties that give info
     /// about how that assembly expects to be run.
     /// 
+    /// (TODO: See if we still need this item)
     /// 3. Aggregate packages (those with subpackages) are also annotated with the
     /// best set of property values that will allow all the asssemblies under them
     /// to run in the same Process and/or AppDomain. If this is __not__ possible,
     /// no properties are added.
     /// </summary>
-    public class PackageSettingsService : Service
+    public class TestPackageAnalyzer : Service
     {
-        static Logger log = InternalTrace.GetLogger(typeof(PackageSettingsService));
+        static Logger log = InternalTrace.GetLogger(typeof(TestPackageAnalyzer));
 
         private IProjectService _projectService;
         private ITestFrameworkService _testFrameworkService;
@@ -43,14 +45,6 @@ namespace TestCentric.Engine.Services
             if (_projectService == null || _testFrameworkService == null)
                 Status = ServiceStatus.Error;
         }
-
-        PackageAggregationPolicy[] _aggregationPolicies = new PackageAggregationPolicy[]
-        {
-            new UseHighestImageRuntimeVersion(),
-            new UseHighestVersionOfSameRuntimeType(),
-            new RunAsX86IfAnyAssemblyRequiresIt(),
-            new UseAssemblyResolverIfAnyAssemblyRequiresIt()
-        };
 
         public void UpdatePackage(TestPackage package)
         {
@@ -64,10 +58,6 @@ namespace TestCentric.Engine.Services
                 // First update subpackages, recursively
                 foreach (var subPackage in package.SubPackages)
                     UpdatePackage(subPackage);
-
-                // Then apply policies for combining settings, where possible
-                foreach (var policy in _aggregationPolicies)
-                    policy.ApplyTo(package);
             }
             else if (File.Exists(package.FullName))
             {
@@ -95,13 +85,14 @@ namespace TestCentric.Engine.Services
         }
 
         /// <summary>
-        /// Use Mono.Cecil to get information about an assembly and
+        /// Use metadata to get information about an assembly and
         /// apply it to the package using special internal keywords.
         /// </summary>
         /// <param name="package"></param>
-        private void ApplyImageSettings(TestPackage package)
+        public void ApplyImageSettings(TestPackage package)
         {
             Guard.ArgumentNotNull(package, nameof(package));
+            Guard.ArgumentValid(package.IsAssemblyPackage(), "ApplyImageSettings called for non-assembly", nameof(package));
 
             var assembly = AssemblyDefinition.ReadAssembly(package.FullName);
 

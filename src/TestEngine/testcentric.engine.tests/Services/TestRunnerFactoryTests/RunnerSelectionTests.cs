@@ -49,7 +49,7 @@ namespace TestCentric.Engine.Services.TestRunnerFactoryTests
             _services.Add(new TestRunnerFactory());
             _services.Add(new FakeRuntimeService());
             _services.Add(new TestFrameworkService());
-            _services.Add(new PackageSettingsService());
+            _services.Add(new TestPackageAnalyzer());
 
             _services.ServiceManager.StartServices();
         }
