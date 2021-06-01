@@ -12,9 +12,9 @@ using NSubstitute;
 using NUnit.Engine;
 
 #if !NETCOREAPP2_1
-namespace TestCentric.Engine.Runners
+namespace TestCentric.Engine.Services
 {
-    public class TestPackageValidatorTests
+    public class TestPackageAnalyzerTests
     {
         // NOTE: Tests are a bit fragile, since we can't inject a 
         // current framework to the validator. Need to find a way
@@ -24,8 +24,9 @@ namespace TestCentric.Engine.Runners
         private static readonly string CURRENT_RUNTIME = RuntimeFramework.CurrentFramework.Id;
 
         private TestPackage _package;
-        private IRuntimeFrameworkService _runtimeService;
-        private TestPackageValidator _validator;
+        private TestPackageAnalyzer _validator;
+
+        public interface ITestRuntimeService : IRuntimeFrameworkService, IService { }
 
         [SetUp]
         public void Initialize()
@@ -33,14 +34,22 @@ namespace TestCentric.Engine.Runners
             // Validation doesn't look at the files specified, only settings
             _package = new TestPackage("any.dll");
 
-            _runtimeService = Substitute.For<IRuntimeFrameworkService>();
-            _runtimeService.IsAvailable("net-2.0").Returns(true);
-            _runtimeService.IsAvailable("net-4.0").Returns(true);
-            _runtimeService.IsAvailable("net-4.5").Returns(true);
-            _runtimeService.IsAvailable(CURRENT_RUNTIME).Returns(true);
-            _runtimeService.IsAvailable("netcore-3.0").Returns(true); // Not actually available yet, but used to test
+            var runtimeService = Substitute.For<ITestRuntimeService>();
+            runtimeService.IsAvailable("net-2.0").Returns(true);
+            runtimeService.IsAvailable("net-4.0").Returns(true);
+            runtimeService.IsAvailable("net-4.5").Returns(true);
+            runtimeService.IsAvailable(CURRENT_RUNTIME).Returns(true);
+            runtimeService.IsAvailable("netcore-3.0").Returns(true); // Not actually available yet, but used to test
 
-            _validator = new TestPackageValidator(_runtimeService);
+            var context = new ServiceContext();
+            context.Add(runtimeService);
+            context.Add(Substitute.For<ProjectService>());
+            context.Add(Substitute.For<TestFrameworkService>());
+
+            _validator = new TestPackageAnalyzer();
+            context.Add(_validator);
+
+            context.ServiceManager.StartServices();
         }
 
         [Test]
@@ -99,7 +108,7 @@ namespace TestCentric.Engine.Runners
 
         private void Validate()
         {
-            _validator.Validate(_package);
+            _validator.ValidatePackageSettings(_package);
         }
 
         private void CheckMessageContent(string message, params string[] errors)
