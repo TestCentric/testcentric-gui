@@ -7,6 +7,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Reflection;
 using System.Xml;
 using NUnit.Engine;
@@ -37,7 +38,7 @@ namespace TestCentric.Engine.Runners
 
         private ITestEngineRunner _engineRunner;
         private readonly IServiceLocator _services;
-        private readonly TestPackageAnalyzer _packageSettingsService;
+        private readonly TestPackageAnalyzer _packageAnalyzer;
 #if !NETSTANDARD2_0
         private readonly IRuntimeFrameworkService _runtimeService;
 #endif
@@ -61,7 +62,7 @@ namespace TestCentric.Engine.Runners
             _projectService = _services.GetService<IProjectService>();
             _testRunnerFactory = _services.GetService<ITestRunnerFactory>();
 
-            _packageSettingsService = _services.GetService<TestPackageAnalyzer>();
+            _packageAnalyzer = _services.GetService<TestPackageAnalyzer>();
 #if !NETSTANDARD2_0
             _runtimeService = _services.GetService<IRuntimeFrameworkService>();
 
@@ -69,7 +70,7 @@ namespace TestCentric.Engine.Runners
 
             // Last chance to catch invalid settings in package,
             // in case the client runner missed them.
-            new TestPackageValidator(_runtimeService).Validate(package);
+            _packageAnalyzer.ValidatePackageSettings(package);
 #endif
         }
 
@@ -243,9 +244,14 @@ namespace TestCentric.Engine.Runners
         {
             if (_engineRunner == null)
             {
-                // Expand projects and update package settings to reflect the
-                // target runtime and test framework usage of each assembly.
-                _packageSettingsService.UpdatePackage(TestPackage);
+                // Expand any project subpackages
+                _packageAnalyzer.ExpandProjectPackages(TestPackage);
+
+                // Add package settings to reflect the target runtime
+                // and test framework usage of each assembly.
+                foreach (var package in TestPackage.AssemblyPackages())
+                    if (File.Exists(package.FullName))
+                        _packageAnalyzer.ApplyImageSettings(package);
 
                 // Use SelectRuntimeFramework for its side effects.
                 // Info will be left behind in the package about

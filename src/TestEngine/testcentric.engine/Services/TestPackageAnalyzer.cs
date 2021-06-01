@@ -5,6 +5,7 @@
 
 using System;
 using System.IO;
+using System.Text;
 using Mono.Cecil;
 using NUnit.Engine;
 using TestCentric.Common;
@@ -16,20 +17,6 @@ namespace TestCentric.Engine.Services
     /// The TestPackageAnalyzer analyzes and expands packages in order to
     /// ensure that all information needed by lower levels of the engine
     /// is explicitly specified.
-    /// 
-    /// Several kinds of information expansion take place:
-    /// 
-    /// 1. Project Packages are expanded, using the ProjectService, to have
-    /// subpackages for each included assembly.
-    /// 
-    /// 2. Assembly packages are annotated with internal properties that give info
-    /// about how that assembly expects to be run.
-    /// 
-    /// (TODO: See if we still need this item)
-    /// 3. Aggregate packages (those with subpackages) are also annotated with the
-    /// best set of property values that will allow all the asssemblies under them
-    /// to run in the same Process and/or AppDomain. If this is __not__ possible,
-    /// no properties are added.
     /// </summary>
     public class TestPackageAnalyzer : Service
     {
@@ -37,37 +24,60 @@ namespace TestCentric.Engine.Services
 
         private IProjectService _projectService;
         private ITestFrameworkService _testFrameworkService;
+        private IRuntimeFrameworkService _runtimeService;
 
         public override void StartService()
         {
             _projectService = ServiceContext.GetService<IProjectService>();
             _testFrameworkService = ServiceContext.GetService<ITestFrameworkService>();
-            if (_projectService == null || _testFrameworkService == null)
+            _runtimeService = ServiceContext.GetService<IRuntimeFrameworkService>();
+            if (_projectService == null || _testFrameworkService == null || _runtimeService == null)
                 Status = ServiceStatus.Error;
         }
 
-        public void UpdatePackage(TestPackage package)
+        /// <summary>
+        /// Examine package settings to see if they are valid. An
+        /// <see cref="NUnitEngineException"> is thrown if errors
+        /// are found.
+        /// </summary>
+        /// <param name="package">The package whose settings are to be validated</param>
+        public void ValidatePackageSettings(TestPackage package)
         {
-            Guard.ArgumentNotNull(package, nameof(package));
+            var sb = new StringBuilder();
 
-            // Expand any packages for projects
-            ExpandProjectPackages(package);
+#if !NETSTANDARD2_0  // TODO: How do we validate runtime framework for .NET Standard 2.0?
+            var frameworkSetting = package.GetSetting(EnginePackageSettings.RequestedRuntimeFramework, "");
+            var runAsX86 = package.GetSetting(EnginePackageSettings.RunAsX86, false);
 
-            if (package.SubPackages.Count > 0)
+            if (frameworkSetting.Length > 0)
             {
-                // First update subpackages, recursively
-                foreach (var subPackage in package.SubPackages)
-                    UpdatePackage(subPackage);
+                // Check requested framework is actually available
+                if (!_runtimeService.IsAvailable(frameworkSetting))
+                    sb.Append($"\n* The requested framework {frameworkSetting} is unknown or not available.\n");
             }
-            else if (File.Exists(package.FullName))
+#endif
+
+            // At this point, any unsupported settings in the TestPackage were
+            // put there by the user, so we consider the package invalid. This
+            // will be checked again as each project package is expanded and
+            // treated as a warning in that case.
+            foreach (string setting in package.Settings.Keys)
             {
-                var ext = Path.GetExtension(package.FullName).ToLowerInvariant();
-                if (ext == ".dll" || ext == ".exe")
-                    ApplyImageSettings(package);
+                if (EnginePackageSettings.IsObsoleteSetting(setting))
+                    sb.Append($"\n* The {setting} setting is no longer supported.\n");
             }
+
+            if (sb.Length > 0)
+                throw new NUnitEngineException($"The following errors were detected in the TestPackage:\n{sb}");
         }
 
-        private void ExpandProjectPackages(TestPackage package)
+        /// <summary>
+        /// Expand any supported project packages so that all assemblies
+        /// included appear as subpackages. The <see cref="ProjectService"/>
+        /// is used to expand the projects.
+        /// </summary>
+        /// <param name="package"></param>
+        public void ExpandProjectPackages(TestPackage package)
         {
             if (package == null) throw new ArgumentNullException("package");
 
