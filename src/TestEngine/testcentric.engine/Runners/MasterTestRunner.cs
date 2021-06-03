@@ -7,6 +7,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Reflection;
 using System.Xml;
 using NUnit.Engine;
@@ -37,8 +38,7 @@ namespace TestCentric.Engine.Runners
 
         private ITestEngineRunner _engineRunner;
         private readonly IServiceLocator _services;
-        private readonly ExtensionService _extensionService;
-        private readonly PackageSettingsService _packageSettingsService;
+        private readonly TestPackageAnalyzer _packageAnalyzer;
 #if !NETSTANDARD2_0
         private readonly IRuntimeFrameworkService _runtimeService;
 #endif
@@ -46,8 +46,7 @@ namespace TestCentric.Engine.Runners
         private ITestRunnerFactory _testRunnerFactory;
         private bool _disposed;
 
-        private TestEventDispatcher _eventDispatcher = new TestEventDispatcher();
-        private WorkItemTracker _workItemTracker = new WorkItemTracker();       
+        private TestEventDispatcher _eventDispatcher;
 
         private const int WAIT_FOR_CANCEL_TO_COMPLETE = 5000;
 
@@ -63,14 +62,15 @@ namespace TestCentric.Engine.Runners
             _projectService = _services.GetService<IProjectService>();
             _testRunnerFactory = _services.GetService<ITestRunnerFactory>();
 
-            _extensionService = _services.GetService<ExtensionService>();
-            _packageSettingsService = _services.GetService<PackageSettingsService>();
+            _packageAnalyzer = _services.GetService<TestPackageAnalyzer>();
 #if !NETSTANDARD2_0
             _runtimeService = _services.GetService<IRuntimeFrameworkService>();
 
+            _eventDispatcher = _services.GetService<TestEventDispatcher>();
+
             // Last chance to catch invalid settings in package,
             // in case the client runner missed them.
-            new TestPackageValidator(_runtimeService).Validate(package);
+            _packageAnalyzer.ValidatePackageSettings(package);
 #endif
         }
 
@@ -187,12 +187,9 @@ namespace TestCentric.Engine.Runners
                 // of the completion of every pending WorkItem, that is, one that started but
                 // never sent a completion event.
 
-                if (!_workItemTracker.WaitForCompletion(WAIT_FOR_CANCEL_TO_COMPLETE))
+                if (!_eventDispatcher.WaitForCompletion(WAIT_FOR_CANCEL_TO_COMPLETE))
                 {
-                    _workItemTracker.IssuePendingNotifications(_eventDispatcher);
-
-                    // Indicate we are no longer running
-                    IsTestRunning = false;
+                    _eventDispatcher.IssuePendingNotifications();
 
                     // Signal completion of the run
                     _eventDispatcher.OnTestEvent($"<test-run id='{TestPackage.ID}' result='Failed' label='Cancelled' />");
@@ -201,6 +198,7 @@ namespace TestCentric.Engine.Runners
                     // that they were actually stopped by the framework. To make sure nothing is
                     // left running, we unload the tests. By unloading only the lower-level engine
                     // runner and not the MasterTestRunner itself, we allow the tests to be loaded
+                    // for subsequent runs using the same package.
 
                     _engineRunner.Unload();
                 }
@@ -246,9 +244,14 @@ namespace TestCentric.Engine.Runners
         {
             if (_engineRunner == null)
             {
-                // Expand projects and update package settings to reflect the
-                // target runtime and test framework usage of each assembly.
-                _packageSettingsService.UpdatePackage(TestPackage);
+                // Expand any project subpackages
+                _packageAnalyzer.ExpandProjectPackages(TestPackage);
+
+                // Add package settings to reflect the target runtime
+                // and test framework usage of each assembly.
+                foreach (var package in TestPackage.Select(p => p.IsAssemblyPackage()))
+                    if (File.Exists(package.FullName))
+                        _packageAnalyzer.ApplyImageSettings(package);
 
                 // Use SelectRuntimeFramework for its side effects.
                 // Info will be left behind in the package about
@@ -362,15 +365,10 @@ namespace TestCentric.Engine.Runners
         /// <returns>A TestEngineResult giving the result of the test execution</returns>
         private TestEngineResult RunTests(ITestEventListener listener, TestFilter filter)
         {
-            _workItemTracker.Clear();
-            _eventDispatcher.Listeners.Clear();
-            _eventDispatcher.Listeners.Add(_workItemTracker);
+            _eventDispatcher.ClearListeners();
 
             if (listener != null)
                 _eventDispatcher.Listeners.Add(listener);
-
-            foreach (var extension in _extensionService.GetExtensions<ITestEventListener>())
-                _eventDispatcher.Listeners.Add(extension);
 
             IsTestRunning = true;
             

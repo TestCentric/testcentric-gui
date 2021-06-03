@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using NUnit.Engine;
+using TestCentric.Common;
 
 namespace TestCentric.Engine.Internal
 {
@@ -26,18 +27,9 @@ namespace TestCentric.Engine.Internal
             return ext == ".dll" || ext== ".exe";
         }
 
-        public static IList<TestPackage> AssemblyPackages(this TestPackage package)
-        {
-            return package.Select(p => p.IsAssemblyPackage());
-        }
-
-        public static IList<TestPackage> TerminalPackages(this TestPackage package)
-        {
-            return package.Select(p => !p.HasSubPackages());
-        }
-
         public static bool HasSubPackages(this TestPackage package)
         {
+            Guard.OperationValid(package.SubPackages != null, "Package has null subpackage");
             return package.SubPackages.Count > 0;
         }
 
