@@ -34,7 +34,10 @@ namespace TestCentric.Engine.Runners
         public void CheckLevelOfParallelism_SingleAssembly()
         {
             var package = new TestPackage("junk.dll");
-            Assert.That(new AggregatingTestRunner(new ServiceContext(), package).LevelOfParallelism, Is.EqualTo(0));
+            var context = new ServiceContext();
+            context.Add(new TestRunnerFactory());
+            var runner = new AggregatingTestRunner(context, package);
+            Assert.That(runner.LevelOfParallelism, Is.EqualTo(0));
         }
 
         // Create a MultipleTestProcessRunner with a fake package consisting of
@@ -42,11 +45,17 @@ namespace TestCentric.Engine.Runners
         // Zero means that MaxAgents is not specified.
         AggregatingTestRunner CreateRunner(int assemblyCount, int? maxAgents)
         {
-            // Currently, we can get away with null entries here
-            var package = new TestPackage(new string[assemblyCount]);
+            var assemblies = new string[assemblyCount];
+            for (int i = 0; i < assemblyCount; i++)
+                assemblies[i] = $"test{i + 1}.dll";
+
+            var package = new TestPackage(assemblies);
             if (maxAgents != null)
                 package.Settings[EnginePackageSettings.MaxAgents] = maxAgents;
-            return new AggregatingTestRunner(new ServiceContext(), package);
+
+            var context = new ServiceContext();
+            context.Add(new TestRunnerFactory());
+            return new AggregatingTestRunner(context, package);
         }
     }
 }

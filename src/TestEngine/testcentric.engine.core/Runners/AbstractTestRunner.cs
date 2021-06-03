@@ -6,6 +6,7 @@
 using System;
 using System.ComponentModel;
 using NUnit.Engine;
+using TestCentric.Common;
 
 namespace TestCentric.Engine.Runners
 {
@@ -19,6 +20,7 @@ namespace TestCentric.Engine.Runners
     {
         public AbstractTestRunner(TestPackage package)
         {
+            Guard.ArgumentNotNull(package, nameof(package));
             TestPackage = package;
         }
 

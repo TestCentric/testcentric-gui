@@ -17,30 +17,14 @@ namespace TestCentric.Engine.Services
     /// </summary>
     public class TestRunnerFactory : Service, ITestRunnerFactory
     {
-        //private IProjectService _projectService;
-
-        //public override void StartService()
-        //{
-        //    // TestRunnerFactory requires the ProjectService
-        //    _projectService = ServiceContext.GetService<IProjectService>();
-
-        //    // Anything returned from ServiceContext is known to be an IService
-        //    Status = _projectService != null && ((IService)_projectService).Status == ServiceStatus.Started
-        //        ? ServiceStatus.Started
-        //        : ServiceStatus.Error;
-        //}
-
         /// <summary>
         /// Returns a test runner based on the settings in a TestPackage.
-        /// Any setting that is "consumed" by the factory is removed, so
-        /// that downstream runners using the factory will not repeatedly
-        /// create the same type of runner.
         /// </summary>
         /// <param name="package">The TestPackage to be loaded and run</param>
         /// <returns>A TestRunner</returns>
         public ITestEngineRunner MakeTestRunner(TestPackage package)
         {
-            var packageList = package.TerminalPackages();
+            var packageList = package.Select(p => !p.HasSubPackages());
 
             if (packageList.Count > 1)
                 return new AggregatingTestRunner(ServiceContext, package);
