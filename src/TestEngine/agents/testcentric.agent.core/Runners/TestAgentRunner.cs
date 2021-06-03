@@ -42,7 +42,7 @@ namespace TestCentric.Engine.Runners
             Guard.ArgumentNotNull(package, nameof(package));
             Guard.ArgumentValid(package.SubPackages.Count == 0, "Only one assembly may be loaded by an agent", nameof(package));
             Guard.ArgumentValid(package.FullName != null, "Package may not be anonymous", nameof(package));
-            Guard.ArgumentValid(package.Name.EndsWith(".exe") || package.Name.EndsWith(".dll"), "Must be an assembly package", nameof(package));
+            Guard.ArgumentValid(package.IsAssemblyPackage(), "Must be an assembly package", nameof(package));
 
 #if !NETSTANDARD1_6
             // Bypass the resolver if not in the default AppDomain. This prevents trying to use the resolver within
@@ -221,10 +221,7 @@ namespace TestCentric.Engine.Runners
 
 #if !NETSTANDARD1_6
             if (_assemblyResolver != null)
-            {
-                foreach (var package in TestPackage.AssemblyPackages())
-                    _assemblyResolver.RemovePathFromFile(package.FullName);
-            }
+                _assemblyResolver.RemovePathFromFile(TestPackage.FullName);
 #endif
             return new TestEngineResult(driverResult);
         }

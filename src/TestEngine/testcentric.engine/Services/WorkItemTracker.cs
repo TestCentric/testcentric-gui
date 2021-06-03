@@ -10,7 +10,7 @@ using System.Xml;
 using NUnit.Engine;
 using TestCentric.Engine.Internal;
 
-namespace TestCentric.Engine.Runners
+namespace TestCentric.Engine.Services
 {
     /// <summary>
     /// Test Frameworks, don't always handle cancellation. Those that do may
