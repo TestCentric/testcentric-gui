@@ -44,7 +44,7 @@ namespace TestCentric.Engine.Services
             if (package.GetSetting(EnginePackageSettings.ImageNonTestAssemblyAttribute, false))
                 return new SkippedAssemblyRunner(package);
 
-            return new ProcessRunner(ServiceContext, package);
+            return new AssemblyRunner(ServiceContext, package);
         }
 
         // TODO: Review this method once used by a gui - currently unused.

@@ -7,14 +7,18 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using TestCentric.Common;
+using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Services
 {
     /// <summary>
     /// Defines the agent tracking operations that must be done atomically.
     /// </summary>
-    internal sealed partial class AgentStore
+    internal sealed class AgentStore
     {
+        private static readonly Logger log = InternalTrace.GetLogger(typeof(AgentStore));
+
         private readonly object LOCK = new object();
 
         private readonly Dictionary<Guid, AgentRecord> _agentIndex = new Dictionary<Guid, AgentRecord>();
@@ -22,6 +26,8 @@ namespace TestCentric.Engine.Services
 
         public void AddAgent(Guid agentId, Process process)
         {
+            Guard.ArgumentNotNull(process, nameof(process));
+
             lock (LOCK)
             {
                 if (_agentIndex.ContainsKey(agentId))
@@ -29,7 +35,7 @@ namespace TestCentric.Engine.Services
                     throw new ArgumentException($"An agent has already been started with the ID '{agentId}'.", nameof(agentId));
                 }
 
-                _agentIndex[agentId] = _processIndex[process] = AgentRecord.Starting(agentId, process);
+                _agentIndex[agentId] = _processIndex[process] = new AgentRecord(agentId, process);
             }
         }
 
@@ -40,19 +46,21 @@ namespace TestCentric.Engine.Services
                 if (!_agentIndex.TryGetValue(agent.Id, out var record)
                     || record.Status != AgentStatus.Starting)
                 {
-                    throw new ArgumentException($"Agent {agent.Id} must have a status of {AgentStatus.Starting} in order to register, but the status was {record.Status}.", nameof(agent));
+                    string status = record?.Status.ToString() ?? "unknown";
+                    throw new ArgumentException($"Agent {agent.Id} must have a status of {AgentStatus.Starting} in order to register, but the status was {status}.", nameof(agent));
                 }
 
-                _agentIndex[agent.Id] = _processIndex[record.Process] = record.Ready(agent);
+                record.Agent = agent;
+                record.Status = AgentStatus.Available;
             }
         }
 
-        public bool IsReady(Guid agentId, out ITestAgent agent)
+        public bool IsAvailable(Guid agentId, out ITestAgent agent)
         {
             lock (LOCK)
             {
                 if (_agentIndex.TryGetValue(agentId, out var record)
-                    && record.Status == AgentStatus.Ready)
+                    && record.Status == AgentStatus.Available)
                 {
                     agent = record.Agent;
                     return true;
@@ -89,10 +97,44 @@ namespace TestCentric.Engine.Services
                 if (record.Status == AgentStatus.Terminated)
                     throw new ArgumentException("Process has already been marked as terminated");
 
-                var agentId = record.AgentId;
-                _agentIndex[agentId] = _processIndex[process] = record.Terminated();
+                record.Status = AgentStatus.Terminated;
+                try
+                {
+                    record.ExitCode = process.ExitCode;
+                }
+                catch(Exception ex)
+                {
+                    log.Error(ex.Message);
+                    record.ExitCode = 0;
+                }
             }
         }
+
+        #region Nested AgentRecord Class
+
+        private class AgentRecord
+        {
+            public AgentRecord(Guid agentId, Process process)
+            {
+                Guard.ArgumentNotNull(process, nameof(process));
+
+                AgentId = agentId;
+                Agent = null;
+                Process = process;
+                Status = AgentStatus.Starting;                
+            }
+
+            // AgentId is a property because it is needed before agent registers
+            // and after it terminates, i.e. while Agent itself is null.
+            public Guid AgentId { get; }
+            public Process Process { get; }
+            public AgentStatus Status { get; set; }
+            public ITestAgent Agent { get; set; }
+            // ExitCode is set when process terminates
+            public int ExitCode { get; set; }
+        }
+
+        #endregion
     }
 }
 #endif

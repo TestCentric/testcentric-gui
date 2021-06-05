@@ -14,23 +14,23 @@ using TestCentric.Engine.Services;
 namespace TestCentric.Engine.Runners
 {
     /// <summary>
-    /// ProcessRunner loads and runs a set of tests in a single remote 
-    /// agent process, which is launched on its behalf by TestAgency.
+    /// AssemblyRunner loads and runs a set of tests in a single assembly 
+    /// using an agent acquired from TestAgency.
     /// </summary>
-    public class ProcessRunner : AbstractTestRunner
+    public class AssemblyRunner : AbstractTestRunner
     {
-        private static readonly Logger log = InternalTrace.GetLogger(typeof(ProcessRunner));
+        private static readonly Logger log = InternalTrace.GetLogger(typeof(AssemblyRunner));
 
         private ITestAgent _agent;
         private ITestEngineRunner _remoteRunner;
         private TestAgency _agency;
 
         /// <summary>
-        /// Construct a new ProcessRunner
+        /// Construct a new AssemblyRunnerRunner
         /// </summary>
         /// <param name="services">A ServiceLocator interface for use by the runner</param>
         /// <param name="package">A TestPackage containing a single assembly</param>
-        public ProcessRunner(IServiceLocator services, TestPackage package) : base(package)
+        public AssemblyRunner(IServiceLocator services, TestPackage package) : base(package)
         {
             _agency = services.GetService<TestAgency>();
         }
@@ -266,7 +266,7 @@ namespace TestCentric.Engine.Runners
                 }
 
                 if (unloadException != null) // Add message line indicating we managed to stop agent anyway
-                    throw new NUnitEngineUnloadException("Agent Process was terminated successfully after error.", unloadException);
+                    throw new NUnitEngineUnloadException("Agent was terminated successfully after error.", unloadException);
             }
         }
 
@@ -277,7 +277,7 @@ namespace TestCentric.Engine.Runners
                 _agent = _agency.GetAgent(TestPackage);
 
                 if (_agent == null)
-                    throw new NUnitEngineException("Unable to acquire remote process agent");
+                    throw new NUnitEngineException("Unable to acquire agent");
             }
 
             if (_remoteRunner == null)
