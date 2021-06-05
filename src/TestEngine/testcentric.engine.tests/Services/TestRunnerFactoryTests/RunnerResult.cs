@@ -14,7 +14,7 @@ namespace TestCentric.Engine.Services.TestRunnerFactoryTests
     public class RunnerResult
     {
 #if !NETCOREAPP
-        public static RunnerResult ProcessRunner => new RunnerResult { TestRunner = typeof(ProcessRunner) };
+        public static RunnerResult ProcessRunner => new RunnerResult { TestRunner = typeof(AssemblyRunner) };
 #endif
 
         public static RunnerResult LocalTestRunner => new RunnerResult { TestRunner = typeof(LocalTestRunner) };

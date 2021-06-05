@@ -24,7 +24,7 @@ namespace TestCentric.Engine.Services
     /// but only one, ProcessAgent is implemented
     /// at this time.
     /// </summary>
-    public class TestAgency : ITestAgency, IService
+    public class TestAgency : ITestAgentFactory, ITestAgency, IService
     {
         private static readonly Logger log = InternalTrace.GetLogger(typeof(TestAgency));
 
@@ -52,10 +52,7 @@ namespace TestCentric.Engine.Services
             _tcpTransport = new TestAgencyTcpTransport(this, port);
         }
 
-        public void Register(ITestAgent agent)
-        {
-            _agentStore.Register(agent);
-        }
+        #region ITestAgentFactory Implementation
 
         public ITestAgent GetAgent(TestPackage package)
         {
@@ -76,6 +73,7 @@ namespace TestCentric.Engine.Services
 
             agentProcess.Exited += (sender, e) => OnAgentExit((Process)sender);
 
+            Console.WriteLine(agentProcess.StartInfo.FileName);
             agentProcess.Start();
             log.Debug("Launched Agent process {0} - see testcentric-agent_{0}.log", agentProcess.Id);
             log.Debug("Command line: \"{0}\" {1}", agentProcess.StartInfo.FileName, agentProcess.StartInfo.Arguments);
@@ -98,7 +96,7 @@ namespace TestCentric.Engine.Services
             {
                 Thread.Sleep(pollTime);
 
-                if (_agentStore.IsReady(agentId, out var agent))
+                if (_agentStore.IsAvailable(agentId, out var agent))
                 {
                     log.Debug($"Returning new agent {agentId:B}");
 
@@ -118,6 +116,77 @@ namespace TestCentric.Engine.Services
 
             return null;
         }
+
+        public bool IsAgentActive(Guid agentId)
+        {
+            Process process;
+            return _agentStore.IsAgentProcessActive(agentId, out process);
+        }
+
+        #endregion
+
+        #region ITestAgency Implementation
+
+        public void Register(ITestAgent agent)
+        {
+            _agentStore.Register(agent);
+        }
+
+        #endregion
+
+        #region IService Implementation
+
+        public IServiceLocator ServiceContext { get; set; }
+
+        public ServiceStatus Status { get; private set; }
+
+        // TODO: it would be better if we had a list of transports to start and stop!
+
+        public void StopService()
+        {
+            try
+            {
+                _remotingTransport.Stop();
+                _tcpTransport.Stop();
+            }
+            finally
+            {
+                Status = ServiceStatus.Stopped;
+            }
+        }
+
+        public void StartService()
+        {
+            _runtimeService = ServiceContext.GetService<IRuntimeFrameworkService>();
+            _extensionService = ServiceContext.GetService<ExtensionService>();
+            if (_runtimeService == null)
+                Status = ServiceStatus.Error;
+            else
+                try
+                {
+                    // Add plugable agents first, so they can override the builtins
+                    if (_extensionService != null)
+                        foreach (IAgentLauncher launcher in _extensionService.GetExtensions<IAgentLauncher>())
+                            _launchers.Add(launcher);
+
+                    _launchers.Add(new Net20AgentLauncher());
+                    _launchers.Add(new Net40AgentLauncher());
+                    _launchers.Add(new NetCore21AgentLauncher());
+                    _launchers.Add(new NetCore31AgentLauncher());
+                    _launchers.Add(new Net50AgentLauncher());
+
+                    _remotingTransport.Start();
+                    _tcpTransport.Start();
+                    Status = ServiceStatus.Started;
+                }
+                catch
+                {
+                    Status = ServiceStatus.Error;
+                    throw;
+                }
+        }
+
+        #endregion
 
         private Process CreateAgentProcess(Guid agentId, string agencyUrl, TestPackage package)
         {
@@ -176,56 +245,6 @@ namespace TestCentric.Engine.Services
             }
 
             throw new NUnitEngineException(errorMsg);
-        }
-
-        public IServiceLocator ServiceContext { get; set; }
-
-        public ServiceStatus Status { get; private set; }
-
-        // TODO: it would be better if we had a list of transports to start and stop!
-
-        public void StopService()
-        {
-            try
-            {
-                _remotingTransport.Stop();
-                _tcpTransport.Stop();
-            }
-            finally
-            {
-                Status = ServiceStatus.Stopped;
-            }
-        }
-
-        public void StartService()
-        {
-            _runtimeService = ServiceContext.GetService<IRuntimeFrameworkService>();
-            _extensionService = ServiceContext.GetService<ExtensionService>();
-            if (_runtimeService == null)
-                Status = ServiceStatus.Error;
-            else
-            try
-            {
-                // Add plugable agents first, so they can override the builtins
-                if (_extensionService != null)
-                    foreach (IAgentLauncher launcher in _extensionService.GetExtensions<IAgentLauncher>())
-                        _launchers.Add(launcher);
-
-                _launchers.Add(new Net20AgentLauncher());
-                _launchers.Add(new Net40AgentLauncher());
-                _launchers.Add(new NetCore21AgentLauncher());
-                _launchers.Add(new NetCore31AgentLauncher());
-                _launchers.Add(new Net50AgentLauncher());
-
-                _remotingTransport.Start();
-                _tcpTransport.Start();
-                Status = ServiceStatus.Started;
-            }
-            catch
-            {
-                Status = ServiceStatus.Error;
-                throw;
-            }
         }
     }
 }

@@ -11,8 +11,13 @@ namespace TestCentric.Engine.Services
     /// </summary>
     public enum AgentStatus
     {
+        /// <summary>Waiting for the agent to register</summary>
         Starting,
-        Ready,
+
+        /// <summary>The agent has registered and is available to perform work</summary>
+        Available,
+
+        /// <summary>The agent has terminated</summary>
         Terminated
     }
 }
