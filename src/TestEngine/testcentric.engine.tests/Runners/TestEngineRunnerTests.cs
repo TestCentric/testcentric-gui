@@ -120,7 +120,7 @@ namespace TestCentric.Engine.Runners
         public void RunAsync()
         {
 #if !NETCOREAPP2_1
-            if (_runner is ProcessRunner || _runner is AggregatingTestRunner )
+            if (_runner is AssemblyRunner || _runner is AggregatingTestRunner )
                 Assert.Ignore("RunAsync is not working for ProcessRunner");
 #endif
 
