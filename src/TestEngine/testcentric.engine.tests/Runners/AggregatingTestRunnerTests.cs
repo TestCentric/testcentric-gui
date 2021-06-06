@@ -8,6 +8,7 @@ using System;
 using NUnit.Engine;
 using NUnit.Framework;
 using TestCentric.Engine.Services;
+using TestCentric.Engine.Services.Fakes;
 
 namespace TestCentric.Engine.Runners
 {
@@ -35,7 +36,7 @@ namespace TestCentric.Engine.Runners
         {
             var package = new TestPackage("junk.dll");
             var context = new ServiceContext();
-            context.Add(new TestRunnerFactory());
+            context.Add(new FakeTestRunnerFactory());
             var runner = new AggregatingTestRunner(context, package);
             Assert.That(runner.LevelOfParallelism, Is.EqualTo(0));
         }
