@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Generic;
 using NUnit.Engine;
 
 namespace TestCentric.Engine.Services.Fakes
@@ -12,12 +13,16 @@ namespace TestCentric.Engine.Services.Fakes
     {
         bool IRuntimeFrameworkService.IsAvailable(string framework)
         {
-            return true;
+            return AvailableRuntimes.Contains(framework);
         }
 
         string IRuntimeFrameworkService.SelectRuntimeFramework(TestPackage package)
         {
-            return string.Empty;
+            return SelectedRuntime;
         }
+
+        public List<string> AvailableRuntimes { get; set; } = new List<string>(new [] { "NONE" });
+
+        public string SelectedRuntime { get; set; } = "NONE";
     }
 }
