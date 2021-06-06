@@ -44,7 +44,7 @@ namespace TestCentric.Engine.Services.TestRunnerFactoryTests
             projectService.Add("amb.nunit", "a.dll", MOCK_ASSEMBLY, "b.dll");
             projectService.Add("mbm.nunit", MOCK_ASSEMBLY, "b.dll", MOCK_ASSEMBLY);
 
-            _services.Add(new ExtensionService());
+            _services.Add(new FakeExtensionService());
             _services.Add(projectService);
             _services.Add(new TestRunnerFactory());
             _services.Add(new FakeRuntimeService());
