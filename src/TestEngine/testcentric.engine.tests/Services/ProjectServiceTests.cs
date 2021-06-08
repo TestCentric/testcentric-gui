@@ -9,6 +9,7 @@ using NUnit.Framework;
 
 namespace TestCentric.Engine.Services
 {
+    // TODO: More tests needed!
     public class ProjectServiceTests
     {
         private ProjectService _projectService;

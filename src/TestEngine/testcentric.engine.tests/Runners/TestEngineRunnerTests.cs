@@ -19,6 +19,8 @@ namespace TestCentric.Engine.Runners
     // Temporarily commenting out Process tests due to
     // intermittent errors, probably due to the test
     // fixture rather than the engine.
+    // TODO: Split agent runner tests from engine runner tests
+    // and move to agent test assembly.
     [TestFixture(typeof(LocalTestRunner))]
 #if !NETCOREAPP2_1
     //[TestFixture(typeof(TestDomainRunner))]
@@ -56,9 +58,9 @@ namespace TestCentric.Engine.Runners
             _services.Add(packageSettingsService);
 #if !NETCOREAPP2_1
             _services.Add(new FakeRuntimeService());
-            _services.Add(new TestAgency("ProcessRunnerTests", 0));
+            //_services.Add(new TestAgency("ProcessRunnerTests", 0));
 #endif
-            _services.Add(new FakeTestRunnerFactory());
+            //_services.Add(new FakeTestRunnerFactory());
             _services.ServiceManager.StartServices();
 
             var mockAssemblyPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "mock-assembly.dll");

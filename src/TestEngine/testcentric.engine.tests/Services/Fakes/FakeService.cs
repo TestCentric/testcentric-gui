@@ -9,22 +9,22 @@ namespace TestCentric.Engine.Services.Fakes
 {
     public class FakeService : IService
     {
-        IServiceLocator IService.ServiceContext { get; set; }
+        public IServiceLocator ServiceContext { get; set; }
 
         private ServiceStatus _status;
-        ServiceStatus IService.Status
+        public ServiceStatus Status
         {
             get { return _status; }
         }
 
-        void IService.StartService()
+        public virtual void StartService()
         {
             _status = FailToStart
                 ? ServiceStatus.Error
                 : ServiceStatus.Started;
         }
 
-        void IService.StopService()
+        public virtual void StopService()
         {
             _status = ServiceStatus.Stopped;
         }

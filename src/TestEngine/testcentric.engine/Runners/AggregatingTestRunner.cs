@@ -37,7 +37,7 @@ namespace TestCentric.Engine.Runners
             get
             {
                 var maxAgents = TestPackage.GetSetting(EnginePackageSettings.MaxAgents, Environment.ProcessorCount);
-                return Math.Min(maxAgents, TestPackage.SubPackages.Count);
+                return Math.Min(maxAgents, TestPackage.Select(p => !p.HasSubPackages()).Count);
             }
         }
 
