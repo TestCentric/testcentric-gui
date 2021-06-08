@@ -15,7 +15,7 @@ namespace TestCentric.Engine.Services.Fakes
         {
             get
             {
-                throw new System.NotImplementedException();
+                return new IExtensionPoint[0];
             }
         }
 
@@ -23,23 +23,23 @@ namespace TestCentric.Engine.Services.Fakes
         {
             get
             {
-                throw new System.NotImplementedException();
+                return new IExtensionNode[0];
             }
         }
 
         public void EnableExtension(string typeName, bool enabled)
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public IEnumerable<IExtensionNode> GetExtensionNodes(string path)
         {
-            throw new System.NotImplementedException();
+            return new IExtensionNode[0];
         }
 
         public IExtensionPoint GetExtensionPoint(string path)
         {
-            throw new System.NotImplementedException();
+            return null;
         }
     }
 }
