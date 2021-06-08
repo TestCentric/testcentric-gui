@@ -43,12 +43,16 @@ namespace TestCentric.Engine.Services
                     }
                 }
 
-            if (theService == null)
-                log.Error(string.Format("Requested service {0} was not found", serviceType.FullName));
-            else
-                log.Debug(string.Format("Request for service {0} satisfied by {1}", serviceType.Name, theService.GetType().Name));
+            if (theService != null)
+            {
+                log.Debug(string.Format("Request for service {0} will be satisfied by {1}", serviceType.Name, theService.GetType().Name));
+                if (theService.Status == ServiceStatus.Stopped)
+                    StartService(theService);
+                return theService;
+            }
 
-            return theService;
+            log.Error(string.Format("Requested service {0} was not found", serviceType.FullName));
+            return null;
         }
 
         public void AddService(IService service)
@@ -59,29 +63,34 @@ namespace TestCentric.Engine.Services
 
         public void StartServices()
         {
-            foreach( IService service in _services )
-            {
-                if (service.Status == ServiceStatus.Stopped)
-                {
-                    string name = service.GetType().Name;
-                    log.Info("Initializing " + name);
-                    try
-                    {
-                        service.StartService();
-                        if (service.Status == ServiceStatus.Error)
-                            throw new InvalidOperationException("Service failed to initialize " + name);
-                    }
-                    catch (Exception ex)
-                    {
-                        // TODO: Should we pass this exception through?
-                        log.Error("Failed to initialize " + name );
-                        log.Error(ex.ToString());
-                        throw;
-                    }
-                }
-            }
+            //foreach( IService service in _services )
+            //{
+            //    if (service.Status == ServiceStatus.Stopped)
+            //    {
+            //        StartService(service);
+            //    }
+            //}
 
             this.ServicesInitialized = true;
+        }
+
+        private static void StartService(IService service)
+        {
+            string name = service.GetType().Name;
+            log.Info("Initializing " + name);
+            try
+            {
+                service.StartService();
+                if (service.Status == ServiceStatus.Error)
+                    throw new InvalidOperationException("Service failed to initialize " + name);
+            }
+            catch (Exception ex)
+            {
+                // TODO: Should we pass this exception through?
+                log.Error("Failed to initialize " + name);
+                log.Error(ex.ToString());
+                throw;
+            }
         }
 
         public void StopServices()
