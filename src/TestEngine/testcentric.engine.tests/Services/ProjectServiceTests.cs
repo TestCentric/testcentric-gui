@@ -12,22 +12,22 @@ namespace TestCentric.Engine.Services
     // TODO: More tests needed!
     public class ProjectServiceTests
     {
-        private ProjectService _projectService;
+        private ServiceContext _services;
 
         [SetUp]
         public void CreateServiceContext()
         {
-            var services = new ServiceContext();
-            services.Add(new Fakes.FakeExtensionService());
-            _projectService = new ProjectService();
-            services.Add(_projectService);
-            services.ServiceManager.StartServices();
+            _services = new ServiceContext();
+            _services.Add(new Fakes.FakeExtensionService());
+            _services.Add(new ProjectService());
+            _services.ServiceManager.StartServices();
         }
 
         [Test]
         public void ServiceIsStarted()
         {
-            Assert.That(_projectService.Status, Is.EqualTo(ServiceStatus.Started));
+            var projectService = _services.ServiceManager.GetService(typeof(IProjectService));
+            Assert.That(projectService.Status, Is.EqualTo(ServiceStatus.Started));
         }
     }
 }

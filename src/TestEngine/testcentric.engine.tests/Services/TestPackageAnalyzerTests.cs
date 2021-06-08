@@ -46,10 +46,11 @@ namespace TestCentric.Engine.Services
             context.Add(Substitute.For<ProjectService>());
             context.Add(Substitute.For<TestFrameworkService>());
 
-            _analyzer = new TestPackageAnalyzer();
-            context.Add(_analyzer);
-
+            context.Add(new TestPackageAnalyzer());
+            
             context.ServiceManager.StartServices();
+
+            _analyzer = context.GetService<TestPackageAnalyzer>();
         }
 
         [Test]
