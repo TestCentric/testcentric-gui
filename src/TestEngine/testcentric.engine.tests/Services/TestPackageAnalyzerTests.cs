@@ -24,7 +24,7 @@ namespace TestCentric.Engine.Services
         private static readonly string CURRENT_RUNTIME = RuntimeFramework.CurrentFramework.Id;
 
         private TestPackage _package;
-        private TestPackageAnalyzer _validator;
+        private TestPackageAnalyzer _analyzer;
 
         public interface ITestRuntimeService : IRuntimeFrameworkService, IService { }
 
@@ -46,8 +46,8 @@ namespace TestCentric.Engine.Services
             context.Add(Substitute.For<ProjectService>());
             context.Add(Substitute.For<TestFrameworkService>());
 
-            _validator = new TestPackageAnalyzer();
-            context.Add(_validator);
+            _analyzer = new TestPackageAnalyzer();
+            context.Add(_analyzer);
 
             context.ServiceManager.StartServices();
         }
@@ -108,7 +108,7 @@ namespace TestCentric.Engine.Services
 
         private void Validate()
         {
-            _validator.ValidatePackageSettings(_package);
+            _analyzer.ValidatePackageSettings(_package);
         }
 
         private void CheckMessageContent(string message, params string[] errors)

@@ -11,6 +11,7 @@ using NUnit.Engine;
 using NUnit.Framework;
 using TestCentric.Engine.Internal;
 using TestCentric.Engine.Services;
+using TestCentric.Engine.Services.Fakes;
 using TestCentric.Tests.Assemblies;
 
 namespace TestCentric.Engine.Runners
@@ -18,6 +19,8 @@ namespace TestCentric.Engine.Runners
     // Temporarily commenting out Process tests due to
     // intermittent errors, probably due to the test
     // fixture rather than the engine.
+    // TODO: Split agent runner tests from engine runner tests
+    // and move to agent test assembly.
     [TestFixture(typeof(LocalTestRunner))]
 #if !NETCOREAPP2_1
     //[TestFixture(typeof(TestDomainRunner))]
@@ -48,16 +51,16 @@ namespace TestCentric.Engine.Runners
         {
             // Add all services needed by any of our TestEngineRunners
             _services = new ServiceContext();
-            _services.Add(new Services.ExtensionService());
-            _services.Add(new Services.ProjectService());
-            _services.Add(new Services.TestFrameworkService());
-            var packageSettingsService = new Services.TestPackageAnalyzer();
+            _services.Add(new FakeExtensionService());
+            _services.Add(new FakeProjectService());
+            _services.Add(new TestFrameworkService());
+            var packageSettingsService = new TestPackageAnalyzer();
             _services.Add(packageSettingsService);
 #if !NETCOREAPP2_1
-            _services.Add(new Services.RuntimeFrameworkService());
-            _services.Add(new Services.TestAgency("ProcessRunnerTests", 0));
+            _services.Add(new FakeRuntimeService());
+            //_services.Add(new TestAgency("ProcessRunnerTests", 0));
 #endif
-            _services.Add(new Services.TestRunnerFactory());
+            //_services.Add(new FakeTestRunnerFactory());
             _services.ServiceManager.StartServices();
 
             var mockAssemblyPath = Path.Combine(TestContext.CurrentContext.TestDirectory, "mock-assembly.dll");
