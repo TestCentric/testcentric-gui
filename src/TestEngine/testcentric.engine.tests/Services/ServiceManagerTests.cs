@@ -45,8 +45,7 @@ namespace TestCentric.Engine.Services
         public void InitializationFailure()
         {
             ((FakeService)_service1).FailToStart = true;
-            Assert.That(() => _serviceManager.StartServices(),
-                Throws.InstanceOf<InvalidOperationException>().And.Message.Contains(_service1.GetType().Name));
+            Assert.DoesNotThrow(() => _serviceManager.StartServices());
         }
 
         [Test]
