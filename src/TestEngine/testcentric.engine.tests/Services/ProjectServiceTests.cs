@@ -9,6 +9,7 @@ using NUnit.Framework;
 
 namespace TestCentric.Engine.Services
 {
+    // TODO: More tests needed!
     public class ProjectServiceTests
     {
         private ProjectService _projectService;
@@ -17,7 +18,7 @@ namespace TestCentric.Engine.Services
         public void CreateServiceContext()
         {
             var services = new ServiceContext();
-            services.Add(new ExtensionService());
+            services.Add(new Fakes.FakeExtensionService());
             _projectService = new ProjectService();
             services.Add(_projectService);
             services.ServiceManager.StartServices();

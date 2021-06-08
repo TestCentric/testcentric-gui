@@ -18,7 +18,6 @@ namespace TestCentric.Engine.Services
         public void CreateService()
         {
             var services = new ServiceContext();
-            services.Add(new ExtensionService());
             _resultService = new ResultService();
             services.Add(_resultService);
             services.ServiceManager.StartServices();
