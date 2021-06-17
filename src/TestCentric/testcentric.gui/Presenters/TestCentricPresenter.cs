@@ -309,6 +309,7 @@ namespace TestCentric.Gui.Presenters
                 _view.CloseCommand.Enabled = isPackageLoaded && !isTestRunning;
 
                 _view.ReloadTestsCommand.Enabled = isPackageLoaded && !isTestRunning;
+                _view.RunAsX86.Enabled = isPackageLoaded && !isTestRunning;
 
                 _view.RuntimeMenu.Visible = _model.AvailableRuntimes.Count > 1;
 
