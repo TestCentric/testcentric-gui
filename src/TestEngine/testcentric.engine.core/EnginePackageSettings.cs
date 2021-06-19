@@ -65,6 +65,18 @@ namespace TestCentric
         public const string DebugAgent = "DebugAgent";
 
         /// <summary>
+        /// Bool flag indicating that the DomainManager should throw a
+        /// <see cref="CannotUnloadAppDomainException" /> for testing purposes.
+        /// </summary>
+        public const string SimulateUnloadError = "DebugUnloadError";
+
+        /// <summary>
+        /// Bool flag indicating that the DomainManager should inject
+        /// an infinite loop for testing purposes.
+        /// </summary>
+        public const string SimulateUnloadTimeout = "DebugUnloadTimeout";
+
+        /// <summary>
         /// The private binpath used to locate assemblies. Directory paths
         /// is separated by a semicolon. It's an error to specify this and
         /// also set AutoBinPath to true.

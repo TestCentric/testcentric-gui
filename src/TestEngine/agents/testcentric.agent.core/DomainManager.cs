@@ -27,12 +27,17 @@ namespace TestCentric.Engine.Internal
         private static readonly PropertyInfo TargetFrameworkNameProperty =
             typeof(AppDomainSetup).GetProperty("TargetFrameworkName", BindingFlags.Public | BindingFlags.Instance);
 
+        private TestPackage _package;
+
         /// <summary>
         /// Construct an application domain for running a test package
         /// </summary>
         /// <param name="package">The TestPackage to be run</param>
         public AppDomain CreateDomain( TestPackage package )
         {
+            // Save package for use when we unload
+            _package = package;
+
             AppDomainSetup setup = CreateAppDomainSetup(package);
 
             string hashCode = string.Empty;
@@ -105,7 +110,7 @@ namespace TestCentric.Engine.Internal
 
         public void Unload(AppDomain domain)
         {
-            new DomainUnloader(domain).Unload();
+            new DomainUnloader(domain).Unload(_package);
         }
 
         class DomainUnloader
@@ -119,8 +124,14 @@ namespace TestCentric.Engine.Internal
                 _domain = domain;
             }
 
-            public void Unload()
+            private bool _simulateUnloadError;
+            private bool _simulateUnloadTimeout;
+
+            public void Unload(TestPackage package)
             {
+                _simulateUnloadError = package.GetSetting(EnginePackageSettings.SimulateUnloadError, false);
+                _simulateUnloadTimeout = package.GetSetting(EnginePackageSettings.SimulateUnloadTimeout, false);
+
                 _unloadThread = new Thread(new ThreadStart(UnloadOnThread));
                 _unloadThread.Start();
 
@@ -145,11 +156,11 @@ namespace TestCentric.Engine.Internal
             {
                 try
                 {
-                    // Uncomment to simulate an error in unloading
-                    //throw new CannotUnloadAppDomainException("Testing: simulated unload error");
+                    if (_simulateUnloadError)
+                        throw new CannotUnloadAppDomainException("Testing: simulated unload error");
 
-                    // Uncomment to simulate a timeout while unloading
-                    //while (true) ;
+                    if (_simulateUnloadTimeout)
+                        while (true) ;
 
                     AppDomain.Unload(_domain);
                 }

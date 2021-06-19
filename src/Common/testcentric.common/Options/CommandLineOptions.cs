@@ -23,39 +23,39 @@ namespace TestCentric.Gui
 
         public CommandLineOptions(params string[] args)
         {
-            this.Add("config=", "Project {CONFIG} to load (e.g.: Debug).",
+            Add("config=", "Project {CONFIG} to load (e.g.: Debug).",
                 v => ActiveConfig = v);
 
-            this.Add("noload", "Suppress loading of the most recent test file.",
+            Add("noload", "Suppress loading of the most recent test file.",
                 v => NoLoad = v != null);
 
-            this.Add("run", "Automatically run the loaded tests.",
+            Add("run", "Automatically run the loaded tests.",
                 v => RunAllTests = v != null);
 
-            this.Add("unattended", "Unattended execution: perform requested actions, then exit.",
+            Add("unattended", "Unattended execution: perform requested actions, then exit.",
                 v => Unattended = v != null);
 
-            this.Add("x86", "Run tests in an X86 process on 64-bit systems.",
+            Add("x86", "Run tests in an X86 process on 64-bit systems.",
                 v => RunAsX86 = v != null);
 
-            this.Add("agents=", "Specify maximum {NUMBER} of test assembly agents to run at one time. If not specified, there is no limit.",
+            Add("agents=", "Specify maximum {NUMBER} of test assembly agents to run at one time. If not specified, there is no limit.",
                 v =>
                 {
                     if (CheckRequiredInt(v, "--agents", out int val))
                         MaxAgents = val;
                 });
 
-            this.Add("work=", "{PATH} of the directory to use for output files. If not specified, defaults to the current directory.",
+            Add("work=", "{PATH} of the directory to use for output files. If not specified, defaults to the current directory.",
                 v =>
                 {
                     if (CheckRequiredValue(v, "--work"))
                         WorkDirectory = v;
                 });
 
-            //this.Add("runselected", "Automatically run last selected tests.",
+            //Add("runselected", "Automatically run last selected tests.",
             //    v => RunSelectedTests = v != null);
 
-            this.Add("trace=", "Set internal trace {LEVEL}. Valid values are Off, Error, Warning, Info or Debug. Verbose is a synonym for Debug.",
+            Add("trace=", "Set internal trace {LEVEL}. Valid values are Off, Error, Warning, Info or Debug. Verbose is a synonym for Debug.",
                 v =>
                 {
                 if (CheckRequiredValue(v, "--trace", "Off", "Error", "Warning", "Info", "Verbose", "Debug"))
@@ -63,15 +63,21 @@ namespace TestCentric.Gui
                 });
 
 #if DEBUG
-            this.Add("debug-agent", "Launch debugger in testcentric-agent when it starts.",
+            Add("debug-agent", "Launch debugger in testcentric-agent when it starts.",
                 v => DebugAgent = v != null);
+
+            Add("simulate-unload-error", "Throw CannotUnloadAppDomainException when unloading AppDomain.",
+                v => SimulateUnloadError = v != null);
+
+            Add("simulate-unload-timeout", "Inject infinite loop when unloading AppDomain.",
+                v => SimulateUnloadTimeout = v != null);
 #endif
 
-            this.Add("help|h", "Display the help message and exit.",
+            Add("help|h", "Display the help message and exit.",
                 v => ShowHelp = v != null);
 
             // Default
-            this.Add("<>", v =>
+            Add("<>", v =>
             {
                 if (v.StartsWith("-") || v.StartsWith("/") && Path.DirectorySeparatorChar != '/')
                     ErrorMessages.Add("Invalid argument: " + v);
@@ -80,7 +86,7 @@ namespace TestCentric.Gui
             });
 
             if (args != null)
-                this.Parse(args);
+                Parse(args);
         }
 
 #endregion
@@ -108,6 +114,8 @@ namespace TestCentric.Gui
         public string InternalTraceLevel { get; private set; }
         public string WorkDirectory { get; private set; }
         public bool DebugAgent { get; private set; }
+        public bool SimulateUnloadError { get; private set; }
+        public bool SimulateUnloadTimeout { get; private set; }
 
         // Error Processing
 

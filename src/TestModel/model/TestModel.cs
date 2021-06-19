@@ -86,7 +86,11 @@ namespace TestCentric.Gui.Model
             if (options.RunAsX86)
                 model.PackageOverrides.Add(EnginePackageSettings.RunAsX86, true);
             if (options.DebugAgent)
-                model.PackageOverrides.Add("DebugAgent", true);
+                model.PackageOverrides.Add(EnginePackageSettings.DebugAgent, true);
+            if (options.SimulateUnloadError)
+                model.PackageOverrides.Add(EnginePackageSettings.SimulateUnloadError, true);
+            if (options.SimulateUnloadTimeout)
+                model.PackageOverrides.Add(EnginePackageSettings.SimulateUnloadTimeout, true);
 
             return model;
         }
