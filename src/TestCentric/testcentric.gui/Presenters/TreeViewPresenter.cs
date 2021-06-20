@@ -216,7 +216,14 @@ namespace TestCentric.Gui.Presenters
                 if (_settings.Engine.ReloadOnRun)
                 {
                     _model.ClearResults();
-                    _model.ReloadTests();
+                    try
+                    {
+                        _model.ReloadTests();
+                    }
+                    catch (NUnitEngineUnloadException ex)
+                    {
+                        // TODO: Issue a warning?
+                    }
                 }
 
                 if (_view.ContextNode != null)

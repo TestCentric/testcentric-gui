@@ -52,9 +52,21 @@ namespace TestCentric.Common
 
         /// <summary>
         /// Bool flag indicating whether a debugger should be launched at agent 
-        /// startup. Used only for debugging NUnit itself.
+        /// startup. Used only for debugging the agent itself.
         /// </summary>
         public const string DebugAgent = "DebugAgent";
+
+        /// <summary>
+        /// Bool flag indicating that the DomainManager should throw a
+        /// <see cref="CannotUnloadAppDomainException" /> for testing purposes.
+        /// </summary>
+        public const string SimulateUnloadError = "DebugUnloadError";
+
+        /// <summary>
+        /// Bool flag indicating that the DomainManager should inject
+        /// an infinite loop for testing purposes.
+        /// </summary>
+        public const string SimulateUnloadTimeout = "DebugUnloadTimeout";
 
         /// <summary>
         /// The private binpath used to locate assemblies. Directory paths
