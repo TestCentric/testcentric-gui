@@ -265,7 +265,7 @@ namespace TestCentric.Gui.Model
         {
             _events.FireTestsUnloading();
 
-            Runner.Unload();
+            UnloadTestsIgnoringErrors();
             Runner.Dispose();
             Tests = null;
             AvailableCategories = null;
@@ -277,6 +277,18 @@ namespace TestCentric.Gui.Model
             _events.FireTestUnloaded();
         }
 
+        private void UnloadTestsIgnoringErrors()
+        {
+            try
+            {
+                Runner.Unload();
+            }
+            catch (NUnit.Engine.NUnitEngineUnloadException ex)
+            {
+
+            }
+        }
+
         public void ReloadTests()
         {
             _events.FireTestsReloading();
@@ -285,7 +297,7 @@ namespace TestCentric.Gui.Model
             // has some problems, so we simulate Unload+Load. See issue #328.
 
             // Replace Runner in case settings changed
-            Runner.Unload();
+            UnloadTestsIgnoringErrors();
             Runner.Dispose();
             Runner = TestEngine.GetRunner(TestPackage);
 

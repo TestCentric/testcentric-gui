@@ -115,10 +115,13 @@ namespace TestCentric.Gui.Presenters
             _model.Events.TestsUnloading += (TestEventArgse) =>
             {
                 UpdateViewCommands();
+
+                _view.LongRunningOperation.Display("Unloading...");
             };
 
             _model.Events.TestUnloaded += (TestEventArgs e) =>
             {
+                _view.LongRunningOperation.Hide();
                 _view.RunSummary.Text = null;
 
                 UpdateViewCommands();
