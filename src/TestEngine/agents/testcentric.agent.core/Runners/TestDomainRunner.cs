@@ -34,10 +34,10 @@ namespace TestCentric.Engine.Runners
         /// </summary>
         public override void UnloadPackage()
         {
-            if (this.TestDomain != null)
+            if (TestDomain != null)
             {
-                _domainManager.Unload(this.TestDomain);
-                this.TestDomain = null;
+                _domainManager.Unload(TestDomain);
+                TestDomain = null;
             }
         }
     }
