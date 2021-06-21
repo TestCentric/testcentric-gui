@@ -3,10 +3,9 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-using System;
 using NUnit.Engine;
 
-namespace TestCentric.Engine
+namespace TestCentric.Engine.Services
 {
     /// <summary>
     /// A Test Runner factory can supply a suitable test runner for a given package

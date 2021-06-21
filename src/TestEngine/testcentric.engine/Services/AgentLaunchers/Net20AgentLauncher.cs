@@ -15,6 +15,11 @@ namespace TestCentric.Engine.Services
 {
     public class Net20AgentLauncher : IAgentLauncher
     {
+        public TestAgentInfo AgentInfo => new TestAgentInfo(
+            GetType().Name,
+            TestAgentType.LocalProcess,
+            "net-2.0");
+
         public bool CanCreateProcess(TestPackage package)
         {
             // Get target runtime

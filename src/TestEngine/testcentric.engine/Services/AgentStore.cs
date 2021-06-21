@@ -71,7 +71,13 @@ namespace TestCentric.Engine.Services
             }
         }
 
-        public bool IsAgentProcessActive(Guid agentId, out Process process)
+        public bool IsAgentActive(Guid agentId)
+        {
+            Process process;
+            return IsAgentActive(agentId, out process);
+        }
+
+        public bool IsAgentActive(Guid agentId, out Process process)
         {
             lock (LOCK)
             {
