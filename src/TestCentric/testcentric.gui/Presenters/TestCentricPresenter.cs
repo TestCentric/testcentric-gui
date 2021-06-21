@@ -314,7 +314,7 @@ namespace TestCentric.Gui.Presenters
                 _view.ReloadTestsCommand.Enabled = isPackageLoaded && !isTestRunning;
                 _view.RunAsX86.Enabled = isPackageLoaded && !isTestRunning;
 
-                _view.RuntimeMenu.Visible = _model.AvailableRuntimes.Count > 1;
+                _view.RuntimeMenu.Visible = _view.RuntimeMenu.Enabled = _model.AvailableRuntimes.Count > 1;
 
                 _view.RecentFilesMenu.Enabled = !isTestRunning;
 

@@ -25,22 +25,20 @@ namespace TestCentric.Engine.Runners
         }
 
         /// <summary>
-        /// The TestPackage for which this is the runner
+        /// The TestPackage, which this runner is handling
         /// </summary>
         protected TestPackage TestPackage { get; set; }
 
         /// <summary>
         /// The result of the last call to LoadPackage
+        /// for this runner's TestPackage.
         /// </summary>
         protected TestEngineResult LoadResult { get; set; }
 
         /// <summary>
-        /// Gets an indicator of whether the package has been loaded.
+        /// Indicates whether the runner's TestPackage is loaded.
         /// </summary>
-        public bool IsPackageLoaded
-        {
-            get { return LoadResult != null;  }
-        }
+        public bool IsPackageLoaded => LoadResult != null;
 
         /// <summary>
         /// Loads the TestPackage for exploration or execution.
