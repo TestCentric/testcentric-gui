@@ -15,6 +15,11 @@ namespace TestCentric.Engine.Services
 {
     public class NetCore31AgentLauncher : IAgentLauncher
     {
+        public TestAgentInfo AgentInfo => new TestAgentInfo(
+            GetType().Name,
+            TestAgentType.LocalProcess,
+            "netcore-3.1");
+
         public bool CanCreateProcess(TestPackage package)
         {
             // Get target runtime

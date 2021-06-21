@@ -112,7 +112,7 @@ namespace TestCentric.Engine.Services
         {
             var database = new AgentStore();
 
-            Assert.That(database.IsAgentProcessActive(DummyAgent.Id, out _), Is.False);
+            Assert.That(database.IsAgentActive(DummyAgent.Id, out _), Is.False);
         }
 
         [Test]
@@ -121,7 +121,7 @@ namespace TestCentric.Engine.Services
             var database = new AgentStore();
 
             database.AddAgent(DummyAgent.Id, DummyProcess);
-            Assert.That(database.IsAgentProcessActive(DummyAgent.Id, out var process), Is.True);
+            Assert.That(database.IsAgentActive(DummyAgent.Id, out var process), Is.True);
             Assert.That(process, Is.SameAs(DummyProcess));
         }
 
@@ -132,7 +132,7 @@ namespace TestCentric.Engine.Services
 
             database.AddAgent(DummyAgent.Id, DummyProcess);
             database.Register(DummyAgent);
-            Assert.That(database.IsAgentProcessActive(DummyAgent.Id, out var process), Is.True);
+            Assert.That(database.IsAgentActive(DummyAgent.Id, out var process), Is.True);
             Assert.That(process, Is.SameAs(DummyProcess));
         }
 
@@ -144,7 +144,7 @@ namespace TestCentric.Engine.Services
             database.AddAgent(DummyAgent.Id, DummyProcess);
             database.Register(DummyAgent);
             database.MarkProcessTerminated(DummyProcess);
-            Assert.That(database.IsAgentProcessActive(DummyAgent.Id, out _), Is.False);
+            Assert.That(database.IsAgentActive(DummyAgent.Id, out _), Is.False);
         }
 
         [Test]
@@ -159,19 +159,19 @@ namespace TestCentric.Engine.Services
                     var id = Guid.NewGuid();
                     var process = new Process();
 
-                    Assert.That(database.IsAgentProcessActive(id, out _), Is.False);
+                    Assert.That(database.IsAgentActive(id, out _), Is.False);
                     Assert.That(database.IsAvailable(id, out _), Is.False);
 
                     database.AddAgent(id, process);
-                    Assert.That(database.IsAgentProcessActive(id, out _), Is.True);
+                    Assert.That(database.IsAgentActive(id, out _), Is.True);
                     Assert.That(database.IsAvailable(id, out _), Is.False);
 
                     database.Register(new DummyTestAgent(id));
-                    Assert.That(database.IsAgentProcessActive(id, out _), Is.True);
+                    Assert.That(database.IsAgentActive(id, out _), Is.True);
                     Assert.That(database.IsAvailable(id, out _), Is.True);
 
                     database.MarkProcessTerminated(process);
-                    Assert.That(database.IsAgentProcessActive(id, out _), Is.False);
+                    Assert.That(database.IsAgentActive(id, out _), Is.False);
                     Assert.That(database.IsAvailable(id, out _), Is.False);
                 }
             }, threadCount: Environment.ProcessorCount);

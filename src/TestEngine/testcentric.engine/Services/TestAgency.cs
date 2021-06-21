@@ -8,9 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Diagnostics;
+using System.Net.Sockets;
+using NUnit.Engine;
 using TestCentric.Common;
 using TestCentric.Engine.Internal;
-using NUnit.Engine;
 using TestCentric.Engine.Communication.Transports.Remoting;
 using TestCentric.Engine.Communication.Transports.Tcp;
 
@@ -24,7 +25,7 @@ namespace TestCentric.Engine.Services
     /// but only one, ProcessAgent is implemented
     /// at this time.
     /// </summary>
-    public class TestAgency : ITestAgentFactory, ITestAgency, IService
+    public class TestAgency : ITestAgentSource, ITestAgency, IService
     {
         private static readonly Logger log = InternalTrace.GetLogger(typeof(TestAgency));
 
@@ -35,6 +36,7 @@ namespace TestCentric.Engine.Services
 
         private IRuntimeFrameworkService _runtimeService;
         private ExtensionService _extensionService;
+
         private readonly List<IAgentLauncher> _launchers = new List<IAgentLauncher>();
 
         // Transports used for various target runtimes
@@ -52,7 +54,21 @@ namespace TestCentric.Engine.Services
             _tcpTransport = new TestAgencyTcpTransport(this, port);
         }
 
-        #region ITestAgentFactory Implementation
+        #region ITestAgentSource Implementation
+
+        public TestAgentType AgentType => TestAgentType.LocalProcess;
+
+        List<TestAgentInfo> _availableAgents = new List<TestAgentInfo>();
+        IList<TestAgentInfo> ITestAgentSource.AvailableAgents => _availableAgents;
+
+        bool ITestAgentSource.IsAgentAvailable(TestPackage package)
+        {
+            foreach (var launcher in _launchers)
+                if (launcher.CanCreateProcess(package))
+                    return true;
+
+            return false;
+        }
 
         public ITestAgent GetAgent(TestPackage package)
         {
@@ -117,10 +133,51 @@ namespace TestCentric.Engine.Services
             return null;
         }
 
-        public bool IsAgentActive(Guid agentId)
+        ITestAgent ITestAgentSource.SelectAgent(int index)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ReleaseAgent(ITestAgent agent)
         {
             Process process;
-            return _agentStore.IsAgentProcessActive(agentId, out process);
+
+            if (_agentStore.IsAgentActive(agent.Id, out process))
+                try
+                {
+                    log.Debug("Stopping remote agent");
+                    agent.Stop();
+                }
+                catch (SocketException se)
+                {
+                    int exitCode;
+
+                    try
+                    {
+                        exitCode = process.ExitCode;
+                    }
+                    catch (NotSupportedException)
+                    {
+                        exitCode = -17;
+                    }
+
+                    if (exitCode == 0)
+                    {
+                        log.Warning("Agent connection was forcibly closed. Exit code was 0, so agent shutdown OK");
+                    }
+                    else
+                    {
+                        var stopError = $"Agent connection was forcibly closed. Exit code was {exitCode}. {Environment.NewLine}{ExceptionHelper.BuildMessageAndStackTrace(se)}";
+                        log.Error(stopError);
+
+                        throw;
+                    }
+                }
+                catch (Exception e)
+                {
+                    var stopError = "Failed to stop the remote agent." + Environment.NewLine + ExceptionHelper.BuildMessageAndStackTrace(e);
+                    log.Error(stopError);
+                }
         }
 
         #endregion
@@ -178,6 +235,9 @@ namespace TestCentric.Engine.Services
                     _remotingTransport.Start();
                     _tcpTransport.Start();
                     Status = ServiceStatus.Started;
+
+                    foreach (var launcher in _launchers)
+                        _availableAgents.Add(launcher.AgentInfo);
                 }
                 catch
                 {
@@ -207,7 +267,7 @@ namespace TestCentric.Engine.Services
 
         internal bool IsAgentProcessActive(Guid agentId, out Process process)
         {
-            return _agentStore.IsAgentProcessActive(agentId, out process);
+            return _agentStore.IsAgentActive(agentId, out process);
         }
 
         internal void OnAgentExit(Process process)

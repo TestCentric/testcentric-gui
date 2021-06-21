@@ -93,14 +93,7 @@ namespace TestCentric.Engine.Runners
         {
             foreach (ITestEngineRunner runner in Runners)
             {
-                try
-                {
-                    runner.Unload();
-                }
-                catch (Exception e)
-                {
-                    _unloadExceptions.Add(e);
-                }
+                runner.Unload();
             }
         }
 
@@ -157,7 +150,7 @@ namespace TestCentric.Engine.Runners
             {
                 var task = new TestExecutionTask(runner, listener, filter, disposeRunners);
                 task.Execute();
-                LogResultsFromTask(task, results, _unloadExceptions);
+                LogResultsFromTask(task, results);
             }
         }
 
@@ -178,7 +171,7 @@ namespace TestCentric.Engine.Runners
             workerPool.WaitAll();
 
             foreach (var task in tasks)
-                LogResultsFromTask(task, results, _unloadExceptions);
+                LogResultsFromTask(task, results);
         }
 #endif
 
@@ -198,23 +191,13 @@ namespace TestCentric.Engine.Runners
 
             foreach (var runner in Runners)
             {
-                try
-                {
-                    runner.Dispose();
-                }
-                catch (Exception e)
-                {
-                    _unloadExceptions.Add(e);
-                }
+                runner.Dispose();
             }
 
             Runners.Clear();
-
-            if (_unloadExceptions.Count > 0)
-                throw new NUnitEngineUnloadException(_unloadExceptions);
         }
 
-        private static void LogResultsFromTask(TestExecutionTask task, List<TestEngineResult> results, List<Exception> unloadExceptions)
+        private static void LogResultsFromTask(TestExecutionTask task, List<TestEngineResult> results)
         {
             var result = task.Result;
             if (result != null)
@@ -222,10 +205,10 @@ namespace TestCentric.Engine.Runners
                 results.Add(result);
             }
 
-            if (task.UnloadException != null)
-            {
-                unloadExceptions.Add(task.UnloadException);
-            }
+            //if (task.UnloadException != null)
+            //{
+            //    unloadExceptions.Add(task.UnloadException);
+            //}
         }
     }
 }
