@@ -5,8 +5,6 @@
 
 #if !NETSTANDARD2_0
 using System;
-using System.Diagnostics;
-using System.Net.Sockets;
 using NUnit.Engine;
 using TestCentric.Engine.Internal;
 using TestCentric.Engine.Services;
@@ -23,7 +21,7 @@ namespace TestCentric.Engine.Runners
 
         private ITestAgent _agent;
         private ITestEngineRunner _remoteRunner;
-        private TestAgency _agency;
+        private ITestAgentService _agentService;
 
         /// <summary>
         /// Construct a new AssemblyRunnerRunner
@@ -32,7 +30,7 @@ namespace TestCentric.Engine.Runners
         /// <param name="package">A TestPackage containing a single assembly</param>
         public AssemblyRunner(IServiceLocator services, TestPackage package) : base(package)
         {
-            _agency = services.GetService<TestAgency>();
+            _agentService = services.GetService<TestAgentService>();
         }
 
         /// <summary>
@@ -85,21 +83,21 @@ namespace TestCentric.Engine.Runners
         /// </summary>
         public override void UnloadPackage()
         {
-            try
-            {
-                if (_remoteRunner != null)
+            if (_remoteRunner != null && TestPackage != null)
+                try
                 {
                     log.Info("Unloading " + TestPackage.Name);
                     _remoteRunner.Unload();
-                    _remoteRunner = null;
                 }
-            }
-            catch (Exception e)
-            {
-                log.Warning("Failed to unload the remote runner. {0}", ExceptionHelper.BuildMessageAndStackTrace(e));
-                _remoteRunner = null;
-                throw;
-            }
+                catch (Exception e)
+                {
+                    log.Warning("Failed to unload the remote runner. {0}", ExceptionHelper.BuildMessageAndStackTrace(e));
+                }
+                finally
+                {
+                    _remoteRunner = null;
+                    LoadResult = null;
+                }
         }
 
         /// <summary>
@@ -196,77 +194,12 @@ namespace TestCentric.Engine.Runners
             {
                 _disposed = true;
 
-                Exception unloadException = null;
+                Unload();
 
-                try
+                if (_agent != null)
                 {
-                    Unload();
+                    _agentService.ReleaseAgent(_agent);
                 }
-                catch (Exception ex)
-                {
-                    // Save and log the unload error
-                    unloadException = ex;
-                    log.Error(ExceptionHelper.BuildMessage(ex));
-                    log.Error(ExceptionHelper.BuildMessageAndStackTrace(ex));
-                }
-
-                if (_agent != null && _agency.IsAgentProcessActive(_agent.Id, out Process process))
-                {
-                    try
-                    {
-                        log.Debug("Stopping remote agent");
-                        _agent.Stop();
-                    }
-                    catch (SocketException se)
-                    {
-                        int? exitCode;
-                        try
-                        {
-                            exitCode = process.ExitCode;
-                        }
-                        catch (NotSupportedException)
-                        {
-                            exitCode = null;
-                        }
-
-                        if (exitCode.HasValue && exitCode == 0)
-                        {
-                            log.Warning("Agent connection was forcibly closed. Exit code was 0, so agent shutdown OK");
-                        }
-                        else
-                        {
-
-                            var stopError = $"Agent connection was forcibly closed. Exit code was {exitCode?.ToString() ?? "unknown"}. {Environment.NewLine}{ExceptionHelper.BuildMessageAndStackTrace(se)}";
-                            log.Error(stopError);
-
-                            // Stop error with no unload error, just rethrow
-                            if (unloadException == null)
-                                throw;
-
-                            // Both kinds of errors, throw exception with combined message
-                            throw new NUnitEngineUnloadException(ExceptionHelper.BuildMessage(unloadException) + Environment.NewLine + stopError);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        var stopError = "Failed to stop the remote agent." + Environment.NewLine + ExceptionHelper.BuildMessageAndStackTrace(e);
-                        log.Error(stopError);
-
-                        // Stop error with no unload error, just rethrow
-                        if (unloadException == null)
-                            throw;
-
-                        // Both kinds of errors, throw exception with combined message
-                        throw new NUnitEngineUnloadException(ExceptionHelper.BuildMessage(unloadException) + Environment.NewLine + stopError);
-                    }
-                    finally
-                    {
-                        _agent = null;
-                    }
-                }
-
-                if (unloadException != null) // Add message line indicating we managed to stop agent anyway
-                    throw new NUnitEngineUnloadException("Agent was terminated successfully after error.", unloadException);
             }
         }
 
@@ -274,7 +207,7 @@ namespace TestCentric.Engine.Runners
         {
             if (_agent == null)
             {
-                _agent = _agency.GetAgent(TestPackage);
+                _agent = _agentService.GetAgent(TestPackage);
 
                 if (_agent == null)
                     throw new NUnitEngineException("Unable to acquire agent");

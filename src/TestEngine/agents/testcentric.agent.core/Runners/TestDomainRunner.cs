@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 #if !NETSTANDARD1_6 && !NETSTANDARD2_0
+using System;
 using NUnit.Engine;
 using TestCentric.Engine.Internal;
 
@@ -15,6 +16,8 @@ namespace TestCentric.Engine.Runners
     /// </summary>
     public class TestDomainRunner : TestAgentRunner
     {
+        static readonly Logger log = InternalTrace.GetLogger("TestDomainRunner");
+
         private DomainManager _domainManager;
 
         public TestDomainRunner(TestPackage package) : base(package)
@@ -36,8 +39,18 @@ namespace TestCentric.Engine.Runners
         {
             if (TestDomain != null)
             {
-                _domainManager.Unload(TestDomain);
-                TestDomain = null;
+                try
+                {
+                    _domainManager.Unload(TestDomain);
+                }
+                catch (Exception e)
+                {
+                    log.Warning("Failed to unload the remote runner. {0}", ExceptionHelper.BuildMessageAndStackTrace(e));
+                }
+                finally
+                {
+                    TestDomain = null;
+                }
             }
         }
     }
