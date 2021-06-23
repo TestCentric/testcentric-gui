@@ -21,7 +21,7 @@ namespace TestCentric.Engine.Runners
 
         private ITestAgent _agent;
         private ITestEngineRunner _remoteRunner;
-        private ITestAgentService _agentService;
+        private TestAgentService _agentService;
 
         /// <summary>
         /// Construct a new AssemblyRunnerRunner
