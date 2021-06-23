@@ -9,16 +9,16 @@ using NUnit.Engine;
 
 namespace TestCentric.Engine.Services
 {
-    class TestAgentService : Service, ITestAgentService
+    class TestAgentService : Service
     {
-        private IList<ITestAgentSource> _agentSources = new List<ITestAgentSource>();
+        private IList<ITestAgentProvider> _agentSources = new List<ITestAgentProvider>();
         private IList<TestAgentInfo> _availableAgents = new List<TestAgentInfo>();
 
         #region ITestAgentFactory Implementation
 
-        IList<TestAgentInfo> ITestAgentService.AvailableAgents { get; } = new List<TestAgentInfo>();
+        public IList<TestAgentInfo> AvailableAgents { get; } = new List<TestAgentInfo>();
 
-        bool ITestAgentService.IsAgentAvailable(TestPackage package)
+        public bool IsAgentAvailable(TestPackage package)
         {
             foreach (var agentSource in _agentSources)
                 if (agentSource.IsAgentAvailable(package))
@@ -27,7 +27,7 @@ namespace TestCentric.Engine.Services
             return false;
         }
 
-        ITestAgent ITestAgentService.GetAgent(TestPackage package)
+        public ITestAgent GetAgent(TestPackage package)
         {
             foreach (var agentSource in _agentSources)
                 if (agentSource.IsAgentAvailable(package))
@@ -36,21 +36,7 @@ namespace TestCentric.Engine.Services
             throw new InvalidOperationException("No available agent matches the TestPackage");
         }
 
-        ITestAgent ITestAgentService.SelectAgent(int index)
-        {
-            foreach (var agentSource in _agentSources)
-            {
-                int sourceCount = agentSource.AvailableAgents.Count;
-                if (index >= sourceCount)
-                    index -= sourceCount;
-                else
-                    return agentSource.SelectAgent(index);
-            }
-
-            throw new InvalidOperationException("No agent named {agentName} is available.");
-        }
-
-        void ITestAgentService.ReleaseAgent(ITestAgent agent)
+        public void ReleaseAgent(ITestAgent agent)
         {
             // TODO: save the source rather than trying all sources
             foreach(var agentSource in _agentSources)
@@ -66,7 +52,7 @@ namespace TestCentric.Engine.Services
             // TEMP for testing
             _agentSources.Add(new DummyAgentFactory());
 
-            ITestAgentSource testAgency = ServiceContext.GetService<TestAgency>();
+            ITestAgentProvider testAgency = ServiceContext.GetService<TestAgency>();
             if (testAgency != null)
             {
                 _agentSources.Add(testAgency);
@@ -82,25 +68,20 @@ namespace TestCentric.Engine.Services
 
         #region
 
-        class DummyAgentFactory : ITestAgentSource
+        class DummyAgentFactory : ITestAgentProvider
         {
-            IList<TestAgentInfo> ITestAgentSource.AvailableAgents => new TestAgentInfo[0];
+            IList<TestAgentInfo> ITestAgentProvider.AvailableAgents => new TestAgentInfo[0];
 
             public TestAgentType AgentType => TestAgentType.LocalProcess;
 
-            ITestAgent ITestAgentSource.GetAgent(TestPackage package)
+            ITestAgent ITestAgentProvider.GetAgent(TestPackage package)
             {
                 throw new NotImplementedException();
             }
 
-            ITestAgent ITestAgentSource.SelectAgent(int index)
-            {
-                throw new NotImplementedException();
-            }
+            bool ITestAgentProvider.IsAgentAvailable(TestPackage package) => false;
 
-            bool ITestAgentSource.IsAgentAvailable(TestPackage package) => false;
-
-            void ITestAgentSource.ReleaseAgent(ITestAgent agent)
+            void ITestAgentProvider.ReleaseAgent(ITestAgent agent)
             {
             }
         }

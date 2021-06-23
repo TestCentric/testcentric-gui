@@ -25,7 +25,7 @@ namespace TestCentric.Engine.Services
     /// but only one, ProcessAgent is implemented
     /// at this time.
     /// </summary>
-    public class TestAgency : ITestAgentSource, ITestAgency, IService
+    public class TestAgency : ITestAgentProvider, ITestAgency, IService
     {
         private static readonly Logger log = InternalTrace.GetLogger(typeof(TestAgency));
 
@@ -59,9 +59,9 @@ namespace TestCentric.Engine.Services
         public TestAgentType AgentType => TestAgentType.LocalProcess;
 
         List<TestAgentInfo> _availableAgents = new List<TestAgentInfo>();
-        IList<TestAgentInfo> ITestAgentSource.AvailableAgents => _availableAgents;
+        IList<TestAgentInfo> ITestAgentProvider.AvailableAgents => _availableAgents;
 
-        bool ITestAgentSource.IsAgentAvailable(TestPackage package)
+        bool ITestAgentProvider.IsAgentAvailable(TestPackage package)
         {
             foreach (var launcher in _launchers)
                 if (launcher.CanCreateProcess(package))
@@ -131,11 +131,6 @@ namespace TestCentric.Engine.Services
             }
 
             return null;
-        }
-
-        ITestAgent ITestAgentSource.SelectAgent(int index)
-        {
-            throw new NotImplementedException();
         }
 
         public void ReleaseAgent(ITestAgent agent)
