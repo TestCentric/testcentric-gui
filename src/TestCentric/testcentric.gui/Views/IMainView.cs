@@ -34,7 +34,6 @@ namespace TestCentric.Gui.Views
         ICommand CloseCommand { get; }
         ICommand AddTestFilesCommand { get; }
         ICommand ReloadTestsCommand { get; }
-        IPopup RuntimeMenu { get; }
         IChecked RunAsX86 { get; }
         IPopup RecentFilesMenu { get; }
         ICommand ExitCommand { get; }
