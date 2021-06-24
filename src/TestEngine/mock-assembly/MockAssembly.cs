@@ -241,10 +241,13 @@ namespace TestCentric.Tests
         public void SomeTest() { }
     }
 
-#if !NET_5_0
     [TestFixture]
     public class FixtureWithTestCases
     {
+#if NET5_0
+        public const int Tests = 0;
+        public const int Suites = 0;
+#else
         public const int Tests = 4;
         public const int Suites = 3;
 
@@ -260,8 +263,8 @@ namespace TestCentric.Tests
         public void GenericMethod<T>(T x, T y)
         {
         }
-    }
 #endif
+    }
 
     [TestFixture(5)]
     [TestFixture(42)]
