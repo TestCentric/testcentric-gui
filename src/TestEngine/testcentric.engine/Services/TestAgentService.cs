@@ -11,16 +11,13 @@ namespace TestCentric.Engine.Services
 {
     class TestAgentService : Service
     {
-        private IList<ITestAgentProvider> _agentSources = new List<ITestAgentProvider>();
-        private IList<TestAgentInfo> _availableAgents = new List<TestAgentInfo>();
+        private IList<ITestAgentProvider> _providers = new List<ITestAgentProvider>();
 
         #region ITestAgentFactory Implementation
 
-        public IList<TestAgentInfo> AvailableAgents { get; } = new List<TestAgentInfo>();
-
         public bool IsAgentAvailable(TestPackage package)
         {
-            foreach (var agentSource in _agentSources)
+            foreach (var agentSource in _providers)
                 if (agentSource.IsAgentAvailable(package))
                     return true;
 
@@ -29,7 +26,7 @@ namespace TestCentric.Engine.Services
 
         public ITestAgent GetAgent(TestPackage package)
         {
-            foreach (var agentSource in _agentSources)
+            foreach (var agentSource in _providers)
                 if (agentSource.IsAgentAvailable(package))
                     return agentSource.GetAgent(package);
 
@@ -39,7 +36,7 @@ namespace TestCentric.Engine.Services
         public void ReleaseAgent(ITestAgent agent)
         {
             // TODO: save the source rather than trying all sources
-            foreach(var agentSource in _agentSources)
+            foreach(var agentSource in _providers)
                 agentSource.ReleaseAgent(agent);
         }
 
@@ -49,41 +46,14 @@ namespace TestCentric.Engine.Services
 
         public override void StartService()
         {
-            // TEMP for testing
-            _agentSources.Add(new DummyAgentFactory());
-
             ITestAgentProvider testAgency = ServiceContext.GetService<TestAgency>();
             if (testAgency != null)
             {
-                _agentSources.Add(testAgency);
-                foreach (var info in testAgency.AvailableAgents)
-                    _availableAgents.Add(info);
+                _providers.Add(testAgency);
                 Status = ServiceStatus.Started;
             }
             else
                 Status = ServiceStatus.Error;
-        }
-
-        #endregion
-
-        #region
-
-        class DummyAgentFactory : ITestAgentProvider
-        {
-            IList<TestAgentInfo> ITestAgentProvider.AvailableAgents => new TestAgentInfo[0];
-
-            public TestAgentType AgentType => TestAgentType.LocalProcess;
-
-            ITestAgent ITestAgentProvider.GetAgent(TestPackage package)
-            {
-                throw new NotImplementedException();
-            }
-
-            bool ITestAgentProvider.IsAgentAvailable(TestPackage package) => false;
-
-            void ITestAgentProvider.ReleaseAgent(ITestAgent agent)
-            {
-            }
         }
 
         #endregion

@@ -11,13 +11,8 @@ namespace TestCentric.Engine.Services
 {
     /// <summary>
     /// An object implementing ITestAgentProvider is able to provide
-    /// test agents of a particular type, which satisfy the criteria
-    /// specified in a TestPackage.
+    /// test agents, which satisfy the criteria specified in a TestPackage.
     /// </summary>
-    /// <remarks>
-    /// Currently, the only supported criteria are agent type,
-    /// target runtime and bitness. Additional factors may be added.
-    /// </remarks>
     public interface ITestAgentProvider
     {
         /// <summary>
