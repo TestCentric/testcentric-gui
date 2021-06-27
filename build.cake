@@ -383,17 +383,14 @@ Task("BuildEngineCorePackage")
 	});
 
 //////////////////////////////////////////////////////////////////////
-// AGENT API PACKAGE
+// ENGINE API PACKAGE
 //////////////////////////////////////////////////////////////////////
 
-// NOTE: The testcentric.agent.api assembly is required by the agent
-// launcher extension, which is part of any custom pluggable agent.
-
-Task("BuildAgentApiPackage")
+Task("BuildEngineApiPackage")
 	.IsDependentOn("Build")
 	.Does<BuildParameters>((parameters) =>
 	{
-		NuGetPack($"{parameters.NuGetDirectory}/TestCentric.Agent.Api.nuspec", new NuGetPackSettings()
+		NuGetPack($"{parameters.NuGetDirectory}/TestCentric.Engine.Api.nuspec", new NuGetPackSettings()
 		{
 			Version = parameters.PackageVersion,
 			OutputDirectory = parameters.PackageDirectory,
@@ -415,7 +412,7 @@ Task("PublishPackages")
 		{
 			PushNuGetPackage(parameters.NuGetPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
 			PushNuGetPackage(parameters.EngineCorePackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
-			PushNuGetPackage(parameters.AgentApiPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
+			PushNuGetPackage(parameters.EngineApiPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
 			PushChocolateyPackage(parameters.ChocolateyPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
 			nothingToPublish = false;
 		}
@@ -424,7 +421,7 @@ Task("PublishPackages")
 		{
 			PushNuGetPackage(parameters.NuGetPackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
 			PushNuGetPackage(parameters.EngineCorePackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
-			PushNuGetPackage(parameters.AgentApiPackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
+			PushNuGetPackage(parameters.EngineApiPackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
 			nothingToPublish = false;
 		}
 
@@ -583,7 +580,7 @@ Task("BuildPackages")
 	.IsDependentOn("BuildNuGetPackage")
     .IsDependentOn("BuildChocolateyPackage")
 	.IsDependentOn("BuildEngineCorePackage")
-	.IsDependentOn("BuildAgentApiPackage");
+	.IsDependentOn("BuildEngineApiPackage");
 
 Task("TestPackages")
 	.IsDependentOn("BuildPackages")
