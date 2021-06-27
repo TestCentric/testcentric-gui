@@ -96,7 +96,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{23ED18B0-608C-4CB5-A70E-CB95C8B0231C}"
 	ProjectSection(SolutionItems) = preProject
 		nuget\testcentric-agent.nuget.addins = nuget\testcentric-agent.nuget.addins
-		nuget\TestCentric.Agent.Api.nuspec = nuget\TestCentric.Agent.Api.nuspec
+		nuget\TestCentric.Engine.Api.nuspec = nuget\TestCentric.Engine.Api.nuspec
 		nuget\TestCentric.Engine.Core.nuspec = nuget\TestCentric.Engine.Core.nuspec
 		nuget\TestCentric.GuiRunner.nuspec = nuget\TestCentric.GuiRunner.nuspec
 		nuget\TestCentric.Metadata.nuspec = nuget\TestCentric.Metadata.nuspec

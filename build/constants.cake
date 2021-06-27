@@ -13,7 +13,7 @@ const string SOLUTION = "testcentric-gui.sln";
 const string PACKAGE_NAME = "testcentric-gui";
 const string NUGET_PACKAGE_NAME = "TestCentric.GuiRunner";
 const string ENGINE_CORE_PACKAGE_NAME = "TestCentric.Engine.Core";
-const string AGENT_API_PACKAGE_NAME = "TestCentric.Agent.Api";
+const string ENGINE_API_PACKAGE_NAME = "TestCentric.Engine.Api";
 
 const string GUI_RUNNER = "testcentric.exe";
 const string EXPERIMENTAL_RUNNER = "tc-next.exe";
