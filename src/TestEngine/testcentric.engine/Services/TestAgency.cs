@@ -54,9 +54,7 @@ namespace TestCentric.Engine.Services
             _tcpTransport = new TestAgencyTcpTransport(this, port);
         }
 
-        #region ITestAgentSource Implementation
-
-        public TestAgentType AgentType => TestAgentType.LocalProcess;
+        #region ITestAgentProvider Implementation
 
         List<TestAgentInfo> _availableAgents = new List<TestAgentInfo>();
         IList<TestAgentInfo> ITestAgentProvider.AvailableAgents => _availableAgents;
