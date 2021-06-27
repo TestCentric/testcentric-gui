@@ -3,7 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-namespace TestCentric.Engine.Services
+namespace TestCentric.Engine.Extensibility
 {
     /// <summary>
     /// The TestAgentInfo struct provides information about an

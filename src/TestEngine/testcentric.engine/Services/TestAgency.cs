@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Net.Sockets;
 using NUnit.Engine;
 using TestCentric.Common;
+using TestCentric.Engine.Extensibility;
 using TestCentric.Engine.Internal;
 using TestCentric.Engine.Communication.Transports.Remoting;
 using TestCentric.Engine.Communication.Transports.Tcp;

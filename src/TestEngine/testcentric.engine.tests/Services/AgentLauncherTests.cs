@@ -10,6 +10,7 @@ using NUnit.Framework;
 using System.IO;
 using System.Diagnostics;
 using NUnit.Engine;
+using TestCentric.Engine.Extensibility;
 
 namespace TestCentric.Engine.Services
 {
