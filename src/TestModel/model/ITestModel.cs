@@ -9,6 +9,7 @@ using System.Collections.Generic;
 namespace TestCentric.Gui.Model
 {
     using NUnit.Engine;
+    using TestCentric.Engine;
     using Services;
     using Settings;
 
@@ -35,6 +36,8 @@ namespace TestCentric.Gui.Model
         // List of available runtimes, based on the engine's list
         // but filtered to meet the GUI's requirements
         IList<IRuntimeFramework> AvailableRuntimes { get; }
+
+        IList<TestAgentInfo> AvailableAgents { get; }
 
         // Result Format Support
         IEnumerable<string> ResultFormats { get; }

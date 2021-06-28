@@ -14,25 +14,13 @@ namespace TestCentric.Engine.Services
     /// An object implementing ITestAgentProvider is able to provide
     /// test agents, which satisfy the criteria specified in a TestPackage.
     /// </summary>
-    public interface ITestAgentProvider
+    public interface ITestAgentProvider : ITestAgentInfo
     {
-        /// <summary>
-        /// AvailableAgents returns a list of information about every
-        /// agent available for use. It is used for display and for 
-        /// selection of the appropriate agent.
-        /// </summary>
-        /// <remarks>
-        /// The factory creates this list by combining info from
-        /// each agent source available.
-        /// </remarks>
-        IList<TestAgentInfo> AvailableAgents { get; }
-
         /// <summary>
         /// Returns true if an agent can be found, which is suitable
         /// for running the provided test package.
         /// </summary>
-        /// <param name="package"></param>
-        /// <returns></returns>
+        /// <param name="package">A TestPackage</param>
         bool IsAgentAvailable(TestPackage package);
 
         /// <summary>

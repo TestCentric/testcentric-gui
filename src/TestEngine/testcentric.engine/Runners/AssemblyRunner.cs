@@ -207,10 +207,10 @@ namespace TestCentric.Engine.Runners
         {
             if (_agent == null)
             {
-                _agent = _agentService.GetAgent(TestPackage);
-
-                if (_agent == null)
-                    throw new NUnitEngineException("Unable to acquire agent");
+                if (_agentService.IsAgentAvailable(TestPackage))
+                    _agent = _agentService.GetAgent(TestPackage);
+                else
+                    throw new NUnitEngineException($"No agent can be found for package {TestPackage.Name}.");
             }
 
             if (_remoteRunner == null)

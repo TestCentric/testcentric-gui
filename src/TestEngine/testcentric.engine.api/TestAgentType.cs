@@ -3,7 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-namespace TestCentric.Engine.Extensibility
+namespace TestCentric.Engine
 {
     /// <summary>
     /// <para>TestAgentType is an enumeration of the types

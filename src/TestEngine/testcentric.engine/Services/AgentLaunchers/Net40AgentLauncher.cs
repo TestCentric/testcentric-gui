@@ -16,10 +16,7 @@ namespace TestCentric.Engine.Services
 {
     public class Net40AgentLauncher : IAgentLauncher
     {
-        public TestAgentInfo AgentInfo => new TestAgentInfo(
-            GetType().Name,
-            TestAgentType.LocalProcess,
-            "net-4.0");
+        public TestAgentInfo AgentInfo => new TestAgentInfo(GetType().Name, TestAgentType.LocalProcess);
 
         public bool CanCreateProcess(TestPackage package)
         {
