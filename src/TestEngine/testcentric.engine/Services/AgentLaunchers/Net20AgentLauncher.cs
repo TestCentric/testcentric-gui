@@ -18,8 +18,7 @@ namespace TestCentric.Engine.Services
     {
         public TestAgentInfo AgentInfo => new TestAgentInfo(
             GetType().Name,
-            TestAgentType.LocalProcess,
-            "net-2.0");
+            TestAgentType.LocalProcess);
 
         public bool CanCreateProcess(TestPackage package)
         {

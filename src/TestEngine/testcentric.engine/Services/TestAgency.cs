@@ -35,7 +35,6 @@ namespace TestCentric.Engine.Services
 
         private readonly AgentStore _agentStore = new AgentStore();
 
-        private IRuntimeFrameworkService _runtimeService;
         private ExtensionService _extensionService;
 
         private readonly List<IAgentLauncher> _launchers = new List<IAgentLauncher>();
@@ -55,12 +54,51 @@ namespace TestCentric.Engine.Services
             _tcpTransport = new TestAgencyTcpTransport(this, port);
         }
 
+        #region ITestAgentInfo Implementation
+
+        /// <summary>
+        /// Gets a list containing <see cref="TestAgentInfo"/> for all available agents.
+        /// </summary>
+        public IList<TestAgentInfo> GetAvailableAgents()
+        {
+            var agents = new List<TestAgentInfo>();
+
+            foreach (var launcher in _launchers)
+                agents.Add(launcher.AgentInfo);
+
+            return agents;
+        }
+
+        /// <summary>
+        /// Gets a list containing <see cref="TestAgentInfo"/> for any available agents,
+        /// which are able to handle the specified package.
+        /// </summary>
+        /// <param name="package">A Testpackage</param>
+        /// <returns>
+        /// A list of suitable agents for running the package or an empty
+        /// list if no agent is available for the package.
+        /// </returns>
+        public IList<TestAgentInfo> GetAvailableAgents(TestPackage package)
+        {
+            var agents = new List<TestAgentInfo>();
+
+            foreach (var launcher in _launchers)
+                if (launcher.CanCreateProcess(package))
+                    agents.Add(launcher.AgentInfo);
+
+            return agents;
+        }
+
+        #endregion
+
         #region ITestAgentProvider Implementation
 
-        List<TestAgentInfo> _availableAgents = new List<TestAgentInfo>();
-        IList<TestAgentInfo> ITestAgentProvider.AvailableAgents => _availableAgents;
-
-        bool ITestAgentProvider.IsAgentAvailable(TestPackage package)
+        /// <summary>
+        /// Returns true if an agent can be found, which is suitable
+        /// for running the provided test package.
+        /// </summary>
+        /// <param name="package">A TestPackage</param>
+        public bool IsAgentAvailable(TestPackage package)
         {
             foreach (var launcher in _launchers)
                 if (launcher.CanCreateProcess(package))
@@ -69,19 +107,20 @@ namespace TestCentric.Engine.Services
             return false;
         }
 
+        /// <summary>
+        /// Return an agent, which best matches the criteria defined
+        /// in a TestPackage.
+        /// </summary>
+        /// <param name="package">The test package to be run</param>
+        /// <returns>An ITestAgent</returns>
+        /// <exception cref="ArgumentException">If no agent is available.</exception>
         public ITestAgent GetAgent(TestPackage package)
         {
             // Target Runtime must be specified by this point
             string runtimeSetting = package.GetSetting(EnginePackageSettings.TargetRuntimeFramework, "");
             Guard.OperationValid(runtimeSetting.Length > 0, "LaunchAgentProcess called with no runtime specified");
 
-            // If target runtime is not available, something went wrong earlier
             var targetRuntime = RuntimeFramework.Parse(runtimeSetting);
-            if (!_runtimeService.IsAvailable(targetRuntime.Id))
-                throw new ArgumentException(
-                    string.Format("The {0} framework is not available", targetRuntime),
-                    "framework");
-
             var agentId = Guid.NewGuid();
             string agencyUrl = targetRuntime.FrameworkName.Identifier == ".NETFramework" ? RemotingUrl : TcpEndPoint;
             var agentProcess = CreateAgentProcess(agentId, agencyUrl, package);
@@ -132,6 +171,18 @@ namespace TestCentric.Engine.Services
             return null;
         }
 
+        /// <summary>
+        /// Releases the test agent back to the supplier, which provided it.
+        /// </summary>
+        /// <param name="agent">An agent previously provided by a call to GetAgent.</param>
+        /// <exception cref="InvalidOperationException">
+        /// If agent was never provided by the factory or was previously released.
+        /// </exception>
+        /// <remarks>
+        /// Disposing an agent also releases it. However, this should not
+        /// normally be done by the client, but by the source that created
+        /// the agent in the first place.
+        /// </remarks>
         public void ReleaseAgent(ITestAgent agent)
         {
             Process process;
@@ -208,36 +259,31 @@ namespace TestCentric.Engine.Services
 
         public void StartService()
         {
-            _runtimeService = ServiceContext.GetService<IRuntimeFrameworkService>();
             _extensionService = ServiceContext.GetService<ExtensionService>();
-            if (_runtimeService == null)
+
+            try
+            {
+                // Add plugable agents first, so they can override the builtins
+                if (_extensionService != null)
+                    foreach (IAgentLauncher launcher in _extensionService.GetExtensions<IAgentLauncher>())
+                        _launchers.Add(launcher);
+
+                _launchers.Add(new Net20AgentLauncher());
+                _launchers.Add(new Net40AgentLauncher());
+                _launchers.Add(new NetCore21AgentLauncher());
+                _launchers.Add(new NetCore31AgentLauncher());
+                _launchers.Add(new Net50AgentLauncher());
+
+                _remotingTransport.Start();
+                _tcpTransport.Start();
+
+                Status = ServiceStatus.Started;
+            }
+            catch
+            {
                 Status = ServiceStatus.Error;
-            else
-                try
-                {
-                    // Add plugable agents first, so they can override the builtins
-                    if (_extensionService != null)
-                        foreach (IAgentLauncher launcher in _extensionService.GetExtensions<IAgentLauncher>())
-                            _launchers.Add(launcher);
-
-                    _launchers.Add(new Net20AgentLauncher());
-                    _launchers.Add(new Net40AgentLauncher());
-                    _launchers.Add(new NetCore21AgentLauncher());
-                    _launchers.Add(new NetCore31AgentLauncher());
-                    _launchers.Add(new Net50AgentLauncher());
-
-                    _remotingTransport.Start();
-                    _tcpTransport.Start();
-                    Status = ServiceStatus.Started;
-
-                    foreach (var launcher in _launchers)
-                        _availableAgents.Add(launcher.AgentInfo);
-                }
-                catch
-                {
-                    Status = ServiceStatus.Error;
-                    throw;
-                }
+                throw;
+            }
         }
 
         #endregion
