@@ -21,7 +21,7 @@ namespace TestCentric.Engine.Runners
 
         private ITestAgent _agent;
         private ITestEngineRunner _remoteRunner;
-        private ITestAgentService _agentService;
+        private TestAgentService _agentService;
 
         /// <summary>
         /// Construct a new AssemblyRunnerRunner
@@ -207,10 +207,10 @@ namespace TestCentric.Engine.Runners
         {
             if (_agent == null)
             {
-                _agent = _agentService.GetAgent(TestPackage);
-
-                if (_agent == null)
-                    throw new NUnitEngineException("Unable to acquire agent");
+                if (_agentService.IsAgentAvailable(TestPackage))
+                    _agent = _agentService.GetAgent(TestPackage);
+                else
+                    throw new NUnitEngineException($"No agent can be found for package {TestPackage.Name}.");
             }
 
             if (_remoteRunner == null)

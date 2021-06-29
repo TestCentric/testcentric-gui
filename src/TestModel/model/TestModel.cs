@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.IO;
 using NUnit.Engine;
 using TestCentric.Common;
+using TestCentric.Engine;
 
 namespace TestCentric.Gui.Model
 {
@@ -37,7 +38,7 @@ namespace TestCentric.Gui.Model
 
         #region Constructor and Creation
 
-        public TestModel(ITestEngine testEngine, string applicationPrefix=null)
+        public TestModel(ITestEngine testEngine, string applicationPrefix = null)
         {
             TestEngine = testEngine;
             _settingsService = new SettingsService(true);
@@ -49,6 +50,8 @@ namespace TestCentric.Gui.Model
             RecentFiles = new RecentFiles(_settingsService, applicationPrefix);
 
             Services = new TestServices(testEngine);
+
+            AvailableAgents = Services.TestAgentService.GetAvailableAgents();
 
             foreach (var node in Services.ExtensionService.GetExtensionNodes(PROJECT_LOADER_EXTENSION_PATH))
             {
@@ -111,6 +114,8 @@ namespace TestCentric.Gui.Model
         public ITestServices Services { get; }
 
         public UserSettings Settings { get; }
+
+        public IList<TestAgentInfo> AvailableAgents { get; }
 
         public RecentFiles RecentFiles { get; }
 

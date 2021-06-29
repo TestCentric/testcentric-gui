@@ -80,7 +80,6 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.ToolStripMenuItem decreaseFixedFontMenuItem;
         private System.Windows.Forms.ToolStripMenuItem restoreFixedFontMenuItem;
         private System.Windows.Forms.ToolStripMenuItem reloadTestsMenuItem;
-        private ToolStripMenuItem runtimeMenuItem;
         private ToolStripMenuItem addTestFileMenuItem;
         private ToolStripMenuItem extensionsMenuItem;
         private ToolStripMenuItem testCentricHelpMenuItem;
@@ -93,7 +92,6 @@ namespace TestCentric.Gui.Views
         private ToolStripMenuItem openWorkDirectoryMenuItem;
         private ToolStripMenuItem saveResultsAsMenuItem;
         private ToolStripMenuItem runParametersMenuItem;
-        private ToolStripMenuItem runtimeDummyMenuItem;
         private ToolStripMenuItem forceStopMenuItem;
         private Button forceStopButton;
         private ToolStripSeparator toolStripSeparator1;
@@ -108,6 +106,8 @@ namespace TestCentric.Gui.Views
         private ToolStripSeparator toolStripSeparator6;
         private ToolStripSeparator toolStripSeparator7;
         private ToolStripMenuItem runAsX86MenuItem;
+        private ToolStripMenuItem selectAgentMenu;
+        private ToolStripMenuItem selectAgentDummyMenuItem;
         private TextOutputView textOutputView1;
 
         #endregion
@@ -136,8 +136,7 @@ namespace TestCentric.Gui.Views
             CloseCommand = new CommandMenuElement(closeMenuItem);
             AddTestFilesCommand = new CommandMenuElement(addTestFileMenuItem);
             ReloadTestsCommand = new CommandMenuElement(reloadTestsMenuItem);
-            RuntimeMenu = new PopupMenuElement(runtimeMenuItem);
-            //SelectedRuntime = new CheckedMenuGroup(runtimeMenuItem);
+            SelectAgentMenu = new PopupMenuElement(selectAgentMenu);
             RunAsX86 = new CheckedMenuElement(runAsX86MenuItem);
             RecentFilesMenu = new PopupMenuElement(recentFilesMenu);
             ExitCommand = new CommandMenuElement(exitMenuItem);
@@ -208,9 +207,10 @@ namespace TestCentric.Gui.Views
             this.addTestFileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.reloadTestsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectAgentMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectAgentDummyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.runtimeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.runtimeDummyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.runAsX86MenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.recentFilesMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.recentFilesDummyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -278,7 +278,6 @@ namespace TestCentric.Gui.Views
             this.treeView = new TestCentric.Gui.Views.TestTreeView();
             this.categoryPage = new System.Windows.Forms.TabPage();
             this.categoryPanel = new System.Windows.Forms.Panel();
-            this.runAsX86MenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMenu.SuspendLayout();
             this.rightPanel.SuspendLayout();
             this.resultTabs.SuspendLayout();
@@ -324,8 +323,8 @@ namespace TestCentric.Gui.Views
             this.addTestFileMenuItem,
             this.toolStripSeparator1,
             this.reloadTestsMenuItem,
+            this.selectAgentMenu,
             this.toolStripSeparator2,
-            this.runtimeMenuItem,
             this.runAsX86MenuItem,
             this.toolStripSeparator3,
             this.recentFilesMenu,
@@ -366,24 +365,30 @@ namespace TestCentric.Gui.Views
             this.reloadTestsMenuItem.Size = new System.Drawing.Size(180, 22);
             this.reloadTestsMenuItem.Text = "&Reload Tests";
             // 
+            // selectAgentMenuItem
+            // 
+            this.selectAgentMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.selectAgentDummyMenuItem});
+            this.selectAgentMenu.Name = "selectAgentMenuItem";
+            this.selectAgentMenu.Size = new System.Drawing.Size(180, 22);
+            this.selectAgentMenu.Text = "Select Agent";
+            // 
+            // selectAgentDummyMenuItem
+            // 
+            this.selectAgentDummyMenuItem.Name = "selectAgentDummyMenuItem";
+            this.selectAgentDummyMenuItem.Size = new System.Drawing.Size(229, 22);
+            this.selectAgentDummyMenuItem.Text = "Dummy entry to force Popup";
+            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
             // 
-            // runtimeMenuItem
+            // runAsX86MenuItem
             // 
-            this.runtimeMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.runtimeDummyMenuItem});
-            this.runtimeMenuItem.Name = "runtimeMenuItem";
-            this.runtimeMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.runtimeMenuItem.Text = "Select R&untime";
-            // 
-            // runtimeDummyMenuItem
-            // 
-            this.runtimeDummyMenuItem.Name = "runtimeDummyMenuItem";
-            this.runtimeDummyMenuItem.Size = new System.Drawing.Size(232, 22);
-            this.runtimeDummyMenuItem.Text = "Dummy  entry to force Popup";
+            this.runAsX86MenuItem.Name = "runAsX86MenuItem";
+            this.runAsX86MenuItem.Size = new System.Drawing.Size(180, 22);
+            this.runAsX86MenuItem.Text = "Run as X86";
             // 
             // toolStripSeparator3
             // 
@@ -922,12 +927,6 @@ namespace TestCentric.Gui.Views
             this.categoryPanel.Size = new System.Drawing.Size(213, 375);
             this.categoryPanel.TabIndex = 0;
             // 
-            // runAsX86MenuItem
-            // 
-            this.runAsX86MenuItem.Name = "runAsX86MenuItem";
-            this.runAsX86MenuItem.Size = new System.Drawing.Size(180, 22);
-            this.runAsX86MenuItem.Text = "Run as X86";
-            // 
             // TestCentricMainView
             // 
             this.ClientSize = new System.Drawing.Size(744, 431);
@@ -1000,7 +999,7 @@ namespace TestCentric.Gui.Views
         public ICommand CloseCommand { get; }
         public ICommand AddTestFilesCommand { get; }
         public ICommand ReloadTestsCommand { get; }
-        public IPopup RuntimeMenu { get; }
+        public IPopup SelectAgentMenu { get; }
         public IChecked RunAsX86 { get; private set; }
         public IPopup RecentFilesMenu { get; }
         public ICommand ExitCommand { get; }

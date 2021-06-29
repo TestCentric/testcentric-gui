@@ -5,6 +5,7 @@
 
 using System;
 using NUnit.Engine;
+using TestCentric.Engine;
 
 namespace TestCentric.TestUtilities.Fakes
 {
@@ -18,6 +19,7 @@ namespace TestCentric.TestUtilities.Fakes
         private ExtensionService _extensions = new ExtensionService();
         private ResultService _resultService = new ResultService();
         private AvailableRuntimesService _availableRuntimes = new AvailableRuntimesService();
+        private ITestAgentInfo _testAgentInfo = new TestAgentInfoService();
 
         #endregion
 
@@ -28,6 +30,7 @@ namespace TestCentric.TestUtilities.Fakes
             _services.AddService<IExtensionService>(_extensions);
             _services.AddService<IResultService>(_resultService);
             _services.AddService<IAvailableRuntimes>(_availableRuntimes);
+            _services.AddService<ITestAgentInfo>(_testAgentInfo);
         }
 
         #endregion

@@ -51,7 +51,7 @@ namespace TestCentric.Gui.Presenters
 
         private readonly RecentFiles _recentFiles;
 
-        private readonly RuntimeSelectionController _runtimeSelectionController;
+        private AgentSelectionController _agentSelectionController;
 
         private List<string> _resultFormats = new List<string>();
 
@@ -68,7 +68,8 @@ namespace TestCentric.Gui.Presenters
 
             _settings = _model.Settings;
             _recentFiles = _model.RecentFiles;
-            _runtimeSelectionController = new RuntimeSelectionController(_view.RuntimeMenu, _model);
+
+            _agentSelectionController = new AgentSelectionController(_model, _view);
 
             _view.Font = _settings.Gui.Font;
             _view.ResultTabs.SelectedIndex = _settings.Gui.SelectedTab;
@@ -312,9 +313,10 @@ namespace TestCentric.Gui.Presenters
                 _view.CloseCommand.Enabled = isPackageLoaded && !isTestRunning;
 
                 _view.ReloadTestsCommand.Enabled = isPackageLoaded && !isTestRunning;
-                _view.RunAsX86.Enabled = isPackageLoaded && !isTestRunning;
 
-                _view.RuntimeMenu.Visible = _model.AvailableRuntimes.Count > 1;
+                _view.SelectAgentMenu.Enabled = _agentSelectionController.AllowAgentSelection();
+
+                _view.RunAsX86.Enabled = isPackageLoaded && !isTestRunning;
 
                 _view.RecentFilesMenu.Enabled = !isTestRunning;
 
@@ -324,12 +326,15 @@ namespace TestCentric.Gui.Presenters
                 //}
             };
 
-            _view.RuntimeMenu.Popup += () => _runtimeSelectionController.PopulateMenu();
-
             _view.OpenCommand.Execute += () => OpenProject();
             _view.CloseCommand.Execute += () => CloseProject();
             _view.AddTestFilesCommand.Execute += () => AddTestFiles();
             _view.ReloadTestsCommand.Execute += () => ReloadTests();
+
+            _view.SelectAgentMenu.Popup += () =>
+            {
+                _agentSelectionController.PopulateMenu();
+            };
 
             _view.RunAsX86.CheckedChanged += () =>
             {
@@ -672,7 +677,6 @@ namespace TestCentric.Gui.Presenters
             _view.CloseCommand.Enabled = testLoaded && !testRunning;
             _view.AddTestFilesCommand.Enabled = testLoaded && !testRunning;
             _view.ReloadTestsCommand.Enabled = testLoaded && !testRunning;
-            _view.RuntimeMenu.Enabled = testLoaded && !testRunning && !testLoading && _runtimeSelectionController.AllowRuntimeSelection();
             _view.RecentFilesMenu.Enabled = !testRunning && !testLoading;
             _view.ExitCommand.Enabled = !testLoading;
             _view.SaveResultsCommand.Enabled = _view.SaveResultsAsMenu.Enabled = !testRunning && !testLoading && _model.HasResults;

@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 using NUnit.Engine;
+using TestCentric.Engine.Extensibility;
 using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Services
@@ -17,8 +18,7 @@ namespace TestCentric.Engine.Services
     {
         public TestAgentInfo AgentInfo => new TestAgentInfo(
             GetType().Name,
-            TestAgentType.LocalProcess,
-            "net-2.0");
+            TestAgentType.LocalProcess);
 
         public bool CanCreateProcess(TestPackage package)
         {

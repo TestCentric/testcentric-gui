@@ -23,7 +23,7 @@ var baseFiles = new string[]
     "nunit.uiexception.dll",
     "TestCentric.Gui.Model.dll",
     "nunit.engine.api.dll",
-    "testcentric.agent.api.dll",
+    "testcentric.engine.api.dll",
     "testcentric.engine.metadata.dll",
     "testcentric.engine.core.dll",
     "testcentric.engine.dll",
@@ -39,7 +39,7 @@ var PdbFiles = new string[]
     "Experimental.Gui.Runner.pdb",
     "nunit.uiexception.pdb",
     "TestCentric.Gui.Model.pdb",
-    "testcentric.agent.api.pdb",
+    "testcentric.engine.api.pdb",
     "testcentric.engine.core.pdb",
     "testcentric.engine.pdb",
 };

@@ -5,6 +5,7 @@
 
 using System;
 using NUnit.Engine;
+using TestCentric.Engine;
 
 namespace TestCentric.Gui.Model
 {
@@ -26,6 +27,7 @@ namespace TestCentric.Gui.Model
 
             ExtensionService = GetService<IExtensionService>();
             ResultService = GetService<IResultService>();
+            TestAgentService = GetService<ITestAgentInfo>();
         }
 
         #region ITestServices Implementation
@@ -33,6 +35,8 @@ namespace TestCentric.Gui.Model
         public IExtensionService ExtensionService { get; }
 
         public IResultService ResultService { get; }
+
+        public ITestAgentInfo TestAgentService { get; }
 
         #endregion
 

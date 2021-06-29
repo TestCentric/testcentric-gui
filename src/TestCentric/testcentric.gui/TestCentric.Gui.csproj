@@ -21,6 +21,7 @@
         <ProjectReference Include="..\..\Common\components\TestCentric.Gui.Components.csproj">
             <Name>TestCentric.Gui.Components</Name>
         </ProjectReference>
+        <ProjectReference Include="..\..\TestEngine\testcentric.engine.api\testcentric.engine.api.csproj" />
         <ProjectReference Include="..\..\TestModel\model\TestCentric.Gui.Model.csproj">
             <Name>TestCentric.Gui.Model</Name>
         </ProjectReference>

@@ -134,16 +134,16 @@ public class BuildParameters
 	public string NuGetPackageName => NUGET_PACKAGE_NAME + "." + PackageVersion + ".nupkg";
 	public string ChocolateyPackageName => PACKAGE_NAME + "." + PackageVersion + ".nupkg";
 	public string EngineCorePackageName => ENGINE_CORE_PACKAGE_NAME + "." + PackageVersion + ".nupkg";
-	public string AgentApiPackageName => AGENT_API_PACKAGE_NAME + "." + PackageVersion + ".nupkg";
+	public string EngineApiPackageName => ENGINE_API_PACKAGE_NAME + "." + PackageVersion + ".nupkg";
 
 	public FilePath ZipPackage => new FilePath(PackageDirectory + ZipPackageName);
 	public FilePath NuGetPackage => new FilePath(PackageDirectory + NuGetPackageName);
 	public FilePath ChocolateyPackage => new FilePath(PackageDirectory + ChocolateyPackageName);
 	public FilePath EngineCorePackage => new FilePath(PackageDirectory + EngineCorePackageName);
-	public FilePath AgentApiPackage => new FilePath(PackageDirectory + AgentApiPackageName);
+	public FilePath EngineApiPackage => new FilePath(PackageDirectory + EngineApiPackageName);
 
 	public string GitHubReleaseAssets => _context.IsRunningOnWindows()
-		? $"\"{ZipPackage},{NuGetPackage},{ChocolateyPackage},{EngineCorePackage},{AgentApiPackage}\""
+		? $"\"{ZipPackage},{NuGetPackage},{ChocolateyPackage},{EngineCorePackage},{EngineApiPackage}\""
         : $"\"{ZipPackage},{NuGetPackage}\"";
 
 	public string MyGetPushUrl => MYGET_PUSH_URL;
