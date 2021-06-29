@@ -317,12 +317,15 @@ namespace TestCentric.Engine.Services
 
         private Process CreateAgentProcess(Guid agentId, string agencyUrl, TestPackage package)
         {
+            // Check to see if a specific agent was selected
+            string selectedAgentName = package.GetSetting(EnginePackageSettings.SelectedAgentName, "DEFAULT");
+
             foreach (var launcher in _launchers)
             {
                 var launcherName = launcher.GetType().Name;
                 log.Debug($"Examining launcher {launcherName}");
 
-                if (launcher.CanCreateProcess(package))
+                if (launcherName == selectedAgentName || selectedAgentName == "DEFAULT" && launcher.CanCreateProcess(package))
                 {
                     log.Info($"Selected launcher {launcherName}");
                     return launcher.CreateProcess(agentId, agencyUrl, package);
