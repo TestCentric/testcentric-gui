@@ -106,6 +106,8 @@ namespace TestCentric.Gui.Views
         private ToolStripSeparator toolStripSeparator6;
         private ToolStripSeparator toolStripSeparator7;
         private ToolStripMenuItem runAsX86MenuItem;
+        private ToolStripMenuItem selectAgentMenu;
+        private ToolStripMenuItem selectAgentDummyMenuItem;
         private TextOutputView textOutputView1;
 
         #endregion
@@ -134,6 +136,7 @@ namespace TestCentric.Gui.Views
             CloseCommand = new CommandMenuElement(closeMenuItem);
             AddTestFilesCommand = new CommandMenuElement(addTestFileMenuItem);
             ReloadTestsCommand = new CommandMenuElement(reloadTestsMenuItem);
+            SelectAgentMenu = new PopupMenuElement(selectAgentMenu);
             RunAsX86 = new CheckedMenuElement(runAsX86MenuItem);
             RecentFilesMenu = new PopupMenuElement(recentFilesMenu);
             ExitCommand = new CommandMenuElement(exitMenuItem);
@@ -204,6 +207,8 @@ namespace TestCentric.Gui.Views
             this.addTestFileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.reloadTestsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectAgentMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectAgentDummyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.runAsX86MenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -318,6 +323,7 @@ namespace TestCentric.Gui.Views
             this.addTestFileMenuItem,
             this.toolStripSeparator1,
             this.reloadTestsMenuItem,
+            this.selectAgentMenu,
             this.toolStripSeparator2,
             this.runAsX86MenuItem,
             this.toolStripSeparator3,
@@ -358,6 +364,20 @@ namespace TestCentric.Gui.Views
             this.reloadTestsMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
             this.reloadTestsMenuItem.Size = new System.Drawing.Size(180, 22);
             this.reloadTestsMenuItem.Text = "&Reload Tests";
+            // 
+            // selectAgentMenuItem
+            // 
+            this.selectAgentMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.selectAgentDummyMenuItem});
+            this.selectAgentMenu.Name = "selectAgentMenuItem";
+            this.selectAgentMenu.Size = new System.Drawing.Size(180, 22);
+            this.selectAgentMenu.Text = "Select Agent";
+            // 
+            // selectAgentDummyMenuItem
+            // 
+            this.selectAgentDummyMenuItem.Name = "selectAgentDummyMenuItem";
+            this.selectAgentDummyMenuItem.Size = new System.Drawing.Size(229, 22);
+            this.selectAgentDummyMenuItem.Text = "Dummy entry to force Popup";
             // 
             // toolStripSeparator2
             // 
@@ -979,6 +999,7 @@ namespace TestCentric.Gui.Views
         public ICommand CloseCommand { get; }
         public ICommand AddTestFilesCommand { get; }
         public ICommand ReloadTestsCommand { get; }
+        public IPopup SelectAgentMenu { get; }
         public IChecked RunAsX86 { get; private set; }
         public IPopup RecentFilesMenu { get; }
         public ICommand ExitCommand { get; }
