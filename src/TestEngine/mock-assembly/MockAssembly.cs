@@ -245,6 +245,7 @@ namespace TestCentric.Tests
     public class FixtureWithTestCases
     {
 #if NET5_0
+        // TODO: Make this work in .NET 5.0
         public const int Tests = 0;
         public const int Suites = 0;
 #else

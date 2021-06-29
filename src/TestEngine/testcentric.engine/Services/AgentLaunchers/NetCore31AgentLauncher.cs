@@ -9,16 +9,14 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Text;
 using NUnit.Engine;
+using TestCentric.Engine.Extensibility;
 using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Services
 {
     public class NetCore31AgentLauncher : IAgentLauncher
     {
-        public TestAgentInfo AgentInfo => new TestAgentInfo(
-            GetType().Name,
-            TestAgentType.LocalProcess,
-            "netcore-3.1");
+        public TestAgentInfo AgentInfo => new TestAgentInfo(GetType().Name, TestAgentType.LocalProcess);
 
         public bool CanCreateProcess(TestPackage package)
         {

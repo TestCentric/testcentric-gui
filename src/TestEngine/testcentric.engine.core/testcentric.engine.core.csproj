@@ -19,9 +19,6 @@
   <ItemGroup>
     <Compile Include="..\CommonEngineAssemblyInfo.cs" Link="Properties\CommonEngineAssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-	<ProjectReference Include="..\testcentric.agent.api\testcentric.agent.api.csproj" />
-  </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
 	<PackageReference Include="Microsoft.Win32.Registry.AccessControl" Version="4.7.0" />
   </ItemGroup>

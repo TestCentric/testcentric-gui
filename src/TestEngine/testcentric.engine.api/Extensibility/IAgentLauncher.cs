@@ -9,7 +9,7 @@ using System.Diagnostics;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
 
-namespace TestCentric.Engine.Services
+namespace TestCentric.Engine.Extensibility
 {
     [TypeExtensionPoint(
         Description = "Launches an Agent Process for supported target runtimes")]

@@ -3,67 +3,39 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-#if !NETCOREAPP2_1
 using System.Linq;
+using NUnit.Engine;
 using NUnit.Framework;
 
 namespace TestCentric.Engine.Services
 {
-    using Fakes;
-    using NUnit.Engine;
-
-    public class TestAgencyTests
+    public class TestAgentServiceTests
     {
         private ServiceContext _services;
-        private TestAgency _testAgency;
-
-        public static readonly string[] BUILTIN_AGENTS = new string[]
-        {
-            "Net20AgentLauncher", "Net40AgentLauncher", "NetCore21AgentLauncher", "NetCore31AgentLauncher", "Net50AgentLauncher"
-        };
+        private ITestAgentInfo _agentService;
 
         [SetUp]
-        public void CreateTestAgency()
+        public void StartServices()
         {
             _services = new ServiceContext();
-            _services.Add(new TestAgency("TestAgencyTest", 0));
+            _services.Add(new TestAgency("TestAgentServiceTests", 0));
+            _services.Add(new TestAgentService());
             _services.ServiceManager.StartServices();
-            _testAgency = _services.GetService<TestAgency>();
-            Assert.That(_testAgency.Status, Is.EqualTo(ServiceStatus.Started));
+
+            _agentService = _services.GetService<ITestAgentInfo>();
         }
 
         [TearDown]
         public void StopServices()
         {
-            _testAgency.StopService();
-            Assert.That(_testAgency.Status, Is.EqualTo(ServiceStatus.Stopped));
+            _services.ServiceManager.StopServices();
         }
 
         [Test]
         public void AvailableAgents()
         {
-            Assert.That(_testAgency.GetAvailableAgents().Select((info) => info.AgentName),
-                Is.EqualTo(BUILTIN_AGENTS));
-        }
-
-        [TestCase("net-2.0", "Net20AgentLauncher", "Net40AgentLauncher")]
-        [TestCase("net-3.5", "Net20AgentLauncher", "Net40AgentLauncher")]
-        [TestCase("net-4.0", "Net40AgentLauncher")]
-        [TestCase("net-4.8", "Net40AgentLauncher")]
-        [TestCase("netcore-1.1", "NetCore21AgentLauncher", "NetCore31AgentLauncher", "Net50AgentLauncher")]
-        [TestCase("netcore-2.0", "NetCore21AgentLauncher", "NetCore31AgentLauncher", "Net50AgentLauncher")]
-        [TestCase("netcore-2.1", "NetCore21AgentLauncher", "NetCore31AgentLauncher", "Net50AgentLauncher")]
-        [TestCase("netcore-3.0", "NetCore31AgentLauncher", "Net50AgentLauncher")]
-        [TestCase("netcore-3.1", "NetCore31AgentLauncher", "Net50AgentLauncher")]
-        [TestCase("netcore-5.0", "Net50AgentLauncher")]
-        public void GetAgentsForAssemblySubPackage(string targetRuntime, params string[] expectedAgents)
-        {
-            // Using the string constructor, which is how a subpackage is created
-            var package = new TestPackage("some.dll");
-            package.AddSetting(EnginePackageSettings.TargetRuntimeFramework, targetRuntime);
-
-            Assert.That(_testAgency.GetAvailableAgents(package).Select((info) => info.AgentName),
-                Is.EqualTo(expectedAgents));
+            Assert.That(_agentService.GetAvailableAgents().Select((info) => info.AgentName),
+                Is.EqualTo(TestAgencyTests.BUILTIN_AGENTS));
         }
 
         [TestCase("net-2.0", "Net20AgentLauncher", "Net40AgentLauncher")]
@@ -80,8 +52,8 @@ namespace TestCentric.Engine.Services
         {
             var package = new TestPackage(new string[] { "some.dll" });
             package.SubPackages[0].AddSetting(EnginePackageSettings.TargetRuntimeFramework, targetRuntime);
-
-            Assert.That(_testAgency.GetAvailableAgents(package).Select((info) => info.AgentName),
+            
+            Assert.That(_agentService.GetAvailableAgents(package).Select((info) => info.AgentName),
                 Is.EqualTo(expectedAgents));
         }
 
@@ -100,9 +72,8 @@ namespace TestCentric.Engine.Services
             package.SubPackages[0].AddSetting(EnginePackageSettings.TargetRuntimeFramework, targetRuntime1);
             package.SubPackages[1].AddSetting(EnginePackageSettings.TargetRuntimeFramework, targetRuntime2);
 
-            Assert.That(_testAgency.GetAvailableAgents(package).Select((info) => info.AgentName),
+            Assert.That(_agentService.GetAvailableAgents(package).Select((info) => info.AgentName),
                 Is.EqualTo(expectedAgents));
         }
     }
 }
-#endif
