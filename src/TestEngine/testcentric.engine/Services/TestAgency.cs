@@ -6,6 +6,7 @@
 #if !NETSTANDARD2_0
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Diagnostics;
 using System.Net.Sockets;
@@ -78,15 +79,41 @@ namespace TestCentric.Engine.Services
         /// A list of suitable agents for running the package or an empty
         /// list if no agent is available for the package.
         /// </returns>
-        public IList<TestAgentInfo> GetAvailableAgents(TestPackage package)
+        public IList<TestAgentInfo> GetAvailableAgents(TestPackage targetPackage)
         {
-            var agents = new List<TestAgentInfo>();
+            Guard.ArgumentNotNull(targetPackage, nameof(targetPackage));
 
-            foreach (var launcher in _launchers)
-                if (launcher.CanCreateProcess(package))
-                    agents.Add(launcher.AgentInfo);
+            // Initialize lists with ALL available agents
+            var availableAgents = new List<TestAgentInfo>(GetAvailableAgents());
+            var validAgentNames = new List<string>(availableAgents.Select(info => info.AgentName));
 
-            return agents;
+            // Look at each included assembly package to see if any names should be removed
+            foreach (var assemblyPackage in targetPackage.Select(p => p.IsAssemblyPackage()))
+            {
+                // Collect names of agents that work for each assembly
+                var agentsForAssembly = new List<string>();
+                foreach (var launcher in _launchers)
+                    if (launcher.CanCreateProcess(assemblyPackage))
+                        agentsForAssembly.Add(launcher.AgentInfo.AgentName);
+
+                // Remove agents from final result if they don't work for this assembly
+                for (int index = validAgentNames.Count - 1; index >= 0; index--)
+                {
+                    var agentName = validAgentNames[index];
+                    if (!agentsForAssembly.Contains(agentName))
+                        validAgentNames.RemoveAt(index);
+                }
+            }
+
+            // Finish up by deleting all unsuitable entries form the List of TestAgentInfo
+            for (int index = availableAgents.Count - 1; index >= 0; index--)
+            {
+                var agentName = availableAgents[index].AgentName;
+                if (!validAgentNames.Contains(agentName))
+                    availableAgents.RemoveAt(index);
+            }
+
+            return availableAgents;
         }
 
         #endregion
