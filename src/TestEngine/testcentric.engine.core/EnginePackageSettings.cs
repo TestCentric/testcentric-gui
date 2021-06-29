@@ -102,6 +102,12 @@ namespace TestCentric
         public const string TargetRuntimeFramework = "TargetRuntimeFramework";
 
         /// <summary>
+        /// The name of the agent selected for use by the user, overriding
+        /// the default agent, which would otherwise be used.
+        /// </summary>
+        public const string SelectedAgentName = "SelectedAgentName";
+
+        /// <summary>
         /// Bool flag indicating that the test should be run in a 32-bit process 
         /// on a 64-bit system. By default, NUNit runs in a 64-bit process on
         /// a 64-bit system. Ignored if set on a 32-bit system.
