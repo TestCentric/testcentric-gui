@@ -447,16 +447,31 @@ Task("CreateDraftRelease")
 			// Exit if any PackageTests failed
 			CheckTestErrors(ref ErrorDetail);
 
-			string releaseName = $"TestCentric {parameters.BuildVersion.SemVer}";
-			string milestone = GetMilestoneFromBranchName(parameters.BranchName);
+			// NOTE: Since this is a release branch, the pre-release label
+			// is "pre", which we don't want to use for the draft release.
+			// The branch name contains the full information to be used
+			// for both the name of the draft release and the milestone,
+			// i.e. release-2.0.0, release-2.0.0-beta2, etc.
+			string milestone = parameters.BranchName.Substring(8);
+			string releaseName = $"TestCentric {milestone}";
 
-			Information($"Creating draft release {releaseName} from milestone {milestone}");
+			Information($"Creating draft release for {releaseName}");
 
-			GitReleaseManagerCreate(parameters.GitHubAccessToken, GITHUB_OWNER, GITHUB_REPO, new GitReleaseManagerCreateSettings()
+			try
 			{
-				Name = releaseName,
-				Milestone = milestone
-			});
+				GitReleaseManagerCreate(parameters.GitHubAccessToken, GITHUB_OWNER, GITHUB_REPO, new GitReleaseManagerCreateSettings()
+				{
+					Name = releaseName,
+					Milestone = milestone
+				});
+			}
+			catch
+            {
+				Error($"Unable to create draft release for {releaseName}.");
+				Error($"Check that there is a {milestone} milestone with at least one closed issue.");
+				Error("");
+				throw;
+            }
 
 			GitReleaseManagerExport(parameters.GitHubAccessToken, GITHUB_OWNER, GITHUB_REPO, "DraftRelease.md",
 				new GitReleaseManagerExportSettings() { TagName = milestone });
@@ -466,27 +481,6 @@ Task("CreateDraftRelease")
 			Information("Skipping Release creation because this is not a release branch");
 		}
 	});
-
-	private string GetMilestoneFromBranchName(string branchName)
-	{
-		Version versionFromBranch;
-		if (!Version.TryParse(branchName.Substring(8), out versionFromBranch))
-		{	string msg = $"Branch name {branchName} incorporates an invalid version format. ";
-			if (branchName.IndexOf("-") >0)
-				msg += "Note that pre-release versions are not yet supported for release branches.";
-			throw new InvalidOperationException(msg);
-		}
-
-		if (versionFromBranch.Build < 0)
-			throw new InvalidOperationException("Release branch must specify three version components.");
-
-		string milestone = versionFromBranch.ToString(3);
-
-		// if (_parameters.IsPreRelease)
-		//     milestone += $"-{_parameters.BuildVersion.PreReleaseSuffix}";
-
-		return milestone;
-	}
 
 //////////////////////////////////////////////////////////////////////
 // CREATE A PRODUCTION RELEASE
@@ -501,7 +495,7 @@ Task("CreateProductionRelease")
 			CheckTestErrors(ref ErrorDetail);
 
 			string token = parameters.GitHubAccessToken;
-			string tagName = parameters.BuildVersion.SemVer;
+			string tagName = parameters.PackageVersion;
 			string assets = parameters.GitHubReleaseAssets;
 
 			Information($"Publishing release {tagName} to GitHub");
