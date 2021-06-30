@@ -1,4 +1,100 @@
-﻿TestCentric Runner for NUnit 1.6.0 - January 10, 2021
+﻿TestCentric Runner for NUnit 2.0.0-alpha1 - June 30, 2021
+
+The 2.0.0 release is the first major upgrade of the TestCentric Gui.
+It includes a number of breaking changes as well as new features.
+
+Gui Features
+
+ * The ProcessModel and DomainUsage menus have been eliminated.
+
+ * A new Select Agents menu allows the user to choose a non-default
+   agent when more than one is available for a particular assembly.
+
+Engine Features
+
+ * In-process execution of tests and the ProcessModel package setting
+   are no longer supported. Each test assembly is now run in its own
+   separate process.
+
+ * The DomainUsage package setting is no longer supported. The runner
+   itself decides whether an AppDomain should  be used when running
+   on a particular platform.
+
+ * All test execution is now performed by agents, which are usually
+   separate local processes. Agent selection may be automatic or
+   user-specified using a package setting.
+   
+ * It is now possible to create "pluggable agents" by use of a new
+   engine extension point. Currently, this capability is limited to
+   local process agents, but it is intended to be extended to other
+   agent types in the future.
+
+ * Services are now initialized when they are first accessed through
+   the service context rather than at startup.
+
+ * There is no longer a .NET Standard build of the engine.
+
+ * The metadata assembly is now a separate package, which is used
+   by the engine.
+
+ * X86 builds of .Net Core agents are no longer provided, since
+   they are not needed.
+
+Issues Resolved
+ * 444 Eliminate in process execution
+ * 656 Pluggable Agents
+ * 657 Eliminate DomainUsage option
+ * 664 Replace AppDomain and Process with "Agent" from user perspective
+ * 665 Eliminate ProcessModel setting
+ * 666 Issue an error message when user provides an obsolete project setting. Ignore in project files.
+ * 677 Update AboutBox for 2.0 release
+ * 678 Create package for use by pluggable agents
+ * 682 Build script should check files for valid headers
+ * 684 Make metadata assembly a fully independent package
+ * 689 Remove DomainManager as a service
+ * 691 Remove InProcessTestRunnerFactory
+ * 693 Stop building engine for .NET Standard
+ * 694 Remove x86 build of agent for .NET Core
+ * 697 Agent Redesign
+ * 699 Create separate test assembly for nunit.agent.core
+ * 700 Use the GUI to run its own tests
+ * 707 ResultHelper.Aggregate doesn't count warnings
+ * 715 Make dependencies of one service on another explicit.
+ * 716 Provide test doubles for all services needed for testing.
+ * 719 Crashing Testcentric on trying to change Process Model to X86
+ * 725 Upgrade NUnit framework to 3.12
+ * 729 Allow creation of draft and production GitHub releases for pre-release versions
+
+TestCentric Runner for NUnit 1.6.2 - March 24, 2021
+
+This additional release of TestCentric 1.6 was necessitated by the identification
+of a critical bug.
+
+#### Bug
+
+* Show CheckBoxes does not work
+
+TestCentric Runner for NUnit 1.6.1 - January 17, 2021
+
+The main change in this release is that the `InProcess` option is disabled
+when the loaded tests cannot all run in the Gui process under the .NET
+Framework 4.x and would otherwise cause an error.
+
+This is intended to be the last release in the TestCentric 1.x series. The
+next release, version 2.0, will contain breaking changes including the
+elimination of the `InProcess` option as well as of all `DomainUsage` options.
+In future, the use of AppDomains in platforms that support them will be treated
+as an implementation detail outside the control of the user.
+
+#### Enhancement
+
+* 661 InProcess menu item should be disabled if any .net core tests are loaded.
+
+#### Refactor
+
+* 658 Restructure or rewrite runtime framework detection code
+
+TestCentric Runner for NUnit 1.6.0 - January 10, 2021
 
 The main feature of this release is the addition of an agent for running tests under .NET 5.0.
 Since the runner itself targets the .NET Framework, this feature is only available when tests
