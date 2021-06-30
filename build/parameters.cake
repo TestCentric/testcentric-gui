@@ -164,7 +164,8 @@ public class BuildParameters
 		!IsPreRelease || LABELS_WE_PUBLISH_ON_NUGET.Contains(BuildVersion.PreReleaseLabel);
 	public bool ShouldPublishToChocolatey =>
 		!IsPreRelease || LABELS_WE_PUBLISH_ON_CHOCOLATEY.Contains(BuildVersion.PreReleaseLabel);
-	public bool IsProductionRelease => ShouldPublishToNuGet || ShouldPublishToChocolatey;
+	public bool IsProductionRelease =>
+		!IsPreRelease || LABELS_WE_RELEASE_ON_GITHUB.Contains(BuildVersion.PreReleaseLabel);
 	
 	public bool UsingXBuild { get; }
 	public MSBuildSettings MSBuildSettings { get; }
@@ -245,10 +246,6 @@ public class BuildParameters
 		Console.WriteLine("PreReleaseLabel:              " + BuildVersion.PreReleaseLabel);
 		Console.WriteLine("PreReleaseSuffix:             " + BuildVersion.PreReleaseSuffix);
 
-		Console.WriteLine("\nRELEASING");
-		Console.WriteLine("BranchName:                   " + BranchName);
-		Console.WriteLine("IsReleaseBranch:              " + IsReleaseBranch);
-
 		Console.WriteLine("\nDIRECTORIES");
 		Console.WriteLine("Project:   " + ProjectDirectory);
 		Console.WriteLine("Output:    " + OutputDirectory);
@@ -280,5 +277,10 @@ public class BuildParameters
 		Console.WriteLine("ShouldPublishToMyGet:      " + ShouldPublishToMyGet);
 		Console.WriteLine("ShouldPublishToNuGet:      " + ShouldPublishToNuGet);
 		Console.WriteLine("ShouldPublishToChocolatey: " + ShouldPublishToChocolatey);
+
+		Console.WriteLine("\nRELEASING");
+		Console.WriteLine("BranchName:                   " + BranchName);
+		Console.WriteLine("IsReleaseBranch:              " + IsReleaseBranch);
+		Console.WriteLine("IsProductionRelease:          " + IsProductionRelease);
 	}
 }
