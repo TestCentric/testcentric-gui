@@ -3,7 +3,6 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-#if !NETSTANDARD1_6
 using System;
 using TestCentric.Common;
 
@@ -43,7 +42,6 @@ namespace TestCentric.Engine.Extensibility
             if (firstVersion < secondVersion)
                 return false;
 
-#if !NETSTANDARD2_0
             //Look at target runtime
             var firstTargetRuntime = first.TargetFramework.FrameworkVersion;
             var secondTargetRuntime = second.TargetFramework.FrameworkVersion;
@@ -52,11 +50,9 @@ namespace TestCentric.Engine.Extensibility
 
             if (firstTargetRuntime < secondTargetRuntime)
                 return false;
-#endif
 
             //Everything is equal, override only if this one was specified exactly while the other wasn't
             return !first.FromWildCard && second.FromWildCard;
         }
     }
 }
-#endif

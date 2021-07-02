@@ -3,16 +3,12 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-#if !NETSTANDARD1_6
 using System;
 using System.Collections.Generic;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
-
-#if NETSTANDARD2_0
 using System.Linq;
 using System.Reflection;
-#endif
 
 namespace TestCentric.Engine.Extensibility
 {
@@ -125,19 +121,7 @@ namespace TestCentric.Engine.Extensibility
         /// </summary>
         public object CreateExtensionObject(params object[] args)
         {
-#if NETSTANDARD2_0
-            var assembly = Assembly.LoadFrom(AssemblyPath);
-            var typeinfo = assembly.DefinedTypes.FirstOrDefault(t => t.FullName == TypeName);
-            if (typeinfo == null)
-            {
-                return null;
-            }
-            return Activator.CreateInstance(typeinfo.AsType(), args);
-#elif NET20
-            return AppDomain.CurrentDomain.CreateInstanceFromAndUnwrap(AssemblyPath, TypeName, false, 0, null, args, null, null, null);
-#else
             return AppDomain.CurrentDomain.CreateInstanceFromAndUnwrap(AssemblyPath, TypeName, false, 0, null, args, null, null);
-#endif
         }
 
         public void AddProperty(string name, string val)
@@ -158,4 +142,3 @@ namespace TestCentric.Engine.Extensibility
         }
     }
 }
-#endif
