@@ -127,9 +127,6 @@ namespace TestCentric.Engine.Runners
 
             bool disposeRunners = TestPackage.GetSetting(EnginePackageSettings.DisposeRunners, false);
 
-#if NETSTANDARD1_6
-            RunTestsSequentially(listener, filter, results, disposeRunners);
-#else
             if (LevelOfParallelism <= 1)
             {
                 RunTestsSequentially(listener, filter, results, disposeRunners);
@@ -138,7 +135,7 @@ namespace TestCentric.Engine.Runners
             {
                 RunTestsInParallel(listener, filter, results, disposeRunners);
             }
-#endif
+
             if (disposeRunners) Runners.Clear();
 
             return ResultHelper.Merge(results);
@@ -154,7 +151,6 @@ namespace TestCentric.Engine.Runners
             }
         }
 
-#if !NETSTANDARD1_6
         private void RunTestsInParallel(ITestEventListener listener, TestFilter filter, List<TestEngineResult> results, bool disposeRunners)
         {
             var workerPool = new ParallelTaskWorkerPool(LevelOfParallelism);
@@ -173,7 +169,6 @@ namespace TestCentric.Engine.Runners
             foreach (var task in tasks)
                 LogResultsFromTask(task, results);
         }
-#endif
 
         /// <summary>
         /// Cancel the ongoing test run. If no  test is running, the call is ignored.

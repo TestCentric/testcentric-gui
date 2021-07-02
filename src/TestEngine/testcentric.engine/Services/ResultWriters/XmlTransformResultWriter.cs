@@ -31,12 +31,7 @@ namespace TestCentric.Engine.Services
             try
             {
                 var settings = new XmlReaderSettings();
-#if NET20
-                settings.ProhibitDtd = false;
-                settings.XmlResolver = null;
-#else
                 settings.DtdProcessing = DtdProcessing.Ignore;
-#endif
                 using (var xmlReader = XmlReader.Create(_xsltFile, settings))
                     _transform.Load(xmlReader);
             }

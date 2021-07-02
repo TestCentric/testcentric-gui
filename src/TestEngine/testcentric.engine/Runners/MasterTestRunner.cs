@@ -39,9 +39,7 @@ namespace TestCentric.Engine.Runners
         private ITestEngineRunner _engineRunner;
         private readonly IServiceLocator _services;
         private readonly TestPackageAnalyzer _packageAnalyzer;
-#if !NETSTANDARD2_0
         private readonly IRuntimeFrameworkService _runtimeService;
-#endif
         private readonly IProjectService _projectService;
         private ITestRunnerFactory _testRunnerFactory;
         private bool _disposed;
@@ -63,7 +61,6 @@ namespace TestCentric.Engine.Runners
             _testRunnerFactory = _services.GetService<ITestRunnerFactory>();
 
             _packageAnalyzer = _services.GetService<TestPackageAnalyzer>();
-#if !NETSTANDARD2_0
             _runtimeService = _services.GetService<IRuntimeFrameworkService>();
 
             _eventDispatcher = _services.GetService<TestEventDispatcher>();
@@ -71,7 +68,6 @@ namespace TestCentric.Engine.Runners
             // Last chance to catch invalid settings in package,
             // in case the client runner missed them.
             _packageAnalyzer.ValidatePackageSettings(package);
-#endif
         }
 
         /// <summary>
@@ -257,9 +253,7 @@ namespace TestCentric.Engine.Runners
                 // Info will be left behind in the package about
                 // each contained assembly, which will subsequently
                 // be used to determine how to run the assembly.
-#if !NETSTANDARD2_0
                 _runtimeService.SelectRuntimeFramework(TestPackage);
-#endif
 
                 _engineRunner = _testRunnerFactory.MakeTestRunner(TestPackage);
             }

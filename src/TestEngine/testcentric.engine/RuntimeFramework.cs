@@ -3,7 +3,6 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-#if !NETSTANDARD1_6
 using System;
 using System.IO;
 using System.Reflection;
@@ -11,9 +10,6 @@ using System.Runtime.Versioning;
 using Microsoft.Win32;
 using NUnit.Engine;
 using TestCentric.Common;
-#if NET20
-using FrameworkName = TestCentric.Engine.Compatibility.FrameworkName;
-#endif
 
 namespace TestCentric.Engine
 {
@@ -335,4 +331,3 @@ namespace TestCentric.Engine
         }
     }
 }
-#endif

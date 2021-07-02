@@ -5,9 +5,6 @@
 
 using System;
 using NUnit.Engine;
-#if !NET20
-using System.Linq;
-#endif
 
 namespace TestCentric.Engine
 {

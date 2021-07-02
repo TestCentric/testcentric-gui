@@ -176,8 +176,8 @@ Task("TestAgentCore")
 //////////////////////////////////////////////////////////////////////
 
 Task("TestGui")
-    .IsDependentOn("Build")
-    .Does<BuildParameters>((parameters) =>
+	.IsDependentOn("Build")
+	.Does<BuildParameters>((parameters) =>
 	{
 		var guiTests = GetFiles(parameters.OutputDirectory + GUI_TESTS);
 		var args = new StringBuilder();
@@ -186,6 +186,25 @@ Task("TestGui")
 
 		var guiTester = new GuiTester(parameters);
 		guiTester.RunGuiUnattended(parameters.OutputDirectory + GUI_RUNNER, args.ToString());
+		var result = new ActualResult(parameters.OutputDirectory + "TestResult.xml");
+
+		new ConsoleReporter(result).Display();
+
+		if (result.OverallResult == "Failed")
+			throw new System.Exception("There were test failures or errors. See listing.");
+	});
+
+Task("TestExperimentalGui")
+	.IsDependentOn("Build")
+	.Does<BuildParameters>((parameters) =>
+	{
+		var guiTests = GetFiles(parameters.OutputDirectory + GUI_TESTS);
+		var args = new StringBuilder();
+		foreach (var test in guiTests)
+			args.Append($"\"{test}\" ");
+
+		var guiTester = new GuiTester(parameters);
+		guiTester.RunGuiUnattended(parameters.OutputDirectory + EXPERIMENTAL_RUNNER, args.ToString());
 		var result = new ActualResult(parameters.OutputDirectory + "TestResult.xml");
 
 		new ConsoleReporter(result).Display();

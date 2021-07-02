@@ -69,11 +69,9 @@ namespace TestCentric.Engine
                 _services.Add(new ProjectService());
                 _services.Add(new TestFrameworkService());
                 _services.Add(new TestPackageAnalyzer());
-#if !NETSTANDARD2_0
                 _services.Add(new RuntimeFrameworkService());
                 _services.Add(new TestAgentService());
                 _services.Add(new TestAgency());
-#endif
                 _services.Add(new ResultService());
                 _services.Add(new TestRunnerFactory());
             }
