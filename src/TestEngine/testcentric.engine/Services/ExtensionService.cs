@@ -3,7 +3,6 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-#if !NETSTANDARD1_6
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -154,10 +153,9 @@ namespace TestCentric.Engine.Services
                     FindExtensionPoints(assembly);
                 FindExtensionPoints(thisAssembly);
                 FindExtensionPoints(apiAssembly);
-#if NETFRAMEWORK
+
                 // Temp adhoc fix
                 FindExtensionPoints(typeof(IAgentLauncher).Assembly);
-#endif
 
                 // Create the list of possible extension assemblies,
                 // eliminating duplicates. Start in Engine directory.
@@ -502,4 +500,3 @@ namespace TestCentric.Engine.Services
         }
     }
 }
-#endif

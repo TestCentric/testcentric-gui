@@ -45,7 +45,6 @@ namespace TestCentric.Engine.Services
         {
             var sb = new StringBuilder();
 
-#if !NETSTANDARD2_0  // TODO: How do we validate runtime framework for .NET Standard 2.0?
             var frameworkSetting = package.GetSetting(EnginePackageSettings.RequestedRuntimeFramework, "");
             var runAsX86 = package.GetSetting(EnginePackageSettings.RunAsX86, false);
 
@@ -55,7 +54,6 @@ namespace TestCentric.Engine.Services
                 if (!_runtimeService.IsAvailable(frameworkSetting))
                     sb.Append($"\n* The requested framework {frameworkSetting} is unknown or not available.\n");
             }
-#endif
 
             // At this point, any unsupported settings in the TestPackage were
             // put there by the user, so we consider the package invalid. This

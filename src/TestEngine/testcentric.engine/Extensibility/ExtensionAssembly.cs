@@ -3,7 +3,6 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-#if !NETSTANDARD1_6
 using System;
 using System.IO;
 using Mono.Cecil;
@@ -38,7 +37,6 @@ namespace TestCentric.Engine.Extensibility
             get { return Assembly.MainModule; }
         }
 
-#if !NETSTANDARD2_0
         public RuntimeFramework TargetFramework
         {
             get
@@ -52,7 +50,6 @@ namespace TestCentric.Engine.Extensibility
                 return new RuntimeFramework(Runtime.Net, new Version(runtimeVersion.Major, runtimeVersion.Minor));
             }
         }
-#endif
 
         private AssemblyDefinition GetAssemblyDefinition()
         {
@@ -65,4 +62,3 @@ namespace TestCentric.Engine.Extensibility
         }
     }
 }
-#endif
