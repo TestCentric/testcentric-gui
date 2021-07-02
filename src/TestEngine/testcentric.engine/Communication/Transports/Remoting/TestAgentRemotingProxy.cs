@@ -3,7 +3,6 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-#if !NETSTANDARD2_0
 using System;
 using NUnit.Engine;
 
@@ -42,4 +41,3 @@ namespace TestCentric.Engine.Communication.Transports.Remoting
         }
     }
 }
-#endif

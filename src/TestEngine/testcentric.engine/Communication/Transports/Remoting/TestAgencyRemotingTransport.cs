@@ -3,7 +3,6 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-#if NETFRAMEWORK
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -139,4 +138,3 @@ namespace TestCentric.Engine.Communication.Transports.Remoting
         }
     }
 }
-#endif

@@ -3,7 +3,6 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-#if !NETSTANDARD2_0
 using System;
 using NUnit.Engine;
 using TestCentric.Engine.Internal;
@@ -246,4 +245,3 @@ namespace TestCentric.Engine.Runners
         }
     }
 }
-#endif
