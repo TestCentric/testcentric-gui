@@ -25,13 +25,8 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.Splitter treeSplitter;
         private System.Windows.Forms.Panel rightPanel;
 
-        private System.Windows.Forms.TabControl tabs;
-        private System.Windows.Forms.TabPage testPage;
         private System.Windows.Forms.Panel testPanel;
         private TestCentric.Gui.Views.TestTreeView treeView;
-        private System.Windows.Forms.TabPage categoryPage;
-        private System.Windows.Forms.Panel categoryPanel;
-        private TestCentric.Gui.Views.CategoryView categoryView;
 
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button runButton;
@@ -270,14 +265,9 @@ namespace TestCentric.Gui.Views
             this.runButton = new System.Windows.Forms.Button();
             this.progressBar = new TestCentric.Gui.Views.ProgressBarView();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.categoryView = new TestCentric.Gui.Views.CategoryView();
             this.leftPanel = new System.Windows.Forms.Panel();
-            this.tabs = new System.Windows.Forms.TabControl();
-            this.testPage = new System.Windows.Forms.TabPage();
             this.testPanel = new System.Windows.Forms.Panel();
             this.treeView = new TestCentric.Gui.Views.TestTreeView();
-            this.categoryPage = new System.Windows.Forms.TabPage();
-            this.categoryPanel = new System.Windows.Forms.Panel();
             this.mainMenu.SuspendLayout();
             this.rightPanel.SuspendLayout();
             this.resultTabs.SuspendLayout();
@@ -286,11 +276,7 @@ namespace TestCentric.Gui.Views
             this.outputTab.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.leftPanel.SuspendLayout();
-            this.tabs.SuspendLayout();
-            this.testPage.SuspendLayout();
             this.testPanel.SuspendLayout();
-            this.categoryPage.SuspendLayout();
-            this.categoryPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusBar
@@ -851,44 +837,14 @@ namespace TestCentric.Gui.Views
             this.progressBar.Status = TestCentric.Gui.Views.ProgressBarStatus.Success;
             this.progressBar.TabIndex = 0;
             // 
-            // categoryView
-            // 
-            this.categoryView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.categoryView.Location = new System.Drawing.Point(0, 0);
-            this.categoryView.Name = "categoryView";
-            this.categoryView.Size = new System.Drawing.Size(213, 375);
-            this.categoryView.TabIndex = 0;
-            // 
             // leftPanel
             // 
-            this.leftPanel.Controls.Add(this.tabs);
+            this.leftPanel.Controls.Add(this.testPanel);
             this.leftPanel.Dock = System.Windows.Forms.DockStyle.Left;
             this.leftPanel.Location = new System.Drawing.Point(0, 24);
             this.leftPanel.Name = "leftPanel";
             this.leftPanel.Size = new System.Drawing.Size(240, 383);
             this.leftPanel.TabIndex = 4;
-            // 
-            // tabs
-            // 
-            this.tabs.Alignment = System.Windows.Forms.TabAlignment.Left;
-            this.tabs.Controls.Add(this.testPage);
-            this.tabs.Controls.Add(this.categoryPage);
-            this.tabs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabs.Location = new System.Drawing.Point(0, 0);
-            this.tabs.Multiline = true;
-            this.tabs.Name = "tabs";
-            this.tabs.SelectedIndex = 0;
-            this.tabs.Size = new System.Drawing.Size(240, 383);
-            this.tabs.TabIndex = 0;
-            // 
-            // testPage
-            // 
-            this.testPage.Controls.Add(this.testPanel);
-            this.testPage.Location = new System.Drawing.Point(23, 4);
-            this.testPage.Name = "testPage";
-            this.testPage.Size = new System.Drawing.Size(213, 375);
-            this.testPage.TabIndex = 0;
-            this.testPage.Text = "Tests";
             // 
             // testPanel
             // 
@@ -908,24 +864,6 @@ namespace TestCentric.Gui.Views
             this.treeView.Name = "treeView";
             this.treeView.Size = new System.Drawing.Size(213, 375);
             this.treeView.TabIndex = 0;
-            // 
-            // categoryPage
-            // 
-            this.categoryPage.Controls.Add(this.categoryPanel);
-            this.categoryPage.Location = new System.Drawing.Point(23, 4);
-            this.categoryPage.Name = "categoryPage";
-            this.categoryPage.Size = new System.Drawing.Size(213, 375);
-            this.categoryPage.TabIndex = 1;
-            this.categoryPage.Text = "Categories";
-            // 
-            // categoryPanel
-            // 
-            this.categoryPanel.Controls.Add(this.categoryView);
-            this.categoryPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.categoryPanel.Location = new System.Drawing.Point(0, 0);
-            this.categoryPanel.Name = "categoryPanel";
-            this.categoryPanel.Size = new System.Drawing.Size(213, 375);
-            this.categoryPanel.TabIndex = 0;
             // 
             // TestCentricMainView
             // 
@@ -951,11 +889,7 @@ namespace TestCentric.Gui.Views
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.leftPanel.ResumeLayout(false);
-            this.tabs.ResumeLayout(false);
-            this.testPage.ResumeLayout(false);
             this.testPanel.ResumeLayout(false);
-            this.categoryPage.ResumeLayout(false);
-            this.categoryPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1042,8 +976,6 @@ namespace TestCentric.Gui.Views
         #region Subordinate Views contained in main form
 
         public TestTreeView TreeView { get { return treeView; } }
-
-        public CategoryView CategoryView { get { return categoryView; } }
 
         public ProgressBarView ProgressBarView { get { return progressBar; } }
 

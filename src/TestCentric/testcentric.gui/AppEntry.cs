@@ -65,7 +65,6 @@ namespace TestCentric.Gui
             new TestsNotRunPresenter(view.TestsNotRunView, model);
             new TextOutputPresenter(view.TextOutputView, model);
             new TreeViewPresenter(view.TreeView, model);
-            new CategoryPresenter(view.CategoryView, model);
             new TestCentricPresenter(view, model, options);
 
             try
