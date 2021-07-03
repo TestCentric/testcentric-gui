@@ -49,35 +49,30 @@ namespace TestCentric.Gui.Model
                 }
         }
 
-        public TestSelection SortBy(Comparison<TestNode> comparer)
-        {
-            Sort(comparer);
-            return this;
-        }
+        // TODO: Not used now but wait till all experimental classes are ported
+        //public IDictionary<string, TestSelection> GroupBy(GroupingFunction groupingFunction)
+        //{
+        //    var groups = new Dictionary<string, TestSelection>();
 
-        public IDictionary<string, TestSelection> GroupBy(GroupingFunction groupingFunction)
-        {
-            var groups = new Dictionary<string, TestSelection>();
+        //    foreach (TestNode testNode in this)
+        //    {
+        //        var groupName = groupingFunction(testNode);
 
-            foreach (TestNode testNode in this)
-            {
-                var groupName = groupingFunction(testNode);
+        //        TestSelection group = null;
+        //        if (!groups.ContainsKey(groupName))
+        //        {
+        //            group = new TestSelection();
+        //            groups[groupName] = group;
+        //        }
+        //        else
+        //        {
+        //            group = groups[groupName];
+        //        }
 
-                TestSelection group = null;
-                if (!groups.ContainsKey(groupName))
-                {
-                    group = new TestSelection();
-                    groups[groupName] = group;
-                }
-                else
-                {
-                    group = groups[groupName];
-                }
+        //        group.Add(testNode);
+        //    }
 
-                group.Add(testNode);
-            }
-
-            return groups;
-        }
+        //    return groups;
+        //}
     }
 }

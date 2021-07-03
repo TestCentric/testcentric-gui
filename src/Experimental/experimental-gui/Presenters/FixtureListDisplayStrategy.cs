@@ -3,6 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
+using System.Linq;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Presenters
@@ -88,9 +89,9 @@ namespace TestCentric.Gui.Presenters
 
         private TestSelection GetTestFixtures(TestNode testNode)
         {
-            return testNode
-                .Select((node) => node.Type == "TestFixture")
-                .SortBy((x, y) => x.Name.CompareTo(y.Name));
+            return new TestSelection(testNode
+                    .Select((node) => node.Type == "TestFixture")
+                    .OrderBy(s => s.Name));
         }
 
         #endregion

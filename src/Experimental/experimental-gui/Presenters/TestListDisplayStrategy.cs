@@ -3,6 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
+using System.Linq;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Presenters
@@ -96,9 +97,9 @@ namespace TestCentric.Gui.Presenters
 
         private TestSelection GetTestCases(TestNode testNode)
         {
-            return testNode
-                .Select((n) => !n.IsSuite)
-                .SortBy((x, y) => x.Name.CompareTo(y.Name));
+            return new TestSelection(testNode
+                .Select(n => !n.IsSuite)
+                .OrderBy(s => s.Name));
         }
 
         #endregion
