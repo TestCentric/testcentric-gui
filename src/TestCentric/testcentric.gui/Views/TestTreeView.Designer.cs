@@ -39,18 +39,14 @@ namespace TestCentric.Gui.Views
             this.projectMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.activeConfigurationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editProjectMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.showCheckBoxesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.expandAllMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.collapseAllMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hideTestsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.treeImages = new System.Windows.Forms.ImageList(this.components);
-            this.buttonPanel = new System.Windows.Forms.Panel();
-            this.checkFailedButton = new System.Windows.Forms.Button();
-            this.clearAllButton = new System.Windows.Forms.Button();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.treePanel.SuspendLayout();
             this.treeMenu.SuspendLayout();
-            this.buttonPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // treePanel
@@ -59,7 +55,7 @@ namespace TestCentric.Gui.Views
             this.treePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treePanel.Location = new System.Drawing.Point(0, 0);
             this.treePanel.Name = "treePanel";
-            this.treePanel.Size = new System.Drawing.Size(227, 70);
+            this.treePanel.Size = new System.Drawing.Size(227, 110);
             this.treePanel.TabIndex = 0;
             // 
             // tree
@@ -73,7 +69,7 @@ namespace TestCentric.Gui.Views
             this.tree.Location = new System.Drawing.Point(0, 0);
             this.tree.Name = "tree";
             this.tree.SelectedImageIndex = 0;
-            this.tree.Size = new System.Drawing.Size(227, 70);
+            this.tree.Size = new System.Drawing.Size(227, 110);
             this.tree.TabIndex = 0;
             // 
             // treeMenu
@@ -89,7 +85,7 @@ namespace TestCentric.Gui.Views
             this.collapseAllMenuItem,
             this.hideTestsMenuItem});
             this.treeMenu.Name = "treeMenu";
-            this.treeMenu.Size = new System.Drawing.Size(210, 208);
+            this.treeMenu.Size = new System.Drawing.Size(210, 186);
             // 
             // runMenuItem
             // 
@@ -121,19 +117,24 @@ namespace TestCentric.Gui.Views
             // activeConfigurationMenuItem
             // 
             this.activeConfigurationMenuItem.Name = "activeConfigurationMenuItem";
-            this.activeConfigurationMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.activeConfigurationMenuItem.Size = new System.Drawing.Size(148, 22);
             this.activeConfigurationMenuItem.Text = "Configuration";
             // 
             // editProjectMenuItem
             // 
             this.editProjectMenuItem.Name = "editProjectMenuItem";
-            this.editProjectMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.editProjectMenuItem.Size = new System.Drawing.Size(148, 22);
             this.editProjectMenuItem.Text = "Edit...";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(206, 6);
             // 
             // showCheckBoxesMenuItem
             // 
-            this.showCheckBoxesMenuItem.Name = "showCheckBoxesMenuItem";
             this.showCheckBoxesMenuItem.CheckOnClick = true;
+            this.showCheckBoxesMenuItem.Name = "showCheckBoxesMenuItem";
             this.showCheckBoxesMenuItem.Size = new System.Drawing.Size(209, 22);
             this.showCheckBoxesMenuItem.Text = "Show CheckBoxes";
             // 
@@ -165,50 +166,15 @@ namespace TestCentric.Gui.Views
             this.treeImages.Images.SetKeyName(3, "Ignored.png");
             this.treeImages.Images.SetKeyName(4, "Inconclusive.png");
             // 
-            // buttonPanel
-            // 
-            this.buttonPanel.Controls.Add(this.checkFailedButton);
-            this.buttonPanel.Controls.Add(this.clearAllButton);
-            this.buttonPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.buttonPanel.Location = new System.Drawing.Point(0, 70);
-            this.buttonPanel.Name = "buttonPanel";
-            this.buttonPanel.Size = new System.Drawing.Size(227, 40);
-            this.buttonPanel.TabIndex = 1;
-            // 
-            // checkFailedButton
-            // 
-            this.checkFailedButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.checkFailedButton.Location = new System.Drawing.Point(130, 8);
-            this.checkFailedButton.Name = "checkFailedButton";
-            this.checkFailedButton.Size = new System.Drawing.Size(96, 23);
-            this.checkFailedButton.TabIndex = 1;
-            this.checkFailedButton.Text = "Check Failed";
-            // 
-            // clearAllButton
-            // 
-            this.clearAllButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.clearAllButton.Location = new System.Drawing.Point(26, 8);
-            this.clearAllButton.Name = "clearAllButton";
-            this.clearAllButton.Size = new System.Drawing.Size(96, 23);
-            this.clearAllButton.TabIndex = 0;
-            this.clearAllButton.Text = "Clear All";
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(206, 6);
-            // 
             // TestTreeView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.treePanel);
-            this.Controls.Add(this.buttonPanel);
             this.Name = "TestTreeView";
             this.Size = new System.Drawing.Size(227, 110);
             this.treePanel.ResumeLayout(false);
             this.treeMenu.ResumeLayout(false);
-            this.buttonPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -218,9 +184,6 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.ImageList treeImages;
         private System.Windows.Forms.Panel treePanel;
         private System.Windows.Forms.TreeView tree;
-        private System.Windows.Forms.Panel buttonPanel;
-        private System.Windows.Forms.Button clearAllButton;
-        private System.Windows.Forms.Button checkFailedButton;
         private System.Windows.Forms.ContextMenuStrip treeMenu;
         private System.Windows.Forms.ToolStripMenuItem runMenuItem;
         private System.Windows.Forms.ToolStripMenuItem failedAssumptionsMenuItem;

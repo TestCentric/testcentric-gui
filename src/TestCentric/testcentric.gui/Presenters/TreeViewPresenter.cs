@@ -236,18 +236,6 @@ namespace TestCentric.Gui.Presenters
 
             _view.ShowCheckBoxes.CheckedChanged += () => _view.CheckBoxes = _view.ShowCheckBoxes.Checked;
 
-            _view.ClearAllCheckBoxes.Execute += () =>
-            {
-                foreach (TreeNode node in _view.Tree.Nodes)
-                    ClearAllCheckBoxes(node);
-            };
-
-            _view.CheckFailedTests.Execute += () =>
-            {
-                foreach (TreeNode node in _view.Tree.Nodes)
-                    CheckFailedTests(node);
-            };
-
             _view.ShowFailedAssumptions.CheckedChanged += () =>
             {
                 TestSuiteTreeNode targetNode = _view.ContextNode ?? (TestSuiteTreeNode)_view.Tree.SelectedNode;
@@ -462,38 +450,6 @@ namespace TestCentric.Gui.Presenters
             return node.Xml.Name == "test-run" && node.Children.Count == 1
                 ? node.Children[0]
                 : node;
-        }
-
-        private static void ClearAllCheckBoxes(TreeNode node)
-        {
-            node.Checked = false;
-
-            foreach (TreeNode child in node.Nodes)
-                ClearAllCheckBoxes(child);
-        }
-
-        private void CheckFailedTests(TreeNode node)
-        {
-            if (node.Nodes.Count == 0) // Only terminal nodes
-            {
-                string id = (string)node.Tag;
-                var result = _model.GetResultForTest(id);
-
-                if (result != null &&
-                    !result.IsSuite &&
-                    result.Outcome.Status == TestStatus.Failed)
-                {
-                    node.Checked = true;
-                    node.EnsureVisible();
-                }
-                else
-                {
-                    node.Checked = false;
-                }
-            }
-            else
-                foreach (TreeNode child in node.Nodes)
-                    CheckFailedTests(child);
         }
 
         #region TestFilterVisitor

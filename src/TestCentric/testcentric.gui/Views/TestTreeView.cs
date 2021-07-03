@@ -50,8 +50,6 @@ namespace TestCentric.Gui.Views
             ExpandAllCommand = new CommandMenuElement(expandAllMenuItem);
             CollapseAllCommand = new CommandMenuElement(collapseAllMenuItem);
             HideTestsCommand = new CommandMenuElement(hideTestsMenuItem);
-            ClearAllCheckBoxes = new ButtonElement(clearAllButton);
-            CheckFailedTests = new ButtonElement(checkFailedButton);
             Tree = new TreeViewElement(tree);
 
             WireUpEvents();
@@ -131,14 +129,8 @@ namespace TestCentric.Gui.Views
             set
             {
                 tree.CheckBoxes = value;
-                buttonPanel.Visible = value;
-                clearAllButton.Visible = value;
-                checkFailedButton.Visible = value;
             }
         }
-
-        public ICommand ClearAllCheckBoxes { get; private set; }
-        public ICommand CheckFailedTests { get; private set; }
 
         [Browsable(false)]
         public string AlternateImageSet

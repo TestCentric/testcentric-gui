@@ -33,9 +33,6 @@ namespace TestCentric.Gui.Views
         // TODO: Can we eliminate need for having this in addition to ShowCheckBoxes?
         bool CheckBoxes { get; set; }
 
-        ICommand ClearAllCheckBoxes { get; }
-        ICommand CheckFailedTests { get; }
-
         string AlternateImageSet { get; set; }
 
         ITreeView Tree { get; }
