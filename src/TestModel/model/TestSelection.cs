@@ -11,14 +11,10 @@ namespace TestCentric.Gui.Model
 {
     public delegate string GroupingFunction(TestNode testNode);
 
-    // TODO: We are now building for .NET 4.5 so the following
-    // limitation no longer applies.
-
     /// <summary>
-    /// TestSelection is an extended List of TestNodes, with
-    /// the addition of a SortBy method. Since the Gui is 
-    /// designed to run under the .NET 2.0 runtime or later,
-    /// we can't use the extension methods for List.
+    /// TestSelection is an List of TestNodes, implementing
+    /// the ITestItem interface so that the entire selection
+    /// may be selected for execution.
     /// </summary>
     public class TestSelection : List<TestNode>, ITestItem
     {
