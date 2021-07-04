@@ -27,8 +27,6 @@ namespace TestCentric.Gui.Presenters.Main
         [TestCase("SaveAsCommand", false)
 #endif
 
-        [TestCase("RunButton", false)]
-        [TestCase("StopButton", false)]
         [TestCase("OpenCommand", true)]
         [TestCase("CloseCommand", false)]
         [TestCase("AddTestFilesCommand", false)]
@@ -39,7 +37,6 @@ namespace TestCentric.Gui.Presenters.Main
         [TestCase("RunSelectedCommand", false)]
         [TestCase("RunFailedCommand", false)]
         [TestCase("TestParametersCommand", false)]
-        [TestCase("StopRunCommand", false)]
         [TestCase("SaveResultsCommand", false)]
         public void CheckCommandEnabled(string propName, bool enabled)
         {
