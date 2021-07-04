@@ -623,12 +623,12 @@ namespace TestCentric.Gui.Presenters
 
         public void RunSelectedTests()
         {
-            RunTests(_view.TreeView.SelectedTests);
+            _model.RunSelectedTests();
         }
 
         public void RunFailedTests()
         {
-            RunTests(_view.TreeView.FailedTests);
+            //RunTests(_view.TreeView.FailedTests);
         }
 
         public void RunTests(TestNode test)

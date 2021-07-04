@@ -3,471 +3,326 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.IO;
 using System.Windows.Forms;
+using NUnit.Engine;
 using TestCentric.Common;
 
 namespace TestCentric.Gui.Presenters
 {
-    using Elements;
     using Model;
-    using Model.Settings;
-    using NUnit.Engine;
     using Views;
+    using Dialogs;
 
+    /// <summary>
+    /// TreeViewPresenter is the presenter for the TestTreeView
+    /// </summary>
     public class TreeViewPresenter
     {
-        /// <summary>
-        /// Indicates how a tree should be displayed initially
-        /// </summary>
-        private enum InitialTreeExpansion
-        {
-            Auto,       // Select based on space available
-            Expand,     // Expand fully
-            Collapse,   // Collapase fully
-            HideTests   // Expand all but the fixtures, leaving
-                        // leaf nodes hidden
-        }
-
         private ITestTreeView _view;
         private ITestModel _model;
-        private UserSettings _settings;
-        private ITreeView _tree;
-        private TestNodeFilter _treeFilter = TestNodeFilter.Empty;
 
-        /// <summary>
-        /// Hashtable provides direct access to TestNodes
-        /// </summary>
-        internal Dictionary<string, TreeNode> _treeMap = new Dictionary<string, TreeNode>();
+        private DisplayStrategy _strategy;
 
-        public Dictionary<string, TreeNode> TreeMap { get { return _treeMap; } }
+        private ITestItem _selectedTestItem;
 
-        public TreeViewPresenter(ITestTreeView view, ITestModel model)
+        private Dictionary<string, TreeNode> _nodeIndex = new Dictionary<string, TreeNode>();
+
+        #region Constructor
+
+        public TreeViewPresenter(ITestTreeView treeView, ITestModel model)
         {
-            _view = view;
-            _tree = view.Tree;
+            _view = treeView;
             _model = model;
-            _settings = model.Settings;
 
-            _view.AlternateImageSet = (string)_settings.Gui.TestTree.AlternateImageSet;
+            Settings = _model.Settings.Gui.TestTree;
 
-            var showCheckBoxes = _settings.Gui.TestTree.ShowCheckBoxes;
-            _view.CheckBoxes = showCheckBoxes;
-            _view.ShowCheckBoxes.Checked = showCheckBoxes;
+            _view.ShowCheckBoxes.Checked = Settings.ShowCheckBoxes;
+            _view.AlternateImageSet = (string)Settings.AlternateImageSet;
 
-            _view.RunCommand.Enabled = false;
-
+            InitializeRunCommands();
             WireUpEvents();
         }
 
+        #endregion
+
+        #region Private Members
+
         private void WireUpEvents()
         {
-            _model.Events.TestsLoading += (e) => _view.RunCommand.Enabled = false;
-
-            _model.Events.TestLoaded += (e) =>
+            // Model actions
+            _model.Events.TestLoaded += (ea) =>
             {
-                _view.RunCommand.Enabled = true;
-                _view.CheckPropertiesDialog();
-
-                LoadTests(GetTopDisplayNode(e.Test));
-
-                if (_model.Settings.Gui.TestTree.SaveVisualState)
-                {
-                    string fileName = VisualState.GetVisualStateFileName(_model.TestFiles[0]);
-                    if (File.Exists(fileName) && new FileInfo(fileName).Length > 0)
-                    {
-                        try
-                        {
-                            var visualState = VisualState.LoadFrom(fileName);
-                            visualState.RestoreVisualState(_view, _treeMap);
-                            _model.SelectCategories(visualState.SelectedCategories, visualState.ExcludeCategories);
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBoxDisplay.Error(
-                                $"Unable to load visual state from {fileName}{Environment.NewLine}{ex.Message}");
-                        }
-                    }
-                }
+                _strategy.OnTestLoaded(ea.Test);
+                InitializeRunCommands();
             };
 
-            VisualState reloadState = null;
-
-            _model.Events.TestsReloading += (e) =>
+            _model.Events.TestReloaded += (ea) =>
             {
-                reloadState = VisualState.LoadFrom(_view);
-
-                _view.RunCommand.Enabled = false;
+                _strategy.OnTestLoaded(ea.Test);
+                InitializeRunCommands();
             };
 
-            _model.Events.TestReloaded += (e) =>
+            _model.Events.TestUnloaded += (ea) =>
             {
-                ReloadTests(GetTopDisplayNode(e.Test));
-
-                if (reloadState != null)
-                    reloadState.RestoreVisualState(_view, _treeMap);
-
-                if (!_settings.Gui.ClearResultsOnReload)
-                    RestoreResults(e.Test);
-
-                if (!_treeFilter.IsEmpty)
-                    _view.Accept(new TestFilterVisitor(_treeFilter));
-
-                _view.RunCommand.Enabled = true;
+                _strategy.OnTestUnloaded();
+                InitializeRunCommands();
             };
 
-            _model.Events.TestChanged += (e) =>
-            {
-                if (_settings.Engine.ReloadOnChange)
-                {
-                    _model.ReloadTests();
-                }
-            };
+            _model.Events.RunStarting += (ea) => InitializeRunCommands();
+            _model.Events.RunFinished += (ea) => InitializeRunCommands();
 
-            _model.Events.TestsUnloading += (e) =>
-            {
-                _view.RunCommand.Enabled = false;
+            _model.Events.TestFinished += (ea) => _strategy.OnTestFinished(ea.Result);
+            _model.Events.SuiteFinished += (ea) => _strategy.OnTestFinished(ea.Result);
 
-                _view.ClosePropertiesDialog();
-
-                if (_settings.Gui.TestTree.SaveVisualState)
-                    try
-                    {
-                        var visualState = VisualState.LoadFrom(_view);
-                        visualState.SelectedCategories = _model.SelectedCategories;
-                        visualState.ExcludeCategories = _model.ExcludeSelectedCategories;
-                        visualState.Save(VisualState.GetVisualStateFileName(_model.TestFiles[0]));
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine("Unable to save visual state.");
-                        Debug.WriteLine(ex);
-                    }
-
-                _view.Clear();
-                _treeMap.Clear();
-            };
-
-            _model.Events.TestUnloaded += (e) => _view.RunCommand.Enabled = false;
-
-            _model.Events.RunStarting += (e) =>
-            {
-                foreach (var node in _view.Tree.Nodes)
-                    ((TestSuiteTreeNode)node).ClearResults();
-                _view.RunCommand.Enabled = false;
-                _view.CheckPropertiesDialog();
-            };
-
-            _model.Events.RunFinished += (e) => _view.RunCommand.Enabled = true;
-
-            _model.Events.TestFinished += (e) => SetTestResult(e.Result);
-
-            _model.Events.SuiteFinished += (e) => SetTestResult(e.Result);
-
-            _model.Events.CategorySelectionChanged += (TestEventArgs e) =>
-            {
-                TestNodeFilter filter = TestNodeFilter.Empty;
-
-                if (_model.SelectedCategories.Count > 0)
-                {
-                    filter = new CategoryFilter(_model.SelectedCategories);
-                    if (_model.ExcludeSelectedCategories)
-                        filter = new NotFilter(filter);
-                }
-
-                _view.Accept(new TestFilterVisitor(_treeFilter = filter));
-            };
-
-            _settings.Changed += (s, e) =>
+            _model.Settings.Changed += (s, e) =>
             {
                 if (e.SettingName == "Gui.TestTree.AlternateImageSet")
+                    _view.AlternateImageSet = Settings.AlternateImageSet;
+            };
+
+            // View actions - Initial Load
+            _view.Load += (s, e) =>
+            {
+                SetDefaultDisplayStrategy();
+            };
+
+            // View context commands
+
+            // Test for null is a hack that allows us to avoid
+            // a problem under Linux creating a ContextMenuStrip
+            // when no display is present.
+            if (_view.Tree.ContextMenuStrip != null)
+                _view.Tree.ContextMenuStrip.Opening += (s, e) => InitializeContextMenu();
+
+            _view.CollapseAllCommand.Execute += () => _view.CollapseAll();
+            _view.ExpandAllCommand.Execute += () => _view.ExpandAll();
+            _view.CollapseToFixturesCommand.Execute += () => _strategy.CollapseToFixtures();
+            _view.ShowCheckBoxes.CheckedChanged += () =>
+            {
+                _view.RunCheckedCommand.Visible =
+                _view.DebugCheckedCommand.Visible =
+                _view.Tree.CheckBoxes = _view.ShowCheckBoxes.Checked;
+            };
+            _view.RunContextCommand.Execute += () =>
+            {
+                if (_selectedTestItem != null)
+                    _model.RunTests(_selectedTestItem);
+            };
+            _view.RunCheckedCommand.Execute += RunCheckedTests;
+            _view.DebugContextCommand.Execute += () =>
+            {
+                if (_selectedTestItem != null) _model.DebugTests(_selectedTestItem);
+            };
+            _view.DebugCheckedCommand.Execute += DebugCheckedTests;
+
+            // Node selected in tree
+            _view.Tree.SelectedNodeChanged += (tn) =>
+            {
+                _selectedTestItem = tn.Tag as ITestItem;
+                _model.NotifySelectedItemChanged(_selectedTestItem);
+            };
+
+            // Run button and dropdowns
+            _view.RunButton.Execute += () =>
+            {
+                // Necessary test because we don't disable the button click
+                if (_model.HasTests && !_model.IsTestRunning)
+                    RunAllTests();
+            };
+            _view.RunAllCommand.Execute += () => RunAllTests();
+            _view.RunSelectedCommand.Execute += () => RunTests(_selectedTestItem);
+            _view.RunFailedCommand.Execute += () => RunAllTests(); // RunFailed NYI
+            _view.StopRunCommand.Execute += () => _model.StopTestRun(true);
+            _view.TestParametersCommand.Execute += () =>
+            {
+                using (var dlg = new TestParametersDialog())
                 {
-                    _view.AlternateImageSet = _settings.Gui.TestTree.AlternateImageSet;
-                }
-                else if (e.SettingName == "Gui.TestTree.ShowCheckBoxes")
-                {
-                    var showCheckBoxes = _settings.Gui.TestTree.ShowCheckBoxes;
+                    dlg.Font = _model.Settings.Gui.Font;
+                    dlg.StartPosition = FormStartPosition.CenterParent;
 
-                    // When turning off checkboxes with a non-empty tree, the
-                    // structure of what is expanded and collapsed is lost.
-                    // We save that structure as a VisualState and then restore it.
-                    VisualState visualState = !showCheckBoxes && _view.Tree.TopNode != null
-                        ? VisualState.LoadFrom(_view)
-                        : null;
-
-                    _view.CheckBoxes = showCheckBoxes;
-
-                    if (visualState != null)
+                    if (_model.PackageOverrides.ContainsKey("TestParametersDictionary"))
                     {
-                        visualState.ShowCheckBoxes = showCheckBoxes;
-                        visualState.RestoreVisualState(_view, _treeMap);
+                        var testParms = _model.PackageOverrides["TestParametersDictionary"] as IDictionary<string, string>;
+                        foreach (string key in testParms.Keys)
+                            dlg.Parameters.Add(key, testParms[key]);
+                    }
+
+                    if (dlg.ShowDialog(_view as IWin32Window) == DialogResult.OK)
+                    {
+                        ChangePackageSettingAndReload("TestParametersDictionary", dlg.Parameters);
                     }
                 }
             };
 
-            _view.FileDrop += _model.LoadTests;
-
-            _view.RunCommand.Execute += () =>
+            // Debug button and dropdowns
+            _view.DebugButton.Execute += () =>
             {
-                if (_settings.Engine.ReloadOnRun)
-                {
-                    _model.ClearResults();
-                    try
-                    {
-                        _model.ReloadTests();
-                    }
-                    catch (NUnitEngineUnloadException ex)
-                    {
-                        // TODO: Issue a warning?
-                    }
-                }
+                // Necessary test because we don't disable the button click
+                if (_model.HasTests && !_model.IsTestRunning)
+                    _model.DebugAllTests();
+            };
+            _view.DebugAllCommand.Execute += () => _model.DebugAllTests();
+            _view.DebugSelectedCommand.Execute += () => _model.DebugTests(_selectedTestItem);
+            _view.DebugFailedCommand.Execute += () => _model.DebugAllTests(); // NYI
 
-                if (_view.ContextNode != null)
-                    _model.RunTests(_view.ContextNode.Test);
+            // Change of display format
+            _view.DisplayFormat.SelectionChanged += () =>
+            {
+                SetDisplayStrategy(_view.DisplayFormat.SelectedItem);
+
+                _strategy.Reload();
+            };
+        }
+
+        private void RunAllTests()
+        {
+            if (_model.Settings.Engine.ReloadOnRun)
+                _model.ReloadTests();
+
+            _model.RunAllTests();
+        }
+
+        private void RunTests(ITestItem testItem)
+        {
+            if (_model.Settings.Engine.ReloadOnRun)
+                _model.ReloadTests();
+
+            _model.RunTests(testItem);
+        }
+
+        private void RunCheckedTests()
+        {
+            var tests = new TestGroup("RunTests");
+
+            foreach (var treeNode in _view.Tree.CheckedNodes)
+            {
+                var testNode = treeNode.Tag as TestNode;
+                if (testNode != null)
+                    tests.Add(testNode);
                 else
-                    _model.RunTests(new TestSelection(_view.SelectedTests));
-            };
+                {
+                    var group = treeNode.Tag as TestGroup;
+                    if (group != null)
+                        tests.AddRange(group);
+                }
+            }
 
-            _view.Tree.ContextMenuStrip.Opened += (s, e) => InitializeContextMenu();
+            _model.RunTests(tests);
+        }
 
-            _view.ShowCheckBoxes.CheckedChanged += () => _view.CheckBoxes = _view.ShowCheckBoxes.Checked;
+        private void DebugCheckedTests()
+        {
+            var tests = new TestGroup("DebugTests");
 
-            _view.ShowFailedAssumptions.CheckedChanged += () =>
+            foreach (var treeNode in _view.Tree.CheckedNodes)
             {
-                TestSuiteTreeNode targetNode = _view.ContextNode ?? (TestSuiteTreeNode)_view.Tree.SelectedNode;
-                TestSuiteTreeNode theoryNode = targetNode?.GetTheoryNode();
-                if (theoryNode != null)
-                    theoryNode.ShowFailedAssumptions = _view.ShowFailedAssumptions.Checked;
-            };
+                var testNode = treeNode.Tag as TestNode;
+                if (testNode != null) tests.Add(testNode);
+                else
+                {
+                    var group = treeNode.Tag as TestGroup;
+                    if (group != null) tests.AddRange(group);
+                }
+            }
 
-            _view.EditProject.Execute += () =>
-            {
-                TestSuiteTreeNode targetNode = _view.ContextNode ?? (TestSuiteTreeNode)_view.Tree.SelectedNode;
-                string projectPath = targetNode.TestPackage.FullName;
-                EditProject(projectPath);
-            };
-
-            _view.ExpandAllCommand.Execute += () => _view.Tree.ExpandAll();
-
-            _view.CollapseAllCommand.Execute += () => _view.Tree.CollapseAll();
-
-            _view.HideTestsCommand.Execute += () => HideTestsUnderNode(_model.Tests);
-
-            _view.PropertiesCommand.Execute += () =>
-            {
-                TestSuiteTreeNode targetNode = _view.ContextNode ?? (TestSuiteTreeNode)_view.Tree.SelectedNode;
-                if (targetNode != null)
-                    _view.ShowPropertiesDialog(targetNode);
-            };
+            _model.DebugTests(tests);
         }
 
         private void InitializeContextMenu()
         {
-            _view.ShowCheckBoxes.Checked = _view.CheckBoxes;
-
-            TestSuiteTreeNode targetNode = _view.ContextNode ?? (TestSuiteTreeNode)_view.Tree.SelectedNode;
-
-            if (targetNode != null)
+            bool displayConfigMenu = false;
+            var test = _view.ContextNode?.Tag as TestNode;
+            if (test != null && test.IsProject)
             {
-                TestNode test = targetNode.Test;
-                TestPackage package = targetNode.TestPackage;
+                TestPackage package = _model.GetPackageForTest(test.Id);
+                string activeConfig = package.GetActiveConfig();
+                string[] configNames = package.GetConfigNames();
 
-                //_view.RunCommand.DefaultItem = _view.RunCommand.Enabled && targetNode.Included &&
-                //    (test.RunState == RunState.Runnable || test.RunState == RunState.Explicit);
-
-                TestSuiteTreeNode theoryNode = targetNode.GetTheoryNode();
-                _view.ShowFailedAssumptions.Visible = _view.ShowFailedAssumptions.Enabled = theoryNode != null;
-                _view.ShowFailedAssumptions.Checked = theoryNode?.ShowFailedAssumptions ?? false;
-
-                bool showProjectMenu = package != null && test.IsProject;
-
-                _view.ProjectMenu.Visible = _view.ProjectMenu.Enabled = showProjectMenu;
-                _view.ActiveConfiguration.Visible = _view.ActiveConfiguration.Enabled = showProjectMenu;
-                _view.EditProject.Visible = _view.EditProject.Enabled = showProjectMenu && Path.GetExtension(package.FullName) == ".nunit";
-
-                if (showProjectMenu)
+                if (configNames.Length > 0)
                 {
-                    string activeConfig = package.GetActiveConfig();
-                    string[] configNames = package.GetConfigNames();
-
-                    if (configNames.Length > 0)
+                    _view.ActiveConfiguration.MenuItems.Clear();
+                    foreach (string config in configNames)
                     {
-                        _view.ActiveConfiguration.MenuItems.Clear();
-                        foreach (string config in configNames)
-                        {
-                            var configEntry = new ToolStripMenuItem(config);
-                            configEntry.Checked = config == activeConfig;
-                            configEntry.Click += (sender, e) => _model.ReloadPackage(package, ((ToolStripMenuItem)sender).Text);
-                            _view.ActiveConfiguration.MenuItems.Add(configEntry);
-                        }
-
-                        _view.ActiveConfiguration.Visible = _view.ActiveConfiguration.Enabled = true;
+                        var configEntry = new ToolStripMenuItem(config);
+                        configEntry.Checked = config == activeConfig;
+                        configEntry.Click += (sender, e) => _model.ReloadPackage(package, ((ToolStripMenuItem)sender).Text);
+                        _view.ActiveConfiguration.MenuItems.Add(configEntry);
                     }
+
+                    displayConfigMenu = true;
                 }
             }
+
+            _view.ActiveConfiguration.Visible = displayConfigMenu;
         }
 
-        private void EditProject(string projectPath)
+        private void InitializeRunCommands()
         {
-            const string Q = "\"";
-            string editorPath = "nunit-editor.exe";
+            bool isRunning = _model.IsTestRunning;
+            bool canRun = _model.HasTests && !isRunning;
+            bool canRunChecked = canRun && _view.ShowCheckBoxes.Checked;
 
-            Process p = new Process();
-
-            p.StartInfo.FileName = Q + editorPath + Q;
-            p.StartInfo.Arguments = Q + projectPath + Q;
-
-            p.Start();
+            // TODO: Figure out how to disable the button click but not the dropdown.
+            //_view.RunButton.Enabled = canRun;
+            _view.RunAllCommand.Enabled = canRun;
+            _view.RunSelectedCommand.Enabled = canRun;
+            _view.RunFailedCommand.Enabled = canRun;
+            _view.TestParametersCommand.Enabled = canRun;
+            _view.DebugAllCommand.Enabled = canRun;
+            _view.DebugSelectedCommand.Enabled = canRun;
+            _view.DebugFailedCommand.Enabled = canRun;
+            _view.RunCheckedCommand.Visible = canRunChecked;
+            _view.DebugCheckedCommand.Visible = canRunChecked;
+            _view.StopRunCommand.Enabled = isRunning;
         }
 
-        public void LoadTests(TestNode topLevelTest)
+        private void SetDefaultDisplayStrategy()
         {
-            InitialTreeExpansion displayStyle = (InitialTreeExpansion)_settings.Gui.TestTree.InitialTreeDisplay;
-            var nodeCount = CountTestNodes(topLevelTest);
-            if (displayStyle == InitialTreeExpansion.Auto)
-                displayStyle = _view.Tree.VisibleCount < nodeCount
-                    ? InitialTreeExpansion.HideTests
-                    : InitialTreeExpansion.Expand;
-
-            LoadTests(topLevelTest, displayStyle);
+            CreateDisplayStrategy(Settings.DisplayFormat);
         }
 
-        private void LoadTests(TestNode topLevelTest, InitialTreeExpansion displayStyle)
+        private void SetDisplayStrategy(string format)
         {
-            _treeMap.Clear();
+            CreateDisplayStrategy(format);
+            Settings.DisplayFormat = format;
+        }
 
-            using (new WaitCursor())
+        private void CreateDisplayStrategy(string format)
+        {
+            switch (format.ToUpperInvariant())
             {
-                TreeNode topLevelNode = BuildTestTree(topLevelTest, displayStyle, false);
-                _view.Tree.Load(topLevelNode);
-            }
-        }
-
-        private int CountTestNodes(TestNode rootNode)
-        {
-            int result = 1;
-
-            if (rootNode.IsSuite)
-                foreach (TestNode child in rootNode.Children)
-                    result += CountTestNodes(child);
-
-            return result;
-        }
-
-        private TestSuiteTreeNode BuildTestTree(TestNode testNode, InitialTreeExpansion displayStyle, bool highlight)
-        {
-            var package = _model.GetPackageForTest(testNode.Id);
-            var treeNode = new TestSuiteTreeNode(testNode, package);
-            if (highlight) treeNode.ForeColor = Color.Blue;
-            _treeMap.Add(testNode.Id, treeNode);
-            treeNode.Tag = testNode.Id;
-
-            if (testNode.IsSuite)
-            {
-                if (testNode.Type == "TestFixture" && displayStyle == InitialTreeExpansion.HideTests)
-                    displayStyle = InitialTreeExpansion.Collapse;
-
-                foreach (TestNode child in testNode.Children)
-                    treeNode.Nodes.Add(BuildTestTree(child, displayStyle, highlight));
-
-                if (displayStyle == InitialTreeExpansion.Expand || displayStyle == InitialTreeExpansion.HideTests)
-                    treeNode.Expand();
+                default:
+                case "NUNIT_TREE":
+                    _strategy = new NUnitTreeDisplayStrategy(_view, _model);
+                    break;
+                case "FIXTURE_LIST":
+                    _strategy = new FixtureListDisplayStrategy(_view, _model);
+                    break;
+                case "TEST_LIST":
+                    _strategy = new TestListDisplayStrategy(_view, _model);
+                    break;
             }
 
-            return treeNode;
+            _view.FormatButton.ToolTipText = _strategy.Description;
+            _view.DisplayFormat.SelectedItem = format;
         }
 
-        /// <summary>
-        /// Reload the tree with a changed test hierarchy
-        /// while maintaining as much gui state as possible.
-        /// </summary>
-        /// <param name="test">Test suite to be loaded</param>
-        public void ReloadTests(TestNode test)
+        private void ChangePackageSettingAndReload(string key, object setting)
         {
-            VisualState visualState = VisualState.LoadFrom(_view);
-            LoadTests(test, InitialTreeExpansion.Collapse);
-            visualState.RestoreVisualState(_view, _treeMap);
-        }
-
-        private void HideTestsUnderNode(TestNode test)
-        {
-            if (test.IsSuite && _treeMap.ContainsKey(test.Id))
-            {
-                TreeNode node = _treeMap[test.Id];
-
-                if (test.Type == "TestFixture")
-                    node.Collapse();
-                else
-                {
-                    node.Expand();
-
-                    foreach (TestNode child in test.Children)
-                        HideTestsUnderNode(child);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Add the result of a test to the tree
-        /// </summary>
-        /// <param name="result">The result of a test</param>
-        private void SetTestResult(ResultNode result)
-        {
-            if (_treeMap.ContainsKey(result.Id))
-            {
-                TestSuiteTreeNode node = (TestSuiteTreeNode)_treeMap[result.Id];
-
-                node.Result = result;
-
-                if (result.Type == "Theory")
-                    node.RepopulateTheoryNode();
-            }
+            if (setting == null || setting as string == "DEFAULT")
+                _model.PackageOverrides.Remove(key);
             else
-            {
-                Debug.WriteLine("Test not found in tree: " + result.FullName);
-            }
+                _model.PackageOverrides[key] = setting;
+
+            // Even though the _model has a Reload method, we cannot use it because Reload
+            // does not re-create the Engine.  Since we just changed a setting, we must
+            // re-create the Engine by unloading/reloading the tests. We make a copy of
+            // __model.TestFiles because the method does an unload before it loads.
+            _model.LoadTests(new List<string>(_model.TestFiles));
         }
 
-        public void RestoreResults(TestNode testNode)
-        {
-            var result = _model.GetResultForTest(testNode.Id);
-
-            if (result != null)
-            {
-                SetTestResult(result);
-
-                foreach (TestNode child in testNode.Children)
-                    RestoreResults(child);
-            }
-        }
-
-        private static TestNode GetTopDisplayNode(TestNode node)
-        {
-            return node.Xml.Name == "test-run" && node.Children.Count == 1
-                ? node.Children[0]
-                : node;
-        }
-
-        #region TestFilterVisitor
-
-        public class TestFilterVisitor : TestSuiteTreeNodeVisitor
-        {
-            private TestNodeFilter filter;
-
-            public TestFilterVisitor(TestNodeFilter filter)
-            {
-                this.filter = filter;
-            }
-
-            public override void Visit(TestSuiteTreeNode node)
-            {
-                node.Included = filter.Pass(node.Test);
-            }
-        }
+        private Model.Settings.TestTreeSettings Settings { get; }
 
         #endregion
     }

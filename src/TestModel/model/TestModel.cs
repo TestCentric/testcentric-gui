@@ -182,6 +182,8 @@ namespace TestCentric.Gui.Model
             get { return Results.Count > 0; }
         }
 
+        public ITestItem SelectedTestItem { get; private set; }
+
         public List<string> SelectedCategories { get; private set; }
 
         public bool ExcludeSelectedCategories { get; private set; }
@@ -334,6 +336,11 @@ namespace TestCentric.Gui.Model
             RunTests(CategoryFilter);
         }
 
+        public void RunSelectedTests()
+        {
+            RunTests(SelectedTestItem);
+        }
+
         public void RunTests(ITestItem testItem)
         {
             if (testItem == null)
@@ -457,6 +464,7 @@ namespace TestCentric.Gui.Model
 
         public void NotifySelectedItemChanged(ITestItem testItem)
         {
+            SelectedTestItem = testItem;
             _events.FireSelectedItemChanged(testItem);
         }
 
