@@ -62,7 +62,6 @@ namespace TestCentric.Gui
             new ProgressBarPresenter(view.ProgressBarView, model);
             new StatusBarPresenter(view.StatusBarView, model);
             new ErrorsAndFailuresPresenter(view.ErrorsAndFailuresView, model);
-            new TestsNotRunPresenter(view.TestsNotRunView, model);
             new TextOutputPresenter(view.TextOutputView, model);
             new TreeViewPresenter(view.TreeView, model);
             new TestCentricPresenter(view, model, options);
