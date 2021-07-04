@@ -122,15 +122,15 @@ namespace TestCentric.Gui.Presenters
             TreeNode treeNode = new TreeNode(testNode.Name);
             treeNode.Tag = testNode;
 
-            int imageIndex = TestSuiteTreeNode.SkippedIndex;
+            int imageIndex = TestTreeView.SkippedIndex;
 
             switch (testNode.RunState)
             {
                 case RunState.Ignored:
-                    imageIndex = TestSuiteTreeNode.WarningIndex;
+                    imageIndex = TestTreeView.WarningIndex;
                     break;
                 case RunState.NotRunnable:
-                    imageIndex = TestSuiteTreeNode.FailureIndex;
+                    imageIndex = TestTreeView.FailureIndex;
                     break;
             }
 
@@ -163,18 +163,18 @@ namespace TestCentric.Gui.Presenters
             switch (outcome.Status)
             {
                 case TestStatus.Inconclusive:
-                    return TestSuiteTreeNode.InconclusiveIndex;
+                    return TestTreeView.InconclusiveIndex;
                 case TestStatus.Passed:
-                    return TestSuiteTreeNode.SuccessIndex;
+                    return TestTreeView.SuccessIndex;
                 case TestStatus.Failed:
-                    return TestSuiteTreeNode.FailureIndex;
+                    return TestTreeView.FailureIndex;
                 case TestStatus.Warning:
-                    return TestSuiteTreeNode.WarningIndex;
+                    return TestTreeView.WarningIndex;
                 case TestStatus.Skipped:
                 default:
                     return outcome.Label == "Ignored"
-                        ? TestSuiteTreeNode.WarningIndex
-                        : TestSuiteTreeNode.SkippedIndex;
+                        ? TestTreeView.WarningIndex
+                        : TestTreeView.SkippedIndex;
             }
         }
 

@@ -68,6 +68,7 @@ namespace TestCentric.Gui.Model
         // Do we have results from running the test?
         bool HasResults { get; }
 
+        ITestItem SelectedTestItem { get; }
         List<string> SelectedCategories { get; }
 
         bool ExcludeSelectedCategories { get; }
@@ -103,6 +104,9 @@ namespace TestCentric.Gui.Model
 
         // Debug all tests
         void DebugAllTests();
+
+        // Run selected tests
+        void RunSelectedTests();
 
         // Run just the specified ITestItem
         void RunTests(ITestItem testItem);

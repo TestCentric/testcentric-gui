@@ -20,7 +20,6 @@ namespace TestCentric.Gui.Dialogs
         // TODO: We can't test TreeBasedSettingsDialog easily because
         // it references the main presenter. This needs to be changed.
         [TestCase(typeof(AboutBox))]
-        [TestCase(typeof(TestPropertiesDialog))]
         [TestCase(typeof(SettingsDialogBase))]
         [TestCase(typeof(ExtensionDialog), null)]
         [TestCase(typeof(ParameterDialog))]

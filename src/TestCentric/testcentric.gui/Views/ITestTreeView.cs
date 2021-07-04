@@ -3,48 +3,47 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
     using Elements;
-    using Model; // To be removed
 
-    public delegate void FileDropEventHandler(IList<string> fileNames);
-
-    public interface ITestTreeView
+    // Interface used for testing
+    public interface ITestTreeView : IView
     {
-        event FileDropEventHandler FileDrop;
+        ICommand RunButton { get; }
+        ICommand RunAllCommand { get; }
+        ICommand RunSelectedCommand { get; }
+        ICommand RunFailedCommand { get; }
+        ICommand TestParametersCommand { get; }
+        ICommand StopRunCommand { get; }
 
-        ContextMenuStrip ContextMenuStrip { get; }
+        ICommand DebugButton { get; }
+        ICommand DebugAllCommand { get; }
+        ICommand DebugSelectedCommand { get; }
+        ICommand DebugFailedCommand { get; }
 
-        ICommand RunCommand { get; }
-        IChecked ShowFailedAssumptions { get; }
-        IToolStripMenu ProjectMenu { get; }
+        IToolTip FormatButton { get; }
+        ISelection DisplayFormat { get; }
+        ISelection GroupBy { get; }
+
+        ICommand RunContextCommand { get; }
+        ICommand RunCheckedCommand { get; }
+        ICommand DebugContextCommand { get; }
+        ICommand DebugCheckedCommand { get; }
         IToolStripMenu ActiveConfiguration { get; }
-        ICommand EditProject { get; }
-        ICommand PropertiesCommand { get; }
         IChecked ShowCheckBoxes { get; }
         ICommand ExpandAllCommand { get; }
         ICommand CollapseAllCommand { get; }
-        ICommand HideTestsCommand { get; }
-
-        // TODO: Can we eliminate need for having this in addition to ShowCheckBoxes?
-        bool CheckBoxes { get; set; }
+        ICommand CollapseToFixturesCommand { get; }
 
         string AlternateImageSet { get; set; }
 
+        void ExpandAll();
+        void CollapseAll();
+
         ITreeView Tree { get; }
-        TestSuiteTreeNode ContextNode { get; }
-        TestNode[] SelectedTests { get; }
-
-        void Clear();
-
-        void Accept(TestSuiteTreeNodeVisitor visitor);
-
-        void ShowPropertiesDialog(TestSuiteTreeNode node);
-        void ClosePropertiesDialog();
-        void CheckPropertiesDialog();
+        TreeNode ContextNode { get; }
     }
 }

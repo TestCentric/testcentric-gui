@@ -59,19 +59,19 @@ namespace TestCentric.Gui
             return (VisualState)serializer.Deserialize(reader);
         }
 
-        public static VisualState LoadFrom(ITestTreeView view)
-        {
-            var visualState = new VisualState()
-            {
-                ShowCheckBoxes = view.CheckBoxes,
-                TopNode = (string)view.Tree.TopNode?.Tag,
-                SelectedNode = (string)view.Tree.SelectedNode?.Tag,
-            };
+        //public static VisualState LoadFrom(ITestTreeView view)
+        //{
+        //    var visualState = new VisualState()
+        //    {
+        //        ShowCheckBoxes = view.CheckBoxes,
+        //        TopNode = (string)view.Tree.TopNode?.Tag,
+        //        SelectedNode = (string)view.Tree.SelectedNode?.Tag,
+        //    };
 
-            visualState.ProcessTreeNodes(view.Tree);
+        //    visualState.ProcessTreeNodes(view.Tree);
 
-            return visualState;
-        }
+        //    return visualState;
+        //}
 
         public void Save(string fileName)
         {
@@ -87,31 +87,31 @@ namespace TestCentric.Gui
             serializer.Serialize(writer, this);
         }
 
-        public void RestoreVisualState(ITestTreeView view, IDictionary<string, TreeNode> treeMap)
-        {
-            view.CheckBoxes = ShowCheckBoxes;
+        //public void RestoreVisualState(ITestTreeView view, IDictionary<string, TreeNode> treeMap)
+        //{
+        //    view.CheckBoxes = ShowCheckBoxes;
 
-            foreach (VisualTreeNode visualNode in Nodes)
-            {
-                if (treeMap.ContainsKey(visualNode.Id))
-                {
-                    TreeNode treeNode = treeMap[visualNode.Id];
+        //    foreach (VisualTreeNode visualNode in Nodes)
+        //    {
+        //        if (treeMap.ContainsKey(visualNode.Id))
+        //        {
+        //            TreeNode treeNode = treeMap[visualNode.Id];
 
-                    if (treeNode.IsExpanded != visualNode.Expanded)
-                        treeNode.Toggle();
+        //            if (treeNode.IsExpanded != visualNode.Expanded)
+        //                treeNode.Toggle();
 
-                    treeNode.Checked = visualNode.Checked;
-                }
-            }
+        //            treeNode.Checked = visualNode.Checked;
+        //        }
+        //    }
 
-            if (SelectedNode != null && treeMap.ContainsKey(SelectedNode))
-                view.Tree.SelectedNode = treeMap[SelectedNode];
+        //    if (SelectedNode != null && treeMap.ContainsKey(SelectedNode))
+        //        view.Tree.SelectedNode = treeMap[SelectedNode];
 
-            if (TopNode != null && treeMap.ContainsKey(TopNode))
-                view.Tree.TopNode = treeMap[TopNode];
+        //    if (TopNode != null && treeMap.ContainsKey(TopNode))
+        //        view.Tree.TopNode = treeMap[TopNode];
 
-            //view.Tree.Select();
-        }
+        //    //view.Tree.Select();
+        //}
 
         #endregion
 
