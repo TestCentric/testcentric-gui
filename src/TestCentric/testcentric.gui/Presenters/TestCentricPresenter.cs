@@ -300,10 +300,6 @@ namespace TestCentric.Gui.Presenters
                 }
             };
 
-            _view.RunButton.Execute += () => RunSelectedTests();
-            _view.StopButton.Execute += () => StopTests();
-            _view.ForceStopButton.Execute += () => ForceStop();
-
             _view.FileMenu.Popup += () =>
             {
                 bool isPackageLoaded = _model.IsPackageLoaded;
@@ -659,19 +655,10 @@ namespace TestCentric.Gui.Presenters
             bool testLoaded = _model.HasTests;
             bool testRunning = _model.IsTestRunning;
 
-            _view.RunButton.Enabled = testLoaded && !testRunning;
             _view.RunAllCommand.Enabled = testLoaded && !testRunning;
             _view.RunSelectedCommand.Enabled = testLoaded && !testRunning;
             _view.RunFailedCommand.Enabled = testLoaded && !testRunning && _model.HasResults;
             _view.TestParametersCommand.Enabled = testLoaded && !testRunning;
-
-            _view.StopButton.Visible = _view.StopRunCommand.Visible = true;
-            _view.StopButton.Enabled = _view.StopRunCommand.Enabled = testRunning;
-
-            // ForceStop button and command are only visible and enabled briefly,
-            // as part of the process of stopping the test run.
-            _view.ForceStopButton.Visible = _view.ForceStopCommand.Visible = false;
-            _view.ForceStopButton.Enabled = _view.ForceStopCommand.Enabled = false;
 
             _view.OpenCommand.Enabled = !testRunning && !testLoading;
             _view.CloseCommand.Enabled = testLoaded && !testRunning;
@@ -801,22 +788,12 @@ namespace TestCentric.Gui.Presenters
 
         private void StopTests()
         {
-            _view.StopButton.Enabled = _view.StopRunCommand.Enabled = false;
-
             _view.LongRunningOperation.Display("Waiting for all running tests to complete.");
             _model.StopTestRun(false);
-
-            _view.StopButton.Visible = _view.StopRunCommand.Visible = false;
-            _view.ForceStopButton.Visible = _view.ForceStopCommand.Visible = true;
-
-            // Prevent an accidental extra click on newly visible button
-            Thread.Sleep(1000);
-            _view.ForceStopButton.Enabled = _view.ForceStopCommand.Enabled = true;
         }
 
         private void ForceStop()
         {
-            _view.ForceStopButton.Enabled = _view.ForceStopCommand.Enabled = false;
             _model.StopTestRun(true);
         }
 

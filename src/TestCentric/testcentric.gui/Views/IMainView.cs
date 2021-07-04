@@ -22,9 +22,6 @@ namespace TestCentric.Gui.Views
         int SplitterPosition { get; set; }
 
         // UI Elements
-        ICommand RunButton { get; }
-        ICommand StopButton { get; }
-        ICommand ForceStopButton { get; }
         IControlElement RunSummary { get; }
         ISelection ResultTabs { get; }
 

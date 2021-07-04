@@ -29,8 +29,6 @@ namespace TestCentric.Gui.Views
         private TestCentric.Gui.Views.TestTreeView treeView;
 
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Button runButton;
-        private System.Windows.Forms.Button stopButton;
         private ProgressBarView progressBar;
         private ExpandingLabel runSummary;
 
@@ -88,7 +86,6 @@ namespace TestCentric.Gui.Views
         private ToolStripMenuItem saveResultsAsMenuItem;
         private ToolStripMenuItem runParametersMenuItem;
         private ToolStripMenuItem forceStopMenuItem;
-        private Button forceStopButton;
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripSeparator toolStripSeparator3;
@@ -119,9 +116,6 @@ namespace TestCentric.Gui.Views
             };
 
             // UI Elements on main form
-            RunButton = new ButtonElement(runButton);
-            StopButton = new ButtonElement(stopButton);
-            ForceStopButton = new ButtonElement(forceStopButton);
             RunSummary = new ControlElement(runSummary);
             ResultTabs = new TabSelector(resultTabs);
 
@@ -260,9 +254,6 @@ namespace TestCentric.Gui.Views
             this.textOutputView1 = new TestCentric.Gui.Views.TextOutputView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.runSummary = new TestCentric.Gui.Controls.ExpandingLabel();
-            this.forceStopButton = new System.Windows.Forms.Button();
-            this.stopButton = new System.Windows.Forms.Button();
-            this.runButton = new System.Windows.Forms.Button();
             this.progressBar = new TestCentric.Gui.Views.ProgressBarView();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.leftPanel = new System.Windows.Forms.Panel();
@@ -324,39 +315,39 @@ namespace TestCentric.Gui.Views
             // 
             this.openMenuItem.Name = "openMenuItem";
             this.openMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openMenuItem.Size = new System.Drawing.Size(179, 22);
             this.openMenuItem.Text = "&Open...";
             // 
             // closeMenuItem
             // 
             this.closeMenuItem.Name = "closeMenuItem";
-            this.closeMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.closeMenuItem.Size = new System.Drawing.Size(179, 22);
             this.closeMenuItem.Text = "&Close";
             // 
             // addTestFileMenuItem
             // 
             this.addTestFileMenuItem.Name = "addTestFileMenuItem";
-            this.addTestFileMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.addTestFileMenuItem.Size = new System.Drawing.Size(179, 22);
             this.addTestFileMenuItem.Text = "&Add Test File...";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(176, 6);
             // 
             // reloadTestsMenuItem
             // 
             this.reloadTestsMenuItem.Name = "reloadTestsMenuItem";
             this.reloadTestsMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-            this.reloadTestsMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.reloadTestsMenuItem.Size = new System.Drawing.Size(179, 22);
             this.reloadTestsMenuItem.Text = "&Reload Tests";
             // 
-            // selectAgentMenuItem
+            // selectAgentMenu
             // 
             this.selectAgentMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.selectAgentDummyMenuItem});
-            this.selectAgentMenu.Name = "selectAgentMenuItem";
-            this.selectAgentMenu.Size = new System.Drawing.Size(180, 22);
+            this.selectAgentMenu.Name = "selectAgentMenu";
+            this.selectAgentMenu.Size = new System.Drawing.Size(179, 22);
             this.selectAgentMenu.Text = "Select Agent";
             // 
             // selectAgentDummyMenuItem
@@ -368,25 +359,25 @@ namespace TestCentric.Gui.Views
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(176, 6);
             // 
             // runAsX86MenuItem
             // 
             this.runAsX86MenuItem.Name = "runAsX86MenuItem";
-            this.runAsX86MenuItem.Size = new System.Drawing.Size(180, 22);
+            this.runAsX86MenuItem.Size = new System.Drawing.Size(179, 22);
             this.runAsX86MenuItem.Text = "Run as X86";
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(176, 6);
             // 
             // recentFilesMenu
             // 
             this.recentFilesMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.recentFilesDummyMenuItem});
             this.recentFilesMenu.Name = "recentFilesMenu";
-            this.recentFilesMenu.Size = new System.Drawing.Size(180, 22);
+            this.recentFilesMenu.Size = new System.Drawing.Size(179, 22);
             this.recentFilesMenu.Text = "Recent &Files";
             // 
             // recentFilesDummyMenuItem
@@ -398,12 +389,12 @@ namespace TestCentric.Gui.Views
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(176, 6);
             // 
             // exitMenuItem
             // 
             this.exitMenuItem.Name = "exitMenuItem";
-            this.exitMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitMenuItem.Size = new System.Drawing.Size(179, 22);
             this.exitMenuItem.Text = "E&xit";
             // 
             // viewMenu
@@ -775,9 +766,6 @@ namespace TestCentric.Gui.Views
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.runSummary);
-            this.groupBox1.Controls.Add(this.forceStopButton);
-            this.groupBox1.Controls.Add(this.stopButton);
-            this.groupBox1.Controls.Add(this.runButton);
             this.groupBox1.Controls.Add(this.progressBar);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
@@ -795,32 +783,6 @@ namespace TestCentric.Gui.Views
             this.runSummary.Name = "runSummary";
             this.runSummary.Size = new System.Drawing.Size(480, 21);
             this.runSummary.TabIndex = 5;
-            // 
-            // forceStopButton
-            // 
-            this.forceStopButton.Location = new System.Drawing.Point(75, 16);
-            this.forceStopButton.Name = "forceStopButton";
-            this.forceStopButton.Size = new System.Drawing.Size(75, 31);
-            this.forceStopButton.TabIndex = 6;
-            this.forceStopButton.Text = "Force Stop";
-            this.forceStopButton.UseVisualStyleBackColor = true;
-            // 
-            // stopButton
-            // 
-            this.stopButton.AutoSize = true;
-            this.stopButton.Location = new System.Drawing.Point(75, 16);
-            this.stopButton.Name = "stopButton";
-            this.stopButton.Size = new System.Drawing.Size(64, 31);
-            this.stopButton.TabIndex = 4;
-            this.stopButton.Text = "&Stop";
-            // 
-            // runButton
-            // 
-            this.runButton.Location = new System.Drawing.Point(8, 16);
-            this.runButton.Name = "runButton";
-            this.runButton.Size = new System.Drawing.Size(64, 31);
-            this.runButton.TabIndex = 3;
-            this.runButton.Text = "&Run";
             // 
             // progressBar
             // 
@@ -852,7 +814,7 @@ namespace TestCentric.Gui.Views
             this.testPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.testPanel.Location = new System.Drawing.Point(0, 0);
             this.testPanel.Name = "testPanel";
-            this.testPanel.Size = new System.Drawing.Size(213, 375);
+            this.testPanel.Size = new System.Drawing.Size(240, 383);
             this.testPanel.TabIndex = 0;
             // 
             // treeView
@@ -862,7 +824,7 @@ namespace TestCentric.Gui.Views
             this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView.Location = new System.Drawing.Point(0, 0);
             this.treeView.Name = "treeView";
-            this.treeView.Size = new System.Drawing.Size(213, 375);
+            this.treeView.Size = new System.Drawing.Size(240, 383);
             this.treeView.TabIndex = 0;
             // 
             // TestCentricMainView
@@ -887,7 +849,6 @@ namespace TestCentric.Gui.Views
             this.notrunTab.ResumeLayout(false);
             this.outputTab.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
             this.leftPanel.ResumeLayout(false);
             this.testPanel.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -921,9 +882,6 @@ namespace TestCentric.Gui.Views
         }
 
         // UI Elements
-        public ICommand RunButton { get; }
-        public ICommand StopButton { get; }
-        public ICommand ForceStopButton { get; }
         public IControlElement RunSummary { get; }
         public ISelection ResultTabs { get; }
 
