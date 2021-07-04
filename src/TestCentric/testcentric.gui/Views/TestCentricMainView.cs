@@ -77,10 +77,8 @@ namespace TestCentric.Gui.Views
         private ToolStripMenuItem extensionsMenuItem;
         private ToolStripMenuItem testCentricHelpMenuItem;
         private TabPage errorTab;
-        private TabPage notrunTab;
         private TabPage outputTab;
         private ErrorsAndFailuresView errorsAndFailuresView1;
-        private TestsNotRunView testsNotRunView1;
         private ToolStripMenuItem recentFilesDummyMenuItem;
         private ToolStripMenuItem openWorkDirectoryMenuItem;
         private ToolStripMenuItem saveResultsAsMenuItem;
@@ -248,8 +246,6 @@ namespace TestCentric.Gui.Views
             this.resultTabs = new System.Windows.Forms.TabControl();
             this.errorTab = new System.Windows.Forms.TabPage();
             this.errorsAndFailuresView1 = new TestCentric.Gui.Views.ErrorsAndFailuresView();
-            this.notrunTab = new System.Windows.Forms.TabPage();
-            this.testsNotRunView1 = new TestCentric.Gui.Views.TestsNotRunView();
             this.outputTab = new System.Windows.Forms.TabPage();
             this.textOutputView1 = new TestCentric.Gui.Views.TextOutputView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -263,7 +259,6 @@ namespace TestCentric.Gui.Views
             this.rightPanel.SuspendLayout();
             this.resultTabs.SuspendLayout();
             this.errorTab.SuspendLayout();
-            this.notrunTab.SuspendLayout();
             this.outputTab.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.leftPanel.SuspendLayout();
@@ -694,7 +689,6 @@ namespace TestCentric.Gui.Views
             // 
             this.resultTabs.Alignment = System.Windows.Forms.TabAlignment.Bottom;
             this.resultTabs.Controls.Add(this.errorTab);
-            this.resultTabs.Controls.Add(this.notrunTab);
             this.resultTabs.Controls.Add(this.outputTab);
             this.resultTabs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.resultTabs.Location = new System.Drawing.Point(0, 120);
@@ -725,24 +719,6 @@ namespace TestCentric.Gui.Views
             this.errorsAndFailuresView1.SourceCodeSplitterDistance = 0.3F;
             this.errorsAndFailuresView1.SplitterPosition = 128;
             this.errorsAndFailuresView1.TabIndex = 0;
-            // 
-            // notrunTab
-            // 
-            this.notrunTab.Controls.Add(this.testsNotRunView1);
-            this.notrunTab.Location = new System.Drawing.Point(4, 4);
-            this.notrunTab.Name = "notrunTab";
-            this.notrunTab.Size = new System.Drawing.Size(490, 237);
-            this.notrunTab.TabIndex = 1;
-            this.notrunTab.Text = "Tests Not Run";
-            this.notrunTab.UseVisualStyleBackColor = true;
-            // 
-            // testsNotRunView1
-            // 
-            this.testsNotRunView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.testsNotRunView1.Location = new System.Drawing.Point(0, 0);
-            this.testsNotRunView1.Name = "testsNotRunView1";
-            this.testsNotRunView1.Size = new System.Drawing.Size(490, 237);
-            this.testsNotRunView1.TabIndex = 0;
             // 
             // outputTab
             // 
@@ -846,7 +822,6 @@ namespace TestCentric.Gui.Views
             this.rightPanel.ResumeLayout(false);
             this.resultTabs.ResumeLayout(false);
             this.errorTab.ResumeLayout(false);
-            this.notrunTab.ResumeLayout(false);
             this.outputTab.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.leftPanel.ResumeLayout(false);
@@ -940,8 +915,6 @@ namespace TestCentric.Gui.Views
         public StatusBarView StatusBarView { get { return statusBar; } }
 
         public ErrorsAndFailuresView ErrorsAndFailuresView { get { return errorsAndFailuresView1; } }
-
-        public TestsNotRunView TestsNotRunView { get { return testsNotRunView1; } }
 
         public ITextOutputView TextOutputView { get { return textOutputView1; } }
 
