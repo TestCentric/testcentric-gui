@@ -27,14 +27,11 @@ namespace TestCentric.Gui.Views
 
         private System.Windows.Forms.Panel testPanel;
         private TestCentric.Gui.Views.TestTreeView treeView;
-
         private ProgressBarView progressBar;
-
         private TabControl resultTabs;
-
         private StatusBarView statusBar;
-
         private TestPropertiesView propertiesView;
+        private XmlView xmlView;
 
         private System.Windows.Forms.ToolTip toolTip;
 
@@ -79,6 +76,7 @@ namespace TestCentric.Gui.Views
         private TabPage errorTab;
         private TabPage outputTab;
         private TabPage propertiesTab;
+        private TabPage xmlTab;
         private ErrorsAndFailuresView errorsAndFailuresView1;
         private ToolStripMenuItem recentFilesDummyMenuItem;
         private ToolStripMenuItem openWorkDirectoryMenuItem;
@@ -250,6 +248,8 @@ namespace TestCentric.Gui.Views
             this.textOutputView1 = new TestCentric.Gui.Views.TextOutputView();
             this.propertiesTab = new System.Windows.Forms.TabPage();
             this.propertiesView = new TestCentric.Gui.Views.TestPropertiesView();
+            this.xmlTab = new System.Windows.Forms.TabPage();
+            this.xmlView = new TestCentric.Gui.Views.XmlView();
             this.progressBar = new TestCentric.Gui.Views.ProgressBarView();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.leftPanel = new System.Windows.Forms.Panel();
@@ -260,6 +260,8 @@ namespace TestCentric.Gui.Views
             this.resultTabs.SuspendLayout();
             this.errorTab.SuspendLayout();
             this.outputTab.SuspendLayout();
+            this.propertiesTab.SuspendLayout();
+            this.xmlTab.SuspendLayout();
             this.leftPanel.SuspendLayout();
             this.testPanel.SuspendLayout();
             this.SuspendLayout();
@@ -690,6 +692,7 @@ namespace TestCentric.Gui.Views
             this.resultTabs.Controls.Add(this.errorTab);
             this.resultTabs.Controls.Add(this.outputTab);
             this.resultTabs.Controls.Add(this.propertiesTab);
+            this.resultTabs.Controls.Add(this.xmlTab);
             this.resultTabs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.resultTabs.Location = new System.Drawing.Point(0, 0);
             this.resultTabs.Name = "resultTabs";
@@ -726,7 +729,7 @@ namespace TestCentric.Gui.Views
             this.outputTab.Location = new System.Drawing.Point(4, 4);
             this.outputTab.Name = "outputTab";
             this.outputTab.Size = new System.Drawing.Size(490, 357);
-            this.outputTab.TabIndex = 2;
+            this.outputTab.TabIndex = 3;
             this.outputTab.Text = "Text Output";
             this.outputTab.UseVisualStyleBackColor = true;
             // 
@@ -756,6 +759,24 @@ namespace TestCentric.Gui.Views
             this.propertiesView.Name = "propertiesView";
             this.propertiesView.Size = new System.Drawing.Size(490, 357);
             this.propertiesView.TabIndex = 0;
+            //
+            // xmlTab
+            //
+            this.xmlTab.Controls.Add(this.xmlView);
+            this.xmlTab.Location = new System.Drawing.Point(4, 4);
+            this.xmlTab.Name = "xmlTab";
+            this.xmlTab.Size = new System.Drawing.Size(490, 357);
+            this.xmlTab.TabIndex = 2;
+            this.xmlTab.Text = "View XML";
+            this.xmlTab.UseVisualStyleBackColor = true;
+            //
+            // xmlView
+            //
+            this.xmlView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.xmlView.Location = new System.Drawing.Point(0, 0);
+            this.xmlView.Name = "xmlView";
+            this.xmlView.Size = new System.Drawing.Size(490, 357);
+            this.xmlView.TabIndex = 0;
             // 
             // progressBar
             // 
@@ -822,6 +843,8 @@ namespace TestCentric.Gui.Views
             this.resultTabs.ResumeLayout(false);
             this.errorTab.ResumeLayout(false);
             this.outputTab.ResumeLayout(false);
+            this.propertiesTab.ResumeLayout(false);
+            this.xmlTab.ResumeLayout(false);
             this.leftPanel.ResumeLayout(false);
             this.testPanel.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -905,13 +928,15 @@ namespace TestCentric.Gui.Views
 
         #region Subordinate Views contained in main form
 
-        public TestTreeView TreeView { get { return treeView; } }
+        public TestTreeView TreeView => treeView;
 
-        public ProgressBarView ProgressBarView { get { return progressBar; } }
+        public ProgressBarView ProgressBarView => progressBar;
 
-        public StatusBarView StatusBarView { get { return statusBar; } }
+        public StatusBarView StatusBarView => statusBar;
 
         public TestPropertiesView TestPropertiesView => propertiesView;
+
+        public XmlView XmlView => xmlView;
 
         public ErrorsAndFailuresView ErrorsAndFailuresView { get { return errorsAndFailuresView1; } }
 
