@@ -4,14 +4,23 @@
 // ***********************************************************************
 
 using System;
+using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
     public partial class StatusBarView : UserControlView, IStatusBarView
     {
+        private ToolTip _resultSummaryToolTip;
+
         public StatusBarView()
         {
             InitializeComponent();
+            _resultSummaryToolTip = new ToolTip()
+            {
+                IsBalloon = true,
+                UseAnimation = true,
+                UseFading = true,
+            };
         }
 
         public void Initialize(int testCount)
@@ -91,6 +100,14 @@ namespace TestCentric.Gui.Views
             });
         }
 
+        public void OnTestRunSummaryCompiled(string testRunSummary)
+        {
+            InvokeIfRequired(() =>
+            {
+                _resultSummaryToolTip.ToolTipTitle = "Tests Run Summary";
+                _resultSummaryToolTip.Show(testRunSummary, this, 10000);
+            });
+        }
         protected override void OnFontChanged(EventArgs e)
         {
             base.OnFontChanged(e);
