@@ -12,9 +12,6 @@
 		<Reference Include="System.Windows.Forms" />
 	</ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\..\Common\components\TestCentric.Gui.Components.csproj">
-            <Name>TestCentric.Gui.Components</Name>
-        </ProjectReference>
         <ProjectReference Include="..\..\Common\testcentric.common\TestCentric.Common.csproj">
             <Name>TestCentric.Common</Name>
         </ProjectReference>
