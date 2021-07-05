@@ -689,9 +689,9 @@ namespace TestCentric.Gui.Views
             // resultTabs
             // 
             this.resultTabs.Alignment = System.Windows.Forms.TabAlignment.Bottom;
+            this.resultTabs.Controls.Add(this.propertiesTab);
             this.resultTabs.Controls.Add(this.errorTab);
             this.resultTabs.Controls.Add(this.outputTab);
-            this.resultTabs.Controls.Add(this.propertiesTab);
             this.resultTabs.Controls.Add(this.xmlTab);
             this.resultTabs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.resultTabs.Location = new System.Drawing.Point(0, 0);
@@ -741,9 +741,9 @@ namespace TestCentric.Gui.Views
             this.textOutputView1.Size = new System.Drawing.Size(490, 357);
             this.textOutputView1.TabIndex = 0;
             this.textOutputView1.WordWrap = true;
-            //
+            // 
             // propertiesTab
-            //
+            // 
             this.propertiesTab.Controls.Add(this.propertiesView);
             this.propertiesTab.Location = new System.Drawing.Point(4, 4);
             this.propertiesTab.Name = "propertiesTab";
@@ -751,17 +751,33 @@ namespace TestCentric.Gui.Views
             this.propertiesTab.TabIndex = 1;
             this.propertiesTab.Text = "Test Properties";
             this.propertiesTab.UseVisualStyleBackColor = true;
-            //
+            // 
             // propertiesView
-            //
+            // 
+            this.propertiesView.AssertCount = "";
+            this.propertiesView.Assertions = "";
+            this.propertiesView.AutoScroll = true;
+            this.propertiesView.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.propertiesView.Categories = "";
+            this.propertiesView.Description = "";
             this.propertiesView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.propertiesView.ElapsedTime = "";
+            this.propertiesView.FullName = "";
+            this.propertiesView.Header = "";
             this.propertiesView.Location = new System.Drawing.Point(0, 0);
             this.propertiesView.Name = "propertiesView";
+            this.propertiesView.Outcome = "";
+            this.propertiesView.Output = "";
+            this.propertiesView.Properties = "";
+            this.propertiesView.RunState = "";
             this.propertiesView.Size = new System.Drawing.Size(490, 357);
+            this.propertiesView.SkipReason = "";
             this.propertiesView.TabIndex = 0;
-            //
+            this.propertiesView.TestCount = "";
+            this.propertiesView.TestType = "";
+            // 
             // xmlTab
-            //
+            // 
             this.xmlTab.Controls.Add(this.xmlView);
             this.xmlTab.Location = new System.Drawing.Point(4, 4);
             this.xmlTab.Name = "xmlTab";
@@ -769,14 +785,21 @@ namespace TestCentric.Gui.Views
             this.xmlTab.TabIndex = 2;
             this.xmlTab.Text = "View XML";
             this.xmlTab.UseVisualStyleBackColor = true;
-            //
+            // 
             // xmlView
-            //
+            // 
+            this.xmlView.AutoScroll = true;
+            this.xmlView.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.xmlView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.xmlView.Header = "";
             this.xmlView.Location = new System.Drawing.Point(0, 0);
+            this.xmlView.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.xmlView.Name = "xmlView";
+            this.xmlView.SelectedText = "";
             this.xmlView.Size = new System.Drawing.Size(490, 357);
             this.xmlView.TabIndex = 0;
+            this.xmlView.TestXml = null;
+            this.xmlView.WordWrap = false;
             // 
             // progressBar
             // 
