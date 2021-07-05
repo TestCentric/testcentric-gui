@@ -34,6 +34,8 @@ namespace TestCentric.Gui.Views
 
         private StatusBarView statusBar;
 
+        private TestPropertiesView propertiesView;
+
         private System.Windows.Forms.ToolTip toolTip;
 
         private System.Windows.Forms.MenuStrip mainMenu;
@@ -76,6 +78,7 @@ namespace TestCentric.Gui.Views
         private ToolStripMenuItem testCentricHelpMenuItem;
         private TabPage errorTab;
         private TabPage outputTab;
+        private TabPage propertiesTab;
         private ErrorsAndFailuresView errorsAndFailuresView1;
         private ToolStripMenuItem recentFilesDummyMenuItem;
         private ToolStripMenuItem openWorkDirectoryMenuItem;
@@ -245,6 +248,8 @@ namespace TestCentric.Gui.Views
             this.errorsAndFailuresView1 = new TestCentric.Gui.Views.ErrorsAndFailuresView();
             this.outputTab = new System.Windows.Forms.TabPage();
             this.textOutputView1 = new TestCentric.Gui.Views.TextOutputView();
+            this.propertiesTab = new System.Windows.Forms.TabPage();
+            this.propertiesView = new TestCentric.Gui.Views.TestPropertiesView();
             this.progressBar = new TestCentric.Gui.Views.ProgressBarView();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.leftPanel = new System.Windows.Forms.Panel();
@@ -684,6 +689,7 @@ namespace TestCentric.Gui.Views
             this.resultTabs.Alignment = System.Windows.Forms.TabAlignment.Bottom;
             this.resultTabs.Controls.Add(this.errorTab);
             this.resultTabs.Controls.Add(this.outputTab);
+            this.resultTabs.Controls.Add(this.propertiesTab);
             this.resultTabs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.resultTabs.Location = new System.Drawing.Point(0, 0);
             this.resultTabs.Name = "resultTabs";
@@ -732,6 +738,24 @@ namespace TestCentric.Gui.Views
             this.textOutputView1.Size = new System.Drawing.Size(490, 357);
             this.textOutputView1.TabIndex = 0;
             this.textOutputView1.WordWrap = true;
+            //
+            // propertiesTab
+            //
+            this.propertiesTab.Controls.Add(this.propertiesView);
+            this.propertiesTab.Location = new System.Drawing.Point(4, 4);
+            this.propertiesTab.Name = "propertiesTab";
+            this.propertiesTab.Size = new System.Drawing.Size(490, 357);
+            this.propertiesTab.TabIndex = 1;
+            this.propertiesTab.Text = "Test Properties";
+            this.propertiesTab.UseVisualStyleBackColor = true;
+            //
+            // propertiesView
+            //
+            this.propertiesView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.propertiesView.Location = new System.Drawing.Point(0, 0);
+            this.propertiesView.Name = "propertiesView";
+            this.propertiesView.Size = new System.Drawing.Size(490, 357);
+            this.propertiesView.TabIndex = 0;
             // 
             // progressBar
             // 
@@ -886,6 +910,8 @@ namespace TestCentric.Gui.Views
         public ProgressBarView ProgressBarView { get { return progressBar; } }
 
         public StatusBarView StatusBarView { get { return statusBar; } }
+
+        public TestPropertiesView TestPropertiesView => propertiesView;
 
         public ErrorsAndFailuresView ErrorsAndFailuresView { get { return errorsAndFailuresView1; } }
 
