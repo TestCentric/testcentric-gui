@@ -71,6 +71,7 @@ namespace TestCentric.Gui.Views
         TestTreeView TreeView { get; }
         StatusBarView StatusBarView { get; }
         TestPropertiesView TestPropertiesView { get; }
+        XmlView XmlView { get; }
         IMessageDisplay MessageDisplay { get; }
         ILongRunningOperationDisplay LongRunningOperation { get; }
 

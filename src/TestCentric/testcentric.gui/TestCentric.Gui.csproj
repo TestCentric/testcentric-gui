@@ -122,6 +122,9 @@
       <Compile Update="Views\TestTreeView.cs">
         <SubType>UserControl</SubType>
       </Compile>
+      <Compile Update="Views\XmlView.cs">
+        <SubType>UserControl</SubType>
+      </Compile>
     </ItemGroup>
     <ItemGroup>
       <EmbeddedResource Update="Properties\Resources.resx">

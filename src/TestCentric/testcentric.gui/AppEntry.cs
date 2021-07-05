@@ -61,6 +61,7 @@ namespace TestCentric.Gui
             log.Info("Constructing presenters");
             new ProgressBarPresenter(view.ProgressBarView, model);
             new StatusBarPresenter(view.StatusBarView, model);
+            new XmlPresenter(view.XmlView, model);
             new TestPropertiesPresenter(view.TestPropertiesView, model);
             new ErrorsAndFailuresPresenter(view.ErrorsAndFailuresView, model);
             new TextOutputPresenter(view.TextOutputView, model);
