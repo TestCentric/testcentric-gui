@@ -15,7 +15,6 @@ var baseFiles = new string[]
     "testcentric.exe",
     "testcentric.exe.config",
     "TestCentric.Common.dll",
-    "TestCentric.Gui.Components.dll",
     "TestCentric.Gui.Runner.dll",
     "nunit.uiexception.dll",
     "TestCentric.Gui.Model.dll",
@@ -30,7 +29,6 @@ var PdbFiles = new string[]
 {
     "testcentric.pdb",
     "TestCentric.Common.pdb",
-    "TestCentric.Gui.Components.pdb",
     "TestCentric.Gui.Runner.pdb",
     "nunit.uiexception.pdb",
     "TestCentric.Gui.Model.pdb",

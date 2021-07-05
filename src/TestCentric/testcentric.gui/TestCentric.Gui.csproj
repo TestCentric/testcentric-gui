@@ -20,9 +20,6 @@
 		<Reference Include="System.Windows.Forms" />
 	</ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\..\Common\components\TestCentric.Gui.Components.csproj">
-            <Name>TestCentric.Gui.Components</Name>
-        </ProjectReference>
         <ProjectReference Include="..\..\TestEngine\testcentric.engine.api\testcentric.engine.api.csproj" />
         <ProjectReference Include="..\..\TestModel\model\TestCentric.Gui.Model.csproj">
             <Name>TestCentric.Gui.Model</Name>
@@ -135,6 +132,9 @@
         <SubType>Form</SubType>
       </Compile>
       <Compile Update="Dialogs\TestParametersDialog.cs">
+        <SubType>Form</SubType>
+      </Compile>
+      <Compile Update="LongRunningOperationDisplay.cs">
         <SubType>Form</SubType>
       </Compile>
       <Compile Update="Properties\Resources.Designer.cs">
