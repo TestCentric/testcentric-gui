@@ -80,6 +80,8 @@ namespace TestCentric.Gui.Presenters
             {
                 _view.DisplayText("Completed");
                 _view.DisplayDuration(ea.Result.Duration);
+                var summary = ResultSummaryCreator.FromResultNode(ea.Result);
+                _view.OnTestRunSummaryCompiled(ResultSummaryReporter.WriteSummaryReport(summary));
             };
 
             _model.Events.TestStarting += (ea) =>
