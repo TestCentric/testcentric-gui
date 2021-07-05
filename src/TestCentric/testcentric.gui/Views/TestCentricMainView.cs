@@ -28,9 +28,7 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.Panel testPanel;
         private TestCentric.Gui.Views.TestTreeView treeView;
 
-        private System.Windows.Forms.GroupBox groupBox1;
         private ProgressBarView progressBar;
-        private ExpandingLabel runSummary;
 
         private TabControl resultTabs;
 
@@ -114,7 +112,6 @@ namespace TestCentric.Gui.Views
             };
 
             // UI Elements on main form
-            RunSummary = new ControlElement(runSummary);
             ResultTabs = new TabSelector(resultTabs);
 
             // Initialize File Menu Commands
@@ -248,8 +245,6 @@ namespace TestCentric.Gui.Views
             this.errorsAndFailuresView1 = new TestCentric.Gui.Views.ErrorsAndFailuresView();
             this.outputTab = new System.Windows.Forms.TabPage();
             this.textOutputView1 = new TestCentric.Gui.Views.TextOutputView();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.runSummary = new TestCentric.Gui.Controls.ExpandingLabel();
             this.progressBar = new TestCentric.Gui.Views.ProgressBarView();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.leftPanel = new System.Windows.Forms.Panel();
@@ -260,7 +255,6 @@ namespace TestCentric.Gui.Views
             this.resultTabs.SuspendLayout();
             this.errorTab.SuspendLayout();
             this.outputTab.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.leftPanel.SuspendLayout();
             this.testPanel.SuspendLayout();
             this.SuspendLayout();
@@ -649,6 +643,7 @@ namespace TestCentric.Gui.Views
             // 
             // nunitHelpMenuItem
             // 
+            this.nunitHelpMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.None;
             this.nunitHelpMenuItem.Name = "nunitHelpMenuItem";
             this.nunitHelpMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F1)));
             this.nunitHelpMenuItem.Size = new System.Drawing.Size(177, 22);
@@ -678,7 +673,6 @@ namespace TestCentric.Gui.Views
             // 
             this.rightPanel.BackColor = System.Drawing.SystemColors.Control;
             this.rightPanel.Controls.Add(this.resultTabs);
-            this.rightPanel.Controls.Add(this.groupBox1);
             this.rightPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rightPanel.Location = new System.Drawing.Point(246, 24);
             this.rightPanel.Name = "rightPanel";
@@ -691,10 +685,10 @@ namespace TestCentric.Gui.Views
             this.resultTabs.Controls.Add(this.errorTab);
             this.resultTabs.Controls.Add(this.outputTab);
             this.resultTabs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.resultTabs.Location = new System.Drawing.Point(0, 120);
+            this.resultTabs.Location = new System.Drawing.Point(0, 0);
             this.resultTabs.Name = "resultTabs";
             this.resultTabs.SelectedIndex = 0;
-            this.resultTabs.Size = new System.Drawing.Size(498, 263);
+            this.resultTabs.Size = new System.Drawing.Size(498, 383);
             this.resultTabs.TabIndex = 2;
             // 
             // errorTab
@@ -702,7 +696,7 @@ namespace TestCentric.Gui.Views
             this.errorTab.Controls.Add(this.errorsAndFailuresView1);
             this.errorTab.Location = new System.Drawing.Point(4, 4);
             this.errorTab.Name = "errorTab";
-            this.errorTab.Size = new System.Drawing.Size(490, 237);
+            this.errorTab.Size = new System.Drawing.Size(490, 357);
             this.errorTab.TabIndex = 0;
             this.errorTab.Text = "Errors and Failures";
             this.errorTab.UseVisualStyleBackColor = true;
@@ -713,7 +707,7 @@ namespace TestCentric.Gui.Views
             this.errorsAndFailuresView1.EnableToolTips = false;
             this.errorsAndFailuresView1.Location = new System.Drawing.Point(0, 0);
             this.errorsAndFailuresView1.Name = "errorsAndFailuresView1";
-            this.errorsAndFailuresView1.Size = new System.Drawing.Size(490, 237);
+            this.errorsAndFailuresView1.Size = new System.Drawing.Size(490, 357);
             this.errorsAndFailuresView1.SourceCodeDisplay = true;
             this.errorsAndFailuresView1.SourceCodeSplitOrientation = System.Windows.Forms.Orientation.Vertical;
             this.errorsAndFailuresView1.SourceCodeSplitterDistance = 0.3F;
@@ -725,7 +719,7 @@ namespace TestCentric.Gui.Views
             this.outputTab.Controls.Add(this.textOutputView1);
             this.outputTab.Location = new System.Drawing.Point(4, 4);
             this.outputTab.Name = "outputTab";
-            this.outputTab.Size = new System.Drawing.Size(490, 237);
+            this.outputTab.Size = new System.Drawing.Size(490, 357);
             this.outputTab.TabIndex = 2;
             this.outputTab.Text = "Text Output";
             this.outputTab.UseVisualStyleBackColor = true;
@@ -735,43 +729,21 @@ namespace TestCentric.Gui.Views
             this.textOutputView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textOutputView1.Location = new System.Drawing.Point(0, 0);
             this.textOutputView1.Name = "textOutputView1";
-            this.textOutputView1.Size = new System.Drawing.Size(490, 237);
+            this.textOutputView1.Size = new System.Drawing.Size(490, 357);
             this.textOutputView1.TabIndex = 0;
             this.textOutputView1.WordWrap = true;
             // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.runSummary);
-            this.groupBox1.Controls.Add(this.progressBar);
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox1.Location = new System.Drawing.Point(0, 0);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(498, 120);
-            this.groupBox1.TabIndex = 0;
-            this.groupBox1.TabStop = false;
-            // 
-            // runSummary
-            // 
-            this.runSummary.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.runSummary.AutoEllipsis = true;
-            this.runSummary.Location = new System.Drawing.Point(8, 89);
-            this.runSummary.Name = "runSummary";
-            this.runSummary.Size = new System.Drawing.Size(480, 21);
-            this.runSummary.TabIndex = 5;
-            // 
             // progressBar
             // 
-            this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBar.BackColor = System.Drawing.SystemColors.Control;
             this.progressBar.CausesValidation = false;
+            this.progressBar.Dock = System.Windows.Forms.DockStyle.Top;
             this.progressBar.Enabled = false;
             this.progressBar.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.progressBar.Location = new System.Drawing.Point(8, 54);
+            this.progressBar.Location = new System.Drawing.Point(0, 0);
             this.progressBar.Name = "progressBar";
             this.progressBar.Progress = 0;
-            this.progressBar.Size = new System.Drawing.Size(480, 16);
+            this.progressBar.Size = new System.Drawing.Size(240, 16);
             this.progressBar.Status = TestCentric.Gui.Views.ProgressBarStatus.Success;
             this.progressBar.TabIndex = 0;
             // 
@@ -786,6 +758,7 @@ namespace TestCentric.Gui.Views
             // 
             // testPanel
             // 
+            this.testPanel.Controls.Add(this.progressBar);
             this.testPanel.Controls.Add(this.treeView);
             this.testPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.testPanel.Location = new System.Drawing.Point(0, 0);
@@ -797,10 +770,12 @@ namespace TestCentric.Gui.Views
             // 
             this.treeView.AllowDrop = true;
             this.treeView.AlternateImageSet = null;
-            this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeView.Location = new System.Drawing.Point(0, 0);
+            this.treeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.treeView.Location = new System.Drawing.Point(0, 16);
             this.treeView.Name = "treeView";
-            this.treeView.Size = new System.Drawing.Size(240, 383);
+            this.treeView.Size = new System.Drawing.Size(240, 348);
             this.treeView.TabIndex = 0;
             // 
             // TestCentricMainView
@@ -823,7 +798,6 @@ namespace TestCentric.Gui.Views
             this.resultTabs.ResumeLayout(false);
             this.errorTab.ResumeLayout(false);
             this.outputTab.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
             this.leftPanel.ResumeLayout(false);
             this.testPanel.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -857,7 +831,6 @@ namespace TestCentric.Gui.Views
         }
 
         // UI Elements
-        public IControlElement RunSummary { get; }
         public ISelection ResultTabs { get; }
 
         // File Menu Items
@@ -919,17 +892,6 @@ namespace TestCentric.Gui.Views
         public ITextOutputView TextOutputView { get { return textOutputView1; } }
 
         #endregion
-
-        #endregion
-
-        #region Overrides
-
-        protected override void OnFontChanged(EventArgs e)
-        {
-            base.OnFontChanged(e);
-
-            runSummary.Font = MakeBold(Font);
-        }
 
         #endregion
 
