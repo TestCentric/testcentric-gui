@@ -119,6 +119,15 @@
         <PackageReference Include="NUnit.Engine.Api" Version="3.11.1" />
     </ItemGroup>
     <ItemGroup>
+      <Compile Update="Dialogs\ExtensionDialog.cs">
+        <SubType>Form</SubType>
+      </Compile>
+      <Compile Update="Dialogs\ParameterDialog.cs">
+        <SubType>Form</SubType>
+      </Compile>
+      <Compile Update="Dialogs\TestParametersDialog.cs">
+        <SubType>Form</SubType>
+      </Compile>
       <Compile Update="Properties\Resources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
