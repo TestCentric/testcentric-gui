@@ -119,6 +119,15 @@
         <PackageReference Include="NUnit.Engine.Api" Version="3.11.1" />
     </ItemGroup>
     <ItemGroup>
+      <Compile Update="Controls\ExpandingLabel.cs">
+        <SubType>Component</SubType>
+      </Compile>
+      <Compile Update="Controls\TestCentricProgressBar.cs">
+        <SubType>Component</SubType>
+      </Compile>
+      <Compile Update="Controls\TipWindow.cs">
+        <SubType>Form</SubType>
+      </Compile>
       <Compile Update="Dialogs\ExtensionDialog.cs">
         <SubType>Form</SubType>
       </Compile>
