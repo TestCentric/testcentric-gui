@@ -22,7 +22,6 @@ namespace TestCentric.Gui.Views
         int SplitterPosition { get; set; }
 
         // UI Elements
-        IControlElement RunSummary { get; }
         ISelection ResultTabs { get; }
 
         // File Menu Items

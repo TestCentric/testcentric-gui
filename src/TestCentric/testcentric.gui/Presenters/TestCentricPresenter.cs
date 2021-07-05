@@ -123,7 +123,6 @@ namespace TestCentric.Gui.Presenters
             _model.Events.TestUnloaded += (TestEventArgs e) =>
             {
                 _view.LongRunningOperation.Hide();
-                _view.RunSummary.Text = null;
 
                 UpdateViewCommands();
             };
@@ -139,9 +138,6 @@ namespace TestCentric.Gui.Presenters
             {
                 _view.LongRunningOperation.Hide();
 
-                if (_settings.Gui.ClearResultsOnReload)
-                    _view.RunSummary.Text = null;
-
                 UpdateViewCommands();
             };
 
@@ -155,8 +151,6 @@ namespace TestCentric.Gui.Presenters
             _model.Events.RunStarting += (RunStartingEventArgs e) =>
             {
                 UpdateViewCommands();
-
-                _view.RunSummary.Text = null;
             };
 
             _model.Events.RunFinished += (TestResultEventArgs e) =>
@@ -165,15 +159,10 @@ namespace TestCentric.Gui.Presenters
 
                 UpdateViewCommands();
 
-                ResultSummary summary = ResultSummaryCreator.FromResultNode(e.Result);
-                _view.RunSummary.Text = string.Format(
-                    "Passed: {0}   Failed: {1}   Errors: {2}   Inconclusive: {3}   Invalid: {4}   Ignored: {5}   Skipped: {6}   Time: {7}",
-                    summary.PassCount, summary.FailedCount, summary.ErrorCount, summary.InconclusiveCount, summary.InvalidCount, summary.IgnoreCount, summary.SkipCount, summary.Duration);
-
-                if (summary.RunCount == 0)
-                {
-
-                }
+                //ResultSummary summary = ResultSummaryCreator.FromResultNode(e.Result);
+                //_view.RunSummary.Text = string.Format(
+                //    "Passed: {0}   Failed: {1}   Errors: {2}   Inconclusive: {3}   Invalid: {4}   Ignored: {5}   Skipped: {6}   Time: {7}",
+                //    summary.PassCount, summary.FailedCount, summary.ErrorCount, summary.InconclusiveCount, summary.InvalidCount, summary.IgnoreCount, summary.SkipCount, summary.Duration);
 
                 //string resultPath = Path.Combine(TestProject.BasePath, "TestResult.xml");
                 // TODO: Use Work Directory
