@@ -104,8 +104,8 @@ public abstract class PackageTester : GuiTester
 	protected static readonly string[] NET_CORE_AGENT_FILES = {
 		"testcentric-agent.dll", "testcentric-agent.dll.config" };
 	protected static readonly string[] GUI_FILES = {
-        "testcentric.exe", "testcentric.exe.config", "tc-next.exe", "tc-next.exe.config", "nunit.uiexception.dll",
-        "TestCentric.Gui.Runner.dll", "Experimental.Gui.Runner.dll", "TestCentric.Gui.Model.dll", "TestCentric.Common.dll" };
+        "testcentric.exe", "testcentric.exe.config", "nunit.uiexception.dll",
+        "TestCentric.Gui.Runner.dll", "TestCentric.Gui.Model.dll", "TestCentric.Common.dll" };
     protected static readonly string[] TREE_ICONS_JPG = {
         "Success.jpg", "Failure.jpg", "Ignored.jpg", "Inconclusive.jpg", "Skipped.jpg" };
     protected static readonly string[] TREE_ICONS_PNG = {
@@ -225,11 +225,6 @@ public abstract class PackageTester : GuiTester
 				Assemblies = new[] { new ExpectedAssemblyResult("TestCentric.Gui.Model.Tests.dll", "net-4.5") }
 			}));
 
-		// TODO: Ensure that experimental runner saves results and handles --unattended
-		// PackageTests.Add(new PackageTest(2, "Run tests of the TestCentric model using the Experimental Runner", ExperimentalRunner,
-		//     "TestCentric.Gui.Model.Tests.dll",
-		//     new ExpectedResult("Passed"));
-
 		//PackageTests.Add(new PackageTest(2, "Run mock-assembly.dll built for NUnit V2", StandardRunner,
 		//	"v2-tests/mock-assembly.dll",
 		//	new ExpectedResult("Failed")
@@ -278,7 +273,6 @@ public abstract class PackageTester : GuiTester
 	private List<PackageTest> PackageTests { get; }
 
 	protected string StandardRunner => PackageTestBinDirectory + GUI_RUNNER;
-	protected string ExperimentalRunner => PackageTestBinDirectory + EXPERIMENTAL_RUNNER;
 
 	public void RunAllTests()
 	{

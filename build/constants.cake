@@ -16,7 +16,6 @@ const string ENGINE_CORE_PACKAGE_NAME = "TestCentric.Engine.Core";
 const string ENGINE_API_PACKAGE_NAME = "TestCentric.Engine.Api";
 
 const string GUI_RUNNER = "testcentric.exe";
-const string EXPERIMENTAL_RUNNER = "tc-next.exe";
 const string GUI_TESTS = "*.Tests.dll";
 
 const string DEFAULT_TEST_RESULT_FILE = "TestResult.xml";
