@@ -6,8 +6,10 @@
 using System.Globalization;
 using System.Text;
 
-namespace TestCentric.Gui.Model
+namespace TestCentric.Gui.Presenters
 {
+    using Model;
+
     public static class ResultSummaryReporter
     {
         public static string WriteSummaryReport(ResultSummary summary)
