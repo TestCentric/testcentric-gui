@@ -100,14 +100,6 @@ namespace TestCentric.Gui.Views
             });
         }
 
-        public void OnTestRunSummaryCompiled(string testRunSummary)
-        {
-            InvokeIfRequired(() =>
-            {
-                _resultSummaryToolTip.ToolTipTitle = "Tests Run Summary";
-                _resultSummaryToolTip.Show(testRunSummary, this, 10000);
-            });
-        }
         protected override void OnFontChanged(EventArgs e)
         {
             base.OnFontChanged(e);

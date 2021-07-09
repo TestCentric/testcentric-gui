@@ -22,7 +22,7 @@ namespace TestCentric.Gui.Presenters.Main
             _model.IsTestRunning.Returns(false);
             _model.TestPackage.Returns(new NUnit.Engine.TestPackage("dummy.dll"));
 
-            var resultNode = new ResultNode("<test-run/>");
+            var resultNode = new ResultNode("<test-run id='XXX' result='Failed' />");
             FireRunFinishedEvent(resultNode);
         }
 

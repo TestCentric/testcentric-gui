@@ -78,6 +78,9 @@ namespace TestCentric.Gui.Views
         // Dialog Manager
         IDialogManager DialogManager { get; }
 
+        // Test Run Summary
+        void DisplayTestRunSummary(string report);
+
         // Methods used by Presenter
         void Configure(bool useFullGui);
         void SetTitleBar(string fileName);
