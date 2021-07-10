@@ -173,6 +173,16 @@ namespace TestCentric.Gui.Presenters
 
                 _strategy.Reload();
             };
+
+            _view.RunSummaryButton.Execute += () =>
+            {
+                // HACK needed until we move menu bar to top level view
+                var mainView = (_view as Control).FindForm() as IMainView;
+                var resultId = _model.GetResultForTest(_model.Tests.Id);
+                var summary = ResultSummaryCreator.FromResultNode(resultId);
+                string report = ResultSummaryReporter.WriteSummaryReport(summary);
+                mainView.DisplayTestRunSummary(report);
+            };
         }
 
         private void RunAllTests()
@@ -275,6 +285,8 @@ namespace TestCentric.Gui.Presenters
             _view.RunCheckedCommand.Visible = canRunChecked;
             _view.DebugCheckedCommand.Visible = canRunChecked;
             _view.StopRunCommand.Enabled = isRunning;
+
+            _view.RunSummaryButton.Visible = !isRunning && _model.HasResults;
         }
 
         private void SetDefaultDisplayStrategy()

@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric GUI contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -6,8 +6,10 @@
 using System;
 using NUnit.Framework;
 
-namespace TestCentric.Gui.Model
+namespace TestCentric.Gui.Presenters
 {
+    using Model;
+
     [TestFixture]
     public class ResultSummaryReporterTests
     {

@@ -15,7 +15,7 @@ namespace TestCentric.Gui.Presenters.Main
     using Elements;
     using Views;
 
-    public class CommandTests : MainPresenterTestBase
+    public class CommandTests : TestTreePresenterTestBase
     {
         private static string[] NO_FILES_SELECTED = new string[0];
         private static string NO_FILE_PATH = null;

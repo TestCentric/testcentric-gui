@@ -57,6 +57,14 @@ namespace TestCentric.Gui
 
         public void Display(string text)
         {
+            if (Owner.InvokeRequired)
+                Owner.Invoke(new EventHandler((s, e) => DisplayOperation(text)));
+            else
+                DisplayOperation(text);
+        }
+
+        private void DisplayOperation(string text)
+        {
             operation.Text = text;
 
             ClientSize = new Size(320, 60);
@@ -70,5 +78,14 @@ namespace TestCentric.Gui
             Invalidate();
             Update();
         }
+
+        public new void Hide()
+        {
+            if (Owner.InvokeRequired)
+                Owner.Invoke(new EventHandler((s,e) => base.Hide()));
+            else
+                base.Hide();
+        }
     }
+
 }

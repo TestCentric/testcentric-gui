@@ -8,7 +8,7 @@ using NUnit.Framework;
 
 namespace TestCentric.Gui.Presenters.Main
 {
-    public class WhenTestsAreUnloaded : MainPresenterTestBase
+    public class WhenTestsAreUnloaded : TestTreePresenterTestBase
     {
         [SetUp]
         public void SimulateTestUnload()

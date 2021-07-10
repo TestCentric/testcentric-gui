@@ -10,7 +10,7 @@ namespace TestCentric.Gui.Presenters.Main
 {
     using Model;
 
-    public class WhenTestRunCompletes : MainPresenterTestBase
+    public class WhenTestRunCompletes : TestTreePresenterTestBase
     {
         [SetUp]
         public void SimulateTestRunFinish()
@@ -22,7 +22,7 @@ namespace TestCentric.Gui.Presenters.Main
             _model.IsTestRunning.Returns(false);
             _model.TestPackage.Returns(new NUnit.Engine.TestPackage("dummy.dll"));
 
-            var resultNode = new ResultNode("<test-run/>");
+            var resultNode = new ResultNode("<test-run id='XXX' result='Failed' />");
             FireRunFinishedEvent(resultNode);
         }
 
@@ -47,6 +47,12 @@ namespace TestCentric.Gui.Presenters.Main
         public void CheckCommandEnabled(string propName, bool enabled)
         {
             ViewElement(propName).Received().Enabled = enabled;
+        }
+
+        [Test]
+        public void TestRunSummaryIsDisplayed()
+        {
+            _view.Received().DisplayTestRunSummary(Arg.Any<string>());
         }
     }
 }

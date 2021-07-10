@@ -51,6 +51,8 @@ namespace TestCentric.Gui.Views
                 "testGrouping",
                 byAssemblyMenuItem, byFixtureMenuItem, byCategoryMenuItem, byExtendedCategoryMenuItem, byOutcomeMenuItem, byDurationMenuItem);
 
+            RunSummaryButton = new ButtonElement(runSummaryButton);
+
             RunContextCommand = new CommandMenuElement(this.runMenuItem);
             RunCheckedCommand = new CommandMenuElement(this.runCheckedMenuItem);
             DebugContextCommand = new CommandMenuElement(this.debugMenuItem);
@@ -85,6 +87,8 @@ namespace TestCentric.Gui.Views
         public ICommand DebugAllCommand { get; private set; }
         public ICommand DebugSelectedCommand { get; private set; }
         public ICommand DebugFailedCommand { get; private set; }
+
+        public ICommand RunSummaryButton { get; private set; }
 
         public ICommand RunContextCommand { get; private set; }
         public ICommand RunCheckedCommand { get; private set; }

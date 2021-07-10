@@ -8,7 +8,7 @@ using NUnit.Framework;
 
 namespace TestCentric.Gui.Presenters.Main
 {
-    public class WhenTestsAreLoading : MainPresenterTestBase
+    public class WhenTestsAreLoading : TestTreePresenterTestBase
     {
         [SetUp]
         public void SimulateTestsLoading()

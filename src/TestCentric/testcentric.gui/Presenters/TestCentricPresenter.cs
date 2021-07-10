@@ -159,11 +159,6 @@ namespace TestCentric.Gui.Presenters
 
                 UpdateViewCommands();
 
-                //ResultSummary summary = ResultSummaryCreator.FromResultNode(e.Result);
-                //_view.RunSummary.Text = string.Format(
-                //    "Passed: {0}   Failed: {1}   Errors: {2}   Inconclusive: {3}   Invalid: {4}   Ignored: {5}   Skipped: {6}   Time: {7}",
-                //    summary.PassCount, summary.FailedCount, summary.ErrorCount, summary.InconclusiveCount, summary.InvalidCount, summary.IgnoreCount, summary.SkipCount, summary.Duration);
-
                 //string resultPath = Path.Combine(TestProject.BasePath, "TestResult.xml");
                 // TODO: Use Work Directory
                 string resultPath = "TestResult.xml";
@@ -180,9 +175,16 @@ namespace TestCentric.Gui.Presenters
 
                 //if (e.Result.Outcome.Status == TestStatus.Failed)
                 //    _view.Activate();
-                
+
                 // If we were running unattended, it's time to close
-                if (_options.Unattended)
+
+                if (!_options.Unattended)
+                {
+                    var summary = ResultSummaryCreator.FromResultNode(e.Result);
+                    string report = ResultSummaryReporter.WriteSummaryReport(summary);
+                    _view.DisplayTestRunSummary(report);
+                }
+                else
                     _view.Close();
             };
 

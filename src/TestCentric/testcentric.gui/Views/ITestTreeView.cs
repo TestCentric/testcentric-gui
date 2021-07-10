@@ -28,6 +28,8 @@ namespace TestCentric.Gui.Views
         ISelection DisplayFormat { get; }
         ISelection GroupBy { get; }
 
+        ICommand RunSummaryButton { get; }
+
         ICommand RunContextCommand { get; }
         ICommand RunCheckedCommand { get; }
         ICommand DebugContextCommand { get; }

@@ -15,8 +15,6 @@ namespace TestCentric.Gui.Views
 
     public class TestCentricMainView : TestCentricFormBase, IMainView
     {
-        static Logger log = InternalTrace.GetLogger(typeof(TestCentricMainView));
-
         #region Instance variables
 
         private System.ComponentModel.IContainer components;
@@ -161,6 +159,20 @@ namespace TestCentric.Gui.Views
             LongRunningOperation = new LongRunningOperationDisplay(this);
         }
 
+        #region Test Run Summary
+
+        private RunSummaryDisplay _testRunSummary;
+
+        public void DisplayTestRunSummary(string report)
+        {
+            if (_testRunSummary == null)
+                _testRunSummary = new RunSummaryDisplay(this);
+
+            _testRunSummary.Display(report);
+        }
+
+        #endregion
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -242,12 +254,12 @@ namespace TestCentric.Gui.Views
             this.treeSplitter = new System.Windows.Forms.Splitter();
             this.rightPanel = new System.Windows.Forms.Panel();
             this.resultTabs = new System.Windows.Forms.TabControl();
+            this.propertiesTab = new System.Windows.Forms.TabPage();
+            this.propertiesView = new TestCentric.Gui.Views.TestPropertiesView();
             this.errorTab = new System.Windows.Forms.TabPage();
             this.errorsAndFailuresView1 = new TestCentric.Gui.Views.ErrorsAndFailuresView();
             this.outputTab = new System.Windows.Forms.TabPage();
             this.textOutputView1 = new TestCentric.Gui.Views.TextOutputView();
-            this.propertiesTab = new System.Windows.Forms.TabPage();
-            this.propertiesView = new TestCentric.Gui.Views.TestPropertiesView();
             this.xmlTab = new System.Windows.Forms.TabPage();
             this.xmlView = new TestCentric.Gui.Views.XmlView();
             this.progressBar = new TestCentric.Gui.Views.ProgressBarView();
@@ -258,9 +270,9 @@ namespace TestCentric.Gui.Views
             this.mainMenu.SuspendLayout();
             this.rightPanel.SuspendLayout();
             this.resultTabs.SuspendLayout();
+            this.propertiesTab.SuspendLayout();
             this.errorTab.SuspendLayout();
             this.outputTab.SuspendLayout();
-            this.propertiesTab.SuspendLayout();
             this.xmlTab.SuspendLayout();
             this.leftPanel.SuspendLayout();
             this.testPanel.SuspendLayout();
@@ -700,6 +712,40 @@ namespace TestCentric.Gui.Views
             this.resultTabs.Size = new System.Drawing.Size(498, 383);
             this.resultTabs.TabIndex = 2;
             // 
+            // propertiesTab
+            // 
+            this.propertiesTab.Controls.Add(this.propertiesView);
+            this.propertiesTab.Location = new System.Drawing.Point(4, 4);
+            this.propertiesTab.Name = "propertiesTab";
+            this.propertiesTab.Size = new System.Drawing.Size(490, 357);
+            this.propertiesTab.TabIndex = 1;
+            this.propertiesTab.Text = "Test Properties";
+            this.propertiesTab.UseVisualStyleBackColor = true;
+            // 
+            // propertiesView
+            // 
+            this.propertiesView.AssertCount = "";
+            this.propertiesView.Assertions = "";
+            this.propertiesView.AutoScroll = true;
+            this.propertiesView.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.propertiesView.Categories = "";
+            this.propertiesView.Description = "";
+            this.propertiesView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.propertiesView.ElapsedTime = "";
+            this.propertiesView.FullName = "";
+            this.propertiesView.Header = "";
+            this.propertiesView.Location = new System.Drawing.Point(0, 0);
+            this.propertiesView.Name = "propertiesView";
+            this.propertiesView.Outcome = "";
+            this.propertiesView.Output = "";
+            this.propertiesView.Properties = "";
+            this.propertiesView.RunState = "";
+            this.propertiesView.Size = new System.Drawing.Size(490, 357);
+            this.propertiesView.SkipReason = "";
+            this.propertiesView.TabIndex = 0;
+            this.propertiesView.TestCount = "";
+            this.propertiesView.TestType = "";
+            // 
             // errorTab
             // 
             this.errorTab.Controls.Add(this.errorsAndFailuresView1);
@@ -742,40 +788,6 @@ namespace TestCentric.Gui.Views
             this.textOutputView1.TabIndex = 0;
             this.textOutputView1.WordWrap = true;
             // 
-            // propertiesTab
-            // 
-            this.propertiesTab.Controls.Add(this.propertiesView);
-            this.propertiesTab.Location = new System.Drawing.Point(4, 4);
-            this.propertiesTab.Name = "propertiesTab";
-            this.propertiesTab.Size = new System.Drawing.Size(490, 357);
-            this.propertiesTab.TabIndex = 1;
-            this.propertiesTab.Text = "Test Properties";
-            this.propertiesTab.UseVisualStyleBackColor = true;
-            // 
-            // propertiesView
-            // 
-            this.propertiesView.AssertCount = "";
-            this.propertiesView.Assertions = "";
-            this.propertiesView.AutoScroll = true;
-            this.propertiesView.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.propertiesView.Categories = "";
-            this.propertiesView.Description = "";
-            this.propertiesView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.propertiesView.ElapsedTime = "";
-            this.propertiesView.FullName = "";
-            this.propertiesView.Header = "";
-            this.propertiesView.Location = new System.Drawing.Point(0, 0);
-            this.propertiesView.Name = "propertiesView";
-            this.propertiesView.Outcome = "";
-            this.propertiesView.Output = "";
-            this.propertiesView.Properties = "";
-            this.propertiesView.RunState = "";
-            this.propertiesView.Size = new System.Drawing.Size(490, 357);
-            this.propertiesView.SkipReason = "";
-            this.propertiesView.TabIndex = 0;
-            this.propertiesView.TestCount = "";
-            this.propertiesView.TestType = "";
-            // 
             // xmlTab
             // 
             this.xmlTab.Controls.Add(this.xmlView);
@@ -811,7 +823,7 @@ namespace TestCentric.Gui.Views
             this.progressBar.Location = new System.Drawing.Point(0, 0);
             this.progressBar.Name = "progressBar";
             this.progressBar.Progress = 0;
-            this.progressBar.Size = new System.Drawing.Size(240, 16);
+            this.progressBar.Size = new System.Drawing.Size(240, 19);
             this.progressBar.Status = TestCentric.Gui.Views.ProgressBarStatus.Success;
             this.progressBar.TabIndex = 0;
             // 
@@ -826,8 +838,8 @@ namespace TestCentric.Gui.Views
             // 
             // testPanel
             // 
-            this.testPanel.Controls.Add(this.progressBar);
             this.testPanel.Controls.Add(this.treeView);
+            this.testPanel.Controls.Add(this.progressBar);
             this.testPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.testPanel.Location = new System.Drawing.Point(0, 0);
             this.testPanel.Name = "testPanel";
@@ -838,12 +850,11 @@ namespace TestCentric.Gui.Views
             // 
             this.treeView.AllowDrop = true;
             this.treeView.AlternateImageSet = null;
-            this.treeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.treeView.Location = new System.Drawing.Point(0, 16);
+            this.treeView.BorderStyle = BorderStyle.Fixed3D;
+            this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeView.Location = new System.Drawing.Point(0, 19);
             this.treeView.Name = "treeView";
-            this.treeView.Size = new System.Drawing.Size(240, 348);
+            this.treeView.Size = new System.Drawing.Size(240, 364);
             this.treeView.TabIndex = 0;
             // 
             // TestCentricMainView
@@ -864,12 +875,13 @@ namespace TestCentric.Gui.Views
             this.mainMenu.PerformLayout();
             this.rightPanel.ResumeLayout(false);
             this.resultTabs.ResumeLayout(false);
+            this.propertiesTab.ResumeLayout(false);
             this.errorTab.ResumeLayout(false);
             this.outputTab.ResumeLayout(false);
-            this.propertiesTab.ResumeLayout(false);
             this.xmlTab.ResumeLayout(false);
             this.leftPanel.ResumeLayout(false);
             this.testPanel.ResumeLayout(false);
+            this.testPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

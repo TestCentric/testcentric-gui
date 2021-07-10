@@ -17,7 +17,5 @@ namespace TestCentric.Gui.Views
         void DisplayWarnings(int count);
         void DisplayInconclusive(int count);
         void DisplayDuration(double time);
-
-        void OnTestRunSummaryCompiled(string testRunSummary);
     }
 }

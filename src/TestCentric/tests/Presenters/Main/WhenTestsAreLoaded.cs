@@ -10,7 +10,7 @@ namespace TestCentric.Gui.Presenters.Main
 {
     using Model;
 
-    public class WhenTestsAreLoaded : MainPresenterTestBase
+    public class WhenTestsAreLoaded : TestTreePresenterTestBase
     {
         [SetUp]
         public void SimulateTestLoad()

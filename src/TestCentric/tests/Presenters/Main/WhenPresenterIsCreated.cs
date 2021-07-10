@@ -8,7 +8,7 @@ using NUnit.Framework;
 
 namespace TestCentric.Gui.Presenters.Main
 {
-    public class WhenPresenterIsCreated : MainPresenterTestBase
+    public class WhenPresenterIsCreated : TestTreePresenterTestBase
     {
 #if NYI // Add after implementation of project or package saving
         [TestCase("NewProjectCommand", true)]
