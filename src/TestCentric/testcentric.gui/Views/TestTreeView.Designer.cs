@@ -52,8 +52,6 @@ namespace TestCentric.Gui.Views
             this.runSelectedMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.testParametersMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem9 = new System.Windows.Forms.ToolStripSeparator();
-            this.stopRunMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugButton = new System.Windows.Forms.ToolStripSplitButton();
             this.debugAllMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugSelectedMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -69,6 +67,7 @@ namespace TestCentric.Gui.Views
             this.byOutcomeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.byDurationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runSummaryButton = new System.Windows.Forms.ToolStripButton();
+            this.stopRunButton = new System.Windows.Forms.ToolStripButton();
             this.testTreeContextMenu.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -198,7 +197,8 @@ namespace TestCentric.Gui.Views
             this.runButton,
             this.debugButton,
             this.formatButton,
-            this.runSummaryButton});
+            this.runSummaryButton,
+            this.stopRunButton});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(191, 25);
@@ -213,9 +213,7 @@ namespace TestCentric.Gui.Views
             this.runAllMenuItem,
             this.runSelectedMenuItem,
             this.toolStripSeparator5,
-            this.testParametersMenuItem,
-            this.toolStripMenuItem9,
-            this.stopRunMenuItem});
+            this.testParametersMenuItem});
             this.runButton.Image = ((System.Drawing.Image)(resources.GetObject("runButton.Image")));
             this.runButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.runButton.Name = "runButton";
@@ -226,7 +224,7 @@ namespace TestCentric.Gui.Views
             // 
             this.runAllMenuItem.Name = "runAllMenuItem";
             this.runAllMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.runAllMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.runAllMenuItem.Size = new System.Drawing.Size(165, 22);
             this.runAllMenuItem.Text = "Run All";
             this.runAllMenuItem.ToolTipText = "Run all tests displayed";
             // 
@@ -234,31 +232,20 @@ namespace TestCentric.Gui.Views
             // 
             this.runSelectedMenuItem.Name = "runSelectedMenuItem";
             this.runSelectedMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F6;
-            this.runSelectedMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.runSelectedMenuItem.Size = new System.Drawing.Size(165, 22);
             this.runSelectedMenuItem.Text = "Run Selected";
             this.runSelectedMenuItem.ToolTipText = "Run the selected tests";
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(162, 6);
             // 
             // testParametersMenuItem
             // 
             this.testParametersMenuItem.Name = "testParametersMenuItem";
-            this.testParametersMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.testParametersMenuItem.Size = new System.Drawing.Size(165, 22);
             this.testParametersMenuItem.Text = "Test Parameters...";
-            // 
-            // toolStripMenuItem9
-            // 
-            this.toolStripMenuItem9.Name = "toolStripMenuItem9";
-            this.toolStripMenuItem9.Size = new System.Drawing.Size(177, 6);
-            // 
-            // stopRunMenuItem
-            // 
-            this.stopRunMenuItem.Name = "stopRunMenuItem";
-            this.stopRunMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.stopRunMenuItem.Text = "Stop Run";
             // 
             // debugButton
             // 
@@ -387,6 +374,15 @@ namespace TestCentric.Gui.Views
             this.runSummaryButton.Text = "Summary Report";
             this.runSummaryButton.ToolTipText = "Display summary report for last test run";
             // 
+            // stopRunButton
+            // 
+            this.stopRunButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.stopRunButton.Image = ((System.Drawing.Image)(resources.GetObject("stopRunButton.Image")));
+            this.stopRunButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.stopRunButton.Name = "stopRunButton";
+            this.stopRunButton.Size = new System.Drawing.Size(23, 22);
+            this.stopRunButton.ToolTipText = "Stop the current test run.";
+            // 
             // TestTreeView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -410,8 +406,6 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.ToolStripSplitButton runButton;
         private System.Windows.Forms.ToolStripMenuItem runAllMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runSelectedMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem9;
-        private System.Windows.Forms.ToolStripMenuItem stopRunMenuItem;
         private System.Windows.Forms.ContextMenuStrip testTreeContextMenu;
         private System.Windows.Forms.ToolStripMenuItem runMenuItem;
         private System.Windows.Forms.ToolStripMenuItem expandAllMenuItem;
@@ -444,5 +438,6 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem testParametersMenuItem;
         private System.Windows.Forms.ToolStripButton runSummaryButton;
+        private System.Windows.Forms.ToolStripButton stopRunButton;
     }
 }
