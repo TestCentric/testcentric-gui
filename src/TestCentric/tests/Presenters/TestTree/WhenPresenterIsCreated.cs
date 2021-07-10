@@ -15,7 +15,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         [TestCase("DebugAllCommand")]
         [TestCase("DebugSelectedCommand")]
         [TestCase("TestParametersCommand")]
-        [TestCase("StopRunCommand")]
+        [TestCase("StopRunButton")]
         public void CommandIsDisabled(string propName)
         {
             ViewElement(propName).Received().Enabled = false;

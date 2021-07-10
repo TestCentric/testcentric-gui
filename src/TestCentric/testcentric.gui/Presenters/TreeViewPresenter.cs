@@ -132,7 +132,7 @@ namespace TestCentric.Gui.Presenters
             };
             _view.RunAllCommand.Execute += () => RunAllTests();
             _view.RunSelectedCommand.Execute += () => RunTests(_selectedTestItem);
-            _view.StopRunCommand.Execute += () => _model.StopTestRun(true);
+            _view.StopRunButton.Execute += () => _model.StopTestRun(true);
             _view.TestParametersCommand.Execute += () =>
             {
                 using (var dlg = new TestParametersDialog())
@@ -280,7 +280,7 @@ namespace TestCentric.Gui.Presenters
             _view.DebugSelectedCommand.Enabled = canRun;
             _view.RunCheckedCommand.Visible = canRunChecked;
             _view.DebugCheckedCommand.Visible = canRunChecked;
-            _view.StopRunCommand.Enabled = isRunning;
+            _view.StopRunButton.Enabled = isRunning;
 
             _view.RunSummaryButton.Visible = !isRunning && _model.HasResults;
         }

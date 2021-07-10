@@ -35,11 +35,12 @@ namespace TestCentric.Gui.Views
             RunAllCommand = new CommandMenuElement(runAllMenuItem);
             RunSelectedCommand = new CommandMenuElement(runSelectedMenuItem);
             TestParametersCommand = new CommandMenuElement(testParametersMenuItem);
-            StopRunCommand = new CommandMenuElement(stopRunMenuItem);
 
             DebugButton = new SplitButtonElement(debugButton);
             DebugAllCommand = new CommandMenuElement(debugAllMenuItem);
             DebugSelectedCommand = new CommandMenuElement(debugSelectedMenuItem);
+
+            StopRunButton = new ButtonElement(stopRunButton);
 
             FormatButton = new ToolStripElement(formatButton);
             DisplayFormat = new CheckedToolStripMenuGroup(
@@ -78,11 +79,12 @@ namespace TestCentric.Gui.Views
         public ICommand RunAllCommand { get; private set; }
         public ICommand RunSelectedCommand { get; private set; }
         public ICommand TestParametersCommand { get; private set; }
-        public ICommand StopRunCommand { get; private set; }
 
         public ICommand DebugButton { get; private set; }
         public ICommand DebugAllCommand { get; private set; }
         public ICommand DebugSelectedCommand { get; private set; }
+
+        public ICommand StopRunButton { get; private set; }
 
         public ICommand RunSummaryButton { get; private set; }
 
