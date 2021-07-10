@@ -60,7 +60,6 @@ namespace TestCentric.Gui.Presenters.TestTree
         //    _model.DidNotReceive().ReloadTests();
         //}
 
-
         [Test]
         public void WhenDisplayFormatChanges_TreeIsReloaded()
         {

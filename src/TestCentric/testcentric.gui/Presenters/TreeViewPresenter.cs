@@ -132,7 +132,6 @@ namespace TestCentric.Gui.Presenters
             };
             _view.RunAllCommand.Execute += () => RunAllTests();
             _view.RunSelectedCommand.Execute += () => RunTests(_selectedTestItem);
-            _view.RunFailedCommand.Execute += () => RunAllTests(); // RunFailed NYI
             _view.StopRunCommand.Execute += () => _model.StopTestRun(true);
             _view.TestParametersCommand.Execute += () =>
             {
@@ -164,7 +163,6 @@ namespace TestCentric.Gui.Presenters
             };
             _view.DebugAllCommand.Execute += () => _model.DebugAllTests();
             _view.DebugSelectedCommand.Execute += () => _model.DebugTests(_selectedTestItem);
-            _view.DebugFailedCommand.Execute += () => _model.DebugAllTests(); // NYI
 
             // Change of display format
             _view.DisplayFormat.SelectionChanged += () =>
@@ -277,11 +275,9 @@ namespace TestCentric.Gui.Presenters
             //_view.RunButton.Enabled = canRun;
             _view.RunAllCommand.Enabled = canRun;
             _view.RunSelectedCommand.Enabled = canRun;
-            _view.RunFailedCommand.Enabled = canRun;
             _view.TestParametersCommand.Enabled = canRun;
             _view.DebugAllCommand.Enabled = canRun;
             _view.DebugSelectedCommand.Enabled = canRun;
-            _view.DebugFailedCommand.Enabled = canRun;
             _view.RunCheckedCommand.Visible = canRunChecked;
             _view.DebugCheckedCommand.Visible = canRunChecked;
             _view.StopRunCommand.Enabled = isRunning;
