@@ -8,7 +8,7 @@ using NUnit.Framework;
 
 namespace TestCentric.Gui.Presenters.Main
 {
-    public class WhenTestRunBegins : MainPresenterTestBase
+    public class WhenTestRunBegins : TestTreePresenterTestBase
     {
         [SetUp]
         protected void SimulateTestRunStarting()

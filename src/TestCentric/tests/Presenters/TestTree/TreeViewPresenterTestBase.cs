@@ -6,22 +6,28 @@
 using NUnit.Framework;
 using NSubstitute;
 
-namespace TestCentric.Gui.Presenters.Main
+namespace TestCentric.Gui.Presenters.TestTree
 {
+    using System.Windows.Forms;
     using Elements;
     using Model;
     using Views;
 
-    public class TestTreePresenterTestBase : PresenterTestBase<IMainView>
+    public class TreeViewPresenterTestBase : PresenterTestBase<ITestTreeView>
     {
-        protected TestCentricPresenter _presenter;
+        protected TreeViewPresenter _presenter;
 
         [SetUp]
         public void CreatePresenter()
         {
-            _view.LongRunningOperation.Returns(Substitute.For<ILongRunningOperationDisplay>());
+            _view.Tree.ContextMenuStrip.Returns(new ContextMenuStrip());
+            _settings.Gui.TestTree.AlternateImageSet = "MyImageSet";
+            _settings.Gui.TestTree.ShowCheckBoxes = true;
 
-            _presenter = new TestCentricPresenter(_view, _model, new CommandLineOptions());
+            _presenter = new TreeViewPresenter(_view, _model);
+
+            // Make it look like the view loaded
+            _view.Load += Raise.Event<System.EventHandler>(_view, new System.EventArgs());
         }
 
         [TearDown]
