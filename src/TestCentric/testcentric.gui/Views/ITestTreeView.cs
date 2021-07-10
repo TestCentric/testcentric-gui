@@ -15,14 +15,12 @@ namespace TestCentric.Gui.Views
         ICommand RunButton { get; }
         ICommand RunAllCommand { get; }
         ICommand RunSelectedCommand { get; }
-        ICommand RunFailedCommand { get; }
         ICommand TestParametersCommand { get; }
         ICommand StopRunCommand { get; }
 
         ICommand DebugButton { get; }
         ICommand DebugAllCommand { get; }
         ICommand DebugSelectedCommand { get; }
-        ICommand DebugFailedCommand { get; }
 
         IToolTip FormatButton { get; }
         ISelection DisplayFormat { get; }
