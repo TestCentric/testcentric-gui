@@ -16,16 +16,20 @@ namespace TestCentric.Gui.Presenters.TestTree
         [TestCase("DebugSelectedCommand")]
         [TestCase("TestParametersCommand")]
         [TestCase("StopRunButton")]
+        [TestCase("ForceStopButton")]
         public void CommandIsDisabled(string propName)
         {
             ViewElement(propName).Received().Enabled = false;
         }
 
-        [TestCase("RunCheckedCommand")]
-        [TestCase("DebugCheckedCommand")]
-        public void ElementIsNotVisible(string propName)
+        [TestCase("RunCheckedCommand", false)]
+        [TestCase("DebugCheckedCommand", false)]
+        [TestCase("RunSummaryButton", false)]
+        [TestCase("StopRunButton", true)]
+        [TestCase("ForceStopButton", false)]
+        public void CheckElementVisibility(string propName, bool visible)
         {
-            ViewElement(propName).Received().Visible = false;
+            ViewElement(propName).Received().Visible = visible;
         }
 
         [Test]

@@ -11,18 +11,8 @@ namespace TestCentric.Gui.Presenters.TestTree
 {
     public class WhenTestRunCompletes : TreeViewPresenterTestBase
     {
-        // TODO: Version 1 Test - Make it work if needed.
-        //[Test]
-        //public void WhenTestRunCompletes_RunCommandIsEnabled()
-        //{
-        //    ClearAllReceivedCalls();
-        //    FireRunFinishedEvent(new ResultNode("<test-run/>"));
-
-        //    _view.RunCommand.Received().Enabled = true;
-        //}
-
-        [Test]
-        public void RunSummaryButtonIsMadeVisible()
+        [SetUp]
+        public void SimulateTestRunCompletion()
         {
             ClearAllReceivedCalls();
 
@@ -30,8 +20,26 @@ namespace TestCentric.Gui.Presenters.TestTree
             _model.HasResults.Returns(true);
 
             FireRunFinishedEvent(new ResultNode("<test-run id='XXX' result='Failed' />"));
+        }
 
-            _view.RunSummaryButton.Received().Visible = true;
+        [TestCase("RunAllCommand", true)]
+        [TestCase("RunSelectedCommand", true)]
+        [TestCase("DebugAllCommand", true)]
+        [TestCase("DebugSelectedCommand", true)]
+        [TestCase("TestParametersCommand", true)]
+        [TestCase("StopRunButton", false)]
+        [TestCase("ForceStopButton", false)]
+        public void CheckElementIsEnabled(string propName, bool enabled)
+        {
+            ViewElement(propName).Received().Enabled = enabled;
+        }
+
+        [TestCase("RunSummaryButton", true)]
+        [TestCase("StopRunButton",  true)]
+        [TestCase("ForceStopButton", false)]
+        public void CheckElementVisibility(string propName, bool visible)
+        {
+            ViewElement(propName).Received().Visible = visible;
         }
     }
 }

@@ -13,7 +13,7 @@ namespace TestCentric.Gui.Presenters.Main
     public class WhenTestsAreReloaded : TestTreePresenterTestBase
     {
         [SetUp]
-        public void SimulateTestLoad()
+        public void SimulateTestReload()
         {
             ClearAllReceivedCalls();
 

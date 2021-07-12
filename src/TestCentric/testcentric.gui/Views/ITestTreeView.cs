@@ -22,6 +22,7 @@ namespace TestCentric.Gui.Views
         ICommand DebugSelectedCommand { get; }
 
         ICommand StopRunButton { get; }
+        ICommand ForceStopButton { get; }
 
         IToolTip FormatButton { get; }
         ISelection DisplayFormat { get; }
