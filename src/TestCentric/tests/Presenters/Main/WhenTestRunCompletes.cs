@@ -42,11 +42,20 @@ namespace TestCentric.Gui.Presenters.Main
         [TestCase("RunAllCommand", true)]
         [TestCase("RunSelectedCommand", true)]
         [TestCase("RunFailedCommand", true)]
+        [TestCase("StopRunCommand", false)]
+        [TestCase("ForceStopCommand", false)]
         [TestCase("TestParametersCommand", true)]
         [TestCase("SaveResultsCommand", true)]
         public void CheckCommandEnabled(string propName, bool enabled)
         {
             ViewElement(propName).Received().Enabled = enabled;
+        }
+
+        [TestCase("StopRunCommand", true)]
+        [TestCase("ForceStopCommand", false)]
+        public void CheckCommandVisible(string propName, bool visible)
+        {
+            ViewElement(propName).Received().Visible = visible;
         }
 
         [Test]
