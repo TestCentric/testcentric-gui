@@ -41,6 +41,7 @@ namespace TestCentric.Gui.Views
             DebugSelectedCommand = new CommandMenuElement(debugSelectedMenuItem);
 
             StopRunButton = new ButtonElement(stopRunButton);
+            ForceStopButton = new ButtonElement(forceStopButton);
 
             FormatButton = new ToolStripElement(formatButton);
             DisplayFormat = new CheckedToolStripMenuGroup(
@@ -85,6 +86,7 @@ namespace TestCentric.Gui.Views
         public ICommand DebugSelectedCommand { get; private set; }
 
         public ICommand StopRunButton { get; private set; }
+        public ICommand ForceStopButton { get; private set; }
 
         public ICommand RunSummaryButton { get; private set; }
 

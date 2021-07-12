@@ -68,6 +68,7 @@ namespace TestCentric.Gui.Views
             this.byDurationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runSummaryButton = new System.Windows.Forms.ToolStripButton();
             this.stopRunButton = new System.Windows.Forms.ToolStripButton();
+            this.forceStopButton = new System.Windows.Forms.ToolStripButton();
             this.testTreeContextMenu.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -198,7 +199,8 @@ namespace TestCentric.Gui.Views
             this.debugButton,
             this.formatButton,
             this.runSummaryButton,
-            this.stopRunButton});
+            this.stopRunButton,
+            this.forceStopButton});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(191, 25);
@@ -383,6 +385,16 @@ namespace TestCentric.Gui.Views
             this.stopRunButton.Size = new System.Drawing.Size(23, 22);
             this.stopRunButton.ToolTipText = "Stop the current test run.";
             // 
+            // forceStopButton
+            // 
+            this.forceStopButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.forceStopButton.Image = ((System.Drawing.Image)(resources.GetObject("forceStopButton.Image")));
+            this.forceStopButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.forceStopButton.Name = "forceStopButton";
+            this.forceStopButton.Size = new System.Drawing.Size(23, 22);
+            this.forceStopButton.Text = "Force Stop";
+            this.forceStopButton.ToolTipText = "Force the test run to stop";
+            // 
             // TestTreeView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -439,5 +451,6 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.ToolStripMenuItem testParametersMenuItem;
         private System.Windows.Forms.ToolStripButton runSummaryButton;
         private System.Windows.Forms.ToolStripButton stopRunButton;
+        private System.Windows.Forms.ToolStripButton forceStopButton;
     }
 }

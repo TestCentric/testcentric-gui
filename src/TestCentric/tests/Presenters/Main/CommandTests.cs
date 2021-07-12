@@ -225,5 +225,36 @@ namespace TestCentric.Gui.Presenters.Main
             _view.Received().Font = newFont;
             Assert.That(_settings.Gui.Font, Is.EqualTo(newFont));
         }
+
+        [Test]
+        public void RunAllCommand_RunsAllTests()
+        {
+            _view.RunAllCommand.Execute += Raise.Event<CommandHandler>();
+            _model.Received().RunAllTests();
+        }
+
+        [Test]
+        public void RunSelectedCommand_RunsSelectedTests()
+        {
+            _view.RunSelectedCommand.Execute += Raise.Event<CommandHandler>();
+            _model.Received().RunSelectedTests();
+        }
+
+        [Test]
+        public void StopRunCommand_StopsTestsAndChangesMenu()
+        {
+            _view.StopRunCommand.Execute += Raise.Event<CommandHandler>();
+            _model.Received().StopTestRun(false);
+            _view.StopRunCommand.Received().Visible = false;
+            _view.ForceStopCommand.Received().Visible = true;
+        }
+
+        [Test]
+        public void ForceStopCommand_ForcesTestsToStopAndDisablesForceStop()
+        {
+            _view.ForceStopCommand.Execute += Raise.Event<CommandHandler>();
+            _model.Received().StopTestRun(true);
+            _view.ForceStopCommand.Received().Enabled = false;
+        }
     }
 }

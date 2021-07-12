@@ -8,17 +8,49 @@ using NSubstitute;
 
 namespace TestCentric.Gui.Presenters.TestTree
 {
-    public class WhenTestsAreReloaded
-    {
-        // TODO: Version 1 Test - Make it work if needed.
-        //[Test]
-        //[Platform(Exclude = "Linux", Reason = "Display issues")]
-        //public void WhenTestReloadCompletes_RunCommandIsEnabled()
-        //{
-        //    ClearAllReceivedCalls();
-        //    FireTestReloadedEvent(new TestNode("<test-run id='2'/>"));
+    using Model;
 
-        //    _view.RunCommand.Received().Enabled = true;
-        //}
+    public class WhenTestsAreReloaded : TreeViewPresenterTestBase
+    {
+        [SetUp]
+        public void SimulateTestReload()
+        {
+            ClearAllReceivedCalls();
+
+            _model.HasTests.Returns(true);
+            _model.IsTestRunning.Returns(false);
+
+            TestNode testNode = new TestNode("<test-suite id='1'/>");
+            _model.Tests.Returns(testNode);
+            _model.TestPackage.Returns(new NUnit.Engine.TestPackage("dummy.dll"));
+
+            FireTestReloadedEvent(testNode);
+        }
+
+#if NYI // Add after implementation of project or package saving
+        [TestCase("NewProjectCommand", true)]
+        [TestCase("OpenProjectCommand", true)]
+        [TestCase("SaveCommand", true)]
+        [TestCase("SaveAsCommand", true)
+#endif
+
+        [TestCase("RunAllCommand", true)]
+        [TestCase("RunSelectedCommand", true)]
+        [TestCase("DebugAllCommand", true)]
+        [TestCase("DebugSelectedCommand", true)]
+        [TestCase("TestParametersCommand", true)]
+        [TestCase("StopRunButton", false)]
+        [TestCase("ForceStopButton", false)]
+        public void CheckCommandEnabled(string propName, bool enabled)
+        {
+            ViewElement(propName).Received().Enabled = enabled;
+        }
+
+        [TestCase("StopRunButton", true)]
+        [TestCase("ForceStopButton", false)]
+        public void CheckElementVisibility(string propName, bool visible)
+        {
+            ViewElement(propName).Received().Visible = visible;
+        }
     }
 }

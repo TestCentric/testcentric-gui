@@ -13,7 +13,7 @@ namespace TestCentric.Gui.Presenters.Main
     public class WhenTestsAreReloaded : TestTreePresenterTestBase
     {
         [SetUp]
-        public void SimulateTestLoad()
+        public void SimulateTestReload()
         {
             ClearAllReceivedCalls();
 
@@ -43,6 +43,8 @@ namespace TestCentric.Gui.Presenters.Main
         [TestCase("RunAllCommand", true)]
         [TestCase("RunSelectedCommand", true)]
         [TestCase("RunFailedCommand", false)]
+        [TestCase("StopRunCommand", false)]
+        [TestCase("ForceStopCommand", false)]
         [TestCase("TestParametersCommand", true)]
         [TestCase("SaveResultsCommand", false)]
         public void CheckCommandEnabled(string propName, bool enabled)

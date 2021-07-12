@@ -75,6 +75,8 @@ namespace TestCentric.Gui.Presenters
             _view.ResultTabs.SelectedIndex = _settings.Gui.SelectedTab;
 
             UpdateViewCommands();
+            _view.StopRunCommand.Visible = true;
+            _view.ForceStopCommand.Visible = false;
 
             foreach (string format in _model.ResultFormats)
                 if (format != "cases" && format != "user")
@@ -158,6 +160,10 @@ namespace TestCentric.Gui.Presenters
                 _view.LongRunningOperation.Hide();
 
                 UpdateViewCommands();
+
+                // Reset these in case run was cancelled
+                _view.StopRunCommand.Visible = true;
+                _view.ForceStopCommand.Visible = false;
 
                 //string resultPath = Path.Combine(TestProject.BasePath, "TestResult.xml");
                 // TODO: Use Work Directory
@@ -414,8 +420,19 @@ namespace TestCentric.Gui.Presenters
             _view.RunSelectedCommand.Execute += () => RunSelectedTests();
             _view.RunFailedCommand.Execute += () => RunFailedTests();
 
-            _view.StopRunCommand.Execute += () => StopTests();
-            _view.ForceStopCommand.Execute += () => ForceStop();
+            _view.StopRunCommand.Execute += () =>
+            {
+                _view.LongRunningOperation.Display("Waiting for all running tests to complete.");
+                _view.StopRunCommand.Visible = false;
+                _view.ForceStopCommand.Visible = true;
+                _model.StopTestRun(false);
+            };
+
+            _view.ForceStopCommand.Execute += () =>
+            {
+                _view.ForceStopCommand.Enabled = false;
+                _model.StopTestRun(true);
+            };
 
             _view.TestParametersCommand.Execute += () =>
             {
@@ -649,6 +666,8 @@ namespace TestCentric.Gui.Presenters
             _view.RunAllCommand.Enabled = testLoaded && !testRunning;
             _view.RunSelectedCommand.Enabled = testLoaded && !testRunning;
             _view.RunFailedCommand.Enabled = testLoaded && !testRunning && _model.HasResults;
+            _view.StopRunCommand.Enabled = testRunning;
+            _view.ForceStopCommand.Enabled = testRunning;
             _view.TestParametersCommand.Enabled = testLoaded && !testRunning;
 
             _view.OpenCommand.Enabled = !testRunning && !testLoading;
@@ -775,17 +794,6 @@ namespace TestCentric.Gui.Presenters
         private static Font DecreaseFont(Font font)
         {
             return new Font(font.FontFamily, font.SizeInPoints / 1.2f, font.Style);
-        }
-
-        private void StopTests()
-        {
-            _view.LongRunningOperation.Display("Waiting for all running tests to complete.");
-            _model.StopTestRun(false);
-        }
-
-        private void ForceStop()
-        {
-            _model.StopTestRun(true);
         }
 
 #endregion

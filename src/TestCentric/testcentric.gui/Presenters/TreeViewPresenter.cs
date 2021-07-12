@@ -41,6 +41,11 @@ namespace TestCentric.Gui.Presenters
             _view.AlternateImageSet = (string)Settings.AlternateImageSet;
 
             InitializeRunCommands();
+
+            _view.StopRunButton.Visible = true;
+            _view.ForceStopButton.Visible = false;
+            _view.RunSummaryButton.Visible = false;
+
             WireUpEvents();
         }
 
@@ -55,22 +60,34 @@ namespace TestCentric.Gui.Presenters
             {
                 _strategy.OnTestLoaded(ea.Test);
                 InitializeRunCommands();
+                _view.StopRunButton.Visible = true;
+                _view.ForceStopButton.Visible = false;
             };
 
             _model.Events.TestReloaded += (ea) =>
             {
                 _strategy.OnTestLoaded(ea.Test);
                 InitializeRunCommands();
+                _view.StopRunButton.Visible = true;
+                _view.ForceStopButton.Visible = false;
             };
 
             _model.Events.TestUnloaded += (ea) =>
             {
                 _strategy.OnTestUnloaded();
                 InitializeRunCommands();
+                _view.StopRunButton.Visible = true;
+                _view.ForceStopButton.Visible = false;
             };
 
             _model.Events.RunStarting += (ea) => InitializeRunCommands();
-            _model.Events.RunFinished += (ea) => InitializeRunCommands();
+            _model.Events.RunFinished += (ea) =>
+            {
+                InitializeRunCommands();
+                _view.RunSummaryButton.Visible = true;
+                _view.StopRunButton.Visible = true;
+                _view.ForceStopButton.Visible = false;
+            };
 
             _model.Events.TestFinished += (ea) => _strategy.OnTestFinished(ea.Result);
             _model.Events.SuiteFinished += (ea) => _strategy.OnTestFinished(ea.Result);
@@ -131,8 +148,20 @@ namespace TestCentric.Gui.Presenters
                     RunAllTests();
             };
             _view.RunAllCommand.Execute += () => RunAllTests();
-            _view.RunSelectedCommand.Execute += () => RunTests(_selectedTestItem);
-            _view.StopRunButton.Execute += () => _model.StopTestRun(true);
+            _view.RunSelectedCommand.Execute += () => _model.RunSelectedTests();
+            _view.StopRunButton.Execute += () =>
+            {
+                _view.StopRunButton.Visible = false;
+                _view.ForceStopButton.Visible = true;
+                _model.StopTestRun(false);
+            };
+
+            _view.ForceStopButton.Execute += () =>
+            {
+                _view.ForceStopButton.Enabled = false;
+                _model.StopTestRun(true);
+            };
+
             _view.TestParametersCommand.Execute += () =>
             {
                 using (var dlg = new TestParametersDialog())
@@ -273,16 +302,17 @@ namespace TestCentric.Gui.Presenters
 
             // TODO: Figure out how to disable the button click but not the dropdown.
             //_view.RunButton.Enabled = canRun;
-            _view.RunAllCommand.Enabled = canRun;
-            _view.RunSelectedCommand.Enabled = canRun;
-            _view.TestParametersCommand.Enabled = canRun;
-            _view.DebugAllCommand.Enabled = canRun;
+            _view.RunAllCommand.Enabled =
+            _view.RunSelectedCommand.Enabled =
+            _view.TestParametersCommand.Enabled =
+            _view.DebugAllCommand.Enabled =
             _view.DebugSelectedCommand.Enabled = canRun;
-            _view.RunCheckedCommand.Visible = canRunChecked;
-            _view.DebugCheckedCommand.Visible = canRunChecked;
-            _view.StopRunButton.Enabled = isRunning;
 
-            _view.RunSummaryButton.Visible = !isRunning && _model.HasResults;
+            _view.RunCheckedCommand.Visible =
+            _view.DebugCheckedCommand.Visible = canRunChecked;
+
+            _view.StopRunButton.Enabled =
+            _view.ForceStopButton.Enabled = isRunning;
         }
 
         private void SetDefaultDisplayStrategy()
