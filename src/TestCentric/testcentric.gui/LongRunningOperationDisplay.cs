@@ -79,13 +79,13 @@ namespace TestCentric.Gui
             Update();
         }
 
-        public new void Hide()
-        {
-            if (Owner.InvokeRequired)
-                Owner.Invoke(new EventHandler((s,e) => base.Hide()));
-            else
-                base.Hide();
-        }
+        //public new void Hide()
+        //{
+        //    if (Owner.InvokeRequired)
+        //        Owner.Invoke(new EventHandler((s,e) => base.Hide()));
+        //    else
+        //        base.Hide();
+        //}
     }
 
 }
