@@ -229,32 +229,32 @@ namespace TestCentric.Gui.Presenters.Main
         [Test]
         public void RunAllCommand_RunsAllTests()
         {
-            _view.RunAllCommand.Execute += Raise.Event<CommandHandler>();
+            _view.RunAllMenuCommand.Execute += Raise.Event<CommandHandler>();
             _model.Received().RunAllTests();
         }
 
         [Test]
         public void RunSelectedCommand_RunsSelectedTests()
         {
-            _view.RunSelectedCommand.Execute += Raise.Event<CommandHandler>();
+            _view.RunSelectedMenuCommand.Execute += Raise.Event<CommandHandler>();
             _model.Received().RunSelectedTests();
         }
 
         [Test]
         public void StopRunCommand_StopsTestsAndChangesMenu()
         {
-            _view.StopRunCommand.Execute += Raise.Event<CommandHandler>();
+            _view.StopRunMenuCommand.Execute += Raise.Event<CommandHandler>();
             _model.Received().StopTestRun(false);
-            _view.StopRunCommand.Received().Visible = false;
-            _view.ForceStopCommand.Received().Visible = true;
+            _view.StopRunMenuCommand.Received().Visible = false;
+            _view.ForceStopMenuCommand.Received().Visible = true;
         }
 
         [Test]
         public void ForceStopCommand_ForcesTestsToStopAndDisablesForceStop()
         {
-            _view.ForceStopCommand.Execute += Raise.Event<CommandHandler>();
+            _view.ForceStopMenuCommand.Execute += Raise.Event<CommandHandler>();
             _model.Received().StopTestRun(true);
-            _view.ForceStopCommand.Received().Enabled = false;
+            _view.ForceStopMenuCommand.Received().Enabled = false;
         }
     }
 }

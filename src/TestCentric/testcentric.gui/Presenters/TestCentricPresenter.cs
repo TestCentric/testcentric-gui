@@ -75,8 +75,8 @@ namespace TestCentric.Gui.Presenters
             _view.ResultTabs.SelectedIndex = _settings.Gui.SelectedTab;
 
             UpdateViewCommands();
-            _view.StopRunCommand.Visible = true;
-            _view.ForceStopCommand.Visible = false;
+            _view.StopRunMenuCommand.Visible = true;
+            _view.ForceStopMenuCommand.Visible = false;
 
             foreach (string format in _model.ResultFormats)
                 if (format != "cases" && format != "user")
@@ -162,8 +162,8 @@ namespace TestCentric.Gui.Presenters
                 UpdateViewCommands();
 
                 // Reset these in case run was cancelled
-                _view.StopRunCommand.Visible = true;
-                _view.ForceStopCommand.Visible = false;
+                _view.StopRunMenuCommand.Visible = true;
+                _view.ForceStopMenuCommand.Visible = false;
 
                 //string resultPath = Path.Combine(TestProject.BasePath, "TestResult.xml");
                 // TODO: Use Work Directory
@@ -365,10 +365,10 @@ namespace TestCentric.Gui.Presenters
 
             _view.ExitCommand.Execute += () => _view.Close();
 
-            _view.DisplayFormat.SelectionChanged += () =>
+            _view.GuiDisplayFormat.SelectionChanged += () =>
             {
-                _settings.Gui.DisplayFormat = _view.DisplayFormat.SelectedItem;
-                InitializeDisplay(_view.DisplayFormat.SelectedItem);
+                _settings.Gui.DisplayFormat = _view.GuiDisplayFormat.SelectedItem;
+                InitializeDisplay(_view.GuiDisplayFormat.SelectedItem);
             };
 
             _view.IncreaseFontCommand.Execute += () =>
@@ -416,25 +416,25 @@ namespace TestCentric.Gui.Presenters
                 _view.StatusBarView.Visible = _view.StatusBarCommand.Checked;
             };
 
-            _view.RunAllCommand.Execute += () => RunAllTests();
-            _view.RunSelectedCommand.Execute += () => RunSelectedTests();
-            _view.RunFailedCommand.Execute += () => RunFailedTests();
+            _view.RunAllMenuCommand.Execute += () => RunAllTests();
+            _view.RunSelectedMenuCommand.Execute += () => RunSelectedTests();
+            _view.RunFailedMenuCommand.Execute += () => RunFailedTests();
 
-            _view.StopRunCommand.Execute += () =>
+            _view.StopRunMenuCommand.Execute += () =>
             {
                 BeginLongRunningOperation("Waiting for all running tests to complete.");
-                _view.StopRunCommand.Visible = false;
-                _view.ForceStopCommand.Visible = true;
+                _view.StopRunMenuCommand.Visible = false;
+                _view.ForceStopMenuCommand.Visible = true;
                 _model.StopTestRun(false);
             };
 
-            _view.ForceStopCommand.Execute += () =>
+            _view.ForceStopMenuCommand.Execute += () =>
             {
-                _view.ForceStopCommand.Enabled = false;
+                _view.ForceStopMenuCommand.Enabled = false;
                 _model.StopTestRun(true);
             };
 
-            _view.TestParametersCommand.Execute += () =>
+            _view.TestParametersMenuCommand.Execute += () =>
             {
                 using (var dlg = new TestParametersDialog())
                 {
@@ -663,12 +663,12 @@ namespace TestCentric.Gui.Presenters
             bool testLoaded = _model.HasTests;
             bool testRunning = _model.IsTestRunning;
 
-            _view.RunAllCommand.Enabled = testLoaded && !testRunning;
-            _view.RunSelectedCommand.Enabled = testLoaded && !testRunning;
-            _view.RunFailedCommand.Enabled = testLoaded && !testRunning && _model.HasResults;
-            _view.StopRunCommand.Enabled = testRunning;
-            _view.ForceStopCommand.Enabled = testRunning;
-            _view.TestParametersCommand.Enabled = testLoaded && !testRunning;
+            _view.RunAllMenuCommand.Enabled = testLoaded && !testRunning;
+            _view.RunSelectedMenuCommand.Enabled = testLoaded && !testRunning;
+            _view.RunFailedMenuCommand.Enabled = testLoaded && !testRunning && _model.HasResults;
+            _view.StopRunMenuCommand.Enabled = testRunning;
+            _view.ForceStopMenuCommand.Enabled = testRunning;
+            _view.TestParametersMenuCommand.Enabled = testLoaded && !testRunning;
 
             _view.OpenCommand.Enabled = !testRunning && !testLoading;
             _view.CloseCommand.Enabled = testLoaded && !testRunning;
@@ -742,7 +742,7 @@ namespace TestCentric.Gui.Presenters
 
         private void InitializeDisplay(string displayFormat)
         {
-            _view.DisplayFormat.SelectedItem = displayFormat;
+            _view.GuiDisplayFormat.SelectedItem = displayFormat;
 
             Point location;
             Size size;
