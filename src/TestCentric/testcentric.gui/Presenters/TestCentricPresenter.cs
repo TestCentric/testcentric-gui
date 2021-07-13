@@ -101,12 +101,12 @@ namespace TestCentric.Gui.Presenters
                     $"Loading Assembly: {e.TestFilesLoading[0]}" :
                     $"Loading {e.TestFilesLoading.Count} Assemblies...";
 
-                _view.LongRunningOperation.Display(message);
+                BeginLongRunningOperation(message);
             };
 
             _model.Events.TestLoaded += (TestNodeEventArgs e) =>
             {
-                _view.LongRunningOperation.Hide();
+                OnLongRunningOperationComplete();
 
                 UpdateViewCommands();
 
@@ -119,12 +119,12 @@ namespace TestCentric.Gui.Presenters
             {
                 UpdateViewCommands();
 
-                _view.LongRunningOperation.Display("Unloading...");
+                BeginLongRunningOperation("Unloading...");
             };
 
             _model.Events.TestUnloaded += (TestEventArgs e) =>
             {
-                _view.LongRunningOperation.Hide();
+                OnLongRunningOperationComplete();
 
                 UpdateViewCommands();
             };
@@ -133,19 +133,19 @@ namespace TestCentric.Gui.Presenters
             {
                 UpdateViewCommands();
 
-                _view.LongRunningOperation.Display("Reloading...");
+                BeginLongRunningOperation("Reloading...");
             };
 
             _model.Events.TestReloaded += (TestNodeEventArgs e) =>
             {
-                _view.LongRunningOperation.Hide();
+                OnLongRunningOperationComplete();
 
                 UpdateViewCommands();
             };
 
             _model.Events.TestLoadFailure += (TestLoadFailureEventArgs e) =>
             {
-                _view.LongRunningOperation.Hide();
+                OnLongRunningOperationComplete();
 
                 _view.MessageDisplay.Error(e.Exception.Message);
             };
@@ -157,7 +157,7 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.RunFinished += (TestResultEventArgs e) =>
             {
-                _view.LongRunningOperation.Hide();
+                OnLongRunningOperationComplete();
 
                 UpdateViewCommands();
 
@@ -422,7 +422,7 @@ namespace TestCentric.Gui.Presenters
 
             _view.StopRunCommand.Execute += () =>
             {
-                _view.LongRunningOperation.Display("Waiting for all running tests to complete.");
+                BeginLongRunningOperation("Waiting for all running tests to complete.");
                 _view.StopRunCommand.Visible = false;
                 _view.ForceStopCommand.Visible = true;
                 _model.StopTestRun(false);
@@ -794,6 +794,20 @@ namespace TestCentric.Gui.Presenters
         private static Font DecreaseFont(Font font)
         {
             return new Font(font.FontFamily, font.SizeInPoints / 1.2f, font.Style);
+        }
+
+        private LongRunningOperationDisplay _longRunningOperation;
+
+        private void BeginLongRunningOperation(string text)
+        {
+            _longRunningOperation = new LongRunningOperationDisplay();
+            _longRunningOperation.Display(text);
+        }
+
+        private void OnLongRunningOperationComplete()
+        {
+            _longRunningOperation?.Close();
+            _longRunningOperation = null;
         }
 
 #endregion

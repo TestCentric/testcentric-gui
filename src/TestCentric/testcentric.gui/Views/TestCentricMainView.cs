@@ -156,7 +156,6 @@ namespace TestCentric.Gui.Views
             AboutCommand = new CommandMenuElement(aboutMenuItem);
 
             DialogManager = new DialogManager();
-            LongRunningOperation = new LongRunningOperationDisplay(this);
         }
 
         #region Test Run Summary
@@ -959,7 +958,6 @@ namespace TestCentric.Gui.Views
         public ICommand AboutCommand { get; }
 
         public IDialogManager DialogManager { get; }
-        public ILongRunningOperationDisplay LongRunningOperation { get;  }
 
         #region Subordinate Views contained in main form
 

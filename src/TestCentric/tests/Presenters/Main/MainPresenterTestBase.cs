@@ -19,8 +19,6 @@ namespace TestCentric.Gui.Presenters.Main
         [SetUp]
         public void CreatePresenter()
         {
-            _view.LongRunningOperation.Returns(Substitute.For<ILongRunningOperationDisplay>());
-
             _presenter = new TestCentricPresenter(_view, _model, new CommandLineOptions());
         }
 

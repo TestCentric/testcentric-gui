@@ -73,7 +73,6 @@ namespace TestCentric.Gui.Views
         TestPropertiesView TestPropertiesView { get; }
         XmlView XmlView { get; }
         IMessageDisplay MessageDisplay { get; }
-        ILongRunningOperationDisplay LongRunningOperation { get; }
 
         // Dialog Manager
         IDialogManager DialogManager { get; }

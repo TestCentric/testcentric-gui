@@ -15,11 +15,11 @@ namespace TestCentric.Gui
     {
         private Label operation;
 
-        public LongRunningOperationDisplay(Form owner)
+        public LongRunningOperationDisplay()
         {
             InitializeComponent();
 
-            Owner = owner;
+            Owner = Form.ActiveForm;
         }
 
         private void InitializeComponent()
@@ -57,35 +57,22 @@ namespace TestCentric.Gui
 
         public void Display(string text)
         {
-            if (Owner.InvokeRequired)
-                Owner.Invoke(new EventHandler((s, e) => DisplayOperation(text)));
-            else
-                DisplayOperation(text);
+            if (Owner != null)
+            {
+                operation.Text = text;
+
+                ClientSize = new Size(320, 60);
+                var origin = Owner.Location;
+                origin.Offset(
+                    (Owner.Size.Width - Size.Width) / 2,
+                    (Owner.Size.Height - Size.Height) / 2);
+                Location = origin;
+
+                Show();
+                Invalidate();
+                Update();
+            }
         }
-
-        private void DisplayOperation(string text)
-        {
-            operation.Text = text;
-
-            ClientSize = new Size(320, 60);
-            var origin = Owner.Location;
-            origin.Offset(
-                (Owner.Size.Width - Size.Width) / 2,
-                (Owner.Size.Height - Size.Height) / 2);
-
-            Location = origin;
-            Show();
-            Invalidate();
-            Update();
-        }
-
-        //public new void Hide()
-        //{
-        //    if (Owner.InvokeRequired)
-        //        Owner.Invoke(new EventHandler((s,e) => base.Hide()));
-        //    else
-        //        base.Hide();
-        //}
     }
 
 }
