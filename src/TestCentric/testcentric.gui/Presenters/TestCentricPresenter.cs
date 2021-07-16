@@ -464,43 +464,14 @@ namespace TestCentric.Gui.Presenters
                 _settings.Gui.TestTree.DisplayFormat = _view.DisplayFormat.SelectedItem;
             };
 
-            _view.StopRunMenuCommand.Execute += () =>
-            {
-                BeginLongRunningOperation("Waiting for all running tests to complete.");
-                _view.StopRunMenuCommand.Visible = false;
-                _view.ForceStopMenuCommand.Visible = true;
-                _model.StopTestRun(false);
-            };
+            _view.StopRunMenuCommand.Execute += ExecuteNormalStop;
+            _view.StopRunButton.Execute += ExecuteNormalStop;
 
-            _view.StopRunButton.Execute += () =>
-            {
-                BeginLongRunningOperation("Waiting for all running tests to complete.");
-                _view.StopRunButton.Visible = false;
-                _view.ForceStopButton.Visible = true;
-                _model.StopTestRun(false);
-            };
+            _view.ForceStopMenuCommand.Execute += ExecuteForcedStop;
+            _view.ForceStopButton.Execute += ExecuteForcedStop;
 
-            _view.ForceStopMenuCommand.Execute += () =>
-            {
-                _view.ForceStopMenuCommand.Enabled = false;
-                _model.StopTestRun(true);
-            };
-
-            _view.ForceStopButton.Execute += () =>
-            {
-                _view.ForceStopButton.Enabled = false;
-                _model.StopTestRun(true);
-            };
-
-            _view.TestParametersMenuCommand.Execute += () =>
-            {
-                DisplayTestParametersDialog();
-            };
-
-            _view.TestParametersCommand.Execute += () =>
-            {
-                DisplayTestParametersDialog();
-            };
+            _view.TestParametersMenuCommand.Execute += DisplayTestParametersDialog;
+            _view.TestParametersCommand.Execute += DisplayTestParametersDialog;
 
             _view.RunSummaryButton.Execute += () =>
             {
@@ -564,6 +535,20 @@ namespace TestCentric.Gui.Presenters
             };
 
             #endregion
+        }
+
+        private void ExecuteNormalStop()
+        {
+            BeginLongRunningOperation("Waiting for all running tests to complete.");
+            _view.StopRunButton.Visible = _view.StopRunMenuCommand.Visible = false;
+            _view.ForceStopButton.Visible = _view.ForceStopMenuCommand.Visible = true;
+            _model.StopTestRun(false);
+        }
+
+        private void ExecuteForcedStop()
+        {
+            _view.ForceStopMenuCommand.Enabled = _view.ForceStopButton.Enabled = false;
+            _model.StopTestRun(true);
         }
 
         private void DisplayTestParametersDialog()
