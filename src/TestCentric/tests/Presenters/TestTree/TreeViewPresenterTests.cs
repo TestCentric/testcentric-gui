@@ -60,15 +60,13 @@ namespace TestCentric.Gui.Presenters.TestTree
         //    _model.DidNotReceive().ReloadTests();
         //}
 
-        [Test]
-        public void WhenDisplayFormatChanges_TreeIsReloaded()
-        {
-            TestNode testNode = new TestNode(XmlHelper.CreateXmlNode("<test-run id='1'><test-suite id='42'/></test-run>"));
-            _model.Tests.Returns(testNode);
-            _view.DisplayFormat.SelectedItem.Returns("NUNIT_TREE");
-            _view.DisplayFormat.SelectionChanged += Raise.Event<CommandHandler>();
+        //[Test]
+        //public void WhenDisplayFormatChanges_TreeIsReloaded()
+        //{
+        //    TestNode testNode = new TestNode(XmlHelper.CreateXmlNode("<test-run id='1'><test-suite id='42'/></test-run>"));
+        //    _model.Tests.Returns(testNode);
 
-            _view.Tree.Received().Add(Arg.Compat.Is<TreeNode>((tn) => ((TestNode)tn.Tag).Id == "42"));
-        }
+        //    _view.Tree.Received().Add(Arg.Compat.Is<TreeNode>((tn) => ((TestNode)tn.Tag).Id == "42"));
+        //}
     }
 }

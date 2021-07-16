@@ -108,6 +108,9 @@ namespace TestCentric.Gui.Model
         // Run selected tests
         void RunSelectedTests();
 
+        // Debug selected tests
+        void DebugSelectedTests();
+
         // Run just the specified ITestItem
         void RunTests(ITestItem testItem);
 

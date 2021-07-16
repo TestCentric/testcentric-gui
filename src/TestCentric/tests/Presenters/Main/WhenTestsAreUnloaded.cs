@@ -8,7 +8,7 @@ using NUnit.Framework;
 
 namespace TestCentric.Gui.Presenters.Main
 {
-    public class WhenTestsAreUnloaded : TestTreePresenterTestBase
+    public class WhenTestsAreUnloaded : MainPresenterTestBase
     {
         [SetUp]
         public void SimulateTestUnload()
@@ -33,16 +33,30 @@ namespace TestCentric.Gui.Presenters.Main
         [TestCase("ReloadTestsCommand", false)]
         [TestCase("RecentFilesMenu", true)]
         [TestCase("ExitCommand", true)]
+        [TestCase("RunAllMenuCommand", false)]
+        [TestCase("RunSelectedMenuCommand", false)]
+        [TestCase("RunFailedMenuCommand", false)]
+        [TestCase("StopRunMenuCommand", false)]
+        [TestCase("ForceStopMenuCommand", false)]
+        [TestCase("TestParametersMenuCommand", false)]
+        [TestCase("SaveResultsCommand", false)]
         [TestCase("RunAllCommand", false)]
         [TestCase("RunSelectedCommand", false)]
-        [TestCase("RunFailedCommand", false)]
-        [TestCase("StopRunCommand", false)]
-        [TestCase("ForceStopCommand", false)]
+        [TestCase("DebugAllCommand", false)]
+        [TestCase("DebugSelectedCommand", false)]
         [TestCase("TestParametersCommand", false)]
-        [TestCase("SaveResultsCommand", false)]
+        [TestCase("StopRunButton", false)]
+        [TestCase("ForceStopButton", false)]
         public void CheckCommandEnabled(string propName, bool enabled)
         {
             ViewElement(propName).Received().Enabled = enabled;
+        }
+
+        [TestCase("StopRunButton", true)]
+        [TestCase("ForceStopButton", false)]
+        public void CheckElementVisibility(string propName, bool visible)
+        {
+            ViewElement(propName).Received().Visible = visible;
         }
     }
 }

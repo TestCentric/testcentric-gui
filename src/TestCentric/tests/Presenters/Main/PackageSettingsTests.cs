@@ -10,7 +10,7 @@ namespace TestCentric.Gui.Presenters.Main
 {
     using Elements;
 
-    public class PackageSettingsTests : TestTreePresenterTestBase
+    public class PackageSettingsTests : MainPresenterTestBase
     {
         //[TestCase("net-2.0")]
         //[TestCase("net-4.5")]

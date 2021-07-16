@@ -31,28 +31,6 @@ namespace TestCentric.Gui.Views
         {
             InitializeComponent();
 
-            RunButton = new SplitButtonElement(runButton);
-            RunAllCommand = new CommandMenuElement(runAllMenuItem);
-            RunSelectedCommand = new CommandMenuElement(runSelectedMenuItem);
-            TestParametersCommand = new CommandMenuElement(testParametersMenuItem);
-
-            DebugButton = new SplitButtonElement(debugButton);
-            DebugAllCommand = new CommandMenuElement(debugAllMenuItem);
-            DebugSelectedCommand = new CommandMenuElement(debugSelectedMenuItem);
-
-            StopRunButton = new ButtonElement(stopRunButton);
-            ForceStopButton = new ButtonElement(forceStopButton);
-
-            FormatButton = new ToolStripElement(formatButton);
-            DisplayFormat = new CheckedToolStripMenuGroup(
-                "displayFormat",
-                nunitTreeMenuItem, fixtureListMenuItem, testListMenuItem);
-            GroupBy = new CheckedToolStripMenuGroup(
-                "testGrouping",
-                byAssemblyMenuItem, byFixtureMenuItem, byCategoryMenuItem, byExtendedCategoryMenuItem, byOutcomeMenuItem, byDurationMenuItem);
-
-            RunSummaryButton = new ButtonElement(runSummaryButton);
-
             RunContextCommand = new CommandMenuElement(this.runMenuItem);
             RunCheckedCommand = new CommandMenuElement(this.runCheckedMenuItem);
             DebugContextCommand = new CommandMenuElement(this.debugMenuItem);
@@ -76,20 +54,6 @@ namespace TestCentric.Gui.Views
 
         #region Properties
 
-        public ICommand RunButton { get; private set; }
-        public ICommand RunAllCommand { get; private set; }
-        public ICommand RunSelectedCommand { get; private set; }
-        public ICommand TestParametersCommand { get; private set; }
-
-        public ICommand DebugButton { get; private set; }
-        public ICommand DebugAllCommand { get; private set; }
-        public ICommand DebugSelectedCommand { get; private set; }
-
-        public ICommand StopRunButton { get; private set; }
-        public ICommand ForceStopButton { get; private set; }
-
-        public ICommand RunSummaryButton { get; private set; }
-
         public ICommand RunContextCommand { get; private set; }
         public ICommand RunCheckedCommand { get; private set; }
         public ICommand DebugContextCommand { get; private set; }
@@ -99,10 +63,6 @@ namespace TestCentric.Gui.Views
         public ICommand ExpandAllCommand { get; private set; }
         public ICommand CollapseAllCommand { get; private set; }
         public ICommand CollapseToFixturesCommand { get; private set; }
-
-        public IToolTip FormatButton { get; private set; }
-        public ISelection DisplayFormat { get; private set; }
-        public ISelection GroupBy { get; private set; }
 
         public ITreeView Tree { get; private set; }
         public TreeNode ContextNode { get; private set; }

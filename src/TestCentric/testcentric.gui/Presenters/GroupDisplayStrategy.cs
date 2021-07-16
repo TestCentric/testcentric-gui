@@ -24,8 +24,6 @@ namespace TestCentric.Gui.Presenters
         public GroupDisplayStrategy(ITestTreeView view, ITestModel model)
             : base(view, model)
         {
-            _view.GroupBy.Enabled = true;
-            _view.GroupBy.SelectionChanged += OnGroupByChanged;
         }
 
         #endregion
@@ -73,13 +71,6 @@ namespace TestCentric.Gui.Presenters
 
         #region Protected Members
 
-        protected void OnGroupByChanged()
-        {
-            SetTestGrouping(_view.GroupBy.SelectedItem);
-
-            Reload();
-        }
-
         protected void SetDefaultTestGrouping()
         {
             _grouping = CreateTestGrouping(DefaultGroupSetting);
@@ -95,8 +86,6 @@ namespace TestCentric.Gui.Presenters
 
         protected TestGrouping CreateTestGrouping(string groupBy)
         {
-            _view.GroupBy.SelectedItem = groupBy;
-
             switch (groupBy)
             {
                 case "OUTCOME":

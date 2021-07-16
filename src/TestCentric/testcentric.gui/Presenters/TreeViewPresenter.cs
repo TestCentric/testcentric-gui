@@ -21,12 +21,14 @@ namespace TestCentric.Gui.Presenters
     {
         private ITestTreeView _view;
         private ITestModel _model;
-
-        private DisplayStrategy _strategy;
+        private Model.Settings.TestTreeSettings _treeSettings;
 
         private ITestItem _selectedTestItem;
 
         private Dictionary<string, TreeNode> _nodeIndex = new Dictionary<string, TreeNode>();
+
+        // Accessed by tests
+        public DisplayStrategy Strategy { get; private set; }
 
         #region Constructor
 
@@ -35,16 +37,12 @@ namespace TestCentric.Gui.Presenters
             _view = treeView;
             _model = model;
 
-            Settings = _model.Settings.Gui.TestTree;
+            _treeSettings = _model.Settings.Gui.TestTree;
 
-            _view.ShowCheckBoxes.Checked = Settings.ShowCheckBoxes;
-            _view.AlternateImageSet = (string)Settings.AlternateImageSet;
+            _view.ShowCheckBoxes.Checked = _treeSettings.ShowCheckBoxes;
+            _view.AlternateImageSet = _treeSettings.AlternateImageSet;
 
             InitializeRunCommands();
-
-            _view.StopRunButton.Visible = true;
-            _view.ForceStopButton.Visible = false;
-            _view.RunSummaryButton.Visible = false;
 
             WireUpEvents();
         }
@@ -58,44 +56,43 @@ namespace TestCentric.Gui.Presenters
             // Model actions
             _model.Events.TestLoaded += (ea) =>
             {
-                _strategy.OnTestLoaded(ea.Test);
+                Strategy.OnTestLoaded(ea.Test);
                 InitializeRunCommands();
-                _view.StopRunButton.Visible = true;
-                _view.ForceStopButton.Visible = false;
             };
 
             _model.Events.TestReloaded += (ea) =>
             {
-                _strategy.OnTestLoaded(ea.Test);
+                Strategy.OnTestLoaded(ea.Test);
                 InitializeRunCommands();
-                _view.StopRunButton.Visible = true;
-                _view.ForceStopButton.Visible = false;
             };
 
             _model.Events.TestUnloaded += (ea) =>
             {
-                _strategy.OnTestUnloaded();
+                Strategy.OnTestUnloaded();
                 InitializeRunCommands();
-                _view.StopRunButton.Visible = true;
-                _view.ForceStopButton.Visible = false;
             };
 
             _model.Events.RunStarting += (ea) => InitializeRunCommands();
             _model.Events.RunFinished += (ea) =>
             {
                 InitializeRunCommands();
-                _view.RunSummaryButton.Visible = true;
-                _view.StopRunButton.Visible = true;
-                _view.ForceStopButton.Visible = false;
             };
 
-            _model.Events.TestFinished += (ea) => _strategy.OnTestFinished(ea.Result);
-            _model.Events.SuiteFinished += (ea) => _strategy.OnTestFinished(ea.Result);
+            _model.Events.TestFinished += (ea) => Strategy.OnTestFinished(ea.Result);
+            _model.Events.SuiteFinished += (ea) => Strategy.OnTestFinished(ea.Result);
 
             _model.Settings.Changed += (s, e) =>
             {
-                if (e.SettingName == "Gui.TestTree.AlternateImageSet")
-                    _view.AlternateImageSet = Settings.AlternateImageSet;
+                switch (e.SettingName)
+                {
+                    case "TestCentric.Gui.TestTree.AlternateImageSet":
+                        _view.AlternateImageSet = _treeSettings.AlternateImageSet;
+                        break;
+                    case "TestCentric.Gui.TestTree.DisplayFormat":
+                        CreateDisplayStrategy(_treeSettings.DisplayFormat);
+                        Strategy.Reload();
+                        break;
+                }
             };
 
             // View actions - Initial Load
@@ -114,7 +111,7 @@ namespace TestCentric.Gui.Presenters
 
             _view.CollapseAllCommand.Execute += () => _view.CollapseAll();
             _view.ExpandAllCommand.Execute += () => _view.ExpandAll();
-            _view.CollapseToFixturesCommand.Execute += () => _strategy.CollapseToFixtures();
+            _view.CollapseToFixturesCommand.Execute += () => Strategy.CollapseToFixtures();
             _view.ShowCheckBoxes.CheckedChanged += () =>
             {
                 _view.RunCheckedCommand.Visible =
@@ -138,77 +135,6 @@ namespace TestCentric.Gui.Presenters
             {
                 _selectedTestItem = tn.Tag as ITestItem;
                 _model.NotifySelectedItemChanged(_selectedTestItem);
-            };
-
-            // Run button and dropdowns
-            _view.RunButton.Execute += () =>
-            {
-                // Necessary test because we don't disable the button click
-                if (_model.HasTests && !_model.IsTestRunning)
-                    RunAllTests();
-            };
-            _view.RunAllCommand.Execute += () => RunAllTests();
-            _view.RunSelectedCommand.Execute += () => _model.RunSelectedTests();
-            _view.StopRunButton.Execute += () =>
-            {
-                _view.StopRunButton.Visible = false;
-                _view.ForceStopButton.Visible = true;
-                _model.StopTestRun(false);
-            };
-
-            _view.ForceStopButton.Execute += () =>
-            {
-                _view.ForceStopButton.Enabled = false;
-                _model.StopTestRun(true);
-            };
-
-            _view.TestParametersCommand.Execute += () =>
-            {
-                using (var dlg = new TestParametersDialog())
-                {
-                    dlg.Font = _model.Settings.Gui.Font;
-                    dlg.StartPosition = FormStartPosition.CenterParent;
-
-                    if (_model.PackageOverrides.ContainsKey("TestParametersDictionary"))
-                    {
-                        var testParms = _model.PackageOverrides["TestParametersDictionary"] as IDictionary<string, string>;
-                        foreach (string key in testParms.Keys)
-                            dlg.Parameters.Add(key, testParms[key]);
-                    }
-
-                    if (dlg.ShowDialog(_view as IWin32Window) == DialogResult.OK)
-                    {
-                        ChangePackageSettingAndReload("TestParametersDictionary", dlg.Parameters);
-                    }
-                }
-            };
-
-            // Debug button and dropdowns
-            _view.DebugButton.Execute += () =>
-            {
-                // Necessary test because we don't disable the button click
-                if (_model.HasTests && !_model.IsTestRunning)
-                    _model.DebugAllTests();
-            };
-            _view.DebugAllCommand.Execute += () => _model.DebugAllTests();
-            _view.DebugSelectedCommand.Execute += () => _model.DebugTests(_selectedTestItem);
-
-            // Change of display format
-            _view.DisplayFormat.SelectionChanged += () =>
-            {
-                SetDisplayStrategy(_view.DisplayFormat.SelectedItem);
-
-                _strategy.Reload();
-            };
-
-            _view.RunSummaryButton.Execute += () =>
-            {
-                // HACK needed until we move menu bar to top level view
-                var mainView = (_view as Control).FindForm() as IMainView;
-                var resultId = _model.GetResultForTest(_model.Tests.Id);
-                var summary = ResultSummaryCreator.FromResultNode(resultId);
-                string report = ResultSummaryReporter.WriteSummaryReport(summary);
-                mainView.DisplayTestRunSummary(report);
             };
         }
 
@@ -300,30 +226,19 @@ namespace TestCentric.Gui.Presenters
             bool canRun = _model.HasTests && !isRunning;
             bool canRunChecked = canRun && _view.ShowCheckBoxes.Checked;
 
-            // TODO: Figure out how to disable the button click but not the dropdown.
-            //_view.RunButton.Enabled = canRun;
-            _view.RunAllCommand.Enabled =
-            _view.RunSelectedCommand.Enabled =
-            _view.TestParametersCommand.Enabled =
-            _view.DebugAllCommand.Enabled =
-            _view.DebugSelectedCommand.Enabled = canRun;
-
             _view.RunCheckedCommand.Visible =
             _view.DebugCheckedCommand.Visible = canRunChecked;
-
-            _view.StopRunButton.Enabled =
-            _view.ForceStopButton.Enabled = isRunning;
         }
 
         private void SetDefaultDisplayStrategy()
         {
-            CreateDisplayStrategy(Settings.DisplayFormat);
+            CreateDisplayStrategy(_treeSettings.DisplayFormat);
         }
 
         private void SetDisplayStrategy(string format)
         {
             CreateDisplayStrategy(format);
-            Settings.DisplayFormat = format;
+            _treeSettings.DisplayFormat = format;
         }
 
         private void CreateDisplayStrategy(string format)
@@ -332,18 +247,15 @@ namespace TestCentric.Gui.Presenters
             {
                 default:
                 case "NUNIT_TREE":
-                    _strategy = new NUnitTreeDisplayStrategy(_view, _model);
+                    Strategy = new NUnitTreeDisplayStrategy(_view, _model);
                     break;
                 case "FIXTURE_LIST":
-                    _strategy = new FixtureListDisplayStrategy(_view, _model);
+                    Strategy = new FixtureListDisplayStrategy(_view, _model);
                     break;
                 case "TEST_LIST":
-                    _strategy = new TestListDisplayStrategy(_view, _model);
+                    Strategy = new TestListDisplayStrategy(_view, _model);
                     break;
             }
-
-            _view.FormatButton.ToolTipText = _strategy.Description;
-            _view.DisplayFormat.SelectedItem = format;
         }
 
         private void ChangePackageSettingAndReload(string key, object setting)
@@ -359,8 +271,6 @@ namespace TestCentric.Gui.Presenters
             // __model.TestFiles because the method does an unload before it loads.
             _model.LoadTests(new List<string>(_model.TestFiles));
         }
-
-        private Model.Settings.TestTreeSettings Settings { get; }
 
         #endregion
     }

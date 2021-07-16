@@ -73,10 +73,14 @@ namespace TestCentric.Gui.Presenters
 
             _view.Font = _settings.Gui.Font;
             _view.ResultTabs.SelectedIndex = _settings.Gui.SelectedTab;
+            _view.DisplayFormat.SelectedItem = _settings.Gui.TestTree.DisplayFormat;
 
             UpdateViewCommands();
             _view.StopRunMenuCommand.Visible = true;
+            _view.StopRunButton.Visible = true;
             _view.ForceStopMenuCommand.Visible = false;
+            _view.ForceStopButton.Visible = false;
+            _view.RunSummaryButton.Visible = false;
 
             foreach (string format in _model.ResultFormats)
                 if (format != "cases" && format != "user")
@@ -109,6 +113,8 @@ namespace TestCentric.Gui.Presenters
                 OnLongRunningOperationComplete();
 
                 UpdateViewCommands();
+                _view.StopRunButton.Visible = true;
+                _view.ForceStopButton.Visible = false;
 
                 var files = _model.TestFiles;
                 if (files.Count == 1)
@@ -118,6 +124,8 @@ namespace TestCentric.Gui.Presenters
             _model.Events.TestsUnloading += (TestEventArgse) =>
             {
                 UpdateViewCommands();
+                _view.StopRunButton.Visible = true;
+                _view.ForceStopButton.Visible = false;
 
                 BeginLongRunningOperation("Unloading...");
             };
@@ -127,6 +135,8 @@ namespace TestCentric.Gui.Presenters
                 OnLongRunningOperationComplete();
 
                 UpdateViewCommands();
+                _view.StopRunButton.Visible = true;
+                _view.ForceStopButton.Visible = false;
             };
 
             _model.Events.TestsReloading += (TestEventArgs e) =>
@@ -141,6 +151,8 @@ namespace TestCentric.Gui.Presenters
                 OnLongRunningOperationComplete();
 
                 UpdateViewCommands();
+                _view.StopRunButton.Visible = true;
+                _view.ForceStopButton.Visible = false;
             };
 
             _model.Events.TestLoadFailure += (TestLoadFailureEventArgs e) =>
@@ -153,6 +165,9 @@ namespace TestCentric.Gui.Presenters
             _model.Events.RunStarting += (RunStartingEventArgs e) =>
             {
                 UpdateViewCommands();
+                _view.StopRunButton.Visible = true;
+                _view.ForceStopButton.Visible = false;
+                _view.RunSummaryButton.Visible = false;
             };
 
             _model.Events.RunFinished += (TestResultEventArgs e) =>
@@ -164,6 +179,9 @@ namespace TestCentric.Gui.Presenters
                 // Reset these in case run was cancelled
                 _view.StopRunMenuCommand.Visible = true;
                 _view.ForceStopMenuCommand.Visible = false;
+                _view.StopRunButton.Visible = true;
+                _view.ForceStopButton.Visible = false;
+                _view.RunSummaryButton.Visible = true;
 
                 //string resultPath = Path.Combine(TestProject.BasePath, "TestResult.xml");
                 // TODO: Use Work Directory
@@ -416,9 +434,35 @@ namespace TestCentric.Gui.Presenters
                 _view.StatusBarView.Visible = _view.StatusBarCommand.Checked;
             };
 
+
             _view.RunAllMenuCommand.Execute += () => RunAllTests();
             _view.RunSelectedMenuCommand.Execute += () => RunSelectedTests();
             _view.RunFailedMenuCommand.Execute += () => RunFailedTests();
+
+            _view.RunAllCommand.Execute += () => RunAllTests();
+            _view.RunSelectedCommand.Execute += () => RunSelectedTests();
+            _view.RunButton.Execute += () =>
+            {
+                // Necessary test because we don't disable the button click
+                if (_model.HasTests && !_model.IsTestRunning)
+                    RunAllTests();
+                // TODO: This should actually run the last Run action selected in the dropdown
+            };
+
+            _view.DebugAllCommand.Execute += () => _model.DebugAllTests();
+            _view.DebugSelectedCommand.Execute += () => _model.DebugSelectedTests();
+            _view.DebugButton.Execute += () =>
+            {
+                // Necessary test because we don't disable the button click
+                if (_model.HasTests && !_model.IsTestRunning)
+                    _model.DebugAllTests();
+                // TODO: This should actually run the last Run action selected in the dropdown
+            };
+
+            _view.DisplayFormat.SelectionChanged += () =>
+            {
+                _settings.Gui.TestTree.DisplayFormat = _view.DisplayFormat.SelectedItem;
+            };
 
             _view.StopRunMenuCommand.Execute += () =>
             {
@@ -428,31 +472,42 @@ namespace TestCentric.Gui.Presenters
                 _model.StopTestRun(false);
             };
 
+            _view.StopRunButton.Execute += () =>
+            {
+                BeginLongRunningOperation("Waiting for all running tests to complete.");
+                _view.StopRunButton.Visible = false;
+                _view.ForceStopButton.Visible = true;
+                _model.StopTestRun(false);
+            };
+
             _view.ForceStopMenuCommand.Execute += () =>
             {
                 _view.ForceStopMenuCommand.Enabled = false;
                 _model.StopTestRun(true);
             };
 
+            _view.ForceStopButton.Execute += () =>
+            {
+                _view.ForceStopButton.Enabled = false;
+                _model.StopTestRun(true);
+            };
+
             _view.TestParametersMenuCommand.Execute += () =>
             {
-                using (var dlg = new TestParametersDialog())
-                {
-                    dlg.Font = _settings.Gui.Font;
-                    dlg.StartPosition = FormStartPosition.CenterParent;
+                DisplayTestParametersDialog();
+            };
 
-                    if (_model.PackageOverrides.ContainsKey("TestParametersDictionary"))
-                    {
-                        var testParms = _model.PackageOverrides["TestParametersDictionary"] as IDictionary<string, string>;
-                        foreach (string key in testParms.Keys)
-                            dlg.Parameters.Add(key, testParms[key]);
-                    }
+            _view.TestParametersCommand.Execute += () =>
+            {
+                DisplayTestParametersDialog();
+            };
 
-                    if (dlg.ShowDialog(_view as IWin32Window) == DialogResult.OK)
-                    {
-                        ChangePackageSettingAndReload("TestParametersDictionary", dlg.Parameters);
-                    }
-                }
+            _view.RunSummaryButton.Execute += () =>
+            {
+                var resultId = _model.GetResultForTest(_model.Tests.Id);
+                var summary = ResultSummaryCreator.FromResultNode(resultId);
+                string report = ResultSummaryReporter.WriteSummaryReport(summary);
+                _view.DisplayTestRunSummary(report);
             };
 
             _view.ToolsMenu.Popup += () =>
@@ -509,6 +564,27 @@ namespace TestCentric.Gui.Presenters
             };
 
             #endregion
+        }
+
+        private void DisplayTestParametersDialog()
+        {
+            using (var dlg = new TestParametersDialog())
+            {
+                dlg.Font = _settings.Gui.Font;
+                dlg.StartPosition = FormStartPosition.CenterParent;
+
+                if (_model.PackageOverrides.ContainsKey("TestParametersDictionary"))
+                {
+                    var testParms = _model.PackageOverrides["TestParametersDictionary"] as IDictionary<string, string>;
+                    foreach (string key in testParms.Keys)
+                        dlg.Parameters.Add(key, testParms[key]);
+                }
+
+                if (dlg.ShowDialog(_view as IWin32Window) == DialogResult.OK)
+                {
+                    ChangePackageSettingAndReload("TestParametersDictionary", dlg.Parameters);
+                }
+            }
         }
 
         #endregion
@@ -663,15 +739,24 @@ namespace TestCentric.Gui.Presenters
             bool testLoaded = _model.HasTests;
             bool testRunning = _model.IsTestRunning;
 
-            _view.RunAllMenuCommand.Enabled = testLoaded && !testRunning;
-            _view.RunSelectedMenuCommand.Enabled = testLoaded && !testRunning;
-            _view.RunFailedMenuCommand.Enabled = testLoaded && !testRunning && _model.HasResults;
-            _view.StopRunMenuCommand.Enabled = testRunning;
-            _view.ForceStopMenuCommand.Enabled = testRunning;
-            _view.TestParametersMenuCommand.Enabled = testLoaded && !testRunning;
+            _view.RunAllMenuCommand.Enabled =
+            _view.RunAllCommand.Enabled =
+            _view.DebugAllCommand.Enabled =
+            _view.RunSelectedMenuCommand.Enabled =
+            _view.RunSelectedCommand.Enabled =
+            _view.DebugSelectedCommand.Enabled =
+            _view.TestParametersMenuCommand.Enabled =
+            _view.TestParametersCommand.Enabled = testLoaded & !testRunning;
 
-            _view.OpenCommand.Enabled = !testRunning && !testLoading;
-            _view.CloseCommand.Enabled = testLoaded && !testRunning;
+            _view.RunFailedMenuCommand.Enabled = testLoaded && !testRunning && _model.HasResults;
+
+            _view.StopRunMenuCommand.Enabled =
+            _view.StopRunButton.Enabled =
+            _view.ForceStopMenuCommand.Enabled =
+            _view.ForceStopButton.Enabled = testRunning;
+
+            _view.OpenCommand.Enabled = !testRunning & !testLoading;
+            _view.CloseCommand.Enabled = testLoaded & !testRunning;
             _view.AddTestFilesCommand.Enabled = testLoaded && !testRunning;
             _view.ReloadTestsCommand.Enabled = testLoaded && !testRunning;
             _view.RecentFilesMenu.Enabled = !testRunning && !testLoading;

@@ -26,25 +26,6 @@ namespace TestCentric.Gui.Presenters.TestTree
             FireTestLoadedEvent(testNode);
         }
 
-        [TestCase("RunAllCommand", true)]
-        [TestCase("RunSelectedCommand", true)]
-        [TestCase("DebugAllCommand", true)]
-        [TestCase("DebugSelectedCommand", true)]
-        [TestCase("TestParametersCommand", true)]
-        [TestCase("StopRunButton", false)]
-        [TestCase("ForceStopButton", false)]
-        public void CheckElementIsEnabled(string propName, bool enabled)
-        {
-            ViewElement(propName).Received().Enabled = enabled;
-        }
-
-        [TestCase("StopRunButton", true)]
-        [TestCase("ForceStopButton", false)]
-        public void CheckElementVisibility(string propName, bool visible)
-        {
-            ViewElement(propName).Received().Visible = visible;
-        }
-
         // TODO: Version 1 Test - Make it work if needed.
         //[Test]
         //[Platform(Exclude = "Linux", Reason = "Display issues")]
