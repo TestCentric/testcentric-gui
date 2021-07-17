@@ -303,6 +303,18 @@ namespace TestCentric.Gui.Presenters.Main
         }
 
         [Test]
+        public void GroupByChange_ChangesModelSetting()
+        {
+            _view.DisplayFormat.SelectedItem.Returns("TEST_LIST");
+            _view.GroupBy.SelectedItem.Returns("OUTCOME");
+            _view.GroupBy.SelectionChanged += Raise.Event<CommandHandler>();
+
+            // FakeSettings saves the setting so we can check if it was set
+            var setting = (string)_model.Settings.GetSetting("Gui.TestTree.TestList.GroupBy");
+            Assert.That(setting, Is.EqualTo("OUTCOME"));
+        }
+
+        [Test]
         public void StopRunMenuCommand_StopsTestsAndChangesMenu()
         {
             _view.StopRunMenuCommand.Execute += Raise.Event<CommandHandler>();

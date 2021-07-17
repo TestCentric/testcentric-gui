@@ -89,6 +89,8 @@ namespace TestCentric.Gui.Presenters
                         _view.AlternateImageSet = _treeSettings.AlternateImageSet;
                         break;
                     case "TestCentric.Gui.TestTree.DisplayFormat":
+                    case "TestCentric.Gui.TestTree.TestList.GroupBy":
+                    case "TestCentric.Gui.TestTree.FixtureList.GroupBy":
                         CreateDisplayStrategy(_treeSettings.DisplayFormat);
                         Strategy.Reload();
                         break;
