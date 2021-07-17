@@ -9,7 +9,6 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
-    using Controls;
     using Elements;
 
     public interface IMainView
@@ -36,7 +35,7 @@ namespace TestCentric.Gui.Views
         ICommand ExitCommand { get; }
 
         // View Menu Items
-        ISelection DisplayFormat { get; }
+        ISelection GuiDisplayFormat { get; }
         ICommand IncreaseFontCommand { get; }
         ICommand DecreaseFontCommand { get; }
         ICommand ChangeFontCommand { get; }
@@ -47,12 +46,12 @@ namespace TestCentric.Gui.Views
         IChecked StatusBarCommand { get; }
 
         // Test Menu Items
-        ICommand RunAllCommand { get; }
-        ICommand RunSelectedCommand { get; }
-        ICommand RunFailedCommand { get; }
-        ICommand StopRunCommand { get; }
-        ICommand ForceStopCommand { get; }
-        ICommand TestParametersCommand { get; }
+        ICommand RunAllMenuCommand { get; }
+        ICommand RunSelectedMenuCommand { get; }
+        ICommand RunFailedMenuCommand { get; }
+        ICommand StopRunMenuCommand { get; }
+        ICommand ForceStopMenuCommand { get; }
+        ICommand TestParametersMenuCommand { get; }
 
         // Tools Menu Items
         IPopup ToolsMenu { get; }
@@ -66,6 +65,25 @@ namespace TestCentric.Gui.Views
         ICommand TestCentricHelpCommand { get; }
         ICommand NUnitHelpCommand { get; }
         ICommand AboutCommand { get; }
+
+        // Toolbar Items
+        ICommand RunButton { get; }
+        ICommand RunAllToolbarCommand { get; }
+        ICommand RunSelectedToolbarCommand { get; }
+        ICommand TestParametersToolbarCommand { get; }
+
+        ICommand DebugButton { get; }
+        ICommand DebugAllToolbarCommand { get; }
+        ICommand DebugSelectedToolbarCommand { get; }
+
+        ICommand StopRunButton { get; }
+        ICommand ForceStopButton { get; }
+
+        IToolTip FormatButton { get; }
+        ISelection DisplayFormat { get; }
+        ISelection GroupBy { get; }
+
+        ICommand RunSummaryButton { get; }
 
         // SubViews
         TestTreeView TreeView { get; }

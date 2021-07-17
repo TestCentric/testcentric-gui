@@ -14,8 +14,9 @@ namespace TestCentric.Gui.Presenters.Main
 {
     using Elements;
     using Views;
+    using Model;
 
-    public class CommandTests : TestTreePresenterTestBase
+    public class CommandTests : MainPresenterTestBase
     {
         private static string[] NO_FILES_SELECTED = new string[0];
         private static string NO_FILE_PATH = null;
@@ -227,34 +228,112 @@ namespace TestCentric.Gui.Presenters.Main
         }
 
         [Test]
+        public void RunAllMenuCommand_RunsAllTests()
+        {
+            _view.RunAllMenuCommand.Execute += Raise.Event<CommandHandler>();
+            _model.Received().RunAllTests();
+        }
+
+        [Test]
         public void RunAllCommand_RunsAllTests()
         {
-            _view.RunAllCommand.Execute += Raise.Event<CommandHandler>();
+            _view.RunAllToolbarCommand.Execute += Raise.Event<CommandHandler>();
             _model.Received().RunAllTests();
+        }
+
+        [Test]
+        public void DebugAllCommand_DebugsAllTests()
+        {
+            _view.DebugAllToolbarCommand.Execute += Raise.Event<CommandHandler>();
+            _model.Received().DebugAllTests();
+        }
+
+        [Test]
+        public void DebugSelectedCommand_DebugsSelectedTests()
+        {
+            _view.DebugSelectedToolbarCommand.Execute += Raise.Event<CommandHandler>();
+            _model.Received().DebugSelectedTests();
+        }
+
+        [Test]
+        public void RunButton_Initially_RunsAllTests()
+        {
+            _model.HasTests.Returns(true);
+            _model.IsTestRunning.Returns(false);
+
+            _view.RunButton.Execute += Raise.Event<CommandHandler>();
+
+            _model.Received().RunAllTests();
+        }
+
+        [Test]
+        public void DebugButton_Initially_DebugsAllTests()
+        {
+            _model.HasTests.Returns(true);
+            _model.IsTestRunning.Returns(false);
+
+            _view.DebugButton.Execute += Raise.Event<CommandHandler>();
+
+            _model.Received().DebugAllTests();
+        }
+
+        [Test]
+        public void RunSelectedMenuCommand_RunsSelectedTests()
+        {
+            _view.RunSelectedMenuCommand.Execute += Raise.Event<CommandHandler>();
+            _model.Received().RunSelectedTests();
         }
 
         [Test]
         public void RunSelectedCommand_RunsSelectedTests()
         {
-            _view.RunSelectedCommand.Execute += Raise.Event<CommandHandler>();
+            _view.RunSelectedToolbarCommand.Execute += Raise.Event<CommandHandler>();
             _model.Received().RunSelectedTests();
         }
 
         [Test]
-        public void StopRunCommand_StopsTestsAndChangesMenu()
+        public void DisplayFormatChange_ChangesModelSetting()
         {
-            _view.StopRunCommand.Execute += Raise.Event<CommandHandler>();
+            _view.DisplayFormat.SelectedItem.Returns("TEST_LIST");
+            _view.DisplayFormat.SelectionChanged += Raise.Event<CommandHandler>();
+
+            // FakeSettings saves the setting so we can check if it was set
+            var setting = (string)_model.Settings.GetSetting("Gui.TestTree.DisplayFormat");
+            Assert.That(setting, Is.EqualTo("TEST_LIST"));
+        }
+
+        [Test]
+        public void StopRunMenuCommand_StopsTestsAndChangesMenu()
+        {
+            _view.StopRunMenuCommand.Execute += Raise.Event<CommandHandler>();
             _model.Received().StopTestRun(false);
-            _view.StopRunCommand.Received().Visible = false;
-            _view.ForceStopCommand.Received().Visible = true;
+            _view.StopRunMenuCommand.Received().Visible = false;
+            _view.ForceStopMenuCommand.Received().Visible = true;
+        }
+
+        [Test]
+        public void StopRunButton_StopsTestsAndChangesMenu()
+        {
+            _view.StopRunButton.Execute += Raise.Event<CommandHandler>();
+            _model.Received().StopTestRun(false);
+            _view.StopRunButton.Received().Visible = false;
+            _view.ForceStopButton.Received().Visible = true;
+        }
+
+        [Test]
+        public void ForceStopMenuCommand_ForcesTestsToStopAndDisablesForceStop()
+        {
+            _view.ForceStopMenuCommand.Execute += Raise.Event<CommandHandler>();
+            _model.Received().StopTestRun(true);
+            _view.ForceStopMenuCommand.Received().Enabled = false;
         }
 
         [Test]
         public void ForceStopCommand_ForcesTestsToStopAndDisablesForceStop()
         {
-            _view.ForceStopCommand.Execute += Raise.Event<CommandHandler>();
+            _view.ForceStopButton.Execute += Raise.Event<CommandHandler>();
             _model.Received().StopTestRun(true);
-            _view.ForceStopCommand.Received().Enabled = false;
+            _view.ForceStopButton.Received().Enabled = false;
         }
     }
 }

@@ -10,23 +10,8 @@ namespace TestCentric.Gui.Presenters.TestTree
 {
     public class WhenPresenterIsCreated : TreeViewPresenterTestBase
     {
-        [TestCase("RunAllCommand")]
-        [TestCase("RunSelectedCommand")]
-        [TestCase("DebugAllCommand")]
-        [TestCase("DebugSelectedCommand")]
-        [TestCase("TestParametersCommand")]
-        [TestCase("StopRunButton")]
-        [TestCase("ForceStopButton")]
-        public void CommandIsDisabled(string propName)
-        {
-            ViewElement(propName).Received().Enabled = false;
-        }
-
         [TestCase("RunCheckedCommand", false)]
         [TestCase("DebugCheckedCommand", false)]
-        [TestCase("RunSummaryButton", false)]
-        [TestCase("StopRunButton", true)]
-        [TestCase("ForceStopButton", false)]
         public void CheckElementVisibility(string propName, bool visible)
         {
             ViewElement(propName).Received().Visible = visible;
@@ -35,13 +20,37 @@ namespace TestCentric.Gui.Presenters.TestTree
         [Test]
         public void AlternateImageSetIsSet()
         {
-            _view.Received().AlternateImageSet = "MyImageSet";
+            string imageSet = _settings.Gui.TestTree.AlternateImageSet;
+            _view.Received().AlternateImageSet = imageSet;
         }
 
         [Test]
         public void ShowCheckBoxesIsSet()
         {
-            _view.ShowCheckBoxes.Received().Checked = true;
+            bool showCheckBoxes = _settings.Gui.TestTree.ShowCheckBoxes;
+            _view.ShowCheckBoxes.Received().Checked = showCheckBoxes;
+        }
+
+        [Test]
+        public void StrategyIsSet()
+        {
+            string displayFormat = _settings.Gui.TestTree.DisplayFormat.ToUpperInvariant();
+
+            switch (displayFormat)
+            {
+                case "NUNIT_TREE":
+                    Assert.That(_presenter.Strategy, Is.TypeOf<NUnitTreeDisplayStrategy>());
+                    break;
+                case "TEST_LIST":
+                    Assert.That(_presenter.Strategy, Is.TypeOf<FixtureListDisplayStrategy>());
+                    break;
+                case "FIXTURE_LIST":
+                    Assert.That(_presenter.Strategy, Is.TypeOf<TestListDisplayStrategy>());
+                    break;
+                default:
+                    Assert.Fail($"{displayFormat} is not a valid display format");
+                    break;
+            }
         }
     }
 }

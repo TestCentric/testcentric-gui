@@ -8,7 +8,7 @@ using NUnit.Framework;
 
 namespace TestCentric.Gui.Presenters.Main
 {
-    public class WhenTestsAreLoading : TestTreePresenterTestBase
+    public class WhenTestsAreLoading : MainPresenterTestBase
     {
         [SetUp]
         public void SimulateTestsLoading()
@@ -31,12 +31,17 @@ namespace TestCentric.Gui.Presenters.Main
         [TestCase("ReloadTestsCommand", false)]
         [TestCase("RecentFilesMenu", false)]
         [TestCase("ExitCommand", false)]
-        [TestCase("RunAllCommand", false)]
-        [TestCase("RunSelectedCommand", false)]
-        [TestCase("RunFailedCommand", false)]
-        [TestCase("StopRunCommand", false)]
-        [TestCase("ForceStopCommand", false)]
-        [TestCase("TestParametersCommand", false)]
+        [TestCase("RunAllMenuCommand", false)]
+        [TestCase("RunSelectedMenuCommand", false)]
+        [TestCase("RunFailedMenuCommand", false)]
+        [TestCase("StopRunMenuCommand", false)]
+        [TestCase("ForceStopMenuCommand", false)]
+        [TestCase("TestParametersMenuCommand", false)]
+        [TestCase("RunAllToolbarCommand", false)]
+        [TestCase("RunSelectedToolbarCommand", false)]
+        [TestCase("TestParametersToolbarCommand", false)]
+        [TestCase("StopRunButton", false)]
+        [TestCase("ForceStopButton", false)]
         [TestCase("SaveResultsCommand", false)]
         public void CheckCommandEnabled(string propName, bool enabled)
         {

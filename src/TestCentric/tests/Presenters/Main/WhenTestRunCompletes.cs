@@ -10,7 +10,7 @@ namespace TestCentric.Gui.Presenters.Main
 {
     using Model;
 
-    public class WhenTestRunCompletes : TestTreePresenterTestBase
+    public class WhenTestRunCompletes : MainPresenterTestBase
     {
         [SetUp]
         public void SimulateTestRunFinish()
@@ -39,20 +39,30 @@ namespace TestCentric.Gui.Presenters.Main
         [TestCase("ReloadTestsCommand", true)]
         [TestCase("RecentFilesMenu", true)]
         [TestCase("ExitCommand", true)]
-        [TestCase("RunAllCommand", true)]
-        [TestCase("RunSelectedCommand", true)]
-        [TestCase("RunFailedCommand", true)]
-        [TestCase("StopRunCommand", false)]
-        [TestCase("ForceStopCommand", false)]
-        [TestCase("TestParametersCommand", true)]
+        [TestCase("RunAllMenuCommand", true)]
+        [TestCase("RunSelectedMenuCommand", true)]
+        [TestCase("RunFailedMenuCommand", true)]
+        [TestCase("StopRunMenuCommand", false)]
+        [TestCase("ForceStopMenuCommand", false)]
+        [TestCase("TestParametersMenuCommand", true)]
         [TestCase("SaveResultsCommand", true)]
+        [TestCase("RunAllToolbarCommand", true)]
+        [TestCase("RunSelectedToolbarCommand", true)]
+        [TestCase("DebugAllToolbarCommand", true)]
+        [TestCase("DebugSelectedToolbarCommand", true)]
+        [TestCase("TestParametersToolbarCommand", true)]
+        [TestCase("StopRunButton", false)]
+        [TestCase("ForceStopButton", false)]
         public void CheckCommandEnabled(string propName, bool enabled)
         {
             ViewElement(propName).Received().Enabled = enabled;
         }
 
-        [TestCase("StopRunCommand", true)]
-        [TestCase("ForceStopCommand", false)]
+        [TestCase("StopRunMenuCommand", true)]
+        [TestCase("ForceStopMenuCommand", false)]
+        [TestCase("RunSummaryButton", true)]
+        [TestCase("StopRunButton", true)]
+        [TestCase("ForceStopButton", false)]
         public void CheckCommandVisible(string propName, bool visible)
         {
             ViewElement(propName).Received().Visible = visible;

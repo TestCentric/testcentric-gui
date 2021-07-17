@@ -366,6 +366,11 @@ namespace TestCentric.Gui.Model
             DebugTests(TestFilter.Empty);
         }
 
+        public void DebugSelectedTests()
+        {
+            DebugTests(SelectedTestItem);
+        }
+
         public void DebugTests(ITestItem testItem)
         {
             if (testItem != null) DebugTests(testItem.GetTestFilter());

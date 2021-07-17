@@ -12,7 +12,7 @@ namespace TestCentric.Gui.Presenters.Main
     using Model;
     using Views;
 
-    public class TestTreePresenterTestBase : PresenterTestBase<IMainView>
+    public class MainPresenterTestBase : PresenterTestBase<IMainView>
     {
         protected TestCentricPresenter _presenter;
 

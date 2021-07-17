@@ -30,7 +30,6 @@ namespace TestCentric.Gui.Presenters.TestTree
         {
             _model.IsPackageLoaded.Returns(true);
             _model.HasTests.Returns(true);
-            _view.DisplayFormat.SelectedItem.Returns("NUNIT_TREE");
 
             var result = resultState.Status.ToString();
             var label = resultState.Label;

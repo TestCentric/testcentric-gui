@@ -13,6 +13,7 @@ using NUnit.Framework;
 namespace TestCentric.Gui.Presenters.TestTree
 {
     using Elements;
+    using TestCentric.Gui.Model;
     using Views;
 
     public class CommandTests : TreeViewPresenterTestBase
@@ -20,35 +21,6 @@ namespace TestCentric.Gui.Presenters.TestTree
         private static string[] NO_FILES_SELECTED = new string[0];
         private static string NO_FILE_PATH = null;
 
-        [Test]
-        public void RunAllCommand_RunsAllTests()
-        {
-            _view.RunAllCommand.Execute += Raise.Event<CommandHandler>();
-            _model.Received().RunAllTests();
-        }
-
-        [Test]
-        public void RunSelectedCommand_RunsSelectedTests()
-        {
-            _view.RunSelectedCommand.Execute += Raise.Event<CommandHandler>();
-            _model.Received().RunSelectedTests();
-        }
-
-        [Test]
-        public void StopRunButton_StopsTestsAndChangesMenu()
-        {
-            _view.StopRunButton.Execute += Raise.Event<CommandHandler>();
-            _model.Received().StopTestRun(false);
-            _view.StopRunButton.Received().Visible = false;
-            _view.ForceStopButton.Received().Visible = true;
-        }
-
-        [Test]
-        public void ForceStopCommand_ForcesTestsToStopAndDisablesForceStop()
-        {
-            _view.ForceStopButton.Execute += Raise.Event<CommandHandler>();
-            _model.Received().StopTestRun(true);
-            _view.ForceStopButton.Received().Enabled = false;
-        }
+        // TODO: Add tests for context menu items
     }
 }

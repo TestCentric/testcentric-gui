@@ -23,12 +23,6 @@ namespace TestCentric.Gui.Presenters
         {
             SetDefaultTestGrouping();
             _view.CollapseToFixturesCommand.Enabled = true;
-
-            // Ugly Hack! We should not be referencing view components here.
-            // TODO: Create a better interface for a CheckedMenuGroup
-            var checkedMenuGroup = _view.GroupBy as TestCentric.Gui.Elements.CheckedToolStripMenuGroup;
-            if (checkedMenuGroup != null)
-                checkedMenuGroup.EnableItem("FIXTURE", false);
         }
 
         #endregion

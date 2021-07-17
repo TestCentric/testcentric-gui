@@ -12,24 +12,6 @@ namespace TestCentric.Gui.Views
     // Interface used for testing
     public interface ITestTreeView : IView
     {
-        ICommand RunButton { get; }
-        ICommand RunAllCommand { get; }
-        ICommand RunSelectedCommand { get; }
-        ICommand TestParametersCommand { get; }
-
-        ICommand DebugButton { get; }
-        ICommand DebugAllCommand { get; }
-        ICommand DebugSelectedCommand { get; }
-
-        ICommand StopRunButton { get; }
-        ICommand ForceStopButton { get; }
-
-        IToolTip FormatButton { get; }
-        ISelection DisplayFormat { get; }
-        ISelection GroupBy { get; }
-
-        ICommand RunSummaryButton { get; }
-
         ICommand RunContextCommand { get; }
         ICommand RunCheckedCommand { get; }
         ICommand DebugContextCommand { get; }
