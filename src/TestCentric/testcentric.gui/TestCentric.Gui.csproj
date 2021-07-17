@@ -12,6 +12,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 	  <None Remove="Images\DebugTests.png" />
+	  <None Remove="Images\GroupBy_16x.png" />
 	  <None Remove="Images\pinned.gif" />
 	  <None Remove="Images\RunTests.png" />
 	  <None Remove="Images\StopRun.png" />
@@ -46,6 +47,9 @@
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
         <Content Include="Images\Ellipsis.gif" />
+        <Content Include="Images\GroupBy_16x.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
         <Content Include="Images\RunTests.png">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
