@@ -74,12 +74,7 @@ namespace TestCentric.Gui.Presenters
             _view.Font = _settings.Gui.Font;
             _view.ResultTabs.SelectedIndex = _settings.Gui.SelectedTab;
 
-            string displayFormat = _settings.Gui.TestTree.DisplayFormat;
-            _view.DisplayFormat.SelectedItem = displayFormat;
-            if (displayFormat == "TEST_LIST")
-                _view.GroupBy.SelectedItem = _settings.Gui.TestTree.TestList.GroupBy;
-            else if (displayFormat == "FIXTURE_LIST")
-                _view.GroupBy.SelectedItem = _settings.Gui.TestTree.FixtureList.GroupBy;
+            SetTreeDisplayFormat(_settings.Gui.TestTree.DisplayFormat);
 
             UpdateViewCommands();
             _view.StopRunMenuCommand.Visible = true;
@@ -467,15 +462,20 @@ namespace TestCentric.Gui.Presenters
 
             _view.DisplayFormat.SelectionChanged += () =>
             {
-                _settings.Gui.TestTree.DisplayFormat = _view.DisplayFormat.SelectedItem;
+                SetTreeDisplayFormat(_view.DisplayFormat.SelectedItem);
             };
 
             _view.GroupBy.SelectionChanged += () =>
             {
-                if (_view.DisplayFormat.SelectedItem == "TEST_LIST")
-                    _settings.Gui.TestTree.TestList.GroupBy = _view.GroupBy.SelectedItem;
-                else if (_view.DisplayFormat.SelectedItem == "FIXTURE_LIST")
-                    _settings.Gui.TestTree.FixtureList.GroupBy = _view.GroupBy.SelectedItem;
+                switch(_view.DisplayFormat.SelectedItem)
+                {
+                    case "TEST_LIST":
+                        _settings.Gui.TestTree.TestList.GroupBy = _view.GroupBy.SelectedItem;
+                        break;
+                    case "FIXTURE_LIST":
+                        _settings.Gui.TestTree.FixtureList.GroupBy = _view.GroupBy.SelectedItem;
+                        break;
+                }
             };
 
             _view.StopRunMenuCommand.Execute += ExecuteNormalStop;
@@ -894,6 +894,29 @@ namespace TestCentric.Gui.Presenters
             _longRunningOperation = null;
         }
 
-#endregion
+        private void SetTreeDisplayFormat(string displayFormat)
+        {
+            _view.DisplayFormat.SelectedItem = displayFormat;
+            _settings.Gui.TestTree.DisplayFormat = displayFormat;
+
+            switch (displayFormat)
+            {
+                case "NUNIT_TREE":
+                    _view.GroupBy.Enabled = false;
+                    break;
+                case "TEST_LIST":
+                    _view.GroupBy.Enabled = true;
+                    _view.GroupBy.SelectedItem = _settings.Gui.TestTree.TestList.GroupBy;
+                    break;
+                case "FIXTURE_LIST":
+                    _view.GroupBy.Enabled = true;
+                    // HACK: Should be handled by the element itself
+                    ((Elements.CheckedToolStripMenuGroup)_view.GroupBy).MenuItems[1].Enabled = false;
+                    _view.GroupBy.SelectedItem = _settings.Gui.TestTree.FixtureList.GroupBy;
+                    break;
+            }
+        }
+
+        #endregion
     }
 }
