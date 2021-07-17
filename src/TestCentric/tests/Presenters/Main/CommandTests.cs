@@ -237,21 +237,21 @@ namespace TestCentric.Gui.Presenters.Main
         [Test]
         public void RunAllCommand_RunsAllTests()
         {
-            _view.RunAllCommand.Execute += Raise.Event<CommandHandler>();
+            _view.RunAllToolbarCommand.Execute += Raise.Event<CommandHandler>();
             _model.Received().RunAllTests();
         }
 
         [Test]
         public void DebugAllCommand_DebugsAllTests()
         {
-            _view.DebugAllCommand.Execute += Raise.Event<CommandHandler>();
+            _view.DebugAllToolbarCommand.Execute += Raise.Event<CommandHandler>();
             _model.Received().DebugAllTests();
         }
 
         [Test]
         public void DebugSelectedCommand_DebugsSelectedTests()
         {
-            _view.DebugSelectedCommand.Execute += Raise.Event<CommandHandler>();
+            _view.DebugSelectedToolbarCommand.Execute += Raise.Event<CommandHandler>();
             _model.Received().DebugSelectedTests();
         }
 
@@ -287,7 +287,7 @@ namespace TestCentric.Gui.Presenters.Main
         [Test]
         public void RunSelectedCommand_RunsSelectedTests()
         {
-            _view.RunSelectedCommand.Execute += Raise.Event<CommandHandler>();
+            _view.RunSelectedToolbarCommand.Execute += Raise.Event<CommandHandler>();
             _model.Received().RunSelectedTests();
         }
 

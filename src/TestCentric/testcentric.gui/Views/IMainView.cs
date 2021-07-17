@@ -9,7 +9,6 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
-    using Controls;
     using Elements;
 
     public interface IMainView
@@ -69,13 +68,13 @@ namespace TestCentric.Gui.Views
 
         // Toolbar Items
         ICommand RunButton { get; }
-        ICommand RunAllCommand { get; }
-        ICommand RunSelectedCommand { get; }
-        ICommand TestParametersCommand { get; }
+        ICommand RunAllToolbarCommand { get; }
+        ICommand RunSelectedToolbarCommand { get; }
+        ICommand TestParametersToolbarCommand { get; }
 
         ICommand DebugButton { get; }
-        ICommand DebugAllCommand { get; }
-        ICommand DebugSelectedCommand { get; }
+        ICommand DebugAllToolbarCommand { get; }
+        ICommand DebugSelectedToolbarCommand { get; }
 
         ICommand StopRunButton { get; }
         ICommand ForceStopButton { get; }

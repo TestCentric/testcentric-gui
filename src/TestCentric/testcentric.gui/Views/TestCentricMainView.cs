@@ -179,13 +179,13 @@ namespace TestCentric.Gui.Views
             AboutCommand = new CommandMenuElement(aboutMenuItem);
 
             RunButton = new SplitButtonElement(runButton);
-            RunAllCommand = new CommandMenuElement(runAllButtonCommand);
-            RunSelectedCommand = new CommandMenuElement(runSelectedButtonCommand);
-            TestParametersCommand = new CommandMenuElement(testParametersMenuItem);
+            RunAllToolbarCommand = new CommandMenuElement(runAllButtonCommand);
+            RunSelectedToolbarCommand = new CommandMenuElement(runSelectedButtonCommand);
+            TestParametersToolbarCommand = new CommandMenuElement(testParametersMenuItem);
 
             DebugButton = new SplitButtonElement(debugButton);
-            DebugAllCommand = new CommandMenuElement(debugAllMenuItem);
-            DebugSelectedCommand = new CommandMenuElement(debugSelectedMenuItem);
+            DebugAllToolbarCommand = new CommandMenuElement(debugAllMenuItem);
+            DebugSelectedToolbarCommand = new CommandMenuElement(debugSelectedMenuItem);
 
             StopRunButton = new ButtonElement(stopRunButton);
             ForceStopButton = new ButtonElement(forceStopButton);
@@ -1231,13 +1231,13 @@ namespace TestCentric.Gui.Views
 
         // ToolBar Elements
         public ICommand RunButton { get; private set; }
-        public ICommand RunAllCommand { get; private set; }
-        public ICommand RunSelectedCommand { get; private set; }
-        public ICommand TestParametersCommand { get; private set; }
+        public ICommand RunAllToolbarCommand { get; private set; }
+        public ICommand RunSelectedToolbarCommand { get; private set; }
+        public ICommand TestParametersToolbarCommand { get; private set; }
 
         public ICommand DebugButton { get; private set; }
-        public ICommand DebugAllCommand { get; private set; }
-        public ICommand DebugSelectedCommand { get; private set; }
+        public ICommand DebugAllToolbarCommand { get; private set; }
+        public ICommand DebugSelectedToolbarCommand { get; private set; }
 
         public ICommand StopRunButton { get; private set; }
         public ICommand ForceStopButton { get; private set; }

@@ -439,8 +439,8 @@ namespace TestCentric.Gui.Presenters
             _view.RunSelectedMenuCommand.Execute += () => RunSelectedTests();
             _view.RunFailedMenuCommand.Execute += () => RunFailedTests();
 
-            _view.RunAllCommand.Execute += () => RunAllTests();
-            _view.RunSelectedCommand.Execute += () => RunSelectedTests();
+            _view.RunAllToolbarCommand.Execute += () => RunAllTests();
+            _view.RunSelectedToolbarCommand.Execute += () => RunSelectedTests();
             _view.RunButton.Execute += () =>
             {
                 // Necessary test because we don't disable the button click
@@ -449,8 +449,8 @@ namespace TestCentric.Gui.Presenters
                 // TODO: This should actually run the last Run action selected in the dropdown
             };
 
-            _view.DebugAllCommand.Execute += () => _model.DebugAllTests();
-            _view.DebugSelectedCommand.Execute += () => _model.DebugSelectedTests();
+            _view.DebugAllToolbarCommand.Execute += () => _model.DebugAllTests();
+            _view.DebugSelectedToolbarCommand.Execute += () => _model.DebugSelectedTests();
             _view.DebugButton.Execute += () =>
             {
                 // Necessary test because we don't disable the button click
@@ -471,7 +471,7 @@ namespace TestCentric.Gui.Presenters
             _view.ForceStopButton.Execute += ExecuteForcedStop;
 
             _view.TestParametersMenuCommand.Execute += DisplayTestParametersDialog;
-            _view.TestParametersCommand.Execute += DisplayTestParametersDialog;
+            _view.TestParametersToolbarCommand.Execute += DisplayTestParametersDialog;
 
             _view.RunSummaryButton.Execute += () =>
             {
@@ -725,13 +725,13 @@ namespace TestCentric.Gui.Presenters
             bool testRunning = _model.IsTestRunning;
 
             _view.RunAllMenuCommand.Enabled =
-            _view.RunAllCommand.Enabled =
-            _view.DebugAllCommand.Enabled =
+            _view.RunAllToolbarCommand.Enabled =
+            _view.DebugAllToolbarCommand.Enabled =
             _view.RunSelectedMenuCommand.Enabled =
-            _view.RunSelectedCommand.Enabled =
-            _view.DebugSelectedCommand.Enabled =
+            _view.RunSelectedToolbarCommand.Enabled =
+            _view.DebugSelectedToolbarCommand.Enabled =
             _view.TestParametersMenuCommand.Enabled =
-            _view.TestParametersCommand.Enabled = testLoaded & !testRunning;
+            _view.TestParametersToolbarCommand.Enabled = testLoaded & !testRunning;
 
             _view.RunFailedMenuCommand.Enabled = testLoaded && !testRunning && _model.HasResults;
 
