@@ -73,7 +73,13 @@ namespace TestCentric.Gui.Presenters
 
             _view.Font = _settings.Gui.Font;
             _view.ResultTabs.SelectedIndex = _settings.Gui.SelectedTab;
-            _view.DisplayFormat.SelectedItem = _settings.Gui.TestTree.DisplayFormat;
+
+            string displayFormat = _settings.Gui.TestTree.DisplayFormat;
+            _view.DisplayFormat.SelectedItem = displayFormat;
+            if (displayFormat == "TEST_LIST")
+                _view.GroupBy.SelectedItem = _settings.Gui.TestTree.TestList.GroupBy;
+            else if (displayFormat == "FIXTURE_LIST")
+                _view.GroupBy.SelectedItem = _settings.Gui.TestTree.FixtureList.GroupBy;
 
             UpdateViewCommands();
             _view.StopRunMenuCommand.Visible = true;
@@ -462,6 +468,14 @@ namespace TestCentric.Gui.Presenters
             _view.DisplayFormat.SelectionChanged += () =>
             {
                 _settings.Gui.TestTree.DisplayFormat = _view.DisplayFormat.SelectedItem;
+            };
+
+            _view.GroupBy.SelectionChanged += () =>
+            {
+                if (_view.DisplayFormat.SelectedItem == "TEST_LIST")
+                    _settings.Gui.TestTree.TestList.GroupBy = _view.GroupBy.SelectedItem;
+                else if (_view.DisplayFormat.SelectedItem == "FIXTURE_LIST")
+                    _settings.Gui.TestTree.FixtureList.GroupBy = _view.GroupBy.SelectedItem;
             };
 
             _view.StopRunMenuCommand.Execute += ExecuteNormalStop;

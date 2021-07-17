@@ -59,5 +59,17 @@ namespace TestCentric.Gui.Presenters.Main
             var expectedFormat = _settings.Gui.TestTree.DisplayFormat;
             _view.DisplayFormat.Received().SelectedItem = expectedFormat;
         }
+
+        [Test]
+        public void GroupByIsSet()
+        {
+            var displayFormat = _settings.Gui.TestTree.DisplayFormat;
+            if (displayFormat == "TEST_LIST")
+                _view.GroupBy.Received().SelectedItem =
+                    _settings.Gui.TestTree.TestList.GroupBy;
+            else if (displayFormat == "FIXTURE_LIST")
+                _view.GroupBy.Received().SelectedItem =
+                    _settings.Gui.TestTree.FixtureList.GroupBy;
+        }
     }
 }
