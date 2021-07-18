@@ -36,8 +36,8 @@ namespace TestCentric.Gui.Presenters.TestTree
 
             var testNode = new TestNode("<test-run id='1'><test-case id='123'/></test-run>");
             var resultNode = new ResultNode(string.IsNullOrEmpty(label)
-                ? string.Format("<test-case id='123' result='{0}'/>", result)
-                : string.Format("<test-case id='123' result='{0}' label='{1}'/>", result, label));
+                ? string.Format($"<test-case id='123' result='{result}'/>")
+                : string.Format($"<test-case id='123' result='{result}' label='{label}'/>"));
             _model.Tests.Returns(testNode);
 
             //var treeNode = _adapter.MakeTreeNode(result);

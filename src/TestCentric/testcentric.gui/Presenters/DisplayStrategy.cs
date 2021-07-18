@@ -68,6 +68,8 @@ namespace TestCentric.Gui.Presenters
         /// </summary>
         public abstract void OnTestLoaded(TestNode testNode);
 
+        public virtual void OnTestUnloading() { }
+
         public void OnTestUnloaded()
         {
             ClearTree();
@@ -215,8 +217,13 @@ namespace TestCentric.Gui.Presenters
 
         public List<TreeNode> GetTreeNodesForTest(TestNode testNode)
         {
+            return GetTreeNodesForTest(testNode.Id);
+        }
+
+        public List<TreeNode> GetTreeNodesForTest(string id)
+        {
             List<TreeNode> treeNodes;
-            if (!_nodeIndex.TryGetValue(testNode.Id, out treeNodes))
+            if (!_nodeIndex.TryGetValue(id, out treeNodes))
                 treeNodes = new List<TreeNode>();
 
             return treeNodes;

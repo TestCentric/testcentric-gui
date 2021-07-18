@@ -3,6 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using NUnit.Engine;
@@ -25,7 +26,7 @@ namespace TestCentric.Gui.Presenters
 
         private ITestItem _selectedTestItem;
 
-        private Dictionary<string, TreeNode> _nodeIndex = new Dictionary<string, TreeNode>();
+        //private Dictionary<string, TreeNode> _nodeIndex = new Dictionary<string, TreeNode>();
 
         // Accessed by tests
         public DisplayStrategy Strategy { get; private set; }
@@ -71,6 +72,8 @@ namespace TestCentric.Gui.Presenters
                 Strategy.OnTestUnloaded();
                 InitializeRunCommands();
             };
+
+            _model.Events.TestsUnloading += ea => Strategy.OnTestUnloading();
 
             _model.Events.RunStarting += (ea) => InitializeRunCommands();
             _model.Events.RunFinished += (ea) =>
