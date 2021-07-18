@@ -388,7 +388,7 @@ namespace TestCentric.Gui.Views
             // 
             this.runAllButtonCommand.Name = "runAllButtonCommand";
             this.runAllButtonCommand.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.runAllButtonCommand.Size = new System.Drawing.Size(180, 22);
+            this.runAllButtonCommand.Size = new System.Drawing.Size(165, 22);
             this.runAllButtonCommand.Text = "Run All";
             this.runAllButtonCommand.ToolTipText = "Run all tests displayed";
             // 
@@ -396,19 +396,19 @@ namespace TestCentric.Gui.Views
             // 
             this.runSelectedButtonCommand.Name = "runSelectedButtonCommand";
             this.runSelectedButtonCommand.ShortcutKeys = System.Windows.Forms.Keys.F6;
-            this.runSelectedButtonCommand.Size = new System.Drawing.Size(180, 22);
+            this.runSelectedButtonCommand.Size = new System.Drawing.Size(165, 22);
             this.runSelectedButtonCommand.Text = "Run Selected";
             this.runSelectedButtonCommand.ToolTipText = "Run the selected tests";
             // 
             // toolStripSeparator12
             // 
             this.toolStripSeparator12.Name = "toolStripSeparator12";
-            this.toolStripSeparator12.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator12.Size = new System.Drawing.Size(162, 6);
             // 
             // testParametersMenuItem
             // 
             this.testParametersMenuItem.Name = "testParametersMenuItem";
-            this.testParametersMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.testParametersMenuItem.Size = new System.Drawing.Size(165, 22);
             this.testParametersMenuItem.Text = "Test Parameters...";
             // 
             // debugButton
@@ -818,14 +818,14 @@ namespace TestCentric.Gui.Views
             // 
             this.runAllMenuItem.Name = "runAllMenuItem";
             this.runAllMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.runAllMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.runAllMenuItem.Size = new System.Drawing.Size(165, 22);
             this.runAllMenuItem.Text = "&Run All";
             // 
             // runSelectedMenuItem
             // 
             this.runSelectedMenuItem.Name = "runSelectedMenuItem";
             this.runSelectedMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F6;
-            this.runSelectedMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.runSelectedMenuItem.Size = new System.Drawing.Size(165, 22);
             this.runSelectedMenuItem.Text = "Run &Selected";
             // 
             // runFailedMenuItem
@@ -833,35 +833,35 @@ namespace TestCentric.Gui.Views
             this.runFailedMenuItem.Enabled = false;
             this.runFailedMenuItem.Name = "runFailedMenuItem";
             this.runFailedMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F7;
-            this.runFailedMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.runFailedMenuItem.Size = new System.Drawing.Size(165, 22);
             this.runFailedMenuItem.Text = "Run &Failed";
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(162, 6);
             // 
             // runParametersMenuItem
             // 
             this.runParametersMenuItem.Name = "runParametersMenuItem";
-            this.runParametersMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.runParametersMenuItem.Size = new System.Drawing.Size(165, 22);
             this.runParametersMenuItem.Text = "Test Parameters...";
             // 
             // toolStripSeparator6
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator6.Size = new System.Drawing.Size(162, 6);
             // 
             // stopRunMenuItem
             // 
             this.stopRunMenuItem.Name = "stopRunMenuItem";
-            this.stopRunMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.stopRunMenuItem.Size = new System.Drawing.Size(165, 22);
             this.stopRunMenuItem.Text = "S&top Run";
             // 
             // forceStopMenuItem
             // 
             this.forceStopMenuItem.Name = "forceStopMenuItem";
-            this.forceStopMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.forceStopMenuItem.Size = new System.Drawing.Size(165, 22);
             this.forceStopMenuItem.Text = "Force Stop";
             // 
             // toolsMenu
