@@ -8,6 +8,7 @@ using NSubstitute;
 
 namespace TestCentric.Gui.Presenters.TestTree
 {
+    using System.Collections.Generic;
     using System.Windows.Forms;
     using Elements;
     using Model;
@@ -21,11 +22,17 @@ namespace TestCentric.Gui.Presenters.TestTree
         public void CreatePresenter()
         {
             _view.Tree.ContextMenuStrip.Returns(new ContextMenuStrip());
+            _settings.Gui.TestTree.SaveVisualState = false;
 
             _presenter = new TreeViewPresenter(_view, _model);
 
             // Make it look like the view loaded
             _view.Load += Raise.Event<System.EventHandler>(_view, new System.EventArgs());
+
+            // We can't construct a TreeNodeCollection, so we fake it
+            var nodes = new TreeNode().Nodes;
+            nodes.Add(new TreeNode("test.dll"));
+            _view.Tree.Nodes.Returns(nodes);
         }
 
         [TearDown]

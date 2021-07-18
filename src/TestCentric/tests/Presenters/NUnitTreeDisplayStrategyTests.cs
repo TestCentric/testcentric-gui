@@ -9,6 +9,7 @@ using NSubstitute;
 
 namespace TestCentric.Gui.Presenters.TestTree
 {
+    using System.Collections.Generic;
     using Model;
     using Views;
 
@@ -25,7 +26,13 @@ namespace TestCentric.Gui.Presenters.TestTree
             _view = Substitute.For<ITestTreeView>();
             _model = Substitute.For<ITestModel>();
             _settings = new TestCentric.TestUtilities.Fakes.UserSettings();
+            _settings.Gui.TestTree.SaveVisualState = false;
             _model.Settings.Returns(_settings);
+
+            // We can't construct a TreeNodeCollection, so we fake it
+            var nodes = new TreeNode().Nodes;
+            nodes.Add(new TreeNode("test.dll"));
+            _view.Tree.Nodes.Returns(nodes);
 
             _strategy = GetDisplayStrategy();
         }

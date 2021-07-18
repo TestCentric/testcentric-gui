@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Presenters
 {
+    using System.IO;
     using Model;
     using Views;
 
@@ -17,15 +18,8 @@ namespace TestCentric.Gui.Presenters
     /// </summary>
     public class NUnitTreeDisplayStrategy : DisplayStrategy
     {
-        #region Construction and Initialization
-
-        public NUnitTreeDisplayStrategy(ITestTreeView view, ITestModel model) : base(view, model)
-        {
-            //_view.GroupBy.Enabled = false;
-            //_view.CollapseToFixturesCommand.Enabled = true;
-        }
-
-        #endregion
+        public NUnitTreeDisplayStrategy(ITestTreeView view, ITestModel model)
+            : base(view, model) { }
 
         public override string Description
         {
@@ -34,23 +28,95 @@ namespace TestCentric.Gui.Presenters
 
         public override void OnTestLoaded(TestNode testNode)
         {
-            var displayStyle = _settings.Gui.TestTree.InitialTreeDisplay;
             ClearTree();
 
-            TreeNode topNode = null;
             foreach (var topLevelNode in testNode.Children)
+                _view.Tree.Add(MakeTreeNode(topLevelNode, true));
+
+            if (_settings.Gui.TestTree.SaveVisualState &&
+                _model.TestFiles.Count > 0)
             {
-                var treeNode = MakeTreeNode(topLevelNode, true);
+                string visualStateFile =
+                    VisualState.GetVisualStateFileName(_model.TestFiles[0]);
+                if (File.Exists(visualStateFile))
+                    RestoreVisualState(visualStateFile);
+                else
+                    SetDefaultInitialExpansion();
+            }
+            else
+                SetDefaultInitialExpansion();
+        }
 
-                if (topNode == null)
-                    topNode = treeNode;
+        public override void OnTestUnloading()
+        {
+            if (_settings.Gui.TestTree.SaveVisualState)
+            {
+                //var visualState = VisualState.LoadFrom(_view);
 
-                _view.Tree.Add(treeNode);
+                var visualState = new VisualState()
+                {
+                    ShowCheckBoxes = _view.Tree.CheckBoxes,
+                    TopNode = ((TestNode)_view.Tree.TopNode?.Tag).Id,
+                    SelectedNode = ((TestNode)_view.Tree.SelectedNode?.Tag).Id,
+                };
 
-                SetInitialExpansion((InitialTreeExpansion)displayStyle, treeNode);
+                foreach (TreeNode node in _view.Tree.Nodes)
+                    ProcessTreeNodes(node, visualState);
+
+                visualState.Save(VisualState.GetVisualStateFileName(_model.TestFiles[0]));
+            }
+        }
+
+        private void ProcessTreeNodes(TreeNode node, VisualState visualState)
+        {
+            if (node.IsExpanded || node.Checked)
+                visualState.Nodes.Add(new VisualTreeNode()
+                {
+                    Id = ((TestNode)node.Tag).Id,
+                    Expanded = node.IsExpanded,
+                    Checked = node.Checked
+                });
+                
+
+            foreach (TreeNode childNode in node.Nodes)
+                ProcessTreeNodes(childNode, visualState);
+        }
+
+        private void RestoreVisualState(string filename)
+        {
+            var visualState = VisualState.LoadFrom(filename);
+
+            _view.Tree.CheckBoxes = visualState.ShowCheckBoxes;
+
+            foreach (var visualNode in visualState.Nodes)
+                foreach (var treeNode in GetTreeNodesForTest(visualNode.Id))
+                {
+                    if (treeNode.IsExpanded != visualNode.Expanded)
+                        treeNode.Toggle();
+
+                    treeNode.Checked = visualNode.Checked;
+                }
+
+            if (visualState.SelectedNode != null)
+                _view.Tree.SelectedNode = GetTreeNodesForTest(visualState.SelectedNode)[0];
+
+            if (visualState.TopNode != null)
+                _view.Tree.TopNode = GetTreeNodesForTest(visualState.TopNode)[0];
+        }
+
+        private void SetDefaultInitialExpansion()
+        {
+            var displayStyle = (InitialTreeExpansion)_settings.Gui.TestTree.InitialTreeDisplay;
+
+            TreeNode firstNode = null;
+            foreach (TreeNode node in _view.Tree.Nodes)
+            {
+                SetInitialExpansion(displayStyle, node);
+                if (firstNode == null)
+                    firstNode = node;
             }
 
-            topNode?.EnsureVisible();
+            firstNode?.EnsureVisible();
         }
 
         private void SetInitialExpansion(InitialTreeExpansion displayStyle, TreeNode treeNode)

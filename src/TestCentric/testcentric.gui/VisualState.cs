@@ -11,7 +11,9 @@ using System.Xml.Serialization;
 
 namespace TestCentric.Gui
 {
+    using Model;
     using Views;
+    using Presenters;
     using Elements;
 
     /// <summary>
@@ -59,20 +61,6 @@ namespace TestCentric.Gui
             return (VisualState)serializer.Deserialize(reader);
         }
 
-        //public static VisualState LoadFrom(ITestTreeView view)
-        //{
-        //    var visualState = new VisualState()
-        //    {
-        //        ShowCheckBoxes = view.CheckBoxes,
-        //        TopNode = (string)view.Tree.TopNode?.Tag,
-        //        SelectedNode = (string)view.Tree.SelectedNode?.Tag,
-        //    };
-
-        //    visualState.ProcessTreeNodes(view.Tree);
-
-        //    return visualState;
-        //}
-
         public void Save(string fileName)
         {
             using (StreamWriter writer = new StreamWriter(fileName))
@@ -85,57 +73,6 @@ namespace TestCentric.Gui
         {
             XmlSerializer serializer = new XmlSerializer(GetType());
             serializer.Serialize(writer, this);
-        }
-
-        //public void RestoreVisualState(ITestTreeView view, IDictionary<string, TreeNode> treeMap)
-        //{
-        //    view.CheckBoxes = ShowCheckBoxes;
-
-        //    foreach (VisualTreeNode visualNode in Nodes)
-        //    {
-        //        if (treeMap.ContainsKey(visualNode.Id))
-        //        {
-        //            TreeNode treeNode = treeMap[visualNode.Id];
-
-        //            if (treeNode.IsExpanded != visualNode.Expanded)
-        //                treeNode.Toggle();
-
-        //            treeNode.Checked = visualNode.Checked;
-        //        }
-        //    }
-
-        //    if (SelectedNode != null && treeMap.ContainsKey(SelectedNode))
-        //        view.Tree.SelectedNode = treeMap[SelectedNode];
-
-        //    if (TopNode != null && treeMap.ContainsKey(TopNode))
-        //        view.Tree.TopNode = treeMap[TopNode];
-
-        //    //view.Tree.Select();
-        //}
-
-        #endregion
-
-        #region Helper Methods
-
-        private void ProcessTreeNodes(ITreeView tree)
-        {
-            if (tree.Nodes != null)
-                foreach (TreeNode node in tree.Nodes)
-                    ProcessTreeNodes(node);
-        }
-
-        private void ProcessTreeNodes(TreeNode node)
-        {
-            if (IsInteresting(node))
-                this.Nodes.Add(new VisualTreeNode(node));
-
-            foreach (TreeNode childNode in node.Nodes)
-                ProcessTreeNodes(childNode);
-        }
-
-        private bool IsInteresting(TreeNode node)
-        {
-            return node.IsExpanded || node.Checked;
         }
 
         #endregion
@@ -155,14 +92,5 @@ namespace TestCentric.Gui
 
         [XmlArrayItem("Node")]
         public VisualTreeNode[] Nodes;
-
-        public VisualTreeNode() { }
-
-        public VisualTreeNode(TreeNode treeNode)
-        {
-            Id = (string)treeNode.Tag;
-            Expanded = treeNode.IsExpanded;
-            Checked = treeNode.Checked;
-        }
     }
 }
