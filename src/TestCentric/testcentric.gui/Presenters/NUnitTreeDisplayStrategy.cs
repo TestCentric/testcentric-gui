@@ -33,26 +33,16 @@ namespace TestCentric.Gui.Presenters
             foreach (var topLevelNode in testNode.Children)
                 _view.Tree.Add(MakeTreeNode(topLevelNode, true));
 
-            if (_settings.Gui.TestTree.SaveVisualState &&
-                _model.TestFiles.Count > 0)
-            {
-                string visualStateFile =
-                    VisualState.GetVisualStateFileName(_model.TestFiles[0]);
-                if (File.Exists(visualStateFile))
-                    RestoreVisualState(visualStateFile);
-                else
-                    SetDefaultInitialExpansion();
-            }
+            if (CanRestoreVisualState())
+                RestoreVisualState();
             else
                 SetDefaultInitialExpansion();
         }
 
         public override void OnTestUnloading()
         {
-            if (_settings.Gui.TestTree.SaveVisualState)
+            if (CanSaveVisualState())
             {
-                //var visualState = VisualState.LoadFrom(_view);
-
                 var visualState = new VisualState()
                 {
                     ShowCheckBoxes = _view.Tree.CheckBoxes,
@@ -82,8 +72,23 @@ namespace TestCentric.Gui.Presenters
                 ProcessTreeNodes(childNode, visualState);
         }
 
-        private void RestoreVisualState(string filename)
+        private bool CanSaveVisualState()
         {
+            return 
+                _settings.Gui.TestTree.SaveVisualState &&
+                _model.TestFiles.Count > 0;
+        }
+
+        private bool CanRestoreVisualState()
+        {
+            return
+                CanSaveVisualState() &&
+                File.Exists(VisualState.GetVisualStateFileName(_model.TestFiles[0]));
+        }
+
+        private void RestoreVisualState()
+        {
+            var filename = VisualState.GetVisualStateFileName(_model.TestFiles[0]);
             var visualState = VisualState.LoadFrom(filename);
 
             _view.Tree.CheckBoxes = visualState.ShowCheckBoxes;
@@ -98,10 +103,16 @@ namespace TestCentric.Gui.Presenters
                 }
 
             if (visualState.SelectedNode != null)
-                _view.Tree.SelectedNode = GetTreeNodesForTest(visualState.SelectedNode)[0];
+                _view.Tree.SelectedNode = GetTreeNodeForTest(visualState.SelectedNode);
 
             if (visualState.TopNode != null)
-                _view.Tree.TopNode = GetTreeNodesForTest(visualState.TopNode)[0];
+                _view.Tree.TopNode = GetTreeNodeForTest(visualState.TopNode);
+        }
+
+        private TreeNode GetTreeNodeForTest(string id)
+        {
+            var treeNodes = GetTreeNodesForTest(id);
+            return treeNodes.Count > 0 ? treeNodes[0] : null;
         }
 
         private void SetDefaultInitialExpansion()
