@@ -384,10 +384,10 @@ namespace TestCentric.Gui.Presenters
 
             _view.ExitCommand.Execute += () => _view.Close();
 
-            _view.GuiDisplayFormat.SelectionChanged += () =>
+            _view.GuiLayout.SelectionChanged += () =>
             {
-                _settings.Gui.DisplayFormat = _view.GuiDisplayFormat.SelectedItem;
-                InitializeDisplay(_view.GuiDisplayFormat.SelectedItem);
+                _settings.Gui.DisplayFormat = _view.GuiLayout.SelectedItem;
+                InitializeDisplay(_view.GuiLayout.SelectedItem);
             };
 
             _view.IncreaseFontCommand.Execute += () =>
@@ -826,7 +826,7 @@ namespace TestCentric.Gui.Presenters
 
         private void InitializeDisplay(string displayFormat)
         {
-            _view.GuiDisplayFormat.SelectedItem = displayFormat;
+            _view.GuiLayout.SelectedItem = displayFormat;
 
             Point location;
             Size size;
