@@ -35,7 +35,7 @@ namespace TestCentric.Gui.Views
         ICommand ExitCommand { get; }
 
         // View Menu Items
-        ISelection GuiDisplayFormat { get; }
+        ISelection GuiLayout { get; }
         ICommand IncreaseFontCommand { get; }
         ICommand DecreaseFontCommand { get; }
         ICommand ChangeFontCommand { get; }
@@ -103,7 +103,6 @@ namespace TestCentric.Gui.Views
         void SetTitleBar(string fileName);
 
         // Form methods that we have to use
-        void Activate();
         void Close();
 
         // Form Events that we use

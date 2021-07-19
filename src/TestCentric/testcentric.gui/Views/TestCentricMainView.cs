@@ -148,7 +148,7 @@ namespace TestCentric.Gui.Views
             ExitCommand = new CommandMenuElement(exitMenuItem);
 
             // Initialize View Menu Commands
-            GuiDisplayFormat = new CheckedToolStripMenuGroup("", fullGuiMenuItem, miniGuiMenuItem);
+            GuiLayout = new CheckedToolStripMenuGroup("", fullGuiMenuItem, miniGuiMenuItem);
             IncreaseFontCommand = new CommandMenuElement(increaseFontMenuItem);
             DecreaseFontCommand = new CommandMenuElement(decreaseFontMenuItem);
             ChangeFontCommand = new CommandMenuElement(fontChangeMenuItem);
@@ -1198,7 +1198,7 @@ namespace TestCentric.Gui.Views
         public ICommand ExitCommand { get; }
 
         // View Menu Items
-        public ISelection GuiDisplayFormat { get; }
+        public ISelection GuiLayout { get; }
         public ICommand IncreaseFontCommand { get; }
         public ICommand DecreaseFontCommand { get; }
         public ICommand ChangeFontCommand { get; }
@@ -1278,11 +1278,24 @@ namespace TestCentric.Gui.Views
         {
             leftPanel.Visible = true;
             leftPanel.Dock = useFullGui
-        ? DockStyle.Left
-        : DockStyle.Fill;
+                ? DockStyle.Left
+                : DockStyle.Fill;
             treeSplitter.Visible = useFullGui;
             rightPanel.Visible = useFullGui;
             statusBar.Visible = useFullGui;
+
+            if (useFullGui)
+            {
+                // Move progress bar from left to right
+                leftPanel.Controls.Remove(progressBar);
+                rightPanel.Controls.Add(progressBar);
+            }
+            else
+            {
+                // Move progress bar from right to left
+                rightPanel.Controls.Remove(progressBar);
+                leftPanel.Controls.Add(progressBar);
+            }
         }
 
         #endregion
