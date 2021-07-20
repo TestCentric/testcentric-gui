@@ -111,7 +111,7 @@ namespace TestCentric.Gui.Model.Settings
 
         public static TestCaseData[] TestCases = new TestCaseData[]
         {
-            new TestCaseData("DisplayFormat", "Full", "Mini"),
+            new TestCaseData("GuiLayout", "Full", "Mini"),
             new TestCaseData("LoadLastProject", true, false),
             new TestCaseData("SelectedTab", 0, 1),
             new TestCaseData("InitialSettingsPage", null, "Some.Page"),
