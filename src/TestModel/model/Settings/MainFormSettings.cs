@@ -35,5 +35,11 @@ namespace TestCentric.Gui.Model.Settings
             get { return GetSetting(nameof(SplitPosition), 0); }
             set { SaveSetting(nameof(SplitPosition), value); }
         }
+
+        public bool ShowStatusBar
+        {
+            get { return GetSetting(nameof(ShowStatusBar), true); }
+            set { SaveSetting(nameof(ShowStatusBar), value); }
+        }
     }
 }
