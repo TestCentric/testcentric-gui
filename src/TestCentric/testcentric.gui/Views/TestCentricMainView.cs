@@ -51,7 +51,6 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.ToolStripSeparator helpMenuSeparator1;
         private System.Windows.Forms.ToolStripMenuItem aboutMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewMenu;
-        private System.Windows.Forms.ToolStripMenuItem statusBarMenuItem;
         private System.Windows.Forms.ToolStripMenuItem miniGuiMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fullGuiMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fontChangeMenuItem;
@@ -89,7 +88,6 @@ namespace TestCentric.Gui.Views
         private ToolStripSeparator toolStripSeparator8;
         private ToolStripSeparator toolStripSeparator10;
         private ToolStripSeparator toolStripSeparator11;
-        private ToolStripSeparator toolStripSeparator9;
         private ToolStripSeparator toolStripSeparator5;
         private ToolStripSeparator toolStripSeparator6;
         private ToolStripSeparator toolStripSeparator7;
@@ -156,7 +154,6 @@ namespace TestCentric.Gui.Views
             IncreaseFixedFontCommand = new CommandMenuElement(increaseFixedFontMenuItem);
             DecreaseFixedFontCommand = new CommandMenuElement(decreaseFixedFontMenuItem);
             RestoreFixedFontCommand = new CommandMenuElement(restoreFixedFontMenuItem);
-            StatusBarCommand = new CheckedMenuElement(statusBarMenuItem);
 
             // Initialize Test Menu Commands
             RunAllMenuCommand = new CommandMenuElement(runAllMenuItem);
@@ -295,8 +292,6 @@ namespace TestCentric.Gui.Views
             this.decreaseFixedFontMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
             this.restoreFixedFontMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
-            this.statusBarMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.runAllMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runSelectedMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -682,9 +677,7 @@ namespace TestCentric.Gui.Views
             this.miniGuiMenuItem,
             this.toolStripSeparator8,
             this.guiFontMenuItem,
-            this.fixedFontMenuItem,
-            this.toolStripSeparator9,
-            this.statusBarMenuItem});
+            this.fixedFontMenuItem});
             this.viewMenu.Name = "viewMenu";
             this.viewMenu.Size = new System.Drawing.Size(44, 20);
             this.viewMenu.Text = "&View";
@@ -694,21 +687,21 @@ namespace TestCentric.Gui.Views
             this.fullGuiMenuItem.Checked = true;
             this.fullGuiMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.fullGuiMenuItem.Name = "fullGuiMenuItem";
-            this.fullGuiMenuItem.Size = new System.Drawing.Size(129, 22);
+            this.fullGuiMenuItem.Size = new System.Drawing.Size(180, 22);
             this.fullGuiMenuItem.Tag = "Full";
             this.fullGuiMenuItem.Text = "&Full GUI";
             // 
             // miniGuiMenuItem
             // 
             this.miniGuiMenuItem.Name = "miniGuiMenuItem";
-            this.miniGuiMenuItem.Size = new System.Drawing.Size(129, 22);
+            this.miniGuiMenuItem.Size = new System.Drawing.Size(180, 22);
             this.miniGuiMenuItem.Tag = "Mini";
             this.miniGuiMenuItem.Text = "&Mini GUI";
             // 
             // toolStripSeparator8
             // 
             this.toolStripSeparator8.Name = "toolStripSeparator8";
-            this.toolStripSeparator8.Size = new System.Drawing.Size(126, 6);
+            this.toolStripSeparator8.Size = new System.Drawing.Size(177, 6);
             // 
             // guiFontMenuItem
             // 
@@ -719,7 +712,7 @@ namespace TestCentric.Gui.Views
             this.fontChangeMenuItem,
             this.defaultFontMenuItem});
             this.guiFontMenuItem.Name = "guiFontMenuItem";
-            this.guiFontMenuItem.Size = new System.Drawing.Size(129, 22);
+            this.guiFontMenuItem.Size = new System.Drawing.Size(180, 22);
             this.guiFontMenuItem.Text = "GUI Fo&nt";
             // 
             // increaseFontMenuItem
@@ -759,7 +752,7 @@ namespace TestCentric.Gui.Views
             this.toolStripSeparator11,
             this.restoreFixedFontMenuItem});
             this.fixedFontMenuItem.Name = "fixedFontMenuItem";
-            this.fixedFontMenuItem.Size = new System.Drawing.Size(129, 22);
+            this.fixedFontMenuItem.Size = new System.Drawing.Size(180, 22);
             this.fixedFontMenuItem.Text = "Fi&xed Font";
             // 
             // increaseFixedFontMenuItem
@@ -784,20 +777,6 @@ namespace TestCentric.Gui.Views
             this.restoreFixedFontMenuItem.Name = "restoreFixedFontMenuItem";
             this.restoreFixedFontMenuItem.Size = new System.Drawing.Size(121, 22);
             this.restoreFixedFontMenuItem.Text = "&Restore";
-            // 
-            // toolStripSeparator9
-            // 
-            this.toolStripSeparator9.Name = "toolStripSeparator9";
-            this.toolStripSeparator9.Size = new System.Drawing.Size(126, 6);
-            // 
-            // statusBarMenuItem
-            // 
-            this.statusBarMenuItem.Checked = true;
-            this.statusBarMenuItem.CheckOnClick = true;
-            this.statusBarMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.statusBarMenuItem.Name = "statusBarMenuItem";
-            this.statusBarMenuItem.Size = new System.Drawing.Size(129, 22);
-            this.statusBarMenuItem.Text = "&Status Bar";
             // 
             // testMenu
             // 
@@ -954,7 +933,7 @@ namespace TestCentric.Gui.Views
             this.treeSplitter.Location = new System.Drawing.Point(240, 48);
             this.treeSplitter.MinSize = 240;
             this.treeSplitter.Name = "treeSplitter";
-            this.treeSplitter.Size = new System.Drawing.Size(6, 383);
+            this.treeSplitter.Size = new System.Drawing.Size(6, 359);
             this.treeSplitter.TabIndex = 2;
             this.treeSplitter.TabStop = false;
             // 
@@ -965,7 +944,7 @@ namespace TestCentric.Gui.Views
             this.rightPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rightPanel.Location = new System.Drawing.Point(246, 48);
             this.rightPanel.Name = "rightPanel";
-            this.rightPanel.Size = new System.Drawing.Size(498, 383);
+            this.rightPanel.Size = new System.Drawing.Size(498, 359);
             this.rightPanel.TabIndex = 3;
             // 
             // resultTabs
@@ -979,7 +958,7 @@ namespace TestCentric.Gui.Views
             this.resultTabs.Location = new System.Drawing.Point(0, 0);
             this.resultTabs.Name = "resultTabs";
             this.resultTabs.SelectedIndex = 0;
-            this.resultTabs.Size = new System.Drawing.Size(498, 383);
+            this.resultTabs.Size = new System.Drawing.Size(498, 359);
             this.resultTabs.TabIndex = 2;
             // 
             // propertiesTab
@@ -987,7 +966,7 @@ namespace TestCentric.Gui.Views
             this.propertiesTab.Controls.Add(this.propertiesView);
             this.propertiesTab.Location = new System.Drawing.Point(4, 4);
             this.propertiesTab.Name = "propertiesTab";
-            this.propertiesTab.Size = new System.Drawing.Size(490, 357);
+            this.propertiesTab.Size = new System.Drawing.Size(490, 333);
             this.propertiesTab.TabIndex = 1;
             this.propertiesTab.Text = "Test Properties";
             this.propertiesTab.UseVisualStyleBackColor = true;
@@ -1010,7 +989,7 @@ namespace TestCentric.Gui.Views
             this.propertiesView.Output = "";
             this.propertiesView.Properties = "";
             this.propertiesView.RunState = "";
-            this.propertiesView.Size = new System.Drawing.Size(490, 357);
+            this.propertiesView.Size = new System.Drawing.Size(490, 333);
             this.propertiesView.SkipReason = "";
             this.propertiesView.TabIndex = 0;
             this.propertiesView.TestCount = "";
@@ -1103,7 +1082,7 @@ namespace TestCentric.Gui.Views
             this.leftPanel.Dock = System.Windows.Forms.DockStyle.Left;
             this.leftPanel.Location = new System.Drawing.Point(0, 48);
             this.leftPanel.Name = "leftPanel";
-            this.leftPanel.Size = new System.Drawing.Size(240, 383);
+            this.leftPanel.Size = new System.Drawing.Size(240, 359);
             this.leftPanel.TabIndex = 4;
             // 
             // testPanel
@@ -1113,7 +1092,7 @@ namespace TestCentric.Gui.Views
             this.testPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.testPanel.Location = new System.Drawing.Point(0, 0);
             this.testPanel.Name = "testPanel";
-            this.testPanel.Size = new System.Drawing.Size(240, 383);
+            this.testPanel.Size = new System.Drawing.Size(240, 359);
             this.testPanel.TabIndex = 0;
             // 
             // treeView
@@ -1124,7 +1103,7 @@ namespace TestCentric.Gui.Views
             this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView.Location = new System.Drawing.Point(0, 19);
             this.treeView.Name = "treeView";
-            this.treeView.Size = new System.Drawing.Size(240, 364);
+            this.treeView.Size = new System.Drawing.Size(240, 340);
             this.treeView.TabIndex = 0;
             // 
             // TestCentricMainView
@@ -1133,6 +1112,7 @@ namespace TestCentric.Gui.Views
             this.Controls.Add(this.rightPanel);
             this.Controls.Add(this.treeSplitter);
             this.Controls.Add(this.leftPanel);
+            this.Controls.Add(this.statusBar);
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.mainMenu);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -1206,7 +1186,6 @@ namespace TestCentric.Gui.Views
         public ICommand IncreaseFixedFontCommand { get; }
         public ICommand DecreaseFixedFontCommand { get; }
         public ICommand RestoreFixedFontCommand { get; }
-        public IChecked StatusBarCommand { get; }
 
         // Test Menu Items
         public ICommand RunAllMenuCommand { get; }
@@ -1282,7 +1261,6 @@ namespace TestCentric.Gui.Views
                 : DockStyle.Fill;
             treeSplitter.Visible = useFullGui;
             rightPanel.Visible = useFullGui;
-            statusBar.Visible = useFullGui;
 
             if (useFullGui)
             {

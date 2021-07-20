@@ -43,7 +43,6 @@ namespace TestCentric.Gui.Views
         ICommand IncreaseFixedFontCommand { get; }
         ICommand DecreaseFixedFontCommand { get; }
         ICommand RestoreFixedFontCommand { get; }
-        IChecked StatusBarCommand { get; }
 
         // Test Menu Items
         ICommand RunAllMenuCommand { get; }

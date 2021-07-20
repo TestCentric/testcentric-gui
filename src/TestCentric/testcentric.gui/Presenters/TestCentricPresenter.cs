@@ -215,7 +215,9 @@ namespace TestCentric.Gui.Presenters
 
             _settings.Changed += (s, e) =>
             {
-                if (e.SettingName == "Gui.Options.DisplayFormat")
+                if (e.SettingName == "TestCentric.Gui.GuiLayout")
+                    InitializeDisplay();
+                if (e.SettingName == "TestCentric.Gui.MainForm.ShowStatusBar")
                     InitializeDisplay();
             };
 
@@ -230,7 +232,7 @@ namespace TestCentric.Gui.Presenters
 
             _view.Load += (s, e) =>
             {
-                InitializeDisplay(_settings.Gui.DisplayFormat);
+                InitializeDisplay(_settings.Gui.GuiLayout);
 
                 var settings = _model.PackageOverrides;
                 if (_options.MaxAgents >= 0)
@@ -303,7 +305,7 @@ namespace TestCentric.Gui.Presenters
 
                 if (!e.Cancel)
                 {
-                    if (_settings.Gui.DisplayFormat == "Mini")
+                    if (_settings.Gui.GuiLayout == "Mini")
                     {
                         _settings.Gui.MiniForm.Location = _view.Location;
                         _settings.Gui.MiniForm.Size = _view.Size;
@@ -386,7 +388,7 @@ namespace TestCentric.Gui.Presenters
 
             _view.GuiLayout.SelectionChanged += () =>
             {
-                _settings.Gui.DisplayFormat = _view.GuiLayout.SelectedItem;
+                _settings.Gui.GuiLayout = _view.GuiLayout.SelectedItem;
                 InitializeDisplay(_view.GuiLayout.SelectedItem);
             };
 
@@ -429,12 +431,6 @@ namespace TestCentric.Gui.Presenters
             {
                 _settings.Gui.FixedFont = new Font(FontFamily.GenericMonospace, 8.0f);
             };
-
-            _view.StatusBarCommand.CheckedChanged += () =>
-            {
-                _view.StatusBarView.Visible = _view.StatusBarCommand.Checked;
-            };
-
 
             _view.RunAllMenuCommand.Execute += () => RunAllTests();
             _view.RunSelectedMenuCommand.Execute += () => RunSelectedTests();
@@ -821,17 +817,17 @@ namespace TestCentric.Gui.Presenters
 
         private void InitializeDisplay()
         {
-            InitializeDisplay(_settings.Gui.DisplayFormat);
+            InitializeDisplay(_settings.Gui.GuiLayout);
         }
 
-        private void InitializeDisplay(string displayFormat)
+        private void InitializeDisplay(string guiLayout)
         {
-            _view.GuiLayout.SelectedItem = displayFormat;
+            _view.GuiLayout.SelectedItem = guiLayout;
 
             Point location;
             Size size;
             bool isMaximized = false;
-            bool useFullGui = displayFormat != "Mini";
+            bool useFullGui = guiLayout != "Mini";
 
             _view.Configure(useFullGui);
 
@@ -857,6 +853,8 @@ namespace TestCentric.Gui.Presenters
 
             if (useFullGui)
                 _view.SplitterPosition = _settings.Gui.MainForm.SplitPosition;
+            
+            _view.StatusBarView.Visible = useFullGui && _settings.Gui.MainForm.ShowStatusBar;
         }
 
         private static bool IsValidLocation(Point location, Size size)

@@ -24,6 +24,7 @@ namespace TestCentric.Gui.SettingsPages
 
         private const int MIN_RECENT_FILES = 5;
         private NumericUpDown recentFilesCountUpDown;
+        private CheckBox showStatusBarCheckBox;
         private const int MAX_RECENT_FILES = 24;
 
         public GuiSettingsPage(string key) : base(key)
@@ -68,6 +69,7 @@ namespace TestCentric.Gui.SettingsPages
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.recentFilesCountUpDown = new System.Windows.Forms.NumericUpDown();
+            this.showStatusBarCheckBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.recentFilesCountUpDown)).BeginInit();
             this.SuspendLayout();
             // 
@@ -82,7 +84,7 @@ namespace TestCentric.Gui.SettingsPages
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Location = new System.Drawing.Point(135, 0);
             this.groupBox1.Name = "groupBox1";
@@ -93,7 +95,7 @@ namespace TestCentric.Gui.SettingsPages
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 96);
+            this.label2.Location = new System.Drawing.Point(8, 127);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(66, 13);
             this.label2.TabIndex = 9;
@@ -102,7 +104,7 @@ namespace TestCentric.Gui.SettingsPages
             // groupBox2
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Location = new System.Drawing.Point(135, 96);
+            this.groupBox2.Location = new System.Drawing.Point(135, 127);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(313, 8);
             this.groupBox2.TabIndex = 8;
@@ -112,7 +114,7 @@ namespace TestCentric.Gui.SettingsPages
             // 
             this.loadLastProjectCheckBox.AutoSize = true;
             this.helpProvider1.SetHelpString(this.loadLastProjectCheckBox, "If checked, most recent project is loaded at startup.");
-            this.loadLastProjectCheckBox.Location = new System.Drawing.Point(32, 198);
+            this.loadLastProjectCheckBox.Location = new System.Drawing.Point(32, 229);
             this.loadLastProjectCheckBox.Name = "loadLastProjectCheckBox";
             this.helpProvider1.SetShowHelp(this.loadLastProjectCheckBox, true);
             this.loadLastProjectCheckBox.Size = new System.Drawing.Size(193, 17);
@@ -130,12 +132,13 @@ namespace TestCentric.Gui.SettingsPages
             this.fullGuiRadioButton.Size = new System.Drawing.Size(215, 17);
             this.fullGuiRadioButton.TabIndex = 32;
             this.fullGuiRadioButton.Text = "Full Gui with progress bar and result tabs";
+            this.fullGuiRadioButton.CheckedChanged += new System.EventHandler(this.fullGuiRadioButton_CheckedChanged);
             // 
             // miniGuiRadioButton
             // 
             this.miniGuiRadioButton.AutoSize = true;
             this.helpProvider1.SetHelpString(this.miniGuiRadioButton, "If selected, the mini-Gui, consisting of only the tree of tests, is displayed.");
-            this.miniGuiRadioButton.Location = new System.Drawing.Point(32, 56);
+            this.miniGuiRadioButton.Location = new System.Drawing.Point(32, 80);
             this.miniGuiRadioButton.Name = "miniGuiRadioButton";
             this.helpProvider1.SetShowHelp(this.miniGuiRadioButton, true);
             this.miniGuiRadioButton.Size = new System.Drawing.Size(148, 17);
@@ -145,7 +148,7 @@ namespace TestCentric.Gui.SettingsPages
             // checkFilesExistCheckBox
             // 
             this.checkFilesExistCheckBox.AutoSize = true;
-            this.checkFilesExistCheckBox.Location = new System.Drawing.Point(32, 159);
+            this.checkFilesExistCheckBox.Location = new System.Drawing.Point(32, 190);
             this.checkFilesExistCheckBox.Name = "checkFilesExistCheckBox";
             this.checkFilesExistCheckBox.Size = new System.Drawing.Size(185, 17);
             this.checkFilesExistCheckBox.TabIndex = 34;
@@ -155,7 +158,7 @@ namespace TestCentric.Gui.SettingsPages
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(125, 124);
+            this.label3.Location = new System.Drawing.Point(125, 155);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(65, 13);
             this.label3.TabIndex = 30;
@@ -164,7 +167,7 @@ namespace TestCentric.Gui.SettingsPages
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(32, 124);
+            this.label4.Location = new System.Drawing.Point(32, 155);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(23, 13);
             this.label4.TabIndex = 28;
@@ -172,7 +175,7 @@ namespace TestCentric.Gui.SettingsPages
             // 
             // recentFilesCountUpDown
             // 
-            this.recentFilesCountUpDown.Location = new System.Drawing.Point(61, 122);
+            this.recentFilesCountUpDown.Location = new System.Drawing.Point(61, 153);
             this.recentFilesCountUpDown.Minimum = new decimal(new int[] {
             1,
             0,
@@ -187,8 +190,19 @@ namespace TestCentric.Gui.SettingsPages
             0,
             0});
             // 
+            // showStatusBarCheckBox
+            // 
+            this.showStatusBarCheckBox.AutoSize = true;
+            this.showStatusBarCheckBox.Location = new System.Drawing.Point(53, 52);
+            this.showStatusBarCheckBox.Name = "showStatusBarCheckBox";
+            this.showStatusBarCheckBox.Size = new System.Drawing.Size(102, 17);
+            this.showStatusBarCheckBox.TabIndex = 36;
+            this.showStatusBarCheckBox.Text = "Show StatusBar";
+            this.showStatusBarCheckBox.UseVisualStyleBackColor = true;
+            // 
             // GuiSettingsPage
             // 
+            this.Controls.Add(this.showStatusBarCheckBox);
             this.Controls.Add(this.recentFilesCountUpDown);
             this.Controls.Add(this.checkFilesExistCheckBox);
             this.Controls.Add(this.miniGuiRadioButton);
@@ -210,16 +224,19 @@ namespace TestCentric.Gui.SettingsPages
 
         public override void LoadSettings()
         {
-            switch (Settings.Gui.DisplayFormat)
+            switch (Settings.Gui.GuiLayout)
             {
                 case "Full":
                     fullGuiRadioButton.Checked = true;
+                    showStatusBarCheckBox.Enabled = true;
                     break;
                 case "Mini":
                     miniGuiRadioButton.Checked = true;
+                    showStatusBarCheckBox.Enabled = false;
                     break;
             }
 
+            showStatusBarCheckBox.Checked = Settings.Gui.MainForm.ShowStatusBar;
             recentFilesCountUpDown.Text = Settings.Gui.RecentProjects.MaxFiles.ToString();
             checkFilesExistCheckBox.Checked = Settings.Gui.RecentProjects.CheckFilesExist;
             loadLastProjectCheckBox.Checked = Settings.Gui.LoadLastProject;
@@ -227,7 +244,9 @@ namespace TestCentric.Gui.SettingsPages
 
         public override void ApplySettings()
         {
-            Settings.Gui.DisplayFormat = fullGuiRadioButton.Checked ? "Full" : "Mini";
+            Settings.Gui.GuiLayout = fullGuiRadioButton.Checked ? "Full" : "Mini";
+            if (fullGuiRadioButton.Checked)
+                Settings.Gui.MainForm.ShowStatusBar = showStatusBarCheckBox.Checked;
             Settings.Gui.RecentProjects.CheckFilesExist = checkFilesExistCheckBox.Checked;
             Settings.Gui.LoadLastProject = loadLastProjectCheckBox.Checked;
             Settings.Gui.RecentProjects.MaxFiles = (int)recentFilesCountUpDown.Value;
@@ -276,6 +295,11 @@ namespace TestCentric.Gui.SettingsPages
             Settings.Gui.RecentProjects.MaxFiles = count;
             if (count == 0)
                 loadLastProjectCheckBox.Checked = false;
+        }
+
+        private void fullGuiRadioButton_CheckedChanged(object sender, System.EventArgs e)
+        {
+            showStatusBarCheckBox.Enabled = fullGuiRadioButton.Checked;
         }
     }
 }

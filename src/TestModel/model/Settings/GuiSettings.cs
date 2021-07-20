@@ -47,10 +47,10 @@ namespace TestCentric.Gui.Model.Settings
             get { return new TextOutputSettings(_settingsService, GroupPrefix); }
         }
 
-        public string DisplayFormat
+        public string GuiLayout
         {
-            get { return GetSetting(nameof(DisplayFormat), "Full"); }
-            set { SaveSetting(nameof(DisplayFormat), value); }
+            get { return GetSetting(nameof(GuiLayout), "Full"); }
+            set { SaveSetting(nameof(GuiLayout), value); }
         }
 
         public bool LoadLastProject
