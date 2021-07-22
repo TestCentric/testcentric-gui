@@ -27,7 +27,8 @@ namespace TestCentric.Gui.Presenters
 
         public bool AllowAgentSelection()
         {
-            return GetAgentsForPackage(_model.TestPackage).Count > 1;
+            return _model.TestPackage != null &&
+                GetAgentsForPackage(_model.TestPackage).Count > 1;
         }
 
         public void PopulateMenu()

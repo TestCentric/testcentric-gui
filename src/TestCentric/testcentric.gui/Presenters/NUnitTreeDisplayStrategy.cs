@@ -43,12 +43,15 @@ namespace TestCentric.Gui.Presenters
         {
             if (CanSaveVisualState())
             {
-                var visualState = new VisualState()
-                {
-                    ShowCheckBoxes = _view.Tree.CheckBoxes,
-                    TopNode = ((TestNode)_view.Tree.TopNode?.Tag).Id,
-                    SelectedNode = ((TestNode)_view.Tree.SelectedNode?.Tag).Id,
-                };
+                var visualState = new VisualState();
+                var topNode = (TestNode)_view.Tree.TopNode?.Tag;
+                var selectedNode = (TestNode)_view.Tree.SelectedNode?.Tag;
+
+                visualState.ShowCheckBoxes = _view.Tree.CheckBoxes;
+                if (topNode != null)
+                    visualState.TopNode = topNode.Id;
+                if (selectedNode != null)
+                    visualState.SelectedNode = selectedNode.Id;
 
                 foreach (TreeNode node in _view.Tree.Nodes)
                     ProcessTreeNodes(node, visualState);
