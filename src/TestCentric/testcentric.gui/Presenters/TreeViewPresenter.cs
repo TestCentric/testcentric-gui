@@ -14,6 +14,7 @@ namespace TestCentric.Gui.Presenters
     using Model;
     using Views;
     using Dialogs;
+    using System.Drawing;
 
     /// <summary>
     /// TreeViewPresenter is the presenter for the TestTreeView
@@ -59,6 +60,7 @@ namespace TestCentric.Gui.Presenters
             {
                 Strategy.OnTestLoaded(ea.Test);
                 InitializeRunCommands();
+                CheckPropertiesDialog();
             };
 
             _model.Events.TestReloaded += (ea) =>
@@ -73,9 +75,17 @@ namespace TestCentric.Gui.Presenters
                 InitializeRunCommands();
             };
 
-            _model.Events.TestsUnloading += ea => Strategy.OnTestUnloading();
+            _model.Events.TestsUnloading += ea =>
+            {
+                Strategy.OnTestUnloading();
+                ClosePropertiesDialog();
+            };
 
-            _model.Events.RunStarting += (ea) => InitializeRunCommands();
+            _model.Events.RunStarting += (ea) =>
+            {
+                InitializeRunCommands();
+                CheckPropertiesDialog();
+            };
             _model.Events.RunFinished += (ea) =>
             {
                 InitializeRunCommands();
@@ -135,12 +145,69 @@ namespace TestCentric.Gui.Presenters
             };
             _view.DebugCheckedCommand.Execute += DebugCheckedTests;
 
+            _view.TestPropertiesCommand.Execute += () => ShowPropertiesDialog();
+
             // Node selected in tree
             _view.Tree.SelectedNodeChanged += (tn) =>
             {
                 _selectedTestItem = tn.Tag as ITestItem;
                 _model.NotifySelectedItemChanged(_selectedTestItem);
+
+                if (_propertiesDialog != null)
+                {
+                    if (_propertiesDialog.Pinned)
+                        _propertiesDialog.DisplayProperties(tn);
+                    else
+                        _propertiesDialog.Close();
+                }
             };
+        }
+
+        TestPropertiesDialog _propertiesDialog;
+
+        private void ShowPropertiesDialog()
+        {
+            if (_propertiesDialog == null)
+                _propertiesDialog = CreatePropertiesDialog();
+
+            _propertiesDialog.DisplayProperties(_view.ContextNode);
+        }
+
+        private TestPropertiesDialog CreatePropertiesDialog()
+        {
+            var mainForm = ((Control)_view).FindForm();
+
+            var propertiesDialog = new TestPropertiesDialog(_model, _view)
+            {
+                Owner = mainForm,
+                Font = mainForm.Font,
+                StartPosition = FormStartPosition.Manual
+            };
+
+            var midScreen = Screen.FromHandle(mainForm.Handle).WorkingArea.Width / 2;
+            var midForm = (mainForm.Left + mainForm.Right) / 2;
+
+            propertiesDialog.Left = midForm < midScreen
+                ? mainForm.Right
+                : Math.Max(0, mainForm.Left - propertiesDialog.Width);
+
+            propertiesDialog.Top = mainForm.Top;
+
+            propertiesDialog.Closed += (s, e) => _propertiesDialog = null;
+
+            return propertiesDialog;
+        }
+
+        private void ClosePropertiesDialog()
+        {
+            if (_propertiesDialog != null)
+                _propertiesDialog.Close();
+        }
+
+        private void CheckPropertiesDialog()
+        {
+            if (_propertiesDialog != null && !_propertiesDialog.Pinned)
+                _propertiesDialog.Close();
         }
 
         private void RunAllTests()
@@ -223,6 +290,9 @@ namespace TestCentric.Gui.Presenters
             }
 
             _view.ActiveConfiguration.Visible = displayConfigMenu;
+
+            var layout = _model.Settings.Gui.GuiLayout;
+            _view.TestPropertiesCommand.Visible = layout == "Mini";
         }
 
         private void InitializeRunCommands()
