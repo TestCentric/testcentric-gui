@@ -12,6 +12,7 @@ using System.Windows.Forms;
 namespace TestCentric.Gui.Dialogs
 {
     using Model;
+    using NUnit.Engine;
     using Views;
 
     public partial class TestPropertiesDialog : Form
@@ -72,6 +73,22 @@ namespace TestCentric.Gui.Dialogs
             else
                 testName.Text = _testNode.Name;
 
+            // Display any package info
+            var package = _model.GetPackageForTest(_testNode.Id);
+            if (package != null)
+            {
+                FillPackageSettingsList(package);
+                groupBox1.Show();
+            }
+            else
+                groupBox1.Hide();
+
+            // Display test details
+            groupBox2.Location = package != null
+                ? new Point(
+                    groupBox1.Location.X, groupBox1.Bottom + 12)
+                : groupBox1.Location;
+
             testType.Text = _testNode.Type;
             fullName.Text = _testNode.FullName;
             description.Text = _testNode.GetProperty("Description");
@@ -97,8 +114,21 @@ namespace TestCentric.Gui.Dialogs
 
             FillPropertyList();
 
-            FillPackageSettingsList();
+            BeginPanel();
 
+            CreateRow(testTypeLabel, testType);
+            CreateRow(fullNameLabel, fullName);
+            CreateRow(descriptionLabel, description);
+            CreateRow(categoriesLabel, categories);
+            CreateRow(testCaseCountLabel, testCaseCount, shouldRunLabel, shouldRun);
+            CreateRow(ignoreReasonLabel, ignoreReason);
+            CreateRow(propertiesLabel, hiddenProperties);
+            CreateRow(properties);
+
+            groupBox2.ClientSize = new Size(
+                groupBox2.ClientSize.Width, maxY + 12);
+
+            // Display Result GroupBox
             elapsedTime.Text = "Execution Time:";
             assertCount.Text = "Assert Count:";
             message.Text = "";
@@ -124,24 +154,8 @@ namespace TestCentric.Gui.Dialogs
                 stackTrace.Text = _resultNode.StackTrace;
             }
 
-            BeginPanel();
-
-            CreateRow(testTypeLabel, testType);
-            CreateRow(fullNameLabel, fullName);
-            CreateRow(descriptionLabel, description);
-            CreateRow(categoriesLabel, categories);
-            CreateRow(testCaseCountLabel, testCaseCount, shouldRunLabel, shouldRun);
-            CreateRow(ignoreReasonLabel, ignoreReason);
-            CreateRow(propertiesLabel, hiddenProperties);
-            CreateRow(properties);
-            CreateRow(packageSettingsLabel);
-            CreateRow(packageSettings);
-
-            groupBox1.ClientSize = new Size(
-                groupBox1.ClientSize.Width, maxY + 12);
-
-            groupBox2.Location = new Point(
-                groupBox1.Location.X, groupBox1.Bottom + 12);
+            groupBox3.Location = new Point(
+                groupBox2.Location.X, groupBox2.Bottom + 12);
 
             BeginPanel();
 
@@ -150,11 +164,11 @@ namespace TestCentric.Gui.Dialogs
             CreateRow(stackTraceLabel);
             CreateRow(stackTrace);
 
-            groupBox2.ClientSize = new Size(
-                groupBox2.ClientSize.Width, this.maxY + 12);
+            groupBox3.ClientSize = new Size(
+                groupBox3.ClientSize.Width, this.maxY + 12);
 
             this.ClientSize = new Size(
-                this.ClientSize.Width, groupBox2.Bottom + 12);
+                this.ClientSize.Width, groupBox3.Bottom + 12);
 
             Show();
         }
@@ -168,21 +182,19 @@ namespace TestCentric.Gui.Dialogs
             }
         }
 
-        private void FillPackageSettingsList()
+        private void FillPackageSettingsList(TestPackage package)
         {
             packageSettings.Items.Clear();
-            var package = _model.GetPackageForTest(_testNode.Id);
 
-            if (package != null)
-                foreach (string key in package.Settings.Keys)
-                {
-                    object val = package.Settings[key] ?? "<null>";
-                    if (val is string && (string)val == string.Empty)
-                        val = "<empty>";
-                    else if (val is string[])
-                        val = string.Join(",", val as string[]);
-                    packageSettings.Items.Add($"{key} = {val}");
-                }
+            foreach (string key in package.Settings.Keys)
+            {
+                object val = package.Settings[key] ?? "<null>";
+                if (val is string && (string)val == string.Empty)
+                    val = "<empty>";
+                else if (val is string[])
+                    val = string.Join(",", val as string[]);
+                packageSettings.Items.Add($"{key} = {val}");
+            }
         }
 
         #endregion
@@ -197,21 +209,10 @@ namespace TestCentric.Gui.Dialogs
                 pinButton.Image = unpinnedImage;
         }
 
-        private void TestPropertiesDialog_SizeChanged(object sender, EventArgs e)
-        {
-            if (clientWidth != this.ClientSize.Width)
-            {
-                if (_treeNode != null)
-                    DisplayProperties(_treeNode);
-
-                clientWidth = this.ClientSize.Width;
-            }
-        }
-
         private void TestPropertiesDialog_ResizeEnd(object sender, EventArgs e)
         {
-            ClientSize = new Size(
-                ClientSize.Width, groupBox2.Bottom + 12);
+            if (clientWidth != ClientSize.Width && _treeNode != null)
+                DisplayProperties(_treeNode);
 
             clientWidth = ClientSize.Width;
         }

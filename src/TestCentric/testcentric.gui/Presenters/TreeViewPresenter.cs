@@ -285,7 +285,7 @@ namespace TestCentric.Gui.Presenters
                         _view.ActiveConfiguration.MenuItems.Add(configEntry);
                     }
 
-                    // TODO: Menu is hidden until changing the config actually works_model.ReloadPackage(package, ((ToolStripMenuItem)sender).Text)
+                    // TODO: Menu is hidden until changing the config actually works
                     //displayConfigMenu = true;
                 }
             }
