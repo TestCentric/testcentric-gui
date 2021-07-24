@@ -23,12 +23,12 @@ namespace TestCentric.Gui.Dialogs
         private TreeNode _treeNode;
         private TestNode _testNode;
         private ResultNode _resultNode;
-        private int maxY;
-        private int nextY;
-        private int clientWidth;
+        private TestPackage _package;
 
-        private Image pinnedImage;
-        private Image unpinnedImage;
+        private int _clientWidth;
+
+        private Image _pinnedImage;
+        private Image _unpinnedImage;
 
         public TestPropertiesDialog(ITestModel model, ITestTreeView view)
         {
@@ -37,9 +37,9 @@ namespace TestCentric.Gui.Dialogs
 
             InitializeComponent();
 
-            pinnedImage = new Bitmap(GetType().Assembly.GetManifestResourceStream("TestCentric.Gui.Images.pinned.gif"));
-            unpinnedImage = new Bitmap(GetType().Assembly.GetManifestResourceStream("TestCentric.Gui.Images.unpinned.gif"));
-            pinButton.Image = unpinnedImage;
+            _pinnedImage = new Bitmap(GetType().Assembly.GetManifestResourceStream("TestCentric.Gui.Images.pinned.gif"));
+            _unpinnedImage = new Bitmap(GetType().Assembly.GetManifestResourceStream("TestCentric.Gui.Images.unpinned.gif"));
+            pinButton.Image = _unpinnedImage;
         }
 
         #region Properties
@@ -63,6 +63,7 @@ namespace TestCentric.Gui.Dialogs
             _treeNode = treeNode;
             _testNode = (TestNode)treeNode.Tag;
             _resultNode = _model.GetResultForTest(_testNode.Id);
+            _package = _model.GetPackageForTest(_testNode.Id);
 
             SetTitleBarText();
 
@@ -73,30 +74,60 @@ namespace TestCentric.Gui.Dialogs
             else
                 testName.Text = _testNode.Name;
 
-            // Display any package info
-            var package = _model.GetPackageForTest(_testNode.Id);
-            if (package != null)
-            {
-                FillPackageSettingsList(package);
-                groupBox1.Show();
-            }
-            else
-                groupBox1.Hide();
+            // Display each groupBox, for which there is data.
+            // Boxes are displayed top-down at the vertical
+            // offset
+            int verticalOffset = packageGroupBox.Top;
 
-            // Display test details
-            groupBox2.Location = package != null
-                ? new Point(
-                    groupBox1.Location.X, groupBox1.Bottom + 12)
-                : groupBox1.Location;
+            if (_package != null)
+                verticalOffset = DisplayPackageGroupBox(verticalOffset) + 12;
+            else
+                packageGroupBox.Hide();
+
+            // Test details are always shown
+            verticalOffset = DisplayTestGroupBox(verticalOffset) + 12;
+
+            if (_resultNode != null)
+                verticalOffset = DisplayResultGroupBox(verticalOffset) + 12;
+            else
+                resultGroupBox.Hide();
+
+            ClientSize = new Size(
+                ClientSize.Width, verticalOffset);
+
+            Rectangle screenArea = Screen.GetWorkingArea(this);
+            Location = new Point(
+                Location.X,
+                Math.Max(0, Math.Min(Location.Y, screenArea.Bottom - Height)));
+
+            Show();
+        }
+
+        private int DisplayPackageGroupBox(int verticalOffset)
+        {
+            packageGroupBox.Location = new Point(
+                packageGroupBox.Location.X, verticalOffset);
+
+            FillPackageSettingsList(_package);
+            packageGroupBox.Show();
+
+            return packageGroupBox.Bottom;
+        }
+
+        private int DisplayTestGroupBox(int verticalOffset)
+        {
+            testGroupBox.Location = new Point(
+                packageGroupBox.Location.X, verticalOffset);
 
             testType.Text = _testNode.Type;
+
             fullName.Text = _testNode.FullName;
+
             description.Text = _testNode.GetProperty("Description");
 
             categories.Text = _testNode.GetPropertyList("Category");
 
             testCaseCount.Text = _testNode.TestCount.ToString();
-
             switch (_testNode.RunState)
             {
                 case RunState.Explicit:
@@ -114,63 +145,33 @@ namespace TestCentric.Gui.Dialogs
 
             FillPropertyList();
 
-            BeginPanel();
+            return testGroupBox.Bottom;
+        }
 
-            CreateRow(testTypeLabel, testType);
-            CreateRow(fullNameLabel, fullName);
-            CreateRow(descriptionLabel, description);
-            CreateRow(categoriesLabel, categories);
-            CreateRow(testCaseCountLabel, testCaseCount, shouldRunLabel, shouldRun);
-            CreateRow(ignoreReasonLabel, ignoreReason);
-            CreateRow(propertiesLabel, hiddenProperties);
-            CreateRow(properties);
+        private int DisplayResultGroupBox(int verticalOffset)
+        {
+            resultGroupBox.Location = new Point(
+                resultGroupBox.Location.X, verticalOffset);
 
-            groupBox2.ClientSize = new Size(
-                groupBox2.ClientSize.Width, maxY + 12);
+            elapsedTime.Text = string.Format("Execution Time: {0}", _resultNode.Duration);
+            assertCount.Text = string.Format("Assert Count: {0}", _resultNode.AssertCount);
 
-            // Display Result GroupBox
-            elapsedTime.Text = "Execution Time:";
-            assertCount.Text = "Assert Count:";
-            message.Text = "";
-            stackTrace.Text = "";
-
-            if (_resultNode != null)
+            // message may have a leading blank line
+            // TODO: take care of this in label ?
+            var messageText = _resultNode.Message;
+            if (messageText != null)
             {
-                elapsedTime.Text = string.Format("Execution Time: {0}", _resultNode.Duration);
-
-                assertCount.Text = string.Format("Assert Count: {0}", _resultNode.AssertCount);
-
-                // message may have a leading blank line
-                // TODO: take care of this in label ?
-                var messageText = _resultNode.Message;
-                if (messageText != null)
-                {
-                    if (messageText.Length > 64000)
-                        message.Text = TrimLeadingBlankLines(messageText.Substring(0, 64000));
-                    else
-                        message.Text = TrimLeadingBlankLines(messageText);
-                }
-
-                stackTrace.Text = _resultNode.StackTrace;
+                if (messageText.Length > 64000)
+                    message.Text = TrimLeadingBlankLines(messageText.Substring(0, 64000));
+                else
+                    message.Text = TrimLeadingBlankLines(messageText);
             }
 
-            groupBox3.Location = new Point(
-                groupBox2.Location.X, groupBox2.Bottom + 12);
+            stackTrace.Text = _resultNode.StackTrace;
 
-            BeginPanel();
+            resultGroupBox.Show();
 
-            CreateRow(elapsedTime, assertCount);
-            CreateRow(messageLabel, message);
-            CreateRow(stackTraceLabel);
-            CreateRow(stackTrace);
-
-            groupBox3.ClientSize = new Size(
-                groupBox3.ClientSize.Width, this.maxY + 12);
-
-            this.ClientSize = new Size(
-                this.ClientSize.Width, groupBox3.Bottom + 12);
-
-            Show();
+            return resultGroupBox.Bottom;
         }
 
         private void FillPropertyList()
@@ -204,17 +205,17 @@ namespace TestCentric.Gui.Dialogs
         private void pinButton_Click(object sender, System.EventArgs e)
         {
             if (pinButton.Checked)
-                pinButton.Image = pinnedImage;
+                pinButton.Image = _pinnedImage;
             else
-                pinButton.Image = unpinnedImage;
+                pinButton.Image = _unpinnedImage;
         }
 
         private void TestPropertiesDialog_ResizeEnd(object sender, EventArgs e)
         {
-            if (clientWidth != ClientSize.Width && _treeNode != null)
+            if (_clientWidth != ClientSize.Width && _treeNode != null)
                 DisplayProperties(_treeNode);
 
-            clientWidth = ClientSize.Width;
+            _clientWidth = ClientSize.Width;
         }
 
         protected override bool ProcessKeyPreview(ref System.Windows.Forms.Message m)
@@ -224,7 +225,7 @@ namespace TestCentric.Gui.Dialogs
 
             if (m.Msg == WM_CHAR && m.WParam.ToInt32() == ESCAPE)
             {
-                this.Close();
+                Close();
                 return true;
             }
 
@@ -254,13 +255,7 @@ namespace TestCentric.Gui.Dialogs
             }
         }
 
-        private void BeginPanel()
-        {
-            this.maxY = 20;
-            this.nextY = 24;
-        }
-
-        private void SizeToFitText(Label label)
+        private static void SizeToFitText(Label label)
         {
             string text = label.Text;
             if (text == "")
@@ -272,27 +267,7 @@ namespace TestCentric.Gui.Dialogs
                 (int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height));
         }
 
-        private void CreateRow(params Control[] controls)
-        {
-            this.nextY = this.maxY + 4;
-
-            foreach (Control control in controls)
-            {
-                InsertInRow(control);
-            }
-        }
-
-        private void InsertInRow(Control control)
-        {
-            Label label = control as Label;
-            if (label != null)
-                SizeToFitText(label);
-
-            control.Location = new Point(control.Location.X, this.nextY);
-            this.maxY = Math.Max(this.maxY, control.Bottom);
-        }
-
-        private string TrimLeadingBlankLines(string s)
+        private static string TrimLeadingBlankLines(string s)
         {
             if (s == null) return s;
 
