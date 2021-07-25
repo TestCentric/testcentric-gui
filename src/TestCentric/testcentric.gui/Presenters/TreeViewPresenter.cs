@@ -91,8 +91,8 @@ namespace TestCentric.Gui.Presenters
                 InitializeRunCommands();
             };
 
-            _model.Events.TestFinished += (ea) => Strategy.OnTestFinished(ea.Result);
-            _model.Events.SuiteFinished += (ea) => Strategy.OnTestFinished(ea.Result);
+            _model.Events.TestFinished += OnTestFinished;
+            _model.Events.SuiteFinished += OnTestFinished;
 
             _model.Settings.Changed += (s, e) =>
             {
@@ -156,11 +156,18 @@ namespace TestCentric.Gui.Presenters
                 if (_propertiesDialog != null)
                 {
                     if (_propertiesDialog.Pinned)
-                        _propertiesDialog.DisplayProperties(tn);
+                        _propertiesDialog.Display(tn);
                     else
                         _propertiesDialog.Close();
                 }
             };
+        }
+
+        private void OnTestFinished(TestResultEventArgs args)
+        {
+            Strategy.OnTestFinished(args.Result);
+
+            _propertiesDialog?.OnTestFinished(args.Result);
         }
 
         TestPropertiesDialog _propertiesDialog;
@@ -170,7 +177,7 @@ namespace TestCentric.Gui.Presenters
             if (_propertiesDialog == null)
                 _propertiesDialog = CreatePropertiesDialog();
 
-            _propertiesDialog.DisplayProperties(_view.ContextNode);
+            _propertiesDialog.Display(_view.ContextNode);
         }
 
         private TestPropertiesDialog CreatePropertiesDialog()

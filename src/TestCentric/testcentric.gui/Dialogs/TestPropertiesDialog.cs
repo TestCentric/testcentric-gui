@@ -55,7 +55,7 @@ namespace TestCentric.Gui.Dialogs
 
         #region Public Methods
 
-        public void DisplayProperties(TreeNode treeNode)
+        public void Display(TreeNode treeNode)
         {
             if (treeNode == null)
                 throw new ArgumentNullException(nameof(treeNode));
@@ -101,6 +101,12 @@ namespace TestCentric.Gui.Dialogs
                 Math.Max(0, Math.Min(Location.Y, screenArea.Bottom - Height)));
 
             Show();
+        }
+
+        public void OnTestFinished(ResultNode result)
+        {
+            if (result.Id == _testNode.Id)
+                Invoke(new Action(() => Display(_treeNode)));
         }
 
         private int DisplayPackageGroupBox(int verticalOffset)
@@ -213,7 +219,7 @@ namespace TestCentric.Gui.Dialogs
         private void TestPropertiesDialog_ResizeEnd(object sender, EventArgs e)
         {
             if (_clientWidth != ClientSize.Width && _treeNode != null)
-                DisplayProperties(_treeNode);
+                Display(_treeNode);
 
             _clientWidth = ClientSize.Width;
         }
