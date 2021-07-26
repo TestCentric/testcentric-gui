@@ -3,6 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
@@ -17,9 +18,6 @@ namespace TestCentric.Gui.Views
         {
             InitializeComponent();
 
-            this.TestPanel = new ControlElement(testPanel);
-            this.ResultPanel = new ControlElement(resultPanel);
-
             displayHiddenProperties.CheckedChanged += (s, e) =>
             {
                 if (DisplayHiddenPropertiesChanged != null)
@@ -33,8 +31,56 @@ namespace TestCentric.Gui.Views
             set { InvokeIfRequired(() => { header.Text = value; }); }
         }
 
-        public IViewElement TestPanel { get; private set; }
-        public IViewElement ResultPanel { get; private set; }
+        public void ShowPackagePanel()
+        {
+            InvokeIfRequired(() =>
+            {
+                packagePanel.Visible = true;
+                splitContainer1.Panel1Collapsed = false;
+            });
+        }
+        public void HidePackagePanel()
+        {
+            InvokeIfRequired(() =>
+            {
+                packagePanel.Visible = false;
+                splitContainer1.Panel1Collapsed = true;
+            });
+        }
+
+        public void ShowTestPanel()
+        {
+            InvokeIfRequired(() =>
+            {
+                testPanel.Visible = true;
+            });
+        }
+        public void HideTestPanel()
+        {
+            InvokeIfRequired(() =>
+            {
+                testPanel.Visible = false;
+            });
+        }
+
+        public void ShowResultPanel()
+        {
+            InvokeIfRequired(() =>
+            {
+                resultPanel.Visible = true;
+                splitContainer2.Panel2Collapsed = false;
+                ClientSize = new Size(ClientSize.Width, splitContainer1.Bottom + 2);
+            });
+        }
+        public void HideResultPanel()
+        {
+            InvokeIfRequired(() =>
+            {
+                resultPanel.Visible = false;
+                splitContainer2.Panel2Collapsed = true;
+                ClientSize = new Size(ClientSize.Width, splitContainer1.Bottom + 2);
+            });
+        }
 
         public string TestType
         {
@@ -117,6 +163,11 @@ namespace TestCentric.Gui.Views
         {
             get { return output.Text; }
             set { InvokeIfRequired(() => { output.Text = value; }); }
+        }
+        public string PackageSettings
+        {
+            get { return packageSettings.Text; }
+            set { InvokeIfRequired(() => { packageSettings.Text = value; }); }
         }
 
         #region Helper Methods

@@ -13,9 +13,6 @@ namespace TestCentric.Gui.Views
 
         bool Visible { get; set; }
         string Header { get; set; }
-        IViewElement TestPanel { get; }
-        IViewElement ResultPanel { get; }
-
         string TestType { get; set; }
         string FullName { get; set; }
         string Description { get; set; }
@@ -30,5 +27,14 @@ namespace TestCentric.Gui.Views
         string AssertCount { get; set; }
         string Assertions { get; set; }
         string Output { get; set; }
+        string PackageSettings { get; set; }
+
+        void ShowPackagePanel();
+        void HidePackagePanel();
+        void ShowTestPanel();
+        void HideTestPanel();
+        void ShowResultPanel();
+        void HideResultPanel();
+
     }
 }
