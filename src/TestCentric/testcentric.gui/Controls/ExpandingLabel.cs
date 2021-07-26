@@ -59,7 +59,7 @@ namespace TestCentric.Gui.Controls
         #region Properties
 
         [Browsable(false)]
-        public bool Expanded
+        public bool IsExpanded
         {
             get { return tipWindow != null && tipWindow.Visible; }
         }
@@ -155,7 +155,7 @@ namespace TestCentric.Gui.Controls
 
         public void Expand()
         {
-            if (!Expanded)
+            if (!IsExpanded)
             {
                 tipWindow = new TipWindow(this);
                 tipWindow.Closed += new EventHandler(tipWindow_Closed);
@@ -170,7 +170,7 @@ namespace TestCentric.Gui.Controls
 
         public void Unexpand()
         {
-            if (Expanded)
+            if (IsExpanded)
             {
                 tipWindow.Close();
             }
@@ -187,13 +187,19 @@ namespace TestCentric.Gui.Controls
 
         protected override void OnMouseHover(System.EventArgs e)
         {
-            Graphics g = Graphics.FromHwnd(Handle);
-            SizeF sizeNeeded = g.MeasureString(Text, Font);
-            bool expansionNeeded =
-                Width < (int)sizeNeeded.Width ||
-                Height < (int)sizeNeeded.Height;
+            if (IsExpandable) Expand();
+        }
 
-            if (expansionNeeded) Expand();
+        private bool IsExpandable
+        {
+            get
+            {
+                Graphics g = Graphics.FromHwnd(Handle);
+                SizeF sizeNeeded = g.MeasureString(Text, Font);
+                return
+                    Width < (int)sizeNeeded.Width ||
+                    Height < (int)sizeNeeded.Height;
+            }
         }
 
         /// <summary>

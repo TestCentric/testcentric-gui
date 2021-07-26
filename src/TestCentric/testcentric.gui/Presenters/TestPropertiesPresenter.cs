@@ -11,7 +11,10 @@ using System.Xml;
 
 namespace TestCentric.Gui.Presenters
 {
+    using System.Drawing;
+    using System.Windows.Forms;
     using Model;
+    using NUnit.Engine;
     using Views;
 
     public class TestPropertiesPresenter
@@ -51,6 +54,7 @@ namespace TestCentric.Gui.Presenters
         {
             TestNode testNode = _selectedItem as TestNode;
             ResultNode resultNode = null;
+            TestPackage package = null;
 
             // TODO: Insert checks for errors in the XML
             if (_selectedItem != null)
@@ -59,31 +63,57 @@ namespace TestCentric.Gui.Presenters
 
                 if (testNode != null)
                 {
-                    _view.TestPanel.Visible = true;
                     _view.SuspendLayout();
 
-                    DisplayTestInfo(testNode);
+                    package = _model.GetPackageForTest(testNode.Id);
+                    if (package != null)
+                        DisplayPackagePanel(package);
+                    else
+                        HidePackagePanel();
+
+                    DisplayTestPanel(testNode);
 
                     resultNode = _model.GetResultForTest(testNode.Id);
                     if (resultNode != null)
-                        DisplayResultInfo(resultNode);
+                        DisplayResultPanel(resultNode);
+                    else
+                        HideResultPanel();
 
                     _view.ResumeLayout();
                 }
             }
 
-            _view.TestPanel.Visible = testNode != null;
             // HACK: results won't display on Linux otherwise
-            if (Path.DirectorySeparatorChar == '/') // Running on Linux or Unix
-                _view.ResultPanel.Visible = true;
-            else
-                _view.ResultPanel.Visible = resultNode != null;
+            //if (Path.DirectorySeparatorChar == '/') // Running on Linux or Unix
+            //    _view.ResultPanelVisible = true;
+            //else
+            //    _view.ResultPanelVisible = resultNode != null;
 
             // TODO: We should actually try to set the font for bold items
             // dynamically, since the global application font may be changed.
         }
 
-        private void DisplayTestInfo(TestNode testNode)
+        private void DisplayPackagePanel(TestPackage package)
+        {
+            var sb = new StringBuilder();
+            foreach (var key in package.Settings.Keys)
+            {
+                if (sb.Length > 0)
+                    sb.Append(Environment.NewLine);
+                sb.Append($"{key} = {package.Settings[key]}");
+            }
+
+            _view.PackageSettings = sb.ToString();
+
+            _view.ShowPackagePanel();
+        }
+
+        private void HidePackagePanel()
+        {
+            _view.HidePackagePanel();
+        }
+
+        private void DisplayTestPanel(TestNode testNode)
         {
             _view.TestType = GetTestType(testNode);
             _view.FullName = testNode.FullName;
@@ -94,6 +124,13 @@ namespace TestCentric.Gui.Presenters
             _view.SkipReason = testNode.GetProperty("_SKIPREASON");
 
             DisplayTestProperties(testNode);
+
+            _view.ShowTestPanel();
+        }
+
+        public void HideTestPanel()
+        {
+            _view.HideTestPanel();
         }
 
         private void DisplayTestProperties(TestNode testNode)
@@ -108,7 +145,7 @@ namespace TestCentric.Gui.Presenters
             _view.Properties = sb.ToString();
         }
 
-        private void DisplayResultInfo(ResultNode resultNode)
+        private void DisplayResultPanel(ResultNode resultNode)
         {
             _view.Outcome = resultNode.Outcome.ToString();
 
@@ -117,6 +154,13 @@ namespace TestCentric.Gui.Presenters
 
             DisplayAssertionResults(resultNode);
             DisplayOutput(resultNode);
+
+            _view.ShowResultPanel();
+        }
+
+        public void HideResultPanel()
+        {
+            _view.HideResultPanel();
         }
 
         private void DisplayAssertionResults(ResultNode resultNode)
