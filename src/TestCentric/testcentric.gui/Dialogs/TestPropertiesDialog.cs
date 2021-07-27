@@ -80,15 +80,15 @@ namespace TestCentric.Gui.Dialogs
             int verticalOffset = packageGroupBox.Top;
 
             if (_package != null)
-                verticalOffset = DisplayPackageGroupBox(verticalOffset) + 12;
+                verticalOffset = DisplayPackageGroupBox(verticalOffset) + 4;
             else
                 packageGroupBox.Hide();
 
             // Test details are always shown
-            verticalOffset = DisplayTestGroupBox(verticalOffset) + 12;
+            verticalOffset = DisplayTestGroupBox(verticalOffset) + 4;
 
             if (_resultNode != null)
-                verticalOffset = DisplayResultGroupBox(verticalOffset) + 12;
+                verticalOffset = DisplayResultGroupBox(verticalOffset) + 4;
             else
                 resultGroupBox.Hide();
 
@@ -295,7 +295,7 @@ namespace TestCentric.Gui.Dialogs
                 }
             }
 
-            getout:
+        getout:
             return start == 0 ? s : s.Substring(start);
         }
 

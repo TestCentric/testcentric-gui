@@ -31,10 +31,9 @@ namespace TestCentric.Gui.Dialogs
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TestPropertiesDialog));
-            this.testResult = new System.Windows.Forms.Label();
             this.pinButton = new System.Windows.Forms.CheckBox();
             this.testName = new System.Windows.Forms.Label();
-            this.testGroupBox = new System.Windows.Forms.GroupBox();
+            this.testGroupBox = new System.Windows.Forms.Panel();
             this.description = new TestCentric.Gui.Controls.ExpandingLabel();
             this.categories = new System.Windows.Forms.Label();
             this.properties = new System.Windows.Forms.ListBox();
@@ -52,49 +51,39 @@ namespace TestCentric.Gui.Dialogs
             this.fullName = new TestCentric.Gui.Controls.ExpandingLabel();
             this.fullNameLabel = new System.Windows.Forms.Label();
             this.hiddenProperties = new System.Windows.Forms.CheckBox();
-            this.resultGroupBox = new System.Windows.Forms.GroupBox();
+            this.resultGroupBox = new System.Windows.Forms.Panel();
+            this.outcomeLabel = new System.Windows.Forms.Label();
+            this.testResult = new System.Windows.Forms.Label();
             this.assertCount = new System.Windows.Forms.Label();
             this.messageLabel = new System.Windows.Forms.Label();
             this.elapsedTime = new System.Windows.Forms.Label();
             this.stackTraceLabel = new System.Windows.Forms.Label();
             this.message = new TestCentric.Gui.Controls.ExpandingLabel();
             this.stackTrace = new TestCentric.Gui.Controls.ExpandingLabel();
-            this.packageGroupBox = new System.Windows.Forms.GroupBox();
+            this.packageGroupBox = new System.Windows.Forms.Panel();
+            this.packageSettingsLabel = new System.Windows.Forms.Label();
             this.packageSettings = new System.Windows.Forms.ListBox();
             this.testGroupBox.SuspendLayout();
             this.resultGroupBox.SuspendLayout();
             this.packageGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
-            // testResult
-            // 
-            this.testResult.Location = new System.Drawing.Point(9, 11);
-            this.testResult.Name = "testResult";
-            this.testResult.Size = new System.Drawing.Size(110, 16);
-            this.testResult.TabIndex = 0;
-            this.testResult.Text = "Inconclusive";
-            // 
             // pinButton
             // 
-            this.pinButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.pinButton.Appearance = System.Windows.Forms.Appearance.Button;
-            this.pinButton.Location = new System.Drawing.Point(332, 10);
+            resources.ApplyResources(this.pinButton, "pinButton");
             this.pinButton.Name = "pinButton";
-            this.pinButton.Size = new System.Drawing.Size(20, 20);
-            this.pinButton.TabIndex = 2;
             this.pinButton.Click += new System.EventHandler(this.pinButton_Click);
             // 
             // testName
             // 
-            this.testName.Location = new System.Drawing.Point(135, 12);
+            resources.ApplyResources(this.testName, "testName");
             this.testName.Name = "testName";
-            this.testName.Size = new System.Drawing.Size(176, 14);
-            this.testName.TabIndex = 1;
             // 
             // testGroupBox
             // 
-            this.testGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            resources.ApplyResources(this.testGroupBox, "testGroupBox");
+            this.testGroupBox.BackColor = System.Drawing.SystemColors.Control;
+            this.testGroupBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.testGroupBox.Controls.Add(this.description);
             this.testGroupBox.Controls.Add(this.categories);
             this.testGroupBox.Controls.Add(this.properties);
@@ -112,290 +101,206 @@ namespace TestCentric.Gui.Dialogs
             this.testGroupBox.Controls.Add(this.fullName);
             this.testGroupBox.Controls.Add(this.fullNameLabel);
             this.testGroupBox.Controls.Add(this.hiddenProperties);
-            this.testGroupBox.Location = new System.Drawing.Point(12, 144);
             this.testGroupBox.Name = "testGroupBox";
-            this.testGroupBox.Size = new System.Drawing.Size(340, 246);
-            this.testGroupBox.TabIndex = 3;
-            this.testGroupBox.TabStop = false;
-            this.testGroupBox.Text = "Test Details";
             // 
             // description
             // 
-            this.description.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            resources.ApplyResources(this.description, "description");
             this.description.CopySupported = true;
             this.description.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
-            this.description.Location = new System.Drawing.Point(101, 64);
             this.description.Name = "description";
-            this.description.Size = new System.Drawing.Size(230, 13);
-            this.description.TabIndex = 5;
             // 
             // categories
             // 
-            this.categories.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.categories.Location = new System.Drawing.Point(101, 86);
+            resources.ApplyResources(this.categories, "categories");
             this.categories.Name = "categories";
-            this.categories.Size = new System.Drawing.Size(230, 13);
-            this.categories.TabIndex = 7;
             // 
             // properties
             // 
-            this.properties.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.properties.Location = new System.Drawing.Point(16, 162);
+            resources.ApplyResources(this.properties, "properties");
             this.properties.Name = "properties";
-            this.properties.Size = new System.Drawing.Size(312, 69);
-            this.properties.TabIndex = 15;
             // 
             // propertiesLabel
             // 
-            this.propertiesLabel.Location = new System.Drawing.Point(13, 143);
+            resources.ApplyResources(this.propertiesLabel, "propertiesLabel");
             this.propertiesLabel.Name = "propertiesLabel";
-            this.propertiesLabel.Size = new System.Drawing.Size(80, 16);
-            this.propertiesLabel.TabIndex = 14;
-            this.propertiesLabel.Text = "Properties:";
             // 
             // testCaseCount
             // 
-            this.testCaseCount.Location = new System.Drawing.Point(101, 108);
+            resources.ApplyResources(this.testCaseCount, "testCaseCount");
             this.testCaseCount.Name = "testCaseCount";
-            this.testCaseCount.Size = new System.Drawing.Size(48, 13);
-            this.testCaseCount.TabIndex = 9;
             // 
             // ignoreReason
             // 
-            this.ignoreReason.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            resources.ApplyResources(this.ignoreReason, "ignoreReason");
             this.ignoreReason.CopySupported = true;
             this.ignoreReason.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Vertical;
-            this.ignoreReason.Location = new System.Drawing.Point(101, 125);
             this.ignoreReason.Name = "ignoreReason";
-            this.ignoreReason.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.ignoreReason.Size = new System.Drawing.Size(230, 13);
-            this.ignoreReason.TabIndex = 13;
             // 
             // ignoreReasonLabel
             // 
-            this.ignoreReasonLabel.Location = new System.Drawing.Point(13, 125);
+            resources.ApplyResources(this.ignoreReasonLabel, "ignoreReasonLabel");
             this.ignoreReasonLabel.Name = "ignoreReasonLabel";
-            this.ignoreReasonLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.ignoreReasonLabel.Size = new System.Drawing.Size(80, 16);
-            this.ignoreReasonLabel.TabIndex = 12;
-            this.ignoreReasonLabel.Text = "Reason:";
             // 
             // testCaseCountLabel
             // 
-            this.testCaseCountLabel.Location = new System.Drawing.Point(13, 108);
+            resources.ApplyResources(this.testCaseCountLabel, "testCaseCountLabel");
             this.testCaseCountLabel.Name = "testCaseCountLabel";
-            this.testCaseCountLabel.Size = new System.Drawing.Size(80, 15);
-            this.testCaseCountLabel.TabIndex = 8;
-            this.testCaseCountLabel.Text = "Test Count:";
             // 
             // shouldRun
             // 
-            this.shouldRun.Location = new System.Drawing.Point(299, 108);
+            resources.ApplyResources(this.shouldRun, "shouldRun");
             this.shouldRun.Name = "shouldRun";
-            this.shouldRun.Size = new System.Drawing.Size(29, 13);
-            this.shouldRun.TabIndex = 11;
-            this.shouldRun.Text = "Yes";
             // 
             // shouldRunLabel
             // 
-            this.shouldRunLabel.Location = new System.Drawing.Point(183, 108);
+            resources.ApplyResources(this.shouldRunLabel, "shouldRunLabel");
             this.shouldRunLabel.Name = "shouldRunLabel";
-            this.shouldRunLabel.Size = new System.Drawing.Size(84, 15);
-            this.shouldRunLabel.TabIndex = 10;
-            this.shouldRunLabel.Text = "Should Run?";
             // 
             // testType
             // 
-            this.testType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.testType.Location = new System.Drawing.Point(101, 24);
+            resources.ApplyResources(this.testType, "testType");
             this.testType.Name = "testType";
-            this.testType.Size = new System.Drawing.Size(230, 13);
-            this.testType.TabIndex = 1;
             // 
             // testTypeLabel
             // 
-            this.testTypeLabel.Location = new System.Drawing.Point(13, 24);
+            resources.ApplyResources(this.testTypeLabel, "testTypeLabel");
             this.testTypeLabel.Name = "testTypeLabel";
-            this.testTypeLabel.Size = new System.Drawing.Size(80, 16);
-            this.testTypeLabel.TabIndex = 0;
-            this.testTypeLabel.Text = "Test Type:";
             // 
             // categoriesLabel
             // 
-            this.categoriesLabel.Location = new System.Drawing.Point(13, 86);
+            resources.ApplyResources(this.categoriesLabel, "categoriesLabel");
             this.categoriesLabel.Name = "categoriesLabel";
-            this.categoriesLabel.Size = new System.Drawing.Size(80, 16);
-            this.categoriesLabel.TabIndex = 6;
-            this.categoriesLabel.Text = "Categories:";
             // 
             // descriptionLabel
             // 
-            this.descriptionLabel.Location = new System.Drawing.Point(13, 64);
+            resources.ApplyResources(this.descriptionLabel, "descriptionLabel");
             this.descriptionLabel.Name = "descriptionLabel";
-            this.descriptionLabel.Size = new System.Drawing.Size(80, 17);
-            this.descriptionLabel.TabIndex = 4;
-            this.descriptionLabel.Text = "Description:";
             // 
             // fullName
             // 
-            this.fullName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            resources.ApplyResources(this.fullName, "fullName");
             this.fullName.CopySupported = true;
-            this.fullName.Location = new System.Drawing.Point(101, 43);
             this.fullName.Name = "fullName";
-            this.fullName.Size = new System.Drawing.Size(230, 13);
-            this.fullName.TabIndex = 3;
             // 
             // fullNameLabel
             // 
-            this.fullNameLabel.Location = new System.Drawing.Point(13, 43);
+            resources.ApplyResources(this.fullNameLabel, "fullNameLabel");
             this.fullNameLabel.Name = "fullNameLabel";
-            this.fullNameLabel.Size = new System.Drawing.Size(80, 17);
-            this.fullNameLabel.TabIndex = 2;
-            this.fullNameLabel.Text = "Full Name:";
             // 
             // hiddenProperties
             // 
-            this.hiddenProperties.AutoSize = true;
-            this.hiddenProperties.Location = new System.Drawing.Point(186, 143);
+            resources.ApplyResources(this.hiddenProperties, "hiddenProperties");
             this.hiddenProperties.Name = "hiddenProperties";
-            this.hiddenProperties.Size = new System.Drawing.Size(144, 17);
-            this.hiddenProperties.TabIndex = 16;
-            this.hiddenProperties.Text = "Display hidden properties";
             this.hiddenProperties.UseVisualStyleBackColor = true;
             this.hiddenProperties.CheckedChanged += new System.EventHandler(this.hiddenProperties_CheckedChanged);
             // 
             // resultGroupBox
             // 
-            this.resultGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            resources.ApplyResources(this.resultGroupBox, "resultGroupBox");
+            this.resultGroupBox.BackColor = System.Drawing.SystemColors.Control;
+            this.resultGroupBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.resultGroupBox.Controls.Add(this.outcomeLabel);
+            this.resultGroupBox.Controls.Add(this.testResult);
             this.resultGroupBox.Controls.Add(this.assertCount);
             this.resultGroupBox.Controls.Add(this.messageLabel);
             this.resultGroupBox.Controls.Add(this.elapsedTime);
             this.resultGroupBox.Controls.Add(this.stackTraceLabel);
             this.resultGroupBox.Controls.Add(this.message);
             this.resultGroupBox.Controls.Add(this.stackTrace);
-            this.resultGroupBox.Location = new System.Drawing.Point(12, 396);
             this.resultGroupBox.Name = "resultGroupBox";
-            this.resultGroupBox.Size = new System.Drawing.Size(340, 170);
-            this.resultGroupBox.TabIndex = 4;
-            this.resultGroupBox.TabStop = false;
-            this.resultGroupBox.Text = "Result";
+            // 
+            // outcomeLabel
+            // 
+            resources.ApplyResources(this.outcomeLabel, "outcomeLabel");
+            this.outcomeLabel.Name = "outcomeLabel";
+            // 
+            // testResult
+            // 
+            resources.ApplyResources(this.testResult, "testResult");
+            this.testResult.Name = "testResult";
             // 
             // assertCount
             // 
-            this.assertCount.Location = new System.Drawing.Point(196, 26);
+            resources.ApplyResources(this.assertCount, "assertCount");
             this.assertCount.Name = "assertCount";
-            this.assertCount.Size = new System.Drawing.Size(131, 13);
-            this.assertCount.TabIndex = 1;
-            this.assertCount.Text = "Assert Count:";
             // 
             // messageLabel
             // 
-            this.messageLabel.Location = new System.Drawing.Point(10, 46);
+            resources.ApplyResources(this.messageLabel, "messageLabel");
             this.messageLabel.Name = "messageLabel";
-            this.messageLabel.Size = new System.Drawing.Size(80, 17);
-            this.messageLabel.TabIndex = 2;
-            this.messageLabel.Text = "Message:";
             // 
             // elapsedTime
             // 
-            this.elapsedTime.Location = new System.Drawing.Point(10, 26);
+            resources.ApplyResources(this.elapsedTime, "elapsedTime");
             this.elapsedTime.Name = "elapsedTime";
-            this.elapsedTime.Size = new System.Drawing.Size(136, 13);
-            this.elapsedTime.TabIndex = 0;
-            this.elapsedTime.Text = "Execution Time:";
             // 
             // stackTraceLabel
             // 
-            this.stackTraceLabel.Location = new System.Drawing.Point(10, 67);
+            resources.ApplyResources(this.stackTraceLabel, "stackTraceLabel");
             this.stackTraceLabel.Name = "stackTraceLabel";
-            this.stackTraceLabel.Size = new System.Drawing.Size(72, 14);
-            this.stackTraceLabel.TabIndex = 4;
-            this.stackTraceLabel.Text = "Stack:";
             // 
             // message
             // 
-            this.message.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            resources.ApplyResources(this.message, "message");
             this.message.CopySupported = true;
             this.message.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
-            this.message.Location = new System.Drawing.Point(106, 47);
             this.message.Name = "message";
-            this.message.Size = new System.Drawing.Size(230, 13);
-            this.message.TabIndex = 3;
             // 
             // stackTrace
             // 
-            this.stackTrace.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            resources.ApplyResources(this.stackTrace, "stackTrace");
             this.stackTrace.CopySupported = true;
             this.stackTrace.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
-            this.stackTrace.Location = new System.Drawing.Point(10, 85);
             this.stackTrace.Name = "stackTrace";
-            this.stackTrace.Size = new System.Drawing.Size(315, 55);
-            this.stackTrace.TabIndex = 5;
             // 
             // packageGroupBox
             // 
-            this.packageGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            resources.ApplyResources(this.packageGroupBox, "packageGroupBox");
+            this.packageGroupBox.BackColor = System.Drawing.SystemColors.Control;
+            this.packageGroupBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.packageGroupBox.Controls.Add(this.packageSettingsLabel);
             this.packageGroupBox.Controls.Add(this.packageSettings);
-            this.packageGroupBox.Location = new System.Drawing.Point(12, 33);
             this.packageGroupBox.Name = "packageGroupBox";
-            this.packageGroupBox.Size = new System.Drawing.Size(340, 105);
-            this.packageGroupBox.TabIndex = 5;
-            this.packageGroupBox.TabStop = false;
-            this.packageGroupBox.Text = "Package Settings";
+            // 
+            // packageSettingsLabel
+            // 
+            resources.ApplyResources(this.packageSettingsLabel, "packageSettingsLabel");
+            this.packageSettingsLabel.Name = "packageSettingsLabel";
             // 
             // packageSettings
             // 
-            this.packageSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.packageSettings.FormattingEnabled = true;
-            this.packageSettings.Location = new System.Drawing.Point(9, 22);
+            resources.ApplyResources(this.packageSettings, "packageSettings");
             this.packageSettings.Name = "packageSettings";
-            this.packageSettings.Size = new System.Drawing.Size(322, 69);
-            this.packageSettings.TabIndex = 18;
             // 
             // TestPropertiesDialog
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(364, 544);
+            this.BackColor = System.Drawing.SystemColors.Window;
             this.Controls.Add(this.packageGroupBox);
             this.Controls.Add(this.resultGroupBox);
             this.Controls.Add(this.testGroupBox);
             this.Controls.Add(this.testName);
             this.Controls.Add(this.pinButton);
-            this.Controls.Add(this.testResult);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(380, 39);
             this.Name = "TestPropertiesDialog";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            this.Text = "Test Properties";
             this.ResizeEnd += new System.EventHandler(this.TestPropertiesDialog_ResizeEnd);
             this.testGroupBox.ResumeLayout(false);
             this.testGroupBox.PerformLayout();
             this.resultGroupBox.ResumeLayout(false);
             this.packageGroupBox.ResumeLayout(false);
+            this.packageGroupBox.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Label testResult;
         private System.Windows.Forms.CheckBox pinButton;
         private System.Windows.Forms.Label testName;
-        private System.Windows.Forms.GroupBox testGroupBox;
+        private System.Windows.Forms.Panel testGroupBox;
         private ExpandingLabel description;
         private System.Windows.Forms.Label categories;
         private System.Windows.Forms.ListBox properties;
@@ -412,7 +317,7 @@ namespace TestCentric.Gui.Dialogs
         private System.Windows.Forms.Label descriptionLabel;
         private ExpandingLabel fullName;
         private System.Windows.Forms.Label fullNameLabel;
-        private System.Windows.Forms.GroupBox resultGroupBox;
+        private System.Windows.Forms.Panel resultGroupBox;
         private System.Windows.Forms.Label assertCount;
         private System.Windows.Forms.Label messageLabel;
         private System.Windows.Forms.Label elapsedTime;
@@ -420,7 +325,10 @@ namespace TestCentric.Gui.Dialogs
         private ExpandingLabel message;
         private ExpandingLabel stackTrace;
         private System.Windows.Forms.CheckBox hiddenProperties;
-        private System.Windows.Forms.GroupBox packageGroupBox;
+        private System.Windows.Forms.Panel packageGroupBox;
         private System.Windows.Forms.ListBox packageSettings;
+        private System.Windows.Forms.Label testResult;
+        private System.Windows.Forms.Label packageSettingsLabel;
+        private System.Windows.Forms.Label outcomeLabel;
     }
 }
