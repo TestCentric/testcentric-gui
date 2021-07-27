@@ -36,7 +36,7 @@ namespace TestCentric.Gui.Dialogs
             this.testGroupBox = new System.Windows.Forms.Panel();
             this.description = new TestCentric.Gui.Controls.ExpandingLabel();
             this.categories = new System.Windows.Forms.Label();
-            this.properties = new System.Windows.Forms.ListBox();
+            this.properties = new TestCentric.Gui.Controls.ExpandingLabel();
             this.propertiesLabel = new System.Windows.Forms.Label();
             this.testCaseCount = new System.Windows.Forms.Label();
             this.ignoreReason = new TestCentric.Gui.Controls.ExpandingLabel();
@@ -118,6 +118,8 @@ namespace TestCentric.Gui.Dialogs
             // properties
             // 
             resources.ApplyResources(this.properties, "properties");
+            this.properties.BackColor = System.Drawing.Color.LightYellow;
+            this.properties.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
             this.properties.Name = "properties";
             // 
             // propertiesLabel
@@ -250,6 +252,7 @@ namespace TestCentric.Gui.Dialogs
             // stackTrace
             // 
             resources.ApplyResources(this.stackTrace, "stackTrace");
+            this.stackTrace.BackColor = System.Drawing.Color.LightYellow;
             this.stackTrace.CopySupported = true;
             this.stackTrace.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
             this.stackTrace.Name = "stackTrace";
@@ -304,7 +307,7 @@ namespace TestCentric.Gui.Dialogs
         private System.Windows.Forms.Panel testGroupBox;
         private ExpandingLabel description;
         private System.Windows.Forms.Label categories;
-        private System.Windows.Forms.ListBox properties;
+        private TestCentric.Gui.Controls.ExpandingLabel properties;
         private System.Windows.Forms.Label propertiesLabel;
         private System.Windows.Forms.Label testCaseCount;
         private ExpandingLabel ignoreReason;

@@ -174,20 +174,43 @@ namespace TestCentric.Gui.Dialogs
                     message.Text = TrimLeadingBlankLines(messageText);
             }
 
-            stackTrace.Text = _resultNode.StackTrace;
+            stackTrace.Text = _resultNode.StackTrace != null
+                ? FormatStackTrace(_resultNode.StackTrace)
+                : string.Empty;
 
             resultGroupBox.Show();
 
             return resultGroupBox.Bottom;
         }
 
+        private static string FormatStackTrace(string stackTrace)
+        {
+            const char SP = ' ';
+            const char NBSP = (char)160;
+
+            var rdr = new StringReader(stackTrace);
+            var line = rdr.ReadLine();
+            var sb = new StringBuilder();
+
+            while (line != null)
+            {
+                sb.AppendLine(line.Trim().Replace(SP, NBSP));
+                line = rdr.ReadLine();
+            }
+
+            return sb.ToString();
+        }
+
         private void FillPropertyList()
         {
-            properties.Items.Clear();
-            foreach (string entry in _testNode.GetAllProperties(hiddenProperties.Checked))
+            var sb = new StringBuilder();
+            foreach (string item in _testNode.GetAllProperties(hiddenProperties.Checked))
             {
-                properties.Items.Add(entry);
+                if (sb.Length > 0)
+                    sb.Append(Environment.NewLine);
+                sb.Append(item);
             }
+            properties.Text = sb.ToString();
         }
 
         private void FillPackageSettingsList(TestPackage package)
