@@ -11,6 +11,7 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Dialogs
 {
+    using System.Text;
     using Model;
     using NUnit.Engine;
     using Views;
@@ -191,17 +192,15 @@ namespace TestCentric.Gui.Dialogs
 
         private void FillPackageSettingsList(TestPackage package)
         {
-            packageSettings.Items.Clear();
-
-            foreach (string key in package.Settings.Keys)
+            var sb = new StringBuilder();
+            foreach (var key in package.Settings.Keys)
             {
-                object val = package.Settings[key] ?? "<null>";
-                if (val is string && (string)val == string.Empty)
-                    val = "<empty>";
-                else if (val is string[])
-                    val = string.Join(",", val as string[]);
-                packageSettings.Items.Add($"{key} = {val}");
+                if (sb.Length > 0)
+                    sb.Append(Environment.NewLine);
+                sb.Append($"{key} = {package.Settings[key]}");
             }
+
+            packageSettings.Text = sb.ToString();
         }
 
         #endregion

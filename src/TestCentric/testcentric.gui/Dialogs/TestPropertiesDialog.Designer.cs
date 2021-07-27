@@ -62,7 +62,7 @@ namespace TestCentric.Gui.Dialogs
             this.stackTrace = new TestCentric.Gui.Controls.ExpandingLabel();
             this.packageGroupBox = new System.Windows.Forms.Panel();
             this.packageSettingsLabel = new System.Windows.Forms.Label();
-            this.packageSettings = new System.Windows.Forms.ListBox();
+            this.packageSettings = new TestCentric.Gui.Controls.ExpandingLabel();
             this.testGroupBox.SuspendLayout();
             this.resultGroupBox.SuspendLayout();
             this.packageGroupBox.SuspendLayout();
@@ -270,8 +270,9 @@ namespace TestCentric.Gui.Dialogs
             // 
             // packageSettings
             // 
-            this.packageSettings.FormattingEnabled = true;
             resources.ApplyResources(this.packageSettings, "packageSettings");
+            this.packageSettings.BackColor = System.Drawing.Color.LightYellow;
+            this.packageSettings.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
             this.packageSettings.Name = "packageSettings";
             // 
             // TestPropertiesDialog
@@ -326,7 +327,7 @@ namespace TestCentric.Gui.Dialogs
         private ExpandingLabel stackTrace;
         private System.Windows.Forms.CheckBox hiddenProperties;
         private System.Windows.Forms.Panel packageGroupBox;
-        private System.Windows.Forms.ListBox packageSettings;
+        private TestCentric.Gui.Controls.ExpandingLabel packageSettings;
         private System.Windows.Forms.Label testResult;
         private System.Windows.Forms.Label packageSettingsLabel;
         private System.Windows.Forms.Label outcomeLabel;
