@@ -124,6 +124,9 @@
   <data name="pinButton.Appearance" type="System.Windows.Forms.Appearance, System.Windows.Forms">
     <value>Button</value>
   </data>
+  <data name="pinButton.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
+  </data>
   <data name="pinButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
@@ -149,6 +152,9 @@
   </data>
   <data name="&gt;&gt;pinButton.ZOrder" xml:space="preserve">
     <value>5</value>
+  </data>
+  <data name="testName.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
   </data>
   <data name="testName.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
@@ -182,6 +188,234 @@
   </data>
   <data name="testGroupBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
+  </data>
+  <data name="&gt;&gt;description.Name" xml:space="preserve">
+    <value>description</value>
+  </data>
+  <data name="&gt;&gt;description.Type" xml:space="preserve">
+    <value>TestCentric.Gui.Controls.ExpandingLabel, TestCentric.Gui.Runner, Version=2.0.0.0, Culture=neutral, PublicKeyToken=6fe0a02d2036aa1d</value>
+  </data>
+  <data name="&gt;&gt;description.Parent" xml:space="preserve">
+    <value>testGroupBox</value>
+  </data>
+  <data name="&gt;&gt;description.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;categories.Name" xml:space="preserve">
+    <value>categories</value>
+  </data>
+  <data name="&gt;&gt;categories.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;categories.Parent" xml:space="preserve">
+    <value>testGroupBox</value>
+  </data>
+  <data name="&gt;&gt;categories.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;properties.Name" xml:space="preserve">
+    <value>properties</value>
+  </data>
+  <data name="&gt;&gt;properties.Type" xml:space="preserve">
+    <value>TestCentric.Gui.Controls.ExpandingLabel, TestCentric.Gui.Runner, Version=2.0.0.0, Culture=neutral, PublicKeyToken=6fe0a02d2036aa1d</value>
+  </data>
+  <data name="&gt;&gt;properties.Parent" xml:space="preserve">
+    <value>testGroupBox</value>
+  </data>
+  <data name="&gt;&gt;properties.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;propertiesLabel.Name" xml:space="preserve">
+    <value>propertiesLabel</value>
+  </data>
+  <data name="&gt;&gt;propertiesLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;propertiesLabel.Parent" xml:space="preserve">
+    <value>testGroupBox</value>
+  </data>
+  <data name="&gt;&gt;propertiesLabel.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;testCaseCount.Name" xml:space="preserve">
+    <value>testCaseCount</value>
+  </data>
+  <data name="&gt;&gt;testCaseCount.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;testCaseCount.Parent" xml:space="preserve">
+    <value>testGroupBox</value>
+  </data>
+  <data name="&gt;&gt;testCaseCount.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;ignoreReason.Name" xml:space="preserve">
+    <value>ignoreReason</value>
+  </data>
+  <data name="&gt;&gt;ignoreReason.Type" xml:space="preserve">
+    <value>TestCentric.Gui.Controls.ExpandingLabel, TestCentric.Gui.Runner, Version=2.0.0.0, Culture=neutral, PublicKeyToken=6fe0a02d2036aa1d</value>
+  </data>
+  <data name="&gt;&gt;ignoreReason.Parent" xml:space="preserve">
+    <value>testGroupBox</value>
+  </data>
+  <data name="&gt;&gt;ignoreReason.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;ignoreReasonLabel.Name" xml:space="preserve">
+    <value>ignoreReasonLabel</value>
+  </data>
+  <data name="&gt;&gt;ignoreReasonLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;ignoreReasonLabel.Parent" xml:space="preserve">
+    <value>testGroupBox</value>
+  </data>
+  <data name="&gt;&gt;ignoreReasonLabel.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;testCaseCountLabel.Name" xml:space="preserve">
+    <value>testCaseCountLabel</value>
+  </data>
+  <data name="&gt;&gt;testCaseCountLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;testCaseCountLabel.Parent" xml:space="preserve">
+    <value>testGroupBox</value>
+  </data>
+  <data name="&gt;&gt;testCaseCountLabel.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;runState.Name" xml:space="preserve">
+    <value>runState</value>
+  </data>
+  <data name="&gt;&gt;runState.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;runState.Parent" xml:space="preserve">
+    <value>testGroupBox</value>
+  </data>
+  <data name="&gt;&gt;runState.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="&gt;&gt;runStateLabel.Name" xml:space="preserve">
+    <value>runStateLabel</value>
+  </data>
+  <data name="&gt;&gt;runStateLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;runStateLabel.Parent" xml:space="preserve">
+    <value>testGroupBox</value>
+  </data>
+  <data name="&gt;&gt;runStateLabel.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="&gt;&gt;testType.Name" xml:space="preserve">
+    <value>testType</value>
+  </data>
+  <data name="&gt;&gt;testType.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;testType.Parent" xml:space="preserve">
+    <value>testGroupBox</value>
+  </data>
+  <data name="&gt;&gt;testType.ZOrder" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="&gt;&gt;testTypeLabel.Name" xml:space="preserve">
+    <value>testTypeLabel</value>
+  </data>
+  <data name="&gt;&gt;testTypeLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;testTypeLabel.Parent" xml:space="preserve">
+    <value>testGroupBox</value>
+  </data>
+  <data name="&gt;&gt;testTypeLabel.ZOrder" xml:space="preserve">
+    <value>11</value>
+  </data>
+  <data name="&gt;&gt;categoriesLabel.Name" xml:space="preserve">
+    <value>categoriesLabel</value>
+  </data>
+  <data name="&gt;&gt;categoriesLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;categoriesLabel.Parent" xml:space="preserve">
+    <value>testGroupBox</value>
+  </data>
+  <data name="&gt;&gt;categoriesLabel.ZOrder" xml:space="preserve">
+    <value>12</value>
+  </data>
+  <data name="&gt;&gt;descriptionLabel.Name" xml:space="preserve">
+    <value>descriptionLabel</value>
+  </data>
+  <data name="&gt;&gt;descriptionLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;descriptionLabel.Parent" xml:space="preserve">
+    <value>testGroupBox</value>
+  </data>
+  <data name="&gt;&gt;descriptionLabel.ZOrder" xml:space="preserve">
+    <value>13</value>
+  </data>
+  <data name="&gt;&gt;fullName.Name" xml:space="preserve">
+    <value>fullName</value>
+  </data>
+  <data name="&gt;&gt;fullName.Type" xml:space="preserve">
+    <value>TestCentric.Gui.Controls.ExpandingLabel, TestCentric.Gui.Runner, Version=2.0.0.0, Culture=neutral, PublicKeyToken=6fe0a02d2036aa1d</value>
+  </data>
+  <data name="&gt;&gt;fullName.Parent" xml:space="preserve">
+    <value>testGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fullName.ZOrder" xml:space="preserve">
+    <value>14</value>
+  </data>
+  <data name="&gt;&gt;fullNameLabel.Name" xml:space="preserve">
+    <value>fullNameLabel</value>
+  </data>
+  <data name="&gt;&gt;fullNameLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fullNameLabel.Parent" xml:space="preserve">
+    <value>testGroupBox</value>
+  </data>
+  <data name="&gt;&gt;fullNameLabel.ZOrder" xml:space="preserve">
+    <value>15</value>
+  </data>
+  <data name="&gt;&gt;hiddenProperties.Name" xml:space="preserve">
+    <value>hiddenProperties</value>
+  </data>
+  <data name="&gt;&gt;hiddenProperties.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;hiddenProperties.Parent" xml:space="preserve">
+    <value>testGroupBox</value>
+  </data>
+  <data name="&gt;&gt;hiddenProperties.ZOrder" xml:space="preserve">
+    <value>16</value>
+  </data>
+  <data name="testGroupBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 128</value>
+  </data>
+  <data name="testGroupBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>352, 207</value>
+  </data>
+  <data name="testGroupBox.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="testGroupBox.Text" xml:space="preserve">
+    <value>Test Details</value>
+  </data>
+  <data name="&gt;&gt;testGroupBox.Name" xml:space="preserve">
+    <value>testGroupBox</value>
+  </data>
+  <data name="&gt;&gt;testGroupBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;testGroupBox.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;testGroupBox.ZOrder" xml:space="preserve">
+    <value>3</value>
   </data>
   <data name="description.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
@@ -295,10 +529,10 @@
     <value>NoControl</value>
   </data>
   <data name="testCaseCount.Location" type="System.Drawing.Point, System.Drawing">
-    <value>101, 73</value>
+    <value>74, 73</value>
   </data>
   <data name="testCaseCount.Size" type="System.Drawing.Size, System.Drawing">
-    <value>48, 13</value>
+    <value>71, 13</value>
   </data>
   <data name="testCaseCount.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -402,58 +636,61 @@
   <data name="&gt;&gt;testCaseCountLabel.ZOrder" xml:space="preserve">
     <value>7</value>
   </data>
-  <data name="shouldRun.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="runState.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
+  <data name="runState.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
+  </data>
+  <data name="runState.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="shouldRun.Location" type="System.Drawing.Point, System.Drawing">
-    <value>243, 73</value>
+  <data name="runState.Location" type="System.Drawing.Point, System.Drawing">
+    <value>236, 73</value>
   </data>
-  <data name="shouldRun.Size" type="System.Drawing.Size, System.Drawing">
-    <value>29, 13</value>
+  <data name="runState.Size" type="System.Drawing.Size, System.Drawing">
+    <value>110, 13</value>
   </data>
-  <data name="shouldRun.TabIndex" type="System.Int32, mscorlib">
+  <data name="runState.TabIndex" type="System.Int32, mscorlib">
     <value>11</value>
   </data>
-  <data name="shouldRun.Text" xml:space="preserve">
-    <value>Yes</value>
+  <data name="&gt;&gt;runState.Name" xml:space="preserve">
+    <value>runState</value>
   </data>
-  <data name="&gt;&gt;shouldRun.Name" xml:space="preserve">
-    <value>shouldRun</value>
-  </data>
-  <data name="&gt;&gt;shouldRun.Type" xml:space="preserve">
+  <data name="&gt;&gt;runState.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;shouldRun.Parent" xml:space="preserve">
+  <data name="&gt;&gt;runState.Parent" xml:space="preserve">
     <value>testGroupBox</value>
   </data>
-  <data name="&gt;&gt;shouldRun.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;runState.ZOrder" xml:space="preserve">
     <value>8</value>
   </data>
-  <data name="shouldRunLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+  <data name="runStateLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="shouldRunLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>167, 73</value>
+  <data name="runStateLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>169, 73</value>
   </data>
-  <data name="shouldRunLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>84, 15</value>
+  <data name="runStateLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>61, 13</value>
   </data>
-  <data name="shouldRunLabel.TabIndex" type="System.Int32, mscorlib">
+  <data name="runStateLabel.TabIndex" type="System.Int32, mscorlib">
     <value>10</value>
   </data>
-  <data name="shouldRunLabel.Text" xml:space="preserve">
-    <value>Should Run?</value>
+  <data name="runStateLabel.Text" xml:space="preserve">
+    <value>Run State:</value>
   </data>
-  <data name="&gt;&gt;shouldRunLabel.Name" xml:space="preserve">
-    <value>shouldRunLabel</value>
+  <data name="&gt;&gt;runStateLabel.Name" xml:space="preserve">
+    <value>runStateLabel</value>
   </data>
-  <data name="&gt;&gt;shouldRunLabel.Type" xml:space="preserve">
+  <data name="&gt;&gt;runStateLabel.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;shouldRunLabel.Parent" xml:space="preserve">
+  <data name="&gt;&gt;runStateLabel.Parent" xml:space="preserve">
     <value>testGroupBox</value>
   </data>
-  <data name="&gt;&gt;shouldRunLabel.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;runStateLabel.ZOrder" xml:space="preserve">
     <value>9</value>
   </data>
   <data name="testType.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
@@ -648,101 +885,8 @@
   <data name="&gt;&gt;hiddenProperties.ZOrder" xml:space="preserve">
     <value>16</value>
   </data>
-  <data name="testGroupBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 128</value>
-  </data>
-  <data name="testGroupBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>352, 207</value>
-  </data>
-  <data name="testGroupBox.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="testGroupBox.Text" xml:space="preserve">
-    <value>Test Details</value>
-  </data>
-  <data name="&gt;&gt;testGroupBox.Name" xml:space="preserve">
-    <value>testGroupBox</value>
-  </data>
-  <data name="&gt;&gt;testGroupBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;testGroupBox.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;testGroupBox.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
   <data name="resultGroupBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
-  </data>
-  <data name="outcomeLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="outcomeLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 4</value>
-  </data>
-  <data name="outcomeLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>53, 13</value>
-  </data>
-  <data name="outcomeLabel.TabIndex" type="System.Int32, mscorlib">
-    <value>19</value>
-  </data>
-  <data name="outcomeLabel.Text" xml:space="preserve">
-    <value>Outcome:</value>
-  </data>
-  <data name="&gt;&gt;outcomeLabel.Name" xml:space="preserve">
-    <value>outcomeLabel</value>
-  </data>
-  <data name="&gt;&gt;outcomeLabel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;outcomeLabel.Parent" xml:space="preserve">
-    <value>resultGroupBox</value>
-  </data>
-  <data name="&gt;&gt;outcomeLabel.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="testResult.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="testResult.Location" type="System.Drawing.Point, System.Drawing">
-    <value>84, 4</value>
-  </data>
-  <data name="testResult.Size" type="System.Drawing.Size, System.Drawing">
-    <value>110, 16</value>
-  </data>
-  <data name="testResult.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="testResult.Text" xml:space="preserve">
-    <value>Inconclusive</value>
-  </data>
-  <data name="&gt;&gt;testResult.Name" xml:space="preserve">
-    <value>testResult</value>
-  </data>
-  <data name="&gt;&gt;testResult.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;testResult.Parent" xml:space="preserve">
-    <value>resultGroupBox</value>
-  </data>
-  <data name="&gt;&gt;testResult.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="assertCount.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="assertCount.Location" type="System.Drawing.Point, System.Drawing">
-    <value>196, 21</value>
-  </data>
-  <data name="assertCount.Size" type="System.Drawing.Size, System.Drawing">
-    <value>131, 13</value>
-  </data>
-  <data name="assertCount.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="assertCount.Text" xml:space="preserve">
-    <value>Asserts:</value>
   </data>
   <data name="&gt;&gt;assertCount.Name" xml:space="preserve">
     <value>assertCount</value>
@@ -754,49 +898,7 @@
     <value>resultGroupBox</value>
   </data>
   <data name="&gt;&gt;assertCount.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="messageLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="messageLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 39</value>
-  </data>
-  <data name="messageLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>80, 17</value>
-  </data>
-  <data name="messageLabel.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="messageLabel.Text" xml:space="preserve">
-    <value>Message:</value>
-  </data>
-  <data name="&gt;&gt;messageLabel.Name" xml:space="preserve">
-    <value>messageLabel</value>
-  </data>
-  <data name="&gt;&gt;messageLabel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;messageLabel.Parent" xml:space="preserve">
-    <value>resultGroupBox</value>
-  </data>
-  <data name="&gt;&gt;messageLabel.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="elapsedTime.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="elapsedTime.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 21</value>
-  </data>
-  <data name="elapsedTime.Size" type="System.Drawing.Size, System.Drawing">
-    <value>136, 13</value>
-  </data>
-  <data name="elapsedTime.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
-  </data>
-  <data name="elapsedTime.Text" xml:space="preserve">
-    <value>Elapsed Time:</value>
   </data>
   <data name="&gt;&gt;elapsedTime.Name" xml:space="preserve">
     <value>elapsedTime</value>
@@ -808,22 +910,67 @@
     <value>resultGroupBox</value>
   </data>
   <data name="&gt;&gt;elapsedTime.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;outcomeLabel.Name" xml:space="preserve">
+    <value>outcomeLabel</value>
+  </data>
+  <data name="&gt;&gt;outcomeLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;outcomeLabel.Parent" xml:space="preserve">
+    <value>resultGroupBox</value>
+  </data>
+  <data name="&gt;&gt;outcomeLabel.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;testResult.Name" xml:space="preserve">
+    <value>testResult</value>
+  </data>
+  <data name="&gt;&gt;testResult.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;testResult.Parent" xml:space="preserve">
+    <value>resultGroupBox</value>
+  </data>
+  <data name="&gt;&gt;testResult.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;assertCountLabel.Name" xml:space="preserve">
+    <value>assertCountLabel</value>
+  </data>
+  <data name="&gt;&gt;assertCountLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;assertCountLabel.Parent" xml:space="preserve">
+    <value>resultGroupBox</value>
+  </data>
+  <data name="&gt;&gt;assertCountLabel.ZOrder" xml:space="preserve">
     <value>4</value>
   </data>
-  <data name="stackTraceLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <data name="&gt;&gt;messageLabel.Name" xml:space="preserve">
+    <value>messageLabel</value>
   </data>
-  <data name="stackTraceLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 56</value>
+  <data name="&gt;&gt;messageLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="stackTraceLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>72, 14</value>
+  <data name="&gt;&gt;messageLabel.Parent" xml:space="preserve">
+    <value>resultGroupBox</value>
   </data>
-  <data name="stackTraceLabel.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
+  <data name="&gt;&gt;messageLabel.ZOrder" xml:space="preserve">
+    <value>5</value>
   </data>
-  <data name="stackTraceLabel.Text" xml:space="preserve">
-    <value>Stack:</value>
+  <data name="&gt;&gt;elapsedTimeLabel.Name" xml:space="preserve">
+    <value>elapsedTimeLabel</value>
+  </data>
+  <data name="&gt;&gt;elapsedTimeLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;elapsedTimeLabel.Parent" xml:space="preserve">
+    <value>resultGroupBox</value>
+  </data>
+  <data name="&gt;&gt;elapsedTimeLabel.ZOrder" xml:space="preserve">
+    <value>6</value>
   </data>
   <data name="&gt;&gt;stackTraceLabel.Name" xml:space="preserve">
     <value>stackTraceLabel</value>
@@ -835,22 +982,7 @@
     <value>resultGroupBox</value>
   </data>
   <data name="&gt;&gt;stackTraceLabel.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="message.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Left, Right</value>
-  </data>
-  <data name="message.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="message.Location" type="System.Drawing.Point, System.Drawing">
-    <value>84, 39</value>
-  </data>
-  <data name="message.Size" type="System.Drawing.Size, System.Drawing">
-    <value>260, 13</value>
-  </data>
-  <data name="message.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
+    <value>7</value>
   </data>
   <data name="&gt;&gt;message.Name" xml:space="preserve">
     <value>message</value>
@@ -862,22 +994,7 @@
     <value>resultGroupBox</value>
   </data>
   <data name="&gt;&gt;message.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="stackTrace.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Left, Right</value>
-  </data>
-  <data name="stackTrace.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="stackTrace.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 73</value>
-  </data>
-  <data name="stackTrace.Size" type="System.Drawing.Size, System.Drawing">
-    <value>338, 64</value>
-  </data>
-  <data name="stackTrace.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
+    <value>8</value>
   </data>
   <data name="&gt;&gt;stackTrace.Name" xml:space="preserve">
     <value>stackTrace</value>
@@ -889,7 +1006,7 @@
     <value>resultGroupBox</value>
   </data>
   <data name="&gt;&gt;stackTrace.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>9</value>
   </data>
   <data name="resultGroupBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>6, 343</value>
@@ -898,7 +1015,7 @@
     <value>352, 145</value>
   </data>
   <data name="resultGroupBox.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
+    <value>0</value>
   </data>
   <data name="resultGroupBox.Text" xml:space="preserve">
     <value>Result</value>
@@ -915,8 +1032,320 @@
   <data name="&gt;&gt;resultGroupBox.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
+  <data name="assertCount.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="assertCount.Location" type="System.Drawing.Point, System.Drawing">
+    <value>231, 21</value>
+  </data>
+  <data name="assertCount.Size" type="System.Drawing.Size, System.Drawing">
+    <value>49, 13</value>
+  </data>
+  <data name="assertCount.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;assertCount.Name" xml:space="preserve">
+    <value>assertCount</value>
+  </data>
+  <data name="&gt;&gt;assertCount.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;assertCount.Parent" xml:space="preserve">
+    <value>resultGroupBox</value>
+  </data>
+  <data name="&gt;&gt;assertCount.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="elapsedTime.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="elapsedTime.Location" type="System.Drawing.Point, System.Drawing">
+    <value>84, 22</value>
+  </data>
+  <data name="elapsedTime.Size" type="System.Drawing.Size, System.Drawing">
+    <value>67, 13</value>
+  </data>
+  <data name="elapsedTime.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;elapsedTime.Name" xml:space="preserve">
+    <value>elapsedTime</value>
+  </data>
+  <data name="&gt;&gt;elapsedTime.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;elapsedTime.Parent" xml:space="preserve">
+    <value>resultGroupBox</value>
+  </data>
+  <data name="&gt;&gt;elapsedTime.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="outcomeLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="outcomeLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 4</value>
+  </data>
+  <data name="outcomeLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>53, 13</value>
+  </data>
+  <data name="outcomeLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="outcomeLabel.Text" xml:space="preserve">
+    <value>Outcome:</value>
+  </data>
+  <data name="&gt;&gt;outcomeLabel.Name" xml:space="preserve">
+    <value>outcomeLabel</value>
+  </data>
+  <data name="&gt;&gt;outcomeLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;outcomeLabel.Parent" xml:space="preserve">
+    <value>resultGroupBox</value>
+  </data>
+  <data name="&gt;&gt;outcomeLabel.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="testResult.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="testResult.Location" type="System.Drawing.Point, System.Drawing">
+    <value>84, 4</value>
+  </data>
+  <data name="testResult.Size" type="System.Drawing.Size, System.Drawing">
+    <value>110, 16</value>
+  </data>
+  <data name="testResult.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="testResult.Text" xml:space="preserve">
+    <value>Inconclusive</value>
+  </data>
+  <data name="&gt;&gt;testResult.Name" xml:space="preserve">
+    <value>testResult</value>
+  </data>
+  <data name="&gt;&gt;testResult.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;testResult.Parent" xml:space="preserve">
+    <value>resultGroupBox</value>
+  </data>
+  <data name="&gt;&gt;testResult.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="assertCountLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="assertCountLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>167, 21</value>
+  </data>
+  <data name="assertCountLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>44, 13</value>
+  </data>
+  <data name="assertCountLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="assertCountLabel.Text" xml:space="preserve">
+    <value>Asserts:</value>
+  </data>
+  <data name="&gt;&gt;assertCountLabel.Name" xml:space="preserve">
+    <value>assertCountLabel</value>
+  </data>
+  <data name="&gt;&gt;assertCountLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;assertCountLabel.Parent" xml:space="preserve">
+    <value>resultGroupBox</value>
+  </data>
+  <data name="&gt;&gt;assertCountLabel.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="messageLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="messageLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 39</value>
+  </data>
+  <data name="messageLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 17</value>
+  </data>
+  <data name="messageLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="messageLabel.Text" xml:space="preserve">
+    <value>Message:</value>
+  </data>
+  <data name="&gt;&gt;messageLabel.Name" xml:space="preserve">
+    <value>messageLabel</value>
+  </data>
+  <data name="&gt;&gt;messageLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;messageLabel.Parent" xml:space="preserve">
+    <value>resultGroupBox</value>
+  </data>
+  <data name="&gt;&gt;messageLabel.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="elapsedTimeLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="elapsedTimeLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 22</value>
+  </data>
+  <data name="elapsedTimeLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>74, 13</value>
+  </data>
+  <data name="elapsedTimeLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="elapsedTimeLabel.Text" xml:space="preserve">
+    <value>Elapsed Time:</value>
+  </data>
+  <data name="&gt;&gt;elapsedTimeLabel.Name" xml:space="preserve">
+    <value>elapsedTimeLabel</value>
+  </data>
+  <data name="&gt;&gt;elapsedTimeLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;elapsedTimeLabel.Parent" xml:space="preserve">
+    <value>resultGroupBox</value>
+  </data>
+  <data name="&gt;&gt;elapsedTimeLabel.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="stackTraceLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="stackTraceLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 56</value>
+  </data>
+  <data name="stackTraceLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>72, 14</value>
+  </data>
+  <data name="stackTraceLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="stackTraceLabel.Text" xml:space="preserve">
+    <value>Stack:</value>
+  </data>
+  <data name="&gt;&gt;stackTraceLabel.Name" xml:space="preserve">
+    <value>stackTraceLabel</value>
+  </data>
+  <data name="&gt;&gt;stackTraceLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;stackTraceLabel.Parent" xml:space="preserve">
+    <value>resultGroupBox</value>
+  </data>
+  <data name="&gt;&gt;stackTraceLabel.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="message.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
+  <data name="message.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="message.Location" type="System.Drawing.Point, System.Drawing">
+    <value>84, 39</value>
+  </data>
+  <data name="message.Size" type="System.Drawing.Size, System.Drawing">
+    <value>260, 13</value>
+  </data>
+  <data name="message.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;message.Name" xml:space="preserve">
+    <value>message</value>
+  </data>
+  <data name="&gt;&gt;message.Type" xml:space="preserve">
+    <value>TestCentric.Gui.Controls.ExpandingLabel, TestCentric.Gui.Runner, Version=2.0.0.0, Culture=neutral, PublicKeyToken=6fe0a02d2036aa1d</value>
+  </data>
+  <data name="&gt;&gt;message.Parent" xml:space="preserve">
+    <value>resultGroupBox</value>
+  </data>
+  <data name="&gt;&gt;message.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="stackTrace.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
+  <data name="stackTrace.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="stackTrace.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 73</value>
+  </data>
+  <data name="stackTrace.Size" type="System.Drawing.Size, System.Drawing">
+    <value>338, 64</value>
+  </data>
+  <data name="stackTrace.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="&gt;&gt;stackTrace.Name" xml:space="preserve">
+    <value>stackTrace</value>
+  </data>
+  <data name="&gt;&gt;stackTrace.Type" xml:space="preserve">
+    <value>TestCentric.Gui.Controls.ExpandingLabel, TestCentric.Gui.Runner, Version=2.0.0.0, Culture=neutral, PublicKeyToken=6fe0a02d2036aa1d</value>
+  </data>
+  <data name="&gt;&gt;stackTrace.Parent" xml:space="preserve">
+    <value>resultGroupBox</value>
+  </data>
+  <data name="&gt;&gt;stackTrace.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
   <data name="packageGroupBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Left, Right</value>
+  </data>
+  <data name="&gt;&gt;packageSettingsLabel.Name" xml:space="preserve">
+    <value>packageSettingsLabel</value>
+  </data>
+  <data name="&gt;&gt;packageSettingsLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;packageSettingsLabel.Parent" xml:space="preserve">
+    <value>packageGroupBox</value>
+  </data>
+  <data name="&gt;&gt;packageSettingsLabel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;packageSettings.Name" xml:space="preserve">
+    <value>packageSettings</value>
+  </data>
+  <data name="&gt;&gt;packageSettings.Type" xml:space="preserve">
+    <value>TestCentric.Gui.Controls.ExpandingLabel, TestCentric.Gui.Runner, Version=2.0.0.0, Culture=neutral, PublicKeyToken=6fe0a02d2036aa1d</value>
+  </data>
+  <data name="&gt;&gt;packageSettings.Parent" xml:space="preserve">
+    <value>packageGroupBox</value>
+  </data>
+  <data name="&gt;&gt;packageSettings.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="packageGroupBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 24</value>
+  </data>
+  <data name="packageGroupBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>352, 96</value>
+  </data>
+  <data name="packageGroupBox.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="packageGroupBox.Text" xml:space="preserve">
+    <value>Package Settings</value>
+  </data>
+  <data name="&gt;&gt;packageGroupBox.Name" xml:space="preserve">
+    <value>packageGroupBox</value>
+  </data>
+  <data name="&gt;&gt;packageGroupBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;packageGroupBox.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;packageGroupBox.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
   <data name="packageSettingsLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -931,7 +1360,7 @@
     <value>94, 13</value>
   </data>
   <data name="packageSettingsLabel.TabIndex" type="System.Int32, mscorlib">
-    <value>19</value>
+    <value>0</value>
   </data>
   <data name="packageSettingsLabel.Text" xml:space="preserve">
     <value>Package Settings:</value>
@@ -975,32 +1404,26 @@
   <data name="&gt;&gt;packageSettings.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="packageGroupBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 24</value>
+  <data name="exitButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
   </data>
-  <data name="packageGroupBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>352, 96</value>
-  </data>
-  <data name="packageGroupBox.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="packageGroupBox.Text" xml:space="preserve">
-    <value>Package Settings</value>
-  </data>
-  <data name="&gt;&gt;packageGroupBox.Name" xml:space="preserve">
-    <value>packageGroupBox</value>
-  </data>
-  <data name="&gt;&gt;packageGroupBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;packageGroupBox.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;packageGroupBox.ZOrder" xml:space="preserve">
-    <value>1</value>
+  <data name="exitButton.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
+    <value>Flat</value>
   </data>
   <data name="exitButton.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 8.25pt, style=Bold</value>
+    <value>Microsoft Sans Serif, 8.25pt</value>
+  </data>
+  <data name="exitButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAACoSURBVDhPrZMxEsMgDAR5kt/AN3hBKKj9UjoaHkGr6Bxp
+        Qoxg7CQ3ozHcaa/CrldrbZPjVNMdDnYe4nmINQiZ7OxivQSjlEIpJaq1miXwkMUYKef8LuHDxnPA3nsK
+        IQwlCiPDDkrAgDUX+pJVdsCq2eIlWGWVXIZV55JbMPRTwRnGtz8vSywYd8sbSmYw/FWm8F8e0vdPWQWD
+        x4RVyGTnE1ZxcPN3du4J+yy2IjcWfmwAAAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="exitButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
   <data name="exitButton.Location" type="System.Drawing.Point, System.Drawing">
     <value>338, 0</value>
@@ -1009,10 +1432,7 @@
     <value>20, 20</value>
   </data>
   <data name="exitButton.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="exitButton.Text" xml:space="preserve">
-    <value>X</value>
+    <value>3</value>
   </data>
   <data name="&gt;&gt;exitButton.Name" xml:space="preserve">
     <value>exitButton</value>

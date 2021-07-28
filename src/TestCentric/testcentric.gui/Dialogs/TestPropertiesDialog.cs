@@ -133,18 +133,19 @@ namespace TestCentric.Gui.Dialogs
             categories.Text = _testNode.GetPropertyList("Category");
 
             testCaseCount.Text = _testNode.TestCount.ToString();
-            switch (_testNode.RunState)
-            {
-                case RunState.Explicit:
-                    shouldRun.Text = "Explicit";
-                    break;
-                case RunState.Runnable:
-                    shouldRun.Text = "Yes";
-                    break;
-                default:
-                    shouldRun.Text = "No";
-                    break;
-            }
+            runState.Text = _testNode.RunState.ToString();
+            //switch (_testNode.RunState)
+            //{
+            //    case RunState.Explicit:
+            //        runState.Text = "Explicit";
+            //        break;
+            //    case RunState.Runnable:
+            //        runState.Text = "Yes";
+            //        break;
+            //    default:
+            //        runState.Text = "No";
+            //        break;
+            //}
 
             ignoreReason.Text = _testNode.GetProperty("_SKIPREASON");
 
@@ -158,19 +159,16 @@ namespace TestCentric.Gui.Dialogs
             resultGroupBox.Location = new Point(
                 resultGroupBox.Location.X, verticalOffset);
 
-            elapsedTime.Text = string.Format("Execution Time: {0}", _resultNode.Duration);
-            assertCount.Text = string.Format("Assert Count: {0}", _resultNode.AssertCount);
+            elapsedTime.Text = _resultNode.Duration.ToString("f3");
+            assertCount.Text = _resultNode.AssertCount.ToString();
 
+            var messageText = _resultNode.Message ?? string.Empty;
             // message may have a leading blank line
             // TODO: take care of this in label ?
-            var messageText = _resultNode.Message;
-            if (messageText != null)
-            {
-                if (messageText.Length > 64000)
-                    message.Text = TrimLeadingBlankLines(messageText.Substring(0, 64000));
-                else
-                    message.Text = TrimLeadingBlankLines(messageText);
-            }
+            if (messageText.Length > 64000)
+                message.Text = TrimLeadingBlankLines(messageText.Substring(0, 64000));
+            else
+                message.Text = TrimLeadingBlankLines(messageText);
 
             stackTrace.Text = _resultNode.StackTrace != null
                 ? FormatStackTrace(_resultNode.StackTrace)

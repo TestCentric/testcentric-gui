@@ -42,8 +42,8 @@ namespace TestCentric.Gui.Dialogs
             this.ignoreReason = new TestCentric.Gui.Controls.ExpandingLabel();
             this.ignoreReasonLabel = new System.Windows.Forms.Label();
             this.testCaseCountLabel = new System.Windows.Forms.Label();
-            this.shouldRun = new System.Windows.Forms.Label();
-            this.shouldRunLabel = new System.Windows.Forms.Label();
+            this.runState = new System.Windows.Forms.Label();
+            this.runStateLabel = new System.Windows.Forms.Label();
             this.testType = new System.Windows.Forms.Label();
             this.testTypeLabel = new System.Windows.Forms.Label();
             this.categoriesLabel = new System.Windows.Forms.Label();
@@ -52,11 +52,13 @@ namespace TestCentric.Gui.Dialogs
             this.fullNameLabel = new System.Windows.Forms.Label();
             this.hiddenProperties = new System.Windows.Forms.CheckBox();
             this.resultGroupBox = new System.Windows.Forms.Panel();
+            this.assertCount = new System.Windows.Forms.Label();
+            this.elapsedTime = new System.Windows.Forms.Label();
             this.outcomeLabel = new System.Windows.Forms.Label();
             this.testResult = new System.Windows.Forms.Label();
-            this.assertCount = new System.Windows.Forms.Label();
+            this.assertCountLabel = new System.Windows.Forms.Label();
             this.messageLabel = new System.Windows.Forms.Label();
-            this.elapsedTime = new System.Windows.Forms.Label();
+            this.elapsedTimeLabel = new System.Windows.Forms.Label();
             this.stackTraceLabel = new System.Windows.Forms.Label();
             this.message = new TestCentric.Gui.Controls.ExpandingLabel();
             this.stackTrace = new TestCentric.Gui.Controls.ExpandingLabel();
@@ -72,8 +74,17 @@ namespace TestCentric.Gui.Dialogs
             // pinButton
             // 
             resources.ApplyResources(this.pinButton, "pinButton");
+            this.pinButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.pinButton.Name = "pinButton";
+            this.pinButton.UseVisualStyleBackColor = true;
             this.pinButton.Click += new System.EventHandler(this.pinButton_Click);
+            // 
+            // exitButton
+            // 
+            resources.ApplyResources(this.exitButton, "exitButton");
+            this.exitButton.Name = "exitButton";
+            this.exitButton.UseVisualStyleBackColor = true;
+            this.exitButton.Click += new System.EventHandler(this.exitButton_Click);
             // 
             // testName
             // 
@@ -93,8 +104,8 @@ namespace TestCentric.Gui.Dialogs
             this.testGroupBox.Controls.Add(this.ignoreReason);
             this.testGroupBox.Controls.Add(this.ignoreReasonLabel);
             this.testGroupBox.Controls.Add(this.testCaseCountLabel);
-            this.testGroupBox.Controls.Add(this.shouldRun);
-            this.testGroupBox.Controls.Add(this.shouldRunLabel);
+            this.testGroupBox.Controls.Add(this.runState);
+            this.testGroupBox.Controls.Add(this.runStateLabel);
             this.testGroupBox.Controls.Add(this.testType);
             this.testGroupBox.Controls.Add(this.testTypeLabel);
             this.testGroupBox.Controls.Add(this.categoriesLabel);
@@ -150,15 +161,15 @@ namespace TestCentric.Gui.Dialogs
             resources.ApplyResources(this.testCaseCountLabel, "testCaseCountLabel");
             this.testCaseCountLabel.Name = "testCaseCountLabel";
             // 
-            // shouldRun
+            // runState
             // 
-            resources.ApplyResources(this.shouldRun, "shouldRun");
-            this.shouldRun.Name = "shouldRun";
+            resources.ApplyResources(this.runState, "runState");
+            this.runState.Name = "runState";
             // 
-            // shouldRunLabel
+            // runStateLabel
             // 
-            resources.ApplyResources(this.shouldRunLabel, "shouldRunLabel");
-            this.shouldRunLabel.Name = "shouldRunLabel";
+            resources.ApplyResources(this.runStateLabel, "runStateLabel");
+            this.runStateLabel.Name = "runStateLabel";
             // 
             // testType
             // 
@@ -203,15 +214,27 @@ namespace TestCentric.Gui.Dialogs
             resources.ApplyResources(this.resultGroupBox, "resultGroupBox");
             this.resultGroupBox.BackColor = System.Drawing.SystemColors.Control;
             this.resultGroupBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.resultGroupBox.Controls.Add(this.assertCount);
+            this.resultGroupBox.Controls.Add(this.elapsedTime);
             this.resultGroupBox.Controls.Add(this.outcomeLabel);
             this.resultGroupBox.Controls.Add(this.testResult);
-            this.resultGroupBox.Controls.Add(this.assertCount);
+            this.resultGroupBox.Controls.Add(this.assertCountLabel);
             this.resultGroupBox.Controls.Add(this.messageLabel);
-            this.resultGroupBox.Controls.Add(this.elapsedTime);
+            this.resultGroupBox.Controls.Add(this.elapsedTimeLabel);
             this.resultGroupBox.Controls.Add(this.stackTraceLabel);
             this.resultGroupBox.Controls.Add(this.message);
             this.resultGroupBox.Controls.Add(this.stackTrace);
             this.resultGroupBox.Name = "resultGroupBox";
+            // 
+            // assertCount
+            // 
+            resources.ApplyResources(this.assertCount, "assertCount");
+            this.assertCount.Name = "assertCount";
+            // 
+            // elapsedTime
+            // 
+            resources.ApplyResources(this.elapsedTime, "elapsedTime");
+            this.elapsedTime.Name = "elapsedTime";
             // 
             // outcomeLabel
             // 
@@ -223,20 +246,20 @@ namespace TestCentric.Gui.Dialogs
             resources.ApplyResources(this.testResult, "testResult");
             this.testResult.Name = "testResult";
             // 
-            // assertCount
+            // assertCountLabel
             // 
-            resources.ApplyResources(this.assertCount, "assertCount");
-            this.assertCount.Name = "assertCount";
+            resources.ApplyResources(this.assertCountLabel, "assertCountLabel");
+            this.assertCountLabel.Name = "assertCountLabel";
             // 
             // messageLabel
             // 
             resources.ApplyResources(this.messageLabel, "messageLabel");
             this.messageLabel.Name = "messageLabel";
             // 
-            // elapsedTime
+            // elapsedTimeLabel
             // 
-            resources.ApplyResources(this.elapsedTime, "elapsedTime");
-            this.elapsedTime.Name = "elapsedTime";
+            resources.ApplyResources(this.elapsedTimeLabel, "elapsedTimeLabel");
+            this.elapsedTimeLabel.Name = "elapsedTimeLabel";
             // 
             // stackTraceLabel
             // 
@@ -279,13 +302,6 @@ namespace TestCentric.Gui.Dialogs
             this.packageSettings.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
             this.packageSettings.Name = "packageSettings";
             // 
-            // exitButton
-            // 
-            resources.ApplyResources(this.exitButton, "exitButton");
-            this.exitButton.Name = "exitButton";
-            this.exitButton.UseVisualStyleBackColor = true;
-            this.exitButton.Click += new System.EventHandler(this.exitButton_Click);
-            // 
             // TestPropertiesDialog
             // 
             resources.ApplyResources(this, "$this");
@@ -325,8 +341,8 @@ namespace TestCentric.Gui.Dialogs
         private ExpandingLabel ignoreReason;
         private System.Windows.Forms.Label ignoreReasonLabel;
         private System.Windows.Forms.Label testCaseCountLabel;
-        private System.Windows.Forms.Label shouldRun;
-        private System.Windows.Forms.Label shouldRunLabel;
+        private System.Windows.Forms.Label runState;
+        private System.Windows.Forms.Label runStateLabel;
         private System.Windows.Forms.Label testType;
         private System.Windows.Forms.Label testTypeLabel;
         private System.Windows.Forms.Label categoriesLabel;
@@ -334,9 +350,9 @@ namespace TestCentric.Gui.Dialogs
         private ExpandingLabel fullName;
         private System.Windows.Forms.Label fullNameLabel;
         private System.Windows.Forms.Panel resultGroupBox;
-        private System.Windows.Forms.Label assertCount;
+        private System.Windows.Forms.Label assertCountLabel;
         private System.Windows.Forms.Label messageLabel;
-        private System.Windows.Forms.Label elapsedTime;
+        private System.Windows.Forms.Label elapsedTimeLabel;
         private System.Windows.Forms.Label stackTraceLabel;
         private ExpandingLabel message;
         private ExpandingLabel stackTrace;
@@ -347,5 +363,7 @@ namespace TestCentric.Gui.Dialogs
         private System.Windows.Forms.Label packageSettingsLabel;
         private System.Windows.Forms.Label outcomeLabel;
         private System.Windows.Forms.Button exitButton;
+        private System.Windows.Forms.Label elapsedTime;
+        private System.Windows.Forms.Label assertCount;
     }
 }

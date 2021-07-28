@@ -256,7 +256,7 @@ namespace TestCentric.Gui.Views
             this.runState.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.runState.Location = new System.Drawing.Point(236, 73);
             this.runState.Name = "runState";
-            this.runState.Size = new System.Drawing.Size(279, 17);
+            this.runState.Size = new System.Drawing.Size(239, 17);
             this.runState.TabIndex = 12;
             // 
             // resultPanel
