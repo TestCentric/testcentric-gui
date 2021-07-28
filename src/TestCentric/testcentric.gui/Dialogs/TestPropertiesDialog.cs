@@ -66,8 +66,6 @@ namespace TestCentric.Gui.Dialogs
             _resultNode = _model.GetResultForTest(_testNode.Id);
             _package = _model.GetPackageForTest(_testNode.Id);
 
-            SetTitleBarText();
-
             testResult.Text = _resultNode?.Outcome.ToString() ?? _testNode.RunState.ToString();
             testResult.Font = new Font(this.Font, FontStyle.Bold);
             if (_testNode.Type == "Project" || _testNode.Type == "Assembly")
@@ -268,32 +266,6 @@ namespace TestCentric.Gui.Dialogs
         #endregion
 
         #region Helper Methods
-
-        private void SetTitleBarText()
-        {
-            string name = _testNode.Name;
-            if (name == null)
-                Text = "Properties";
-            else
-            {
-                int index = name.LastIndexOfAny(new char[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar });
-                if (index >= 0)
-                    name = name.Substring(index + 1);
-                Text = $"{_testNode.Type} Properties - {name}";
-            }
-        }
-
-        private static void SizeToFitText(Label label)
-        {
-            string text = label.Text;
-            if (text == "")
-                text = "Ay"; // Include descender to be sure of size
-
-            Graphics g = Graphics.FromHwnd(label.Handle);
-            SizeF size = g.MeasureString(text, label.Font, label.Parent.ClientSize.Width - label.Left - 8);
-            label.ClientSize = new Size(
-                (int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height));
-        }
 
         private static string TrimLeadingBlankLines(string s)
         {
