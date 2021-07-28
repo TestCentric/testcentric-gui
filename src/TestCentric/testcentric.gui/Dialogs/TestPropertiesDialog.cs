@@ -263,6 +263,11 @@ namespace TestCentric.Gui.Dialogs
             FillPropertyList();
         }
 
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
         #endregion
 
         #region Helper Methods

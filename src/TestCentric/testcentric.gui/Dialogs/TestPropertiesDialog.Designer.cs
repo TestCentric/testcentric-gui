@@ -34,9 +34,12 @@ namespace TestCentric.Gui.Dialogs
             this.pinButton = new System.Windows.Forms.CheckBox();
             this.testName = new System.Windows.Forms.Label();
             this.testGroupBox = new System.Windows.Forms.Panel();
+            this.description = new TestCentric.Gui.Controls.ExpandingLabel();
             this.categories = new System.Windows.Forms.Label();
+            this.properties = new TestCentric.Gui.Controls.ExpandingLabel();
             this.propertiesLabel = new System.Windows.Forms.Label();
             this.testCaseCount = new System.Windows.Forms.Label();
+            this.ignoreReason = new TestCentric.Gui.Controls.ExpandingLabel();
             this.ignoreReasonLabel = new System.Windows.Forms.Label();
             this.testCaseCountLabel = new System.Windows.Forms.Label();
             this.shouldRun = new System.Windows.Forms.Label();
@@ -45,6 +48,7 @@ namespace TestCentric.Gui.Dialogs
             this.testTypeLabel = new System.Windows.Forms.Label();
             this.categoriesLabel = new System.Windows.Forms.Label();
             this.descriptionLabel = new System.Windows.Forms.Label();
+            this.fullName = new TestCentric.Gui.Controls.ExpandingLabel();
             this.fullNameLabel = new System.Windows.Forms.Label();
             this.hiddenProperties = new System.Windows.Forms.CheckBox();
             this.resultGroupBox = new System.Windows.Forms.Panel();
@@ -54,15 +58,12 @@ namespace TestCentric.Gui.Dialogs
             this.messageLabel = new System.Windows.Forms.Label();
             this.elapsedTime = new System.Windows.Forms.Label();
             this.stackTraceLabel = new System.Windows.Forms.Label();
+            this.message = new TestCentric.Gui.Controls.ExpandingLabel();
+            this.stackTrace = new TestCentric.Gui.Controls.ExpandingLabel();
             this.packageGroupBox = new System.Windows.Forms.Panel();
             this.packageSettingsLabel = new System.Windows.Forms.Label();
             this.packageSettings = new TestCentric.Gui.Controls.ExpandingLabel();
-            this.message = new TestCentric.Gui.Controls.ExpandingLabel();
-            this.stackTrace = new TestCentric.Gui.Controls.ExpandingLabel();
-            this.description = new TestCentric.Gui.Controls.ExpandingLabel();
-            this.properties = new TestCentric.Gui.Controls.ExpandingLabel();
-            this.ignoreReason = new TestCentric.Gui.Controls.ExpandingLabel();
-            this.fullName = new TestCentric.Gui.Controls.ExpandingLabel();
+            this.exitButton = new System.Windows.Forms.Button();
             this.testGroupBox.SuspendLayout();
             this.resultGroupBox.SuspendLayout();
             this.packageGroupBox.SuspendLayout();
@@ -103,10 +104,24 @@ namespace TestCentric.Gui.Dialogs
             this.testGroupBox.Controls.Add(this.hiddenProperties);
             this.testGroupBox.Name = "testGroupBox";
             // 
+            // description
+            // 
+            resources.ApplyResources(this.description, "description");
+            this.description.CopySupported = true;
+            this.description.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
+            this.description.Name = "description";
+            // 
             // categories
             // 
             resources.ApplyResources(this.categories, "categories");
             this.categories.Name = "categories";
+            // 
+            // properties
+            // 
+            resources.ApplyResources(this.properties, "properties");
+            this.properties.BackColor = System.Drawing.Color.LightYellow;
+            this.properties.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
+            this.properties.Name = "properties";
             // 
             // propertiesLabel
             // 
@@ -117,6 +132,13 @@ namespace TestCentric.Gui.Dialogs
             // 
             resources.ApplyResources(this.testCaseCount, "testCaseCount");
             this.testCaseCount.Name = "testCaseCount";
+            // 
+            // ignoreReason
+            // 
+            resources.ApplyResources(this.ignoreReason, "ignoreReason");
+            this.ignoreReason.CopySupported = true;
+            this.ignoreReason.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Vertical;
+            this.ignoreReason.Name = "ignoreReason";
             // 
             // ignoreReasonLabel
             // 
@@ -157,6 +179,12 @@ namespace TestCentric.Gui.Dialogs
             // 
             resources.ApplyResources(this.descriptionLabel, "descriptionLabel");
             this.descriptionLabel.Name = "descriptionLabel";
+            // 
+            // fullName
+            // 
+            resources.ApplyResources(this.fullName, "fullName");
+            this.fullName.CopySupported = true;
+            this.fullName.Name = "fullName";
             // 
             // fullNameLabel
             // 
@@ -215,6 +243,21 @@ namespace TestCentric.Gui.Dialogs
             resources.ApplyResources(this.stackTraceLabel, "stackTraceLabel");
             this.stackTraceLabel.Name = "stackTraceLabel";
             // 
+            // message
+            // 
+            resources.ApplyResources(this.message, "message");
+            this.message.CopySupported = true;
+            this.message.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
+            this.message.Name = "message";
+            // 
+            // stackTrace
+            // 
+            resources.ApplyResources(this.stackTrace, "stackTrace");
+            this.stackTrace.BackColor = System.Drawing.Color.LightYellow;
+            this.stackTrace.CopySupported = true;
+            this.stackTrace.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
+            this.stackTrace.Name = "stackTrace";
+            // 
             // packageGroupBox
             // 
             resources.ApplyResources(this.packageGroupBox, "packageGroupBox");
@@ -236,47 +279,12 @@ namespace TestCentric.Gui.Dialogs
             this.packageSettings.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
             this.packageSettings.Name = "packageSettings";
             // 
-            // message
+            // exitButton
             // 
-            resources.ApplyResources(this.message, "message");
-            this.message.CopySupported = true;
-            this.message.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
-            this.message.Name = "message";
-            // 
-            // stackTrace
-            // 
-            resources.ApplyResources(this.stackTrace, "stackTrace");
-            this.stackTrace.BackColor = System.Drawing.Color.LightYellow;
-            this.stackTrace.CopySupported = true;
-            this.stackTrace.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
-            this.stackTrace.Name = "stackTrace";
-            // 
-            // description
-            // 
-            resources.ApplyResources(this.description, "description");
-            this.description.CopySupported = true;
-            this.description.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
-            this.description.Name = "description";
-            // 
-            // properties
-            // 
-            resources.ApplyResources(this.properties, "properties");
-            this.properties.BackColor = System.Drawing.Color.LightYellow;
-            this.properties.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
-            this.properties.Name = "properties";
-            // 
-            // ignoreReason
-            // 
-            resources.ApplyResources(this.ignoreReason, "ignoreReason");
-            this.ignoreReason.CopySupported = true;
-            this.ignoreReason.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Vertical;
-            this.ignoreReason.Name = "ignoreReason";
-            // 
-            // fullName
-            // 
-            resources.ApplyResources(this.fullName, "fullName");
-            this.fullName.CopySupported = true;
-            this.fullName.Name = "fullName";
+            resources.ApplyResources(this.exitButton, "exitButton");
+            this.exitButton.Name = "exitButton";
+            this.exitButton.UseVisualStyleBackColor = true;
+            this.exitButton.Click += new System.EventHandler(this.exitButton_Click);
             // 
             // TestPropertiesDialog
             // 
@@ -284,6 +292,7 @@ namespace TestCentric.Gui.Dialogs
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.ControlBox = false;
+            this.Controls.Add(this.exitButton);
             this.Controls.Add(this.packageGroupBox);
             this.Controls.Add(this.resultGroupBox);
             this.Controls.Add(this.testGroupBox);
@@ -337,5 +346,6 @@ namespace TestCentric.Gui.Dialogs
         private System.Windows.Forms.Label testResult;
         private System.Windows.Forms.Label packageSettingsLabel;
         private System.Windows.Forms.Label outcomeLabel;
+        private System.Windows.Forms.Button exitButton;
     }
 }
