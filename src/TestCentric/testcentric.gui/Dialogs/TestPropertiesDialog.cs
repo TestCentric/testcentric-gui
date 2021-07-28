@@ -11,6 +11,7 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Dialogs
 {
+    using System.Text;
     using Model;
     using NUnit.Engine;
     using Views;
@@ -65,8 +66,6 @@ namespace TestCentric.Gui.Dialogs
             _resultNode = _model.GetResultForTest(_testNode.Id);
             _package = _model.GetPackageForTest(_testNode.Id);
 
-            SetTitleBarText();
-
             testResult.Text = _resultNode?.Outcome.ToString() ?? _testNode.RunState.ToString();
             testResult.Font = new Font(this.Font, FontStyle.Bold);
             if (_testNode.Type == "Project" || _testNode.Type == "Assembly")
@@ -80,15 +79,15 @@ namespace TestCentric.Gui.Dialogs
             int verticalOffset = packageGroupBox.Top;
 
             if (_package != null)
-                verticalOffset = DisplayPackageGroupBox(verticalOffset) + 12;
+                verticalOffset = DisplayPackageGroupBox(verticalOffset) + 4;
             else
                 packageGroupBox.Hide();
 
             // Test details are always shown
-            verticalOffset = DisplayTestGroupBox(verticalOffset) + 12;
+            verticalOffset = DisplayTestGroupBox(verticalOffset) + 4;
 
             if (_resultNode != null)
-                verticalOffset = DisplayResultGroupBox(verticalOffset) + 12;
+                verticalOffset = DisplayResultGroupBox(verticalOffset) + 4;
             else
                 resultGroupBox.Hide();
 
@@ -134,18 +133,19 @@ namespace TestCentric.Gui.Dialogs
             categories.Text = _testNode.GetPropertyList("Category");
 
             testCaseCount.Text = _testNode.TestCount.ToString();
-            switch (_testNode.RunState)
-            {
-                case RunState.Explicit:
-                    shouldRun.Text = "Explicit";
-                    break;
-                case RunState.Runnable:
-                    shouldRun.Text = "Yes";
-                    break;
-                default:
-                    shouldRun.Text = "No";
-                    break;
-            }
+            runState.Text = _testNode.RunState.ToString();
+            //switch (_testNode.RunState)
+            //{
+            //    case RunState.Explicit:
+            //        runState.Text = "Explicit";
+            //        break;
+            //    case RunState.Runnable:
+            //        runState.Text = "Yes";
+            //        break;
+            //    default:
+            //        runState.Text = "No";
+            //        break;
+            //}
 
             ignoreReason.Text = _testNode.GetProperty("_SKIPREASON");
 
@@ -159,49 +159,67 @@ namespace TestCentric.Gui.Dialogs
             resultGroupBox.Location = new Point(
                 resultGroupBox.Location.X, verticalOffset);
 
-            elapsedTime.Text = string.Format("Execution Time: {0}", _resultNode.Duration);
-            assertCount.Text = string.Format("Assert Count: {0}", _resultNode.AssertCount);
+            elapsedTime.Text = _resultNode.Duration.ToString("f3");
+            assertCount.Text = _resultNode.AssertCount.ToString();
 
+            var messageText = _resultNode.Message ?? string.Empty;
             // message may have a leading blank line
             // TODO: take care of this in label ?
-            var messageText = _resultNode.Message;
-            if (messageText != null)
-            {
-                if (messageText.Length > 64000)
-                    message.Text = TrimLeadingBlankLines(messageText.Substring(0, 64000));
-                else
-                    message.Text = TrimLeadingBlankLines(messageText);
-            }
+            if (messageText.Length > 64000)
+                message.Text = TrimLeadingBlankLines(messageText.Substring(0, 64000));
+            else
+                message.Text = TrimLeadingBlankLines(messageText);
 
-            stackTrace.Text = _resultNode.StackTrace;
+            stackTrace.Text = _resultNode.StackTrace != null
+                ? FormatStackTrace(_resultNode.StackTrace)
+                : string.Empty;
 
             resultGroupBox.Show();
 
             return resultGroupBox.Bottom;
         }
 
+        private static string FormatStackTrace(string stackTrace)
+        {
+            const char SP = ' ';
+            const char NBSP = (char)160;
+
+            var rdr = new StringReader(stackTrace);
+            var line = rdr.ReadLine();
+            var sb = new StringBuilder();
+
+            while (line != null)
+            {
+                sb.AppendLine(line.Trim().Replace(SP, NBSP));
+                line = rdr.ReadLine();
+            }
+
+            return sb.ToString();
+        }
+
         private void FillPropertyList()
         {
-            properties.Items.Clear();
-            foreach (string entry in _testNode.GetAllProperties(hiddenProperties.Checked))
+            var sb = new StringBuilder();
+            foreach (string item in _testNode.GetAllProperties(hiddenProperties.Checked))
             {
-                properties.Items.Add(entry);
+                if (sb.Length > 0)
+                    sb.Append(Environment.NewLine);
+                sb.Append(item);
             }
+            properties.Text = sb.ToString();
         }
 
         private void FillPackageSettingsList(TestPackage package)
         {
-            packageSettings.Items.Clear();
-
-            foreach (string key in package.Settings.Keys)
+            var sb = new StringBuilder();
+            foreach (var key in package.Settings.Keys)
             {
-                object val = package.Settings[key] ?? "<null>";
-                if (val is string && (string)val == string.Empty)
-                    val = "<empty>";
-                else if (val is string[])
-                    val = string.Join(",", val as string[]);
-                packageSettings.Items.Add($"{key} = {val}");
+                if (sb.Length > 0)
+                    sb.Append(Environment.NewLine);
+                sb.Append($"{key} = {package.Settings[key]}");
             }
+
+            packageSettings.Text = sb.ToString();
         }
 
         #endregion
@@ -243,35 +261,14 @@ namespace TestCentric.Gui.Dialogs
             FillPropertyList();
         }
 
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
         #endregion
 
         #region Helper Methods
-
-        private void SetTitleBarText()
-        {
-            string name = _testNode.Name;
-            if (name == null)
-                Text = "Properties";
-            else
-            {
-                int index = name.LastIndexOfAny(new char[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar });
-                if (index >= 0)
-                    name = name.Substring(index + 1);
-                Text = $"{_testNode.Type} Properties - {name}";
-            }
-        }
-
-        private static void SizeToFitText(Label label)
-        {
-            string text = label.Text;
-            if (text == "")
-                text = "Ay"; // Include descender to be sure of size
-
-            Graphics g = Graphics.FromHwnd(label.Handle);
-            SizeF size = g.MeasureString(text, label.Font, label.Parent.ClientSize.Width - label.Left - 8);
-            label.ClientSize = new Size(
-                (int)Math.Ceiling(size.Width), (int)Math.Ceiling(size.Height));
-        }
 
         private static string TrimLeadingBlankLines(string s)
         {
@@ -295,7 +292,7 @@ namespace TestCentric.Gui.Dialogs
                 }
             }
 
-            getout:
+        getout:
             return start == 0 ? s : s.Substring(start);
         }
 
