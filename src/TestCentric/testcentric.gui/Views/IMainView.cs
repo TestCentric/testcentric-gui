@@ -87,6 +87,7 @@ namespace TestCentric.Gui.Views
         // SubViews
         TestTreeView TreeView { get; }
         StatusBarView StatusBarView { get; }
+        ProgressBarView ProgressBarView { get; }
         TestPropertiesView TestPropertiesView { get; }
         XmlView XmlView { get; }
         IMessageDisplay MessageDisplay { get; }
@@ -94,8 +95,7 @@ namespace TestCentric.Gui.Views
         // Dialog Manager
         IDialogManager DialogManager { get; }
 
-        // Test Run Summary
-        void DisplayTestRunSummary(string report);
+        IRunSummaryDisplay RunSummaryDisplay { get; }
 
         // Methods used by Presenter
         void Configure(bool useFullGui);

@@ -67,11 +67,5 @@ namespace TestCentric.Gui.Presenters.Main
         {
             ViewElement(propName).Received().Visible = visible;
         }
-
-        [Test]
-        public void TestRunSummaryIsDisplayed()
-        {
-            _view.Received().DisplayTestRunSummary(Arg.Any<string>());
-        }
     }
 }

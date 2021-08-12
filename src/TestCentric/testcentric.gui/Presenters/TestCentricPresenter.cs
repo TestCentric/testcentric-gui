@@ -171,7 +171,10 @@ namespace TestCentric.Gui.Presenters
                 _view.RunSummaryButton.Visible = false;
             };
 
-            _model.Events.RunFinished += (TestResultEventArgs e) =>
+            _model.Events.RunFinished += (TestResultEventArgs e) => OnRunFinished(e.Result);
+
+            // Separate internal method for testing
+            void OnRunFinished(ResultNode result)
             {
                 OnLongRunningOperationComplete();
 
@@ -202,15 +205,10 @@ namespace TestCentric.Gui.Presenters
                 //    _view.Activate();
 
                 // If we were running unattended, it's time to close
-
-                if (!_options.Unattended)
-                {
-                    var summary = ResultSummaryCreator.FromResultNode(e.Result);
-                    string report = ResultSummaryReporter.WriteSummaryReport(summary);
-                    _view.DisplayTestRunSummary(report);
-                }
-                else
+                if (_options.Unattended)
                     _view.Close();
+                else
+                    DisplayTestRunSummary(result, true);
             };
 
             _settings.Changed += (s, e) =>
@@ -501,11 +499,22 @@ namespace TestCentric.Gui.Presenters
 
             _view.RunSummaryButton.Execute += () =>
             {
-                var resultId = _model.GetResultForTest(_model.Tests.Id);
-                var summary = ResultSummaryCreator.FromResultNode(resultId);
-                string report = ResultSummaryReporter.WriteSummaryReport(summary);
-                _view.DisplayTestRunSummary(report);
+                var result = _model.GetResultForTest(_model.Tests.Id);
+                DisplayTestRunSummary(result, false);
             };
+
+            //_view.RunSummaryButton.CheckedChanged += () =>
+            //{
+            //    if (_view.RunSummaryButton.Checked)
+            //    {
+            //        var resultId = _model.GetResultForTest(_model.Tests.Id);
+            //        var summary = ResultSummaryCreator.FromResultNode(resultId);
+            //        string report = ResultSummaryReporter.WriteSummaryReport(summary);
+            //        _view.DisplayTestRunSummary(report);
+            //    }
+            //    else
+            //        _view.HideTestRunSummary();
+            //};
 
             _view.ToolsMenu.Popup += () =>
             {
@@ -919,6 +928,20 @@ namespace TestCentric.Gui.Presenters
             _longRunningOperation?.Close();
             _longRunningOperation = null;
         }
+
+        private void DisplayTestRunSummary(ResultNode result, bool withTimeout)
+        {
+            var report = CreateSummaryReport(result);
+            _view.RunSummaryDisplay.Display(report, withTimeout);
+        }
+
+        private string CreateSummaryReport(ResultNode result)
+        {
+            var summary = ResultSummaryCreator.FromResultNode(result);
+            return ResultSummaryReporter.WriteSummaryReport(summary);
+        }
+
+
 
         private void SetTreeDisplayFormat(string displayFormat)
         {
