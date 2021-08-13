@@ -1,4 +1,48 @@
-﻿TestCentric Runner for NUnit 2.0.0-alpha1 - June 30, 2021
+﻿TestCentric Runner for NUnit 2.0.0-alpha1 - August 13, 2021
+
+Features
+
+ * 230 Save and restore Visual state
+ * 609 Allow selecting normal versus forced stop
+ * 732 Merge features of the experimental GUI into the 2.0 standard GUI
+ * 735 Remove Categories Tab from left-hand GUI panel
+ * 740 Remove right-hand panel Run and Cancel buttons
+ * 741 Move Progress Bar to left-hand panel
+ * 742 Remove Not Run tab
+ * 744 Port PropertyView from experimental GUI
+ * 745 Port XmlView from experimental GUI
+ * 757 Remove "Run Failed" from split button choices in menu bar
+ * 758 Make "Stop Run" a separate button on menu bar"
+ * 761 Make Menu Bar full width of main window
+ * 762 Variable positioning of progress bar
+ * 780 Restore TestPropertiesDialog for use with the mini-GUI
+
+Enhancements
+
+ * 737 Remove checkbox-related buttons from below tree display
+ * 755 Display last run summary on demand
+ * 786 Show package settings at top of PropertiesDialog and only show for tests representing packages
+ * 789 Display package settings in TestPropertiesView
+ * 790 Hide result box in TestPropertiesDialog when there is no result
+ * 794 Adjust PropertiesDialog Layout to be closer to that of TestPropertiesView
+ * 798 Improve Test Run Report Presentation
+
+Bugs
+
+ * 767 GroupBy dropdown has no effect when changing
+ * 769 Groupings, which do not apply to the current display format, should be disabled
+ * 770 Need icon for display format button
+ * 778 Visibility of StatusBar is not saved
+ * 783 NRE when File Menu pops up without an open project
+ * 788 Location of form should be saved before changing GUI layout
+ * 791 TestPropertiesDialog does not update after test run
+
+Build
+
+ * 733 Remove unneeded conditionals from the engine
+ * 753 Move "common" gui components to the  Gui project
+
+TestCentric Runner for NUnit 2.0.0-alpha1 - June 30, 2021
 
 The 2.0.0 release is the first major upgrade of the TestCentric Gui.
 It includes a number of breaking changes as well as new features.
