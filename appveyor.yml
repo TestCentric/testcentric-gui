@@ -20,4 +20,4 @@ environment:
   GITHUB_PASSWORD:
     secure: 2eNz23Eb1L40g2LPmlPqog==
   GITHUB_ACCESS_TOKEN:
-    secure: pxZJzzwCBB46Ey3tRoJI90RC10KnK1pgucafZagYsLL8JNJz6RwcHf0DIH01nWnL
+    secure: xmGXWrw5Nj3CI3fPxhw/DWIU5YL/1mM06pSmjpkd9LpKs3t3EYXbECbEQs62lU/O
