@@ -402,37 +402,79 @@ Task("BuildEngineApiPackage")
 // PUBLISH PACKAGES
 //////////////////////////////////////////////////////////////////////
 
+static bool hadPublishingErrors = false;
+
 Task("PublishPackages")
 	.Description("Publish nuget and chocolatey packages according to the current settings")
+	.IsDependentOn("PublishToMyGet")
+	.IsDependentOn("PublishToNuGet")
+	.IsDependentOn("PublishToChocolatey")
+	.Does(() =>
+	{
+		if (hadPublishingErrors)
+			throw new Exception("One of the publishing steps failed.");
+	});
+
+// This task may either be run by the PublishPackages task,
+// which depends on it, or directly when recovering from errors.
+Task("PublishToMyGet")
+	.Description("Publish packages to MyGet")
 	.Does<BuildParameters>((parameters) =>
 	{
-		bool nothingToPublish = true;
+        if (!parameters.ShouldPublishToMyGet)
+            Information("Nothing to publish to MyGet from this run.");
+        else
+            try
+			{
+				PushNuGetPackage(parameters.NuGetPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
+				PushNuGetPackage(parameters.EngineCorePackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
+				PushNuGetPackage(parameters.EngineApiPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
+				PushChocolateyPackage(parameters.ChocolateyPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
+			}
+			catch(Exception)
+			{
+				hadPublishingErrors = true;
+			}
+	});
 
-		if (parameters.ShouldPublishToMyGet)
-		{
-			PushNuGetPackage(parameters.NuGetPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
-			PushNuGetPackage(parameters.EngineCorePackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
-			PushNuGetPackage(parameters.EngineApiPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
-			PushChocolateyPackage(parameters.ChocolateyPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
-			nothingToPublish = false;
-		}
+// This task may either be run by the PublishPackages task,
+// which depends on it, or directly when recovering from errors.
+Task("PublishToNuGet")
+	.Description("Publish packages to NuGet")
+	.Does<BuildParameters>((parameters) =>
+	{
+		if (!parameters.ShouldPublishToNuGet)
+			Information("Nothing to publish to NuGet from this run.");
+		else
+			try
+			{
+				PushNuGetPackage(parameters.NuGetPackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
+				PushNuGetPackage(parameters.EngineCorePackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
+				PushNuGetPackage(parameters.EngineApiPackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
+			}
+			catch(Exception)
+            {
+				hadPublishingErrors = true;
+			}
+	});
 
-		if (parameters.ShouldPublishToNuGet)
-		{
-			PushNuGetPackage(parameters.NuGetPackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
-			PushNuGetPackage(parameters.EngineCorePackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
-			PushNuGetPackage(parameters.EngineApiPackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
-			nothingToPublish = false;
-		}
-
-		if (parameters.ShouldPublishToChocolatey)
-		{
-			PushChocolateyPackage(parameters.ChocolateyPackage, parameters.ChocolateyApiKey, parameters.ChocolateyPushUrl);
-			nothingToPublish = false;
-		}
-
-		if (nothingToPublish)
-			Information("Nothing to publish from this run.");
+// This task may either be run by the PublishPackages task,
+// which depends on it, or directly when recovering from errors.
+Task("PublishToChocolatey")
+	.Description("Publish packages to Chocolatey")
+	.Does<BuildParameters>((parameters) =>
+	{
+		if (!parameters.ShouldPublishToChocolatey)
+			Information("Nothing to publish to Chocolatey from this run.");
+		else
+			try
+			{
+				PushChocolateyPackage(parameters.ChocolateyPackage, parameters.ChocolateyApiKey, parameters.ChocolateyPushUrl);
+			}
+			catch(Exception)
+            {
+				hadPublishingErrors = true;
+			}
 	});
 
 //////////////////////////////////////////////////////////////////////
