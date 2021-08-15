@@ -426,7 +426,7 @@ Task("PublishToMyGet")
         else
             try
 			{
-				PushNuGetPackage(parameters.NuGetPackage, "BAD_KEY", parameters.MyGetPushUrl);
+				PushNuGetPackage(parameters.NuGetPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
 				PushNuGetPackage(parameters.EngineCorePackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
 				PushNuGetPackage(parameters.EngineApiPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
 				PushChocolateyPackage(parameters.ChocolateyPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
