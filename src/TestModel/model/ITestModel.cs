@@ -8,7 +8,6 @@ using System.Collections.Generic;
 
 namespace TestCentric.Gui.Model
 {
-    using NUnit.Engine;
     using TestCentric.Engine;
     using Services;
     using Settings;
@@ -35,7 +34,7 @@ namespace TestCentric.Gui.Model
 
         // List of available runtimes, based on the engine's list
         // but filtered to meet the GUI's requirements
-        IList<IRuntimeFramework> AvailableRuntimes { get; }
+        IList<NUnit.Engine.IRuntimeFramework> AvailableRuntimes { get; }
 
         IList<TestAgentInfo> AvailableAgents { get; }
 
@@ -46,7 +45,7 @@ namespace TestCentric.Gui.Model
 
         #region Current State of the Model
 
-        TestPackage TestPackage { get; }
+        NUnit.Engine.TestPackage TestPackage { get; }
 
         bool IsPackageLoaded { get; }
 
@@ -98,7 +97,7 @@ namespace TestCentric.Gui.Model
         void ReloadTests();
 
         // Reload a specific package using the specified config
-        void ReloadPackage(TestPackage package, string config);
+        void ReloadPackage(NUnit.Engine.TestPackage package, string config);
 
         // Run all the tests
         void RunAllTests();
@@ -128,7 +127,7 @@ namespace TestCentric.Gui.Model
         ResultNode GetResultForTest(string id);
 
         // Get the TestPackage represented by a test,if available
-        TestPackage GetPackageForTest(string id);
+        NUnit.Engine.TestPackage GetPackageForTest(string id);
 
         // Clear the results for all tests
         void ClearResults();

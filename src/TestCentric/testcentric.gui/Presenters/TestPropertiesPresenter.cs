@@ -62,7 +62,7 @@ namespace TestCentric.Gui.Presenters
 
                 if (testNode != null)
                 {
-                    _view.SuspendLayout();
+                    //_view.SuspendLayout();
 
                     package = _model.GetPackageForTest(testNode.Id);
                     if (package != null)
@@ -78,7 +78,7 @@ namespace TestCentric.Gui.Presenters
                     else
                         HideResultPanel();
 
-                    _view.ResumeLayout();
+                    //_view.ResumeLayout();
                 }
             }
 

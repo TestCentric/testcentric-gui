@@ -61,8 +61,8 @@ namespace TestCentric.Gui.Model
             return Xml.Name == "test-run"
                 ? TestFilter.Empty
                 : IsSuite && Type == "Project"
-                    ? Filters.MakeIdFilter(Children)
-                    : Filters.MakeIdFilter(this);
+                    ? TestFilter.MakeIdFilter(Children)
+                    : TestFilter.MakeIdFilter(this);
         }
 
         #endregion

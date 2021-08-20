@@ -8,7 +8,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using NUnit.Engine;
 using TestCentric.Common;
 using TestCentric.Engine;
 
@@ -38,7 +37,7 @@ namespace TestCentric.Gui.Model
 
         #region Constructor and Creation
 
-        public TestModel(ITestEngine testEngine, string applicationPrefix = null)
+        public TestModel(NUnit.Engine.ITestEngine testEngine, string applicationPrefix = null)
         {
             TestEngine = testEngine;
             _settingsService = new SettingsService(true);
@@ -62,15 +61,15 @@ namespace TestCentric.Gui.Model
             }
         }
 
-        public static ITestModel CreateTestModel(ITestEngine testEngine, CommandLineOptions options)
+        public static ITestModel CreateTestModel(NUnit.Engine.ITestEngine testEngine, CommandLineOptions options)
         {
             // Currently the InternalTraceLevel can only be set from the command-line.
             // We can't use user settings to provide a default because the settings
             // are an engine service and the engine have the internal trace level
             // set as part of its initialization.
             var traceLevel = options.InternalTraceLevel != null
-                ? (InternalTraceLevel)Enum.Parse(typeof(InternalTraceLevel), options.InternalTraceLevel)
-                : InternalTraceLevel.Off;
+                ? (NUnit.Engine.InternalTraceLevel)Enum.Parse(typeof(NUnit.Engine.InternalTraceLevel), options.InternalTraceLevel)
+                : NUnit.Engine.InternalTraceLevel.Off;
 
             // This initializes the trace setting for the process.
             InternalTrace.Initialize($"InternalTrace.{Process.GetCurrentProcess().Id}.gui.log", traceLevel);
@@ -124,8 +123,8 @@ namespace TestCentric.Gui.Model
         public bool VisualStudioSupport { get; }
 
         // Runtime Support
-        private List<IRuntimeFramework> _runtimes;
-        public IList<IRuntimeFramework> AvailableRuntimes
+        private List<NUnit.Engine.IRuntimeFramework> _runtimes;
+        public IList<NUnit.Engine.IRuntimeFramework> AvailableRuntimes
         {
             get
             {
@@ -158,7 +157,7 @@ namespace TestCentric.Gui.Model
         #region Current State of the Model
 
         // The current TestPackage loaded by the model
-        public TestPackage TestPackage { get; private set; }
+        public NUnit.Engine.TestPackage TestPackage { get; private set; }
 
         public bool IsPackageLoaded { get { return TestPackage != null; } }
 
@@ -229,7 +228,7 @@ namespace TestCentric.Gui.Model
 
             try
             {
-                Tests = new TestNode(Runner.Explore(TestFilter.Empty));
+                Tests = new TestNode(Runner.Explore(NUnit.Engine.TestFilter.Empty));
             }
             catch(Exception ex)
             {
@@ -252,7 +251,7 @@ namespace TestCentric.Gui.Model
                 RecentFiles.Latest = subPackage.FullName;
         }
 
-        private Dictionary<string, TestPackage> _packageMap = new Dictionary<string, TestPackage>();
+        private Dictionary<string, NUnit.Engine.TestPackage> _packageMap = new Dictionary<string, NUnit.Engine.TestPackage>();
 
         private void MapTestsToPackages()
         {
@@ -260,7 +259,7 @@ namespace TestCentric.Gui.Model
             MapTestToPackage(Tests, TestPackage);
         }
 
-        private void MapTestToPackage(TestNode test, TestPackage package)
+        private void MapTestToPackage(TestNode test, NUnit.Engine.TestPackage package)
         {
             _packageMap[test.Id] = package;
             
@@ -309,7 +308,7 @@ namespace TestCentric.Gui.Model
             Runner = TestEngine.GetRunner(TestPackage);
 
             // Discover tests
-            Tests = new TestNode(Runner.Explore(TestFilter.Empty));
+            Tests = new TestNode(Runner.Explore(NUnit.Engine.TestFilter.Empty));
             AvailableCategories = GetAvailableCategories();
 
             Results.Clear();
@@ -317,7 +316,7 @@ namespace TestCentric.Gui.Model
             _events.FireTestReloaded(Tests);
         }
 
-        public void ReloadPackage(TestPackage package, string config)
+        public void ReloadPackage(NUnit.Engine.TestPackage package, string config)
         {
             //var originalSubPackages = new List<TestPackage>(package.SubPackages);
             //package.SubPackages.Clear();
@@ -348,8 +347,8 @@ namespace TestCentric.Gui.Model
 
             var filter = testItem.GetTestFilter();
 
-            if (!CategoryFilter.IsEmpty())
-                filter = Filters.MakeAndFilter(filter, CategoryFilter);
+            if (!CategoryFilter.IsEmpty)
+                filter = TestFilter.MakeAndFilter(filter, CategoryFilter);
 
             RunTests(filter);
         }
@@ -358,7 +357,7 @@ namespace TestCentric.Gui.Model
         {
             SetTestDebuggingFlag(false);
 
-            Runner.RunAsync(_events, filter);
+            Runner.RunAsync(_events, filter.AsNUnitFilter());
         }
 
         public void DebugAllTests()
@@ -380,7 +379,7 @@ namespace TestCentric.Gui.Model
         {
             SetTestDebuggingFlag(true);
 
-            Runner.RunAsync(_events, filter);
+            Runner.RunAsync(_events, filter.AsNUnitFilter());
         }
 
         private void SetTestDebuggingFlag(bool debuggingRequested)
@@ -430,7 +429,7 @@ namespace TestCentric.Gui.Model
             return null;
         }
 
-        public TestPackage GetPackageForTest(string id)
+        public NUnit.Engine.TestPackage GetPackageForTest(string id)
         {
             return _packageMap.ContainsKey(id) 
                 ? _packageMap[id] 
@@ -458,10 +457,10 @@ namespace TestCentric.Gui.Model
 
             if (SelectedCategories != null && SelectedCategories.Count > 0)
             {
-                catFilter = Filters.MakeCategoryFilter(SelectedCategories);
+                catFilter = TestFilter.MakeCategoryFilter(SelectedCategories);
 
                 if (ExcludeSelectedCategories)
-                    catFilter = Filters.MakeNotFilter(catFilter);
+                    catFilter = TestFilter.MakeNotFilter(catFilter);
             }
 
             CategoryFilter = catFilter;
@@ -498,7 +497,7 @@ namespace TestCentric.Gui.Model
                 if (_settingsService != null)
                     _settingsService.SaveSettings();
             }
-            catch (NUnitEngineUnloadException)
+            catch (NUnit.Engine.NUnitEngineUnloadException)
             {
                 // TODO: Figure out what to do about this
             }
@@ -508,9 +507,9 @@ namespace TestCentric.Gui.Model
 
         #region Private and Internal Properties
 
-        private ITestEngine TestEngine { get; }
+        private NUnit.Engine.ITestEngine TestEngine { get; }
 
-        private ITestRunner Runner { get; set; }
+        private NUnit.Engine.ITestRunner Runner { get; set; }
 
         internal IDictionary<string, ResultNode> Results { get; } = new Dictionary<string, ResultNode>();
 
@@ -519,9 +518,9 @@ namespace TestCentric.Gui.Model
         #region Helper Methods
 
         // Public for testing only
-        public TestPackage MakeTestPackage(IList<string> testFiles)
+        public NUnit.Engine.TestPackage MakeTestPackage(IList<string> testFiles)
         {
-            var package = new TestPackage(testFiles);
+            var package = new NUnit.Engine.TestPackage(testFiles);
             var engineSettings = Settings.Engine;
 
             // We use AddSetting rather than just setting the value because
@@ -554,11 +553,11 @@ namespace TestCentric.Gui.Model
         // drop unwanted entries here. Even if some of these items
         // are removed in a later version of the engine, we may
         // have to retain this code to work with older engines.
-        private List<IRuntimeFramework> GetAvailableRuntimes()
+        private List<NUnit.Engine.IRuntimeFramework> GetAvailableRuntimes()
         {
-            var runtimes = new List<IRuntimeFramework>();
+            var runtimes = new List<NUnit.Engine.IRuntimeFramework>();
 
-            foreach (var runtime in Services.GetService<IAvailableRuntimes>().AvailableRuntimes)
+            foreach (var runtime in Services.GetService<NUnit.Engine.IAvailableRuntimes>().AvailableRuntimes)
             {
                 // We don't support anything below .NET Framework 2.0
                 if (runtime.Id.StartsWith("net-") && runtime.ClrVersion.Major < 2)

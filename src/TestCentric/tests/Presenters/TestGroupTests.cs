@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric GUI contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -37,9 +37,9 @@ namespace TestCentric.Gui.Presenters
         }
 
         [Test]
-        public void TestFilter()
+        public void TestTestFilter()
         {
-            var filter = XmlHelper.CreateXmlNode(_group.GetTestFilter().Text);
+            var filter = XmlHelper.CreateXmlNode(_group.GetTestFilter().XmlText);
             Assert.That(filter.Name, Is.EqualTo("filter"));
             Assert.That(filter.ChildNodes.Count, Is.EqualTo(1));
 

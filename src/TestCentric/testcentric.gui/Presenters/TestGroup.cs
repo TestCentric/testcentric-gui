@@ -41,7 +41,7 @@ namespace TestCentric.Gui.Presenters
 
         #endregion
 
-        public override NUnit.Engine.TestFilter GetTestFilter()
+        public override TestFilter GetTestFilter()
         {
             StringBuilder sb = new StringBuilder("<filter><or>");
 
@@ -51,7 +51,7 @@ namespace TestCentric.Gui.Presenters
 
             sb.Append("</or></filter>");
 
-            return new NUnit.Engine.TestFilter(sb.ToString());
+            return new TestFilter(sb.ToString());
         }
     }
 }
