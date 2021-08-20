@@ -6,7 +6,6 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Linq;
-using NUnit.Engine;
 using TestCentric.Common;
 using TestCentric.Engine;
 using TestCentric.Gui.Model;
@@ -90,7 +89,7 @@ namespace TestCentric.Gui.Presenters
             }
         }
 
-        private IList<TestAgentInfo> GetAgentsForPackage(TestPackage package)
+        private IList<TestAgentInfo> GetAgentsForPackage(NUnit.Engine.TestPackage package)
         {
             return _model.Services.TestAgentService.GetAvailableAgents(package);
         }

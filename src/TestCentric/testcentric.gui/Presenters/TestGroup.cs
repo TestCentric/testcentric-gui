@@ -5,7 +5,6 @@
 
 using System.Text;
 using System.Windows.Forms;
-using NUnit.Engine;
 
 namespace TestCentric.Gui.Presenters
 {
@@ -42,7 +41,7 @@ namespace TestCentric.Gui.Presenters
 
         #endregion
 
-        public override TestFilter GetTestFilter()
+        public override NUnit.Engine.TestFilter GetTestFilter()
         {
             StringBuilder sb = new StringBuilder("<filter><or>");
 
@@ -52,7 +51,7 @@ namespace TestCentric.Gui.Presenters
 
             sb.Append("</or></filter>");
 
-            return new TestFilter(sb.ToString());
+            return new NUnit.Engine.TestFilter(sb.ToString());
         }
     }
 }

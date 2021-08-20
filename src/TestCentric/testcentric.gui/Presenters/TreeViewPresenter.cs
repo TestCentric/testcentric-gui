@@ -6,7 +6,6 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using NUnit.Engine;
 using TestCentric.Common;
 
 namespace TestCentric.Gui.Presenters
@@ -277,7 +276,7 @@ namespace TestCentric.Gui.Presenters
             var test = _view.ContextNode?.Tag as TestNode;
             if (test != null && test.IsProject)
             {
-                TestPackage package = _model.GetPackageForTest(test.Id);
+                NUnit.Engine.TestPackage package = _model.GetPackageForTest(test.Id);
                 string activeConfig = package.GetActiveConfig();
                 string[] configNames = package.GetConfigNames();
 

@@ -7,8 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
-using NUnit.Engine;
-using NUnit.Engine.Extensibility;
 
 namespace TestCentric.Gui.Dialogs
 {
@@ -17,8 +15,8 @@ namespace TestCentric.Gui.Dialogs
     /// </summary>
     public class ExtensionDialog : System.Windows.Forms.Form
     {
-        private IList<IExtensionPoint> _extensionPoints;
-        private IList<IExtensionNode> _extensions;
+        private IList<NUnit.Engine.Extensibility.IExtensionPoint> _extensionPoints;
+        private IList<NUnit.Engine.Extensibility.IExtensionNode> _extensions;
 
         private System.Windows.Forms.TextBox extensionPointDescriptionTextBox;
         private System.Windows.Forms.Label label1;
@@ -43,9 +41,9 @@ namespace TestCentric.Gui.Dialogs
         private Label assemblyVersionLabel;
         private Label label6;
         private Label label5;
-        private IExtensionService _extensionService;
+        private NUnit.Engine.IExtensionService _extensionService;
 
-        public ExtensionDialog(IExtensionService extensionService)
+        public ExtensionDialog(NUnit.Engine.IExtensionService extensionService)
         {
             _extensionService = extensionService;
 
@@ -315,8 +313,8 @@ namespace TestCentric.Gui.Dialogs
         {
             if (!DesignMode)
             {
-                _extensionPoints = new List<IExtensionPoint>(_extensionService.ExtensionPoints);
-                _extensions = new List<IExtensionNode>(_extensionService.Extensions);
+                _extensionPoints = new List<NUnit.Engine.Extensibility.IExtensionPoint>(_extensionService.ExtensionPoints);
+                _extensions = new List<NUnit.Engine.Extensibility.IExtensionNode>(_extensionService.Extensions);
 
                 foreach (var ep in _extensionPoints)
                     extensionPointsListBox.Items.Add(ep.Path);
@@ -337,7 +335,7 @@ namespace TestCentric.Gui.Dialogs
             if (index >= 0)
             {
                 var ep = _extensionPoints[index];
-                _extensions = new List<IExtensionNode>(ep.Extensions);
+                _extensions = new List<NUnit.Engine.Extensibility.IExtensionNode>(ep.Extensions);
                 extensionPointDescriptionTextBox.Text = ep.Description ?? "==None Provided==";
 
                 extensionListView.Items.Clear();

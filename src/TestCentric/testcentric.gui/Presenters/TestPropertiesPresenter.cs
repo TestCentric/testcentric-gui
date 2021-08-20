@@ -14,7 +14,6 @@ namespace TestCentric.Gui.Presenters
     using System.Drawing;
     using System.Windows.Forms;
     using Model;
-    using NUnit.Engine;
     using Views;
 
     public class TestPropertiesPresenter
@@ -54,7 +53,7 @@ namespace TestCentric.Gui.Presenters
         {
             TestNode testNode = _selectedItem as TestNode;
             ResultNode resultNode = null;
-            TestPackage package = null;
+            NUnit.Engine.TestPackage package = null;
 
             // TODO: Insert checks for errors in the XML
             if (_selectedItem != null)
@@ -93,7 +92,7 @@ namespace TestCentric.Gui.Presenters
             // dynamically, since the global application font may be changed.
         }
 
-        private void DisplayPackagePanel(TestPackage package)
+        private void DisplayPackagePanel(NUnit.Engine.TestPackage package)
         {
             var sb = new StringBuilder();
             foreach (var key in package.Settings.Keys)

@@ -13,7 +13,6 @@ namespace TestCentric.Gui.Dialogs
 {
     using System.Text;
     using Model;
-    using NUnit.Engine;
     using Views;
 
     public partial class TestPropertiesDialog : Form
@@ -24,7 +23,7 @@ namespace TestCentric.Gui.Dialogs
         private TreeNode _treeNode;
         private TestNode _testNode;
         private ResultNode _resultNode;
-        private TestPackage _package;
+        private NUnit.Engine.TestPackage _package;
 
         private int _clientWidth;
 
@@ -209,7 +208,7 @@ namespace TestCentric.Gui.Dialogs
             properties.Text = sb.ToString();
         }
 
-        private void FillPackageSettingsList(TestPackage package)
+        private void FillPackageSettingsList(NUnit.Engine.TestPackage package)
         {
             var sb = new StringBuilder();
             foreach (var key in package.Settings.Keys)
