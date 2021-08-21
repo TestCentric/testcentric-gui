@@ -78,7 +78,7 @@ namespace TestCentric.Engine.Services
         /// A list of suitable agents for running the package or an empty
         /// list if no agent is available for the package.
         /// </returns>
-        public IList<TestAgentInfo> GetAvailableAgents(TestPackage targetPackage)
+        public IList<TestAgentInfo> GetAgentsForPackage(TestPackage targetPackage)
         {
             Guard.ArgumentNotNull(targetPackage, nameof(targetPackage));
 
