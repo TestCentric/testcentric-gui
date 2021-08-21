@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using TestPackage = NUnit.Engine.TestPackage;
 
 namespace TestCentric.Gui.Model
 {
@@ -45,7 +46,7 @@ namespace TestCentric.Gui.Model
 
         #region Current State of the Model
 
-        NUnit.Engine.TestPackage TestPackage { get; }
+        TestPackage TestPackage { get; }
 
         bool IsPackageLoaded { get; }
 
@@ -97,7 +98,7 @@ namespace TestCentric.Gui.Model
         void ReloadTests();
 
         // Reload a specific package using the specified config
-        void ReloadPackage(NUnit.Engine.TestPackage package, string config);
+        void ReloadPackage(TestPackage package, string config);
 
         // Run all the tests
         void RunAllTests();
@@ -127,7 +128,11 @@ namespace TestCentric.Gui.Model
         ResultNode GetResultForTest(string id);
 
         // Get the TestPackage represented by a test,if available
-        NUnit.Engine.TestPackage GetPackageForTest(string id);
+        TestPackage GetPackageForTest(string id);
+        IDictionary<string, object> GetPackageSettingsForTest(string id);
+
+        // Get Agents available for a package
+        IList<TestAgentInfo> GetAvailableAgents(TestPackage package);
 
         // Clear the results for all tests
         void ClearResults();

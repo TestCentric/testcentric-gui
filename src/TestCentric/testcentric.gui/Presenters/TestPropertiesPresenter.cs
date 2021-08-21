@@ -53,7 +53,6 @@ namespace TestCentric.Gui.Presenters
         {
             TestNode testNode = _selectedItem as TestNode;
             ResultNode resultNode = null;
-            NUnit.Engine.TestPackage package = null;
 
             // TODO: Insert checks for errors in the XML
             if (_selectedItem != null)
@@ -64,9 +63,9 @@ namespace TestCentric.Gui.Presenters
                 {
                     //_view.SuspendLayout();
 
-                    package = _model.GetPackageForTest(testNode.Id);
-                    if (package != null)
-                        DisplayPackagePanel(package);
+                    var packageSettings = _model.GetPackageSettingsForTest(testNode.Id);
+                    if (packageSettings != null)
+                        DisplayPackageSettingsPanel(packageSettings);
                     else
                         HidePackagePanel();
 
@@ -92,14 +91,14 @@ namespace TestCentric.Gui.Presenters
             // dynamically, since the global application font may be changed.
         }
 
-        private void DisplayPackagePanel(NUnit.Engine.TestPackage package)
+        private void DisplayPackageSettingsPanel(IDictionary<string, object> settings)
         {
             var sb = new StringBuilder();
-            foreach (var key in package.Settings.Keys)
+            foreach (var key in settings.Keys)
             {
                 if (sb.Length > 0)
                     sb.Append(Environment.NewLine);
-                sb.Append($"{key} = {package.Settings[key]}");
+                sb.Append($"{key} = {settings[key]}");
             }
 
             _view.PackageSettings = sb.ToString();

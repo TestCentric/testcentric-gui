@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.IO;
 using TestCentric.Common;
 using TestCentric.Engine;
+using TestPackage = NUnit.Engine.TestPackage;
 
 namespace TestCentric.Gui.Model
 {
@@ -157,7 +158,7 @@ namespace TestCentric.Gui.Model
         #region Current State of the Model
 
         // The current TestPackage loaded by the model
-        public NUnit.Engine.TestPackage TestPackage { get; private set; }
+        public TestPackage TestPackage { get; private set; }
 
         public bool IsPackageLoaded { get { return TestPackage != null; } }
 
@@ -251,7 +252,7 @@ namespace TestCentric.Gui.Model
                 RecentFiles.Latest = subPackage.FullName;
         }
 
-        private Dictionary<string, NUnit.Engine.TestPackage> _packageMap = new Dictionary<string, NUnit.Engine.TestPackage>();
+        private Dictionary<string, TestPackage> _packageMap = new Dictionary<string, TestPackage>();
 
         private void MapTestsToPackages()
         {
@@ -259,12 +260,17 @@ namespace TestCentric.Gui.Model
             MapTestToPackage(Tests, TestPackage);
         }
 
-        private void MapTestToPackage(TestNode test, NUnit.Engine.TestPackage package)
+        private void MapTestToPackage(TestNode test, TestPackage package)
         {
             _packageMap[test.Id] = package;
             
             for (int index = 0; index < package.SubPackages.Count && index < test.Children.Count; index++)
                 MapTestToPackage(test.Children[index], package.SubPackages[index]);
+        }
+
+        public IList<TestAgentInfo> GetAvailableAgents(TestPackage package)
+        {
+            return Services.TestAgentService.GetAvailableAgents(package);
         }
 
         public void UnloadTests()
@@ -316,7 +322,7 @@ namespace TestCentric.Gui.Model
             _events.FireTestReloaded(Tests);
         }
 
-        public void ReloadPackage(NUnit.Engine.TestPackage package, string config)
+        public void ReloadPackage(TestPackage package, string config)
         {
             //var originalSubPackages = new List<TestPackage>(package.SubPackages);
             //package.SubPackages.Clear();
@@ -429,7 +435,11 @@ namespace TestCentric.Gui.Model
             return null;
         }
 
-        public NUnit.Engine.TestPackage GetPackageForTest(string id)
+        public IDictionary<string, object> GetPackageSettingsForTest(string id)
+        {
+            return GetPackageForTest(id)?.Settings;
+        }
+        public TestPackage GetPackageForTest(string id)
         {
             return _packageMap.ContainsKey(id) 
                 ? _packageMap[id] 
@@ -518,9 +528,9 @@ namespace TestCentric.Gui.Model
         #region Helper Methods
 
         // Public for testing only
-        public NUnit.Engine.TestPackage MakeTestPackage(IList<string> testFiles)
+        public TestPackage MakeTestPackage(IList<string> testFiles)
         {
-            var package = new NUnit.Engine.TestPackage(testFiles);
+            var package = new TestPackage(testFiles);
             var engineSettings = Settings.Engine;
 
             // We use AddSetting rather than just setting the value because

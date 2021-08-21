@@ -8,7 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using TestCentric.TestUtilities.Fakes;
-using NUnit.Engine;
+
+using TestPackage = NUnit.Engine.TestPackage;
 
 namespace TestCentric.Gui.Model
 {
