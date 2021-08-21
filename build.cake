@@ -255,44 +255,16 @@ Task("TestZipPackage")
 //////////////////////////////////////////////////////////////////////
 
 Task("BuildNuGetPackage")
-	.IsDependentOn("CreateImage")
 	.Does<BuildParameters>((parameters) =>
 	{
 		Information("Creating package " + parameters.NuGetPackageName);
 
-        var content = new List<NuSpecContent>();
-		int index = parameters.ImageDirectory.Length;
-
-		foreach (var file in GetFiles(parameters.ImageDirectory + "**/*.*"))
-		{
-			var source = file.FullPath;
-			var target = System.IO.Path.GetDirectoryName(source.Substring(index));
-
-			if (target == "bin")
-				target = "tools";
-			else if (target.StartsWith("bin" + System.IO.Path.DirectorySeparatorChar))
-				target = "tools" + target.Substring(3);
-
-			if (target.IndexOf("Visual") != -1)
-				Console.WriteLine($"Adding Source = {file.FullPath}\nTarget = {target}");
-
-			content.Add(new NuSpecContent() { Source = file.FullPath, Target = target });
-		}
-
-		// Icon goes in the root
-		content.Add(new NuSpecContent() { Source = "../testcentric.png" });
-
-		// Use addins file tailored for nuget install
-		content.Add(new NuSpecContent() { Source = "testcentric.nuget.addins", Target = "tools" });
-		foreach (string runtime in parameters.SupportedAgentRuntimes)
-			content.Add(new NuSpecContent() {Source = "testcentric-agent.nuget.addins", Target = $"tools/agents/{runtime}" }); 
-
-        NuGetPack($"{parameters.NuGetDirectory}/{NUGET_PACKAGE_NAME}.nuspec", new NuGetPackSettings()
+		NuGetPack($"{parameters.NuGetDirectory}/{NUGET_PACKAGE_NAME}.nuspec", new NuGetPackSettings()
         {
             Version = parameters.PackageVersion,
+			BasePath = parameters.OutputDirectory,
             OutputDirectory = parameters.PackageDirectory,
-            NoPackageAnalysis = true,
-			Files = content
+            NoPackageAnalysis = true
         });
 	});
 
