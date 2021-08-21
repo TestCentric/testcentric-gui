@@ -62,6 +62,12 @@ namespace TestCentric.Gui.Model
             }
         }
 
+        public static ITestModel CreateTestModel(CommandLineOptions options)
+        {
+            return CreateTestModel(TestEngineActivator.CreateInstance(), options);
+        }
+
+        // Public for testing
         public static ITestModel CreateTestModel(NUnit.Engine.ITestEngine testEngine, CommandLineOptions options)
         {
             // Currently the InternalTraceLevel can only be set from the command-line.

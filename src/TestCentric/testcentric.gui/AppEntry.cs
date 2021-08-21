@@ -49,10 +49,8 @@ namespace TestCentric.Gui
                 return 2;
             }
 
-            NUnit.Engine.ITestEngine engine = TestEngineActivator.CreateInstance();
-
             log.Info("Instantiating TestModel");
-            ITestModel model = TestModel.CreateTestModel(engine, options);
+            ITestModel model = TestModel.CreateTestModel(options);
 
             log.Info("Constructing Form");
             TestCentricMainView view = new TestCentricMainView();
