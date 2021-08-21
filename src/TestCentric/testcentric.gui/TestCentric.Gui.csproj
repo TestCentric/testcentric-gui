@@ -11,161 +11,107 @@
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	</PropertyGroup>
 	<ItemGroup>
-	  <None Remove="Images\DebugTests.png" />
-	  <None Remove="Images\GroupBy_16x.png" />
-	  <None Remove="Images\pinned.gif" />
-	  <None Remove="Images\RunTests.png" />
-	  <None Remove="Images\StopRun.png" />
-	  <None Remove="Images\SummaryReport.png" />
-	  <None Remove="Images\unpinned.gif" />
-	</ItemGroup>
-	<ItemGroup>
 		<Reference Include="System.Windows.Forms" />
 	</ItemGroup>
-    <ItemGroup>
-        <ProjectReference Include="..\..\TestEngine\testcentric.engine.api\testcentric.engine.api.csproj" />
-        <ProjectReference Include="..\..\TestModel\model\TestCentric.Gui.Model.csproj">
-            <Name>TestCentric.Gui.Model</Name>
-        </ProjectReference>
-        <ProjectReference Include="..\..\GuiException\UiException\nunit.uiexception.dll.csproj">
-            <Name>nunit.uiexception.dll</Name>
-        </ProjectReference>
-        <ProjectReference Include="..\..\Common\testcentric.common\TestCentric.Common.csproj">
-            <Name>TestCentric.Common</Name>
-        </ProjectReference>
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Include="..\..\CommonAssemblyInfo.cs">
-            <Link>Properties\CommonAssemblyInfo.cs</Link>
-        </Compile>
-    </ItemGroup>
-    <ItemGroup>
-        <Content Include="..\..\..\testcentric.ico">
-            <Link>testcentric.ico</Link>
-        </Content>
-        <Content Include="Images\DebugTests.png">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Images\Ellipsis.gif" />
-        <Content Include="Images\GroupBy_16x.png">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Images\RunTests.png">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Images\StopRun.png">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Images\SummaryReport.png">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Images\Tree\Circles\Failure.jpg">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Images\Tree\Circles\Ignored.jpg">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Images\Tree\Circles\Inconclusive.jpg">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Images\Tree\Circles\Skipped.jpg">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Images\Tree\Circles\Success.jpg">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Images\Tree\Classic\Failure.jpg">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Images\Tree\Classic\Ignored.jpg">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Images\Tree\Classic\Inconclusive.jpg">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Images\Tree\Classic\Skipped.jpg">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Images\Tree\Classic\Success.jpg">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Images\Tree\Default\Failure.png">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Images\Tree\Default\Ignored.png">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Images\Tree\Default\Inconclusive.png">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Images\Tree\Default\Skipped.png">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Images\Tree\Default\Success.png">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Images\Tree\Visual Studio\Failure.png">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Images\Tree\Visual Studio\Ignored.png">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Images\Tree\Visual Studio\Inconclusive.png">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Images\Tree\Visual Studio\Skipped.png">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Images\Tree\Visual Studio\Success.png">
-          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-    </ItemGroup>
-    <ItemGroup>
-      <EmbeddedResource Include="Images\pinned.gif" />
-      <EmbeddedResource Include="Images\unpinned.gif" />
-    </ItemGroup>
-    <ItemGroup>
-        <PackageReference Include="NUnit.Engine.Api" Version="3.11.1" />
-    </ItemGroup>
-    <ItemGroup>
-      <Compile Update="Controls\ExpandingLabel.cs">
-        <SubType>Component</SubType>
-      </Compile>
-      <Compile Update="Controls\TestCentricProgressBar.cs">
-        <SubType>Component</SubType>
-      </Compile>
-      <Compile Update="Controls\TipWindow.cs">
-        <SubType>Form</SubType>
-      </Compile>
-      <Compile Update="Dialogs\ExtensionDialog.cs">
-        <SubType>Form</SubType>
-      </Compile>
-      <Compile Update="Dialogs\ParameterDialog.cs">
-        <SubType>Form</SubType>
-      </Compile>
-      <Compile Update="Dialogs\TestParametersDialog.cs">
-        <SubType>Form</SubType>
-      </Compile>
-      <Compile Update="LongRunningOperationDisplay.cs" />
-      <Compile Update="Properties\Resources.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Resources.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Views\TestPropertiesView.cs">
-        <SubType>UserControl</SubType>
-      </Compile>
-      <Compile Update="Views\TestTreeView.cs">
-        <SubType>UserControl</SubType>
-      </Compile>
-      <Compile Update="Views\XmlView.cs">
-        <SubType>UserControl</SubType>
-      </Compile>
-    </ItemGroup>
-    <ItemGroup>
-      <EmbeddedResource Update="Properties\Resources.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\TestModel\model\TestCentric.Gui.Model.csproj" />
+    <ProjectReference Include="..\..\GuiException\UiException\nunit.uiexception.dll.csproj" />
+    <ProjectReference Include="..\..\Common\testcentric.common\TestCentric.Common.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\..\testcentric.ico">
+      <Link>testcentric.ico</Link>
+    </Content>
+    <Content Include="Images\DebugTests.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Ellipsis.gif" />
+    <Content Include="Images\GroupBy_16x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\RunTests.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\StopRun.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\SummaryReport.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Tree\Circles\Failure.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Tree\Circles\Ignored.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Tree\Circles\Inconclusive.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Tree\Circles\Skipped.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Tree\Circles\Success.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Tree\Classic\Failure.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Tree\Classic\Ignored.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Tree\Classic\Inconclusive.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Tree\Classic\Skipped.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Tree\Classic\Success.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Tree\Default\Failure.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Tree\Default\Ignored.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Tree\Default\Inconclusive.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Tree\Default\Skipped.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Tree\Default\Success.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Tree\Visual Studio\Failure.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Tree\Visual Studio\Ignored.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Tree\Visual Studio\Inconclusive.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Tree\Visual Studio\Skipped.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\Tree\Visual Studio\Success.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Images\pinned.gif" />
+    <EmbeddedResource Include="Images\unpinned.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

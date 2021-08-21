@@ -6,35 +6,40 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
-using NUnit.Engine;
 
 namespace TestCentric.Gui.Model
 {
     /// <summary>
     /// Utility class for working with TestFilters.
     /// </summary>
-    public static class Filters
+    public class TestFilter
     {
-        #region TestFilter Extensions
-
-        public static bool IsEmpty(this TestFilter filter)
+        public TestFilter(string xmlText)
         {
-            return filter == TestFilter.Empty;
+            XmlText = xmlText;
+            Xml = XmlHelper.CreateXmlNode(xmlText);
+            InnerXml = Xml.InnerXml;
+            IsEmpty = string.IsNullOrEmpty(InnerXml);
         }
 
-        private static XmlNode ToXml(this TestFilter filter)
+        public static TestFilter Empty { get; } = new TestFilter("<filter/>");
+
+        public string XmlText { get; }
+
+        public XmlNode Xml { get; }
+
+        public string InnerXml { get; }
+
+        public bool IsEmpty { get; }
+
+        public NUnit.Engine.TestFilter AsNUnitFilter()
         {
-            return XmlHelper.CreateXmlNode(filter.Text);
+            return IsEmpty
+                ? NUnit.Engine.TestFilter.Empty
+                : new NUnit.Engine.TestFilter(XmlText);
         }
 
-        //public static TestFilter FromXml(this XmlNode node)
-        //{
-        //    return new TestFilter(node.OuterXml);
-        //}
-
-        #endregion
-
-        #region Methods to Create TestFilters
+        #region Static Methods to Create TestFilters
 
         public static TestFilter MakeIdFilter(TestNode test)
         {
@@ -76,7 +81,7 @@ namespace TestCentric.Gui.Model
 
         public static TestFilter MakeNotFilter(TestFilter filter)
         {
-            return new TestFilter($"<filter><not>{filter.ToXml().InnerXml}</not></filter>");
+            return new TestFilter($"<filter><not>{filter.InnerXml}</not></filter>");
         }
 
         public static TestFilter MakeAndFilter(params TestFilter[] filters)
@@ -84,7 +89,7 @@ namespace TestCentric.Gui.Model
             StringBuilder sb = new StringBuilder("<filter><and>");
 
             foreach (var filter in filters)
-                sb.Append(filter.ToXml().InnerXml);
+                sb.Append(filter.InnerXml);
 
             sb.Append("</and></filter>");
 

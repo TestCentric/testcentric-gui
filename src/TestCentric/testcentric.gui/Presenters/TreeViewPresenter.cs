@@ -6,7 +6,6 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using NUnit.Engine;
 using TestCentric.Common;
 
 namespace TestCentric.Gui.Presenters
@@ -273,29 +272,29 @@ namespace TestCentric.Gui.Presenters
 
         private void InitializeContextMenu()
         {
+            // TODO: Menu is hidden until changing the config actually works
             bool displayConfigMenu = false;
-            var test = _view.ContextNode?.Tag as TestNode;
-            if (test != null && test.IsProject)
-            {
-                TestPackage package = _model.GetPackageForTest(test.Id);
-                string activeConfig = package.GetActiveConfig();
-                string[] configNames = package.GetConfigNames();
+            //var test = _view.ContextNode?.Tag as TestNode;
+            //if (test != null && test.IsProject)
+            //{
+            //    NUnit.Engine.TestPackage package = _model.GetPackageForTest(test.Id);
+            //    string activeConfig = package.GetActiveConfig();
+            //    string[] configNames = package.GetConfigNames();
 
-                if (configNames.Length > 0)
-                {
-                    _view.ActiveConfiguration.MenuItems.Clear();
-                    foreach (string config in configNames)
-                    {
-                        var configEntry = new ToolStripMenuItem(config);
-                        configEntry.Checked = config == activeConfig;
-                        configEntry.Click += (sender, e) => _model.ReloadPackage(package, ((ToolStripMenuItem)sender).Text);
-                        _view.ActiveConfiguration.MenuItems.Add(configEntry);
-                    }
+            //    if (configNames.Length > 0)
+            //    {
+            //        _view.ActiveConfiguration.MenuItems.Clear();
+            //        foreach (string config in configNames)
+            //        {
+            //            var configEntry = new ToolStripMenuItem(config);
+            //            configEntry.Checked = config == activeConfig;
+            //            configEntry.Click += (sender, e) => _model.ReloadPackage(package, ((ToolStripMenuItem)sender).Text);
+            //            _view.ActiveConfiguration.MenuItems.Add(configEntry);
+            //        }
 
-                    // TODO: Menu is hidden until changing the config actually works
-                    //displayConfigMenu = true;
-                }
-            }
+            //        //displayConfigMenu = true;
+            //    }
+            //}
 
             _view.ActiveConfiguration.Visible = displayConfigMenu;
 

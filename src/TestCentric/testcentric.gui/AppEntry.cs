@@ -7,7 +7,6 @@ using System;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;
-using NUnit.Engine;
 
 namespace TestCentric.Gui
 {
@@ -50,10 +49,8 @@ namespace TestCentric.Gui
                 return 2;
             }
 
-            ITestEngine engine = TestEngineActivator.CreateInstance();
-
             log.Info("Instantiating TestModel");
-            ITestModel model = TestModel.CreateTestModel(engine, options);
+            ITestModel model = TestModel.CreateTestModel(options);
 
             log.Info("Constructing Form");
             TestCentricMainView view = new TestCentricMainView();

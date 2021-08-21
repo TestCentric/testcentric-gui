@@ -5,10 +5,10 @@
 
 using System;
 using System.Collections.Generic;
+using TestPackage = NUnit.Engine.TestPackage;
 
 namespace TestCentric.Gui.Model
 {
-    using NUnit.Engine;
     using TestCentric.Engine;
     using Services;
     using Settings;
@@ -35,9 +35,9 @@ namespace TestCentric.Gui.Model
 
         // List of available runtimes, based on the engine's list
         // but filtered to meet the GUI's requirements
-        IList<IRuntimeFramework> AvailableRuntimes { get; }
+        IList<NUnit.Engine.IRuntimeFramework> AvailableRuntimes { get; }
 
-        IList<TestAgentInfo> AvailableAgents { get; }
+        IList<string> AvailableAgents { get; }
 
         // Result Format Support
         IEnumerable<string> ResultFormats { get; }
@@ -129,6 +129,10 @@ namespace TestCentric.Gui.Model
 
         // Get the TestPackage represented by a test,if available
         TestPackage GetPackageForTest(string id);
+        IDictionary<string, object> GetPackageSettingsForTest(string id);
+
+        // Get Agents available for a package
+        IList<string> GetAgentsForPackage(TestPackage package);
 
         // Clear the results for all tests
         void ClearResults();

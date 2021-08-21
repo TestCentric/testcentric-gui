@@ -17,7 +17,7 @@ namespace TestCentric.TestUtilities.Fakes
             return new TestAgentInfo[0];
         }
 
-        public IList<TestAgentInfo> GetAvailableAgents(TestPackage package)
+        public IList<TestAgentInfo> GetAgentsForPackage(TestPackage package)
         {
             return new TestAgentInfo[0];
         }

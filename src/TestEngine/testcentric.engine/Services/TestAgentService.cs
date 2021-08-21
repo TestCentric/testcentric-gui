@@ -38,12 +38,12 @@ namespace TestCentric.Engine.Services
         /// A list of suitable agents for running the package or an empty
         /// list if no agent is available for the package.
         /// </returns>
-        public IList<TestAgentInfo> GetAvailableAgents(TestPackage package)
+        public IList<TestAgentInfo> GetAgentsForPackage(TestPackage package)
         {
             var agents = new List<TestAgentInfo>();
 
             foreach (var provider in _providers)
-                agents.AddRange(provider.GetAvailableAgents(package));
+                agents.AddRange(provider.GetAgentsForPackage(package));
 
             return agents;
         }

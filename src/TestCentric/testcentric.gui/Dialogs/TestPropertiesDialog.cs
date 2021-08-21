@@ -11,9 +11,9 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Dialogs
 {
+    using System.Collections.Generic;
     using System.Text;
     using Model;
-    using NUnit.Engine;
     using Views;
 
     public partial class TestPropertiesDialog : Form
@@ -24,7 +24,7 @@ namespace TestCentric.Gui.Dialogs
         private TreeNode _treeNode;
         private TestNode _testNode;
         private ResultNode _resultNode;
-        private TestPackage _package;
+        private IDictionary<string, object> _packageSettings;
 
         private int _clientWidth;
 
@@ -64,7 +64,7 @@ namespace TestCentric.Gui.Dialogs
             _treeNode = treeNode;
             _testNode = (TestNode)treeNode.Tag;
             _resultNode = _model.GetResultForTest(_testNode.Id);
-            _package = _model.GetPackageForTest(_testNode.Id);
+            _packageSettings = _model.GetPackageSettingsForTest(_testNode.Id);
 
             testResult.Text = _resultNode?.Outcome.ToString() ?? _testNode.RunState.ToString();
             testResult.Font = new Font(this.Font, FontStyle.Bold);
@@ -78,7 +78,7 @@ namespace TestCentric.Gui.Dialogs
             // offset
             int verticalOffset = packageGroupBox.Top;
 
-            if (_package != null)
+            if (_packageSettings != null)
                 verticalOffset = DisplayPackageGroupBox(verticalOffset) + 4;
             else
                 packageGroupBox.Hide();
@@ -113,7 +113,7 @@ namespace TestCentric.Gui.Dialogs
             packageGroupBox.Location = new Point(
                 packageGroupBox.Location.X, verticalOffset);
 
-            FillPackageSettingsList(_package);
+            FillPackageSettingsList(_packageSettings);
             packageGroupBox.Show();
 
             return packageGroupBox.Bottom;
@@ -209,14 +209,14 @@ namespace TestCentric.Gui.Dialogs
             properties.Text = sb.ToString();
         }
 
-        private void FillPackageSettingsList(TestPackage package)
+        private void FillPackageSettingsList(IDictionary<string, object> settings)
         {
             var sb = new StringBuilder();
-            foreach (var key in package.Settings.Keys)
+            foreach (var key in settings.Keys)
             {
                 if (sb.Length > 0)
                     sb.Append(Environment.NewLine);
-                sb.Append($"{key} = {package.Settings[key]}");
+                sb.Append($"{key} = {settings[key]}");
             }
 
             packageSettings.Text = sb.ToString();

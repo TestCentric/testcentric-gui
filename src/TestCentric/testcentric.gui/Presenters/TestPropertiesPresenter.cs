@@ -14,7 +14,6 @@ namespace TestCentric.Gui.Presenters
     using System.Drawing;
     using System.Windows.Forms;
     using Model;
-    using NUnit.Engine;
     using Views;
 
     public class TestPropertiesPresenter
@@ -54,7 +53,6 @@ namespace TestCentric.Gui.Presenters
         {
             TestNode testNode = _selectedItem as TestNode;
             ResultNode resultNode = null;
-            TestPackage package = null;
 
             // TODO: Insert checks for errors in the XML
             if (_selectedItem != null)
@@ -63,11 +61,11 @@ namespace TestCentric.Gui.Presenters
 
                 if (testNode != null)
                 {
-                    _view.SuspendLayout();
+                    //_view.SuspendLayout();
 
-                    package = _model.GetPackageForTest(testNode.Id);
-                    if (package != null)
-                        DisplayPackagePanel(package);
+                    var packageSettings = _model.GetPackageSettingsForTest(testNode.Id);
+                    if (packageSettings != null)
+                        DisplayPackageSettingsPanel(packageSettings);
                     else
                         HidePackagePanel();
 
@@ -79,7 +77,7 @@ namespace TestCentric.Gui.Presenters
                     else
                         HideResultPanel();
 
-                    _view.ResumeLayout();
+                    //_view.ResumeLayout();
                 }
             }
 
@@ -93,14 +91,14 @@ namespace TestCentric.Gui.Presenters
             // dynamically, since the global application font may be changed.
         }
 
-        private void DisplayPackagePanel(TestPackage package)
+        private void DisplayPackageSettingsPanel(IDictionary<string, object> settings)
         {
             var sb = new StringBuilder();
-            foreach (var key in package.Settings.Keys)
+            foreach (var key in settings.Keys)
             {
                 if (sb.Length > 0)
                     sb.Append(Environment.NewLine);
-                sb.Append($"{key} = {package.Settings[key]}");
+                sb.Append($"{key} = {settings[key]}");
             }
 
             _view.PackageSettings = sb.ToString();

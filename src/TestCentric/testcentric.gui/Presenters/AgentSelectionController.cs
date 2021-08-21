@@ -6,9 +6,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Linq;
-using NUnit.Engine;
 using TestCentric.Common;
-using TestCentric.Engine;
 using TestCentric.Gui.Model;
 using TestCentric.Gui.Views;
 
@@ -27,8 +25,9 @@ namespace TestCentric.Gui.Presenters
 
         public bool AllowAgentSelection()
         {
-            return _model.TestPackage != null &&
-                GetAgentsForPackage(_model.TestPackage).Count > 1;
+            var package = _model.TestPackage;
+            return package != null &&
+                _model.GetAgentsForPackage(package).Count > 1;
         }
 
         public void PopulateMenu()
@@ -45,15 +44,15 @@ namespace TestCentric.Gui.Presenters
 
             agentMenu.MenuItems.Add(defaultMenuItem);
 
-            var agentsToEnable = GetAgentsForPackage(_model.TestPackage).Select(info => info.AgentName);
+            var agentsToEnable = _model.GetAgentsForPackage(_model.TestPackage);
             var selectedAgentName = _model.TestPackage.GetSetting(EnginePackageSettings.SelectedAgentName, "DEFAULT");
             
-            foreach (var info in _model.AvailableAgents)
+            foreach (var agentName in _model.AvailableAgents)
             {
-                var menuItem = new ToolStripMenuItem(info.AgentName)
+                var menuItem = new ToolStripMenuItem(agentName)
                 {
-                    Tag = info.AgentName,
-                    Enabled = agentsToEnable.Contains(info.AgentName)
+                    Tag = agentName,
+                    Enabled = agentsToEnable.Contains(agentName)
                 };
 
                 agentMenu.MenuItems.Add(menuItem);
@@ -88,11 +87,6 @@ namespace TestCentric.Gui.Presenters
                 _model.TestPackage.Settings.Remove(EnginePackageSettings.SelectedAgentName);
                 _model.PackageOverrides.Remove(EnginePackageSettings.SelectedAgentName);
             }
-        }
-
-        private IList<TestAgentInfo> GetAgentsForPackage(TestPackage package)
-        {
-            return _model.Services.TestAgentService.GetAvailableAgents(package);
         }
     }
 }

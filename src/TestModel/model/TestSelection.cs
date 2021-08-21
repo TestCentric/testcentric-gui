@@ -28,7 +28,7 @@ namespace TestCentric.Gui.Model
         {
             return Count == 1
                 ? this[0].GetTestFilter() // This allows nodes with special handling for filters to apply it.
-                : Filters.MakeIdFilter(this);
+                : TestFilter.MakeIdFilter(this);
         }
 
         // <summary>
