@@ -8,6 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using TestCentric.Common;
 using TestCentric.Engine;
 using TestPackage = NUnit.Engine.TestPackage;
@@ -51,7 +52,8 @@ namespace TestCentric.Gui.Model
 
             Services = new TestServices(testEngine);
 
-            AvailableAgents = Services.TestAgentService.GetAvailableAgents();
+            AvailableAgents = new List<string>(
+                Services.TestAgentService.GetAvailableAgents().Select((a) => a.AgentName));
 
             foreach (var node in Services.ExtensionService.GetExtensionNodes(PROJECT_LOADER_EXTENSION_PATH))
             {
@@ -121,7 +123,7 @@ namespace TestCentric.Gui.Model
 
         public UserSettings Settings { get; }
 
-        public IList<TestAgentInfo> AvailableAgents { get; }
+        public IList<string> AvailableAgents { get; }
 
         public RecentFiles RecentFiles { get; }
 
@@ -274,9 +276,12 @@ namespace TestCentric.Gui.Model
                 MapTestToPackage(test.Children[index], package.SubPackages[index]);
         }
 
-        public IList<TestAgentInfo> GetAvailableAgents(TestPackage package)
+        public IList<string> GetAgentsForPackage(TestPackage package = null)
         {
-            return Services.TestAgentService.GetAvailableAgents(package);
+            if (package == null) package = TestPackage;
+
+            return new List<string>(
+                Services.TestAgentService.GetAgentsForPackage(package).Select(a => a.AgentName));
         }
 
         public void UnloadTests()

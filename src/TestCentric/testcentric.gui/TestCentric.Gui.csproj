@@ -14,7 +14,6 @@
 		<Reference Include="System.Windows.Forms" />
 	</ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\TestEngine\testcentric.engine.api\testcentric.engine.api.csproj" />
     <ProjectReference Include="..\..\TestModel\model\TestCentric.Gui.Model.csproj" />
     <ProjectReference Include="..\..\GuiException\UiException\nunit.uiexception.dll.csproj" />
     <ProjectReference Include="..\..\Common\testcentric.common\TestCentric.Common.csproj" />

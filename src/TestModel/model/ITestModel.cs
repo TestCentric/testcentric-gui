@@ -37,7 +37,7 @@ namespace TestCentric.Gui.Model
         // but filtered to meet the GUI's requirements
         IList<NUnit.Engine.IRuntimeFramework> AvailableRuntimes { get; }
 
-        IList<TestAgentInfo> AvailableAgents { get; }
+        IList<string> AvailableAgents { get; }
 
         // Result Format Support
         IEnumerable<string> ResultFormats { get; }
@@ -132,7 +132,7 @@ namespace TestCentric.Gui.Model
         IDictionary<string, object> GetPackageSettingsForTest(string id);
 
         // Get Agents available for a package
-        IList<TestAgentInfo> GetAvailableAgents(TestPackage package);
+        IList<string> GetAgentsForPackage(TestPackage package);
 
         // Clear the results for all tests
         void ClearResults();

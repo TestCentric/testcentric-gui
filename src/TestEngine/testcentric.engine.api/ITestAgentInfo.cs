@@ -24,6 +24,6 @@ namespace TestCentric.Engine
         /// A list of suitable agents for running the package or an empty
         /// list if no agent is available for the package.
         /// </returns>
-        IList<TestAgentInfo> GetAvailableAgents(TestPackage package);
+        IList<TestAgentInfo> GetAgentsForPackage(TestPackage package);
     }
 }

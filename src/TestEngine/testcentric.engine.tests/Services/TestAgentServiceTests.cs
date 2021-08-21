@@ -53,7 +53,7 @@ namespace TestCentric.Engine.Services
             var package = new TestPackage(new string[] { "some.dll" });
             package.SubPackages[0].AddSetting(EnginePackageSettings.TargetRuntimeFramework, targetRuntime);
             
-            Assert.That(_agentService.GetAvailableAgents(package).Select((info) => info.AgentName),
+            Assert.That(_agentService.GetAgentsForPackage(package).Select((info) => info.AgentName),
                 Is.EqualTo(expectedAgents));
         }
 
@@ -72,7 +72,7 @@ namespace TestCentric.Engine.Services
             package.SubPackages[0].AddSetting(EnginePackageSettings.TargetRuntimeFramework, targetRuntime1);
             package.SubPackages[1].AddSetting(EnginePackageSettings.TargetRuntimeFramework, targetRuntime2);
 
-            Assert.That(_agentService.GetAvailableAgents(package).Select((info) => info.AgentName),
+            Assert.That(_agentService.GetAgentsForPackage(package).Select((info) => info.AgentName),
                 Is.EqualTo(expectedAgents));
         }
     }

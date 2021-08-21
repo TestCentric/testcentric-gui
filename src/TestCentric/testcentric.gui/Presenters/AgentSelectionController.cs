@@ -27,7 +27,7 @@ namespace TestCentric.Gui.Presenters
         {
             var package = _model.TestPackage;
             return package != null &&
-                _model.GetAvailableAgents(package).Count > 1;
+                _model.GetAgentsForPackage(package).Count > 1;
         }
 
         public void PopulateMenu()
@@ -44,15 +44,15 @@ namespace TestCentric.Gui.Presenters
 
             agentMenu.MenuItems.Add(defaultMenuItem);
 
-            var agentsToEnable = _model.GetAvailableAgents(_model.TestPackage).Select(info => info.AgentName);
+            var agentsToEnable = _model.GetAgentsForPackage(_model.TestPackage);
             var selectedAgentName = _model.TestPackage.GetSetting(EnginePackageSettings.SelectedAgentName, "DEFAULT");
             
-            foreach (var info in _model.AvailableAgents)
+            foreach (var agentName in _model.AvailableAgents)
             {
-                var menuItem = new ToolStripMenuItem(info.AgentName)
+                var menuItem = new ToolStripMenuItem(agentName)
                 {
-                    Tag = info.AgentName,
-                    Enabled = agentsToEnable.Contains(info.AgentName)
+                    Tag = agentName,
+                    Enabled = agentsToEnable.Contains(agentName)
                 };
 
                 agentMenu.MenuItems.Add(menuItem);
