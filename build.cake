@@ -202,24 +202,16 @@ Task("TestGui")
 // CREATE PACKAGE IMAGE
 //////////////////////////////////////////////////////////////////////
 
-Task("CreateImage")
-	.IsDependentOn("Build")
-    .Description("Copies all files into the image directory")
-    .Does<BuildParameters>((parameters) =>
-    {
-        CreateDirectory(parameters.PackageDirectory);
-
-		CreateImage(parameters);
-    });
-
 //////////////////////////////////////////////////////////////////////
 // ZIP PACKAGE
 //////////////////////////////////////////////////////////////////////
 
 Task("BuildZipPackage")
-    .IsDependentOn("CreateImage")
     .Does<BuildParameters>((parameters) =>
     {
+		CreateDirectory(parameters.PackageDirectory);
+		CreateZipImage(parameters);
+
 		Information("Creating package " + parameters.ZipPackageName);
 
 		// TODO: We copy in and then delete zip-specific addins files because Zip command
@@ -228,18 +220,14 @@ Task("BuildZipPackage")
 		// add and delete these files.
 		try
 		{
-			CopyFileToDirectory(parameters.ZipDirectory + "testcentric.zip.addins", parameters.ImageDirectory + "bin/");
-			foreach (string runtime in parameters.SupportedAgentRuntimes)
-				CopyFileToDirectory(parameters.ZipDirectory + "testcentric-agent.zip.addins", $"{parameters.ImageDirectory}bin/agents/{runtime}");
-
-			var zipFiles = GetFiles(parameters.ImageDirectory + "**/*.*");
-			Zip(parameters.ImageDirectory, parameters.ZipPackage, zipFiles);
+			var zipFiles = GetFiles(parameters.ZipImageDirectory + "**/*.*");
+			Zip(parameters.ZipImageDirectory, parameters.ZipPackage, zipFiles);
 		}
 		finally
 		{
-			DeleteFile(parameters.ImageDirectory + "bin/testcentric.zip.addins");
-			foreach (string runtime in parameters.SupportedAgentRuntimes)
-				DeleteFile($"{parameters.ImageDirectory}bin/agents/{runtime}/testcentric-agent.zip.addins");
+			////DeleteFile(parameters.ZipImageDirectory + "bin/testcentric.zip.addins");
+			////foreach (string runtime in parameters.SupportedAgentRuntimes)
+			////	DeleteFile($"{parameters.ZipImageDirectory}bin/agents/{runtime}/testcentric-agent.zip.addins");
 		}
 	});
 
@@ -257,6 +245,8 @@ Task("TestZipPackage")
 Task("BuildNuGetPackage")
 	.Does<BuildParameters>((parameters) =>
 	{
+		CreateDirectory(parameters.PackageDirectory);
+
 		Information("Creating package " + parameters.NuGetPackageName);
 
 		NuGetPack($"{parameters.NuGetDirectory}/{NUGET_PACKAGE_NAME}.nuspec", new NuGetPackSettings()
@@ -283,6 +273,8 @@ Task("BuildChocolateyPackage")
 	.WithCriteria(IsRunningOnWindows())
     .Does<BuildParameters>((parameters) =>
     {
+		CreateDirectory(parameters.PackageDirectory);
+
 		Information("Creating package " + parameters.ChocolateyPackageName);
 
 		ChocolateyPack($"{parameters.ChocoDirectory}/{PACKAGE_NAME}.nuspec", 
