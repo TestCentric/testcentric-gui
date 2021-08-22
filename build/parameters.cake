@@ -121,7 +121,7 @@ public class BuildParameters
 	public string NuGetDirectory => ProjectDirectory + "nuget/";
 	public string ChocoDirectory => ProjectDirectory + "choco/";
 	public string PackageDirectory => ProjectDirectory + "package/";
-	public string ImageDirectory => PackageDirectory + "image/";
+	public string ZipImageDirectory => PackageDirectory + "zipimage/";
 	public string TestDirectory => PackageDirectory + "test/";
 	public string ZipTestDirectory => TestDirectory + "zip/";
 	public string NuGetTestDirectory => TestDirectory + "nuget/";
@@ -253,7 +253,7 @@ public class BuildParameters
 		Console.WriteLine("NuGet:     " + NuGetDirectory);
 		Console.WriteLine("Choco:     " + ChocoDirectory);
 		Console.WriteLine("Package:   " + PackageDirectory);
-		Console.WriteLine("Image:     " + ImageDirectory);
+		Console.WriteLine("ZipImage:  " + ZipImageDirectory);
 		Console.WriteLine("ZipTest:   " + ZipTestDirectory);
 		Console.WriteLine("NuGetTest: " + NuGetTestDirectory);
 		Console.WriteLine("ChocoTest: " + ChocolateyTestDirectory);

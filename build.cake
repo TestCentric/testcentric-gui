@@ -202,24 +202,16 @@ Task("TestGui")
 // CREATE PACKAGE IMAGE
 //////////////////////////////////////////////////////////////////////
 
-Task("CreateImage")
-	.IsDependentOn("Build")
-    .Description("Copies all files into the image directory")
-    .Does<BuildParameters>((parameters) =>
-    {
-        CreateDirectory(parameters.PackageDirectory);
-
-		CreateImage(parameters);
-    });
-
 //////////////////////////////////////////////////////////////////////
 // ZIP PACKAGE
 //////////////////////////////////////////////////////////////////////
 
 Task("BuildZipPackage")
-    .IsDependentOn("CreateImage")
     .Does<BuildParameters>((parameters) =>
     {
+		CreateDirectory(parameters.PackageDirectory);
+		CreateZipImage(parameters);
+
 		Information("Creating package " + parameters.ZipPackageName);
 
 		// TODO: We copy in and then delete zip-specific addins files because Zip command
@@ -228,18 +220,14 @@ Task("BuildZipPackage")
 		// add and delete these files.
 		try
 		{
-			CopyFileToDirectory(parameters.ZipDirectory + "testcentric.zip.addins", parameters.ImageDirectory + "bin/");
-			foreach (string runtime in parameters.SupportedAgentRuntimes)
-				CopyFileToDirectory(parameters.ZipDirectory + "testcentric-agent.zip.addins", $"{parameters.ImageDirectory}bin/agents/{runtime}");
-
-			var zipFiles = GetFiles(parameters.ImageDirectory + "**/*.*");
-			Zip(parameters.ImageDirectory, parameters.ZipPackage, zipFiles);
+			var zipFiles = GetFiles(parameters.ZipImageDirectory + "**/*.*");
+			Zip(parameters.ZipImageDirectory, parameters.ZipPackage, zipFiles);
 		}
 		finally
 		{
-			DeleteFile(parameters.ImageDirectory + "bin/testcentric.zip.addins");
-			foreach (string runtime in parameters.SupportedAgentRuntimes)
-				DeleteFile($"{parameters.ImageDirectory}bin/agents/{runtime}/testcentric-agent.zip.addins");
+			////DeleteFile(parameters.ZipImageDirectory + "bin/testcentric.zip.addins");
+			////foreach (string runtime in parameters.SupportedAgentRuntimes)
+			////	DeleteFile($"{parameters.ZipImageDirectory}bin/agents/{runtime}/testcentric-agent.zip.addins");
 		}
 	});
 
@@ -255,44 +243,18 @@ Task("TestZipPackage")
 //////////////////////////////////////////////////////////////////////
 
 Task("BuildNuGetPackage")
-	.IsDependentOn("CreateImage")
 	.Does<BuildParameters>((parameters) =>
 	{
+		CreateDirectory(parameters.PackageDirectory);
+
 		Information("Creating package " + parameters.NuGetPackageName);
 
-        var content = new List<NuSpecContent>();
-		int index = parameters.ImageDirectory.Length;
-
-		foreach (var file in GetFiles(parameters.ImageDirectory + "**/*.*"))
-		{
-			var source = file.FullPath;
-			var target = System.IO.Path.GetDirectoryName(source.Substring(index));
-
-			if (target == "bin")
-				target = "tools";
-			else if (target.StartsWith("bin" + System.IO.Path.DirectorySeparatorChar))
-				target = "tools" + target.Substring(3);
-
-			if (target.IndexOf("Visual") != -1)
-				Console.WriteLine($"Adding Source = {file.FullPath}\nTarget = {target}");
-
-			content.Add(new NuSpecContent() { Source = file.FullPath, Target = target });
-		}
-
-		// Icon goes in the root
-		content.Add(new NuSpecContent() { Source = "../testcentric.png" });
-
-		// Use addins file tailored for nuget install
-		content.Add(new NuSpecContent() { Source = "testcentric.nuget.addins", Target = "tools" });
-		foreach (string runtime in parameters.SupportedAgentRuntimes)
-			content.Add(new NuSpecContent() {Source = "testcentric-agent.nuget.addins", Target = $"tools/agents/{runtime}" }); 
-
-        NuGetPack($"{parameters.NuGetDirectory}/{NUGET_PACKAGE_NAME}.nuspec", new NuGetPackSettings()
+		NuGetPack($"{parameters.NuGetDirectory}/{NUGET_PACKAGE_NAME}.nuspec", new NuGetPackSettings()
         {
             Version = parameters.PackageVersion,
+			BasePath = parameters.OutputDirectory,
             OutputDirectory = parameters.PackageDirectory,
-            NoPackageAnalysis = true,
-			Files = content
+            NoPackageAnalysis = true
         });
 	});
 
@@ -308,48 +270,20 @@ Task("TestNuGetPackage")
 //////////////////////////////////////////////////////////////////////
 
 Task("BuildChocolateyPackage")
-    .IsDependentOn("CreateImage")
 	.WithCriteria(IsRunningOnWindows())
     .Does<BuildParameters>((parameters) =>
     {
+		CreateDirectory(parameters.PackageDirectory);
+
 		Information("Creating package " + parameters.ChocolateyPackageName);
 
-        var content = new List<ChocolateyNuSpecContent>();
-		int index = parameters.ImageDirectory.Length;
-
-		foreach (var file in GetFiles(parameters.ImageDirectory + "**/*.*"))
-		{
-			var source = file.FullPath;
-			var target = System.IO.Path.GetDirectoryName(file.FullPath.Substring(index));
-
-			if (target == "" || target == "bin")
-				target = "tools";
-			else if (target.StartsWith("bin" + System.IO.Path.DirectorySeparatorChar))
-				target = "tools" + target.Substring(3);
-
-			if (target.IndexOf("Visual") != -1)
-				Console.WriteLine($"Adding Source = {file.FullPath}\nTarget = {target}");
-
-			content.Add(new ChocolateyNuSpecContent() { Source = file.FullPath, Target = target });
-		}
-
-		content.AddRange(new ChocolateyNuSpecContent[]
-		{
-			new ChocolateyNuSpecContent() { Source = "VERIFICATION.txt", Target = "tools" },
-			new ChocolateyNuSpecContent() { Source = "testcentric-agent.exe.ignore", Target = "tools" },
-			new ChocolateyNuSpecContent() { Source = "testcentric-agent-x86.exe.ignore", Target = "tools" },
-			new ChocolateyNuSpecContent() { Source = "testcentric.choco.addins", Target = "tools" }
-		});
-
-		foreach (string runtime in parameters.SupportedAgentRuntimes)
-			content.Add(new ChocolateyNuSpecContent() {Source = "testcentric-agent.choco.addins", Target = $"tools/agents/{runtime}" }); 
-			
 		ChocolateyPack($"{parameters.ChocoDirectory}/{PACKAGE_NAME}.nuspec", 
             new ChocolateyPackSettings()
-            {
-                Version = parameters.PackageVersion,
-                OutputDirectory = parameters.PackageDirectory,
-                Files = content
+			{
+				Version = parameters.PackageVersion,
+				WorkingDirectory = parameters.OutputDirectory,
+				OutputDirectory = parameters.PackageDirectory,
+				ArgumentCustomization = args => args.Append($"BIN={parameters.OutputDirectory}")
             });
     });
 

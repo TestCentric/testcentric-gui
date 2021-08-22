@@ -37,36 +37,39 @@ var PdbFiles = new string[]
     "testcentric.engine.pdb",
 };
 
-private void CreateImage(BuildParameters parameters)
+private void CreateZipImage(BuildParameters parameters)
 {
-	string imageDir = parameters.ImageDirectory;
-	string imageBinDir = imageDir + "bin/";
+	string zipImageDir = parameters.ZipImageDirectory;
+	string zipImageBinDir = zipImageDir + "bin/";
 
-    CreateDirectory(imageDir);
-    CleanDirectory(imageDir);
+    CreateDirectory(zipImageDir);
+    CleanDirectory(zipImageDir);
 
-	CopyFiles(RootFiles, imageDir);
+	CopyFiles(RootFiles, zipImageDir);
 
 	var copyFiles = new List<string>(baseFiles);
 	if (!parameters.UsingXBuild)
 		copyFiles.AddRange(PdbFiles);
 
-	CreateDirectory(imageBinDir);
+	CreateDirectory(zipImageBinDir);
 
 	foreach (string file in copyFiles)
-		CopyFileToDirectory(parameters.OutputDirectory + file, imageBinDir);
+		CopyFileToDirectory(parameters.OutputDirectory + file, zipImageBinDir);
 
-	CopyDirectory(parameters.OutputDirectory + "Images", imageBinDir + "Images");
+    CopyFileToDirectory(parameters.ZipDirectory + "testcentric.zip.addins", parameters.ZipImageDirectory + "bin/");
+
+    CopyDirectory(parameters.OutputDirectory + "Images", zipImageBinDir + "Images");
 
 	foreach (var runtime in parameters.SupportedAgentRuntimes)
     {
-        var targetDir = imageBinDir + "agents/" + Directory(runtime);
+        var targetDir = zipImageBinDir + "agents/" + Directory(runtime);
         var sourceDir = parameters.OutputDirectory + "agents/" + Directory(runtime);
         CopyDirectory(sourceDir, targetDir);
-	}
+        CopyFileToDirectory(parameters.ZipDirectory + "testcentric-agent.zip.addins", $"{parameters.ZipImageDirectory}bin/agents/{runtime}");
+    }
 
-	// NOTE: Files specific to a particular package are not copied
-	// into the image directory but are added separately.
+    // NOTE: Files specific to a particular package are not copied
+    // into the image directory but are added separately.
 }
 
 private void PushNuGetPackage(FilePath package, string apiKey, string url)
