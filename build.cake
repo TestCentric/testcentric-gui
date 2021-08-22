@@ -280,48 +280,18 @@ Task("TestNuGetPackage")
 //////////////////////////////////////////////////////////////////////
 
 Task("BuildChocolateyPackage")
-    .IsDependentOn("CreateImage")
 	.WithCriteria(IsRunningOnWindows())
     .Does<BuildParameters>((parameters) =>
     {
 		Information("Creating package " + parameters.ChocolateyPackageName);
 
-        var content = new List<ChocolateyNuSpecContent>();
-		int index = parameters.ImageDirectory.Length;
-
-		foreach (var file in GetFiles(parameters.ImageDirectory + "**/*.*"))
-		{
-			var source = file.FullPath;
-			var target = System.IO.Path.GetDirectoryName(file.FullPath.Substring(index));
-
-			if (target == "" || target == "bin")
-				target = "tools";
-			else if (target.StartsWith("bin" + System.IO.Path.DirectorySeparatorChar))
-				target = "tools" + target.Substring(3);
-
-			if (target.IndexOf("Visual") != -1)
-				Console.WriteLine($"Adding Source = {file.FullPath}\nTarget = {target}");
-
-			content.Add(new ChocolateyNuSpecContent() { Source = file.FullPath, Target = target });
-		}
-
-		content.AddRange(new ChocolateyNuSpecContent[]
-		{
-			new ChocolateyNuSpecContent() { Source = "VERIFICATION.txt", Target = "tools" },
-			new ChocolateyNuSpecContent() { Source = "testcentric-agent.exe.ignore", Target = "tools" },
-			new ChocolateyNuSpecContent() { Source = "testcentric-agent-x86.exe.ignore", Target = "tools" },
-			new ChocolateyNuSpecContent() { Source = "testcentric.choco.addins", Target = "tools" }
-		});
-
-		foreach (string runtime in parameters.SupportedAgentRuntimes)
-			content.Add(new ChocolateyNuSpecContent() {Source = "testcentric-agent.choco.addins", Target = $"tools/agents/{runtime}" }); 
-			
 		ChocolateyPack($"{parameters.ChocoDirectory}/{PACKAGE_NAME}.nuspec", 
             new ChocolateyPackSettings()
-            {
-                Version = parameters.PackageVersion,
-                OutputDirectory = parameters.PackageDirectory,
-                Files = content
+			{
+				Version = parameters.PackageVersion,
+				WorkingDirectory = parameters.OutputDirectory,
+				OutputDirectory = parameters.PackageDirectory,
+				ArgumentCustomization = args => args.Append($"BIN={parameters.OutputDirectory}")
             });
     });
 

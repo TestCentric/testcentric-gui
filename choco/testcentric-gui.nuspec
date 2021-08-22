@@ -41,4 +41,107 @@ NUnit engine extensions are supported but no extensions are bundled with the GUI
 Projects with tests to be run under **TestCentric** must already have some version of the NUnit framework installed separtely.
     </description>
   </metadata>
+  <files>
+    <file src="../LICENSE.txt" target="tools" />
+    <file src="../NOTICES.txt" target="tools" />
+    <file src="../CHANGES.txt" target="tools" />
+    <file src="../testcentric.png" target="tools" />
+    
+    <file src="VERIFICATION.txt" target="tools" />
+    <file src="testcentric-agent.exe.ignore" target="tools" />
+    <file src="testcentric-agent-x86.exe.ignore" target="tools" />
+    <file src="testcentric.choco.addins" target="tools" />
+    
+    <file src="$BIN$testcentric.exe" target="tools" />
+    <file src="$BIN$testcentric.exe.config" target="tools" />
+    <file src="$BIN$TestCentric.Common.dll" target="tools" />
+    <file src="$BIN$TestCentric.Gui.Runner.dll" target="tools" />
+    <file src="$BIN$nunit.uiexception.dll" target="tools" />
+    <file src="$BIN$TestCentric.Gui.Model.dll" target="tools" />
+    <file src="$BIN$nunit.engine.api.dll" target="tools" />
+    <file src="$BIN$testcentric.engine.api.dll" target="tools" />
+    <file src="$BIN$testcentric.engine.metadata.dll" target="tools" />
+    <file src="$BIN$testcentric.engine.core.dll" target="tools" />
+    <file src="$BIN$testcentric.engine.dll" target="tools" />
+
+    <file src="$BIN$Images/RunTests.png" target="tools/Images" />
+    <file src="$BIN$Images/DebugTests.png" target="tools/Images" />
+    <file src="$BIN$Images/GroupBy_16x.png" target="tools/Images" />
+    <file src="$BIN$Images/StopRun.png" target="tools/Images" />
+    <file src="$BIN$Images/SummaryReport.png" target="tools/Images" />
+
+    <file src="$BIN$Images/Tree/Circles/Failure.jpg" target="tools/Images/Tree/Circles" />
+    <file src="$BIN$Images/Tree/Circles/Ignored.jpg" target="tools/Images/Tree/Circles" />
+    <file src="$BIN$Images/Tree/Circles/Inconclusive.jpg" target="tools/Images/Tree/Circles" />
+    <file src="$BIN$Images/Tree/Circles/Skipped.jpg" target="tools/Images/Tree/Circles" />
+    <file src="$BIN$Images/Tree/Circles/Success.jpg" target="tools/Images/Tree/Circles" />
+    <file src="$BIN$Images/Tree/Classic/Failure.jpg" target="tools/Images/Tree/Classic" />
+    <file src="$BIN$Images/Tree/Classic/Ignored.jpg" target="tools/Images/Tree/Classic" />
+    <file src="$BIN$Images/Tree/Classic/Inconclusive.jpg" target="tools/Images/Tree/Classic" />
+    <file src="$BIN$Images/Tree/Classic/Skipped.jpg" target="tools/Images/Tree/Classic" />
+    <file src="$BIN$Images/Tree/Classic/Success.jpg" target="tools/Images/Tree/Classic" />
+    <file src="$BIN$Images/Tree/Default/Failure.png" target="tools/Images/Tree/Default" />
+    <file src="$BIN$Images/Tree/Default/Ignored.png" target="tools/Images/Tree/Default" />
+    <file src="$BIN$Images/Tree/Default/Inconclusive.png" target="tools/Images/Tree/Default" />
+    <file src="$BIN$Images/Tree/Default/Skipped.png" target="tools/Images/Tree/Default" />
+    <file src="$BIN$Images/Tree/Default/Success.png" target="tools/Images/Tree/Default" />
+    <file src="$BIN$Images/Tree/Visual Studio/Failure.png" target="tools/Images/Tree/Visual Studio" />
+    <file src="$BIN$Images/Tree/Visual Studio/Ignored.png" target="tools/Images/Tree/Visual Studio" />
+    <file src="$BIN$Images/Tree/Visual Studio/Inconclusive.png" target="tools/Images/Tree/Visual Studio" />
+    <file src="$BIN$Images/Tree/Visual Studio/Skipped.png" target="tools/Images/Tree/Visual Studio" />
+    <file src="$BIN$Images/Tree/Visual Studio/Success.png" target="tools/Images/Tree/Visual Studio" />
+
+    <file src="$BIN$agents/net20/nunit.engine.api.dll" target="tools/agents/net20" />
+    <file src="$BIN$agents/net20/testcentric.engine.metadata.dll" target="tools/agents/net20" />
+    <file src="$BIN$agents/net20/testcentric.engine.core.dll" target="tools/agents/net20" />
+    <file src="$BIN$agents/net20/testcentric.agent.core.dll" target="tools/agents/net20" />
+    <file src="$BIN$agents/net20/testcentric-agent.exe" target="tools/agents/net20" />
+    <file src="$BIN$agents/net20/testcentric-agent.exe.config" target="tools/agents/net20" />
+    <file src="$BIN$agents/net20/testcentric-agent-x86.exe" target="tools/agents/net20" />
+    <file src="$BIN$agents/net20/testcentric-agent-x86.exe.config" target="tools/agents/net20" />
+    <file src="testcentric-agent.choco.addins" target="tools/agents/net20" />
+
+    <file src="$BIN$agents/net40/nunit.engine.api.dll" target="tools/agents/net40" />
+    <file src="$BIN$agents/net40/testcentric.engine.metadata.dll" target="tools/agents/net40" />
+    <file src="$BIN$agents/net40/testcentric.engine.core.dll" target="tools/agents/net40" />
+    <file src="$BIN$agents/net40/testcentric.agent.core.dll" target="tools/agents/net40" />
+    <file src="$BIN$agents/net40/testcentric-agent.exe" target="tools/agents/net40" />
+    <file src="$BIN$agents/net40/testcentric-agent.exe.config" target="tools/agents/net40" />
+    <file src="$BIN$agents/net40/testcentric-agent-x86.exe" target="tools/agents/net40" />
+    <file src="$BIN$agents/net40/testcentric-agent-x86.exe.config" target="tools/agents/net40" />
+    <file src="testcentric-agent.choco.addins" target="tools/agents/net40" />
+
+    <file src="$BIN$agents/netcoreapp2.1/nunit.engine.api.dll" target="tools/agents/netcoreapp2.1" />
+    <file src="$BIN$agents/netcoreapp2.1/testcentric.engine.metadata.dll" target="tools/agents/netcoreapp2.1" />
+    <file src="$BIN$agents/netcoreapp2.1/testcentric.agent.core.dll" target="tools/agents/netcoreapp2.1" />
+    <file src="$BIN$agents/netcoreapp2.1/testcentric.engine.core.dll" target="tools/agents/netcoreapp2.1" />
+    <file src="$BIN$agents/netcoreapp2.1/testcentric-agent.dll" target="tools/agents/netcoreapp2.1" />
+    <file src="$BIN$agents/netcoreapp2.1/testcentric-agent.dll.config" target="tools/agents/netcoreapp2.1" />
+    <file src="$BIN$agents/netcoreapp2.1/testcentric-agent.deps.json" target="tools/agents/netcoreapp2.1" />
+    <file src="$BIN$agents/netcoreapp2.1/testcentric-agent.runtimeconfig.json" target="tools/agents/netcoreapp2.1" />
+    <file src="$BIN$agents/netcoreapp2.1/testcentric-agent.runtimeconfig.dev.json" target="tools/agents/netcoreapp2.1" />
+    <file src="testcentric-agent.choco.addins" target="tools/agents/netcoreapp2.1" />
+
+    <file src="$BIN$agents/netcoreapp3.1/nunit.engine.api.dll" target="tools/agents/netcoreapp3.1" />
+    <file src="$BIN$agents/netcoreapp3.1/testcentric.engine.metadata.dll" target="tools/agents/netcoreapp3.1" />
+    <file src="$BIN$agents/netcoreapp3.1/testcentric.engine.core.dll" target="tools/agents/netcoreapp3.1" />
+    <file src="$BIN$agents/netcoreapp3.1/testcentric.agent.core.dll" target="tools/agents/netcoreapp3.1" />
+    <file src="$BIN$agents/netcoreapp3.1/testcentric-agent.dll" target="tools/agents/netcoreapp3.1" />
+    <file src="$BIN$agents/netcoreapp3.1/testcentric-agent.dll.config" target="tools/agents/netcoreapp3.1" />
+    <file src="$BIN$agents/netcoreapp3.1/testcentric-agent.deps.json" target="tools/agents/netcoreapp3.1" />
+    <file src="$BIN$agents/netcoreapp3.1/testcentric-agent.runtimeconfig.json" target="tools/agents/netcoreapp3.1" />
+    <file src="$BIN$agents/netcoreapp3.1/testcentric-agent.runtimeconfig.dev.json" target="tools/agents/netcoreapp3.1" />
+    <file src="testcentric-agent.choco.addins" target="tools/agents/netcoreapp3.1" />
+
+    <file src="$BIN$agents/net5.0/nunit.engine.api.dll" target="tools/agents/net5.0" />
+    <file src="$BIN$agents/net5.0/testcentric.engine.metadata.dll" target="tools/agents/net5.0" />
+    <file src="$BIN$agents/net5.0/testcentric.engine.core.dll" target="tools/agents/net5.0" />
+    <file src="$BIN$agents/net5.0/testcentric.agent.core.dll" target="tools/agents/net5.0" />
+    <file src="$BIN$agents/net5.0/testcentric-agent.dll" target="tools/agents/net5.0" />
+    <file src="$BIN$agents/net5.0/testcentric-agent.dll.config" target="tools/agents/net5.0" />
+    <file src="$BIN$agents/net5.0/testcentric-agent.deps.json" target="tools/agents/net5.0" />
+    <file src="$BIN$agents/net5.0/testcentric-agent.runtimeconfig.json" target="tools/agents/net5.0" />
+    <file src="$BIN$agents/net5.0/testcentric-agent.runtimeconfig.dev.json" target="tools/agents/net5.0" />
+    <file src="testcentric-agent.choco.addins" target="tools/agents/net5.0" />
+  </files>
 </package>
