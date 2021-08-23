@@ -60,11 +60,7 @@ namespace TestCentric.Engine.Drivers
             var idPrefix = string.IsNullOrEmpty(ID) ? "" : ID + "-";
 
             var assemblyRef = AssemblyDefinition.ReadAssembly(testAssembly);
-#if NETSTANDARD1_6
-            _testAssembly = Assembly.Load(new AssemblyName(assemblyRef.FullName));
-#else
             _testAssembly = Assembly.LoadFrom(testAssembly);
-#endif
             if (_testAssembly == null)
                 throw new NUnitEngineException(string.Format(FAILED_TO_LOAD_TEST_ASSEMBLY, assemblyRef.FullName));
 
@@ -72,11 +68,7 @@ namespace TestCentric.Engine.Drivers
             if (nunitRef == null)
                 throw new NUnitEngineException(FAILED_TO_LOAD_NUNIT);
 
-#if NETSTANDARD1_6
-            var nunit = Assembly.Load(new AssemblyName(nunitRef.FullName));
-#else
             var nunit = Assembly.LoadFrom(Path.Combine(Path.GetDirectoryName(testAssembly), nunitRef.Name + ".dll"));
-#endif
             if (nunit == null)
                 throw new NUnitEngineException(FAILED_TO_LOAD_NUNIT);
 

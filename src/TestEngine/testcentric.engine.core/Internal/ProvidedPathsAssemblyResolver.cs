@@ -3,7 +3,6 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-#if !NETSTANDARD1_6
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -79,4 +78,3 @@ namespace TestCentric.Engine.Internal
         List<string> _resolutionPaths;
     }
 }
-#endif

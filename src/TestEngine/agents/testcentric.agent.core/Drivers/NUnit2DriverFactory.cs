@@ -4,7 +4,7 @@
 // ***********************************************************************
 
 #if TEMP
-#if !NETSTANDARD1_6 && !NETSTANDARD2_0
+#if !NETSTANDARD
 using System;
 using System.Reflection;
 using NUnit.Engine.Extensibility;
