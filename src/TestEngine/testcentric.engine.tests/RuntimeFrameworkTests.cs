@@ -3,7 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-#if !NETCOREAPP1_1 && !NETCOREAPP2_1
+#if !NETCOREAPP2_1
 using System;
 using NUnit.Framework;
 #if NET20 || NET35

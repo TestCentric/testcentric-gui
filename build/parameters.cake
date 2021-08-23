@@ -173,9 +173,7 @@ public class BuildParameters
 	public NuGetRestoreSettings RestoreSettings { get; }
 
 	public string[] SupportedEngineRuntimes => new string[] {"net40"};
-	public string[] SupportedCoreRuntimes => IsRunningOnWindows
-		? new string[] {"net40", "net35", "netcoreapp2.1", "netcoreapp1.1"}
-		: new string[] {"net40", "net35", "netcoreapp2.1"};
+	public string[] SupportedCoreRuntimes => new string[] {"net40", "net35", "netcoreapp2.1"};
 	public string[] SupportedAgentRuntimes => new string[] { "net20", "net40", "netcoreapp2.1", "netcoreapp3.1", "net5.0" };
 
 	public string ProjectUri => "https://github.com/TestCentric/testcentric-gui";
