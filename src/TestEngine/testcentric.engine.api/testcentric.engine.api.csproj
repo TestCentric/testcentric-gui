@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RootNamespace>TestCentric.Engine</RootNamespace>
-    <TargetFrameworks>net20;net40;netstandard1.6;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net20;net40;netstandard2.0</TargetFrameworks>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\nunit.snk</AssemblyOriginatorKeyFile>
 	<DebugType>Full</DebugType>
@@ -20,6 +20,6 @@
     <Compile Include="..\CommonEngineAssemblyInfo.cs" Link="Properties\CommonEngineAssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NUnit.Engine.Api" Version="3.11.1" />
+    <PackageReference Include="NUnit.Engine.Api" Version="4.0.0-dev-001" />
   </ItemGroup>
 </Project>

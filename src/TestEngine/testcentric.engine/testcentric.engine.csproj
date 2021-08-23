@@ -20,7 +20,7 @@
     <ProjectReference Include="..\testcentric.engine.core\testcentric.engine.core.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NUnit.Engine.Api" Version="3.11.1" />
+    <PackageReference Include="NUnit.Engine.Api" Version="4.0.0-dev-001" />
     <PackageReference Include="NUnit.Extension.NUnitProjectLoader" Version="3.6.0" />
     <PackageReference Include="TestCentric.Metadata" Version="1.7.0" />
   </ItemGroup>
