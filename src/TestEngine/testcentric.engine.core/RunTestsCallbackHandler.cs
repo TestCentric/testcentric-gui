@@ -3,9 +3,8 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-#if !NETSTANDARD1_6 && !NETSTANDARD2_0
+#if !NETSTANDARD
 using System;
-using System.Diagnostics;
 using System.Web.UI;
 using NUnit.Engine;
 

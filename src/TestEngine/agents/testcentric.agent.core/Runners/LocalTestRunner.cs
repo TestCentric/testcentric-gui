@@ -15,9 +15,7 @@ namespace TestCentric.Engine.Runners
     {
         public LocalTestRunner(TestPackage package) : base(package)
         {
-#if !NETSTANDARD1_6
             this.TestDomain = AppDomain.CurrentDomain;
-#endif
         }
     }
 }

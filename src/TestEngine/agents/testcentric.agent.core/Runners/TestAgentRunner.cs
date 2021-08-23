@@ -31,11 +31,9 @@ namespace TestCentric.Engine.Runners
 
         private IFrameworkDriver _driver;
 
-#if !NETSTANDARD1_6
         private ProvidedPathsAssemblyResolver _assemblyResolver;
 
         protected AppDomain TestDomain { get; set; }
-#endif
 
         public TestAgentRunner(TestPackage package) : base(package)
         {
@@ -44,7 +42,6 @@ namespace TestCentric.Engine.Runners
             Guard.ArgumentValid(package.FullName != null, "Package may not be anonymous", nameof(package));
             Guard.ArgumentValid(package.IsAssemblyPackage(), "Must be an assembly package", nameof(package));
 
-#if !NETSTANDARD1_6
             // Bypass the resolver if not in the default AppDomain. This prevents trying to use the resolver within
             // NUnit's own automated tests (in a test AppDomain) which does not make sense anyway.
             if (AppDomain.CurrentDomain.IsDefaultAppDomain())
@@ -52,7 +49,6 @@ namespace TestCentric.Engine.Runners
                 _assemblyResolver = new ProvidedPathsAssemblyResolver();
                 _assemblyResolver.Install();
             }
-#endif
         }
 
         /// <summary>
@@ -89,7 +85,6 @@ namespace TestCentric.Engine.Runners
             string frameworkReference = TestPackage.GetSetting(EnginePackageSettings.ImageTestFrameworkReference, (string)null);
             bool skipNonTestAssemblies = TestPackage.GetSetting(EnginePackageSettings.SkipNonTestAssemblies, false);
 
-#if !NETSTANDARD1_6
             if (_assemblyResolver != null && !TestDomain.IsDefaultAppDomain()
                 && TestPackage.GetSetting(EnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver, false))
             {
@@ -99,9 +94,6 @@ namespace TestCentric.Engine.Runners
             }
 
             _driver = GetDriver(TestDomain, testFile, targetFramework, skipNonTestAssemblies);
-#else
-            _driver = GetDriver(testFile, skipNonTestAssemblies);
-#endif
             _driver.ID = TestPackage.ID;
             
             try
@@ -116,11 +108,7 @@ namespace TestCentric.Engine.Runners
 
         // TODO: This is a temporary fix while we decide how to handle
         // loadable drivers outside of the context of DriverService
-#if NETSTANDARD1_6
-        public IFrameworkDriver GetDriver(string assemblyPath, bool skipNonTestAssemblies)
-#else
         public IFrameworkDriver GetDriver(AppDomain domain, string assemblyPath, string targetFramework, bool skipNonTestAssemblies)
-#endif
         {
             if (!File.Exists(assemblyPath))
                 return new InvalidAssemblyFrameworkDriver(assemblyPath, "File not found: " + assemblyPath);
@@ -129,7 +117,7 @@ namespace TestCentric.Engine.Runners
             if (ext != ".dll" && ext != ".exe")
                 return new InvalidAssemblyFrameworkDriver(assemblyPath, "File type is not supported");
 
-#if !NETSTANDARD1_6 && !NETSTANDARD2_0
+#if !NETSTANDARD
             if (targetFramework != null)
             {
                 // This takes care of an issue with Roslyn. It may get fixed, but we still
@@ -158,8 +146,8 @@ namespace TestCentric.Engine.Runners
                     foreach (var factory in factories)
                     {
                         if (factory.IsSupportedTestFramework(referencedFramework))
-#if NETSTANDARD1_6 || NETSTANDARD2_0
-                        return factory.GetDriver(referencedFramework);
+#if NETSTANDARD
+                            return factory.GetDriver(referencedFramework);
 #else
                             return factory.GetDriver(domain, referencedFramework);
 #endif
@@ -219,10 +207,9 @@ namespace TestCentric.Engine.Runners
                 throw new NUnitEngineException("An exception occurred in the driver while running tests.", ex);
             }
 
-#if !NETSTANDARD1_6
             if (_assemblyResolver != null)
                 _assemblyResolver.RemovePathFromFile(TestPackage.FullName);
-#endif
+
             return new TestEngineResult(driverResult);
         }
 

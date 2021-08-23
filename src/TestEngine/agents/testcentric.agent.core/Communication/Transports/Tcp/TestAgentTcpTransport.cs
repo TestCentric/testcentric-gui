@@ -3,8 +3,6 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-#if !NETSTANDARD1_6
-using System;
 using NUnit.Engine;
 using System.Net;
 using System.Net.Sockets;
@@ -136,4 +134,3 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
         }
     }
 }
-#endif

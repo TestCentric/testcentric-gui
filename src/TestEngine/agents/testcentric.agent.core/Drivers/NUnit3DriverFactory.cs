@@ -24,7 +24,7 @@ namespace TestCentric.Engine.Drivers
             return NUNIT_FRAMEWORK.Equals(reference.Name, StringComparison.OrdinalIgnoreCase) && reference.Version.Major == 3;
         }
 
-#if !NETSTANDARD1_6 && !NETSTANDARD2_0
+#if !NETSTANDARD
         /// <summary>
         /// Gets a driver for a given test assembly and a framework
         /// which the assembly is already known to reference.

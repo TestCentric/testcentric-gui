@@ -3,7 +3,6 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-#if !NETSTANDARD1_6
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -249,4 +248,3 @@ namespace TestCentric.Engine.Communication.Protocols
         }
     }
 }
-#endif
