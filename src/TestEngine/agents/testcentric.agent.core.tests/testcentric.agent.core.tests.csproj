@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RootNamespace>TestCentric.Agent</RootNamespace>
-    <TargetFrameworks>net35;net40;netcoreapp1.1;netcoreapp2.1</TargetFrameworks>
+    <TargetFrameworks>net35;net40;netcoreapp2.1</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\..\nunit.snk</AssemblyOriginatorKeyFile>

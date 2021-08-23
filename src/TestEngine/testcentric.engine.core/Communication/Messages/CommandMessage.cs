@@ -7,9 +7,7 @@ using System;
 
 namespace TestCentric.Engine.Communication.Messages
 {
-#if !NETSTANDARD1_6
     [Serializable]
-#endif
     public class CommandMessage : TestEngineMessage
     {
         public CommandMessage(string commandName, params object[] arguments)
