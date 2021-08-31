@@ -305,7 +305,6 @@ Task("TestChocolateyPackage")
 // other projects, which may want to make use of it.
 
 Task("BuildEngineCorePackage")
-	.IsDependentOn("Build")
 	.Does<BuildParameters>((parameters) =>
 	{
 		NuGetPack($"{parameters.NuGetDirectory}/TestCentric.Engine.Core.nuspec", new NuGetPackSettings()
@@ -321,7 +320,6 @@ Task("BuildEngineCorePackage")
 //////////////////////////////////////////////////////////////////////
 
 Task("BuildEngineApiPackage")
-	.IsDependentOn("Build")
 	.Does<BuildParameters>((parameters) =>
 	{
 		NuGetPack($"{parameters.NuGetDirectory}/TestCentric.Engine.Api.nuspec", new NuGetPackSettings()
@@ -524,6 +522,7 @@ Task("ChocolateyInstall")
 //////////////////////////////////////////////////////////////////////
 
 Task("Package")
+	.IsDependentOn("Build")
 	.IsDependentOn("BuildPackages")
 	.IsDependentOn("TestPackages");
 

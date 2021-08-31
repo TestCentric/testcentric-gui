@@ -218,13 +218,6 @@ public abstract class PackageTester : GuiTester
 
 		// Level 2 tests are run for PRs and when packages will be published
 
-		PackageTests.Add(new PackageTest(2, "Re-run tests of the TestCentric model using the package", StandardRunner,
-			"TestCentric.Gui.Model.Tests.dll",
-			new ExpectedResult("Passed")
-			{
-				Assemblies = new[] { new ExpectedAssemblyResult("TestCentric.Gui.Model.Tests.dll", "net-4.5") }
-			}));
-
 		//PackageTests.Add(new PackageTest(2, "Run mock-assembly.dll built for NUnit V2", StandardRunner,
 		//	"v2-tests/mock-assembly.dll",
 		//	new ExpectedResult("Failed")
@@ -291,6 +284,7 @@ public abstract class PackageTester : GuiTester
 	{
 		Console.WriteLine("Unzipping package to directory\n  " + PackageTestDirectory);
 		_context.CleanDirectory(PackageTestDirectory);
+		_context.CleanDirectory(ExtensionInstallDirectory);
 		_context.Unzip(PackageUnderTest, PackageTestDirectory);
 	}
 
@@ -432,8 +426,14 @@ public class ZipPackageTester : PackageTester
 
 	protected override void InstallEngineExtension(string extension)
 	{
+		Console.WriteLine($"Installing {extension} to directory {ExtensionInstallDirectory}");
+
 		_parameters.Context.NuGetInstall(extension,
-			new NuGetInstallSettings() { OutputDirectory = ExtensionInstallDirectory});
+			new NuGetInstallSettings()
+			{
+				OutputDirectory = ExtensionInstallDirectory,
+				Prerelease = true
+			});
 	}
 }
 
@@ -466,7 +466,11 @@ public class NuGetPackageTester : PackageTester
 	protected override void InstallEngineExtension(string extension)
 	{
 		_parameters.Context.NuGetInstall(extension,
-			new NuGetInstallSettings() { OutputDirectory = ExtensionInstallDirectory});
+			new NuGetInstallSettings()
+			{
+				OutputDirectory = ExtensionInstallDirectory,
+				Prerelease = true
+			});
 	}
 }
 
@@ -505,8 +509,9 @@ public class ChocolateyPackageTester : PackageTester
 		_parameters.Context.NuGetInstall(extension,
 			new NuGetInstallSettings()
 			{
-				Source = new [] { "https://chocolatey.org/api/v2/" },
-				OutputDirectory = ExtensionInstallDirectory
+				Source = new[] { "https://www.myget.org/F/nunit/api/v3/index.json" },
+				OutputDirectory = ExtensionInstallDirectory,
+				Prerelease = true
 			});
 	}
 }
