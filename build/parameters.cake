@@ -1,5 +1,6 @@
 #load "./constants.cake"
 #load "./utilities.cake"
+#load "./package-checks.cake"
 #load "./versioning.cake"
 #load "./testing.cake"
 #load "./test-results.cake"

@@ -99,6 +99,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{6C9280F6
 		build\check-headers.cake = build\check-headers.cake
 		build\console-reporter.cake = build\console-reporter.cake
 		build\constants.cake = build\constants.cake
+		build\package-checks.cake = build\package-checks.cake
 		build\packaging.cake = build\packaging.cake
 		build\parameters.cake = build\parameters.cake
 		build\test-results.cake = build\test-results.cake
