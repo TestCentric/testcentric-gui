@@ -37,7 +37,7 @@
   <ItemGroup>
     <PackageReference Include="NSubstitute" Version="2.0.3" />
     <PackageReference Include="NUnit" Version="3.12.0" />
-    <PackageReference Include="NUnit.Engine.Api" Version="3.11.1" />
+    <PackageReference Include="NUnit.Engine.Api" Version="4.0.0-dev-001" />
     <PackageReference Include="NUnitLite" Version="3.12.0" />
   </ItemGroup>
   <ItemGroup>

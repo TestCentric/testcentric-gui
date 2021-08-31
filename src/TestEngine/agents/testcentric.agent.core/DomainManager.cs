@@ -69,9 +69,6 @@ namespace TestCentric.Engine.Internal
         {
             AppDomainSetup setup = new AppDomainSetup();
 
-            if (package.SubPackages.Count == 1)
-                package = package.SubPackages[0];
-
             //For parallel tests, we need to use distinct application name
             setup.ApplicationName = "Tests" + "_" + Environment.TickCount;
 
