@@ -15,11 +15,12 @@ namespace TestCentric.Engine.Internal
     public class DomainManagerTests
     {
         private DomainManager _domainManager;
-        private TestPackage _package = new TestPackage(MockAssembly.AssemblyPath);
+        private TestPackage _package;
 
         [SetUp]
         public void CreateDomainManager()
         {
+            _package = new TestPackage(MockAssembly.AssemblyPath);
             _domainManager = new DomainManager();
         }
 
@@ -45,7 +46,7 @@ namespace TestCentric.Engine.Internal
         [Test, Platform("Linux,Net", Reason = "get_SetupInformation() fails on Windows+Mono")]
         public void CanCreateDomainWithApplicationBaseSpecified()
         {
-            string assemblyDir = Path.GetDirectoryName(_package.FullName);
+            string assemblyDir = Path.GetDirectoryName(MockAssembly.AssemblyPath);
             string basePath = Path.GetDirectoryName(Path.GetDirectoryName(assemblyDir));
             string relPath = assemblyDir.Substring(basePath.Length + 1);
 

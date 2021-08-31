@@ -27,7 +27,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="NUnit.Engine.Api">
-			<Version>3.11.1</Version>
+			<Version>4.0.0-dev-001</Version>
 		</PackageReference>
 	</ItemGroup>
 </Project>

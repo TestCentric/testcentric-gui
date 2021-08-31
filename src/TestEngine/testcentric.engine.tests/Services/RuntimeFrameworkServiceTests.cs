@@ -51,7 +51,7 @@ namespace TestCentric.Engine.Services
         {
             var assemblyPath = Path.Combine(TestContext.CurrentContext.TestDirectory, assemblyName);
             FileAssert.Exists(assemblyPath, $"File not found: {assemblyPath}");
-            var package = new TestPackage(assemblyPath);
+            var package = new TestPackage(assemblyPath).SubPackages[0];
 
             _packageAnalyzer.ApplyImageSettings(package);
             var runtimeFramework = _runtimeService.SelectRuntimeFramework(package);
