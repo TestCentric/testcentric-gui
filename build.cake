@@ -1,10 +1,6 @@
 #tool nuget:?package=GitVersion.CommandLine&version=5.0.0
 #tool nuget:?package=GitReleaseManager&version=0.11.0
 #tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.8.0"
-#tool nuget:?package=Wyam&version=2.2.9
-
-#addin nuget:?package=Cake.Git&version=0.22.0
-#addin nuget:?package=Cake.Wyam&version=2.2.9
 
 #load "./build/parameters.cake"
 
@@ -12,11 +8,13 @@
 // ARGUMENTS (In addition to the standard Cake arguments)
 //
 // --asVersion=VERSION
-//     Specifies the full package version, incliding any pre-release
+//     Specifies the full package version, including any pre-release
 //     suffix. This version is used directly instead of the default
 //     version from the script or that calculated by GitVersion.
 //     Note that all other versions (AssemblyVersion, etc.) are
 //     derived from the package version.
+//     
+//     NOTE: We can't use "version" since that's an argument to Cake itself.
 //
 // --testLevel=LEVEL
 //     Specifies the level of package testing, which is normally set
@@ -27,7 +25,7 @@
 //       2 = Adds more tests for PRs and Dev builds uploaded to MyGet
 //       3 = Adds even more tests prior to publishing a release
 //
-// NOTE: Cake syntax requires the `=` character. Neither a space
+// NOTE: Cake syntax now requires the `=` character. Neither a space
 //       nor a colon will work!
 //////////////////////////////////////////////////////////////////////
 
@@ -199,10 +197,6 @@ Task("TestGui")
 //////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////
-// CREATE PACKAGE IMAGE
-//////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////
 // ZIP PACKAGE
 //////////////////////////////////////////////////////////////////////
 
@@ -214,21 +208,8 @@ Task("BuildZipPackage")
 
 		Information("Creating package " + parameters.ZipPackageName);
 
-		// TODO: We copy in and then delete zip-specific addins files because Zip command
-		// requires all files to be in the directory that is zipped. Ideally, the image
-		// directory should be used exclusively for the zip package to avoid having to
-		// add and delete these files.
-		try
-		{
-			var zipFiles = GetFiles(parameters.ZipImageDirectory + "**/*.*");
-			Zip(parameters.ZipImageDirectory, parameters.ZipPackage, zipFiles);
-		}
-		finally
-		{
-			////DeleteFile(parameters.ZipImageDirectory + "bin/testcentric.zip.addins");
-			////foreach (string runtime in parameters.SupportedAgentRuntimes)
-			////	DeleteFile($"{parameters.ZipImageDirectory}bin/agents/{runtime}/testcentric-agent.zip.addins");
-		}
+		var zipFiles = GetFiles(parameters.ZipImageDirectory + "**/*.*");
+		Zip(parameters.ZipImageDirectory, parameters.ZipPackage, zipFiles);
 	});
 
 Task("TestZipPackage")
@@ -481,40 +462,6 @@ Task("CreateProductionRelease")
 		{
 			Information("Skipping CreateProductionRelease because this is not a production release");
 		}
-	});
-
-//////////////////////////////////////////////////////////////////////
-// INTERACTIVE TESTS FOR USE IN DEVELOPMENT
-//////////////////////////////////////////////////////////////////////
-
-Task("MustBeLocalBuild")
-	.Description("Throw an exception if this is not a local build")
-	.Does<BuildParameters>((parameters) =>
-	{
-		if (!parameters.IsLocalBuild)
-			throw new InvalidOperationException($"The {parameters.Target} task is interactive and may only be run locally.");
-	});
-
-//////////////////////////////////////////////////////////////////////
-// RUN THE STANDARD GUI
-//////////////////////////////////////////////////////////////////////
-
-Task("RunTestCentric")
-    .IsDependentOn("MustBeLocalBuild")
-    .Does<BuildParameters>((parameters) =>
-	{
-		StartProcess(parameters.OutputDirectory + GUI_RUNNER);
-	});
-
-//////////////////////////////////////////////////////////////////////
-// CHOCOLATEY INSTALL (MUST RUN AS ADMIN)
-//////////////////////////////////////////////////////////////////////
-
-Task("ChocolateyInstall")
-	.Does<BuildParameters>((parameters) =>
-	{
-		if (StartProcess("choco", $"install -f -y -s {parameters.PackageDirectory} {PACKAGE_NAME}") != 0)
-			throw new InvalidOperationException("Failed to install package. Must run this command as administrator.");
 	});
 
 //////////////////////////////////////////////////////////////////////
