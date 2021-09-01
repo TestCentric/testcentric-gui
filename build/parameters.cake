@@ -4,6 +4,7 @@
 #load "./versioning.cake"
 #load "./testing.cake"
 #load "./test-results.cake"
+#load "./test-reports.cake"
 #load "./packaging.cake"
 #load "./check-headers.cake"
 #load "./console-reporter.cake"

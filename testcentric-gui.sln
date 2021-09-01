@@ -102,6 +102,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{6C9280F6
 		build\package-checks.cake = build\package-checks.cake
 		build\packaging.cake = build\packaging.cake
 		build\parameters.cake = build\parameters.cake
+		build\test-reports.cake = build\test-reports.cake
 		build\test-results.cake = build\test-results.cake
 		build\testing.cake = build\testing.cake
 		build\utilities.cake = build\utilities.cake
