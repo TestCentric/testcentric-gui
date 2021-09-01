@@ -99,13 +99,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{6C9280F6
 		build\check-headers.cake = build\check-headers.cake
 		build\console-reporter.cake = build\console-reporter.cake
 		build\constants.cake = build\constants.cake
+		build\package-checks.cake = build\package-checks.cake
 		build\packaging.cake = build\packaging.cake
 		build\parameters.cake = build\parameters.cake
+		build\test-reports.cake = build\test-reports.cake
 		build\test-results.cake = build\test-results.cake
 		build\testing.cake = build\testing.cake
 		build\utilities.cake = build\utilities.cake
 		build\versioning.cake = build\versioning.cake
-		build\website.cake = build\website.cake
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mock-assembly-x86", "src\tests\mock-assembly-x86\mock-assembly-x86.csproj", "{80A66FA1-65B5-4AA5-B8BB-8908D0B04598}"
