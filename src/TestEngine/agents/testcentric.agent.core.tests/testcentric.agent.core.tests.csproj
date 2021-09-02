@@ -24,10 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\CommonEngineAssemblyInfo.cs" Link="Properties\CommonEngineAssemblyInfo.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\mock-assembly\mock-assembly.csproj" />
     <ProjectReference Include="..\..\testcentric.engine.core\testcentric.engine.core.csproj" />
     <ProjectReference Include="..\testcentric.agent.core\testcentric.agent.core.csproj" />

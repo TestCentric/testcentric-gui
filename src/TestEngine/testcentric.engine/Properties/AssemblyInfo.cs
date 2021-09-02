@@ -3,15 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-
-[assembly: AssemblyTitle("NUnit Engine")]
-[assembly: AssemblyDescription("Provides a common interface for loading, exploring and running NUnit tests")]
-
-// The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("5796938b-03c9-4b75-8b43-89a8adc4acd0")]
 
 [assembly: InternalsVisibleTo("testcentric.engine.tests, PublicKey="+
     "002400000480000094000000060200000024000052534131000400000100010031eea370b1984b" +

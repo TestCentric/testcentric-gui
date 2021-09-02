@@ -8,8 +8,9 @@
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\..\testcentric.snk</AssemblyOriginatorKeyFile>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	</PropertyGroup>
+    <AssemblyTitle>TestCentric Runner</AssemblyTitle>
+    <Description>TestCentric GUI Implementation</Description>
+  </PropertyGroup>
 	<ItemGroup>
 		<Reference Include="System.Windows.Forms" />
 	</ItemGroup>
@@ -17,11 +18,6 @@
     <ProjectReference Include="..\..\TestModel\model\TestCentric.Gui.Model.csproj" />
     <ProjectReference Include="..\..\GuiException\UiException\nunit.uiexception.dll.csproj" />
     <ProjectReference Include="..\..\Common\testcentric.common\TestCentric.Common.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\CommonAssemblyInfo.cs">
-      <Link>Properties\CommonAssemblyInfo.cs</Link>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\..\testcentric.ico">

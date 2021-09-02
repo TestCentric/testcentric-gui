@@ -96,9 +96,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\CommonAssemblyInfo.cs">
-      <Link>Properties\CommonAssemblyInfo.cs</Link>
-    </Compile>
     <Compile Include="Fakes\ExtensionService.cs" />
     <Compile Include="Fakes\FakeUserSettings.cs" />
     <Compile Include="Fakes\AvailableRuntimesService.cs" />

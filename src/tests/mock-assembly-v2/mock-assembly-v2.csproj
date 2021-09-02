@@ -8,9 +8,11 @@
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="NUnit" Version="2.6.4" />
+	  <Compile Remove="Properties\**" />
+	  <EmbeddedResource Remove="Properties\**" />
+	  <None Remove="Properties\**" />
 	</ItemGroup>
 	<ItemGroup>
-		<Folder Include="Properties\" />
+		<PackageReference Include="NUnit" Version="2.6.4" />
 	</ItemGroup>
 </Project>

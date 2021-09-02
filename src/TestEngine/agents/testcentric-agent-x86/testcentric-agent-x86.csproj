@@ -10,6 +10,7 @@
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
     <OutputPath>..\..\..\..\bin\$(Configuration)\agents\</OutputPath>
 	  <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <Title>TestCentric Agent</Title>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net20'">
     <Reference Include="System.Runtime.Remoting" />
@@ -18,7 +19,6 @@
     <Reference Include="System.Runtime.Remoting" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\CommonEngineAssemblyInfo.cs" Link="Properties\CommonEngineAssemblyInfo.cs" />
     <Compile Include="..\AgentExitCodes.cs" Link="AgentExitCodes.cs" />
     <Compile Include="..\Program.cs" Link="Program.cs" />
   </ItemGroup>

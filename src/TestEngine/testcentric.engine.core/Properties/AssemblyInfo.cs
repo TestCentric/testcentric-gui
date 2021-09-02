@@ -3,11 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-using System.Reflection;
 using System.Runtime.CompilerServices;
-
-[assembly: AssemblyTitle("TestCentric Engine Core")]
-[assembly: AssemblyDescription("Lower level of engine")]
 
 [assembly: InternalsVisibleTo("testcentric.engine.tests, PublicKey=" +
     "002400000480000094000000060200000024000052534131000400000100010031eea370b1984b" +
