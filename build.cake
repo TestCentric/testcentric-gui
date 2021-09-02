@@ -115,9 +115,9 @@ Task("Build")
     .Does<BuildParameters>((parameters) =>
 {
     if(parameters.UsingXBuild)
-        XBuild(SOLUTION, parameters.XBuildSettings);
+        XBuild(SOLUTION, parameters.XBuildSettings.WithProperty("Version", parameters.PackageVersion));
     else
-        MSBuild(SOLUTION, parameters.MSBuildSettings);
+        MSBuild(SOLUTION, parameters.MSBuildSettings.WithProperty("Version", parameters.PackageVersion));
 });
 
 //////////////////////////////////////////////////////////////////////

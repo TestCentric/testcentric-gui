@@ -8,18 +8,15 @@
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\..\testcentric.snk</AssemblyOriginatorKeyFile>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	</PropertyGroup>
 	<ItemGroup>
 		<Reference Include="System.Windows.Forms" />
 	</ItemGroup>
 	<ItemGroup>
-		<Compile Include="..\..\CommonAssemblyInfo.cs">
-			<Link>Properties\CommonAssemblyInfo.cs</Link>
-		</Compile>
-	</ItemGroup>
-	<ItemGroup>
 		<PackageReference Include="NUnit" Version="3.13.2" />
 		<PackageReference Include="NUnit.Engine.Api" Version="4.0.0-dev-001" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Properties\" />
 	</ItemGroup>
 </Project>

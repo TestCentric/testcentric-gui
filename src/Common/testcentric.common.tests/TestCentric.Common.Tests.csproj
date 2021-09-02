@@ -6,13 +6,7 @@
 		<OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	</PropertyGroup>
-	<ItemGroup>
-		<Compile Include="..\..\CommonAssemblyInfo.cs">
-			<Link>Properties\CommonAssemblyInfo.cs</Link>
-		</Compile>
-	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\testcentric.common\TestCentric.Common.csproj">
 			<Project>{b69057f3-0663-4763-a3ec-50d463578b94}</Project>

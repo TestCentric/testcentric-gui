@@ -6,8 +6,8 @@
 		<OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	</PropertyGroup>
+    <AssemblyTitle>TestCentric GUI Tests</AssemblyTitle>
+  </PropertyGroup>
 	<ItemGroup>
 		<Reference Include="System.Windows.Forms" />
 	</ItemGroup>
@@ -30,11 +30,6 @@
         <ProjectReference Include="..\..\tests\test-utilities\test-utilities.csproj">
             <Name>test-utilities</Name>
         </ProjectReference>
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Include="..\..\CommonAssemblyInfo.cs">
-            <Link>Properties\CommonAssemblyInfo.cs</Link>
-        </Compile>
     </ItemGroup>
     <ItemGroup>
         <None Include="TestCentric.Gui.Tests.addins">
