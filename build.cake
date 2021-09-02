@@ -71,13 +71,17 @@ Task("DumpSettings")
 Task("Clean")
     .Does<BuildParameters>((parameters) =>
 {
-    CleanDirectory(parameters.OutputDirectory);
+	Information("Deleting " + parameters.OutputDirectory);
+	CleanDirectory(parameters.OutputDirectory);
 });
 
 Task("CleanAll")
-	.IsDependentOn("Clean")
 	.Does<BuildParameters>((parameters) =>
 	{
+		Information("Deleting all output directories");
+		CleanDirectory(parameters.ProjectDirectory + "bin/");
+
+		Information("Deleting object directories");
 		DeleteObjectDirectories(parameters);
 	});
 
@@ -92,25 +96,12 @@ Task("RestorePackages")
 });
 
 //////////////////////////////////////////////////////////////////////
-// UPDATE ASSEMBLYINFO
-//////////////////////////////////////////////////////////////////////
-
-Task("UpdateAssemblyInfo")
-	.Does<BuildParameters>((parameters) =>
-{
-	var major = new Version(parameters.AssemblyVersion).Major;
-	parameters.BuildVersion.PatchAssemblyInfo("src/CommonAssemblyInfo.cs");
-    parameters.BuildVersion.PatchAssemblyInfo("src/TestEngine/CommonEngineAssemblyInfo.cs");
-});
-
-//////////////////////////////////////////////////////////////////////
 // BUILD
 //////////////////////////////////////////////////////////////////////
 
 Task("Build")
 	.IsDependentOn("Clean")
     .IsDependentOn("RestorePackages")
-	.IsDependentOn("UpdateAssemblyInfo")
 	.IsDependentOn("CheckHeaders")
     .Does<BuildParameters>((parameters) =>
 {
