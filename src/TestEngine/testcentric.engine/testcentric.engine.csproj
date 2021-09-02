@@ -4,8 +4,9 @@
     <TargetFrameworks>net40</TargetFrameworks>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\nunit.snk</AssemblyOriginatorKeyFile>
-	<DebugType>Full</DebugType>
-	<OutputPath>..\..\..\bin\$(Configuration)\engine\</OutputPath>
+	  <DebugType>Full</DebugType>
+	  <OutputPath>..\..\..\bin\$(Configuration)\engine\</OutputPath>
+    <Title>TestCentric Engine</Title>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net40'">
     <Reference Include="System.Runtime.Remoting" />
@@ -13,7 +14,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\agents\AgentExitCodes.cs" LinkBase="Agents" />
-    <Compile Include="..\CommonEngineAssemblyInfo.cs" Link="Properties\CommonEngineAssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\testcentric.engine.api\testcentric.engine.api.csproj" />

@@ -8,6 +8,7 @@
     <DebugType>Full</DebugType>
     <OutputPath>..\..\..\..\bin\$(Configuration)\engine\</OutputPath>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <Title>TestCentric Agent Core</Title>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='net20'">
@@ -18,10 +19,6 @@
   <ItemGroup Condition="'$(TargetFramework)'=='net40'">
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Web" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="..\..\CommonEngineAssemblyInfo.cs" Link="Properties\CommonEngineAssemblyInfo.cs" />
   </ItemGroup>
 
   <ItemGroup>
