@@ -28,26 +28,31 @@ namespace TestCentric.Engine.Agents
         [STAThread]
         public static void Main(string[] args)
         {
-            AgentId = new Guid(args[0]);
-            AgencyUrl = args[1];
-
             var traceLevel = InternalTraceLevel.Off;
             var pid = Process.GetCurrentProcess().Id;
             var debugArgPassed = false;
             var workDirectory = string.Empty;
             var agencyPid = string.Empty;
 
-            for (int i = 2; i < args.Length; i++)
+            for (int i = 0; i < args.Length; i++)
             {
                 string arg = args[i];
 
                 // NOTE: we can test these strings exactly since
                 // they originate from the engine itself.
-                if (arg == "--debug-agent")
+                if (arg.StartsWith("--agentId="))
+                {
+                    AgentId = new Guid(arg.Substring(10));
+                }
+                else if (arg.StartsWith("--agencyUrl="))
+                {
+                    AgencyUrl = arg.Substring(12);
+                }
+                else if (arg == "--debug-agent")
                 {
                     debugArgPassed = true;
                 }
-                else if (arg.StartsWith("--trace:"))
+                else if (arg.StartsWith("--trace="))
                 {
                     traceLevel = (InternalTraceLevel)Enum.Parse(typeof(InternalTraceLevel), arg.Substring(8));
                 }
@@ -125,6 +130,11 @@ namespace TestCentric.Engine.Agents
                 log.Error($"Failed with exception: {e.Message} {e.StackTrace}");
                 Environment.Exit(AgentExitCodes.UNABLE_TO_LOCATE_AGENCY);
             }
+        }
+
+        private static bool IsOption(string arg)
+        {
+            return arg.StartsWith("--");
         }
 
         private static void WaitForStop()
