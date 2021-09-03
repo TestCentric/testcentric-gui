@@ -16,8 +16,8 @@ namespace TestCentric.Engine.Agents
 {
     public class TestCentricAgent
     {
-        static Guid AgentId;
-        static string AgencyUrl;
+        ////static Guid AgentId;
+        ////static string AgencyUrl;
         static Process AgencyProcess;
         static RemoteTestAgent Agent;
         private static Logger log;
@@ -28,52 +28,53 @@ namespace TestCentric.Engine.Agents
         [STAThread]
         public static void Main(string[] args)
         {
-            var traceLevel = InternalTraceLevel.Off;
+            var options = new AgentOptions(args);
+            //var traceLevel = InternalTraceLevel.Off;
             var pid = Process.GetCurrentProcess().Id;
-            var debugArgPassed = false;
-            var workDirectory = string.Empty;
-            var agencyPid = string.Empty;
+            //var debugArgPassed = false;
+            //var workDirectory = string.Empty;
+            //var agencyPid = string.Empty;
 
-            for (int i = 0; i < args.Length; i++)
-            {
-                string arg = args[i];
+            //for (int i = 0; i < args.Length; i++)
+            //{
+            //    string arg = args[i];
 
-                // NOTE: we can test these strings exactly since
-                // they originate from the engine itself.
-                if (arg.StartsWith("--agentId="))
-                {
-                    AgentId = new Guid(arg.Substring(10));
-                }
-                else if (arg.StartsWith("--agencyUrl="))
-                {
-                    AgencyUrl = arg.Substring(12);
-                }
-                else if (arg == "--debug-agent")
-                {
-                    debugArgPassed = true;
-                }
-                else if (arg.StartsWith("--trace="))
-                {
-                    traceLevel = (InternalTraceLevel)Enum.Parse(typeof(InternalTraceLevel), arg.Substring(8));
-                }
-                else if (arg.StartsWith("--pid="))
-                {
-                    agencyPid = arg.Substring(6);
-                }
-                else if (arg.StartsWith("--work="))
-                {
-                    workDirectory = arg.Substring(7);
-                }
-            }
+            //    // NOTE: we can test these strings exactly since
+            //    // they originate from the engine itself.
+            //    if (arg.StartsWith("--agentId="))
+            //    {
+            //        AgentId = new Guid(arg.Substring(10));
+            //    }
+            //    else if (arg.StartsWith("--agencyUrl="))
+            //    {
+            //        AgencyUrl = arg.Substring(12);
+            //    }
+            //    else if (arg == "--debug-agent")
+            //    {
+            //        debugArgPassed = true;
+            //    }
+            //    else if (arg.StartsWith("--trace="))
+            //    {
+            //        traceLevel = (InternalTraceLevel)Enum.Parse(typeof(InternalTraceLevel), arg.Substring(8));
+            //    }
+            //    else if (arg.StartsWith("--pid="))
+            //    {
+            //        agencyPid = arg.Substring(6);
+            //    }
+            //    else if (arg.StartsWith("--work="))
+            //    {
+            //        workDirectory = arg.Substring(7);
+            //    }
+            //}
 
             var logName = $"testcentric-agent_{pid}.log";
-            InternalTrace.Initialize(Path.Combine(workDirectory, logName), traceLevel);
+            InternalTrace.Initialize(Path.Combine(options.WorkDirectory, logName), options.TraceLevel);
             log = InternalTrace.GetLogger(typeof(TestCentricAgent));
 
-            if (debugArgPassed)
+            if (options.DebugAgent)
                 TryLaunchDebugger();
 
-            LocateAgencyProcess(agencyPid);
+            LocateAgencyProcess(options.AgencyPid);
 
             log.Info("Agent process {0} starting", pid);
 
@@ -90,12 +91,12 @@ namespace TestCentric.Engine.Agents
 #endif
 
             log.Info("Starting RemoteTestAgent");
-            Agent = new RemoteTestAgent(AgentId);
+            Agent = new RemoteTestAgent(options.AgentId);
             Agent.Transport =
 #if NETFRAMEWORK
-                new TestCentric.Engine.Communication.Transports.Remoting.TestAgentRemotingTransport(Agent, AgencyUrl);
+                new TestCentric.Engine.Communication.Transports.Remoting.TestAgentRemotingTransport(Agent, options.AgencyUrl);
 #else
-                new TestCentric.Engine.Communication.Transports.Tcp.TestAgentTcpTransport(Agent, AgencyUrl);
+                new TestCentric.Engine.Communication.Transports.Tcp.TestAgentTcpTransport(Agent, options.AgencyUrl );
 #endif
             try
             {
