@@ -32,6 +32,10 @@ namespace TestCentric.Engine.Agents
                 {
                     DebugAgent = true;
                 }
+                else if (arg == "--debug-tests")
+                {
+                    DebugTests = true;
+                }
                 else if (arg.StartsWith("--trace="))
                 {
                     TraceLevel = (InternalTraceLevel)Enum.Parse(typeof(InternalTraceLevel), arg.Substring(8));
@@ -50,10 +54,8 @@ namespace TestCentric.Engine.Agents
         public Guid AgentId { get; } = Guid.Empty;
         public string AgencyUrl { get; } = string.Empty;
         public string AgencyPid { get; } = string.Empty;
-        public bool RunAsX86 { get; } = false;
         public bool DebugTests { get; } = false;
         public bool DebugAgent { get; } = false;
-        public bool LoadUserProfile { get; } = false;
         public InternalTraceLevel TraceLevel { get; } = InternalTraceLevel.Off;
         public string WorkDirectory { get; } = string.Empty;
     }
