@@ -12,41 +12,48 @@ namespace TestCentric.Engine.Agents
 {
     public class AgentOptions
     {
+        static readonly char[] DELIMS = new[] { '=', ':' };
         public AgentOptions(params string[] args)
         {
             for (int i = 0; i < args.Length; i++)
             {
                 string arg = args[i];
 
-                // NOTE: we can test these strings exactly since
-                // they originate from the engine itself.
-                if (arg.StartsWith("--agentId="))
+                if (IsOption(arg))
                 {
-                    AgentId = new Guid(arg.Substring(10));
-                }
-                else if (arg.StartsWith("--agencyUrl="))
-                {
-                    AgencyUrl = arg.Substring(12);
-                }
-                else if (arg == "--debug-agent")
-                {
-                    DebugAgent = true;
-                }
-                else if (arg == "--debug-tests")
-                {
-                    DebugTests = true;
-                }
-                else if (arg.StartsWith("--trace="))
-                {
-                    TraceLevel = (InternalTraceLevel)Enum.Parse(typeof(InternalTraceLevel), arg.Substring(8));
-                }
-                else if (arg.StartsWith("--pid="))
-                {
-                    AgencyPid = arg.Substring(6);
-                }
-                else if (arg.StartsWith("--work="))
-                {
-                    WorkDirectory = arg.Substring(7);
+                    var opt = arg.Substring(2);
+                    var delim = opt.IndexOfAny(DELIMS);
+                    string val = null;
+                    if (delim > 0)
+                    {
+                        val = opt.Substring(delim + 1);
+                        opt = opt.Substring(0, delim);
+                    }
+
+                    switch (opt)
+                    {
+                        case "agentId":
+                            AgentId = new Guid(val);
+                            break;
+                        case "agencyUrl":
+                            AgencyUrl = val;
+                            break;
+                        case "debug-agent":
+                            DebugAgent = true;
+                            break;
+                        case "debug-tests":
+                            DebugTests = true;
+                            break;
+                        case "trace":
+                            TraceLevel = (InternalTraceLevel)Enum.Parse(typeof(InternalTraceLevel), val);
+                            break;
+                        case "pid":
+                            AgencyPid = val;
+                            break;
+                        case "work":
+                            WorkDirectory = val;
+                            break;
+                    }
                 }
             }
         }
@@ -58,5 +65,10 @@ namespace TestCentric.Engine.Agents
         public bool DebugAgent { get; } = false;
         public InternalTraceLevel TraceLevel { get; } = InternalTraceLevel.Off;
         public string WorkDirectory { get; } = string.Empty;
+
+        private static bool IsOption(string arg)
+        {
+            return arg.StartsWith("--");
+        }
     }
 }
