@@ -16,8 +16,8 @@ namespace TestCentric.Engine.Agents
 {
     public class TestCentricAgent
     {
-        static Guid AgentId;
-        static string AgencyUrl;
+        ////static Guid AgentId;
+        ////static string AgencyUrl;
         static Process AgencyProcess;
         static RemoteTestAgent Agent;
         private static Logger log;
@@ -28,47 +28,17 @@ namespace TestCentric.Engine.Agents
         [STAThread]
         public static void Main(string[] args)
         {
-            AgentId = new Guid(args[0]);
-            AgencyUrl = args[1];
-
-            var traceLevel = InternalTraceLevel.Off;
+            var options = new AgentOptions(args);
             var pid = Process.GetCurrentProcess().Id;
-            var debugArgPassed = false;
-            var workDirectory = string.Empty;
-            var agencyPid = string.Empty;
-
-            for (int i = 2; i < args.Length; i++)
-            {
-                string arg = args[i];
-
-                // NOTE: we can test these strings exactly since
-                // they originate from the engine itself.
-                if (arg == "--debug-agent")
-                {
-                    debugArgPassed = true;
-                }
-                else if (arg.StartsWith("--trace:"))
-                {
-                    traceLevel = (InternalTraceLevel)Enum.Parse(typeof(InternalTraceLevel), arg.Substring(8));
-                }
-                else if (arg.StartsWith("--pid="))
-                {
-                    agencyPid = arg.Substring(6);
-                }
-                else if (arg.StartsWith("--work="))
-                {
-                    workDirectory = arg.Substring(7);
-                }
-            }
-
             var logName = $"testcentric-agent_{pid}.log";
-            InternalTrace.Initialize(Path.Combine(workDirectory, logName), traceLevel);
+
+            InternalTrace.Initialize(Path.Combine(options.WorkDirectory, logName), options.TraceLevel);
             log = InternalTrace.GetLogger(typeof(TestCentricAgent));
 
-            if (debugArgPassed)
+            if (options.DebugAgent || options.DebugTests)
                 TryLaunchDebugger();
 
-            LocateAgencyProcess(agencyPid);
+            LocateAgencyProcess(options.AgencyPid);
 
             log.Info("Agent process {0} starting", pid);
 
@@ -85,12 +55,12 @@ namespace TestCentric.Engine.Agents
 #endif
 
             log.Info("Starting RemoteTestAgent");
-            Agent = new RemoteTestAgent(AgentId);
+            Agent = new RemoteTestAgent(options.AgentId);
             Agent.Transport =
 #if NETFRAMEWORK
-                new TestCentric.Engine.Communication.Transports.Remoting.TestAgentRemotingTransport(Agent, AgencyUrl);
+                new TestCentric.Engine.Communication.Transports.Remoting.TestAgentRemotingTransport(Agent, options.AgencyUrl);
 #else
-                new TestCentric.Engine.Communication.Transports.Tcp.TestAgentTcpTransport(Agent, AgencyUrl);
+                new TestCentric.Engine.Communication.Transports.Tcp.TestAgentTcpTransport(Agent, options.AgencyUrl );
 #endif
             try
             {
@@ -125,6 +95,11 @@ namespace TestCentric.Engine.Agents
                 log.Error($"Failed with exception: {e.Message} {e.StackTrace}");
                 Environment.Exit(AgentExitCodes.UNABLE_TO_LOCATE_AGENCY);
             }
+        }
+
+        private static bool IsOption(string arg)
+        {
+            return arg.StartsWith("--");
         }
 
         private static void WaitForStop()

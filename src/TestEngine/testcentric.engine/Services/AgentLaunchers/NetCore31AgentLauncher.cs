@@ -39,7 +39,7 @@ namespace TestCentric.Engine.Services
             bool loadUserProfile = package.GetSetting(EnginePackageSettings.LoadUserProfile, false);
             string workDirectory = package.GetSetting(EnginePackageSettings.WorkDirectory, string.Empty);
 
-            var sb = new StringBuilder($"{agentId} {agencyUrl} --pid={Process.GetCurrentProcess().Id}");
+            var sb = new StringBuilder($"--agentId={agentId} --agencyUrl={agencyUrl} --pid={Process.GetCurrentProcess().Id}");
 
             // Set options that need to be in effect before the package
             // is loaded by using the command line.
