@@ -48,7 +48,9 @@ namespace TestCentric.Engine.Agents
             new TestCaseData("--work=WORKDIR", "WorkDirectory", "WORKDIR"),
             // Options with values - using ':' as delimiter
             new TestCaseData("--trace:Error", "TraceLevel", InternalTraceLevel.Error),
-            new TestCaseData("--work:WORKDIR", "WorkDirectory", "WORKDIR")
+            new TestCaseData("--work:WORKDIR", "WorkDirectory", "WORKDIR"),
+            // Value with spaces (provided OS passes them through)
+            new TestCaseData("--work:MY WORK DIR", "WorkDirectory", "MY WORK DIR"),
         };
 
         [TestCaseSource(nameof(ValidSettings))]
@@ -58,6 +60,16 @@ namespace TestCentric.Engine.Agents
             var prop = typeof(AgentOptions).GetProperty(propertyName);
             Assert.NotNull(prop, $"Property {propertyName} does not exist");
             Assert.That(prop.GetValue(options, new object[0]), Is.EqualTo(expectedValue));
+        }
+
+        [Test]
+        public void MultipleOptions()
+        {
+            var options = new AgentOptions("--debug-tests", "--trace=Info", "--work", "MYWORKDIR");
+            Assert.False(options.DebugAgent);
+            Assert.True(options.DebugTests);
+            Assert.That(options.TraceLevel, Is.EqualTo(InternalTraceLevel.Info));
+            Assert.That(options.WorkDirectory, Is.EqualTo("MYWORKDIR"));
         }
     }
 }
