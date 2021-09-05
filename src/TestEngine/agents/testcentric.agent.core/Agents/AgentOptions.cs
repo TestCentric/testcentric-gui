@@ -13,6 +13,19 @@ namespace TestCentric.Engine.Agents
     public class AgentOptions
     {
         static readonly char[] DELIMS = new[] { '=', ':' };
+        static readonly Dictionary<string, bool> VALID_OPTIONS = new Dictionary<string, bool>();
+       
+        static AgentOptions()
+        {
+            VALID_OPTIONS["agentId"] = true;
+            VALID_OPTIONS["agencyUrl"] = true;
+            VALID_OPTIONS["debug-agent"] = false;
+            VALID_OPTIONS["debug-tests"] = false;
+            VALID_OPTIONS["trace"] = true;
+            VALID_OPTIONS["pid"] = true;
+            VALID_OPTIONS["work"] = true;
+        }
+
         public AgentOptions(params string[] args)
         {
             for (int i = 0; i < args.Length; i++)
@@ -21,13 +34,32 @@ namespace TestCentric.Engine.Agents
 
                 if (IsOption(arg))
                 {
-                    var opt = arg.Substring(2);
-                    var delim = opt.IndexOfAny(DELIMS);
+                    var option = arg.Substring(2);
+                    var delim = option.IndexOfAny(DELIMS);
+                    var opt = option;
                     string val = null;
                     if (delim > 0)
                     {
-                        val = opt.Substring(delim + 1);
-                        opt = opt.Substring(0, delim);
+                        opt = option.Substring(0, delim);
+                        val = option.Substring(delim + 1);
+                    }
+
+                    if (!VALID_OPTIONS.ContainsKey(opt))
+                        InvalidArgumentError(arg);
+
+                    bool optionTakesValue = VALID_OPTIONS[opt];
+
+                    if (optionTakesValue)
+                    {
+                        if (val == null && i + 1 < args.Length)
+                            val = args[++i];
+
+                        if (val == null)
+                            ValueRequiredError(arg);
+                    }
+                    else if (delim > 0)
+                    {
+                        ValueNotAllowedError(arg);
                     }
 
                     switch (opt)
@@ -53,6 +85,9 @@ namespace TestCentric.Engine.Agents
                         case "work":
                             WorkDirectory = val;
                             break;
+                        default:
+                            InvalidArgumentError(arg);
+                            break;
                     }
                 }
             }
@@ -69,6 +104,21 @@ namespace TestCentric.Engine.Agents
         private static bool IsOption(string arg)
         {
             return arg.StartsWith("--");
+        }
+
+        private void ValueRequiredError(string arg)
+        {
+            throw new Exception($"Option requires a value: {arg}");
+        }
+
+        private void ValueNotAllowedError(string arg)
+        {
+            throw new Exception($"Option does not take a value: {arg}");
+        }
+
+        private void InvalidArgumentError(string arg)
+        {
+            throw new Exception("Invalid argument " + arg);
         }
     }
 }
