@@ -2,6 +2,23 @@
 #tool nuget:?package=GitReleaseManager&version=0.11.0
 #tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.8.0"
 
+const string SOLUTION = "testcentric-gui.sln";
+const string NUGET_ID = "TestCentric.GuiRunner";
+const string CHOCO_ID = "testcentric-gui-runner";
+const string GITHUB_OWNER = "testcentric";
+const string GITHUB_REPO = "testcentric-gui";
+const string DEFAULT_VERSION = "2.0.0";
+const string DEFAULT_CONFIGURATION = "Release";
+
+const string PACKAGE_NAME = "testcentric-gui";
+const string NUGET_PACKAGE_NAME = "TestCentric.GuiRunner";
+const string ENGINE_CORE_PACKAGE_NAME = "TestCentric.Engine.Core";
+const string ENGINE_API_PACKAGE_NAME = "TestCentric.Engine.Api";
+
+const string GUI_RUNNER = "testcentric.exe";
+const string GUI_TESTS = "*.Tests.dll";
+
+// Load scripts after defining constants
 #load "./cake/parameters.cake"
 
 //////////////////////////////////////////////////////////////////////
@@ -60,9 +77,9 @@ Teardown(context => CheckTestErrors(ref ErrorDetail));
 
 Task("DumpSettings")
 	.Does<BuildParameters>((parameters) =>
-{
-	parameters.DumpSettings();
-});
+	{
+		parameters.DumpSettings();
+	});
 
 //////////////////////////////////////////////////////////////////////
 // CLEAN
@@ -70,19 +87,9 @@ Task("DumpSettings")
 
 Task("Clean")
     .Does<BuildParameters>((parameters) =>
-{
-	Information("Deleting " + parameters.OutputDirectory);
-	CleanDirectory(parameters.OutputDirectory);
-});
-
-Task("CleanAll")
-	.Does<BuildParameters>((parameters) =>
 	{
-		Information("Deleting all output directories");
-		CleanDirectory(parameters.ProjectDirectory + "bin/");
-
-		Information("Deleting object directories");
-		DeleteObjectDirectories(parameters);
+		Information("Cleaning " + parameters.OutputDirectory);
+		CleanDirectory(parameters.OutputDirectory);
 	});
 
 //////////////////////////////////////////////////////////////////////
@@ -418,9 +425,6 @@ Task("CreateDraftRelease")
 				Error("");
 				throw;
             }
-
-			GitReleaseManagerExport(parameters.GitHubAccessToken, GITHUB_OWNER, GITHUB_REPO, "DraftRelease.md",
-				new GitReleaseManagerExportSettings() { TagName = milestone });
 		}
 		else
 		{
@@ -510,7 +514,7 @@ Task("Travis")
     .IsDependentOn("Build")
     .IsDependentOn("Test");
 
-Task("All")
+Task("Full")
 	.IsDependentOn("DumpSettings")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
@@ -518,7 +522,7 @@ Task("All")
 	.IsDependentOn("TestPackages");
 
 Task("Default")
-    .IsDependentOn("Test");
+    .IsDependentOn("Build");
 
 //////////////////////////////////////////////////////////////////////
 // EXECUTION

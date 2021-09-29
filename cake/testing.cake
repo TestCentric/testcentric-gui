@@ -91,6 +91,8 @@ public struct PackageTest
 	}
 }
 
+const string DEFAULT_TEST_RESULT_FILE = "TestResult.xml";
+
 // Abstract base for all package testers. Currently, we only
 // have one package of each type (Zip, NuGet, Chocolatey).
 public abstract class PackageTester : GuiTester
