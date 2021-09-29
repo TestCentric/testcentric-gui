@@ -2,7 +2,7 @@
 #tool nuget:?package=GitReleaseManager&version=0.11.0
 #tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.8.0"
 
-#load "./build/parameters.cake"
+#load "./cake/parameters.cake"
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS (In addition to the standard Cake arguments)
