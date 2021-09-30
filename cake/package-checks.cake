@@ -1,10 +1,28 @@
 ﻿//////////////////////////////////////////////////////////////////////
+// SYNTAX FOR EXPRESSING CHECKS
+//////////////////////////////////////////////////////////////////////
+
+private static class Check
+{
+    public static void That(string testDir, params PackageCheck[] checks)
+    {
+        foreach (var check in checks)
+            check.ApplyTo(testDir);
+    }
+}
+
+private static FileCheck HasFile(string file) => HasFiles(new[] { file });
+private static FileCheck HasFiles(params string[] files) => new FileCheck(files);
+
+private static DirectoryCheck HasDirectory(string dir) => new DirectoryCheck(dir);
+
+//////////////////////////////////////////////////////////////////////
 // PACKAGECHECK CLASS
 //////////////////////////////////////////////////////////////////////
 
 public abstract class PackageCheck
 {
-    public abstract bool Apply(string dir);
+    public abstract bool ApplyTo(string dir);
 
     protected static void RecordError(string msg)
     {
@@ -25,7 +43,7 @@ public class FileCheck : PackageCheck
         _paths = paths;
     }
 
-    public override bool Apply(string dir)
+    public override bool ApplyTo(string dir)
     {
         var isOK = true;
 
@@ -78,7 +96,7 @@ public class DirectoryCheck : PackageCheck
         return AndFiles(file);
     }
 
-    public override bool Apply(string dir)
+    public override bool ApplyTo(string dir)
     {
         if (!System.IO.Directory.Exists(dir + _path))
         {
