@@ -1,5 +1,10 @@
+# NOTE: The milestone must not contain any closed issues without one
+# of the labels listed here under issue-labels-include or issue-labels-exclude.
+# If no such label is found, then GRM fails with an error.
+
 # The labels that will be used to include issues in release notes.
 issue-labels-include:
+- Breaking Change
 - Feature
 - Enhancement
 - Bug
