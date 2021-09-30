@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env bash
+#!/usr/bin/env bash
 
 ##########################################################################
 # This is the Cake bootstrapper script for Linux and OS X.
@@ -18,6 +18,10 @@ PACKAGES_CONFIG_MD5=$TOOLS_DIR/packages.config.md5sum
 ADDINS_PACKAGES_CONFIG=$ADDINS_DIR/packages.config
 MODULES_PACKAGES_CONFIG=$MODULES_DIR/packages.config
 
+export CAKE_PATHS_TOOLS=$TOOLS_DIR
+export CAKE_PATHS_ADDINS=$ADDINS_DIR
+export CAKE_PATHS_MODULES=$MODULES_DIR
+
 # Define md5sum or md5 depending on Linux/OSX
 MD5_EXE=
 if [[ "$(uname -s)" == "Darwin" ]]; then
@@ -27,7 +31,7 @@ else
 fi
 
 # Define default arguments.
-SCRIPT="build.cake"
+SCRIPT=$SCRIPT_DIR/build.cake
 CAKE_ARGUMENTS=()
 
 # Parse arguments.
@@ -50,7 +54,7 @@ if [ ! -f "$TOOLS_DIR/packages.config" ]; then
     echo "Downloading packages.config..."
     curl -Lsfo "$TOOLS_DIR/packages.config" https://cakebuild.net/download/bootstrapper/packages
     if [ $? -ne 0 ]; then
-        echo "An error occured while downloading packages.config."
+        echo "An error occurred while downloading packages.config."
         exit 1
     fi
 fi
@@ -60,7 +64,7 @@ if [ ! -f "$NUGET_EXE" ]; then
     echo "Downloading NuGet..."
     curl -Lsfo "$NUGET_EXE" https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
     if [ $? -ne 0 ]; then
-        echo "An error occured while downloading nuget.exe."
+        echo "An error occurred while downloading nuget.exe."
         exit 1
     fi
 fi
@@ -68,7 +72,7 @@ fi
 # Restore tools from NuGet.
 pushd "$TOOLS_DIR" >/dev/null
 if [ ! -f "$PACKAGES_CONFIG_MD5" ] || [ "$( cat "$PACKAGES_CONFIG_MD5" | sed 's/\r$//' )" != "$( $MD5_EXE "$PACKAGES_CONFIG" | awk '{ print $1 }' )" ]; then
-    find . -type d ! -name . | xargs rm -rf
+    find . -type d ! -name . ! -name 'Cake.Bakery' | xargs rm -rf
 fi
 
 mono "$NUGET_EXE" install -ExcludeVersion
@@ -115,3 +119,8 @@ fi
 
 # Start Cake
 exec mono "$CAKE_EXE" $SCRIPT "${CAKE_ARGUMENTS[@]}"
+
+# Clean up environment variables that were created earlier in this bootstrapper
+unset CAKE_PATHS_TOOLS
+unset CAKE_PATHS_ADDINS
+unset CAKE_PATHS_MODULES
