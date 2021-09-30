@@ -1,12 +1,12 @@
-#load "./utilities.cake"
-#load "./package-checks.cake"
 #load "./versioning.cake"
-#load "./testing.cake"
+#load "./packaging.cake"
+#load "./package-checks.cake"
+#load "./package-tests.cake"
 #load "./test-results.cake"
 #load "./test-reports.cake"
-#load "./packaging.cake"
 #load "./check-headers.cake"
 #load "./console-reporter.cake"
+#load "./utilities.cake"
 #load "./local-targets.cake"
 
 // URLs for uploading packages
@@ -53,13 +53,11 @@ public class BuildParameters
 		MyGetApiKey = _context.EnvironmentVariable(MYGET_API_KEY);
 		NuGetApiKey = _context.EnvironmentVariable(NUGET_API_KEY);
 		ChocolateyApiKey = _context.EnvironmentVariable(CHOCO_API_KEY);
+		GitHubAccessToken = _context.EnvironmentVariable(GITHUB_ACCESS_TOKEN);
 
 		UsingXBuild = context.EnvironmentVariable("USE_XBUILD") != null;
-
-		GitHubAccessToken = _context.EnvironmentVariable(GITHUB_ACCESS_TOKEN);
 		
 		BuildVersion = new BuildVersion(context, this);
-		//ReleaseManager = new ReleaseManager(context, this);
 
 		if (context.HasArgument("testLevel"))
 			PackageTestLevel = context.Argument("testLevel", 1);
@@ -130,7 +128,6 @@ public class BuildParameters
 	public bool IsLocalBuild => _buildSystem.IsLocalBuild;
 	public bool IsRunningOnUnix => _context.IsRunningOnUnix();
 	public bool IsRunningOnWindows => _context.IsRunningOnWindows();
-
 	public bool IsRunningOnAppVeyor => _buildSystem.AppVeyor.IsRunningOnAppVeyor;
 
 	public string ProjectDirectory { get; }

@@ -210,8 +210,38 @@ Task("BuildZipPackage")
 		Zip(parameters.ZipImageDirectory, parameters.ZipPackage, zipFiles);
 	});
 
+Task("InstallZipPackage")
+	.Does<BuildParameters>((parameters) =>
+	{
+		CleanDirectory(parameters.ZipTestDirectory);
+		Unzip(parameters.ZipPackage, parameters.ZipTestDirectory);
+
+		Information($"Unzipped {parameters.ZipPackageName} to { parameters.ZipTestDirectory}");
+	});
+
+Task("VerifyZipPackage")
+	.IsDependentOn("InstallZipPackage")
+	.Does<BuildParameters>((parameters) =>
+	{
+		Check.That(parameters.ZipTestDirectory,
+			HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt"),
+			HasDirectory("bin").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.zip.addins"),
+			HasDirectory("bin/agents/net20").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
+			HasDirectory("bin/agents/net40").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
+			HasDirectory("bin/agents/netcoreapp2.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
+			HasDirectory("bin/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
+			HasDirectory("bin/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
+			HasDirectory("bin/Images").WithFiles("DebugTests.png", "RunTests.png", "StopRun.png", "GroupBy_16x.png", "SummaryReport.png"),
+			HasDirectory("bin/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
+			HasDirectory("bin/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
+			HasDirectory("bin/Images/Tree/Default").WithFiles(TREE_ICONS_PNG),
+			HasDirectory("bin/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG));
+
+		Information("Verification was successful!");
+	});
+
 Task("TestZipPackage")
-	.IsDependentOn("BuildZipPackage")
+	.IsDependentOn("InstallZipPackage")
 	.Does<BuildParameters>((parameters) =>
 	{
 		new ZipPackageTester(parameters).RunAllTests();
@@ -237,8 +267,38 @@ Task("BuildNuGetPackage")
         });
 	});
 
+Task("InstallNuGetPackage")
+	.Does<BuildParameters>((parameters) =>
+	{
+		CleanDirectory(parameters.NuGetTestDirectory);
+		Unzip(parameters.NuGetPackage, parameters.NuGetTestDirectory);
+
+		Information($"Unzipped {parameters.NuGetPackageName} to { parameters.NuGetTestDirectory}");
+	});
+
+Task("VerifyNuGetPackage")
+	.IsDependentOn("InstallNuGetPackage")
+	.Does<BuildParameters>((parameters) =>
+	{
+		Check.That(parameters.NuGetTestDirectory,
+			HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "testcentric.png"),
+			HasDirectory("tools").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.nuget.addins"),
+			HasDirectory("tools/agents/net20").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
+			HasDirectory("tools/agents/net40").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
+			HasDirectory("tools/agents/netcoreapp2.1").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
+			HasDirectory("tools/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
+			HasDirectory("tools/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
+			HasDirectory("tools/Images").WithFiles("DebugTests.png", "RunTests.png", "StopRun.png", "GroupBy_16x.png", "SummaryReport.png"),
+			HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
+			HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
+			HasDirectory("tools/Images/Tree/Default").WithFiles(TREE_ICONS_PNG),
+			HasDirectory("tools/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG));
+
+		Information("Verification was successful!");
+	});
+
 Task("TestNuGetPackage")
-	.IsDependentOn("BuildNuGetPackage")
+	.IsDependentOn("InstallNuGetPackage")
 	.Does<BuildParameters>((parameters) =>
 	{
 		new NuGetPackageTester(parameters).RunAllTests();
@@ -266,8 +326,37 @@ Task("BuildChocolateyPackage")
             });
     });
 
+Task("InstallChocolateyPackage")
+	.Does<BuildParameters>((parameters) =>
+	{
+		CleanDirectory(parameters.ChocolateyTestDirectory);
+		Unzip(parameters.ChocolateyPackage, parameters.ChocolateyTestDirectory);
+
+		Information($"Unzipped {parameters.ChocolateyPackageName} to { parameters.ChocolateyTestDirectory}");
+	});
+
+Task("VerifyChocolateyPackage")
+	.IsDependentOn("InstallChocolateyPackage")
+	.Does<BuildParameters>((parameters) =>
+	{
+		Check.That(parameters.ChocolateyTestDirectory,
+			HasDirectory("tools").WithFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "VERIFICATION.txt", "testcentric.choco.addins").AndFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.choco.addins"),
+			HasDirectory("tools/agents/net20").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
+			HasDirectory("tools/agents/net40").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
+			HasDirectory("tools/agents/netcoreapp2.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
+			HasDirectory("tools/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
+			HasDirectory("tools/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
+			HasDirectory("tools/Images").WithFiles("DebugTests.png", "RunTests.png", "StopRun.png", "GroupBy_16x.png", "SummaryReport.png"),
+			HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
+			HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
+			HasDirectory("tools/Images/Tree/Default").WithFiles(TREE_ICONS_PNG),
+			HasDirectory("tools/Images/Tree/Visual%20Studio").WithFiles(TREE_ICONS_PNG));
+
+		Information("Verification was successful!");
+	});
+
 Task("TestChocolateyPackage")
-	.IsDependentOn("BuildChocolateyPackage")
+	.IsDependentOn("InstallChocolateyPackage")
 	.WithCriteria(IsRunningOnWindows())
 	.Does<BuildParameters>((parameters) =>
 	{
@@ -465,8 +554,26 @@ Task("CreateProductionRelease")
 
 Task("Package")
 	.IsDependentOn("Build")
-	.IsDependentOn("BuildPackages")
-	.IsDependentOn("TestPackages");
+	.IsDependentOn("PackageZip")
+	.IsDependentOn("PackageNuGet")
+	.IsDependentOn("PackageChocolatey")
+	.IsDependentOn("BuildEngineCorePackage")
+	.IsDependentOn("BuildEngineApiPackage");
+
+Task("PackageZip")
+	.IsDependentOn("BuildZipPackage")
+	.IsDependentOn("VerifyZipPackage")
+	.IsDependentOn("TestZipPackage");
+
+Task("PackageNuGet")
+	.IsDependentOn("BuildNuGetPackage")
+	.IsDependentOn("VerifyNuGetPackage")
+	.IsDependentOn("TestNuGetPackage");
+
+Task("PackageChocolatey")
+	.IsDependentOn("BuildChocolateyPackage")
+	.IsDependentOn("VerifyChocolateyPackage")
+	.IsDependentOn("TestChocolateyPackage");
 
 Task("Test")
 	.IsDependentOn("TestEngineCore")
@@ -474,38 +581,11 @@ Task("Test")
 	.IsDependentOn("TestEngine")
 	.IsDependentOn("TestGui");
 
-Task("BuildPackages")
-	.IsDependentOn("CheckTestErrors")
-    .IsDependentOn("BuildZipPackage")
-	.IsDependentOn("BuildNuGetPackage")
-    .IsDependentOn("BuildChocolateyPackage")
-	.IsDependentOn("BuildEngineCorePackage")
-	.IsDependentOn("BuildEngineApiPackage");
-
-Task("TestPackages")
-	.IsDependentOn("BuildPackages")
-    .IsDependentOn("TestZipPackage")
-	.IsDependentOn("TestNuGetPackage")
-    .IsDependentOn("TestChocolateyPackage");
-
-Task("PackageZip")
-	.IsDependentOn("BuildZipPackage")
-	.IsDependentOn("TestZipPackage");
-
-Task("PackageNuGet")
-	.IsDependentOn("BuildNuGetPackage")
-	.IsDependentOn("TestNuGetPackage");
-
-Task("PackageChocolatey")
-	.IsDependentOn("BuildChocolateyPackage")
-	.IsDependentOn("TestChocolateyPackage");
-
 Task("AppVeyor")
 	.IsDependentOn("DumpSettings")
 	.IsDependentOn("Build")
 	.IsDependentOn("Test")
-	.IsDependentOn("BuildPackages")
-	.IsDependentOn("TestPackages")
+	.IsDependentOn("Package")
 	.IsDependentOn("PublishPackages")
 	.IsDependentOn("CreateDraftRelease")
 	.IsDependentOn("CreateProductionRelease");
@@ -518,8 +598,7 @@ Task("Full")
 	.IsDependentOn("DumpSettings")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
-    .IsDependentOn("BuildPackages")
-	.IsDependentOn("TestPackages");
+    .IsDependentOn("Package");
 
 Task("Default")
     .IsDependentOn("Build");
