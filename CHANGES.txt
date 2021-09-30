@@ -1,4 +1,25 @@
-﻿TestCentric Runner for NUnit 2.0.0-alpha1 - August 13, 2021
+﻿TestCentric Runner for NUnit 2.0.0-alpha3 - September 30, 2021
+
+Breaking Changes
+
+ * 808 Switch to the dev-40 build of the NUnit Engine API
+ * 809 Stop building for .NET Standard 1.6 and .NET Core 1.1
+
+Feature
+
+ * 804 Remove references to the engine from the GUI proper
+
+Enhancement
+
+ * 705 Modify Arguments to Agent Process
+
+Build
+
+ * 805 Stop use of Image Directory where not needed
+ * 812 Use VS Project properties to generate the assemblyinfo files
+ * 813 Upgrade to the latest Cake version
+
+TestCentric Runner for NUnit 2.0.0-alpha2 - August 15, 2021
 
 Features
 
@@ -84,28 +105,41 @@ Engine Features
  * X86 builds of .Net Core agents are no longer provided, since
    they are not needed.
 
-Issues Resolved
+Breaking Changes
+
  * 444 Eliminate in process execution
  * 656 Pluggable Agents
  * 657 Eliminate DomainUsage option
  * 664 Replace AppDomain and Process with "Agent" from user perspective
  * 665 Eliminate ProcessModel setting
- * 666 Issue an error message when user provides an obsolete project setting. Ignore in project files.
- * 677 Update AboutBox for 2.0 release
+
+Features
+
  * 678 Create package for use by pluggable agents
- * 682 Build script should check files for valid headers
  * 684 Make metadata assembly a fully independent package
  * 689 Remove DomainManager as a service
  * 691 Remove InProcessTestRunnerFactory
  * 693 Stop building engine for .NET Standard
  * 694 Remove x86 build of agent for .NET Core
  * 697 Agent Redesign
+
+Enhancements
+
+ * 666 Issue an error message when user provides an obsolete project setting. Ignore in project files.
+ * 677 Update AboutBox for 2.0 release
+ * 715 Make dependencies of one service on another explicit.
+
+Bugs
+
+ * 707 ResultHelper.Aggregate doesn't count warnings
+ * 719 Crashing Testcentric on trying to change Process Model to X86
+
+Build
+
+ * 682 Build script should check files for valid headers
  * 699 Create separate test assembly for nunit.agent.core
  * 700 Use the GUI to run its own tests
- * 707 ResultHelper.Aggregate doesn't count warnings
- * 715 Make dependencies of one service on another explicit.
  * 716 Provide test doubles for all services needed for testing.
- * 719 Crashing Testcentric on trying to change Process Model to X86
  * 725 Upgrade NUnit framework to 3.12
  * 729 Allow creation of draft and production GitHub releases for pre-release versions
 
