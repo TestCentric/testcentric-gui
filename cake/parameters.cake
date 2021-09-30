@@ -1,13 +1,30 @@
-#load "./constants.cake"
-#load "./utilities.cake"
-#load "./package-checks.cake"
 #load "./versioning.cake"
-#load "./testing.cake"
+#load "./packaging.cake"
+#load "./package-checks.cake"
+#load "./package-tests.cake"
 #load "./test-results.cake"
 #load "./test-reports.cake"
-#load "./packaging.cake"
 #load "./check-headers.cake"
 #load "./console-reporter.cake"
+#load "./utilities.cake"
+#load "./local-targets.cake"
+
+// URLs for uploading packages
+private const string MYGET_PUSH_URL = "https://www.myget.org/F/testcentric/api/v2";
+private const string NUGET_PUSH_URL = "https://api.nuget.org/v3/index.json";
+private const string CHOCO_PUSH_URL = "https://push.chocolatey.org/";
+
+// Environment Variable names holding API keys
+private const string MYGET_API_KEY = "MYGET_API_KEY";
+private const string NUGET_API_KEY = "NUGET_API_KEY";
+private const string CHOCO_API_KEY = "CHOCO_API_KEY";
+private const string GITHUB_ACCESS_TOKEN = "GITHUB_ACCESS_TOKEN";
+
+// Pre-release labels that we publish
+private static readonly string[] LABELS_WE_PUBLISH_ON_MYGET = { "dev", "pre" };
+private static readonly string[] LABELS_WE_PUBLISH_ON_NUGET = { "alpha", "beta", "rc" };
+private static readonly string[] LABELS_WE_PUBLISH_ON_CHOCOLATEY = { "alpha", "beta", "rc" };
+private static readonly string[] LABELS_WE_RELEASE_ON_GITHUB = { "alpha", "beta", "rc" };
 
 public class BuildParameters
 {
@@ -36,13 +53,11 @@ public class BuildParameters
 		MyGetApiKey = _context.EnvironmentVariable(MYGET_API_KEY);
 		NuGetApiKey = _context.EnvironmentVariable(NUGET_API_KEY);
 		ChocolateyApiKey = _context.EnvironmentVariable(CHOCO_API_KEY);
+		GitHubAccessToken = _context.EnvironmentVariable(GITHUB_ACCESS_TOKEN);
 
 		UsingXBuild = context.EnvironmentVariable("USE_XBUILD") != null;
-
-		GitHubAccessToken = _context.EnvironmentVariable(GITHUB_ACCESS_TOKEN);
 		
 		BuildVersion = new BuildVersion(context, this);
-		//ReleaseManager = new ReleaseManager(context, this);
 
 		if (context.HasArgument("testLevel"))
 			PackageTestLevel = context.Argument("testLevel", 1);
@@ -113,7 +128,6 @@ public class BuildParameters
 	public bool IsLocalBuild => _buildSystem.IsLocalBuild;
 	public bool IsRunningOnUnix => _context.IsRunningOnUnix();
 	public bool IsRunningOnWindows => _context.IsRunningOnWindows();
-
 	public bool IsRunningOnAppVeyor => _buildSystem.AppVeyor.IsRunningOnAppVeyor;
 
 	public string ProjectDirectory { get; }

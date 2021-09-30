@@ -3,6 +3,22 @@
 // PACKAGING METHODS AND CLASSES
 //////////////////////////////////////////////////////////////////////
 
+protected static readonly string[] ENGINE_FILES = {
+        "testcentric.engine.dll", "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll"};
+protected static readonly string[] ENGINE_CORE_FILES = {
+        "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll" };
+protected static readonly string[] NET_FRAMEWORK_AGENT_FILES = {
+        "testcentric-agent.exe", "testcentric-agent.exe.config", "testcentric-agent-x86.exe", "testcentric-agent-x86.exe.config" };
+protected static readonly string[] NET_CORE_AGENT_FILES = {
+        "testcentric-agent.dll", "testcentric-agent.dll.config" };
+protected static readonly string[] GUI_FILES = {
+        "testcentric.exe", "testcentric.exe.config", "nunit.uiexception.dll",
+        "TestCentric.Gui.Runner.dll", "TestCentric.Gui.Model.dll", "TestCentric.Common.dll" };
+protected static readonly string[] TREE_ICONS_JPG = {
+        "Success.jpg", "Failure.jpg", "Ignored.jpg", "Inconclusive.jpg", "Skipped.jpg" };
+protected static readonly string[] TREE_ICONS_PNG = {
+        "Success.png", "Failure.png", "Ignored.png", "Inconclusive.png", "Skipped.png" };
+
 var RootFiles = new string[]
 {
     "LICENSE.txt",
@@ -70,23 +86,4 @@ private void CreateZipImage(BuildParameters parameters)
 
     // NOTE: Files specific to a particular package are not copied
     // into the image directory but are added separately.
-}
-
-private void PushNuGetPackage(FilePath package, string apiKey, string url)
-{
-	CheckPackageExists(package);
-	NuGetPush(package, new NuGetPushSettings() { ApiKey=apiKey, Source=url });
-}
-
-private void PushChocolateyPackage(FilePath package, string apiKey, string url)
-{
-	CheckPackageExists(package);
-	ChocolateyPush(package, new ChocolateyPushSettings() { ApiKey=apiKey, Source=url });
-}
-
-private void CheckPackageExists(FilePath package)
-{
-	if (!FileExists(package))
-		throw new InvalidOperationException(
-			$"Package not found: {package.GetFilename()}.\nCode may have changed since package was last built.");
 }

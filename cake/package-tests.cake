@@ -91,26 +91,12 @@ public struct PackageTest
 	}
 }
 
+const string DEFAULT_TEST_RESULT_FILE = "TestResult.xml";
+
 // Abstract base for all package testers. Currently, we only
 // have one package of each type (Zip, NuGet, Chocolatey).
 public abstract class PackageTester : GuiTester
 {
-	protected static readonly string[] ENGINE_FILES = {
-		"testcentric.engine.dll", "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll"};
-	protected static readonly string[] ENGINE_CORE_FILES = {
-		"testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll" };
-	protected static readonly string[] NET_FRAMEWORK_AGENT_FILES = {
-		"testcentric-agent.exe", "testcentric-agent.exe.config", "testcentric-agent-x86.exe", "testcentric-agent-x86.exe.config" };
-	protected static readonly string[] NET_CORE_AGENT_FILES = {
-		"testcentric-agent.dll", "testcentric-agent.dll.config" };
-	protected static readonly string[] GUI_FILES = {
-        "testcentric.exe", "testcentric.exe.config", "nunit.uiexception.dll",
-        "TestCentric.Gui.Runner.dll", "TestCentric.Gui.Model.dll", "TestCentric.Common.dll" };
-    protected static readonly string[] TREE_ICONS_JPG = {
-        "Success.jpg", "Failure.jpg", "Ignored.jpg", "Inconclusive.jpg", "Skipped.jpg" };
-    protected static readonly string[] TREE_ICONS_PNG = {
-        "Success.png", "Failure.png", "Ignored.png", "Inconclusive.png", "Skipped.png" };
-
 	protected BuildParameters _parameters;
 	private ICakeContext _context;
 
@@ -257,9 +243,6 @@ public abstract class PackageTester : GuiTester
 	protected virtual string NUnitV2Driver => "NUnit.Extension.NUnitV2Driver";
 	protected virtual string NUnitProjectLoader => "NUnit.Extension.NUnitProjectLoader";
 
-	// PackageChecks differ for each package type.
-	protected abstract PackageCheck[] PackageChecks { get; }
-
 	// NOTE: Currently, we use the same tests for all packages. There seems to be
 	// no reason for the three packages to differ in capability so the only reason
 	// to limit tests on some of them would be efficiency... so far not a problem.
@@ -271,45 +254,10 @@ public abstract class PackageTester : GuiTester
 	{
 		Console.WriteLine("Testing package " + PackageName);
 
-		CreateTestDirectory();
-
-		RunChecks();
-
 		RunPackageTests(_parameters.PackageTestLevel);
 
 		CheckTestErrors(ref ErrorDetail);
 	}
-
-	private void CreateTestDirectory()
-	{
-		Console.WriteLine("Unzipping package to directory\n  " + PackageTestDirectory);
-		_context.CleanDirectory(PackageTestDirectory);
-		_context.CleanDirectory(ExtensionInstallDirectory);
-		_context.Unzip(PackageUnderTest, PackageTestDirectory);
-	}
-
-    private void RunChecks()
-    {
-		DisplayBanner("Checking Package Content");
-
-        bool allPassed = true;
-
-        if (PackageChecks.Length == 0)
-        {
-            Console.WriteLine("  Package found but no checks were specified.");
-        }
-        else
-        {
-            foreach (var check in PackageChecks)
-                allPassed &= check.Apply(PackageTestDirectory);
-
-            if (allPassed)
-                Console.WriteLine("  All checks passed!");
-        }
-
-        if (!allPassed)
-     		throw new Exception($"Package check failed for {PackageName}");
-    }
 
 	private void CheckExtensionIsInstalled(string extension)
 	{
@@ -408,22 +356,6 @@ public class ZipPackageTester : PackageTester
 	protected override string PackageTestBinDirectory => PackageTestDirectory + "bin/";
 	protected override string ExtensionInstallDirectory => PackageTestBinDirectory + "addins/";
 	
-	protected override PackageCheck[] PackageChecks => new PackageCheck[]
-	{
-		HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt"),
-		HasDirectory("bin").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.zip.addins"),
-		HasDirectory("bin/agents/net20").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
-		HasDirectory("bin/agents/net40").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
-		HasDirectory("bin/agents/netcoreapp2.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
-		HasDirectory("bin/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
-		HasDirectory("bin/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
-		HasDirectory("bin/Images").WithFiles("DebugTests.png", "RunTests.png", "StopRun.png", "GroupBy_16x.png", "SummaryReport.png"),
-		HasDirectory("bin/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
-		HasDirectory("bin/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
-		HasDirectory("bin/Images/Tree/Default").WithFiles(TREE_ICONS_PNG),
-		HasDirectory("bin/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG)
-	};
-
 	protected override void InstallEngineExtension(string extension)
 	{
 		Console.WriteLine($"Installing {extension} to directory {ExtensionInstallDirectory}");
@@ -447,22 +379,6 @@ public class NuGetPackageTester : PackageTester
 	protected override string PackageTestBinDirectory => PackageTestDirectory + "tools/";
 	protected override string ExtensionInstallDirectory => _parameters.TestDirectory;
 	
-	protected override PackageCheck[] PackageChecks => new PackageCheck[]
-	{
-		HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "testcentric.png"),
-		HasDirectory("tools").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.nuget.addins"),
-		HasDirectory("tools/agents/net20").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
-		HasDirectory("tools/agents/net40").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
-		HasDirectory("tools/agents/netcoreapp2.1").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
-		HasDirectory("tools/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
-		HasDirectory("tools/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
-		HasDirectory("tools/Images").WithFiles("DebugTests.png", "RunTests.png", "StopRun.png", "GroupBy_16x.png", "SummaryReport.png"),
-		HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
-		HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
-		HasDirectory("tools/Images/Tree/Default").WithFiles(TREE_ICONS_PNG),
-		HasDirectory("tools/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG)
-	};
-
 	protected override void InstallEngineExtension(string extension)
 	{
 		_parameters.Context.NuGetInstall(extension,
@@ -487,21 +403,6 @@ public class ChocolateyPackageTester : PackageTester
 	// Chocolatey packages have a different naming convention from NuGet
 	protected override string NUnitV2Driver => "nunit-extension-nunit-v2-driver";
 	protected override string NUnitProjectLoader => "nunit-extension-nunit-project-loader";
-
-	protected override PackageCheck[] PackageChecks => new PackageCheck[]
-	{
-		HasDirectory("tools").WithFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "VERIFICATION.txt", "testcentric.choco.addins").AndFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.choco.addins"),
-		HasDirectory("tools/agents/net20").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
-		HasDirectory("tools/agents/net40").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
-		HasDirectory("tools/agents/netcoreapp2.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
-		HasDirectory("tools/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
-		HasDirectory("tools/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
-		HasDirectory("tools/Images").WithFiles("DebugTests.png", "RunTests.png", "StopRun.png", "GroupBy_16x.png", "SummaryReport.png"),
-		HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
-		HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
-		HasDirectory("tools/Images/Tree/Default").WithFiles(TREE_ICONS_PNG),
-		HasDirectory("tools/Images/Tree/Visual%20Studio").WithFiles(TREE_ICONS_PNG)
-	};
 
 	protected override void InstallEngineExtension(string extension)
 	{
