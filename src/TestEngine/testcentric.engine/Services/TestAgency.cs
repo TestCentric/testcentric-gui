@@ -299,6 +299,7 @@ namespace TestCentric.Engine.Services
                 _launchers.Add(new NetCore21AgentLauncher());
                 _launchers.Add(new NetCore31AgentLauncher());
                 _launchers.Add(new Net50AgentLauncher());
+                _launchers.Add(new Net60AgentLauncher());
 
                 _remotingTransport.Start();
                 _tcpTransport.Start();

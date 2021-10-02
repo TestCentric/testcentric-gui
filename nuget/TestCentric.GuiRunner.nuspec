@@ -117,5 +117,15 @@
     <file src="agents/net5.0/testcentric-agent.runtimeconfig.json" target="tools/agents/net5.0" />
     <file src="agents/net5.0/testcentric-agent.runtimeconfig.dev.json" target="tools/agents/net5.0" />
     <file src="../../nuget/testcentric-agent.nuget.addins" target="tools/agents/net5.0" />
+
+    <file src="agents/net6.0/nunit.engine.api.dll" target="tools/agents/net6.0" />
+    <file src="agents/net6.0/testcentric.engine.metadata.dll" target="tools/agents/net6.0" />
+    <file src="agents/net6.0/testcentric.engine.core.dll" target="tools/agents/net6.0" />
+    <file src="agents/net6.0/testcentric.agent.core.dll" target="tools/agents/net6.0" />
+    <file src="agents/net6.0/testcentric-agent.dll" target="tools/agents/net6.0" />
+    <file src="agents/net6.0/testcentric-agent.dll.config" target="tools/agents/net6.0" />
+    <file src="agents/net6.0/testcentric-agent.deps.json" target="tools/agents/net6.0" />
+    <file src="agents/net6.0/testcentric-agent.runtimeconfig.json" target="tools/agents/net6.0" />
+    <file src="../../nuget/testcentric-agent.nuget.addins" target="tools/agents/net6.0" />
   </files>
 </package>

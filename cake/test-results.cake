@@ -135,6 +135,8 @@ public class ActualAssemblyResult
 			runtime = targetRuntime;
 		else if (clrVersion.StartsWith("5.0") && targetRuntime == "netcore-5.0")
 			runtime = targetRuntime;
+		else if (clrVersion.StartsWith("6.0") && targetRuntime == "netcore-6.0")
+			runtime = targetRuntime;
 		else if (clrVersion.StartsWith("2.0") && targetRuntime == "net-2.0")
 			runtime = targetRuntime;
 		else if (clrVersion.StartsWith("4.0") && targetRuntime.StartsWith("net-"))

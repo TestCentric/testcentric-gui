@@ -42,7 +42,9 @@ namespace TestCentric.Engine.Agents
 
             log.Info("Agent process {0} starting", pid);
 
-#if NET5_0
+#if NET6_0
+            log.Info($"Running .NET 6.0 agent under {RuntimeInformation.FrameworkDescription}");
+#elif NET5_0
             log.Info($"Running .NET 5.0 agent under {RuntimeInformation.FrameworkDescription}");
 #elif NETCOREAPP3_1
             log.Info($"Running .NET Core 3.1 agent under {RuntimeInformation.FrameworkDescription}");

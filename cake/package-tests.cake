@@ -187,6 +187,19 @@ public abstract class PackageTester : GuiTester
 				Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "netcore-5.0") }
 			}));
 
+		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET 6.0", StandardRunner,
+			"engine-tests/net6.0/mock-assembly.dll",
+			new ExpectedResult("Failed")
+			{
+				Total = 36,
+				Passed = 23,
+				Failed = 5,
+				Warnings = 1,
+				Inconclusive = 1,
+				Skipped = 7,
+				Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "netcore-6.0") }
+			}));
+
 		PackageTests.Add(new PackageTest(1, "Run different builds of mock-assembly.dll together", StandardRunner,
 			"engine-tests/net35/mock-assembly.dll engine-tests/netcoreapp2.1/mock-assembly.dll",
 			new ExpectedResult("Failed")

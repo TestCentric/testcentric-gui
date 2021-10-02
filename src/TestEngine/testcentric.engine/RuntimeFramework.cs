@@ -278,7 +278,7 @@ namespace TestCentric.Engine
         /// components are ignored.
         /// </summary>
         /// <param name="target">The RuntimeFramework to be matched.</param>
-        /// <returns><c>true</c> on match, otherwise <c>false</c></returns>
+        ///// <returns><c>true</c> on match, otherwise <c>false</c></returns>
         public bool Supports(RuntimeFramework target)
         {
             if (this.Runtime != target.Runtime)
