@@ -1,4 +1,13 @@
-﻿TestCentric Runner for NUnit 2.0.0-alpha3 - September 30, 2021
+﻿TestCentric Runner for NUnit 2.0.0-alpha3 - October 2, 2021
+
+This release incorporates a critical fix to a bug, which caused the program to crash
+when run on a machine with .NET 6.0 installed.
+
+Bug
+
+ * 818 TestCentric Runner for NUnit 2.0.0-alpha3 - September 30, 2021
+
+TestCentric Runner for NUnit 2.0.0-alpha3 - September 30, 2021
 
 Breaking Changes
 
