@@ -113,11 +113,11 @@ public abstract class PackageTester : GuiTester
 			"mock-assembly.dll",
 			new ExpectedResult("Failed")
 			{
-				Total = 31,
-				Passed = 18,
-				Failed = 5,
+				Total = 40,
+				Passed = 22,
+				Failed = 6,
 				Warnings = 0,
-				Inconclusive = 1,
+				Inconclusive = 5,
 				Skipped = 7,
 				Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "net-4.5") }
 			})) ;

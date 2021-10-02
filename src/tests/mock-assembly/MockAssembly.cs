@@ -15,7 +15,7 @@ namespace TestCentric.Tests
         /// </summary>
         public class MockAssembly
         {
-            public static int Classes = 9;
+            public static int Classes = 10;
             public static int NamespaceSuites = 6; // assembly, NUnit, Tests, Assemblies, Singletons, TestAssembly
 
             public static int Tests = MockTestFixture.Tests
@@ -26,7 +26,8 @@ namespace TestCentric.Tests
                         + BadFixture.Tests
                         + FixtureWithTestCases.Tests
                         + ParameterizedFixture.Tests
-                        + GenericFixtureConstants.Tests;
+                        + GenericFixtureConstants.Tests
+                        + FixtureWithTheories.Tests;
 
             public static int Suites = MockTestFixture.Suites
                         + Singletons.OneTestCase.Suites
@@ -37,6 +38,7 @@ namespace TestCentric.Tests
                         + FixtureWithTestCases.Suites
                         + ParameterizedFixture.Suites
                         + GenericFixtureConstants.Suites
+                        + FixtureWithTheories.Suites
                         + NamespaceSuites;
 
             public static readonly int Nodes = Tests + Suites;
@@ -279,5 +281,32 @@ namespace TestCentric.Tests
 
         [Test]
         public void Test2() { }
+    }
+
+    public class FixtureWithTheories
+    {
+        public static readonly int Tests = 9;
+        public static readonly int Suites = 3;
+
+        [DatapointSource]
+        static int[] ValuesToUse = new int[] { 1, 2, 3 };
+
+        [Theory]
+        public void AllCasesPass(int val)
+        {
+            Assume.That(val != 2, $"Argument '{val}' is not valid.");
+        }
+
+        [Theory]
+        public void AllCasesInconclusive(int val)
+        {
+            Assert.Inconclusive($"Argument '{val}' is not valid.");
+        }
+
+        [Theory]
+        public void OneCaseFails(int val)
+        {
+            Assert.That(val, Is.Not.EqualTo(2));
+        }
     }
 }
