@@ -67,5 +67,14 @@ namespace TestCentric.Gui.Dialogs
             else
                 base.WndProc(ref m);
         }
+
+        private void PinnableDisplay_Load(object sender, EventArgs e)
+        {
+            // Derived displays may have different widths, so set the
+            // location of the controls dynamically on Load.
+            exitButton.Left = ClientRectangle.Width - exitButton.Width - 4;
+            pinButton.Left = exitButton.Left - pinButton.Width - 4;
+            testName.Width = pinButton.Left - testName.Left;
+        }
     }
 }

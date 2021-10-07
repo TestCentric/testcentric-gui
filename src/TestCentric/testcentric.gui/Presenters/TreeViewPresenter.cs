@@ -183,7 +183,7 @@ namespace TestCentric.Gui.Presenters
             _propertiesDialog?.OnTestFinished(args.Result);
         }
 
-        TestPropertiesDialog _propertiesDialog;
+        TestPropertiesDisplay _propertiesDialog;
 
         private void ShowPropertiesDialog()
         {
@@ -193,11 +193,11 @@ namespace TestCentric.Gui.Presenters
             _propertiesDialog.Display(_view.ContextNode);
         }
 
-        private TestPropertiesDialog CreatePropertiesDialog()
+        private TestPropertiesDisplay CreatePropertiesDialog()
         {
             var mainForm = ((Control)_view).FindForm();
 
-            var propertiesDialog = new TestPropertiesDialog(_model, _view)
+            var propertiesDialog = new TestPropertiesDisplay(_model, _view)
             {
                 Owner = mainForm,
                 Font = mainForm.Font,
