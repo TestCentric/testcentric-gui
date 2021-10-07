@@ -44,6 +44,8 @@ namespace TestCentric.Gui.Views
             this.collapseAllMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.collapseToFixturesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.treeImages = new System.Windows.Forms.ImageList(this.components);
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.viewAsXmlMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testTreeContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -67,7 +69,9 @@ namespace TestCentric.Gui.Views
             this.runCheckedMenuItem,
             this.debugMenuItem,
             this.debugCheckedMenuItem,
+            this.toolStripSeparator1,
             this.testPropertiesMenuItem,
+            this.viewAsXmlMenuItem,
             this.activeConfigMenuItem,
             this.toolStripSeparator3,
             this.showCheckboxesMenuItem,
@@ -75,7 +79,7 @@ namespace TestCentric.Gui.Views
             this.collapseAllMenuItem,
             this.collapseToFixturesMenuItem});
             this.testTreeContextMenu.Name = "testTreeContextMenu";
-            this.testTreeContextMenu.Size = new System.Drawing.Size(191, 230);
+            this.testTreeContextMenu.Size = new System.Drawing.Size(191, 280);
             // 
             // runMenuItem
             // 
@@ -153,6 +157,17 @@ namespace TestCentric.Gui.Views
             this.treeImages.Images.SetKeyName(3, "Warning.png");
             this.treeImages.Images.SetKeyName(4, "Failure.png");
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(187, 6);
+            // 
+            // viewAsXmlMenuItem
+            // 
+            this.viewAsXmlMenuItem.Name = "viewAsXmlMenuItem";
+            this.viewAsXmlMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.viewAsXmlMenuItem.Text = "View as XML...";
+            // 
             // TestTreeView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -181,5 +196,7 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.ToolStripMenuItem activeConfigMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem testPropertiesMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem viewAsXmlMenuItem;
     }
 }

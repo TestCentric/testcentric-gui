@@ -22,6 +22,7 @@ namespace TestCentric.Gui.Views
         ICommand CollapseAllCommand { get; }
         ICommand CollapseToFixturesCommand { get; }
         ICommand TestPropertiesCommand { get; }
+        ICommand ViewAsXmlCommand { get; }
 
         string AlternateImageSet { get; set; }
 

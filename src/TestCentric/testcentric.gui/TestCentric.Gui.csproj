@@ -10,6 +10,7 @@
 		<AssemblyOriginatorKeyFile>..\..\testcentric.snk</AssemblyOriginatorKeyFile>
     <AssemblyTitle>TestCentric Runner</AssemblyTitle>
     <Description>TestCentric GUI Implementation</Description>
+    <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 	<ItemGroup>
 		<Reference Include="System.Windows.Forms" />

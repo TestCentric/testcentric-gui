@@ -13,6 +13,7 @@ namespace TestCentric.Gui.Presenters
     using Model;
     using Views;
     using Dialogs;
+    using System.Xml;
     using System.Drawing;
 
     /// <summary>
@@ -60,6 +61,7 @@ namespace TestCentric.Gui.Presenters
                 Strategy.OnTestLoaded(ea.Test);
                 InitializeRunCommands();
                 CheckPropertiesDialog();
+                CheckXmlDisplay();
             };
 
             _model.Events.TestReloaded += (ea) =>
@@ -78,12 +80,14 @@ namespace TestCentric.Gui.Presenters
             {
                 Strategy.OnTestUnloading();
                 ClosePropertiesDialog();
+                CloseXmlDisplay();
             };
 
             _model.Events.RunStarting += (ea) =>
             {
                 InitializeRunCommands();
                 CheckPropertiesDialog();
+                CheckXmlDisplay();
             };
             _model.Events.RunFinished += (ea) =>
             {
@@ -146,6 +150,8 @@ namespace TestCentric.Gui.Presenters
 
             _view.TestPropertiesCommand.Execute += () => ShowPropertiesDialog();
 
+            _view.ViewAsXmlCommand.Execute += () => ShowXmlDisplayDialog();
+
             // Node selected in tree
             _view.Tree.SelectedNodeChanged += (tn) =>
             {
@@ -157,7 +163,15 @@ namespace TestCentric.Gui.Presenters
                     if (_propertiesDialog.Pinned)
                         _propertiesDialog.Display(tn);
                     else
-                        _propertiesDialog.Close();
+                        ClosePropertiesDialog();
+                }
+
+                if (_xmlDisplay != null)
+                {
+                    if (_xmlDisplay.Pinned)
+                        _xmlDisplay.Display(tn);
+                    else
+                        CloseXmlDisplay();
                 }
             };
         }
@@ -207,13 +221,74 @@ namespace TestCentric.Gui.Presenters
         private void ClosePropertiesDialog()
         {
             if (_propertiesDialog != null)
+            {
                 _propertiesDialog.Close();
+                _propertiesDialog = null;
+            }
         }
 
         private void CheckPropertiesDialog()
         {
             if (_propertiesDialog != null && !_propertiesDialog.Pinned)
-                _propertiesDialog.Close();
+                ClosePropertiesDialog();
+        }
+
+        private XmlDisplay _xmlDisplay;
+
+        private void ShowXmlDisplayDialog()
+        {
+            if (_xmlDisplay == null)
+                _xmlDisplay = CreateXmlDisplay();
+
+            _xmlDisplay.Display(_view.ContextNode);
+        }
+
+        private XmlDisplay CreateXmlDisplay()
+        {
+            var treeView = (Control)_view;
+            var mainForm = treeView.FindForm();
+
+            var xmlDisplay = new XmlDisplay(_model)
+            {
+                Owner = mainForm,
+                Font = mainForm.Font,
+                StartPosition = FormStartPosition.Manual
+            };
+
+            var midForm = (mainForm.Left + mainForm.Right) / 2;
+            var screenArea = Screen.FromHandle(mainForm.Handle).WorkingArea;
+            var midScreen = screenArea.Width / 2;
+
+            var myLeft = mainForm.Left;
+            var myRight = mainForm.Right;
+
+            if (_propertiesDialog != null)
+            {
+                myLeft = Math.Min(myLeft, _propertiesDialog.Left);
+                myRight = Math.Max(myRight, _propertiesDialog.Right);
+            }
+
+            xmlDisplay.Left = myLeft > screenArea.Width - myRight
+                ? Math.Max(0, myLeft - xmlDisplay.Width)
+                : Math.Min(myRight, screenArea.Width - xmlDisplay.Width);
+
+            xmlDisplay.Top = mainForm.Top + (mainForm.Height - xmlDisplay.Height) / 2;
+
+            xmlDisplay.Closed += (s, e) => _xmlDisplay = null;
+
+            return xmlDisplay;
+        }
+
+        private void CloseXmlDisplay()
+        {
+            _xmlDisplay?.Close();
+        }
+
+        private void CheckXmlDisplay()
+        {
+            if (_xmlDisplay != null && !_xmlDisplay.Pinned)
+                _xmlDisplay.Close();
+
         }
 
         private void RunAllTests()

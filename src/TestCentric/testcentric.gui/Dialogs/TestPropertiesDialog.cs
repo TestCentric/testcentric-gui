@@ -46,11 +46,7 @@ namespace TestCentric.Gui.Dialogs
         #region Properties
 
         [Browsable(false)]
-        public bool Pinned
-        {
-            get { return pinButton.Checked; }
-            set { pinButton.Checked = value; }
-        }
+        public bool Pinned => pinButton.Checked;
 
         #endregion
 
