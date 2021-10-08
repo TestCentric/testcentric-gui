@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System;
+using System.IO;
 
 namespace TestCentric.Gui.Views
 {
@@ -13,54 +14,79 @@ namespace TestCentric.Gui.Views
     /// </summary>
     public class TestResultItem
     {
-        private string testName;
-        private string message;
-        private string stackTrace;
+        private string _testName;
+        private string _message;
+        private string _rawStackTrace;
 
         public TestResultItem(string testName, string message, string stackTrace)
         {
-            this.testName = testName;
-            this.message = message;
-            this.stackTrace = stackTrace;
+            this._testName = testName;
+            this._message = message;
+            this._rawStackTrace = stackTrace;
         }
 
         public override string ToString()
         {
-            if (message?.Length > 64000)
-                return string.Format("{0}:{1}{2}", testName, Environment.NewLine, message.Substring(0, 64000));
+            if (_message?.Length > 64000)
+                return string.Format("{0}:{1}{2}", _testName, Environment.NewLine, _message.Substring(0, 64000));
 
             return GetMessage();
         }
 
         public string GetMessage()
         {
-            return String.Format("{0}:{1}{2}", testName, Environment.NewLine, message);
+            return String.Format("{0}:{1}{2}", _testName, Environment.NewLine, _message);
         }
 
-        public string GetToolTipMessage()   //NRG 05/28/03 - Substitute spaces for tab characters
-        {
-            return (ReplaceTabs(GetMessage(), 8)); // Change each tab to 8 space characters
-        }
-
-        public string ReplaceTabs(string strOriginal, int nSpaces)  //NRG 05/28/03
-        {
-            string strSpaces = string.Empty;
-            strSpaces = strSpaces.PadRight(nSpaces, ' ');
-            return (strOriginal.Replace("\t", strSpaces));
-        }
-
-        public string StackTrace
+        public string FilteredStackTrace
         {
             get
             {
-                return stackTrace == null ? null : StackTraceFilter.Filter(stackTrace);
+                if (_rawStackTrace == null)
+                    return null;
 
-                //string trace = "No stack trace is available";
-                //if(stackTrace != null)
-                //    trace = StackTraceFilter.Filter(stackTrace);
+                StringWriter sw = new StringWriter();
+                StringReader sr = new StringReader(_rawStackTrace);
 
-                //return trace;
+                try
+                {
+                    string line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        if (!FilterLine(line))
+                            sw.WriteLine(line.Trim());
+                    }
+                }
+                catch (Exception)
+                {
+                    return _rawStackTrace;
+                }
+
+                return sw.ToString();
             }
+        }
+
+        static bool FilterLine(string line)
+        {
+            string[] patterns = new string[]
+            {
+                "NUnit.Core.TestCase",
+                "NUnit.Core.ExpectedExceptionTestCase",
+                "NUnit.Core.TemplateTestCase",
+                "NUnit.Core.TestResult",
+                "NUnit.Core.TestSuite",
+                "NUnit.Framework.Assertion",
+                "NUnit.Framework.Assert",
+                "System.Reflection.MonoMethod"
+            };
+
+            for (int i = 0; i < patterns.Length; i++)
+            {
+                if (line.IndexOf(patterns[i]) > 0)
+                    return true;
+            }
+
+            return false;
         }
     }
 }
