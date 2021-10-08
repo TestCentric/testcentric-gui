@@ -3,73 +3,56 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
+using System;
+using System.ComponentModel;
+using System.Drawing;
 using System.Xml;
+using System.Windows.Forms;
+using TestCentric.Gui.Model;
 
-namespace TestCentric.Gui.Presenters
+namespace TestCentric.Gui.Dialogs
 {
-    using Model;
-    using Views;
-
-    public class XmlPresenter
+    public partial class XmlDisplay : PinnableDisplay
     {
-        private readonly IXmlView _view;
-        private readonly ITestModel _model;
-
-        private ITestItem _selectedItem;
-
-        public XmlPresenter(IXmlView view, ITestModel model)
+        private ITestModel _model;
+        
+        public XmlDisplay(ITestModel model)
         {
-            _view = view;
+            InitializeComponent();
+
             _model = model;
 
-            _view.Visible = false;
-
-            WireUpEvents();
-        }
-
-        private void WireUpEvents()
-        {
-            _model.Events.TestLoaded += (ea) => _view.Visible = true;
-            _model.Events.TestReloaded += (ea) => _view.Visible = true;
-            _model.Events.TestUnloaded += (ea) => _view.Visible = false;
-            _model.Events.RunFinished += (ea) => DisplayXml();
-            _model.Events.SelectedItemChanged += (ea) => OnSelectedItemChanged(ea.TestItem);
-
-            _view.SelectAllCommand += () => _view.SelectAll();
-
-            _view.SelectionChanged += () => _view.CopyToolStripMenuItem.Enabled = !string.IsNullOrEmpty(_view.SelectedText);
-
-            _view.WordWrapChanged += () => _view.WordWrap = _view.WordWrapToolStripMenuItem.Checked;
-
-            _view.CopyCommand += () => _view.Copy();
-
-            _view.ViewGotFocus += () => DisplayXml();
-        }
-
-        private void OnSelectedItemChanged(ITestItem testItem)
-        {
-            _selectedItem = testItem;
-            DisplayXml();
-        }
-
-        private void DisplayXml()
-        {
-            var testNode = _selectedItem as TestNode;
-
-            _view.XmlPanel.Visible = testNode != null;
-
-            if (testNode != null)
+            selectAllToolStripMenuItem.Click += (s, e) =>
             {
-                _view.SuspendLayout();
-                _view.Header = testNode.Name;
-                if (_view.Visible)
-                    _view.TestXml = GetFullXml(testNode);
-                _view.ResumeLayout();
-            }
-            else if (_selectedItem != null)
+                xmlTextBox.SelectAll();
+            };
+
+            copyToolStripMenuItem.Click += (s, e) =>
             {
-                _view.Header = _selectedItem.Name;
-            }
+                xmlTextBox.Copy();
+            };
+
+            wordWrapToolStripMenuItem.CheckedChanged += (s, e) =>
+            {
+                xmlTextBox.WordWrap = wordWrapToolStripMenuItem.Checked;
+            };
+        }
+
+        public void Display(TreeNode treeNode)
+        {
+            if (treeNode == null)
+                throw new ArgumentNullException(nameof(treeNode));
+
+            var testNode = (TestNode)treeNode.Tag;
+
+            SuspendLayout();
+            TestName = testNode.Name;
+            var fullXml = GetFullXml(testNode);
+            xmlTextBox.Rtf = new Xml2RtfConverter(2).Convert(fullXml);
+
+            ResumeLayout();
+
+            Show();
         }
 
         private XmlNode GetFullXml(TestNode testNode)

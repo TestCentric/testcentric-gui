@@ -16,7 +16,7 @@ namespace TestCentric.Gui.Dialogs
     using Model;
     using Views;
 
-    public partial class TestPropertiesDialog : Form
+    public partial class TestPropertiesDisplay : PinnableDisplay
     {
         private ITestModel _model;
         private ITestTreeView _view;
@@ -28,31 +28,13 @@ namespace TestCentric.Gui.Dialogs
 
         private int _clientWidth;
 
-        private Image _pinnedImage;
-        private Image _unpinnedImage;
-
-        public TestPropertiesDialog(ITestModel model, ITestTreeView view)
+        public TestPropertiesDisplay(ITestModel model, ITestTreeView view)
         {
             _model = model;
             _view = view;
 
             InitializeComponent();
-
-            _pinnedImage = new Bitmap(GetType().Assembly.GetManifestResourceStream("TestCentric.Gui.Images.pinned.gif"));
-            _unpinnedImage = new Bitmap(GetType().Assembly.GetManifestResourceStream("TestCentric.Gui.Images.unpinned.gif"));
-            pinButton.Image = _unpinnedImage;
         }
-
-        #region Properties
-
-        [Browsable(false)]
-        public bool Pinned
-        {
-            get { return pinButton.Checked; }
-            set { pinButton.Checked = value; }
-        }
-
-        #endregion
 
         #region Public Methods
 
@@ -69,9 +51,9 @@ namespace TestCentric.Gui.Dialogs
             testResult.Text = _resultNode?.Outcome.ToString() ?? _testNode.RunState.ToString();
             testResult.Font = new Font(this.Font, FontStyle.Bold);
             if (_testNode.Type == "Project" || _testNode.Type == "Assembly")
-                testName.Text = Path.GetFileName(_testNode.Name);
+                TestName = Path.GetFileName(_testNode.Name);
             else
-                testName.Text = _testNode.Name;
+                TestName = _testNode.Name;
 
             // Display each groupBox, for which there is data.
             // Boxes are displayed top-down at the vertical
@@ -226,14 +208,6 @@ namespace TestCentric.Gui.Dialogs
 
         #region Event Handlers and Overrides
 
-        private void pinButton_Click(object sender, System.EventArgs e)
-        {
-            if (pinButton.Checked)
-                pinButton.Image = _pinnedImage;
-            else
-                pinButton.Image = _unpinnedImage;
-        }
-
         private void TestPropertiesDialog_ResizeEnd(object sender, EventArgs e)
         {
             if (_clientWidth != ClientSize.Width && _treeNode != null)
@@ -297,5 +271,6 @@ namespace TestCentric.Gui.Dialogs
         }
 
         #endregion
+
     }
 }

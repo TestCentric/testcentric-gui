@@ -41,6 +41,7 @@ namespace TestCentric.Gui.Views
             CollapseAllCommand = new CommandMenuElement(collapseAllMenuItem);
             CollapseToFixturesCommand = new CommandMenuElement(collapseToFixturesMenuItem);
             TestPropertiesCommand = new CommandMenuElement(testPropertiesMenuItem);
+            ViewAsXmlCommand = new CommandMenuElement(viewAsXmlMenuItem);
 
             Tree = new TreeViewElement(treeView);
             treeView.MouseDown += (s, e) =>
@@ -65,6 +66,7 @@ namespace TestCentric.Gui.Views
         public ICommand CollapseAllCommand { get; private set; }
         public ICommand CollapseToFixturesCommand { get; private set; }
         public ICommand TestPropertiesCommand { get; private set; }
+        public ICommand ViewAsXmlCommand { get; private set; }
 
         public ITreeView Tree { get; private set; }
         public TreeNode ContextNode { get; private set; }

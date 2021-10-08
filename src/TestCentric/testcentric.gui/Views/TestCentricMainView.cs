@@ -29,7 +29,6 @@ namespace TestCentric.Gui.Views
         private TabControl resultTabs;
         private StatusBarView statusBar;
         private TestPropertiesView propertiesView;
-        private XmlView xmlView;
 
         private System.Windows.Forms.ToolTip toolTip;
 
@@ -73,7 +72,6 @@ namespace TestCentric.Gui.Views
         private TabPage errorTab;
         private TabPage outputTab;
         private TabPage propertiesTab;
-        private TabPage xmlTab;
         private ErrorsAndFailuresView errorsAndFailuresView1;
         private ToolStripMenuItem recentFilesDummyMenuItem;
         private ToolStripMenuItem openWorkDirectoryMenuItem;
@@ -309,8 +307,6 @@ namespace TestCentric.Gui.Views
             this.errorsAndFailuresView1 = new TestCentric.Gui.Views.ErrorsAndFailuresView();
             this.outputTab = new System.Windows.Forms.TabPage();
             this.textOutputView1 = new TestCentric.Gui.Views.TextOutputView();
-            this.xmlTab = new System.Windows.Forms.TabPage();
-            this.xmlView = new TestCentric.Gui.Views.XmlView();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.leftPanel = new System.Windows.Forms.Panel();
             this.testPanel = new System.Windows.Forms.Panel();
@@ -322,7 +318,6 @@ namespace TestCentric.Gui.Views
             this.propertiesTab.SuspendLayout();
             this.errorTab.SuspendLayout();
             this.outputTab.SuspendLayout();
-            this.xmlTab.SuspendLayout();
             this.leftPanel.SuspendLayout();
             this.testPanel.SuspendLayout();
             this.SuspendLayout();
@@ -955,7 +950,6 @@ namespace TestCentric.Gui.Views
             this.resultTabs.Controls.Add(this.propertiesTab);
             this.resultTabs.Controls.Add(this.errorTab);
             this.resultTabs.Controls.Add(this.outputTab);
-            this.resultTabs.Controls.Add(this.xmlTab);
             this.resultTabs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.resultTabs.Location = new System.Drawing.Point(0, 0);
             this.resultTabs.Name = "resultTabs";
@@ -1040,31 +1034,6 @@ namespace TestCentric.Gui.Views
             this.textOutputView1.TabIndex = 0;
             this.textOutputView1.WordWrap = true;
             // 
-            // xmlTab
-            // 
-            this.xmlTab.Controls.Add(this.xmlView);
-            this.xmlTab.Location = new System.Drawing.Point(4, 4);
-            this.xmlTab.Name = "xmlTab";
-            this.xmlTab.Size = new System.Drawing.Size(490, 333);
-            this.xmlTab.TabIndex = 2;
-            this.xmlTab.Text = "View XML";
-            this.xmlTab.UseVisualStyleBackColor = true;
-            // 
-            // xmlView
-            // 
-            this.xmlView.AutoScroll = true;
-            this.xmlView.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.xmlView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.xmlView.Header = "";
-            this.xmlView.Location = new System.Drawing.Point(0, 0);
-            this.xmlView.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.xmlView.Name = "xmlView";
-            this.xmlView.SelectedText = "";
-            this.xmlView.Size = new System.Drawing.Size(490, 333);
-            this.xmlView.TabIndex = 0;
-            this.xmlView.TestXml = null;
-            this.xmlView.WordWrap = false;
-            // 
             // leftPanel
             // 
             this.leftPanel.Controls.Add(this.testPanel);
@@ -1118,7 +1087,6 @@ namespace TestCentric.Gui.Views
             this.propertiesTab.ResumeLayout(false);
             this.errorTab.ResumeLayout(false);
             this.outputTab.ResumeLayout(false);
-            this.xmlTab.ResumeLayout(false);
             this.leftPanel.ResumeLayout(false);
             this.testPanel.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -1228,8 +1196,6 @@ namespace TestCentric.Gui.Views
         public StatusBarView StatusBarView => statusBar;
 
         public TestPropertiesView TestPropertiesView => propertiesView;
-
-        public XmlView XmlView => xmlView;
 
         public ErrorsAndFailuresView ErrorsAndFailuresView { get { return errorsAndFailuresView1; } }
 
