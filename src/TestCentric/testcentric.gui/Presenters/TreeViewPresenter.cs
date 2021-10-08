@@ -60,7 +60,7 @@ namespace TestCentric.Gui.Presenters
             {
                 Strategy.OnTestLoaded(ea.Test);
                 InitializeRunCommands();
-                CheckPropertiesDialog();
+                CheckPropertiesDisplay();
                 CheckXmlDisplay();
             };
 
@@ -79,14 +79,14 @@ namespace TestCentric.Gui.Presenters
             _model.Events.TestsUnloading += ea =>
             {
                 Strategy.OnTestUnloading();
-                ClosePropertiesDialog();
+                ClosePropertiesDisplay();
                 CloseXmlDisplay();
             };
 
             _model.Events.RunStarting += (ea) =>
             {
                 InitializeRunCommands();
-                CheckPropertiesDialog();
+                CheckPropertiesDisplay();
                 CheckXmlDisplay();
             };
             _model.Events.RunFinished += (ea) =>
@@ -148,7 +148,7 @@ namespace TestCentric.Gui.Presenters
             };
             _view.DebugCheckedCommand.Execute += DebugCheckedTests;
 
-            _view.TestPropertiesCommand.Execute += () => ShowPropertiesDialog();
+            _view.TestPropertiesCommand.Execute += () => ShowPropertiesDisplay();
 
             _view.ViewAsXmlCommand.Execute += () => ShowXmlDisplayDialog();
 
@@ -158,12 +158,12 @@ namespace TestCentric.Gui.Presenters
                 _selectedTestItem = tn.Tag as ITestItem;
                 _model.NotifySelectedItemChanged(_selectedTestItem);
 
-                if (_propertiesDialog != null)
+                if (_propertiesDisplay != null)
                 {
-                    if (_propertiesDialog.Pinned)
-                        _propertiesDialog.Display(tn);
+                    if (_propertiesDisplay.Pinned)
+                        _propertiesDisplay.Display(tn);
                     else
-                        ClosePropertiesDialog();
+                        ClosePropertiesDisplay();
                 }
 
                 if (_xmlDisplay != null)
@@ -180,57 +180,52 @@ namespace TestCentric.Gui.Presenters
         {
             Strategy.OnTestFinished(args.Result);
 
-            _propertiesDialog?.OnTestFinished(args.Result);
+            _propertiesDisplay?.OnTestFinished(args.Result);
         }
 
-        TestPropertiesDisplay _propertiesDialog;
+        TestPropertiesDisplay _propertiesDisplay;
 
-        private void ShowPropertiesDialog()
+        private void ShowPropertiesDisplay()
         {
-            if (_propertiesDialog == null)
-                _propertiesDialog = CreatePropertiesDialog();
-
-            _propertiesDialog.Display(_view.ContextNode);
-        }
-
-        private TestPropertiesDisplay CreatePropertiesDialog()
-        {
-            var mainForm = ((Control)_view).FindForm();
-
-            var propertiesDialog = new TestPropertiesDisplay(_model, _view)
+            if (_propertiesDisplay == null)
             {
-                Owner = mainForm,
-                Font = mainForm.Font,
-                StartPosition = FormStartPosition.Manual
-            };
+                var mainForm = ((Control)_view).FindForm();
 
-            var midScreen = Screen.FromHandle(mainForm.Handle).WorkingArea.Width / 2;
-            var midForm = (mainForm.Left + mainForm.Right) / 2;
+                _propertiesDisplay = new TestPropertiesDisplay(_model, _view)
+                {
+                    Owner = mainForm,
+                    Font = mainForm.Font,
+                    StartPosition = FormStartPosition.Manual
+                };
 
-            propertiesDialog.Left = midForm < midScreen
-                ? mainForm.Right
-                : Math.Max(0, mainForm.Left - propertiesDialog.Width);
+                var midScreen = Screen.FromHandle(mainForm.Handle).WorkingArea.Width / 2;
+                var midForm = (mainForm.Left + mainForm.Right) / 2;
 
-            propertiesDialog.Top = mainForm.Top;
+                _propertiesDisplay.Left = midForm < midScreen
+                    ? mainForm.Right
+                    : Math.Max(0, mainForm.Left - _propertiesDisplay.Width);
 
-            propertiesDialog.Closed += (s, e) => _propertiesDialog = null;
+                _propertiesDisplay.Top = mainForm.Top;
 
-            return propertiesDialog;
+                _propertiesDisplay.Closed += (s, e) => _propertiesDisplay = null;
+            }
+
+            _propertiesDisplay.Display(_view.ContextNode);
         }
 
-        private void ClosePropertiesDialog()
+        private void ClosePropertiesDisplay()
         {
-            if (_propertiesDialog != null)
+            if (_propertiesDisplay != null)
             {
-                _propertiesDialog.Close();
-                _propertiesDialog = null;
+                _propertiesDisplay.Close();
+                _propertiesDisplay = null;
             }
         }
 
-        private void CheckPropertiesDialog()
+        private void CheckPropertiesDisplay()
         {
-            if (_propertiesDialog != null && !_propertiesDialog.Pinned)
-                ClosePropertiesDialog();
+            if (_propertiesDisplay != null && !_propertiesDisplay.Pinned)
+                ClosePropertiesDisplay();
         }
 
         private XmlDisplay _xmlDisplay;
@@ -238,45 +233,40 @@ namespace TestCentric.Gui.Presenters
         private void ShowXmlDisplayDialog()
         {
             if (_xmlDisplay == null)
-                _xmlDisplay = CreateXmlDisplay();
-
-            _xmlDisplay.Display(_view.ContextNode);
-        }
-
-        private XmlDisplay CreateXmlDisplay()
-        {
-            var treeView = (Control)_view;
-            var mainForm = treeView.FindForm();
-
-            var xmlDisplay = new XmlDisplay(_model)
             {
-                Owner = mainForm,
-                Font = mainForm.Font,
-                StartPosition = FormStartPosition.Manual
-            };
+                var treeView = (Control)_view;
+                var mainForm = treeView.FindForm();
 
-            var midForm = (mainForm.Left + mainForm.Right) / 2;
-            var screenArea = Screen.FromHandle(mainForm.Handle).WorkingArea;
-            var midScreen = screenArea.Width / 2;
+                _xmlDisplay = new XmlDisplay(_model)
+                {
+                    Owner = mainForm,
+                    Font = mainForm.Font,
+                    StartPosition = FormStartPosition.Manual
+                };
 
-            var myLeft = mainForm.Left;
-            var myRight = mainForm.Right;
+                var midForm = (mainForm.Left + mainForm.Right) / 2;
+                var screenArea = Screen.FromHandle(mainForm.Handle).WorkingArea;
+                var midScreen = screenArea.Width / 2;
 
-            if (_propertiesDialog != null)
-            {
-                myLeft = Math.Min(myLeft, _propertiesDialog.Left);
-                myRight = Math.Max(myRight, _propertiesDialog.Right);
+                var myLeft = mainForm.Left;
+                var myRight = mainForm.Right;
+
+                if (_propertiesDisplay != null)
+                {
+                    myLeft = Math.Min(myLeft, _propertiesDisplay.Left);
+                    myRight = Math.Max(myRight, _propertiesDisplay.Right);
+                }
+
+                _xmlDisplay.Left = myLeft > screenArea.Width - myRight
+                    ? Math.Max(0, myLeft - _xmlDisplay.Width)
+                    : Math.Min(myRight, screenArea.Width - _xmlDisplay.Width);
+
+                _xmlDisplay.Top = mainForm.Top + (mainForm.Height - _xmlDisplay.Height) / 2;
+
+                _xmlDisplay.Closed += (s, e) => _xmlDisplay = null;
             }
 
-            xmlDisplay.Left = myLeft > screenArea.Width - myRight
-                ? Math.Max(0, myLeft - xmlDisplay.Width)
-                : Math.Min(myRight, screenArea.Width - xmlDisplay.Width);
-
-            xmlDisplay.Top = mainForm.Top + (mainForm.Height - xmlDisplay.Height) / 2;
-
-            xmlDisplay.Closed += (s, e) => _xmlDisplay = null;
-
-            return xmlDisplay;
+            _xmlDisplay.Display(_view.ContextNode);
         }
 
         private void CloseXmlDisplay()
