@@ -337,7 +337,7 @@ namespace TestCentric.Gui.Model
         {
             //var originalSubPackages = new List<TestPackage>(package.SubPackages);
             //package.SubPackages.Clear();
-            package.SetActiveConfig(config);
+            package.Settings[EnginePackageSettings.ActiveConfig] = config;
 
             //foreach (var subPackage in package.SubPackages)
             //    foreach (var original in originalSubPackages)
