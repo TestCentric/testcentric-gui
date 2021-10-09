@@ -27,7 +27,6 @@
 
     <file src="testcentric.exe" target="tools" />
     <file src="testcentric.exe.config" target="tools" />
-    <file src="TestCentric.Common.dll" target="tools" />
     <file src="TestCentric.Gui.Runner.dll" target="tools" />
     <file src="nunit.uiexception.dll" target="tools" />
     <file src="TestCentric.Gui.Model.dll" target="tools" />
