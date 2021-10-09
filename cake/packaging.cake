@@ -13,7 +13,7 @@ static readonly string[] NET_CORE_AGENT_FILES = {
         "testcentric-agent.dll", "testcentric-agent.dll.config" };
 static readonly string[] GUI_FILES = {
         "testcentric.exe", "testcentric.exe.config", "nunit.uiexception.dll",
-        "TestCentric.Gui.Runner.dll", "TestCentric.Gui.Model.dll", "TestCentric.Common.dll" };
+        "TestCentric.Gui.Runner.dll", "TestCentric.Gui.Model.dll" };
 static readonly string[] TREE_ICONS_JPG = {
         "Success.jpg", "Failure.jpg", "Ignored.jpg", "Inconclusive.jpg", "Skipped.jpg" };
 static readonly string[] TREE_ICONS_PNG = {
@@ -30,7 +30,6 @@ var baseFiles = new string[]
 {
     "testcentric.exe",
     "testcentric.exe.config",
-    "TestCentric.Common.dll",
     "TestCentric.Gui.Runner.dll",
     "nunit.uiexception.dll",
     "TestCentric.Gui.Model.dll",
@@ -44,7 +43,6 @@ var baseFiles = new string[]
 var PdbFiles = new string[]
 {
     "testcentric.pdb",
-    "TestCentric.Common.pdb",
     "TestCentric.Gui.Runner.pdb",
     "nunit.uiexception.pdb",
     "TestCentric.Gui.Model.pdb",
