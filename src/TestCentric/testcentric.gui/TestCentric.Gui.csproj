@@ -18,7 +18,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\TestModel\model\TestCentric.Gui.Model.csproj" />
     <ProjectReference Include="..\..\GuiException\UiException\nunit.uiexception.dll.csproj" />
-    <ProjectReference Include="..\..\Common\testcentric.common\TestCentric.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\..\testcentric.ico">

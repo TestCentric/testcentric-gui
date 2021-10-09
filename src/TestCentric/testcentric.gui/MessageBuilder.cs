@@ -6,7 +6,7 @@
 using System;
 using System.Text;
 
-namespace TestCentric.Common
+namespace TestCentric.Gui
 {
     /// <summary>
     /// Static methods for creating messages

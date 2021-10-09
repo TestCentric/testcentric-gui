@@ -273,7 +273,7 @@ namespace TestCentric.Gui.Views
         private void detailList_SelectedIndexChanged(object sender, System.EventArgs e)
         {
             TestResultItem resultItem = (TestResultItem)detailList.SelectedItem;
-            errorBrowser.StackTraceSource = resultItem.StackTrace;
+            errorBrowser.StackTraceSource = resultItem.FilteredStackTrace;
             detailList.ContextMenuStrip = detailListContextMenuStrip;
         }
 
