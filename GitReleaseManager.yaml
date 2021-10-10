@@ -1,0 +1,65 @@
+# NOTE: The milestone must not contain any closed issues without one
+# of the labels listed here under issue-labels-include or issue-labels-exclude.
+# If no such label is found, then GRM fails with an error.
+
+# The labels that will be used to include issues in release notes.
+issue-labels-include:
+- Breaking Change
+- Feature
+- Enhancement
+- Bug
+- Build
+- Documentation
+# The labels that will NOT be used when including issues in release notes.
+issue-labels-exclude:
+- Refactor
+# Overrides default pluralization and header names for specific labels.
+issue-labels-alias:
+- name: Build
+  header: Build
+  plural: Build
+- name: Documentation
+  header: Documentation
+  plural: Documentation
+# Configuration values used when creating new releases
+create:
+  include-footer: true
+  footer-heading: Packages
+  footer-content: >-
+    There are three different downloads for the GUI.
+    <ul>
+    <li>For a chocolatey install: `testcentric-gui.{milestone}.nupkg`
+    <li>For a nuget install: `TestCentric.GuiRunner.{milestone}.nupkg`
+    <li>For a zip install in a directory of your choice: `testcentric-gui-{milestone}.zip`
+    </ul>
+    You may also download the TestCentric GUI from
+    [chocolatey.org](https://chocolatey.org/packages/testcentric-gui/) 
+    or [nuget.org](https://nuget.org/packages/TestCentric.GuiRunner/).
+    <br><br>
+    **Note:** `TestCentric.Metadata.{milestone}.nupkg` is for our internal use
+    and is not needed to run TestCentric.
+  footer-includes-milestone: true
+  milestone-replace-text: '{milestone}'
+  include-sha-section: true
+  sha-section-heading: "SHA256 Hashes of the release artifacts"
+  sha-section-line-format: "- `{1}\t{0}`"
+  allow-update-to-published: false
+# Configuration values used when exporting release notes
+export:
+  include-created-date-in-title: true
+  created-date-string-format: MMMM dd, yyyy
+  perform-regex-removal: false
+#  regex-text: '### Where to get it(\r\n)*You can .*\.'
+#  multiline-regex: false
+# Configuration values used when closing a milestone
+close:
+# Whether to add comments to issues closed with the published milestone release.
+  use-issue-comments: true
+  issue-comment: |-
+    :tada: This issue has been resolved in version {milestone} :tada:
+
+    The release is available on:
+
+    - [GitHub Release](https://github.com/{owner}/{repository}/releases/tag/{milestone})
+    - [NuGet Package](https://www.nuget.org/packages/TestCentric.GuiRunner/{milestone})
+    - [Chocolatey Package](https://chocolatey.org/packages/testcentric-gui/{milestone})

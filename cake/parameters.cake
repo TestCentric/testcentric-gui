@@ -5,7 +5,6 @@
 #load "./test-results.cake"
 #load "./test-reports.cake"
 #load "./check-headers.cake"
-#load "./console-reporter.cake"
 #load "./utilities.cake"
 #load "./local-targets.cake"
 
@@ -142,9 +141,6 @@ public class BuildParameters
 	public string ZipTestDirectory => TestDirectory + "zip/";
 	public string NuGetTestDirectory => TestDirectory + "nuget/";
 	public string ChocolateyTestDirectory => TestDirectory + "choco/";
-	public string WebDirectory => ProjectDirectory + "web/";
-	public string WebOutputDirectory => WebDirectory + "output/";
-	public string WebDeployDirectory => ProjectDirectory + "../testcentric-gui.deploy/";
 
 	public string ZipPackageName => PACKAGE_NAME + "-" + PackageVersion + ".zip";
 	public string NuGetPackageName => NUGET_PACKAGE_NAME + "." + PackageVersion + ".nupkg";
@@ -192,8 +188,7 @@ public class BuildParameters
 	public string[] SupportedCoreRuntimes => new string[] {"net40", "net35", "netcoreapp2.1"};
 	public string[] SupportedAgentRuntimes => new string[] { "net20", "net40", "netcoreapp2.1", "netcoreapp3.1", "net5.0" };
 
-	public string ProjectUri => "https://github.com/TestCentric/testcentric-gui";
-	public string WebDeployBranch => "gh-pages";
+	public string ProjectUri => "https://github.com/TestCentric/testcentric-engine";
 	public string GitHubUserId => "charliepoole";
 	public string GitHubUserEmail => "charliepoole@gmail.com";
 	public string GitHubPassword { get; }

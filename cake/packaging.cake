@@ -28,11 +28,6 @@ var RootFiles = new string[]
 
 var baseFiles = new string[]
 {
-    "testcentric.exe",
-    "testcentric.exe.config",
-    "TestCentric.Gui.Runner.dll",
-    "nunit.uiexception.dll",
-    "TestCentric.Gui.Model.dll",
     "nunit.engine.api.dll",
     "testcentric.engine.api.dll",
     "testcentric.engine.metadata.dll",
@@ -42,10 +37,6 @@ var baseFiles = new string[]
 
 var PdbFiles = new string[]
 {
-    "testcentric.pdb",
-    "TestCentric.Gui.Runner.pdb",
-    "nunit.uiexception.pdb",
-    "TestCentric.Gui.Model.pdb",
     "testcentric.engine.api.pdb",
     "testcentric.engine.core.pdb",
     "testcentric.engine.pdb",
@@ -72,8 +63,6 @@ private void CreateZipImage(BuildParameters parameters)
 
     CopyFileToDirectory(parameters.ZipDirectory + "testcentric.zip.addins", parameters.ZipImageDirectory + "bin/");
 
-    CopyDirectory(parameters.OutputDirectory + "Images", zipImageBinDir + "Images");
-
 	foreach (var runtime in parameters.SupportedAgentRuntimes)
     {
         var targetDir = zipImageBinDir + "agents/" + Directory(runtime);
@@ -81,7 +70,4 @@ private void CreateZipImage(BuildParameters parameters)
         CopyDirectory(sourceDir, targetDir);
         CopyFileToDirectory(parameters.ZipDirectory + "testcentric-agent.zip.addins", $"{parameters.ZipImageDirectory}bin/agents/{runtime}");
     }
-
-    // NOTE: Files specific to a particular package are not copied
-    // into the image directory but are added separately.
 }

@@ -19,10 +19,6 @@ bool CHECK_ASSEMBLY_INFO = false;
 // File names, which are exempt from checking
 static readonly string[] EXEMPT_FILES = new [] {
     "Options.cs",
-    "Resource.cs",
-    "TextCode.cs",
-    //"ProcessUtils.cs",
-    //"ProcessUtilsTests.cs"
 };
 
 static readonly int CD_LENGTH = Environment.CurrentDirectory.Length + 1;
@@ -48,7 +44,7 @@ Task("CheckHeaders")
                 continue;
 
             // Ignore AssemblyInfo files
-            if (!CHECK_ASSEMBLY_INFO && path.EndsWith(".AssemblyInfo.cs"))
+            if (!CHECK_ASSEMBLY_INFO && System.IO.Path.GetFileName(path) == "AssemblyInfo.cs")
                 continue;
 
             examined++;
