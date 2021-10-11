@@ -254,6 +254,35 @@ Task("BuildEngineCorePackage")
 		});
 	});
 
+Task("VerifyEngineCorePackage")
+	.Does<BuildParameters>((parameters) =>
+	{
+		string dirName = $"{System.Guid.NewGuid()}/";
+
+		try
+		{
+			Unzip(parameters.EngineCorePackage, dirName);
+
+			Check.That(dirName,
+				HasFiles("LICENSE.txt", "testcentric.png"),
+				HasDirectory("lib/net20").WithFiles(
+					"testcentric.engine.core.dll", "testcentric.engine.api.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll"),
+				HasDirectory("lib/net40").WithFiles(
+					"testcentric.engine.core.dll", "testcentric.engine.api.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll"),
+				HasDirectory("lib/netstandard2.0").WithFiles(
+					"testcentric.engine.core.dll", "testcentric.engine.api.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll"));
+		}
+		finally
+		{
+			DeleteDirectory(dirName, new DeleteDirectorySettings()
+			{
+				Recursive = true
+			});
+		}
+
+		Information("Verification was successful!");
+	});
+
 //////////////////////////////////////////////////////////////////////
 // ENGINE API PACKAGE
 //////////////////////////////////////////////////////////////////////
@@ -267,6 +296,32 @@ Task("BuildEngineApiPackage")
 			OutputDirectory = parameters.PackageDirectory,
 			NoPackageAnalysis = true
 		});
+	});
+
+Task("VerifyEngineApiPackage")
+	.Does<BuildParameters>((parameters) =>
+	{
+		string dirName = $"{System.Guid.NewGuid()}/";
+
+		try
+		{
+			Unzip(parameters.EngineApiPackage, dirName);
+
+			Check.That(dirName,
+				HasFiles("LICENSE.txt", "testcentric.png"),
+				HasDirectory("lib/net20").WithFile("testcentric.engine.api.dll"),
+				HasDirectory("lib/net40").WithFile("testcentric.engine.api.dll"),
+				HasDirectory("lib/netstandard2.0").WithFile("testcentric.engine.api.dll"));
+		}
+		finally
+		{
+			DeleteDirectory(dirName, new DeleteDirectorySettings()
+			{
+				Recursive = true
+			});
+		}
+
+		Information("Verification was successful!");
 	});
 
 //////////////////////////////////////////////////////////////////////
@@ -414,10 +469,12 @@ Task("PackageEngine")
 	.IsDependentOn("TestEnginePackage");
 
 Task("PackageEngineCore")
-	.IsDependentOn("BuildEngineCorePackage");
+	.IsDependentOn("BuildEngineCorePackage")
+	.IsDependentOn("VerifyEngineCorePackage");
 
 Task("PackageEngineApi")
-	.IsDependentOn("BuildEngineApiPackage");
+	.IsDependentOn("BuildEngineApiPackage")
+	.IsDependentOn("VerifyEngineApiPackage");
 
 Task("Test")
 	.IsDependentOn("TestEngineCore")
@@ -430,8 +487,6 @@ Task("AppVeyor")
 	.IsDependentOn("Test")
 	.IsDependentOn("Package")
 	.IsDependentOn("PublishPackages");
-	//.IsDependentOn("CreateDraftRelease")
-	//.IsDependentOn("CreateProductionRelease");
 
 Task("Travis")
     .IsDependentOn("Build")
