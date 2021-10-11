@@ -168,54 +168,6 @@ Task("TestAgentCore")
 //////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////
-// ZIP PACKAGE
-//////////////////////////////////////////////////////////////////////
-
-Task("BuildZipPackage")
-    .Does<BuildParameters>((parameters) =>
-    {
-        CreateDirectory(parameters.PackageDirectory);
-        CreateZipImage(parameters);
-
-        Information("Creating package " + parameters.ZipPackageName);
-
-        var zipFiles = GetFiles(parameters.ZipImageDirectory + "**/*.*");
-        Zip(parameters.ZipImageDirectory, parameters.ZipPackage, zipFiles);
-    });
-
-Task("InstallZipPackage")
-	.Does<BuildParameters>((parameters) =>
-	{
-		CleanDirectory(parameters.ZipTestDirectory);
-		Unzip(parameters.ZipPackage, parameters.ZipTestDirectory);
-
-		Information($"Unzipped {parameters.ZipPackageName} to { parameters.ZipTestDirectory}");
-	});
-
-Task("VerifyZipPackage")
-	.IsDependentOn("InstallZipPackage")
-	.Does<BuildParameters>((parameters) =>
-	{
-        Check.That(parameters.ZipTestDirectory,
-            HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt"),
-            HasDirectory("bin").WithFiles(ENGINE_FILES).AndFile("testcentric.zip.addins"),
-            HasDirectory("bin/agents/net20").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
-            HasDirectory("bin/agents/net40").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
-            HasDirectory("bin/agents/netcoreapp2.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
-            HasDirectory("bin/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
-            HasDirectory("bin/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.zip.addins"));
-
-        Information("Verification was successful!");
-	});
-
-Task("TestZipPackage")
-	.IsDependentOn("InstallZipPackage")
-	.Does<BuildParameters>((parameters) =>
-	{
-		new ZipPackageTester(parameters).RunAllTests();
-	});
-
-//////////////////////////////////////////////////////////////////////
 // NUGET PACKAGE
 //////////////////////////////////////////////////////////////////////
 
@@ -437,15 +389,9 @@ Task("PublishToNuGet")
 
 Task("Package")
 	.IsDependentOn("Build")
-	.IsDependentOn("PackageZip")
 	.IsDependentOn("PackageNuGet")
 	.IsDependentOn("BuildEngineCorePackage")
 	.IsDependentOn("BuildEngineApiPackage");
-
-Task("PackageZip")
-	.IsDependentOn("BuildZipPackage")
-	.IsDependentOn("VerifyZipPackage")
-	.IsDependentOn("TestZipPackage");
 
 Task("PackageNuGet")
 	.IsDependentOn("BuildNuGetPackage")

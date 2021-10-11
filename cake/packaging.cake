@@ -42,32 +42,3 @@ var PdbFiles = new string[]
     "testcentric.engine.pdb",
 };
 
-private void CreateZipImage(BuildParameters parameters)
-{
-	string zipImageDir = parameters.ZipImageDirectory;
-	string zipImageBinDir = zipImageDir + "bin/";
-
-    CreateDirectory(zipImageDir);
-    CleanDirectory(zipImageDir);
-
-	CopyFiles(RootFiles, zipImageDir);
-
-	var copyFiles = new List<string>(baseFiles);
-	if (!parameters.UsingXBuild)
-		copyFiles.AddRange(PdbFiles);
-
-	CreateDirectory(zipImageBinDir);
-
-	foreach (string file in copyFiles)
-		CopyFileToDirectory(parameters.OutputDirectory + file, zipImageBinDir);
-
-    CopyFileToDirectory(parameters.ZipDirectory + "testcentric.zip.addins", parameters.ZipImageDirectory + "bin/");
-
-	foreach (var runtime in parameters.SupportedAgentRuntimes)
-    {
-        var targetDir = zipImageBinDir + "agents/" + Directory(runtime);
-        var sourceDir = parameters.OutputDirectory + "agents/" + Directory(runtime);
-        CopyDirectory(sourceDir, targetDir);
-        CopyFileToDirectory(parameters.ZipDirectory + "testcentric-agent.zip.addins", $"{parameters.ZipImageDirectory}bin/agents/{runtime}");
-    }
-}

@@ -24,16 +24,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		src\testcentric.snk = src\testcentric.snk
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "choco", "choco", "{7A082D44-4669-485E-AB71-5475978EE240}"
-	ProjectSection(SolutionItems) = preProject
-		choco\testcentric-agent-x86.exe.ignore = choco\testcentric-agent-x86.exe.ignore
-		choco\testcentric-agent.choco.addins = choco\testcentric-agent.choco.addins
-		choco\testcentric-agent.exe.ignore = choco\testcentric-agent.exe.ignore
-		choco\testcentric-engine.nuspec = choco\testcentric-engine.nuspec
-		choco\testcentric.choco.addins = choco\testcentric.choco.addins
-		choco\VERIFICATION.txt = choco\VERIFICATION.txt
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestEngine", "TestEngine", "{EA14AF63-0F5D-4938-9C87-6EC67A961DB3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mock-assembly", "src\TestEngine\mock-assembly\mock-assembly.csproj", "{4A110EEC-7C79-4B44-9F6C-38259366076D}"
@@ -70,12 +60,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cake", "cake", "{6C9280F6-6
 		cake\test-results.cake = cake\test-results.cake
 		cake\utilities.cake = cake\utilities.cake
 		cake\versioning.cake = cake\versioning.cake
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "zip", "zip", "{76D01D8E-B522-45D8-9835-B0F0FAE48A0A}"
-	ProjectSection(SolutionItems) = preProject
-		zip\testcentric-agent.zip.addins = zip\testcentric-agent.zip.addins
-		zip\testcentric.zip.addins = zip\testcentric.zip.addins
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Agents", "Agents", "{804797D1-A019-4846-9295-F2F409434B43}"
@@ -153,7 +137,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{7A082D44-4669-485E-AB71-5475978EE240} = {A65042E1-D8BC-48DD-8DE1-F0991F07EA77}
 		{4A110EEC-7C79-4B44-9F6C-38259366076D} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
 		{79429F2F-F2AC-4829-97F4-B55FDD037D9D} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
 		{987B26C9-023D-4ECF-8A36-05F1B652B57F} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
@@ -162,7 +145,6 @@ Global
 		{5952A5E6-0F93-4A63-A1E4-62EDC47CF9E7} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
 		{23ED18B0-608C-4CB5-A70E-CB95C8B0231C} = {A65042E1-D8BC-48DD-8DE1-F0991F07EA77}
 		{6C9280F6-6159-4E15-BDC6-F24A3A94F721} = {A65042E1-D8BC-48DD-8DE1-F0991F07EA77}
-		{76D01D8E-B522-45D8-9835-B0F0FAE48A0A} = {A65042E1-D8BC-48DD-8DE1-F0991F07EA77}
 		{804797D1-A019-4846-9295-F2F409434B43} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
 		{68DC97D4-3B2D-46FA-B6F9-A9A052C2EBA7} = {804797D1-A019-4846-9295-F2F409434B43}
 		{93069114-A4EB-4ED6-A65D-CD0718A5171F} = {804797D1-A019-4846-9295-F2F409434B43}

@@ -300,29 +300,6 @@ public abstract class PackageTester
     }
 }
 
-public class ZipPackageTester : PackageTester
-{
-    public ZipPackageTester(BuildParameters parameters) : base(parameters) { }
-
-    protected override string PackageName => _parameters.ZipPackageName;
-    protected override FilePath PackageUnderTest => _parameters.ZipPackage;
-    protected override string PackageTestDirectory => _parameters.ZipTestDirectory;
-    protected override string PackageTestBinDirectory => PackageTestDirectory + "bin/";
-    protected override string ExtensionInstallDirectory => PackageTestBinDirectory + "addins/";
-
-    //protected override void InstallEngineExtension(string extension)
-    //{
-    //    Console.WriteLine($"Installing {extension} to directory {ExtensionInstallDirectory}");
-
-    //    _parameters.Context.NuGetInstall(extension,
-    //        new NuGetInstallSettings()
-    //        {
-    //            OutputDirectory = ExtensionInstallDirectory,
-    //            Prerelease = true
-    //        });
-    //}
-}
-
 public class NuGetPackageTester : PackageTester
 {
     public NuGetPackageTester(BuildParameters parameters) : base(parameters) { }

@@ -128,27 +128,22 @@ public class BuildParameters
 	public string ProjectDirectory { get; }
 	public string SourceDirectory => ProjectDirectory + "src/";
 	public string OutputDirectory => ProjectDirectory + "bin/" + Configuration + "/";
-	public string ZipDirectory => ProjectDirectory + "zip/";
 	public string NuGetDirectory => ProjectDirectory + "nuget/";
 	public string PackageDirectory => ProjectDirectory + "package/";
-	public string ZipImageDirectory => PackageDirectory + "zipimage/";
 	public string TestDirectory => PackageDirectory + "test/";
-	public string ZipTestDirectory => TestDirectory + "zip/";
 	public string NuGetTestDirectory => TestDirectory + "nuget/";
 
-	public string ZipPackageName => PACKAGE_NAME + "-" + PackageVersion + ".zip";
 	public string EnginePackageName => ENGINE_PACKAGE_NAME + "." + PackageVersion + ".nupkg";
 	public string EngineCorePackageName => ENGINE_CORE_PACKAGE_NAME + "." + PackageVersion + ".nupkg";
 	public string EngineApiPackageName => ENGINE_API_PACKAGE_NAME + "." + PackageVersion + ".nupkg";
 
-	public FilePath ZipPackage => new FilePath(PackageDirectory + ZipPackageName);
 	public FilePath EnginePackage => new FilePath(PackageDirectory + EnginePackageName);
 	public FilePath EngineCorePackage => new FilePath(PackageDirectory + EngineCorePackageName);
 	public FilePath EngineApiPackage => new FilePath(PackageDirectory + EngineApiPackageName);
 
 	public string GitHubReleaseAssets => _context.IsRunningOnWindows()
-		? $"\"{ZipPackage},{EnginePackage},{EngineCorePackage},{EngineApiPackage}\""
-        : $"\"{ZipPackage},{EnginePackage}\"";
+		? $"\"{EnginePackage},{EngineCorePackage},{EngineApiPackage}\""
+        : $"\"{EnginePackage}\"";
 
 	public string MyGetPushUrl => MYGET_PUSH_URL;
 	public string NuGetPushUrl => NUGET_PUSH_URL;
@@ -247,8 +242,6 @@ public class BuildParameters
 		Console.WriteLine("Source:    " + SourceDirectory);
 		Console.WriteLine("NuGet:     " + NuGetDirectory);
 		Console.WriteLine("Package:   " + PackageDirectory);
-		Console.WriteLine("ZipImage:  " + ZipImageDirectory);
-		Console.WriteLine("ZipTest:   " + ZipTestDirectory);
 		Console.WriteLine("NuGetTest: " + NuGetTestDirectory);
 
 		Console.WriteLine("\nBUILD");
