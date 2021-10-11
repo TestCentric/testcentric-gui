@@ -61,8 +61,7 @@ public struct PackageTest
 
 const string DEFAULT_TEST_RESULT_FILE = "TestResult.xml";
 
-// Abstract base for all package testers. Currently, we only
-// have one package of each type (Zip, NuGet, Chocolatey).
+// Abstract base for all package testers.
 public abstract class PackageTester
 {
     protected BuildParameters _parameters;
@@ -328,8 +327,8 @@ public class NuGetPackageTester : PackageTester
 {
     public NuGetPackageTester(BuildParameters parameters) : base(parameters) { }
 
-    protected override string PackageName => _parameters.NuGetPackageName;
-    protected override FilePath PackageUnderTest => _parameters.NuGetPackage;
+    protected override string PackageName => _parameters.EnginePackageName;
+    protected override FilePath PackageUnderTest => _parameters.EnginePackage;
     protected override string PackageTestDirectory => _parameters.NuGetTestDirectory;
     protected override string PackageTestBinDirectory => PackageTestDirectory + "tools/";
     protected override string ExtensionInstallDirectory => _parameters.TestDirectory;
@@ -339,33 +338,6 @@ public class NuGetPackageTester : PackageTester
     //    _parameters.Context.NuGetInstall(extension,
     //        new NuGetInstallSettings()
     //        {
-    //            OutputDirectory = ExtensionInstallDirectory,
-    //            Prerelease = true
-    //        });
-    //}
-}
-
-public class ChocolateyPackageTester : PackageTester
-{
-    public ChocolateyPackageTester(BuildParameters parameters) : base(parameters) { }
-
-    protected override string PackageName => _parameters.ChocolateyPackageName;
-    protected override FilePath PackageUnderTest => _parameters.ChocolateyPackage;
-    protected override string PackageTestDirectory => _parameters.ChocolateyTestDirectory;
-    protected override string PackageTestBinDirectory => PackageTestDirectory + "tools/";
-    protected override string ExtensionInstallDirectory => _parameters.TestDirectory;
-
-    //// Chocolatey packages have a different naming convention from NuGet
-    //protected override string NUnitV2Driver => "nunit-extension-nunit-v2-driver";
-    //protected override string NUnitProjectLoader => "nunit-extension-nunit-project-loader";
-
-    //protected override void InstallEngineExtension(string extension)
-    //{
-    //    // Install with NuGet because choco requires administrator access
-    //    _parameters.Context.NuGetInstall(extension,
-    //        new NuGetInstallSettings()
-    //        {
-    //            Source = new[] { "https://www.myget.org/F/nunit/api/v3/index.json" },
     //            OutputDirectory = ExtensionInstallDirectory,
     //            Prerelease = true
     //        });

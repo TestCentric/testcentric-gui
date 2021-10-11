@@ -16,12 +16,6 @@ private void PushNuGetPackage(FilePath package, string apiKey, string url)
 	NuGetPush(package, new NuGetPushSettings() { ApiKey = apiKey, Source = url });
 }
 
-private void PushChocolateyPackage(FilePath package, string apiKey, string url)
-{
-	CheckPackageExists(package);
-	ChocolateyPush(package, new ChocolateyPushSettings() { ApiKey = apiKey, Source = url });
-}
-
 private void CheckPackageExists(FilePath package)
 {
 	if (!FileExists(package))

@@ -4,14 +4,13 @@
 
 const string SOLUTION = "testcentric-engine.sln";
 const string NUGET_ID = "TestCentric.Engine";
-const string CHOCO_ID = "testcentric-engine";
 const string GITHUB_OWNER = "testcentric";
 const string GITHUB_REPO = "testcentric-engine";
 const string DEFAULT_VERSION = "2.0.0";
 const string DEFAULT_CONFIGURATION = "Release";
 
 const string PACKAGE_NAME = "testcentric-engine";
-const string NUGET_PACKAGE_NAME = "TestCentric.Engine";
+const string ENGINE_PACKAGE_NAME = "TestCentric.Engine";
 const string ENGINE_CORE_PACKAGE_NAME = "TestCentric.Engine.Core";
 const string ENGINE_API_PACKAGE_NAME = "TestCentric.Engine.Api";
 
@@ -225,9 +224,9 @@ Task("BuildNuGetPackage")
 	{
 		CreateDirectory(parameters.PackageDirectory);
 
-		Information("Creating package " + parameters.NuGetPackageName);
+		Information("Creating package " + parameters.EnginePackageName);
 
-        NuGetPack($"{parameters.NuGetDirectory}/{NUGET_PACKAGE_NAME}.nuspec", new NuGetPackSettings()
+        NuGetPack($"{parameters.NuGetDirectory}/{ENGINE_PACKAGE_NAME}.nuspec", new NuGetPackSettings()
         {
             Version = parameters.PackageVersion,
             BasePath = parameters.OutputDirectory,
@@ -240,9 +239,9 @@ Task("InstallNuGetPackage")
 	.Does<BuildParameters>((parameters) =>
 	{
         CleanDirectory(parameters.NuGetTestDirectory);
-        Unzip(parameters.NuGetPackage, parameters.NuGetTestDirectory);
+        Unzip(parameters.EnginePackage, parameters.NuGetTestDirectory);
 
-        Information($"Unzipped {parameters.NuGetPackageName} to { parameters.NuGetTestDirectory}");
+        Information($"Unzipped {parameters.EnginePackageName} to { parameters.NuGetTestDirectory}");
     });
 
 Task("VerifyNuGetPackage")
@@ -266,60 +265,6 @@ Task("TestNuGetPackage")
 	.Does<BuildParameters>((parameters) =>
 	{
 		new NuGetPackageTester(parameters).RunAllTests();
-	});
-
-//////////////////////////////////////////////////////////////////////
-// CHOCOLATEY PACKAGE
-//////////////////////////////////////////////////////////////////////
-
-Task("BuildChocolateyPackage")
-	.WithCriteria(IsRunningOnWindows())
-    .Does<BuildParameters>((parameters) =>
-    {
-		CreateDirectory(parameters.PackageDirectory);
-
-		Information("Creating package " + parameters.ChocolateyPackageName);
-
-        ChocolateyPack($"{parameters.ChocoDirectory}/{PACKAGE_NAME}.nuspec",
-            new ChocolateyPackSettings()
-            {
-                Version = parameters.PackageVersion,
-                WorkingDirectory = parameters.OutputDirectory,
-                OutputDirectory = parameters.PackageDirectory,
-                ArgumentCustomization = args => args.Append($"BIN={parameters.OutputDirectory}")
-            });
-    });
-
-Task("InstallChocolateyPackage")
-	.Does<BuildParameters>((parameters) =>
-	{
-        CleanDirectory(parameters.ChocolateyTestDirectory);
-        Unzip(parameters.ChocolateyPackage, parameters.ChocolateyTestDirectory);
-
-        Information($"Unzipped {parameters.ChocolateyPackageName} to { parameters.ChocolateyTestDirectory}");
-    });
-
-Task("VerifyChocolateyPackage")
-	.IsDependentOn("InstallChocolateyPackage")
-	.Does<BuildParameters>((parameters) =>
-	{
-        Check.That(parameters.ChocolateyTestDirectory,
-            HasDirectory("tools").WithFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "VERIFICATION.txt", "testcentric.choco.addins").AndFiles(ENGINE_FILES).AndFile("testcentric.choco.addins"),
-            HasDirectory("tools/agents/net20").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
-            HasDirectory("tools/agents/net40").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
-            HasDirectory("tools/agents/netcoreapp2.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
-            HasDirectory("tools/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
-            HasDirectory("tools/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"));
-
-        Information("Verification was successful!");
-	});
-
-Task("TestChocolateyPackage")
-	.IsDependentOn("InstallChocolateyPackage")
-	.WithCriteria(IsRunningOnWindows())
-	.Does<BuildParameters>((parameters) =>
-	{
-		new ChocolateyPackageTester(parameters).RunAllTests();
 	});
 
 //////////////////////////////////////////////////////////////////////
@@ -364,10 +309,9 @@ Task("BuildEngineApiPackage")
 static bool hadPublishingErrors = false;
 
 Task("PublishPackages")
-	.Description("Publish nuget and chocolatey packages according to the current settings")
+	.Description("Publish packages according to the current settings")
 	.IsDependentOn("PublishToMyGet")
     .IsDependentOn("PublishToNuGet")
-    .IsDependentOn("PublishToChocolatey")
     .Does(() =>
 	{
 		if (hadPublishingErrors)
@@ -385,10 +329,9 @@ Task("PublishToMyGet")
         else
             try
 			{
-				PushNuGetPackage(parameters.NuGetPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
+				PushNuGetPackage(parameters.EnginePackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
 				PushNuGetPackage(parameters.EngineCorePackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
 				PushNuGetPackage(parameters.EngineApiPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
-				PushChocolateyPackage(parameters.ChocolateyPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
 			}
 			catch(Exception)
 			{
@@ -407,28 +350,9 @@ Task("PublishToNuGet")
 		else
 			try
 			{
-				PushNuGetPackage(parameters.NuGetPackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
+				PushNuGetPackage(parameters.EnginePackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
 				PushNuGetPackage(parameters.EngineCorePackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
 				PushNuGetPackage(parameters.EngineApiPackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
-			}
-			catch(Exception)
-            {
-				hadPublishingErrors = true;
-			}
-	});
-
-// This task may either be run by the PublishPackages task,
-// which depends on it, or directly when recovering from errors.
-Task("PublishToChocolatey")
-	.Description("Publish packages to Chocolatey")
-	.Does<BuildParameters>((parameters) =>
-	{
-		if (!parameters.ShouldPublishToChocolatey)
-			Information("Nothing to publish to Chocolatey from this run.");
-		else
-			try
-			{
-				PushChocolateyPackage(parameters.ChocolateyPackage, parameters.ChocolateyApiKey, parameters.ChocolateyPushUrl);
 			}
 			catch(Exception)
             {
@@ -515,7 +439,6 @@ Task("Package")
 	.IsDependentOn("Build")
 	.IsDependentOn("PackageZip")
 	.IsDependentOn("PackageNuGet")
-	.IsDependentOn("PackageChocolatey")
 	.IsDependentOn("BuildEngineCorePackage")
 	.IsDependentOn("BuildEngineApiPackage");
 
@@ -528,11 +451,6 @@ Task("PackageNuGet")
 	.IsDependentOn("BuildNuGetPackage")
 	.IsDependentOn("VerifyNuGetPackage")
 	.IsDependentOn("TestNuGetPackage");
-
-Task("PackageChocolatey")
-	.IsDependentOn("BuildChocolateyPackage")
-	.IsDependentOn("VerifyChocolateyPackage")
-	.IsDependentOn("TestChocolateyPackage");
 
 Task("Test")
 	.IsDependentOn("TestEngineCore")

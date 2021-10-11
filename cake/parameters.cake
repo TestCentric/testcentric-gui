@@ -11,18 +11,15 @@
 // URLs for uploading packages
 private const string MYGET_PUSH_URL = "https://www.myget.org/F/testcentric/api/v2";
 private const string NUGET_PUSH_URL = "https://api.nuget.org/v3/index.json";
-private const string CHOCO_PUSH_URL = "https://push.chocolatey.org/";
 
 // Environment Variable names holding API keys
 private const string MYGET_API_KEY = "MYGET_API_KEY";
 private const string NUGET_API_KEY = "NUGET_API_KEY";
-private const string CHOCO_API_KEY = "CHOCO_API_KEY";
 private const string GITHUB_ACCESS_TOKEN = "GITHUB_ACCESS_TOKEN";
 
 // Pre-release labels that we publish
 private static readonly string[] LABELS_WE_PUBLISH_ON_MYGET = { "dev", "pre" };
 private static readonly string[] LABELS_WE_PUBLISH_ON_NUGET = { "alpha", "beta", "rc" };
-private static readonly string[] LABELS_WE_PUBLISH_ON_CHOCOLATEY = { "alpha", "beta", "rc" };
 private static readonly string[] LABELS_WE_RELEASE_ON_GITHUB = { "alpha", "beta", "rc" };
 
 public class BuildParameters
@@ -51,7 +48,6 @@ public class BuildParameters
 
 		MyGetApiKey = _context.EnvironmentVariable(MYGET_API_KEY);
 		NuGetApiKey = _context.EnvironmentVariable(NUGET_API_KEY);
-		ChocolateyApiKey = _context.EnvironmentVariable(CHOCO_API_KEY);
 		GitHubAccessToken = _context.EnvironmentVariable(GITHUB_ACCESS_TOKEN);
 
 		UsingXBuild = context.EnvironmentVariable("USE_XBUILD") != null;
@@ -134,37 +130,31 @@ public class BuildParameters
 	public string OutputDirectory => ProjectDirectory + "bin/" + Configuration + "/";
 	public string ZipDirectory => ProjectDirectory + "zip/";
 	public string NuGetDirectory => ProjectDirectory + "nuget/";
-	public string ChocoDirectory => ProjectDirectory + "choco/";
 	public string PackageDirectory => ProjectDirectory + "package/";
 	public string ZipImageDirectory => PackageDirectory + "zipimage/";
 	public string TestDirectory => PackageDirectory + "test/";
 	public string ZipTestDirectory => TestDirectory + "zip/";
 	public string NuGetTestDirectory => TestDirectory + "nuget/";
-	public string ChocolateyTestDirectory => TestDirectory + "choco/";
 
 	public string ZipPackageName => PACKAGE_NAME + "-" + PackageVersion + ".zip";
-	public string NuGetPackageName => NUGET_PACKAGE_NAME + "." + PackageVersion + ".nupkg";
-	public string ChocolateyPackageName => PACKAGE_NAME + "." + PackageVersion + ".nupkg";
+	public string EnginePackageName => ENGINE_PACKAGE_NAME + "." + PackageVersion + ".nupkg";
 	public string EngineCorePackageName => ENGINE_CORE_PACKAGE_NAME + "." + PackageVersion + ".nupkg";
 	public string EngineApiPackageName => ENGINE_API_PACKAGE_NAME + "." + PackageVersion + ".nupkg";
 
 	public FilePath ZipPackage => new FilePath(PackageDirectory + ZipPackageName);
-	public FilePath NuGetPackage => new FilePath(PackageDirectory + NuGetPackageName);
-	public FilePath ChocolateyPackage => new FilePath(PackageDirectory + ChocolateyPackageName);
+	public FilePath EnginePackage => new FilePath(PackageDirectory + EnginePackageName);
 	public FilePath EngineCorePackage => new FilePath(PackageDirectory + EngineCorePackageName);
 	public FilePath EngineApiPackage => new FilePath(PackageDirectory + EngineApiPackageName);
 
 	public string GitHubReleaseAssets => _context.IsRunningOnWindows()
-		? $"\"{ZipPackage},{NuGetPackage},{ChocolateyPackage},{EngineCorePackage},{EngineApiPackage}\""
-        : $"\"{ZipPackage},{NuGetPackage}\"";
+		? $"\"{ZipPackage},{EnginePackage},{EngineCorePackage},{EngineApiPackage}\""
+        : $"\"{ZipPackage},{EnginePackage}\"";
 
 	public string MyGetPushUrl => MYGET_PUSH_URL;
 	public string NuGetPushUrl => NUGET_PUSH_URL;
-	public string ChocolateyPushUrl => CHOCO_PUSH_URL;
 	
 	public string MyGetApiKey { get; }
 	public string NuGetApiKey { get; }
-	public string ChocolateyApiKey { get; }
 
     public string BranchName => BuildVersion.BranchName;
 	public bool IsReleaseBranch => BuildVersion.IsReleaseBranch;
@@ -174,8 +164,6 @@ public class BuildParameters
 		!IsPreRelease || LABELS_WE_PUBLISH_ON_MYGET.Contains(BuildVersion.PreReleaseLabel);
 	public bool ShouldPublishToNuGet =>
 		!IsPreRelease || LABELS_WE_PUBLISH_ON_NUGET.Contains(BuildVersion.PreReleaseLabel);
-	public bool ShouldPublishToChocolatey =>
-		!IsPreRelease || LABELS_WE_PUBLISH_ON_CHOCOLATEY.Contains(BuildVersion.PreReleaseLabel);
 	public bool IsProductionRelease =>
 		!IsPreRelease || LABELS_WE_RELEASE_ON_GITHUB.Contains(BuildVersion.PreReleaseLabel);
 	
@@ -204,8 +192,6 @@ public class BuildParameters
 				validationErrors.Add("MyGet ApiKey was not set.");
 			if (ShouldPublishToNuGet && string.IsNullOrEmpty(NuGetApiKey))
 				validationErrors.Add("NuGet ApiKey was not set.");
-			if (ShouldPublishToChocolatey && string.IsNullOrEmpty(ChocolateyApiKey))
-				validationErrors.Add("Chocolatey ApiKey was not set.");
 		}
 
 		if (TasksToExecute.Contains("CreateDraftRelease") && (IsReleaseBranch || IsProductionRelease))
@@ -260,12 +246,10 @@ public class BuildParameters
 		Console.WriteLine("Output:    " + OutputDirectory);
 		Console.WriteLine("Source:    " + SourceDirectory);
 		Console.WriteLine("NuGet:     " + NuGetDirectory);
-		Console.WriteLine("Choco:     " + ChocoDirectory);
 		Console.WriteLine("Package:   " + PackageDirectory);
 		Console.WriteLine("ZipImage:  " + ZipImageDirectory);
 		Console.WriteLine("ZipTest:   " + ZipTestDirectory);
 		Console.WriteLine("NuGetTest: " + NuGetTestDirectory);
-		Console.WriteLine("ChocoTest: " + ChocolateyTestDirectory);
 
 		Console.WriteLine("\nBUILD");
 		Console.WriteLine("Build With:      " + (UsingXBuild ? "XBuild" : "MSBuild"));
@@ -277,15 +261,12 @@ public class BuildParameters
 		Console.WriteLine("\nPACKAGING");
 		Console.WriteLine("MyGetPushUrl:              " + MyGetPushUrl);
 		Console.WriteLine("NuGetPushUrl:              " + NuGetPushUrl);
-		Console.WriteLine("ChocolateyPushUrl:         " + ChocolateyPushUrl);
 		Console.WriteLine("MyGetApiKey:               " + (!string.IsNullOrEmpty(MyGetApiKey) ? "AVAILABLE" : "NOT AVAILABLE"));
 		Console.WriteLine("NuGetApiKey:               " + (!string.IsNullOrEmpty(NuGetApiKey) ? "AVAILABLE" : "NOT AVAILABLE"));
-		Console.WriteLine("ChocolateyApiKey:          " + (!string.IsNullOrEmpty(ChocolateyApiKey) ? "AVAILABLE" : "NOT AVAILABLE"));
 
 		Console.WriteLine("\nPUBLISHING");
 		Console.WriteLine("ShouldPublishToMyGet:      " + ShouldPublishToMyGet);
 		Console.WriteLine("ShouldPublishToNuGet:      " + ShouldPublishToNuGet);
-		Console.WriteLine("ShouldPublishToChocolatey: " + ShouldPublishToChocolatey);
 
 		Console.WriteLine("\nRELEASING");
 		Console.WriteLine("BranchName:                   " + BranchName);
