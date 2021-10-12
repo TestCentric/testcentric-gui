@@ -465,8 +465,8 @@ Task("Package")
 
 Task("PackageEngine")
 	.IsDependentOn("BuildEnginePackage")
-	.IsDependentOn("VerifyEnginePackage")
-	.IsDependentOn("TestEnginePackage");
+	.IsDependentOn("VerifyEnginePackage");
+	//.IsDependentOn("TestEnginePackage");
 
 Task("PackageEngineCore")
 	.IsDependentOn("BuildEngineCorePackage")
