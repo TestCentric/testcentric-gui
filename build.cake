@@ -14,6 +14,10 @@ const string ENGINE_PACKAGE_NAME = "TestCentric.Engine";
 const string ENGINE_CORE_PACKAGE_NAME = "TestCentric.Engine.Core";
 const string ENGINE_API_PACKAGE_NAME = "TestCentric.Engine.Api";
 
+const string TEST_BED_DIR = "src/test-bed/";
+const string TEST_BED_SOLUTION = TEST_BED_DIR + "test-engine-test-bed.sln";
+static readonly string TEST_RUNNER_EXE = "test-runner.exe";
+
 // Load scripts after defining constants
 #load "./cake/parameters.cake"
 
@@ -95,7 +99,7 @@ Task("Clean")
 Task("RestorePackages")
     .Does<BuildParameters>((parameters) =>
 {
-    NuGetRestore(SOLUTION, parameters.RestoreSettings);
+	NuGetRestore(SOLUTION, parameters.RestoreSettings);
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -104,15 +108,15 @@ Task("RestorePackages")
 
 Task("Build")
 	.IsDependentOn("Clean")
-    .IsDependentOn("RestorePackages")
+	.IsDependentOn("RestorePackages")
 	.IsDependentOn("CheckHeaders")
-    .Does<BuildParameters>((parameters) =>
-{
-    if(parameters.UsingXBuild)
-        XBuild(SOLUTION, parameters.XBuildSettings.WithProperty("Version", parameters.PackageVersion));
-    else
-        MSBuild(SOLUTION, parameters.MSBuildSettings.WithProperty("Version", parameters.PackageVersion));
-});
+	.Does<BuildParameters>((parameters) =>
+	{
+		if (parameters.UsingXBuild)
+			XBuild(SOLUTION, parameters.XBuildSettings.WithProperty("Version", parameters.PackageVersion));
+		else
+			MSBuild(SOLUTION, parameters.MSBuildSettings.WithProperty("Version", parameters.PackageVersion));
+	});
 
 //////////////////////////////////////////////////////////////////////
 // TESTS
@@ -163,9 +167,23 @@ Task("TestAgentCore")
 			RunNUnitLite("testcentric.agent.core.tests", runtime, $"{parameters.OutputDirectory}engine-tests/{runtime}/");
 	});
 
-////////////////////////////////////////////////////////////////////
-// PACKAGING
 //////////////////////////////////////////////////////////////////////
+// BUILD TEST BED
+//////////////////////////////////////////////////////////////////////
+
+Task("BuildTestBed")
+	.Does<BuildParameters>((parameters) =>
+	{
+		var testBedOutputDirectory = $"{TEST_BED_DIR}bin/{parameters.Configuration}/";
+		CleanDirectory(testBedOutputDirectory);
+
+		NuGetRestore(TEST_BED_SOLUTION, parameters.RestoreSettings);
+
+		MSBuild(TEST_BED_SOLUTION, parameters.MSBuildSettings.WithProperty("Version", parameters.PackageVersion));
+
+		// Temporarily copy agent code (until we start using package)
+		CopyDirectory(parameters.OutputDirectory + "agents", testBedOutputDirectory + "agents");
+	});
 
 //////////////////////////////////////////////////////////////////////
 // ENGINE PACKAGE
@@ -229,6 +247,7 @@ Task("VerifyEnginePackage")
 
 Task("TestEnginePackage")
 	.IsDependentOn("InstallEnginePackage")
+	.IsDependentOn("BuildTestBed")
 	.Does<BuildParameters>((parameters) =>
 	{
 		new NuGetPackageTester(parameters).RunAllTests();
@@ -465,8 +484,8 @@ Task("Package")
 
 Task("PackageEngine")
 	.IsDependentOn("BuildEnginePackage")
-	.IsDependentOn("VerifyEnginePackage");
-	//.IsDependentOn("TestEnginePackage");
+	.IsDependentOn("VerifyEnginePackage")
+	.IsDependentOn("TestEnginePackage");
 
 Task("PackageEngineCore")
 	.IsDependentOn("BuildEngineCorePackage")

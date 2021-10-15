@@ -97,13 +97,12 @@ public class ActualAssemblyResult
     {
 		Name = xml.Attributes["name"]?.Value;
 
-		var env = xml.SelectSingleNode("environment");
-		var settings = xml.SelectSingleNode("settings");
+		//var settings = xml.SelectSingleNode("settings");
 
-		// If TargetRuntimeFramework setting is not present, the GUI will have crashed anyway
-		var runtimeSetting = settings.SelectSingleNode("setting[@name='TargetRuntimeFramework']");
-		TargetRuntime = runtimeSetting?.Attributes["value"]?.Value;
-		Runtime = DeduceActualRuntime(xml);
+		//// If TargetRuntimeFramework setting is not present, the GUI will have crashed anyway
+		//var runtimeSetting = settings?.SelectSingleNode("setting[@name='TargetRuntimeFramework']");
+		//TargetRuntime = runtimeSetting?.Attributes["value"]?.Value;
+		//Runtime = DeduceActualRuntime(xml);
 	}
 
 	public string Name { get; }

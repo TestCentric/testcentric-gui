@@ -22,7 +22,7 @@ public class PackageTestReport
 		if (actualResult.OverallResult == null)
 			Errors.Add("   The test-run element has no result attribute.");
 		else if (expectedResult.OverallResult != actualResult.OverallResult)
-			Errors.Add($"   Expected: Overall Result = {expectedResult.OverallResult}\n   But was: {actualResult.OverallResult}");
+			Errors.Add($"   Expected: Overall Result = {expectedResult.OverallResult}, But was: {actualResult.OverallResult}");
 		CheckCounter("Test Count", expectedResult.Total, actualResult.Total);
 		CheckCounter("Passed", expectedResult.Passed, actualResult.Passed);
 		CheckCounter("Failed", expectedResult.Failed, actualResult.Failed);
@@ -33,18 +33,22 @@ public class PackageTestReport
 		var expectedAssemblies = expectedResult.Assemblies;
 		var actualAssemblies = actualResult.Assemblies;
 
-		for (int i = 0; i < expectedAssemblies.Length && i < actualAssemblies.Length; i++)
+        for (int i = 0; i < expectedAssemblies.Length && i < actualAssemblies.Length; i++)
         {
-			var expected = expectedAssemblies[i];
-			var actual = actualAssemblies[i];
+            var expected = expectedAssemblies[i];
+            var actual = actualAssemblies[i];
 
 			if (expected.Name != actual.Name)
+			{
 				Errors.Add($"   Expected: {expected.Name}\n    But was: { actual.Name}");
-			else if (!actual.Runtime.StartsWith(expected.Runtime))
-				Errors.Add($"   Assembly {actual.Name}\n     Expected: {expected.Runtime}\n      But was: {actual.Runtime}");
+				continue;
+			}
+
+            if (actual.Runtime != null && expected.Runtime != null && !actual.Runtime.StartsWith(expected.Runtime))
+                Errors.Add($"   Assembly {actual.Name}\n     Expected: {expected.Runtime}\n      But was: {actual.Runtime}");
         }
 
-		for (int i = actualAssemblies.Length; i < expectedAssemblies.Length; i++)
+        for (int i = actualAssemblies.Length; i < expectedAssemblies.Length; i++)
 			Errors.Add($"   Assembly {expectedAssemblies[i].Name} was not found");
 
 		for (int i = expectedAssemblies.Length; i < actualAssemblies.Length; i++)
@@ -95,7 +99,9 @@ public class PackageTestReport
 			string site = suite.Attributes["site"]?.Value ?? "Test";
 			if (runState == "NotRunnable" || suiteResult == "Failed" && site == "Test" && (label == "Invalid" || label == "Error"))
 			{
-				string message = suite.SelectSingleNode("reason/message")?.InnerText;
+				string message =
+					suite.SelectSingleNode("failure/message")?.InnerText ??
+					suite.SelectSingleNode("reason/message")?.InnerText;
 				Errors.Add($"   {message}");
 			}
 		}
@@ -105,7 +111,7 @@ public class PackageTestReport
 	{
 		// If expected value of counter is negative, it means no check is needed
 		if (expected >= 0 && expected != actual)
-			Errors.Add($"   Expected: {label} = {expected}\n    But was: {actual}");
+			Errors.Add($"   Expected: {label} = {expected}, But was: {actual}");
 	}
 
 	private string GetAttribute(XmlNode node, string name)

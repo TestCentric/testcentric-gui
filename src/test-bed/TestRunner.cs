@@ -8,7 +8,7 @@ using System.IO;
 using System.Xml;
 using NUnit.Engine;
 
-namespace TestCentric.Engine.TestRunner
+namespace TestCentric.Engine.TestBed
 {
     /// <summary>
     /// A simple test runner used for testing packages. The
@@ -17,7 +17,7 @@ namespace TestCentric.Engine.TestRunner
     /// of the runner. No options are supported - all the
     /// tests in each assembly are run.
     /// </summary>
-    class Program
+    class TestRunner
     {
         static void Main(string[] args)
         {
@@ -33,7 +33,7 @@ namespace TestCentric.Engine.TestRunner
 
             Console.WriteLine("Test Files");
             foreach (var file in args)
-                Console.WriteLine("  " + Path.GetFullPath(file));
+                    Console.WriteLine("  " + file);
             Console.WriteLine();
 
             var engine = new TestEngine();
@@ -41,7 +41,8 @@ namespace TestCentric.Engine.TestRunner
 
             XmlNode resultNode = runner.Run(null, TestFilter.Empty);
 
-            using (var stream = new FileStream("TestResult.xml", FileMode.Create, FileAccess.Write))
+            string resultFile = "TestResult.xml";
+            using (var stream = new FileStream(resultFile, FileMode.Create, FileAccess.Write))
             using (var writer = new StreamWriter(stream))
             {
                 var settings = new XmlWriterSettings
@@ -56,7 +57,7 @@ namespace TestCentric.Engine.TestRunner
                 }
 
                 Console.WriteLine();
-                Console.WriteLine($"Saved results to TestResult.xml");
+                Console.WriteLine($"Saved results to {resultFile}");
             }
 
             Environment.Exit(0);

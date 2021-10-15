@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>TestCentric.Engine.TestBed</RootNamespace>
+    <AssemblyName>test-runner</AssemblyName>
+    <TargetFramework>net45</TargetFramework>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="nunit.engine.api">
+      <HintPath>..\..\bin\$(Configuration)\engine\net40\nunit.engine.api.dll</HintPath>
+    </Reference>
+    <Reference Include="testcentric.engine">
+      <HintPath>..\..\bin\$(Configuration)\engine\net40\testcentric.engine.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

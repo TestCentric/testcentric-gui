@@ -101,72 +101,72 @@ public abstract class PackageTester
                 Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "net-2.0") }
             }));
 
-        PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET Core 2.1",
-            "engine-tests/netcoreapp2.1/mock-assembly.dll",
-            new ExpectedResult("Failed")
-            {
-                Total = 36,
-                Passed = 23,
-                Failed = 5,
-                Warnings = 1,
-                Inconclusive = 1,
-                Skipped = 7,
-                Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "netcore-2.1") }
-            }));
+        //PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET Core 2.1",
+        //    "engine-tests/netcoreapp2.1/mock-assembly.dll",
+        //    new ExpectedResult("Failed")
+        //    {
+        //        Total = 36,
+        //        Passed = 23,
+        //        Failed = 5,
+        //        Warnings = 1,
+        //        Inconclusive = 1,
+        //        Skipped = 7,
+        //        Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "netcore-2.1") }
+        //    }));
 
-        PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET Core 3.1",
-            "engine-tests/netcoreapp3.1/mock-assembly.dll",
-            new ExpectedResult("Failed")
-            {
-                Total = 36,
-                Passed = 23,
-                Failed = 5,
-                Warnings = 1,
-                Inconclusive = 1,
-                Skipped = 7,
-                Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "netcore-3.1") }
-            }));
+        //PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET Core 3.1",
+        //    "engine-tests/netcoreapp3.1/mock-assembly.dll",
+        //    new ExpectedResult("Failed")
+        //    {
+        //        Total = 36,
+        //        Passed = 23,
+        //        Failed = 5,
+        //        Warnings = 1,
+        //        Inconclusive = 1,
+        //        Skipped = 7,
+        //        Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "netcore-3.1") }
+        //    }));
 
-        PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET Core 1.1",
-            "engine-tests/netcoreapp1.1/mock-assembly.dll",
-            new ExpectedResult("Failed")
-            {
-                Total = 36,
-                Passed = 23,
-                Failed = 5,
-                Warnings = 1,
-                Inconclusive = 1,
-                Skipped = 7,
-                Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "netcore-1.1") }
-            }));
+        //PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET Core 1.1",
+        //    "engine-tests/netcoreapp1.1/mock-assembly.dll",
+        //    new ExpectedResult("Failed")
+        //    {
+        //        Total = 36,
+        //        Passed = 23,
+        //        Failed = 5,
+        //        Warnings = 1,
+        //        Inconclusive = 1,
+        //        Skipped = 7,
+        //        Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "netcore-1.1") }
+        //    }));
 
-        PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET 5.0",
-            "engine-tests/net5.0/mock-assembly.dll",
-            new ExpectedResult("Failed")
-            {
-                Total = 32,
-                Passed = 19,
-                Failed = 5,
-                Warnings = 1,
-                Inconclusive = 1,
-                Skipped = 7,
-                Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "netcore-5.0") }
-            }));
+        //PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET 5.0",
+        //    "engine-tests/net5.0/mock-assembly.dll",
+        //    new ExpectedResult("Failed")
+        //    {
+        //        Total = 32,
+        //        Passed = 19,
+        //        Failed = 5,
+        //        Warnings = 1,
+        //        Inconclusive = 1,
+        //        Skipped = 7,
+        //        Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "netcore-5.0") }
+        //    }));
 
-        PackageTests.Add(new PackageTest(1, "Run different builds of mock-assembly.dll together",
-            "engine-tests/net35/mock-assembly.dll engine-tests/netcoreapp2.1/mock-assembly.dll",
-            new ExpectedResult("Failed")
-            {
-                Total = 72,
-                Passed = 46,
-                Failed = 10,
-                Warnings = 2,
-                Inconclusive = 2,
-                Skipped = 14,
-                Assemblies = new[] {
-                            new ExpectedAssemblyResult("mock-assembly.dll", "net-2.0"),
-                            new ExpectedAssemblyResult("mock-assembly.dll", "netcore-2.1") }
-            }));
+        //PackageTests.Add(new PackageTest(1, "Run different builds of mock-assembly.dll together",
+        //    "engine-tests/net35/mock-assembly.dll engine-tests/netcoreapp2.1/mock-assembly.dll",
+        //    new ExpectedResult("Failed")
+        //    {
+        //        Total = 72,
+        //        Passed = 46,
+        //        Failed = 10,
+        //        Warnings = 2,
+        //        Inconclusive = 2,
+        //        Skipped = 14,
+        //        Assemblies = new[] {
+        //                    new ExpectedAssemblyResult("mock-assembly.dll", "net-2.0"),
+        //                    new ExpectedAssemblyResult("mock-assembly.dll", "netcore-2.1") }
+        //    }));
 
         //		// Level 2 tests are run for PRs and when packages will be published
 
@@ -238,8 +238,9 @@ public abstract class PackageTester
 
     private void RunPackageTests(int testLevel)
     {
-        _context.CopyFileToDirectory(_parameters.OutputDirectory + "test-runner.exe", PackageTestBinDirectory);
-        
+        string pathToRunner = 
+            $"{TEST_BED_DIR}bin/{_parameters.Configuration}/{TEST_RUNNER_EXE}";
+
         var reporter = new ResultReporter(PackageName);
 
         foreach (var packageTest in PackageTests)
@@ -258,17 +259,16 @@ public abstract class PackageTester
 
                 DisplayBanner(packageTest.Description);
 
-                _context.StartProcess(PackageTestBinDirectory + "test-runner.exe", new ProcessSettings()
-                {
-                    Arguments = packageTest.Arguments,
-                    WorkingDirectory = _parameters.OutputDirectory
-                });
-
                 try
                 {
+                    _context.StartProcess(pathToRunner, new ProcessSettings()
+                    {
+                        Arguments = packageTest.Arguments,
+                        WorkingDirectory = _parameters.OutputDirectory
+                    });
+
                     var result = new ActualResult(resultFile);
-                    var report = new PackageTestReport(packageTest, result);
-                    reporter.AddReport(report);
+                    var report = new PackageTestReport(packageTest, result);                    reporter.AddReport(report);
 
                     Console.WriteLine(report.Errors.Count == 0
                         ? "\nSUCCESS: Test Result matches expected result!"
@@ -278,7 +278,8 @@ public abstract class PackageTester
                 {
                     reporter.AddReport(new PackageTestReport(packageTest, ex));
 
-                    Console.WriteLine("\nERROR: No result found!");
+                    Console.WriteLine("\nERROR: Unexpected Exception thrown.");
+                    Console.WriteLine(ex.ToString());
                 }
             }
         }
