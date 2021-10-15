@@ -7,7 +7,6 @@ build_script:
 test: off
 
 artifacts:
-- path: package\*.zip
 - path: package\*.nupkg
 
 environment:

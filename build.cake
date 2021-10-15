@@ -14,8 +14,8 @@ const string ENGINE_PACKAGE_NAME = "TestCentric.Engine";
 const string ENGINE_CORE_PACKAGE_NAME = "TestCentric.Engine.Core";
 const string ENGINE_API_PACKAGE_NAME = "TestCentric.Engine.Api";
 
-const string TEST_BED_DIR = "src/test-bed/";
-const string TEST_BED_SOLUTION = TEST_BED_DIR + "test-engine-test-bed.sln";
+const string TEST_BED_DIR = "src/TestBed/";
+const string TEST_BED_SOLUTION = "test-engine-test-bed.sln";
 static readonly string TEST_RUNNER_EXE = "test-runner.exe";
 
 // Load scripts after defining constants
