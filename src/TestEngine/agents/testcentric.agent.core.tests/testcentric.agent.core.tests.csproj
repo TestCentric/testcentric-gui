@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RootNamespace>TestCentric.Agent</RootNamespace>
-    <TargetFrameworks>net35;net40;netcoreapp2.1</TargetFrameworks>
+    <TargetFrameworks>net40;netcoreapp2.1</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\..\nunit.snk</AssemblyOriginatorKeyFile>
@@ -10,12 +10,6 @@
     <OutputPath>..\..\..\..\bin\$(Configuration)\engine-tests\</OutputPath>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)'=='net35'">
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Runtime.Remoting" />
-    <Reference Include="System.Web" />
-  </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='net40'">
     <Reference Include="System.Configuration" />

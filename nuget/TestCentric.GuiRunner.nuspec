@@ -64,16 +64,6 @@
     <file src="Images/Tree/Visual Studio/Skipped.png" target="tools/Images/Tree/Visual Studio" />
     <file src="Images/Tree/Visual Studio/Success.png" target="tools/Images/Tree/Visual Studio" />
 
-    <file src="agents/net20/nunit.engine.api.dll" target="tools/agents/net20" />
-    <file src="agents/net20/testcentric.engine.metadata.dll" target="tools/agents/net20" />
-    <file src="agents/net20/testcentric.engine.core.dll" target="tools/agents/net20" />
-    <file src="agents/net20/testcentric.agent.core.dll" target="tools/agents/net20" />
-    <file src="agents/net20/testcentric-agent.exe" target="tools/agents/net20" />
-    <file src="agents/net20/testcentric-agent.exe.config" target="tools/agents/net20" />
-    <file src="agents/net20/testcentric-agent-x86.exe" target="tools/agents/net20" />
-    <file src="agents/net20/testcentric-agent-x86.exe.config" target="tools/agents/net20" />
-    <file src="../../nuget/testcentric-agent.nuget.addins" target="tools/agents/net20" />
-
     <file src="agents/net40/nunit.engine.api.dll" target="tools/agents/net40" />
     <file src="agents/net40/testcentric.engine.metadata.dll" target="tools/agents/net40" />
     <file src="agents/net40/testcentric.engine.core.dll" target="tools/agents/net40" />

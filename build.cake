@@ -226,7 +226,6 @@ Task("VerifyZipPackage")
 		Check.That(parameters.ZipTestDirectory,
 			HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt"),
 			HasDirectory("bin").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.zip.addins"),
-			HasDirectory("bin/agents/net20").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
 			HasDirectory("bin/agents/net40").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
 			HasDirectory("bin/agents/netcoreapp2.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
 			HasDirectory("bin/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
@@ -283,7 +282,6 @@ Task("VerifyNuGetPackage")
 		Check.That(parameters.NuGetTestDirectory,
 			HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "testcentric.png"),
 			HasDirectory("tools").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.nuget.addins"),
-			HasDirectory("tools/agents/net20").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
 			HasDirectory("tools/agents/net40").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
 			HasDirectory("tools/agents/netcoreapp2.1").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
 			HasDirectory("tools/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
@@ -341,7 +339,6 @@ Task("VerifyChocolateyPackage")
 	{
 		Check.That(parameters.ChocolateyTestDirectory,
 			HasDirectory("tools").WithFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "VERIFICATION.txt", "testcentric.choco.addins").AndFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.choco.addins"),
-			HasDirectory("tools/agents/net20").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
 			HasDirectory("tools/agents/net40").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
 			HasDirectory("tools/agents/netcoreapp2.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
 			HasDirectory("tools/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),

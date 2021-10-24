@@ -22,10 +22,6 @@
   <files>
 	<file src="../LICENSE.txt" />
 	<file src="../testcentric.png" />
-  <file src="../bin/Release/engine/net20/nunit.engine.api.dll" target="lib/net20" />
-  <file src="../bin/Release/engine/net20/testcentric.engine.api.dll" target="lib/net20" />
-  <file src="../bin/Release/engine/net20/testcentric.engine.core.dll" target="lib/net20" />
-  <file src="../bin/Release/engine/net20/testcentric.engine.metadata.dll" target="lib/net20" />
   <file src="../bin/Release/engine/net40/nunit.engine.api.dll" target="lib/net40" />
   <file src="../bin/Release/engine/net40/testcentric.engine.api.dll" target="lib/net40" />
   <file src="../bin/Release/engine/net40/testcentric.engine.core.dll" target="lib/net40" />
