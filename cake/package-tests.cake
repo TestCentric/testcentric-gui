@@ -29,10 +29,14 @@ private void RunNUnitLite(string testName, string framework, string directory)
 		? StartProcess("dotnet", testPath)
 		: StartProcess(testPath);
 
+	//if (rc > 0)
+	//	ErrorDetail.Add($"{testName}: {rc} tests failed running under {framework}");
+	//else if (rc < 0)
+	//	ErrorDetail.Add($"{testName} returned rc = {rc} running under {framework}");
 	if (rc > 0)
-		ErrorDetail.Add($"{testName}: {rc} tests failed running under {framework}");
+		throw new Exception($"{testName}: {rc} tests failed running under {framework}");
 	else if (rc < 0)
-		ErrorDetail.Add($"{testName} returned rc = {rc} running under {framework}");
+		throw new Exception($"{testName} returned rc = {rc} running under {framework}");
 }
 
 // Class that knows how to run tests against either GUI
