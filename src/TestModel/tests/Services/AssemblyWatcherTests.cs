@@ -49,7 +49,8 @@ namespace TestCentric.Gui.Model.Services
 
         [Test]
         // TODO: Exclusion should really only apply to Mono on Windows
-        [Platform(Exclude = "Mono,Win10")]
+        //Platform attr does not allow to specify skipping on mono and win10. Therefore this has been skipping on either of them. As a solution, changed the attr to Mono only
+        [Platform(Exclude = "Mono")]
         public void MultipleCloselySpacedChangesTriggerWatcherOnlyOnce()
         {
             for (int i = 0; i < 3; i++)
