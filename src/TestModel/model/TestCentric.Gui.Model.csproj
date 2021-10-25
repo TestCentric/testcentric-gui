@@ -16,6 +16,7 @@
 		<ProjectReference Include="..\..\TestEngine\testcentric.engine.api\testcentric.engine.api.csproj" />
 	</ItemGroup>
 	<ItemGroup>
+		<PackageReference Include="Mono.Options" Version="6.12.0.148" />
 		<PackageReference Include="NUnit.Engine.Api">
 			<Version>4.0.0-dev-001</Version>
 		</PackageReference>
