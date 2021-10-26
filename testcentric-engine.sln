@@ -73,7 +73,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testcentric.agent.core.test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testcentric.engine.api", "src\TestEngine\testcentric.engine.api\testcentric.engine.api.csproj", "{58918B08-2D50-4044-8AF9-586B9B48DACF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestRunner", "TestRunner", "{2530B34F-CC3F-49AB-886D-7E9CB084AB0B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{4ED698DF-CE5D-4A52-B103-9F350DEAC03F}"
+	ProjectSection(SolutionItems) = preProject
+		nuget\build\TestCentric.Engine.targets = nuget\build\TestCentric.Engine.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -144,6 +147,7 @@ Global
 		{EBE0D42B-742F-463E-B875-3F11C3F3B00C} = {804797D1-A019-4846-9295-F2F409434B43}
 		{87670F39-5853-4F04-9867-E7F742DA2128} = {804797D1-A019-4846-9295-F2F409434B43}
 		{58918B08-2D50-4044-8AF9-586B9B48DACF} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
+		{4ED698DF-CE5D-4A52-B103-9F350DEAC03F} = {23ED18B0-608C-4CB5-A70E-CB95C8B0231C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CDFF439B-8888-4133-8734-86F4F899BC40}
