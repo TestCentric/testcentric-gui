@@ -11,12 +11,6 @@
         <Reference Include="System.Windows.Forms" />
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\..\TestEngine\testcentric.engine.core\testcentric.engine.core.csproj">
-          <Name>testcentric.engine.core</Name>
-        </ProjectReference>
-        <ProjectReference Include="..\..\TestEngine\testcentric.engine\testcentric.engine.csproj">
-          <Name>testcentric.engine</Name>
-        </ProjectReference>
         <ProjectReference Include="..\..\tests\mock-assembly\mock-assembly.csproj">
           <Name>mock-assembly</Name>
         </ProjectReference>

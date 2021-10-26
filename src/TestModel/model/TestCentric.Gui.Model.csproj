@@ -13,11 +13,9 @@
 		<Reference Include="System.Windows.Forms" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\..\TestEngine\testcentric.engine.api\testcentric.engine.api.csproj" />
-	</ItemGroup>
-	<ItemGroup>
 		<PackageReference Include="NUnit.Engine.Api">
 			<Version>4.0.0-dev-001</Version>
 		</PackageReference>
+    <PackageReference Include="TestCentric.Engine" Version="2.0.0-dev00508" />
 	</ItemGroup>
 </Project>
