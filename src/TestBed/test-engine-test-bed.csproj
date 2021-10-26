@@ -6,15 +6,11 @@
     <AssemblyName>test-runner</AssemblyName>
     <TargetFramework>net45</TargetFramework>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="nunit.engine.api">
-      <HintPath>..\..\bin\$(Configuration)\engine\net40\nunit.engine.api.dll</HintPath>
-    </Reference>
-    <Reference Include="testcentric.engine">
-      <HintPath>..\..\bin\$(Configuration)\engine\net40\testcentric.engine.dll</HintPath>
-    </Reference>
+    <PackageReference Include="TestCentric.Engine" Version="2.0.0-ci00011-package-ref" />
   </ItemGroup>
 
 </Project>
