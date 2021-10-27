@@ -118,12 +118,23 @@ Task("Build")
         MSBuild(SOLUTION, parameters.MSBuildSettings.WithProperty("Version", parameters.PackageVersion));
 
 	// The package does not restore correctly. As a temporary
-	// fix, we copy agents and content to the output directory.
+	// fix, we install a local copy and then copy agents and
+	// content to the output directory.
+
+	CleanDirectory(parameters.NuGetTestDirectory);
+
+	NuGetInstall("TestCentric.Engine", new NuGetInstallSettings()
+	{
+		Version = "2.0.0-dev00508",
+		OutputDirectory = parameters.NuGetTestDirectory,
+		ExcludeVersion = true
+	});
+
 	CopyFileToDirectory(
-		parameters.NuGetTestDirectory + "tools/testcentric.nuget.addins",
+		parameters.NuGetTestDirectory + "TestCentric.Engine/content/testcentric.nuget.addins",
 		parameters.OutputDirectory);
 	CopyDirectory(
-		parameters.NuGetTestDirectory + "tools/agents",
+		parameters.NuGetTestDirectory + "TestCentric.Engine/agents",
 		parameters.OutputDirectory + "agents");
 
 });
