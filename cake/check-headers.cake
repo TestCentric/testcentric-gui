@@ -48,7 +48,7 @@ Task("CheckHeaders")
                 continue;
 
             // Ignore AssemblyInfo files
-            if (!CHECK_ASSEMBLY_INFO && path.EndsWith(".AssemblyInfo.cs"))
+            if (!CHECK_ASSEMBLY_INFO && System.IO.Path.GetFileName(path) == "AssemblyInfo.cs")
                 continue;
 
             examined++;

@@ -116,6 +116,27 @@ Task("Build")
         XBuild(SOLUTION, parameters.XBuildSettings.WithProperty("Version", parameters.PackageVersion));
     else
         MSBuild(SOLUTION, parameters.MSBuildSettings.WithProperty("Version", parameters.PackageVersion));
+
+	// The package does not restore correctly. As a temporary
+	// fix, we install a local copy and then copy agents and
+	// content to the output directory.
+
+	CleanDirectory(parameters.NuGetTestDirectory);
+
+	NuGetInstall("TestCentric.Engine", new NuGetInstallSettings()
+	{
+		Version = "2.0.0-dev00508",
+		OutputDirectory = parameters.NuGetTestDirectory,
+		ExcludeVersion = true
+	});
+
+	CopyFileToDirectory(
+		parameters.NuGetTestDirectory + "TestCentric.Engine/content/testcentric.nuget.addins",
+		parameters.OutputDirectory);
+	CopyDirectory(
+		parameters.NuGetTestDirectory + "TestCentric.Engine/agents",
+		parameters.OutputDirectory + "agents");
+
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -129,49 +150,10 @@ Task("CheckTestErrors")
     .Does(() => CheckTestErrors(ref ErrorDetail));
 
 //////////////////////////////////////////////////////////////////////
-// TESTS OF TESTCENTRIC.ENGINE
-//////////////////////////////////////////////////////////////////////
-
-Task("TestEngine")
-	.Description("Tests the TestCentric Engine")
-	.IsDependentOn("Build")
-	.Does<BuildParameters>((parameters) =>
-	{
-		foreach (var runtime in parameters.SupportedEngineRuntimes)
-			RunNUnitLite("testcentric.engine.tests", runtime, $"{parameters.OutputDirectory}engine-tests/{runtime}/");
-	});
-
-//////////////////////////////////////////////////////////////////////
-// TESTS OF TESTCENTRIC.ENGINE.CORE
-//////////////////////////////////////////////////////////////////////
-
-Task("TestEngineCore")
-	.Description("Tests the TestCentric Engine Core")
-	.IsDependentOn("Build")
-	.Does<BuildParameters>((parameters) =>
-	{
-		foreach (var runtime in parameters.SupportedCoreRuntimes)
-			RunNUnitLite("testcentric.engine.core.tests", runtime, $"{parameters.OutputDirectory}engine-tests/{runtime}/");
-	});
-
-//////////////////////////////////////////////////////////////////////
-// TESTS OF TESTCENTRIC.AGENT.CORE
-//////////////////////////////////////////////////////////////////////
-
-Task("TestAgentCore")
-	.Description("Tests the TestCentric Engine Core")
-	.IsDependentOn("Build")
-	.Does<BuildParameters>((parameters) =>
-	{
-		foreach (var runtime in parameters.SupportedCoreRuntimes)
-			RunNUnitLite("testcentric.agent.core.tests", runtime, $"{parameters.OutputDirectory}engine-tests/{runtime}/");
-	});
-
-//////////////////////////////////////////////////////////////////////
 // TESTS OF THE GUI
 //////////////////////////////////////////////////////////////////////
 
-Task("TestGui")
+Task("Test")
 	.IsDependentOn("Build")
 	.Does<BuildParameters>((parameters) =>
 	{
@@ -556,9 +538,7 @@ Task("Package")
 	.IsDependentOn("Build")
 	.IsDependentOn("PackageZip")
 	.IsDependentOn("PackageNuGet")
-	.IsDependentOn("PackageChocolatey")
-	.IsDependentOn("BuildEngineCorePackage")
-	.IsDependentOn("BuildEngineApiPackage");
+	.IsDependentOn("PackageChocolatey");
 
 Task("PackageZip")
 	.IsDependentOn("BuildZipPackage")
@@ -574,12 +554,6 @@ Task("PackageChocolatey")
 	.IsDependentOn("BuildChocolateyPackage")
 	.IsDependentOn("VerifyChocolateyPackage")
 	.IsDependentOn("TestChocolateyPackage");
-
-Task("Test")
-	.IsDependentOn("TestEngineCore")
-	.IsDependentOn("TestAgentCore")
-	.IsDependentOn("TestEngine")
-	.IsDependentOn("TestGui");
 
 Task("AppVeyor")
 	.IsDependentOn("DumpSettings")

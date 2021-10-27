@@ -62,8 +62,8 @@ private void CreateZipImage(BuildParameters parameters)
 	CopyFiles(RootFiles, zipImageDir);
 
 	var copyFiles = new List<string>(baseFiles);
-	if (!parameters.UsingXBuild)
-		copyFiles.AddRange(PdbFiles);
+	//if (!parameters.UsingXBuild)
+	//	copyFiles.AddRange(PdbFiles);
 
 	CreateDirectory(zipImageBinDir);
 
