@@ -12,39 +12,12 @@ const string DEFAULT_CONFIGURATION = "Release";
 
 const string PACKAGE_NAME = "testcentric-gui";
 const string NUGET_PACKAGE_NAME = "TestCentric.GuiRunner";
-const string ENGINE_CORE_PACKAGE_NAME = "TestCentric.Engine.Core";
-const string ENGINE_API_PACKAGE_NAME = "TestCentric.Engine.Api";
 
 const string GUI_RUNNER = "testcentric.exe";
 const string GUI_TESTS = "*.Tests.dll";
 
 // Load scripts after defining constants
 #load "./cake/parameters.cake"
-
-//////////////////////////////////////////////////////////////////////
-// ARGUMENTS (In addition to the standard Cake arguments)
-//
-// --asVersion=VERSION
-//     Specifies the full package version, including any pre-release
-//     suffix. This version is used directly instead of the default
-//     version from the script or that calculated by GitVersion.
-//     Note that all other versions (AssemblyVersion, etc.) are
-//     derived from the package version.
-//     
-//     NOTE: We can't use "version" since that's an argument to Cake itself.
-//
-// --testLevel=LEVEL
-//     Specifies the level of package testing, which is normally set
-//     automatically for different types of builds like CI, PR, etc.
-//     Used by developers to test packages locally without creating
-//     a PR or publishing the package. Defined levels are
-//       1 = Normal CI tests run every time you build a package
-//       2 = Adds more tests for PRs and Dev builds uploaded to MyGet
-//       3 = Adds even more tests prior to publishing a release
-//
-// NOTE: Cake syntax now requires the `=` character. Neither a space
-//       nor a colon will work!
-//////////////////////////////////////////////////////////////////////
 
 using System.Xml;
 using System.Text.RegularExpressions;
@@ -112,10 +85,7 @@ Task("Build")
 	.IsDependentOn("CheckHeaders")
     .Does<BuildParameters>((parameters) =>
 {
-    if(parameters.UsingXBuild)
-        XBuild(SOLUTION, parameters.XBuildSettings.WithProperty("Version", parameters.PackageVersion));
-    else
-        MSBuild(SOLUTION, parameters.MSBuildSettings.WithProperty("Version", parameters.PackageVersion));
+    MSBuild(SOLUTION, parameters.MSBuildSettings.WithProperty("Version", parameters.PackageVersion));
 
 	// The package does not restore correctly. As a temporary
 	// fix, we install a local copy and then copy agents and
@@ -208,11 +178,11 @@ Task("VerifyZipPackage")
 		Check.That(parameters.ZipTestDirectory,
 			HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt"),
 			HasDirectory("bin").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.zip.addins"),
-			HasDirectory("bin/agents/net20").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
-			HasDirectory("bin/agents/net40").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
-			HasDirectory("bin/agents/netcoreapp2.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
-			HasDirectory("bin/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
-			HasDirectory("bin/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
+			HasDirectory("bin/agents/net20").WithFiles(NET_FRAMEWORK_AGENT_FILES),
+			HasDirectory("bin/agents/net40").WithFiles(NET_FRAMEWORK_AGENT_FILES),
+			HasDirectory("bin/agents/netcoreapp2.1").WithFiles(NET_CORE_AGENT_FILES),
+			HasDirectory("bin/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES),
+			HasDirectory("bin/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES),
 			HasDirectory("bin/Images").WithFiles("DebugTests.png", "RunTests.png", "StopRun.png", "GroupBy_16x.png", "SummaryReport.png"),
 			HasDirectory("bin/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
 			HasDirectory("bin/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
@@ -409,8 +379,6 @@ Task("PublishToMyGet")
             try
 			{
 				PushNuGetPackage(parameters.NuGetPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
-				PushNuGetPackage(parameters.EngineCorePackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
-				PushNuGetPackage(parameters.EngineApiPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
 				PushChocolateyPackage(parameters.ChocolateyPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
 			}
 			catch(Exception)
@@ -431,8 +399,6 @@ Task("PublishToNuGet")
 			try
 			{
 				PushNuGetPackage(parameters.NuGetPackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
-				PushNuGetPackage(parameters.EngineCorePackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
-				PushNuGetPackage(parameters.EngineApiPackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
 			}
 			catch(Exception)
             {
