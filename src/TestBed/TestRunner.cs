@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using NUnit.Engine;
@@ -65,11 +66,35 @@ namespace TestCentric.Engine.TestBed
 
         private static TestPackage MakeTestPackageFromArguments(string[] args)
         {
+            List<string> files = new List<string>();
+            bool debugAgent = false;
+            bool trace = false;
+
             foreach (string arg in args)
                 if (arg.StartsWith("-"))
-                    throw new ArgumentException($"Options are not supported by this runner: '{arg}'");
+                    switch (arg)
+                    {
+                        case "--trace":
+                            trace = true;
+                            break;
 
-            return new TestPackage(args);
+                        case "--debug-agent":
+                            debugAgent = true;
+                            break;
+
+                        default:
+                            throw new ArgumentException($"Invalid option: '{arg}'");
+                    }
+                else
+                    files.Add(arg);
+
+            var package = new TestPackage(files);
+            if (trace)
+                package.AddSetting("InternalTraceLevel", "Debug");
+            if (debugAgent)
+                package.AddSetting("DebugAgent", true);
+
+            return package;
         }
     }
 }

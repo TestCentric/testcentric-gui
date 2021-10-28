@@ -187,7 +187,7 @@ Task("BuildTestBed")
 		MSBuild(TEST_BED_SOLUTION, parameters.MSBuildSettings);
 
 		// The package does not restore correctly. As a temporary
-		// fix, we copy agents and contentFiles to the output directory.
+		// fix, we copy agents and content to the output directory.
 		var outputDir = $"{TEST_BED_DIR}bin/{parameters.Configuration}/";
         CopyFileToDirectory(
             parameters.NuGetTestDirectory + "content/testcentric.nuget.addins",
