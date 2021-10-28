@@ -28,11 +28,11 @@
     <file src="../../CHANGES.txt" />
     <file src="../../testcentric.png" />
 
-    <file src="engine/net40/nunit.engine.api.dll" target="lib" />
-    <file src="engine/net40/testcentric.engine.api.dll" target="lib" />
-    <file src="engine/net40/testcentric.engine.metadata.dll" target="lib" />
-    <file src="engine/net40/testcentric.engine.core.dll" target="lib" />
-    <file src="engine/net40/testcentric.engine.dll" target="lib" />
+    <file src="nunit.engine.api.dll" target="lib" />
+    <file src="testcentric.engine.api.dll" target="lib" />
+    <file src="testcentric.engine.metadata.dll" target="lib" />
+    <file src="testcentric.engine.core.dll" target="lib" />
+    <file src="testcentric.engine.dll" target="lib" />
     <file src="../../nuget/testcentric.nuget.addins" target="content" />
 
     <file src="agents/net20/nunit.engine.api.dll" target="agents/net20" />

@@ -5,7 +5,7 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\nunit.snk</AssemblyOriginatorKeyFile>
 	  <DebugType>Full</DebugType>
-	  <OutputPath>..\..\..\bin\$(Configuration)\engine\</OutputPath>
+	  <OutputPath>bin\$(Configuration)\</OutputPath>
 	  <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <Title>TestCentric Engine Core</Title>
   </PropertyGroup>

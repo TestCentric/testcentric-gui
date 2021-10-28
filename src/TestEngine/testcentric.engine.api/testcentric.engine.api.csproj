@@ -5,7 +5,7 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\nunit.snk</AssemblyOriginatorKeyFile>
 	  <DebugType>Full</DebugType>
-	  <OutputPath>..\..\..\bin\$(Configuration)\engine\</OutputPath>
+	  <OutputPath>bin\$(Configuration)</OutputPath>
 	  <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net20'">

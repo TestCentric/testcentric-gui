@@ -289,11 +289,11 @@ Task("VerifyEngineCorePackage")
 			Check.That(dirName,
 				HasFiles("LICENSE.txt", "testcentric.png"),
 				HasDirectory("lib/net20").WithFiles(
-					"testcentric.engine.core.dll", "testcentric.engine.api.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll"),
+					"testcentric.engine.core.dll", "nunit.engine.api.dll"),
 				HasDirectory("lib/net40").WithFiles(
-					"testcentric.engine.core.dll", "testcentric.engine.api.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll"),
+					"testcentric.engine.core.dll", "nunit.engine.api.dll"),
 				HasDirectory("lib/netstandard2.0").WithFiles(
-					"testcentric.engine.core.dll", "testcentric.engine.api.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll"));
+					"testcentric.engine.core.dll", "nunit.engine.api.dll"));
 		}
 		finally
 		{

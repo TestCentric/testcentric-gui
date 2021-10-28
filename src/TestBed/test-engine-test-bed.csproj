@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="TestCentric.Engine" Version="2.0.0-ci00011-package-ref" />
+    <PackageReference Include="TestCentric.Engine" Version="2.0.0-dev00013" />
   </ItemGroup>
 
 </Project>

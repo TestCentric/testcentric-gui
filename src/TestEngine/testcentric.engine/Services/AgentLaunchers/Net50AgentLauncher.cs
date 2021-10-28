@@ -65,7 +65,7 @@ namespace TestCentric.Engine.Services
             startInfo.LoadUserProfile = loadUserProfile;
 
             startInfo.FileName = "dotnet";
-            startInfo.Arguments = $"{agentPath} {agentArgs}";
+            startInfo.Arguments = $"{agentPath} {agentArgs} -f net5.0";
 
             return process;
         }

@@ -6,7 +6,6 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\..\nunit.snk</AssemblyOriginatorKeyFile>
     <DebugType>Full</DebugType>
-    <OutputPath>..\..\..\..\bin\$(Configuration)\engine\</OutputPath>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <Title>TestCentric Agent Core</Title>
   </PropertyGroup>
