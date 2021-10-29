@@ -10,6 +10,11 @@ const string GITHUB_REPO = "testcentric-gui";
 const string DEFAULT_VERSION = "2.0.0";
 const string DEFAULT_CONFIGURATION = "Release";
 
+// NOTE: This must match what is actually referenced by
+// the GUI test model project. Hopefully, this is a temporary
+// fix, which we can get rid of in the future.
+const string REF_ENGINE_VERSION = "2.0.0-dev00511";
+
 const string PACKAGE_NAME = "testcentric-gui";
 const string NUGET_PACKAGE_NAME = "TestCentric.GuiRunner";
 
@@ -95,7 +100,7 @@ Task("Build")
 
 	NuGetInstall("TestCentric.Engine", new NuGetInstallSettings()
 	{
-		Version = "2.0.0-dev00508",
+		Version = REF_ENGINE_VERSION,
 		OutputDirectory = parameters.NuGetTestDirectory,
 		ExcludeVersion = true
 	});
@@ -153,6 +158,8 @@ Task("Test")
 Task("BuildZipPackage")
     .Does<BuildParameters>((parameters) =>
     {
+		Information("Creating Zip Image Directory");
+
 		CreateDirectory(parameters.PackageDirectory);
 		CreateZipImage(parameters);
 

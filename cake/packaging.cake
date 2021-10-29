@@ -65,8 +65,8 @@ private void CreateZipImage(BuildParameters parameters)
 
 	CreateDirectory(zipImageBinDir);
 
-	foreach (string file in copyFiles)
-		CopyFileToDirectory(parameters.OutputDirectory + file, zipImageBinDir);
+    foreach (string file in copyFiles)
+        CopyFileToDirectory(parameters.OutputDirectory + file, zipImageBinDir);
 
     CopyFileToDirectory(parameters.ZipDirectory + "testcentric.zip.addins", parameters.ZipImageDirectory + "bin/");
 
