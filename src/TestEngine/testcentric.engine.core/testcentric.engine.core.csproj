@@ -17,15 +17,12 @@
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Web" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-	<PackageReference Include="Microsoft.Win32.Registry.AccessControl" Version="4.7.0" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.6'">
+  <!--<ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.6'">
 	  <PackageReference Include="Microsoft.Win32.Registry.AccessControl" Version="4.7.0" />
 	  <PackageReference Include="Microsoft.DotNet.InternalAbstractions" Version="1.0.0" />
     <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
     <PackageReference Include="System.Xml.XPath.XmlDocument" Version="4.3.0" />
-  </ItemGroup>
+  </ItemGroup>-->
   <ItemGroup>
     <PackageReference Include="NUnit.Engine.Api" Version="4.0.0-dev-001" />
   </ItemGroup>
