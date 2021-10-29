@@ -62,25 +62,17 @@ private void CreateZipImage(BuildParameters parameters)
 	CopyFiles(RootFiles, zipImageDir);
 
 	var copyFiles = new List<string>(baseFiles);
-	//if (!parameters.UsingXBuild)
-	//	copyFiles.AddRange(PdbFiles);
 
 	CreateDirectory(zipImageBinDir);
 
-	foreach (string file in copyFiles)
-		CopyFileToDirectory(parameters.OutputDirectory + file, zipImageBinDir);
+    foreach (string file in copyFiles)
+        CopyFileToDirectory(parameters.OutputDirectory + file, zipImageBinDir);
 
     CopyFileToDirectory(parameters.ZipDirectory + "testcentric.zip.addins", parameters.ZipImageDirectory + "bin/");
 
     CopyDirectory(parameters.OutputDirectory + "Images", zipImageBinDir + "Images");
 
-	foreach (var runtime in parameters.SupportedAgentRuntimes)
-    {
-        var targetDir = zipImageBinDir + "agents/" + Directory(runtime);
-        var sourceDir = parameters.OutputDirectory + "agents/" + Directory(runtime);
-        CopyDirectory(sourceDir, targetDir);
-        CopyFileToDirectory(parameters.ZipDirectory + "testcentric-agent.zip.addins", $"{parameters.ZipImageDirectory}bin/agents/{runtime}");
-    }
+    CopyDirectory(parameters.OutputDirectory + "agents", zipImageBinDir + "agents");
 
     // NOTE: Files specific to a particular package are not copied
     // into the image directory but are added separately.

@@ -55,8 +55,6 @@ public class BuildParameters
 		ChocolateyApiKey = _context.EnvironmentVariable(CHOCO_API_KEY);
 		GitHubAccessToken = _context.EnvironmentVariable(GITHUB_ACCESS_TOKEN);
 
-		UsingXBuild = context.EnvironmentVariable("USE_XBUILD") != null;
-		
 		BuildVersion = new BuildVersion(context, this);
 
 		if (context.HasArgument("testLevel"))
@@ -90,24 +88,7 @@ public class BuildParameters
 			DetailedSummary = true,
 		};
 
-		XBuildSettings = new XBuildSettings {
-			Verbosity = Verbosity.Minimal,
-			ToolVersion = XBuildToolVersion.Default,//The highest available XBuild tool version//NET40
-			Configuration = Configuration,
-		};
-
 		RestoreSettings = new NuGetRestoreSettings();
-		// Older Mono version was not picking up the testcentric source
-		// TODO: Check if this is still needed
-		if (UsingXBuild)
-			RestoreSettings.Source = new string [] {
-				"https://www.myget.org/F/testcentric/api/v2/",
-				"https://www.myget.org/F/testcentric/api/v3/index.json",
-				"https://www.nuget.org/api/v2/",
-				"https://api.nuget.org/v3/index.json",
-				"https://www.myget.org/F/nunit/api/v2/",
-				"https://www.myget.org/F/nunit/api/v3/index.json"
-			};
 	}
 
 	public string Target { get; }
@@ -149,17 +130,13 @@ public class BuildParameters
 	public string ZipPackageName => PACKAGE_NAME + "-" + PackageVersion + ".zip";
 	public string NuGetPackageName => NUGET_PACKAGE_NAME + "." + PackageVersion + ".nupkg";
 	public string ChocolateyPackageName => PACKAGE_NAME + "." + PackageVersion + ".nupkg";
-	public string EngineCorePackageName => ENGINE_CORE_PACKAGE_NAME + "." + PackageVersion + ".nupkg";
-	public string EngineApiPackageName => ENGINE_API_PACKAGE_NAME + "." + PackageVersion + ".nupkg";
 
 	public FilePath ZipPackage => new FilePath(PackageDirectory + ZipPackageName);
 	public FilePath NuGetPackage => new FilePath(PackageDirectory + NuGetPackageName);
 	public FilePath ChocolateyPackage => new FilePath(PackageDirectory + ChocolateyPackageName);
-	public FilePath EngineCorePackage => new FilePath(PackageDirectory + EngineCorePackageName);
-	public FilePath EngineApiPackage => new FilePath(PackageDirectory + EngineApiPackageName);
 
 	public string GitHubReleaseAssets => _context.IsRunningOnWindows()
-		? $"\"{ZipPackage},{NuGetPackage},{ChocolateyPackage},{EngineCorePackage},{EngineApiPackage}\""
+		? $"\"{ZipPackage},{NuGetPackage},{ChocolateyPackage}\""
         : $"\"{ZipPackage},{NuGetPackage}\"";
 
 	public string MyGetPushUrl => MYGET_PUSH_URL;
@@ -183,14 +160,10 @@ public class BuildParameters
 	public bool IsProductionRelease =>
 		!IsPreRelease || LABELS_WE_RELEASE_ON_GITHUB.Contains(BuildVersion.PreReleaseLabel);
 	
-	public bool UsingXBuild { get; }
 	public MSBuildSettings MSBuildSettings { get; }
-	public XBuildSettings XBuildSettings { get; }
 	public NuGetRestoreSettings RestoreSettings { get; }
 
 	public string[] SupportedEngineRuntimes => new string[] {"net40"};
-	public string[] SupportedCoreRuntimes => new string[] {"net40", "net35", "netcoreapp2.1"};
-	public string[] SupportedAgentRuntimes => new string[] { "net20", "net40", "netcoreapp2.1", "netcoreapp3.1", "net5.0" };
 
 	public string ProjectUri => "https://github.com/TestCentric/testcentric-gui";
 	public string WebDeployBranch => "gh-pages";
@@ -273,11 +246,8 @@ public class BuildParameters
 		Console.WriteLine("ChocoTest: " + ChocolateyTestDirectory);
 
 		Console.WriteLine("\nBUILD");
-		Console.WriteLine("Build With:      " + (UsingXBuild ? "XBuild" : "MSBuild"));
 		Console.WriteLine("Configuration:   " + Configuration);
 		Console.WriteLine("Engine Runtimes: " + string.Join(", ", SupportedEngineRuntimes));
-		Console.WriteLine("Core Runtimes:   " + string.Join(", ", SupportedCoreRuntimes));
-		Console.WriteLine("Agent Runtimes:  " + string.Join(", ", SupportedAgentRuntimes));
 
 		Console.WriteLine("\nPACKAGING");
 		Console.WriteLine("MyGetPushUrl:              " + MyGetPushUrl);

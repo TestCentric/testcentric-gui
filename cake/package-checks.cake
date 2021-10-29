@@ -6,8 +6,13 @@ private static class Check
 {
     public static void That(string testDir, params PackageCheck[] checks)
     {
+        bool isOK = true;
+
         foreach (var check in checks)
-            check.ApplyTo(testDir);
+            isOK &= check.ApplyTo(testDir);
+
+        if (!isOK)
+            throw new System.Exception("Verification failed!");
     }
 }
 
