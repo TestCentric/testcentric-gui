@@ -78,6 +78,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{4ED698DF
 		nuget\build\TestCentric.Engine.targets = nuget\build\TestCentric.Engine.targets
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestBed", "TestBed", "{13AD1B51-4961-4ED5-8D22-6BF50F2EBECF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "test-engine-test-bed", "src\TestBed\test-engine-test-bed.csproj", "{CD4C6A60-FA53-42A0-97D5-A0415FB19128}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -128,6 +132,10 @@ Global
 		{58918B08-2D50-4044-8AF9-586B9B48DACF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58918B08-2D50-4044-8AF9-586B9B48DACF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58918B08-2D50-4044-8AF9-586B9B48DACF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD4C6A60-FA53-42A0-97D5-A0415FB19128}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD4C6A60-FA53-42A0-97D5-A0415FB19128}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD4C6A60-FA53-42A0-97D5-A0415FB19128}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD4C6A60-FA53-42A0-97D5-A0415FB19128}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -148,6 +156,7 @@ Global
 		{87670F39-5853-4F04-9867-E7F742DA2128} = {804797D1-A019-4846-9295-F2F409434B43}
 		{58918B08-2D50-4044-8AF9-586B9B48DACF} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
 		{4ED698DF-CE5D-4A52-B103-9F350DEAC03F} = {23ED18B0-608C-4CB5-A70E-CB95C8B0231C}
+		{CD4C6A60-FA53-42A0-97D5-A0415FB19128} = {13AD1B51-4961-4ED5-8D22-6BF50F2EBECF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CDFF439B-8888-4133-8734-86F4F899BC40}

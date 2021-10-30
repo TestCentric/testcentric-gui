@@ -238,8 +238,7 @@ public abstract class PackageTester
 
     private void RunPackageTests(int testLevel)
     {
-        string pathToRunner = 
-            $"{TEST_BED_DIR}bin/{_parameters.Configuration}/{TEST_RUNNER_EXE}";
+        string pathToRunner = _parameters.OutputDirectory + TEST_RUNNER_EXE;
 
         var reporter = new ResultReporter(PackageName);
 

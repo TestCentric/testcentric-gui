@@ -15,7 +15,6 @@ const string ENGINE_CORE_PACKAGE_NAME = "TestCentric.Engine.Core";
 const string ENGINE_API_PACKAGE_NAME = "TestCentric.Engine.Api";
 
 const string TEST_BED_DIR = "src/TestBed/";
-const string TEST_BED_SOLUTION = "test-engine-test-bed.sln";
 static readonly string TEST_RUNNER_EXE = "test-runner.exe";
 
 // Load scripts after defining constants
@@ -168,36 +167,6 @@ Task("TestAgentCore")
 	});
 
 //////////////////////////////////////////////////////////////////////
-// BUILD TEST BED
-//////////////////////////////////////////////////////////////////////
-
-Task("BuildTestBed")
-	.IsDependentOn("BuildEnginePackage")
-	.Does<BuildParameters>((parameters) =>
-	{
-		var testBedOutputDirectory = $"{TEST_BED_DIR}bin/{parameters.Configuration}/";
-		CleanDirectory(testBedOutputDirectory);
-
-		NuGetRestore(TEST_BED_SOLUTION, new NuGetRestoreSettings()
-		{
-			Source = new string[] { parameters.PackageDirectory },
-			NoCache = true
-		});
-
-		MSBuild(TEST_BED_SOLUTION, parameters.MSBuildSettings);
-
-		// The package does not restore correctly. As a temporary
-		// fix, we copy agents and content to the output directory.
-		var outputDir = $"{TEST_BED_DIR}bin/{parameters.Configuration}/";
-        CopyFileToDirectory(
-            parameters.NuGetTestDirectory + "content/testcentric.nuget.addins",
-            outputDir);
-        CopyDirectory(
-			parameters.NuGetTestDirectory + "agents",
-			outputDir + "agents");
-	});
-
-//////////////////////////////////////////////////////////////////////
 // ENGINE PACKAGE
 //////////////////////////////////////////////////////////////////////
 
@@ -251,7 +220,6 @@ Task("VerifyEnginePackage")
 
 Task("TestEnginePackage")
 	.IsDependentOn("InstallEnginePackage")
-	.IsDependentOn("BuildTestBed")
 	.Does<BuildParameters>((parameters) =>
 	{
 		new NuGetPackageTester(parameters).RunAllTests();
