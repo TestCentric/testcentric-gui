@@ -14,8 +14,6 @@ const string ENGINE_PACKAGE_NAME = "TestCentric.Engine";
 const string ENGINE_CORE_PACKAGE_NAME = "TestCentric.Engine.Core";
 const string ENGINE_API_PACKAGE_NAME = "TestCentric.Engine.Api";
 
-const string TEST_BED_DIR = "src/TestBed/";
-const string TEST_BED_SOLUTION = "test-engine-test-bed.sln";
 static readonly string TEST_RUNNER_EXE = "test-runner.exe";
 
 // Load scripts after defining constants
@@ -168,36 +166,6 @@ Task("TestAgentCore")
 	});
 
 //////////////////////////////////////////////////////////////////////
-// BUILD TEST BED
-//////////////////////////////////////////////////////////////////////
-
-Task("BuildTestBed")
-	.IsDependentOn("BuildEnginePackage")
-	.Does<BuildParameters>((parameters) =>
-	{
-		var testBedOutputDirectory = $"{TEST_BED_DIR}bin/{parameters.Configuration}/";
-		CleanDirectory(testBedOutputDirectory);
-
-		NuGetRestore(TEST_BED_SOLUTION, new NuGetRestoreSettings()
-		{
-			Source = new string[] { parameters.PackageDirectory },
-			NoCache = true
-		});
-
-		MSBuild(TEST_BED_SOLUTION, parameters.MSBuildSettings);
-
-		// The package does not restore correctly. As a temporary
-		// fix, we copy agents and content to the output directory.
-		var outputDir = $"{TEST_BED_DIR}bin/{parameters.Configuration}/";
-        CopyFileToDirectory(
-            parameters.NuGetTestDirectory + "content/testcentric.nuget.addins",
-            outputDir);
-        CopyDirectory(
-			parameters.NuGetTestDirectory + "agents",
-			outputDir + "agents");
-	});
-
-//////////////////////////////////////////////////////////////////////
 // ENGINE PACKAGE
 //////////////////////////////////////////////////////////////////////
 
@@ -233,25 +201,42 @@ Task("VerifyEnginePackage")
 		Check.That(parameters.NuGetTestDirectory,
 			HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "testcentric.png"),
 			HasDirectory("lib").WithFiles(
-				"testcentric.engine.dll", "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll"),
+				"testcentric.engine.dll", "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll",
+				"testcentric.engine.pdb", "testcentric.engine.core.pdb"),
 			HasDirectory("content").WithFile("testcentric.nuget.addins"),
 			HasDirectory("agents/net20").WithFiles(
-				"testcentric-agent.exe", "testcentric-agent.exe.config", "testcentric-agent-x86.exe", "testcentric-agent-x86.exe.config", "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric-agent.nuget.addins"),
+				"testcentric-agent.exe", "testcentric-agent.pdb", "testcentric-agent.exe.config",
+				"testcentric-agent-x86.exe", "testcentric-agent-x86.pdb", "testcentric-agent-x86.exe.config",
+				"testcentric.agent.core.dll", "testcentric.agent.core.pdb",
+				"testcentric.engine.core.dll", "testcentric.engine.core.pdb",
+				"nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric-agent.nuget.addins"),
 			HasDirectory("agents/net40").WithFiles(
-				"testcentric-agent.exe", "testcentric-agent.exe.config", "testcentric-agent-x86.exe", "testcentric-agent-x86.exe.config", "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric-agent.nuget.addins"),
+				"testcentric-agent.exe", "testcentric-agent.pdb", "testcentric-agent.exe.config",
+				"testcentric-agent-x86.exe", "testcentric-agent-x86.pdb", "testcentric-agent-x86.exe.config",
+				"testcentric.agent.core.dll", "testcentric.agent.core.pdb",
+				"testcentric.engine.core.dll", "testcentric.engine.core.pdb",
+				"nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric-agent.nuget.addins"),
 			HasDirectory("agents/netcoreapp2.1").WithFiles(
-                "testcentric-agent.dll", "testcentric-agent.dll.config", "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric-agent.nuget.addins"),
+				"testcentric-agent.dll", "testcentric-agent.pdb", "testcentric-agent.dll.config",
+				"testcentric.agent.core.dll", "testcentric.agent.core.pdb",
+				"testcentric.engine.core.dll", "testcentric.engine.core.pdb",
+				"nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric-agent.nuget.addins"),
 			HasDirectory("agents/netcoreapp3.1").WithFiles(
-                "testcentric-agent.dll", "testcentric-agent.dll.config", "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric-agent.nuget.addins"),
+				"testcentric-agent.dll", "testcentric-agent.pdb", "testcentric-agent.dll.config",
+				"testcentric.agent.core.dll", "testcentric.agent.core.pdb",
+				"testcentric.engine.core.dll", "testcentric.engine.core.pdb",
+				"nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric-agent.nuget.addins"),
 			HasDirectory("agents/net5.0").WithFiles(
-                "testcentric-agent.dll", "testcentric-agent.dll.config", "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric-agent.nuget.addins"));
+				"testcentric-agent.dll", "testcentric-agent.pdb", "testcentric-agent.dll.config",
+				"testcentric.agent.core.dll", "testcentric.agent.core.pdb",
+				"testcentric.engine.core.dll", "testcentric.engine.core.pdb",
+				"nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric-agent.nuget.addins"));
 
 			Information("Verification was successful!");
 	});
 
 Task("TestEnginePackage")
 	.IsDependentOn("InstallEnginePackage")
-	.IsDependentOn("BuildTestBed")
 	.Does<BuildParameters>((parameters) =>
 	{
 		new NuGetPackageTester(parameters).RunAllTests();
@@ -289,11 +274,11 @@ Task("VerifyEngineCorePackage")
 			Check.That(dirName,
 				HasFiles("LICENSE.txt", "testcentric.png"),
 				HasDirectory("lib/net20").WithFiles(
-					"testcentric.engine.core.dll", "nunit.engine.api.dll"),
+					"testcentric.engine.core.dll", "testcentric.engine.core.pdb", "nunit.engine.api.dll"),
 				HasDirectory("lib/net40").WithFiles(
-					"testcentric.engine.core.dll", "nunit.engine.api.dll"),
+					"testcentric.engine.core.dll", "testcentric.engine.core.pdb", "nunit.engine.api.dll"),
 				HasDirectory("lib/netstandard2.0").WithFiles(
-					"testcentric.engine.core.dll", "nunit.engine.api.dll"));
+					"testcentric.engine.core.dll", "testcentric.engine.core.pdb", "nunit.engine.api.dll"));
 		}
 		finally
 		{
@@ -332,9 +317,9 @@ Task("VerifyEngineApiPackage")
 
 			Check.That(dirName,
 				HasFiles("LICENSE.txt", "testcentric.png"),
-				HasDirectory("lib/net20").WithFile("testcentric.engine.api.dll"),
-				HasDirectory("lib/net40").WithFile("testcentric.engine.api.dll"),
-				HasDirectory("lib/netstandard2.0").WithFile("testcentric.engine.api.dll"));
+				HasDirectory("lib/net20").WithFiles("testcentric.engine.api.dll", "testcentric.engine.api.pdb"),
+				HasDirectory("lib/net40").WithFiles("testcentric.engine.api.dll", "testcentric.engine.api.pdb"),
+				HasDirectory("lib/netstandard2.0").WithFiles("testcentric.engine.api.dll", "testcentric.engine.api.pdb"));
 		}
 		finally
 		{
