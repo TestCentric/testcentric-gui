@@ -1,4 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <RootNamespace>nunit.agent</RootNamespace>
@@ -12,32 +13,40 @@
 	  <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <Title>TestCentric Agent</Title>
   </PropertyGroup>
+
   <ItemGroup Condition="'$(TargetFramework)'=='net20'">
     <Reference Include="System.Runtime.Remoting" />
   </ItemGroup>
+
   <ItemGroup Condition="'$(TargetFramework)'=='net40'">
     <Reference Include="System.Runtime.Remoting" />
   </ItemGroup>
+
   <ItemGroup>
     <Compile Include="..\AgentExitCodes.cs" Link="AgentExitCodes.cs" />
     <Compile Include="..\Program.cs" Link="Program.cs" />
   </ItemGroup>
+
   <ItemGroup>
     <Content Include="..\..\..\..\nunit.ico">
       <Link>nunit.ico</Link>
     </Content>
   </ItemGroup>
+
   <ItemGroup>
     <None Include="..\app.config" Link="app.config" />
     <None Include="..\app.manifest" Link="app.manifest" />
   </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\testcentric.engine.core\testcentric.engine.core.csproj" />
     <ProjectReference Include="..\testcentric.agent.core\testcentric.agent.core.csproj" />
   </ItemGroup>
+
   <ItemGroup>
     <None Update="app.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
 </Project>
