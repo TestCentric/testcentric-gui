@@ -3,7 +3,6 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-#if NETFRAMEWORK
 using System;
 using System.IO;
 using System.Text;
@@ -182,4 +181,3 @@ namespace TestCentric.Engine.Internal
         }
     }
 }
-#endif

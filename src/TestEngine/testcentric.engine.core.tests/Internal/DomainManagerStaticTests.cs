@@ -3,7 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-#if !NETCOREAPP2_1
+#if NETFRAMEWORK
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -21,9 +21,9 @@ namespace TestCentric.Engine.Internal
 
         const string STANDARD_CONFIG_FILE =
 #if NETFRAMEWORK
-            "testcentric.agent.core.tests.exe.config";
+            "testcentric.engine.core.tests.exe.config";
 #else
-            "testcentric.agent.core.tests.dll.config";
+            "testcentric.engine.core.tests.dll.config";
 #endif
         const string ALTERNATE_CONFIG_FILE = "alt.config";
 

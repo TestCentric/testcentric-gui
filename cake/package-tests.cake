@@ -10,8 +10,8 @@ static void CheckTestErrors(ref List<string> errorDetail)
         var copyError = new List<string>();
         copyError = errorDetail.Select(s => s).ToList();
         errorDetail.Clear();
-        throw new Exception("One or more tests failed, breaking the build.\n"
-                              + copyError.Aggregate((x,y) => x + "\n" + y));
+        throw new Exception("One or more tests failed, breaking the build.\r\n"
+                              + copyError.Aggregate((x,y) => x + "\r\n" + y));
     }
 }
 
