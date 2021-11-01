@@ -10,6 +10,12 @@ using NUnit.Engine;
 
 namespace TestCentric.Engine.Agents
 {
+    /// <summary>
+    /// All agents, either built-in or pluggable, must be able to 
+    /// handle the options defined in this class. In some cases,
+    /// it may be permissible to ignore them but they should never
+    /// give rise to an error.
+    /// </summary>
     public class AgentOptions
     {
         static readonly char[] DELIMS = new[] { '=', ':' };

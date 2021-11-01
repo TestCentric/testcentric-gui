@@ -3,9 +3,9 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-namespace TestCentric.Common
+namespace TestCentric.Engine.Agents
 {
-    internal static class AgentExitCodes
+    public static class AgentExitCodes
     {
         public const int OK = 0;
         public const int PARENT_PROCESS_TERMINATED = -1;

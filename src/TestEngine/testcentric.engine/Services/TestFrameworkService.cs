@@ -6,7 +6,6 @@
 using System.Collections.Generic;
 using System.Reflection;
 using Mono.Cecil;
-using TestCentric.Common;
 using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Services

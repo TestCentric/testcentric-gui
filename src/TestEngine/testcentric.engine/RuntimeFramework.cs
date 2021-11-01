@@ -9,7 +9,6 @@ using System.Reflection;
 using System.Runtime.Versioning;
 using Microsoft.Win32;
 using NUnit.Engine;
-using TestCentric.Common;
 
 namespace TestCentric.Engine
 {

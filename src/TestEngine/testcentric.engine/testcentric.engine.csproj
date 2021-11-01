@@ -16,10 +16,6 @@
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Web" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="..\agents\AgentExitCodes.cs" LinkBase="Agents" />
-  </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\testcentric.engine.api\testcentric.engine.api.csproj" />

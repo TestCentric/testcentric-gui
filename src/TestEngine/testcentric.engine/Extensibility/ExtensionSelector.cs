@@ -4,7 +4,6 @@
 // ***********************************************************************
 
 using System;
-using TestCentric.Common;
 
 namespace TestCentric.Engine.Extensibility
 {

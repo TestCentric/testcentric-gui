@@ -7,7 +7,6 @@ using NUnit.Engine;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using TestCentric.Common;
 using TestCentric.Engine.Agents;
 using TestCentric.Engine.Internal;
 using TestCentric.Engine.Communication.Messages;

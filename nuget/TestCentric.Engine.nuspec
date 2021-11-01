@@ -42,8 +42,6 @@
     <file src="agents/net20/testcentric.engine.metadata.dll" target="agents/net20" />
     <file src="agents/net20/testcentric.engine.core.dll" target="agents/net20" />
     <file src="agents/net20/testcentric.engine.core.pdb" target="agents/net20" />
-    <file src="agents/net20/testcentric.agent.core.dll" target="agents/net20" />
-    <file src="agents/net20/testcentric.agent.core.pdb" target="agents/net20" />
     <file src="agents/net20/testcentric-agent.exe" target="agents/net20" />
     <file src="agents/net20/testcentric-agent.pdb" target="agents/net20" />
     <file src="agents/net20/testcentric-agent.exe.config" target="agents/net20" />
@@ -56,8 +54,6 @@
     <file src="agents/net40/testcentric.engine.metadata.dll" target="agents/net40" />
     <file src="agents/net40/testcentric.engine.core.dll" target="agents/net40" />
     <file src="agents/net40/testcentric.engine.core.pdb" target="agents/net40" />
-    <file src="agents/net40/testcentric.agent.core.dll" target="agents/net40" />
-    <file src="agents/net40/testcentric.agent.core.pdb" target="agents/net40" />
     <file src="agents/net40/testcentric-agent.exe" target="agents/net40" />
     <file src="agents/net40/testcentric-agent.pdb" target="agents/net40" />
     <file src="agents/net40/testcentric-agent.exe.config" target="agents/net40" />
@@ -68,8 +64,6 @@
 
     <file src="agents/netcoreapp2.1/nunit.engine.api.dll" target="agents/netcoreapp2.1" />
     <file src="agents/netcoreapp2.1/testcentric.engine.metadata.dll" target="agents/netcoreapp2.1" />
-    <file src="agents/netcoreapp2.1/testcentric.agent.core.dll" target="agents/netcoreapp2.1" />
-    <file src="agents/netcoreapp2.1/testcentric.agent.core.pdb" target="agents/netcoreapp2.1" />
     <file src="agents/netcoreapp2.1/testcentric.engine.core.dll" target="agents/netcoreapp2.1" />
     <file src="agents/netcoreapp2.1/testcentric.engine.core.pdb" target="agents/netcoreapp2.1" />
     <file src="agents/netcoreapp2.1/testcentric-agent.dll" target="agents/netcoreapp2.1" />
@@ -84,8 +78,6 @@
     <file src="agents/netcoreapp3.1/testcentric.engine.metadata.dll" target="agents/netcoreapp3.1" />
     <file src="agents/netcoreapp3.1/testcentric.engine.core.dll" target="agents/netcoreapp3.1" />
     <file src="agents/netcoreapp3.1/testcentric.engine.core.pdb" target="agents/netcoreapp3.1" />
-    <file src="agents/netcoreapp3.1/testcentric.agent.core.dll" target="agents/netcoreapp3.1" />
-    <file src="agents/netcoreapp3.1/testcentric.agent.core.pdb" target="agents/netcoreapp3.1" />
     <file src="agents/netcoreapp3.1/testcentric-agent.dll" target="agents/netcoreapp3.1" />
     <file src="agents/netcoreapp3.1/testcentric-agent.pdb" target="agents/netcoreapp3.1" />
     <file src="agents/netcoreapp3.1/testcentric-agent.dll.config" target="agents/netcoreapp3.1" />
@@ -98,8 +90,6 @@
     <file src="agents/net5.0/testcentric.engine.metadata.dll" target="agents/net5.0" />
     <file src="agents/net5.0/testcentric.engine.core.dll" target="agents/net5.0" />
     <file src="agents/net5.0/testcentric.engine.core.pdb" target="agents/net5.0" />
-    <file src="agents/net5.0/testcentric.agent.core.dll" target="agents/net5.0" />
-    <file src="agents/net5.0/testcentric.agent.core.pdb" target="agents/net5.0" />
     <file src="agents/net5.0/testcentric-agent.dll" target="agents/net5.0" />
     <file src="agents/net5.0/testcentric-agent.pdb" target="agents/net5.0" />
     <file src="agents/net5.0/testcentric-agent.dll.config" target="agents/net5.0" />

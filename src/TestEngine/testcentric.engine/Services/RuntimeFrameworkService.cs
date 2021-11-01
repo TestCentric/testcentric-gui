@@ -10,7 +10,6 @@ using System.IO;
 using System.Linq;
 using Microsoft.Win32;
 using NUnit.Engine;
-using TestCentric.Common;
 using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Services

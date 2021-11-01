@@ -6,7 +6,6 @@
 using System;
 using System.Reflection;
 using NUnit.Engine.Extensibility;
-using TestCentric.Common;
 
 namespace TestCentric.Engine.Drivers
 {
