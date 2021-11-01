@@ -2,6 +2,7 @@
   <PropertyGroup>
     <RootNamespace>NUnit.Engine</RootNamespace>
     <TargetFrameworks>net35;net40;netcoreapp2.1</TargetFrameworks>
+    <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <OutputType>Exe</OutputType>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\nunit.snk</AssemblyOriginatorKeyFile>
@@ -27,12 +28,6 @@
   
   <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp2.1'">
     <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Compile Remove="Drivers\**" />
-    <EmbeddedResource Remove="Drivers\**" />
-    <None Remove="Drivers\**" />
   </ItemGroup>
   
   <ItemGroup>

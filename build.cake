@@ -474,6 +474,7 @@ Task("AppVeyor")
 	.IsDependentOn("DumpSettings")
 	.IsDependentOn("Build")
 	.IsDependentOn("Test")
+	.IsDependentOn("CheckTestErrors")
 	.IsDependentOn("Package")
 	.IsDependentOn("PublishPackages");
 
@@ -485,6 +486,7 @@ Task("Full")
 	.IsDependentOn("DumpSettings")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
+	.IsDependentOn("CheckTestErrors")
     .IsDependentOn("Package");
 
 Task("Default")
