@@ -10,7 +10,7 @@ using System.Threading;
 using System.Diagnostics;
 using System.Net.Sockets;
 using NUnit.Engine;
-using TestCentric.Common;
+using TestCentric.Engine;
 using TestCentric.Engine.Agents;
 using TestCentric.Engine.Extensibility;
 using TestCentric.Engine.Internal;

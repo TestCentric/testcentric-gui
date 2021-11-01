@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.IO;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
-using TestCentric.Common;
 using TestCentric.Engine.Extensibility;
 
 namespace TestCentric.Engine.Services

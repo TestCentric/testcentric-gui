@@ -7,10 +7,8 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Security;
-using TestCentric.Common;
-using TestCentric.Engine.Internal;
-using NUnit.Engine;
 using System.Runtime.InteropServices;
+using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Agents
 {

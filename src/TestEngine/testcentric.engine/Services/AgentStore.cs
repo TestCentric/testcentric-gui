@@ -6,7 +6,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using TestCentric.Common;
 using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Services

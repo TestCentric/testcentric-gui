@@ -11,7 +11,6 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
-using TestCentric.Common;
 using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Drivers

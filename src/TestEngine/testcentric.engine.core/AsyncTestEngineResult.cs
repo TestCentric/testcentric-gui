@@ -7,7 +7,6 @@ using System;
 using System.Threading;
 using System.Xml;
 using NUnit.Engine;
-using TestCentric.Common;
 
 namespace TestCentric.Engine
 {

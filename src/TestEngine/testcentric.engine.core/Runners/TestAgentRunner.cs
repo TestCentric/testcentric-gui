@@ -9,7 +9,6 @@ using System.IO;
 using System.Reflection;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
-using TestCentric.Common;
 using TestCentric.Engine.Drivers;
 using TestCentric.Engine.Internal;
 

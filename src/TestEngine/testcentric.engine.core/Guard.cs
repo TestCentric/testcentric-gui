@@ -5,7 +5,7 @@
 
 using System;
 
-namespace TestCentric.Common
+namespace TestCentric.Engine
 {
     /// <summary>
     /// Class used to guard against unexpected argument values

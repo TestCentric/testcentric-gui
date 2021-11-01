@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
-using TestCentric.Common;
 
 namespace TestCentric.Engine.Runners
 {

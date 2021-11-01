@@ -8,7 +8,6 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Xsl;
-using TestCentric.Common;
 using NUnit.Engine.Extensibility;
 
 namespace TestCentric.Engine.Services
