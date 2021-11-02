@@ -1,4 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  
 	<PropertyGroup>
 		<RootNamespace>TestCentric.Gui.Model</RootNamespace>
 		<AssemblyName>TestCentric.Gui.Model</AssemblyName>
@@ -9,12 +10,15 @@
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\..\testcentric.snk</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
+  
 	<ItemGroup>
 		<Reference Include="System.Windows.Forms" />
 	</ItemGroup>
+  
 	<ItemGroup>
     <PackageReference Include="NUnit.Engine.Api" Version="4.0.0-dev-001" />
-    <PackageReference Include="TestCentric.Engine.Api" Version="2.0.0-dev00511" />
-    <PackageReference Include="TestCentric.Engine" Version="2.0.0-dev00511" />
+    <PackageReference Include="TestCentric.Engine.Api" Version="2.0.0-dev00522" />
+    <PackageReference Include="TestCentric.Engine" Version="2.0.0-dev00522" />
   </ItemGroup>
+  
 </Project>
