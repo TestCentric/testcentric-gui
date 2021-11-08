@@ -19,7 +19,7 @@ namespace TestCentric.Engine.Services
 
         public static readonly string[] BUILTIN_AGENTS = new string[]
         {
-            "Net40AgentLauncher", "NetCore21AgentLauncher", "NetCore31AgentLauncher", "Net50AgentLauncher"
+            "Net40AgentLauncher", "NetCore31AgentLauncher", "Net50AgentLauncher"
         };
 
         [SetUp]
@@ -50,9 +50,9 @@ namespace TestCentric.Engine.Services
         [TestCase("net-3.5", "Net40AgentLauncher")]
         [TestCase("net-4.0", "Net40AgentLauncher")]
         [TestCase("net-4.8", "Net40AgentLauncher")]
-        [TestCase("netcore-1.1", "NetCore21AgentLauncher", "NetCore31AgentLauncher", "Net50AgentLauncher")]
-        [TestCase("netcore-2.0", "NetCore21AgentLauncher", "NetCore31AgentLauncher", "Net50AgentLauncher")]
-        [TestCase("netcore-2.1", "NetCore21AgentLauncher", "NetCore31AgentLauncher", "Net50AgentLauncher")]
+        [TestCase("netcore-1.1", "NetCore31AgentLauncher", "Net50AgentLauncher")]
+        [TestCase("netcore-2.0", "NetCore31AgentLauncher", "Net50AgentLauncher")]
+        [TestCase("netcore-2.1", "NetCore31AgentLauncher", "Net50AgentLauncher")]
         [TestCase("netcore-3.0", "NetCore31AgentLauncher", "Net50AgentLauncher")]
         [TestCase("netcore-3.1", "NetCore31AgentLauncher", "Net50AgentLauncher")]
         [TestCase("netcore-5.0", "Net50AgentLauncher")]
@@ -70,9 +70,9 @@ namespace TestCentric.Engine.Services
         [TestCase("net-3.5", "Net40AgentLauncher")]
         [TestCase("net-4.0", "Net40AgentLauncher")]
         [TestCase("net-4.8", "Net40AgentLauncher")]
-        [TestCase("netcore-1.1", "NetCore21AgentLauncher", "NetCore31AgentLauncher", "Net50AgentLauncher")]
-        [TestCase("netcore-2.0", "NetCore21AgentLauncher", "NetCore31AgentLauncher", "Net50AgentLauncher")]
-        [TestCase("netcore-2.1", "NetCore21AgentLauncher", "NetCore31AgentLauncher", "Net50AgentLauncher")]
+        [TestCase("netcore-1.1", "NetCore31AgentLauncher", "Net50AgentLauncher")]
+        [TestCase("netcore-2.0", "NetCore31AgentLauncher", "Net50AgentLauncher")]
+        [TestCase("netcore-2.1", "NetCore31AgentLauncher", "Net50AgentLauncher")]
         [TestCase("netcore-3.0", "NetCore31AgentLauncher", "Net50AgentLauncher")]
         [TestCase("netcore-3.1", "NetCore31AgentLauncher", "Net50AgentLauncher")]
         [TestCase("netcore-5.0", "Net50AgentLauncher")]
@@ -89,8 +89,8 @@ namespace TestCentric.Engine.Services
         [TestCase("net-4.0", "net-4.0", "Net40AgentLauncher")]
         [TestCase("net-4.8", "net-4.5", "Net40AgentLauncher")]
         [TestCase("net-4.8", "net-2.0", "Net40AgentLauncher")]
-        [TestCase("netcore-1.1", "netcore-2.0", "NetCore21AgentLauncher", "NetCore31AgentLauncher", "Net50AgentLauncher")]
-        [TestCase("netcore-2.1", "netcore-2.1", "NetCore21AgentLauncher", "NetCore31AgentLauncher", "Net50AgentLauncher")]
+        [TestCase("netcore-1.1", "netcore-2.0", "NetCore31AgentLauncher", "Net50AgentLauncher")]
+        [TestCase("netcore-2.1", "netcore-2.1", "NetCore31AgentLauncher", "Net50AgentLauncher")]
         [TestCase("netcore-3.0", "netcore-3.1", "NetCore31AgentLauncher", "Net50AgentLauncher")]
         [TestCase("netcore-3.1", "netcore-5.0", "Net50AgentLauncher")]
         [TestCase("netcore-5.0", "net-4.8")] // No agents in common
