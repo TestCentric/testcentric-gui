@@ -2,7 +2,7 @@
 // Copyright (c) Charlie Poole and TestCentric GUI contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
-
+#if false
 using System;
 using System.Diagnostics;
 using System.Reflection;
@@ -44,7 +44,7 @@ namespace TestCentric.Engine.Services
             var sb = new StringBuilder($"--agentId={agentId} --agencyUrl={agencyUrl} --pid={Process.GetCurrentProcess().Id}");
 
             // Set options that need to be in effect before the package
-            // is loaded by using the command line.
+            // is loaded by using the command line.b
             if (traceLevel != "Off")
                 sb.Append(" --trace=").EscapeProcessArgument(traceLevel);
             if (debugAgent)
@@ -73,3 +73,4 @@ namespace TestCentric.Engine.Services
         }
     }
 }
+#endif

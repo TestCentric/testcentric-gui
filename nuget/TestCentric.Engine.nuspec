@@ -38,18 +38,6 @@
     <file src="testcentric.engine.pdb" target="lib" />
     <file src="../../nuget/testcentric.nuget.addins" target="content" />
 
-    <file src="agents/net20/nunit.engine.api.dll" target="agents/net20" />
-    <file src="agents/net20/testcentric.engine.metadata.dll" target="agents/net20" />
-    <file src="agents/net20/testcentric.engine.core.dll" target="agents/net20" />
-    <file src="agents/net20/testcentric.engine.core.pdb" target="agents/net20" />
-    <file src="agents/net20/testcentric-agent.exe" target="agents/net20" />
-    <file src="agents/net20/testcentric-agent.pdb" target="agents/net20" />
-    <file src="agents/net20/testcentric-agent.exe.config" target="agents/net20" />
-    <file src="agents/net20/testcentric-agent-x86.exe" target="agents/net20" />
-    <file src="agents/net20/testcentric-agent-x86.pdb" target="agents/net20" />
-    <file src="agents/net20/testcentric-agent-x86.exe.config" target="agents/net20" />
-    <file src="../../nuget/testcentric-agent.nuget.addins" target="agents/net20" />
-
     <file src="agents/net40/nunit.engine.api.dll" target="agents/net40" />
     <file src="agents/net40/testcentric.engine.metadata.dll" target="agents/net40" />
     <file src="agents/net40/testcentric.engine.core.dll" target="agents/net40" />

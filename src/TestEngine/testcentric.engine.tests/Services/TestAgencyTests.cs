@@ -19,7 +19,7 @@ namespace TestCentric.Engine.Services
 
         public static readonly string[] BUILTIN_AGENTS = new string[]
         {
-            "Net20AgentLauncher", "Net40AgentLauncher", "NetCore21AgentLauncher", "NetCore31AgentLauncher", "Net50AgentLauncher"
+            "Net40AgentLauncher", "NetCore21AgentLauncher", "NetCore31AgentLauncher", "Net50AgentLauncher"
         };
 
         [SetUp]
@@ -46,8 +46,8 @@ namespace TestCentric.Engine.Services
                 Is.EqualTo(BUILTIN_AGENTS));
         }
 
-        [TestCase("net-2.0", "Net20AgentLauncher", "Net40AgentLauncher")]
-        [TestCase("net-3.5", "Net20AgentLauncher", "Net40AgentLauncher")]
+        [TestCase("net-2.0", "Net40AgentLauncher")]
+        [TestCase("net-3.5", "Net40AgentLauncher")]
         [TestCase("net-4.0", "Net40AgentLauncher")]
         [TestCase("net-4.8", "Net40AgentLauncher")]
         [TestCase("netcore-1.1", "NetCore21AgentLauncher", "NetCore31AgentLauncher", "Net50AgentLauncher")]
@@ -66,8 +66,8 @@ namespace TestCentric.Engine.Services
                 Is.EqualTo(expectedAgents));
         }
 
-        [TestCase("net-2.0", "Net20AgentLauncher", "Net40AgentLauncher")]
-        [TestCase("net-3.5", "Net20AgentLauncher", "Net40AgentLauncher")]
+        [TestCase("net-2.0", "Net40AgentLauncher")]
+        [TestCase("net-3.5", "Net40AgentLauncher")]
         [TestCase("net-4.0", "Net40AgentLauncher")]
         [TestCase("net-4.8", "Net40AgentLauncher")]
         [TestCase("netcore-1.1", "NetCore21AgentLauncher", "NetCore31AgentLauncher", "Net50AgentLauncher")]
@@ -85,7 +85,7 @@ namespace TestCentric.Engine.Services
                 Is.EqualTo(expectedAgents));
         }
 
-        [TestCase("net-2.0", "net-2.0", "Net20AgentLauncher", "Net40AgentLauncher")]
+        [TestCase("net-2.0", "net-2.0", "Net40AgentLauncher")]
         [TestCase("net-4.0", "net-4.0", "Net40AgentLauncher")]
         [TestCase("net-4.8", "net-4.5", "Net40AgentLauncher")]
         [TestCase("net-4.8", "net-2.0", "Net40AgentLauncher")]

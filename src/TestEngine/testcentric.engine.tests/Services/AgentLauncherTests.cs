@@ -154,20 +154,20 @@ namespace TestCentric.Engine.Services
         }
     }
 
-    public class Net20AgentLauncherTests : AgentLauncherTests<Net20AgentLauncher>
-    {
-        protected override string[] SupportedRuntimes => new string[] { "net-2.0", "net-3.0", "net-3.5" };
+    //public class Net20AgentLauncherTests : AgentLauncherTests<Net20AgentLauncher>
+    //{
+    //    protected override string[] SupportedRuntimes => new string[] { "net-2.0", "net-3.0", "net-3.5" };
 
-        private string AgentDir = Path.Combine(TestContext.CurrentContext.TestDirectory, "agents/net20");
-        private string AgentName = "testcentric-agent.exe";
-        private string AgentNameX86 = "testcentric-agent-x86.exe";
+    //    private string AgentDir = Path.Combine(TestContext.CurrentContext.TestDirectory, "agents/net20");
+    //    private string AgentName = "testcentric-agent.exe";
+    //    private string AgentNameX86 = "testcentric-agent-x86.exe";
 
-        protected override void CheckAgentPath(Process process, bool x86)
-        {
-            string agentPath = Path.Combine(AgentDir, x86 ? AgentNameX86 : AgentName);
-            Assert.That(process.StartInfo.FileName, Is.SamePath(agentPath));
-        }
-    }
+    //    protected override void CheckAgentPath(Process process, bool x86)
+    //    {
+    //        string agentPath = Path.Combine(AgentDir, x86 ? AgentNameX86 : AgentName);
+    //        Assert.That(process.StartInfo.FileName, Is.SamePath(agentPath));
+    //    }
+    //}
 
     public class Net40AgentLauncherTests : AgentLauncherTests<Net40AgentLauncher>
     {
