@@ -32,14 +32,6 @@ namespace TestCentric.Gui.Model
             _model.Dispose();
         }
 
-        [Test] // TODO: Move this to the engine tests
-        public void EnsureAgentIsAvailable()
-        {
-            var testDir = TestContext.CurrentContext.TestDirectory;
-            Assert.That(File.Exists(Path.Combine(testDir, "agents/net20/testcentric-agent.exe")), "Cannot find testcentric-agent - may cause other test failures");
-            Assert.That(File.Exists(Path.Combine(testDir, "agents/net20/testcentric-agent-x86.exe")), "Cannot find testcentric-agent-x86 - may cause other test failures");
-        }
-
         [Test]
         public void CheckStateAfterLoading()
         {

@@ -122,10 +122,25 @@ public abstract class PackageTester : GuiTester
 				Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "net-4.5") }
 			})) ;
 
-        PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET 3.5", StandardRunner,
-            "net35/mock-assembly.dll",
-            new ExpectedResult("Failed")
-            {
+		PackageTests.Add(new PackageTest(1, "Run net35 mock-assembly.dll under .NET 4.0", StandardRunner,
+		"net35/mock-assembly.dll",
+		new ExpectedResult("Failed")
+		{
+			Total = 40,
+			Passed = 22,
+			Failed = 6,
+			Warnings = 0,
+			Inconclusive = 5,
+			Skipped = 7,
+			Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "net-2.0") }
+		},
+		"NUnit.Extension.Net20PluggableAgent"));
+
+
+		PackageTests.Add(new PackageTest(1, "Run net35 mock-assembly.dll under .NET 2.0 pluggable agent", StandardRunner,
+			"net35/mock-assembly.dll",
+			new ExpectedResult("Failed")
+			{
 				Total = 40,
 				Passed = 22,
 				Failed = 6,
@@ -133,9 +148,10 @@ public abstract class PackageTester : GuiTester
 				Inconclusive = 5,
 				Skipped = 7,
 				Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "net-2.0") }
-            }));
+			},
+			"NUnit.Extension.Net20PluggableAgent"));
 
-        PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET Core 2.1", StandardRunner,
+		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET Core 2.1", StandardRunner,
             "netcoreapp2.1/mock-assembly.dll",
             new ExpectedResult("Failed")
             {
