@@ -39,9 +39,9 @@ public class PackageTestReport
 			var actual = actualAssemblies[i];
 
 			if (expected.Name != actual.Name)
-				Errors.Add($"   Expected: {expected.Name}\n    But was: { actual.Name}");
+				Errors.Add($"   Expected: {expected.Name}\r\n    But was: { actual.Name}");
 			else if (!actual.Runtime.StartsWith(expected.Runtime))
-				Errors.Add($"   Assembly {actual.Name}\n     Expected: {expected.Runtime}\n      But was: {actual.Runtime}");
+				Errors.Add($"   Assembly {actual.Name}\r\n     Expected: {expected.Runtime}\r\n      But was: {actual.Runtime}");
         }
 
 		for (int i = actualAssemblies.Length; i < expectedAssemblies.Length; i++)
