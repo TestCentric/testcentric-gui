@@ -43,23 +43,6 @@ namespace TestCentric.Engine.Services
             Assert.That(_runtimeService.Status, Is.EqualTo(ServiceStatus.Started));
         }
 
-        // TODO: Review whether this test is contributing anything
-        [TestCase("mock-assembly.dll", false)]
-        [TestCase("../../agents/net20/testcentric-agent.exe", false, ExcludePlatform = "Linux")]
-        [TestCase("../../agents/net20/testcentric-agent-x86.exe", true, ExcludePlatform = "Linux")]
-        public void SelectRuntimeFramework(string assemblyName, bool runAsX86)
-        {
-            var assemblyPath = Path.Combine(TestContext.CurrentContext.TestDirectory, assemblyName);
-            FileAssert.Exists(assemblyPath, $"File not found: {assemblyPath}");
-            var package = new TestPackage(assemblyPath).SubPackages[0];
-
-            _packageAnalyzer.ApplyImageSettings(package);
-            var runtimeFramework = _runtimeService.SelectRuntimeFramework(package);
-
-            Assert.That(package.GetSetting("TargetRuntimeFramework", ""), Is.EqualTo(runtimeFramework));
-            Assert.That(package.GetSetting("RunAsX86", false), Is.EqualTo(runAsX86));
-        }
-
         [Test]
         public void AvailableFrameworks()
         {
