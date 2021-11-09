@@ -129,7 +129,7 @@ public class ActualAssemblyResult
 
 		if (clrVersion.StartsWith(".NET Core 4.6") && targetRuntime == "netcore-1.1")
 			runtime = targetRuntime;
-		else if (clrVersion.StartsWith("3.1") && targetRuntime == "netcore-3.1")
+		else if (clrVersion.StartsWith("3.1") && targetRuntime.StartsWith("netcore-"))
 			runtime = targetRuntime;
 		else if (clrVersion.StartsWith("4.0") && targetRuntime.StartsWith("netcore-"))
 			runtime = targetRuntime;

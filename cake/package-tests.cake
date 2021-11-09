@@ -133,8 +133,7 @@ public abstract class PackageTester : GuiTester
 			Inconclusive = 5,
 			Skipped = 7,
 			Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "net-2.0") }
-		},
-		"NUnit.Extension.Net20PluggableAgent"));
+		}));
 
 
 		PackageTests.Add(new PackageTest(1, "Run net35 mock-assembly.dll under .NET 2.0 pluggable agent", StandardRunner,
@@ -149,9 +148,9 @@ public abstract class PackageTester : GuiTester
 				Skipped = 7,
 				Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "net-2.0") }
 			},
-			"NUnit.Extension.Net20PluggableAgent"));
+			Net20PluggableAgent));
 
-		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET Core 2.1", StandardRunner,
+		PackageTests.Add(new PackageTest(1, "Run .NET Core 2.1 mock-assembly.dll under .NET Core 3.1", StandardRunner,
             "netcoreapp2.1/mock-assembly.dll",
             new ExpectedResult("Failed")
             {
@@ -258,6 +257,7 @@ public abstract class PackageTester : GuiTester
 
 	protected virtual string NUnitV2Driver => "NUnit.Extension.NUnitV2Driver";
 	protected virtual string NUnitProjectLoader => "NUnit.Extension.NUnitProjectLoader";
+	protected virtual string Net20PluggableAgent => "NUnit.Extension.Net20PluggableAgent";
 
 	// NOTE: Currently, we use the same tests for all packages. There seems to be
 	// no reason for the three packages to differ in capability so the only reason
