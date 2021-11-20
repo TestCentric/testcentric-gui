@@ -8,6 +8,7 @@
     <AssemblyOriginatorKeyFile>..\..\nunit.snk</AssemblyOriginatorKeyFile>
     <DebugType>Full</DebugType>
     <OutputPath>..\..\..\bin\$(Configuration)\engine-tests\</OutputPath>
+    <CheckEolTargetFramework>false</CheckEolTargetFramework>
   </PropertyGroup>
   
   <ItemGroup Condition="'$(TargetFramework)'=='net35'">
