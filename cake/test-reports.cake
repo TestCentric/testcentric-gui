@@ -40,12 +40,12 @@ public class PackageTestReport
 
 			if (expected.Name != actual.Name)
 			{
-				Errors.Add($"   Expected: {expected.Name}\n    But was: { actual.Name}");
+				Errors.Add($"   Expected: {expected.Name}\r\n    But was: { actual.Name}");
 				continue;
 			}
 
             if (actual.Runtime != null && expected.Runtime != null && !actual.Runtime.StartsWith(expected.Runtime))
-                Errors.Add($"   Assembly {actual.Name}\n     Expected: {expected.Runtime}\n      But was: {actual.Runtime}");
+                Errors.Add($"   Assembly {actual.Name}\r\n     Expected: {expected.Runtime}\r\n      But was: {actual.Runtime}");
         }
 
         for (int i = actualAssemblies.Length; i < expectedAssemblies.Length; i++)
@@ -137,9 +137,9 @@ public class ResultReporter
 
 	public bool ReportResults()
 	{
-		Console.WriteLine("\n=================================================="); ;
-		Console.WriteLine($"Test Results for {_packageName}");
-		Console.WriteLine("=================================================="); ;
+		Console.WriteLine("\n=======================================================");
+		Console.WriteLine($"Test Results: {_packageName}");
+		Console.WriteLine("=======================================================");
 
 		Console.WriteLine("\nTest Environment");
 		Console.WriteLine($"   OS Version: {Environment.OSVersion.VersionString}");

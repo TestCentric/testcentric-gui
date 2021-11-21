@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using NUnit.Engine;
 
@@ -20,6 +21,8 @@ namespace TestCentric.Engine.TestBed
     /// </summary>
     class TestRunner
     {
+        static readonly ITestEngine TestEngine = new TestEngine();
+
         static void Main(string[] args)
         {
             Console.WriteLine("TestCentric Engine Test Runner");
@@ -30,6 +33,13 @@ namespace TestCentric.Engine.TestBed
             Console.WriteLine($"  CLR Version: {Environment.Version}");
             Console.WriteLine();
 
+
+            if (args.Contains("--list-extensions"))
+            {
+                ListExtensions();
+                return;
+            }
+
             var package = MakeTestPackageFromArguments(args);
 
             Console.WriteLine("Test Files");
@@ -37,8 +47,7 @@ namespace TestCentric.Engine.TestBed
                     Console.WriteLine("  " + file);
             Console.WriteLine();
 
-            var engine = new TestEngine();
-            var runner = engine.GetRunner(package);
+            var runner = TestEngine.GetRunner(package);
 
             XmlNode resultNode = runner.Run(null, TestFilter.Empty);
 
@@ -62,6 +71,21 @@ namespace TestCentric.Engine.TestBed
             }
 
             Environment.Exit(0);
+        }
+
+        private static void ListExtensions()
+        {
+            var extensionService = TestEngine.Services.GetService<IExtensionService>();
+
+            Console.WriteLine("Extension Points and Extensions");
+            Console.WriteLine();
+
+            foreach (var ep in extensionService.ExtensionPoints)
+            {
+                Console.WriteLine($"  {ep.Path}");
+                foreach (var extension in ep.Extensions)
+                    Console.WriteLine($"    {extension.TypeName}");
+            }
         }
 
         private static TestPackage MakeTestPackageFromArguments(string[] args)

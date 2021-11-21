@@ -11,6 +11,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="test-runner.addins" />
+    <None Remove="TestProject.nunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="TestProject.nunit">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="test-runner.addins">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\TestEngine\testcentric.engine\testcentric.engine.csproj" />
   </ItemGroup>
 

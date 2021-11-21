@@ -186,18 +186,21 @@ public abstract class PackageTester
         // TODO: Use --config option when it's supported by the extension.
         // Current test relies on the fact that the Release config appears
         // first in the project file.
-        //if (_parameters.Configuration == "Release")
-        //{
-        //    PackageTests.Add(new PackageTest(2, "Run an NUnit project",
-        //        "../../GuiTests.nunit --trace=Debug",
-        //        new ExpectedResult("Passed")
-        //        {
-        //            Assemblies = new[] {
-        //                            new ExpectedAssemblyResult("TestCentric.Gui.Tests.dll", "net-4.5"),
-        //                            new ExpectedAssemblyResult("TestCentric.Gui.Model.Tests.dll", "net-4.5") }
-        //        },
-        //        NUnitProjectLoader));
-        //}
+        if (_parameters.Configuration == "Release")
+        {
+            PackageTests.Add(new PackageTest(1, "Run an NUnit project",
+                "TestProject.nunit",
+                new ExpectedResult("Failed")
+                {
+                    Assemblies = new[] {
+                                    new ExpectedAssemblyResult("mock-assembly.dll", "net-2.0"),
+                                    new ExpectedAssemblyResult("mock-assembly.dll", "net-4.0"),
+                                    new ExpectedAssemblyResult("mock-assembly.dll", "netcore-3.1"),
+                                    new ExpectedAssemblyResult("mock-assembly.dll", "netcore-5.0") }
+                },
+                NUnitProjectLoader));
+
+        }
     }
 
     protected abstract string PackageName { get; }
@@ -206,8 +209,9 @@ public abstract class PackageTester
     protected abstract string PackageTestBinDirectory { get; }
     protected abstract string ExtensionInstallDirectory { get; }
 
-    //	protected virtual string NUnitV2Driver => "NUnit.Extension.NUnitV2Driver";
-    //	protected virtual string NUnitProjectLoader => "NUnit.Extension.NUnitProjectLoader";
+    protected virtual string NUnitV2Driver => "NUnit.Extension.NUnitV2Driver";
+    protected virtual string NUnitProjectLoader => "NUnit.Extension.NUnitProjectLoader";
+    protected virtual string NetCore21PluggableAgent => "NUnit.Extension.NetCore21PluggableAgent";
 
     // NOTE: Currently, we use the same tests for all packages. There seems to be
     // no reason for the three packages to differ in capability so the only reason
@@ -223,18 +227,18 @@ public abstract class PackageTester
         CheckTestErrors(ref ErrorDetail);
     }
 
-    //	private void CheckExtensionIsInstalled(string extension)
-    //	{
-    //		bool alreadyInstalled = _context.GetDirectories($"{ExtensionInstallDirectory}{extension}.*").Count > 0;
+    private void CheckExtensionIsInstalled(string extension)
+    {
+        bool alreadyInstalled = _context.GetDirectories($"{ExtensionInstallDirectory}{extension}.*").Count > 0;
 
-    //		if (!alreadyInstalled)
-    //		{
-    //			DisplayBanner($"Installing {extension}");
-    //			InstallEngineExtension(extension);
-    //		}
-    //	}
+        if (!alreadyInstalled)
+        {
+            DisplayBanner($"Installing {extension}");
+            InstallEngineExtension(extension);
+        }
+    }
 
-    //	protected abstract void InstallEngineExtension(string extension);
+    protected abstract void InstallEngineExtension(string extension);
 
     private void RunPackageTests(int testLevel)
     {
@@ -246,8 +250,8 @@ public abstract class PackageTester
         {
             if (packageTest.Level > 0 && packageTest.Level <= testLevel)
             {
-                //foreach (string extension in packageTest.ExtensionsNeeded)
-                //    CheckExtensionIsInstalled(extension);
+                foreach (string extension in packageTest.ExtensionsNeeded)
+                    CheckExtensionIsInstalled(extension);
 
                 var resultFile = _parameters.OutputDirectory + DEFAULT_TEST_RESULT_FILE;
                 // Delete result file ahead of time so we don't mistakenly
@@ -294,9 +298,9 @@ public abstract class PackageTester
 
     private void DisplayBanner(string message)
     {
-        Console.WriteLine("\n========================================"); ;
+        Console.WriteLine("\n=======================================================");
         Console.WriteLine(message);
-        Console.WriteLine("========================================");
+        Console.WriteLine("=======================================================");
     }
 }
 
@@ -308,15 +312,15 @@ public class NuGetPackageTester : PackageTester
     protected override FilePath PackageUnderTest => _parameters.EnginePackage;
     protected override string PackageTestDirectory => _parameters.NuGetTestDirectory;
     protected override string PackageTestBinDirectory => PackageTestDirectory + "tools/";
-    protected override string ExtensionInstallDirectory => _parameters.TestDirectory;
+    protected override string ExtensionInstallDirectory => _parameters.OutputDirectory + "addins";
 
-    //protected override void InstallEngineExtension(string extension)
-    //{
-    //    _parameters.Context.NuGetInstall(extension,
-    //        new NuGetInstallSettings()
-    //        {
-    //            OutputDirectory = ExtensionInstallDirectory,
-    //            Prerelease = true
-    //        });
-    //}
+    protected override void InstallEngineExtension(string extension)
+    {
+        _parameters.Context.NuGetInstall(extension,
+            new NuGetInstallSettings()
+            {
+                OutputDirectory = ExtensionInstallDirectory,
+                Prerelease = true
+            });
+    }
 }
