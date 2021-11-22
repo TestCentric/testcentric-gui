@@ -422,7 +422,7 @@ namespace TestCentric.Engine.Runners
                 resultXml.AddAttribute("duration", duration.ToString("0.000000", NumberFormatInfo.InvariantInfo));
 
                 _eventDispatcher.OnTestEvent(resultXml.OuterXml);
-                _eventDispatcher.OnTestEvent($"<unhandled-exception message='{ex.Message}' />");
+                _eventDispatcher.OnTestEvent($"<unhandled-exception message=\"{ex.Message}\" />");
 
                 return new TestEngineResult(resultXml);
             }
