@@ -6,8 +6,6 @@
 		<OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-		<SignAssembly>true</SignAssembly>
-		<AssemblyOriginatorKeyFile>..\..\testcentric.snk</AssemblyOriginatorKeyFile>
     <AssemblyTitle>TestCentric Runner</AssemblyTitle>
     <Description>TestCentric GUI Implementation</Description>
     <UseWindowsForms>true</UseWindowsForms>

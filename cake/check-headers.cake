@@ -18,11 +18,8 @@ bool CHECK_ASSEMBLY_INFO = false;
 
 // File names, which are exempt from checking
 static readonly string[] EXEMPT_FILES = new [] {
-    "Options.cs",
     "Resource.cs",
     "TextCode.cs",
-    //"ProcessUtils.cs",
-    //"ProcessUtilsTests.cs"
 };
 
 static readonly int CD_LENGTH = Environment.CurrentDirectory.Length + 1;

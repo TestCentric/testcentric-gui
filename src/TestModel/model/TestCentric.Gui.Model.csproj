@@ -7,8 +7,6 @@
 		<OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-		<SignAssembly>true</SignAssembly>
-		<AssemblyOriginatorKeyFile>..\..\testcentric.snk</AssemblyOriginatorKeyFile>
 	</PropertyGroup>
   
 	<ItemGroup>
@@ -16,6 +14,7 @@
 	</ItemGroup>
   
 	<ItemGroup>
+    <PackageReference Include="Mono.Options" Version="6.12.0.148" />
     <PackageReference Include="NUnit.Engine.Api" Version="4.0.0-dev-001" />
     <PackageReference Include="TestCentric.Engine.Api" Version="2.0.0-dev00526" />
     <PackageReference Include="TestCentric.Engine" Version="2.0.0-dev00526" />
