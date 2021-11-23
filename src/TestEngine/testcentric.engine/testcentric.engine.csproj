@@ -25,7 +25,7 @@
   <ItemGroup>
     <PackageReference Include="NUnit.Engine.Api" Version="4.0.0-dev-001" />
     <PackageReference Include="NUnit.Extension.NUnitProjectLoader" Version="3.6.0" />
-    <PackageReference Include="TestCentric.Metadata" Version="1.7.0" />
+    <PackageReference Include="TestCentric.Metadata" Version="1.7.1" />
   </ItemGroup>
 
 </Project>

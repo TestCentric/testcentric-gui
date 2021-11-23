@@ -199,20 +199,6 @@ public abstract class PackageTester
                                     new ExpectedAssemblyResult("mock-assembly.dll", "netcore-5.0") }
                 },
                 NUnitProjectLoader));
-
-            //PackageTests.Add(new PackageTest(1, "Run .NET Core 2.1 mock-assembly.dll using pluggable agent",
-            //    "engine-tests/netcoreapp2.1/mock-assembly.dll",
-            //    new ExpectedResult("Failed")
-            //    {
-            //        Total = 36,
-            //        Passed = 23,
-            //        Failed = 5,
-            //        Warnings = 1,
-            //        Inconclusive = 1,
-            //        Skipped = 7,
-            //        Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "netcore-2.1") }
-            //    },
-            //    NetCore21PluggableAgent));
         }
     }
 
