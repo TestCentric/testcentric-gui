@@ -57,6 +57,7 @@ Projects with tests to be run under **TestCentric** must already have some versi
     <file src="$BIN$TestCentric.Gui.Runner.dll" target="tools" />
     <file src="$BIN$nunit.uiexception.dll" target="tools" />
     <file src="$BIN$TestCentric.Gui.Model.dll" target="tools" />
+    <file src="$BIN$Mono.Options.dll" target="tools" />
     <file src="$BIN$nunit.engine.api.dll" target="tools" />
     <file src="$BIN$testcentric.engine.api.dll" target="tools" />
     <file src="$BIN$testcentric.engine.metadata.dll" target="tools" />
