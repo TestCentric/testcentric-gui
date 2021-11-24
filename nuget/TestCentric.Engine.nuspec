@@ -24,8 +24,6 @@
   </metadata>
   <files>
     <file src="../../LICENSE.txt" />
-    <file src="../../NOTICES.txt" />
-    <file src="../../CHANGES.txt" />
     <file src="../../testcentric.png" />
 
     <file src="nunit.engine.api.dll" target="lib" />

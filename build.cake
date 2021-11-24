@@ -186,7 +186,7 @@ Task("VerifyEnginePackage")
 	.Does<BuildParameters>((parameters) =>
 	{
 		Check.That(parameters.NuGetTestDirectory,
-			HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "testcentric.png"),
+			HasFiles("LICENSE.txt", "testcentric.png"),
 			HasDirectory("lib").WithFiles(
 				"testcentric.engine.dll", "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll",
 				"testcentric.engine.pdb", "testcentric.engine.core.pdb"),
