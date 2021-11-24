@@ -186,7 +186,7 @@ Task("VerifyEnginePackage")
 	.Does<BuildParameters>((parameters) =>
 	{
 		Check.That(parameters.NuGetTestDirectory,
-			HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "testcentric.png"),
+			HasFiles("LICENSE.txt", "testcentric.png"),
 			HasDirectory("lib").WithFiles(
 				"testcentric.engine.dll", "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll",
 				"testcentric.engine.pdb", "testcentric.engine.core.pdb"),
@@ -367,72 +367,72 @@ Task("PublishToNuGet")
 // CREATE A DRAFT RELEASE
 //////////////////////////////////////////////////////////////////////
 
-//Task("CreateDraftRelease")
-//	.Does<BuildParameters>((parameters) =>
-//	{
-//		if (parameters.IsReleaseBranch)
-//		{
-//			// Exit if any PackageTests failed
-//			CheckTestErrors(ref ErrorDetail);
+Task("CreateDraftRelease")
+    .Does<BuildParameters>((parameters) =>
+    {
+        if (parameters.IsReleaseBranch)
+        {
+            // Exit if any PackageTests failed
+            CheckTestErrors(ref ErrorDetail);
 
-//			// NOTE: Since this is a release branch, the pre-release label
-//			// is "pre", which we don't want to use for the draft release.
-//			// The branch name contains the full information to be used
-//			// for both the name of the draft release and the milestone,
-//			// i.e. release-2.0.0, release-2.0.0-beta2, etc.
-//			string milestone = parameters.BranchName.Substring(8);
-//			string releaseName = $"TestCentric Engine {milestone}";
+            // NOTE: Since this is a release branch, the pre-release label
+            // is "pre", which we don't want to use for the draft release.
+            // The branch name contains the full information to be used
+            // for both the name of the draft release and the milestone,
+            // i.e. release-2.0.0, release-2.0.0-beta2, etc.
+            string milestone = parameters.BranchName.Substring(8);
+            string releaseName = $"TestCentric Engine {milestone}";
 
-//			Information($"Creating draft release for {releaseName}");
+            Information($"Creating draft release for {releaseName}");
 
-//			try
-//			{
-//				GitReleaseManagerCreate(parameters.GitHubAccessToken, GITHUB_OWNER, GITHUB_REPO, new GitReleaseManagerCreateSettings()
-//				{
-//					Name = releaseName,
-//					Milestone = milestone
-//				});
-//			}
-//			catch
-//            {
-//				Error($"Unable to create draft release for {releaseName}.");
-//				Error($"Check that there is a {milestone} milestone with at least one closed issue.");
-//				Error("");
-//				throw;
-//            }
-//		}
-//		else
-//		{
-//			Information("Skipping Release creation because this is not a release branch");
-//		}
-//	});
+            try
+            {
+                GitReleaseManagerCreate(parameters.GitHubAccessToken, GITHUB_OWNER, GITHUB_REPO, new GitReleaseManagerCreateSettings()
+                {
+                    Name = releaseName,
+                    Milestone = milestone
+                });
+            }
+            catch
+            {
+                Error($"Unable to create draft release for {releaseName}.");
+                Error($"Check that there is a {milestone} milestone with at least one closed issue.");
+                Error("");
+                throw;
+            }
+        }
+        else
+        {
+            Information("Skipping Release creation because this is not a release branch");
+        }
+    });
 
 ////////////////////////////////////////////////////////////////////////
 //// CREATE A PRODUCTION RELEASE
 ////////////////////////////////////////////////////////////////////////
 
-//Task("CreateProductionRelease")
-//	.Does<BuildParameters>((parameters) =>
-//	{
-//		if (parameters.IsProductionRelease)
-//		{
-//			// Exit if any PackageTests failed
-//			CheckTestErrors(ref ErrorDetail);
+Task("CreateProductionRelease")
+    .Does<BuildParameters>((parameters) =>
+    {
+        if (parameters.IsProductionRelease)
+        {
+            // Exit if any PackageTests failed
+            CheckTestErrors(ref ErrorDetail);
 
-//			string token = parameters.GitHubAccessToken;
-//			string tagName = parameters.PackageVersion;
-//			string assets = parameters.GitHubReleaseAssets;
+            string token = parameters.GitHubAccessToken;
+            string tagName = parameters.PackageVersion;
+            string assets = parameters.GitHubReleaseAssets;
 
-//			Information($"Publishing release {tagName} to GitHub");
+            Information($"Publishing release {tagName} to GitHub");
 
-//			GitReleaseManagerAddAssets(token, GITHUB_OWNER, GITHUB_REPO, tagName, assets);
-//			GitReleaseManagerClose(token, GITHUB_OWNER, GITHUB_REPO, tagName);
-//		}
-//		else
-//		{
-//			Information("Skipping CreateProductionRelease because this is not a production release");
-//		}
-//	});
+            GitReleaseManagerAddAssets(token, GITHUB_OWNER, GITHUB_REPO, tagName, assets);
+            GitReleaseManagerClose(token, GITHUB_OWNER, GITHUB_REPO, tagName);
+        }
+        else
+        {
+            Information("Skipping CreateProductionRelease because this is not a production release");
+        }
+    });
 
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
@@ -467,7 +467,9 @@ Task("AppVeyor")
 	.IsDependentOn("Test")
 	.IsDependentOn("CheckTestErrors")
 	.IsDependentOn("Package")
-	.IsDependentOn("PublishPackages");
+	.IsDependentOn("PublishPackages")
+	.IsDependentOn("CreateDraftRelease")
+	.IsDependentOn("CreateProductionRelease");
 
 Task("Travis")
     .IsDependentOn("Build")
