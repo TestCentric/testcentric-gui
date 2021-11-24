@@ -411,28 +411,28 @@ Task("CreateDraftRelease")
 //// CREATE A PRODUCTION RELEASE
 ////////////////////////////////////////////////////////////////////////
 
-//Task("CreateProductionRelease")
-//	.Does<BuildParameters>((parameters) =>
-//	{
-//		if (parameters.IsProductionRelease)
-//		{
-//			// Exit if any PackageTests failed
-//			CheckTestErrors(ref ErrorDetail);
+Task("CreateProductionRelease")
+    .Does<BuildParameters>((parameters) =>
+    {
+        if (parameters.IsProductionRelease)
+        {
+            // Exit if any PackageTests failed
+            CheckTestErrors(ref ErrorDetail);
 
-//			string token = parameters.GitHubAccessToken;
-//			string tagName = parameters.PackageVersion;
-//			string assets = parameters.GitHubReleaseAssets;
+            string token = parameters.GitHubAccessToken;
+            string tagName = parameters.PackageVersion;
+            string assets = parameters.GitHubReleaseAssets;
 
-//			Information($"Publishing release {tagName} to GitHub");
+            Information($"Publishing release {tagName} to GitHub");
 
-//			GitReleaseManagerAddAssets(token, GITHUB_OWNER, GITHUB_REPO, tagName, assets);
-//			GitReleaseManagerClose(token, GITHUB_OWNER, GITHUB_REPO, tagName);
-//		}
-//		else
-//		{
-//			Information("Skipping CreateProductionRelease because this is not a production release");
-//		}
-//	});
+            GitReleaseManagerAddAssets(token, GITHUB_OWNER, GITHUB_REPO, tagName, assets);
+            GitReleaseManagerClose(token, GITHUB_OWNER, GITHUB_REPO, tagName);
+        }
+        else
+        {
+            Information("Skipping CreateProductionRelease because this is not a production release");
+        }
+    });
 
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
@@ -468,7 +468,8 @@ Task("AppVeyor")
 	.IsDependentOn("CheckTestErrors")
 	.IsDependentOn("Package")
 	.IsDependentOn("PublishPackages")
-	.IsDependentOn("CreateDraftRelease");
+	.IsDependentOn("CreateDraftRelease")
+	.IsDependentOn("CreateProductionRelease");
 
 Task("Travis")
     .IsDependentOn("Build")
