@@ -23,7 +23,7 @@ issue-labels-alias:
   plural: Documentation
 # Configuration values used when creating new releases
 create:
-  include-footer: true
+  include-footer: false
   footer-heading: Packages
   footer-content: >-
     There are three different downloads for the GUI.
@@ -61,5 +61,4 @@ close:
     The release is available on:
 
     - [GitHub Release](https://github.com/{owner}/{repository}/releases/tag/{milestone})
-    - [NuGet Package](https://www.nuget.org/packages/TestCentric.GuiRunner/{milestone})
-    - [Chocolatey Package](https://chocolatey.org/packages/testcentric-gui/{milestone})
+    - [NuGet Package](https://www.nuget.org/packages/TestCentric.Engine/{milestone})
