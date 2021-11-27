@@ -51,6 +51,32 @@ namespace TestCentric.Engine.TestBed
 
             XmlNode resultNode = runner.Run(null, TestFilter.Empty);
 
+            DisplayErrorsAndFailures(resultNode);
+
+            SaveTestResults(resultNode); 
+
+            Environment.Exit(0);
+        }
+
+        static void DisplayErrorsAndFailures(XmlNode resultNode)
+        {
+            Console.WriteLine("TestResults");
+            int index = 0;
+            foreach (XmlNode testNode in resultNode.SelectNodes("//test-case[@result='Failed']"))
+            {
+                ++index;
+                var name = testNode.Attributes["fullname"]?.Value ?? "<null>";
+                var label = testNode.Attributes["label"]?.Value;
+                var status = label == null ? "FAILED" : label.ToUpper();
+                var message = testNode.SelectSingleNode("failure/message")?.InnerText;
+                Console.WriteLine($"\n{++index}) {status} {name}");
+                if (message != null)
+                    Console.WriteLine(message);
+            }
+        }
+
+        static void SaveTestResults(XmlNode resultNode)
+        {
             string resultFile = "TestResult.xml";
             using (var stream = new FileStream(resultFile, FileMode.Create, FileAccess.Write))
             using (var writer = new StreamWriter(stream))
@@ -69,8 +95,6 @@ namespace TestCentric.Engine.TestBed
                 Console.WriteLine();
                 Console.WriteLine($"Saved results to {resultFile}");
             }
-
-            Environment.Exit(0);
         }
 
         private static void ListExtensions()
