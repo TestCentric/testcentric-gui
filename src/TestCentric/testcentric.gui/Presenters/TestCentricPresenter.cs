@@ -55,6 +55,8 @@ namespace TestCentric.Gui.Presenters
 
         private List<string> _resultFormats = new List<string>();
 
+        private string[] _lastFilesLoaded = null;
+
         #endregion
 
         #region Constructor
@@ -117,9 +119,9 @@ namespace TestCentric.Gui.Presenters
                 _view.StopRunButton.Visible = true;
                 _view.ForceStopButton.Visible = false;
 
-                var files = _model.TestFiles;
-                if (files.Count == 1)
-                    _view.SetTitleBar(files.First());
+                _lastFilesLoaded = _model.TestFiles.ToArray();
+                if (_lastFilesLoaded.Length == 1)
+                    _view.SetTitleBar(_lastFilesLoaded.First());
             };
 
             _model.Events.TestsUnloading += (TestEventArgse) =>
@@ -160,7 +162,28 @@ namespace TestCentric.Gui.Presenters
             {
                 OnLongRunningOperationComplete();
 
-                _view.MessageDisplay.Error(e.Exception.Message);
+                // HACK: Engine should recognize .NET Standard and give the
+                // appropriate error message. For now, we compensate for its
+                // failure by issuing the message ourselves and reloading the
+                // previously loaded  test.
+                var msg = e.Exception.Message;
+                bool isNetStandardError =
+                    e.Exception.Message == "Unrecognized Target Framework Identifier: .NETStandard";
+                
+                if (!isNetStandardError)
+                {
+                    _view.MessageDisplay.Error(e.Exception.Message);
+                    return;
+                }
+
+                _view.MessageDisplay.Error("Test assemblies must target a specific platform, rather than .NETStandard.");
+                if (_lastFilesLoaded == null)
+                    _view.Close();
+                else
+                {
+                    _model.UnloadTests();
+                    _model.LoadTests(_lastFilesLoaded);
+                }
             };
 
             _model.Events.RunStarting += (RunStartingEventArgs e) =>
