@@ -49,46 +49,13 @@ namespace TestCentric.Engine.TestBed
 
             var runner = TestEngine.GetRunner(package);
 
-            XmlNode resultNode = runner.Run(null, TestFilter.Empty);
+            XmlNode resultNode = runner.Run(new TestEventHandler(), TestFilter.Empty);
 
-            DisplayErrorsAndFailures(resultNode);
-            DisplaySummaryReport(resultNode);
+            ResultReporter.ReportResults(resultNode);
 
             SaveTestResults(resultNode); 
 
             Environment.Exit(0);
-        }
-
-        static void DisplayErrorsAndFailures(XmlNode resultNode)
-        {
-            Console.WriteLine("Errors and Failures");
-            int index = 0;
-            foreach (XmlNode testNode in resultNode.SelectNodes("//test-case[@result='Failed']"))
-            {
-                var name = testNode.Attributes["fullname"]?.Value ?? "<null>";
-                var label = testNode.Attributes["label"]?.Value;
-                var status = label == null ? "FAILED" : label.ToUpper();
-                var message = testNode.SelectSingleNode("failure/message")?.InnerText;
-                Console.WriteLine($"\n{++index}) {status} {name}");
-                if (message != null)
-                    Console.WriteLine(message);
-            }
-        }
-
-        static void DisplaySummaryReport(XmlNode resultNode)
-        {
-            string overall = resultNode.Attributes["result"]?.Value ?? "Unknown";
-            int testcasecount = int.Parse(resultNode.Attributes["testcasecount"]?.Value ?? "0");
-            int passed = int.Parse(resultNode.Attributes["passed"]?.Value ?? "0");
-            int failed = int.Parse(resultNode.Attributes["failed"]?.Value ?? "0");
-            int warnings = int.Parse(resultNode.Attributes["warnings"]?.Value ?? "0");
-            int inconclusive = int.Parse(resultNode.Attributes["inconclusive"]?.Value ?? "0");
-            int skipped = int.Parse(resultNode.Attributes["skipped"]?.Value ?? "0");
-
-            Console.WriteLine("\nTest Run Summary");
-            Console.WriteLine($"  Overall Result: {overall}");
-            Console.WriteLine($"  Test Count: {testcasecount}, Passed: {passed}, Failed: {failed}," +
-                $" Warnings: {warnings}, Inconclusive: {inconclusive}, Skipped: {skipped}");
         }
 
         static void SaveTestResults(XmlNode resultNode)
