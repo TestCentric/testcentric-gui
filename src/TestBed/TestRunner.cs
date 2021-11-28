@@ -49,8 +49,17 @@ namespace TestCentric.Engine.TestBed
 
             var runner = TestEngine.GetRunner(package);
 
-            XmlNode resultNode = runner.Run(null, TestFilter.Empty);
+            XmlNode resultNode = runner.Run(new TestEventHandler(), TestFilter.Empty);
 
+            ResultReporter.ReportResults(resultNode);
+
+            SaveTestResults(resultNode); 
+
+            Environment.Exit(0);
+        }
+
+        static void SaveTestResults(XmlNode resultNode)
+        {
             string resultFile = "TestResult.xml";
             using (var stream = new FileStream(resultFile, FileMode.Create, FileAccess.Write))
             using (var writer = new StreamWriter(stream))
@@ -69,8 +78,6 @@ namespace TestCentric.Engine.TestBed
                 Console.WriteLine();
                 Console.WriteLine($"Saved results to {resultFile}");
             }
-
-            Environment.Exit(0);
         }
 
         private static void ListExtensions()

@@ -53,6 +53,9 @@ namespace TestCentric.Engine
                     return Runtime.Net;
                 case FrameworkIdentifiers.NetCoreApp:
                     return Runtime.NetCore;
+                case FrameworkIdentifiers.NetStandard:
+                    throw new NUnitEngineException(
+                        "Test assemblies must target a specific platform, rather than .NETStandard.");
             }
 
             throw new NUnitEngineException("Unrecognized Target Framework Identifier: " + s);

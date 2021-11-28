@@ -154,7 +154,6 @@ namespace TestCentric.Engine.Services
 
             agentProcess.Exited += (sender, e) => OnAgentExit((Process)sender);
 
-            Console.WriteLine(agentProcess.StartInfo.FileName);
             agentProcess.Start();
             log.Debug("Launched Agent process {0} - see testcentric-agent_{0}.log", agentProcess.Id);
             log.Debug("Command line: \"{0}\" {1}", agentProcess.StartInfo.FileName, agentProcess.StartInfo.Arguments);
