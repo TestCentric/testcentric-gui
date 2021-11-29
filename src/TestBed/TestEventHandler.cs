@@ -21,6 +21,15 @@ namespace TestCentric.Engine.TestBed
             var testEvent = doc.FirstChild;
             switch (testEvent.Name)
             {
+                case "test-suite":
+                    if (testEvent.GetAttribute("type") == "Assembly" && testEvent.GetAttribute("runstate") == "NotRunnable")
+                    {
+                        var msg = testEvent.SelectSingleNode("reason/message")?.InnerText;
+                        if (msg != null)
+                            Console.WriteLine(msg);
+                    }
+                    break;
+
                 case "unhandled-exception":
                     Console.WriteLine(testEvent.GetAttribute("message"));
                     break;
