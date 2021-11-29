@@ -84,14 +84,18 @@ namespace TestCentric.Engine.TestBed
         {
             var extensionService = TestEngine.Services.GetService<IExtensionService>();
 
-            Console.WriteLine("Extension Points and Extensions");
+            Console.WriteLine("Extension Points and Installed Extensions");
             Console.WriteLine();
 
             foreach (var ep in extensionService.ExtensionPoints)
             {
-                Console.WriteLine($"  {ep.Path}");
+                Console.WriteLine($"  Extension Point: {ep.Path}");
+                int extensionCount = 0;
                 foreach (var extension in ep.Extensions)
-                    Console.WriteLine($"    {extension.TypeName}");
+                {
+                    Console.WriteLine($"    Extension: {extension.TypeName}");
+                    ++extensionCount;
+                }
             }
         }
 

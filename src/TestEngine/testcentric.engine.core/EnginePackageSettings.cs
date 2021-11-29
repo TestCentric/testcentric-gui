@@ -102,8 +102,13 @@ namespace TestCentric
         public const string TargetRuntimeFramework = "TargetRuntimeFramework";
 
         /// <summary>
-        /// The name of the agent selected for use by the user, overriding
+        /// The name of the agent requested by the user, overriding
         /// the default agent, which would otherwise be used.
+        /// </summary>
+        public const string RequestedAgentName = "RequestedAgentName";
+
+        /// <summary>
+        /// The name of the agent actually used for running tests.
         /// </summary>
         public const string SelectedAgentName = "SelectedAgentName";
 
