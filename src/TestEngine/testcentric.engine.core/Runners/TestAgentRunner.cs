@@ -159,7 +159,7 @@ namespace TestCentric.Engine.Runners
             }
 
             return new InvalidAssemblyFrameworkDriver(assemblyPath,
-                $"No suitable test driver found for '{assemblyPath}'");
+                $"No suitable test driver was found. Either the assembly contains no tests or it uses an unsupported test framework.");
         }
 
         /// <summary>
