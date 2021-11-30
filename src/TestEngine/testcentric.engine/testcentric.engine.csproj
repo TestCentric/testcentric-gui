@@ -7,11 +7,17 @@
     <AssemblyOriginatorKeyFile>..\..\nunit.snk</AssemblyOriginatorKeyFile>
 	  <DebugType>Full</DebugType>
 	  <OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
-    <Title>TestCentric Engine</Title>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
-  
+
+  <!-- Properties used in generating AssemblyInfo.cs for this project -->
+  <PropertyGroup>
+    <AssemblyTitle>TestCentric Engine</AssemblyTitle>
+    <Description>The TestCentric Engine loads and runs NUnit and (with extensions) other types of tests.</Description>
+    <Version Condition="'$(Version)'==''">2.0.0-IDE</Version>
+  </PropertyGroup>
+
   <ItemGroup Condition="'$(TargetFramework)'=='net40'">
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Web" />

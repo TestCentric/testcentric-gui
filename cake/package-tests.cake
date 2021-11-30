@@ -217,6 +217,20 @@ public abstract class PackageTester
                 Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net20AgentLauncher") }
             },
             Net20PluggableAgent));
+
+        //PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting Net Core 2.1 using NetCore21PluggableAgent",
+        //    "engine-tests/netcoreapp2.1/mock-assembly.dll",
+        //    new ExpectedResult("Failed")
+        //    {
+        //        Total = 36,
+        //        Passed = 23,
+        //        Failed = 5,
+        //        Warnings = 1,
+        //        Inconclusive = 1,
+        //        Skipped = 7,
+        //        Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "NetCore21AgentLauncher") }
+        //    },
+        //    NetCore21PluggableAgent));
     }
 
     protected abstract string PackageName { get; }

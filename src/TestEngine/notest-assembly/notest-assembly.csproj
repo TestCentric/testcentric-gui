@@ -1,4 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  
   <PropertyGroup>
     <RootNamespace>notest_assembly</RootNamespace>
     <TargetFrameworks>net35;net40;netcoreapp1.1;netcoreapp2.1</TargetFrameworks>
@@ -6,11 +7,19 @@
     <OutputPath>..\..\..\bin\$(Configuration)\engine-tests\</OutputPath>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
   </PropertyGroup>
+
+  <!-- Properties used in generating AssemblyInfo.cs for this project -->
+  <PropertyGroup>
+    <AssemblyTitle>Test Assembly with no tests</AssemblyTitle>
+    <Version Condition="'$(Version)'==''">2.0.0-IDE</Version>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Properties\**" />
     <EmbeddedResource Remove="Properties\**" />
     <None Remove="Properties\**" />
   </ItemGroup>
+  
   <ItemGroup>
     <PackageReference Include="NUnit" Version="3.12.0" />
   </ItemGroup>

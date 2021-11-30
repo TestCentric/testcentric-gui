@@ -10,6 +10,13 @@
 	  <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
+  <!-- Properties used in generating AssemblyInfo.cs for this project -->
+  <PropertyGroup>
+    <AssemblyTitle>TestCentric Engine Api</AssemblyTitle>
+    <Description>Defines an additional API specific to the TestCentric engine.</Description>
+    <Version Condition="'$(Version)'==''">2.0.0-IDE</Version>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="NUnit.Engine.Api" Version="4.0.0-dev-05363" />
   </ItemGroup>
