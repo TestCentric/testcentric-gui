@@ -10,7 +10,13 @@
     <OutputPath>..\..\..\bin\$(Configuration)\engine-tests\</OutputPath>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
   </PropertyGroup>
-  
+
+  <!-- Properties used in generating AssemblyInfo.cs for this project -->
+  <PropertyGroup>
+    <AssemblyTitle>TestCentric Engine Core Tests</AssemblyTitle>
+    <Version Condition="'$(Version)'==''">2.0.0-IDE</Version>
+  </PropertyGroup>
+
   <ItemGroup Condition="'$(TargetFramework)'=='net35'">
     <Reference Include="System.Configuration" />
     <Reference Include="System.Runtime.Remoting" />

@@ -8,7 +8,13 @@
 	  <DebugType>Full</DebugType>
 	  <OutputPath>bin\$(Configuration)\</OutputPath>
 	  <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <Title>TestCentric Engine Core</Title>
+  </PropertyGroup>
+
+  <!-- Properties used in generating AssemblyInfo.cs for this project -->
+  <PropertyGroup>
+    <AssemblyTitle>TestCentric Engine Core</AssemblyTitle>
+    <Description>Core functionality used by both the engine and agents.</Description>
+    <Version Condition="'$(Version)'==''">2.0.0-IDE</Version>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='net20'">
