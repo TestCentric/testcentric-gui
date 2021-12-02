@@ -58,6 +58,8 @@ namespace TestCentric.Gui.Presenters
             // Model actions
             _model.Events.TestLoaded += (ea) =>
             {
+                EnsureNonRunnableFilesAreVisible(ea.Test);
+
                 Strategy.OnTestLoaded(ea.Test);
                 InitializeRunCommands();
                 CheckPropertiesDisplay();
@@ -66,6 +68,8 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.TestReloaded += (ea) =>
             {
+                EnsureNonRunnableFilesAreVisible(ea.Test);
+
                 Strategy.OnTestLoaded(ea.Test);
                 InitializeRunCommands();
             };
@@ -174,6 +178,15 @@ namespace TestCentric.Gui.Presenters
                         CloseXmlDisplay();
                 }
             };
+        }
+
+        private void EnsureNonRunnableFilesAreVisible(TestNode testNode)
+        {
+            // HACK: Temporary fix switches the display strategy if no
+            // tests are found. Should handle other error situations
+            // including one non-runnable file out of several files.
+            if (testNode.TestCount == 0)
+                Strategy = new NUnitTreeDisplayStrategy(_view, _model);
         }
 
         private void OnTestFinished(TestResultEventArgs args)

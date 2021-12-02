@@ -272,10 +272,17 @@ public abstract class PackageTester : GuiTester
 	{
 		Console.WriteLine("Testing package " + PackageName);
 
+		RunPackageTests(_parameters.PackageTestLevel);
+
+		CheckTestErrors(ref ErrorDetail);
+	}
+
+	private void ClearAllExtensions()
+    {
 		// Ensure we start out each package with no extensions installed.
 		// If any package test installs an extension, it remains available
 		// for subsequent tests of the same package only.
-		foreach (var dirPath in _context.GetDirectories(ExtensionInstallDirectory))
+		foreach (var dirPath in _context.GetDirectories(ExtensionInstallDirectory + "*"))
 		{
 			string dirName = dirPath.GetDirectoryName();
 			if (dirName.StartsWith("NUnit.Extension.") || dirName.StartsWith("nunit-extension-"))
@@ -284,10 +291,6 @@ public abstract class PackageTester : GuiTester
 				Console.WriteLine("Deleted directory " + dirName);
 			}
 		}
-
-		RunPackageTests(_parameters.PackageTestLevel);
-
-		CheckTestErrors(ref ErrorDetail);
 	}
 
 	private void CheckExtensionIsInstalled(string extension)
@@ -307,6 +310,8 @@ public abstract class PackageTester : GuiTester
 	private void RunPackageTests(int testLevel)
 	{
 		var reporter = new ResultReporter(PackageName);
+
+		ClearAllExtensions();
 
 		foreach (var packageTest in PackageTests)
 		{
