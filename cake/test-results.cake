@@ -36,14 +36,14 @@ public class ExpectedResult : ResultSummary
 
 public class ExpectedAssemblyResult
 {
-	public ExpectedAssemblyResult(string name, string expectedRuntime)
+	public ExpectedAssemblyResult(string assemblyName, string agentName)
 	{
-		Name = name;
-		Runtime = expectedRuntime;
+		AssemblyName = assemblyName;
+		AgentName = agentName;
 	}
 
-	public string Name { get; }
-	public string Runtime { get; }
+	public string AssemblyName { get; }
+	public string AgentName { get; }
 }
 
 public class ActualResult : ResultSummary
@@ -95,7 +95,7 @@ public class ActualAssemblyResult
 {
 	public ActualAssemblyResult(XmlNode xml)
     {
-		Name = xml.Attributes["name"]?.Value;
+		AssemblyName = xml.Attributes["name"]?.Value;
 
 		var env = xml.SelectSingleNode("environment");
 		var settings = xml.SelectSingleNode("settings");
@@ -103,43 +103,13 @@ public class ActualAssemblyResult
 		// If TargetRuntimeFramework setting is not present, the GUI will have crashed anyway
 		var runtimeSetting = settings.SelectSingleNode("setting[@name='TargetRuntimeFramework']");
 		TargetRuntime = runtimeSetting?.Attributes["value"]?.Value;
-		Runtime = DeduceActualRuntime(xml);
+
+		var agentSetting = settings?.SelectSingleNode("setting[@name='SelectedAgentName']");
+		AgentName = agentSetting.Attributes["value"]?.Value;
 	}
 
-	public string Name { get; }
-	public string Runtime { get; }
+	public string AssemblyName { get; }
+	public string AgentName { get; }
 
 	public string TargetRuntime { get; }
-
-	// Code to determine the runtime actually used is adhoc
-	// and works only for the set of runtimes we use in our
-	// package  tests. We have to go through all this because
-	// sufficient information for a cleaner approach is not
-	// present in the result file.
-	// TODO: Modify result file schema so this can be cleaner
-	private static string DeduceActualRuntime(XmlNode assembly)
-	{
-		var env = assembly.SelectSingleNode("environment");
-		// If TargetRuntimeFramework setting is not present, the GUI will have crashed anyway
-		var runtimeSetting = assembly.SelectSingleNode("settings/setting[@name='TargetRuntimeFramework']");
-
-		var clrVersion = env.Attributes["clr-version"]?.Value;
-		var targetRuntime = runtimeSetting.Attributes["value"]?.Value;
-		var runtime = "UNKNOWN";
-
-		if (clrVersion.StartsWith(".NET Core 4.6") && targetRuntime == "netcore-1.1")
-			runtime = targetRuntime;
-		else if (clrVersion.StartsWith("3.1") && targetRuntime.StartsWith("netcore-"))
-			runtime = targetRuntime;
-		else if (clrVersion.StartsWith("4.0") && targetRuntime.StartsWith("netcore-"))
-			runtime = targetRuntime;
-		else if (clrVersion.StartsWith("5.0") && targetRuntime == "netcore-5.0")
-			runtime = targetRuntime;
-		else if (clrVersion.StartsWith("2.0") && targetRuntime == "net-2.0")
-			runtime = targetRuntime;
-		else if (clrVersion.StartsWith("4.0") && targetRuntime.StartsWith("net-"))
-			runtime = targetRuntime;
-
-		return runtime;
-	}
 }

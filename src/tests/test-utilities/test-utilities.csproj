@@ -136,7 +136,7 @@
       <Version>3.13.2</Version>
     </PackageReference>
     <PackageReference Include="NUnit.Engine.Api">
-      <Version>4.0.0-dev-001</Version>
+      <Version>4.0.0-dev-05363</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

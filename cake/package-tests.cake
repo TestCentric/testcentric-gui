@@ -119,7 +119,7 @@ public abstract class PackageTester : GuiTester
 				Warnings = 0,
 				Inconclusive = 5,
 				Skipped = 7,
-				Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "net-4.5") }
+				Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net40AgentLauncher") }
 			})) ;
 
 		PackageTests.Add(new PackageTest(1, "Run net35 mock-assembly.dll under .NET 4.0", StandardRunner,
@@ -132,7 +132,7 @@ public abstract class PackageTester : GuiTester
 			Warnings = 0,
 			Inconclusive = 5,
 			Skipped = 7,
-			Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "net-2.0") }
+			Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net40AgentLauncher") }
 		}));
 
 
@@ -146,7 +146,7 @@ public abstract class PackageTester : GuiTester
 				Warnings = 0,
 				Inconclusive = 5,
 				Skipped = 7,
-				Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "net-2.0") }
+				Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net20AgentLauncher") }
 			},
 			Net20PluggableAgent));
 
@@ -160,7 +160,7 @@ public abstract class PackageTester : GuiTester
 				Warnings = 0,
 				Inconclusive = 5,
 				Skipped = 7,
-				Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "netcore-2.1") }
+				Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "NetCore31AgentLauncher") }
             }));
 
         PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET Core 3.1", StandardRunner,
@@ -173,7 +173,7 @@ public abstract class PackageTester : GuiTester
 				Warnings = 0,
 				Inconclusive = 5,
 				Skipped = 7,
-				Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "netcore-3.1") }
+				Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "NetCore31AgentLauncher") }
             }));
 
         //    PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET Core 1.1", StandardRunner,
@@ -199,7 +199,7 @@ public abstract class PackageTester : GuiTester
                 Warnings = 0,
                 Inconclusive = 5,
                 Skipped = 7,
-                Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "netcore-5.0") }
+                Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net50AgentLauncher") }
             }));
 
         //PackageTests.Add(new PackageTest(1, "Run different builds of mock-assembly.dll together", StandardRunner,
@@ -259,6 +259,8 @@ public abstract class PackageTester : GuiTester
 	protected virtual string NUnitProjectLoader => "NUnit.Extension.NUnitProjectLoader";
 	protected virtual string Net20PluggableAgent => "NUnit.Extension.Net20PluggableAgent";
 
+	private List<string> InstalledExtensions { get; } = new List<string>();
+
 	// NOTE: Currently, we use the same tests for all packages. There seems to be
 	// no reason for the three packages to differ in capability so the only reason
 	// to limit tests on some of them would be efficiency... so far not a problem.
@@ -275,6 +277,22 @@ public abstract class PackageTester : GuiTester
 		CheckTestErrors(ref ErrorDetail);
 	}
 
+	private void ClearAllExtensions()
+    {
+		// Ensure we start out each package with no extensions installed.
+		// If any package test installs an extension, it remains available
+		// for subsequent tests of the same package only.
+		foreach (var dirPath in _context.GetDirectories(ExtensionInstallDirectory + "*"))
+		{
+			string dirName = dirPath.GetDirectoryName();
+			if (dirName.StartsWith("NUnit.Extension.") || dirName.StartsWith("nunit-extension-"))
+			{
+				_context.DeleteDirectory(dirPath, new DeleteDirectorySettings() { Recursive = true });
+				Console.WriteLine("Deleted directory " + dirName);
+			}
+		}
+	}
+
 	private void CheckExtensionIsInstalled(string extension)
 	{
 		bool alreadyInstalled = _context.GetDirectories($"{ExtensionInstallDirectory}{extension}.*").Count > 0;
@@ -283,6 +301,7 @@ public abstract class PackageTester : GuiTester
 		{
 			DisplayBanner($"Installing {extension}");
 			InstallEngineExtension(extension);
+			InstalledExtensions.Add(extension);
 		}
 	}
 
@@ -291,6 +310,8 @@ public abstract class PackageTester : GuiTester
 	private void RunPackageTests(int testLevel)
 	{
 		var reporter = new ResultReporter(PackageName);
+
+		ClearAllExtensions();
 
 		foreach (var packageTest in PackageTests)
 		{
@@ -419,14 +440,15 @@ public class ChocolateyPackageTester : PackageTester
 	// Chocolatey packages have a different naming convention from NuGet
 	protected override string NUnitV2Driver => "nunit-extension-nunit-v2-driver";
 	protected override string NUnitProjectLoader => "nunit-extension-nunit-project-loader";
+    protected override string Net20PluggableAgent => "nunit-extension-net20-pluggable-agent";
 
-	protected override void InstallEngineExtension(string extension)
+    protected override void InstallEngineExtension(string extension)
 	{
 		// Install with NuGet because choco requires administrator access
 		_parameters.Context.NuGetInstall(extension,
 			new NuGetInstallSettings()
 			{
-				Source = new[] { "https://www.myget.org/F/nunit/api/v3/index.json" },
+				Source = new[] { "https://www.myget.org/F/testcentric/api/v3/index.json" },
 				OutputDirectory = ExtensionInstallDirectory,
 				Prerelease = true
 			});

@@ -38,17 +38,17 @@ public class PackageTestReport
 			var expected = expectedAssemblies[i];
 			var actual = actualAssemblies[i];
 
-			if (expected.Name != actual.Name)
-				Errors.Add($"   Expected: {expected.Name}\r\n    But was: { actual.Name}");
-			else if (!actual.Runtime.StartsWith(expected.Runtime))
-				Errors.Add($"   Assembly {actual.Name}\r\n     Expected: {expected.Runtime}\r\n      But was: {actual.Runtime}");
+			if (expected.AssemblyName != actual.AssemblyName)
+				Errors.Add($"   Expected: {expected.AssemblyName}\r\n    But was: { actual.AssemblyName}");
+			else if (actual.AgentName != null && expected.AgentName != actual.AgentName)
+				Errors.Add($"   Assembly {actual.AssemblyName}\r\n     Expected: {expected.AgentName}\r\n      But was: {actual.AgentName}");
         }
 
 		for (int i = actualAssemblies.Length; i < expectedAssemblies.Length; i++)
-			Errors.Add($"   Assembly {expectedAssemblies[i].Name} was not found");
+			Errors.Add($"   Assembly {expectedAssemblies[i].AssemblyName} was not found");
 
 		for (int i = expectedAssemblies.Length; i < actualAssemblies.Length; i++)
-			Errors.Add($"   Found unexpected assembly {actualAssemblies[i].Name}");
+			Errors.Add($"   Found unexpected assembly {actualAssemblies[i].AssemblyName}");
 	}
 
 	public PackageTestReport(PackageTest test, Exception ex)
