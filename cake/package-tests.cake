@@ -81,152 +81,9 @@ public abstract class PackageTester
 
         PackageTests = new List<PackageTest>();
 
-        // Level 1 tests are run each time we build the packages
-        //PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET 4.0",
-        //    "engine-tests/net40/mock-assembly.dll",
-        //    new ExpectedResult("Failed")
-        //    {
-        //        Total = 36,
-        //        Passed = 23,
-        //        Failed = 5,
-        //        Warnings = 1,
-        //        Inconclusive = 1,
-        //        Skipped = 7,
-        //        Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net40AgentLauncher") }
-        //    }));
-
-        //PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET 3.5",
-        //    "engine-tests/net35/mock-assembly.dll",
-        //    new ExpectedResult("Failed")
-        //    {
-        //        Total = 36,
-        //        Passed = 23,
-        //        Failed = 5,
-        //        Warnings = 1,
-        //        Inconclusive = 1,
-        //        Skipped = 7,
-        //        Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net40AgentLauncher") }
-        //    }));
-
-        //PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET Core 2.1",
-        //    "engine-tests/netcoreapp2.1/mock-assembly.dll",
-        //    new ExpectedResult("Failed")
-        //    {
-        //        Total = 36,
-        //        Passed = 23,
-        //        Failed = 5,
-        //        Warnings = 1,
-        //        Inconclusive = 1,
-        //        Skipped = 7,
-        //        Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "NetCore31AgentLauncher") }
-        //    }));
-
-        //PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET Core 3.1",
-        //    "engine-tests/netcoreapp3.1/mock-assembly.dll",
-        //    new ExpectedResult("Failed")
-        //    {
-        //        Total = 36,
-        //        Passed = 23,
-        //        Failed = 5,
-        //        Warnings = 1,
-        //        Inconclusive = 1,
-        //        Skipped = 7,
-        //        Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "NetCore31AgentLauncher") }
-        //    }));
-
-        //PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET Core 1.1",
-        //    "engine-tests/netcoreapp1.1/mock-assembly.dll",
-        //    new ExpectedResult("Failed")
-        //    {
-        //        Total = 36,
-        //        Passed = 23,
-        //        Failed = 5,
-        //        Warnings = 1,
-        //        Inconclusive = 1,
-        //        Skipped = 7,
-        //        Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "NetCore31AgentLauncher") }
-        //    }));
-
-        //PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET 5.0",
-        //    "engine-tests/net5.0/mock-assembly.dll",
-        //    new ExpectedResult("Failed")
-        //    {
-        //        Total = 32,
-        //        Passed = 19,
-        //        Failed = 5,
-        //        Warnings = 1,
-        //        Inconclusive = 1,
-        //        Skipped = 7,
-        //        Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net50AgentLauncher") }
-        //    }));
-
-        //PackageTests.Add(new PackageTest(1, "Run different builds of mock-assembly.dll together",
-        //    "engine-tests/net35/mock-assembly.dll engine-tests/netcoreapp2.1/mock-assembly.dll",
-        //    new ExpectedResult("Failed")
-        //    {
-        //        Total = 72,
-        //        Passed = 46,
-        //        Failed = 10,
-        //        Warnings = 2,
-        //        Inconclusive = 2,
-        //        Skipped = 14,
-        //        Assemblies = new[] {
-        //                    new ExpectedAssemblyResult("mock-assembly.dll", "Net40AgentLauncher"),
-        //                    new ExpectedAssemblyResult("mock-assembly.dll", "NetCore31AgentLauncher") }
-        //    }));
-
-        ////		// Level 2 tests are run for PRs and when packages will be published
-
-        ////		//PackageTests.Add(new PackageTest(2, "Run mock-assembly.dll built for NUnit V2"
-        ////		//	"v2-tests/mock-assembly.dll",
-        ////		//	new ExpectedResult("Failed")
-        ////		//	{
-        ////		//		Total = 28,
-        ////		//		Passed = 18,
-        ////		//		Failed = 5,
-        ////		//		Warnings = 0,
-        ////		//		Inconclusive = 1,
-        ////		//		Skipped = 4
-        ////		//	},
-        ////		//	NUnitV2Driver));
-
-        //// TODO: Use --config option when it's supported by the extension.
-        //// Current test relies on the fact that the Release config appears
-        //// first in the project file.
-        //if (_parameters.Configuration == "Release")
-        //{
-        //    PackageTests.Add(new PackageTest(1, "Run an NUnit project",
-        //        "TestProject.nunit",
-        //        new ExpectedResult("Failed")
-        //        {
-        //            Assemblies = new[] {
-        //                            new ExpectedAssemblyResult("mock-assembly.dll", "Net40AgentLauncher"),
-        //                            new ExpectedAssemblyResult("mock-assembly.dll", "Net40AgentLauncher"),
-        //                            new ExpectedAssemblyResult("mock-assembly.dll", "NetCore31AgentLauncher"),
-        //                            new ExpectedAssemblyResult("mock-assembly.dll", "Net50AgentLauncher") }
-        //        },
-        //        NUnitProjectLoader));
-        //}
-
-        //// NOTE: Package tests using a pluggable agent must be run after all tests
-        //// that assume no pluggable agents are installed!
-
-        //PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting net35 using Net20PluggableAgent",
-        //    "engine-tests/net35/mock-assembly.dll",
-        //    new ExpectedResult("Failed")
-        //    {
-        //        Total = 36,
-        //        Passed = 23,
-        //        Failed = 5,
-        //        Warnings = 1,
-        //        Inconclusive = 1,
-        //        Skipped = 7,
-        //        Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net20AgentLauncher") }
-        //    },
-        //    Net20PluggableAgent));
-
-        PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting Net Core 2.1 using NetCore21PluggableAgent",
-            "engine-tests/netcoreapp2.1/mock-assembly.dll --trace",
+        //Level 1 tests are run each time we build the packages
+        PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET 4.0",
+            "engine-tests/net40/mock-assembly.dll",
             new ExpectedResult("Failed")
             {
                 Total = 36,
@@ -235,9 +92,152 @@ public abstract class PackageTester
                 Warnings = 1,
                 Inconclusive = 1,
                 Skipped = 7,
-                Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "NetCore21AgentLauncher") }
+                Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net40AgentLauncher") }
+            }));
+
+        PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET 3.5",
+            "engine-tests/net35/mock-assembly.dll",
+            new ExpectedResult("Failed")
+            {
+                Total = 36,
+                Passed = 23,
+                Failed = 5,
+                Warnings = 1,
+                Inconclusive = 1,
+                Skipped = 7,
+                Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net40AgentLauncher") }
+            }));
+
+        PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET Core 2.1",
+            "engine-tests/netcoreapp2.1/mock-assembly.dll",
+            new ExpectedResult("Failed")
+            {
+                Total = 36,
+                Passed = 23,
+                Failed = 5,
+                Warnings = 1,
+                Inconclusive = 1,
+                Skipped = 7,
+                Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "NetCore31AgentLauncher") }
+            }));
+
+        PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET Core 3.1",
+            "engine-tests/netcoreapp3.1/mock-assembly.dll",
+            new ExpectedResult("Failed")
+            {
+                Total = 36,
+                Passed = 23,
+                Failed = 5,
+                Warnings = 1,
+                Inconclusive = 1,
+                Skipped = 7,
+                Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "NetCore31AgentLauncher") }
+            }));
+
+        PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET Core 1.1",
+            "engine-tests/netcoreapp1.1/mock-assembly.dll",
+            new ExpectedResult("Failed")
+            {
+                Total = 36,
+                Passed = 23,
+                Failed = 5,
+                Warnings = 1,
+                Inconclusive = 1,
+                Skipped = 7,
+                Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "NetCore31AgentLauncher") }
+            }));
+
+        PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET 5.0",
+            "engine-tests/net5.0/mock-assembly.dll",
+            new ExpectedResult("Failed")
+            {
+                Total = 32,
+                Passed = 19,
+                Failed = 5,
+                Warnings = 1,
+                Inconclusive = 1,
+                Skipped = 7,
+                Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net50AgentLauncher") }
+            }));
+
+        PackageTests.Add(new PackageTest(1, "Run different builds of mock-assembly.dll together",
+            "engine-tests/net35/mock-assembly.dll engine-tests/netcoreapp2.1/mock-assembly.dll",
+            new ExpectedResult("Failed")
+            {
+                Total = 72,
+                Passed = 46,
+                Failed = 10,
+                Warnings = 2,
+                Inconclusive = 2,
+                Skipped = 14,
+                Assemblies = new[] {
+                            new ExpectedAssemblyResult("mock-assembly.dll", "Net40AgentLauncher"),
+                            new ExpectedAssemblyResult("mock-assembly.dll", "NetCore31AgentLauncher") }
+            }));
+
+        //		// Level 2 tests are run for PRs and when packages will be published
+
+        //		//PackageTests.Add(new PackageTest(2, "Run mock-assembly.dll built for NUnit V2"
+        //		//	"v2-tests/mock-assembly.dll",
+        //		//	new ExpectedResult("Failed")
+        //		//	{
+        //		//		Total = 28,
+        //		//		Passed = 18,
+        //		//		Failed = 5,
+        //		//		Warnings = 0,
+        //		//		Inconclusive = 1,
+        //		//		Skipped = 4
+        //		//	},
+        //		//	NUnitV2Driver));
+
+        // TODO: Use --config option when it's supported by the extension.
+        // Current test relies on the fact that the Release config appears
+        // first in the project file.
+        if (_parameters.Configuration == "Release")
+        {
+            PackageTests.Add(new PackageTest(1, "Run an NUnit project",
+                "TestProject.nunit",
+                new ExpectedResult("Failed")
+                {
+                    Assemblies = new[] {
+                                    new ExpectedAssemblyResult("mock-assembly.dll", "Net40AgentLauncher"),
+                                    new ExpectedAssemblyResult("mock-assembly.dll", "Net40AgentLauncher"),
+                                    new ExpectedAssemblyResult("mock-assembly.dll", "NetCore31AgentLauncher"),
+                                    new ExpectedAssemblyResult("mock-assembly.dll", "Net50AgentLauncher") }
+                },
+                NUnitProjectLoader));
+        }
+
+        // NOTE: Package tests using a pluggable agent must be run after all tests
+        // that assume no pluggable agents are installed!
+
+        PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting net35 using Net20PluggableAgent",
+            "engine-tests/net35/mock-assembly.dll",
+            new ExpectedResult("Failed")
+            {
+                Total = 36,
+                Passed = 23,
+                Failed = 5,
+                Warnings = 1,
+                Inconclusive = 1,
+                Skipped = 7,
+                Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net20AgentLauncher") }
             },
-            NetCore21PluggableAgent));
+            Net20PluggableAgent));
+
+        //PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting Net Core 2.1 using NetCore21PluggableAgent",
+        //    "engine-tests/netcoreapp2.1/mock-assembly.dll --trace",
+        //    new ExpectedResult("Failed")
+        //    {
+        //        Total = 36,
+        //        Passed = 23,
+        //        Failed = 5,
+        //        Warnings = 1,
+        //        Inconclusive = 1,
+        //        Skipped = 7,
+        //        Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "NetCore21AgentLauncher") }
+        //    },
+        //    NetCore21PluggableAgent));
     }
 
     protected abstract string PackageName { get; }

@@ -45,11 +45,10 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
             try
             {
                 // Connect to the server
-                log.Info("Connecting to TestAgency at {0}", _agencyUrl);
+                log.Debug($"Connecting to TestAgency at {_agencyUrl}");
                 _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                log.Debug($"Socket created - RemoteEndPoint is {_clientSocket.RemoteEndPoint}");
                 _clientSocket.Connect(ServerEndPoint);
-                log.Info("Connection successful");
+                log.Info($"Connected to TestAgency at {_clientSocket.RemoteEndPoint}");
             }
             catch(System.Exception ex)
             {
