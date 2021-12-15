@@ -41,6 +41,8 @@ namespace TestCentric.Engine.Services
         {
             lock (LOCK)
             {
+                log.Debug($"Registering agent {agent.Id:B}");
+
                 if (!_agentIndex.TryGetValue(agent.Id, out var record)
                     || record.Status != AgentStatus.Starting)
                 {

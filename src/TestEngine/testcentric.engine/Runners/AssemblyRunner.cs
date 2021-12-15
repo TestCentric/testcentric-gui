@@ -206,14 +206,22 @@ namespace TestCentric.Engine.Runners
         {
             if (_agent == null)
             {
+                log.Debug($"Trying to get an agent");
+
                 if (_agentService.IsAgentAvailable(TestPackage))
                     _agent = _agentService.GetAgent(TestPackage);
                 else
                     throw new NUnitEngineException($"No agent can be found for package {TestPackage.Name}.");
+
+                log.Debug($"Got agent {_agent.Id:B}");
             }
 
             if (_remoteRunner == null)
+            {
+                log.Debug("Creating Runner");
                 _remoteRunner = _agent.CreateRunner(TestPackage);
+                log.Debug($"Created Runner {_remoteRunner.GetType().Name}");
+            }
         }
 
         TestEngineResult CreateFailedResult(Exception e)

@@ -8,6 +8,7 @@ using System.Net.Sockets;
 using NUnit.Engine;
 using TestCentric.Engine.Communication.Messages;
 using TestCentric.Engine.Communication.Protocols;
+using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Communication.Transports.Tcp
 {
@@ -17,6 +18,8 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
     /// </summary>
     internal class TestAgentTcpProxy : ITestAgent, ITestEngineRunner
     {
+        private static readonly Logger log = InternalTrace.GetLogger(typeof(TestAgentTcpProxy));
+
         private Socket _socket;
         private BinarySerializationProtocol _wireProtocol = new BinarySerializationProtocol();
 
@@ -104,10 +107,12 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
         private void SendCommandMessage(string command, params object[] arguments)
         {
             _socket.Send(_wireProtocol.Encode(new CommandMessage(command, arguments)));
+            log.Debug($"Sent {command} command");
         }
 
         private T CommandResult<T>()
         {
+            log.Debug("Waiting for command result");
             return (T)new SocketReader(_socket, _wireProtocol).GetNextMessage<CommandReturnMessage>().ReturnValue;
         }
 

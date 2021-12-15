@@ -33,6 +33,8 @@ namespace TestCentric.Engine.TestBed
             Console.WriteLine($"  CLR Version: {Environment.Version}");
             Console.WriteLine();
 
+            if (args.Contains("--trace"))
+                TestEngine.InternalTraceLevel = InternalTraceLevel.Debug;
 
             if (args.Contains("--list-extensions"))
             {
@@ -94,6 +96,7 @@ namespace TestCentric.Engine.TestBed
                 foreach (var extension in ep.Extensions)
                 {
                     Console.WriteLine($"    Extension: {extension.TypeName}");
+                    Console.WriteLine($"     Assembly: {extension.AssemblyPath}");
                     ++extensionCount;
                 }
             }

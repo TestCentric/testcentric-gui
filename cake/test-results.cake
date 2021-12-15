@@ -52,7 +52,6 @@ public class ActualResult : ResultSummary
 	{
 		var doc = new XmlDocument();
 		doc.Load(resultFile);
-
 		Xml = doc.DocumentElement;
 		if (Xml.Name != "test-run")
 			throw new Exception("The test-run element was not found.");
@@ -101,10 +100,10 @@ public class ActualAssemblyResult
 
 		// If TargetRuntimeFramework setting is not present, the GUI will have crashed anyway
 		var runtimeSetting = settings?.SelectSingleNode("setting[@name='TargetRuntimeFramework']");
-		TargetRuntime = runtimeSetting.Attributes["value"]?.Value;
+		TargetRuntime = runtimeSetting?.Attributes["value"]?.Value;
 
 		var agentSetting = settings?.SelectSingleNode("setting[@name='SelectedAgentName']");
-		AgentName = agentSetting.Attributes["value"]?.Value;
+		AgentName = agentSetting?.Attributes["value"]?.Value;
 	}
 
 	public string AssemblyName { get; }

@@ -33,6 +33,7 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
             var parts = serverUrl.Split(new char[] { ':' });
             Guard.ArgumentValid(parts.Length == 2, "Invalid server address specified. Must be a valid endpoint including the port number", nameof(serverUrl));
             ServerEndPoint = new IPEndPoint(IPAddress.Parse(parts[0]), int.Parse(parts[1]));
+            log.Debug($"Using server EndPoint ${ServerEndPoint}");
         }
 
         public TestAgent Agent { get; }
@@ -41,14 +42,23 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
 
         public bool Start()
         {
-            log.Info("Connecting to TestAgency at {0}", _agencyUrl);
-
-            // Connect to the server
-            _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            _clientSocket.Connect(ServerEndPoint);
+            try
+            {
+                // Connect to the server
+                log.Info("Connecting to TestAgency at {0}", _agencyUrl);
+                _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                log.Debug($"Socket created - RemoteEndPoint is {_clientSocket.RemoteEndPoint}");
+                _clientSocket.Connect(ServerEndPoint);
+                log.Info("Connection successful");
+            }
+            catch(System.Exception ex)
+            {
+                log.Error(ex.ToString());
+            }
 
             // Immediately upon connection send the agent Id as a raw byte array
             _clientSocket.Send(Agent.Id.ToByteArray());
+            log.Info("Sent agent ID");
 
             // Start the loop that reads and executes commands
             Thread commandLoop = new Thread(CommandLoop);
@@ -59,7 +69,7 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
 
         public void Stop()
         {
-            Agent.StopSignal.Set();
+            //Agent.StopSignal.Set();
         }
 
         public ITestEngineRunner CreateRunner(TestPackage package)
@@ -74,7 +84,9 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
 
             while (keepRunning)
             {
+                log.Debug("Waiting for a command");
                 var command = socketReader.GetNextMessage<CommandMessage>();
+                log.Debug($"Received {command.CommandName} command");
 
                 switch (command.CommandName)
                 {

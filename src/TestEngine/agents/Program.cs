@@ -60,6 +60,7 @@ namespace TestCentric.Engine.Agents
 #else
                 new TestCentric.Engine.Communication.Transports.Tcp.TestAgentTcpTransport(Agent, options.AgencyUrl );
 #endif
+            log.Info($"Using transport {Agent.Transport.GetType().Name}");
             try
             {
                 if (Agent.Start())
@@ -75,8 +76,8 @@ namespace TestCentric.Engine.Agents
                 log.Error("Exception in RemoteTestAgent. {0}", ExceptionHelper.BuildMessageAndStackTrace(ex));
                 Environment.Exit(AgentExitCodes.UNEXPECTED_EXCEPTION);
             }
-            log.Info("Agent process {0} exiting cleanly", pid);
 
+            log.Info("Agent process {0} exiting cleanly", pid);
             Environment.Exit(AgentExitCodes.OK);
         }
 

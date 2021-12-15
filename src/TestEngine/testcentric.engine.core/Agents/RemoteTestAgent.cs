@@ -35,16 +35,19 @@ namespace TestCentric.Engine.Agents
         public override bool Start()
         {
             Guard.OperationValid(Transport != null, "Transport must be set before calling Start().");
+            log.Debug("Starting");
             return Transport.Start();
         }
 
         public override void Stop()
         {
+            log.Debug("Starting");
             Transport.Stop();
         }
 
         public override ITestEngineRunner CreateRunner(TestPackage package)
         {
+            Console.WriteLine("Creating the runner");
 #if NETFRAMEWORK
             return new TestDomainRunner(package);
 #else
