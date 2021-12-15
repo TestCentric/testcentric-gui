@@ -133,6 +133,7 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
         {
             var resultMessage = new CommandReturnMessage(result);
             var bytes = new BinarySerializationProtocol().Encode(resultMessage);
+            log.Debug($"Sending result {result.GetType().Name}, length={bytes.Length}");
             _clientSocket.Send(bytes);
         }
 

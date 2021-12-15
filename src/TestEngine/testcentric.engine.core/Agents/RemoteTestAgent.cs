@@ -49,10 +49,12 @@ namespace TestCentric.Engine.Agents
         {
             Console.WriteLine("Creating the runner");
 #if NETFRAMEWORK
-            return new TestDomainRunner(package);
+            var runner = new TestDomainRunner(package);
 #else
-            return new LocalTestRunner(package);
+            var runner = new LocalTestRunner(package);
 #endif
+            log.Debug($"Returning {runner.GetType().Name}");
+            return runner;
         }
     }
 }

@@ -7,11 +7,14 @@ using System;
 using System.Collections.Generic;
 using NUnit.Engine;
 using TestCentric.Engine.Extensibility;
+using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Services
 {
     class TestAgentService : Service, ITestAgentInfo
     {
+        private static readonly Logger log = InternalTrace.GetLogger(typeof(TestAgentService));
+
         private IList<ITestAgentProvider> _providers = new List<ITestAgentProvider>();
 
         #region ITestAgentInfo Implementation
@@ -77,7 +80,11 @@ namespace TestCentric.Engine.Services
         {
             foreach (var agentSource in _providers)
                 if (agentSource.IsAgentAvailable(package))
-                    return agentSource.GetAgent(package);
+                {
+                    var agent = agentSource.GetAgent(package);
+                    log.Debug($"Returning agent {agent.Id:B}");
+                    return agent;
+                }
 
             throw new InvalidOperationException("No available agent matches the TestPackage");
         }

@@ -157,11 +157,6 @@ namespace TestCentric.Engine.Services
             agentProcess.Start();
             log.Debug("Launched Agent process {0} - see testcentric-agent_{0}.log", agentProcess.Id);
             log.Debug("Command line: \"{0}\" {1}", agentProcess.StartInfo.FileName, agentProcess.StartInfo.Arguments);
-            if (runtimeSetting == "netcore-2.1")
-            {
-                Console.WriteLine("Launched Agent process {0} - see testcentric-agent_{0}.log", agentProcess.Id);
-                Console.WriteLine("Command line: \"{0}\" {1}", agentProcess.StartInfo.FileName, agentProcess.StartInfo.Arguments);
-            }
 
             _agentStore.AddAgent(agentId, agentProcess);
 
@@ -262,6 +257,7 @@ namespace TestCentric.Engine.Services
 
         public void Register(ITestAgent agent)
         {
+            log.Debug($"Registered agent {agent.Id:B}");
             _agentStore.Register(agent);
         }
 
