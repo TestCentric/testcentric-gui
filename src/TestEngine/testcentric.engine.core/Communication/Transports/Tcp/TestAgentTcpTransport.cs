@@ -33,7 +33,7 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
             var parts = serverUrl.Split(new char[] { ':' });
             Guard.ArgumentValid(parts.Length == 2, "Invalid server address specified. Must be a valid endpoint including the port number", nameof(serverUrl));
             ServerEndPoint = new IPEndPoint(IPAddress.Parse(parts[0]), int.Parse(parts[1]));
-            log.Debug($"Using server EndPoint ${ServerEndPoint}");
+            log.Debug($"Using server EndPoint {ServerEndPoint}");
         }
 
         public TestAgent Agent { get; }
@@ -104,8 +104,11 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
                         break;
                     case "Explore":
                         var filter = (TestFilter)command.Arguments[0];
-                        log.Debug($"  Filter = {filter.Text}");
-                        SendResult(_runner.Explore(filter));
+                        //log.Debug($"  Filter = {filter.Text}");
+                        log.Debug("Calling Explore");
+                        var result = _runner.Explore(filter);
+                        log.Debug("Got Explore Result");
+                        SendResult(result);
                         break;
                     case "CountTestCases":
                         filter = (TestFilter)command.Arguments[0];
