@@ -104,19 +104,23 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
                         break;
                     case "Explore":
                         var filter = (TestFilter)command.Arguments[0];
+                        log.Debug($"  Filter = {filter.Text}");
                         SendResult(_runner.Explore(filter));
                         break;
                     case "CountTestCases":
                         filter = (TestFilter)command.Arguments[0];
+                        log.Debug($"  Filter = {filter.Text}");
                         SendResult(_runner.CountTestCases(filter));
                         break;
                     case "Run":
                         filter = (TestFilter)command.Arguments[0];
+                        log.Debug($"  Filter = {filter.Text}");
                         SendResult(_runner.Run(this, filter));
                         break;
 
                     case "RunAsync":
                         filter = (TestFilter)command.Arguments[0];
+                        log.Debug($"  Filter = {filter.Text}");
                         _runner.RunAsync(this, filter);
                         break;
 

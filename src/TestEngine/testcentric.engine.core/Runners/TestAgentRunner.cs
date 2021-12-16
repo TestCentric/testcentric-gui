@@ -28,6 +28,8 @@ namespace TestCentric.Engine.Runners
         // TestAgentRunner creates an appropriate framework driver for the assembly
         // specified in the TestPackage.
 
+        private static readonly Logger log = InternalTrace.GetLogger(typeof(TestAgentRunner));
+
         private IFrameworkDriver _driver;
 
         private ProvidedPathsAssemblyResolver _assemblyResolver;
@@ -79,6 +81,7 @@ namespace TestCentric.Engine.Runners
         protected override TestEngineResult LoadPackage()
         {
             var testFile = TestPackage.FullName;
+            log.Info($"Loading package {testFile}");
 
             string targetFramework = TestPackage.GetSetting(EnginePackageSettings.ImageTargetFrameworkName, (string)null);
             string frameworkReference = TestPackage.GetSetting(EnginePackageSettings.ImageTestFrameworkReference, (string)null);
@@ -94,6 +97,8 @@ namespace TestCentric.Engine.Runners
 
             _driver = GetDriver(TestDomain, testFile, targetFramework, skipNonTestAssemblies);
             _driver.ID = TestPackage.ID;
+            log.Debug($"Using driver {_driver.GetType().Name}");
+            
             
             try
             {
