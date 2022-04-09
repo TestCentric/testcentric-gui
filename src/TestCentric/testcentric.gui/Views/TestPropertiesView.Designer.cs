@@ -275,7 +275,7 @@ namespace TestCentric.Gui.Views
             this.resultPanel.Controls.Add(this.assertions);
             this.resultPanel.Location = new System.Drawing.Point(0, 0);
             this.resultPanel.Name = "resultPanel";
-            this.resultPanel.Size = new System.Drawing.Size(522, 218);
+            this.resultPanel.Size = new System.Drawing.Size(522, 198);
             this.resultPanel.TabIndex = 29;
             // 
             // output
@@ -285,15 +285,15 @@ namespace TestCentric.Gui.Views
             this.output.BackColor = System.Drawing.Color.LightYellow;
             this.output.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
             this.output.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.output.Location = new System.Drawing.Point(5, 146);
+            this.output.Location = new System.Drawing.Point(5, 133);
             this.output.Name = "output";
-            this.output.Size = new System.Drawing.Size(510, 64);
+            this.output.Size = new System.Drawing.Size(510, 53);
             this.output.TabIndex = 29;
             // 
             // outputLabel
             // 
             this.outputLabel.AutoSize = true;
-            this.outputLabel.Location = new System.Drawing.Point(2, 127);
+            this.outputLabel.Location = new System.Drawing.Point(2, 114);
             this.outputLabel.Name = "outputLabel";
             this.outputLabel.Size = new System.Drawing.Size(66, 13);
             this.outputLabel.TabIndex = 0;
@@ -308,11 +308,13 @@ namespace TestCentric.Gui.Views
             this.assertions.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.assertions.Location = new System.Drawing.Point(3, 57);
             this.assertions.Name = "assertions";
-            this.assertions.Size = new System.Drawing.Size(510, 64);
+            this.assertions.Size = new System.Drawing.Size(510, 53);
             this.assertions.TabIndex = 26;
             // 
             // testPanel
             // 
+            this.testPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.testPanel.BackColor = System.Drawing.SystemColors.Control;
             this.testPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.testPanel.Controls.Add(this.testTypeLabel);
@@ -412,7 +414,7 @@ namespace TestCentric.Gui.Views
             this.packageSettings.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
             this.packageSettings.Location = new System.Drawing.Point(6, 22);
             this.packageSettings.Name = "packageSettings";
-            this.packageSettings.Size = new System.Drawing.Size(520, 64);
+            this.packageSettings.Size = new System.Drawing.Size(509, 64);
             this.packageSettings.TabIndex = 1;
             // 
             // packageSettingsLabel
