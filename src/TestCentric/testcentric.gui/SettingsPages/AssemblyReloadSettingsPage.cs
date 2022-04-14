@@ -16,6 +16,7 @@ namespace TestCentric.Gui.SettingsPages
         private System.Windows.Forms.CheckBox reloadOnChangeCheckBox;
         private System.Windows.Forms.HelpProvider helpProvider1;
         private CheckBox clearResultsCheckBox;
+        private Label label2;
         private System.ComponentModel.IContainer components = null;
 
         public AssemblyReloadSettingsPage(string key) : base(key)
@@ -55,6 +56,7 @@ namespace TestCentric.Gui.SettingsPages
             this.reloadOnChangeCheckBox = new System.Windows.Forms.CheckBox();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.clearResultsCheckBox = new System.Windows.Forms.CheckBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -116,6 +118,7 @@ namespace TestCentric.Gui.SettingsPages
             // clearResultsCheckBox
             // 
             this.clearResultsCheckBox.AutoSize = true;
+            this.clearResultsCheckBox.Enabled = false;
             this.helpProvider1.SetHelpString(this.clearResultsCheckBox, "If checked, any prior results are cleared when reloading");
             this.clearResultsCheckBox.Location = new System.Drawing.Point(24, 151);
             this.clearResultsCheckBox.Name = "clearResultsCheckBox";
@@ -124,8 +127,18 @@ namespace TestCentric.Gui.SettingsPages
             this.clearResultsCheckBox.TabIndex = 35;
             this.clearResultsCheckBox.Text = "Clear results when reloading.";
             // 
+            // label2
+            // 
+            this.label2.Location = new System.Drawing.Point(21, 176);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(336, 33);
+            this.label2.TabIndex = 36;
+            this.label2.Text = "This setting is currently disabled. Results are aloways cleared due to  a problem" +
+    " in the engine Reload function.";
+            // 
             // AssemblyReloadSettingsPage
             // 
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.clearResultsCheckBox);
             this.Controls.Add(this.rerunOnChangeCheckBox);
             this.Controls.Add(this.reloadOnRunCheckBox);

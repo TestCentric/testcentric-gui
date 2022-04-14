@@ -140,19 +140,20 @@ namespace TestCentric.Gui.Presenters
                 _view.DebugCheckedCommand.Visible =
                 _view.Tree.CheckBoxes = _view.ShowCheckBoxes.Checked;
             };
+
             _view.RunContextCommand.Execute += () =>
             {
                 if (_selectedTestItem != null)
                     _model.RunTests(_selectedTestItem);
             };
+
             _view.TreeNodeDoubleClick += (treeNode) =>
             {
                 var testNode = treeNode.Tag as TestNode;
                 if (testNode != null && testNode.Type == "TestCase")
-                { 
-                    RunTests(testNode);
-                }
+                    _model.RunTests(testNode);
             };
+
             _view.RunCheckedCommand.Execute += RunCheckedTests;
             _view.DebugContextCommand.Execute += () =>
             {
@@ -300,22 +301,6 @@ namespace TestCentric.Gui.Presenters
             if (_xmlDisplay != null && !_xmlDisplay.Pinned)
                 _xmlDisplay.Close();
 
-        }
-
-        private void RunAllTests()
-        {
-            if (_model.Settings.Engine.ReloadOnRun)
-                _model.ReloadTests();
-
-            _model.RunAllTests();
-        }
-
-        private void RunTests(ITestItem testItem)
-        {
-            if (_model.Settings.Engine.ReloadOnRun)
-                _model.ReloadTests();
-
-            _model.RunTests(testItem);
         }
 
         private void RunCheckedTests()
