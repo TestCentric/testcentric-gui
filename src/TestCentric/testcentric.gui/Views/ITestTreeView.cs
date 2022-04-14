@@ -12,6 +12,8 @@ namespace TestCentric.Gui.Views
     // Interface used for testing
     public interface ITestTreeView : IView
     {
+        event TreeNodeActionHandler TreeNodeDoubleClick;
+
         ICommand RunContextCommand { get; }
         ICommand RunCheckedCommand { get; }
         ICommand DebugContextCommand { get; }

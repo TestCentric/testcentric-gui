@@ -10,6 +10,7 @@ using System.Reflection;
 
 namespace TestCentric.Gui.Views
 {
+    using System;
     using Elements;
 
     public partial class TestTreeView : UserControl, ITestTreeView
@@ -26,6 +27,8 @@ namespace TestCentric.Gui.Views
         public const int SuccessIndex = 2;
         public const int WarningIndex = 3;
         public const int FailureIndex = 4;
+
+        public event TreeNodeActionHandler TreeNodeDoubleClick;
 
         public TestTreeView()
         {
@@ -44,6 +47,7 @@ namespace TestCentric.Gui.Views
             ViewAsXmlCommand = new CommandMenuElement(viewAsXmlMenuItem);
 
             Tree = new TreeViewElement(treeView);
+            
             treeView.MouseDown += (s, e) =>
             {
                 if (e.Button == MouseButtons.Right)
@@ -52,6 +56,15 @@ namespace TestCentric.Gui.Views
                 }
             };
 
+            treeView.MouseDoubleClick += (s, e) =>
+            {
+                if (TreeNodeDoubleClick != null)
+                {
+                    var treeNode = treeView.GetNodeAt(e.X, e.Y);
+                    if (treeNode != null)
+                        TreeNodeDoubleClick(treeNode);
+                }
+            };
         }
 
         #region Properties
