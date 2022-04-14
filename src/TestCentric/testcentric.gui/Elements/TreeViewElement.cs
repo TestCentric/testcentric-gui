@@ -19,6 +19,7 @@ namespace TestCentric.Gui.Elements
     public class TreeViewElement : ControlElement, ITreeView
     {
         public event TreeNodeActionHandler SelectedNodeChanged;
+        public event TreeNodeActionHandler TreeNodeDoubleClick;
 
         private TreeView _treeView;
 
