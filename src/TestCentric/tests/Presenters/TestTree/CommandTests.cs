@@ -3,10 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Linq;
+using System.Windows.Forms;
 using NSubstitute;
 using NUnit.Framework;
 
@@ -18,9 +15,46 @@ namespace TestCentric.Gui.Presenters.TestTree
 
     public class CommandTests : TreeViewPresenterTestBase
     {
-        private static string[] NO_FILES_SELECTED = new string[0];
-        private static string NO_FILE_PATH = null;
+        private static TestNode TEST_CASE_NODE = new TestNode(XmlHelper.CreateXmlNode("<test-case/>"));
+        private static TreeNode TEST_CASE_TREE_NODE = new TreeNode()
+        {
+            Tag = TEST_CASE_NODE
+        };
 
-        // TODO: Add tests for context menu items
+        private static TestNode TEST_SUITE_NODE = new TestNode(XmlHelper.CreateXmlNode("<test-suite/>"));
+        private static TreeNode TEST_SUITE_TREE_NODE = new TreeNode()
+        {
+            Tag = TEST_SUITE_NODE
+        };
+
+        [Test]
+        public void RunContextCommandOnTestCaseRunsTest()
+        {
+            _view.Tree.SelectedNodeChanged += Raise.Event<TreeNodeActionHandler>(TEST_CASE_TREE_NODE);
+            _view.RunContextCommand.Execute += Raise.Event<CommandHandler>();
+            _model.Received().RunTests(Arg.Is(TEST_CASE_NODE));
+        }
+
+        [Test]
+        public void RunContextCommandOnTestSuiteRunsTest()
+        {
+            _view.Tree.SelectedNodeChanged += Raise.Event<TreeNodeActionHandler>(TEST_SUITE_TREE_NODE);
+            _view.RunContextCommand.Execute += Raise.Event<CommandHandler>();
+            _model.Received().RunTests(Arg.Is(TEST_SUITE_NODE));
+        }
+
+        [Test]
+        public void DoubleClickOnTestCaseRunsTest()
+        {
+            _view.TreeNodeDoubleClick += Raise.Event<TreeNodeActionHandler>(TEST_CASE_TREE_NODE);
+            _model.Received().RunTests(Arg.Is(TEST_CASE_NODE));
+        }
+
+        [Test]
+        public void DoubleClickOnTestSuiteDoesNotRunTest()
+        {
+            _view.TreeNodeDoubleClick += Raise.Event<TreeNodeActionHandler>(TEST_SUITE_TREE_NODE);
+            _model.DidNotReceive().RunTests(Arg.Is(TEST_SUITE_NODE));
+        }
     }
 }

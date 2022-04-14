@@ -370,9 +370,20 @@ namespace TestCentric.Gui.Model
             RunTests(filter);
         }
 
+        // All Test running eventually comes down to this method
         private void RunTests(TestFilter filter)
         {
             SetTestDebuggingFlag(false);
+
+            if (Settings.Engine.ReloadOnRun)
+            {
+                // TODO: reinstate when engine Reload works. Currently
+                // we simulate it with Unload + Load, so the results
+                // are always cleared.
+                //if (Settings.Gui.ClearResultsOnReload)
+                //    ClearResults();
+                ReloadTests();
+            }
 
             Runner.RunAsync(_events, filter.AsNUnitFilter());
         }

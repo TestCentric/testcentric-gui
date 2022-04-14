@@ -772,23 +772,6 @@ namespace TestCentric.Gui.Presenters
             //RunTests(_view.TreeView.FailedTests);
         }
 
-        public void RunTests(TestNode test)
-        {
-            RunTests(new TestNode[] { test });
-        }
-
-        public void RunTests(TestNode[] tests)
-        {
-            if (_settings.Engine.ReloadOnRun)
-            {
-                _model.ClearResults();
-                _model.ReloadTests();
-            }
-
-            if (tests != null && tests.Length > 0)
-                _model.RunTests(new TestSelection(tests));
-        }
-
         #endregion
 
         #endregion
