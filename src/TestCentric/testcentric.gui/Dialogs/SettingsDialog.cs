@@ -17,12 +17,12 @@ namespace TestCentric.Gui.Dialogs
         public static void Display(TestCentricPresenter presenter, ITestModel model)
         {
             TreeBasedSettingsDialog.Display(presenter, model,
-            new GuiSettingsPage("Gui.General"),
-            new TreeSettingsPage("Gui.Tree Display"),
-            new AssemblyReloadSettingsPage("Gui.Assembly Reload"),
-            new TextOutputSettingsPage("Gui.Text Output"),
-            new ProjectEditorSettingsPage("Gui.Project Editor"),
-            new AdvancedLoaderSettingsPage("Engine.Advanced")) ;
+            new GuiSettingsPage("General"),
+            new TreeSettingsPage("Tree Display"),
+            new TextOutputSettingsPage("Text Output"),
+            new AdvancedLoaderSettingsPage("Assembly Load Settings"),
+            new AssemblyReloadSettingsPage("Automatic Reload"),
+            new ProjectEditorSettingsPage("Project Editor"));
         }
     }
 }

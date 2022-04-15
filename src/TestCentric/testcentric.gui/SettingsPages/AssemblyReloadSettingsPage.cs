@@ -12,8 +12,9 @@ namespace TestCentric.Gui.SettingsPages
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.CheckBox rerunOnChangeCheckBox;
-        private System.Windows.Forms.CheckBox reloadOnRunCheckBox;
-        private System.Windows.Forms.CheckBox reloadOnChangeCheckBox;
+        private System.Windows.Forms.RadioButton reloadOnRunRadioButton;
+        private System.Windows.Forms.RadioButton reloadOnChangeRadioButton;
+        private System.Windows.Forms.RadioButton noAutoReloadRadioButton;
         private System.Windows.Forms.HelpProvider helpProvider1;
         private CheckBox clearResultsCheckBox;
         private Label label2;
@@ -52,8 +53,9 @@ namespace TestCentric.Gui.SettingsPages
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.rerunOnChangeCheckBox = new System.Windows.Forms.CheckBox();
-            this.reloadOnRunCheckBox = new System.Windows.Forms.CheckBox();
-            this.reloadOnChangeCheckBox = new System.Windows.Forms.CheckBox();
+            this.reloadOnRunRadioButton = new System.Windows.Forms.RadioButton();
+            this.reloadOnChangeRadioButton = new System.Windows.Forms.RadioButton();
+            this.noAutoReloadRadioButton = new System.Windows.Forms.RadioButton();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.clearResultsCheckBox = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -64,9 +66,9 @@ namespace TestCentric.Gui.SettingsPages
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(8, 4);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(88, 13);
+            this.label1.Size = new System.Drawing.Size(91, 13);
             this.label1.TabIndex = 7;
-            this.label1.Text = "Assembly Reload";
+            this.label1.Text = "Automatic Reload";
             // 
             // groupBox1
             // 
@@ -84,36 +86,47 @@ namespace TestCentric.Gui.SettingsPages
             this.rerunOnChangeCheckBox.Enabled = false;
             this.helpProvider1.SetHelpString(this.rerunOnChangeCheckBox, "If checked, the last tests run will be re-run automatically whenever the assembly" +
         " changes.");
-            this.rerunOnChangeCheckBox.Location = new System.Drawing.Point(48, 96);
+            this.rerunOnChangeCheckBox.Location = new System.Drawing.Point(48, 84);
             this.rerunOnChangeCheckBox.Name = "rerunOnChangeCheckBox";
             this.helpProvider1.SetShowHelp(this.rerunOnChangeCheckBox, true);
             this.rerunOnChangeCheckBox.Size = new System.Drawing.Size(120, 17);
             this.rerunOnChangeCheckBox.TabIndex = 13;
             this.rerunOnChangeCheckBox.Text = "Re-run last tests run";
             // 
-            // reloadOnRunCheckBox
+            // reloadOnRunRadioButton
             // 
-            this.reloadOnRunCheckBox.AutoSize = true;
-            this.helpProvider1.SetHelpString(this.reloadOnRunCheckBox, "If checked, the assembly is reloaded before each run");
-            this.reloadOnRunCheckBox.Location = new System.Drawing.Point(24, 32);
-            this.reloadOnRunCheckBox.Name = "reloadOnRunCheckBox";
-            this.helpProvider1.SetShowHelp(this.reloadOnRunCheckBox, true);
-            this.reloadOnRunCheckBox.Size = new System.Drawing.Size(158, 17);
-            this.reloadOnRunCheckBox.TabIndex = 11;
-            this.reloadOnRunCheckBox.Text = "Reload before each test run";
+            this.reloadOnRunRadioButton.AutoSize = true;
+            this.helpProvider1.SetHelpString(this.reloadOnRunRadioButton, "If checked, the assembly is reloaded before each run");
+            this.reloadOnRunRadioButton.Location = new System.Drawing.Point(24, 32);
+            this.reloadOnRunRadioButton.Name = "reloadOnRunRadioButton";
+            this.helpProvider1.SetShowHelp(this.reloadOnRunRadioButton, true);
+            this.reloadOnRunRadioButton.Size = new System.Drawing.Size(157, 17);
+            this.reloadOnRunRadioButton.TabIndex = 11;
+            this.reloadOnRunRadioButton.Text = "Reload before each test run";
             // 
-            // reloadOnChangeCheckBox
+            // reloadOnChangeRadioButton
             // 
-            this.reloadOnChangeCheckBox.AutoSize = true;
-            this.helpProvider1.SetHelpString(this.reloadOnChangeCheckBox, "If checked, the assembly is reloaded whenever it changes. Changes to this setting" +
+            this.reloadOnChangeRadioButton.AutoSize = true;
+            this.helpProvider1.SetHelpString(this.reloadOnChangeRadioButton, "If checked, the assembly is reloaded whenever it changes. Changes to this setting" +
         " do not take effect until the next time an assembly is loaded.");
-            this.reloadOnChangeCheckBox.Location = new System.Drawing.Point(24, 64);
-            this.reloadOnChangeCheckBox.Name = "reloadOnChangeCheckBox";
-            this.helpProvider1.SetShowHelp(this.reloadOnChangeCheckBox, true);
-            this.reloadOnChangeCheckBox.Size = new System.Drawing.Size(199, 17);
-            this.reloadOnChangeCheckBox.TabIndex = 12;
-            this.reloadOnChangeCheckBox.Text = "Reload when test assembly changes";
-            this.reloadOnChangeCheckBox.CheckedChanged += new System.EventHandler(this.reloadOnChangeCheckBox_CheckedChanged);
+            this.reloadOnChangeRadioButton.Location = new System.Drawing.Point(24, 60);
+            this.reloadOnChangeRadioButton.Name = "reloadOnChangeRadioButton";
+            this.helpProvider1.SetShowHelp(this.reloadOnChangeRadioButton, true);
+            this.reloadOnChangeRadioButton.Size = new System.Drawing.Size(198, 17);
+            this.reloadOnChangeRadioButton.TabIndex = 12;
+            this.reloadOnChangeRadioButton.Text = "Reload when test assembly changes";
+            this.reloadOnChangeRadioButton.CheckedChanged += new System.EventHandler(this.reloadOnChangeRadioButton_CheckedChanged);
+            // 
+            // noAutoReloadRadioButton
+            // 
+            this.noAutoReloadRadioButton.AutoSize = true;
+            this.helpProvider1.SetHelpString(this.noAutoReloadRadioButton, "If checked, the assembly is never reloaded automatically");
+            this.noAutoReloadRadioButton.Location = new System.Drawing.Point(24, 107);
+            this.noAutoReloadRadioButton.Name = "noAutoReloadRadioButton";
+            this.helpProvider1.SetShowHelp(this.noAutoReloadRadioButton, true);
+            this.noAutoReloadRadioButton.Size = new System.Drawing.Size(120, 17);
+            this.noAutoReloadRadioButton.TabIndex = 13;
+            this.noAutoReloadRadioButton.Text = "No automatic reload";
             // 
             // clearResultsCheckBox
             // 
@@ -139,10 +152,11 @@ namespace TestCentric.Gui.SettingsPages
             // AssemblyReloadSettingsPage
             // 
             this.Controls.Add(this.label2);
+            this.Controls.Add(this.noAutoReloadRadioButton);
             this.Controls.Add(this.clearResultsCheckBox);
             this.Controls.Add(this.rerunOnChangeCheckBox);
-            this.Controls.Add(this.reloadOnRunCheckBox);
-            this.Controls.Add(this.reloadOnChangeCheckBox);
+            this.Controls.Add(this.reloadOnRunRadioButton);
+            this.Controls.Add(this.reloadOnChangeRadioButton);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox1);
             this.Name = "AssemblyReloadSettingsPage";
@@ -154,26 +168,31 @@ namespace TestCentric.Gui.SettingsPages
 
         public override void LoadSettings()
         {
-            reloadOnChangeCheckBox.Checked = Settings.Engine.ReloadOnChange;
+            if (Settings.Engine.ReloadOnChange)
+                reloadOnChangeRadioButton.Checked = true;
+            else if (Settings.Engine.ReloadOnRun)
+                reloadOnRunRadioButton.Checked = true;
+            else
+                noAutoReloadRadioButton.Checked = true;
+
             rerunOnChangeCheckBox.Checked = Settings.Engine.RerunOnChange;
-            reloadOnRunCheckBox.Checked = Settings.Engine.ReloadOnRun;
             clearResultsCheckBox.Checked = Settings.Gui.ClearResultsOnReload;
         }
 
         public override void ApplySettings()
         {
-            Settings.Engine.ReloadOnChange = reloadOnChangeCheckBox.Checked;
+            Settings.Engine.ReloadOnChange = reloadOnChangeRadioButton.Checked;
+            Settings.Engine.ReloadOnRun = reloadOnRunRadioButton.Checked;
+
             Settings.Engine.RerunOnChange = rerunOnChangeCheckBox.Checked;
-            Settings.Engine.ReloadOnRun = reloadOnRunCheckBox.Checked;
             Settings.Gui.ClearResultsOnReload = clearResultsCheckBox.Checked;
         }
 
 
 
-        private void reloadOnChangeCheckBox_CheckedChanged(object sender, System.EventArgs e)
+        private void reloadOnChangeRadioButton_CheckedChanged(object sender, System.EventArgs e)
         {
-            // TODO: Waiting for issue #233
-            //rerunOnChangeCheckBox.Enabled = reloadOnChangeCheckBox.Checked;
+            rerunOnChangeCheckBox.Enabled = reloadOnChangeRadioButton.Checked;
         }
 
         protected override void OnHelpRequested(HelpEventArgs hevent)
