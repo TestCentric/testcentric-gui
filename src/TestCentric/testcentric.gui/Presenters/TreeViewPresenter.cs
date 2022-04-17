@@ -41,10 +41,10 @@ namespace TestCentric.Gui.Presenters
 
             _treeSettings = _model.Settings.Gui.TestTree;
 
-            _view.ShowCheckBoxes.Checked = _treeSettings.ShowCheckBoxes;
+            _view.ShowCheckBoxes.Checked = _view.Tree.CheckBoxes = _treeSettings.ShowCheckBoxes;
             _view.AlternateImageSet = _treeSettings.AlternateImageSet;
 
-            InitializeRunCommands();
+            //InitializeRunCommands();
 
             WireUpEvents();
         }
@@ -61,7 +61,7 @@ namespace TestCentric.Gui.Presenters
                 EnsureNonRunnableFilesAreVisible(ea.Test);
 
                 Strategy.OnTestLoaded(ea.Test);
-                InitializeRunCommands();
+                //InitializeRunCommands();
                 CheckPropertiesDisplay();
                 CheckXmlDisplay();
             };
@@ -71,13 +71,13 @@ namespace TestCentric.Gui.Presenters
                 EnsureNonRunnableFilesAreVisible(ea.Test);
 
                 Strategy.OnTestLoaded(ea.Test);
-                InitializeRunCommands();
+                //InitializeRunCommands();
             };
 
             _model.Events.TestUnloaded += (ea) =>
             {
                 Strategy.OnTestUnloaded();
-                InitializeRunCommands();
+                //InitializeRunCommands();
             };
 
             _model.Events.TestsUnloading += ea =>
@@ -89,13 +89,13 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.RunStarting += (ea) =>
             {
-                InitializeRunCommands();
+                //InitializeRunCommands();
                 CheckPropertiesDisplay();
                 CheckXmlDisplay();
             };
             _model.Events.RunFinished += (ea) =>
             {
-                InitializeRunCommands();
+                //InitializeRunCommands();
             };
 
             _model.Events.TestFinished += OnTestFinished;
@@ -128,16 +128,15 @@ namespace TestCentric.Gui.Presenters
             // Test for null is a hack that allows us to avoid
             // a problem under Linux creating a ContextMenuStrip
             // when no display is present.
-            if (_view.Tree.ContextMenuStrip != null)
-                _view.Tree.ContextMenuStrip.Opening += (s, e) => InitializeContextMenu();
+            _view.ContextMenuOpening += (s, e) => InitializeContextMenu();
 
             _view.CollapseAllCommand.Execute += () => _view.CollapseAll();
             _view.ExpandAllCommand.Execute += () => _view.ExpandAll();
             _view.CollapseToFixturesCommand.Execute += () => Strategy.CollapseToFixtures();
             _view.ShowCheckBoxes.CheckedChanged += () =>
             {
-                _view.RunCheckedCommand.Visible =
-                _view.DebugCheckedCommand.Visible =
+                //_view.RunCheckedCommand.Visible =
+                //_view.DebugCheckedCommand.Visible =
                 _view.Tree.CheckBoxes = _view.ShowCheckBoxes.Checked;
             };
 
@@ -343,7 +342,7 @@ namespace TestCentric.Gui.Presenters
 
         private void InitializeContextMenu()
         {
-            // TODO: Menu is hidden until changing the config actually works
+            // TODO: Config Menu is hidden until changing the config actually works
             bool displayConfigMenu = false;
             //var test = _view.ContextNode?.Tag as TestNode;
             //if (test != null && test.IsProject)
@@ -367,21 +366,24 @@ namespace TestCentric.Gui.Presenters
             //    }
             //}
 
+            _view.RunCheckedCommand.Visible =
+            _view.DebugCheckedCommand.Visible = _view.ShowCheckBoxes.Checked;
+
             _view.ActiveConfiguration.Visible = displayConfigMenu;
 
             var layout = _model.Settings.Gui.GuiLayout;
             _view.TestPropertiesCommand.Visible = layout == "Mini";
         }
 
-        private void InitializeRunCommands()
-        {
-            bool isRunning = _model.IsTestRunning;
-            bool canRun = _model.HasTests && !isRunning;
-            bool canRunChecked = canRun && _view.ShowCheckBoxes.Checked;
+        //private void InitializeRunCommands()
+        //{
+        //    bool isRunning = _model.IsTestRunning;
+        //    bool canRun = _model.HasTests && !isRunning;
+        //    bool canRunChecked = canRun && _view.ShowCheckBoxes.Checked;
 
-            _view.RunCheckedCommand.Visible =
-            _view.DebugCheckedCommand.Visible = canRunChecked;
-        }
+        //    _view.RunCheckedCommand.Visible =
+        //    _view.DebugCheckedCommand.Visible = canRunChecked;
+        //}
 
         private void SetDefaultDisplayStrategy()
         {

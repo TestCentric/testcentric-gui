@@ -13,6 +13,8 @@ namespace TestCentric.Gui.Presenters.TestTree
     using Model;
     using Elements;
     using System.Collections.Generic;
+    using System.ComponentModel;
+    using System;
 
     public class TreeViewPresenterTests : TreeViewPresenterTestBase
     {
@@ -68,5 +70,28 @@ namespace TestCentric.Gui.Presenters.TestTree
 
         //    _view.Tree.Received().Add(Arg.Compat.Is<TreeNode>((tn) => ((TestNode)tn.Tag).Id == "42"));
         //}
+
+        [Test, Combinatorial]
+        public void WhenContextMenuIsDisplayed_RunCheckedCommandVisibilityIsSet(
+            [Values] bool showCheckBoxes)
+        {
+            var tree = Substitute.For<ITreeView>();
+            tree.ContextMenuStrip.Returns(new ContextMenuStrip());
+            tree.CheckBoxes.Returns(showCheckBoxes);
+            
+            var testNode = new TestNode(XmlHelper.CreateXmlNode("<test-case/>"));
+            var treeNode = new TreeNode()
+            {
+                Tag = testNode
+            };
+
+            _view.ShowCheckBoxes.Checked.Returns(showCheckBoxes);
+            _view.ContextNode.Returns(treeNode);
+            _view.Tree.Returns(tree);
+
+            _view.ClearReceivedCalls();
+            _view.ContextMenuOpening += Raise.Event<EventHandler>();
+            ViewElement("RunCheckedCommand").Received().Visible = showCheckBoxes;
+        }
     }
 }

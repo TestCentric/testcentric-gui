@@ -3,6 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
+using System;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
@@ -13,6 +14,7 @@ namespace TestCentric.Gui.Views
     public interface ITestTreeView : IView
     {
         event TreeNodeActionHandler TreeNodeDoubleClick;
+        event EventHandler ContextMenuOpening;
 
         ICommand RunContextCommand { get; }
         ICommand RunCheckedCommand { get; }
