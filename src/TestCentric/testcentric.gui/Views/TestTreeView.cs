@@ -29,6 +29,7 @@ namespace TestCentric.Gui.Views
         public const int FailureIndex = 4;
 
         public event TreeNodeActionHandler TreeNodeDoubleClick;
+        public event EventHandler ContextMenuOpening;
 
         public TestTreeView()
         {
@@ -51,9 +52,7 @@ namespace TestCentric.Gui.Views
             treeView.MouseDown += (s, e) =>
             {
                 if (e.Button == MouseButtons.Right)
-                {
                     ContextNode = treeView.GetNodeAt(e.X, e.Y);
-                }
             };
 
             treeView.MouseDoubleClick += (s, e) =>
@@ -65,6 +64,8 @@ namespace TestCentric.Gui.Views
                         TreeNodeDoubleClick(treeNode);
                 }
             };
+
+            treeView.ContextMenuStrip.Opening += (s, e) => ContextMenuOpening?.Invoke(s, e);
         }
 
         #region Properties

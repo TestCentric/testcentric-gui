@@ -10,13 +10,6 @@ namespace TestCentric.Gui.Presenters.TestTree
 {
     public class WhenPresenterIsCreated : TreeViewPresenterTestBase
     {
-        [TestCase("RunCheckedCommand", false)]
-        [TestCase("DebugCheckedCommand", false)]
-        public void CheckElementVisibility(string propName, bool visible)
-        {
-            ViewElement(propName).Received().Visible = visible;
-        }
-
         [Test]
         public void AlternateImageSetIsSet()
         {
