@@ -35,8 +35,6 @@ namespace TestCentric.Gui.Presenters
 
         protected Dictionary<string, List<TreeNode>> _nodeIndex = new Dictionary<string, List<TreeNode>>();
 
-        public ITreeView Tree { get; private set; }
-
         #region Construction and Initialization
 
         public DisplayStrategy(ITestTreeView view, ITestModel model)
@@ -44,8 +42,6 @@ namespace TestCentric.Gui.Presenters
             _view = view;
             _model = model;
             _settings = _model.Settings;
-
-            this.Tree = view.Tree;
         }
 
         #endregion
@@ -79,7 +75,7 @@ namespace TestCentric.Gui.Presenters
         {
             int imageIndex = CalcImageIndex(result.Outcome);
             foreach (TreeNode treeNode in GetTreeNodesForTest(result))
-                Tree.SetImageIndex(treeNode, imageIndex);
+                _view.SetImageIndex(treeNode, imageIndex);
         }
 
         // Called when either the display strategy or the grouping
@@ -91,8 +87,8 @@ namespace TestCentric.Gui.Presenters
             {
                 OnTestLoaded(testNode);
 
-                if (Tree.Nodes != null) // TODO: Null when mocked
-                    foreach (TreeNode treeNode in Tree.Nodes)
+                if (_view.Nodes != null) // TODO: Null when mocked
+                    foreach (TreeNode treeNode in _view.Nodes)
                         ApplyResultsToTree(treeNode);
             }
         }
@@ -103,7 +99,7 @@ namespace TestCentric.Gui.Presenters
 
         protected void ClearTree()
         {
-            Tree.Clear();
+            _view.Clear();
             _nodeIndex.Clear();
         }
 
@@ -197,8 +193,8 @@ namespace TestCentric.Gui.Presenters
 
         public void CollapseToFixtures()
         {
-            if (_view.Tree.Nodes != null) // TODO: Null when mocked
-                foreach (TreeNode treeNode in _view.Tree.Nodes)
+            if (_view.Nodes != null) // TODO: Null when mocked
+                foreach (TreeNode treeNode in _view.Nodes)
                     CollapseToFixtures(treeNode);
         }
 

@@ -75,9 +75,6 @@ namespace TestCentric.Gui.Presenters.TestTree
         public void WhenContextMenuIsDisplayed_RunCheckedCommandVisibilityIsSet(
             [Values] bool showCheckBoxes)
         {
-            var tree = Substitute.For<ITreeView>();
-            tree.ContextMenuStrip.Returns(new ContextMenuStrip());
-            tree.CheckBoxes.Returns(showCheckBoxes);
             
             var testNode = new TestNode(XmlHelper.CreateXmlNode("<test-case/>"));
             var treeNode = new TreeNode()
@@ -85,9 +82,10 @@ namespace TestCentric.Gui.Presenters.TestTree
                 Tag = testNode
             };
 
+            _view.CheckBoxes.Returns(showCheckBoxes);
             _view.ShowCheckBoxes.Checked.Returns(showCheckBoxes);
             _view.ContextNode.Returns(treeNode);
-            _view.Tree.Returns(tree);
+            _view.TreeContextMenu.Returns(new ContextMenuStrip());
 
             _view.ClearReceivedCalls();
             _view.ContextMenuOpening += Raise.Event<EventHandler>();

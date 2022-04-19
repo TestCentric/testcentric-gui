@@ -50,7 +50,7 @@ namespace TestCentric.Gui.Presenters
                         foreach (TestNode fixture in GetTestFixtures(assembly))
                             treeNode.Nodes.Add(MakeTreeNode(fixture, true));
 
-                        _view.Tree.Add(treeNode);
+                        _view.Add(treeNode);
                         CollapseToFixtures(treeNode);
                     }
                     break;

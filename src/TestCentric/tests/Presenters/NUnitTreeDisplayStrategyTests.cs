@@ -32,7 +32,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             // We can't construct a TreeNodeCollection, so we fake it
             var nodes = new TreeNode().Nodes;
             nodes.Add(new TreeNode("test.dll"));
-            _view.Tree.Nodes.Returns(nodes);
+            _view.Nodes.Returns(nodes);
 
             _strategy = GetDisplayStrategy();
         }
@@ -45,9 +45,9 @@ namespace TestCentric.Gui.Presenters.TestTree
             _strategy.OnTestLoaded(
                 new TestNode("<test-run id='1'><test-suite id='42'/><test-suite id='99'/></test-run>"));
 
-            _view.Tree.Received().Clear();
-            _view.Tree.Received().Add(Arg.Compat.Is<TreeNode>((tn) => ((TestNode)tn.Tag).Id == "42"));
-            _view.Tree.Received().Add(Arg.Compat.Is<TreeNode>((tn) => ((TestNode)tn.Tag).Id == "99"));
+            _view.Received().Clear();
+            _view.Received().Add(Arg.Compat.Is<TreeNode>((tn) => ((TestNode)tn.Tag).Id == "42"));
+            _view.Received().Add(Arg.Compat.Is<TreeNode>((tn) => ((TestNode)tn.Tag).Id == "99"));
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         {
             _strategy.OnTestUnloaded();
 
-            _view.Tree.Received().Clear();
+            _view.Received().Clear();
         }
     }
 

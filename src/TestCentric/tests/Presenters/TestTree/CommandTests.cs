@@ -30,7 +30,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         [Test]
         public void RunContextCommandOnTestCaseRunsTest()
         {
-            _view.Tree.SelectedNodeChanged += Raise.Event<TreeNodeActionHandler>(TEST_CASE_TREE_NODE);
+            _view.SelectedNodeChanged += Raise.Event<TreeNodeActionHandler>(TEST_CASE_TREE_NODE);
             _view.RunContextCommand.Execute += Raise.Event<CommandHandler>();
             _model.Received().RunTests(Arg.Is(TEST_CASE_NODE));
         }
@@ -38,7 +38,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         [Test]
         public void RunContextCommandOnTestSuiteRunsTest()
         {
-            _view.Tree.SelectedNodeChanged += Raise.Event<TreeNodeActionHandler>(TEST_SUITE_TREE_NODE);
+            _view.SelectedNodeChanged += Raise.Event<TreeNodeActionHandler>(TEST_SUITE_TREE_NODE);
             _view.RunContextCommand.Execute += Raise.Event<CommandHandler>();
             _model.Received().RunTests(Arg.Is(TEST_SUITE_NODE));
         }
