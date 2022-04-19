@@ -194,8 +194,7 @@ namespace TestCentric.Gui.Presenters
             int index = 0;
             foreach (var assertion in assertionResults)
             {
-                sb.AppendFormat("{0}) {1}\n", ++index, assertion.Status);
-                sb.AppendLine(assertion.Message);
+                sb.AppendLine($"{++index}) {assertion.Status.ToUpper()} {assertion.Message}");
                 if (assertion.StackTrace != null)
                     sb.AppendLine(AdjustStackTrace(assertion.StackTrace));
 
