@@ -41,7 +41,7 @@ namespace TestCentric.Gui.Presenters
 
             _treeSettings = _model.Settings.Gui.TestTree;
 
-            _view.ShowCheckBoxes.Checked = _view.Tree.CheckBoxes = _treeSettings.ShowCheckBoxes;
+            _view.ShowCheckBoxes.Checked = _view.CheckBoxes = _treeSettings.ShowCheckBoxes;
             _view.AlternateImageSet = _treeSettings.AlternateImageSet;
 
             //InitializeRunCommands();
@@ -137,7 +137,7 @@ namespace TestCentric.Gui.Presenters
             {
                 //_view.RunCheckedCommand.Visible =
                 //_view.DebugCheckedCommand.Visible =
-                _view.Tree.CheckBoxes = _view.ShowCheckBoxes.Checked;
+                _view.CheckBoxes = _view.ShowCheckBoxes.Checked;
             };
 
             _view.RunContextCommand.Execute += () =>
@@ -165,7 +165,7 @@ namespace TestCentric.Gui.Presenters
             _view.ViewAsXmlCommand.Execute += () => ShowXmlDisplayDialog();
 
             // Node selected in tree
-            _view.Tree.SelectedNodeChanged += (tn) =>
+            _view.SelectedNodeChanged += (tn) =>
             {
                 _selectedTestItem = tn.Tag as ITestItem;
                 _model.NotifySelectedItemChanged(_selectedTestItem);
@@ -306,7 +306,7 @@ namespace TestCentric.Gui.Presenters
         {
             var tests = new TestGroup("RunTests");
 
-            foreach (var treeNode in _view.Tree.CheckedNodes)
+            foreach (var treeNode in _view.CheckedNodes)
             {
                 var testNode = treeNode.Tag as TestNode;
                 if (testNode != null)
@@ -326,7 +326,7 @@ namespace TestCentric.Gui.Presenters
         {
             var tests = new TestGroup("DebugTests");
 
-            foreach (var treeNode in _view.Tree.CheckedNodes)
+            foreach (var treeNode in _view.CheckedNodes)
             {
                 var testNode = treeNode.Tag as TestNode;
                 if (testNode != null) tests.Add(testNode);

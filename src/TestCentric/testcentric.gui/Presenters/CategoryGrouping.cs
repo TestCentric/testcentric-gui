@@ -62,7 +62,7 @@ namespace TestCentric.Gui.Presenters
             }
         }
 
-        protected override TestGroup[] SelectGroups(TestNode testNode)
+        public override TestGroup[] SelectGroups(TestNode testNode)
         {
             List<TestGroup> groups = new List<TestGroup>();
             string xpathExpression = "properties/property[@name='Category']";

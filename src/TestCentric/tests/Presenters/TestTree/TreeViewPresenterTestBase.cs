@@ -21,7 +21,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         [SetUp]
         public void CreatePresenter()
         {
-            _view.Tree.ContextMenuStrip.Returns(new ContextMenuStrip());
+            _view.TreeContextMenu.Returns(new ContextMenuStrip());
             _settings.Gui.TestTree.SaveVisualState = false;
 
             _presenter = new TreeViewPresenter(_view, _model);
@@ -32,7 +32,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             // We can't construct a TreeNodeCollection, so we fake it
             var nodes = new TreeNode().Nodes;
             nodes.Add(new TreeNode("test.dll"));
-            _view.Tree.Nodes.Returns(nodes);
+            _view.Nodes.Returns(nodes);
         }
 
         [TearDown]

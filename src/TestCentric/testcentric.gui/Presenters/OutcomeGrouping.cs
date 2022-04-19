@@ -50,10 +50,10 @@ namespace TestCentric.Gui.Presenters
         /// </summary>
         public override void OnTestFinished(ResultNode result)
         {
-            ChangeGroupsBasedOnTestResult(result, false);
+            _displayStrategy.ApplyResultToGroup(result, false);
         }
 
-        protected override TestGroup[] SelectGroups(TestNode testNode)
+        public override TestGroup[] SelectGroups(TestNode testNode)
         {
             return new TestGroup[] { SelectGroup(testNode) };
         }

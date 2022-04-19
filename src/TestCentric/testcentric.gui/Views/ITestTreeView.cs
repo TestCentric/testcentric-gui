@@ -8,14 +8,20 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
+    using System.Collections.Generic;
     using Elements;
+
+    public delegate void TreeNodeActionHandler(TreeNode treeNode);
 
     // Interface used for testing
     public interface ITestTreeView : IView
     {
+        // Events
+        event TreeNodeActionHandler SelectedNodeChanged;
         event TreeNodeActionHandler TreeNodeDoubleClick;
         event EventHandler ContextMenuOpening;
 
+        // Commands
         ICommand RunContextCommand { get; }
         ICommand RunCheckedCommand { get; }
         ICommand DebugContextCommand { get; }
@@ -28,12 +34,31 @@ namespace TestCentric.Gui.Views
         ICommand TestPropertiesCommand { get; }
         ICommand ViewAsXmlCommand { get; }
 
-        string AlternateImageSet { get; set; }
+        // Tree Properties
+        ContextMenuStrip TreeContextMenu { get; }
 
+        bool CheckBoxes { get; set; }
+
+        string AlternateImageSet { get; set; }
+        int VisibleNodeCount { get; }
+        TreeNode TopNode { get; set; }
+
+        TreeView TreeView { get; }
+        TreeNodeCollection Nodes { get; }
+        TreeNode ContextNode { get; }
+        TreeNode SelectedNode { get; set; }
+        IList<TreeNode> CheckedNodes { get; }
+
+        // Tree-related Methods
+        void Clear();
+        void Add(TreeNode treeNode);
         void ExpandAll();
         void CollapseAll();
+        void SetImageIndex(TreeNode treeNode, int imageIndex);
 
-        ITreeView Tree { get; }
-        TreeNode ContextNode { get; }
+        /// <summary>
+        /// Invoke a delegate if necessary, otherwise just call it
+        /// </summary>
+        void InvokeIfRequired(MethodInvoker _delegate);
     }
 }

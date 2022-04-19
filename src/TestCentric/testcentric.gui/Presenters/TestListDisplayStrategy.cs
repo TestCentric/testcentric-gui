@@ -50,7 +50,7 @@ namespace TestCentric.Gui.Presenters
                         foreach (TestNode test in GetTestCases(assembly))
                             treeNode.Nodes.Add(MakeTreeNode(test, true));
 
-                        _view.Tree.Add(treeNode);
+                        _view.Add(treeNode);
                         treeNode.ExpandAll();
                     }
                     break;
@@ -64,7 +64,7 @@ namespace TestCentric.Gui.Presenters
                         foreach (TestNode test in GetTestCases(fixture))
                             treeNode.Nodes.Add(MakeTreeNode(test, true));
 
-                        _view.Tree.Add(treeNode);
+                        _view.Add(treeNode);
                         treeNode.ExpandAll();
                     }
                     break;
