@@ -24,5 +24,7 @@ namespace TestCentric.Engine.Services.Fakes
         public List<string> AvailableRuntimes { get; set; } = new List<string>(new [] { "NONE" });
 
         public string SelectedRuntime { get; set; } = "NONE";
+
+        public IRuntimeFramework CurrentFramework => throw new NotImplementedException();
     }
 }

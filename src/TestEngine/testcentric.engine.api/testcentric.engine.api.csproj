@@ -18,7 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NUnit.Engine.Api" Version="4.0.0-dev-05363" />
+    <PackageReference Include="NUnit.Engine.Api" Version="4.0.0-dev00102" />
   </ItemGroup>
 
 </Project>
