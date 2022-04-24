@@ -53,6 +53,12 @@ namespace TestCentric.Engine.Services
         #region IRuntimeFrameworkService Implementation
 
         /// <summary>
+        /// Unimplemented CurrentFramework needs to be added
+        /// </summary>
+        public IRuntimeFramework CurrentFramework =>
+            throw new NotImplementedException("Not yet implemented by the TestCentric version of RuntimeFrameworkService.");
+
+        /// <summary>
         /// Returns true if the runtime framework represented by
         /// the string passed as an argument is available.
         /// </summary>
