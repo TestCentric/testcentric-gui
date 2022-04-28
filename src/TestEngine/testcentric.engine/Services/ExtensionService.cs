@@ -23,13 +23,33 @@ namespace TestCentric.Engine.Services
     public class ExtensionService : Service, IExtensionService
     {
         static Logger log = InternalTrace.GetLogger(typeof(ExtensionService));
-        static readonly Version ENGINE_VERSION = typeof(ExtensionService).Assembly.GetName().Version;
+        static readonly Version COMPATIBLE_NUNIT_VERSION;
 
         private readonly List<ExtensionPoint> _extensionPoints = new List<ExtensionPoint>();
         private readonly Dictionary<string, ExtensionPoint> _pathIndex = new Dictionary<string, ExtensionPoint>();
 
         private readonly List<ExtensionNode> _extensions = new List<ExtensionNode>();
         private readonly List<ExtensionAssembly> _assemblies = new List<ExtensionAssembly>();
+
+        static ExtensionService()
+        {
+            // Default - in case no attribute is found
+            COMPATIBLE_NUNIT_VERSION = new Version(4, 0);
+
+            var apiAssembly = typeof(IExtensionService).Assembly;
+            log.Debug($"  Using API Assembly {apiAssembly.GetName().FullName}");
+            var attrs = apiAssembly.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false);
+
+            if (attrs.Length > 0)
+            {
+                var attr = attrs[0] as AssemblyInformationalVersionAttribute;
+                string version = attr.InformationalVersion;
+                int dash = version.IndexOf('-');
+                if (dash > 0)
+                    version = version.Substring(0, dash);
+                COMPATIBLE_NUNIT_VERSION = new Version(version);
+            }
+        }
 
         public IList<Assembly> RootAssemblies { get; } = new List<Assembly>();
 
@@ -265,7 +285,8 @@ namespace TestCentric.Engine.Services
         /// <param name="startDir"></param>
         private void FindExtensionAssemblies(DirectoryInfo startDir)
         {
-            // First check the directory itself
+            log.Info($"Searching for extensions compatible with NUnit {COMPATIBLE_NUNIT_VERSION} API");
+
             ProcessAddinsFiles(startDir, false);
         }
 
@@ -400,14 +421,25 @@ namespace TestCentric.Engine.Services
 
                 foreach (var type in assembly.MainModule.GetTypes())
                 {
+                    log.Debug($"Examining Type {type.Name}");
+
                     CustomAttribute extensionAttr = type.GetAttribute("NUnit.Engine.Extensibility.ExtensionAttribute");
 
                     if (extensionAttr == null)
                         continue;
 
+                    log.Info($"ExtensionAttribute found on {type.Name}");
+
                     object versionArg = extensionAttr.GetNamedArgument("EngineVersion");
-                    if (versionArg != null && new Version((string)versionArg) > ENGINE_VERSION)
-                        continue;
+                    if (versionArg != null)
+                    {
+                        var requiredVersion = new Version((string)versionArg);
+                        if (requiredVersion > COMPATIBLE_NUNIT_VERSION)
+                        {
+                            log.Warning($"  Ignoring {type.Name} because it requires NUnit {requiredVersion} API");
+                            continue;
+                        }
+                    }
 
                     var node = new ExtensionNode(assembly.FilePath, assembly.AssemblyVersion, type.FullName, assemblyTargetFramework);
                     node.Path = extensionAttr.GetNamedArgument("Path") as string;
@@ -416,8 +448,6 @@ namespace TestCentric.Engine.Services
                     object enabledArg = extensionAttr.GetNamedArgument("Enabled");
                     node.Enabled = enabledArg != null
                         ? (bool)enabledArg : true;
-
-                    log.Info("  Found ExtensionAttribute on Type " + type.Name);
 
                     foreach (var attr in type.GetAttributes("NUnit.Engine.Extensibility.ExtensionPropertyAttribute"))
                     {
@@ -432,6 +462,7 @@ namespace TestCentric.Engine.Services
                     }
 
                     _extensions.Add(node);
+                    log.Info($"Added extension {node.TypeName}");
 
                     ExtensionPoint ep;
                     if (node.Path == null)
@@ -461,6 +492,7 @@ namespace TestCentric.Engine.Services
                     }
 
                     ep.Install(node);
+                    log.Info($"Installed extension {node.TypeName} at path {node.Path}");
                 }
             }
         }

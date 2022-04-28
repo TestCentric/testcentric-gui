@@ -194,20 +194,20 @@ public abstract class PackageTester
         // Current test relies on the fact that the Release config appears
         // first in the project file.
         // TODO: Reinstate this when extension is updated to work.
-        //if (_parameters.Configuration == "Release")
-        //{
-        //    PackageTests.Add(new PackageTest(1, "Run an NUnit project",
-        //        "TestProject.nunit",
-        //        new ExpectedResult("Failed")
-        //        {
-        //            Assemblies = new[] {
-        //                            new ExpectedAssemblyResult("mock-assembly.dll", "Net40AgentLauncher"),
-        //                            new ExpectedAssemblyResult("mock-assembly.dll", "Net40AgentLauncher"),
-        //                            new ExpectedAssemblyResult("mock-assembly.dll", "NetCore31AgentLauncher"),
-        //                            new ExpectedAssemblyResult("mock-assembly.dll", "Net50AgentLauncher") }
-        //        },
-        //        NUnitProjectLoader));
-        //}
+        if (_parameters.Configuration == "Release")
+        {
+            PackageTests.Add(new PackageTest(1, "Run an NUnit project",
+                "TestProject.nunit --trace",
+                new ExpectedResult("Failed")
+                {
+                    Assemblies = new[] {
+                                    new ExpectedAssemblyResult("mock-assembly.dll", "Net40AgentLauncher"),
+                                    new ExpectedAssemblyResult("mock-assembly.dll", "Net40AgentLauncher"),
+                                    new ExpectedAssemblyResult("mock-assembly.dll", "NetCore31AgentLauncher"),
+                                    new ExpectedAssemblyResult("mock-assembly.dll", "Net50AgentLauncher") }
+                },
+                NUnitProjectLoader));
+        }
 
         // NOTE: Package tests using a pluggable agent must be run after all tests
         // that assume no pluggable agents are installed!
@@ -283,7 +283,10 @@ public abstract class PackageTester
 
     private void RunPackageTests(int testLevel)
     {
-        string pathToRunner = _parameters.OutputDirectory + TEST_RUNNER_EXE;
+        //string pathToRunner = _parameters.OutputDirectory + TEST_BED_EXE;
+        _context.CopyFileToDirectory(
+            _parameters.OutputDirectory + TEST_BED_EXE, 
+            PackageTestBinDirectory);
 
         var reporter = new ResultReporter(PackageName);
 
@@ -305,7 +308,8 @@ public abstract class PackageTester
 
                 try
                 {
-                    _context.StartProcess(pathToRunner, new ProcessSettings()
+                    Console.WriteLine($"Launching {PackageTestBinDirectory}{TEST_BED_EXE}");
+                    _context.StartProcess(PackageTestBinDirectory + TEST_BED_EXE, new ProcessSettings()
                     {
                         Arguments = packageTest.Arguments,
                         WorkingDirectory = _parameters.OutputDirectory
@@ -353,7 +357,7 @@ public class NuGetPackageTester : PackageTester
     protected override FilePath PackageUnderTest => _parameters.EnginePackage;
     protected override string PackageTestDirectory => _parameters.NuGetTestDirectory;
     protected override string PackageTestBinDirectory => PackageTestDirectory + "tools/";
-    protected override string ExtensionInstallDirectory => _parameters.OutputDirectory + "addins";
+    protected override string ExtensionInstallDirectory => PackageTestBinDirectory + "addins";
 
     protected override void InstallEngineExtension(string extension)
     {
