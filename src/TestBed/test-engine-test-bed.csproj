@@ -3,23 +3,18 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <RootNamespace>TestCentric.Engine.TestBed</RootNamespace>
-    <AssemblyName>test-runner</AssemblyName>
+    <AssemblyName>test-bed</AssemblyName>
     <TargetFramework>net45</TargetFramework>
     <OutputPath>..\..\bin\$(Configuration)\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="test-runner.addins" />
-    <None Remove="TestProject.nunit" />
-  </ItemGroup>
-
-  <ItemGroup>
+<ItemGroup>
     <Content Include="TestProject.nunit">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="test-runner.addins">
+    <Content Include="test-bed.addins">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

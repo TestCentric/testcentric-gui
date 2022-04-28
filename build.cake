@@ -14,7 +14,7 @@ const string ENGINE_PACKAGE_NAME = "TestCentric.Engine";
 const string ENGINE_CORE_PACKAGE_NAME = "TestCentric.Engine.Core";
 const string ENGINE_API_PACKAGE_NAME = "TestCentric.Engine.Api";
 
-static readonly string TEST_RUNNER_EXE = "test-runner.exe";
+static readonly string TEST_BED_EXE = "test-bed.exe";
 
 // Load scripts after defining constants
 #load "./cake/parameters.cake"
@@ -177,6 +177,13 @@ Task("InstallEnginePackage")
 	{
         CleanDirectory(parameters.NuGetTestDirectory);
         Unzip(parameters.EnginePackage, parameters.NuGetTestDirectory);
+		//NuGetInstall(ENGINE_PACKAGE_NAME,
+        //    new NuGetInstallSettings()
+        //    {
+        //        Source = new [] { parameters.PackageDirectory },
+		//		Version = parameters.PackageVersion,
+        //        OutputDirectory = parameters.NuGetTestDirectory
+        //    });
 
         Information($"Installed {parameters.EnginePackageName} at { parameters.NuGetTestDirectory}");
     });
@@ -187,20 +194,20 @@ Task("VerifyEnginePackage")
 	{
 		Check.That(parameters.NuGetTestDirectory,
 			HasFiles("LICENSE.txt", "testcentric.png"),
-			HasDirectory("lib").WithFiles(
+			HasDirectory("tools").WithFiles(
 				"testcentric.engine.dll", "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll",
-				"testcentric.engine.pdb", "testcentric.engine.core.pdb"),
+				"testcentric.engine.pdb", "testcentric.engine.core.pdb", "test-bed.exe", "test-bed.addins"),
 			HasDirectory("content").WithFile("testcentric.nuget.addins"),
-			HasDirectory("agents/net40").WithFiles(
+			HasDirectory("tools/agents/net40").WithFiles(
 				"testcentric-agent.exe", "testcentric-agent.pdb", "testcentric-agent.exe.config",
 				"testcentric-agent-x86.exe", "testcentric-agent-x86.pdb", "testcentric-agent-x86.exe.config",
 				"testcentric.engine.core.dll", "testcentric.engine.core.pdb",
 				"nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric-agent.nuget.addins"),
-			HasDirectory("agents/netcoreapp3.1").WithFiles(
+			HasDirectory("tools/agents/netcoreapp3.1").WithFiles(
 				"testcentric-agent.dll", "testcentric-agent.pdb", "testcentric-agent.dll.config",
 				"testcentric.engine.core.dll", "testcentric.engine.core.pdb",
 				"nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric-agent.nuget.addins"),
-			HasDirectory("agents/net5.0").WithFiles(
+			HasDirectory("tools/agents/net5.0").WithFiles(
 				"testcentric-agent.dll", "testcentric-agent.pdb", "testcentric-agent.dll.config",
 				"testcentric.engine.core.dll", "testcentric.engine.core.pdb",
 				"nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric-agent.nuget.addins"));

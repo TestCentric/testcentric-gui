@@ -19,7 +19,7 @@ namespace TestCentric.Engine.TestBed
     /// of the runner. No options are supported - all the
     /// tests in each assembly are run.
     /// </summary>
-    class TestRunner
+    class TestBed
     {
         static readonly ITestEngine TestEngine = new TestEngine();
 
