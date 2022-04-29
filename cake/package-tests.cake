@@ -197,7 +197,7 @@ public abstract class PackageTester
         if (_parameters.Configuration == "Release")
         {
             PackageTests.Add(new PackageTest(1, "Run an NUnit project",
-                "TestProject.nunit --trace",
+                "TestProject.nunit",
                 new ExpectedResult("Failed")
                 {
                     Assemblies = new[] {
@@ -213,19 +213,19 @@ public abstract class PackageTester
         // that assume no pluggable agents are installed!
 
         // TODO: Reinstate test of Net20PluggableAgent when new version is available
-        //PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting net35 using Net20PluggableAgent",
-        //    "engine-tests/net35/mock-assembly.dll",
-        //    new ExpectedResult("Failed")
-        //    {
-        //        Total = 36,
-        //        Passed = 23,
-        //        Failed = 5,
-        //        Warnings = 1,
-        //        Inconclusive = 1,
-        //        Skipped = 7,
-        //        Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net20AgentLauncher") }
-        //    },
-        //    Net20PluggableAgent));
+        PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting net35 using Net20PluggableAgent",
+            "engine-tests/net35/mock-assembly.dll",
+            new ExpectedResult("Failed")
+            {
+                Total = 36,
+                Passed = 23,
+                Failed = 5,
+                Warnings = 1,
+                Inconclusive = 1,
+                Skipped = 7,
+                Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net20AgentLauncher") }
+            },
+            Net20PluggableAgent));
 
         // TODO: NetCore21PluggableAgent is not yet available
         //PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting Net Core 2.1 using NetCore21PluggableAgent",
