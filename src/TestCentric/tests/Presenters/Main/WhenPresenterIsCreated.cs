@@ -23,28 +23,20 @@ namespace TestCentric.Gui.Presenters.Main
         [TestCase("ReloadTestsCommand", false)]
         [TestCase("RecentFilesMenu", true)]
         [TestCase("ExitCommand", true)]
-        [TestCase("RunAllMenuCommand", false)]
-        [TestCase("RunSelectedMenuCommand", false)]
-        [TestCase("RunFailedMenuCommand", false)]
-        [TestCase("StopRunMenuCommand", false)]
-        [TestCase("ForceStopMenuCommand", false)]
-        [TestCase("TestParametersMenuCommand", false)]
-        [TestCase("RunAllToolbarCommand", false)]
-        [TestCase("RunSelectedToolbarCommand", false)]
-        [TestCase("DebugAllToolbarCommand", false)]
-        [TestCase("DebugSelectedToolbarCommand", false)]
-        [TestCase("TestParametersToolbarCommand", false)]
+        [TestCase("RunAllButton", false)]
+        [TestCase("RunFailedButton", false)]
+        [TestCase("RerunButton", false)]
+        [TestCase("RunSelectedButton", false)]
+        [TestCase("DisplayFormatButton", false)]
+        [TestCase("RunParametersButton", false)]
         [TestCase("StopRunButton", false)]
         [TestCase("ForceStopButton", false)]
-
         [TestCase("SaveResultsCommand", false)]
         public void CheckCommandEnabled(string propName, bool enabled)
         {
             ViewElement(propName).Received().Enabled = enabled;
         }
 
-        [TestCase("StopRunMenuCommand", true)]
-        [TestCase("ForceStopMenuCommand", false)]
         [TestCase("StopRunButton", true)]
         [TestCase("ForceStopButton", false)]
         [TestCase("RunSummaryButton", false)]

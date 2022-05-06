@@ -3,6 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
+using System.Collections.Generic;
 using System.Windows.Forms;
 using NSubstitute;
 using NUnit.Framework;
@@ -13,7 +14,7 @@ namespace TestCentric.Gui.Presenters.TestTree
     using TestCentric.Gui.Model;
     using Views;
 
-    public class CommandTests : TreeViewPresenterTestBase
+    public class TestExecutionTests : TreeViewPresenterTestBase
     {
         private static TestNode TEST_CASE_NODE = new TestNode(XmlHelper.CreateXmlNode("<test-case/>"));
         private static TreeNode TEST_CASE_TREE_NODE = new TreeNode()
@@ -30,7 +31,8 @@ namespace TestCentric.Gui.Presenters.TestTree
         [Test]
         public void RunContextCommandOnTestCaseRunsTest()
         {
-            _view.SelectedNodeChanged += Raise.Event<TreeNodeActionHandler>(TEST_CASE_TREE_NODE);
+            _view.ContextNode.Returns(TEST_CASE_TREE_NODE);
+
             _view.RunContextCommand.Execute += Raise.Event<CommandHandler>();
             _model.Received().RunTests(Arg.Is(TEST_CASE_NODE));
         }
@@ -38,7 +40,8 @@ namespace TestCentric.Gui.Presenters.TestTree
         [Test]
         public void RunContextCommandOnTestSuiteRunsTest()
         {
-            _view.SelectedNodeChanged += Raise.Event<TreeNodeActionHandler>(TEST_SUITE_TREE_NODE);
+            _view.ContextNode.Returns(TEST_SUITE_TREE_NODE);
+
             _view.RunContextCommand.Execute += Raise.Event<CommandHandler>();
             _model.Received().RunTests(Arg.Is(TEST_SUITE_NODE));
         }
@@ -56,5 +59,24 @@ namespace TestCentric.Gui.Presenters.TestTree
             _view.TreeNodeDoubleClick += Raise.Event<TreeNodeActionHandler>(TEST_SUITE_TREE_NODE);
             _model.DidNotReceive().RunTests(Arg.Is(TEST_SUITE_NODE));
         }
+
+        //[Test]
+        //public void RunSelectedCommandRunsSelectedTests()
+        //{
+        //    _view.SelectedNodes.Returns(new[] { TEST_SUITE_TREE_NODE });
+
+        //    _view.RunSelectedCommand.Execute += Raise.Event<CommandHandler>();
+        //    _model.Received().RunSelectedTests();
+        //}
+
+        //[Test]
+        //public void WhenSelectedNodesChangeModelIsNotified()
+        //{
+        //    var treeNodes = new List<TreeNode>( new[] { TEST_CASE_TREE_NODE, TEST_SUITE_TREE_NODE });
+
+        //    _view.SelectedNodesChanged += Raise.Event<MultipleTreeNodeActionHandler>(treeNodes);
+        //    _model.Received().NotifyTestSelectionChanged(Arg.Is<TestSelection>( (s) =>
+        //        s.Count == 2 && s.Contains(TEST_CASE_NODE) && s.Contains(TEST_SUITE_NODE) ));
+        //}
     }
 }

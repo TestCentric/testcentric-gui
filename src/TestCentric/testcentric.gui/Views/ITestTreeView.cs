@@ -12,12 +12,14 @@ namespace TestCentric.Gui.Views
     using Elements;
 
     public delegate void TreeNodeActionHandler(TreeNode treeNode);
+    public delegate void MultipleTreeNodeActionHandler(IList<TreeNode> treeNodes);
 
     // Interface used for testing
     public interface ITestTreeView : IView
     {
         // Events
         event TreeNodeActionHandler SelectedNodeChanged;
+        event TreeNodeActionHandler AfterCheck;
         event TreeNodeActionHandler TreeNodeDoubleClick;
         event EventHandler ContextMenuOpening;
 

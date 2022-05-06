@@ -44,14 +44,6 @@ namespace TestCentric.Gui.Views
         ICommand DecreaseFixedFontCommand { get; }
         ICommand RestoreFixedFontCommand { get; }
 
-        // Test Menu Items
-        ICommand RunAllMenuCommand { get; }
-        ICommand RunSelectedMenuCommand { get; }
-        ICommand RunFailedMenuCommand { get; }
-        ICommand StopRunMenuCommand { get; }
-        ICommand ForceStopMenuCommand { get; }
-        ICommand TestParametersMenuCommand { get; }
-
         // Tools Menu Items
         IPopup ToolsMenu { get; }
         ICommand SaveResultsCommand { get; }
@@ -66,21 +58,18 @@ namespace TestCentric.Gui.Views
         ICommand AboutCommand { get; }
 
         // Toolbar Items
-        ICommand RunButton { get; }
-        ICommand RunAllToolbarCommand { get; }
-        ICommand RunSelectedToolbarCommand { get; }
-        ICommand TestParametersToolbarCommand { get; }
-
-        ICommand DebugButton { get; }
-        ICommand DebugAllToolbarCommand { get; }
-        ICommand DebugSelectedToolbarCommand { get; }
+        ICommand RunAllButton { get; }
+        ICommand RunSelectedButton { get; }
+        ICommand RerunButton { get; }
+        ICommand RunFailedButton { get; }
 
         ICommand StopRunButton { get; }
         ICommand ForceStopButton { get; }
 
-        IToolTip FormatButton { get; }
+        IViewElement DisplayFormatButton { get; }
         ISelection DisplayFormat { get; }
         ISelection GroupBy { get; }
+        ICommand RunParametersButton { get; }
 
         ICommand RunSummaryButton { get; }
 

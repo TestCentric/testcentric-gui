@@ -55,11 +55,6 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.ToolStripMenuItem defaultFontMenuItem;
         private System.Windows.Forms.ToolStripMenuItem decreaseFontMenuItem;
         private System.Windows.Forms.ToolStripMenuItem increaseFontMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem testMenu;
-        private System.Windows.Forms.ToolStripMenuItem runAllMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem runSelectedMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem runFailedMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem stopRunMenuItem;
         private System.Windows.Forms.ToolStripMenuItem guiFontMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fixedFontMenuItem;
         private System.Windows.Forms.ToolStripMenuItem increaseFixedFontMenuItem;
@@ -76,8 +71,6 @@ namespace TestCentric.Gui.Views
         private ToolStripMenuItem recentFilesDummyMenuItem;
         private ToolStripMenuItem openWorkDirectoryMenuItem;
         private ToolStripMenuItem saveResultsAsMenuItem;
-        private ToolStripMenuItem runParametersMenuItem;
-        private ToolStripMenuItem forceStopMenuItem;
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripSeparator toolStripSeparator3;
@@ -85,21 +78,12 @@ namespace TestCentric.Gui.Views
         private ToolStripSeparator toolStripSeparator8;
         private ToolStripSeparator toolStripSeparator10;
         private ToolStripSeparator toolStripSeparator11;
-        private ToolStripSeparator toolStripSeparator5;
-        private ToolStripSeparator toolStripSeparator6;
         private ToolStripSeparator toolStripSeparator7;
         private ToolStripMenuItem runAsX86MenuItem;
         private ToolStripMenuItem selectAgentMenu;
         private ToolStripMenuItem selectAgentDummyMenuItem;
-        private ToolStripSplitButton runButton;
-        private ToolStripMenuItem runAllButtonCommand;
-        private ToolStripMenuItem runSelectedButtonCommand;
-        private ToolStripSeparator toolStripSeparator12;
-        private ToolStripMenuItem testParametersMenuItem;
-        private ToolStripSplitButton debugButton;
-        private ToolStripMenuItem debugAllMenuItem;
-        private ToolStripMenuItem debugSelectedMenuItem;
-        private ToolStripDropDownButton formatButton;
+        private ToolStripButton runSelectedButton;
+        private ToolStripDropDownButton displayFormatButton;
         private ToolStripMenuItem nunitTreeMenuItem;
         private ToolStripMenuItem fixtureListMenuItem;
         private ToolStripMenuItem testListMenuItem;
@@ -114,6 +98,11 @@ namespace TestCentric.Gui.Views
         private ToolStripButton forceStopButton;
         private ProgressBarView progressBar;
         private ToolStripButton runSummaryButton;
+        private ToolStripButton runAllButton;
+        private ToolStripButton runParametersButton;
+        private ToolStripButton runFailedButton;
+        private ToolStripSeparator toolStripSeparator5;
+        private ToolStripButton rerunButton;
         private TextOutputView textOutputView1;
 
         #endregion
@@ -153,14 +142,6 @@ namespace TestCentric.Gui.Views
             DecreaseFixedFontCommand = new CommandMenuElement(decreaseFixedFontMenuItem);
             RestoreFixedFontCommand = new CommandMenuElement(restoreFixedFontMenuItem);
 
-            // Initialize Test Menu Commands
-            RunAllMenuCommand = new CommandMenuElement(runAllMenuItem);
-            RunSelectedMenuCommand = new CommandMenuElement(runSelectedMenuItem);
-            RunFailedMenuCommand = new CommandMenuElement(runFailedMenuItem);
-            StopRunMenuCommand = new CommandMenuElement(stopRunMenuItem);
-            ForceStopMenuCommand = new CommandMenuElement(forceStopMenuItem);
-            TestParametersMenuCommand = new CommandMenuElement(runParametersMenuItem);
-
             // Initialize Tools Menu Comands
             ToolsMenu = new PopupMenuElement(toolsMenu);
             SaveResultsCommand = new CommandMenuElement(saveResultsMenuItem);
@@ -169,30 +150,26 @@ namespace TestCentric.Gui.Views
             ExtensionsCommand = new CommandMenuElement(extensionsMenuItem);
             SettingsCommand = new CommandMenuElement(settingsMenuItem);
 
+            // Initialize Help Menu
             TestCentricHelpCommand = new CommandMenuElement(testCentricHelpMenuItem);
             NUnitHelpCommand = new CommandMenuElement(nunitHelpMenuItem);
             AboutCommand = new CommandMenuElement(aboutMenuItem);
 
-            RunButton = new SplitButtonElement(runButton);
-            RunAllToolbarCommand = new CommandMenuElement(runAllButtonCommand);
-            RunSelectedToolbarCommand = new CommandMenuElement(runSelectedButtonCommand);
-            TestParametersToolbarCommand = new CommandMenuElement(testParametersMenuItem);
-
-            DebugButton = new SplitButtonElement(debugButton);
-            DebugAllToolbarCommand = new CommandMenuElement(debugAllMenuItem);
-            DebugSelectedToolbarCommand = new CommandMenuElement(debugSelectedMenuItem);
-
+            // Initialize Toolbar
+            RunAllButton = new ButtonElement(runAllButton);
+            RunSelectedButton = new ButtonElement(runSelectedButton);
+            RerunButton = new ButtonElement(rerunButton);
+            RunFailedButton = new ButtonElement(runFailedButton);
             StopRunButton = new ButtonElement(stopRunButton);
             ForceStopButton = new ButtonElement(forceStopButton);
-
-            FormatButton = new ToolStripElement(formatButton);
+            DisplayFormatButton = new ToolStripElement(displayFormatButton);
             DisplayFormat = new CheckedToolStripMenuGroup(
                 "displayFormat",
                 nunitTreeMenuItem, fixtureListMenuItem, testListMenuItem);
             GroupBy = new CheckedToolStripMenuGroup(
                 "testGrouping",
                 byAssemblyMenuItem, byFixtureMenuItem, byCategoryMenuItem, byExtendedCategoryMenuItem, byOutcomeMenuItem, byDurationMenuItem);
-
+            RunParametersButton = new ButtonElement(runParametersButton);
             RunSummaryButton = new ButtonElement(runSummaryButton);
 
             DialogManager = new DialogManager();
@@ -223,15 +200,13 @@ namespace TestCentric.Gui.Views
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TestCentricMainView));
             this.statusBar = new TestCentric.Gui.Views.StatusBarView();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
-            this.runButton = new System.Windows.Forms.ToolStripSplitButton();
-            this.runAllButtonCommand = new System.Windows.Forms.ToolStripMenuItem();
-            this.runSelectedButtonCommand = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
-            this.testParametersMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.debugButton = new System.Windows.Forms.ToolStripSplitButton();
-            this.debugAllMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.debugSelectedMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.formatButton = new System.Windows.Forms.ToolStripDropDownButton();
+            this.runAllButton = new System.Windows.Forms.ToolStripButton();
+            this.runSelectedButton = new System.Windows.Forms.ToolStripButton();
+            this.runFailedButton = new System.Windows.Forms.ToolStripButton();
+            this.stopRunButton = new System.Windows.Forms.ToolStripButton();
+            this.forceStopButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.displayFormatButton = new System.Windows.Forms.ToolStripDropDownButton();
             this.nunitTreeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fixtureListMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testListMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -243,8 +218,7 @@ namespace TestCentric.Gui.Views
             this.byOutcomeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.byDurationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runSummaryButton = new System.Windows.Forms.ToolStripButton();
-            this.stopRunButton = new System.Windows.Forms.ToolStripButton();
-            this.forceStopButton = new System.Windows.Forms.ToolStripButton();
+            this.runParametersButton = new System.Windows.Forms.ToolStripButton();
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.fileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.openMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -276,15 +250,6 @@ namespace TestCentric.Gui.Views
             this.decreaseFixedFontMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
             this.restoreFixedFontMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.testMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.runAllMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.runSelectedMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.runFailedMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.runParametersMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
-            this.stopRunMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.forceStopMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.saveResultsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveResultsAsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -311,6 +276,7 @@ namespace TestCentric.Gui.Views
             this.leftPanel = new System.Windows.Forms.Panel();
             this.testPanel = new System.Windows.Forms.Panel();
             this.treeView = new TestCentric.Gui.Views.TestTreeView();
+            this.rerunButton = new System.Windows.Forms.ToolStripButton();
             this.toolStrip.SuspendLayout();
             this.mainMenu.SuspendLayout();
             this.rightPanel.SuspendLayout();
@@ -334,91 +300,77 @@ namespace TestCentric.Gui.Views
             // toolStrip
             // 
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.runButton,
-            this.debugButton,
-            this.formatButton,
-            this.runSummaryButton,
+            this.runAllButton,
+            this.runSelectedButton,
+            this.rerunButton,
+            this.runFailedButton,
             this.stopRunButton,
-            this.forceStopButton});
+            this.forceStopButton,
+            this.toolStripSeparator5,
+            this.displayFormatButton,
+            this.runSummaryButton,
+            this.runParametersButton});
             this.toolStrip.Location = new System.Drawing.Point(0, 24);
             this.toolStrip.MinimumSize = new System.Drawing.Size(0, 24);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(744, 24);
             this.toolStrip.TabIndex = 0;
             // 
-            // runButton
+            // runAllButton
             // 
-            this.runButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.runButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.runAllButtonCommand,
-            this.runSelectedButtonCommand,
-            this.toolStripSeparator12,
-            this.testParametersMenuItem});
-            this.runButton.Image = ((System.Drawing.Image)(resources.GetObject("runButton.Image")));
-            this.runButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.runButton.Name = "runButton";
-            this.runButton.Size = new System.Drawing.Size(32, 21);
-            this.runButton.ToolTipText = "Run All Tests";
+            this.runAllButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.runAllButton.Image = ((System.Drawing.Image)(resources.GetObject("runAllButton.Image")));
+            this.runAllButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.runAllButton.Name = "runAllButton";
+            this.runAllButton.Size = new System.Drawing.Size(23, 21);
+            this.runAllButton.ToolTipText = "Run All Tests";
             // 
-            // runAllButtonCommand
+            // runSelectedButton
             // 
-            this.runAllButtonCommand.Name = "runAllButtonCommand";
-            this.runAllButtonCommand.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.runAllButtonCommand.Size = new System.Drawing.Size(165, 22);
-            this.runAllButtonCommand.Text = "Run All";
-            this.runAllButtonCommand.ToolTipText = "Run all tests displayed";
+            this.runSelectedButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.runSelectedButton.Image = ((System.Drawing.Image)(resources.GetObject("runSelectedButton.Image")));
+            this.runSelectedButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.runSelectedButton.Name = "runSelectedButton";
+            this.runSelectedButton.Size = new System.Drawing.Size(23, 21);
+            this.runSelectedButton.ToolTipText = "Run Selected Tests";
             // 
-            // runSelectedButtonCommand
+            // runFailedButton
             // 
-            this.runSelectedButtonCommand.Name = "runSelectedButtonCommand";
-            this.runSelectedButtonCommand.ShortcutKeys = System.Windows.Forms.Keys.F6;
-            this.runSelectedButtonCommand.Size = new System.Drawing.Size(165, 22);
-            this.runSelectedButtonCommand.Text = "Run Selected";
-            this.runSelectedButtonCommand.ToolTipText = "Run the selected tests";
+            this.runFailedButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.runFailedButton.Image = ((System.Drawing.Image)(resources.GetObject("runFailedButton.Image")));
+            this.runFailedButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.runFailedButton.Name = "runFailedButton";
+            this.runFailedButton.Size = new System.Drawing.Size(23, 21);
+            this.runFailedButton.ToolTipText = "Run Failed Tests";
             // 
-            // toolStripSeparator12
+            // stopRunButton
             // 
-            this.toolStripSeparator12.Name = "toolStripSeparator12";
-            this.toolStripSeparator12.Size = new System.Drawing.Size(162, 6);
+            this.stopRunButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.stopRunButton.Image = ((System.Drawing.Image)(resources.GetObject("stopRunButton.Image")));
+            this.stopRunButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.stopRunButton.Name = "stopRunButton";
+            this.stopRunButton.Size = new System.Drawing.Size(23, 21);
+            this.stopRunButton.ToolTipText = "Stop the current test run.";
             // 
-            // testParametersMenuItem
+            // forceStopButton
             // 
-            this.testParametersMenuItem.Name = "testParametersMenuItem";
-            this.testParametersMenuItem.Size = new System.Drawing.Size(165, 22);
-            this.testParametersMenuItem.Text = "Test Parameters...";
+            this.forceStopButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.forceStopButton.Image = ((System.Drawing.Image)(resources.GetObject("forceStopButton.Image")));
+            this.forceStopButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.forceStopButton.Name = "forceStopButton";
+            this.forceStopButton.Size = new System.Drawing.Size(23, 21);
+            this.forceStopButton.Text = "Force Stop";
+            this.forceStopButton.ToolTipText = "Force the test run to stop";
             // 
-            // debugButton
+            // toolStripSeparator5
             // 
-            this.debugButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.debugButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.debugAllMenuItem,
-            this.debugSelectedMenuItem});
-            this.debugButton.Image = ((System.Drawing.Image)(resources.GetObject("debugButton.Image")));
-            this.debugButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.debugButton.Name = "debugButton";
-            this.debugButton.Size = new System.Drawing.Size(32, 21);
-            this.debugButton.ToolTipText = "Debug All Tests";
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 24);
             // 
-            // debugAllMenuItem
+            // displayFormatButton
             // 
-            this.debugAllMenuItem.Name = "debugAllMenuItem";
-            this.debugAllMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F5)));
-            this.debugAllMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.debugAllMenuItem.Text = "Debug All";
-            this.debugAllMenuItem.ToolTipText = "Debug all tests displayed";
-            // 
-            // debugSelectedMenuItem
-            // 
-            this.debugSelectedMenuItem.Name = "debugSelectedMenuItem";
-            this.debugSelectedMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F6)));
-            this.debugSelectedMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.debugSelectedMenuItem.Text = "Debug Selected";
-            this.debugSelectedMenuItem.ToolTipText = "Debug the selected tests";
-            // 
-            // formatButton
-            // 
-            this.formatButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.formatButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.displayFormatButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.displayFormatButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.nunitTreeMenuItem,
             this.fixtureListMenuItem,
             this.testListMenuItem,
@@ -429,11 +381,12 @@ namespace TestCentric.Gui.Views
             this.byExtendedCategoryMenuItem,
             this.byOutcomeMenuItem,
             this.byDurationMenuItem});
-            this.formatButton.Image = ((System.Drawing.Image)(resources.GetObject("formatButton.Image")));
-            this.formatButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.formatButton.Name = "formatButton";
-            this.formatButton.Size = new System.Drawing.Size(29, 21);
-            this.formatButton.Text = "Display";
+            this.displayFormatButton.Image = ((System.Drawing.Image)(resources.GetObject("displayFormatButton.Image")));
+            this.displayFormatButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.displayFormatButton.Name = "displayFormatButton";
+            this.displayFormatButton.Size = new System.Drawing.Size(29, 21);
+            this.displayFormatButton.Text = "Display";
+            this.displayFormatButton.ToolTipText = "Tree Display Format";
             // 
             // nunitTreeMenuItem
             // 
@@ -515,31 +468,20 @@ namespace TestCentric.Gui.Views
             this.runSummaryButton.Text = "Summary Report";
             this.runSummaryButton.ToolTipText = "Display summary report for last test run";
             // 
-            // stopRunButton
+            // runParametersButton
             // 
-            this.stopRunButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.stopRunButton.Image = ((System.Drawing.Image)(resources.GetObject("stopRunButton.Image")));
-            this.stopRunButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.stopRunButton.Name = "stopRunButton";
-            this.stopRunButton.Size = new System.Drawing.Size(23, 21);
-            this.stopRunButton.ToolTipText = "Stop the current test run.";
-            // 
-            // forceStopButton
-            // 
-            this.forceStopButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.forceStopButton.Image = ((System.Drawing.Image)(resources.GetObject("forceStopButton.Image")));
-            this.forceStopButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.forceStopButton.Name = "forceStopButton";
-            this.forceStopButton.Size = new System.Drawing.Size(23, 21);
-            this.forceStopButton.Text = "Force Stop";
-            this.forceStopButton.ToolTipText = "Force the test run to stop";
+            this.runParametersButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.runParametersButton.Image = ((System.Drawing.Image)(resources.GetObject("runParametersButton.Image")));
+            this.runParametersButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.runParametersButton.Name = "runParametersButton";
+            this.runParametersButton.Size = new System.Drawing.Size(23, 21);
+            this.runParametersButton.ToolTipText = "Test Run Parameters";
             // 
             // mainMenu
             // 
             this.mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileMenu,
             this.viewMenu,
-            this.testMenu,
             this.toolsMenu,
             this.helpItem});
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
@@ -759,71 +701,6 @@ namespace TestCentric.Gui.Views
             this.restoreFixedFontMenuItem.Name = "restoreFixedFontMenuItem";
             this.restoreFixedFontMenuItem.Size = new System.Drawing.Size(121, 22);
             this.restoreFixedFontMenuItem.Text = "&Restore";
-            // 
-            // testMenu
-            // 
-            this.testMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.runAllMenuItem,
-            this.runSelectedMenuItem,
-            this.runFailedMenuItem,
-            this.toolStripSeparator5,
-            this.runParametersMenuItem,
-            this.toolStripSeparator6,
-            this.stopRunMenuItem,
-            this.forceStopMenuItem});
-            this.testMenu.Name = "testMenu";
-            this.testMenu.Size = new System.Drawing.Size(44, 20);
-            this.testMenu.Text = "&Tests";
-            // 
-            // runAllMenuItem
-            // 
-            this.runAllMenuItem.Name = "runAllMenuItem";
-            this.runAllMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.runAllMenuItem.Size = new System.Drawing.Size(165, 22);
-            this.runAllMenuItem.Text = "&Run All";
-            // 
-            // runSelectedMenuItem
-            // 
-            this.runSelectedMenuItem.Name = "runSelectedMenuItem";
-            this.runSelectedMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F6;
-            this.runSelectedMenuItem.Size = new System.Drawing.Size(165, 22);
-            this.runSelectedMenuItem.Text = "Run &Selected";
-            // 
-            // runFailedMenuItem
-            // 
-            this.runFailedMenuItem.Enabled = false;
-            this.runFailedMenuItem.Name = "runFailedMenuItem";
-            this.runFailedMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F7;
-            this.runFailedMenuItem.Size = new System.Drawing.Size(165, 22);
-            this.runFailedMenuItem.Text = "Run &Failed";
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(162, 6);
-            // 
-            // runParametersMenuItem
-            // 
-            this.runParametersMenuItem.Name = "runParametersMenuItem";
-            this.runParametersMenuItem.Size = new System.Drawing.Size(165, 22);
-            this.runParametersMenuItem.Text = "Test Parameters...";
-            // 
-            // toolStripSeparator6
-            // 
-            this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(162, 6);
-            // 
-            // stopRunMenuItem
-            // 
-            this.stopRunMenuItem.Name = "stopRunMenuItem";
-            this.stopRunMenuItem.Size = new System.Drawing.Size(165, 22);
-            this.stopRunMenuItem.Text = "S&top Run";
-            // 
-            // forceStopMenuItem
-            // 
-            this.forceStopMenuItem.Name = "forceStopMenuItem";
-            this.forceStopMenuItem.Size = new System.Drawing.Size(165, 22);
-            this.forceStopMenuItem.Text = "Force Stop";
             // 
             // toolsMenu
             // 
@@ -1057,11 +934,22 @@ namespace TestCentric.Gui.Views
             this.treeView.AllowDrop = true;
             this.treeView.AlternateImageSet = null;
             this.treeView.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.treeView.CheckBoxes = false;
             this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView.Location = new System.Drawing.Point(0, 0);
             this.treeView.Name = "treeView";
+            this.treeView.SelectedNode = null;
             this.treeView.Size = new System.Drawing.Size(240, 359);
             this.treeView.TabIndex = 0;
+            this.treeView.TopNode = null;
+            // 
+            // rerunButton
+            // 
+            this.rerunButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.rerunButton.Image = ((System.Drawing.Image)(resources.GetObject("rerunButton.Image")));
+            this.rerunButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.rerunButton.Name = "rerunButton";
+            this.rerunButton.Size = new System.Drawing.Size(23, 21);
             // 
             // TestCentricMainView
             // 
@@ -1143,14 +1031,6 @@ namespace TestCentric.Gui.Views
         public ICommand DecreaseFixedFontCommand { get; }
         public ICommand RestoreFixedFontCommand { get; }
 
-        // Test Menu Items
-        public ICommand RunAllMenuCommand { get; }
-        public ICommand RunSelectedMenuCommand { get; }
-        public ICommand RunFailedMenuCommand { get; }
-        public ICommand StopRunMenuCommand { get; }
-        public ICommand ForceStopMenuCommand { get; }
-        public ICommand TestParametersMenuCommand { get; }
-
         // Tools Menu Items
         public IPopup ToolsMenu { get; }
         public ICommand SaveResultsCommand { get; }
@@ -1165,21 +1045,18 @@ namespace TestCentric.Gui.Views
         public ICommand AboutCommand { get; }
 
         // ToolBar Elements
-        public ICommand RunButton { get; private set; }
-        public ICommand RunAllToolbarCommand { get; private set; }
-        public ICommand RunSelectedToolbarCommand { get; private set; }
-        public ICommand TestParametersToolbarCommand { get; private set; }
-
-        public ICommand DebugButton { get; private set; }
-        public ICommand DebugAllToolbarCommand { get; private set; }
-        public ICommand DebugSelectedToolbarCommand { get; private set; }
+        public ICommand RunAllButton { get; private set; }
+        public ICommand RunSelectedButton { get; private set; }
+        public ICommand RerunButton { get; private set; }
+        public ICommand RunFailedButton { get; private set; }
 
         public ICommand StopRunButton { get; private set; }
         public ICommand ForceStopButton { get; private set; }
 
-        public IToolTip FormatButton { get; private set; }
+        public IViewElement DisplayFormatButton { get; private set; }
         public ISelection DisplayFormat { get; private set; }
         public ISelection GroupBy { get; private set; }
+        public ICommand RunParametersButton { get; private set; }
 
         public ICommand RunSummaryButton { get; private set; }
 

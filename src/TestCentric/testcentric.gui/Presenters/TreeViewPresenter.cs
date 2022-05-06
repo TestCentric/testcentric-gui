@@ -71,6 +71,7 @@ namespace TestCentric.Gui.Presenters
                 EnsureNonRunnableFilesAreVisible(ea.Test);
 
                 Strategy.OnTestLoaded(ea.Test);
+                _view.CheckBoxes = _view.ShowCheckBoxes.Checked; // TODO: View should handle this
                 //InitializeRunCommands();
             };
 
@@ -135,15 +136,17 @@ namespace TestCentric.Gui.Presenters
             _view.CollapseToFixturesCommand.Execute += () => Strategy.CollapseToFixtures();
             _view.ShowCheckBoxes.CheckedChanged += () =>
             {
-                //_view.RunCheckedCommand.Visible =
-                //_view.DebugCheckedCommand.Visible =
                 _view.CheckBoxes = _view.ShowCheckBoxes.Checked;
             };
 
             _view.RunContextCommand.Execute += () =>
             {
-                if (_selectedTestItem != null)
-                    _model.RunTests(_selectedTestItem);
+                if (_view.ContextNode != null)
+                {
+                    var testNode = _view.ContextNode.Tag as TestNode;
+                    if (testNode != null)
+                        _model.RunTests(testNode);
+                }
             };
 
             _view.TreeNodeDoubleClick += (treeNode) =>
@@ -164,28 +167,52 @@ namespace TestCentric.Gui.Presenters
 
             _view.ViewAsXmlCommand.Execute += () => ShowXmlDisplayDialog();
 
-            // Node selected in tree
-            _view.SelectedNodeChanged += (tn) =>
+            _view.SelectedNodeChanged += (treeNode) =>
             {
-                _selectedTestItem = tn.Tag as ITestItem;
-                _model.NotifySelectedItemChanged(_selectedTestItem);
-
-                if (_propertiesDisplay != null)
-                {
-                    if (_propertiesDisplay.Pinned)
-                        _propertiesDisplay.Display(tn);
-                    else
-                        ClosePropertiesDisplay();
-                }
-
-                if (_xmlDisplay != null)
-                {
-                    if (_xmlDisplay.Pinned)
-                        _xmlDisplay.Display(tn);
-                    else
-                        CloseXmlDisplay();
-                }
+                var testItem = treeNode.Tag as ITestItem;
+                if (testItem != null)
+                    _model.NotifySelectedItemChanged(testItem);
             };
+
+            _view.AfterCheck += (treeNode) =>
+            {
+                var checkedNodes = _view.CheckedNodes;
+                var selection = new TestSelection();
+
+                foreach (var node in checkedNodes)
+                    selection.Add(node.Tag as TestNode);
+                
+                _model.NotifyCheckedItemsChanged(selection);
+            };
+
+            // Node selected in tree
+            //_view.SelectedNodesChanged += (nodes) =>
+            //{
+            //    var selection = new TestSelection();
+            //    foreach (TreeNode tn in nodes)
+            //    {
+            //        var test = tn.Tag as TestNode;
+            //        if (test != null)
+            //            selection.Add(test);
+            //        _model.NotifyTestSelectionChanged(selection);
+            //    }
+
+            //    if (_propertiesDisplay != null)
+            //    {
+            //        if (_propertiesDisplay.Pinned && nodes.Count == 1)
+            //            _propertiesDisplay.Display(nodes[0]);
+            //        else
+            //            ClosePropertiesDisplay();
+            //    }
+
+            //    if (_xmlDisplay != null)
+            //    {
+            //        if (_xmlDisplay.Pinned && nodes.Count == 1)
+            //            _xmlDisplay.Display(nodes[0]);
+            //        else
+            //            CloseXmlDisplay();
+            //    }
+            //};
         }
 
         private void EnsureNonRunnableFilesAreVisible(TestNode testNode)
