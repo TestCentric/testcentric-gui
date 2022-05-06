@@ -36,7 +36,9 @@ namespace TestCentric.Gui.Views
             this.runCheckedMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugCheckedMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.testPropertiesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewAsXmlMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.activeConfigMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.showCheckboxesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -44,8 +46,6 @@ namespace TestCentric.Gui.Views
             this.collapseAllMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.collapseToFixturesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.treeImages = new System.Windows.Forms.ImageList(this.components);
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.viewAsXmlMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testTreeContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -105,11 +105,22 @@ namespace TestCentric.Gui.Views
             this.debugCheckedMenuItem.Size = new System.Drawing.Size(190, 22);
             this.debugCheckedMenuItem.Text = "Debug Checked Items";
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(187, 6);
+            // 
             // testPropertiesMenuItem
             // 
             this.testPropertiesMenuItem.Name = "testPropertiesMenuItem";
             this.testPropertiesMenuItem.Size = new System.Drawing.Size(190, 22);
             this.testPropertiesMenuItem.Text = "Properties...";
+            // 
+            // viewAsXmlMenuItem
+            // 
+            this.viewAsXmlMenuItem.Name = "viewAsXmlMenuItem";
+            this.viewAsXmlMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.viewAsXmlMenuItem.Text = "View as XML...";
             // 
             // activeConfigMenuItem
             // 
@@ -145,7 +156,7 @@ namespace TestCentric.Gui.Views
             // 
             this.collapseToFixturesMenuItem.Name = "collapseToFixturesMenuItem";
             this.collapseToFixturesMenuItem.Size = new System.Drawing.Size(190, 22);
-            this.collapseToFixturesMenuItem.Text = "Collapse to Fixtures";
+            this.collapseToFixturesMenuItem.Text = "Display Fixtures";
             // 
             // treeImages
             // 
@@ -156,17 +167,6 @@ namespace TestCentric.Gui.Views
             this.treeImages.Images.SetKeyName(2, "Success.png");
             this.treeImages.Images.SetKeyName(3, "Warning.png");
             this.treeImages.Images.SetKeyName(4, "Failure.png");
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(187, 6);
-            // 
-            // viewAsXmlMenuItem
-            // 
-            this.viewAsXmlMenuItem.Name = "viewAsXmlMenuItem";
-            this.viewAsXmlMenuItem.Size = new System.Drawing.Size(190, 22);
-            this.viewAsXmlMenuItem.Text = "View as XML...";
             // 
             // TestTreeView
             // 

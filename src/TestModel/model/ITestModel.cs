@@ -70,6 +70,9 @@ namespace TestCentric.Gui.Model
         bool HasResults { get; }
 
         ITestItem SelectedTestItem { get; }
+
+        TestSelection CheckedTestItems { get; }
+
         List<string> SelectedCategories { get; }
 
         bool ExcludeSelectedCategories { get; }
@@ -137,8 +140,11 @@ namespace TestCentric.Gui.Model
         // Clear the results for all tests
         void ClearResults();
 
-        // Broadcast event when SelectedTestItem changes
+        // Notify TestModel when SelectedTestItem changes
         void NotifySelectedItemChanged(ITestItem testItem);
+
+        // Notify TestModel when the list of checked items changes
+        void NotifyCheckedItemsChanged(TestSelection checkedItems);
 
         // Set the category filters for running and tree display
         void SelectCategories(IList<string> categories, bool exclude);

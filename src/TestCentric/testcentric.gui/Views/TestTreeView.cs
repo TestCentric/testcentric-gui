@@ -30,6 +30,7 @@ namespace TestCentric.Gui.Views
         public const int FailureIndex = 4;
 
         public event TreeNodeActionHandler SelectedNodeChanged;
+        public event TreeNodeActionHandler AfterCheck;
         public event TreeNodeActionHandler TreeNodeDoubleClick;
         public event EventHandler ContextMenuOpening;
 
@@ -50,38 +51,18 @@ namespace TestCentric.Gui.Views
             ViewAsXmlCommand = new CommandMenuElement(viewAsXmlMenuItem);
 
             TreeView = treeView;
-            
+
             treeView.MouseDown += (s, e) =>
             {
                 if (e.Button == MouseButtons.Right)
                     ContextNode = TreeView.GetNodeAt(e.X, e.Y);
             };
 
-            treeView.MouseUp += (s, e) =>
-            {
-                if (e.Button == MouseButtons.Right)
-                {
-                    var treeNode = treeView.GetNodeAt(e.X, e.Y);
-                    if (treeNode != null)
-                        treeView.SelectedNode = treeNode;
-                }
-            };
+            treeView.NodeMouseDoubleClick += (s, e) => TreeNodeDoubleClick?.Invoke(e.Node);
 
-            treeView.MouseDoubleClick += (s, e) =>
-            {
-                if (TreeNodeDoubleClick != null)
-                {
-                    var treeNode = treeView.GetNodeAt(e.X, e.Y);
-                    if (treeNode != null)
-                        TreeNodeDoubleClick(treeNode);
-                }
-            };
+            treeView.AfterSelect += (s, e) => SelectedNodeChanged?.Invoke(e.Node);
 
-            treeView.AfterSelect += (s, e) =>
-            {
-                if (SelectedNodeChanged != null)
-                    SelectedNodeChanged(e.Node);
-            };
+            treeView.AfterCheck += (s, e) => AfterCheck?.Invoke(e.Node);
 
             treeView.ContextMenuStrip.Opening += (s, e) => ContextMenuOpening?.Invoke(s, e);
         }
@@ -155,6 +136,8 @@ namespace TestCentric.Gui.Views
             get { return treeView.SelectedNode; }
             set { InvokeIfRequired(() => treeView.SelectedNode = value); }
         }
+
+        //public IList<TreeNode> SelectedNodes => treeView.SelectedNodes;
 
         public IList<TreeNode> CheckedNodes => GetCheckedNodes();
 
@@ -241,22 +224,6 @@ namespace TestCentric.Gui.Views
 
             foreach (TreeNode node in startNode.Nodes)
                 RecordExpandedNodes(expanded, node);
-        }
-
-        private void Add(TreeNode treeNode, bool doClear)
-        {
-            InvokeIfRequired(() =>
-            {
-                if (doClear)
-                    treeView.Nodes.Clear();
-
-                treeView.BeginUpdate();
-                treeView.Nodes.Add(treeNode);
-                if (treeView.SelectedNode == null)
-                    treeView.SelectedNode = treeNode;
-                treeView.EndUpdate();
-                treeView.Select();
-            });
         }
 
         #endregion

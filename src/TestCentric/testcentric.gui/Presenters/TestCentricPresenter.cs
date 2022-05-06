@@ -79,9 +79,7 @@ namespace TestCentric.Gui.Presenters
             SetTreeDisplayFormat(_settings.Gui.TestTree.DisplayFormat);
 
             UpdateViewCommands();
-            _view.StopRunMenuCommand.Visible = true;
             _view.StopRunButton.Visible = true;
-            _view.ForceStopMenuCommand.Visible = false;
             _view.ForceStopButton.Visible = false;
             _view.RunSummaryButton.Visible = false;
 
@@ -154,6 +152,7 @@ namespace TestCentric.Gui.Presenters
                 OnLongRunningOperationComplete();
 
                 UpdateViewCommands();
+
                 _view.StopRunButton.Visible = true;
                 _view.ForceStopButton.Visible = false;
             };
@@ -204,8 +203,6 @@ namespace TestCentric.Gui.Presenters
                 UpdateViewCommands();
 
                 // Reset these in case run was cancelled
-                _view.StopRunMenuCommand.Visible = true;
-                _view.ForceStopMenuCommand.Visible = false;
                 _view.StopRunButton.Visible = true;
                 _view.ForceStopButton.Visible = false;
                 _view.RunSummaryButton.Visible = true;
@@ -469,29 +466,9 @@ namespace TestCentric.Gui.Presenters
                 _settings.Gui.FixedFont = new Font(FontFamily.GenericMonospace, 8.0f);
             };
 
-            _view.RunAllMenuCommand.Execute += () => RunAllTests();
-            _view.RunSelectedMenuCommand.Execute += () => RunSelectedTests();
-            _view.RunFailedMenuCommand.Execute += () => RunFailedTests();
-
-            _view.RunAllToolbarCommand.Execute += () => RunAllTests();
-            _view.RunSelectedToolbarCommand.Execute += () => RunSelectedTests();
-            _view.RunButton.Execute += () =>
-            {
-                // Necessary test because we don't disable the button click
-                if (_model.HasTests && !_model.IsTestRunning)
-                    RunAllTests();
-                // TODO: This should actually run the last Run action selected in the dropdown
-            };
-
-            _view.DebugAllToolbarCommand.Execute += () => _model.DebugAllTests();
-            _view.DebugSelectedToolbarCommand.Execute += () => _model.DebugSelectedTests();
-            _view.DebugButton.Execute += () =>
-            {
-                // Necessary test because we don't disable the button click
-                if (_model.HasTests && !_model.IsTestRunning)
-                    _model.DebugAllTests();
-                // TODO: This should actually run the last Run action selected in the dropdown
-            };
+            _view.RunAllButton.Execute += RunAllTests;
+            _view.RunSelectedButton.Execute += () => _model.RunSelectedTests();
+            _view.RunFailedButton.Execute += RunFailedTests;
 
             _view.DisplayFormat.SelectionChanged += () =>
             {
@@ -511,14 +488,10 @@ namespace TestCentric.Gui.Presenters
                 }
             };
 
-            _view.StopRunMenuCommand.Execute += ExecuteNormalStop;
             _view.StopRunButton.Execute += ExecuteNormalStop;
-
-            _view.ForceStopMenuCommand.Execute += ExecuteForcedStop;
             _view.ForceStopButton.Execute += ExecuteForcedStop;
 
-            _view.TestParametersMenuCommand.Execute += DisplayTestParametersDialog;
-            _view.TestParametersToolbarCommand.Execute += DisplayTestParametersDialog;
+            _view.RunParametersButton.Execute += DisplayTestParametersDialog;
 
             _view.RunSummaryButton.Execute += () =>
             {
@@ -616,14 +589,14 @@ namespace TestCentric.Gui.Presenters
         private void ExecuteNormalStop()
         {
             BeginLongRunningOperation("Waiting for all running tests to complete.");
-            _view.StopRunButton.Visible = _view.StopRunMenuCommand.Visible = false;
-            _view.ForceStopButton.Visible = _view.ForceStopMenuCommand.Visible = true;
+            _view.StopRunButton.Visible = false;
+            _view.ForceStopButton.Visible = true;
             _model.StopTestRun(false);
         }
 
         private void ExecuteForcedStop()
         {
-            _view.ForceStopMenuCommand.Enabled = _view.ForceStopButton.Enabled = false;
+            _view.ForceStopButton.Enabled = false;
             _model.StopTestRun(true);
         }
 
@@ -762,11 +735,6 @@ namespace TestCentric.Gui.Presenters
             _model.RunAllTests();
         }
 
-        public void RunSelectedTests()
-        {
-            _model.RunSelectedTests();
-        }
-
         public void RunFailedTests()
         {
             //RunTests(_view.TreeView.FailedTests);
@@ -783,20 +751,16 @@ namespace TestCentric.Gui.Presenters
             bool testLoaded = _model.HasTests;
             bool testRunning = _model.IsTestRunning;
 
-            _view.RunAllMenuCommand.Enabled =
-            _view.RunAllToolbarCommand.Enabled =
-            _view.DebugAllToolbarCommand.Enabled =
-            _view.RunSelectedMenuCommand.Enabled =
-            _view.RunSelectedToolbarCommand.Enabled =
-            _view.DebugSelectedToolbarCommand.Enabled =
-            _view.TestParametersMenuCommand.Enabled =
-            _view.TestParametersToolbarCommand.Enabled = testLoaded & !testRunning;
+            _view.RunAllButton.Enabled =
+            _view.RunSelectedButton.Enabled =
+            _view.DisplayFormatButton.Enabled =
+            _view.RunParametersButton.Enabled = testLoaded && !testRunning;
 
-            _view.RunFailedMenuCommand.Enabled = testLoaded && !testRunning && _model.HasResults;
+            _view.RerunButton.Enabled =
+            // TODO: RunFailedButton should only be enabled if there are failures
+            _view.RunFailedButton.Enabled = testLoaded && !testRunning && _model.HasResults;
 
-            _view.StopRunMenuCommand.Enabled =
             _view.StopRunButton.Enabled =
-            _view.ForceStopMenuCommand.Enabled =
             _view.ForceStopButton.Enabled = testRunning;
 
             _view.OpenCommand.Enabled = !testRunning & !testLoading;

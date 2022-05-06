@@ -192,6 +192,8 @@ namespace TestCentric.Gui.Model
 
         public ITestItem SelectedTestItem { get; private set; }
 
+        public TestSelection CheckedTestItems { get; private set; }
+
         public List<string> SelectedCategories { get; private set; }
 
         public bool ExcludeSelectedCategories { get; private set; }
@@ -306,7 +308,7 @@ namespace TestCentric.Gui.Model
             {
                 Runner.Unload();
             }
-            catch (NUnit.Engine.NUnitEngineUnloadException ex)
+            catch (NUnit.Engine.NUnitEngineUnloadException)
             {
 
             }
@@ -354,7 +356,10 @@ namespace TestCentric.Gui.Model
 
         public void RunSelectedTests()
         {
-            RunTests(SelectedTestItem);
+            if (CheckedTestItems.Count > 0)
+                RunTests(CheckedTestItems);
+            else
+                RunTests(SelectedTestItem);
         }
 
         public void RunTests(ITestItem testItem)
@@ -502,6 +507,11 @@ namespace TestCentric.Gui.Model
         {
             SelectedTestItem = testItem;
             _events.FireSelectedItemChanged(testItem);
+        }
+
+        public void NotifyCheckedItemsChanged(TestSelection checkedItems)
+        {
+            CheckedTestItems = checkedItems;
         }
 
         #endregion

@@ -222,72 +222,22 @@ namespace TestCentric.Gui.Presenters.Main
             Font newFont = new Font(FontFamily.GenericSerif, 16.0f);
 
             _view.DialogManager.ApplyFont += Raise.Event<ApplyFontHandler>(newFont);
-
+            
             _view.Received().Font = newFont;
             Assert.That(_settings.Gui.Font, Is.EqualTo(newFont));
         }
 
         [Test]
-        public void RunAllMenuCommand_RunsAllTests()
+        public void RunAllButton_RunsAllTests()
         {
-            _view.RunAllMenuCommand.Execute += Raise.Event<CommandHandler>();
+            _view.RunAllButton.Execute += Raise.Event<CommandHandler>();
             _model.Received().RunAllTests();
         }
 
         [Test]
-        public void RunAllCommand_RunsAllTests()
+        public void RunButton_RunsSelectedTests()
         {
-            _view.RunAllToolbarCommand.Execute += Raise.Event<CommandHandler>();
-            _model.Received().RunAllTests();
-        }
-
-        [Test]
-        public void DebugAllCommand_DebugsAllTests()
-        {
-            _view.DebugAllToolbarCommand.Execute += Raise.Event<CommandHandler>();
-            _model.Received().DebugAllTests();
-        }
-
-        [Test]
-        public void DebugSelectedCommand_DebugsSelectedTests()
-        {
-            _view.DebugSelectedToolbarCommand.Execute += Raise.Event<CommandHandler>();
-            _model.Received().DebugSelectedTests();
-        }
-
-        [Test]
-        public void RunButton_Initially_RunsAllTests()
-        {
-            _model.HasTests.Returns(true);
-            _model.IsTestRunning.Returns(false);
-
-            _view.RunButton.Execute += Raise.Event<CommandHandler>();
-
-            _model.Received().RunAllTests();
-        }
-
-        [Test]
-        public void DebugButton_Initially_DebugsAllTests()
-        {
-            _model.HasTests.Returns(true);
-            _model.IsTestRunning.Returns(false);
-
-            _view.DebugButton.Execute += Raise.Event<CommandHandler>();
-
-            _model.Received().DebugAllTests();
-        }
-
-        [Test]
-        public void RunSelectedMenuCommand_RunsSelectedTests()
-        {
-            _view.RunSelectedMenuCommand.Execute += Raise.Event<CommandHandler>();
-            _model.Received().RunSelectedTests();
-        }
-
-        [Test]
-        public void RunSelectedCommand_RunsSelectedTests()
-        {
-            _view.RunSelectedToolbarCommand.Execute += Raise.Event<CommandHandler>();
+            _view.RunSelectedButton.Execute += Raise.Event<CommandHandler>();
             _model.Received().RunSelectedTests();
         }
 
@@ -315,29 +265,14 @@ namespace TestCentric.Gui.Presenters.Main
         }
 
         [Test]
-        public void StopRunMenuCommand_StopsTestsAndChangesMenu()
-        {
-            _view.StopRunMenuCommand.Execute += Raise.Event<CommandHandler>();
-            _model.Received().StopTestRun(false);
-            _view.StopRunMenuCommand.Received().Visible = false;
-            _view.ForceStopMenuCommand.Received().Visible = true;
-        }
-
-        [Test]
         public void StopRunButton_StopsTestsAndChangesMenu()
         {
+            _view.StopRunButton.ClearReceivedCalls();
+            _view.ForceStopButton.ClearReceivedCalls();
             _view.StopRunButton.Execute += Raise.Event<CommandHandler>();
             _model.Received().StopTestRun(false);
             _view.StopRunButton.Received().Visible = false;
             _view.ForceStopButton.Received().Visible = true;
-        }
-
-        [Test]
-        public void ForceStopMenuCommand_ForcesTestsToStopAndDisablesForceStop()
-        {
-            _view.ForceStopMenuCommand.Execute += Raise.Event<CommandHandler>();
-            _model.Received().StopTestRun(true);
-            _view.ForceStopMenuCommand.Received().Enabled = false;
         }
 
         [Test]
