@@ -81,7 +81,6 @@ namespace TestCentric.Gui.Presenters
             UpdateViewCommands();
             _view.StopRunButton.Visible = true;
             _view.ForceStopButton.Visible = false;
-            _view.RunSummaryButton.Visible = false;
 
             foreach (string format in _model.ResultFormats)
                 if (format != "cases" && format != "user")
@@ -190,7 +189,6 @@ namespace TestCentric.Gui.Presenters
                 UpdateViewCommands();
                 _view.StopRunButton.Visible = true;
                 _view.ForceStopButton.Visible = false;
-                _view.RunSummaryButton.Visible = false;
             };
 
             _model.Events.RunFinished += (TestResultEventArgs e) => OnRunFinished(e.Result);
@@ -205,7 +203,6 @@ namespace TestCentric.Gui.Presenters
                 // Reset these in case run was cancelled
                 _view.StopRunButton.Visible = true;
                 _view.ForceStopButton.Visible = false;
-                _view.RunSummaryButton.Visible = true;
 
                 //string resultPath = Path.Combine(TestProject.BasePath, "TestResult.xml");
                 // TODO: Use Work Directory
@@ -227,8 +224,8 @@ namespace TestCentric.Gui.Presenters
                 // If we were running unattended, it's time to close
                 if (_options.Unattended)
                     _view.Close();
-                else
-                    DisplayTestRunSummary(result, true);
+                //else
+                //    DisplayTestRunSummary(result, true);
             };
 
             _settings.Changed += (s, e) =>
@@ -493,24 +490,20 @@ namespace TestCentric.Gui.Presenters
 
             _view.RunParametersButton.Execute += DisplayTestParametersDialog;
 
-            _view.RunSummaryButton.Execute += () =>
+            _view.RunSummaryButton.CheckedChanged += () =>
             {
-                var result = _model.GetResultForTest(_model.Tests.Id);
-                DisplayTestRunSummary(result, false);
+                if (_view.RunSummaryButton.Checked)
+                {
+                    var result = _model.GetResultForTest(_model.Tests.Id);
+                    var summary = ResultSummaryCreator.FromResultNode(result);
+                    var report = ResultSummaryReporter.WriteSummaryReport(summary);
+                    _view.RunSummaryDisplay.Display(report);
+                }
+                else
+                {
+                    _view.RunSummaryDisplay.Hide();
+                }
             };
-
-            //_view.RunSummaryButton.CheckedChanged += () =>
-            //{
-            //    if (_view.RunSummaryButton.Checked)
-            //    {
-            //        var resultId = _model.GetResultForTest(_model.Tests.Id);
-            //        var summary = ResultSummaryCreator.FromResultNode(resultId);
-            //        string report = ResultSummaryReporter.WriteSummaryReport(summary);
-            //        _view.DisplayTestRunSummary(report);
-            //    }
-            //    else
-            //        _view.HideTestRunSummary();
-            //};
 
             _view.ToolsMenu.Popup += () =>
             {
@@ -763,6 +756,8 @@ namespace TestCentric.Gui.Presenters
             _view.StopRunButton.Enabled =
             _view.ForceStopButton.Enabled = testRunning;
 
+            _view.RunSummaryButton.Enabled = testLoaded && !testRunning && _model.HasResults;
+
             _view.OpenCommand.Enabled = !testRunning & !testLoading;
             _view.CloseCommand.Enabled = testLoaded & !testRunning;
             _view.AddTestFilesCommand.Enabled = testLoaded && !testRunning;
@@ -898,20 +893,6 @@ namespace TestCentric.Gui.Presenters
             _longRunningOperation?.Close();
             _longRunningOperation = null;
         }
-
-        private void DisplayTestRunSummary(ResultNode result, bool withTimeout)
-        {
-            var report = CreateSummaryReport(result);
-            _view.RunSummaryDisplay.Display(report, withTimeout);
-        }
-
-        private string CreateSummaryReport(ResultNode result)
-        {
-            var summary = ResultSummaryCreator.FromResultNode(result);
-            return ResultSummaryReporter.WriteSummaryReport(summary);
-        }
-
-
 
         private void SetTreeDisplayFormat(string displayFormat)
         {

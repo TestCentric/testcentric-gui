@@ -39,7 +39,6 @@ namespace TestCentric.Gui.Presenters.Main
 
         [TestCase("StopRunButton", true)]
         [TestCase("ForceStopButton", false)]
-        [TestCase("RunSummaryButton", false)]
         public void CheckCommandVisible(string propName, bool visible)
         {
             ViewElement(propName).Received().Visible = visible;

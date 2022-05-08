@@ -10,20 +10,20 @@ namespace TestCentric.Gui.Elements
     /// <summary>
     /// ButtonElement wraps a Button as an ICommand.
     /// </summary>
-    public class ButtonElement : ControlElement, ICommand
+    public class ToolStripButtonElement : ToolStripElement, ICommand, IChecked
     {
-        private Button _button;
+        private ToolStripButton _button;
 
         public event CommandHandler Execute;
-        //public event CommandHandler CheckedChanged;
+        public event CommandHandler CheckedChanged;
 
-        //public bool Checked
-        //{
-        //    get { return _button.Checked; }
-        //    set { InvokeIfRequired(() => _button.Checked = value); }
-        //}
+        public bool Checked
+        {
+            get { return _button.Checked; }
+            set { InvokeIfRequired(() => _button.Checked = value); }
+        }
 
-        public ButtonElement(Button button) : base(button)
+        public ToolStripButtonElement(ToolStripButton button) : base(button)
         {
             _button = button;
 

@@ -9,6 +9,7 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
+    using Controls;
     using Elements;
 
     public interface IMainView
@@ -71,7 +72,7 @@ namespace TestCentric.Gui.Views
         ISelection GroupBy { get; }
         ICommand RunParametersButton { get; }
 
-        ICommand RunSummaryButton { get; }
+        IChecked RunSummaryButton { get; }
 
         // SubViews
         TestTreeView TreeView { get; }

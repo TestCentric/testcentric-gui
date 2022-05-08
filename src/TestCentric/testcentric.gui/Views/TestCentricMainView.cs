@@ -23,6 +23,7 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.Splitter treeSplitter;
         private System.Windows.Forms.Panel rightPanel;
         private System.Windows.Forms.ToolStrip toolStrip;
+        private System.Windows.Forms.Panel progressPanel;
 
         private System.Windows.Forms.Panel testPanel;
         private TestCentric.Gui.Views.TestTreeView treeView;
@@ -97,12 +98,15 @@ namespace TestCentric.Gui.Views
         private ToolStripButton stopRunButton;
         private ToolStripButton forceStopButton;
         private ProgressBarView progressBar;
-        private ToolStripButton runSummaryButton;
         private ToolStripButton runAllButton;
         private ToolStripButton runParametersButton;
         private ToolStripButton runFailedButton;
         private ToolStripSeparator toolStripSeparator5;
         private ToolStripButton rerunButton;
+        private CheckBox runSummaryButton;
+        private RunSummaryDisplay runSummaryDisplay;
+        private TextBox runSummary;
+        private Label title;
         private TextOutputView textOutputView1;
 
         #endregion
@@ -156,12 +160,12 @@ namespace TestCentric.Gui.Views
             AboutCommand = new CommandMenuElement(aboutMenuItem);
 
             // Initialize Toolbar
-            RunAllButton = new ButtonElement(runAllButton);
-            RunSelectedButton = new ButtonElement(runSelectedButton);
-            RerunButton = new ButtonElement(rerunButton);
-            RunFailedButton = new ButtonElement(runFailedButton);
-            StopRunButton = new ButtonElement(stopRunButton);
-            ForceStopButton = new ButtonElement(forceStopButton);
+            RunAllButton = new ToolStripButtonElement(runAllButton);
+            RunSelectedButton = new ToolStripButtonElement(runSelectedButton);
+            RerunButton = new ToolStripButtonElement(rerunButton);
+            RunFailedButton = new ToolStripButtonElement(runFailedButton);
+            StopRunButton = new ToolStripButtonElement(stopRunButton);
+            ForceStopButton = new ToolStripButtonElement(forceStopButton);
             DisplayFormatButton = new ToolStripElement(displayFormatButton);
             DisplayFormat = new CheckedToolStripMenuGroup(
                 "displayFormat",
@@ -169,8 +173,8 @@ namespace TestCentric.Gui.Views
             GroupBy = new CheckedToolStripMenuGroup(
                 "testGrouping",
                 byAssemblyMenuItem, byFixtureMenuItem, byCategoryMenuItem, byExtendedCategoryMenuItem, byOutcomeMenuItem, byDurationMenuItem);
-            RunParametersButton = new ButtonElement(runParametersButton);
-            RunSummaryButton = new ButtonElement(runSummaryButton);
+            RunParametersButton = new ToolStripButtonElement(runParametersButton);
+            RunSummaryButton = new CheckBoxElement(runSummaryButton);
 
             DialogManager = new DialogManager();
         }
@@ -202,6 +206,7 @@ namespace TestCentric.Gui.Views
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.runAllButton = new System.Windows.Forms.ToolStripButton();
             this.runSelectedButton = new System.Windows.Forms.ToolStripButton();
+            this.rerunButton = new System.Windows.Forms.ToolStripButton();
             this.runFailedButton = new System.Windows.Forms.ToolStripButton();
             this.stopRunButton = new System.Windows.Forms.ToolStripButton();
             this.forceStopButton = new System.Windows.Forms.ToolStripButton();
@@ -217,7 +222,6 @@ namespace TestCentric.Gui.Views
             this.byExtendedCategoryMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.byOutcomeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.byDurationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.runSummaryButton = new System.Windows.Forms.ToolStripButton();
             this.runParametersButton = new System.Windows.Forms.ToolStripButton();
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.fileMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -264,6 +268,11 @@ namespace TestCentric.Gui.Views
             this.aboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.treeSplitter = new System.Windows.Forms.Splitter();
             this.rightPanel = new System.Windows.Forms.Panel();
+            this.progressPanel = new System.Windows.Forms.Panel();
+            this.runSummaryDisplay = new TestCentric.Gui.Controls.RunSummaryDisplay();
+            this.runSummary = new System.Windows.Forms.TextBox();
+            this.title = new System.Windows.Forms.Label();
+            this.runSummaryButton = new System.Windows.Forms.CheckBox();
             this.progressBar = new TestCentric.Gui.Views.ProgressBarView();
             this.resultTabs = new System.Windows.Forms.TabControl();
             this.propertiesTab = new System.Windows.Forms.TabPage();
@@ -276,10 +285,11 @@ namespace TestCentric.Gui.Views
             this.leftPanel = new System.Windows.Forms.Panel();
             this.testPanel = new System.Windows.Forms.Panel();
             this.treeView = new TestCentric.Gui.Views.TestTreeView();
-            this.rerunButton = new System.Windows.Forms.ToolStripButton();
             this.toolStrip.SuspendLayout();
             this.mainMenu.SuspendLayout();
             this.rightPanel.SuspendLayout();
+            this.progressPanel.SuspendLayout();
+            this.runSummaryDisplay.SuspendLayout();
             this.resultTabs.SuspendLayout();
             this.propertiesTab.SuspendLayout();
             this.errorTab.SuspendLayout();
@@ -308,7 +318,6 @@ namespace TestCentric.Gui.Views
             this.forceStopButton,
             this.toolStripSeparator5,
             this.displayFormatButton,
-            this.runSummaryButton,
             this.runParametersButton});
             this.toolStrip.Location = new System.Drawing.Point(0, 24);
             this.toolStrip.MinimumSize = new System.Drawing.Size(0, 24);
@@ -333,6 +342,14 @@ namespace TestCentric.Gui.Views
             this.runSelectedButton.Name = "runSelectedButton";
             this.runSelectedButton.Size = new System.Drawing.Size(23, 21);
             this.runSelectedButton.ToolTipText = "Run Selected Tests";
+            // 
+            // rerunButton
+            // 
+            this.rerunButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.rerunButton.Image = ((System.Drawing.Image)(resources.GetObject("rerunButton.Image")));
+            this.rerunButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.rerunButton.Name = "rerunButton";
+            this.rerunButton.Size = new System.Drawing.Size(23, 21);
             // 
             // runFailedButton
             // 
@@ -455,18 +472,6 @@ namespace TestCentric.Gui.Views
             this.byDurationMenuItem.Size = new System.Drawing.Size(198, 22);
             this.byDurationMenuItem.Tag = "DURATION";
             this.byDurationMenuItem.Text = "By Duration";
-            // 
-            // runSummaryButton
-            // 
-            this.runSummaryButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.runSummaryButton.CheckOnClick = true;
-            this.runSummaryButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.runSummaryButton.Image = ((System.Drawing.Image)(resources.GetObject("runSummaryButton.Image")));
-            this.runSummaryButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.runSummaryButton.Name = "runSummaryButton";
-            this.runSummaryButton.Size = new System.Drawing.Size(23, 21);
-            this.runSummaryButton.Text = "Summary Report";
-            this.runSummaryButton.ToolTipText = "Display summary report for last test run";
             // 
             // runParametersButton
             // 
@@ -799,7 +804,7 @@ namespace TestCentric.Gui.Views
             // rightPanel
             // 
             this.rightPanel.BackColor = System.Drawing.SystemColors.Control;
-            this.rightPanel.Controls.Add(this.progressBar);
+            this.rightPanel.Controls.Add(this.progressPanel);
             this.rightPanel.Controls.Add(this.resultTabs);
             this.rightPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rightPanel.Location = new System.Drawing.Point(246, 48);
@@ -807,17 +812,82 @@ namespace TestCentric.Gui.Views
             this.rightPanel.Size = new System.Drawing.Size(498, 359);
             this.rightPanel.TabIndex = 3;
             // 
+            // progressPanel
+            // 
+            this.progressPanel.AutoSize = true;
+            this.progressPanel.BackColor = System.Drawing.SystemColors.Control;
+            this.progressPanel.Controls.Add(this.runSummaryDisplay);
+            this.progressPanel.Controls.Add(this.runSummaryButton);
+            this.progressPanel.Controls.Add(this.progressBar);
+            this.progressPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.progressPanel.Location = new System.Drawing.Point(0, 0);
+            this.progressPanel.Name = "progressPanel";
+            this.progressPanel.Size = new System.Drawing.Size(498, 102);
+            this.progressPanel.TabIndex = 3;
+            // 
+            // runSummaryDisplay
+            // 
+            this.runSummaryDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.runSummaryDisplay.BackColor = System.Drawing.Color.LightYellow;
+            this.runSummaryDisplay.Controls.Add(this.runSummary);
+            this.runSummaryDisplay.Controls.Add(this.title);
+            this.runSummaryDisplay.Location = new System.Drawing.Point(3, 23);
+            this.runSummaryDisplay.Name = "runSummaryDisplay";
+            this.runSummaryDisplay.Size = new System.Drawing.Size(488, 76);
+            this.runSummaryDisplay.TabIndex = 5;
+            this.runSummaryDisplay.Visible = false;
+            // 
+            // runSummary
+            // 
+            this.runSummary.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.runSummary.BackColor = System.Drawing.Color.LightYellow;
+            this.runSummary.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.runSummary.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.runSummary.Location = new System.Drawing.Point(7, 30);
+            this.runSummary.Multiline = true;
+            this.runSummary.Name = "runSummary";
+            this.runSummary.Size = new System.Drawing.Size(476, 37);
+            this.runSummary.TabIndex = 4;
+            // 
+            // title
+            // 
+            this.title.AutoSize = true;
+            this.title.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.title.Location = new System.Drawing.Point(4, 5);
+            this.title.Name = "title";
+            this.title.Size = new System.Drawing.Size(145, 17);
+            this.title.TabIndex = 3;
+            this.title.Text = "Test Run Summary";
+            // 
+            // runSummaryButton
+            // 
+            this.runSummaryButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.runSummaryButton.Appearance = System.Windows.Forms.Appearance.Button;
+            this.runSummaryButton.FlatAppearance.BorderSize = 0;
+            this.runSummaryButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.runSummaryButton.Image = ((System.Drawing.Image)(resources.GetObject("runSummaryButton.Image")));
+            this.runSummaryButton.Location = new System.Drawing.Point(472, 2);
+            this.runSummaryButton.Name = "runSummaryButton";
+            this.runSummaryButton.Size = new System.Drawing.Size(19, 19);
+            this.runSummaryButton.TabIndex = 4;
+            this.toolTip.SetToolTip(this.runSummaryButton, "Display Run Summary");
+            this.runSummaryButton.UseVisualStyleBackColor = true;
+            this.runSummaryButton.CheckedChanged += new System.EventHandler(this.runSummaryButton_CheckedChanged);
+            // 
             // progressBar
             // 
+            this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBar.BackColor = System.Drawing.SystemColors.Control;
             this.progressBar.CausesValidation = false;
-            this.progressBar.Dock = System.Windows.Forms.DockStyle.Top;
             this.progressBar.Enabled = false;
             this.progressBar.ForeColor = System.Drawing.SystemColors.Highlight;
-            this.progressBar.Location = new System.Drawing.Point(0, 0);
+            this.progressBar.Location = new System.Drawing.Point(0, 2);
             this.progressBar.Name = "progressBar";
             this.progressBar.Progress = 0;
-            this.progressBar.Size = new System.Drawing.Size(498, 19);
+            this.progressBar.Size = new System.Drawing.Size(471, 19);
             this.progressBar.Status = TestCentric.Gui.Views.ProgressBarStatus.Success;
             this.progressBar.TabIndex = 3;
             // 
@@ -943,14 +1013,6 @@ namespace TestCentric.Gui.Views
             this.treeView.TabIndex = 0;
             this.treeView.TopNode = null;
             // 
-            // rerunButton
-            // 
-            this.rerunButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.rerunButton.Image = ((System.Drawing.Image)(resources.GetObject("rerunButton.Image")));
-            this.rerunButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.rerunButton.Name = "rerunButton";
-            this.rerunButton.Size = new System.Drawing.Size(23, 21);
-            // 
             // TestCentricMainView
             // 
             this.ClientSize = new System.Drawing.Size(744, 431);
@@ -971,6 +1033,10 @@ namespace TestCentric.Gui.Views
             this.mainMenu.ResumeLayout(false);
             this.mainMenu.PerformLayout();
             this.rightPanel.ResumeLayout(false);
+            this.rightPanel.PerformLayout();
+            this.progressPanel.ResumeLayout(false);
+            this.runSummaryDisplay.ResumeLayout(false);
+            this.runSummaryDisplay.PerformLayout();
             this.resultTabs.ResumeLayout(false);
             this.propertiesTab.ResumeLayout(false);
             this.errorTab.ResumeLayout(false);
@@ -1058,11 +1124,11 @@ namespace TestCentric.Gui.Views
         public ISelection GroupBy { get; private set; }
         public ICommand RunParametersButton { get; private set; }
 
-        public ICommand RunSummaryButton { get; private set; }
+        public IChecked RunSummaryButton { get; private set; }
 
         public IDialogManager DialogManager { get; }
 
-        public IRunSummaryDisplay RunSummaryDisplay => new RunSummaryDisplay(this);
+        public IRunSummaryDisplay RunSummaryDisplay => runSummaryDisplay;
 
         #region Subordinate Views contained in main form
 
@@ -1098,14 +1164,14 @@ namespace TestCentric.Gui.Views
             if (useFullGui)
             {
                 // Move progress bar from left to right
-                leftPanel.Controls.Remove(progressBar);
-                rightPanel.Controls.Add(progressBar);
+                leftPanel.Controls.Remove(progressPanel);
+                rightPanel.Controls.Add(progressPanel);
             }
             else
             {
                 // Move progress bar from right to left
-                rightPanel.Controls.Remove(progressBar);
-                leftPanel.Controls.Add(progressBar);
+                rightPanel.Controls.Remove(progressPanel);
+                leftPanel.Controls.Add(progressPanel);
             }
         }
 
@@ -1133,6 +1199,11 @@ namespace TestCentric.Gui.Views
         }
 
         #endregion
+
+        private void runSummaryButton_CheckedChanged(object sender, EventArgs e)
+        {
+            toolTip.SetToolTip(runSummaryButton, runSummaryButton.Checked ? "Hide Run Summary" : "Display Run Summary");
+        }
     }
 }
 
