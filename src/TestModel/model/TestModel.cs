@@ -35,6 +35,8 @@ namespace TestCentric.Gui.Model
 
         private SettingsService _settingsService;
 
+        private TestRunSpecification _lastTestRun;
+
         private bool _lastRunWasDebugRun;
 
         #region Constructor and Creation
@@ -202,6 +204,24 @@ namespace TestCentric.Gui.Model
 
         #endregion
 
+        #region Specifications passed as arguments to methods
+
+        private class TestRunSpecification
+        {
+            // The selected tests to run (ITestItem may be a TestSelection or a TestNode
+            public ITestItem SelectedTests { get; }
+            // A possibly empty filter to be applied to the selected tests
+            public TestFilter CategoryFilter { get; }
+
+            public TestRunSpecification(ITestItem selectedTests, TestFilter filter)
+            {
+                SelectedTests = selectedTests;
+                CategoryFilter = filter;
+            }
+        }
+
+        #endregion
+
         #region Methods
 
         public void NewProject()
@@ -233,6 +253,7 @@ namespace TestCentric.Gui.Model
             TestFiles.AddRange(files);
 
             TestPackage = MakeTestPackage(files);
+            _lastTestRun = null;
             _lastRunWasDebugRun = false;
 
             Runner = TestEngine.GetRunner(TestPackage);
@@ -351,15 +372,22 @@ namespace TestCentric.Gui.Model
 
         public void RunAllTests()
         {
-            RunTests(CategoryFilter);
+            RunTests(new TestRunSpecification(Tests, CategoryFilter));
         }
 
         public void RunSelectedTests()
         {
-            if (CheckedTestItems.Count > 0)
-                RunTests(CheckedTestItems);
-            else
-                RunTests(SelectedTestItem);
+            ITestItem testsToRun =
+                CheckedTestItems.Count > 0
+                    ? CheckedTestItems
+                    : SelectedTestItem;
+
+            RunTests(new TestRunSpecification(testsToRun, CategoryFilter));
+        }
+
+        public void RerunTests()
+        {
+            RunTests(_lastTestRun);
         }
 
         public void RunTests(ITestItem testItem)
@@ -367,30 +395,7 @@ namespace TestCentric.Gui.Model
             if (testItem == null)
                 throw new ArgumentNullException("testItem");
 
-            var filter = testItem.GetTestFilter();
-
-            if (!CategoryFilter.IsEmpty)
-                filter = TestFilter.MakeAndFilter(filter, CategoryFilter);
-
-            RunTests(filter);
-        }
-
-        // All Test running eventually comes down to this method
-        private void RunTests(TestFilter filter)
-        {
-            SetTestDebuggingFlag(false);
-
-            if (Settings.Engine.ReloadOnRun)
-            {
-                // TODO: reinstate when engine Reload works. Currently
-                // we simulate it with Unload + Load, so the results
-                // are always cleared.
-                //if (Settings.Gui.ClearResultsOnReload)
-                //    ClearResults();
-                ReloadTests();
-            }
-
-            Runner.RunAsync(_events, filter.AsNUnitFilter());
+            RunTests(new TestRunSpecification(testItem, CategoryFilter));
         }
 
         public void DebugAllTests()
@@ -406,36 +411,6 @@ namespace TestCentric.Gui.Model
         public void DebugTests(ITestItem testItem)
         {
             if (testItem != null) DebugTests(testItem.GetTestFilter());
-        }
-
-        private void DebugTests(TestFilter filter)
-        {
-            SetTestDebuggingFlag(true);
-
-            Runner.RunAsync(_events, filter.AsNUnitFilter());
-        }
-
-        private void SetTestDebuggingFlag(bool debuggingRequested)
-        {
-            // We need to re-create the test runner because settings such
-            // as debugging have already been passed to the test runner.
-            // For performance, only do this if we did run in a different mode than last time.
-            if (_lastRunWasDebugRun != debuggingRequested)
-            {
-                foreach (var subPackage in TestPackage.SubPackages)
-                {
-                    subPackage.Settings["DebugTests"] = debuggingRequested;
-                }
-
-                Runner = TestEngine.GetRunner(TestPackage);
-                Runner.Load();
-
-                // It is not strictly necessary to load the tests
-                // because the runner will do that automatically, however,
-                // the initial test count will be incorrect causing UI crashes.
-
-                _lastRunWasDebugRun = debuggingRequested;
-            }
         }
 
         public void StopTestRun(bool force)
@@ -624,6 +599,62 @@ namespace TestCentric.Gui.Model
             }
 
             return runtimes;
+        }
+
+        // All Test running eventually comes down to this method
+        private void RunTests(TestRunSpecification runSpec)
+        {
+            // CreateTestModel a test filter incorporating both the
+            // selected tests and the category filter.
+            var filter = runSpec.SelectedTests.GetTestFilter();
+            if (!runSpec.CategoryFilter.IsEmpty)
+                filter = TestFilter.MakeAndFilter(filter, runSpec.CategoryFilter);
+
+            SetTestDebuggingFlag(false);
+            _lastTestRun = runSpec;
+
+            // TODO: Does this belong here? Maybe need to do before creating the run specification.
+            if (Settings.Engine.ReloadOnRun)
+            {
+                // TODO: reinstate when engine Reload works. Currently
+                // we simulate it with Unload + Load, so the results
+                // are always cleared.
+                //if (Settings.Gui.ClearResultsOnReload)
+                //    ClearResults();
+                ReloadTests();
+            }
+
+            Runner.RunAsync(_events, filter.AsNUnitFilter());
+        }
+
+        private void DebugTests(TestFilter filter)
+        {
+            SetTestDebuggingFlag(true);
+
+            Runner.RunAsync(_events, filter.AsNUnitFilter());
+        }
+
+        private void SetTestDebuggingFlag(bool debuggingRequested)
+        {
+            // We need to re-create the test runner because settings such
+            // as debugging have already been passed to the test runner.
+            // For performance, only do this if we did run in a different mode than last time.
+            if (_lastRunWasDebugRun != debuggingRequested)
+            {
+                foreach (var subPackage in TestPackage.SubPackages)
+                {
+                    subPackage.Settings["DebugTests"] = debuggingRequested;
+                }
+
+                Runner = TestEngine.GetRunner(TestPackage);
+                Runner.Load();
+
+                // It is not strictly necessary to load the tests
+                // because the runner will do that automatically, however,
+                // the initial test count will be incorrect causing UI crashes.
+
+                _lastRunWasDebugRun = debuggingRequested;
+            }
         }
 
         public IList<string> GetAvailableCategories()

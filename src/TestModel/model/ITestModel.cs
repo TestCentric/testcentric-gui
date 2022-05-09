@@ -115,6 +115,9 @@ namespace TestCentric.Gui.Model
         // Debug selected tests
         void DebugSelectedTests();
 
+        // Rerpeat Last Test Run
+        void RerunTests();
+
         // Run just the specified ITestItem
         void RunTests(ITestItem testItem);
 
