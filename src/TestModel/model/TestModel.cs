@@ -35,6 +35,8 @@ namespace TestCentric.Gui.Model
 
         private SettingsService _settingsService;
 
+        private TestRunSpecification _lastTestRun;
+
         private bool _lastRunWasDebugRun;
 
         #region Constructor and Creation
@@ -202,6 +204,24 @@ namespace TestCentric.Gui.Model
 
         #endregion
 
+        #region Specifications passed as arguments to methods
+
+        private class TestRunSpecification
+        {
+            // The selected tests to run (ITestItem may be a TestSelection or a TestNode
+            public ITestItem SelectedTests { get; }
+            // A possibly empty filter to be applied to the selected tests
+            public TestFilter CategoryFilter { get; }
+
+            public TestRunSpecification(ITestItem selectedTests, TestFilter filter)
+            {
+                SelectedTests = selectedTests;
+                CategoryFilter = filter;
+            }
+        }
+
+        #endregion
+
         #region Methods
 
         public void NewProject()
@@ -233,6 +253,7 @@ namespace TestCentric.Gui.Model
             TestFiles.AddRange(files);
 
             TestPackage = MakeTestPackage(files);
+            _lastTestRun = null;
             _lastRunWasDebugRun = false;
 
             Runner = TestEngine.GetRunner(TestPackage);
@@ -351,15 +372,22 @@ namespace TestCentric.Gui.Model
 
         public void RunAllTests()
         {
-            RunTests(CategoryFilter);
+            RunTests(new TestRunSpecification(Tests, CategoryFilter));
         }
 
         public void RunSelectedTests()
         {
-            if (CheckedTestItems.Count > 0)
-                RunTests(CheckedTestItems);
-            else
-                RunTests(SelectedTestItem);
+            ITestItem testsToRun =
+                CheckedTestItems.Count > 0
+                    ? CheckedTestItems
+                    : SelectedTestItem;
+
+            RunTests(new TestRunSpecification(testsToRun, CategoryFilter));
+        }
+
+        public void RerunTests()
+        {
+            RunTests(_lastTestRun);
         }
 
         public void RunTests(ITestItem testItem)
@@ -367,19 +395,22 @@ namespace TestCentric.Gui.Model
             if (testItem == null)
                 throw new ArgumentNullException("testItem");
 
-            var filter = testItem.GetTestFilter();
-
-            if (!CategoryFilter.IsEmpty)
-                filter = TestFilter.MakeAndFilter(filter, CategoryFilter);
-
-            RunTests(filter);
+            RunTests(new TestRunSpecification(testItem, CategoryFilter));
         }
 
         // All Test running eventually comes down to this method
-        private void RunTests(TestFilter filter)
+        private void RunTests(TestRunSpecification runSpec)
         {
-            SetTestDebuggingFlag(false);
+            // CreateTestModel a test filter incorporating both the
+            // selected tests and the category filter.
+            var filter = runSpec.SelectedTests.GetTestFilter();
+            if (!runSpec.CategoryFilter.IsEmpty)
+                filter = TestFilter.MakeAndFilter(filter, runSpec.CategoryFilter);
 
+            SetTestDebuggingFlag(false);
+            _lastTestRun = runSpec;
+
+            // TODO: Does this belong here? Maybe need to do before creating the run specification.
             if (Settings.Engine.ReloadOnRun)
             {
                 // TODO: reinstate when engine Reload works. Currently

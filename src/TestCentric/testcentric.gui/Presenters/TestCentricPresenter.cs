@@ -465,6 +465,7 @@ namespace TestCentric.Gui.Presenters
 
             _view.RunAllButton.Execute += RunAllTests;
             _view.RunSelectedButton.Execute += () => _model.RunSelectedTests();
+            _view.RerunButton.Execute += () => _model.RerunTests();
             _view.RunFailedButton.Execute += RunFailedTests;
 
             _view.DisplayFormat.SelectionChanged += () =>
