@@ -71,25 +71,25 @@ namespace TestCentric.Gui.Presenters.TestTree
         //    _view.Tree.Received().Add(Arg.Compat.Is<TreeNode>((tn) => ((TestNode)tn.Tag).Id == "42"));
         //}
 
-        [Test, Combinatorial]
-        public void WhenContextMenuIsDisplayed_RunCheckedCommandVisibilityIsSet(
-            [Values] bool showCheckBoxes)
-        {
+        //[Test, Combinatorial]
+        //public void WhenContextMenuIsDisplayed_RunCheckedCommandVisibilityIsSet(
+        //    [Values] bool showCheckBoxes)
+        //{
             
-            var testNode = new TestNode(XmlHelper.CreateXmlNode("<test-case/>"));
-            var treeNode = new TreeNode()
-            {
-                Tag = testNode
-            };
+        //    var testNode = new TestNode(XmlHelper.CreateXmlNode("<test-case/>"));
+        //    var treeNode = new TreeNode()
+        //    {
+        //        Tag = testNode
+        //    };
 
-            _view.CheckBoxes.Returns(showCheckBoxes);
-            _view.ShowCheckBoxes.Checked.Returns(showCheckBoxes);
-            _view.ContextNode.Returns(treeNode);
-            _view.TreeContextMenu.Returns(new ContextMenuStrip());
+        //    _view.CheckBoxes.Returns(showCheckBoxes);
+        //    _view.ShowCheckBoxes.Checked.Returns(showCheckBoxes);
+        //    _view.ContextNode.Returns(treeNode);
+        //    _view.TreeContextMenu.Returns(new ContextMenuStrip());
 
-            _view.ClearReceivedCalls();
-            _view.ContextMenuOpening += Raise.Event<EventHandler>();
-            ViewElement("RunCheckedCommand").Received().Visible = showCheckBoxes;
-        }
+        //    _view.ClearReceivedCalls();
+        //    _view.ContextMenuOpening += Raise.Event<EventHandler>();
+        //    ViewElement("RunCheckedCommand").Received().Visible = showCheckBoxes;
+        //}
     }
 }

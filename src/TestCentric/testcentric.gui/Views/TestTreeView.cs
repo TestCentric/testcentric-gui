@@ -39,9 +39,7 @@ namespace TestCentric.Gui.Views
             InitializeComponent();
 
             RunContextCommand = new CommandMenuElement(this.runMenuItem);
-            RunCheckedCommand = new CommandMenuElement(this.runCheckedMenuItem);
             DebugContextCommand = new CommandMenuElement(this.debugMenuItem);
-            DebugCheckedCommand = new CommandMenuElement(this.debugCheckedMenuItem);
             ActiveConfiguration = new PopupMenuElement(this.activeConfigMenuItem);
             ShowCheckBoxes = new CheckedMenuElement(showCheckboxesMenuItem);
             ExpandAllCommand = new CommandMenuElement(expandAllMenuItem);
@@ -52,10 +50,31 @@ namespace TestCentric.Gui.Views
 
             TreeView = treeView;
 
+            // NOTE: We use MouseDown here rather than MouseUp because
+            // the menu strip Opening event occurs before MouseUp.
             treeView.MouseDown += (s, e) =>
             {
                 if (e.Button == MouseButtons.Right)
+                {
                     ContextNode = TreeView.GetNodeAt(e.X, e.Y);
+                }
+            };
+
+            treeView.ContextMenuStrip.Opening += (s, e) =>
+            {
+                bool clickedOnNode = ContextNode != null;
+
+                runMenuItem.Visible =
+                debugMenuItem.Visible =
+                contextMenuSeparator1.Visible =
+                viewAsXmlMenuItem.Visible =
+                contextMenuSeparator2.Visible = clickedOnNode;
+
+                ContextMenuOpening?.Invoke(s, e);
+
+                // In case presenter cancels
+                if (!e.Cancel && clickedOnNode)
+                    SelectedNode = ContextNode;
             };
 
             treeView.NodeMouseDoubleClick += (s, e) => TreeNodeDoubleClick?.Invoke(e.Node);
@@ -63,8 +82,6 @@ namespace TestCentric.Gui.Views
             treeView.AfterSelect += (s, e) => SelectedNodeChanged?.Invoke(e.Node);
 
             treeView.AfterCheck += (s, e) => AfterCheck?.Invoke(e.Node);
-
-            treeView.ContextMenuStrip.Opening += (s, e) => ContextMenuOpening?.Invoke(s, e);
         }
 
         #region Properties
@@ -95,9 +112,7 @@ namespace TestCentric.Gui.Views
         }
 
         public ICommand RunContextCommand { get; private set; }
-        public ICommand RunCheckedCommand { get; private set; }
         public ICommand DebugContextCommand { get; private set; }
-        public ICommand DebugCheckedCommand { get; private set; }
         public IToolStripMenu ActiveConfiguration { get; private set; }
         public IChecked ShowCheckBoxes { get; private set; }
         public ICommand ExpandAllCommand { get; private set; }
