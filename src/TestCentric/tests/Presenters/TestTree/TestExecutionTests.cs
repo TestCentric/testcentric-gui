@@ -59,24 +59,5 @@ namespace TestCentric.Gui.Presenters.TestTree
             _view.TreeNodeDoubleClick += Raise.Event<TreeNodeActionHandler>(TEST_SUITE_TREE_NODE);
             _model.DidNotReceive().RunTests(Arg.Is(TEST_SUITE_NODE));
         }
-
-        //[Test]
-        //public void RunSelectedCommandRunsSelectedTests()
-        //{
-        //    _view.SelectedNodes.Returns(new[] { TEST_SUITE_TREE_NODE });
-
-        //    _view.RunSelectedCommand.Execute += Raise.Event<CommandHandler>();
-        //    _model.Received().RunSelectedTests();
-        //}
-
-        //[Test]
-        //public void WhenSelectedNodesChangeModelIsNotified()
-        //{
-        //    var treeNodes = new List<TreeNode>( new[] { TEST_CASE_TREE_NODE, TEST_SUITE_TREE_NODE });
-
-        //    _view.SelectedNodesChanged += Raise.Event<MultipleTreeNodeActionHandler>(treeNodes);
-        //    _model.Received().NotifyTestSelectionChanged(Arg.Is<TestSelection>( (s) =>
-        //        s.Count == 2 && s.Contains(TEST_CASE_NODE) && s.Contains(TEST_SUITE_NODE) ));
-        //}
     }
 }

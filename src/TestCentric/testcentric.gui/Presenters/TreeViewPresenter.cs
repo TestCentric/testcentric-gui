@@ -171,7 +171,17 @@ namespace TestCentric.Gui.Presenters
             {
                 var testItem = treeNode.Tag as ITestItem;
                 if (testItem != null)
-                    _model.NotifySelectedItemChanged(testItem);
+                {
+                    _model.ActiveTestItem = testItem;
+                    if (!_view.CheckBoxes)
+                    {
+                        var selection = testItem as TestSelection;
+                        var node = testItem as TestNode;
+                        if (selection == null && node != null)
+                            selection = new TestSelection() { node };
+                        _model.SelectedTests = selection;
+                    }
+                }
             };
 
             _view.AfterCheck += (treeNode) =>
@@ -182,7 +192,7 @@ namespace TestCentric.Gui.Presenters
                 foreach (var node in checkedNodes)
                     selection.Add(node.Tag as TestNode);
                 
-                _model.NotifyCheckedItemsChanged(selection);
+                _model.SelectedTests = selection;
             };
 
             // Node selected in tree

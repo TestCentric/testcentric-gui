@@ -192,9 +192,21 @@ namespace TestCentric.Gui.Model
             get { return Results.Count > 0; }
         }
 
-        public ITestItem SelectedTestItem { get; private set; }
+        /// <summary>
+        /// Gets or sets the active test item. This is the item
+        /// for which details are displayed in the various views.
+        /// </summary>
+        public ITestItem ActiveTestItem
+        {
+            get { return _activeItem; }
+            set { _activeItem = value; _events.FireActiveItemChanged(_activeItem); }
+        }
+        private ITestItem _activeItem;
 
-        public TestSelection CheckedTestItems { get; private set; }
+        /// <summary>
+        ///  Gets or sets the list of selected tests.
+        /// </summary>
+        public TestSelection SelectedTests { get; set; }
 
         public List<string> SelectedCategories { get; private set; }
 
@@ -378,9 +390,9 @@ namespace TestCentric.Gui.Model
         public void RunSelectedTests()
         {
             ITestItem testsToRun =
-                CheckedTestItems.Count > 0
-                    ? CheckedTestItems
-                    : SelectedTestItem;
+                SelectedTests.Count > 0
+                    ? SelectedTests
+                    : ActiveTestItem;
 
             RunTests(new TestRunSpecification(testsToRun, CategoryFilter));
         }
@@ -405,7 +417,7 @@ namespace TestCentric.Gui.Model
 
         public void DebugSelectedTests()
         {
-            DebugTests(SelectedTestItem);
+            DebugTests(ActiveTestItem);
         }
 
         public void DebugTests(ITestItem testItem)
@@ -476,17 +488,6 @@ namespace TestCentric.Gui.Model
             }
 
             CategoryFilter = catFilter;
-        }
-
-        public void NotifySelectedItemChanged(ITestItem testItem)
-        {
-            SelectedTestItem = testItem;
-            _events.FireSelectedItemChanged(testItem);
-        }
-
-        public void NotifyCheckedItemsChanged(TestSelection checkedItems)
-        {
-            CheckedTestItems = checkedItems;
         }
 
         #endregion
