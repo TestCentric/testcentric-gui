@@ -21,7 +21,7 @@ namespace TestCentric.Gui.Presenters.Main
             _model.IsTestRunning.Returns(false);
 
             TestNode testNode = new TestNode("<test-suite id='1'/>");
-            _model.Tests.Returns(testNode);
+            _model.LoadedTests.Returns(testNode);
             _model.TestPackage.Returns(new NUnit.Engine.TestPackage("dummy.dll"));
 
             FireTestReloadedEvent(testNode);

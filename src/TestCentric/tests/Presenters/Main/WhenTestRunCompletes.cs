@@ -12,6 +12,8 @@ namespace TestCentric.Gui.Presenters.Main
 
     public class WhenTestRunCompletes : MainPresenterTestBase
     {
+        private ResultSummary _summary;
+
         [SetUp]
         public void SimulateTestRunFinish()
         {
@@ -19,6 +21,7 @@ namespace TestCentric.Gui.Presenters.Main
 
             _model.HasTests.Returns(true);
             _model.HasResults.Returns(true);
+            _model.ResultSummary.Returns(new ResultSummary() { FailureCount = 1 });
             _model.IsTestRunning.Returns(false);
             _model.TestPackage.Returns(new NUnit.Engine.TestPackage("dummy.dll"));
 
@@ -43,7 +46,7 @@ namespace TestCentric.Gui.Presenters.Main
         [TestCase("RunAllButton", true)]
         [TestCase("RunSelectedButton", true)]
         [TestCase("RerunButton", true)]
-        [TestCase("RunFailedButton", true)] // TODO: Further tests with & without failures
+        [TestCase("RunFailedButton", true)]
         [TestCase("DisplayFormatButton", true)]
         [TestCase("RunParametersButton", true)]
         [TestCase("StopRunButton", false)]

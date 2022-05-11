@@ -82,7 +82,7 @@ namespace TestCentric.Gui.Presenters
         // changes. May need to distinguish these cases.
         public void Reload()
         {
-            TestNode testNode = _model.Tests;
+            TestNode testNode = _model.LoadedTests;
             if (testNode != null)
             {
                 OnTestLoaded(testNode);

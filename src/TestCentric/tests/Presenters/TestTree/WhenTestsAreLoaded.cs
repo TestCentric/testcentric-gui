@@ -22,7 +22,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             _model.TestPackage.Returns(new NUnit.Engine.TestPackage("dummy.dll"));
 
             TestNode testNode = new TestNode("<test-suite id='1'/>");
-            _model.Tests.Returns(testNode);
+            _model.LoadedTests.Returns(testNode);
             FireTestLoadedEvent(testNode);
         }
 

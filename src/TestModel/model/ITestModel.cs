@@ -56,7 +56,7 @@ namespace TestCentric.Gui.Model
         IDictionary<string, object> PackageOverrides { get; }
 
         // TestNode hierarchy representing the discovered tests
-        TestNode Tests { get; }
+        TestNode LoadedTests { get; }
 
         // See if tests are available
         bool HasTests { get; }
@@ -66,7 +66,10 @@ namespace TestCentric.Gui.Model
         // See if a test is running
         bool IsTestRunning { get; }
 
-        // Do we have results from running the test?
+        // Summary of last test run
+        ResultSummary ResultSummary { get; }
+
+        // Is Resultsummary available?
         bool HasResults { get; }
 
         /// <summary>
@@ -98,19 +101,13 @@ namespace TestCentric.Gui.Model
 
         void SaveProject();
 
-        // Load a TestPackage
+        // Loading and Unloading Tests
         void LoadTests(IList<string> files);
-
-        // Unload current TestPackage
         void UnloadTests();
-
-        // Reload current TestPackage
         void ReloadTests();
-
-        // Reload a specific package using the specified config
         void ReloadPackage(TestPackage package, string config);
 
-        // Run all the tests
+        // Running Tests
         void RunAllTests();
 
         // Run selected tests
@@ -118,20 +115,15 @@ namespace TestCentric.Gui.Model
 
         // Repeat Last Test Run
         void RerunTests();
-
-        // Run just the specified ITestItem
+        void RunFailedTests();
         void RunTests(ITestItem testItem);
-
-        // Debug just the specified ITestItem
         void DebugTests(ITestItem testItem);
-
-        // Stop the running test
         void StopTestRun(bool force);
 
         // Save the results of the last run in the specified format
         void SaveResults(string fileName, string format="nunit3");
 
-        // Get the result for a test if available
+        // Get the result for a specific test id if available
         ResultNode GetResultForTest(string id);
 
         // Get the TestPackage represented by a test,if available
