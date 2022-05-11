@@ -410,16 +410,6 @@ namespace TestCentric.Gui.Model
             RunTests(new TestRunSpecification(testItem, CategoryFilter));
         }
 
-        public void DebugAllTests()
-        {
-            DebugTests(TestFilter.Empty);
-        }
-
-        public void DebugSelectedTests()
-        {
-            DebugTests(ActiveTestItem);
-        }
-
         public void DebugTests(ITestItem testItem)
         {
             if (testItem != null) DebugTests(testItem.GetTestFilter());

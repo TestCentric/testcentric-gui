@@ -221,11 +221,13 @@ namespace TestCentric.Gui.Presenters
                 //if (e.Result.Outcome.Status == TestStatus.Failed)
                 //    _view.Activate();
 
+                // TODO: Should this be an option?
+                // Display the run summary
+                _view.RunSummaryButton.Checked = true;
+
                 // If we were running unattended, it's time to close
                 if (_options.Unattended)
                     _view.Close();
-                //else
-                //    DisplayTestRunSummary(result, true);
             };
 
             _settings.Changed += (s, e) =>
@@ -307,7 +309,7 @@ namespace TestCentric.Gui.Presenters
 
                 // Run loaded test automatically if called for
                 if (_model.IsPackageLoaded && _options.RunAllTests)
-                    RunAllTests();
+                    _model.RunAllTests();
                 // Currently, --unattended without --run does nothing except exit.
                 else if (_options.Unattended)
                     _view.Close();
@@ -463,9 +465,12 @@ namespace TestCentric.Gui.Presenters
                 _settings.Gui.FixedFont = new Font(FontFamily.GenericMonospace, 8.0f);
             };
 
-            _view.RunAllButton.Execute += RunAllTests;
+            _view.RunAllButton.Execute += () => { _model.ClearResults(); _model.RunAllTests(); };
+
             _view.RunSelectedButton.Execute += () => _model.RunSelectedTests();
+
             _view.RerunButton.Execute += () => _model.RerunTests();
+
             _view.RunFailedButton.Execute += RunFailedTests;
 
             _view.DisplayFormat.SelectionChanged += () =>
@@ -722,12 +727,6 @@ namespace TestCentric.Gui.Presenters
         #endregion
 
         #region Run Methods
-
-        public void RunAllTests()
-        {
-            _model.ClearResults();
-            _model.RunAllTests();
-        }
 
         public void RunFailedTests()
         {
