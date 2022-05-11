@@ -36,10 +36,10 @@ namespace TestCentric.Gui.Model
         public void CheckStateAfterLoading()
         {
             Assert.That(_model.HasTests, "HasTests");
-            Assert.NotNull(_model.Tests, "Tests");
+            Assert.NotNull(_model.LoadedTests, "Tests");
             Assert.False(_model.HasResults, "HasResults");
 
-            var testRun = _model.Tests;
+            var testRun = _model.LoadedTests;
             Assert.That(testRun.Xml.Name, Is.EqualTo("test-run"), "Expected test-run element");
             Assert.That(testRun.RunState, Is.EqualTo(RunState.Runnable), "RunState of test-run");
             Assert.That(testRun.TestCount, Is.EqualTo(MockAssembly.Tests), "TestCount of test-run");
@@ -53,9 +53,9 @@ namespace TestCentric.Gui.Model
         [Test]
         public void CheckThatTestsMapToPackages()
         {
-            var package1 = _model.GetPackageForTest(_model.Tests.Id);
-            var package2 = _model.GetPackageForTest(_model.Tests.Children[0].Id);
-            var nopackage = _model.GetPackageForTest(_model.Tests.Children[0].Children[0].Id);
+            var package1 = _model.GetPackageForTest(_model.LoadedTests.Id);
+            var package2 = _model.GetPackageForTest(_model.LoadedTests.Children[0].Id);
+            var nopackage = _model.GetPackageForTest(_model.LoadedTests.Children[0].Children[0].Id);
 
             Assert.NotNull(package1, "Package1");
             Assert.NotNull(package2, "Package2");
@@ -76,7 +76,7 @@ namespace TestCentric.Gui.Model
             RunAllTestsAndWaitForCompletion();
 
             Assert.That(_model.HasTests, "HasTests");
-            Assert.NotNull(_model.Tests, "Tests");
+            Assert.NotNull(_model.LoadedTests, "Tests");
             Assert.That(_model.HasResults, "HasResults");
         }
 
@@ -86,7 +86,7 @@ namespace TestCentric.Gui.Model
             _model.UnloadTests();
 
             Assert.False(_model.HasTests, "HasTests");
-            Assert.Null(_model.Tests, "Tests");
+            Assert.Null(_model.LoadedTests, "Tests");
             Assert.False(_model.HasResults, "HasResults");
         }
 
@@ -96,18 +96,18 @@ namespace TestCentric.Gui.Model
             _model.ReloadTests();
 
             Assert.That(_model.HasTests, "HasTests");
-            Assert.NotNull(_model.Tests, "Tests");
+            Assert.NotNull(_model.LoadedTests, "Tests");
             Assert.False(_model.HasResults, "HasResults");
         }
 
         [Test]
         public void TestTreeIsUnchangedByReload()
         {
-            var originalTests = _model.Tests;
+            var originalTests = _model.LoadedTests;
 
             _model.ReloadTests();
 
-            Assert.Multiple(() => CheckNodesAreEqual(originalTests, _model.Tests));
+            Assert.Multiple(() => CheckNodesAreEqual(originalTests, _model.LoadedTests));
         }
 
         private void RunAllTestsAndWaitForCompletion()

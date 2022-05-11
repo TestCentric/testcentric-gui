@@ -471,7 +471,7 @@ namespace TestCentric.Gui.Presenters
 
             _view.RerunButton.Execute += () => _model.RerunTests();
 
-            _view.RunFailedButton.Execute += RunFailedTests;
+            _view.RunFailedButton.Execute += () => _model.RunFailedTests();
 
             _view.DisplayFormat.SelectionChanged += () =>
             {
@@ -500,9 +500,7 @@ namespace TestCentric.Gui.Presenters
             {
                 if (_view.RunSummaryButton.Checked)
                 {
-                    var result = _model.GetResultForTest(_model.Tests.Id);
-                    var summary = ResultSummaryCreator.FromResultNode(result);
-                    var report = ResultSummaryReporter.WriteSummaryReport(summary);
+                    var report = ResultSummaryReporter.WriteSummaryReport(_model.ResultSummary);
                     _view.RunSummaryDisplay.Display(report);
                 }
                 else
@@ -726,15 +724,6 @@ namespace TestCentric.Gui.Presenters
 
         #endregion
 
-        #region Run Methods
-
-        public void RunFailedTests()
-        {
-            //RunTests(_view.TreeView.FailedTests);
-        }
-
-        #endregion
-
         #endregion
 
         #region Helper Methods
@@ -743,20 +732,22 @@ namespace TestCentric.Gui.Presenters
         {
             bool testLoaded = _model.HasTests;
             bool testRunning = _model.IsTestRunning;
+            bool hasResults = _model.HasResults;
+            bool hasFailures = _model.HasResults && _model.ResultSummary.FailedCount > 0;
 
             _view.RunAllButton.Enabled =
             _view.RunSelectedButton.Enabled =
             _view.DisplayFormatButton.Enabled =
             _view.RunParametersButton.Enabled = testLoaded && !testRunning;
 
-            _view.RerunButton.Enabled =
-            // TODO: RunFailedButton should only be enabled if there are failures
-            _view.RunFailedButton.Enabled = testLoaded && !testRunning && _model.HasResults;
+            _view.RerunButton.Enabled = testLoaded && !testRunning && hasResults;
+
+            _view.RunFailedButton.Enabled = testLoaded && !testRunning && hasFailures;
 
             _view.StopRunButton.Enabled =
             _view.ForceStopButton.Enabled = testRunning;
 
-            _view.RunSummaryButton.Enabled = testLoaded && !testRunning && _model.HasResults;
+            _view.RunSummaryButton.Enabled = testLoaded && !testRunning && hasResults;
 
             _view.OpenCommand.Enabled = !testRunning & !testLoading;
             _view.CloseCommand.Enabled = testLoaded & !testRunning;
@@ -764,7 +755,7 @@ namespace TestCentric.Gui.Presenters
             _view.ReloadTestsCommand.Enabled = testLoaded && !testRunning;
             _view.RecentFilesMenu.Enabled = !testRunning && !testLoading;
             _view.ExitCommand.Enabled = !testLoading;
-            _view.SaveResultsCommand.Enabled = _view.SaveResultsAsMenu.Enabled = !testRunning && !testLoading && _model.HasResults;
+            _view.SaveResultsCommand.Enabled = _view.SaveResultsAsMenu.Enabled = !testRunning && !testLoading && hasResults;
         }
 
         private string CreateOpenFileFilter()

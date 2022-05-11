@@ -242,6 +242,20 @@ namespace TestCentric.Gui.Presenters.Main
         }
 
         [Test]
+        public void RerunButton_RerunsTests()
+        {
+            _view.RerunButton.Execute += Raise.Event<CommandHandler>();
+            _model.Received().RerunTests();
+        }
+
+        [Test]
+        public void RunFailedButton_RunsFailedTests()
+        {
+            _view.RunFailedButton.Execute += Raise.Event<CommandHandler>();
+            _model.Received().RunFailedTests();
+        }
+
+        [Test]
         public void DisplayFormatChange_ChangesModelSetting()
         {
             _view.DisplayFormat.SelectedItem.Returns("TEST_LIST");

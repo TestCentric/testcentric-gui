@@ -177,20 +177,15 @@ namespace TestCentric.Gui.Model
 
         public IDictionary<string, object> PackageOverrides { get; } = new Dictionary<string, object>();
 
-        public TestNode Tests { get; private set; }
-        public bool HasTests { get { return Tests != null; } }
+        public TestNode LoadedTests { get; private set; }
+        public bool HasTests { get { return LoadedTests != null; } }
 
         public IList<string> AvailableCategories { get; private set; }
 
-        public bool IsTestRunning
-        {
-            get { return Runner != null && Runner.IsTestRunning; }
-        }
+        public bool IsTestRunning => Runner != null && Runner.IsTestRunning;
 
-        public bool HasResults
-        {
-            get { return Results.Count > 0; }
-        }
+        public ResultSummary ResultSummary { get; internal set; }
+        public bool HasResults => ResultSummary != null;
 
         /// <summary>
         /// Gets or sets the active test item. This is the item
@@ -272,7 +267,7 @@ namespace TestCentric.Gui.Model
 
             try
             {
-                Tests = new TestNode(Runner.Explore(NUnit.Engine.TestFilter.Empty));
+                LoadedTests = new TestNode(Runner.Explore(NUnit.Engine.TestFilter.Empty));
             }
             catch(Exception ex)
             {
@@ -283,13 +278,13 @@ namespace TestCentric.Gui.Model
             MapTestsToPackages();
             AvailableCategories = GetAvailableCategories();
 
-            Results.Clear();
+            ClearResults();
 
             _assemblyWatcher.Setup(1000, files as IList);
             _assemblyWatcher.AssemblyChanged += (path) => _events.FireTestChanged();
             _assemblyWatcher.Start();
 
-            _events.FireTestLoaded(Tests);
+            _events.FireTestLoaded(LoadedTests);
 
             foreach (var subPackage in TestPackage.SubPackages)
                 RecentFiles.Latest = subPackage.FullName;
@@ -300,7 +295,7 @@ namespace TestCentric.Gui.Model
         private void MapTestsToPackages()
         {
             _packageMap.Clear();
-            MapTestToPackage(Tests, TestPackage);
+            MapTestToPackage(LoadedTests, TestPackage);
         }
 
         private void MapTestToPackage(TestNode test, TestPackage package)
@@ -325,11 +320,11 @@ namespace TestCentric.Gui.Model
 
             UnloadTestsIgnoringErrors();
             Runner.Dispose();
-            Tests = null;
+            LoadedTests = null;
             AvailableCategories = null;
             TestPackage = null;
             TestFiles.Clear();
-            Results.Clear();
+            ClearResults();
             _assemblyWatcher.Stop();
 
             _events.FireTestUnloaded();
@@ -360,12 +355,12 @@ namespace TestCentric.Gui.Model
             Runner = TestEngine.GetRunner(TestPackage);
 
             // Discover tests
-            Tests = new TestNode(Runner.Explore(NUnit.Engine.TestFilter.Empty));
+            LoadedTests = new TestNode(Runner.Explore(NUnit.Engine.TestFilter.Empty));
             AvailableCategories = GetAvailableCategories();
 
-            Results.Clear();
+            ClearResults();
 
-            _events.FireTestReloaded(Tests);
+            _events.FireTestReloaded(LoadedTests);
         }
 
         public void ReloadPackage(TestPackage package, string config)
@@ -384,7 +379,7 @@ namespace TestCentric.Gui.Model
 
         public void RunAllTests()
         {
-            RunTests(new TestRunSpecification(Tests, CategoryFilter));
+            RunTests(new TestRunSpecification(LoadedTests, CategoryFilter));
         }
 
         public void RunSelectedTests()
@@ -400,6 +395,20 @@ namespace TestCentric.Gui.Model
         public void RerunTests()
         {
             RunTests(_lastTestRun);
+        }
+
+        public void RunFailedTests()
+        {
+            var tests = new TestSelection();
+
+            foreach (var entry in Results)
+            {
+                var test = entry.Value;
+                if (!test.IsSuite && test.Outcome.Status == TestStatus.Failed)
+                    tests.Add(test);
+            }
+
+            RunTests(new TestRunSpecification(tests, TestFilter.Empty));
         }
 
         public void RunTests(ITestItem testItem)
@@ -423,7 +432,7 @@ namespace TestCentric.Gui.Model
         public void SaveResults(string filePath, string format = "nunit3")
         {
             var resultWriter = Services.ResultService.GetResultWriter(format, new object[0]);
-            var results = GetResultForTest(Tests.Id);
+            var results = GetResultForTest(LoadedTests.Id);
             resultWriter.WriteResultFile(results.Xml, filePath);
         }
 
@@ -453,6 +462,7 @@ namespace TestCentric.Gui.Model
         public void ClearResults()
         {
             Results.Clear();
+            ResultSummary = null;
         }
 
         public void SelectCategories(IList<string> categories, bool exclude)
@@ -651,7 +661,7 @@ namespace TestCentric.Gui.Model
         public IList<string> GetAvailableCategories()
         {
             var categories = new Dictionary<string, string>();
-            CollectCategories(Tests, categories);
+            CollectCategories(LoadedTests, categories);
 
             var list = new List<string>(categories.Values);
             list.Sort();

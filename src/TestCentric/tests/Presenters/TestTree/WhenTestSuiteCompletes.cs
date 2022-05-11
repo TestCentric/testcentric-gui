@@ -38,7 +38,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             var resultNode = new ResultNode(string.IsNullOrEmpty(label)
                 ? string.Format("<test-suite id='123' result='{0}'/>", result)
                 : string.Format("<test-suite id='123' result='{0}' label='{1}'/>", result, label));
-            _model.Tests.Returns(testNode);
+            _model.LoadedTests.Returns(testNode);
 
             _model.Events.TestLoaded += Raise.Event<TestNodeEventHandler>(new TestNodeEventArgs(testNode));
             _model.Events.SuiteFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(resultNode));
