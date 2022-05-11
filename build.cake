@@ -108,9 +108,11 @@ Task("Build")
 	CopyFileToDirectory(
 		parameters.NuGetTestDirectory + "TestCentric.Engine/content/testcentric.nuget.addins",
 		parameters.OutputDirectory);
+	Information("Copyied testcentric.nuget.addins");
 	CopyDirectory(
 		parameters.NuGetTestDirectory + "TestCentric.Engine/agents",
 		parameters.OutputDirectory + "agents");
+	Information("Copyied agent files");
 
 });
 

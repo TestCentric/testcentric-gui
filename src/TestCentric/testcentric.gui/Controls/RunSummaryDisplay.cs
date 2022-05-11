@@ -9,10 +9,8 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Controls
 {
-    public class RunSummaryDisplay : Panel, IRunSummaryDisplay
+    public class RunSummaryDisplay : UserControl, IRunSummaryDisplay
     {
-        private const int DEFAULT_TIMEOUT = 10000;
-
         private Label title;
         private TextBox runSummary;
 
@@ -30,10 +28,10 @@ namespace TestCentric.Gui.Controls
             // title
             // 
             this.title.AutoSize = true;
-            this.title.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.title.Location = new System.Drawing.Point(6, 5);
+            this.title.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.4F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.title.Location = new System.Drawing.Point(0, 0);
             this.title.Name = "title";
-            this.title.Size = new System.Drawing.Size(129, 17);
+            this.title.Size = new System.Drawing.Size(137, 16);
             this.title.TabIndex = 0;
             this.title.Text = "Test Run Summary";
             // 
@@ -44,19 +42,19 @@ namespace TestCentric.Gui.Controls
             this.runSummary.BackColor = System.Drawing.Color.LightYellow;
             this.runSummary.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.runSummary.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.runSummary.Location = new System.Drawing.Point(15, 36);
+            this.runSummary.Location = new System.Drawing.Point(3, 19);
             this.runSummary.Multiline = true;
             this.runSummary.Name = "runSummary";
-            this.runSummary.Size = new System.Drawing.Size(448, 106);
+            this.runSummary.Size = new System.Drawing.Size(469, 120);
             this.runSummary.TabIndex = 2;
             // 
             // RunSummaryDisplay
             // 
             this.BackColor = System.Drawing.Color.LightYellow;
-            this.ClientSize = new System.Drawing.Size(475, 154);
             this.Controls.Add(this.runSummary);
             this.Controls.Add(this.title);
             this.Name = "RunSummaryDisplay";
+            this.Size = new System.Drawing.Size(475, 139);
             this.ResumeLayout(false);
             this.PerformLayout();
 

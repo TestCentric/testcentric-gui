@@ -69,9 +69,16 @@ namespace TestCentric.Gui.Model
         // Do we have results from running the test?
         bool HasResults { get; }
 
-        ITestItem SelectedTestItem { get; }
+        /// <summary>
+        /// Gets or sets the active test item. This is the item
+        /// for which details are displayed in the various views.
+        /// </summary>
+        ITestItem ActiveTestItem { get; set; }
 
-        TestSelection CheckedTestItems { get; }
+        /// <summary>
+        ///  Gets or sets the list of selected tests.
+        /// </summary>
+        TestSelection SelectedTests { get; set; }
 
         List<string> SelectedCategories { get; }
 
@@ -106,16 +113,10 @@ namespace TestCentric.Gui.Model
         // Run all the tests
         void RunAllTests();
 
-        // Debug all tests
-        void DebugAllTests();
-
         // Run selected tests
         void RunSelectedTests();
 
-        // Debug selected tests
-        void DebugSelectedTests();
-
-        // Rerpeat Last Test Run
+        // Repeat Last Test Run
         void RerunTests();
 
         // Run just the specified ITestItem
@@ -142,12 +143,6 @@ namespace TestCentric.Gui.Model
 
         // Clear the results for all tests
         void ClearResults();
-
-        // Notify TestModel when SelectedTestItem changes
-        void NotifySelectedItemChanged(ITestItem testItem);
-
-        // Notify TestModel when the list of checked items changes
-        void NotifyCheckedItemsChanged(TestSelection checkedItems);
 
         // Set the category filters for running and tree display
         void SelectCategories(IList<string> categories, bool exclude);

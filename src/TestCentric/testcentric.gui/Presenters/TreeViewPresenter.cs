@@ -156,12 +156,10 @@ namespace TestCentric.Gui.Presenters
                     _model.RunTests(testNode);
             };
 
-            _view.RunCheckedCommand.Execute += RunCheckedTests;
             _view.DebugContextCommand.Execute += () =>
             {
                 if (_selectedTestItem != null) _model.DebugTests(_selectedTestItem);
             };
-            _view.DebugCheckedCommand.Execute += DebugCheckedTests;
 
             _view.TestPropertiesCommand.Execute += () => ShowPropertiesDisplay();
 
@@ -171,7 +169,17 @@ namespace TestCentric.Gui.Presenters
             {
                 var testItem = treeNode.Tag as ITestItem;
                 if (testItem != null)
-                    _model.NotifySelectedItemChanged(testItem);
+                {
+                    _model.ActiveTestItem = testItem;
+                    if (!_view.CheckBoxes)
+                    {
+                        var selection = testItem as TestSelection;
+                        var node = testItem as TestNode;
+                        if (selection == null && node != null)
+                            selection = new TestSelection() { node };
+                        _model.SelectedTests = selection;
+                    }
+                }
             };
 
             _view.AfterCheck += (treeNode) =>
@@ -182,7 +190,7 @@ namespace TestCentric.Gui.Presenters
                 foreach (var node in checkedNodes)
                     selection.Add(node.Tag as TestNode);
                 
-                _model.NotifyCheckedItemsChanged(selection);
+                _model.SelectedTests = selection;
             };
 
             // Node selected in tree
@@ -329,44 +337,6 @@ namespace TestCentric.Gui.Presenters
 
         }
 
-        private void RunCheckedTests()
-        {
-            var tests = new TestGroup("RunTests");
-
-            foreach (var treeNode in _view.CheckedNodes)
-            {
-                var testNode = treeNode.Tag as TestNode;
-                if (testNode != null)
-                    tests.Add(testNode);
-                else
-                {
-                    var group = treeNode.Tag as TestGroup;
-                    if (group != null)
-                        tests.AddRange(group);
-                }
-            }
-
-            _model.RunTests(tests);
-        }
-
-        private void DebugCheckedTests()
-        {
-            var tests = new TestGroup("DebugTests");
-
-            foreach (var treeNode in _view.CheckedNodes)
-            {
-                var testNode = treeNode.Tag as TestNode;
-                if (testNode != null) tests.Add(testNode);
-                else
-                {
-                    var group = treeNode.Tag as TestGroup;
-                    if (group != null) tests.AddRange(group);
-                }
-            }
-
-            _model.DebugTests(tests);
-        }
-
         private void InitializeContextMenu()
         {
             // TODO: Config Menu is hidden until changing the config actually works
@@ -393,24 +363,11 @@ namespace TestCentric.Gui.Presenters
             //    }
             //}
 
-            _view.RunCheckedCommand.Visible =
-            _view.DebugCheckedCommand.Visible = _view.ShowCheckBoxes.Checked;
-
             _view.ActiveConfiguration.Visible = displayConfigMenu;
 
             var layout = _model.Settings.Gui.GuiLayout;
             _view.TestPropertiesCommand.Visible = layout == "Mini";
         }
-
-        //private void InitializeRunCommands()
-        //{
-        //    bool isRunning = _model.IsTestRunning;
-        //    bool canRun = _model.HasTests && !isRunning;
-        //    bool canRunChecked = canRun && _view.ShowCheckBoxes.Checked;
-
-        //    _view.RunCheckedCommand.Visible =
-        //    _view.DebugCheckedCommand.Visible = canRunChecked;
-        //}
 
         private void SetDefaultDisplayStrategy()
         {

@@ -105,8 +105,6 @@ namespace TestCentric.Gui.Views
         private ToolStripButton rerunButton;
         private CheckBox runSummaryButton;
         private RunSummaryDisplay runSummaryDisplay;
-        private TextBox runSummary;
-        private Label title;
         private TextOutputView textOutputView1;
 
         #endregion
@@ -270,8 +268,6 @@ namespace TestCentric.Gui.Views
             this.rightPanel = new System.Windows.Forms.Panel();
             this.progressPanel = new System.Windows.Forms.Panel();
             this.runSummaryDisplay = new TestCentric.Gui.Controls.RunSummaryDisplay();
-            this.runSummary = new System.Windows.Forms.TextBox();
-            this.title = new System.Windows.Forms.Label();
             this.runSummaryButton = new System.Windows.Forms.CheckBox();
             this.progressBar = new TestCentric.Gui.Views.ProgressBarView();
             this.resultTabs = new System.Windows.Forms.TabControl();
@@ -830,36 +826,11 @@ namespace TestCentric.Gui.Views
             this.runSummaryDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.runSummaryDisplay.BackColor = System.Drawing.Color.LightYellow;
-            this.runSummaryDisplay.Controls.Add(this.runSummary);
-            this.runSummaryDisplay.Controls.Add(this.title);
             this.runSummaryDisplay.Location = new System.Drawing.Point(3, 23);
             this.runSummaryDisplay.Name = "runSummaryDisplay";
             this.runSummaryDisplay.Size = new System.Drawing.Size(488, 76);
             this.runSummaryDisplay.TabIndex = 5;
             this.runSummaryDisplay.Visible = false;
-            // 
-            // runSummary
-            // 
-            this.runSummary.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.runSummary.BackColor = System.Drawing.Color.LightYellow;
-            this.runSummary.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.runSummary.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.runSummary.Location = new System.Drawing.Point(7, 30);
-            this.runSummary.Multiline = true;
-            this.runSummary.Name = "runSummary";
-            this.runSummary.Size = new System.Drawing.Size(476, 37);
-            this.runSummary.TabIndex = 4;
-            // 
-            // title
-            // 
-            this.title.AutoSize = true;
-            this.title.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.title.Location = new System.Drawing.Point(4, 5);
-            this.title.Name = "title";
-            this.title.Size = new System.Drawing.Size(145, 17);
-            this.title.TabIndex = 3;
-            this.title.Text = "Test Run Summary";
             // 
             // runSummaryButton
             // 

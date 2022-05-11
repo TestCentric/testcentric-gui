@@ -77,7 +77,7 @@ namespace TestCentric.Gui.Model
             TestLoadFailure?.Invoke(new TestLoadFailureEventArgs(ex));
         }
 
-        public void FireSelectedItemChanged(ITestItem testItem)
+        public void FireActiveItemChanged(ITestItem testItem)
         {
             SelectedItemChanged?.Invoke(new TestItemEventArgs(testItem));
         }
