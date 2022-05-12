@@ -47,6 +47,15 @@ namespace TestCentric.Gui.Presenters.TestTree
         }
 
         [Test]
+        public void DebugContextCommand_DebugsTest()
+        {
+            _view.ContextNode.Returns(TEST_SUITE_TREE_NODE);
+
+            _view.DebugContextCommand.Execute += Raise.Event<CommandHandler>();
+            _model.Received().DebugTests(Arg.Is(TEST_SUITE_NODE));
+        }
+
+        [Test]
         public void DoubleClickOnTestCaseRunsTest()
         {
             _view.TreeNodeDoubleClick += Raise.Event<TreeNodeActionHandler>(TEST_CASE_TREE_NODE);

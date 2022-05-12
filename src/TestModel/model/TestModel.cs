@@ -421,7 +421,9 @@ namespace TestCentric.Gui.Model
 
         public void DebugTests(ITestItem testItem)
         {
-            if (testItem != null) DebugTests(testItem.GetTestFilter());
+            Guard.ArgumentNotNull(testItem, nameof(testItem));
+
+            DebugTests(testItem.GetTestFilter());
         }
 
         public void StopTestRun(bool force)
@@ -602,7 +604,7 @@ namespace TestCentric.Gui.Model
             return runtimes;
         }
 
-        // All Test running eventually comes down to this method
+        // All Test running except for DebugTests eventually comes down to this method
         private void RunTests(TestRunSpecification runSpec)
         {
             // CreateTestModel a test filter incorporating both the
@@ -632,6 +634,9 @@ namespace TestCentric.Gui.Model
         {
             SetTestDebuggingFlag(true);
 
+            // We bypass use RunTests(RunSpecification) here because
+            // we don't want to either save this as the last test run
+            // or reload the tests.
             Runner.RunAsync(_events, filter.AsNUnitFilter());
         }
 
@@ -639,7 +644,8 @@ namespace TestCentric.Gui.Model
         {
             // We need to re-create the test runner because settings such
             // as debugging have already been passed to the test runner.
-            // For performance, only do this if we did run in a different mode than last time.
+            // For performance reasons, we only do this if we did run
+            // in a different mode than last time.
             if (_lastRunWasDebugRun != debuggingRequested)
             {
                 foreach (var subPackage in TestPackage.SubPackages)
