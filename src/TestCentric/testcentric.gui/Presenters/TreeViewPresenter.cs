@@ -25,10 +25,6 @@ namespace TestCentric.Gui.Presenters
         private ITestModel _model;
         private Model.Settings.TestTreeSettings _treeSettings;
 
-        private ITestItem _selectedTestItem;
-
-        //private Dictionary<string, TreeNode> _nodeIndex = new Dictionary<string, TreeNode>();
-
         // Accessed by tests
         public DisplayStrategy Strategy { get; private set; }
 
@@ -158,7 +154,12 @@ namespace TestCentric.Gui.Presenters
 
             _view.DebugContextCommand.Execute += () =>
             {
-                if (_selectedTestItem != null) _model.DebugTests(_selectedTestItem);
+                if (_view.ContextNode != null)
+                {
+                    var testNode = _view.ContextNode.Tag as TestNode;
+                    if (testNode != null)
+                        _model.DebugTests(testNode);
+                }
             };
 
             _view.TestPropertiesCommand.Execute += () => ShowPropertiesDisplay();
