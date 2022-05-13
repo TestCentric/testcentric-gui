@@ -49,6 +49,8 @@ namespace TestCentric.Gui.Presenters
 
         private readonly UserSettings _settings;
 
+        private string _guiLayout;
+
         private readonly RecentFiles _recentFiles;
 
         private AgentSelectionController _agentSelectionController;
@@ -266,9 +268,9 @@ namespace TestCentric.Gui.Presenters
 
             _view.Load += (s, e) =>
             {
-                var guiLayout = _settings.Gui.GuiLayout;
-                _view.GuiLayout.SelectedItem = guiLayout;
-                SetGuiLayout(guiLayout);
+                _guiLayout = _options.GuiLayout ?? _settings.Gui.GuiLayout;
+                _view.GuiLayout.SelectedItem = _guiLayout;
+                SetGuiLayout(_guiLayout);
 
                 var settings = _model.PackageOverrides;
                 if (_options.MaxAgents >= 0)
@@ -340,7 +342,7 @@ namespace TestCentric.Gui.Presenters
                 }
 
                 if (!e.Cancel)
-                    SaveFormLocationAndSize(_settings.Gui.GuiLayout);
+                    SaveFormLocationAndSize(_guiLayout);
             };
 
             _view.FileMenu.Popup += () =>
@@ -415,13 +417,15 @@ namespace TestCentric.Gui.Presenters
             {
                 // Selection menu item has changed, so we want
                 // to update both the display and the settings
-                var oldLayout = _settings.Gui.GuiLayout;
-                var newLayout = _view.GuiLayout.SelectedItem;
-                if (oldLayout != newLayout)
+                var oldSetting = _settings.Gui.GuiLayout;
+                var newSetting = _view.GuiLayout.SelectedItem;
+                if (oldSetting != newSetting)
                 {
-                    SaveFormLocationAndSize(oldLayout);
-                    SetGuiLayout(newLayout);
+                    SaveFormLocationAndSize(oldSetting);
+                    SetGuiLayout(newSetting);
                 }
+
+                _guiLayout = newSetting;
                 _settings.Gui.GuiLayout = _view.GuiLayout.SelectedItem;
             };
 
