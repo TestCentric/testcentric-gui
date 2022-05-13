@@ -400,6 +400,7 @@ namespace TestCentric.Gui.Views
             this.displayFormatButton.Size = new System.Drawing.Size(29, 21);
             this.displayFormatButton.Text = "Display";
             this.displayFormatButton.ToolTipText = "Tree Display Format";
+            this.displayFormatButton.DropDown.Closing += DisplayFormatDropDown_Closing;
             // 
             // nunitTreeMenuItem
             // 
@@ -1017,6 +1018,13 @@ namespace TestCentric.Gui.Views
             this.ResumeLayout(false);
             this.PerformLayout();
 
+        }
+
+        private void DisplayFormatDropDown_Closing(object sender, ToolStripDropDownClosingEventArgs e)
+        {
+            e.Cancel =
+                e.CloseReason == ToolStripDropDownCloseReason.ItemClicked ||
+                e.CloseReason == ToolStripDropDownCloseReason.AppFocusChange;
         }
 
         #endregion
