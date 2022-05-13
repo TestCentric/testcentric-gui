@@ -51,6 +51,8 @@ public class GuiTester
 			arguments += " --run";
 		if (!arguments.Contains(" --unattended"))
 			arguments += " --unattended";
+		if (!arguments.Contains(" --full-gui"))
+			arguments += " --full-gui";
 
 		return RunGui(runnerPath, arguments);
 	}
