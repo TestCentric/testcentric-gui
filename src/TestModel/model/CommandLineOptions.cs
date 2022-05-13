@@ -35,6 +35,12 @@ namespace TestCentric.Gui
             Add("unattended", "Unattended execution: perform requested actions, then exit.",
                 v => Unattended = v != null);
 
+            Add("full-gui", "Use the standard (full) GUI interface.",
+                v => GuiLayout = "Full");
+
+            Add("mini-gui", "Use the mini-GUI interface.",
+                v => GuiLayout = "Mini");
+
             Add("x86", "Run tests in an X86 process on 64-bit systems.",
                 v => RunAsX86 = v != null);
 
@@ -109,6 +115,7 @@ namespace TestCentric.Gui
 
         // How to Run Tests
 
+        public string GuiLayout { get; private set; }
         public bool RunAsX86 { get; private set; }
         public int MaxAgents { get; private set; }
         public string InternalTraceLevel { get; private set; }
