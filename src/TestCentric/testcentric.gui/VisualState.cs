@@ -91,6 +91,12 @@ namespace TestCentric.Gui
         public bool Checked;
 
         [XmlArrayItem("Node")]
-        public VisualTreeNode[] Nodes;
+        public VisualTreeNode[] Nodes = new VisualTreeNode[0];
+
+        // Provided for use in test output
+        public override string ToString()
+        {
+            return $"Id={Id},Expanded={Expanded},Checked={Checked},Nodes={Nodes.Length}";
+        }
     }
 }
