@@ -275,6 +275,7 @@ namespace TestCentric.Gui.Model
                 return;
             }
 
+            BuildTestIndex();
             MapTestsToPackages();
             AvailableCategories = GetAvailableCategories();
 
@@ -288,6 +289,22 @@ namespace TestCentric.Gui.Model
 
             foreach (var subPackage in TestPackage.SubPackages)
                 RecentFiles.Latest = subPackage.FullName;
+        }
+
+        private Dictionary<string, TestNode> _testsById = new Dictionary<string, TestNode>();
+
+        private void BuildTestIndex()
+        {
+            _testsById.Clear();
+            BuildTestIndex(LoadedTests);
+        }
+
+        private void BuildTestIndex(TestNode node)
+        {
+            _testsById[node.Id] = node;
+
+            foreach (TestNode child in node.Children)
+                BuildTestIndex(child);
         }
 
         private Dictionary<string, TestPackage> _packageMap = new Dictionary<string, TestPackage>();
@@ -436,6 +453,11 @@ namespace TestCentric.Gui.Model
             var resultWriter = Services.ResultService.GetResultWriter(format, new object[0]);
             var results = GetResultForTest(LoadedTests.Id);
             resultWriter.WriteResultFile(results.Xml, filePath);
+        }
+
+        public TestNode GetTestById(string id)
+        {
+            return _testsById.TryGetValue(id, out var node) ? node : null;
         }
 
         public ResultNode GetResultForTest(string id)

@@ -123,6 +123,9 @@ namespace TestCentric.Gui.Model
         // Save the results of the last run in the specified format
         void SaveResults(string fileName, string format="nunit3");
 
+        // Get a specific test given its id
+        TestNode GetTestById(string id);
+
         // Get the result for a specific test id if available
         ResultNode GetResultForTest(string id);
 
