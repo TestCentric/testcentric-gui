@@ -66,6 +66,9 @@ namespace TestCentric.Gui.Model
         // See if a test is running
         bool IsTestRunning { get; }
 
+        // Dictionary of test results by test id
+        IDictionary<string, ResultNode> Results { get; }
+
         // Summary of last test run
         ResultSummary ResultSummary { get; }
 
@@ -101,24 +104,24 @@ namespace TestCentric.Gui.Model
 
         void SaveProject();
 
-        // Loading and Unloading Tests
+        #region Loading and Unloading Tests
+
         void LoadTests(IList<string> files);
         void UnloadTests();
         void ReloadTests();
         void ReloadPackage(TestPackage package, string config);
 
-        // Running Tests
-        void RunAllTests();
+        #endregion
 
-        // Run selected tests
-        void RunSelectedTests();
+        #region Running Tests
 
-        // Repeat Last Test Run
-        void RerunTests();
-        void RunFailedTests();
-        void RunTests(ITestItem testItem);
-        void DebugTests(ITestItem testItem);
+        void RunTests(TestNode testNode);
+        void RunTests(TestSelection testSelection);
+        void RepeatLastRun();
+        void DebugTests(TestNode testNode);
         void StopTestRun(bool force);
+
+        #endregion
 
         // Save the results of the last run in the specified format
         void SaveResults(string fileName, string format="nunit3");

@@ -172,10 +172,14 @@ namespace TestCentric.Gui.Presenters
                 if (testItem != null)
                 {
                     _model.ActiveTestItem = testItem;
+
                     if (!_view.CheckBoxes)
                     {
+                        // When CheckBoxes are off, the active item is also used as the
+                        // selection. It's either a TestSelection or a TestNode.
                         var selection = testItem as TestSelection;
                         var node = testItem as TestNode;
+                        // If it's a TestNode, make a TestSelection
                         if (selection == null && node != null)
                             selection = new TestSelection() { node };
                         _model.SelectedTests = selection;

@@ -43,7 +43,7 @@ namespace TestCentric.Gui.Dialogs
             if (treeNode == null)
                 throw new ArgumentNullException(nameof(treeNode));
 
-            var testNode = (TestNode)treeNode.Tag;
+            var testNode = treeNode.Tag as TestNode;
 
             SuspendLayout();
             TestName = testNode.Name;

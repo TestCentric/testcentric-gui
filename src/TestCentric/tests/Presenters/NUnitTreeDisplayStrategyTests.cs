@@ -46,8 +46,8 @@ namespace TestCentric.Gui.Presenters.TestTree
                 new TestNode("<test-run id='1'><test-suite id='42'/><test-suite id='99'/></test-run>"));
 
             _view.Received().Clear();
-            _view.Received().Add(Arg.Compat.Is<TreeNode>((tn) => ((TestNode)tn.Tag).Id == "42"));
-            _view.Received().Add(Arg.Compat.Is<TreeNode>((tn) => ((TestNode)tn.Tag).Id == "99"));
+            _view.Received().Add(Arg.Compat.Is<TreeNode>((tn) => (tn.Tag as TestNode).Id == "42"));
+            _view.Received().Add(Arg.Compat.Is<TreeNode>((tn) => (tn.Tag as TestNode).Id == "99"));
         }
 
         [Test]

@@ -141,7 +141,7 @@ namespace TestCentric.Gui.Model
             bool runComplete = false;
             _model.Events.RunFinished += (r) => runComplete = true;
 
-            _model.RunAllTests();
+            _model.RunTests(_model.LoadedTests);
 
             while (!runComplete)
                 System.Threading.Thread.Sleep(1);

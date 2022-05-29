@@ -43,7 +43,7 @@ namespace TestCentric.Gui.Presenters
         {
             if (CanSaveVisualState())
             {
-                var visualState = VisualState.LoadFrom(_view.TreeView);
+                var visualState = new VisualState().LoadFrom(_view.TreeView);
                 visualState.Save(VisualState.GetVisualStateFileName(_model.TestFiles[0]));
             }
         }
@@ -67,22 +67,7 @@ namespace TestCentric.Gui.Presenters
             var filename = VisualState.GetVisualStateFileName(_model.TestFiles[0]);
             var visualState = VisualState.LoadFrom(filename);
 
-            _view.CheckBoxes = visualState.ShowCheckBoxes;
-
-            foreach (var visualNode in visualState.Nodes)
-                foreach (var treeNode in GetTreeNodesForTest(visualNode.Id))
-                {
-                    if (treeNode.IsExpanded != visualNode.Expanded)
-                        treeNode.Toggle();
-
-                    treeNode.Checked = visualNode.Checked;
-                }
-
-            if (visualState.SelectedNode != null)
-                _view.SelectedNode = GetTreeNodeForTest(visualState.SelectedNode);
-
-            if (visualState.TopNode != null)
-                _view.TopNode = GetTreeNodeForTest(visualState.TopNode);
+            visualState.ApplyTo(_view.TreeView);
         }
 
         private TreeNode GetTreeNodeForTest(string id)
