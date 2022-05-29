@@ -230,29 +230,35 @@ namespace TestCentric.Gui.Presenters.Main
         [Test]
         public void RunAllButton_RunsAllTests()
         {
+            var loadedTests = new TestNode("<test-run id='ID' name='TOP' />");
+            _model.LoadedTests.Returns(loadedTests);
+
             _view.RunAllButton.Execute += Raise.Event<CommandHandler>();
-            _model.Received().RunAllTests();
+
+            _model.Received().RunTests(Arg.Is(loadedTests));
         }
 
         [Test]
         public void RunButton_RunsSelectedTests()
         {
+            // TODO: Specify Results and test with specific argument
             _view.RunSelectedButton.Execute += Raise.Event<CommandHandler>();
-            _model.Received().RunSelectedTests();
+            _model.Received().RunTests(Arg.Any<TestSelection>());
         }
 
         [Test]
         public void RerunButton_RerunsTests()
         {
             _view.RerunButton.Execute += Raise.Event<CommandHandler>();
-            _model.Received().RerunTests();
+            _model.Received().RepeatLastRun();
         }
 
         [Test]
         public void RunFailedButton_RunsFailedTests()
         {
+            // TODO: Specify Results and test with specific argument
             _view.RunFailedButton.Execute += Raise.Event<CommandHandler>();
-            _model.Received().RunFailedTests();
+            _model.Received().RunTests(Arg.Any<TestSelection>());
         }
 
         [Test]

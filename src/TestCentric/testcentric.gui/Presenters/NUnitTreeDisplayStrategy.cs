@@ -43,36 +43,9 @@ namespace TestCentric.Gui.Presenters
         {
             if (CanSaveVisualState())
             {
-                var visualState = new VisualState();
-                var topNode = (TestNode)_view.TopNode?.Tag;
-                var selectedNode = (TestNode)_view.SelectedNode?.Tag;
-
-                visualState.ShowCheckBoxes = _view.CheckBoxes;
-                if (topNode != null)
-                    visualState.TopNode = topNode.Id;
-                if (selectedNode != null)
-                    visualState.SelectedNode = selectedNode.Id;
-
-                foreach (TreeNode node in _view.Nodes)
-                    ProcessTreeNodes(node, visualState);
-
+                var visualState = new VisualState().LoadFrom(_view.TreeView);
                 visualState.Save(VisualState.GetVisualStateFileName(_model.TestFiles[0]));
             }
-        }
-
-        private void ProcessTreeNodes(TreeNode node, VisualState visualState)
-        {
-            if (node.IsExpanded || node.Checked)
-                visualState.Nodes.Add(new VisualTreeNode()
-                {
-                    Id = ((TestNode)node.Tag).Id,
-                    Expanded = node.IsExpanded,
-                    Checked = node.Checked
-                });
-                
-
-            foreach (TreeNode childNode in node.Nodes)
-                ProcessTreeNodes(childNode, visualState);
         }
 
         private bool CanSaveVisualState()
@@ -94,22 +67,7 @@ namespace TestCentric.Gui.Presenters
             var filename = VisualState.GetVisualStateFileName(_model.TestFiles[0]);
             var visualState = VisualState.LoadFrom(filename);
 
-            _view.CheckBoxes = visualState.ShowCheckBoxes;
-
-            foreach (var visualNode in visualState.Nodes)
-                foreach (var treeNode in GetTreeNodesForTest(visualNode.Id))
-                {
-                    if (treeNode.IsExpanded != visualNode.Expanded)
-                        treeNode.Toggle();
-
-                    treeNode.Checked = visualNode.Checked;
-                }
-
-            if (visualState.SelectedNode != null)
-                _view.SelectedNode = GetTreeNodeForTest(visualState.SelectedNode);
-
-            if (visualState.TopNode != null)
-                _view.TopNode = GetTreeNodeForTest(visualState.TopNode);
+            visualState.ApplyTo(_view.TreeView);
         }
 
         private TreeNode GetTreeNodeForTest(string id)

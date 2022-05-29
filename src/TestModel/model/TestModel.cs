@@ -184,6 +184,7 @@ namespace TestCentric.Gui.Model
 
         public bool IsTestRunning => Runner != null && Runner.IsTestRunning;
 
+        public IDictionary<string, ResultNode> Results { get; } = new Dictionary<string, ResultNode>();
         public ResultSummary ResultSummary { get; internal set; }
         public bool HasResults => ResultSummary != null;
 
@@ -216,13 +217,22 @@ namespace TestCentric.Gui.Model
         private class TestRunSpecification
         {
             // The selected tests to run (ITestItem may be a TestSelection or a TestNode
-            public ITestItem SelectedTests { get; }
-            // A possibly empty filter to be applied to the selected tests
+            public TestSelection SelectedTests { get; }
+
+            // A possibly empty filter to be applied to the selected tests.
+            // NOTE: Currently, filter is always empty
             public TestFilter CategoryFilter { get; }
 
-            public TestRunSpecification(ITestItem selectedTests, TestFilter filter)
+            public TestRunSpecification(TestSelection selectedTests, TestFilter filter)
             {
                 SelectedTests = selectedTests;
+                CategoryFilter = filter;
+            }
+
+            public TestRunSpecification(TestNode testNode, TestFilter filter)
+            {
+                SelectedTests = new TestSelection();
+                SelectedTests.Add(testNode);
                 CategoryFilter = filter;
             }
         }
@@ -275,6 +285,7 @@ namespace TestCentric.Gui.Model
                 return;
             }
 
+            BuildTestIndex();
             MapTestsToPackages();
             AvailableCategories = GetAvailableCategories();
 
@@ -288,6 +299,22 @@ namespace TestCentric.Gui.Model
 
             foreach (var subPackage in TestPackage.SubPackages)
                 RecentFiles.Latest = subPackage.FullName;
+        }
+
+        private Dictionary<string, TestNode> _testsById = new Dictionary<string, TestNode>();
+
+        private void BuildTestIndex()
+        {
+            _testsById.Clear();
+            BuildTestIndex(LoadedTests);
+        }
+
+        private void BuildTestIndex(TestNode node)
+        {
+            _testsById[node.Id] = node;
+
+            foreach (TestNode child in node.Children)
+                BuildTestIndex(child);
         }
 
         private Dictionary<string, TestPackage> _packageMap = new Dictionary<string, TestPackage>();
@@ -377,53 +404,32 @@ namespace TestCentric.Gui.Model
             ReloadTests();
         }
 
-        public void RunAllTests()
+        public void RunTests(TestNode testNode)
         {
-            RunTests(new TestRunSpecification(LoadedTests, CategoryFilter));
+            Guard.ArgumentNotNull(testNode, nameof(testNode));
+
+            RunTests(new TestRunSpecification(testNode, CategoryFilter));
         }
 
-        public void RunSelectedTests()
+        public void RunTests(TestSelection tests)
         {
-            ITestItem testsToRun =
-                SelectedTests.Count > 0
-                    ? SelectedTests
-                    : ActiveTestItem;
+            Guard.ArgumentNotNull(tests, nameof(tests));
 
-            RunTests(new TestRunSpecification(testsToRun, CategoryFilter));
+            RunTests(new TestRunSpecification(tests, CategoryFilter));
         }
 
-        public void RerunTests()
+        public void RepeatLastRun()
         {
+            Guard.OperationValid(_lastTestRun != null, "RepeatLastRun called before any tests were run");
+
             RunTests(_lastTestRun);
         }
 
-        public void RunFailedTests()
+        public void DebugTests(TestNode testNode)
         {
-            var tests = new TestSelection();
+            Guard.ArgumentNotNull(testNode, nameof(testNode));
 
-            foreach (var entry in Results)
-            {
-                var test = entry.Value;
-                if (!test.IsSuite && test.Outcome.Status == TestStatus.Failed)
-                    tests.Add(test);
-            }
-
-            RunTests(new TestRunSpecification(tests, TestFilter.Empty));
-        }
-
-        public void RunTests(ITestItem testItem)
-        {
-            if (testItem == null)
-                throw new ArgumentNullException("testItem");
-
-            RunTests(new TestRunSpecification(testItem, CategoryFilter));
-        }
-
-        public void DebugTests(ITestItem testItem)
-        {
-            Guard.ArgumentNotNull(testItem, nameof(testItem));
-
-            DebugTests(testItem.GetTestFilter());
+            DebugTests(testNode.GetTestFilter());
         }
 
         public void StopTestRun(bool force)
@@ -436,6 +442,11 @@ namespace TestCentric.Gui.Model
             var resultWriter = Services.ResultService.GetResultWriter(format, new object[0]);
             var results = GetResultForTest(LoadedTests.Id);
             resultWriter.WriteResultFile(results.Xml, filePath);
+        }
+
+        public TestNode GetTestById(string id)
+        {
+            return _testsById.TryGetValue(id, out var node) ? node : null;
         }
 
         public ResultNode GetResultForTest(string id)
@@ -530,8 +541,6 @@ namespace TestCentric.Gui.Model
         private NUnit.Engine.ITestEngine TestEngine { get; }
 
         private NUnit.Engine.ITestRunner Runner { get; set; }
-
-        internal IDictionary<string, ResultNode> Results { get; } = new Dictionary<string, ResultNode>();
 
         #endregion
 

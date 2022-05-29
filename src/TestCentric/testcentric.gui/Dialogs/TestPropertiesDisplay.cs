@@ -44,7 +44,7 @@ namespace TestCentric.Gui.Dialogs
                 throw new ArgumentNullException(nameof(treeNode));
 
             _treeNode = treeNode;
-            _testNode = (TestNode)treeNode.Tag;
+            _testNode = treeNode.Tag as TestNode;
             _resultNode = _model.GetResultForTest(_testNode.Id);
             _packageSettings = _model.GetPackageSettingsForTest(_testNode.Id);
 

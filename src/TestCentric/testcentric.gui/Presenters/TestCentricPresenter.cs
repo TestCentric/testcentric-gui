@@ -311,7 +311,7 @@ namespace TestCentric.Gui.Presenters
 
                 // Run loaded test automatically if called for
                 if (_model.IsPackageLoaded && _options.RunAllTests)
-                    _model.RunAllTests();
+                    _model.RunTests(_model.LoadedTests);
                 // Currently, --unattended without --run does nothing except exit.
                 else if (_options.Unattended)
                     _view.Close();
@@ -469,13 +469,13 @@ namespace TestCentric.Gui.Presenters
                 _settings.Gui.FixedFont = new Font(FontFamily.GenericMonospace, 8.0f);
             };
 
-            _view.RunAllButton.Execute += () => { _model.ClearResults(); _model.RunAllTests(); };
+            _view.RunAllButton.Execute += RunAllTests;
 
-            _view.RunSelectedButton.Execute += () => _model.RunSelectedTests();
+            _view.RunSelectedButton.Execute += RunSelectedTests;
 
-            _view.RerunButton.Execute += () => _model.RerunTests();
+            _view.RerunButton.Execute += () => _model.RepeatLastRun();
 
-            _view.RunFailedButton.Execute += () => _model.RunFailedTests();
+            _view.RunFailedButton.Execute += RunFailedTests;
 
             _view.DisplayFormat.SelectionChanged += () =>
             {
@@ -567,10 +567,6 @@ namespace TestCentric.Gui.Presenters
             };
 
             #endregion
-        }
-
-        private void ChangeGuiLayout(string newLayout)
-        {
         }
 
         private void SaveFormLocationAndSize(string guiLayout)
@@ -910,6 +906,33 @@ namespace TestCentric.Gui.Presenters
                     _view.GroupBy.SelectedItem = _settings.Gui.TestTree.FixtureList.GroupBy;
                     break;
             }
+        }
+
+        private void RunAllTests()
+        {
+            _model.ClearResults();
+            var allTests = _model.LoadedTests;
+            _model.RunTests(allTests);
+        }
+
+        private void RunSelectedTests()
+        {
+            var testSelection = _model.SelectedTests;
+            _model.RunTests(testSelection);
+        }
+
+        private void RunFailedTests()
+        {
+            var failedTests = new TestSelection();
+
+            foreach (var entry in _model.Results)
+            {
+                var test = entry.Value;
+                if (!test.IsSuite && test.Outcome.Status == TestStatus.Failed)
+                    failedTests.Add(test);
+            }
+
+            _model.RunTests(failedTests);
         }
 
         #endregion

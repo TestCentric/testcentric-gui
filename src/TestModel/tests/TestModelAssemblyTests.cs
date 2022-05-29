@@ -50,6 +50,32 @@ namespace TestCentric.Gui.Model
             Assert.That(testAssembly.TestCount, Is.EqualTo(MockAssembly.Tests), "TestCount of assembly");
         }
 
+        [TestCase("MockTestFixture")]
+        [TestCase("FailingTest")]
+        public void CheckGetTestById(string testName)
+        {
+            var testNode = FindTestByName(_model.LoadedTests, testName);
+            Assert.NotNull(testNode, $"Internal Test Error: Can't find {testName} in mock-assembly");
+
+            var foundTest = _model.GetTestById(testNode.Id);
+            Assert.NotNull(foundTest, $"No test found with id {testNode.Id}");
+            Assert.That(foundTest.Name, Is.EqualTo(testName), "Found the test but name is wrong");
+        }
+
+        private TestNode FindTestByName(TestNode parent, string name)
+        {
+            if (parent.Name == name)
+                return parent;
+
+            foreach (var child in parent.Children)
+            {
+                var result = FindTestByName(child, name);
+                if (result != null) return result;
+            }
+
+            return null;
+        }
+
         [Test]
         public void CheckThatTestsMapToPackages()
         {
@@ -115,7 +141,7 @@ namespace TestCentric.Gui.Model
             bool runComplete = false;
             _model.Events.RunFinished += (r) => runComplete = true;
 
-            _model.RunAllTests();
+            _model.RunTests(_model.LoadedTests);
 
             while (!runComplete)
                 System.Threading.Thread.Sleep(1);
