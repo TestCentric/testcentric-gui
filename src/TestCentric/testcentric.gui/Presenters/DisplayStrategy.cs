@@ -64,7 +64,9 @@ namespace TestCentric.Gui.Presenters
         /// </summary>
         public abstract void OnTestLoaded(TestNode testNode);
 
-        public virtual void OnTestUnloading() { }
+        public virtual void OnTestsUnloading() { }
+
+        public virtual void OnTestsReloading() { }
 
         public void OnTestUnloaded()
         {
