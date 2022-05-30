@@ -79,10 +79,13 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.TestsUnloading += ea =>
             {
-                Strategy.OnTestUnloading();
+                Strategy.OnTestsUnloading();
                 ClosePropertiesDisplay();
                 CloseXmlDisplay();
             };
+
+            _model.Events.TestsReloading += ea => Strategy.OnTestsReloading();
+
 
             _model.Events.RunStarting += (ea) =>
             {

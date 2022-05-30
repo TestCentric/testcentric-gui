@@ -39,7 +39,16 @@ namespace TestCentric.Gui.Presenters
                 SetDefaultInitialExpansion();
         }
 
-        public override void OnTestUnloading()
+        public override void OnTestsUnloading()
+        {
+            if (CanSaveVisualState())
+            {
+                var visualState = new VisualState().LoadFrom(_view.TreeView);
+                visualState.Save(VisualState.GetVisualStateFileName(_model.TestFiles[0]));
+            }
+        }
+
+        public override void OnTestsReloading()
         {
             if (CanSaveVisualState())
             {
