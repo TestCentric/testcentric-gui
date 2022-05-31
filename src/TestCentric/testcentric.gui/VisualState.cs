@@ -77,6 +77,7 @@ namespace TestCentric.Gui
                 var visualNode = new VisualTreeNode()
                 {
                     Id = testNode.Id,
+                    Name = testNode.Name,
                     Expanded = treeNode.IsExpanded,
                     Checked = treeNode.Checked,
                     Selected = isSelectedNode,
@@ -108,6 +109,10 @@ namespace TestCentric.Gui
 
         public void ApplyTo(TreeView treeView)
         {
+            // TODO: Use of these members is a HACK! Should remove.
+            _selectedTreeNode = null;
+            _topTreeNode = null;
+
             treeView.CheckBoxes = ShowCheckBoxes;
 
             foreach (TreeNode treeNode in treeView.Nodes)
@@ -126,17 +131,17 @@ namespace TestCentric.Gui
         private void ApplyTo(TreeNode treeNode)
         {
             var id = (treeNode.Tag as TestNode)?.Id;
-            if (_nodeIndex.TryGetValue(id, out var visualNode))
+            if (_nodeIndex.TryGetValue(id, out var visualNode) && visualNode.Matches(treeNode))
             {
                 if (treeNode.IsExpanded != visualNode.Expanded)
                     treeNode.Toggle();
 
                 treeNode.Checked = visualNode.Checked;
 
-                if (id == SelectedNode.Id)
+                if (SelectedNode.Matches(treeNode))
                     _selectedTreeNode = treeNode;
 
-                if (id == TopNode.Id)
+                if (TopNode.Matches(treeNode))
                     _topTreeNode = treeNode;
 
                 foreach (TreeNode child in treeNode.Nodes)
@@ -202,6 +207,9 @@ namespace TestCentric.Gui
         [XmlAttribute]
         public string Id;
 
+        [XmlAttribute]
+        public string Name;
+
         [XmlAttribute, System.ComponentModel.DefaultValue(false)]
         public bool Expanded;
 
@@ -214,10 +222,18 @@ namespace TestCentric.Gui
         [XmlAttribute, System.ComponentModel.DefaultValue(false)]
         public bool IsTopNode;
 
+        /// <summary>
+        /// Return true if this VisualTreeNode matches a TreeNode
+        /// </summary>
+        public bool Matches(TreeNode treeNode)
+        {
+            return (Id == (treeNode.Tag as TestNode)?.Id) && (Name == treeNode.Text);
+        }
+
         // Provided for use in test output
         public override string ToString()
         {
-            return $"Id={Id},Expanded={Expanded},Checked={Checked}, Selected={Selected}, IsTopNode={IsTopNode}";
+            return $"Id={Id}, Name={Name},Expanded={Expanded},Checked={Checked},Selected={Selected},IsTopNode={IsTopNode}";
         }
 
         public override bool Equals(object obj)
@@ -227,6 +243,7 @@ namespace TestCentric.Gui
             return
                 other != null &&
                 Id == other.Id &&
+                Name == other.Name &&
                 Expanded == other.Expanded &&
                 Checked == other.Checked &&
                 Selected == other.Selected &&
