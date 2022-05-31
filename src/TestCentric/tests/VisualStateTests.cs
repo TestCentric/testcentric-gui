@@ -22,90 +22,8 @@ namespace TestCentric.Gui
         [OneTimeSetUp]
         public void InitializeFixture()
         {
-            OriginalTreeView = CreateTreeView(true);
-
-            var selectedNode = new VisualTreeNode() { Id = "id-2", Selected = true };
-            var topNode = new VisualTreeNode() { Id = "id-7", Expanded = true, IsTopNode = true };
-
-            ExpectedVisualState = new VisualState()
-            {
-                ShowCheckBoxes = true,
-                SelectedNode = selectedNode,
-                TopNode = topNode,
-                Nodes = new List<VisualTreeNode> {
-                        topNode,
-                        new VisualTreeNode() { Id = "id-6", Expanded = true },
-                        new VisualTreeNode() { Id = "id-5", Expanded = true },
-                        new VisualTreeNode() { Id = "id-4", Expanded = true },
-                        new VisualTreeNode() { Id = "id-1", Checked = true },
-                        selectedNode,
-                        new VisualTreeNode() { Id = "id-3", Checked = true },
-                        new VisualTreeNode() { Id = "id-14", Expanded = true },
-                        new VisualTreeNode() { Id = "id-13", Expanded = true },
-                        new VisualTreeNode() { Id = "id-10", Checked = true, Expanded = true }
-                    }
-            };
-            ExpectedVisualState.BuildNodeIndex();
-
-            Assert.That(OriginalTreeView.SelectedNode.Text, Is.EqualTo("Test2"));
-        }
-
-        // Helper to create a TreeView for testing
-        private TreeView CreateTreeView(bool expanded)
-        {
-            // Create TreeNodes for two assemblies
-            TreeNode assembly1 =
-                TN("test-suite", "Assembly1", "id-7",
-                    TN("test-suite", "NUnit", "id-6",
-                        TN("test-suite", "Tests", "id-5",
-                            TN("test-suite", "MyFixture", "id-4",
-                                TN("test-case", "Test1", "id-1"),
-                                TN("test-case", "Test2", "id-2"),
-                                TN("test-case", "Test3", "id-3")))));
-            TreeNode assembly2 =
-                TN("test-suite", "Assembly2", "id-14",
-                    TN("test-suite", "Tests", "id-13",
-                        TN("test-suite", "FixtureA", "id-10",
-                            TN("test-case", "Test1", "id-8"),
-                            TN("test-case", "Test1", "id-9")),
-                        TN("test-suite", "FixtureB", "id-12",
-                            TN("test-case", "Test1", "id-11"))));
-
-            // Create the TreeView and add Nodes to it
-            TreeView tv = new TreeView() { CheckBoxes = true };
-            tv.Nodes.AddRange(new[] { assembly1, assembly2 });
-
-            if (expanded)
-            {
-                // Expand some Nodes
-                assembly1.Expand();
-                assembly1.Nodes[0].Expand();
-                assembly1.Nodes[0].Nodes[0].Expand();
-                assembly1.Nodes[0].Nodes[0].Nodes[0].Expand();
-                assembly2.Expand();
-                assembly2.Nodes[0].Expand();
-                assembly2.Nodes[0].Nodes[0].Expand();
-
-                // Check some nodes
-                assembly1.Nodes[0].Nodes[0].Nodes[0].Nodes[0].Checked = true; // Test1
-                assembly1.Nodes[0].Nodes[0].Nodes[0].Nodes[2].Checked = true; // Test3
-                assembly2.Nodes[0].Nodes[0].Checked = true; // FixtureA
-
-                // Select a node and set TopNode
-                tv.SelectedNode = assembly1.Nodes[0].Nodes[0].Nodes[0].Nodes[1]; // Test2
-                tv.TopNode = assembly1;
-            }
-
-            return tv;
-        }
-
-        // Helper used to create a tree node
-        private static TreeNode TN(string element, string name, string id, params TreeNode[] childNodes)
-        {
-            var treeNode = new TreeNode(name) { Tag = new TestNode($"<{element} name='{name}' id='{id}' />") };
-            if (childNodes.Length > 0)
-                treeNode.Nodes.AddRange(childNodes);
-            return treeNode;
+            OriginalTreeView = CreateOriginalTreeView();
+            ExpectedVisualState = CreateExpectedVisualState();
         }
 
         [Test]
@@ -116,24 +34,16 @@ namespace TestCentric.Gui
             Assert.Multiple(() =>
             {
                 Assert.That(visualState.ShowCheckBoxes, Is.EqualTo(OriginalTreeView.CheckBoxes));
-                Assert.That(visualState.SelectedNode, Is.EqualTo(new VisualTreeNode() { Id = "id-2", Selected=true }));
-                Assert.That(visualState.TopNode, Is.EqualTo(new VisualTreeNode() { Id = "id-7", Expanded = true, IsTopNode = true }));
+                Assert.That(visualState.SelectedNode, Is.EqualTo(VTN("1-2", "Test2", SEL)), "SelectedNode");
+                Assert.That(visualState.TopNode, Is.EqualTo(VTN("1-7", "Assembly1", EXP+TOP)), "TopNode");
                 Assert.That(visualState.Nodes, Is.EqualTo(ExpectedVisualState.Nodes));
             });
         }
 
         [Test]
-        public void CanApplyVisualStateToTree()
+        public void CanApplyVisualStateToTree_Unchanged()
         {
-            var tv = CreateTreeView(false);
-            Assert.That(tv.CheckBoxes, Is.True);
-            Assert.That(tv.SelectedNode, Is.Null);
-            Assert.That(tv.Nodes[0].IsExpanded, Is.False);
-            Assert.That(tv.Nodes[1].IsExpanded, Is.False);
-            Assert.That(ExpectedVisualState.ShowCheckBoxes, Is.True);
-            Assert.That(ExpectedVisualState.SelectedNode, Is.Not.Null);
-            Assert.That(ExpectedVisualState.SelectedNode.Id, Is.EqualTo("id-2"));
-            Assert.That(ExpectedVisualState.TopNode.Id, Is.EqualTo("id-7"));
+            var tv = CreateBaseTreeView();
             ExpectedVisualState.ApplyTo(tv);
 
             Assert.Multiple(() =>
@@ -155,6 +65,51 @@ namespace TestCentric.Gui
         }
 
         [Test]
+        public void CanApplyVisualStateToTree_SingleDeletion()
+        {
+            // Remove Test2 and decrement all ids > 1-1
+            var tv = new TestTreeView(
+                TN("test-suite", "Assembly1", "1-6",
+                    TN("test-suite", "NUnit", "1-5",
+                        TN("test-suite", "Tests", "1-4",
+                            TN("test-suite", "MyFixture", "1-3",
+                                TN("test-case", "Test1", "1-1"),
+                                TN("test-case", "Test3", "1-2"))))),
+                TN("test-suite", "Assembly2", "2-7",
+                    TN("test-suite", "Tests", "2-6",
+                        TN("test-suite", "FixtureA", "2-3",
+                            TN("test-case", "Test1", "2-1"),
+                            TN("test-case", "Test1", "2-2")),
+                        TN("test-suite", "FixtureB", "2-5",
+                            TN("test-case", "Test1", "2-4")))));
+
+            ExpectedVisualState.ApplyTo(tv);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(tv.CheckBoxes, Is.True, "CheckBoxes");
+
+                // No SelectedNode since Test2 is no longer present
+                Assert.That(tv.SelectedNode, Is.Null, "SelectedNode");
+
+                // Remaining Tests in Assembly1 are now failing
+                Warn.Unless(tv.TopNode?.Text, Is.EqualTo("Assembly1"), "TopNode");
+                Warn.Unless(tv.Nodes[0].IsExpanded, "Assembly1 not expanded");
+                Warn.Unless(tv.Nodes[0].Nodes[0].IsExpanded, "NUnit not expanded");
+                Warn.Unless(tv.Nodes[0].Nodes[0].Nodes[0].IsExpanded, "Tests not expanded");
+                Warn.Unless(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[0].IsExpanded, "MyFixture not expanded");
+                Warn.Unless(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[0].Nodes[0].Checked, "Test1 not checked");
+                Warn.Unless(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[0].Nodes[1].Checked, "Test3 not checked");
+
+                // All checks for Assembly2 work as before
+                Assert.That(tv.Nodes[1].IsExpanded, "Assembly2 not expanded");
+                Assert.That(tv.Nodes[1].Nodes[0].IsExpanded, "Tests not expanded");
+                Assert.That(tv.Nodes[1].Nodes[0].Nodes[0].IsExpanded, "FixtureA not expanded");
+                Assert.That(tv.Nodes[1].Nodes[0].Nodes[0].Checked, "FixtureA not checked");
+            });
+        }
+
+        [Test]
         public void CanSaveAndReloadVisualState()
         {
             StringWriter writer = new StringWriter();
@@ -165,16 +120,127 @@ namespace TestCentric.Gui
 
             VisualState restoredState = VisualState.LoadFrom(reader);
 
-            Assert.Multiple( () => {
+            Assert.Multiple(() =>
+            {
                 Assert.That(restoredState.ShowCheckBoxes, Is.EqualTo(ExpectedVisualState.ShowCheckBoxes));
-                Assert.That(restoredState.SelectedNode, Is.EqualTo(new VisualTreeNode() { Id = "id-2", Selected = true }));
-                Assert.That(restoredState.TopNode, Is.EqualTo(new VisualTreeNode() { Id = "id-7", Expanded = true, IsTopNode = true }));
+                Assert.That(restoredState.SelectedNode, Is.EqualTo(VTN("1-2", "Test2", SEL)));
+                Assert.That(restoredState.TopNode, Is.EqualTo(VTN("1-7", "Assembly1", EXP+TOP)));
                 // TODO: Categories not yet supported
                 //Assert.AreEqual(ExpectedVisualState.SelectedCategories, restoredState.SelectedCategories);
                 //Assert.AreEqual(ExpectedVisualState.ExcludeCategories, restoredState.ExcludeCategories);
                 Assert.That(restoredState.Nodes, Is.EqualTo(ExpectedVisualState.Nodes));
             });
+        }
 
+        private TreeView CreateOriginalTreeView()
+        {
+            var tv = CreateBaseTreeView();
+
+            // Expand some Nodes
+            tv.Nodes[0].Expand();
+            tv.Nodes[0].Nodes[0].Expand();
+            tv.Nodes[0].Nodes[0].Nodes[0].Expand();
+            tv.Nodes[0].Nodes[0].Nodes[0].Nodes[0].Expand();
+            tv.Nodes[1].Expand();
+            tv.Nodes[1].Nodes[0].Expand();
+            tv.Nodes[1].Nodes[0].Nodes[0].Expand();
+
+            // Check some nodes
+            tv.Nodes[0].Nodes[0].Nodes[0].Nodes[0].Nodes[0].Checked = true; // Test1
+            tv.Nodes[0].Nodes[0].Nodes[0].Nodes[0].Nodes[2].Checked = true; // Test3
+            tv.Nodes[1].Nodes[0].Nodes[0].Checked = true; // FixtureA
+
+            // Select a node and set TopNode
+            tv.SelectedNode = tv.Nodes[0].Nodes[0].Nodes[0].Nodes[0].Nodes[1]; // Test2
+            tv.TopNode = tv.Nodes[0];
+
+            return tv;
+        }
+
+        private TreeView CreateBaseTreeView()
+        {
+            return new TestTreeView(
+                TN("test-suite", "Assembly1", "1-7",
+                    TN("test-suite", "NUnit", "1-6",
+                        TN("test-suite", "Tests", "1-5",
+                            TN("test-suite", "MyFixture", "1-4",
+                                TN("test-case", "Test1", "1-1"),
+                                TN("test-case", "Test2", "1-2"),
+                                TN("test-case", "Test3", "1-3"))))),
+                TN("test-suite", "Assembly2", "2-7",
+                    TN("test-suite", "Tests", "2-6",
+                        TN("test-suite", "FixtureA", "2-3",
+                            TN("test-case", "Test1", "2-1"),
+                            TN("test-case", "Test1", "2-2")),
+                        TN("test-suite", "FixtureB", "2-5",
+                            TN("test-case", "Test1", "2-4")))));
+        }
+
+        private class TestTreeView : TreeView
+        {
+            public TestTreeView(params TreeNode[] nodes)
+            {
+                CheckBoxes = true;
+
+                foreach (TreeNode node in nodes)
+                    Nodes.Add(node);
+            }
+        }
+
+        // Helper used to create a TreeNode
+        private static TreeNode TN(string element, string name, string id, params TreeNode[] childNodes)
+        {
+            var treeNode = new TreeNode(name) { Tag = new TestNode($"<{element} name='{name}' id='{id}' />") };
+            if (childNodes.Length > 0)
+                treeNode.Nodes.AddRange(childNodes);
+            return treeNode;
+        }
+
+        private VisualState CreateExpectedVisualState()
+        {
+            //var selectedNode = VTN("1-2", "Test2", SEL);
+            //var topNode = VTN("1-7", "Assembly1", EXP+TOP);
+
+            return new VisualState()
+            {
+                ShowCheckBoxes = true,
+                SelectedNode = VTN("1-2", "Test2", SEL),
+                TopNode = VTN("1-7", "Assembly1", EXP + TOP),
+                Nodes = new List<VisualTreeNode> {
+                    VTN("1-7", "Assembly1", EXP + TOP,
+                        VTN("1-6", "NUnit", EXP,
+                            VTN("1-5", "Tests", EXP,
+                                VTN("1-4", "MyFixture", EXP,
+                                    VTN("1-1", "Test1", CHK),
+                                    VTN("1-2", "Test2", SEL),
+                                    VTN("1-3", "Test3", CHK))))),
+                    VTN("2-7", "Assembly2", EXP,
+                        VTN("2-6", "Tests", EXP,
+                            VTN("2-3", "FixtureA", EXP+CHK)))
+                }
+            };
+        }
+
+        const int EXP = 1;
+        const int CHK = 2;
+        const int SEL = 4;
+        const int TOP = 8;
+
+        // Helper used to create a VisualTreeNode
+        private static VisualTreeNode VTN(string id, string name, int flags, params VisualTreeNode[] childNodes)
+        {
+            bool expand = (flags & EXP) == EXP;
+            bool check = (flags & CHK) == CHK;
+            bool select = (flags & SEL) == SEL;
+            bool top = (flags & TOP) == TOP;
+            Console.WriteLine($"flags={flags} gives expand={expand}, check={check}, select={select}, top={top}");
+
+            var visualNode = new VisualTreeNode() { Name = name, Expanded = expand, Checked = check, Selected = select, IsTopNode = top };
+            
+            if (childNodes.Length > 0)
+                visualNode.Nodes.AddRange(childNodes);
+            
+            return visualNode;
         }
     }
 }
