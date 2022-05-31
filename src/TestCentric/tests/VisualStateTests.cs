@@ -201,7 +201,7 @@ namespace TestCentric.Gui
             //var selectedNode = VTN("1-2", "Test2", SEL);
             //var topNode = VTN("1-7", "Assembly1", EXP+TOP);
 
-            var visualState = new VisualState()
+            return new VisualState()
             {
                 ShowCheckBoxes = true,
                 SelectedNode = VTN("1-2", "Test2", SEL),
@@ -219,10 +219,6 @@ namespace TestCentric.Gui
                             VTN("2-3", "FixtureA", EXP+CHK)))
                 }
             };
-
-            visualState.BuildNodeIndex();
-
-            return visualState;
         }
 
         const int EXP = 1;
@@ -239,7 +235,7 @@ namespace TestCentric.Gui
             bool top = (flags & TOP) == TOP;
             Console.WriteLine($"flags={flags} gives expand={expand}, check={check}, select={select}, top={top}");
 
-            var visualNode = new VisualTreeNode() { Id = id, Name = name, Expanded = expand, Checked = check, Selected = select, IsTopNode = top };
+            var visualNode = new VisualTreeNode() { Name = name, Expanded = expand, Checked = check, Selected = select, IsTopNode = top };
             
             if (childNodes.Length > 0)
                 visualNode.Nodes.AddRange(childNodes);

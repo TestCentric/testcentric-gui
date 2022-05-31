@@ -38,7 +38,7 @@ namespace TestCentric.Gui
         [XmlArrayItem("Node")]
         public List<VisualTreeNode> Nodes = new List<VisualTreeNode>();
 
-        private Dictionary<string, VisualTreeNode> _nodeIndex = new Dictionary<string, VisualTreeNode>();
+        //private Dictionary<string, VisualTreeNode> _nodeIndex = new Dictionary<string, VisualTreeNode>();
 
         #endregion
 
@@ -60,8 +60,6 @@ namespace TestCentric.Gui
             foreach (TreeNode treeNode in treeView.Nodes)
                 ProcessTreeNode(treeNode, this.Nodes);
 
-            BuildNodeIndex();
-
             return this;
         }
 
@@ -76,7 +74,6 @@ namespace TestCentric.Gui
 
                 var visualNode = new VisualTreeNode()
                 {
-                    Id = testNode.Id,
                     Name = testNode.Name,
                     Expanded = treeNode.IsExpanded,
                     Checked = treeNode.Checked,
@@ -115,8 +112,7 @@ namespace TestCentric.Gui
 
             treeView.CheckBoxes = ShowCheckBoxes;
 
-            foreach (TreeNode treeNode in treeView.Nodes)
-                ApplyTo(treeNode);
+            ApplyVisualNodesToTreeNodes(this.Nodes, treeView.Nodes);
 
             if (_selectedTreeNode != null)
                 treeView.SelectedNode = _selectedTreeNode;
@@ -125,28 +121,41 @@ namespace TestCentric.Gui
                 treeView.TopNode = _topTreeNode;
         }
 
+        private void ApplyVisualNodesToTreeNodes(List<VisualTreeNode> visualNodes, TreeNodeCollection treeNodes)
+        {
+            // Find matching names
+            for (int i = 0; i < visualNodes.Count; i++)
+            {
+                var visualNode = visualNodes[i];
+
+                foreach (TreeNode treeNode in treeNodes)
+                {
+                    if (treeNode.Text == visualNode.Name)
+                    {
+                        ApplyVisualNodeToTreeNode(visualNode, treeNode);
+                        break;
+                    }
+                }
+            }
+        }
+
         private TreeNode _selectedTreeNode;
         private TreeNode _topTreeNode;
 
-        private void ApplyTo(TreeNode treeNode)
+        private void ApplyVisualNodeToTreeNode(VisualTreeNode visualNode, TreeNode treeNode)
         {
-            var id = (treeNode.Tag as TestNode)?.Id;
-            if (_nodeIndex.TryGetValue(id, out var visualNode) && visualNode.Matches(treeNode))
-            {
-                if (treeNode.IsExpanded != visualNode.Expanded)
-                    treeNode.Toggle();
+            if (treeNode.IsExpanded != visualNode.Expanded)
+                treeNode.Toggle();
 
-                treeNode.Checked = visualNode.Checked;
+            treeNode.Checked = visualNode.Checked;
 
-                if (SelectedNode.Matches(treeNode))
-                    _selectedTreeNode = treeNode;
+            if (SelectedNode.Matches(treeNode))
+                _selectedTreeNode = treeNode;
 
-                if (TopNode.Matches(treeNode))
-                    _topTreeNode = treeNode;
+            if (TopNode.Matches(treeNode))
+                _topTreeNode = treeNode;
 
-                foreach (TreeNode child in treeNode.Nodes)
-                    ApplyTo(child);
-            }
+            ApplyVisualNodesToTreeNodes(visualNode.Nodes, treeNode.Nodes);
         }
 
         #endregion
@@ -164,9 +173,7 @@ namespace TestCentric.Gui
         public static VisualState LoadFrom(TextReader reader)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(VisualState));
-            var result = (VisualState)serializer.Deserialize(reader);
-            result.BuildNodeIndex();
-            return result;
+            return (VisualState)serializer.Deserialize(reader);
         }
 
         #endregion
@@ -190,21 +197,21 @@ namespace TestCentric.Gui
         #endregion
 
         // Public for testing
-        public void BuildNodeIndex()
-        {
-            _nodeIndex.Clear();
+        //public void BuildNodeIndex()
+        //{
+        //    _nodeIndex.Clear();
 
-            foreach (var node in Nodes)
-                IndexNodeAndChildren(node);
-        }
+        //    foreach (var node in Nodes)
+        //        IndexNodeAndChildren(node);
+        //}
 
-        private void IndexNodeAndChildren(VisualTreeNode node)
-        {
-            _nodeIndex.Add(node.Id, node);
+        //private void IndexNodeAndChildren(VisualTreeNode node)
+        //{
+        //    _nodeIndex.Add(node.Id, node);
 
-            foreach (var child in node.Nodes)
-                IndexNodeAndChildren(child);
-        }
+        //    foreach (var child in node.Nodes)
+        //        IndexNodeAndChildren(child);
+        //}
 
         #endregion
     }
@@ -212,9 +219,6 @@ namespace TestCentric.Gui
     [Serializable]
     public class VisualTreeNode
     {
-        [XmlAttribute]
-        public string Id;
-
         [XmlAttribute]
         public string Name;
 
@@ -238,13 +242,13 @@ namespace TestCentric.Gui
         /// </summary>
         public bool Matches(TreeNode treeNode)
         {
-            return (Id == (treeNode.Tag as TestNode)?.Id) && (Name == treeNode.Text);
+            return Name == treeNode.Text;
         }
 
         // Provided for use in test output
         public override string ToString()
         {
-            return $"Id={Id}, Name={Name},Expanded={Expanded},Checked={Checked},Selected={Selected},IsTopNode={IsTopNode}";
+            return $"Name={Name},Expanded={Expanded},Checked={Checked},Selected={Selected},IsTopNode={IsTopNode}";
         }
 
         public override bool Equals(object obj)
@@ -253,7 +257,6 @@ namespace TestCentric.Gui
 
             return
                 other != null &&
-                Id == other.Id &&
                 Name == other.Name &&
                 Expanded == other.Expanded &&
                 Checked == other.Checked &&
@@ -263,7 +266,7 @@ namespace TestCentric.Gui
 
         public override int GetHashCode()
         {
-            return Id.GetHashCode();
+            return Name.GetHashCode();
         }
     }
 }
