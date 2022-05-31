@@ -58,14 +58,14 @@ namespace TestCentric.Gui
             ShowCheckBoxes = treeView.CheckBoxes;
 
             foreach (TreeNode treeNode in treeView.Nodes)
-                ProcessTreeNode(treeNode);
+                ProcessTreeNode(treeNode, this.Nodes);
 
             BuildNodeIndex();
 
             return this;
         }
 
-        private void ProcessTreeNode(TreeNode treeNode)
+        private void ProcessTreeNode(TreeNode treeNode, List<VisualTreeNode> visualNodes)
         {
             // TODO: Currently, we only save testNodes, not groups
             var testNode = treeNode.Tag as TestNode;
@@ -85,16 +85,16 @@ namespace TestCentric.Gui
                 };
 
                 if (treeNode.IsExpanded || treeNode.Checked || isSelectedNode || isTopNode)
-                    RecordVisualNode(visualNode);
+                    RecordVisualNode(visualNode, visualNodes);
 
                 foreach (TreeNode childNode in treeNode.Nodes)
-                    ProcessTreeNode(childNode);
+                    ProcessTreeNode(childNode, visualNode.Nodes);
             }
         }
 
-        private void RecordVisualNode(VisualTreeNode visualNode)
+        private void RecordVisualNode(VisualTreeNode visualNode, List<VisualTreeNode> visualNodes)
         {
-            Nodes.Add(visualNode);
+            visualNodes.Add(visualNode);
 
             if (visualNode.Selected)
                 SelectedNode = visualNode;
@@ -195,7 +195,15 @@ namespace TestCentric.Gui
             _nodeIndex.Clear();
 
             foreach (var node in Nodes)
-                _nodeIndex.Add(node.Id, node);
+                IndexNodeAndChildren(node);
+        }
+
+        private void IndexNodeAndChildren(VisualTreeNode node)
+        {
+            _nodeIndex.Add(node.Id, node);
+
+            foreach (var child in node.Nodes)
+                IndexNodeAndChildren(child);
         }
 
         #endregion
@@ -221,6 +229,9 @@ namespace TestCentric.Gui
 
         [XmlAttribute, System.ComponentModel.DefaultValue(false)]
         public bool IsTopNode;
+
+        [XmlArrayItem("Node")]
+        public List<VisualTreeNode> Nodes = new List<VisualTreeNode>();
 
         /// <summary>
         /// Return true if this VisualTreeNode matches a TreeNode
