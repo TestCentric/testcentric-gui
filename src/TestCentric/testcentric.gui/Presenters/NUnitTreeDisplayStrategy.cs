@@ -33,56 +33,43 @@ namespace TestCentric.Gui.Presenters
             foreach (var topLevelNode in testNode.Children)
                 _view.Add(MakeTreeNode(topLevelNode, true));
 
-            if (CanRestoreVisualState())
-                RestoreVisualState();
-            else
+            if (!TryRestoreVisualState())
                 SetDefaultInitialExpansion();
         }
 
         public override void OnTestsUnloading()
         {
-            if (CanSaveVisualState())
-            {
-                var visualState = new VisualState().LoadFrom(_view.TreeView);
-                visualState.Save(VisualState.GetVisualStateFileName(_model.TestFiles[0]));
-            }
+            TrySaveVisualState();
         }
 
         public override void OnTestsReloading()
         {
-            if (CanSaveVisualState())
+            TrySaveVisualState();
+        }
+
+        private bool TryRestoreVisualState()
+        {
+            if (_model.TestFiles.Count == 0)
+                return false;
+
+            var filename = VisualState.GetVisualStateFileName(_model.TestFiles[0]);
+            if (!File.Exists(filename))
+                return false;
+
+            var visualState = VisualState.LoadFrom(filename);
+
+            visualState.ApplyTo(_view.TreeView);
+
+            return true;
+        }
+
+        private void TrySaveVisualState()
+        {
+            if (_model.TestFiles.Count > 0)
             {
                 var visualState = new VisualState().LoadFrom(_view.TreeView);
                 visualState.Save(VisualState.GetVisualStateFileName(_model.TestFiles[0]));
             }
-        }
-
-        private bool CanSaveVisualState()
-        {
-            return 
-                _settings.Gui.TestTree.SaveVisualState &&
-                _model.TestFiles.Count > 0;
-        }
-
-        private bool CanRestoreVisualState()
-        {
-            return
-                CanSaveVisualState() &&
-                File.Exists(VisualState.GetVisualStateFileName(_model.TestFiles[0]));
-        }
-
-        private void RestoreVisualState()
-        {
-            var filename = VisualState.GetVisualStateFileName(_model.TestFiles[0]);
-            var visualState = VisualState.LoadFrom(filename);
-
-            visualState.ApplyTo(_view.TreeView);
-        }
-
-        private TreeNode GetTreeNodeForTest(string id)
-        {
-            var treeNodes = GetTreeNodesForTest(id);
-            return treeNodes.Count > 0 ? treeNodes[0] : null;
         }
 
         private void SetDefaultInitialExpansion()
