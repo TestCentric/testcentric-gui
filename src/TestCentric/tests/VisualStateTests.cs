@@ -347,7 +347,6 @@ namespace TestCentric.Gui
             bool check = (flags & CHK) == CHK;
             bool select = (flags & SEL) == SEL;
             bool top = (flags & TOP) == TOP;
-            Console.WriteLine($"flags={flags} gives expand={expand}, check={check}, select={select}, top={top}");
 
             var visualNode = new VisualTreeNode() { Name = name, Expanded = expand, Checked = check, Selected = select, IsTopNode = top };
             

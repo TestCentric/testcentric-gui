@@ -16,7 +16,6 @@ namespace TestCentric.Gui.SettingsPages
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox initialDisplayComboBox;
-        private System.Windows.Forms.CheckBox saveVisualStateCheckBox;
         private System.Windows.Forms.CheckBox showCheckBoxesCheckBox;
         private System.Windows.Forms.HelpProvider helpProvider1;
         private Label label6;
@@ -75,7 +74,6 @@ namespace TestCentric.Gui.SettingsPages
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.initialDisplayComboBox = new System.Windows.Forms.ComboBox();
-            this.saveVisualStateCheckBox = new System.Windows.Forms.CheckBox();
             this.showCheckBoxesCheckBox = new System.Windows.Forms.CheckBox();
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
             this.label6 = new System.Windows.Forms.Label();
@@ -95,7 +93,7 @@ namespace TestCentric.Gui.SettingsPages
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Location = new System.Drawing.Point(144, 0);
             this.groupBox1.Name = "groupBox1";
@@ -137,26 +135,14 @@ namespace TestCentric.Gui.SettingsPages
             this.initialDisplayComboBox.Size = new System.Drawing.Size(168, 21);
             this.initialDisplayComboBox.TabIndex = 33;
             // 
-            // saveVisualStateCheckBox
-            // 
-            this.saveVisualStateCheckBox.AutoSize = true;
-            this.helpProvider1.SetHelpString(this.saveVisualStateCheckBox, "If checked, the visual state of the project is saved on exit. This includes selec" +
-        "ted tests, categories and the state of the tree itself.");
-            this.saveVisualStateCheckBox.Location = new System.Drawing.Point(32, 155);
-            this.saveVisualStateCheckBox.Name = "saveVisualStateCheckBox";
-            this.helpProvider1.SetShowHelp(this.saveVisualStateCheckBox, true);
-            this.saveVisualStateCheckBox.Size = new System.Drawing.Size(184, 17);
-            this.saveVisualStateCheckBox.TabIndex = 35;
-            this.saveVisualStateCheckBox.Text = "Save Visual State of each project";
-            // 
-            // saveVisualStateCheckBox
+            // showCheckBoxesCheckBox
             // 
             this.showCheckBoxesCheckBox.AutoSize = true;
             this.helpProvider1.SetHelpString(this.showCheckBoxesCheckBox, "If checked, a checkbox is displayed next to each item in the tree.");
-            this.showCheckBoxesCheckBox.Location = new System.Drawing.Point(32, 185);
+            this.showCheckBoxesCheckBox.Location = new System.Drawing.Point(32, 150);
             this.showCheckBoxesCheckBox.Name = "showCheckBoxesCheckBox";
             this.helpProvider1.SetShowHelp(this.showCheckBoxesCheckBox, true);
-            this.showCheckBoxesCheckBox.Size = new System.Drawing.Size(184, 17);
+            this.showCheckBoxesCheckBox.Size = new System.Drawing.Size(227, 17);
             this.showCheckBoxesCheckBox.TabIndex = 36;
             this.showCheckBoxesCheckBox.Text = "Display a checkbox next to each tree item.";
             // 
@@ -250,7 +236,6 @@ namespace TestCentric.Gui.SettingsPages
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.initialDisplayComboBox);
-            this.Controls.Add(this.saveVisualStateCheckBox);
             this.Controls.Add(this.showCheckBoxesCheckBox);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label1);
@@ -269,7 +254,6 @@ namespace TestCentric.Gui.SettingsPages
         public override void LoadSettings()
         {
             initialDisplayComboBox.SelectedIndex = Settings.Gui.TestTree.InitialTreeDisplay;
-            saveVisualStateCheckBox.Checked = Settings.Gui.TestTree.SaveVisualState;
             showCheckBoxesCheckBox.Checked = Settings.Gui.TestTree.ShowCheckBoxes;
 
             string[] altDirs = Directory.Exists(treeImageDir)
@@ -289,7 +273,6 @@ namespace TestCentric.Gui.SettingsPages
         public override void ApplySettings()
         {
             Settings.Gui.TestTree.InitialTreeDisplay = initialDisplayComboBox.SelectedIndex;
-            Settings.Gui.TestTree.SaveVisualState = saveVisualStateCheckBox.Checked;
             Settings.Gui.TestTree.ShowCheckBoxes = showCheckBoxesCheckBox.Checked;
 
             if (imageSetListBox.SelectedIndex >= 0)
