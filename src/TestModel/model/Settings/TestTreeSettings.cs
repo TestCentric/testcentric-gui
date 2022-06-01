@@ -26,12 +26,6 @@ namespace TestCentric.Gui.Model.Settings
             set { SaveSetting(nameof(DisplayFormat), value); }
         }
 
-        public bool SaveVisualState
-        {
-            get { return GetSetting(nameof(SaveVisualState), true); }
-            set { SaveSetting(nameof(SaveVisualState), value); }
-        }
-
         public int InitialTreeDisplay
         {
             get { return GetSetting(nameof(InitialTreeDisplay), 0); }

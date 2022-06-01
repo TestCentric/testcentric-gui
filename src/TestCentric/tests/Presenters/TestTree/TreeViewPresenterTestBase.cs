@@ -22,7 +22,6 @@ namespace TestCentric.Gui.Presenters.TestTree
         public void CreatePresenter()
         {
             _view.TreeContextMenu.Returns(new ContextMenuStrip());
-            _settings.Gui.TestTree.SaveVisualState = false;
 
             _presenter = new TreeViewPresenter(_view, _model);
 
