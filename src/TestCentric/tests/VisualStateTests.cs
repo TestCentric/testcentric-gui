@@ -67,7 +67,7 @@ namespace TestCentric.Gui
         [Test]
         public void CanApplyVisualStateToTree_SingleDeletion()
         {
-            // Remove Test2 and decrement all ids > 1-1
+            // Remove Test2
             var tv = new TestTreeView(
                 TN("test-suite", "Assembly1", "1-6",
                     TN("test-suite", "NUnit", "1-5",
@@ -92,20 +92,56 @@ namespace TestCentric.Gui
                 // No SelectedNode since Test2 is no longer present
                 Assert.That(tv.SelectedNode, Is.Null, "SelectedNode");
 
-                // Remaining Tests in Assembly1 are now failing
-                Warn.Unless(tv.TopNode?.Text, Is.EqualTo("Assembly1"), "TopNode");
-                Warn.Unless(tv.Nodes[0].IsExpanded, "Assembly1 not expanded");
-                Warn.Unless(tv.Nodes[0].Nodes[0].IsExpanded, "NUnit not expanded");
-                Warn.Unless(tv.Nodes[0].Nodes[0].Nodes[0].IsExpanded, "Tests not expanded");
-                Warn.Unless(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[0].IsExpanded, "MyFixture not expanded");
-                Warn.Unless(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[0].Nodes[0].Checked, "Test1 not checked");
-                Warn.Unless(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[0].Nodes[1].Checked, "Test3 not checked");
-
-                // All checks for Assembly2 work as before
+                // Remaining Tests continue to pass
+                Assert.That(tv.TopNode?.Text, Is.EqualTo("Assembly1"), "TopNode");
+                Assert.That(tv.Nodes[0].IsExpanded, "Assembly1 not expanded");
+                Assert.That(tv.Nodes[0].Nodes[0].IsExpanded, "NUnit not expanded");
+                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].IsExpanded, "Tests not expanded");
+                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[0].IsExpanded, "MyFixture not expanded");
                 Assert.That(tv.Nodes[1].IsExpanded, "Assembly2 not expanded");
                 Assert.That(tv.Nodes[1].Nodes[0].IsExpanded, "Tests not expanded");
                 Assert.That(tv.Nodes[1].Nodes[0].Nodes[0].IsExpanded, "FixtureA not expanded");
+                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[0].Nodes[0].Checked, "Test1 not checked");
+                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[0].Nodes[1].Checked, "Test3 not checked");
                 Assert.That(tv.Nodes[1].Nodes[0].Nodes[0].Checked, "FixtureA not checked");
+            });
+        }
+
+        [Test]
+        public void CanApplyVisualStateToTree_MultipleDeletions()
+        {
+            // Remove Test2 and FixtureA
+            var tv = new TestTreeView(
+                TN("test-suite", "Assembly1", "1-6",
+                    TN("test-suite", "NUnit", "1-5",
+                        TN("test-suite", "Tests", "1-4",
+                            TN("test-suite", "MyFixture", "1-3",
+                                TN("test-case", "Test1", "1-1"),
+                                TN("test-case", "Test3", "1-2"))))),
+                TN("test-suite", "Assembly2", "2-7",
+                    TN("test-suite", "Tests", "2-6",
+                        TN("test-suite", "FixtureB", "2-5",
+                            TN("test-case", "Test1", "2-4")))));
+
+            ExpectedVisualState.ApplyTo(tv);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(tv.CheckBoxes, Is.True, "CheckBoxes");
+
+                // No SelectedNode since Test2 is no longer present
+                Assert.That(tv.SelectedNode, Is.Null, "SelectedNode");
+
+                // Remaining Tests continue to pass except for FixtureA, which is no longer present
+                Assert.That(tv.TopNode?.Text, Is.EqualTo("Assembly1"), "TopNode");
+                Assert.That(tv.Nodes[0].IsExpanded, "Assembly1 not expanded");
+                Assert.That(tv.Nodes[0].Nodes[0].IsExpanded, "NUnit not expanded");
+                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].IsExpanded, "Tests not expanded");
+                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[0].IsExpanded, "MyFixture not expanded");
+                Assert.That(tv.Nodes[1].IsExpanded, "Assembly2 not expanded");
+                Assert.That(tv.Nodes[1].Nodes[0].IsExpanded, "Tests not expanded");
+                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[0].Nodes[0].Checked, "Test1 not checked");
+                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[0].Nodes[1].Checked, "Test3 not checked");
             });
         }
 
