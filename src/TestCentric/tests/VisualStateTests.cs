@@ -65,6 +65,84 @@ namespace TestCentric.Gui
         }
 
         [Test]
+        public void CanApplyVisualStateToTree_TestsAdded()
+        {
+            // Added NewFixture, SomeTest, NewTest, FixtureB, Test1
+            var tv = new TestTreeView(
+                TN("test-suite", "Assembly1", "1-7",
+                    TN("test-suite", "NUnit", "1-6",
+                        TN("test-suite", "Tests", "1-5",
+                            TN("test-suite", "New Fixture", "1-9",
+                                TN("test-case", "SomeTest", "1-10")),
+                            TN("test-suite", "MyFixture", "1-4",
+                                TN("test-case", "Test1", "1-1"),
+                                TN("test-case", "Test2", "1-2"),
+                                TN("test-case", "Test3", "1-3"),
+                                TN("test-case", "NewTest", "1-11"))))),
+                TN("test-suite", "Assembly2", "2-7",
+                    TN("test-suite", "Tests", "2-6",
+                        TN("test-suite", "FixtureA", "2-3",
+                            TN("test-case", "Test1", "2-1"),
+                            TN("test-case", "Test2", "2-2")),
+                        TN("test-suite", "FixtureB", "2-5",
+                            TN("test-case", "Test1", "2-4")))));
+            ExpectedVisualState.ApplyTo(tv);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(tv.CheckBoxes, Is.True, "CheckBoxes");
+                Assert.That(tv.SelectedNode?.Text, Is.EqualTo("Test2"), "SelectedNode");
+                Assert.That(tv.TopNode?.Text, Is.EqualTo("Assembly1"), "TopNode");
+                Assert.That(tv.Nodes[0].IsExpanded, "Assembly1 not expanded");
+                Assert.That(tv.Nodes[0].Nodes[0].IsExpanded, "NUnit not expanded");
+                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].IsExpanded, "Tests not expanded");
+                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[1].IsExpanded, "MyFixture not expanded");
+                Assert.That(tv.Nodes[1].IsExpanded, "Assembly2 not expanded");
+                Assert.That(tv.Nodes[1].Nodes[0].IsExpanded, "Tests not expanded");
+                Assert.That(tv.Nodes[1].Nodes[0].Nodes[0].IsExpanded, "FixtureA not expanded");
+                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[1].Nodes[0].Checked, "Test1 not checked");
+                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[1].Nodes[2].Checked, "Test3 not checked");
+                Assert.That(tv.Nodes[1].Nodes[0].Nodes[0].Checked, "FixtureA not checked");
+            });
+        }
+
+        [Test]
+        public void CanApplyVisualStateToTree_TestsAddedAndDeleted ()
+        {
+            // Added NewFixture with SomeTest, NewTest, FixtureB with Test1
+            // Deleted Test3, FixtureA with Test1 and Test2
+            var tv = new TestTreeView(
+                TN("test-suite", "Assembly1", "1-7",
+                    TN("test-suite", "NUnit", "1-6",
+                        TN("test-suite", "Tests", "1-5",
+                            TN("test-suite", "New Fixture", "1-9",
+                                TN("test-case", "SomeTest", "1-10")),
+                            TN("test-suite", "MyFixture", "1-4",
+                                TN("test-case", "Test1", "1-1"),
+                                TN("test-case", "Test2", "1-2"),
+                                TN("test-case", "NewTest", "1-11"))))),
+                TN("test-suite", "Assembly2", "2-7",
+                    TN("test-suite", "Tests", "2-6",
+                        TN("test-suite", "FixtureB", "2-5",
+                            TN("test-case", "Test1", "2-4")))));
+            ExpectedVisualState.ApplyTo(tv);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(tv.CheckBoxes, Is.True, "CheckBoxes");
+                Assert.That(tv.SelectedNode?.Text, Is.EqualTo("Test2"), "SelectedNode");
+                Assert.That(tv.TopNode?.Text, Is.EqualTo("Assembly1"), "TopNode");
+                Assert.That(tv.Nodes[0].IsExpanded, "Assembly1 not expanded");
+                Assert.That(tv.Nodes[0].Nodes[0].IsExpanded, "NUnit not expanded");
+                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].IsExpanded, "Tests not expanded");
+                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[1].IsExpanded, "MyFixture not expanded");
+                Assert.That(tv.Nodes[1].IsExpanded, "Assembly2 not expanded");
+                Assert.That(tv.Nodes[1].Nodes[0].IsExpanded, "Tests not expanded");
+                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[1].Nodes[0].Checked, "Test1 not checked");
+            });
+        }
+
+        [Test]
         public void CanApplyVisualStateToTree_SingleDeletion()
         {
             // Remove Test2
@@ -79,7 +157,7 @@ namespace TestCentric.Gui
                     TN("test-suite", "Tests", "2-6",
                         TN("test-suite", "FixtureA", "2-3",
                             TN("test-case", "Test1", "2-1"),
-                            TN("test-case", "Test1", "2-2")),
+                            TN("test-case", "Test2", "2-2")),
                         TN("test-suite", "FixtureB", "2-5",
                             TN("test-case", "Test1", "2-4")))));
 
