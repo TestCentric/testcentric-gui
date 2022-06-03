@@ -128,10 +128,7 @@ namespace TestCentric.Engine.Drivers
         /// <param name="force">If true, cancel any ongoing test threads, otherwise wait for them to complete.</param>
         public void StopRun(bool force)
         {
-            if (force)
-                throw new NotImplementedException("StopRun with force:true is not supported under .NET Standard or Core");
-            else
-                ExecuteMethod(STOP_RUN_METHOD, false);
+            ExecuteMethod(STOP_RUN_METHOD, false);
         }
 
         /// <summary>
