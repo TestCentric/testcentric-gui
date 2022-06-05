@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml;
 using NUnit.Engine;
 
@@ -33,23 +34,34 @@ namespace TestCentric.Engine.TestBed
             Console.WriteLine($"  CLR Version: {Environment.Version}");
             Console.WriteLine();
 
-            if (args.Contains("--trace"))
-                TestEngine.InternalTraceLevel = InternalTraceLevel.Debug;
+            var options = new CommandLineOptions(args);
 
-            if (args.Contains("--list-extensions"))
+            if (options.ListExtensions)
             {
                 ListExtensions();
                 return;
             }
 
-            var package = MakeTestPackageFromArguments(args);
-
             Console.WriteLine("Test Files");
-            foreach (var file in args)
+            foreach (var file in options.Files)
                     Console.WriteLine("  " + file);
             Console.WriteLine();
 
+            var package = new TestPackage(options.Files);
+
+            if (options.Trace)
+            {
+                package.AddSetting("InternalTraceLevel", "Debug");
+                TestEngine.InternalTraceLevel = InternalTraceLevel.Debug;
+            }
+
+            if (options.DebugAgent)
+                package.AddSetting("DebugAgent", true);
+
             var runner = TestEngine.GetRunner(package);
+
+            if (options.Timeout > 0)
+                Task.Delay(options.Timeout).ContinueWith(t => runner.StopRun(true));
 
             XmlNode resultNode = runner.Run(new TestEventHandler(), TestFilter.Empty);
 
@@ -100,39 +112,6 @@ namespace TestCentric.Engine.TestBed
                     ++extensionCount;
                 }
             }
-        }
-
-        private static TestPackage MakeTestPackageFromArguments(string[] args)
-        {
-            List<string> files = new List<string>();
-            bool debugAgent = false;
-            bool trace = false;
-
-            foreach (string arg in args)
-                if (arg.StartsWith("-"))
-                    switch (arg)
-                    {
-                        case "--trace":
-                            trace = true;
-                            break;
-
-                        case "--debug-agent":
-                            debugAgent = true;
-                            break;
-
-                        default:
-                            throw new ArgumentException($"Invalid option: '{arg}'");
-                    }
-                else
-                    files.Add(arg);
-
-            var package = new TestPackage(files);
-            if (trace)
-                package.AddSetting("InternalTraceLevel", "Debug");
-            if (debugAgent)
-                package.AddSetting("DebugAgent", true);
-
-            return package;
         }
     }
 }

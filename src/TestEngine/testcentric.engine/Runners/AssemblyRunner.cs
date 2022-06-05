@@ -174,7 +174,10 @@ namespace TestCentric.Engine.Runners
             {
                 try
                 {
-                    _remoteRunner.StopRun(force);
+                    if (force)
+                        _agent.Stop();
+                    else
+                        _remoteRunner.StopRun(false);
                 }
                 catch (Exception e)
                 {
