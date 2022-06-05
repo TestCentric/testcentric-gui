@@ -183,6 +183,8 @@ namespace TestCentric.Gui.Model
         public IList<string> AvailableCategories { get; private set; }
 
         public bool IsTestRunning => Runner != null && Runner.IsTestRunning;
+        public bool StopRequested { get; private set; }
+        public bool ForcedStopRequested { get; private set; }
 
         public IDictionary<string, ResultNode> Results { get; } = new Dictionary<string, ResultNode>();
         public ResultSummary ResultSummary { get; internal set; }
@@ -434,7 +436,11 @@ namespace TestCentric.Gui.Model
 
         public void StopTestRun(bool force)
         {
-            Runner.StopRun(force);
+            StopRequested = true;
+            ForcedStopRequested = force;
+            // TODO: Re-enable when engine is updated for issue 39
+            if (!force)
+                Runner.StopRun(force);
         }
 
         public void SaveResults(string filePath, string format = "nunit3")
@@ -636,6 +642,7 @@ namespace TestCentric.Gui.Model
                 ReloadTests();
             }
 
+            StopRequested = ForcedStopRequested = false;
             Runner.RunAsync(_events, filter.AsNUnitFilter());
         }
 

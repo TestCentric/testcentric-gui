@@ -285,22 +285,19 @@ namespace TestCentric.Gui.Presenters.Main
         }
 
         [Test]
-        public void StopRunButton_StopsTestsAndChangesMenu()
+        public void StopRunButton_StopsTests()
         {
             _view.StopRunButton.ClearReceivedCalls();
             _view.ForceStopButton.ClearReceivedCalls();
             _view.StopRunButton.Execute += Raise.Event<CommandHandler>();
             _model.Received().StopTestRun(false);
-            _view.StopRunButton.Received().Visible = false;
-            _view.ForceStopButton.Received().Visible = true;
         }
 
         [Test]
-        public void ForceStopCommand_ForcesTestsToStopAndDisablesForceStop()
+        public void ForceStopButton_ForcesTestsToStop()
         {
             _view.ForceStopButton.Execute += Raise.Event<CommandHandler>();
             _model.Received().StopTestRun(true);
-            _view.ForceStopButton.Received().Enabled = false;
         }
     }
 }

@@ -81,8 +81,6 @@ namespace TestCentric.Gui.Presenters
             SetTreeDisplayFormat(_settings.Gui.TestTree.DisplayFormat);
 
             UpdateViewCommands();
-            _view.StopRunButton.Visible = true;
-            _view.ForceStopButton.Visible = false;
 
             foreach (string format in _model.ResultFormats)
                 if (format != "cases" && format != "user")
@@ -115,8 +113,6 @@ namespace TestCentric.Gui.Presenters
                 OnLongRunningOperationComplete();
 
                 UpdateViewCommands();
-                _view.StopRunButton.Visible = true;
-                _view.ForceStopButton.Visible = false;
 
                 _lastFilesLoaded = _model.TestFiles.ToArray();
                 if (_lastFilesLoaded.Length == 1)
@@ -126,8 +122,6 @@ namespace TestCentric.Gui.Presenters
             _model.Events.TestsUnloading += (TestEventArgse) =>
             {
                 UpdateViewCommands();
-                _view.StopRunButton.Visible = true;
-                _view.ForceStopButton.Visible = false;
 
                 BeginLongRunningOperation("Unloading...");
             };
@@ -137,8 +131,6 @@ namespace TestCentric.Gui.Presenters
                 OnLongRunningOperationComplete();
 
                 UpdateViewCommands();
-                _view.StopRunButton.Visible = true;
-                _view.ForceStopButton.Visible = false;
             };
 
             _model.Events.TestsReloading += (TestEventArgs e) =>
@@ -154,8 +146,6 @@ namespace TestCentric.Gui.Presenters
 
                 UpdateViewCommands();
 
-                _view.StopRunButton.Visible = true;
-                _view.ForceStopButton.Visible = false;
             };
 
             _model.Events.TestLoadFailure += (TestLoadFailureEventArgs e) =>
@@ -189,8 +179,6 @@ namespace TestCentric.Gui.Presenters
             _model.Events.RunStarting += (RunStartingEventArgs e) =>
             {
                 UpdateViewCommands();
-                _view.StopRunButton.Visible = true;
-                _view.ForceStopButton.Visible = false;
             };
 
             _model.Events.RunFinished += (TestResultEventArgs e) => OnRunFinished(e.Result);
@@ -201,10 +189,6 @@ namespace TestCentric.Gui.Presenters
                 OnLongRunningOperationComplete();
 
                 UpdateViewCommands();
-
-                // Reset these in case run was cancelled
-                _view.StopRunButton.Visible = true;
-                _view.ForceStopButton.Visible = false;
 
                 //string resultPath = Path.Combine(TestProject.BasePath, "TestResult.xml");
                 // TODO: Use Work Directory
@@ -585,16 +569,16 @@ namespace TestCentric.Gui.Presenters
 
         private void ExecuteNormalStop()
         {
-            BeginLongRunningOperation("Waiting for all running tests to complete.");
-            _view.StopRunButton.Visible = false;
-            _view.ForceStopButton.Visible = true;
+            BeginLongRunningOperation("Waiting for currently running tests to complete. Use the Kill button to terminate the process without waiting.");
             _model.StopTestRun(false);
+            UpdateViewCommands();
         }
 
         private void ExecuteForcedStop()
         {
-            _view.ForceStopButton.Enabled = false;
+            UpdateLongRunningOperation("Process is being terminated.");
             _model.StopTestRun(true);
+            UpdateViewCommands(false);
         }
 
         private void DisplayTestParametersDialog()
@@ -732,6 +716,8 @@ namespace TestCentric.Gui.Presenters
         {
             bool testLoaded = _model.HasTests;
             bool testRunning = _model.IsTestRunning;
+            bool stopRequested = _model.StopRequested;
+            bool forcedStopRequested = _model.ForcedStopRequested;
             bool hasResults = _model.HasResults;
             bool hasFailures = _model.HasResults && _model.ResultSummary.FailedCount > 0;
 
@@ -744,8 +730,10 @@ namespace TestCentric.Gui.Presenters
 
             _view.RunFailedButton.Enabled = testLoaded && !testRunning && hasFailures;
 
-            _view.StopRunButton.Enabled =
-            _view.ForceStopButton.Enabled = testRunning;
+            _view.StopRunButton.Enabled = testRunning && !stopRequested;
+            _view.StopRunButton.Visible = !testRunning || !stopRequested;
+            _view.ForceStopButton.Enabled = testRunning && stopRequested && !forcedStopRequested;
+            _view.ForceStopButton.Visible = testRunning && stopRequested;
 
             _view.RunSummaryButton.Enabled = testLoaded && !testRunning && hasResults;
 
@@ -877,6 +865,11 @@ namespace TestCentric.Gui.Presenters
         {
             _longRunningOperation = new LongRunningOperationDisplay();
             _longRunningOperation.Display(text);
+        }
+
+        private void UpdateLongRunningOperation(string text)
+        {
+            _longRunningOperation?.Update(text);
         }
 
         private void OnLongRunningOperationComplete()
