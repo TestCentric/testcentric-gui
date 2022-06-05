@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using TestCentric.Common;
 using TestCentric.TestUtilities.Fakes;
 
 using TestPackage = NUnit.Engine.TestPackage;

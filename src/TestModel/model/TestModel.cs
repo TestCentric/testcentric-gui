@@ -408,28 +408,32 @@ namespace TestCentric.Gui.Model
 
         public void RunTests(TestNode testNode)
         {
-            Guard.ArgumentNotNull(testNode, nameof(testNode));
+            if (testNode == null)
+                throw new ArgumentNullException(nameof(testNode));
 
             RunTests(new TestRunSpecification(testNode, CategoryFilter));
         }
 
         public void RunTests(TestSelection tests)
         {
-            Guard.ArgumentNotNull(tests, nameof(tests));
+            if (tests == null)
+                throw new ArgumentNullException(nameof(tests));
 
             RunTests(new TestRunSpecification(tests, CategoryFilter));
         }
 
         public void RepeatLastRun()
         {
-            Guard.OperationValid(_lastTestRun != null, "RepeatLastRun called before any tests were run");
+            if (_lastTestRun == null)
+                throw new InvalidOperationException("RepeatLastRun called before any tests were run");
 
             RunTests(_lastTestRun);
         }
 
         public void DebugTests(TestNode testNode)
         {
-            Guard.ArgumentNotNull(testNode, nameof(testNode));
+            if (testNode == null)
+                throw new ArgumentNullException(nameof(testNode));
 
             DebugTests(testNode.GetTestFilter());
         }
@@ -595,7 +599,7 @@ namespace TestCentric.Gui.Model
             foreach (var runtime in Services.GetService<NUnit.Engine.IAvailableRuntimes>().AvailableRuntimes)
             {
                 // We don't support anything below .NET Framework 2.0
-                if (runtime.Id.StartsWith("net-") && runtime.ClrVersion.Major < 2)
+                if (runtime.Id.StartsWith("net-") && runtime.FrameworkVersion.Major < 2)
                     continue;
 
                 runtimes.Add(runtime);
