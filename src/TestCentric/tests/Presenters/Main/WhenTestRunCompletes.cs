@@ -23,6 +23,7 @@ namespace TestCentric.Gui.Presenters.Main
             _model.HasResults.Returns(true);
             _model.ResultSummary.Returns(new ResultSummary() { FailureCount = 1 });
             _model.IsTestRunning.Returns(false);
+            _model.StopRequested.Returns(false);
             _model.TestPackage.Returns(new NUnit.Engine.TestPackage("dummy.dll"));
 
             var resultNode = new ResultNode("<test-run id='XXX' result='Failed' />");

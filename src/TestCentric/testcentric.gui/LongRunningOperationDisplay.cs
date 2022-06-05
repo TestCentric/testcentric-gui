@@ -19,7 +19,7 @@ namespace TestCentric.Gui
         {
             InitializeComponent();
 
-            Owner = Form.ActiveForm;
+            Owner = ActiveForm;
         }
 
         private void InitializeComponent()
@@ -71,7 +71,21 @@ namespace TestCentric.Gui
                 Show();
                 Invalidate();
                 Update();
+
+                Owner.Focus();
             }
+        }
+
+        public void Update(string text)
+        {
+            if (!Visible || string.IsNullOrEmpty(operation.Text))
+                throw new InvalidOperationException("Cannot update a display, which is not already visible");
+
+            operation.Text = text;
+
+            Show();
+            Invalidate();
+            Update();
         }
     }
 
