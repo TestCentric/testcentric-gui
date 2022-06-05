@@ -172,28 +172,18 @@ namespace TestCentric.Engine.Runners
         {
             if (_remoteRunner != null)
             {
-                if (force)
-                    KillRemoteProcess();
-                else
-                    AskTestToStop();
+                try
+                {
+                    if (force)
+                        _agent.Stop();
+                    else
+                        _remoteRunner.StopRun(false);
+                }
+                catch (Exception e)
+                {
+                    log.Error("Failed to stop the remote run. {0}", ExceptionHelper.BuildMessageAndStackTrace(e));
+                }
             }
-        }
-
-        private void AskTestToStop()
-        {
-            try
-            {
-                _remoteRunner.StopRun(false);
-            }
-            catch (Exception e)
-            {
-                log.Error("Failed to stop the remote run. {0}", ExceptionHelper.BuildMessageAndStackTrace(e));
-            }
-        }
-
-        private void KillRemoteProcess()
-        {
-            _agent.Stop();
         }
 
         protected override void Dispose(bool disposing)

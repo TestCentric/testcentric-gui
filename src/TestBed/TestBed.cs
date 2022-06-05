@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml;
 using NUnit.Engine;
 
@@ -58,6 +59,9 @@ namespace TestCentric.Engine.TestBed
                 package.AddSetting("DebugAgent", true);
 
             var runner = TestEngine.GetRunner(package);
+
+            if (options.Timeout > 0)
+                Task.Delay(options.Timeout).ContinueWith(t => runner.StopRun(true));
 
             XmlNode resultNode = runner.Run(new TestEventHandler(), TestFilter.Empty);
 
