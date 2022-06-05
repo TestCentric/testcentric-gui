@@ -41,7 +41,7 @@ namespace TestCentric.Engine.Agents
 
         public override void Stop()
         {
-            log.Debug("Starting");
+            log.Debug("Stopping");
             Transport.Stop();
         }
 
