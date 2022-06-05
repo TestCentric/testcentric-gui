@@ -13,7 +13,7 @@ const string DEFAULT_CONFIGURATION = "Release";
 // NOTE: This must match what is actually referenced by
 // the GUI test model project. Hopefully, this is a temporary
 // fix, which we can get rid of in the future.
-const string REF_ENGINE_VERSION = "2.0.0-dev00014";
+const string REF_ENGINE_VERSION = "2.0.0-dev00031";
 
 const string PACKAGE_NAME = "testcentric-gui";
 const string NUGET_PACKAGE_NAME = "TestCentric.GuiRunner";
@@ -108,11 +108,11 @@ Task("Build")
 	CopyFileToDirectory(
 		parameters.NuGetTestDirectory + "TestCentric.Engine/content/testcentric.nuget.addins",
 		parameters.OutputDirectory);
-	Information("Copyied testcentric.nuget.addins");
+	Information("Copied testcentric.nuget.addins");
 	CopyDirectory(
-		parameters.NuGetTestDirectory + "TestCentric.Engine/agents",
-		parameters.OutputDirectory + "agents");
-	Information("Copyied agent files");
+		parameters.NuGetTestDirectory + "TestCentric.Engine/tools",
+		parameters.OutputDirectory);
+	Information("Copied engine files");
 
 });
 

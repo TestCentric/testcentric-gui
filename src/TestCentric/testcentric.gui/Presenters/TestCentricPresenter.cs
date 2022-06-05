@@ -213,7 +213,10 @@ namespace TestCentric.Gui.Presenters
 
                 // If we were running unattended, it's time to close
                 if (_options.Unattended)
+                {
                     _view.Close();
+                    Environment.Exit(0);
+                }
             };
 
             _settings.Changed += (s, e) =>

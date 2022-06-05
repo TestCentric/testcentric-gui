@@ -17,7 +17,7 @@
     <PackageReference Include="Mono.Options" Version="6.12.0.148" />
     <PackageReference Include="NUnit.Engine.Api" Version="4.0.0-dev00102" />
     <PackageReference Include="TestCentric.Engine.Api" Version="2.0.0-dev00017" />
-    <PackageReference Include="TestCentric.Engine" Version="2.0.0-dev00017" />
+    <PackageReference Include="TestCentric.Engine" Version="2.0.0-dev00031" />
   </ItemGroup>
   
 </Project>
