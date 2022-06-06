@@ -47,6 +47,7 @@ namespace TestCentric.Engine.Runners
         private TestEventDispatcher _eventDispatcher;
 
         private const int WAIT_FOR_CANCEL_TO_COMPLETE = 5000;
+        private bool _runWasCancelled;
 
         public MasterTestRunner(IServiceLocator services, TestPackage package)
         {
@@ -173,6 +174,8 @@ namespace TestCentric.Engine.Runners
 
             if (force)
             {
+                _runWasCancelled = true;
+
                 // Frameworks should handle StopRun(true) by cancelling all tests and notifying
                 // us of the completion of any tests that were running. However, this feature
                 // may be absent in some frameworks or may be broken and we may not pass on the
@@ -422,6 +425,8 @@ namespace TestCentric.Engine.Runners
                 resultXml.AddAttribute("duration", duration.ToString("0.000000", NumberFormatInfo.InvariantInfo));
 
                 _eventDispatcher.OnTestEvent(resultXml.OuterXml);
+
+                if (!_runWasCancelled)
                 _eventDispatcher.OnTestEvent($"<unhandled-exception message=\"{ex.Message}\" />");
 
                 return new TestEngineResult(resultXml);

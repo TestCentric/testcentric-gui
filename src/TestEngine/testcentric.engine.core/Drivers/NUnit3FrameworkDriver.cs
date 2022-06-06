@@ -105,20 +105,39 @@ namespace TestCentric.Engine.Drivers
             CheckLoadWasCalled();
 
             var handler = new RunTestsCallbackHandler(listener);
+            var filename = Path.GetFileName(_testAssemblyPath);
 
-            log.Info("Running {0} - see separate log file", Path.GetFileName(_testAssemblyPath));
-            CreateObject(RUN_ACTION, _frameworkController, filter, handler);
+            log.Info("Running {0} - see separate log file", filename);
 
-            return handler.Result;
+            try
+            {
+                CreateObject(RUN_ACTION, _frameworkController, filter, handler);
+
+                return handler.Result;
+            }
+            catch when (_runWasCancelled)
+            {
+                return $"<test-suite type='Assembly' id='{ID}' name='{filename}' fullname='{_testAssemblyPath}' result='Failed' label='Cancelled' />";
+            }
         }
+
+        private bool _runWasCancelled;
 
         /// <summary>
         /// Cancel the ongoing test run. If no  test is running, the call is ignored.
         /// </summary>
         /// <param name="force">If true, cancel any ongoing test threads, otherwise wait for them to complete.</param>
+        /// <remarks>
+        /// The call with force:true no longer cancels the test run. It merely saves a flag indicating that the run
+        /// is being aborted at a higher level, so that exceptions generated in the process may be ignored. Ideally
+        /// we would change this API, but it is maintained for reasons of compatibility.
+        /// </remarks>
         public void StopRun(bool force)
         {
-            CreateObject(STOP_RUN_ACTION, _frameworkController, force, new CallbackHandler());
+            if (force)
+                _runWasCancelled = true;
+            else
+                CreateObject(STOP_RUN_ACTION, _frameworkController, false, new CallbackHandler());
         }
 
         /// <summary>
