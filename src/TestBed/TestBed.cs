@@ -34,7 +34,17 @@ namespace TestCentric.Engine.TestBed
             Console.WriteLine($"  CLR Version: {Environment.Version}");
             Console.WriteLine();
 
-            var options = new CommandLineOptions(args);
+            CommandLineOptions options = null;
+
+            try
+            {
+                options = new CommandLineOptions(args);
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                Environment.Exit(1);
+            }
 
             if (options.ListExtensions)
             {
@@ -60,8 +70,11 @@ namespace TestCentric.Engine.TestBed
 
             var runner = TestEngine.GetRunner(package);
 
-            if (options.Timeout > 0)
-                Task.Delay(options.Timeout).ContinueWith(t => runner.StopRun(true));
+            if (options.StopTimeout > 0)
+                Task.Delay(options.StopTimeout).ContinueWith(t => runner.StopRun(false));
+
+            if (options.CancelTimeout > 0)
+                Task.Delay(options.CancelTimeout).ContinueWith(t => runner.StopRun(true));
 
             XmlNode resultNode = runner.Run(new TestEventHandler(), TestFilter.Empty);
 
