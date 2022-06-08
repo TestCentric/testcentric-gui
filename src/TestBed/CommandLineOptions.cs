@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace TestCentric.Engine.TestBed
 {
@@ -16,16 +17,22 @@ namespace TestCentric.Engine.TestBed
             {
                 if (arg.StartsWith("-"))
                     ProcessOption(arg);
-                else
+                else if (File.Exists(arg))
                     Files.Add(arg);
+                else
+                    throw new FileNotFoundException($"File not found: {arg}");
             }
+
+            if (StopTimeout > CancelTimeout)
+                throw new ArgumentException("Value of --stop may not be greater than that of --cancel");
         }
 
         public List<String> Files { get; } = new List<string>();
         public bool DebugAgent { get; private set; }
         public bool Trace { get; private set; }
         public bool ListExtensions { get; private set; }
-        public int Timeout { get; private set; } = 0;
+        public int StopTimeout { get; private set; } = 0;
+        public int CancelTimeout { get; private set; } = 0;
 
         private void ProcessOption(string arg)
         {
@@ -53,8 +60,12 @@ namespace TestCentric.Engine.TestBed
                     ListExtensions = true;
                     break;
 
-                case "--timeout":
-                    Timeout = int.Parse(val);
+                case "--stop":
+                    StopTimeout = int.Parse(val);
+                    break;
+
+                case "--cancel":
+                    CancelTimeout = int.Parse(val);
                     break;
 
                 default:
