@@ -40,11 +40,8 @@ namespace TestCentric.Engine.Services
         
         public void Clear()
         {
-            lock (_trackerLock)
-            {
-                _itemsInProcess.Clear();
-                _allItemsComplete.Reset();
-            }
+            _itemsInProcess.Clear();
+            _allItemsComplete.Reset();
         }
 
         public bool WaitForCompletion(int millisecondsTimeout)
@@ -54,14 +51,11 @@ namespace TestCentric.Engine.Services
 
         public void IssuePendingNotifications(ITestEventListener listener)
         {
-            lock (_trackerLock)
-            {
-                int count = _itemsInProcess.Count;
+            int count = _itemsInProcess.Count;
 
-                // Signal completion of all pending suites, in reverse order
-                while (count > 0)
-                    listener.OnTestEvent(CreateNotification(_itemsInProcess[--count]));
-            }
+            // Signal completion of all pending suites, in reverse order
+            while (count > 0)
+                listener.OnTestEvent(CreateNotification(_itemsInProcess[--count]));
         }
 
         private static string CreateNotification(XmlNode startElement)

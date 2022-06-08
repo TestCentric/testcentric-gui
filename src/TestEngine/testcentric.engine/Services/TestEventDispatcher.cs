@@ -41,7 +41,10 @@ namespace TestCentric.Engine.Services
 
         public void IssuePendingNotifications()
         {
-            _workItemTracker.IssuePendingNotifications(this);
+            lock (_eventLock)
+            {
+                _workItemTracker.IssuePendingNotifications(this);
+            }
         }
 
         public override object InitializeLifetimeService()
