@@ -115,13 +115,13 @@ namespace TestCentric.Engine.Drivers
 
                 return handler.Result;
             }
-            catch when (_runWasCancelled)
+            catch when (_runCancelled)
             {
                 return $"<test-suite type='Assembly' id='{ID}' name='{filename}' fullname='{_testAssemblyPath}' result='Failed' label='Cancelled' />";
             }
         }
 
-        private bool _runWasCancelled;
+        private bool _runCancelled;
 
         /// <summary>
         /// Cancel the ongoing test run. If no  test is running, the call is ignored.
@@ -135,7 +135,7 @@ namespace TestCentric.Engine.Drivers
         public void StopRun(bool force)
         {
             if (force)
-                _runWasCancelled = true;
+                _runCancelled = true;
             else
                 CreateObject(STOP_RUN_ACTION, _frameworkController, false, new CallbackHandler());
         }

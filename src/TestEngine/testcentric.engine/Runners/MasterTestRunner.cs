@@ -47,7 +47,6 @@ namespace TestCentric.Engine.Runners
         private TestEventDispatcher _eventDispatcher;
 
         private const int WAIT_FOR_CANCEL_TO_COMPLETE = 5000;
-        private bool _runWasCancelled;
 
         public MasterTestRunner(IServiceLocator services, TestPackage package)
         {
@@ -174,8 +173,6 @@ namespace TestCentric.Engine.Runners
 
             if (force)
             {
-                _runWasCancelled = true;
-
                 // Frameworks should handle StopRun(true) by cancelling all tests and notifying
                 // us of the completion of any tests that were running. However, this feature
                 // may be absent in some frameworks or may be broken and we may not pass on the
@@ -186,21 +183,18 @@ namespace TestCentric.Engine.Runners
                 // of the completion of every pending WorkItem, that is, one that started but
                 // never sent a completion event.
 
-                if (!_eventDispatcher.WaitForCompletion(WAIT_FOR_CANCEL_TO_COMPLETE))
-                {
-                    _eventDispatcher.IssuePendingNotifications();
+                _eventDispatcher.IssuePendingNotifications();
 
-                    // Signal completion of the run
-                    _eventDispatcher.OnTestEvent($"<test-run id='{TestPackage.ID}' result='Failed' label='Cancelled' />");
+                // Signal completion of the run
+                _eventDispatcher.OnTestEvent($"<test-run id='{TestPackage.ID}' result='Failed' label='Cancelled' />");
 
-                    // Since we were not notified of the completion of some items, we can't trust
-                    // that they were actually stopped by the framework. To make sure nothing is
-                    // left running, we unload the tests. By unloading only the lower-level engine
-                    // runner and not the MasterTestRunner itself, we allow the tests to be loaded
-                    // for subsequent runs using the same package.
+                // Since we were not notified of the completion of some items, we can't trust
+                // that they were actually stopped by the framework. To make sure nothing is
+                // left running, we unload the tests. By unloading only the lower-level engine
+                // runner and not the MasterTestRunner itself, we allow the tests to be loaded
+                // for subsequent runs using the same package.
 
-                    _engineRunner.Unload();
-                }
+                _engineRunner.Unload();
             }
         }
 
@@ -426,7 +420,6 @@ namespace TestCentric.Engine.Runners
 
                 _eventDispatcher.OnTestEvent(resultXml.OuterXml);
 
-                if (!_runWasCancelled)
                 _eventDispatcher.OnTestEvent($"<unhandled-exception message=\"{ex.Message}\" />");
 
                 return new TestEngineResult(resultXml);

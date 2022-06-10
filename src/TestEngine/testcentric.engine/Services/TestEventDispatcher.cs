@@ -5,7 +5,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Xml;
 using NUnit.Engine;
+using TestCentric.Engine.Internal;
 using TestCentric.Engine.Services;
 
 namespace TestCentric.Engine.Services
@@ -19,6 +21,7 @@ namespace TestCentric.Engine.Services
         private ExtensionService _extensionService;
         private List<ITestEventListener> _listenerExtensions = new List<ITestEventListener>();
         private WorkItemTracker _workItemTracker = new WorkItemTracker();
+        private bool _runCancelled;
 
         public TestEventDispatcher()
         {
@@ -31,7 +34,6 @@ namespace TestCentric.Engine.Services
         {
             _workItemTracker.Clear();
             Listeners = new List<ITestEventListener>(_listenerExtensions);
-            Listeners.Add(_workItemTracker);
         }
 
         public bool WaitForCompletion(int millisecondsTimeout)
@@ -43,7 +45,9 @@ namespace TestCentric.Engine.Services
         {
             lock (_eventLock)
             {
-                _workItemTracker.IssuePendingNotifications(this);
+                _runCancelled = true;
+                foreach(XmlNode notification in _workItemTracker.CreateCompletionNotifications())
+                    DispatchEvent(notification.OuterXml);
             }
         }
 
@@ -58,8 +62,30 @@ namespace TestCentric.Engine.Services
         {
             lock (_eventLock)
             {
-                foreach (var listener in Listeners)
-                    listener.OnTestEvent(report);
+                if (!_runCancelled)
+                    DispatchEvent(report);
+            }
+        }
+
+        private void DispatchEvent(string report)
+        {
+            foreach (var listener in Listeners)
+                listener.OnTestEvent(report);
+
+            XmlNode xmlNode = XmlHelper.CreateXmlNode(report);
+
+            switch (xmlNode.Name)
+            {
+                case "start-test":
+                case "start-suite":
+                    _workItemTracker.AddItem(xmlNode);
+                    break;
+
+                case "test-case":
+                case "test-suite":
+                    string id = xmlNode.GetAttribute("id");
+                    _workItemTracker.RemoveItem(id);
+                    break;
             }
         }
 

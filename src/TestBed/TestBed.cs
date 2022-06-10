@@ -70,11 +70,13 @@ namespace TestCentric.Engine.TestBed
 
             var runner = TestEngine.GetRunner(package);
 
+            // NOTE: The test in the two Tasks is needed when we  run in
+            // Debug mode and the specified timeout is too short.
             if (options.StopTimeout > 0)
-                Task.Delay(options.StopTimeout).ContinueWith(t => runner.StopRun(false));
+                Task.Delay(options.StopTimeout).ContinueWith(t => { if (runner.IsTestRunning) runner.StopRun(false); });
 
             if (options.CancelTimeout > 0)
-                Task.Delay(options.CancelTimeout).ContinueWith(t => runner.StopRun(true));
+                Task.Delay(options.CancelTimeout).ContinueWith(t => { if (runner.IsTestRunning) runner.StopRun(true); });
 
             XmlNode resultNode = runner.Run(new TestEventHandler(), TestFilter.Empty);
 
