@@ -48,6 +48,8 @@ namespace TestCentric.Engine.Runners
 
         private const int WAIT_FOR_CANCEL_TO_COMPLETE = 5000;
 
+        private static readonly Logger log = InternalTrace.GetLogger(typeof(MasterTestRunner));
+
         public MasterTestRunner(IServiceLocator services, TestPackage package)
         {
             if (services == null) throw new ArgumentNullException("services");
@@ -169,6 +171,8 @@ namespace TestCentric.Engine.Runners
         /// <param name="force">If true, cancel any ongoing test threads, otherwise wait for them to complete.</param>
         public void StopRun(bool force)
         {
+            log.Info(force ? "Cancelling test run" : "Requesting stop");
+
             _engineRunner.StopRun(force);
 
             if (force)
@@ -193,7 +197,6 @@ namespace TestCentric.Engine.Runners
                 // left running, we unload the tests. By unloading only the lower-level engine
                 // runner and not the MasterTestRunner itself, we allow the tests to be loaded
                 // for subsequent runs using the same package.
-
                 _engineRunner.Unload();
             }
         }

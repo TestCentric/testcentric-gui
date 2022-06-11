@@ -170,6 +170,8 @@ namespace TestCentric.Engine.Runners
         /// <param name="force">If true, cancel any ongoing test threads, otherwise wait for them to complete.</param>
         public override void StopRun(bool force)
         {
+            log.Info(force ? "Cancelling test run" : "Requesting stop");
+
             if (_remoteRunner != null)
             {
                 try

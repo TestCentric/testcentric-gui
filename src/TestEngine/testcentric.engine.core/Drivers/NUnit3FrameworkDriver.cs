@@ -134,6 +134,8 @@ namespace TestCentric.Engine.Drivers
         /// </remarks>
         public void StopRun(bool force)
         {
+            log.Info(force ? "Cancelling test run" : "Requesting stop");
+
             if (force)
                 _runCancelled = true;
             else

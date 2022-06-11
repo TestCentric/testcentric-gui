@@ -198,6 +198,8 @@ namespace TestCentric.Engine.Runners
         /// </returns>
         protected override TestEngineResult RunTests(ITestEventListener listener, TestFilter filter)
         {
+            log.Info($"Running tests for {TestPackage.FullName}");
+
             EnsurePackageIsLoaded();
 
             string driverResult;
@@ -223,6 +225,8 @@ namespace TestCentric.Engine.Runners
         /// <param name="force">If true, cancel any ongoing test threads, otherwise wait for them to complete.</param>
         public override void StopRun(bool force)
         {
+            log.Info(force ? "Cancelling test run" : "Requesting stop");
+
             EnsurePackageIsLoaded();
 
             try
