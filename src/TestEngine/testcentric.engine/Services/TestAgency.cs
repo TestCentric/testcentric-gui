@@ -348,6 +348,7 @@ namespace TestCentric.Engine.Services
             switch (process.ExitCode)
             {
                 case AgentExitCodes.OK:
+                case AgentExitCodes.CANCELLED_BY_USER:
                     return;
                 case AgentExitCodes.PARENT_PROCESS_TERMINATED:
                     errorMsg = "Remote test agent believes agency process has exited.";

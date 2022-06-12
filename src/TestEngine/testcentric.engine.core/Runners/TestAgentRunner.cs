@@ -207,9 +207,11 @@ namespace TestCentric.Engine.Runners
             try
             {
                 driverResult = _driver.Run(listener, filter.Text);
+                log.Debug("Got driver Result");
             }
             catch (Exception ex) when (!(ex is NUnitEngineException))
             {
+                log.Debug("An exception occurred in the driver while running tests.", ex);
                 throw new NUnitEngineException("An exception occurred in the driver while running tests.", ex);
             }
 
@@ -225,17 +227,25 @@ namespace TestCentric.Engine.Runners
         /// <param name="force">If true, cancel any ongoing test threads, otherwise wait for them to complete.</param>
         public override void StopRun(bool force)
         {
-            log.Info(force ? "Cancelling test run" : "Requesting stop");
-
-            EnsurePackageIsLoaded();
-
-            try
+            if (force)
             {
-                _driver.StopRun(force);
+                log.Info("Cancelling test run");
+                Environment.Exit(0);
             }
-            catch (Exception ex) when (!(ex is NUnitEngineException))
+            else
             {
-                throw new NUnitEngineException("An exception occurred in the driver while stopping the run.", ex);
+                log.Info("Requesting stop");
+
+                EnsurePackageIsLoaded();
+
+                try
+                {
+                    _driver.StopRun(false);
+                }
+                catch (Exception ex) when (!(ex is NUnitEngineException))
+                {
+                    throw new NUnitEngineException("An exception occurred in the driver while stopping the run.", ex);
+                }
             }
         }
 

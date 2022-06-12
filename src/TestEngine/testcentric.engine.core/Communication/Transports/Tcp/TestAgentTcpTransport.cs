@@ -118,13 +118,19 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
                     case "Run":
                         filter = (TestFilter)command.Arguments[0];
                         log.Debug($"  Filter = {filter.Text}");
-                        SendResult(_runner.Run(this, filter));
+                        Thread runnerThread = new Thread(RunTests);
+                        runnerThread.Start(filter);
                         break;
 
                     case "RunAsync":
                         filter = (TestFilter)command.Arguments[0];
                         log.Debug($"  Filter = {filter.Text}");
-                        _runner.RunAsync(this, filter);
+                        SendResult(_runner.RunAsync(this, filter));
+                        break;
+
+                    case "StopRun":
+                        var force = (bool)command.Arguments[0];
+                        _runner.StopRun(force);
                         break;
 
                     case "Stop":
@@ -133,7 +139,13 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
                 }
             }
 
+            log.Info("Terminating command loop");
             Stop();
+        }
+
+        private void RunTests(object filter)
+        {
+            SendResult(_runner.Run(this, (TestFilter)filter));
         }
 
         private void SendResult(object result)

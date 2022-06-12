@@ -197,7 +197,7 @@ namespace TestCentric.Engine.Runners
                 // left running, we unload the tests. By unloading only the lower-level engine
                 // runner and not the MasterTestRunner itself, we allow the tests to be loaded
                 // for subsequent runs using the same package.
-                _engineRunner.Unload();
+                //_engineRunner.Unload();
             }
         }
 

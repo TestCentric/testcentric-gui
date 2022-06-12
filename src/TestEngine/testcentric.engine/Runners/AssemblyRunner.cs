@@ -164,6 +164,8 @@ namespace TestCentric.Engine.Runners
             }
         }
 
+        private bool _runCancelled;
+
         /// <summary>
         /// Cancel the ongoing test run. If no  test is running, the call is ignored.
         /// </summary>
@@ -171,6 +173,7 @@ namespace TestCentric.Engine.Runners
         public override void StopRun(bool force)
         {
             log.Info(force ? "Cancelling test run" : "Requesting stop");
+            _runCancelled = force;
 
             if (_remoteRunner != null)
             {
@@ -236,7 +239,7 @@ namespace TestCentric.Engine.Runners
             XmlHelper.AddAttribute(suite, "runstate", "NotRunnable");
             XmlHelper.AddAttribute(suite, "testcasecount", "1");
             XmlHelper.AddAttribute(suite, "result", "Failed");
-            XmlHelper.AddAttribute(suite, "label", "Error");
+            XmlHelper.AddAttribute(suite, "label", _runCancelled ? "Cancelled" : "Error");
             XmlHelper.AddAttribute(suite, "start-time", DateTime.UtcNow.ToString("u"));
             XmlHelper.AddAttribute(suite, "end-time", DateTime.UtcNow.ToString("u"));
             XmlHelper.AddAttribute(suite, "duration", "0.001");
@@ -248,8 +251,13 @@ namespace TestCentric.Engine.Runners
             XmlHelper.AddAttribute(suite, "asserts", "0");
 
             var failure = suite.AddElement("failure");
-            failure.AddElementWithCDataSection("message", ExceptionHelper.BuildMessage(e));
-            failure.AddElementWithCDataSection("stack-trace", ExceptionHelper.BuildMessageAndStackTrace(e));
+            if (_runCancelled)
+                failure.AddElementWithCDataSection("message", "Run cancelled by user");
+            else
+            {
+                failure.AddElementWithCDataSection("message", ExceptionHelper.BuildMessage(e));
+                failure.AddElementWithCDataSection("stack-trace", ExceptionHelper.BuildMessageAndStackTrace(e));
+            }
 
             return new TestEngineResult(suite);
         }

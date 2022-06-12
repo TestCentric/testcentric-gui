@@ -8,6 +8,7 @@ namespace TestCentric.Engine.Agents
     public static class AgentExitCodes
     {
         public const int OK = 0;
+        public const int CANCELLED_BY_USER = 1;
         public const int PARENT_PROCESS_TERMINATED = -1;
         public const int FAILED_TO_START_REMOTE_AGENT = -2;
         public const int DEBUGGER_SECURITY_VIOLATION = -3;
