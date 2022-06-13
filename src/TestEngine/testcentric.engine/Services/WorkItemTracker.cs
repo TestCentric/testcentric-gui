@@ -32,11 +32,10 @@ namespace TestCentric.Engine.Services
     /// complete. Once the test has been cancelled, it provide notifications
     /// to the runner so the information may be displayed.
     /// </summary>
-    internal class WorkItemTracker : ITestEventListener
+    internal class WorkItemTracker
     {
         private List<XmlNode> _itemsInProcess = new List<XmlNode>();
         private ManualResetEvent _allItemsComplete = new ManualResetEvent(false);
-        private object _trackerLock = new object();
         
         public void Clear()
         {
@@ -49,16 +48,22 @@ namespace TestCentric.Engine.Services
             return _allItemsComplete.WaitOne(millisecondsTimeout);
         }
 
-        public void IssuePendingNotifications(ITestEventListener listener)
+        public IEnumerable<XmlNode> CreateCompletionNotifications()
         {
+            // Generate completion notification for all pending items, in reverse order
             int count = _itemsInProcess.Count;
-
-            // Signal completion of all pending suites, in reverse order
-            while (count > 0)
-                listener.OnTestEvent(CreateNotification(_itemsInProcess[--count]));
+            
+            while (--count >= 0)
+            {
+                var startElement = _itemsInProcess[count];
+                _itemsInProcess.RemoveAt(count);
+                yield return CreateCompletionNotification(startElement);
+            }
+            
+            _allItemsComplete.Set();
         }
 
-        private static string CreateNotification(XmlNode startElement)
+        private static XmlNode CreateCompletionNotification(XmlNode startElement)
         {
             bool isSuite = startElement.Name == "start-suite";
 
@@ -72,41 +77,24 @@ namespace TestCentric.Engine.Services
             notification.AddAttribute("label", "Cancelled");
             XmlNode failure = notification.AddElement("failure");
             XmlNode message = failure.AddElementWithCDataSection("message", "Test run cancelled by user");
-            return notification.OuterXml;
+            return notification;
         }
 
-        void ITestEventListener.OnTestEvent(string report)
+        public void AddItem(XmlNode xmlNode)
         {
-            XmlNode xmlNode = XmlHelper.CreateXmlNode(report);
-
-            lock (_trackerLock)
-            {
-                switch (xmlNode.Name)
-                {
-                    case "start-test":
-                    case "start-suite":
-                        _itemsInProcess.Add(xmlNode);
-                        break;
-
-                    case "test-case":
-                    case "test-suite":
-                        string id = xmlNode.GetAttribute("id");
-                        RemoveItem(id);
-
-                        if (_itemsInProcess.Count == 0)
-                            _allItemsComplete.Set();
-                        break;
-                }
-            }
+            _itemsInProcess.Add(xmlNode);
         }
 
-        private void RemoveItem(string id)
+        public void RemoveItem(string id)
         {
             foreach (XmlNode item in _itemsInProcess)
             {
                 if (item.GetAttribute("id") == id)
                 {
                     _itemsInProcess.Remove(item);
+                    if (_itemsInProcess.Count == 0)
+                        _allItemsComplete.Set();
+
                     return;
                 }
             }

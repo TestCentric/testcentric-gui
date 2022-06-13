@@ -70,19 +70,45 @@ namespace TestCentric.Engine.TestBed
 
             var runner = TestEngine.GetRunner(package);
 
-            if (options.StopTimeout > 0)
-                Task.Delay(options.StopTimeout).ContinueWith(t => runner.StopRun(false));
+            var eventHandler = new TestEventHandler();
+            eventHandler.RunStarted += () => OnRunStarted(runner, options);
 
-            if (options.CancelTimeout > 0)
-                Task.Delay(options.CancelTimeout).ContinueWith(t => runner.StopRun(true));
-
-            XmlNode resultNode = runner.Run(new TestEventHandler(), TestFilter.Empty);
+            XmlNode resultNode = runner.Run(eventHandler, TestFilter.Empty);
 
             ResultReporter.ReportResults(resultNode);
 
             SaveTestResults(resultNode); 
 
             Environment.Exit(0);
+        }
+
+        private static void OnRunStarted(ITestRunner runner, CommandLineOptions options)
+        {
+            // NOTE: It takes some finite amount of time for the run to actually
+            // start. Once it does, we set up delays for stop and cancel.
+            if (options.StopTimeout > 0)
+                Task.Delay(options.StopTimeout).ContinueWith(t =>
+                {
+                    if (runner.IsTestRunning)
+                    {
+                        runner.StopRun(false);
+                        Console.WriteLine("Stopping...");
+                    }
+                    else
+                        Console.WriteLine("Unable to stop run - not yet started.");
+                });
+
+            if (options.CancelTimeout > 0)
+                Task.Delay(options.CancelTimeout).ContinueWith(t =>
+                {
+                    if (runner.IsTestRunning)
+                    {
+                        runner.StopRun(true);
+                        Console.WriteLine("Cancelling...");
+                    }
+                    else
+                        Console.WriteLine("Unable to cancel run - not yet started.");
+                });
         }
 
         static void SaveTestResults(XmlNode resultNode)

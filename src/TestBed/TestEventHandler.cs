@@ -6,13 +6,19 @@
 using System;
 using System.Xml;
 using NUnit.Engine;
+using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.TestBed
 {
-    using Internal;
+    delegate void StartRunHandler();
+
 
     class TestEventHandler : ITestEventListener
     {
+        public event StartRunHandler RunStarted;
+
+        string _lastTestOutput = null;
+
         public void OnTestEvent(string report)
         {
             var doc = new XmlDocument();
@@ -21,12 +27,31 @@ namespace TestCentric.Engine.TestBed
             var testEvent = doc.FirstChild;
             switch (testEvent.Name)
             {
+                case "start-run":
+                    RunStarted?.Invoke();
+                    break;
+
                 case "test-suite":
                     if (testEvent.GetAttribute("type") == "Assembly" && testEvent.GetAttribute("runstate") == "NotRunnable")
                     {
                         var msg = testEvent.SelectSingleNode("reason/message")?.InnerText;
                         if (msg != null)
                             Console.WriteLine(msg);
+                    }
+                    break;
+
+                case "test-output":
+                    if (testEvent.GetAttribute("stream") == "Progress")
+                    {
+                        var testname = testEvent.GetAttribute("testname");
+
+                        if (testname != _lastTestOutput)
+                        {
+                            Console.WriteLine($"\n==> {testname}");
+                            _lastTestOutput = testname;
+                        }
+
+                        Console.Write(testEvent.InnerText);
                     }
                     break;
 

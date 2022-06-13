@@ -23,7 +23,7 @@ namespace TestCentric.Engine.TestBed
                     throw new FileNotFoundException($"File not found: {arg}");
             }
 
-            if (StopTimeout > CancelTimeout)
+            if (CancelTimeout > 0 && StopTimeout > CancelTimeout)
                 throw new ArgumentException("Value of --stop may not be greater than that of --cancel");
         }
 

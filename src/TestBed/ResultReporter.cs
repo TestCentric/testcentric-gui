@@ -119,14 +119,18 @@ namespace TestCentric.Engine.TestBed
         static void DisplaySummaryReport(XmlNode resultNode)
         {
             string overallResult = resultNode.Attributes["result"]?.Value ?? "Unknown";
+            string label = resultNode.Attributes["label"]?.Value;
             int totalFailed = Summary.FailureCount + Summary.InvalidCount + Summary.ErrorCount;
             int totalSkipped = Summary.SkipCount + Summary.IgnoreCount + Summary.ExplicitCount;
 
             Console.WriteLine("\nTest Run Summary");
 
-            Console.WriteLine("  " +
+            var overallResultLine = "  " +
                 $"Test Count: {Summary.TestCount}, " +
-                $"Overall Result: {overallResult}");
+                $"Overall Result: {overallResult}";
+            if (label != null)
+                overallResultLine += $" ({label})";
+            Console.WriteLine(overallResultLine);
             
             Console.WriteLine("  " +
                 $"Passed: {Summary.PassCount}, " +

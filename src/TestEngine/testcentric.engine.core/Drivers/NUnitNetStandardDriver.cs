@@ -37,6 +37,7 @@ namespace TestCentric.Engine.Drivers
 
         static ILogger log = InternalTrace.GetLogger(nameof(NUnitNetStandardDriver));
 
+        string _testAssemblyPath;
         Assembly _testAssembly;
         Assembly _frameworkAssembly;
         object _frameworkController;
@@ -52,15 +53,16 @@ namespace TestCentric.Engine.Drivers
         /// Loads the tests in an assembly.
         /// </summary>
         /// <param name="frameworkAssembly">The NUnit Framework that the tests reference</param>
-        /// <param name="testAssembly">The test assembly</param>
+        /// <param name="testAssemblyPath">The test assembly</param>
         /// <param name="settings">The test settings</param>
         /// <returns>An Xml string representing the loaded test</returns>
-        public string Load(string testAssembly, IDictionary<string, object> settings)
+        public string Load(string testAssemblyPath, IDictionary<string, object> settings)
         {
             var idPrefix = string.IsNullOrEmpty(ID) ? "" : ID + "-";
 
-            var assemblyRef = AssemblyDefinition.ReadAssembly(testAssembly);
-            _testAssembly = Assembly.LoadFrom(testAssembly);
+            _testAssemblyPath = testAssemblyPath;
+            var assemblyRef = AssemblyDefinition.ReadAssembly(testAssemblyPath);
+            _testAssembly = Assembly.LoadFrom(testAssemblyPath);
             if (_testAssembly == null)
                 throw new NUnitEngineException(string.Format(FAILED_TO_LOAD_TEST_ASSEMBLY, assemblyRef.FullName));
 
@@ -68,7 +70,7 @@ namespace TestCentric.Engine.Drivers
             if (nunitRef == null)
                 throw new NUnitEngineException(FAILED_TO_LOAD_NUNIT);
 
-            var nunit = Assembly.LoadFrom(Path.Combine(Path.GetDirectoryName(testAssembly), nunitRef.Name + ".dll"));
+            var nunit = Assembly.LoadFrom(Path.Combine(Path.GetDirectoryName(testAssemblyPath), nunitRef.Name + ".dll"));
             if (nunit == null)
                 throw new NUnitEngineException(FAILED_TO_LOAD_NUNIT);
 
@@ -107,6 +109,7 @@ namespace TestCentric.Engine.Drivers
             CheckLoadWasCalled();
             log.Info("Running {0} - see separate log file", _testAssembly.FullName);
             Action<string> callback = listener != null ? listener.OnTestEvent : (Action<string>)null;
+            var filename = Path.GetFileName(_testAssemblyPath);
             return ExecuteMethod(RUN_METHOD, new[] { typeof(Action<string>), typeof(string) }, callback, filter) as string;
         }
 
@@ -118,7 +121,7 @@ namespace TestCentric.Engine.Drivers
         public void RunAsync(Action<string> callback, string filter)
         {
             CheckLoadWasCalled();
-            log.Info("Running {0} - see separate log file", _testAssembly.FullName);
+            log.Info("Running {0} (async) - see separate log file", _testAssembly.FullName);
             ExecuteMethod(RUN_ASYNC_METHOD, new[] { typeof(Action<string>), typeof(string) }, callback, filter);
         }
 
@@ -126,8 +129,16 @@ namespace TestCentric.Engine.Drivers
         /// Cancel the ongoing test run. If no  test is running, the call is ignored.
         /// </summary>
         /// <param name="force">If true, cancel any ongoing test threads, otherwise wait for them to complete.</param>
+        /// <remarks>
+        /// The call with force:true is no longer supported. We throw rather than just ignoring it
+        /// so that users will be aware of this important change and can modify their code accordingly.
+        /// </remarks>
         public void StopRun(bool force)
         {
+            if (force)
+                throw new ArgumentException("StopRun with force:true is no longer supported");
+
+            log.Info("Requesting stop");
             ExecuteMethod(STOP_RUN_METHOD, false);
         }
 
