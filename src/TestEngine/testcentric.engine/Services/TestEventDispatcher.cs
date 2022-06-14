@@ -67,7 +67,7 @@ namespace TestCentric.Engine.Services
             }
         }
 
-        private void DispatchEvent(string report)
+        internal void DispatchEvent(string report)
         {
             foreach (var listener in Listeners)
                 listener.OnTestEvent(report);
