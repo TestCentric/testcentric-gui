@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Xml;
 using NUnit.Engine;
 using TestCentric.Engine.Internal;
@@ -103,7 +104,8 @@ namespace TestCentric.Engine.Runners
         /// <returns>An XmlNode representing the loaded assembly.</returns>
         public XmlNode Load()
         {
-            LoadResult = PrepareResult(GetEngineRunner().Load()).MakeTestRunResult(TestPackage);
+            LoadResult = GetEngineRunner().Load()
+                .MakeTestRunResult(TestPackage);
 
             return LoadResult.Xml;
         }
@@ -124,7 +126,8 @@ namespace TestCentric.Engine.Runners
         /// <exception cref="InvalidOperationException">If no package has been loaded</exception>
         public XmlNode Reload()
         {
-            LoadResult = PrepareResult(GetEngineRunner().Reload()).MakeTestRunResult(TestPackage);
+            LoadResult = GetEngineRunner().Reload()
+                .MakeTestRunResult(TestPackage);
 
             return LoadResult.Xml;
         }
@@ -177,10 +180,12 @@ namespace TestCentric.Engine.Runners
 
             // When running under .NET Core, the test framework will not be able to kill the
             // threads currently running tests. We handle cleanup here in case that happens.
-            if (force && !_eventDispatcher.WaitForCompletion(WAIT_FOR_CANCEL_TO_COMPLETE))
+            if (force)
             {
                 // Send completion events for any tests, which were still running
                 _eventDispatcher.IssuePendingNotifications();
+
+                IsTestRunning = false;
 
                 // Signal completion of the run
                 _eventDispatcher.DispatchEvent($"<test-run id='{TestPackage.ID}' result='Failed' label='Cancelled' />");
@@ -195,7 +200,7 @@ namespace TestCentric.Engine.Runners
         /// <returns>An XmlNode representing the tests found.</returns>
         public XmlNode Explore(TestFilter filter)
         {
-            LoadResult = PrepareResult(GetEngineRunner().Explore(filter))
+            LoadResult = GetEngineRunner().Explore(filter)
                 .MakeTestRunResult(TestPackage);
 
             return LoadResult.Xml;
@@ -247,71 +252,6 @@ namespace TestCentric.Engine.Runners
             return _engineRunner;
         }
 
-        // The TestEngineResult returned to MasterTestRunner contains no info
-        // about projects. At this point, if there are any projects, the result
-        // needs to be modified to include info about them. Doing it this way
-        // allows the lower-level runners to be completely ignorant of projects
-        private TestEngineResult PrepareResult(TestEngineResult result)
-        {
-            if (result == null) throw new ArgumentNullException("result");
-
-            // See if we have any projects to deal with. At this point,
-            // any subpackage, which itself has subpackages, is a project
-            // we expanded.
-            bool hasProjects = false;
-                foreach (var p in TestPackage.SubPackages)
-                    hasProjects |= p.HasSubPackages();
-
-            // If no Projects, there's nothing to do
-            if (!hasProjects)
-                return result;
-
-            // If there is just one subpackage, it has to be a project and we don't
-            // need to rebuild the XML but only wrap it with a project result.
-            if (TestPackage.SubPackages.Count == 1)
-                return result.MakeProjectResult(TestPackage.SubPackages[0]);
-
-            // Most complex case - we need to work with the XML in order to
-            // examine and rebuild the result to include project nodes.
-            // NOTE: The algorithm used here relies on the ordering of nodes in the
-            // result matching the ordering of subpackages under the top-level package.
-            // If that should change in the future, then we would need to implement
-            // identification and summarization of projects into each of the lower-
-            // level TestEngineRunners. In that case, we will be warned by failures
-            // of some of the MasterTestRunnerTests.
-
-            // Start a fresh TestEngineResult for top level
-            var topLevelResult = new TestEngineResult();
-            int nextTest = 0;
-
-            foreach (var subPackage in TestPackage.SubPackages)
-            {
-                if (subPackage.HasSubPackages())
-                {
-                    // This is a project, create an intermediate result
-                    var projectResult = new TestEngineResult();
-                    
-                    // Now move any children of this project under it. As noted
-                    // above, we must rely on ordering here because (1) the
-                    // fullname attribute is not reliable on all nunit framework
-                    // versions, (2) we may have duplicates of the same assembly
-                    // and (3) we have no info about the id of each assembly.
-                    int numChildren = subPackage.SubPackages.Count;
-                    while (numChildren-- > 0)
-                        projectResult.Add(result.XmlNodes[nextTest++]);
-                    
-                    topLevelResult.Add(projectResult.MakeProjectResult(subPackage).Xml);
-                }
-                else
-                {
-                    // Add the next assembly package to our new result
-                    topLevelResult.Add(result.XmlNodes[nextTest++]);
-                }
-            }
-            
-            return topLevelResult;
-        }
-
         /// <summary>
         /// Unload any loaded TestPackage.
         /// </summary>
@@ -345,7 +285,7 @@ namespace TestCentric.Engine.Runners
         /// <returns>A TestEngineResult giving the result of the test execution</returns>
         private TestEngineResult RunTests(ITestEventListener listener, TestFilter filter)
         {
-            _eventDispatcher.ClearListeners();
+            _eventDispatcher.InitializeForRun();
 
             if (listener != null)
                 _eventDispatcher.Listeners.Add(listener);
@@ -362,22 +302,21 @@ namespace TestCentric.Engine.Runners
 
             try
             {
-                var startRunNode = XmlHelper.CreateTopLevelElement("start-run");
-                startRunNode.AddAttribute("count", CountTests(filter).ToString());
-                startRunNode.AddAttribute("start-time", XmlConvert.ToString(startTime, "u"));
-                startRunNode.AddAttribute("engine-version", engineVersion);
-                startRunNode.AddAttribute("clr-version", clrVersion);
+                var startRunNode = XmlHelper.CreateTopLevelElement("start-run")
+                    .AddAttribute("count", CountTests(filter).ToString())
+                    .AddAttribute("start-time", XmlConvert.ToString(startTime, "u"))
+                    .AddAttribute("engine-version", engineVersion)
+                    .AddAttribute("clr-version", clrVersion);
 
-                InsertCommandLineElement(startRunNode);
+                startRunNode.AddElementWithCDataSection("command-line", Environment.CommandLine);
 
                 _eventDispatcher.OnTestEvent(startRunNode.OuterXml);
 
-                TestEngineResult result = PrepareResult(GetEngineRunner().Run(_eventDispatcher, filter)).MakeTestRunResult(TestPackage);
-
-                // These are inserted in reverse order, since each is added as the first child.
-                InsertFilterElement(result.Xml, filter);
-
-                InsertCommandLineElement(result.Xml);
+                // Insertions are done in reverse order, since each is added as the first child.
+                TestEngineResult result = GetEngineRunner().Run(_eventDispatcher, filter)
+                    .MakeTestRunResult(TestPackage)
+                    .InsertFilterElement(filter)
+                    .InsertCommandLineElement(Environment.CommandLine);
 
                 result.Xml.AddAttribute("engine-version", engineVersion);
                 result.Xml.AddAttribute("clr-version", clrVersion);
@@ -396,23 +335,25 @@ namespace TestCentric.Engine.Runners
             {
                 IsTestRunning = false;
 
-                var resultXml = XmlHelper.CreateTopLevelElement("test-run");
-                resultXml.AddAttribute("id", TestPackage.ID);
-                resultXml.AddAttribute("result", "Failed");
-                resultXml.AddAttribute("label", "Error");
-                resultXml.AddAttribute("engine-version", engineVersion);
-                resultXml.AddAttribute("clr-version", clrVersion);
+                var result = CreateErrorResult(TestPackage);
+                result.Xml.AddAttribute("engine-version", engineVersion);
+                result.Xml.AddAttribute("clr-version", clrVersion);
                 double duration = (double)(Stopwatch.GetTimestamp() - startTicks) / Stopwatch.Frequency;
-                resultXml.AddAttribute("start-time", XmlConvert.ToString(startTime, "u"));
-                resultXml.AddAttribute("end-time", XmlConvert.ToString(DateTime.UtcNow, "u"));
-                resultXml.AddAttribute("duration", duration.ToString("0.000000", NumberFormatInfo.InvariantInfo));
+                result.Xml.AddAttribute("start-time", XmlConvert.ToString(startTime, "u"));
+                result.Xml.AddAttribute("end-time", XmlConvert.ToString(DateTime.UtcNow, "u"));
+                result.Xml.AddAttribute("duration", duration.ToString("0.000000", NumberFormatInfo.InvariantInfo));
 
-                _eventDispatcher.OnTestEvent(resultXml.OuterXml);
+                _eventDispatcher.OnTestEvent(result.Xml.OuterXml);
 
                 _eventDispatcher.OnTestEvent($"<unhandled-exception message=\"{ex.Message}\" />");
 
-                return new TestEngineResult(resultXml);
+                return result;
             }
+        }
+
+        private TestEngineResult CreateErrorResult(TestPackage package)
+        {
+            return new TestEngineResult($"<test-run id='{package.ID}' result='Failed' label = 'Error' />");
         }
 
         private AsyncTestEngineResult RunTestsAsync(ITestEventListener listener, TestFilter filter)
@@ -431,43 +372,6 @@ namespace TestCentric.Engine.Runners
             }
 
             return testRun;
-        }
-
-        private static void InsertCommandLineElement(XmlNode resultNode)
-        {
-            var doc = resultNode.OwnerDocument;
-
-            if (doc == null)
-            {
-                return;
-            }
-
-            XmlNode cmd = doc.CreateElement("command-line");
-            resultNode.InsertAfter(cmd, null);
-
-            var cdata = doc.CreateCDataSection(Environment.CommandLine);
-            cmd.AppendChild(cdata);
-        }
-
-        private static void InsertFilterElement(XmlNode resultNode, TestFilter filter)
-        {
-            // Convert the filter to an XmlNode
-            var tempNode = XmlHelper.CreateXmlNode(filter.Text);
-
-            // Don't include it if it's an empty filter
-            if (tempNode.ChildNodes.Count <= 0)
-            {
-                return;
-            }
-
-            var doc = resultNode.OwnerDocument;
-            if (doc == null)
-            {
-                return;
-            }
-
-            var filterElement = doc.ImportNode(tempNode, true);
-            resultNode.InsertAfter(filterElement, null);
         }
     }
 }

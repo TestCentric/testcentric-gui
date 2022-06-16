@@ -40,11 +40,12 @@ namespace TestCentric.Engine.Internal
         /// <param name="node">The node to which the attribute should be added.</param>
         /// <param name="name">The name of the attribute.</param>
         /// <param name="value">The value of the attribute.</param>
-        public static void AddAttribute(this XmlNode node, string name, string value)
+        public static XmlNode AddAttribute(this XmlNode node, string name, string value)
         {
             XmlAttribute attr = node.OwnerDocument.CreateAttribute(name);
             attr.Value = value;
             node.Attributes.Append(attr);
+            return node;
         }
 
         /// <summary>
