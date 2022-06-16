@@ -35,17 +35,12 @@ namespace TestCentric.Engine.Services
     internal class WorkItemTracker
     {
         private List<XmlNode> _itemsInProcess = new List<XmlNode>();
-        private ManualResetEvent _allItemsComplete = new ManualResetEvent(false);
-        
+
+        public bool HasPendingItems => _itemsInProcess.Count > 0;
+
         public void Clear()
         {
             _itemsInProcess.Clear();
-            _allItemsComplete.Reset();
-        }
-
-        public bool WaitForCompletion(int millisecondsTimeout)
-        {
-            return _allItemsComplete.WaitOne(millisecondsTimeout);
         }
 
         public IEnumerable<XmlNode> CreateCompletionNotifications()
@@ -59,8 +54,6 @@ namespace TestCentric.Engine.Services
                 _itemsInProcess.RemoveAt(count);
                 yield return CreateCompletionNotification(startElement);
             }
-            
-            _allItemsComplete.Set();
         }
 
         private static XmlNode CreateCompletionNotification(XmlNode startElement)
@@ -92,8 +85,6 @@ namespace TestCentric.Engine.Services
                 if (item.GetAttribute("id") == id)
                 {
                     _itemsInProcess.Remove(item);
-                    if (_itemsInProcess.Count == 0)
-                        _allItemsComplete.Set();
 
                     return;
                 }

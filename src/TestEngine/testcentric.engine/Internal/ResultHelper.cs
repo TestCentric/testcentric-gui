@@ -61,6 +61,71 @@ namespace TestCentric.Engine.Internal
             return Aggregate(result, TEST_SUITE_ELEMENT, PROJECT_SUITE_TYPE, package.ID, package.Name, package.FullName);
         }
 
+        // The TestEngineResult returned to MasterTestRunner contains no info
+        // about projects. At this point, if there are any projects, the result
+        // needs to be modified to include info about them. Doing it this way
+        // allows the lower-level runners to be completely ignorant of projects
+        public static TestEngineResult AddProjectPackages(this TestEngineResult result, TestPackage testPackage)
+        {
+            if (result == null) throw new ArgumentNullException("result");
+
+            // See if we have any projects to deal with. At this point,
+            // any subpackage, which itself has subpackages, is a project
+            // we expanded.
+            bool hasProjects = false;
+            foreach (var p in testPackage.SubPackages)
+                hasProjects |= p.HasSubPackages();
+
+            // If no Projects, there's nothing to do
+            if (!hasProjects)
+                return result;
+
+            // If there is just one subpackage, it has to be a project and we don't
+            // need to rebuild the XML but only wrap it with a project result.
+            if (testPackage.SubPackages.Count == 1)
+                return result.MakeProjectResult(testPackage.SubPackages[0]);
+
+            // Most complex case - we need to work with the XML in order to
+            // examine and rebuild the result to include project nodes.
+            // NOTE: The algorithm used here relies on the ordering of nodes in the
+            // result matching the ordering of subpackages under the top-level package.
+            // If that should change in the future, then we would need to implement
+            // identification and summarization of projects into each of the lower-
+            // level TestEngineRunners. In that case, we will be warned by failures
+            // of some of the MasterTestRunnerTests.
+
+            // Start a fresh TestEngineResult for top level
+            var topLevelResult = new TestEngineResult();
+            int nextTest = 0;
+
+            foreach (var subPackage in testPackage.SubPackages)
+            {
+                if (subPackage.HasSubPackages())
+                {
+                    // This is a project, create an intermediate result
+                    var projectResult = new TestEngineResult();
+
+                    // Now move any children of this project under it. As noted
+                    // above, we must rely on ordering here because (1) the
+                    // fullname attribute is not reliable on all nunit framework
+                    // versions, (2) we may have duplicates of the same assembly
+                    // and (3) we have no info about the id of each assembly.
+                    int numChildren = subPackage.SubPackages.Count;
+                    while (numChildren-- > 0)
+                        projectResult.Add(result.XmlNodes[nextTest++]);
+
+                    topLevelResult.Add(projectResult.MakeProjectResult(subPackage).Xml);
+                }
+                else
+                {
+                    // Add the next assembly package to our new result
+                    topLevelResult.Add(result.XmlNodes[nextTest++]);
+                }
+            }
+
+            return topLevelResult;
+        }
+
         /// <summary>
         /// Aggregate all the separate assembly results of a test run as a single node.
         /// </summary>
@@ -69,7 +134,33 @@ namespace TestCentric.Engine.Internal
         /// <returns>A TestEngineResult with a single top-level element.</returns>
         public static TestEngineResult MakeTestRunResult(this TestEngineResult result, TestPackage package)
         {
-            return Aggregate(result, TEST_RUN_ELEMENT, package.ID, package.Name, package.FullName);
+            return Aggregate(result.AddProjectPackages(package), TEST_RUN_ELEMENT, package.ID, package.Name, package.FullName);
+        }
+
+        public static TestEngineResult InsertFilterElement(this TestEngineResult result, TestFilter filter)
+        {
+            // Convert the filter to an XmlNode
+            var tempNode = XmlHelper.CreateXmlNode(filter.Text);
+
+            // Don't include it if it's an empty filter
+            if (tempNode.ChildNodes.Count > 0)
+            {
+                var doc = result.Xml.OwnerDocument;
+                if (doc != null)
+                {
+                    var filterElement = doc.ImportNode(tempNode, true);
+                    result.Xml.InsertAfter(filterElement, null);
+                }
+            }
+
+            return result;
+        }
+
+        public static TestEngineResult InsertCommandLineElement(this TestEngineResult result, string commandLine)
+        {
+            result.Xml.AddElementWithCDataSection("command-line", commandLine);
+
+            return result;
         }
 
         /// <summary>

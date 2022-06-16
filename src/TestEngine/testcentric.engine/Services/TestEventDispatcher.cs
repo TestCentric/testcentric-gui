@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Xml;
 using NUnit.Engine;
 using TestCentric.Engine.Internal;
@@ -21,6 +22,7 @@ namespace TestCentric.Engine.Services
         private ExtensionService _extensionService;
         private List<ITestEventListener> _listenerExtensions = new List<ITestEventListener>();
         private WorkItemTracker _workItemTracker = new WorkItemTracker();
+        private ManualResetEvent _allItemsComplete = new ManualResetEvent(false);
         private bool _runCancelled;
 
         public TestEventDispatcher()
@@ -30,15 +32,16 @@ namespace TestCentric.Engine.Services
 
         public IList<ITestEventListener> Listeners { get; private set; }
 
-        public void ClearListeners()
+        public void InitializeForRun()
         {
             _workItemTracker.Clear();
+            _allItemsComplete.Reset();
             Listeners = new List<ITestEventListener>(_listenerExtensions);
         }
 
         public bool WaitForCompletion(int millisecondsTimeout)
         {
-            return _workItemTracker.WaitForCompletion(millisecondsTimeout);
+            return _allItemsComplete.WaitOne(millisecondsTimeout);
         }
 
         public void IssuePendingNotifications()
@@ -48,6 +51,8 @@ namespace TestCentric.Engine.Services
                 _runCancelled = true;
                 foreach(XmlNode notification in _workItemTracker.CreateCompletionNotifications())
                     DispatchEvent(notification.OuterXml);
+
+                _allItemsComplete.Set();
             }
         }
 
@@ -85,6 +90,9 @@ namespace TestCentric.Engine.Services
                 case "test-suite":
                     string id = xmlNode.GetAttribute("id");
                     _workItemTracker.RemoveItem(id);
+
+                    if (!_workItemTracker.HasPendingItems)
+                        _allItemsComplete.Set();
                     break;
             }
         }
