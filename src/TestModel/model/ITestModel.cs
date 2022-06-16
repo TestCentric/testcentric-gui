@@ -66,12 +66,6 @@ namespace TestCentric.Gui.Model
         // See if a test is running
         bool IsTestRunning { get; }
 
-        // Was a stop requested?
-        bool StopRequested { get; }
-
-        // Was a forced stop requested?
-        bool ForcedStopRequested { get; }
-
         // Dictionary of test results by test id
         IDictionary<string, ResultNode> Results { get; }
 
