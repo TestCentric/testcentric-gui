@@ -87,6 +87,14 @@ namespace TestCentric.Gui
             Invalidate();
             Update();
         }
+
+        public void InvokeIfRequired(MethodInvoker del)
+        {
+            if (InvokeRequired)
+                Invoke(del, new object[0]);
+            else
+                del();
+        }
     }
 
 }

@@ -59,6 +59,9 @@ namespace TestCentric.Gui.Presenters
 
         private string[] _lastFilesLoaded = null;
 
+        private bool _stopRequested;
+        private bool _forcedStopRequested;
+
         #endregion
 
         #region Constructor
@@ -178,6 +181,7 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.RunStarting += (RunStartingEventArgs e) =>
             {
+                _stopRequested = _forcedStopRequested = false;
                 UpdateViewCommands();
             };
 
@@ -321,6 +325,7 @@ namespace TestCentric.Gui.Presenters
                             return;
                         }
 
+                        _stopRequested = _forcedStopRequested = true;
                         _model.StopTestRun(true);
                     }
 
@@ -573,6 +578,8 @@ namespace TestCentric.Gui.Presenters
         private void ExecuteNormalStop()
         {
             BeginLongRunningOperation("Waiting for currently running tests to complete. Use the Kill button to terminate the process without waiting.");
+            _stopRequested = true;
+            _forcedStopRequested = false;
             _model.StopTestRun(false);
             UpdateViewCommands();
         }
@@ -580,8 +587,10 @@ namespace TestCentric.Gui.Presenters
         private void ExecuteForcedStop()
         {
             UpdateLongRunningOperation("Process is being terminated.");
-            _model.StopTestRun(true);
+            _stopRequested = _forcedStopRequested = true;
             UpdateViewCommands(false);
+
+            _model.StopTestRun(true);
         }
 
         private void DisplayTestParametersDialog()
@@ -719,8 +728,6 @@ namespace TestCentric.Gui.Presenters
         {
             bool testLoaded = _model.HasTests;
             bool testRunning = _model.IsTestRunning;
-            bool stopRequested = _model.StopRequested;
-            bool forcedStopRequested = _model.ForcedStopRequested;
             bool hasResults = _model.HasResults;
             bool hasFailures = _model.HasResults && _model.ResultSummary.FailedCount > 0;
 
@@ -733,10 +740,11 @@ namespace TestCentric.Gui.Presenters
 
             _view.RunFailedButton.Enabled = testLoaded && !testRunning && hasFailures;
 
-            _view.StopRunButton.Enabled = testRunning && !stopRequested;
-            _view.StopRunButton.Visible = !testRunning || !stopRequested;
-            _view.ForceStopButton.Enabled = testRunning && stopRequested && !forcedStopRequested;
-            _view.ForceStopButton.Visible = testRunning && stopRequested;
+            bool displayForcedStop = testRunning && _stopRequested;
+            _view.ForceStopButton.Visible = displayForcedStop;
+            _view.ForceStopButton.Enabled = displayForcedStop && !_forcedStopRequested;
+            _view.StopRunButton.Visible = !displayForcedStop;
+            _view.StopRunButton.Enabled = testRunning && !_stopRequested;
 
             _view.RunSummaryButton.Enabled = testLoaded && !testRunning && hasResults;
 
@@ -877,8 +885,11 @@ namespace TestCentric.Gui.Presenters
 
         private void OnLongRunningOperationComplete()
         {
-            _longRunningOperation?.Close();
-            _longRunningOperation = null;
+            if (_longRunningOperation != null)
+            {
+                _longRunningOperation.InvokeIfRequired(() => { _longRunningOperation.Close(); });
+                _longRunningOperation = null;
+            }
         }
 
         private void SetTreeDisplayFormat(string displayFormat)
