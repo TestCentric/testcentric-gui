@@ -65,6 +65,8 @@ namespace TestCentric.Gui.Presenters
 
                     break;
             }
+
+            TryRestoreVisualState();
         }
 
         #endregion

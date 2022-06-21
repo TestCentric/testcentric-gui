@@ -37,16 +37,6 @@ namespace TestCentric.Gui.Presenters
                 SetDefaultInitialExpansion();
         }
 
-        public override void OnTestsUnloading()
-        {
-            TrySaveVisualState();
-        }
-
-        public override void OnTestsReloading()
-        {
-            TrySaveVisualState();
-        }
-
         private void SetDefaultInitialExpansion()
         {
             var displayStyle = (InitialTreeExpansion)_settings.Gui.TestTree.InitialTreeDisplay;

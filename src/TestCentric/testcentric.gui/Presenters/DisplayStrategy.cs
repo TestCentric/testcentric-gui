@@ -65,9 +65,15 @@ namespace TestCentric.Gui.Presenters
         /// </summary>
         public abstract void OnTestLoaded(TestNode testNode);
 
-        public virtual void OnTestsUnloading() { }
+        public virtual void OnTestsUnloading()
+        {
+            TrySaveVisualState();
+        }
 
-        public virtual void OnTestsReloading() { }
+        public virtual void OnTestsReloading()
+        {
+            TrySaveVisualState();
+        }
 
         public void OnTestUnloaded()
         {
