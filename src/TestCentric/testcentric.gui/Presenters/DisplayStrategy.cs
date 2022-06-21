@@ -12,6 +12,7 @@ namespace TestCentric.Gui.Presenters
     using Model.Settings;
     using Views;
 	using Elements;
+    using System.IO;
 
     /// <summary>
     /// DisplayStrategy is the abstract base for the various
@@ -151,6 +152,31 @@ namespace TestCentric.Gui.Presenters
                     treeNode.Nodes.Add(MakeTreeNode(childNode, true));
 
             return treeNode;
+        }
+
+        protected bool TryRestoreVisualState()
+        {
+            if (_model.TestFiles.Count == 0)
+                return false;
+
+            var filename = VisualState.GetVisualStateFileName(_model.TestFiles[0]);
+            if (!File.Exists(filename))
+                return false;
+
+            var visualState = VisualState.LoadFrom(filename);
+
+            visualState.ApplyTo(_view.TreeView);
+
+            return true;
+        }
+
+        protected void TrySaveVisualState()
+        {
+            if (_model.TestFiles.Count > 0)
+            {
+                var visualState = new VisualState().LoadFrom(_view.TreeView);
+                visualState.Save(VisualState.GetVisualStateFileName(_model.TestFiles[0]));
+            }
         }
 
         public string GroupDisplayName(TestGroup group)
