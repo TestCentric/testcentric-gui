@@ -65,28 +65,23 @@ namespace TestCentric.Gui
 
         private void ProcessTreeNode(TreeNode treeNode, List<VisualTreeNode> visualNodes)
         {
-            // TODO: Currently, we only save testNodes, not groups
-            var testNode = treeNode.Tag as TestNode;
-            if (testNode != null)
+            bool isSelectedNode = treeNode == treeNode.TreeView.SelectedNode;
+            bool isTopNode = treeNode == treeNode.TreeView.TopNode;
+
+            var visualNode = new VisualTreeNode()
             {
-                bool isSelectedNode = treeNode == treeNode.TreeView.SelectedNode;
-                bool isTopNode = treeNode == treeNode.TreeView.TopNode;
+                Name = treeNode.Text,
+                Expanded = treeNode.IsExpanded,
+                Checked = treeNode.Checked,
+                Selected = isSelectedNode,
+                IsTopNode = isTopNode
+            };
 
-                var visualNode = new VisualTreeNode()
-                {
-                    Name = testNode.Name,
-                    Expanded = treeNode.IsExpanded,
-                    Checked = treeNode.Checked,
-                    Selected = isSelectedNode,
-                    IsTopNode = isTopNode
-                };
+            if (treeNode.IsExpanded || treeNode.Checked || isSelectedNode || isTopNode)
+                RecordVisualNode(visualNode, visualNodes);
 
-                if (treeNode.IsExpanded || treeNode.Checked || isSelectedNode || isTopNode)
-                    RecordVisualNode(visualNode, visualNodes);
-
-                foreach (TreeNode childNode in treeNode.Nodes)
-                    ProcessTreeNode(childNode, visualNode.Nodes);
-            }
+            foreach (TreeNode childNode in treeNode.Nodes)
+                ProcessTreeNode(childNode, visualNode.Nodes);
         }
 
         private void RecordVisualNode(VisualTreeNode visualNode, List<VisualTreeNode> visualNodes)
