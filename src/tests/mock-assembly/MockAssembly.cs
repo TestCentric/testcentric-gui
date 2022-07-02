@@ -75,7 +75,7 @@ namespace TestCentric.Tests
         [Category("FixtureCategory")]
         public class MockTestFixture
         {
-            public static readonly int Tests = 11;
+            public static readonly int Tests = 12;
             public static readonly int Suites = 1;
 
             public static readonly int Ignored = 1;
@@ -153,6 +153,17 @@ namespace TestCentric.Tests
             private void MethodThrowsException()
             {
                 throw new ApplicationException("Intentional Exception");
+            }
+
+            [Test]
+            public void MultipleFailuresTest()
+            {
+                Assert.Multiple( () => 
+                {
+                    Assert.That(2 + 2, Is.EqualTo(5));
+                    Assert.That(99 < 42, "What?");
+                    Assert.That("Hello World", Does.Contain("Everyone"));
+                });
             }
         }
     }
