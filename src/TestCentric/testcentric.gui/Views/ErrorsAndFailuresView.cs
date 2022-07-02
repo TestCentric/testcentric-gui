@@ -344,6 +344,7 @@ namespace TestCentric.Gui.Views
                     tipWindow.Expansion = TipWindow.ExpansionStyle.Both;
                     tipWindow.Overlay = true;
                     tipWindow.WantClicks = true;
+                    tipWindow.MouseLeaveDelay = 500;
                     tipWindow.Closed += new EventHandler(tipWindow_Closed);
                     tipWindow.Show();
                 }
