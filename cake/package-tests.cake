@@ -115,9 +115,9 @@ public abstract class PackageTester : GuiTester
 			"net45/mock-assembly.dll",
 			new ExpectedResult("Failed")
 			{
-				Total = 40,
+				Total = 41,
 				Passed = 22,
-				Failed = 6,
+				Failed = 7,
 				Warnings = 0,
 				Inconclusive = 5,
 				Skipped = 7,
@@ -128,9 +128,9 @@ public abstract class PackageTester : GuiTester
 		"net35/mock-assembly.dll",
 		new ExpectedResult("Failed")
 		{
-			Total = 40,
+			Total = 41,
 			Passed = 22,
-			Failed = 6,
+			Failed = 7,
 			Warnings = 0,
 			Inconclusive = 5,
 			Skipped = 7,
@@ -142,9 +142,9 @@ public abstract class PackageTester : GuiTester
 			"net35/mock-assembly.dll",
 			new ExpectedResult("Failed")
 			{
-				Total = 40,
+				Total = 41,
 				Passed = 22,
-				Failed = 6,
+				Failed = 7,
 				Warnings = 0,
 				Inconclusive = 5,
 				Skipped = 7,
@@ -156,9 +156,9 @@ public abstract class PackageTester : GuiTester
             "netcoreapp2.1/mock-assembly.dll",
             new ExpectedResult("Failed")
             {
-				Total = 40,
+				Total = 41,
 				Passed = 22,
-				Failed = 6,
+				Failed = 7,
 				Warnings = 0,
 				Inconclusive = 5,
 				Skipped = 7,
@@ -169,9 +169,9 @@ public abstract class PackageTester : GuiTester
             "netcoreapp3.1/mock-assembly.dll",
             new ExpectedResult("Failed")
             {
-				Total = 40,
+				Total = 41,
 				Passed = 22,
-				Failed = 6,
+				Failed = 7,
 				Warnings = 0,
 				Inconclusive = 5,
 				Skipped = 7,
@@ -182,9 +182,9 @@ public abstract class PackageTester : GuiTester
         //        "netcoreapp1.1/mock-assembly.dll",
         //        new ExpectedResult("Failed")
         //        {
-        //Total = 40,
+        //Total = 41,
         //Passed = 22,
-        //Failed = 6,
+        //Failed = 7,
         //Warnings = 0,
         //Inconclusive = 5,
         //Skipped = 7,
@@ -195,9 +195,9 @@ public abstract class PackageTester : GuiTester
             "net5.0/mock-assembly.dll",
             new ExpectedResult("Failed")
             {
-                Total = 40,
+                Total = 41,
                 Passed = 22,
-                Failed = 6,
+                Failed = 7,
                 Warnings = 0,
                 Inconclusive = 5,
                 Skipped = 7,

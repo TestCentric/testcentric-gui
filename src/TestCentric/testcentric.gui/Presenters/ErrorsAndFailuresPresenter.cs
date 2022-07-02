@@ -109,7 +109,11 @@ namespace TestCentric.Gui.Presenters
             if (result.IsSuite && result.Site == FailureSite.SetUp)
                 testName += " (TestFixtureSetUp)";
 
-            _view.AddResult(testName, message, stackTrace);
+            if (result.Assertions.Count > 0)
+                foreach(var assertion in result.Assertions)
+                    _view.AddResult(testName, assertion.Message, assertion.StackTrace);
+            else
+                _view.AddResult(testName, message, stackTrace);
         }
     }
 }
