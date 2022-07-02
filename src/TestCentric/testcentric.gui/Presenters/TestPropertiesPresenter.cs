@@ -164,11 +164,7 @@ namespace TestCentric.Gui.Presenters
         private void DisplayAssertionResults(ResultNode resultNode)
         {
             StringBuilder sb;
-            var assertionNodes = resultNode.Xml.SelectNodes("assertions/assertion");
-            var assertionResults = new List<AssertionResult>();
-
-            foreach (XmlNode assertion in assertionNodes)
-                assertionResults.Add(new AssertionResult(assertion));
+            var assertionResults = resultNode.Assertions;
 
             // If there were no actual assertionresult entries, we fake
             // one if there is a message to display
@@ -279,30 +275,6 @@ namespace TestCentric.Gui.Presenters
             }
 
             return message;
-        }
-
-        #endregion
-
-        #region Nested AssertionResult Class
-
-        public struct AssertionResult
-        {
-            public AssertionResult(XmlNode assertion, string status)
-                : this(assertion)
-            {
-                Status = status;
-            }
-
-            public AssertionResult(XmlNode assertion)
-            {
-                Status = assertion.GetAttribute("label") ?? assertion.GetAttribute("result");
-                Message = assertion.SelectSingleNode("message")?.InnerText;
-                StackTrace = assertion.SelectSingleNode("stack-trace")?.InnerText;
-            }
-
-            public string Status { get; }
-            public string Message { get; }
-            public string StackTrace { get; }
         }
 
         #endregion

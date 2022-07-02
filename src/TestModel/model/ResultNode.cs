@@ -1,8 +1,9 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric GUI contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
+using System.Collections.Generic;
 using System.Globalization;
 using System.Xml;
 
@@ -58,6 +59,23 @@ namespace TestCentric.Gui.Model
         public string Output
         {
             get { return GetTrimmedInnerText(Xml.SelectSingleNode("output")); }
+        }
+
+        private List<AssertionResult> _assertions;
+        public List<AssertionResult> Assertions
+        {
+            get
+            {
+                if (_assertions == null)
+                {
+                    _assertions = new List<AssertionResult>();
+
+                    foreach (XmlNode assertion in Xml.SelectNodes("assertions/assertion"))
+                        _assertions.Add(new AssertionResult(assertion));
+                }
+
+                return _assertions;
+            }
         }
 
         #endregion
