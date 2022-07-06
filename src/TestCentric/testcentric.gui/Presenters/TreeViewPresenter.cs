@@ -15,6 +15,7 @@ namespace TestCentric.Gui.Presenters
     using Dialogs;
     using System.Xml;
     using System.Drawing;
+    using System.IO;
 
     /// <summary>
     /// TreeViewPresenter is the presenter for the TestTreeView
@@ -120,7 +121,11 @@ namespace TestCentric.Gui.Presenters
             // View actions - Initial Load
             _view.Load += (s, e) =>
             {
-                SetDefaultDisplayStrategy();
+                var visualState = LoadVisualStateIfAvailable();
+                if (visualState != null)
+                    SetDisplayStrategy(visualState.DisplayStrategy);
+                else
+                    SetDefaultDisplayStrategy();
             };
 
             // View context commands
@@ -229,6 +234,18 @@ namespace TestCentric.Gui.Presenters
             //            CloseXmlDisplay();
             //    }
             //};
+        }
+
+        private VisualState LoadVisualStateIfAvailable()
+        {
+            if (_model.TestFiles.Count == 0)
+                return null;
+
+            var filename = VisualState.GetVisualStateFileName(_model.TestFiles[0]);
+            if (!File.Exists(filename))
+                return null;
+
+            return VisualState.LoadFrom(filename);
         }
 
         private void EnsureNonRunnableFilesAreVisible(TestNode testNode)

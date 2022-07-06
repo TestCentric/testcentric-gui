@@ -34,8 +34,6 @@ namespace TestCentric.Gui
             Assert.Multiple(() =>
             {
                 Assert.That(visualState.ShowCheckBoxes, Is.EqualTo(OriginalTreeView.CheckBoxes));
-                Assert.That(visualState.SelectedNode, Is.EqualTo(VTN("1-2", "Test2", SEL)), "SelectedNode");
-                Assert.That(visualState.TopNode, Is.EqualTo(VTN("1-7", "Assembly1", EXP+TOP)), "TopNode");
                 Assert.That(visualState.Nodes, Is.EqualTo(ExpectedVisualState.Nodes));
             });
         }
@@ -237,8 +235,6 @@ namespace TestCentric.Gui
             Assert.Multiple(() =>
             {
                 Assert.That(restoredState.ShowCheckBoxes, Is.EqualTo(ExpectedVisualState.ShowCheckBoxes));
-                Assert.That(restoredState.SelectedNode, Is.EqualTo(VTN("1-2", "Test2", SEL)));
-                Assert.That(restoredState.TopNode, Is.EqualTo(VTN("1-7", "Assembly1", EXP+TOP)));
                 // TODO: Categories not yet supported
                 //Assert.AreEqual(ExpectedVisualState.SelectedCategories, restoredState.SelectedCategories);
                 //Assert.AreEqual(ExpectedVisualState.ExcludeCategories, restoredState.ExcludeCategories);
@@ -312,14 +308,9 @@ namespace TestCentric.Gui
 
         private VisualState CreateExpectedVisualState()
         {
-            //var selectedNode = VTN("1-2", "Test2", SEL);
-            //var topNode = VTN("1-7", "Assembly1", EXP+TOP);
-
             return new VisualState()
             {
                 ShowCheckBoxes = true,
-                SelectedNode = VTN("1-2", "Test2", SEL),
-                TopNode = VTN("1-7", "Assembly1", EXP + TOP),
                 Nodes = new List<VisualTreeNode> {
                     VTN("1-7", "Assembly1", EXP + TOP,
                         VTN("1-6", "NUnit", EXP,

@@ -29,6 +29,8 @@ namespace TestCentric.Gui.Presenters
 
         #region Public Members
 
+        public override string StrategyID => "FIXTURE_LIST";
+
         public override string Description
         {
             get { return "Fixtures By " + DefaultGroupSetting; }

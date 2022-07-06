@@ -36,6 +36,8 @@ namespace TestCentric.Gui.Presenters
 
         #region Public Members
 
+        public abstract string ID { get; }
+
         public List<TestGroup> Groups { get; private set; }
 
         /// <summary>

@@ -21,6 +21,9 @@ namespace TestCentric.Gui.Presenters
         public NUnitTreeDisplayStrategy(ITestTreeView view, ITestModel model)
             : base(view, model) { }
 
+
+        public override string StrategyID => "NUNIT_TREE";
+
         public override string Description
         {
             get { return "NUnit Tree"; }

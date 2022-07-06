@@ -54,6 +54,8 @@ namespace TestCentric.Gui.Presenters
             get { return _model.HasResults; }
         }
 
+        public abstract string StrategyID { get; }
+
         public abstract string Description { get; }
 
         #endregion
@@ -162,25 +164,29 @@ namespace TestCentric.Gui.Presenters
 
         protected bool TryRestoreVisualState()
         {
-            if (_model.TestFiles.Count == 0)
-                return false;
-
-            var filename = VisualState.GetVisualStateFileName(_model.TestFiles[0]);
-            if (!File.Exists(filename))
-                return false;
-
-            var visualState = VisualState.LoadFrom(filename);
-
-            visualState.ApplyTo(_view.TreeView);
+            var visualState = LoadVisualStateIfAvailable();
+            visualState?.ApplyTo(_view.TreeView);
 
             return true;
         }
 
-        protected void TrySaveVisualState()
+        private VisualState LoadVisualStateIfAvailable()
+        {
+            if (_model.TestFiles.Count == 0)
+                return null;
+
+            var filename = VisualState.GetVisualStateFileName(_model.TestFiles[0]);
+            if (!File.Exists(filename))
+                return null;
+
+            return VisualState.LoadFrom(filename);
+        }
+
+        protected virtual void TrySaveVisualState()
         {
             if (_model.TestFiles.Count > 0)
             {
-                var visualState = new VisualState().LoadFrom(_view.TreeView);
+                var visualState = new VisualState(StrategyID).LoadFrom(_view.TreeView);
                 visualState.Save(VisualState.GetVisualStateFileName(_model.TestFiles[0]));
             }
         }

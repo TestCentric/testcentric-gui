@@ -29,6 +29,8 @@ namespace TestCentric.Gui.Presenters
 
         #region Public Members
 
+        public override string StrategyID => "TEST_LIST";
+
         public override string Description
         {
             get { return "Tests By " + DefaultGroupSetting; }
