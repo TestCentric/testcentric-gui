@@ -10,7 +10,7 @@ What remains is to define the API or APIs we are protecting from incompatible ch
 
 ## TestCentric APIs
 
-First, let's note that the **TestCentric GUI** is not designed to be used as a library, so there is no API or library-like API to worry about. So what other APIs do we need to support? 
+First, let's note that the **TestCentric GUI** is not designed to be used as a library, so there is no ABI or library-like API to worry about. So what other APIs do we need to support? 
 
 There seem to be two of them at this point:
 
@@ -62,5 +62,3 @@ The command-line API is defined by the documentation for the GUI, which includes
 ## Additional Considerations
 
 Even in the case of non-breaking changes, as defined above, every effort will be made to avoid negative impact on users.
-
-The included **Experimental GUI** is not subject to the above considerations. It is currently versioned separately from the standard GUI, with a `MAJOR` component of 0. The **Experimental GUI** may gain and lose features at any time until it becomes (as we eventually intend) the second major version of the GUI.
