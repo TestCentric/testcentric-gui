@@ -107,6 +107,8 @@
     <Compile Include="FormTester.cs" />
     <Compile Include="TempResourceFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TreeViewFactory.cs" />
+    <Compile Include="VisualStateFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -126,6 +128,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\TestCentric\testcentric.gui\TestCentric.Gui.csproj">
+      <Project>{3ff340d5-d3b4-4df0-baf1-98b3c00b6148}</Project>
+      <Name>TestCentric.Gui</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\TestModel\model\TestCentric.Gui.Model.csproj">
       <Project>{e978a8d7-e4a4-4de9-94df-d82bd764936b}</Project>
       <Name>TestCentric.Gui.Model</Name>

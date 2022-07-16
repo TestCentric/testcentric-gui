@@ -4,36 +4,37 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using NUnit.Framework;
+using TestCentric.TestUtilities;
 
 namespace TestCentric.Gui
 {
     using Model;
-    using Presenters;
 
+    [TestFixtureSource(nameof(TestData))]
     public class VisualStateTests
     {
-        private static TreeView OriginalTreeView;
-        private static VisualState ExpectedVisualState;
+        private VisualStateTestData _data;
+        private TreeView ExpandedTreeView;
+        private VisualState ExpectedVisualState;
 
-        [OneTimeSetUp]
-        public void InitializeFixture()
+        public VisualStateTests(VisualStateTestData data)
         {
-            OriginalTreeView = CreateOriginalTreeView();
-            ExpectedVisualState = CreateExpectedVisualState();
+            _data = data;
+            ExpandedTreeView = data.ExpandedTreeView;
+            ExpectedVisualState = data.ExpectedVisualState;
         }
 
         [Test]
         public void CanCreateVisualStateFromTree()
         {
-            var visualState = new VisualState().LoadFrom(OriginalTreeView);
+            var visualState = new VisualState().LoadFrom(ExpandedTreeView);
 
             Assert.Multiple(() =>
             {
-                Assert.That(visualState.ShowCheckBoxes, Is.EqualTo(OriginalTreeView.CheckBoxes));
+                Assert.That(visualState.ShowCheckBoxes, Is.EqualTo(ExpandedTreeView.CheckBoxes));
                 Assert.That(visualState.Nodes, Is.EqualTo(ExpectedVisualState.Nodes));
             });
         }
@@ -41,184 +42,84 @@ namespace TestCentric.Gui
         [Test]
         public void CanApplyVisualStateToTree_Unchanged()
         {
-            var tv = CreateBaseTreeView();
-            ExpectedVisualState.ApplyTo(tv);
+            var treeView = _data.GetInitialTreeView();
 
-            Assert.Multiple(() =>
-            {
-                Assert.That(tv.CheckBoxes, Is.True, "CheckBoxes");
-                Assert.That(tv.SelectedNode?.Text, Is.EqualTo("Test2"), "SelectedNode");
-                Assert.That(tv.TopNode?.Text, Is.EqualTo("Assembly1"), "TopNode");
-                Assert.That(tv.Nodes[0].IsExpanded, "Assembly1 not expanded");
-                Assert.That(tv.Nodes[0].Nodes[0].IsExpanded, "NUnit not expanded");
-                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].IsExpanded, "Tests not expanded");
-                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[0].IsExpanded, "MyFixture not expanded");
-                Assert.That(tv.Nodes[1].IsExpanded, "Assembly2 not expanded");
-                Assert.That(tv.Nodes[1].Nodes[0].IsExpanded, "Tests not expanded");
-                Assert.That(tv.Nodes[1].Nodes[0].Nodes[0].IsExpanded, "FixtureA not expanded");
-                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[0].Nodes[0].Checked, "Test1 not checked");
-                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[0].Nodes[2].Checked, "Test3 not checked");
-                Assert.That(tv.Nodes[1].Nodes[0].Nodes[0].Checked, "FixtureA not checked");
-            });
+            ExpectedVisualState.ApplyTo(treeView);
+
+            VerifyTreeView(treeView, selectedNode:"Test2");
         }
 
         [Test]
         public void CanApplyVisualStateToTree_TestsAdded()
         {
-            // Added NewFixture, SomeTest, NewTest, FixtureB, Test1
-            var tv = new TestTreeView(
-                TN("test-suite", "Assembly1", "1-7",
-                    TN("test-suite", "NUnit", "1-6",
-                        TN("test-suite", "Tests", "1-5",
-                            TN("test-suite", "New Fixture", "1-9",
-                                TN("test-case", "SomeTest", "1-10")),
-                            TN("test-suite", "MyFixture", "1-4",
-                                TN("test-case", "Test1", "1-1"),
-                                TN("test-case", "Test2", "1-2"),
-                                TN("test-case", "Test3", "1-3"),
-                                TN("test-case", "NewTest", "1-11"))))),
-                TN("test-suite", "Assembly2", "2-7",
-                    TN("test-suite", "Tests", "2-6",
-                        TN("test-suite", "FixtureA", "2-3",
-                            TN("test-case", "Test1", "2-1"),
-                            TN("test-case", "Test2", "2-2")),
-                        TN("test-suite", "FixtureB", "2-5",
-                            TN("test-case", "Test1", "2-4")))));
-            ExpectedVisualState.ApplyTo(tv);
+            var treeView = _data.GetInitialTreeView();
 
-            Assert.Multiple(() =>
-            {
-                Assert.That(tv.CheckBoxes, Is.True, "CheckBoxes");
-                Assert.That(tv.SelectedNode?.Text, Is.EqualTo("Test2"), "SelectedNode");
-                Assert.That(tv.TopNode?.Text, Is.EqualTo("Assembly1"), "TopNode");
-                Assert.That(tv.Nodes[0].IsExpanded, "Assembly1 not expanded");
-                Assert.That(tv.Nodes[0].Nodes[0].IsExpanded, "NUnit not expanded");
-                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].IsExpanded, "Tests not expanded");
-                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[1].IsExpanded, "MyFixture not expanded");
-                Assert.That(tv.Nodes[1].IsExpanded, "Assembly2 not expanded");
-                Assert.That(tv.Nodes[1].Nodes[0].IsExpanded, "Tests not expanded");
-                Assert.That(tv.Nodes[1].Nodes[0].Nodes[0].IsExpanded, "FixtureA not expanded");
-                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[1].Nodes[0].Checked, "Test1 not checked");
-                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[1].Nodes[2].Checked, "Test3 not checked");
-                Assert.That(tv.Nodes[1].Nodes[0].Nodes[0].Checked, "FixtureA not checked");
-            });
+            AddSomeTests(treeView);
+
+            ExpectedVisualState.ApplyTo(treeView);
+
+            VerifyTreeView(treeView, selectedNode:"Test2");
         }
 
         [Test]
         public void CanApplyVisualStateToTree_TestsAddedAndDeleted ()
         {
-            // Added NewFixture with SomeTest, NewTest, FixtureB with Test1
-            // Deleted Test3, FixtureA with Test1 and Test2
-            var tv = new TestTreeView(
-                TN("test-suite", "Assembly1", "1-7",
-                    TN("test-suite", "NUnit", "1-6",
-                        TN("test-suite", "Tests", "1-5",
-                            TN("test-suite", "New Fixture", "1-9",
-                                TN("test-case", "SomeTest", "1-10")),
-                            TN("test-suite", "MyFixture", "1-4",
-                                TN("test-case", "Test1", "1-1"),
-                                TN("test-case", "Test2", "1-2"),
-                                TN("test-case", "NewTest", "1-11"))))),
-                TN("test-suite", "Assembly2", "2-7",
-                    TN("test-suite", "Tests", "2-6",
-                        TN("test-suite", "FixtureB", "2-5",
-                            TN("test-case", "Test1", "2-4")))));
-            ExpectedVisualState.ApplyTo(tv);
+            var treeView = _data.GetInitialTreeView();
 
-            Assert.Multiple(() =>
+            AddSomeTests(treeView);
+
+            // Test4 and Test5 are deleted before FixtureA, which may not be displayed
+            treeView.Remove("Test3", "Test4", "Test5", "FixtureA");
+
+            ExpectedVisualState.ApplyTo(treeView);
+
+            VerifyTreeView(treeView, selectedNode: "Test2");
+        }
+
+        private void AddSomeTests(TreeView treeView)
+        {
+            // Add NewFixture, SomeTest, NewTest, FixtureB, Test1
+            if (_data.DisplayStrategy == "TEST_LIST") // Just add the test cases
             {
-                Assert.That(tv.CheckBoxes, Is.True, "CheckBoxes");
-                Assert.That(tv.SelectedNode?.Text, Is.EqualTo("Test2"), "SelectedNode");
-                Assert.That(tv.TopNode?.Text, Is.EqualTo("Assembly1"), "TopNode");
-                Assert.That(tv.Nodes[0].IsExpanded, "Assembly1 not expanded");
-                Assert.That(tv.Nodes[0].Nodes[0].IsExpanded, "NUnit not expanded");
-                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].IsExpanded, "Tests not expanded");
-                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[1].IsExpanded, "MyFixture not expanded");
-                Assert.That(tv.Nodes[1].IsExpanded, "Assembly2 not expanded");
-                Assert.That(tv.Nodes[1].Nodes[0].IsExpanded, "Tests not expanded");
-                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[1].Nodes[0].Checked, "Test1 not checked");
-            });
+                treeView.Search("Test1").AddSibling(TN("test-case", "SomeTest", "1-10"));
+                treeView.Search("Test1").AddSibling(TN("test-case", "NewTest", "1-11"));
+                treeView.Search("Test4").AddSibling(TN("test-case", "Test7", "2-4"));
+            }
+            else // Add both fixtures and cases
+            {
+                treeView.Search("MyFixture").AddSibling(
+                    TN("test-suite", "New Fixture", "1-9",
+                        TN("test-case", "SomeTest", "1-10")));
+                treeView.Search("MyFixture").Nodes.Add(TN("test-case", "NewTest", "1-11"));
+                treeView.Search("FixtureA").AddSibling(
+                    TN("test-suite", "FixtureB", "2-5",
+                        TN("test-case", "Test7", "2-4")));
+            }
         }
 
         [Test]
         public void CanApplyVisualStateToTree_SingleDeletion()
         {
-            // Remove Test2
-            var tv = new TestTreeView(
-                TN("test-suite", "Assembly1", "1-6",
-                    TN("test-suite", "NUnit", "1-5",
-                        TN("test-suite", "Tests", "1-4",
-                            TN("test-suite", "MyFixture", "1-3",
-                                TN("test-case", "Test1", "1-1"),
-                                TN("test-case", "Test3", "1-2"))))),
-                TN("test-suite", "Assembly2", "2-7",
-                    TN("test-suite", "Tests", "2-6",
-                        TN("test-suite", "FixtureA", "2-3",
-                            TN("test-case", "Test1", "2-1"),
-                            TN("test-case", "Test2", "2-2")),
-                        TN("test-suite", "FixtureB", "2-5",
-                            TN("test-case", "Test1", "2-4")))));
+            var treeView = _data.GetInitialTreeView();
 
-            ExpectedVisualState.ApplyTo(tv);
+            treeView.Remove("Test2");
 
-            Assert.Multiple(() =>
-            {
-                Assert.That(tv.CheckBoxes, Is.True, "CheckBoxes");
+            ExpectedVisualState.ApplyTo(treeView);
 
-                // No SelectedNode since Test2 is no longer present
-                Assert.That(tv.SelectedNode, Is.Null, "SelectedNode");
-
-                // Remaining Tests continue to pass
-                Assert.That(tv.TopNode?.Text, Is.EqualTo("Assembly1"), "TopNode");
-                Assert.That(tv.Nodes[0].IsExpanded, "Assembly1 not expanded");
-                Assert.That(tv.Nodes[0].Nodes[0].IsExpanded, "NUnit not expanded");
-                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].IsExpanded, "Tests not expanded");
-                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[0].IsExpanded, "MyFixture not expanded");
-                Assert.That(tv.Nodes[1].IsExpanded, "Assembly2 not expanded");
-                Assert.That(tv.Nodes[1].Nodes[0].IsExpanded, "Tests not expanded");
-                Assert.That(tv.Nodes[1].Nodes[0].Nodes[0].IsExpanded, "FixtureA not expanded");
-                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[0].Nodes[0].Checked, "Test1 not checked");
-                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[0].Nodes[1].Checked, "Test3 not checked");
-                Assert.That(tv.Nodes[1].Nodes[0].Nodes[0].Checked, "FixtureA not checked");
-            });
+            VerifyTreeView(treeView, selectedNode:null);
         }
 
         [Test]
         public void CanApplyVisualStateToTree_MultipleDeletions()
         {
-            // Remove Test2 and FixtureA
-            var tv = new TestTreeView(
-                TN("test-suite", "Assembly1", "1-6",
-                    TN("test-suite", "NUnit", "1-5",
-                        TN("test-suite", "Tests", "1-4",
-                            TN("test-suite", "MyFixture", "1-3",
-                                TN("test-case", "Test1", "1-1"),
-                                TN("test-case", "Test3", "1-2"))))),
-                TN("test-suite", "Assembly2", "2-7",
-                    TN("test-suite", "Tests", "2-6",
-                        TN("test-suite", "FixtureB", "2-5",
-                            TN("test-case", "Test1", "2-4")))));
+            var treeView = _data.GetInitialTreeView();
 
-            ExpectedVisualState.ApplyTo(tv);
+            // Test4 and Test5 are deleted before FixtureA, which may not be displayed
+            treeView.Remove("Test2", "Test4", "Test5", "FixtureA");
 
-            Assert.Multiple(() =>
-            {
-                Assert.That(tv.CheckBoxes, Is.True, "CheckBoxes");
+            ExpectedVisualState.ApplyTo(treeView);
 
-                // No SelectedNode since Test2 is no longer present
-                Assert.That(tv.SelectedNode, Is.Null, "SelectedNode");
-
-                // Remaining Tests continue to pass except for FixtureA, which is no longer present
-                Assert.That(tv.TopNode?.Text, Is.EqualTo("Assembly1"), "TopNode");
-                Assert.That(tv.Nodes[0].IsExpanded, "Assembly1 not expanded");
-                Assert.That(tv.Nodes[0].Nodes[0].IsExpanded, "NUnit not expanded");
-                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].IsExpanded, "Tests not expanded");
-                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[0].IsExpanded, "MyFixture not expanded");
-                Assert.That(tv.Nodes[1].IsExpanded, "Assembly2 not expanded");
-                Assert.That(tv.Nodes[1].Nodes[0].IsExpanded, "Tests not expanded");
-                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[0].Nodes[0].Checked, "Test1 not checked");
-                Assert.That(tv.Nodes[0].Nodes[0].Nodes[0].Nodes[0].Nodes[1].Checked, "Test3 not checked");
-            });
+            VerifyTreeView(treeView, selectedNode: null);
         }
 
         [Test]
@@ -242,63 +143,9 @@ namespace TestCentric.Gui
             });
         }
 
-        private TreeView CreateOriginalTreeView()
-        {
-            var tv = CreateBaseTreeView();
-
-            // Expand some Nodes
-            tv.Nodes[0].Expand();
-            tv.Nodes[0].Nodes[0].Expand();
-            tv.Nodes[0].Nodes[0].Nodes[0].Expand();
-            tv.Nodes[0].Nodes[0].Nodes[0].Nodes[0].Expand();
-            tv.Nodes[1].Expand();
-            tv.Nodes[1].Nodes[0].Expand();
-            tv.Nodes[1].Nodes[0].Nodes[0].Expand();
-
-            // Check some nodes
-            tv.Nodes[0].Nodes[0].Nodes[0].Nodes[0].Nodes[0].Checked = true; // Test1
-            tv.Nodes[0].Nodes[0].Nodes[0].Nodes[0].Nodes[2].Checked = true; // Test3
-            tv.Nodes[1].Nodes[0].Nodes[0].Checked = true; // FixtureA
-
-            // Select a node and set TopNode
-            tv.SelectedNode = tv.Nodes[0].Nodes[0].Nodes[0].Nodes[0].Nodes[1]; // Test2
-            tv.TopNode = tv.Nodes[0];
-
-            return tv;
-        }
-
-        private TreeView CreateBaseTreeView()
-        {
-            return new TestTreeView(
-                TN("test-suite", "Assembly1", "1-7",
-                    TN("test-suite", "NUnit", "1-6",
-                        TN("test-suite", "Tests", "1-5",
-                            TN("test-suite", "MyFixture", "1-4",
-                                TN("test-case", "Test1", "1-1"),
-                                TN("test-case", "Test2", "1-2"),
-                                TN("test-case", "Test3", "1-3"))))),
-                TN("test-suite", "Assembly2", "2-7",
-                    TN("test-suite", "Tests", "2-6",
-                        TN("test-suite", "FixtureA", "2-3",
-                            TN("test-case", "Test1", "2-1"),
-                            TN("test-case", "Test1", "2-2")),
-                        TN("test-suite", "FixtureB", "2-5",
-                            TN("test-case", "Test1", "2-4")))));
-        }
-
-        private class TestTreeView : TreeView
-        {
-            public TestTreeView(params TreeNode[] nodes)
-            {
-                CheckBoxes = true;
-
-                foreach (TreeNode node in nodes)
-                    Nodes.Add(node);
-            }
-        }
-
         // Helper used to create a TreeNode
-        private static TreeNode TN(string element, string name, string id, params TreeNode[] childNodes)
+        // TODO: Move to test utilities
+        public static TreeNode TN(string element, string name, string id, params TreeNode[] childNodes)
         {
             var treeNode = new TreeNode(name) { Tag = new TestNode($"<{element} name='{name}' id='{id}' />") };
             if (childNodes.Length > 0)
@@ -306,45 +153,206 @@ namespace TestCentric.Gui
             return treeNode;
         }
 
-        private VisualState CreateExpectedVisualState()
+        #region Helper method to handle common asserts
+
+        private void VerifyTreeView(TreeView treeView, string selectedNode = null)
         {
-            return new VisualState()
+            Assert.Multiple(() =>
             {
-                ShowCheckBoxes = true,
-                Nodes = new List<VisualTreeNode> {
-                    VTN("1-7", "Assembly1", EXP + TOP,
-                        VTN("1-6", "NUnit", EXP,
-                            VTN("1-5", "Tests", EXP,
-                                VTN("1-4", "MyFixture", EXP,
+                Assert.That(treeView.CheckBoxes, Is.True, "CheckBoxes");
+                Assert.That(treeView.SelectedNode?.Text, Is.EqualTo(selectedNode), "SelectedNode");
+                Assert.That(treeView.TopNode?.Text, Is.EqualTo("Assembly1"), "TopNode");
+
+                Assert.That(treeView.Search("Assembly1").IsExpanded, "Assembly1 not expanded");
+                Assert.That(treeView.Search("Assembly2").IsExpanded, "Assembly2 not expanded");
+
+                // Namespaces are only displayed using NUNIT_TREE strategy
+                if (_data.DisplayStrategy == "NUNIT_TREE")
+                {
+                    Assert.That(treeView.Search("NUnit").IsExpanded, "NUnit namespace not expanded");
+                    Assert.That(treeView.Search("Tests").IsExpanded, "NUnit/Tests namespace not expanded");
+                    Assert.That(treeView.Search("UnitTests").IsExpanded, "UnitTests namespace not expanded");
+                }
+
+                // No TestFixtures are displayed under the Test_LIST strategy
+                if (_data.DisplayStrategy != "TEST_LIST")
+                {
+                    Assert.That(treeView.Search("MyFixture").IsExpanded, "MyFixture not expanded");
+                    var fixtureA = treeView.Search("FixtureA");
+                    if (fixtureA != null) // Removed in some scenarios
+                    {
+                        Assert.That(fixtureA.IsExpanded, "FixtureA not expanded");
+                        Assert.That(fixtureA.Checked, "FixtureA not checked");
+                    }
+                }
+
+                Assert.That(treeView.Search("Test1").Checked, "Test1 not checked");
+                var test3 = treeView.Search("Test3");
+                if (test3 != null) // Removed in some scenarios
+                    Assert.That(test3.Checked, "Test3 not checked");
+            });
+        }
+
+        #endregion
+
+        #region Test Data
+
+        private static VisualStateTestData[] TestData = new VisualStateTestData[]
+        {
+            new VisualStateTestData("NUNIT_TREE"),
+            new VisualStateTestData("FIXTURE_LIST"),
+            new VisualStateTestData("TEST_LIST")
+        };
+
+        public class VisualStateTestData
+        {
+            public string DisplayStrategy;
+            public VisualState InitialVisualState;
+
+            public VisualStateTestData(string strategy)
+            {
+                DisplayStrategy = strategy;
+            }
+
+            public TreeView GetInitialTreeView()
+            {
+                switch (DisplayStrategy)
+                {
+                    case "NUNIT_TREE":
+                        return TreeViewFactory.CreateTreeView(
+                            true,
+                            TN("test-suite", "Assembly1", "1-7",
+                                TN("test-suite", "NUnit", "1-6",
+                                    TN("test-suite", "Tests", "1-5",
+                                        TN("test-suite", "MyFixture", "1-4",
+                                            TN("test-case", "Test1", "1-1"),
+                                            TN("test-case", "Test2", "1-2"),
+                                            TN("test-case", "Test3", "1-3"))))),
+                            TN("test-suite", "Assembly2", "2-7",
+                                TN("test-suite", "UnitTests", "2-6",
+                                    TN("test-suite", "FixtureA", "2-3",
+                                        TN("test-case", "Test4", "2-1"),
+                                        TN("test-case", "Test5", "2-2")),
+                                    TN("test-suite", "FixtureB", "2-5",
+                                        TN("test-case", "Test6", "2-4")))));
+
+                    case "FIXTURE_LIST":
+                        return TreeViewFactory.CreateTreeView(
+                            true,
+                            TN("test-suite", "Assembly1", "1-7",
+                                TN("test-suite", "MyFixture", "1-4",
+                                    TN("test-case", "Test1", "1-1"),
+                                    TN("test-case", "Test2", "1-2"),
+                                    TN("test-case", "Test3", "1-3"))),
+                            TN("test-suite", "Assembly2", "2-7",
+                                TN("test-suite", "FixtureA", "2-3",
+                                    TN("test-case", "Test4", "2-1"),
+                                    TN("test-case", "Test5", "2-2")),
+                                TN("test-suite", "FixtureB", "2-5",
+                                    TN("test-case", "Test6", "2-4"))));
+
+                    case "TEST_LIST":
+                        return TreeViewFactory.CreateTreeView(
+                            true,
+                            TN("test-suite", "Assembly1", "1-7",
+                                TN("test-case", "Test1", "1-1"),
+                                TN("test-case", "Test2", "1-2"),
+                                TN("test-case", "Test3", "1-3")),
+                            TN("test-suite", "Assembly2", "2-7",
+                                TN("test-case", "Test4", "2-1"),
+                                TN("test-case", "Test5", "2-2"),
+                                TN("test-case", "Test6", "2-4")));
+
+                    default:
+                        throw new Exception($"DisplayStrategy {DisplayStrategy} is not recognized");
+                }
+            }
+
+            public TreeView ExpandedTreeView
+            {
+                get
+                {
+                    var tv = GetInitialTreeView();
+
+                    tv.Expand("Assembly1", "NUnit", "Tests", "MyFixture", "Assembly2", "Tests", "FixtureA");
+                    tv.Check("Test1", "Test3", "FixtureA");
+                    tv.SelectedNode = tv.Search("Test2");
+                    tv.TopNode = tv.Search("Assembly1");
+
+                    return tv;
+                }
+            }
+
+            public VisualState ExpectedVisualState
+            {
+                get
+                {
+                    switch (DisplayStrategy)
+                    {
+                        case "NUNIT_TREE":
+                            return VisualStateFactory.CreateVisualState(
+                                DisplayStrategy,
+                                true,
+                                VTN("1-7", "Assembly1", EXP + TOP,
+                                    VTN("1-6", "NUnit", EXP,
+                                        VTN("1-5", "Tests", EXP,
+                                            VTN("1-4", "MyFixture", EXP,
+                                                VTN("1-1", "Test1", CHK),
+                                                VTN("1-2", "Test2", SEL),
+                                                VTN("1-3", "Test3", CHK))))),
+                                VTN("2-7", "Assembly2", EXP,
+                                    VTN("2-6", "UnitTests", EXP,
+                                        VTN("2-3", "FixtureA", EXP + CHK))));
+
+                        case "FIXTURE_LIST":
+                            return VisualStateFactory.CreateVisualState(
+                                DisplayStrategy,
+                                true,
+                                VTN("1-7", "Assembly1", EXP + TOP,
+                                    VTN("1-4", "MyFixture", EXP,
+                                        VTN("1-1", "Test1", CHK),
+                                        VTN("1-2", "Test2", SEL),
+                                        VTN("1-3", "Test3", CHK))),
+                                VTN("2-7", "Assembly2", EXP,
+                                    VTN("2-3", "FixtureA", EXP + CHK)));
+
+                        case "TEST_LIST":
+                            return VisualStateFactory.CreateVisualState(
+                                DisplayStrategy,
+                                true,
+                                VTN("1-7", "Assembly1", EXP + TOP,
                                     VTN("1-1", "Test1", CHK),
                                     VTN("1-2", "Test2", SEL),
-                                    VTN("1-3", "Test3", CHK))))),
-                    VTN("2-7", "Assembly2", EXP,
-                        VTN("2-6", "Tests", EXP,
-                            VTN("2-3", "FixtureA", EXP+CHK)))
+                                    VTN("1-3", "Test3", CHK)),
+                                VTN("2-7", "Assembly2", EXP));
+                    }
+
+                    throw new Exception($"Unrecognized DisplayStrategy: {DisplayStrategy}");
                 }
-            };
+            }
+
+            const int EXP = 1;
+            const int CHK = 2;
+            const int SEL = 4;
+            const int TOP = 8;
+
+            // Helper used to create a VisualTreeNode
+            private static VisualTreeNode VTN(string id, string name, int flags, params VisualTreeNode[] childNodes)
+            {
+                bool expand = (flags & EXP) == EXP;
+                bool check = (flags & CHK) == CHK;
+                bool select = (flags & SEL) == SEL;
+                bool top = (flags & TOP) == TOP;
+
+                var visualNode = new VisualTreeNode() { Name = name, Expanded = expand, Checked = check, Selected = select, IsTopNode = top };
+
+                if (childNodes.Length > 0)
+                    visualNode.Nodes.AddRange(childNodes);
+
+                return visualNode;
+            }
         }
 
-        const int EXP = 1;
-        const int CHK = 2;
-        const int SEL = 4;
-        const int TOP = 8;
-
-        // Helper used to create a VisualTreeNode
-        private static VisualTreeNode VTN(string id, string name, int flags, params VisualTreeNode[] childNodes)
-        {
-            bool expand = (flags & EXP) == EXP;
-            bool check = (flags & CHK) == CHK;
-            bool select = (flags & SEL) == SEL;
-            bool top = (flags & TOP) == TOP;
-
-            var visualNode = new VisualTreeNode() { Name = name, Expanded = expand, Checked = check, Selected = select, IsTopNode = top };
-            
-            if (childNodes.Length > 0)
-                visualNode.Nodes.AddRange(childNodes);
-            
-            return visualNode;
-        }
+        #endregion
     }
 }
