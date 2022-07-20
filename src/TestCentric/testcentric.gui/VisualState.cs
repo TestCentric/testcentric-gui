@@ -250,11 +250,11 @@ namespace TestCentric.Gui
 
             return
                 other != null &&
-                Name == other.Name &&
-                Expanded == other.Expanded &&
-                Checked == other.Checked &&
-                Selected == other.Selected &&
-                IsTopNode == other.IsTopNode;
+                Name == other.Name;// &&
+                //Expanded == other.Expanded &&
+                //Checked == other.Checked &&
+                //Selected == other.Selected &&
+                //IsTopNode == other.IsTopNode;
         }
 
         public override int GetHashCode()

@@ -35,7 +35,10 @@ namespace TestCentric.Gui
             Assert.Multiple(() =>
             {
                 Assert.That(visualState.ShowCheckBoxes, Is.EqualTo(ExpandedTreeView.CheckBoxes));
-                Assert.That(visualState.Nodes, Is.EqualTo(ExpectedVisualState.Nodes));
+                Assert.That(ExpectedVisualState.Nodes.Count, Is.EqualTo(2), "Expected Visual State Nodes");
+                Assert.That(visualState.Nodes.Count, Is.EqualTo(2), "Actual Visual State Nodes");
+                Assert.That(visualState.Nodes[0], Is.EqualTo(ExpectedVisualState.Nodes[0]));
+                Assert.That(visualState.Nodes[1], Is.EqualTo(ExpectedVisualState.Nodes[1]));
             });
         }
 
@@ -139,7 +142,8 @@ namespace TestCentric.Gui
                 // TODO: Categories not yet supported
                 //Assert.AreEqual(ExpectedVisualState.SelectedCategories, restoredState.SelectedCategories);
                 //Assert.AreEqual(ExpectedVisualState.ExcludeCategories, restoredState.ExcludeCategories);
-                Assert.That(restoredState.Nodes, Is.EqualTo(ExpectedVisualState.Nodes));
+                //Assert.That(restoredState.Nodes, Is.EqualTo(ExpectedVisualState.Nodes));
+                Assert.That(restoredState.Nodes[0], Is.EqualTo(ExpectedVisualState.Nodes[0]));
             });
         }
 
@@ -157,33 +161,64 @@ namespace TestCentric.Gui
 
         private void VerifyTreeView(TreeView treeView, string selectedNode = null)
         {
+            var expectedTopNode = treeView.Nodes[0].Text;
+
             Assert.Multiple(() =>
             {
                 Assert.That(treeView.CheckBoxes, Is.True, "CheckBoxes");
                 Assert.That(treeView.SelectedNode?.Text, Is.EqualTo(selectedNode), "SelectedNode");
-                Assert.That(treeView.TopNode?.Text, Is.EqualTo("Assembly1"), "TopNode");
+                Assert.That(treeView.TopNode?.Text, Is.EqualTo(expectedTopNode), "TopNode");
 
-                Assert.That(treeView.Search("Assembly1").IsExpanded, "Assembly1 not expanded");
-                Assert.That(treeView.Search("Assembly2").IsExpanded, "Assembly2 not expanded");
+                var fixtureA = treeView.Search("FixtureA");
 
-                // Namespaces are only displayed using NUNIT_TREE strategy
-                if (_data.DisplayStrategy == "NUNIT_TREE")
+                switch (_data.DisplayStrategy)
                 {
-                    Assert.That(treeView.Search("NUnit").IsExpanded, "NUnit namespace not expanded");
-                    Assert.That(treeView.Search("Tests").IsExpanded, "NUnit/Tests namespace not expanded");
-                    Assert.That(treeView.Search("UnitTests").IsExpanded, "UnitTests namespace not expanded");
-                }
+                    case "NUNIT_TREE":
+                        Assert.That(treeView.Search("Assembly1").IsExpanded, "Assembly1 not expanded");
+                        Assert.That(treeView.Search("Assembly2").IsExpanded, "Assembly2 not expanded");
+                        Assert.That(treeView.Search("NUnit").IsExpanded, "NUnit namespace not expanded");
+                        Assert.That(treeView.Search("Tests").IsExpanded, "NUnit/Tests namespace not expanded");
+                        Assert.That(treeView.Search("UnitTests").IsExpanded, "UnitTests namespace not expanded");
+                        Assert.That(treeView.Search("MyFixture").IsExpanded, "MyFixture not expanded");
+                        if (fixtureA != null) // In case it was deleted
+                        {
+                            Assert.That(fixtureA.IsExpanded, "MyFixture not expanded");
+                            Assert.That(fixtureA.Checked, "FixtureA not checked");
+                        }
+                        break;
+                    case "FIXTURE_LIST":
+                        switch (_data.Grouping)
+                        {
+                            case "ASSEMBLY":
+                                Assert.That(treeView.Search("Assembly1").IsExpanded, "Assembly1 not expanded");
+                                Assert.That(treeView.Search("Assembly2").IsExpanded, "Assembly2 not expanded");
+                                break;
+                        }
+                        Assert.That(treeView.Search("MyFixture").IsExpanded, "MyFixture not expanded");
+                        if (fixtureA != null) // In case it was deleted
+                        {
+                            Assert.That(fixtureA.IsExpanded, "MyFixture not expanded");
+                            Assert.That(fixtureA.Checked, "FixtureA not checked");
+                        }
+                        break;
+                    case "TEST_LIST":
+                        switch(_data.Grouping)
+                        {
+                            case "Assembly":
+                                Assert.That(treeView.Search("Assembly1").IsExpanded, "Assembly1 not expanded");
+                                Assert.That(treeView.Search("Assembly2").IsExpanded, "Assembly2 not expanded");
+                                break;
+                            case "FIXTURE":
+                                Assert.That(treeView.Search("MyFixture").IsExpanded, "MyFixture not expanded");
+                                if (fixtureA != null) // In case it was deleted
+                                {
+                                    Assert.That(fixtureA.IsExpanded, "MyFixture not expanded");
+                                    Assert.That(fixtureA.Checked, "FixtureA not checked");
+                                }
+                                break;
+                        }
+                        break;
 
-                // No TestFixtures are displayed under the Test_LIST strategy
-                if (_data.DisplayStrategy != "TEST_LIST")
-                {
-                    Assert.That(treeView.Search("MyFixture").IsExpanded, "MyFixture not expanded");
-                    var fixtureA = treeView.Search("FixtureA");
-                    if (fixtureA != null) // Removed in some scenarios
-                    {
-                        Assert.That(fixtureA.IsExpanded, "FixtureA not expanded");
-                        Assert.That(fixtureA.Checked, "FixtureA not checked");
-                    }
                 }
 
                 Assert.That(treeView.Search("Test1").Checked, "Test1 not checked");
@@ -200,18 +235,26 @@ namespace TestCentric.Gui
         private static VisualStateTestData[] TestData = new VisualStateTestData[]
         {
             new VisualStateTestData("NUNIT_TREE"),
-            new VisualStateTestData("FIXTURE_LIST"),
-            new VisualStateTestData("TEST_LIST")
+            new VisualStateTestData("FIXTURE_LIST", "ASSEMBLY"),
+            new VisualStateTestData("TEST_LIST", "ASSEMBLY"),
+            new VisualStateTestData("TEST_LIST", "FIXTURE")
         };
 
         public class VisualStateTestData
         {
             public string DisplayStrategy;
+            public string Grouping;
             public VisualState InitialVisualState;
 
             public VisualStateTestData(string strategy)
             {
                 DisplayStrategy = strategy;
+            }
+
+            public VisualStateTestData(string strategy, string grouping)
+            {
+                DisplayStrategy = strategy;
+                Grouping = grouping;
             }
 
             public TreeView GetInitialTreeView()
@@ -237,31 +280,58 @@ namespace TestCentric.Gui
                                         TN("test-case", "Test6", "2-4")))));
 
                     case "FIXTURE_LIST":
-                        return TreeViewFactory.CreateTreeView(
-                            true,
-                            TN("test-suite", "Assembly1", "1-7",
-                                TN("test-suite", "MyFixture", "1-4",
-                                    TN("test-case", "Test1", "1-1"),
-                                    TN("test-case", "Test2", "1-2"),
-                                    TN("test-case", "Test3", "1-3"))),
-                            TN("test-suite", "Assembly2", "2-7",
-                                TN("test-suite", "FixtureA", "2-3",
-                                    TN("test-case", "Test4", "2-1"),
-                                    TN("test-case", "Test5", "2-2")),
-                                TN("test-suite", "FixtureB", "2-5",
-                                    TN("test-case", "Test6", "2-4"))));
+                        switch (Grouping)
+                        {
+                            case "ASSEMBLY":
+                            return TreeViewFactory.CreateTreeView(
+                                true,
+                                TN("test-suite", "Assembly1", "1-7",
+                                    TN("test-suite", "MyFixture", "1-4",
+                                        TN("test-case", "Test1", "1-1"),
+                                        TN("test-case", "Test2", "1-2"),
+                                        TN("test-case", "Test3", "1-3"))),
+                                TN("test-suite", "Assembly2", "2-7",
+                                    TN("test-suite", "FixtureA", "2-3",
+                                        TN("test-case", "Test4", "2-1"),
+                                        TN("test-case", "Test5", "2-2")),
+                                    TN("test-suite", "FixtureB", "2-5",
+                                        TN("test-case", "Test6", "2-4"))));
+
+                            default:
+                                throw new Exception($"Grouping {Grouping} is not recognized");
+                        }
 
                     case "TEST_LIST":
-                        return TreeViewFactory.CreateTreeView(
-                            true,
-                            TN("test-suite", "Assembly1", "1-7",
-                                TN("test-case", "Test1", "1-1"),
-                                TN("test-case", "Test2", "1-2"),
-                                TN("test-case", "Test3", "1-3")),
-                            TN("test-suite", "Assembly2", "2-7",
-                                TN("test-case", "Test4", "2-1"),
-                                TN("test-case", "Test5", "2-2"),
-                                TN("test-case", "Test6", "2-4")));
+                        switch (Grouping)
+                        {
+                            case "ASSEMBLY":
+                                return TreeViewFactory.CreateTreeView(
+                                    true,
+                                    TN("test-suite", "Assembly1", "1-7",
+                                        TN("test-case", "Test1", "1-1"),
+                                        TN("test-case", "Test2", "1-2"),
+                                        TN("test-case", "Test3", "1-3")),
+                                    TN("test-suite", "Assembly2", "2-7",
+                                        TN("test-case", "Test4", "2-1"),
+                                        TN("test-case", "Test5", "2-2"),
+                                        TN("test-case", "Test6", "2-4")));
+
+                            case "FIXTURE":
+                                return TreeViewFactory.CreateTreeView(
+                                    true,
+                                    TN("test-suite", "MyFixture", "1-4",
+                                        TN("test-case", "Test1", "1-1"),
+                                        TN("test-case", "Test2", "1-2"),
+                                        TN("test-case", "Test3", "1-3")),
+                                    TN("test-suite", "FixtureA", "2-3",
+                                        TN("test-case", "Test4", "2-1"),
+                                        TN("test-case", "Test5", "2-2")),
+                                    TN("test-suite", "FixtureB", "2-5",
+                                        TN("test-case", "Test6", "2-4")));
+
+                            default:
+                                throw new Exception($"Grouping {Grouping} is not recognized");
+                        }
 
                     default:
                         throw new Exception($"DisplayStrategy {DisplayStrategy} is not recognized");
@@ -277,7 +347,10 @@ namespace TestCentric.Gui
                     tv.Expand("Assembly1", "NUnit", "Tests", "MyFixture", "Assembly2", "Tests", "FixtureA");
                     tv.Check("Test1", "Test3", "FixtureA");
                     tv.SelectedNode = tv.Search("Test2");
-                    tv.TopNode = tv.Search("Assembly1");
+                    if (DisplayStrategy == "NUNIT_TREE" || Grouping == "ASSEMBLY")
+                        tv.TopNode = tv.Search("Assembly1");
+                    else if (Grouping == "FIXTURE")
+                        tv.TopNode = tv.Search("MyFixture");
 
                     return tv;
                 }
@@ -305,26 +378,50 @@ namespace TestCentric.Gui
                                         VTN("2-3", "FixtureA", EXP + CHK))));
 
                         case "FIXTURE_LIST":
-                            return VisualStateFactory.CreateVisualState(
-                                DisplayStrategy,
-                                true,
-                                VTN("1-7", "Assembly1", EXP + TOP,
-                                    VTN("1-4", "MyFixture", EXP,
-                                        VTN("1-1", "Test1", CHK),
-                                        VTN("1-2", "Test2", SEL),
-                                        VTN("1-3", "Test3", CHK))),
-                                VTN("2-7", "Assembly2", EXP,
-                                    VTN("2-3", "FixtureA", EXP + CHK)));
+                            switch (Grouping)
+                            {
+                                case "ASSEMBLY":
+                                    return VisualStateFactory.CreateVisualState(
+                                        DisplayStrategy,
+                                        true,
+                                        VTN("1-7", "Assembly1", EXP + TOP,
+                                            VTN("1-4", "MyFixture", EXP,
+                                                VTN("1-1", "Test1", CHK),
+                                                VTN("1-2", "Test2", SEL),
+                                                VTN("1-3", "Test3", CHK))),
+                                        VTN("2-7", "Assembly2", EXP,
+                                            VTN("2-3", "FixtureA", EXP + CHK)));
+
+                                default:
+                                    throw new Exception($"Grouping {Grouping} is nto recognized");
+                            }
 
                         case "TEST_LIST":
-                            return VisualStateFactory.CreateVisualState(
-                                DisplayStrategy,
-                                true,
-                                VTN("1-7", "Assembly1", EXP + TOP,
-                                    VTN("1-1", "Test1", CHK),
-                                    VTN("1-2", "Test2", SEL),
-                                    VTN("1-3", "Test3", CHK)),
-                                VTN("2-7", "Assembly2", EXP));
+                            switch (Grouping)
+                            {
+                                case "ASSEMBLY":
+                                    return VisualStateFactory.CreateVisualState(
+                                        DisplayStrategy,
+                                        true,
+                                        VTN("1-7", "Assembly1", EXP + TOP,
+                                            VTN("1-1", "Test1", CHK),
+                                            VTN("1-2", "Test2", SEL),
+                                            VTN("1-3", "Test3", CHK)),
+                                        VTN("2-7", "Assembly2", EXP));
+
+                                case "FIXTURE":
+                                    return VisualStateFactory.CreateVisualState(
+                                        DisplayStrategy,
+                                        true,
+                                        VTN("1-4", "MyFixture", EXP + TOP,
+                                            VTN("1-1", "Test1", CHK),
+                                            VTN("1-2", "Test2", SEL),
+                                            VTN("1-3", "Test3", CHK)),
+                                        VTN("2-3", "FixtureA", EXP + CHK));
+
+                                default:
+                                    throw new Exception($"Grouping {Grouping} is not recognized");
+                            }
                     }
 
                     throw new Exception($"Unrecognized DisplayStrategy: {DisplayStrategy}");
@@ -350,6 +447,14 @@ namespace TestCentric.Gui
                     visualNode.Nodes.AddRange(childNodes);
 
                 return visualNode;
+            }
+
+            // Override ToString so tests deplay clearly
+            public override string ToString()
+            {
+                return DisplayStrategy == "NUNIT_TREE"
+                    ? "Strategy=NUNIT_TREE"
+                    : $"Strategy={DisplayStrategy} Grouping={Grouping}";
             }
         }
 
