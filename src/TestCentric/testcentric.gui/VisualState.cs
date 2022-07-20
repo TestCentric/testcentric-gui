@@ -131,14 +131,15 @@ namespace TestCentric.Gui
         private void ApplyVisualNodesToTreeNodes(List<VisualTreeNode> visualNodes, TreeNodeCollection treeNodes)
         {
             // Find matching names
-            for (int i = 0; i < visualNodes.Count; i++)
+            foreach (var visualNode in visualNodes)
             {
-                var visualNode = visualNodes[i];
-
+                Console.WriteLine($"Examining VisualNode {visualNode}");
                 foreach (TreeNode treeNode in treeNodes)
                 {
-                    if (treeNode.Text == visualNode.Name || treeNode.Text.StartsWith("Not Run"))
+                    Console.WriteLine($"Examining TreeNode {treeNode}");
+                    if (treeNode.Text == visualNode.Name)
                     {
+                        Console.WriteLine($"Applying VisualNode {visualNode.Name} to TreeNode {treeNode.Text}");
                         ApplyVisualNodeToTreeNode(visualNode, treeNode);
                         break;
                     }
@@ -203,6 +204,18 @@ namespace TestCentric.Gui
 
         #endregion
 
+        #region Dump VisualState to Console 
+
+        public void Dump()
+        {
+            var writer = new StringWriter();
+            Save(writer);
+
+            Console.WriteLine(writer.GetStringBuilder().ToString());
+        }
+
+        #endregion
+
         #endregion
     }
 
@@ -250,11 +263,11 @@ namespace TestCentric.Gui
 
             return
                 other != null &&
-                Name == other.Name;// &&
-                //Expanded == other.Expanded &&
-                //Checked == other.Checked &&
-                //Selected == other.Selected &&
-                //IsTopNode == other.IsTopNode;
+                Name == other.Name &&
+                Expanded == other.Expanded &&
+                Checked == other.Checked &&
+                Selected == other.Selected &&
+                IsTopNode == other.IsTopNode;
         }
 
         public override int GetHashCode()
