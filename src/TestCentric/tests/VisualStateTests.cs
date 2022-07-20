@@ -195,12 +195,16 @@ namespace TestCentric.Gui
                             Assert.That(treeView.Search("Assembly1").IsExpanded, "Assembly1 not expanded");
                             Assert.That(treeView.Search("Assembly2").IsExpanded, "Assembly2 not expanded");
                             break;
-                        case "CATEGORY":
-                        case "CATEGORY_EXTENDED":
-                            Assert.That(treeView.Search("None").IsExpanded, "Category 'None' not expanded");
-                            break;
-                    }
-                    Assert.That(treeView.Search("MyFixture").IsExpanded, "MyFixture not expanded");
+                            case "CATEGORY":
+                            case "CATEGORY_EXTENDED":
+                                Assert.That(treeView.Search("None").IsExpanded, "Category 'None' not expanded");
+                                break;
+                            case "OUTCOME":
+                            case "DURATION":
+                                Assert.That(treeView.Search("Not Run").IsExpanded, "'Not Run' not expanded");
+                                break;
+                        }
+                        Assert.That(treeView.Search("MyFixture").IsExpanded, "MyFixture not expanded");
                     if (fixtureA != null) // In case it was deleted
                     {
                         Assert.That(fixtureA.IsExpanded, "MyFixture not expanded");
@@ -245,10 +249,14 @@ namespace TestCentric.Gui
             new VisualStateTestData("FIXTURE_LIST", "ASSEMBLY"),
             new VisualStateTestData("FIXTURE_LIST", "CATEGORY"),
             new VisualStateTestData("FIXTURE_LIST", "CATEGORY_EXTENDED"),
+            new VisualStateTestData("FIXTURE_LIST", "OUTCOME"),
+            new VisualStateTestData("FIXTURE_LIST", "DURATION"),
             new VisualStateTestData("TEST_LIST", "ASSEMBLY"),
             new VisualStateTestData("TEST_LIST", "FIXTURE"),
             new VisualStateTestData("TEST_LIST", "CATEGORY"),
-            new VisualStateTestData("TEST_LIST", "CATEGORY_EXTENDED")
+            new VisualStateTestData("TEST_LIST", "CATEGORY_EXTENDED"),
+            new VisualStateTestData("TEST_LIST", "OUTCOME"),
+            new VisualStateTestData("TEST_LIST", "DURATION")
         };
 
         public class VisualStateTestData
@@ -323,6 +331,21 @@ namespace TestCentric.Gui
                                         TN("test-suite", "FixtureB", "2-5",
                                             TN("test-case", "Test6", "2-4"))));
 
+                            case "OUTCOME":
+                            case "DURATION":
+                                return TreeViewFactory.CreateTreeView(
+                                    true,
+                                    TN("test-suite", "Not Run", "1-7",
+                                        TN("test-suite", "MyFixture", "1-4",
+                                            TN("test-case", "Test1", "1-1"),
+                                            TN("test-case", "Test2", "1-2"),
+                                            TN("test-case", "Test3", "1-3")),
+                                        TN("test-suite", "FixtureA", "2-3",
+                                            TN("test-case", "Test4", "2-1"),
+                                            TN("test-case", "Test5", "2-2")),
+                                        TN("test-suite", "FixtureB", "2-5",
+                                            TN("test-case", "Test6", "2-4"))));
+
                             default:
                                 throw new Exception($"Grouping {Grouping} is not recognized");
                         }
@@ -367,6 +390,18 @@ namespace TestCentric.Gui
                                         TN("test-case", "Test5", "2-2"),
                                         TN("test-case", "Test6", "2-4")));
 
+                            case "OUTCOME":
+                            case "DURATION":
+                                return TreeViewFactory.CreateTreeView(
+                                    true,
+                                    TN("test-suite", "Not Run", "1-7",
+                                        TN("test-case", "Test1", "1-1"),
+                                        TN("test-case", "Test2", "1-2"),
+                                        TN("test-case", "Test3", "1-3"),
+                                        TN("test-case", "Test4", "2-1"),
+                                        TN("test-case", "Test5", "2-2"),
+                                        TN("test-case", "Test6", "2-4")));
+
                             default:
                                 throw new Exception($"Grouping {Grouping} is not recognized");
                         }
@@ -391,6 +426,8 @@ namespace TestCentric.Gui
                         tv.TopNode = tv.Search("MyFixture");
                     else if (Grouping == "CATEGORY" || Grouping == "CATEGORY_EXTENDED")
                         tv.TopNode = tv.Search("None");
+                    else if (Grouping == "OUTCOME" || Grouping == "DURATION")
+                        tv.TopNode = tv.Search("Not Run");
 
                     return tv;
                 }
@@ -444,6 +481,18 @@ namespace TestCentric.Gui
                                                 VTN("1-3", "Test3", CHK)),
                                             VTN("2-3", "FixtureA", EXP + CHK)));
 
+                                case "OUTCOME":
+                                case "DURATION":
+                                    return VisualStateFactory.CreateVisualState(
+                                        DisplayStrategy,
+                                        true,
+                                        VTN("1-7", "Not Run", EXP + TOP,
+                                            VTN("1-4", "MyFixture", EXP,
+                                                VTN("1-1", "Test1", CHK),
+                                                VTN("1-2", "Test2", SEL),
+                                                VTN("1-3", "Test3", CHK)),
+                                            VTN("2-3", "FixtureA", EXP + CHK)));
+
                                 default:
                                     throw new Exception($"ExpectedVisualState: Fixture list grouping {Grouping} is not recognized");
                             }
@@ -477,6 +526,16 @@ namespace TestCentric.Gui
                                         DisplayStrategy,
                                         true,
                                         VTN("1-4", "None", EXP + TOP,
+                                            VTN("1-1", "Test1", CHK),
+                                            VTN("1-2", "Test2", SEL),
+                                            VTN("1-3", "Test3", CHK)));
+
+                                case "OUTCOME":
+                                case "DURATION":
+                                    return VisualStateFactory.CreateVisualState(
+                                        DisplayStrategy,
+                                        true,
+                                        VTN("1-4", "Not Run", EXP + TOP,
                                             VTN("1-1", "Test1", CHK),
                                             VTN("1-2", "Test2", SEL),
                                             VTN("1-3", "Test3", CHK)));
