@@ -110,142 +110,207 @@ namespace TestCentric.Gui
             }
         }
 
-        public TreeView ExpandedTreeView
+        public TreeView GetExpandedTreeView()
         {
-            get
-            {
-                var tv = GetInitialTreeView();
+            var tv = GetInitialTreeView();
 
-                tv.Expand("Assembly1", "None", "Not Run", "NUnit", "Tests", "MyFixture", "Assembly2", "Tests", "FixtureA");
-                tv.Check("Test1", "Test3", "FixtureA");
-                tv.SelectedNode = tv.Search("Test2");
-                if (DisplayStrategy == "NUNIT_TREE" || Grouping == "ASSEMBLY")
-                    tv.TopNode = tv.Search("Assembly1");
-                else if (Grouping == "FIXTURE")
-                    tv.TopNode = tv.Search("MyFixture");
-                else if (Grouping == "CATEGORY" || Grouping == "CATEGORY_EXTENDED")
-                    tv.TopNode = tv.Search("None");
-                else if (Grouping == "OUTCOME" || Grouping == "DURATION")
-                    tv.TopNode = tv.Search("Not Run");
+            tv.Expand("Assembly1", "None", "Not Run", "NUnit", "Tests", "MyFixture", "Assembly2", "Tests", "FixtureA");
+            tv.Check("Test1", "Test3", "FixtureA");
+            tv.SelectedNode = tv.Search("Test2");
+            if (DisplayStrategy == "NUNIT_TREE" || Grouping == "ASSEMBLY")
+                tv.TopNode = tv.Search("Assembly1");
+            else if (Grouping == "FIXTURE")
+                tv.TopNode = tv.Search("MyFixture");
+            else if (Grouping == "CATEGORY" || Grouping == "CATEGORY_EXTENDED")
+                tv.TopNode = tv.Search("None");
+            else if (Grouping == "OUTCOME" || Grouping == "DURATION")
+                tv.TopNode = tv.Search("Not Run");
 
-                return tv;
-            }
+            return tv;
         }
 
-        public VisualState ExpectedVisualState
+        public VisualState GetExpectedVisualState()
         {
-            get
+            switch (DisplayStrategy)
             {
-                switch (DisplayStrategy)
-                {
-                    case "NUNIT_TREE":
-                        return VisualStateFactory.CreateVisualState(
-                            DisplayStrategy,
-                            true,
-                            VTN("Assembly1", EXP + TOP,
-                                VTN("NUnit", EXP,
-                                    VTN("Tests", EXP,
-                                        VTN("MyFixture", EXP,
-                                            VTN("Test1", CHK),
-                                            VTN("Test2", SEL),
-                                            VTN("Test3", CHK))))),
-                            VTN("Assembly2", EXP,
-                                VTN("UnitTests", EXP,
-                                    VTN("FixtureA", EXP + CHK))));
+                case "NUNIT_TREE":
+                    return VisualStateFactory.CreateVisualState(
+                        DisplayStrategy,
+                        true,
+                        VTN("Assembly1", EXP + TOP,
+                            VTN("NUnit", EXP,
+                                VTN("Tests", EXP,
+                                    VTN("MyFixture", EXP,
+                                        VTN("Test1", CHK),
+                                        VTN("Test2", SEL),
+                                        VTN("Test3", CHK))))),
+                        VTN("Assembly2", EXP,
+                            VTN("UnitTests", EXP,
+                                VTN("FixtureA", EXP + CHK))));
 
-                    case "FIXTURE_LIST":
-                        switch (Grouping)
-                        {
-                            case "ASSEMBLY":
-                                return VisualStateFactory.CreateVisualState(
-                                    DisplayStrategy,
-                                    true,
-                                    VTN("Assembly1", EXP + TOP,
-                                        VTN("MyFixture", EXP,
-                                            VTN("Test1", CHK),
-                                            VTN("Test2", SEL),
-                                            VTN("Test3", CHK))),
-                                    VTN("Assembly2", EXP,
-                                        VTN("FixtureA", EXP + CHK)));
+                case "FIXTURE_LIST":
+                    switch (Grouping)
+                    {
+                        case "ASSEMBLY":
+                            return VisualStateFactory.CreateVisualState(
+                                DisplayStrategy,
+                                true,
+                                VTN("Assembly1", EXP + TOP,
+                                    VTN("MyFixture", EXP,
+                                        VTN("Test1", CHK),
+                                        VTN("Test2", SEL),
+                                        VTN("Test3", CHK))),
+                                VTN("Assembly2", EXP,
+                                    VTN("FixtureA", EXP + CHK)));
 
-                            case "CATEGORY":
-                            case "CATEGORY_EXTENDED":
-                                return VisualStateFactory.CreateVisualState(
-                                    DisplayStrategy,
-                                    true,
-                                    VTN("None", EXP + TOP,
-                                        VTN("MyFixture", EXP,
-                                            VTN("Test1", CHK),
-                                            VTN("Test2", SEL),
-                                            VTN("Test3", CHK)),
-                                        VTN("FixtureA", EXP + CHK)));
-
-                            case "OUTCOME":
-                            case "DURATION":
-                                return VisualStateFactory.CreateVisualState(
-                                    DisplayStrategy,
-                                    true,
-                                    VTN("Not Run", EXP + TOP,
-                                        VTN("MyFixture", EXP,
-                                            VTN("Test1", CHK),
-                                            VTN("Test2", SEL),
-                                            VTN("Test3", CHK)),
-                                        VTN("FixtureA", EXP + CHK)));
-
-                            default:
-                                throw new Exception($"ExpectedVisualState: Fixture list grouping {Grouping} is not recognized");
-                        }
-
-                    case "TEST_LIST":
-                        switch (Grouping)
-                        {
-                            case "ASSEMBLY":
-                                return VisualStateFactory.CreateVisualState(
-                                    DisplayStrategy,
-                                    true,
-                                    VTN("Assembly1", EXP + TOP,
+                        case "CATEGORY":
+                        case "CATEGORY_EXTENDED":
+                            return VisualStateFactory.CreateVisualState(
+                                DisplayStrategy,
+                                true,
+                                VTN("None", EXP + TOP,
+                                    VTN("MyFixture", EXP,
                                         VTN("Test1", CHK),
                                         VTN("Test2", SEL),
                                         VTN("Test3", CHK)),
-                                    VTN("Assembly2", EXP));
+                                    VTN("FixtureA", EXP + CHK)));
 
-                            case "FIXTURE":
-                                return VisualStateFactory.CreateVisualState(
-                                    DisplayStrategy,
-                                    true,
-                                    VTN("MyFixture", EXP + TOP,
+                        case "OUTCOME":
+                        case "DURATION":
+                            return VisualStateFactory.CreateVisualState(
+                                DisplayStrategy,
+                                true,
+                                VTN("Not Run", EXP + TOP,
+                                    VTN("MyFixture", EXP,
                                         VTN("Test1", CHK),
                                         VTN("Test2", SEL),
                                         VTN("Test3", CHK)),
-                                    VTN("FixtureA", EXP + CHK));
+                                    VTN("FixtureA", EXP + CHK)));
 
-                            case "CATEGORY":
-                            case "CATEGORY_EXTENDED":
-                                return VisualStateFactory.CreateVisualState(
-                                    DisplayStrategy,
-                                    true,
-                                    VTN("None", EXP + TOP,
-                                        VTN("Test1", CHK),
-                                        VTN("Test2", SEL),
-                                        VTN("Test3", CHK)));
+                        default:
+                            throw new Exception($"ExpectedVisualState: Fixture list grouping {Grouping} is not recognized");
+                    }
 
-                            case "OUTCOME":
-                            case "DURATION":
-                                return VisualStateFactory.CreateVisualState(
-                                    DisplayStrategy,
-                                    true,
-                                    VTN("Not Run", EXP + TOP,
-                                        VTN("Test1", CHK),
-                                        VTN("Test2", SEL),
-                                        VTN("Test3", CHK)));
+                case "TEST_LIST":
+                    switch (Grouping)
+                    {
+                        case "ASSEMBLY":
+                            return VisualStateFactory.CreateVisualState(
+                                DisplayStrategy,
+                                true,
+                                VTN("Assembly1", EXP + TOP,
+                                    VTN("Test1", CHK),
+                                    VTN("Test2", SEL),
+                                    VTN("Test3", CHK)),
+                                VTN("Assembly2", EXP));
 
-                            default:
-                                throw new Exception($"ExpectedVisualState: Test list grouping {Grouping} is not recognized");
-                        }
-                }
+                        case "FIXTURE":
+                            return VisualStateFactory.CreateVisualState(
+                                DisplayStrategy,
+                                true,
+                                VTN("MyFixture", EXP + TOP,
+                                    VTN("Test1", CHK),
+                                    VTN("Test2", SEL),
+                                    VTN("Test3", CHK)),
+                                VTN("FixtureA", EXP + CHK));
 
-                throw new Exception($"ExpectedVisualState: Unrecognized DisplayStrategy: {DisplayStrategy}");
+                        case "CATEGORY":
+                        case "CATEGORY_EXTENDED":
+                            return VisualStateFactory.CreateVisualState(
+                                DisplayStrategy,
+                                true,
+                                VTN("None", EXP + TOP,
+                                    VTN("Test1", CHK),
+                                    VTN("Test2", SEL),
+                                    VTN("Test3", CHK)));
+
+                        case "OUTCOME":
+                        case "DURATION":
+                            return VisualStateFactory.CreateVisualState(
+                                DisplayStrategy,
+                                true,
+                                VTN("Not Run", EXP + TOP,
+                                    VTN("Test1", CHK),
+                                    VTN("Test2", SEL),
+                                    VTN("Test3", CHK)));
+
+                        default:
+                            throw new Exception($"ExpectedVisualState: Test list grouping {Grouping} is not recognized");
+                    }
             }
+
+            throw new Exception($"ExpectedVisualState: Unrecognized DisplayStrategy: {DisplayStrategy}");
+        }
+
+        public VisualState GetSimulatedVisualStateAfterTestRun()
+        { 
+            switch(DisplayStrategy)
+            {
+                case "NUNIT_TREE":
+                    return GetExpectedVisualState();
+
+                case "FIXTURE_LIST":
+                    switch (Grouping)
+                    {
+                        case "ASSEMBLY":
+                        case "FIXTURE":
+                        case "CATEGORY":
+                        case "CATEGORY_EXTENDED":
+                            return GetExpectedVisualState();
+                        case "OUTCOME":
+                            return VisualStateFactory.CreateVisualState(
+                                DisplayStrategy,
+                                true,
+                                VTN("Passed", EXP + TOP,
+                                    VTN("MyFixture", EXP,
+                                        VTN("Test1", CHK),
+                                        VTN("Test2", SEL),
+                                        VTN("Test3", CHK)),
+                                    VTN("FixtureA", EXP + CHK)));
+                        case "DURATION":
+                            return VisualStateFactory.CreateVisualState(
+                                DisplayStrategy,
+                                true,
+                                VTN("Not Run", EXP + TOP,
+                                    VTN("MyFixture", EXP,
+                                        VTN("Test1", CHK),
+                                        VTN("Test2", SEL),
+                                        VTN("Test3", CHK)),
+                                    VTN("FixtureA", EXP + CHK)));
+                    }
+
+                    throw new Exception($"SimulateVisualStateAfterTestRun: Fixture list grouping {Grouping} is not recognized");
+
+                case "TEST_LIST":
+                    switch (Grouping)
+                    {
+                        case "ASSEMBLY":
+                        case "FIXTURE":
+                        case "CATEGORY":
+                        case "CATEGORY_EXTENDED":
+                            return GetExpectedVisualState();
+                        case "OUTCOME":
+                            return VisualStateFactory.CreateVisualState(
+                                DisplayStrategy,
+                                true,
+                                VTN("Passed", EXP + TOP,
+                                    VTN("Test1", CHK),
+                                    VTN("Test2", SEL),
+                                    VTN("Test3", CHK)));
+                        case "DURATION":
+                            return VisualStateFactory.CreateVisualState(
+                                DisplayStrategy,
+                                true,
+                                VTN("Not Run", EXP + TOP,
+                                    VTN("Test1", CHK),
+                                    VTN("Test2", SEL),
+                                    VTN("Test3", CHK)));
+                    }
+
+                    throw new Exception($"SimulateVisualStateAfterTestRun: Fixture list grouping {Grouping} is not recognized");
+            }
+
+            throw new Exception($"SimulateVisualStateAfterTestRun: Unrecognized DisplayStrategy: {DisplayStrategy}");
         }
 
         // Helper used to create a TreeNode for use in the tests

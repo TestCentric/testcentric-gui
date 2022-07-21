@@ -137,7 +137,7 @@ namespace TestCentric.Gui
                 foreach (TreeNode treeNode in treeNodes)
                 {
                     Console.WriteLine($"Examining TreeNode {treeNode}");
-                    if (treeNode.Text == visualNode.Name)
+                    if (treeNode.Text == visualNode.Name || treeNode.Text == "Not Run")
                     {
                         Console.WriteLine($"Applying VisualNode {visualNode.Name} to TreeNode {treeNode.Text}");
                         ApplyVisualNodeToTreeNode(visualNode, treeNode);

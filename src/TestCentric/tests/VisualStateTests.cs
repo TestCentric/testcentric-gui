@@ -23,8 +23,8 @@ namespace TestCentric.Gui
         public VisualStateTests(VisualStateTestData data)
         {
             _data = data;
-            ExpandedTreeView = data.ExpandedTreeView;
-            ExpectedVisualState = data.ExpectedVisualState;
+            ExpandedTreeView = data.GetExpandedTreeView();
+            ExpectedVisualState = data.GetExpectedVisualState();
         }
 
         [Test]
@@ -46,7 +46,7 @@ namespace TestCentric.Gui
 
             ExpectedVisualState.ApplyTo(treeView);
 
-            VerifyTreeView(treeView, selectedNode:"Test2");
+            VerifyTreeView(treeView, selectedNode: "Test2");
         }
 
         [Test]
@@ -135,20 +135,55 @@ namespace TestCentric.Gui
                 // TODO: Categories not yet supported
                 //Assert.AreEqual(ExpectedVisualState.SelectedCategories, restoredState.SelectedCategories);
                 //Assert.AreEqual(ExpectedVisualState.ExcludeCategories, restoredState.ExcludeCategories);
-                //Assert.That(restoredState.Nodes, Is.EqualTo(ExpectedVisualState.Nodes));
-                Assert.That(restoredState.Nodes[0], Is.EqualTo(ExpectedVisualState.Nodes[0]));
+                Assert.That(restoredState.Nodes, Is.EqualTo(ExpectedVisualState.Nodes));
             });
+        }
+
+        [Test]
+        // This test verifies that the visual state is saved and restored
+        // in the form of the tree created by a test run, which may differ
+        // from the initial form upon load.
+        public void CanSaveAndReloadVisualStateAfterTestRun()
+        {
+            StringWriter writer = new StringWriter();
+            var visualState = _data.GetSimulatedVisualStateAfterTestRun();
+            visualState.Save(writer);
+
+            string output = writer.GetStringBuilder().ToString();
+            StringReader reader = new StringReader(output);
+
+            VisualState restoredState = VisualState.LoadFrom(reader);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(restoredState.ShowCheckBoxes, Is.EqualTo(visualState.ShowCheckBoxes));
+                // TODO: Categories not yet supported
+                //Assert.AreEqual(ExpectedVisualState.SelectedCategories, restoredState.SelectedCategories);
+                //Assert.AreEqual(ExpectedVisualState.ExcludeCategories, restoredState.ExcludeCategories);
+                Assert.That(restoredState.Nodes, Is.EqualTo(visualState.Nodes));
+            });
+        }
+
+        [Test]
+        // This test verifies that when the visual state created after a test
+        // run is applied, the normal tree shape prior to a run is restored.
+        // E.g.: groups like "Passed", "Failed", etc. all become "Not Run".
+        public void CanApplyVisualState_AfterTestRun()
+        {
+            var treeView = _data.GetInitialTreeView();
+            var visualState = _data.GetSimulatedVisualStateAfterTestRun();
+
+            visualState.ApplyTo(treeView);
+
+            VerifyTreeView(treeView, selectedNode: "Test2");
         }
 
         // Helper used to create a TreeNode for use in the tests
         // NOTE: Unlike the TreeNodes used in the production app, the Tag
         // is not set because VisualState doesn't make use of it.
-        public static TreeNode TN(string name, params TreeNode[] childNodes)
+        private static TreeNode TN(string name, params TreeNode[] childNodes)
         {
-            var treeNode = new TreeNode(name);
-            if (childNodes.Length > 0)
-                treeNode.Nodes.AddRange(childNodes);
-            return treeNode;
+            return VisualStateTestData.TN(name, childNodes);
         }
 
         #region Helper method to handle common asserts
