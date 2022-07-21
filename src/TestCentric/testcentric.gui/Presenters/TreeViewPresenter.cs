@@ -15,6 +15,7 @@ namespace TestCentric.Gui.Presenters
     using Dialogs;
     using System.Xml;
     using System.Drawing;
+    using System.IO;
 
     /// <summary>
     /// TreeViewPresenter is the presenter for the TestTreeView
@@ -40,8 +41,6 @@ namespace TestCentric.Gui.Presenters
             _view.ShowCheckBoxes.Checked = _view.CheckBoxes = _treeSettings.ShowCheckBoxes;
             _view.AlternateImageSet = _treeSettings.AlternateImageSet;
 
-            //InitializeRunCommands();
-
             WireUpEvents();
         }
 
@@ -56,8 +55,29 @@ namespace TestCentric.Gui.Presenters
             {
                 EnsureNonRunnableFilesAreVisible(ea.Test);
 
-                Strategy.OnTestLoaded(ea.Test);
-                //InitializeRunCommands();
+                VisualState visualState;
+
+                if (TryLoadVisualState(out visualState))
+                {
+                    switch (visualState.DisplayStrategy)
+                    {
+                        case "NUNIT_TREE":
+                            Strategy = new NUnitTreeDisplayStrategy(_view, _model);
+                            break;
+                        case "FIXTURE_LIST":
+                            Strategy = new FixtureListDisplayStrategy(_view, _model);
+                            break;
+                        case "TEST_LIST":
+                            Strategy = new TestListDisplayStrategy(_view, _model);
+                            break;
+                        default:
+                            throw new Exception($"Invalid DisplayStrategy: {visualState.DisplayStrategy}");
+                    }
+                }
+                else
+                    Strategy = new NUnitTreeDisplayStrategy(_view, _model);
+
+                Strategy.OnTestLoaded(ea.Test, visualState);
                 CheckPropertiesDisplay();
                 CheckXmlDisplay();
             };
@@ -66,36 +86,29 @@ namespace TestCentric.Gui.Presenters
             {
                 EnsureNonRunnableFilesAreVisible(ea.Test);
 
-                Strategy.OnTestLoaded(ea.Test);
+                Strategy.OnTestLoaded(ea.Test, null);
                 _view.CheckBoxes = _view.ShowCheckBoxes.Checked; // TODO: View should handle this
-                //InitializeRunCommands();
             };
 
             _model.Events.TestUnloaded += (ea) =>
             {
                 Strategy.OnTestUnloaded();
-                //InitializeRunCommands();
             };
 
             _model.Events.TestsUnloading += ea =>
             {
-                Strategy.OnTestsUnloading();
+                Strategy.SaveVisualState();
                 ClosePropertiesDisplay();
                 CloseXmlDisplay();
             };
 
-            _model.Events.TestsReloading += ea => Strategy.OnTestsReloading();
+            _model.Events.TestsReloading += ea => Strategy.SaveVisualState();
 
 
             _model.Events.RunStarting += (ea) =>
             {
-                //InitializeRunCommands();
                 CheckPropertiesDisplay();
                 CheckXmlDisplay();
-            };
-            _model.Events.RunFinished += (ea) =>
-            {
-                //InitializeRunCommands();
             };
 
             _model.Events.TestFinished += OnTestFinished;
@@ -111,16 +124,9 @@ namespace TestCentric.Gui.Presenters
                     case "TestCentric.Gui.TestTree.DisplayFormat":
                     case "TestCentric.Gui.TestTree.TestList.GroupBy":
                     case "TestCentric.Gui.TestTree.FixtureList.GroupBy":
-                        CreateDisplayStrategy(_treeSettings.DisplayFormat);
                         Strategy.Reload();
                         break;
                 }
-            };
-
-            // View actions - Initial Load
-            _view.Load += (s, e) =>
-            {
-                SetDefaultDisplayStrategy();
             };
 
             // View context commands
@@ -245,6 +251,20 @@ namespace TestCentric.Gui.Presenters
             Strategy.OnTestFinished(args.Result);
 
             _propertiesDisplay?.OnTestFinished(args.Result);
+        }
+
+        private bool TryLoadVisualState(out VisualState visualState)
+        {
+            visualState = null;
+
+            if (_model.TestFiles.Count > 0)
+            {
+                var filename = VisualState.GetVisualStateFileName(_model.TestFiles[0]);
+                if (File.Exists(filename))
+                    visualState = VisualState.LoadFrom(filename);
+            }
+
+            return visualState != null;
         }
 
         TestPropertiesDisplay _propertiesDisplay;
@@ -375,34 +395,6 @@ namespace TestCentric.Gui.Presenters
 
             var layout = _model.Settings.Gui.GuiLayout;
             _view.TestPropertiesCommand.Visible = layout == "Mini";
-        }
-
-        private void SetDefaultDisplayStrategy()
-        {
-            CreateDisplayStrategy(_treeSettings.DisplayFormat);
-        }
-
-        private void SetDisplayStrategy(string format)
-        {
-            CreateDisplayStrategy(format);
-            _treeSettings.DisplayFormat = format;
-        }
-
-        private void CreateDisplayStrategy(string format)
-        {
-            switch (format.ToUpperInvariant())
-            {
-                default:
-                case "NUNIT_TREE":
-                    Strategy = new NUnitTreeDisplayStrategy(_view, _model);
-                    break;
-                case "FIXTURE_LIST":
-                    Strategy = new FixtureListDisplayStrategy(_view, _model);
-                    break;
-                case "TEST_LIST":
-                    Strategy = new TestListDisplayStrategy(_view, _model);
-                    break;
-            }
         }
 
         private void ChangePackageSettingAndReload(string key, object setting)

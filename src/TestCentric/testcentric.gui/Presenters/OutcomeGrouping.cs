@@ -34,6 +34,8 @@ namespace TestCentric.Gui.Presenters
 
         #region Overrides
 
+        public override string ID => "OUTCOME";
+
         public override void Load(IEnumerable<TestNode> tests)
         {
             foreach (TestGroup group in Groups)

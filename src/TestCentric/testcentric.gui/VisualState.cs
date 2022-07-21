@@ -6,30 +6,48 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 
 namespace TestCentric.Gui
 {
-    using Model;
-    using Views;
-    using Presenters;
-    using Elements;
-
     /// <summary>
     /// The VisualState class holds the latest visual state for a project.
     /// </summary>
     [Serializable]
     public class VisualState
     {
+        // Default constructor is required for serialization
+        public VisualState() { }
+
+        public VisualState(string strategyID)
+        {
+            DisplayStrategy = strategyID;
+        }
+
+        public VisualState(string strategyID, string groupID)
+        {
+            if (strategyID == "NUNIT_TREE")
+                throw new ArgumentException("When strategy is NUNIT_TREE, groupID may not be specified", nameof(groupID));
+
+            DisplayStrategy = strategyID;
+            GroupBy = groupID;
+        }
+
         #region Fields
 
         [XmlAttribute]
+        public string DisplayStrategy;
+
+        [XmlAttribute]
+        public string GroupBy;
+
+        [XmlIgnore]
+        public bool GroupBySpecified => GroupBy != null;
+
+        [XmlAttribute, DefaultValue(false)]
         public bool ShowCheckBoxes;
-
-        public VisualTreeNode SelectedNode;
-
-        public VisualTreeNode TopNode;
 
         // TODO: Categories not yet supported
         //public List<string> SelectedCategories;
@@ -87,12 +105,6 @@ namespace TestCentric.Gui
         private void RecordVisualNode(VisualTreeNode visualNode, List<VisualTreeNode> visualNodes)
         {
             visualNodes.Add(visualNode);
-
-            if (visualNode.Selected)
-                SelectedNode = visualNode;
-
-            if (visualNode.IsTopNode)
-                TopNode = visualNode;
         }
 
         #endregion
@@ -119,14 +131,15 @@ namespace TestCentric.Gui
         private void ApplyVisualNodesToTreeNodes(List<VisualTreeNode> visualNodes, TreeNodeCollection treeNodes)
         {
             // Find matching names
-            for (int i = 0; i < visualNodes.Count; i++)
+            foreach (var visualNode in visualNodes)
             {
-                var visualNode = visualNodes[i];
-
+                Console.WriteLine($"Examining VisualNode {visualNode}");
                 foreach (TreeNode treeNode in treeNodes)
                 {
-                    if (treeNode.Text == visualNode.Name)
+                    Console.WriteLine($"Examining TreeNode {treeNode}");
+                    if (treeNode.Text == visualNode.Name || treeNode.Text == "Not Run")
                     {
+                        Console.WriteLine($"Applying VisualNode {visualNode.Name} to TreeNode {treeNode.Text}");
                         ApplyVisualNodeToTreeNode(visualNode, treeNode);
                         break;
                     }
@@ -144,11 +157,11 @@ namespace TestCentric.Gui
 
             treeNode.Checked = visualNode.Checked;
 
-            if (SelectedNode.Matches(treeNode))
-                _selectedTreeNode = treeNode;
-
-            if (TopNode.Matches(treeNode))
+            if (visualNode.IsTopNode)
                 _topTreeNode = treeNode;
+
+            if (visualNode.Selected)
+                _selectedTreeNode = treeNode;
 
             ApplyVisualNodesToTreeNodes(visualNode.Nodes, treeNode.Nodes);
         }
@@ -191,22 +204,17 @@ namespace TestCentric.Gui
 
         #endregion
 
-        // Public for testing
-        //public void BuildNodeIndex()
-        //{
-        //    _nodeIndex.Clear();
+        #region Dump VisualState to Console 
 
-        //    foreach (var node in Nodes)
-        //        IndexNodeAndChildren(node);
-        //}
+        public void Dump()
+        {
+            var writer = new StringWriter();
+            Save(writer);
 
-        //private void IndexNodeAndChildren(VisualTreeNode node)
-        //{
-        //    _nodeIndex.Add(node.Id, node);
+            Console.WriteLine(writer.GetStringBuilder().ToString());
+        }
 
-        //    foreach (var child in node.Nodes)
-        //        IndexNodeAndChildren(child);
-        //}
+        #endregion
 
         #endregion
     }
@@ -217,20 +225,23 @@ namespace TestCentric.Gui
         [XmlAttribute]
         public string Name;
 
-        [XmlAttribute, System.ComponentModel.DefaultValue(false)]
+        [XmlAttribute, DefaultValue(false)]
         public bool Expanded;
 
-        [XmlAttribute, System.ComponentModel.DefaultValue(false)]
+        [XmlAttribute, DefaultValue(false)]
         public bool Checked;
 
-        [XmlAttribute, System.ComponentModel.DefaultValue(false)]
+        [XmlAttribute, DefaultValue(false)]
         public bool Selected;
 
-        [XmlAttribute, System.ComponentModel.DefaultValue(false)]
+        [XmlAttribute, DefaultValue(false)]
         public bool IsTopNode;
 
         [XmlArrayItem("Node")]
         public List<VisualTreeNode> Nodes = new List<VisualTreeNode>();
+
+        [XmlIgnore]
+        public bool NodesSpecified => Nodes.Count > 0;
 
         /// <summary>
         /// Return true if this VisualTreeNode matches a TreeNode

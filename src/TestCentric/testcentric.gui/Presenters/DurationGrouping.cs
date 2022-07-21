@@ -22,6 +22,8 @@ namespace TestCentric.Gui.Presenters
 
         #region Overrides
 
+        public override string ID => "DURATION";
+
         public override void Load(IEnumerable<TestNode> tests)
         {
             Groups.Clear();

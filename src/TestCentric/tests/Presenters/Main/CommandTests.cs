@@ -261,16 +261,17 @@ namespace TestCentric.Gui.Presenters.Main
             _model.Received().RunTests(Arg.Any<TestSelection>());
         }
 
-        [Test]
-        public void DisplayFormatChange_ChangesModelSetting()
-        {
-            _view.DisplayFormat.SelectedItem.Returns("TEST_LIST");
-            _view.DisplayFormat.SelectionChanged += Raise.Event<CommandHandler>();
+        //// TODO: No longer a setting, replace with change to VisualState
+        //[Test]
+        //public void DisplayFormatChange_ChangesModelSetting()
+        //{
+        //    _view.DisplayFormat.SelectedItem.Returns("TEST_LIST");
+        //    _view.DisplayFormat.SelectionChanged += Raise.Event<CommandHandler>();
 
-            // FakeSettings saves the setting so we can check if it was set
-            var setting = (string)_model.Settings.GetSetting("Gui.TestTree.DisplayFormat");
-            Assert.That(setting, Is.EqualTo("TEST_LIST"));
-        }
+        //    // FakeSettings saves the setting so we can check if it was set
+        //    var setting = (string)_model.Settings.GetSetting("Gui.TestTree.DisplayFormat");
+        //    Assert.That(setting, Is.EqualTo("TEST_LIST"));
+        //}
 
         [Test]
         public void GroupByChange_ChangesModelSetting()

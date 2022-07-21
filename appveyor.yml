@@ -1,6 +1,7 @@
 image: Visual Studio 2019
 
 build_script: 
+  - cmd: dotnet --info
   - ps: .\build.ps1 --Target=AppVeyor --Configuration=Release
   
 # disable built-in tests.

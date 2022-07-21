@@ -43,7 +43,8 @@ namespace TestCentric.Gui.Presenters.TestTree
         public void WhenTestsAreLoaded_TreeViewIsLoaded()
         {
             _strategy.OnTestLoaded(
-                new TestNode("<test-run id='1'><test-suite id='42'/><test-suite id='99'/></test-run>"));
+                new TestNode("<test-run id='1'><test-suite id='42'/><test-suite id='99'/></test-run>"),
+                null);
 
             _view.Received().Clear();
             _view.Received().Add(Arg.Compat.Is<TreeNode>((tn) => (tn.Tag as TestNode).Id == "42"));
