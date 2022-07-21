@@ -181,6 +181,9 @@ namespace TestCentric.Gui.Presenters
             {
                 _stopRequested = _forcedStopRequested = false;
                 UpdateViewCommands();
+
+                // Hide the run summary
+                _view.RunSummaryButton.Checked = false;
             };
 
             _model.Events.RunFinished += (TestResultEventArgs e) => OnRunFinished(e.Result);
@@ -209,7 +212,6 @@ namespace TestCentric.Gui.Presenters
                 //if (e.Result.Outcome.Status == TestStatus.Failed)
                 //    _view.Activate();
 
-                // TODO: Should this be an option?
                 // Display the run summary
                 _view.RunSummaryButton.Checked = true;
 
