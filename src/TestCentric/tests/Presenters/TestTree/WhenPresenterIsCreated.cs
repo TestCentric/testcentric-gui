@@ -24,26 +24,26 @@ namespace TestCentric.Gui.Presenters.TestTree
             _view.ShowCheckBoxes.Received().Checked = showCheckBoxes;
         }
 
-        [Test]
-        public void StrategyIsSet()
-        {
-            string displayFormat = _settings.Gui.TestTree.DisplayFormat.ToUpperInvariant();
+        //[Test]
+        //public void StrategyIsSet()
+        //{
+        //    string displayFormat = _settings.Gui.TestTree.DisplayFormat.ToUpperInvariant();
 
-            switch (displayFormat)
-            {
-                case "NUNIT_TREE":
-                    Assert.That(_presenter.Strategy, Is.TypeOf<NUnitTreeDisplayStrategy>());
-                    break;
-                case "TEST_LIST":
-                    Assert.That(_presenter.Strategy, Is.TypeOf<FixtureListDisplayStrategy>());
-                    break;
-                case "FIXTURE_LIST":
-                    Assert.That(_presenter.Strategy, Is.TypeOf<TestListDisplayStrategy>());
-                    break;
-                default:
-                    Assert.Fail($"{displayFormat} is not a valid display format");
-                    break;
-            }
-        }
+        //    switch (displayFormat)
+        //    {
+        //        case "NUNIT_TREE":
+        //            Assert.That(_presenter.Strategy, Is.TypeOf<NUnitTreeDisplayStrategy>());
+        //            break;
+        //        case "TEST_LIST":
+        //            Assert.That(_presenter.Strategy, Is.TypeOf<FixtureListDisplayStrategy>());
+        //            break;
+        //        case "FIXTURE_LIST":
+        //            Assert.That(_presenter.Strategy, Is.TypeOf<TestListDisplayStrategy>());
+        //            break;
+        //        default:
+        //            Assert.Fail($"{displayFormat} is not a valid display format");
+        //            break;
+        //    }
+        //}
     }
 }

@@ -29,16 +29,20 @@ namespace TestCentric.Gui.Presenters
             get { return "NUnit Tree"; }
         }
 
-        public override void OnTestLoaded(TestNode testNode)
+        public override void OnTestLoaded(TestNode testNode, VisualState visualState)
         {
             ClearTree();
 
             foreach (var topLevelNode in testNode.Children)
                 _view.Add(MakeTreeNode(topLevelNode, true));
 
-            if (!TryRestoreVisualState())
+            if (visualState != null)
+                visualState.ApplyTo(_view.TreeView);
+            else
                 SetDefaultInitialExpansion();
         }
+
+        protected override VisualState CreateVisualState() => new VisualState("NUNIT_TREE").LoadFrom(_view.TreeView);
 
         private void SetDefaultInitialExpansion()
         {

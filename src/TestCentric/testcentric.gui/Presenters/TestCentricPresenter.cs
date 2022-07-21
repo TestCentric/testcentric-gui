@@ -81,8 +81,6 @@ namespace TestCentric.Gui.Presenters
             _view.Font = _settings.Gui.Font;
             _view.ResultTabs.SelectedIndex = _settings.Gui.SelectedTab;
 
-            SetTreeDisplayFormat(_settings.Gui.TestTree.DisplayFormat);
-
             UpdateViewCommands();
 
             foreach (string format in _model.ResultFormats)
@@ -895,7 +893,6 @@ namespace TestCentric.Gui.Presenters
         private void SetTreeDisplayFormat(string displayFormat)
         {
             _view.DisplayFormat.SelectedItem = displayFormat;
-            _settings.Gui.TestTree.DisplayFormat = displayFormat;
 
             switch (displayFormat)
             {

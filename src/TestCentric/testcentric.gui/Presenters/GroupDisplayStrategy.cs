@@ -205,15 +205,6 @@ namespace TestCentric.Gui.Presenters
             }
         }
 
-        protected override void TrySaveVisualState()
-        {
-            if (_model.TestFiles.Count > 0)
-            {
-                var visualState = new VisualState(StrategyID, _grouping?.ID ?? "ASSEMBLY").LoadFrom(_view.TreeView);
-                visualState.Save(VisualState.GetVisualStateFileName(_model.TestFiles[0]));
-            }
-        }
-
         #endregion
     }
 }

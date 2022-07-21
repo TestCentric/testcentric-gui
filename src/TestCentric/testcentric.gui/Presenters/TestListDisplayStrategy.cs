@@ -36,7 +36,7 @@ namespace TestCentric.Gui.Presenters
             get { return "Tests By " + DefaultGroupSetting; }
         }
 
-        public override void OnTestLoaded(TestNode testNode)
+        public override void OnTestLoaded(TestNode testNode, VisualState visualState)
         {
             ClearTree();
 
@@ -82,8 +82,10 @@ namespace TestCentric.Gui.Presenters
                     break;
             }
 
-            TryRestoreVisualState();
+            visualState?.ApplyTo(_view.TreeView);
         }
+
+        protected override VisualState CreateVisualState() => new VisualState("TEST_LIST", _grouping.ID).LoadFrom(_view.TreeView);
 
         #endregion
 

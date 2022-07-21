@@ -36,7 +36,9 @@ namespace TestCentric.Gui.Presenters
             get { return "Fixtures By " + DefaultGroupSetting; }
         }
 
-        public override void OnTestLoaded(TestNode testNode)
+        protected override VisualState CreateVisualState() => new VisualState("FIXTURE_LIST", _grouping.ID).LoadFrom(_view.TreeView);
+
+        public override void OnTestLoaded(TestNode testNode, VisualState visualState)
         {
             ClearTree();
 
@@ -68,7 +70,7 @@ namespace TestCentric.Gui.Presenters
                     break;
             }
 
-            TryRestoreVisualState();
+            visualState?.ApplyTo(_view.TreeView);
         }
 
         #endregion

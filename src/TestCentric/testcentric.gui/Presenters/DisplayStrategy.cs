@@ -65,17 +65,11 @@ namespace TestCentric.Gui.Presenters
         /// <summary>
         /// Load all tests into the tree, starting from a root TestNode.
         /// </summary>
-        public abstract void OnTestLoaded(TestNode testNode);
+        public abstract void OnTestLoaded(TestNode testNode, VisualState visualState);
 
-        public virtual void OnTestsUnloading()
-        {
-            TrySaveVisualState();
-        }
+        public void SaveVisualState() => CreateVisualState().Save(VisualState.GetVisualStateFileName(_model.TestFiles[0]));
 
-        public virtual void OnTestsReloading()
-        {
-            TrySaveVisualState();
-        }
+        protected abstract VisualState CreateVisualState();
 
         public void OnTestUnloaded()
         {
@@ -96,7 +90,7 @@ namespace TestCentric.Gui.Presenters
             TestNode testNode = _model.LoadedTests;
             if (testNode != null)
             {
-                OnTestLoaded(testNode);
+                OnTestLoaded(testNode, null);
 
                 if (_view.Nodes != null) // TODO: Null when mocked
                     foreach (TreeNode treeNode in _view.Nodes)
@@ -160,35 +154,6 @@ namespace TestCentric.Gui.Presenters
                     treeNode.Nodes.Add(MakeTreeNode(childNode, true));
 
             return treeNode;
-        }
-
-        protected bool TryRestoreVisualState()
-        {
-            var visualState = LoadVisualStateIfAvailable();
-            visualState?.ApplyTo(_view.TreeView);
-
-            return true;
-        }
-
-        private VisualState LoadVisualStateIfAvailable()
-        {
-            if (_model.TestFiles.Count == 0)
-                return null;
-
-            var filename = VisualState.GetVisualStateFileName(_model.TestFiles[0]);
-            if (!File.Exists(filename))
-                return null;
-
-            return VisualState.LoadFrom(filename);
-        }
-
-        protected virtual void TrySaveVisualState()
-        {
-            if (_model.TestFiles.Count > 0)
-            {
-                var visualState = new VisualState(StrategyID).LoadFrom(_view.TreeView);
-                visualState.Save(VisualState.GetVisualStateFileName(_model.TestFiles[0]));
-            }
         }
 
         public string GroupDisplayName(TestGroup group)

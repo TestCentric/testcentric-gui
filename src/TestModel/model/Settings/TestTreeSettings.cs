@@ -20,12 +20,6 @@ namespace TestCentric.Gui.Model.Settings
             get { return new TestListSettings(_settingsService, GroupPrefix); }
         }
 
-        public string DisplayFormat
-        {
-            get { return GetSetting(nameof(DisplayFormat), "NUNIT_TREE"); }
-            set { SaveSetting(nameof(DisplayFormat), value); }
-        }
-
         public int InitialTreeDisplay
         {
             get { return GetSetting(nameof(InitialTreeDisplay), 0); }
