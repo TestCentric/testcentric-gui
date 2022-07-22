@@ -1,7 +1,8 @@
 {
   "profiles": {
     "testcentric.engine.core.tests": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "--test:TestCentric.Engine.Internal.TestFilterExtensionTests"
     }
   }
 }
