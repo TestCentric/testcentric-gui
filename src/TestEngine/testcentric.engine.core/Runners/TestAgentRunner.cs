@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Xml;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
 using TestCentric.Engine.Drivers;
@@ -204,16 +205,19 @@ namespace TestCentric.Engine.Runners
 
             string driverResult;
 
-            try
-            {
-                driverResult = _driver.Run(listener, filter.Text);
-                log.Debug("Got driver Result");
-            }
-            catch (Exception ex) when (!(ex is NUnitEngineException))
-            {
-                log.Debug("An exception occurred in the driver while running tests.", ex);
-                throw new NUnitEngineException("An exception occurred in the driver while running tests.", ex);
-            }
+            if (filter.Excludes(TestPackage))
+                driverResult = $"<test-suite type='Assembly' name='{TestPackage.Name}' fullname='{TestPackage.FullName}' result='Skipped'><reason><message>Filter excludes this assembly</message></reason></test-suite>";
+            else
+                try
+                {
+                    driverResult = _driver.Run(listener, filter.Text);
+                    log.Debug("Got driver Result");
+                }
+                catch (Exception ex) when (!(ex is NUnitEngineException))
+                {
+                    log.Debug("An exception occurred in the driver while running tests.", ex);
+                    throw new NUnitEngineException("An exception occurred in the driver while running tests.", ex);
+                }
 
             if (_assemblyResolver != null)
                 _assemblyResolver.RemovePathFromFile(TestPackage.FullName);
