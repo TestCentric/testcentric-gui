@@ -13,7 +13,7 @@ const string DEFAULT_CONFIGURATION = "Release";
 // NOTE: This must match what is actually referenced by
 // the GUI test model project. Hopefully, this is a temporary
 // fix, which we can get rid of in the future.
-const string REF_ENGINE_VERSION = "2.0.0-alpha6";
+const string REF_ENGINE_VERSION = "2.0.0-dev00002";
 
 const string PACKAGE_NAME = "testcentric-gui";
 const string NUGET_PACKAGE_NAME = "TestCentric.GuiRunner";
