@@ -101,7 +101,7 @@ public abstract class PackageTester : GuiTester
 	protected static readonly string[] NET_FRAMEWORK_AGENT_FILES = {
 		"testcentric-agent.exe", "testcentric-agent.exe.config", "testcentric-agent-x86.exe", "testcentric-agent-x86.exe.config" };
 	protected static readonly string[] NET_CORE_AGENT_FILES = {
-		"testcentric-agent.dll", "testcentric-agent.dll.config", "testcentric-agent-x86.dll", "testcentric-agent-x86.dll.config" };
+		"testcentric-agent.dll", "testcentric-agent.dll.config" };
 	protected static readonly string[] GUI_FILES = {
         "testcentric.exe", "testcentric.exe.config", "tc-next.exe", "tc-next.exe.config", "nunit.uiexception.dll",
         "TestCentric.Gui.Runner.dll", "Experimental.Gui.Runner.dll", "TestCentric.Gui.Model.dll", "TestCentric.Common.dll" };
