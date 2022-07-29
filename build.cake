@@ -44,12 +44,16 @@ using System.Threading.Tasks;
 Setup<BuildParameters>((context) =>
 {
 	var parameters = BuildParameters.Create(context);
-	Information("BuildParameters created");
-
-	if (BuildSystem.IsRunningOnAppVeyor)
-			AppVeyor.UpdateBuildVersion(parameters.PackageVersion + "-" + AppVeyor.Environment.Build.Number);
 
     Information("Building {0} version {1} of TestCentric GUI.", parameters.Configuration, parameters.PackageVersion);
+
+	if (BuildSystem.IsRunningOnAppVeyor)
+	{
+		var buildVersion = $"{parameters.PackageVersion}-{AppVeyor.Environment.Build.Number}";
+
+		Information($"Changing AppVeyor build to {buildVersion}");
+		AppVeyor.UpdateBuildVersion(buildVersion);
+	}
 
 	return parameters;
 });
