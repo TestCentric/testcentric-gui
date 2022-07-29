@@ -44,6 +44,7 @@ using System.Threading.Tasks;
 Setup<BuildParameters>((context) =>
 {
 	var parameters = BuildParameters.Create(context);
+	Information("BuildParameters created");
 
 	if (BuildSystem.IsRunningOnAppVeyor)
 			AppVeyor.UpdateBuildVersion(parameters.PackageVersion + "-" + AppVeyor.Environment.Build.Number);
