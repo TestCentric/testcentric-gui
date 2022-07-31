@@ -15,7 +15,6 @@ const string NUGET_PACKAGE_NAME = "TestCentric.GuiRunner";
 const string METADATA_PACKAGE_NAME = "TestCentric.Metadata";
 
 const string GUI_RUNNER = "testcentric.exe";
-const string EXPERIMENTAL_RUNNER = "tc-next.exe";
 const string ALL_TESTS = "*.Tests.dll";
 
 const string DEFAULT_TEST_RESULT_FILE = "TestResult.xml";
