@@ -103,8 +103,8 @@ public abstract class PackageTester : GuiTester
 	protected static readonly string[] NET_CORE_AGENT_FILES = {
 		"testcentric-agent.dll", "testcentric-agent.dll.config" };
 	protected static readonly string[] GUI_FILES = {
-        "testcentric.exe", "testcentric.exe.config", "tc-next.exe", "tc-next.exe.config", "nunit.uiexception.dll",
-        "TestCentric.Gui.Runner.dll", "Experimental.Gui.Runner.dll", "TestCentric.Gui.Model.dll", "TestCentric.Common.dll" };
+        "testcentric.exe", "testcentric.exe.config", "nunit.uiexception.dll",
+        "TestCentric.Gui.Runner.dll", "TestCentric.Gui.Model.dll", "TestCentric.Common.dll" };
     protected static readonly string[] TREE_ICONS_JPG = {
         "Success.jpg", "Failure.jpg", "Ignored.jpg", "Inconclusive.jpg", "Skipped.jpg" };
     protected static readonly string[] TREE_ICONS_PNG = {
@@ -194,11 +194,6 @@ public abstract class PackageTester : GuiTester
 
 		// Level 2 tests are run for PRs and when packages will be published
 
-		// TODO: Ensure that experimental runner saves results and handles --unattended
-		// PackageTests.Add(new PackageTest(2, ExperimentalRunner,
-		// 	"TestCentric.Gui.Model.Tests.dll",
-		// 	new ExpectedResult("Passed"),
-		// 	"Run tests of the TestCentric model using the Experimental Runner"));
 		PackageTests.Add(new PackageTest(2, "Run mock-assembly.dll built for NUnit V2", StandardRunner,
 			"v2-tests/mock-assembly.dll",
 			new ExpectedResult("Failed")
@@ -248,7 +243,6 @@ public abstract class PackageTester : GuiTester
 	private List<PackageTest> PackageTests { get; }
 
 	protected string StandardRunner => PackageTestBinDirectory + GUI_RUNNER;
-	protected string ExperimentalRunner => PackageTestBinDirectory + EXPERIMENTAL_RUNNER;
 
 	public void RunAllTests()
 	{
@@ -387,7 +381,6 @@ public class ZipPackageTester : PackageTester
 		HasDirectory("bin/agents/netcoreapp2.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
 		HasDirectory("bin/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
 		HasDirectory("bin/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
-		HasDirectory("bin/Images").WithFiles("DebugTests.png", "RunTests.png"),
 		HasDirectory("bin/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
 		HasDirectory("bin/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
 		HasDirectory("bin/Images/Tree/Default").WithFiles(TREE_ICONS_PNG),
@@ -420,7 +413,6 @@ public class NuGetPackageTester : PackageTester
 		HasDirectory("tools/agents/netcoreapp2.1").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
 		HasDirectory("tools/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
 		HasDirectory("tools/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
-		HasDirectory("tools/Images").WithFiles("DebugTests.png", "RunTests.png"),
 		HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
 		HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
 		HasDirectory("tools/Images/Tree/Default").WithFiles(TREE_ICONS_PNG),
@@ -456,7 +448,6 @@ public class ChocolateyPackageTester : PackageTester
 		HasDirectory("tools/agents/netcoreapp2.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
 		HasDirectory("tools/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
 		HasDirectory("tools/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
-		HasDirectory("tools/Images").WithFiles("DebugTests.png", "RunTests.png"),
 		HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
 		HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
 		HasDirectory("tools/Images/Tree/Default").WithFiles(TREE_ICONS_PNG),
