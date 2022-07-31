@@ -42,37 +42,37 @@ namespace TestCentric.Engine
         [TestCaseSource(nameof(frameworkData))]
         public void CanCreateUsingFrameworkVersion(FrameworkData data)
         {
-            RuntimeFramework framework = new RuntimeFramework(data.runtime, data.frameworkVersion);
-            Assert.That(framework.Runtime, Is.EqualTo(data.runtime));
-            Assert.That(framework.FrameworkVersion, Is.EqualTo(data.frameworkVersion));
-            Assert.That(framework.ClrVersion, Is.EqualTo(data.clrVersion));
-            Assert.That(framework.FrameworkName, Is.EqualTo(data.frameworkName));
+            RuntimeFramework framework = new RuntimeFramework(data.Runtime, data.FrameworkVersion);
+            Assert.That(framework.Runtime, Is.EqualTo(data.Runtime));
+            Assert.That(framework.FrameworkVersion, Is.EqualTo(data.FrameworkVersion));
+            Assert.That(framework.ClrVersion, Is.EqualTo(data.ClrVersion));
+            Assert.That(framework.FrameworkName, Is.EqualTo(data.FrameworkName));
         }
 
         [TestCaseSource(nameof(frameworkData))]
         public void CanParseRuntimeFramework(FrameworkData data)
         {
-            RuntimeFramework framework = RuntimeFramework.Parse(data.representation);
-            Assert.That(framework.Runtime, Is.EqualTo(data.runtime));
-            Assert.That(framework.ClrVersion, Is.EqualTo(data.clrVersion));
-            Assert.That(framework.FrameworkName, Is.EqualTo(data.frameworkName));
+            RuntimeFramework framework = RuntimeFramework.Parse(data.Representation);
+            Assert.That(framework.Runtime, Is.EqualTo(data.Runtime));
+            Assert.That(framework.ClrVersion, Is.EqualTo(data.ClrVersion));
+            Assert.That(framework.FrameworkName, Is.EqualTo(data.FrameworkName));
         }
 
         [TestCaseSource(nameof(frameworkData))]
         public void CanDisplayFrameworkAsString(FrameworkData data)
         {
-            RuntimeFramework framework = new RuntimeFramework(data.runtime, data.frameworkVersion);
-            Assert.That(framework.ToString(), Is.EqualTo(data.representation));
-            Assert.That(framework.DisplayName, Is.EqualTo(data.displayName));
+            RuntimeFramework framework = new RuntimeFramework(data.Runtime, data.FrameworkVersion);
+            Assert.That(framework.ToString(), Is.EqualTo(data.Representation));
+            Assert.That(framework.DisplayName, Is.EqualTo(data.DisplayName));
         }
 
         [TestCaseSource(nameof(frameworkData))]
         public void CanCreateFromFrameworkName(FrameworkData data)
         {
-            Assume.That(data.runtime != Runtime.Mono);
+            Assume.That(data.Runtime != Runtime.Mono);
 
-            var framework = RuntimeFramework.FromFrameworkName(data.frameworkName);
-            Assert.That(framework.ToString(), Is.EqualTo(data.representation));
+            var framework = RuntimeFramework.FromFrameworkName(data.FrameworkName);
+            Assert.That(framework.ToString(), Is.EqualTo(data.Representation));
         }
 
         [TestCaseSource(nameof(matchData))]
@@ -112,7 +112,91 @@ namespace TestCentric.Engine
             new TestCaseData(
                 new RuntimeFramework(Runtime.Net, new Version(2,0)),
                 new RuntimeFramework(Runtime.Net, new Version(1,1)))
-                .Returns(false)
+                .Returns(false),
+            new TestCaseData(
+                new RuntimeFramework(Runtime.NetCore, new Version(1,1)),
+                new RuntimeFramework(Runtime.NetCore, new Version(1,1)))
+                .Returns(true),
+            new TestCaseData(
+                new RuntimeFramework(Runtime.NetCore, new Version(2,1)),
+                new RuntimeFramework(Runtime.NetCore, new Version(2,1)))
+                .Returns(true),
+            new TestCaseData(
+                new RuntimeFramework(Runtime.NetCore, new Version(2,1)),
+                new RuntimeFramework(Runtime.NetCore, new Version(1,1)))
+                .Returns(true),
+            new TestCaseData(
+                new RuntimeFramework(Runtime.NetCore, new Version(3,1)),
+                new RuntimeFramework(Runtime.NetCore, new Version(3,1)))
+                .Returns(true),
+            new TestCaseData(
+                new RuntimeFramework(Runtime.NetCore, new Version(3,1)),
+                new RuntimeFramework(Runtime.NetCore, new Version(2,1)))
+                .Returns(true),
+            new TestCaseData(
+                new RuntimeFramework(Runtime.NetCore, new Version(3,1)),
+                new RuntimeFramework(Runtime.NetCore, new Version(1,1)))
+                .Returns(true),
+            new TestCaseData(
+                new RuntimeFramework(Runtime.NetCore, new Version(5,0)),
+                new RuntimeFramework(Runtime.NetCore, new Version(5,0)))
+                .Returns(true),
+            new TestCaseData(
+                new RuntimeFramework(Runtime.NetCore, new Version(5,0)),
+                new RuntimeFramework(Runtime.NetCore, new Version(3,1)))
+                .Returns(true),
+            new TestCaseData(
+                new RuntimeFramework(Runtime.NetCore, new Version(5,0)),
+                new RuntimeFramework(Runtime.NetCore, new Version(2,1)))
+                .Returns(true),
+            new TestCaseData(
+                new RuntimeFramework(Runtime.NetCore, new Version(5,0)),
+                new RuntimeFramework(Runtime.NetCore, new Version(1,1)))
+                .Returns(true),
+            new TestCaseData(
+                new RuntimeFramework(Runtime.NetCore, new Version(6,0)),
+                new RuntimeFramework(Runtime.NetCore, new Version(6,0)))
+                .Returns(true),
+            new TestCaseData(
+                new RuntimeFramework(Runtime.NetCore, new Version(6,0)),
+                new RuntimeFramework(Runtime.NetCore, new Version(5,0)))
+                .Returns(true),
+            new TestCaseData(
+                new RuntimeFramework(Runtime.NetCore, new Version(6,0)),
+                new RuntimeFramework(Runtime.NetCore, new Version(3,1)))
+                .Returns(true),
+            new TestCaseData(
+                new RuntimeFramework(Runtime.NetCore, new Version(6,0)),
+                new RuntimeFramework(Runtime.NetCore, new Version(2,1)))
+                .Returns(true),
+            new TestCaseData(
+                new RuntimeFramework(Runtime.NetCore, new Version(6,0)),
+                new RuntimeFramework(Runtime.NetCore, new Version(1,1)))
+                .Returns(true),
+            new TestCaseData(
+                new RuntimeFramework(Runtime.NetCore, new Version(7,0)),
+                new RuntimeFramework(Runtime.NetCore, new Version(7,0)))
+                .Returns(true),
+            new TestCaseData(
+                new RuntimeFramework(Runtime.NetCore, new Version(7,0)),
+                new RuntimeFramework(Runtime.NetCore, new Version(6,0)))
+                .Returns(true),
+            new TestCaseData(
+                new RuntimeFramework(Runtime.NetCore, new Version(7,0)),
+                new RuntimeFramework(Runtime.NetCore, new Version(5,0)))
+                .Returns(true),
+            new TestCaseData(
+                new RuntimeFramework(Runtime.NetCore, new Version(7,0)),
+                new RuntimeFramework(Runtime.NetCore, new Version(3,1)))
+                .Returns(true),
+            new TestCaseData(
+                new RuntimeFramework(Runtime.NetCore, new Version(7,0)),
+                new RuntimeFramework(Runtime.NetCore, new Version(2,1)))
+                .Returns(true),
+            new TestCaseData(
+                new RuntimeFramework(Runtime.NetCore, new Version(7,0)),
+                new RuntimeFramework(Runtime.NetCore, new Version(1,1)))
+                .Returns(true),
             };
 
         private static readonly TestCaseData[] CanLoadData = {
@@ -133,29 +217,29 @@ namespace TestCentric.Engine
 
         public struct FrameworkData
         {
-            public Runtime runtime;
-            public Version frameworkVersion;
-            public Version clrVersion;
-            public string representation;
-            public string displayName;
-            public FrameworkName frameworkName;
+            public Runtime Runtime;
+            public Version FrameworkVersion;
+            public Version ClrVersion;
+            public string Representation;
+            public string DisplayName;
+            public FrameworkName FrameworkName;
 
             public FrameworkData(Runtime runtime, Version frameworkVersion, Version clrVersion,
                 string representation, string displayName, string frameworkName)
             {
-                this.runtime = runtime;
-                this.frameworkVersion = frameworkVersion;
-                this.clrVersion = clrVersion;
-                this.representation = representation;
-                this.displayName = displayName;
-                this.frameworkName = frameworkName != null
+                Runtime = runtime;
+                FrameworkVersion = frameworkVersion;
+                ClrVersion = clrVersion;
+                Representation = representation;
+                DisplayName = displayName;
+                FrameworkName = frameworkName != null
                     ? new FrameworkName(frameworkName)
                     : null;
             }
 
             public override string ToString()
             {
-                return string.Format("<{0}-{1}>", this.runtime, this.frameworkVersion);
+                return string.Format("<{0}-{1}>", this.Runtime, this.FrameworkVersion);
             }
         }
 

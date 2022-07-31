@@ -288,9 +288,7 @@ namespace TestCentric.Engine
             if (this.Runtime != target.Runtime)
                 return false;
 
-            return VersionsMatch(this.ClrVersion, target.ClrVersion)
-                && this.FrameworkVersion.Major >= target.FrameworkVersion.Major
-                && this.FrameworkVersion.Minor >= target.FrameworkVersion.Minor;
+            return Runtime.Supports(this.FrameworkVersion, target.FrameworkVersion);
         }
 
         public bool CanLoad(IRuntimeFramework requested)
@@ -306,14 +304,6 @@ namespace TestCentric.Engine
                 displayName += " - " + profile;
 
             return displayName;
-        }
-
-        private static bool VersionsMatch(Version v1, Version v2)
-        {
-            return v1.Major == v2.Major &&
-                   v1.Minor == v2.Minor &&
-                  (v1.Build < 0 || v2.Build < 0 || v1.Build == v2.Build) &&
-                  (v1.Revision < 0 || v2.Revision < 0 || v1.Revision == v2.Revision);
         }
 
         private static string GetMonoPrefixFromAssembly(Assembly assembly)
