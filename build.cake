@@ -541,11 +541,10 @@ Task("AppVeyor")
 	.IsDependentOn("Build")
 	.IsDependentOn("Test")
 	.IsDependentOn("BuildPackages")
-	.IsDependentOn("TestPackages");
-	// Temporarily disabling further steps while we get the build working
-	//.IsDependentOn("PublishPackages")
-	//.IsDependentOn("CreateDraftRelease")
-	//.IsDependentOn("CreateProductionRelease");
+	.IsDependentOn("TestPackages")
+	.IsDependentOn("PublishPackages")
+	.IsDependentOn("CreateDraftRelease")
+	.IsDependentOn("CreateProductionRelease");
 
 Task("Travis")
     .IsDependentOn("Build")
