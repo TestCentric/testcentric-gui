@@ -2,10 +2,10 @@
   "version": 1,
   "isRoot": true,
   "tools": {
-    "wyam.tool": {
-      "version": "2.2.9",
+    "cake.tool": {
+      "version": "2.3.0",
       "commands": [
-        "wyam"
+        "dotnet-cake"
       ]
     }
   }

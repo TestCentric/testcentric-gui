@@ -9,8 +9,8 @@ static void CheckTestErrors(ref List<string> errorDetail)
         var copyError = new List<string>();
         copyError = errorDetail.Select(s => s).ToList();
         errorDetail.Clear();
-        throw new Exception("One or more tests failed, breaking the build.\n"
-                              + copyError.Aggregate((x,y) => x + "\n" + y));
+        throw new Exception("One or more tests failed, breaking the build.\r\n"
+                              + copyError.Aggregate((x,y) => x + "\r\n" + y));
     }
 }
 
@@ -122,7 +122,7 @@ public abstract class PackageTester : GuiTester
 		PackageTests = new List<PackageTest>();
 
 		// Level 1 tests are run each time we build the packages
-		PackageTests.Add(new PackageTest(2, "Re-run tests of the TestCentric model", StandardRunner,
+		/*PackageTests.Add(new PackageTest(2, "Re-run tests of the TestCentric model", StandardRunner,
 			"TestCentric.Gui.Model.Tests.dll",
 			new ExpectedResult("Passed")));
 		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET 4.5", StandardRunner,
@@ -135,7 +135,7 @@ public abstract class PackageTester : GuiTester
 				Warnings = 0,
 				Inconclusive = 1,
 				Skipped = 7
-			}));
+			}));*/
 		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET 3.5", StandardRunner,
 			"engine-tests/net35/mock-assembly.dll",
 			new ExpectedResult("Failed")
@@ -194,7 +194,7 @@ public abstract class PackageTester : GuiTester
 
 		// Level 2 tests are run for PRs and when packages will be published
 
-		PackageTests.Add(new PackageTest(2, "Run mock-assembly.dll built for NUnit V2", StandardRunner,
+		/*PackageTests.Add(new PackageTest(2, "Run mock-assembly.dll built for NUnit V2", StandardRunner,
 			"v2-tests/mock-assembly.dll",
 			new ExpectedResult("Failed")
 			{
@@ -205,7 +205,7 @@ public abstract class PackageTester : GuiTester
 				Inconclusive = 1,
 				Skipped = 4
 			},
-			NUnitV2Driver));
+			NUnitV2Driver));*/
 		PackageTests.Add( new PackageTest(2, "Run different builds of mock-assembly.dll together", StandardRunner,
 			"engine-tests/net35/mock-assembly.dll engine-tests/netcoreapp2.1/mock-assembly.dll",
 			new ExpectedResult("Failed")
@@ -218,11 +218,11 @@ public abstract class PackageTester : GuiTester
 				Skipped = 14
 			}));
 		// TODO: Make test work on AppVeyor - currently runs locally only
-		if (_parameters.IsLocalBuild)
+		/*if (_parameters.IsLocalBuild)
 			PackageTests.Add( new PackageTest(2, "Run an NUnit project, specifying Release config", StandardRunner,
 				"../../GuiTests.nunit --config=Release --trace=Debug",
 				new ExpectedResult("Passed"),
-				NUnitProjectLoader));
+				NUnitProjectLoader));*/
 	}
 
 	protected abstract string PackageName { get; }
@@ -302,15 +302,18 @@ public abstract class PackageTester : GuiTester
 
 	private void RunPackageTests(int testLevel)
 	{
-		bool anyErrors = false;
-		int testCount = 0;
+        var reporter = new ResultReporter(PackageName);
+
+        //_context.CleanDirectory(_resultDirectory);
+        string testToRun = _context.Argument("runTest", "ALL");
 
 		foreach (var packageTest in PackageTests)
 		{
+            //if (testToRun != "ALL" && testToRun != packageTest.Name)
+            //    continue;
+
 			if (packageTest.Level > 0 && packageTest.Level <= testLevel)
 			{
-				++testCount;
-
 				foreach (string extension in packageTest.ExtensionsNeeded)
 					CheckExtensionIsInstalled(extension);
 
@@ -326,24 +329,30 @@ public abstract class PackageTester : GuiTester
 
 				RunGuiUnattended(packageTest.Runner, packageTest.Arguments);
 
-				var reporter = new ResultReporter(resultFile);
-				anyErrors |= reporter.Report(packageTest.ExpectedResult) > 0;
+				try
+				{
+					var result = new ActualResult(resultFile);
+					var report = new TestReport(packageTest, result);
+					reporter.AddReport(report);
+
+					Console.WriteLine(report.Errors.Count == 0
+						? "\nSUCCESS: Test Result matches expected result!"
+						: "\nERROR: Test Result not as expected!");
+				}
+				catch (Exception ex)
+				{
+					reporter.AddReport(new TestReport(packageTest, ex));
+
+					Console.WriteLine("\nERROR: No result found!");
+				}
 			}
 		}
 
-		Console.WriteLine($"\nRan {testCount} package tests on {PackageName}");
+        bool hadErrors = reporter.ReportResults();
+        Console.WriteLine();
 
-		// All package tests are run even if one of them fails. If there are
-		// any errors,  we stop the run at this point.
-		if (anyErrors)
-			throw new Exception("One or more package tests had errors!");
-	}
-
-	private void DisplayBanner(string message)
-	{
-		Console.WriteLine("\n========================================");;
-		Console.WriteLine(message);
-		Console.WriteLine("========================================");
+        if (hadErrors)
+            throw new Exception("One or more package tests had errors!");
 	}
 
 	private void DisplayTestEnvironment(PackageTest test)
@@ -377,7 +386,7 @@ public class ZipPackageTester : PackageTester
 		HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt"),
 		HasDirectory("bin").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.zip.addins"),
 		HasDirectory("bin/agents/net20").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
-		HasDirectory("bin/agents/net40").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
+		HasDirectory("bin/agents/net462").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
 		HasDirectory("bin/agents/netcoreapp2.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
 		HasDirectory("bin/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
 		HasDirectory("bin/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.zip.addins"),
@@ -409,7 +418,7 @@ public class NuGetPackageTester : PackageTester
 		HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "testcentric.png"),
 		HasDirectory("tools").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.nuget.addins"),
 		HasDirectory("tools/agents/net20").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
-		HasDirectory("tools/agents/net40").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
+		HasDirectory("tools/agents/net462").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
 		HasDirectory("tools/agents/netcoreapp2.1").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
 		HasDirectory("tools/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
 		HasDirectory("tools/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
@@ -444,7 +453,7 @@ public class ChocolateyPackageTester : PackageTester
 	{
 		HasDirectory("tools").WithFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "VERIFICATION.txt", "testcentric.choco.addins").AndFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.choco.addins"),
 		HasDirectory("tools/agents/net20").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
-		HasDirectory("tools/agents/net40").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
+		HasDirectory("tools/agents/net462").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
 		HasDirectory("tools/agents/netcoreapp2.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
 		HasDirectory("tools/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
 		HasDirectory("tools/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),

@@ -57,7 +57,7 @@ namespace TestCentric.Engine.Extensibility
 #if NET20 || NET35
             Assert.That(_ea.TargetFramework.ToString(), Is.EqualTo("net-2.0"));
 #else
-            Assert.That(_ea.TargetFramework.ToString(), Is.EqualTo("net-4.0"));
+            Assert.That(_ea.TargetFramework.ToString(), Is.EqualTo("net-4.6.2"));
 #endif
         }
 #endif

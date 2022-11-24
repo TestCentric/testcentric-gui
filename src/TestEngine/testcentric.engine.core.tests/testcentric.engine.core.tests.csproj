@@ -1,20 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RootNamespace>NUnit.Engine</RootNamespace>
-    <TargetFrameworks>net35;net40;netcoreapp1.1;netcoreapp2.1</TargetFrameworks>
+    <TargetFrameworks>net35;net462;netcoreapp1.1;netcoreapp2.1</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\nunit.snk</AssemblyOriginatorKeyFile>
     <DebugType>Full</DebugType>
     <OutputPath>..\..\..\bin\$(Configuration)\engine-tests\</OutputPath>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	<CheckEolTargetFramework>false</CheckEolTargetFramework>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net35'">
     <Reference Include="System.Configuration" />
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Web" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)'=='net40'">
+  <ItemGroup Condition="'$(TargetFramework)'=='net462'">
     <Reference Include="System.Configuration" />
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Web" />

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<RootNamespace>NUnit.Tests</RootNamespace>
-		<TargetFramework>net45</TargetFramework>
+		<TargetFramework>net462</TargetFramework>
 		<OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>

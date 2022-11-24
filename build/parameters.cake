@@ -37,7 +37,7 @@ public class BuildParameters
 
 		GitHubAccessToken = _context.EnvironmentVariable(GITHUB_ACCESS_TOKEN);
 		
-		BuildVersion = new BuildVersion(context, this);
+		BuildVersion = new BuildVersion(context);
 		//ReleaseManager = new ReleaseManager(context, this);
 
 		if (context.HasArgument("testLevel"))
@@ -166,11 +166,11 @@ public class BuildParameters
 	public XBuildSettings XBuildSettings { get; }
 	public NuGetRestoreSettings RestoreSettings { get; }
 
-	public string[] SupportedEngineRuntimes => new string[] {"net40", "netcoreapp2.1"};
+	public string[] SupportedEngineRuntimes => new string[] {"net462", "netcoreapp2.1"};
 	public string[] SupportedCoreRuntimes => IsRunningOnWindows
-		? new string[] {"net40", "net35", "netcoreapp2.1", "netcoreapp1.1"}
-		: new string[] {"net40", "net35", "netcoreapp2.1"};
-	public string[] SupportedAgentRuntimes => new string[] { "net20", "net40", "netcoreapp2.1", "netcoreapp3.1", "net5.0" };
+		? new string[] {"net462", "net35", "netcoreapp2.1", "netcoreapp1.1"}
+		: new string[] {"net462", "net35", "netcoreapp2.1"};
+	public string[] SupportedAgentRuntimes => new string[] { "net20", "net462", "netcoreapp2.1", "netcoreapp3.1", "net5.0" };
 
 	public string ProjectUri => "https://github.com/TestCentric/testcentric-gui";
 	public string WebDeployBranch => "gh-pages";

@@ -3,7 +3,6 @@ using System.Text.RegularExpressions;
 public class BuildVersion
 {
     private ISetupContext _context;
-    private BuildParameters _parameters;
     private GitVersion _gitVersion;
 
     // NOTE: This is complicated because (1) the user may have specified 
@@ -13,19 +12,25 @@ public class BuildVersion
     //
     // We simplify things a by figuring out the full package version and
     // then parsing it to provide information that is used in the build.
-	public BuildVersion(ISetupContext context, BuildParameters parameters)
+	public BuildVersion(ISetupContext context)
 	{
+        Console.WriteLine($"Current Directory: {Environment.CurrentDirectory}");
+
         _context = context;
-        _parameters = parameters;
         _gitVersion = context.GitVersion();
 
         BranchName = _gitVersion.BranchName;
+        Console.WriteLine($"BuildVersion: BranchName={BranchName}");
         IsReleaseBranch = BranchName.StartsWith("release-");
+        Console.WriteLine($"BuildVersion: IsReleaseBranch={IsReleaseBranch}");
 
-		// TODO: Get GitVersion to work on Linux
+        if (BranchName.StartsWith("support-") || BranchName.StartsWith("support/"))
+            throw new Exception("Support branches have a special meaning for GitVersion. Please rename the branch");
+
         string packageVersion = context.HasArgument("asVersion")
-            ? context.Argument("asVersion", DEFAULT_VERSION)
+            ? context.Argument<string>("asVersion")
             : CalculatePackageVersion();
+        Console.WriteLine($"BuildVersion: packageVersion={packageVersion}");
 
 		int dash = packageVersion.IndexOf('-');
         IsPreRelease = dash > 0;
@@ -72,7 +77,9 @@ public class BuildVersion
 
 	private string CalculatePackageVersion()
 	{
+        Console.WriteLine("BuildVersion: Calculating Package Version");
 		string label = _gitVersion.PreReleaseLabel;
+        Console.WriteLine($"BuildVersion: PreReleaseLabel={label}");
 
         // Non pre-release is easy
         if (string.IsNullOrEmpty(label))
@@ -111,47 +118,6 @@ public class BuildVersion
             case "beta":
             default:
                 return _gitVersion.LegacySemVer;
-        }
-	}
-
-    public void PatchAssemblyInfo(string sourceFile, string assemblyVersion = null)
-    {
-        ReplaceFileContents(sourceFile, source =>
-        {
-            source = ReplaceAttributeString(source, "AssemblyVersion", assemblyVersion ?? _parameters.AssemblyVersion);
-
-            source = ReplaceAttributeString(source, "AssemblyFileVersion", _parameters.AssemblyFileVersion);
-
-            source = ReplaceAttributeString(source, "AssemblyInformationalVersion", _parameters.AssemblyInformationalVersion);
-
-            return source;
-        });
-
-        string ReplaceAttributeString(string source, string attributeName, string value)
-        {
-            var matches = Regex.Matches(source, $@"\[assembly: {Regex.Escape(attributeName)}\(""(?<value>[^""]+)""\)\]");
-            if (matches.Count != 1) throw new InvalidOperationException($"Expected exactly one line similar to:\r\n[assembly: {attributeName}(\"1.2.3-optional\")]");
-
-            var group = matches[0].Groups["value"];
-            return source.Substring(0, group.Index) + value + source.Substring(group.Index + group.Length);
-        }
-
-        void ReplaceFileContents(string filePath, Func<string, string> update)
-        {
-            using (var file = new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
-            {
-                string source;
-                using (var reader = new StreamReader(file, new UTF8Encoding(false), true, 4096, leaveOpen: true))
-                    source = reader.ReadToEnd();
-
-                var newSource = update.Invoke(source);
-                if (newSource == source) return;
-
-                file.Seek(0, SeekOrigin.Begin);
-                using (var writer = new StreamWriter(file, new UTF8Encoding(false), 4096, leaveOpen: true))
-                    writer.Write(newSource);
-                file.SetLength(file.Position);
-            }
         }
     }
 }

@@ -27,7 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GuiException", "GuiException", "{35A92AA3-A1E6-426E-8D96-322F3EBF1C8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "nunit.uiexception.dll", "src\GuiException\UiException\nunit.uiexception.dll.csproj", "{3E87A106-EB20-4147-84C8-95B0BB43A1D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "nunit.uiexception.dll", "src\GuiException\UiException\nunit.uiexception.dll.csproj", "{3E87A106-EB20-4147-84C8-95B0BB43A1D4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestModel", "TestModel", "{C68900CC-C4E4-48D5-A2AC-267726E75C60}"
 EndProject

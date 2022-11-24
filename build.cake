@@ -1,11 +1,9 @@
+static string Target; Target = GetArgument("target|t", "Default");
+static string Configuration; Configuration = GetArgument("configuration|c", "Release");
+
 #tool nuget:?package=NUnit.ConsoleRunner&version=3.10.0
 #tool nuget:?package=GitVersion.CommandLine&version=5.0.0
 #tool nuget:?package=GitReleaseManager&version=0.11.0
-#tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.8.0"
-#tool nuget:?package=Wyam&version=2.2.9
-
-#addin nuget:?package=Cake.Git&version=0.22.0
-#addin nuget:?package=Cake.Wyam&version=2.2.9
 
 #load "./build/parameters.cake"
 
@@ -100,25 +98,12 @@ Task("RestorePackages")
 });
 
 //////////////////////////////////////////////////////////////////////
-// UPDATE ASSEMBLYINFO
-//////////////////////////////////////////////////////////////////////
-
-Task("UpdateAssemblyInfo")
-	.Does<BuildParameters>((parameters) =>
-{
-	var major = new Version(parameters.AssemblyVersion).Major;
-	parameters.BuildVersion.PatchAssemblyInfo("src/CommonAssemblyInfo.cs");
-    parameters.BuildVersion.PatchAssemblyInfo("src/TestEngine/CommonEngineAssemblyInfo.cs");
-});
-
-//////////////////////////////////////////////////////////////////////
 // BUILD
 //////////////////////////////////////////////////////////////////////
 
 Task("Build")
 	.IsDependentOn("Clean")
     .IsDependentOn("RestorePackages")
-	.IsDependentOn("UpdateAssemblyInfo")
     .Does<BuildParameters>((parameters) =>
 {
     if(parameters.UsingXBuild)
@@ -556,27 +541,27 @@ Task("AppVeyor")
 	.IsDependentOn("Build")
 	.IsDependentOn("Test")
 	.IsDependentOn("BuildPackages")
-	.IsDependentOn("TestPackages")
-	.IsDependentOn("PublishPackages")
-	.IsDependentOn("CreateDraftRelease")
-	.IsDependentOn("CreateProductionRelease");
+	.IsDependentOn("TestPackages");
+	// Temporarily disabling further steps while we get the build working
+	//.IsDependentOn("PublishPackages")
+	//.IsDependentOn("CreateDraftRelease")
+	//.IsDependentOn("CreateProductionRelease");
 
 Task("Travis")
     .IsDependentOn("Build")
     .IsDependentOn("Test");
 
-Task("All")
+Task("BuildTestAndPackage")
 	.IsDependentOn("DumpSettings")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
-    .IsDependentOn("BuildPackages")
-	.IsDependentOn("TestPackages");
+    .IsDependentOn("Package");
 
 Task("Default")
-    .IsDependentOn("Test");
+    .IsDependentOn("Build");
 
 //////////////////////////////////////////////////////////////////////
 // EXECUTION
 //////////////////////////////////////////////////////////////////////
 
-RunTarget(Argument("target", "Default"));
+RunTarget(Target);
