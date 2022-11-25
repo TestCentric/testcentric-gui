@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<RootNamespace>TestCentric.Common.Tests</RootNamespace>
 		<AssemblyName>TestCentric.Common.Tests</AssemblyName>
-		<TargetFramework>net45</TargetFramework>
+		<TargetFramework>net462</TargetFramework>
 		<OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>

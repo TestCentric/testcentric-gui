@@ -142,7 +142,7 @@ namespace TestCentric.Engine.Services
 
 #if NETCOREAPP2_1
             var assemblyName = Path.Combine(GetNetFrameworkSiblingDirectory(), "testcentric.engine.tests.exe");
-#elif NET40
+#elif NET462
             var assemblyName = Path.Combine(GetNetCoreSiblingDirectory(), "testcentric.engine.tests.dll");
 #endif
             Assert.That(assemblyName, Does.Exist);
@@ -271,7 +271,7 @@ namespace TestCentric.Engine.Services
 
         private static string GetNetFrameworkSiblingDirectory()
         {
-            return GetSiblingDirectory("net40");
+            return GetSiblingDirectory("net462");
         }
 
         private static string GetNetCoreSiblingDirectory()
