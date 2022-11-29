@@ -7,10 +7,10 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
-using TestCentric.Engine.Helpers;
-using TestCentric.Tests.Assemblies;
 using NUnit.Framework;
 using NUnit.Engine;
+using TestCentric.Engine.Helpers;
+using TestCentric.Tests.Assemblies;
 
 namespace TestCentric.Engine.Drivers
 {
@@ -109,12 +109,12 @@ namespace TestCentric.Engine.Drivers
             Assert.That(result.Name, Is.EqualTo("test-suite"));
             Assert.That(result.GetAttribute("type"), Is.EqualTo("Assembly"));
             Assert.That(result.GetAttribute("runstate"), Is.EqualTo("Runnable"));
-            Assert.That(result.GetAttribute("testcasecount"), Is.EqualTo(MockAssembly.Tests.ToString()));
+            Assert.That(result.GetAttribute("testcasecount"), Is.EqualTo(MockAssembly.Tests.ToString()), "Count");
             Assert.That(result.GetAttribute("result"), Is.EqualTo("Failed"));
-            Assert.That(result.GetAttribute("passed"), Is.EqualTo(MockAssembly.PassedInAttribute.ToString()));
-            Assert.That(result.GetAttribute("failed"), Is.EqualTo(MockAssembly.Failed.ToString()));
-            Assert.That(result.GetAttribute("skipped"), Is.EqualTo(MockAssembly.Skipped.ToString()));
-            Assert.That(result.GetAttribute("inconclusive"), Is.EqualTo(MockAssembly.Inconclusive.ToString()));
+            Assert.That(result.GetAttribute("passed"), Is.EqualTo(MockAssembly.Passed.ToString()), "Passed");
+            Assert.That(result.GetAttribute("failed"), Is.EqualTo(MockAssembly.Failed.ToString()), "Failed");
+            Assert.That(result.GetAttribute("skipped"), Is.EqualTo(MockAssembly.Skipped.ToString()), "Skipped");
+            Assert.That(result.GetAttribute("inconclusive"), Is.EqualTo(MockAssembly.Inconclusive.ToString()), "Inconclusive");
             Assert.That(result.SelectNodes("test-suite").Count, Is.GreaterThan(0), "Explore result should have child tests");
         }
 

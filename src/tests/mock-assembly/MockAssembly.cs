@@ -6,6 +6,9 @@
 using System;
 using NUnit.Framework;
 
+// This copy of mock-assembly is referenced by TestCentric.Gui.Model.Tests
+// and so is copied into  the bin directory. We mark it as a non-test assembly so
+// it won't be treated as a test assembly if anyone loads the solution file.
 [assembly: NonTestAssembly]
 
 namespace TestCentric.Tests
@@ -17,47 +20,33 @@ namespace TestCentric.Tests
         /// </summary>
         public class MockAssembly
         {
-            public static int Classes = 9;
-            public static int NamespaceSuites = 6; // assembly, NUnit, Tests, Assemblies, Singletons, TestAssembly
-
-            public static int Tests = MockTestFixture.Tests
+            public const int Tests = MockTestFixture.Tests
                         + Singletons.OneTestCase.Tests
                         + TestAssembly.MockTestFixture.Tests
                         + IgnoredFixture.Tests
                         + ExplicitFixture.Tests
                         + BadFixture.Tests
+#if !NET5_0
                         + FixtureWithTestCases.Tests
+#endif
                         + ParameterizedFixture.Tests
                         + GenericFixtureConstants.Tests;
 
-            public static int Suites = MockTestFixture.Suites
-                        + Singletons.OneTestCase.Suites
-                        + TestAssembly.MockTestFixture.Suites
-                        + IgnoredFixture.Suites
-                        + ExplicitFixture.Suites
-                        + BadFixture.Suites
-                        + FixtureWithTestCases.Suites
-                        + ParameterizedFixture.Suites
-                        + GenericFixtureConstants.Suites
-                        + NamespaceSuites;
+            private const int Ignored = MockTestFixture.Ignored + IgnoredFixture.Tests;
+            private const int Explicit = MockTestFixture.Explicit + ExplicitFixture.Tests;
+            private const int NotRunnable = MockTestFixture.NotRunnable + BadFixture.Tests;
+            public const int Skipped = Ignored + Explicit;
+            public const int TestsRun = Tests - Skipped;
 
-            public static readonly int Nodes = Tests + Suites;
+            private const int Errors = MockTestFixture.Errors;
+            public const int Failures = MockTestFixture.Failures;
 
-            public static int ExplicitFixtures = 1;
-            public static int SuitesRun = Suites - ExplicitFixtures;
+            public const int Failed = Errors + Failures + NotRunnable;
+            public const int Passed = TestsRun - Failed - Warnings - Inconclusive;
+            public const int Warnings = 0;
+            public const int Inconclusive = 1;
 
-            public static int Ignored = MockTestFixture.Ignored + IgnoredFixture.Tests;
-            public static int Explicit = MockTestFixture.Explicit + ExplicitFixture.Tests;
-            public static int NotRunnable = MockTestFixture.NotRunnable + BadFixture.Tests;
-            public static int NotRun = Ignored + Explicit + NotRunnable;
-            public static int TestsRun = Tests - NotRun;
-            public static int ResultCount = Tests - Explicit;
-
-            public static int Errors = MockTestFixture.Errors;
-            public static int Failures = MockTestFixture.Failures;
-
-            public static int Categories = MockTestFixture.Categories;
-
+#if !NETCOREAPP1_1
             public static string AssemblyPath;
 
             static MockAssembly()
@@ -69,27 +58,23 @@ namespace TestCentric.Tests
                     ? new Uri(codeBase).LocalPath
                     : assembly.Location;
             }
+#endif
         }
 
         [TestFixture(Description = "Fake Test Fixture")]
         [Category("FixtureCategory")]
         public class MockTestFixture
         {
-            public static readonly int Tests = 11;
-            public static readonly int Suites = 1;
+            public const int Tests = 11;
 
-            public static readonly int Ignored = 1;
-            public static readonly int Explicit = 1;
-            public static readonly int NotRunnable = 2;
-            public static readonly int NotRun = Ignored + Explicit + NotRunnable;
-            public static readonly int TestsRun = Tests - NotRun;
-            public static readonly int ResultCount = Tests - Explicit;
+            public const int Ignored = 1;
+            public const int Explicit = 1;
+            public const int NotRunnable = 2;
 
-            public static readonly int Failures = 1;
-            public static readonly int Errors = 1;
+            public const int Failures = 1;
+            public const int Errors = 1;
 
-            public static readonly int Categories = 5;
-            public static readonly int MockCategoryTests = 2;
+            public const int Categories = 5;
 
             [Test(Description = "Mock Test #1")]
             public void MockTest1()
@@ -152,7 +137,7 @@ namespace TestCentric.Tests
 
             private void MethodThrowsException()
             {
-                throw new ApplicationException("Intentional Exception");
+                throw new Exception("Intentional Exception");
             }
         }
     }
@@ -162,8 +147,7 @@ namespace TestCentric.Tests
         [TestFixture]
         public class OneTestCase
         {
-            public static readonly int Tests = 1;
-            public static readonly int Suites = 1;
+            public const int Tests = 1;
 
             [Test]
             public virtual void TestCase()
@@ -176,8 +160,7 @@ namespace TestCentric.Tests
         [TestFixture]
         public class MockTestFixture
         {
-            public static readonly int Tests = 1;
-            public static readonly int Suites = 1;
+            public const int Tests = 1;
 
             [Test]
             public void MyTest()
@@ -189,8 +172,8 @@ namespace TestCentric.Tests
     [TestFixture, Ignore("Testing")]
     public class IgnoredFixture
     {
-        public static readonly int Tests = 3;
-        public static readonly int Suites = 1;
+        public const int Tests = 3;
+        public const int Suites = 1;
 
         [Test]
         public void Test1() { }
@@ -205,9 +188,7 @@ namespace TestCentric.Tests
     [TestFixture, Explicit]
     public class ExplicitFixture
     {
-        public static readonly int Tests = 2;
-        public static readonly int Suites = 1;
-        public static readonly int Nodes = Tests + Suites;
+        public const int Tests = 2;
 
         [Test]
         public void Test1() { }
@@ -219,8 +200,7 @@ namespace TestCentric.Tests
     [TestFixture]
     public class BadFixture
     {
-        public static readonly int Tests = 1;
-        public static readonly int Suites = 1;
+        public const int Tests = 1;
 
         public BadFixture(int val) { }
 
@@ -228,11 +208,11 @@ namespace TestCentric.Tests
         public void SomeTest() { }
     }
 
+#if !NET5_0 // Under the nunit 3.10 framework, these tests cause an error
     [TestFixture]
     public class FixtureWithTestCases
     {
-        public static readonly int Tests = 4;
-        public static readonly int Suites = 3;
+        public const int Tests = 4;
 
         [TestCase(2, 2, ExpectedResult = 4)]
         [TestCase(9, 11, ExpectedResult = 20)]
@@ -247,13 +227,13 @@ namespace TestCentric.Tests
         {
         }
     }
+#endif
 
     [TestFixture(5)]
     [TestFixture(42)]
     public class ParameterizedFixture
     {
-        public static readonly int Tests = 4;
-        public static readonly int Suites = 3;
+        public const int Tests = 4;
 
         public ParameterizedFixture(int num) { }
 
@@ -266,8 +246,7 @@ namespace TestCentric.Tests
 
     public class GenericFixtureConstants
     {
-        public static readonly int Tests = 4;
-        public static readonly int Suites = 3;
+        public const int Tests = 4;
     }
 
     [TestFixture(5)]

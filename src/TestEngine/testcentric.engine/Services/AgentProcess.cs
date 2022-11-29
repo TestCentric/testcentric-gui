@@ -108,7 +108,7 @@ namespace TestCentric.Engine.Services
                             agentPath = Path.Combine(engineDir, "agents/net20/" + agentName + ".exe");
                             break;
                         case 4:
-                            agentPath = Path.Combine(engineDir, "agents/net40/" + agentName + ".exe");
+                            agentPath = Path.Combine(engineDir, "agents/net462/" + agentName + ".exe");
                             break;
                     }
                     break;

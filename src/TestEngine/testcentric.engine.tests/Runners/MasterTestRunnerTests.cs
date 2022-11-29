@@ -40,8 +40,7 @@ namespace TestCentric.Engine.Runners
         }
 
         static ResultData MockAssemblyData =
-            new ResultData("mock-assembly.dll", "Runnable", MockAssembly.Tests, MockAssembly.PassedInAttribute, MockAssembly.Failed, MockAssembly.Skipped, MockAssembly.Inconclusive);
-
+            new ResultData("mock-assembly.dll", "Runnable", MockAssembly.Tests, MockAssembly.Passed, MockAssembly.Failed, MockAssembly.Skipped, MockAssembly.Inconclusive);
         static ResultData NoTestAssemblyData =
             new ResultData("notest-assembly.dll", "NotRunnable", 0, 0, 0, 0, 0);
 

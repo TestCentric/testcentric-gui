@@ -27,9 +27,6 @@
         <ProjectReference Include="..\..\GuiException\UiException\nunit.uiexception.dll.csproj">
             <Name>nunit.uiexception.dll</Name>
         </ProjectReference>
-        <ProjectReference Include="..\..\tests\mock-assembly\mock-assembly.csproj">
-            <Name>mock-assembly</Name>
-        </ProjectReference>
         <ProjectReference Include="..\..\tests\test-utilities\test-utilities.csproj">
             <Name>test-utilities</Name>
         </ProjectReference>

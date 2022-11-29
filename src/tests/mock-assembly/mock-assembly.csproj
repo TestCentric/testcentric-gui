@@ -1,13 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RootNamespace>NUnit.Tests</RootNamespace>
-    <TargetFramework>net462</TargetFramework>
+    <TargetFrameworks>net35;net462;netcoreapp1.1;netcoreapp2.1;netcoreapp3.1;net5.0</TargetFrameworks>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\nunit.snk</AssemblyOriginatorKeyFile>
-    <OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
-	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <OutputPath>..\..\..\bin\$(Configuration)\engine-tests\</OutputPath>
 	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-	  <CheckEolTargetFramework>false</CheckEolTargetFramework>
+	<CheckEolTargetFramework>false</CheckEolTargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="NUnit" Version="3.11.0" />

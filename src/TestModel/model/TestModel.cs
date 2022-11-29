@@ -386,6 +386,7 @@ namespace TestCentric.Gui.Model
         {
             var resultWriter = Services.ResultService.GetResultWriter(format, new object[0]);
             var results = GetResultForTest(Tests.Id);
+            
             resultWriter.WriteResultFile(results.Xml, filePath);
         }
 

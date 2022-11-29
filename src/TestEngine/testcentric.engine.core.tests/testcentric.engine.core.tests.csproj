@@ -51,7 +51,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\mock-assembly\mock-assembly.csproj" />
+	<ProjectReference Include="..\..\tests\mock-assembly\mock-assembly.csproj" />
     <ProjectReference Include="..\testcentric.engine.core\testcentric.engine.core.csproj" />
   </ItemGroup>
   <ItemGroup>
