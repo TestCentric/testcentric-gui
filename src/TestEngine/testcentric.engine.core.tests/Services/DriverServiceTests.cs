@@ -37,11 +37,11 @@ namespace TestCentric.Engine.Services
 
 #if NETCOREAPP1_1 || NETCOREAPP2_1
         [TestCase("mock-assembly.dll", false, typeof(NUnitNetStandardDriver))]
-        [TestCase("mock-assembly.dll", true, typeof(NUnitNetStandardDriver))]
+        [TestCase("mock-assembly.dll", true, typeof(SkippedAssemblyFrameworkDriver))]
         [TestCase("notest-assembly.dll", false, typeof(NUnitNetStandardDriver))]
 #else
         [TestCase("mock-assembly.dll", false, typeof(NUnit3FrameworkDriver))]
-        [TestCase("mock-assembly.dll", true, typeof(NUnit3FrameworkDriver))]
+        [TestCase("mock-assembly.dll", true, typeof(SkippedAssemblyFrameworkDriver))]
         [TestCase("notest-assembly.dll", false, typeof(NUnit3FrameworkDriver))]
 #endif
         [TestCase("mock-assembly.pdb", false, typeof(InvalidAssemblyFrameworkDriver))]

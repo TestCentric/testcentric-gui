@@ -73,17 +73,17 @@ public class GuiTester
 public struct PackageTest
 {
 	public int Level;
+	public string Name;
 	public string Description;
-	public string Runner;
 	public string Arguments;
 	public ExpectedResult ExpectedResult;
 	public string[] ExtensionsNeeded;
 	
-	public PackageTest(int level, string description, string runner, string arguments, ExpectedResult expectedResult, params string[] extensionsNeeded)
+	public PackageTest(int level, string name, string description, string arguments, ExpectedResult expectedResult, params string[] extensionsNeeded)
 	{
 		Level = level;
+		Name = name;
 		Description = description;
-		Runner = runner;
 		Arguments = arguments;
 		ExpectedResult = expectedResult;
 		ExtensionsNeeded = extensionsNeeded;
@@ -122,11 +122,8 @@ public abstract class PackageTester : GuiTester
 		PackageTests = new List<PackageTest>();
 
 		// Level 1 tests are run each time we build the packages
-		/*PackageTests.Add(new PackageTest(2, "Re-run tests of the TestCentric model", StandardRunner,
-			"TestCentric.Gui.Model.Tests.dll",
-			new ExpectedResult("Passed")));
-		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET 4.5", StandardRunner,
-			"mock-assembly.dll",
+		PackageTests.Add(new PackageTest(1, "Net462Test", "Run mock-assembly.dll under .NET 4.6.2",
+			"engine-tests/net462/mock-assembly.dll",
 			new ExpectedResult("Failed")
 			{
 				Total = 31,
@@ -135,66 +132,103 @@ public abstract class PackageTester : GuiTester
 				Warnings = 0,
 				Inconclusive = 1,
 				Skipped = 7
-			}));*/
-		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET 3.5", StandardRunner,
+			}));
+		PackageTests.Add(new PackageTest(1, "Net462TestInProcess", "Run mock-assembly.dll under .NET 4.6.2 in process",
+			"engine-tests/net462/mock-assembly.dll --inprocess",
+			new ExpectedResult("Failed")
+			{
+				Total = 31,
+				Passed = 18,
+				Failed = 5,
+				Warnings = 0,
+				Inconclusive = 1,
+				Skipped = 7
+			}));
+		PackageTests.Add(new PackageTest(1, "Net35Test", "Run mock-assembly.dll under .NET 3.5",
 			"engine-tests/net35/mock-assembly.dll",
 			new ExpectedResult("Failed")
 			{
-				Total = 36,
-				Passed = 23,
+				Total = 31,
+				Passed = 18,
 				Failed = 5,
 				Warnings = 0,
 				Inconclusive = 1,
 				Skipped = 7
 			}));
-		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET Core 2.1", StandardRunner,
+		PackageTests.Add(new PackageTest(1, "Net35TestInProcess", "Run mock-assembly.dll under .NET 3.5 in process",
+			"engine-tests/net35/mock-assembly.dll --inprocess",
+			new ExpectedResult("Failed")
+			{
+				Total = 31,
+				Passed = 18,
+				Failed = 5,
+				Warnings = 0,
+				Inconclusive = 1,
+				Skipped = 7
+			}));
+		PackageTests.Add(new PackageTest(1, "NetCore21Test", "Run mock-assembly.dll under .NET Core 2.1",
 			"engine-tests/netcoreapp2.1/mock-assembly.dll",
 			new ExpectedResult("Failed")
 			{
-				Total = 36,
-				Passed = 23,
+				Total = 31,
+				Passed = 18,
 				Failed = 5,
 				Warnings = 0,
 				Inconclusive = 1,
 				Skipped = 7
 			}));
-		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET Core 3.1", StandardRunner,
+		PackageTests.Add(new PackageTest(1, "NetCore31Test", "Run mock-assembly.dll under .NET Core 3.1",
 			"engine-tests/netcoreapp3.1/mock-assembly.dll",
 			new ExpectedResult("Failed")
 			{
-				Total = 36,
-				Passed = 23,
+				Total = 31,
+				Passed = 18,
 				Failed = 5,
 				Warnings = 0,
 				Inconclusive = 1,
 				Skipped = 7
 			}));
-		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET Core 1.1", StandardRunner,
+		PackageTests.Add(new PackageTest(1, "NetCore11Test", "Run mock-assembly.dll targeting .NET Core 1.1",
 			"engine-tests/netcoreapp1.1/mock-assembly.dll",
 			new ExpectedResult("Failed")
 			{
-				Total = 36,
-				Passed = 23,
+				Total = 31,
+				Passed = 18,
 				Failed = 5,
 				Warnings = 0,
 				Inconclusive = 1,
 				Skipped = 7
 			}));
-		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET 5.0", StandardRunner,
+		PackageTests.Add(new PackageTest(1, "Net50Test", "Run mock-assembly.dll under .NET 5.0",
 			"engine-tests/net5.0/mock-assembly.dll",
 			new ExpectedResult("Failed")
 			{
-				Total = 32,
-				Passed = 19,
+				// 27 rather than 31 tests due to a bug in nunit.framework 3.11
+				Total = 27,
+				Passed = 14,
 				Failed = 5,
 				Warnings = 0,
 				Inconclusive = 1,
 				Skipped = 7
+			}));
+		PackageTests.Add( new PackageTest(1, "Net35PlusNetCore21Test", "Run different builds of mock-assembly.dll together",
+			"engine-tests/net35/mock-assembly.dll engine-tests/netcoreapp2.1/mock-assembly.dll",
+			new ExpectedResult("Failed")
+			{
+				Total = 62,
+				Passed = 36,
+				Failed = 10,
+				Warnings = 0,
+				Inconclusive = 2,
+				Skipped = 14
 			}));
 
 		// Level 2 tests are run for PRs and when packages will be published
 
-		/*PackageTests.Add(new PackageTest(2, "Run mock-assembly.dll built for NUnit V2", StandardRunner,
+		PackageTests.Add(new PackageTest(2, "TestModelTests", "Re-run tests of the TestCentric model",
+			"TestCentric.Gui.Model.Tests.dll",
+			new ExpectedResult("Passed")));
+		PackageTests.Add(new PackageTest(2, "NUnitV2Test", "Run mock-assembly.dll built for NUnit V2",
 			"v2-tests/mock-assembly.dll",
 			new ExpectedResult("Failed")
 			{
@@ -205,30 +239,20 @@ public abstract class PackageTester : GuiTester
 				Inconclusive = 1,
 				Skipped = 4
 			},
-			NUnitV2Driver));*/
-		PackageTests.Add( new PackageTest(2, "Run different builds of mock-assembly.dll together", StandardRunner,
-			"engine-tests/net35/mock-assembly.dll engine-tests/netcoreapp2.1/mock-assembly.dll",
-			new ExpectedResult("Failed")
-			{
-				Total = 72,
-				Passed = 46,
-				Failed = 10,
-				Warnings = 0,
-				Inconclusive = 2,
-				Skipped = 14
-			}));
-		// TODO: Make test work on AppVeyor - currently runs locally only
-		/*if (_parameters.IsLocalBuild)
-			PackageTests.Add( new PackageTest(2, "Run an NUnit project, specifying Release config", StandardRunner,
-				"../../GuiTests.nunit --config=Release --trace=Debug",
-				new ExpectedResult("Passed"),
-				NUnitProjectLoader));*/
+			NUnitV2Driver));
+		// TODO: This won't work because the proper config is not used. We need to either
+		// create two projects, debug and release, or make the --config option work.
+		//PackageTests.Add( new PackageTest(2, "NUnitProjectTest", "Run an NUnit project, specifying Release config",
+		//	"../../GuiTests.nunit --config=Release",
+		//	new ExpectedResult("Passed"),
+		//	NUnitProjectLoader));
 	}
 
 	protected abstract string PackageName { get; }
 	protected abstract FilePath PackageUnderTest { get; }
 	protected abstract string PackageTestDirectory { get; }
 	protected abstract string PackageTestBinDirectory { get; }
+	protected abstract string PackageResultDirectory { get; }
 	protected abstract string ExtensionInstallDirectory { get; }
 
 	protected virtual string NUnitV2Driver => "NUnit.Extension.NUnitV2Driver";
@@ -304,7 +328,7 @@ public abstract class PackageTester : GuiTester
 	{
         var reporter = new ResultReporter(PackageName);
 
-        //_context.CleanDirectory(_resultDirectory);
+        _context.CleanDirectory(PackageResultDirectory);
         string testToRun = _context.Argument("runTest", "ALL");
 
 		foreach (var packageTest in PackageTests)
@@ -317,23 +341,37 @@ public abstract class PackageTester : GuiTester
 				foreach (string extension in packageTest.ExtensionsNeeded)
 					CheckExtensionIsInstalled(extension);
 
-				var resultFile = _parameters.OutputDirectory + DEFAULT_TEST_RESULT_FILE;
-				// Delete result file ahead of time so we don't mistakenly
-				// read a left-over file from another test run. Leave the
-				// file after the run in case we need it to debug a failure.
-				if (_context.FileExists(resultFile))
-					_context.DeleteFile(resultFile);
+				var testResultDir = PackageResultDirectory + packageTest.Name + "/";
+				_context.CreateDirectory(testResultDir);
+
+				var resultFile = testResultDir + DEFAULT_TEST_RESULT_FILE;
 				
 				DisplayBanner(packageTest.Description);
 				DisplayTestEnvironment(packageTest);
 
-				RunGuiUnattended(packageTest.Runner, packageTest.Arguments);
+				RunGuiUnattended(StandardRunner, packageTest.Arguments + $" --work:{testResultDir}");
 
 				try
 				{
 					var result = new ActualResult(resultFile);
 					var report = new TestReport(packageTest, result);
 					reporter.AddReport(report);
+
+					if (result.Failed + result.Warnings > 0)
+					{
+						int index = 0;
+						Console.WriteLine();
+						Console.WriteLine("Errors, Failures and Warnings");
+
+						foreach (XmlNode childResult in result.Xml.ChildNodes)
+							WriteErrorsFailuresAndWarnings(childResult, ref index, 1);
+					}
+
+					Console.WriteLine("\nTest Run Summary");
+					Console.WriteLine("  Overall Result: " + result.OverallResult);
+
+					Console.WriteLine($"  Test Count: {result.Total}, Passed: {result.Passed}, Failed: {result.Failed}"
+						+$" Warnings: {result.Warnings}, Inconclusive: {result.Inconclusive}, Skipped: {result.Skipped}\n");
 
 					Console.WriteLine(report.Errors.Count == 0
 						? "\nSUCCESS: Test Result matches expected result!"
@@ -360,9 +398,84 @@ public abstract class PackageTester : GuiTester
 		Console.WriteLine("Test Environment");
 		Console.WriteLine($"   OS Version: {Environment.OSVersion.VersionString}");
 		Console.WriteLine($"  CLR Version: {Environment.Version}");
-		Console.WriteLine($"       Runner: {test.Runner}");
 		Console.WriteLine($"    Arguments: {test.Arguments}");
 		Console.WriteLine();
+	}
+
+	private void WriteErrorsFailuresAndWarnings(XmlNode resultNode, ref int index, int level)
+	{
+		string resultState = GetAttribute(resultNode, "result");
+
+		switch (resultNode.Name)
+		{
+			case "test-case":
+				if (resultState == "Failed" || resultState == "Warning")
+					WriteResultNode(resultNode, ++index);
+				return;
+
+			case "test-suite":
+				if (resultState == "Failed" || resultState == "Warning")
+				{
+					var suiteType = GetAttribute(resultNode, "type");
+					if (suiteType == "Theory")
+					{
+						// Report failure of the entire theory and then go on
+						// to list the individual cases that failed
+						WriteResultNode(resultNode, ++index);
+					}
+					else
+					{
+						// Where did this happen? Default is in the current test.
+						var site = GetAttribute(resultNode, "site");
+
+						// Correct a problem in some framework versions, whereby warnings and some failures 
+						// are promulgated to the containing suite without setting the FailureSite.
+						if (site == null)
+						{ 
+							if (resultNode.SelectSingleNode("reason/message")?.InnerText == "One or more child tests had warnings" ||
+								resultNode.SelectSingleNode("failure/message")?.InnerText == "One or more child tests had errors")
+							{
+								site = "Child";
+							}
+							else
+							{
+								site = "Test";
+							}
+						}
+
+						// Only report errors in the current test method, setup or teardown
+						if (site == "SetUp" || site == "TearDown" || site == "Test")
+							WriteResultNode(resultNode, ++index);
+
+						// Do not list individual "failed" tests after a one-time setup failure
+						if (site == "SetUp") return;
+					}
+				}
+
+				foreach (XmlNode childResult in resultNode.ChildNodes)
+					WriteErrorsFailuresAndWarnings(childResult, ref index, level + 1);
+				break;
+		}
+	}
+
+	private void WriteResultNode(XmlNode resultNode, int index)
+	{
+		var EOL_CHARS = new char[] { '\r', '\n' };
+		string status = GetAttribute(resultNode, "label") ?? GetAttribute(resultNode, "result");
+		string fullname = GetAttribute(resultNode, "fullname");
+		string message = (resultNode.SelectSingleNode("failure/message") ?? resultNode.SelectSingleNode("reason/message"))?.InnerText.Trim(EOL_CHARS);
+		string stackTrace = resultNode.SelectSingleNode("failure/stack-trace")?.InnerText.Trim(EOL_CHARS);
+
+		Console.WriteLine($"\n{index}) {status} : {fullname}");
+		if (message != null)
+			Console.WriteLine(message);
+		if (stackTrace != null)
+			Console.WriteLine(stackTrace);
+	}
+
+	private string GetAttribute(XmlNode node, string name)
+	{
+		return node.Attributes[name]?.Value;
 	}
 
     protected FileCheck HasFile(string file) => HasFiles(new [] { file });
@@ -379,6 +492,7 @@ public class ZipPackageTester : PackageTester
 	protected override FilePath PackageUnderTest => _parameters.ZipPackage;
 	protected override string PackageTestDirectory => _parameters.ZipTestDirectory;
 	protected override string PackageTestBinDirectory => PackageTestDirectory + "bin/";
+	protected override string PackageResultDirectory => _parameters.ZipResultDirectory;
 	protected override string ExtensionInstallDirectory => PackageTestBinDirectory + "addins/";
 	
 	protected override PackageCheck[] PackageChecks => new PackageCheck[]
@@ -411,6 +525,7 @@ public class NuGetPackageTester : PackageTester
 	protected override FilePath PackageUnderTest => _parameters.NuGetPackage;
 	protected override string PackageTestDirectory => _parameters.NuGetTestDirectory;
 	protected override string PackageTestBinDirectory => PackageTestDirectory + "tools/";
+	protected override string PackageResultDirectory => _parameters.NuGetResultDirectory;
 	protected override string ExtensionInstallDirectory => _parameters.TestDirectory;
 	
 	protected override PackageCheck[] PackageChecks => new PackageCheck[]
@@ -443,6 +558,7 @@ public class ChocolateyPackageTester : PackageTester
 	protected override FilePath PackageUnderTest => _parameters.ChocolateyPackage;
 	protected override string PackageTestDirectory => _parameters.ChocolateyTestDirectory;
 	protected override string PackageTestBinDirectory => PackageTestDirectory + "tools/";
+	protected override string PackageResultDirectory => _parameters.ChocolateyResultDirectory;
 	protected override string ExtensionInstallDirectory => _parameters.TestDirectory;
 	
 	// Chocolatey packages have a different naming convention from NuGet

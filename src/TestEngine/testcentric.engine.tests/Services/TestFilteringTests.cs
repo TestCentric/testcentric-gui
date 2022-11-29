@@ -40,12 +40,12 @@ namespace TestCentric.Engine.Services
         [TestCase("<filter/>", MockAssembly.Tests)]
         [TestCase("<filter><test>TestCentric.Tests.Assemblies.MockTestFixture</test></filter>", MockTestFixture.Tests)]
         //[TestCase("<filter><not><not><test>TestCentric.Tests.Assemblies.MockTestFixture</test></not></not></filter>", MockTestFixture.Tests)]
-        [TestCase("<filter><test>TestCentric.Tests.Assemblies.MockTestFixture.IgnoreTest</test></filter>", 1)]
+        //[TestCase("<filter><test>TestCentric.Tests.Assemblies.MockTestFixture.IgnoreTest</test></filter>", 1)]
         //[TestCase("<filter><not><not><test>TestCentric.Tests.Assemblies.MockTestFixture.IgnoreTest</test></not></not></filter>", 1)]
         [TestCase("<filter><class>TestCentric.Tests.Assemblies.MockTestFixture</class></filter>", MockTestFixture.Tests)]
-        [TestCase("<filter><name>IgnoreTest</name></filter>", 1)]
+        //[TestCase("<filter><name>IgnoreTest</name></filter>", 1)]
         [TestCase("<filter><name>MockTestFixture</name></filter>", MockTestFixture.Tests + TestCentric.Tests.TestAssembly.MockTestFixture.Tests)]
-        [TestCase("<filter><method>IgnoreTest</method></filter>", 1)]
+        //[TestCase("<filter><method>IgnoreTest</method></filter>", 1)]
         [TestCase("<filter><cat>FixtureCategory</cat></filter>", MockTestFixture.Tests)]
         //[TestCase("<filter><not><not><cat>FixtureCategory</cat></not></not></filter>", MockTestFixture.Tests)]
         public void UsingXml(string filter, int count)
@@ -54,7 +54,7 @@ namespace TestCentric.Engine.Services
         }
 
         [TestCase("TestCentric.Tests.Assemblies.MockTestFixture", MockTestFixture.Tests, TestName = "{m}_MockTestFixture")]
-        [TestCase("TestCentric.Tests.Assemblies.MockTestFixture.IgnoreTest", 1, TestName = "{m}_MockTest4")]
+        //[TestCase("TestCentric.Tests.Assemblies.MockTestFixture.IgnoreTest", 1, TestName = "{m}_IgnoreTest")]
         public void UsingTestFilterBuilderAddTest(string testName, int count)
         {
             var builder = new TestFilterBuilder();
@@ -65,11 +65,11 @@ namespace TestCentric.Engine.Services
         }
 
         [TestCase("test==TestCentric.Tests.Assemblies.MockTestFixture", MockTestFixture.Tests, TestName = "{m}_MockTestFixture")]
-        [TestCase("test==TestCentric.Tests.Assemblies.MockTestFixture.IgnoreTest", 1, TestName = "{m}_MockTest4")]
+        //[TestCase("test==TestCentric.Tests.Assemblies.MockTestFixture.IgnoreTest", 1, TestName = "{m}_IgnoreTest")]
         [TestCase("class==TestCentric.Tests.Assemblies.MockTestFixture", MockTestFixture.Tests)]
-        [TestCase("name==IgnoreTest", 1)]
+        //[TestCase("name==IgnoreTest", 1)]
         [TestCase("name==MockTestFixture", MockTestFixture.Tests + TestCentric.Tests.TestAssembly.MockTestFixture.Tests)]
-        [TestCase("method==IgnoreTest", 1)]
+        //[TestCase("method==IgnoreTest", 1)]
         [TestCase("cat==FixtureCategory", MockTestFixture.Tests)]
         public void UsingTestFilterBuilderSelectWhere(string expression, int count)
         {

@@ -1,5 +1,5 @@
 ﻿<NUnitProject>
-  <Settings processModel="Default" domainUsage="Default" />
+  <Settings processModel="Default" domainUsage="Default" activeConfig="Release"/>
   <Config name="Debug" appbase="bin/Debug">
     <assembly path="Testcentric.Gui.Tests.dll" />
     <assembly path="Testcentric.Gui.Model.Tests.dll" />

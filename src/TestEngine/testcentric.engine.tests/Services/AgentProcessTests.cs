@@ -31,10 +31,10 @@ namespace TestCentric.Engine.Services
             _package.Settings[EnginePackageSettings.TargetRuntimeFramework] = "net-4.5";
         }
 
-        [TestCase("net-4.5", false, "agents/net40/testcentric-agent.exe")]
-        [TestCase("net-4.5", true, "agents/net40/testcentric-agent-x86.exe")]
-        [TestCase("net-4.0", false, "agents/net40/testcentric-agent.exe")]
-        [TestCase("net-4.0", true, "agents/net40/testcentric-agent-x86.exe")]
+        [TestCase("net-4.5", false, "agents/net462/testcentric-agent.exe")]
+        [TestCase("net-4.5", true, "agents/net462/testcentric-agent-x86.exe")]
+        [TestCase("net-4.0", false, "agents/net462/testcentric-agent.exe")]
+        [TestCase("net-4.0", true, "agents/net462/testcentric-agent-x86.exe")]
         [TestCase("net-3.5", false, "agents/net20/testcentric-agent.exe")]
         [TestCase("net-3.5", true, "agents/net20/testcentric-agent-x86.exe")]
         [TestCase("net-2.0", false, "agents/net20/testcentric-agent.exe")]

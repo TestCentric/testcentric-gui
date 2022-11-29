@@ -124,6 +124,10 @@ public class BuildParameters
 	public string ZipTestDirectory => TestDirectory + "zip/";
 	public string NuGetTestDirectory => TestDirectory + "nuget/";
 	public string ChocolateyTestDirectory => TestDirectory + "choco/";
+	public string ResultDirectory => PackageDirectory + "results/";
+	public string ZipResultDirectory => ResultDirectory + "zip/";
+	public string NuGetResultDirectory => ResultDirectory + "nuget/";
+	public string ChocolateyResultDirectory => ResultDirectory + "choco/";
 	public string WebDirectory => ProjectDirectory + "web/";
 	public string WebOutputDirectory => WebDirectory + "output/";
 	public string WebDeployDirectory => ProjectDirectory + "../testcentric-gui.deploy/";
