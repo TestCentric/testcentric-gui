@@ -133,6 +133,17 @@ public abstract class PackageTester : GuiTester
 				Inconclusive = 1,
 				Skipped = 7
 			}));
+		PackageTests.Add(new PackageTest(1, "Net462X86Test", "Run mock-assembly-x86.dll under .NET 4.6.2",
+			"engine-tests/net462/mock-assembly-x86.dll",
+			new ExpectedResult("Failed")
+			{
+				Total = 31,
+				Passed = 18,
+				Failed = 5,
+				Warnings = 0,
+				Inconclusive = 1,
+				Skipped = 7
+			}));
 		PackageTests.Add(new PackageTest(1, "Net462TestInProcess", "Run mock-assembly.dll under .NET 4.6.2 in process",
 			"engine-tests/net462/mock-assembly.dll --inprocess",
 			new ExpectedResult("Failed")
@@ -146,6 +157,17 @@ public abstract class PackageTester : GuiTester
 			}));
 		PackageTests.Add(new PackageTest(1, "Net35Test", "Run mock-assembly.dll under .NET 3.5",
 			"engine-tests/net35/mock-assembly.dll",
+			new ExpectedResult("Failed")
+			{
+				Total = 31,
+				Passed = 18,
+				Failed = 5,
+				Warnings = 0,
+				Inconclusive = 1,
+				Skipped = 7
+			}));
+		PackageTests.Add(new PackageTest(1, "Net35X86Test", "Run mock-assembly-x86.dll under .NET 3.5",
+			"engine-tests/net35/mock-assembly-x86.dll",
 			new ExpectedResult("Failed")
 			{
 				Total = 31,
@@ -223,13 +245,32 @@ public abstract class PackageTester : GuiTester
 				Skipped = 14
 			}));
 
-		// Level 2 tests are run for PRs and when packages will be published
-
-		PackageTests.Add(new PackageTest(2, "TestModelTests", "Re-run tests of the TestCentric model",
-			"TestCentric.Gui.Model.Tests.dll",
-			new ExpectedResult("Passed")));
-		PackageTests.Add(new PackageTest(2, "NUnitV2Test", "Run mock-assembly.dll built for NUnit V2",
-			"v2-tests/mock-assembly.dll",
+		PackageTests.Add(new PackageTest(1, "NUnitV2Net462Test", "Run mock-assembly-v2.dll under net462",
+			"v2-tests/net462/mock-assembly-v2.dll",
+			new ExpectedResult("Failed")
+			{
+				Total = 28,
+				Passed = 18,
+				Failed = 5,
+				Warnings = 0,
+				Inconclusive = 1,
+				Skipped = 4
+			},
+			NUnitV2Driver));
+		PackageTests.Add(new PackageTest(1, "NUnitV2Net462TestInProcess", "Run mock-assembly-v2.dll in process under net462",
+			"v2-tests/net462/mock-assembly-v2.dll --inprocess",
+			new ExpectedResult("Failed")
+			{
+				Total = 28,
+				Passed = 18,
+				Failed = 5,
+				Warnings = 0,
+				Inconclusive = 1,
+				Skipped = 4
+			},
+			NUnitV2Driver));
+		PackageTests.Add(new PackageTest(1, "NUnitV2Net35Test", "Run mock-assembly-v2.dll under net35",
+			"v2-tests/net35/mock-assembly-v2.dll",
 			new ExpectedResult("Failed")
 			{
 				Total = 28,
@@ -333,8 +374,8 @@ public abstract class PackageTester : GuiTester
 
 		foreach (var packageTest in PackageTests)
 		{
-            //if (testToRun != "ALL" && testToRun != packageTest.Name)
-            //    continue;
+            if (testToRun != "ALL" && testToRun != packageTest.Name)
+                continue;
 
 			if (packageTest.Level > 0 && packageTest.Level <= testLevel)
 			{

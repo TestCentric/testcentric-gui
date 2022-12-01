@@ -18,6 +18,8 @@ namespace TestCentric.Engine.Runners
     /// </summary>
     public abstract class DirectTestRunner : AbstractTestRunner
     {
+        private static Logger log = InternalTrace.GetLogger(typeof(DirectTestRunner));
+
         // DirectTestRunner loads and runs tests in a particular AppDomain using
         // one driver per assembly. All test assemblies are ultimately executed by
         // one of the derived classes of DirectTestRunner, either LocalTestRunner
@@ -128,6 +130,7 @@ namespace TestCentric.Engine.Runners
                 }
 
                 IFrameworkDriver driver = driverService.GetDriver(TestDomain, testFile, targetFramework, skipNonTestAssemblies);
+                log.Debug("Using driver " + driver.GetType().Name);
 #else
                 IFrameworkDriver driver = driverService.GetDriver(testFile, skipNonTestAssemblies);
 #endif
