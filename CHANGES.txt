@@ -1,4 +1,33 @@
-﻿TestCentric Runner for NUnit 1.6.2 - March 24, 2021
+﻿TestCentric Runner for NUnit 1.6.4 - December 1, 2022
+
+Bug
+
+* 925 TestCentric-Gui 1.6.3 + NUnit IDriverFactory extension
+
+Build
+
+* 926 Update Version 1 GUI to build with current tools
+* 929 Update cake scripts
+
+TestCentric Runner for NUnit 1.6.3 - July 31, 2022
+
+Feature
+
+* 921 Remove Experimental GUI
+
+Enhancement
+
+* 919 Eliminate dependency on CLR version when initializing TestCentric
+
+Bug
+
+* 916 Testcentric 1.6.2 does not start when .Net 6.0 is installed
+
+Build
+
+* 917 Set up branch for V1 releases
+
+TestCentric Runner for NUnit 1.6.2 - March 24, 2021
 
 Although version 1.6.1 was intended to be the last release in the 1.x series, a critical issue arose, which
 is fixed by this release of version 1.6.2.
