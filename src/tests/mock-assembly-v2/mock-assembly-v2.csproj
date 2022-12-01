@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<RootNamespace>NUnit.Tests</RootNamespace>
-		<TargetFramework>net20</TargetFramework>
-		<AssemblyName>mock-assembly</AssemblyName>
+		<TargetFrameworks>net35;net462</TargetFrameworks>
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>..\..\nunit.snk</AssemblyOriginatorKeyFile>
 		<OutputPath>..\..\..\bin\$(Configuration)\v2-tests\</OutputPath>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
 	<ItemGroup>

@@ -52,11 +52,12 @@ namespace TestCentric.Tests
             static MockAssembly()
             {
                 var assembly = typeof(MockAssembly).Assembly;
-                string codeBase = assembly.EscapedCodeBase;
+//                string codeBase = assembly.EscapedCodeBase;
+                AssemblyPath = assembly.Location;
 
-                AssemblyPath = codeBase.ToLower().StartsWith(Uri.UriSchemeFile)
-                    ? new Uri(codeBase).LocalPath
-                    : assembly.Location;
+//                AssemblyPath = codeBase.ToLower().StartsWith(Uri.UriSchemeFile)
+//                    ? new Uri(codeBase).LocalPath
+//                   : assembly.Location;
             }
 #endif
         }

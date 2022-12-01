@@ -13,6 +13,7 @@ using NUnit.Engine.Extensibility;
 using TestCentric.Common;
 using TestCentric.Engine.Drivers;
 using TestCentric.Engine.Helpers;
+using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Services
 {
@@ -23,6 +24,8 @@ namespace TestCentric.Engine.Services
     public class DriverService : Service, IDriverService
     {
         readonly IList<IDriverFactory> _factories = new List<IDriverFactory>();
+
+        static readonly Logger log = InternalTrace.GetLogger(typeof(DriverService));
 
         /// <summary>
         /// Get a driver suitable for use with a particular test assembly.
@@ -77,6 +80,7 @@ namespace TestCentric.Engine.Services
                 {
                     foreach (var reference in references)
                     {
+                        log.Debug($"Factory {factory.GetType().Name} checking ref {reference.Name} version {reference.Version}");
                         if (factory.IsSupportedTestFramework(reference))
 #if NETSTANDARD1_6 || NETSTANDARD2_0
                             return factory.GetDriver(reference);
@@ -104,14 +108,14 @@ namespace TestCentric.Engine.Services
 
             try
             {
-#if NET20 || NETSTANDARD2_0
+#if !NETSTANDARD1_6 // 1.6 does not support driver extensions
                 var extensionService = ServiceContext.GetService<ExtensionService>();
                 if (extensionService != null)
                 {
                     foreach (IDriverFactory factory in extensionService.GetExtensions<IDriverFactory>())
                         _factories.Add(factory);
 
-#if NET20
+#if NETFRAMEWORK // NUnit V2 driver only works for .NET Framework
                     var node = extensionService.GetExtensionNode("/NUnit/Engine/NUnitV2Driver");
                     if (node != null)
                         _factories.Add(new NUnit2DriverFactory(node));
