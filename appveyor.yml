@@ -14,7 +14,7 @@ environment:
   MYGET_API_KEY:
     secure: wtAvJDVl2tfwiVcyLExFHLvZVfUWiQRHsfdHBFCNEATeCHo1Nd8JP642PfY8xhji
   NUGET_API_KEY:
-    secure: PVHROoT0SmGkr9CHgrKapuA0/CcJGHSP63M3fZaNLvcEVbBnzYLeCwpc0PZHhdvD
+    secure: 6lmjTFOrs5IZbOR70rmQNSOuFMPKGxA88/TuGAm1X3mspgj5bn1rnbN/iqTIC2Le
   CHOCO_API_KEY:
     secure: aDsu1U+umVYFVybjkBVtVQsatSj3QKbD7VkGQci9mNF3493g9Giao/GABISIaHjT
   GITHUB_PASSWORD:
