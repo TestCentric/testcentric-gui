@@ -1,18 +1,17 @@
-#tool nuget:?package=GitVersion.CommandLine&version=5.0.0
-#tool nuget:?package=GitReleaseManager&version=0.11.0
-#tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.8.0"
+#tool NuGet.CommandLine&version=6.0.0
+#tool nuget:?package=GitVersion.CommandLine&version=5.6.3
+#tool nuget:?package=GitReleaseManager&version=0.12.1
 
 const string SOLUTION = "testcentric-engine.sln";
-const string NUGET_ID = "TestCentric.Engine";
 const string GITHUB_OWNER = "testcentric";
 const string GITHUB_REPO = "testcentric-engine";
 const string DEFAULT_VERSION = "2.0.0";
 const string DEFAULT_CONFIGURATION = "Release";
+static readonly string[] VALID_CONFIGS = { "Release", "Debug" };
 
-const string PACKAGE_NAME = "testcentric-engine";
-const string ENGINE_PACKAGE_NAME = "TestCentric.Engine";
-const string ENGINE_CORE_PACKAGE_NAME = "TestCentric.Engine.Core";
-const string ENGINE_API_PACKAGE_NAME = "TestCentric.Engine.Api";
+const string ENGINE_PACKAGE_ID = "TestCentric.Engine";
+const string ENGINE_CORE_PACKAGE_ID = "TestCentric.Engine.Core";
+const string ENGINE_API_PACKAGE_ID = "TestCentric.Engine.Api";
 
 static readonly string TEST_BED_EXE = "test-bed.exe";
 
@@ -20,18 +19,34 @@ static readonly string TEST_BED_EXE = "test-bed.exe";
 #load "./cake/parameters.cake"
 
 //////////////////////////////////////////////////////////////////////
-// ARGUMENTS (In addition to the standard Cake arguments)
+// ARGUMENTS
 //
-// --asVersion=VERSION
+// Arguments taking a value may use  `=` or space to separate the name
+// from the value. Examples of each are shown here.
+//
+// --target=TARGET
+// -t Target
+//
+//    The name of the task to be run, e.g. Test. Defaults to Build.
+//
+// --configuration=CONFIG
+// -c CONFIG
+//
+//     The name of the configuration to build, test and/or package, e.g. Debug.
+//     Defaults to Release.
+//
+// --packageVersion=VERSION
+// --package=VERSION
 //     Specifies the full package version, including any pre-release
 //     suffix. This version is used directly instead of the default
 //     version from the script or that calculated by GitVersion.
 //     Note that all other versions (AssemblyVersion, etc.) are
 //     derived from the package version.
-//     
+//
 //     NOTE: We can't use "version" since that's an argument to Cake itself.
 //
 // --testLevel=LEVEL
+// --level=LEVEL
 //     Specifies the level of package testing, which is normally set
 //     automatically for different types of builds like CI, PR, etc.
 //     Used by developers to test packages locally without creating
@@ -40,8 +55,10 @@ static readonly string TEST_BED_EXE = "test-bed.exe";
 //       2 = Adds more tests for PRs and Dev builds uploaded to MyGet
 //       3 = Adds even more tests prior to publishing a release
 //
-// NOTE: Cake syntax now requires the `=` character. Neither a space
-//       nor a colon will work!
+// --nopush
+//     Display a message rather than actually pushing when a publish
+//     step is run. Used for testing the build script.
+//
 //////////////////////////////////////////////////////////////////////
 
 using System.Xml;
@@ -55,7 +72,7 @@ using System.Threading.Tasks;
 
 Setup<BuildParameters>((context) =>
 {
-	var parameters = BuildParameters.Create(context);
+	var parameters = BuildParameters.CreateInstance(context);
 
 	if (BuildSystem.IsRunningOnAppVeyor)
 			AppVeyor.UpdateBuildVersion(parameters.PackageVersion + "-" + AppVeyor.Environment.Build.Number);
@@ -163,7 +180,7 @@ Task("BuildEnginePackage")
 
 		Information("Creating package " + parameters.EnginePackageName);
 
-        NuGetPack($"{parameters.NuGetDirectory}/{ENGINE_PACKAGE_NAME}.nuspec", new NuGetPackSettings()
+        NuGetPack($"{parameters.NuGetDirectory}/{ENGINE_PACKAGE_ID}.nuspec", new NuGetPackSettings()
         {
             Version = parameters.PackageVersion,
             BasePath = parameters.OutputDirectory,
@@ -177,7 +194,7 @@ Task("InstallEnginePackage")
 	{
         CleanDirectory(parameters.NuGetTestDirectory);
         Unzip(parameters.EnginePackage, parameters.NuGetTestDirectory);
-		//NuGetInstall(ENGINE_PACKAGE_NAME,
+		//NuGetInstall(ENGINE_PACKAGE_ID,
         //    new NuGetInstallSettings()
         //    {
         //        Source = new [] { parameters.PackageDirectory },
@@ -234,7 +251,7 @@ Task("TestEnginePackage")
 Task("BuildEngineCorePackage")
 	.Does<BuildParameters>((parameters) =>
 	{
-		NuGetPack($"{parameters.NuGetDirectory}/TestCentric.Engine.Core.nuspec", new NuGetPackSettings()
+		NuGetPack($"{parameters.NuGetDirectory}/{ENGINE_CORE_PACKAGE_ID}.nuspec", new NuGetPackSettings()
 		{
 			Version = parameters.PackageVersion,
 			OutputDirectory = parameters.PackageDirectory,
@@ -278,7 +295,7 @@ Task("VerifyEngineCorePackage")
 Task("BuildEngineApiPackage")
 	.Does<BuildParameters>((parameters) =>
 	{
-		NuGetPack($"{parameters.NuGetDirectory}/TestCentric.Engine.Api.nuspec", new NuGetPackSettings()
+		NuGetPack($"{parameters.NuGetDirectory}/{ENGINE_API_PACKAGE_ID}.nuspec", new NuGetPackSettings()
 		{
 			Version = parameters.PackageVersion,
 			OutputDirectory = parameters.PackageDirectory,
@@ -446,29 +463,35 @@ Task("CreateProductionRelease")
 //////////////////////////////////////////////////////////////////////
 
 Task("Package")
+	.Description("Build and package all components")
 	.IsDependentOn("Build")
 	.IsDependentOn("PackageEngine")
 	.IsDependentOn("PackageEngineCore")
 	.IsDependentOn("PackageEngineApi");
 
 Task("PackageEngine")
+	.Description("Package the engine")
 	.IsDependentOn("BuildEnginePackage")
 	.IsDependentOn("VerifyEnginePackage")
 	.IsDependentOn("TestEnginePackage");
 
 Task("PackageEngineCore")
+	.Description("Package the engine core separately")
 	.IsDependentOn("BuildEngineCorePackage")
 	.IsDependentOn("VerifyEngineCorePackage");
 
 Task("PackageEngineApi")
+	.Description("Package the engine api separately")
 	.IsDependentOn("BuildEngineApiPackage")
 	.IsDependentOn("VerifyEngineApiPackage");
 
 Task("Test")
+	.Description("Builds and tests engine core and  engine")
 	.IsDependentOn("TestEngineCore")
 	.IsDependentOn("TestEngine");
 
 Task("AppVeyor")
+	.Description("Targets to run on AppVeyor")
 	.IsDependentOn("DumpSettings")
 	.IsDependentOn("Build")
 	.IsDependentOn("Test")
@@ -479,10 +502,12 @@ Task("AppVeyor")
 	.IsDependentOn("CreateProductionRelease");
 
 Task("Travis")
+	.Description("Targets to run on Travis")
     .IsDependentOn("Build")
     .IsDependentOn("Test");
 
 Task("Full")
+	.Description("Build, Test and Package")
 	.IsDependentOn("DumpSettings")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
@@ -496,4 +521,6 @@ Task("Default")
 // EXECUTION
 //////////////////////////////////////////////////////////////////////
 
-RunTarget(Argument("target", "Default"));
+// We can't use the BuildParameters.Target for this because Setup has
+// not yet run and the parameters have not been initialized.
+RunTarget(Argument("target", Argument("t", "Default")));

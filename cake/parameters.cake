@@ -23,38 +23,43 @@ private static readonly string[] LABELS_WE_RELEASE_ON_GITHUB = { "alpha", "beta"
 
 public class BuildParameters
 {
-	private ISetupContext _context;
 	private BuildSystem _buildSystem;
 
-	public static BuildParameters Create(ISetupContext context)
-	{
-		var parameters = new BuildParameters(context);
-		parameters.Validate();
+	// BuildParameters is effectively a singleton because it is only created in the Setup method.
+	private static BuildParameters _instance;
 
-		return parameters;
+	public static BuildParameters CreateInstance(ISetupContext context)
+	{
+		if (_instance != null)
+			throw new Exception("BuildParameters instance may only be created once.");
+
+		_instance = new BuildParameters(context);
+		_instance.Validate();
+
+		return _instance;
 	}
 
 	private BuildParameters(ISetupContext context)
 	{
-		_context = context;
-		_buildSystem = _context.BuildSystem();
+		SetupContext = context;
+		_buildSystem = SetupContext.BuildSystem();
 
-		Target = _context.TargetTask.Name;
-		TasksToExecute = _context.TasksToExecute.Select(t => t.Name);
+		Target = SetupContext.TargetTask.Name;
+		TasksToExecute = SetupContext.TasksToExecute.Select(t => t.Name);
 
-		Configuration = context.Argument("configuration", DEFAULT_CONFIGURATION);
+		Configuration = GetArgument("configuration|c", DEFAULT_CONFIGURATION);
 		ProjectDirectory = context.Environment.WorkingDirectory.FullPath + "/";
 
-		MyGetApiKey = _context.EnvironmentVariable(MYGET_API_KEY);
-		NuGetApiKey = _context.EnvironmentVariable(NUGET_API_KEY);
-		GitHubAccessToken = _context.EnvironmentVariable(GITHUB_ACCESS_TOKEN);
+		MyGetApiKey = SetupContext.EnvironmentVariable(MYGET_API_KEY);
+		NuGetApiKey = SetupContext.EnvironmentVariable(NUGET_API_KEY);
+		GitHubAccessToken = SetupContext.EnvironmentVariable(GITHUB_ACCESS_TOKEN);
 
 		UsingXBuild = context.EnvironmentVariable("USE_XBUILD") != null;
 		
 		BuildVersion = new BuildVersion(context, this);
 
-		if (context.HasArgument("testLevel"))
-			PackageTestLevel = context.Argument("testLevel", 1);
+		if (HasArgument("testLevel|level"))
+			PackageTestLevel = GetArgument("testLevel|level", 1);
 		else if (!BuildVersion.IsPreRelease)
 			PackageTestLevel = 3;
 		else switch (BuildVersion.PreReleaseLabel)
@@ -104,12 +109,12 @@ public class BuildParameters
 			};
 	}
 
+	public ISetupContext SetupContext { get; }
+
 	public string Target { get; }
 	public IEnumerable<string> TasksToExecute { get; }
 
-	public ICakeContext Context => _context;
-
-	public string Configuration { get; }
+	public string Configuration { get; private set; }
 
 	public BuildVersion BuildVersion { get; }
 	public string PackageVersion => BuildVersion.PackageVersion;
@@ -120,8 +125,8 @@ public class BuildParameters
 	public int PackageTestLevel { get; }
 
 	public bool IsLocalBuild => _buildSystem.IsLocalBuild;
-	public bool IsRunningOnUnix => _context.IsRunningOnUnix();
-	public bool IsRunningOnWindows => _context.IsRunningOnWindows();
+	public bool IsRunningOnUnix => SetupContext.IsRunningOnUnix();
+	public bool IsRunningOnWindows => SetupContext.IsRunningOnWindows();
 	public bool IsRunningOnAppVeyor => _buildSystem.AppVeyor.IsRunningOnAppVeyor;
 
 	public string ProjectDirectory { get; }
@@ -132,15 +137,15 @@ public class BuildParameters
 	public string TestDirectory => PackageDirectory + "test/";
 	public string NuGetTestDirectory => TestDirectory + "nuget/";
 
-	public string EnginePackageName => ENGINE_PACKAGE_NAME + "." + PackageVersion + ".nupkg";
-	public string EngineCorePackageName => ENGINE_CORE_PACKAGE_NAME + "." + PackageVersion + ".nupkg";
-	public string EngineApiPackageName => ENGINE_API_PACKAGE_NAME + "." + PackageVersion + ".nupkg";
+	public string EnginePackageName => ENGINE_PACKAGE_ID + "." + PackageVersion + ".nupkg";
+	public string EngineCorePackageName => ENGINE_CORE_PACKAGE_ID + "." + PackageVersion + ".nupkg";
+	public string EngineApiPackageName => ENGINE_API_PACKAGE_ID + "." + PackageVersion + ".nupkg";
 
 	public FilePath EnginePackage => new FilePath(PackageDirectory + EnginePackageName);
 	public FilePath EngineCorePackage => new FilePath(PackageDirectory + EngineCorePackageName);
 	public FilePath EngineApiPackage => new FilePath(PackageDirectory + EngineApiPackageName);
 
-	public string GitHubReleaseAssets => _context.IsRunningOnWindows()
+	public string GitHubReleaseAssets => SetupContext.IsRunningOnWindows()
 		? $"\"{EnginePackage},{EngineCorePackage},{EngineApiPackage}\""
         : $"\"{EnginePackage}\"";
 
@@ -176,9 +181,40 @@ public class BuildParameters
 	public string GitHubPassword { get; }
 	public string GitHubAccessToken { get; }
 
+	public bool HasArgument(string altNames)
+	{
+		foreach (string name in altNames.Split('|'))
+			if (SetupContext.HasArgument(name))
+				return true;
+
+		return false;
+	}
+
+	public T GetArgument<T>(string altNames, T defaultValue)
+	{
+		foreach (string name in altNames.Split('|'))
+			if (SetupContext.HasArgument(name))
+				return SetupContext.Argument(name, defaultValue);
+
+		return defaultValue;
+	}
+
 	private void Validate()
 	{
 		var validationErrors = new List<string>();
+		
+		bool validConfig = false;
+		foreach (string config in VALID_CONFIGS)
+		{
+			if (string.Equals(config, Configuration, StringComparison.OrdinalIgnoreCase))
+			{
+				Configuration = config;
+				validConfig = true;
+			}
+		}
+
+		if (!validConfig)
+			validationErrors.Add($"Invalid configuration: {Configuration}");
 
 		if (TasksToExecute.Contains("PublishPackages"))
 		{
@@ -205,7 +241,7 @@ public class BuildParameters
 		{
 			DumpSettings();
 
-			var msg = new StringBuilder("Parameter validation failed! See settings above.\n\nErrors found:\n");
+			var msg = new StringBuilder("Parameter validation failed! See settings above.\r\n\nErrors found:\r\n");
 			foreach (var error in validationErrors)
 				msg.AppendLine("  " + error);
 

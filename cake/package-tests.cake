@@ -77,7 +77,7 @@ public abstract class PackageTester
     public PackageTester(BuildParameters parameters)
     {
         _parameters = parameters;
-        _context = parameters.Context;
+        _context = parameters.SetupContext;
 
         PackageTests = new List<PackageTest>();
 
@@ -361,7 +361,7 @@ public class NuGetPackageTester : PackageTester
 
     protected override void InstallEngineExtension(string extension)
     {
-        _parameters.Context.NuGetInstall(extension,
+        _parameters.SetupContext.NuGetInstall(extension,
             new NuGetInstallSettings()
             {
                 OutputDirectory = ExtensionInstallDirectory,
