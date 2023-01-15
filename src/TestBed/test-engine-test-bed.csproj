@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>TestCentric.Engine.TestBed</RootNamespace>
     <AssemblyName>test-bed</AssemblyName>
-    <TargetFramework>net45</TargetFramework>
+    <TargetFramework>net462</TargetFramework>
     <OutputPath>..\..\bin\$(Configuration)\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
