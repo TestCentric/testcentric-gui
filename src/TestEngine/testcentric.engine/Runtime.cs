@@ -63,7 +63,7 @@ namespace TestCentric.Engine
 
         #endregion
 
-        #region Absract Properties and Methods
+        #region Abstract Properties and Methods
 
         public abstract string DisplayName { get; }
 
@@ -71,7 +71,11 @@ namespace TestCentric.Engine
 
         public abstract bool Matches(Runtime targetRuntime);
 
-        public abstract Version GetClrVersionForFramework(Version frameworkVersion);
+        public virtual bool Supports(Version runtime, Version target)
+        {
+            // We assume that Major versions must match.
+            return runtime.Major == target.Major && runtime.Minor >= target.Minor;
+        }
 
         #endregion
 
@@ -85,52 +89,24 @@ namespace TestCentric.Engine
             public override string ToString() => "Net";
             public override bool Matches(Runtime targetRuntime) => targetRuntime is NetFrameworkRuntime;
 
-            public override Version GetClrVersionForFramework(Version frameworkVersion)
+            public override bool Supports(Version runtime, Version target)
             {
-                switch (frameworkVersion.Major)
-                {
-                    case 1:
-                        switch (frameworkVersion.Minor)
-                        {
-                            case 0:
-                                return new Version(1, 0, 3705);
-                            case 1:
-                                return new Version(1, 1, 4322);
-                        }
-                        break;
-                    case 2:
-                    case 3:
-                        return new Version(2, 0, 50727);
-                    case 4:
-                        return new Version(4, 0, 30319);
-                }
-
-                throw new ArgumentException($"Unknown version for .NET Framework: {frameworkVersion}", "version");
+                // Runtime 3 supports runtime 2.
+                return base.Supports(runtime, target) ||
+                    (runtime.Major == 3 && (target.Major == 2 || target.Major == 3) &&
+                    runtime.Minor >= target.Minor);
             }
         }
 
-        private class MonoRuntime : Runtime
+        private class MonoRuntime : NetFrameworkRuntime
         {
             public override string DisplayName => "Mono";
-            public override string FrameworkIdentifier => FrameworkIdentifiers.NetFramework;
 
             public override string ToString() => "Mono";
-            public override bool Matches(Runtime targetRuntime) => targetRuntime is NetFrameworkRuntime;
 
-            public override Version GetClrVersionForFramework(Version frameworkVersion)
+            public override bool Supports(Version runtime, Version target)
             {
-                switch (frameworkVersion.Major)
-                {
-                    case 1:
-                        return new Version(1, 1, 4322);
-                    case 2:
-                    case 3:
-                        return new Version(2, 0, 50727);
-                    case 4:
-                        return new Version(4, 0, 30319);
-                }
-
-                throw new ArgumentException($"Unknown version for Mono runtime: {frameworkVersion}", "version");
+                return base.Supports(runtime, target) || runtime.Major >= 4 && target.Major == 4;
             }
         }
 
@@ -141,26 +117,6 @@ namespace TestCentric.Engine
 
             public override string ToString() => "NetCore";
             public override bool Matches(Runtime targetRuntime) => targetRuntime is NetCoreRuntime;
-
-            public override Version GetClrVersionForFramework(Version frameworkVersion)
-            {
-                switch(frameworkVersion.Major)
-                {
-                    case 1:
-                    case 2:
-                        return new Version(4, 0, 30319);
-                    case 3:
-                        return new Version(3, 1, 10);
-                    case 5:
-                        return new Version(5, 0, 1);
-                    case 6:
-                        return new Version(6, 0, 0);
-                    case 7:
-                        return new Version(7, 0, 0);
-                }
-
-                throw new ArgumentException($"Unknown .NET Core version: {frameworkVersion}", "version");
-            }
         }
 
         #endregion

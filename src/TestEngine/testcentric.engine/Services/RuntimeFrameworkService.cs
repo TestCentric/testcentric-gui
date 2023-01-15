@@ -103,26 +103,6 @@ namespace TestCentric.Engine.Services
             return false;
         }
 
-        /// <summary>
-        /// Returns the best available framework that matches a target framework.
-        /// If the target framework has a build number specified, then an exact
-        /// match is needed. Otherwise, the matching framework with the highest
-        /// build number is used.
-        /// </summary>
-        public RuntimeFramework GetBestAvailableFramework(RuntimeFramework target)
-        {
-            RuntimeFramework result = target;
-
-            foreach (RuntimeFramework framework in _availableRuntimes)
-                if (framework.Supports(target))
-                {
-                    if (framework.ClrVersion.Build > result.ClrVersion.Build)
-                        result = framework;
-                }
-
-            return result;
-        }
-
         #endregion
 
         #region Helper Methods
@@ -135,8 +115,8 @@ namespace TestCentric.Engine.Services
             if (!rt1.Matches(rt2))
                 return false;
 
-            var v1 = f1.ClrVersion;
-            var v2 = f2.ClrVersion;
+            var v1 = f1.FrameworkVersion;
+            var v2 = f2.FrameworkVersion;
 
             if (v1 == AnyVersion || v2 == AnyVersion)
                 return true;

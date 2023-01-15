@@ -22,39 +22,31 @@ namespace TestCentric.Engine
         private static RuntimeFramework _currentFramework;
 
         /// <summary>
-        /// Construct from a runtime type and version. If the version has
-        /// two parts, it is taken as a framework version. If it has three
-        /// or more, it is taken as a CLR version. In either case, the other
-        /// version is deduced based on the runtime type and provided version.
+        /// Construct from a Runtime and Version.
         /// </summary>
-        /// <param name="runtime">The runtime type of the framework</param>
-        /// <param name="version">The version of the framework</param>
+        /// <param name="runtime">A Runtime instance</param>
+        /// <param name="version">The Version of the framework</param>
         public RuntimeFramework(Runtime runtime, Version version)
             : this(runtime, version, null)
         {
         }
 
         /// <summary>
-        /// Construct from a runtime type, version and profile. The version
-        /// may be either a framework version or a CLR version. If a CLR
-        /// version is provided, we try to deduce the framework version but
-        /// this may not always be successful, in which case a version of
-        /// 0.0 is used.
+        /// Construct from a Runtime, Version and profile.
         /// </summary>
-        /// <param name="runtime">The runtime type of the framework.</param>
-        /// <param name="version">The version of the framework.</param>
-        /// <param name="profile">The profile of the framework. Null if unspecified.</param>
+        /// <param name="runtime">A Runtime instance.</param>
+        /// <param name="version">The Version of the framework.</param>
+        /// <param name="profile">A string representing the profile of the framework. Null if unspecified.</param>
         public RuntimeFramework(Runtime runtime, Version version, string profile)
         {
             Runtime = runtime;
             FrameworkVersion = version;
-            ClrVersion = runtime.GetClrVersionForFramework(version);
 
             Profile = profile;
 
-            DisplayName = GetDefaultDisplayName(Runtime, FrameworkVersion, profile);
+            DisplayName = GetDefaultDisplayName(runtime, FrameworkVersion, profile);
 
-            FrameworkName = new FrameworkName(Runtime.FrameworkIdentifier, FrameworkVersion);
+            FrameworkName = new FrameworkName(runtime.FrameworkIdentifier, FrameworkVersion);
         }
 
         /// <summary>
@@ -118,7 +110,6 @@ namespace TestCentric.Engine
                     }
 
                     _currentFramework = new RuntimeFramework(runtime, new Version(major, minor));
-                    _currentFramework.ClrVersion = Environment.Version;
 
                     if (isMono)
                     {
@@ -199,11 +190,6 @@ namespace TestCentric.Engine
         public Version FrameworkVersion { get; private set; }
 
         /// <summary>
-        /// The CLR version for this runtime framework
-        /// </summary>
-        public Version ClrVersion { get; private set; }
-
-        /// <summary>
         /// The Profile for this framework, where relevant.
         /// May be null and will have different sets of
         /// values for each Runtime.
@@ -263,29 +249,21 @@ namespace TestCentric.Engine
         /// Overridden to return the short name of the framework
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
-        {
-            return this.Id;
-        }
-
+        public override string ToString() => Id;
+        
         /// <summary>
         /// Returns true if the current framework matches the
-        /// one supplied as an argument. Two frameworks match
-        /// if their runtime types are the same or either one
-        /// is RuntimeType.Any and all specified version components
-        /// are equal. Negative (i.e. unspecified) version
-        /// components are ignored.
+        /// one supplied as an argument. Both the Runtime
+        /// and the Version must match.
         /// </summary>
         /// <param name="target">The RuntimeFramework to be matched.</param>
         /// <returns><c>true</c> on match, otherwise <c>false</c></returns>
         public bool Supports(RuntimeFramework target)
         {
-            if (this.Runtime != target.Runtime)
+            if (!Runtime.Matches(target.Runtime))
                 return false;
 
-            return VersionsMatch(this.ClrVersion, target.ClrVersion)
-                && this.FrameworkVersion.Major >= target.FrameworkVersion.Major
-                && this.FrameworkVersion.Minor >= target.FrameworkVersion.Minor;
+            return Runtime.Supports(this.FrameworkVersion, target.FrameworkVersion);
         }
 
         public bool CanLoad(IRuntimeFramework requested)
@@ -295,20 +273,12 @@ namespace TestCentric.Engine
 
         private static string GetDefaultDisplayName(Runtime runtime, Version version, string profile)
         {
-            string displayName = runtime.DisplayName + " " + version.ToString();
+            string displayName = $"{runtime.DisplayName} {version}";
 
             if (!string.IsNullOrEmpty(profile) && profile != "Full")
                 displayName += " - " + profile;
 
             return displayName;
-        }
-
-        private static bool VersionsMatch(Version v1, Version v2)
-        {
-            return v1.Major == v2.Major &&
-                   v1.Minor == v2.Minor &&
-                  (v1.Build < 0 || v2.Build < 0 || v1.Build == v2.Build) &&
-                  (v1.Revision < 0 || v2.Revision < 0 || v1.Revision == v2.Revision);
         }
 
         private static string GetMonoPrefixFromAssembly(Assembly assembly)
