@@ -12,19 +12,6 @@ namespace TestCentric.Engine
     [TestFixture]
     public class RuntimeFrameworkTests
     {
-        static readonly Runtime CURRENT_RUNTIME =
-            Type.GetType("Mono.Runtime", false) != null
-                ? Runtime.Mono
-                : Runtime.Net;
-
-        [Test]
-        public void CanGetCurrentFramework()
-        {
-            RuntimeFramework framework = RuntimeFramework.CurrentFramework;
-
-            Assert.That(framework.Runtime, Is.EqualTo(CURRENT_RUNTIME));
-        }
-
         [TestCaseSource(nameof(frameworkData))]
         public void CanCreateUsingFrameworkVersion(FrameworkData data)
         {

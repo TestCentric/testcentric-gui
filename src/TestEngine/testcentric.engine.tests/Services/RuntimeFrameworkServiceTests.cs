@@ -54,9 +54,9 @@ namespace TestCentric.Engine.Services
         [Test]
         public void CurrentFrameworkMustBeAvailable()
         {
-            var current = RuntimeFramework.CurrentFramework;
+            var current = _runtimeService.CurrentFramework;
             Console.WriteLine("Current framework is {0} ({1})", current.DisplayName, current.Id);
-            Assert.That(_runtimeService.IsAvailable(current), "{0} not available", current);
+            Assert.That(_runtimeService.IsAvailable(current.Id), "{0} not available", current);
         }
 
         [Test]
@@ -115,15 +115,5 @@ namespace TestCentric.Engine.Services
         //        }
         //    });
         //}
-
-        [TestCase("1.1", "2.1", "3.1", ExpectedResult = new[] { "netcore-1.1", "netcore-2.1", "netcore-3.1" })]
-        [TestCase("1.1.14", "2.1.508", "3.1.201", ExpectedResult = new[] { "netcore-1.1", "netcore-2.1", "netcore-3.1" })]
-        [TestCase("1.1.14", "2.1.202", "2.1.508", "2.1.509", "2.1.512", "3.1.201", ExpectedResult = new[] { "netcore-1.1", "netcore-2.1", "netcore-3.1" })]
-        [TestCase("1.0.1", "2.0.7", "2.0.9", "2.1.2", "2.1.3-servicing-26724-03", "2.1.4", "2.1.5", ExpectedResult = new[] { "netcore-1.0", "netcore-2.0", "netcore-2.1" })]
-        [TestCase("1.0.1", "2.0.7", "2.0.9", "2.1.3-servicing-26724-03", ExpectedResult = new[] { "netcore-1.0", "netcore-2.0", "netcore-2.1" })]
-        public string[] GetNetCoreRuntimesFromDirectoryNames(params string[] dirNames)
-        {
-            return _runtimeService.GetNetCoreRuntimesFromDirectoryNames(dirNames).Select((r) => r.Id).ToArray();
-        }
     }
 }
