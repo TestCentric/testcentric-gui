@@ -154,7 +154,7 @@ namespace TestCentric.Engine.Services
         }
     }
 
-    public class Net40AgentLauncherTests : AgentLauncherTests<Net40AgentLauncher>
+    public class Net40AgentLauncherTests : AgentLauncherTests<Net462AgentLauncher>
     {
         protected override string[] SupportedRuntimes => new string[] { "net-2.0", "net-3.0", "net-3.5", "net-4.0", "net-4.5" };
 

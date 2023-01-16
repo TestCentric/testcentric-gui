@@ -171,9 +171,9 @@ public class BuildParameters
 	public XBuildSettings XBuildSettings { get; }
 	public NuGetRestoreSettings RestoreSettings { get; }
 
-	public string[] SupportedEngineRuntimes => new string[] {"net40"};
-	public string[] SupportedCoreRuntimes => new string[] {"net40", "net35", "netcoreapp2.1"};
-	public string[] SupportedAgentRuntimes => new string[] { "net20", "net40", "netcoreapp2.1", "netcoreapp3.1", "net5.0" };
+	public string[] SupportedEngineRuntimes => new string[] {"net462"};
+	public string[] SupportedCoreRuntimes => new string[] {"net462", "net35", "netcoreapp2.1"};
+	public string[] SupportedAgentRuntimes => new string[] { "net20", "net462", "netcoreapp2.1", "netcoreapp3.1", "net5.0" };
 
 	public string ProjectUri => "https://github.com/TestCentric/testcentric-engine";
 	public string GitHubUserId => "charliepoole";

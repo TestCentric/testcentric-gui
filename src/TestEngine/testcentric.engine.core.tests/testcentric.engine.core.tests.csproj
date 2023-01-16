@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RootNamespace>NUnit.Engine</RootNamespace>
-    <TargetFrameworks>net35;net40;netcoreapp2.1</TargetFrameworks>
+    <TargetFrameworks>net35;net462;netcoreapp2.1</TargetFrameworks>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <OutputType>Exe</OutputType>
     <SignAssembly>true</SignAssembly>
@@ -23,7 +23,7 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   
-  <ItemGroup Condition="'$(TargetFramework)'=='net40'">
+  <ItemGroup Condition="'$(TargetFramework)'=='net462'">
     <Reference Include="System.Configuration" />
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Web" />

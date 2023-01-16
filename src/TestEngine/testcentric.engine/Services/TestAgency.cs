@@ -295,7 +295,7 @@ namespace TestCentric.Engine.Services
                     foreach (IAgentLauncher launcher in _extensionService.GetExtensions<IAgentLauncher>())
                         _launchers.Add(launcher);
 
-                _launchers.Add(new Net40AgentLauncher());
+                _launchers.Add(new Net462AgentLauncher());
                 _launchers.Add(new NetCore31AgentLauncher());
                 _launchers.Add(new Net50AgentLauncher());
 

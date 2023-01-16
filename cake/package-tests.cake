@@ -82,8 +82,8 @@ public abstract class PackageTester
         PackageTests = new List<PackageTest>();
 
         //Level 1 tests are run each time we build the packages
-        PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET 4.0",
-            "engine-tests/net40/mock-assembly.dll",
+        PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET 4.6.2",
+            "engine-tests/net462/mock-assembly.dll",
             new ExpectedResult("Failed")
             {
                 Total = 36,
@@ -92,7 +92,7 @@ public abstract class PackageTester
                 Warnings = 1,
                 Inconclusive = 1,
                 Skipped = 7,
-                Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net40AgentLauncher") }
+                Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net462AgentLauncher") }
             }));
 
         PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET 3.5",
@@ -105,7 +105,7 @@ public abstract class PackageTester
                 Warnings = 1,
                 Inconclusive = 1,
                 Skipped = 7,
-                Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net40AgentLauncher") }
+                Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net462AgentLauncher") }
             }));
 
         PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET Core 2.1",
@@ -171,7 +171,7 @@ public abstract class PackageTester
                 Inconclusive = 2,
                 Skipped = 14,
                 Assemblies = new[] {
-                            new ExpectedAssemblyResult("mock-assembly.dll", "Net40AgentLauncher"),
+                            new ExpectedAssemblyResult("mock-assembly.dll", "Net462AgentLauncher"),
                             new ExpectedAssemblyResult("mock-assembly.dll", "NetCore31AgentLauncher") }
             }));
 
@@ -201,8 +201,8 @@ public abstract class PackageTester
                 new ExpectedResult("Failed")
                 {
                     Assemblies = new[] {
-                                    new ExpectedAssemblyResult("mock-assembly.dll", "Net40AgentLauncher"),
-                                    new ExpectedAssemblyResult("mock-assembly.dll", "Net40AgentLauncher"),
+                                    new ExpectedAssemblyResult("mock-assembly.dll", "Net462AgentLauncher"),
+                                    new ExpectedAssemblyResult("mock-assembly.dll", "Net462AgentLauncher"),
                                     new ExpectedAssemblyResult("mock-assembly.dll", "NetCore31AgentLauncher"),
                                     new ExpectedAssemblyResult("mock-assembly.dll", "Net50AgentLauncher") }
                 },

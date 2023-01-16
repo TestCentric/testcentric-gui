@@ -137,7 +137,7 @@ namespace TestCentric.Engine.Services
 
 #if NETCOREAPP2_1
             var assemblyName = Path.Combine(GetNetFrameworkSiblingDirectory(), "testcentric.engine.core.tests.exe");
-#elif NET40
+#elif NET462
             var assemblyName = Path.Combine(GetNetCoreSiblingDirectory(), "testcentric.engine.core.tests.dll");
 #endif
             Assert.That(assemblyName, Does.Exist);
