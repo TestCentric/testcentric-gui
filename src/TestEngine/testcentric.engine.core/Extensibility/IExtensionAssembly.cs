@@ -8,7 +8,7 @@ using System.Runtime.Versioning;
 
 namespace TestCentric.Engine.Extensibility
 {
-    internal interface IExtensionAssembly
+    public interface IExtensionAssembly
     {
         bool FromWildCard { get; }
         string AssemblyName { get; }

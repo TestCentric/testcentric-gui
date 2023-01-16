@@ -4,12 +4,10 @@
 // ***********************************************************************
 
 #if NET20 || NET35
-using System;
 using System.Diagnostics;
+using TestCentric.Engine;
 
-// NOTE: Since the .NET 4.5 engine refers to this assembly, we can't define
-// FrameworkName in the System.Runtime.Versioning namespace.
-namespace TestCentric.Engine.Compatibility
+namespace System.Runtime.Versioning
 {
     /// <summary>
     /// Compatible implementation of FrameworkName, based on the corefx implementation

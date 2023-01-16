@@ -7,7 +7,7 @@ using System;
 
 namespace TestCentric.Engine.Extensibility
 {
-    internal static class ExtensionSelector
+    public static class ExtensionSelector
     {
         /// <summary>
         /// IsDuplicateOf returns true if two assemblies have the same name.

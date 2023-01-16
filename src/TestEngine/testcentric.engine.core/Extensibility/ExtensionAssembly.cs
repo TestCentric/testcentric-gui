@@ -10,7 +10,7 @@ using Mono.Cecil;
 
 namespace TestCentric.Engine.Extensibility
 {
-    internal class ExtensionAssembly : IExtensionAssembly
+    public class ExtensionAssembly : IExtensionAssembly
     {
         public ExtensionAssembly(string filePath, bool fromWildCard)
         {

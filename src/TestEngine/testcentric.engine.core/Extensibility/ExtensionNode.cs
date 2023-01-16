@@ -5,10 +5,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
+#if !NETFRAMEWORK
 using System.Linq;
-using System.Reflection;
+#endif
 
 namespace TestCentric.Engine.Extensibility
 {
@@ -121,7 +123,15 @@ namespace TestCentric.Engine.Extensibility
         /// </summary>
         public object CreateExtensionObject(params object[] args)
         {
-            return AppDomain.CurrentDomain.CreateInstanceFromAndUnwrap(AssemblyPath, TypeName, false, 0, null, args, null, null);
+#if NETFRAMEWORK            
+            return AppDomain.CurrentDomain.CreateInstanceFromAndUnwrap(AssemblyPath, TypeName, false, 0, null, args, null, null, null);
+#else
+            var assembly = Assembly.LoadFrom(AssemblyPath);
+            var typeinfo = assembly.DefinedTypes.FirstOrDefault(t => t.FullName == TypeName);
+            return typeinfo != null
+                ? Activator.CreateInstance(typeinfo.AsType(), args)
+                : null;
+#endif
         }
 
         public void AddProperty(string name, string val)
