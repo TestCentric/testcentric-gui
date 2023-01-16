@@ -267,7 +267,7 @@ namespace TestCentric.Engine.Services
 
         private static string GetNetFrameworkSiblingDirectory()
         {
-            return GetSiblingDirectory("net40");
+            return GetSiblingDirectory("net462");
         }
 
         private static string GetNetCoreSiblingDirectory()

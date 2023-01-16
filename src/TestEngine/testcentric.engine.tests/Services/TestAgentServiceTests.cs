@@ -38,10 +38,10 @@ namespace TestCentric.Engine.Services
                 Is.EqualTo(TestAgencyTests.BUILTIN_AGENTS));
         }
 
-        [TestCase("net-2.0", "Net40AgentLauncher")]
-        [TestCase("net-3.5", "Net40AgentLauncher")]
-        [TestCase("net-4.0", "Net40AgentLauncher")]
-        [TestCase("net-4.8", "Net40AgentLauncher")]
+        [TestCase("net-2.0", "Net462AgentLauncher")]
+        [TestCase("net-3.5", "Net462AgentLauncher")]
+        [TestCase("net-4.0", "Net462AgentLauncher")]
+        [TestCase("net-4.8", "Net462AgentLauncher")]
         [TestCase("netcore-1.1", "NetCore31AgentLauncher", "Net50AgentLauncher")]
         [TestCase("netcore-2.0", "NetCore31AgentLauncher", "Net50AgentLauncher")]
         [TestCase("netcore-2.1", "NetCore31AgentLauncher", "Net50AgentLauncher")]
@@ -57,10 +57,10 @@ namespace TestCentric.Engine.Services
                 Is.EqualTo(expectedAgents));
         }
 
-        [TestCase("net-2.0", "net-2.0", "Net40AgentLauncher")]
-        [TestCase("net-4.0", "net-4.0", "Net40AgentLauncher")]
-        [TestCase("net-4.8", "net-4.5", "Net40AgentLauncher")]
-        [TestCase("net-4.8", "net-2.0", "Net40AgentLauncher")]
+        [TestCase("net-2.0", "net-2.0", "Net462AgentLauncher")]
+        [TestCase("net-4.0", "net-4.0", "Net462AgentLauncher")]
+        [TestCase("net-4.8", "net-4.5", "Net462AgentLauncher")]
+        [TestCase("net-4.8", "net-2.0", "Net462AgentLauncher")]
         [TestCase("netcore-1.1", "netcore-2.0", "NetCore31AgentLauncher", "Net50AgentLauncher")]
         [TestCase("netcore-2.1", "netcore-2.1", "NetCore31AgentLauncher", "Net50AgentLauncher")]
         [TestCase("netcore-3.0", "netcore-3.1", "NetCore31AgentLauncher", "Net50AgentLauncher")]
