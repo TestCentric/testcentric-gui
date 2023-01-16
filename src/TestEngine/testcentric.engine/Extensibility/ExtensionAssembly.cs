@@ -5,6 +5,7 @@
 
 using System;
 using System.IO;
+using System.Runtime.Versioning;
 using Mono.Cecil;
 
 namespace TestCentric.Engine.Extensibility
@@ -37,17 +38,17 @@ namespace TestCentric.Engine.Extensibility
             get { return Assembly.MainModule; }
         }
 
-        public RuntimeFramework TargetFramework
+        public FrameworkName FrameworkName
         {
             get
             {
-                var frameworkName = Assembly.GetFrameworkName();
-                if (frameworkName != null)
-                    return RuntimeFramework.FromFrameworkName(frameworkName);
+                var framework = Assembly.GetFrameworkName();
+                if (framework != null)
+                    return new FrameworkName(framework);
 
                 // No TargetFrameworkAttribute - Assume .NET Framework
                 var runtimeVersion = Assembly.GetRuntimeVersion();
-                return new RuntimeFramework(Runtime.Net, new Version(runtimeVersion.Major, runtimeVersion.Minor));
+                return new FrameworkName(FrameworkIdentifiers.NetFramework, new Version(runtimeVersion.Major, runtimeVersion.Minor));
             }
         }
 

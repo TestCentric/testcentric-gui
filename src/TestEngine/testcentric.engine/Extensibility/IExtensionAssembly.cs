@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System;
+using System.Runtime.Versioning;
 
 namespace TestCentric.Engine.Extensibility
 {
@@ -12,6 +13,6 @@ namespace TestCentric.Engine.Extensibility
         bool FromWildCard { get; }
         string AssemblyName { get; }
         Version AssemblyVersion { get; }
-        RuntimeFramework TargetFramework { get; }
+        FrameworkName FrameworkName { get; }
     }
 }

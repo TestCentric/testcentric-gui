@@ -42,8 +42,8 @@ namespace TestCentric.Engine.Extensibility
                 return false;
 
             //Look at target runtime
-            var firstTargetRuntime = first.TargetFramework.FrameworkVersion;
-            var secondTargetRuntime = second.TargetFramework.FrameworkVersion;
+            var firstTargetRuntime = first.FrameworkName.Version;
+            var secondTargetRuntime = second.FrameworkName.Version;
             if (firstTargetRuntime > secondTargetRuntime)
                 return true;
 
