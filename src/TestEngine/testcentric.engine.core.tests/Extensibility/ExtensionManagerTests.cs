@@ -3,7 +3,6 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-#if false // needs to be reorganized to provide access to some extension manager calls
 using System;
 using System.Linq;
 using System.IO;
@@ -12,15 +11,15 @@ using System.Collections.Generic;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 using TestCentric.Engine.Internal;
 using TestCentric.Engine.Extensibility;
 
 namespace TestCentric.Engine.Services
 {
-    public class ExtensionServiceTests
+    public class ExtensionManagerTests
     {
-        private ExtensionService _serviceClass;
-        private IExtensionService _serviceInterface;
+        private ExtensionManager _extensionManager;
 
 #pragma warning disable 414
         private static readonly string[] KnownExtensionPointPaths = {
@@ -43,23 +42,23 @@ namespace TestCentric.Engine.Services
 #pragma warning restore 414
 
         [SetUp]
-        public void CreateService()
+        public void CreateManager()
         {
-            _serviceInterface = _serviceClass = new ExtensionService();
+            _extensionManager = new ExtensionManager();
 
             // Rather than actually starting the service, which would result
             // in finding the extensions actually in use on the current system,
             // we simulate the start using this assemblies dummy extensions.
-            _serviceClass.FindExtensionPoints(typeof(TestEngine).Assembly);
-            _serviceClass.FindExtensionPoints(typeof(ITestEngine).Assembly);
+            _extensionManager.FindExtensionPoints(typeof(ExtensionManager).Assembly);
+            _extensionManager.FindExtensionPoints(typeof(ITestEngine).Assembly);
 
-            _serviceClass.FindExtensionsInAssembly(new ExtensionAssembly(GetType().Assembly.Location, false));
+            _extensionManager.FindExtensionsInAssembly(new ExtensionAssembly(GetType().Assembly.Location, false));
         }
 
         [Test]
         public void AllExtensionPointsAreKnown()
         {
-            Assert.That(_serviceInterface.ExtensionPoints.Select(ep => ep.Path), Is.EquivalentTo(KnownExtensionPointPaths));
+            Assert.That(_extensionManager.ExtensionPoints.Select(ep => ep.Path), Is.EquivalentTo(KnownExtensionPointPaths));
         }
 
         [Test, Sequential]
@@ -67,7 +66,7 @@ namespace TestCentric.Engine.Services
             [ValueSource(nameof(KnownExtensionPointPaths))] string path,
             [ValueSource(nameof(KnownExtensionPointTypes))] Type type)
         {
-            var ep = _serviceInterface.GetExtensionPoint(path);
+            var ep = _extensionManager.GetExtensionPoint(path);
             Assert.NotNull(ep);
             Assert.That(ep.Path, Is.EqualTo(path));
             Assert.That(ep.TypeName, Is.EqualTo(type.FullName));
@@ -78,7 +77,7 @@ namespace TestCentric.Engine.Services
             [ValueSource(nameof(KnownExtensionPointPaths))] string path,
             [ValueSource(nameof(KnownExtensionPointTypes))] Type type)
         {
-            var ep = _serviceClass.GetExtensionPoint(type);
+            var ep = _extensionManager.GetExtensionPoint(type);
             Assert.NotNull(ep);
             Assert.That(ep.Path, Is.EqualTo(path));
             Assert.That(ep.TypeName, Is.EqualTo(type.FullName));
@@ -93,42 +92,42 @@ namespace TestCentric.Engine.Services
         };
 #pragma warning restore 414
 
-        [TestCaseSource(nameof(KnownExtensions))]
-        public void CanListExtensions(string typeName)
-        {
-            Assert.That(_serviceClass.Extensions,
-                Has.One.Property(nameof(ExtensionNode.TypeName)).EqualTo(typeName)
-                   .And.Property(nameof(ExtensionNode.Enabled)).True);
-        }
+        //[TestCaseSource(nameof(KnownExtensions))]
+        //public void CanListExtensions(string typeName)
+        //{
+        //    Assert.That(_extensionManager.Extensions,
+        //        Has.One.Property(nameof(ExtensionNode.TypeName)).EqualTo(typeName)
+        //           .And.Property(nameof(ExtensionNode.Enabled)).True);
+        //}
 
-        [Test, Sequential]
-        public void ExtensionsAreAddedToExtensionPoint(
-            [ValueSource(nameof(KnownExtensionPointPaths))] string path,
-            [ValueSource(nameof(KnownExtensionPointCounts))] int extensionCount)
-        {
-            var ep = _serviceClass.GetExtensionPoint(path);
-            Assume.That(ep, Is.Not.Null);
+        //[Test, Sequential]
+        //public void ExtensionsAreAddedToExtensionPoint(
+        //    [ValueSource(nameof(KnownExtensionPointPaths))] string path,
+        //    [ValueSource(nameof(KnownExtensionPointCounts))] int extensionCount)
+        //{
+        //    var ep = _extensionManager.GetExtensionPoint(path);
+        //    Assume.That(ep, Is.Not.Null);
 
-            Assert.That(ep.Extensions.Count, Is.EqualTo(extensionCount));
-        }
+        //    Assert.That(ep.Extensions.Count, Is.EqualTo(extensionCount));
+        //}
 
-        [Test]
-        public void ExtensionMayBeDisabledByDefault()
-        {
-            Assert.That(_serviceInterface.Extensions,
-                Has.One.Property(nameof(ExtensionNode.TypeName)).EqualTo("TestCentric.Engine.DummyDisabledExtension")
-                   .And.Property(nameof(ExtensionNode.Enabled)).False);
-        }
+        //[Test]
+        //public void ExtensionMayBeDisabledByDefault()
+        //{
+        //    Assert.That(_extensionManager.Extensions,
+        //        Has.One.Property(nameof(ExtensionNode.TypeName)).EqualTo("TestCentric.Engine.DummyDisabledExtension")
+        //           .And.Property(nameof(ExtensionNode.Enabled)).False);
+        //}
 
-        [Test]
-        public void DisabledExtensionMayBeEnabled()
-        {
-            _serviceInterface.EnableExtension("TestCentric.Engine.DummyDisabledExtension", true);
+        //[Test]
+        //public void DisabledExtensionMayBeEnabled()
+        //{
+        //    _extensionManager.EnableExtension("TestCentric.Engine.DummyDisabledExtension", true);
 
-            Assert.That(_serviceInterface.Extensions,
-                Has.One.Property(nameof(ExtensionNode.TypeName)).EqualTo("TestCentric.Engine.DummyDisabledExtension")
-                   .And.Property(nameof(ExtensionNode.Enabled)).True);
-        }
+        //    Assert.That(_extensionManager.Extensions,
+        //        Has.One.Property(nameof(ExtensionNode.TypeName)).EqualTo("TestCentric.Engine.DummyDisabledExtension")
+        //           .And.Property(nameof(ExtensionNode.Enabled)).True);
+        //}
 
         [Test]
         public void SkipsGracefullyLoadingOtherFrameworkExtensionAssembly()
@@ -136,39 +135,39 @@ namespace TestCentric.Engine.Services
             //May be null on mono
             Assume.That(Assembly.GetEntryAssembly(), Is.Not.Null, "Entry assembly is null, framework loading validation will be skipped.");
 
-#if NETCOREAPP2_1
+#if NETCOREAPP
             var assemblyName = Path.Combine(GetNetFrameworkSiblingDirectory(), "testcentric.engine.core.tests.exe");
-#elif NET462
+#else
             var assemblyName = Path.Combine(GetNetCoreSiblingDirectory(), "testcentric.engine.core.tests.dll");
 #endif
             Assert.That(assemblyName, Does.Exist);
 
-            var service = new ExtensionService();
-            service.FindExtensionPoints(typeof(TestEngine).Assembly);
-            service.FindExtensionPoints(typeof(ITestEngine).Assembly);
+            var manager = new ExtensionManager();
+            //manager.FindExtensionPoints(typeof(DriverService).Assembly);
+            manager.FindExtensionPoints(typeof(ITestEngine).Assembly);
             var extensionAssembly = new ExtensionAssembly(assemblyName, false);
 
-            Assert.That(() => service.FindExtensionsInAssembly(extensionAssembly), Throws.Nothing);
+            Assert.That(() => manager.FindExtensionsInAssembly(extensionAssembly), Throws.Nothing);
         }
 
         [TestCaseSource(nameof(ValidCombos))]
         public void ValidTargetFrameworkCombinations(FrameworkCombo combo)
         {
-            Assert.That(() => ExtensionService.CanLoadTargetFramework(combo.RunnerAssembly, combo.ExtensionAssembly),
+            Assert.That(() => ExtensionManager.CanLoadTargetFramework(combo.RunnerAssembly, combo.ExtensionAssembly),
                 Is.True);
         }
 
         [TestCaseSource(nameof(InvalidTargetFrameworkCombos))]
         public void InvalidTargetFrameworkCombinations(FrameworkCombo combo)
         {
-            Assert.That(() => ExtensionService.CanLoadTargetFramework(combo.RunnerAssembly, combo.ExtensionAssembly),
+            Assert.That(() => ExtensionManager.CanLoadTargetFramework(combo.RunnerAssembly, combo.ExtensionAssembly),
                 Is.False);
         }
 
         [TestCaseSource(nameof(InvalidRunnerCombos))]
         public void InvalidRunnerTargetFrameworkCombinations(FrameworkCombo combo)
         {
-            Assert.That(() => ExtensionService.CanLoadTargetFramework(combo.RunnerAssembly, combo.ExtensionAssembly),
+            Assert.That(() => ExtensionManager.CanLoadTargetFramework(combo.RunnerAssembly, combo.ExtensionAssembly),
                 Throws.Exception.TypeOf<NUnitEngineException>().And.Message.Contains("not .NET Standard"));
         }
 
@@ -191,7 +190,7 @@ namespace TestCentric.Engine.Services
         public static IEnumerable<TestCaseData> ValidCombos()
         {
 #if NETCOREAPP2_1
-            Assembly netstandard = typeof(ExtensionService).Assembly;
+            Assembly netstandard = typeof(ExtensionManager).Assembly;
             Assembly netcore = Assembly.GetExecutingAssembly();
 
             var extNetStandard = new ExtensionAssembly(netstandard.Location, false);
@@ -200,7 +199,7 @@ namespace TestCentric.Engine.Services
             yield return new TestCaseData(new FrameworkCombo(netcore, extNetStandard)).SetName("ValidCombo(.NET Core, .NET Standard)");
             yield return new TestCaseData(new FrameworkCombo(netcore, extNetCore)).SetName("ValidCombo(.NET Core, .Net Core)");
 #else
-            Assembly netFramework = typeof(ExtensionService).Assembly;
+            Assembly netFramework = typeof(ExtensionManager).Assembly;
 
             var extNetFramework = new ExtensionAssembly(netFramework.Location, false);
             var extNetStandard = new ExtensionAssembly(Path.Combine(TestContext.CurrentContext.TestDirectory, "testcentric.engine.core.dll"), false);
@@ -213,7 +212,7 @@ namespace TestCentric.Engine.Services
         public static IEnumerable<TestCaseData> InvalidTargetFrameworkCombos()
         {
 #if NETCOREAPP2_1
-            Assembly netstandard = typeof(ExtensionService).Assembly;
+            Assembly netstandard = typeof(ExtensionManager).Assembly;
             Assembly netcore = Assembly.GetExecutingAssembly();
 
             var extNetStandard = new ExtensionAssembly(netstandard.Location, false);
@@ -222,7 +221,7 @@ namespace TestCentric.Engine.Services
 
             yield return new TestCaseData(new FrameworkCombo(netcore, extNetFramework)).SetName("InvalidCombo(.NET Core, .NET Framework)");
 #else
-            Assembly netFramework = typeof(ExtensionService).Assembly;
+            Assembly netFramework = typeof(ExtensionManager).Assembly;
 
 
             var netCoreAppDir = GetNetCoreSiblingDirectory();
@@ -237,7 +236,7 @@ namespace TestCentric.Engine.Services
         public static IEnumerable<TestCaseData> InvalidRunnerCombos()
         {
 #if NETCOREAPP2_1
-            Assembly netstandard = typeof(ExtensionService).Assembly;
+            Assembly netstandard = typeof(ExtensionManager).Assembly;
             Assembly netcore = Assembly.GetExecutingAssembly();
 
             var extNetStandard = new ExtensionAssembly(netstandard.Location, false);
@@ -262,7 +261,7 @@ namespace TestCentric.Engine.Services
         /// <returns></returns>
         private static string GetSiblingDirectory(string dir)
         {
-            var file = new FileInfo(AssemblyHelper.GetAssemblyPath(typeof(ExtensionServiceTests).Assembly));
+            var file = new FileInfo(AssemblyHelper.GetAssemblyPath(typeof(ExtensionManagerTests).Assembly));
             return Path.Combine(file.Directory.Parent.FullName, dir);
         }
 
@@ -277,4 +276,3 @@ namespace TestCentric.Engine.Services
         }
     }
 }
-#endif

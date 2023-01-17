@@ -197,7 +197,7 @@ public abstract class PackageTester
         if (_parameters.Configuration == "Release")
         {
             PackageTests.Add(new PackageTest(1, "Run an NUnit project",
-                "TestProject.nunit",
+                "TestProject.nunit --trace",
                 new ExpectedResult("Failed")
                 {
                     Assemblies = new[] {
@@ -212,7 +212,6 @@ public abstract class PackageTester
         // NOTE: Package tests using a pluggable agent must be run after all tests
         // that assume no pluggable agents are installed!
 
-        // TODO: Reinstate test of Net20PluggableAgent when new version is available
         PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting net35 using Net20PluggableAgent",
             "engine-tests/net35/mock-assembly.dll",
             new ExpectedResult("Failed")

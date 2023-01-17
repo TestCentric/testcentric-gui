@@ -465,6 +465,10 @@ Task("CreateProductionRelease")
 Task("Package")
 	.Description("Build and package all components")
 	.IsDependentOn("Build")
+	.IsDependentOn("PackageExistingBuild");
+
+Task("PackageExistingBuild")
+	.Description("Package all components using existing build")
 	.IsDependentOn("PackageEngine")
 	.IsDependentOn("PackageEngineCore")
 	.IsDependentOn("PackageEngineApi");
