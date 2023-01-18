@@ -128,9 +128,13 @@ Task("Build")
 	.Does<BuildParameters>((parameters) =>
 	{
 		if (parameters.UsingXBuild)
-			XBuild(SOLUTION, parameters.XBuildSettings.WithProperty("Version", parameters.PackageVersion));
+			XBuild(SOLUTION, parameters.XBuildSettings
+				.WithProperty("Version", parameters.PackageVersion));
+				//.WithProperty("NUnitApiVersion", "3.16.2"));
 		else
-			MSBuild(SOLUTION, parameters.MSBuildSettings.WithProperty("Version", parameters.PackageVersion));
+			MSBuild(SOLUTION, parameters.MSBuildSettings
+				.WithProperty("Version", parameters.PackageVersion));
+				//.WithProperty("NUnitApiVersion", "3.16.2"));
 	});
 
 //////////////////////////////////////////////////////////////////////

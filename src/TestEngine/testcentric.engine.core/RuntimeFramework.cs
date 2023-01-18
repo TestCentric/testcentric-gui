@@ -82,6 +82,8 @@ namespace TestCentric.Engine
         /// </summary>
         public Version FrameworkVersion { get; private set; }
 
+        public Version ClrVersion => throw new NotImplementedException();
+
         /// <summary>
         /// The Profile for this framework, where relevant.
         /// May be null and will have different sets of

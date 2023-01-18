@@ -31,7 +31,7 @@ namespace TestCentric.Engine.Extensibility
         static ExtensionManager()
         {
             // Default - in case no attribute is found
-            COMPATIBLE_NUNIT_VERSION = new Version(4, 0);
+            COMPATIBLE_NUNIT_VERSION = new Version(3, 16, 2);
 
             var apiAssembly = typeof(IExtensionService).Assembly;
             log.Debug($"  Using API Assembly {apiAssembly.GetName().FullName}");

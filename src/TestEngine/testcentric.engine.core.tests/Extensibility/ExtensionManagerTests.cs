@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 using TestCentric.Engine.Internal;
 using TestCentric.Engine.Extensibility;
 
@@ -27,7 +26,8 @@ namespace TestCentric.Engine.Services
             "/NUnit/Engine/TypeExtensions/IResultWriter",
             "/NUnit/Engine/TypeExtensions/ITestEventListener",
             "/NUnit/Engine/TypeExtensions/IDriverFactory",
-            "/NUnit/Engine/TypeExtensions/IService"
+            "/NUnit/Engine/TypeExtensions/IService",
+            "/NUnit/Engine/NUnitV2Driver"
         };
 
         private static readonly Type[] KnownExtensionPointTypes = {
@@ -35,10 +35,11 @@ namespace TestCentric.Engine.Services
             typeof(IResultWriter),
             typeof(ITestEventListener),
             typeof(IDriverFactory),
-            typeof(IService)
+            typeof(IService),
+            typeof(IFrameworkDriver)
         };
 
-        private static readonly int[] KnownExtensionPointCounts = { 1, 1, 2, 0, 1 };
+        private static readonly int[] KnownExtensionPointCounts = { 1, 1, 2, 0, 1, 2 };
 #pragma warning restore 414
 
         [SetUp]

@@ -3,8 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-#if TEMP
-#if !NETSTANDARD
+#if NETFRAMEWORK
 using System;
 using System.Reflection;
 using NUnit.Engine.Extensibility;
@@ -63,5 +62,4 @@ namespace TestCentric.Engine.Drivers
         }
     }
 }
-#endif
 #endif

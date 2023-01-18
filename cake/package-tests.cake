@@ -175,20 +175,7 @@ public abstract class PackageTester
                             new ExpectedAssemblyResult("mock-assembly.dll", "NetCore31AgentLauncher") }
             }));
 
-        //		// Level 2 tests are run for PRs and when packages will be published
-
-        //		//PackageTests.Add(new PackageTest(2, "Run mock-assembly.dll built for NUnit V2"
-        //		//	"v2-tests/mock-assembly.dll",
-        //		//	new ExpectedResult("Failed")
-        //		//	{
-        //		//		Total = 28,
-        //		//		Passed = 18,
-        //		//		Failed = 5,
-        //		//		Warnings = 0,
-        //		//		Inconclusive = 1,
-        //		//		Skipped = 4
-        //		//	},
-        //		//	NUnitV2Driver));
+        // Level 2 tests are run for PRs and when packages will be published
 
         // TODO: Use --config option when it's supported by the extension.
         // Current test relies on the fact that the Release config appears
@@ -240,6 +227,20 @@ public abstract class PackageTester
         //        Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "NetCore21AgentLauncher") }
         //    },
         //    NetCore21PluggableAgent));
+
+        // NUnitV2Driver is not yet available for the NUnit 4.0 Api
+        //PackageTests.Add(new PackageTest(1, "Run tests using the V2 framework driver",
+        //	"v2-tests/net35/v2-test-assembly.dll",
+        //	new ExpectedResult("Failed")
+        //	{
+        //		Total = 28,
+        //		Passed = 18,
+        //		Failed = 5,
+        //		Warnings = 0,
+        //		Inconclusive = 1,
+        //		Skipped = 4
+        //	},
+        //	NUnitV2Driver));
     }
 
     protected abstract string PackageName { get; }
