@@ -26,7 +26,7 @@ namespace TestCentric.Engine.Runners
         [TestCase("junk.cfg", "Unknown")]
         public void Load(string filePath, string expectedType)
         {
-            var package = new TestPackage(filePath).SubPackages[0];
+            var package = TestPackageBuilder.MakeSubPackage(filePath);
             var runner = CreateRunner(package);
             var result = runner.Load().Xml;
 
@@ -46,12 +46,12 @@ namespace TestCentric.Engine.Runners
         [TestCase("junk.cfg", "Unknown")]
         public void Explore(string filePath, string expectedType)
         {
-            var package = new TestPackage(filePath);
-            var runner = CreateRunner(package.SubPackages[0]);
+            var package = TestPackageBuilder.MakeSubPackage(filePath);
+            var runner = CreateRunner(package);
             var result = runner.Explore(TestFilter.Empty).Xml;
 
             Assert.That(result.Name, Is.EqualTo("test-suite"));
-            Assert.That(result.GetAttribute("id"), Is.EqualTo(package.SubPackages[0].ID));
+            Assert.That(result.GetAttribute("id"), Is.EqualTo(package.ID));
             Assert.That(result.GetAttribute("name"), Is.EqualTo(filePath));
             Assert.That(result.GetAttribute("fullname"), Is.EqualTo(Path.GetFullPath(filePath)));
             Assert.That(result.GetAttribute("type"), Is.EqualTo(expectedType));
@@ -76,7 +76,7 @@ namespace TestCentric.Engine.Runners
         public void Run(string filePath, string expectedType)
         {
             // We only create runners for subpackages
-            var package = new TestPackage(filePath).SubPackages[0];
+            var package = TestPackageBuilder.MakeSubPackage(filePath);
             ITestEngineRunner runner = CreateRunner(package);
             var result = runner.Run(new NullListener(), TestFilter.Empty).Xml;
             Assert.That(result.Name, Is.EqualTo("test-suite"));
