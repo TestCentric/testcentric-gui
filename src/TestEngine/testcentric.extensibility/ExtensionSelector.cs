@@ -5,7 +5,7 @@
 
 using System;
 
-namespace TestCentric.Engine.Extensibility
+namespace TestCentric.Extensibility
 {
     internal static class ExtensionSelector
     {
@@ -30,7 +30,8 @@ namespace TestCentric.Engine.Extensibility
         /// </summary>
         public static bool IsBetterVersionOf(this IExtensionAssembly first, IExtensionAssembly second)
         {
-            Guard.OperationValid(first.IsDuplicateOf(second), "IsBetterVersionOf should only be called on duplicate assemblies");
+            if (!first.IsDuplicateOf(second))
+                throw new InvalidOperationException("IsBetterVersionOf should only be called on duplicate assemblies");
 
             //Look at assembly version
             var firstVersion = first.AssemblyVersion;
@@ -42,8 +43,8 @@ namespace TestCentric.Engine.Extensibility
                 return false;
 
             //Look at target runtime
-            var firstTargetRuntime = first.TargetFramework.FrameworkVersion;
-            var secondTargetRuntime = second.TargetFramework.FrameworkVersion;
+            var firstTargetRuntime = first.FrameworkName.Version;
+            var secondTargetRuntime = second.FrameworkName.Version;
             if (firstTargetRuntime > secondTargetRuntime)
                 return true;
 

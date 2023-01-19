@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <RootNamespace>TestCentric.Engine</RootNamespace>
-    <TargetFrameworks>net40</TargetFrameworks>
+    <TargetFrameworks>net462</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\nunit.snk</AssemblyOriginatorKeyFile>
@@ -16,7 +16,7 @@
     <Version Condition="'$(Version)'==''">2.0.0-IDE</Version>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)'=='net45'">
+  <ItemGroup Condition="'$(TargetFramework)'=='net462'">
     <Reference Include="System.Configuration" />
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Web" />
@@ -31,8 +31,8 @@
   <ItemGroup>
     <PackageReference Include="NSubstitute" Version="2.0.3" />
     <PackageReference Include="NUnit" Version="3.12.0" />
-    <PackageReference Include="NUnit.Engine.Api" Version="4.0.0-dev00102" />
     <PackageReference Include="NUnitLite" Version="3.12.0" />
+	<PackageReference Include="NUnit.Engine.Api" Version="4.0.0-dev00102" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />

@@ -8,13 +8,13 @@ using System.Collections.Generic;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
 
-namespace TestCentric.Engine.Extensibility
+namespace TestCentric.Extensibility
 {
     /// <summary>
     /// An ExtensionPoint represents a single point in the TestEngine
     /// that may be extended by user addins and extensions.
     /// </summary>
-    public class ExtensionPoint : IExtensionPoint
+    internal class ExtensionPoint : IExtensionPoint
     {
         /// <summary>
         /// Construct an ExtensionPoint
@@ -27,6 +27,8 @@ namespace TestCentric.Engine.Extensibility
             TypeName = type.FullName;
             Extensions = new List<ExtensionNode>();
         }
+
+        #region IExtensionPoint Implementation
 
         /// <summary>
         /// Gets the unique path identifying this extension point.
@@ -50,6 +52,8 @@ namespace TestCentric.Engine.Extensibility
         {
             get { return this.Extensions.ToArray(); }
         }
+
+        #endregion
 
         /// <summary>
         /// Gets a list of ExtensionNodes for extensions installed on this extension point.

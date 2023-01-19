@@ -2,7 +2,7 @@
   
   <PropertyGroup>
     <RootNamespace>TestCentric.Engine</RootNamespace>
-    <TargetFrameworks>net40</TargetFrameworks>
+    <TargetFrameworks>net462</TargetFrameworks>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\nunit.snk</AssemblyOriginatorKeyFile>
 	  <DebugType>Full</DebugType>
@@ -18,7 +18,7 @@
     <Version Condition="'$(Version)'==''">2.0.0-IDE</Version>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)'=='net40'">
+  <ItemGroup Condition="'$(TargetFramework)'=='net462'">
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Web" />
   </ItemGroup>
@@ -26,6 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="..\testcentric.engine.api\testcentric.engine.api.csproj" />
     <ProjectReference Include="..\testcentric.engine.core\testcentric.engine.core.csproj" />
+	<ProjectReference Include="..\testcentric.extensibility\testcentric.extensibility.csproj" />
   </ItemGroup>
 
   <ItemGroup>

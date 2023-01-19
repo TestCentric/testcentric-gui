@@ -21,7 +21,7 @@ namespace TestCentric.Engine.Services
         // to fake current framework for better tests.
         private const string VALID_RUNTIME = "net-4.0";
         private const string INVALID_RUNTIME = "invalid-5.0";
-        private static readonly string CURRENT_RUNTIME = RuntimeFramework.CurrentFramework.Id;
+        //private static readonly string CURRENT_RUNTIME = RuntimeFramework.CurrentFramework.Id;
 
         private TestPackage _package;
         private TestPackageAnalyzer _analyzer;
@@ -38,7 +38,7 @@ namespace TestCentric.Engine.Services
             runtimeService.IsAvailable("net-2.0").Returns(true);
             runtimeService.IsAvailable("net-4.0").Returns(true);
             runtimeService.IsAvailable("net-4.5").Returns(true);
-            runtimeService.IsAvailable(CURRENT_RUNTIME).Returns(true);
+            //runtimeService.IsAvailable(CURRENT_RUNTIME).Returns(true);
             runtimeService.IsAvailable("netcore-3.0").Returns(true); // Not actually available yet, but used to test
 
             var context = new ServiceContext();

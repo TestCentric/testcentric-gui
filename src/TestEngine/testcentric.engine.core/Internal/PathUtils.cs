@@ -24,6 +24,19 @@ namespace TestCentric.Engine.Internal
         internal static char AltDirectorySeparatorChar = Path.AltDirectorySeparatorChar;
 
         /// <summary>
+        /// <summary>
+        /// Returns a boolean indicating whether the specified path
+        /// is that of an assembly - that is a dll or exe file.
+        /// </summary>
+        /// <param name="path">Path to a file.</param>
+        /// <returns>True if the file extension is dll or exe, otherwise false.</returns>
+        public static bool IsAssemblyFileType(string path)
+        {
+            string extension = Path.GetExtension(path).ToLower();
+            return extension == ".dll" || extension == ".exe";
+        }
+
+        /// <summary>
         /// Returns the relative path from a base directory to another
         /// directory or file.
         /// </summary>

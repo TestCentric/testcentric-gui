@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RootNamespace>TestCentric.Engine</RootNamespace>
-    <TargetFrameworks>net20;net40;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net20;net462;netstandard2.0</TargetFrameworks>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\nunit.snk</AssemblyOriginatorKeyFile>
 	  <DebugType>Full</DebugType>
@@ -16,13 +16,31 @@
     <Description>Core functionality used by both the engine and agents.</Description>
     <Version Condition="'$(Version)'==''">2.0.0-IDE</Version>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net20|AnyCPU'">
+    <NoWarn>1701;1702;618</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net20|AnyCPU'">
+    <NoWarn>1701;1702;618</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net462|AnyCPU'">
+    <NoWarn>1701;1702;618</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net462|AnyCPU'">
+    <NoWarn>1701;1702;618</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+    <NoWarn>1701;1702;618</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+    <NoWarn>1701;1702;618</NoWarn>
+  </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='net20'">
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Web" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)'=='net40'">
+  <ItemGroup Condition="'$(TargetFramework)'=='net462'">
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Web" />
   </ItemGroup>
@@ -34,6 +52,10 @@
     <PackageReference Include="System.Xml.XPath.XmlDocument" Version="4.3.0" />
   </ItemGroup>-->
 
+  <ItemGroup>
+	<ProjectReference Include="..\testcentric.extensibility\testcentric.extensibility.csproj" />
+  </ItemGroup>
+	
   <ItemGroup>
     <PackageReference Include="NUnit.Engine.Api" Version="4.0.0-dev00102" />
     <PackageReference Include="TestCentric.Metadata" Version="1.7.1" />

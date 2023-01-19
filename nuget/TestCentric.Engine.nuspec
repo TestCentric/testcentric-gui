@@ -34,28 +34,31 @@
 	<file src="nunit.engine.api.dll" target="tools" />
     <file src="testcentric.engine.api.dll" target="tools" />
     <file src="testcentric.engine.api.pdb" target="tools" />
-    <file src="testcentric.engine.metadata.dll" target="tools" />
-    <file src="testcentric.engine.core.dll" target="tools" />
+	<file src="testcentric.engine.metadata.dll" target="tools" />
+	<file src="testcentric.extensibility.dll" target="tools" />
+	<file src="testcentric.engine.core.dll" target="tools" />
     <file src="testcentric.engine.core.pdb" target="tools" />
     <file src="testcentric.engine.dll" target="tools" />
     <file src="testcentric.engine.pdb" target="tools" />
     <file src="../../nuget/testcentric.nuget.addins" target="content" />
 
-    <file src="agents/net40/nunit.engine.api.dll" target="tools/agents/net40" />
-    <file src="agents/net40/testcentric.engine.metadata.dll" target="tools/agents/net40" />
-    <file src="agents/net40/testcentric.engine.core.dll" target="tools/agents/net40" />
-    <file src="agents/net40/testcentric.engine.core.pdb" target="tools/agents/net40" />
-    <file src="agents/net40/testcentric-agent.exe" target="tools/agents/net40" />
-    <file src="agents/net40/testcentric-agent.pdb" target="tools/agents/net40" />
-    <file src="agents/net40/testcentric-agent.exe.config" target="tools/agents/net40" />
-    <file src="agents/net40/testcentric-agent-x86.exe" target="tools/agents/net40" />
-    <file src="agents/net40/testcentric-agent-x86.pdb" target="tools/agents/net40" />
-    <file src="agents/net40/testcentric-agent-x86.exe.config" target="tools/agents/net40" />
-    <file src="../../nuget/testcentric-agent.nuget.addins" target="tools/agents/net40" />
+    <file src="agents/net462/nunit.engine.api.dll" target="tools/agents/net462" />
+	<file src="agents/net462/testcentric.engine.metadata.dll" target="tools/agents/net462" />
+	<file src="agents/net462/testcentric.extensibility.dll" target="tools/agents/net462" />
+	<file src="agents/net462/testcentric.engine.core.dll" target="tools/agents/net462" />
+    <file src="agents/net462/testcentric.engine.core.pdb" target="tools/agents/net462" />
+    <file src="agents/net462/testcentric-agent.exe" target="tools/agents/net462" />
+    <file src="agents/net462/testcentric-agent.pdb" target="tools/agents/net462" />
+    <file src="agents/net462/testcentric-agent.exe.config" target="tools/agents/net462" />
+    <file src="agents/net462/testcentric-agent-x86.exe" target="tools/agents/net462" />
+    <file src="agents/net462/testcentric-agent-x86.pdb" target="tools/agents/net462" />
+    <file src="agents/net462/testcentric-agent-x86.exe.config" target="tools/agents/net462" />
+    <file src="../../nuget/testcentric-agent.nuget.addins" target="tools/agents/net462" />
 
     <file src="agents/netcoreapp3.1/nunit.engine.api.dll" target="tools/agents/netcoreapp3.1" />
     <file src="agents/netcoreapp3.1/testcentric.engine.metadata.dll" target="tools/agents/netcoreapp3.1" />
-    <file src="agents/netcoreapp3.1/testcentric.engine.core.dll" target="tools/agents/netcoreapp3.1" />
+	<file src="agents/netcoreapp3.1/testcentric.extensibility.dll" target="tools/agents/netcoreapp3.1" />
+	<file src="agents/netcoreapp3.1/testcentric.engine.core.dll" target="tools/agents/netcoreapp3.1" />
     <file src="agents/netcoreapp3.1/testcentric.engine.core.pdb" target="tools/agents/netcoreapp3.1" />
     <file src="agents/netcoreapp3.1/testcentric-agent.dll" target="tools/agents/netcoreapp3.1" />
     <file src="agents/netcoreapp3.1/testcentric-agent.pdb" target="tools/agents/netcoreapp3.1" />
@@ -67,7 +70,8 @@
 
     <file src="agents/net5.0/nunit.engine.api.dll" target="tools/agents/net5.0" />
     <file src="agents/net5.0/testcentric.engine.metadata.dll" target="tools/agents/net5.0" />
-    <file src="agents/net5.0/testcentric.engine.core.dll" target="tools/agents/net5.0" />
+	<file src="agents/net5.0/testcentric.extensibility.dll" target="tools/agents/net5.0" />
+	<file src="agents/net5.0/testcentric.engine.core.dll" target="tools/agents/net5.0" />
     <file src="agents/net5.0/testcentric.engine.core.pdb" target="tools/agents/net5.0" />
     <file src="agents/net5.0/testcentric-agent.dll" target="tools/agents/net5.0" />
     <file src="agents/net5.0/testcentric-agent.pdb" target="tools/agents/net5.0" />

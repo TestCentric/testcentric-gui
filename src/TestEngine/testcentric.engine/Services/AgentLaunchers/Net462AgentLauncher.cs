@@ -13,7 +13,7 @@ using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Services
 {
-    public class Net40AgentLauncher : IAgentLauncher
+    public class Net462AgentLauncher : IAgentLauncher
     {
         public TestAgentInfo AgentInfo => new TestAgentInfo(GetType().Name, TestAgentType.LocalProcess);
 
@@ -52,7 +52,7 @@ namespace TestCentric.Engine.Services
 
             var agentName = runAsX86 ? "testcentric-agent-x86.exe" : "testcentric-agent.exe";
             var enginePath = AssemblyHelper.GetDirectoryName(Assembly.GetExecutingAssembly());
-            var agentPath = System.IO.Path.Combine(enginePath, $"agents/net40/{agentName}");
+            var agentPath = System.IO.Path.Combine(enginePath, $"agents/net462/{agentName}");
             var agentArgs = sb.ToString();
 
             var process = new Process();

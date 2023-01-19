@@ -7,14 +7,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace TestCentric.Engine.Internal
+namespace TestCentric.Extensibility
 {
     /// <summary>
     /// DirectoryFinder is a utility class used for extended wildcard
     /// selection of directories and files. It's less than a full-fledged
     /// Linux-style globbing utility and more than standard wildcard use.
     /// </summary>
-    public static class DirectoryFinder
+    internal static class DirectoryFinder
     {
         /// <summary>
         /// Get a list of diretories matching and extended wildcard pattern.
@@ -26,7 +26,8 @@ namespace TestCentric.Engine.Internal
         /// <returns>A list of DirectoryInfos</returns>
         public static IList<DirectoryInfo> GetDirectories(DirectoryInfo baseDir, string pattern)
         {
-            Guard.ArgumentNotNullOrEmpty(pattern, "pattern");
+            if (pattern == null)
+                throw new NullReferenceException("pattern");
 
             if (Path.DirectorySeparatorChar == '\\')
                 pattern = pattern.Replace(Path.DirectorySeparatorChar, '/');

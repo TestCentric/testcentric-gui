@@ -5,10 +5,11 @@
 
 #if !NETCOREAPP2_1
 using System;
+using System.Runtime.Versioning;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace TestCentric.Engine.Extensibility
+namespace TestCentric.Extensibility
 {
     internal class ExtensionSelectorTests
     {
@@ -59,8 +60,8 @@ namespace TestCentric.Engine.Extensibility
         [Test]
         public void IsBetterVersionOfChoosesHighestTargetFramework()
         {
-            var first = MockExtension(targetFramework: new Version(2, 0));
-            var second = MockExtension(targetFramework: new Version(4, 7));
+            var first = MockExtension(targetVersion: new Version(2, 0));
+            var second = MockExtension(targetVersion: new Version(4, 7));
             Assert.Multiple(() =>
             {
                 Assert.That(first.IsBetterVersionOf(second), Is.False);
@@ -71,8 +72,8 @@ namespace TestCentric.Engine.Extensibility
         [Test]
         public void IsBetterVersionOfPrioritisesAssemblyVersionOverTargetFramework()
         {
-            var first = MockExtension(assemblyVersion: new Version(2, 0), targetFramework: new Version(2, 0));
-            var second = MockExtension(assemblyVersion: new Version(1, 0), targetFramework: new Version(4, 7));
+            var first = MockExtension(assemblyVersion: new Version(2, 0), targetVersion: new Version(2, 0));
+            var second = MockExtension(assemblyVersion: new Version(1, 0), targetVersion: new Version(4, 7));
             Assert.Multiple(() =>
             {
                 Assert.That(first.IsBetterVersionOf(second), Is.True);
@@ -106,14 +107,14 @@ namespace TestCentric.Engine.Extensibility
 
         private static IExtensionAssembly MockExtension(string assemblyName = "ExtensionSelectorTestsExtension",
             Version assemblyVersion = null,
-            Version targetFramework = null,
+            Version targetVersion = null,
             bool fromWildcard = false)
         {
             var sub = Substitute.For<IExtensionAssembly>();
             sub.AssemblyName.Returns(assemblyName);
             sub.AssemblyVersion.Returns(assemblyVersion ?? new Version(1, 0));
-            targetFramework = targetFramework ?? new Version(2, 0);
-            sub.TargetFramework.Returns(new RuntimeFramework(Runtime.Net, targetFramework));
+            targetVersion = targetVersion ?? new Version(2, 0);
+            sub.FrameworkName.Returns(new FrameworkName(".NETFramework", targetVersion));
             sub.FromWildCard.Returns(fromWildcard);
             return sub;
         }
