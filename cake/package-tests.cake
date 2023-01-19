@@ -365,7 +365,7 @@ public class NuGetPackageTester : PackageTester
             new NuGetInstallSettings()
             {
                 OutputDirectory = ExtensionInstallDirectory,
-                Prerelease = true
+                //Prerelease = true
             });
     }
 }

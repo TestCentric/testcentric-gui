@@ -15,7 +15,7 @@ namespace TestCentric.Extensibility
     public class ExtensionManager : IExtensionManager
     {
         // TODO: static Logger log = InternalTrace.GetLogger(typeof(ExtensionManager));
-        static readonly Version COMPATIBLE_NUNIT_VERSION;
+        static readonly Version NUNIT_API_VERSION;
 
         private readonly List<ExtensionPoint> _extensionPoints = new List<ExtensionPoint>();
         private readonly Dictionary<string, ExtensionPoint> _pathIndex = new Dictionary<string, ExtensionPoint>();
@@ -30,11 +30,11 @@ namespace TestCentric.Extensibility
         static ExtensionManager()
         {
             // Default - in case no attribute is found
-            COMPATIBLE_NUNIT_VERSION = new Version(3, 16, 2);
+            NUNIT_API_VERSION = new Version(3, 16, 2);
 
-            var apiAssembly = typeof(IExtensionService).Assembly;
+            var nunitApiAssembly = typeof(IExtensionService).Assembly;
             // TODO:  // TODO:  log.Debug($"  Using API Assembly {apiAssembly.GetName().FullName}");
-            var attrs = apiAssembly.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false);
+            var attrs = nunitApiAssembly.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false);
 
             if (attrs.Length > 0)
             {
@@ -43,8 +43,10 @@ namespace TestCentric.Extensibility
                 int dash = version.IndexOf('-');
                 if (dash > 0)
                     version = version.Substring(0, dash);
-                COMPATIBLE_NUNIT_VERSION = new Version(version);
+                NUNIT_API_VERSION = new Version(version);
             }
+
+            Console.WriteLine($"Extension Manager using NUnit API {NUNIT_API_VERSION}");
         }
 
         public ExtensionManager(params Assembly[] rootAsemblies)
@@ -74,7 +76,7 @@ namespace TestCentric.Extensibility
 
             // Check each assembly to see if it contains extensions
             // TODO:  // TODO:  log.Info($"Searching for extensions compatible with NUnit {COMPATIBLE_NUNIT_VERSION} API");
-            Console.WriteLine($"Searching for extensions compatible with NUnit {COMPATIBLE_NUNIT_VERSION} API");
+            Console.WriteLine($"Searching for extensions compatible with NUnit {NUNIT_API_VERSION} API");
             foreach (var candidate in _extensionAssemblies)
                 FindExtensionsInAssembly(candidate);
         }
@@ -398,7 +400,7 @@ namespace TestCentric.Extensibility
                     if (versionArg != null)
                     {
                         var requiredVersion = new Version((string)versionArg);
-                        if (requiredVersion > COMPATIBLE_NUNIT_VERSION)
+                        if (requiredVersion > NUNIT_API_VERSION)
                         {
                             // TODO:  log.Warning($"  Ignoring {type.Name} because it requires NUnit {requiredVersion} API");
                             continue;
