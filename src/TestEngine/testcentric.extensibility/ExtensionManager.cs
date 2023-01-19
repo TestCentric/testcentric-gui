@@ -9,13 +9,12 @@ using System.Reflection;
 using Mono.Cecil;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
-using TestCentric.Engine.Internal;
 
-namespace TestCentric.Engine.Extensibility
+namespace TestCentric.Extensibility
 {
-    public class ExtensionManager
+    public class ExtensionManager : IExtensionManager
     {
-        static Logger log = InternalTrace.GetLogger(typeof(ExtensionManager));
+        // TODO: static Logger log = InternalTrace.GetLogger(typeof(ExtensionManager));
         static readonly Version COMPATIBLE_NUNIT_VERSION;
 
         private readonly List<ExtensionPoint> _extensionPoints = new List<ExtensionPoint>();
@@ -34,7 +33,7 @@ namespace TestCentric.Engine.Extensibility
             COMPATIBLE_NUNIT_VERSION = new Version(3, 16, 2);
 
             var apiAssembly = typeof(IExtensionService).Assembly;
-            log.Debug($"  Using API Assembly {apiAssembly.GetName().FullName}");
+            // TODO:  // TODO:  log.Debug($"  Using API Assembly {apiAssembly.GetName().FullName}");
             var attrs = apiAssembly.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false);
 
             if (attrs.Length > 0)
@@ -61,26 +60,28 @@ namespace TestCentric.Engine.Extensibility
         public void Initialize(string startDir)
         {
             // Find all extension points
-            log.Info("Initializing extension points");
+            // TODO:  // TODO:  log.Info("Initializing extension points");
             Console.WriteLine("Initializing extension points");
             foreach (var assembly in _rootAssemblies)
                 FindExtensionPoints(assembly);
 
             // Find potential extension assemblies
-            log.Info("Locating potential extension assemblies");
-            log.Info($"Start directory is {startDir}");
+            // TODO:  // TODO:  log.Info("Locating potential extension assemblies");
+            // TODO:  // TODO:  log.Info($"Start directory is {startDir}");
             Console.WriteLine($"Locating potential extension assemblies");
             Console.WriteLine($"Start directory is {startDir}");
             ProcessAddinsFiles(new DirectoryInfo(startDir), false);
 
             // Check each assembly to see if it contains extensions
-            log.Info($"Searching for extensions compatible with NUnit {COMPATIBLE_NUNIT_VERSION} API");
+            // TODO:  // TODO:  log.Info($"Searching for extensions compatible with NUnit {COMPATIBLE_NUNIT_VERSION} API");
             Console.WriteLine($"Searching for extensions compatible with NUnit {COMPATIBLE_NUNIT_VERSION} API");
             foreach (var candidate in _extensionAssemblies)
                 FindExtensionsInAssembly(candidate);
         }
 
         #endregion
+
+        #region IExtensionService Implementation
 
         /// <summary>
         /// Gets an enumeration of all ExtensionPoints in the engine.
@@ -98,51 +99,17 @@ namespace TestCentric.Engine.Extensibility
             get { return _extensions.ToArray(); }
         }
 
-        /// <summary>
-        /// Get an ExtensionPoint based on its unique identifying path.
-        /// </summary>
-        public ExtensionPoint GetExtensionPoint(string path)
+        public IExtensionPoint GetExtensionPoint(string path)
         {
             return _pathIndex.ContainsKey(path) ? _pathIndex[path] : null;
         }
 
-        /// <summary>
-        /// Get an ExtensionPoint based on the required Type for extensions.
-        /// </summary>
-        public ExtensionPoint GetExtensionPoint(Type type)
-        {
-            foreach (var ep in _extensionPoints)
-                if (ep.TypeName == type.FullName)
-                    return ep;
-
-            return null;
-        }
-
-        /// <summary>
-        /// Get an ExtensionPoint based on a Cecil TypeReference.
-        /// </summary>
-        private ExtensionPoint GetExtensionPoint(TypeReference type)
-        {
-            foreach (var ep in _extensionPoints)
-                if (ep.TypeName == type.FullName)
-                    return ep;
-
-            return null;
-        }
-
-        public IEnumerable<ExtensionNode> GetExtensionNodes(string path)
+        public IEnumerable<IExtensionNode> GetExtensionNodes(string path)
         {
             var ep = GetExtensionPoint(path);
             if (ep != null)
                 foreach (var node in ep.Extensions)
                     yield return node;
-        }
-
-        public ExtensionNode GetExtensionNode(string path)
-        {
-            var ep = GetExtensionPoint(path);
-
-            return ep != null && ep.Extensions.Count > 0 ? ep.Extensions[0] : null;
         }
 
         public IEnumerable<ExtensionNode> GetExtensionNodes<T>(bool includeDisabled = false)
@@ -164,6 +131,40 @@ namespace TestCentric.Engine.Extensibility
                     node.Enabled = enabled;
         }
 
+        #endregion
+
+        /// <summary>
+        /// Get an ExtensionPoint based on the required Type for extensions.
+        /// </summary>
+        internal ExtensionPoint GetExtensionPoint(Type type)
+        {
+            foreach (var ep in _extensionPoints)
+                if (ep.TypeName == type.FullName)
+                    return ep;
+
+            return null;
+        }
+
+        /// <summary>
+        /// Get an ExtensionPoint based on a Cecil TypeReference.
+        /// </summary>
+        private ExtensionPoint GetExtensionPoint(TypeReference type)
+        {
+            foreach (var ep in _extensionPoints)
+                if (ep.TypeName == type.FullName)
+                    return ep;
+
+            return null;
+        }
+
+        public ExtensionNode GetExtensionNode(string path)
+        {
+            // HACK
+            var ep = GetExtensionPoint(path) as ExtensionPoint;
+
+            return ep != null && ep.Extensions.Count > 0 ? ep.Extensions[0] : null;
+        }
+
         public IEnumerable<T> GetExtensions<T>()
         {
             foreach (var node in GetExtensionNodes<T>())
@@ -176,7 +177,7 @@ namespace TestCentric.Engine.Extensibility
         /// </summary>
         public void FindExtensionPoints(Assembly assembly)
         {
-            log.Info("Scanning {0} assembly for extension points", assembly.GetName().Name);
+            // TODO:  // TODO:  log.Info("Scanning {0} assembly for extension points", assembly.GetName().Name);
 
             foreach (ExtensionPointAttribute attr in assembly.GetCustomAttributes(typeof(ExtensionPointAttribute), false))
             {
@@ -196,7 +197,7 @@ namespace TestCentric.Engine.Extensibility
                 _extensionPoints.Add(ep);
                 _pathIndex.Add(ep.Path, ep);
 
-                log.Info("  Found Path={0}, Type={1}", ep.Path, ep.TypeName);
+                // TODO:  // TODO:  log.Info("  Found Path={0}, Type={1}", ep.Path, ep.TypeName);
             }
 
             foreach (Type type in assembly.GetExportedTypes())
@@ -221,7 +222,7 @@ namespace TestCentric.Engine.Extensibility
                     _extensionPoints.Add(ep);
                     _pathIndex.Add(path, ep);
 
-                    log.Info("  Found Path={0}, Type={1}", ep.Path, ep.TypeName);
+                    // TODO:  log.Info("  Found Path={0}, Type={1}", ep.Path, ep.TypeName);
                 }
             }
         }
@@ -260,7 +261,7 @@ namespace TestCentric.Engine.Extensibility
         /// </summary>
         private void ProcessDirectory(DirectoryInfo startDir, bool fromWildCard)
         {
-            log.Info("Scanning directory {0} for extensions", startDir.FullName);
+            // TODO:  log.Info("Scanning directory {0} for extensions", startDir.FullName);
 
             if (ProcessAddinsFiles(startDir, fromWildCard) == 0)
                 foreach (var file in startDir.GetFiles("*.dll"))
@@ -289,7 +290,7 @@ namespace TestCentric.Engine.Extensibility
         /// </summary>
         private void ProcessAddinsFile(DirectoryInfo baseDir, string fileName, bool fromWildCard)
         {
-            log.Info("Processing file " + fileName);
+            // TODO:  log.Info("Processing file " + fileName);
 
             using (var rdr = new StreamReader(fileName))
             {
@@ -375,7 +376,7 @@ namespace TestCentric.Engine.Extensibility
         /// </summary>
         internal void FindExtensionsInAssembly(ExtensionAssembly assembly)
         {
-            log.Info("Scanning {0} assembly for Extensions", assembly.FilePath);
+            // TODO:  log.Info("Scanning {0} assembly for Extensions", assembly.FilePath);
 
             if (CanLoadTargetFramework(Assembly.GetEntryAssembly(), assembly))
             {
@@ -384,14 +385,14 @@ namespace TestCentric.Engine.Extensibility
 
                 foreach (var type in assembly.MainModule.GetTypes())
                 {
-                    log.Debug($"Examining Type {type.Name}");
+                    // TODO:  log.Debug($"Examining Type {type.Name}");
 
                     CustomAttribute extensionAttr = type.GetAttribute("NUnit.Engine.Extensibility.ExtensionAttribute");
 
                     if (extensionAttr == null)
                         continue;
 
-                    log.Info($"ExtensionAttribute found on {type.Name}");
+                    // TODO:  log.Info($"ExtensionAttribute found on {type.Name}");
 
                     object versionArg = extensionAttr.GetNamedArgument("EngineVersion");
                     if (versionArg != null)
@@ -399,7 +400,7 @@ namespace TestCentric.Engine.Extensibility
                         var requiredVersion = new Version((string)versionArg);
                         if (requiredVersion > COMPATIBLE_NUNIT_VERSION)
                         {
-                            log.Warning($"  Ignoring {type.Name} because it requires NUnit {requiredVersion} API");
+                            // TODO:  log.Warning($"  Ignoring {type.Name} because it requires NUnit {requiredVersion} API");
                             continue;
                         }
                     }
@@ -420,12 +421,12 @@ namespace TestCentric.Engine.Extensibility
                         if (name != null && value != null)
                         {
                             node.AddProperty(name, value);
-                            log.Info("        ExtensionProperty {0} = {1}", name, value);
+                            // TODO:  log.Info("        ExtensionProperty {0} = {1}", name, value);
                         }
                     }
 
                     _extensions.Add(node);
-                    log.Info($"Added extension {node.TypeName}");
+                    // TODO:  log.Info($"Added extension {node.TypeName}");
 
                     ExtensionPoint ep;
                     if (node.Path == null)
@@ -443,7 +444,8 @@ namespace TestCentric.Engine.Extensibility
                     }
                     else
                     {
-                        ep = GetExtensionPoint(node.Path);
+                        // HACK
+                        ep = GetExtensionPoint(node.Path) as ExtensionPoint;
                         if (ep == null)
                         {
                             string msg = string.Format(
@@ -455,7 +457,7 @@ namespace TestCentric.Engine.Extensibility
                     }
 
                     ep.Install(node);
-                    log.Info($"Installed extension {node.TypeName} at path {node.Path}");
+                    // TODO:  log.Info($"Installed extension {node.TypeName} at path {node.Path}");
                 }
             }
         }
@@ -481,13 +483,13 @@ namespace TestCentric.Engine.Extensibility
             {
                 if (extensionFrameworkName?.StartsWith(".NETStandard") != true && extensionFrameworkName?.StartsWith(".NETCoreApp") != true)
                 {
-                    log.Info($".NET Core runners require .NET Core or .NET Standard extension for {extensionAsm.FilePath}");
+                    // TODO:  log.Info($".NET Core runners require .NET Core or .NET Standard extension for {extensionAsm.FilePath}");
                     return false;
                 }
             }
             else if (extensionFrameworkName?.StartsWith(".NETCoreApp") == true)
             {
-                log.Info($".NET Framework runners cannot load .NET Core extension {extensionAsm.FilePath}");
+                // TODO:  log.Info($".NET Framework runners cannot load .NET Core extension {extensionAsm.FilePath}");
                 return false;
             }
 

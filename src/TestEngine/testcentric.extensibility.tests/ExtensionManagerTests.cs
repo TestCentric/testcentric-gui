@@ -11,10 +11,8 @@ using System.Collections.Generic;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
 using NUnit.Framework;
-using TestCentric.Engine.Internal;
-using TestCentric.Engine.Extensibility;
 
-namespace TestCentric.Engine.Services
+namespace TestCentric.Extensibility
 {
     public class ExtensionManagerTests
     {

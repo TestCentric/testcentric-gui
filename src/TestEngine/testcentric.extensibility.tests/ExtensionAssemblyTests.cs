@@ -7,7 +7,7 @@ using System;
 using System.Reflection;
 using NUnit.Framework;
 
-namespace TestCentric.Engine.Extensibility
+namespace TestCentric.Extensibility
 {
     public class ExtensionAssemblyTests
     {
@@ -54,7 +54,7 @@ namespace TestCentric.Engine.Extensibility
         public void TargetFramework()
         {
             var framework = _ea.FrameworkName;
-            Assert.That(_ea.FrameworkName.Identifier, Is.EqualTo(FrameworkIdentifiers.NetFramework));
+            Assert.That(_ea.FrameworkName.Identifier, Is.EqualTo(".NETFramework"));
 #if NET20 || NET35
             Assert.That(_ea.FrameworkName.Version, Is.EqualTo(new Version(2, 0, 0)));
 #else

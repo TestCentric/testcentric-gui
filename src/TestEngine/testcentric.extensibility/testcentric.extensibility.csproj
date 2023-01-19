@@ -1,12 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net40;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net20;net462;netstandard2.0</TargetFrameworks>
+	<SignAssembly>true</SignAssembly>
+	<AssemblyOriginatorKeyFile>..\..\nunit.snk</AssemblyOriginatorKeyFile>
+	<DebugType>Full</DebugType>
+	<OutputPath>bin\$(Configuration)\</OutputPath>
+	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	<NoWarn>618</NoWarn>
   </PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="NUnit.Engine.Api" Version="4.0.0-dev00102" />
-		<PackageReference Include="TestCentric.Metadata" Version="1.7.1" />
-	</ItemGroup>
+  <ItemGroup>
+	<PackageReference Include="NUnit.Engine.Api" Version="4.0.0-dev00102" />
+	<PackageReference Include="TestCentric.Metadata" Version="1.7.1" />
+  </ItemGroup>
 	
 </Project>

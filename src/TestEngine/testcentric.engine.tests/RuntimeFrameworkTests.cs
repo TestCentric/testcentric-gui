@@ -42,7 +42,7 @@ namespace TestCentric.Engine
         {
             Assume.That(data.runtime != Runtime.Mono);
 
-            var framework = RuntimeFramework.FromFrameworkName(data.frameworkName);
+            var framework = RuntimeFramework.FromFrameworkName(data.frameworkName.ToString());
             Assert.That(framework.ToString(), Is.EqualTo(data.representation));
         }
 
@@ -117,9 +117,7 @@ namespace TestCentric.Engine
                 this.frameworkVersion = frameworkVersion;
                 this.representation = representation;
                 this.displayName = displayName;
-                this.frameworkName = frameworkName != null
-                    ? new FrameworkName(frameworkName)
-                    : null;
+                this.frameworkName = new FrameworkName(frameworkName);
             }
 
             public override string ToString()

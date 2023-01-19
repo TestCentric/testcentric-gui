@@ -10,8 +10,8 @@ using System.Reflection;
 using Mono.Cecil;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
-using TestCentric.Engine.Extensibility;
 using TestCentric.Engine.Internal;
+using TestCentric.Extensibility;
 
 namespace TestCentric.Engine.Drivers
 {

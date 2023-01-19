@@ -9,7 +9,7 @@ using System.Runtime.Versioning;
 using NSubstitute;
 using NUnit.Framework;
 
-namespace TestCentric.Engine.Extensibility
+namespace TestCentric.Extensibility
 {
     internal class ExtensionSelectorTests
     {
@@ -114,7 +114,7 @@ namespace TestCentric.Engine.Extensibility
             sub.AssemblyName.Returns(assemblyName);
             sub.AssemblyVersion.Returns(assemblyVersion ?? new Version(1, 0));
             targetVersion = targetVersion ?? new Version(2, 0);
-            sub.FrameworkName.Returns(new FrameworkName(FrameworkIdentifiers.NetFramework, targetVersion));
+            sub.FrameworkName.Returns(new FrameworkName(".NETFramework", targetVersion));
             sub.FromWildCard.Returns(fromWildcard);
             return sub;
         }

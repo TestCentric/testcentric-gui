@@ -3,12 +3,10 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using NUnit.Framework;
 
-namespace TestCentric.Engine.Internal
+namespace TestCentric.Extensibility
 {
     public class DirectoryFinderTests
     {

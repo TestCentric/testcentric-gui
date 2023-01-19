@@ -5,12 +5,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
+#if !NETFRAMEWORK
 using System.Linq;
-using System.Reflection;
+#endif
 
-namespace TestCentric.Engine.Extensibility
+namespace TestCentric.Extensibility
 {
     /// <summary>
     /// The ExtensionNode class represents a single extension being installed
@@ -39,15 +41,12 @@ namespace TestCentric.Engine.Extensibility
             Enabled = true; // By default
         }
 
+        #region IExtensionNode Implementation
+
         /// <summary>
         /// Gets the full name of the Type of the extension object.
         /// </summary>
         public string TypeName { get; private set; }
-
-        /// <summary>
-        /// The TargetFramework of the extension assembly.
-        /// </summary>
-        public IRuntimeFramework TargetFramework { get; }
 
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="TestCentric.Engine.Extensibility.ExtensionNode"/> is enabled.
@@ -68,12 +67,27 @@ namespace TestCentric.Engine.Extensibility
         public string Description { get; set; }
 
         /// <summary>
+        /// The TargetFramework of the extension assembly.
+        /// </summary>
+        public IRuntimeFramework TargetFramework { get; }
+
+        /// <summary>
         /// Gets a collection of the names of all this extension's properties
         /// </summary>
         public IEnumerable<string> PropertyNames
         {
             get { return _properties.Keys; }
         }
+
+        /// <summary>
+        /// Gets the path to the assembly where the extension is defined.
+        /// </summary>
+        public string AssemblyPath { get; private set; }
+
+        /// <summary>
+        /// Gets the version of the extension assembly.
+        /// </summary>
+        public Version AssemblyVersion { get; private set; }
 
         /// <summary>
         /// Gets a collection of the values of a particular named property.
@@ -89,15 +103,7 @@ namespace TestCentric.Engine.Extensibility
                 return new string[0];
         }
 
-        /// <summary>
-        /// Gets the path to the assembly where the extension is defined.
-        /// </summary>
-        public string AssemblyPath { get; private set; }
-
-        /// <summary>
-        /// Gets the version of the extension assembly.
-        /// </summary>
-        public Version AssemblyVersion { get; private set; }
+        #endregion
 
         /// <summary>
         /// Gets an object of the specified extension type, loading the Assembly
@@ -121,7 +127,15 @@ namespace TestCentric.Engine.Extensibility
         /// </summary>
         public object CreateExtensionObject(params object[] args)
         {
-            return AppDomain.CurrentDomain.CreateInstanceFromAndUnwrap(AssemblyPath, TypeName, false, 0, null, args, null, null);
+#if NETFRAMEWORK            
+            return AppDomain.CurrentDomain.CreateInstanceFromAndUnwrap(AssemblyPath, TypeName, false, 0, null, args, null, null, null);
+#else
+            var assembly = Assembly.LoadFrom(AssemblyPath);
+            var typeinfo = assembly.DefinedTypes.FirstOrDefault(t => t.FullName == TypeName);
+            return typeinfo != null
+                ? Activator.CreateInstance(typeinfo.AsType(), args)
+                : null;
+#endif
         }
 
         public void AddProperty(string name, string val)

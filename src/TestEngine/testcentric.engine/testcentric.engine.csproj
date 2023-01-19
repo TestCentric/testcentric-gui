@@ -26,6 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="..\testcentric.engine.api\testcentric.engine.api.csproj" />
     <ProjectReference Include="..\testcentric.engine.core\testcentric.engine.core.csproj" />
+	<ProjectReference Include="..\testcentric.extensibility\testcentric.extensibility.csproj" />
   </ItemGroup>
 
   <ItemGroup>

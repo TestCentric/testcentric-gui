@@ -7,7 +7,7 @@
 using System;
 using System.Reflection;
 using NUnit.Engine.Extensibility;
-using TestCentric.Engine.Extensibility;
+using TestCentric.Extensibility;
 using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Drivers

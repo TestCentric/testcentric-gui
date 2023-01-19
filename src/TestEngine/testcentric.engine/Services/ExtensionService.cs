@@ -7,11 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using Mono.Cecil;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
 using TestCentric.Engine.Extensibility;
 using TestCentric.Engine.Internal;
+using TestCentric.Extensibility;
 
 namespace TestCentric.Engine.Services
 {
@@ -29,7 +29,7 @@ namespace TestCentric.Engine.Services
         static readonly Assembly TESTCENTRIC_API_ASSEMBLY = typeof(IAgentLauncher).Assembly;
         static readonly string ENGINE_DIRECTORY = Path.GetDirectoryName(AssemblyHelper.GetAssemblyPath(ENGINE_ASSEMBLY));
 
-        private readonly ExtensionManager _extensionManager;
+        private readonly IExtensionManager _extensionManager;
 
         public ExtensionService()
         {

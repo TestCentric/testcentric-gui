@@ -130,13 +130,9 @@ namespace TestCentric.Engine
             }
         }
 
-        public static RuntimeFramework FromFrameworkName(string frameworkName)
+        public static RuntimeFramework FromFrameworkName(string framework)
         {
-            return FromFrameworkName(new FrameworkName(frameworkName));
-        }
-
-        public static RuntimeFramework FromFrameworkName(FrameworkName frameworkName)
-        {
+            var frameworkName = new FrameworkName(framework);
             return new RuntimeFramework(Runtime.FromFrameworkIdentifier(frameworkName.Identifier), frameworkName.Version, frameworkName.Profile);
         }
 
