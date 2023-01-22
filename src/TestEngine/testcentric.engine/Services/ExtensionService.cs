@@ -103,6 +103,7 @@ namespace TestCentric.Engine.Services
         {
             try
             {
+                Console.WriteLine("ExtensionService: Initializing ExtensionManager");
                 _extensionManager.Initialize(ENGINE_DIRECTORY);
                 Status = ServiceStatus.Started;
             }

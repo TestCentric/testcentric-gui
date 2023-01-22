@@ -3,7 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-#if !NETSTANDARD
+#if NETFRAMEWORK
 using System;
 using System.Collections.Generic;
 using System.Runtime.Remoting.Channels;

@@ -76,7 +76,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "test-engine-test-bed", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "hung-tests", "src\TestEngine\hung-tests\hung-tests.csproj", "{CE239574-9291-41D8-8D82-2B605714DD6C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "v2-test-assembly", "src\TestEngine\v2-test-assembly\v2-test-assembly.csproj", "{B6D3AEAE-ECDA-4047-A9BA-CC6DA3EBEDF8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "v2-test-assembly", "src\TestEngine\v2-test-assembly\v2-test-assembly.csproj", "{B6D3AEAE-ECDA-4047-A9BA-CC6DA3EBEDF8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testcentric.extensibility", "src\TestEngine\testcentric.extensibility\testcentric.extensibility.csproj", "{484211DA-BEE5-4A57-B8A7-F3A93214578D}"
 EndProject

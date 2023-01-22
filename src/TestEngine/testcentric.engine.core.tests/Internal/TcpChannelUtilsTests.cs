@@ -1,9 +1,9 @@
-// ***********************************************************************
+﻿// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric GUI contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-#if !NETCOREAPP2_1
+#if NETFRAMEWORK
 using System;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;

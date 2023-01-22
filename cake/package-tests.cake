@@ -15,14 +15,14 @@ static void CheckTestErrors(ref List<string> errorDetail)
     }
 }
 
-private void RunNUnitLite(string testName, string framework, string directory)
+private void RunNUnitLite(string testName, string runtime, string directory)
 {
-	bool isDotNetCore = framework.StartsWith("netcoreapp");
+	bool isDotNetCore = runtime.StartsWith("netcoreapp");
 	string ext = isDotNetCore ? ".dll" : ".exe";
 	string testPath = directory + testName + ext;
 
 	Information("==================================================");
-	Information("Running tests under " + framework);
+	Information("Running tests under " + runtime);
 	Information("==================================================");
 
 	int rc = isDotNetCore
@@ -30,9 +30,9 @@ private void RunNUnitLite(string testName, string framework, string directory)
 		: StartProcess(testPath);
 
 	if (rc > 0)
-		ErrorDetail.Add($"{testName}: {rc} tests failed running under {framework}");
+		ErrorDetail.Add($"{testName}: {rc} tests failed running under {runtime}");
 	else if (rc < 0)
-		ErrorDetail.Add($"{testName} returned rc = {rc} running under {framework}");
+		ErrorDetail.Add($"{testName} returned rc = {rc} running under {runtime}");
 }
 
 // Representation of a single test to be run against a pre-built package.
@@ -349,15 +349,15 @@ public abstract class PackageTester
     }
 }
 
-public class NuGetPackageTester : PackageTester
+public class EnginePackageTester : PackageTester
 {
-    public NuGetPackageTester(BuildParameters parameters) : base(parameters) { }
+    public EnginePackageTester(BuildParameters parameters) : base(parameters) { }
 
     protected override string PackageName => _parameters.EnginePackageName;
     protected override FilePath PackageUnderTest => _parameters.EnginePackage;
-    protected override string PackageTestDirectory => _parameters.NuGetTestDirectory;
+    protected override string PackageTestDirectory => _parameters.EngineTestDirectory;
     protected override string PackageTestBinDirectory => PackageTestDirectory + "tools/";
-    protected override string ExtensionInstallDirectory => PackageTestBinDirectory + "addins";
+    protected override string ExtensionInstallDirectory => _parameters.TestDirectory;
 
     protected override void InstallEngineExtension(string extension)
     {
