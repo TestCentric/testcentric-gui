@@ -46,8 +46,6 @@ namespace TestCentric.Extensibility
                     version = version.Substring(0, dash);
                 NUNIT_API_VERSION = new Version(version);
             }
-
-            Console.WriteLine($"Extension Manager using NUnit API {NUNIT_API_VERSION}");
         }
 
         public ExtensionManager(params Assembly[] rootAsemblies)
@@ -188,7 +186,6 @@ namespace TestCentric.Extensibility
         public void FindExtensionPoints(Assembly assembly)
         {
             // NYI: log.Info("Scanning {0} assembly for extension points", assembly.GetName().Name);
-            Console.WriteLine("Scanning {0} assembly for extension points", assembly.GetName().Name);
 
             foreach (ExtensionPointAttribute attr in assembly.GetCustomAttributes(typeof(ExtensionPointAttribute), false))
             {

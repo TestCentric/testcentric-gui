@@ -526,7 +526,7 @@ Task("Travis")
     .IsDependentOn("Build")
     .IsDependentOn("Test");
 
-Task("Full")
+Task("BuildTestAndPackage")
 	.Description("Build, Test and Package")
 	.IsDependentOn("DumpSettings")
     .IsDependentOn("Build")
