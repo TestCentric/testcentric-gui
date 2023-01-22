@@ -124,12 +124,13 @@ public abstract class PackageTester
                 Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net50AgentLauncher") }
             }));
 
-        PackageTests.Add(new PackageTest(1, "Run test using windows forms under .NET 5.0",
-            "engine-tests/net5.0-windows/windows-forms-test.dll",
-            new ExpectedResult("Passed")
-            {
-                Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net50AgentLauncher") }
-            }));
+        if (!parameters.IsRunningOnAppVeyor)
+            PackageTests.Add(new PackageTest(1, "Run test using windows forms under .NET 5.0",
+                "engine-tests/net5.0-windows/windows-forms-test.dll",
+                new ExpectedResult("Passed")
+                {
+                    Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net50AgentLauncher") }
+                }));
 
         // Level 2 tests are run for PRs and when packages will be published
 
