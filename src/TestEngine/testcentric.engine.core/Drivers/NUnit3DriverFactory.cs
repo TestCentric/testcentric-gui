@@ -1,17 +1,20 @@
-// ***********************************************************************
+﻿// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric GUI contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
 using System;
 using System.Reflection;
+using NUnit.Engine;
 using NUnit.Engine.Extensibility;
+using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Drivers
 {
     public class NUnit3DriverFactory : IDriverFactory
     {
         private const string NUNIT_FRAMEWORK = "nunit.framework";
+        static ILogger log = InternalTrace.GetLogger(typeof(NUnit3DriverFactory));
 
         /// <summary>
         /// Gets a flag indicating whether a given assembly name and version
@@ -23,7 +26,7 @@ namespace TestCentric.Engine.Drivers
             return NUNIT_FRAMEWORK.Equals(reference.Name, StringComparison.OrdinalIgnoreCase) && reference.Version.Major == 3;
         }
 
-#if !NETSTANDARD
+#if NETFRAMEWORK
         /// <summary>
         /// Gets a driver for a given test assembly and a framework
         /// which the assembly is already known to reference.
@@ -48,8 +51,13 @@ namespace TestCentric.Engine.Drivers
         public IFrameworkDriver GetDriver(AssemblyName reference)
         {
             Guard.ArgumentValid(IsSupportedTestFramework(reference), "Invalid framework", "reference");
-
+#if NETSTANDARD
+            log.Info("Using NUnitNetStandardDriver");
             return new NUnitNetStandardDriver();
+#else
+            log.Info("Using NUnitNetCore31Driver");
+            return new NUnitNetCore31Driver();
+#endif
         }
 #endif
     }

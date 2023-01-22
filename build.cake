@@ -105,6 +105,9 @@ Task("Clean")
 	{
 		Information("Cleaning " + parameters.OutputDirectory);
 		CleanDirectory(parameters.OutputDirectory);
+
+        Information("Cleaning Package Directory");
+        CleanDirectory(parameters.PackageDirectory);
 	});
 
 //////////////////////////////////////////////////////////////////////
@@ -156,7 +159,7 @@ Task("TestEngine")
 	.IsDependentOn("Build")
 	.Does<BuildParameters>((parameters) =>
 	{
-		foreach (var runtime in parameters.SupportedEngineRuntimes)
+		foreach (var runtime in parameters.EngineRuntimes)
 			RunNUnitLite("testcentric.engine.tests", runtime, $"{parameters.OutputDirectory}engine-tests/{runtime}/");
 	});
 
@@ -169,8 +172,12 @@ Task("TestEngineCore")
 	.IsDependentOn("Build")
 	.Does<BuildParameters>((parameters) =>
 	{
-		foreach (var runtime in parameters.SupportedCoreRuntimes)
-			RunNUnitLite("testcentric.engine.core.tests", runtime, $"{parameters.OutputDirectory}engine-tests/{runtime}/");
+		foreach (var runtime in parameters.EngineCoreRuntimes)
+		{
+			// Only .NET Standard we currently build is 2.0
+			var testUnder = runtime == "netstandard2.0" ? "netcoreapp2.1" : runtime;
+			RunNUnitLite("testcentric.engine.core.tests", testUnder, $"{parameters.OutputDirectory}engine-tests/{testUnder}/");
+		}
 	});
 
 //////////////////////////////////////////////////////////////////////
@@ -196,24 +203,25 @@ Task("BuildEnginePackage")
 Task("InstallEnginePackage")
 	.Does<BuildParameters>((parameters) =>
 	{
-        CleanDirectory(parameters.NuGetTestDirectory);
-        Unzip(parameters.EnginePackage, parameters.NuGetTestDirectory);
-		//NuGetInstall(ENGINE_PACKAGE_ID,
-        //    new NuGetInstallSettings()
-        //    {
-        //        Source = new [] { parameters.PackageDirectory },
-		//		Version = parameters.PackageVersion,
-        //        OutputDirectory = parameters.NuGetTestDirectory
-        //    });
+        //CleanDirectory(parameters.NuGetTestDirectory);
+        //Unzip(parameters.EnginePackage, parameters.NuGetTestDirectory);
+		NuGetInstall(ENGINE_PACKAGE_ID,
+            new NuGetInstallSettings()
+            {
+                Source = new [] { parameters.PackageDirectory },
+				Version = parameters.PackageVersion,
+				ExcludeVersion = true,
+                OutputDirectory = parameters.TestDirectory
+            });
 
-        Information($"Installed {parameters.EnginePackageName} at { parameters.NuGetTestDirectory}");
+        Information($"Installed {parameters.EnginePackageName} at {parameters.TestDirectory}");
     });
 
 Task("VerifyEnginePackage")
 	.IsDependentOn("InstallEnginePackage")
 	.Does<BuildParameters>((parameters) =>
 	{
-		Check.That(parameters.NuGetTestDirectory,
+		Check.That(parameters.EngineTestDirectory,
 			HasFiles("LICENSE.txt", "testcentric.png"),
 			HasDirectory("tools").WithFiles(
 				"testcentric.engine.dll", "testcentric.engine.core.dll", "nunit.engine.api.dll",
@@ -241,7 +249,7 @@ Task("TestEnginePackage")
 	.IsDependentOn("InstallEnginePackage")
 	.Does<BuildParameters>((parameters) =>
 	{
-		new NuGetPackageTester(parameters).RunAllTests();
+		new EnginePackageTester(parameters).RunAllTests();
 	});
 
 //////////////////////////////////////////////////////////////////////
@@ -518,7 +526,7 @@ Task("Travis")
     .IsDependentOn("Build")
     .IsDependentOn("Test");
 
-Task("Full")
+Task("BuildTestAndPackage")
 	.Description("Build, Test and Package")
 	.IsDependentOn("DumpSettings")
     .IsDependentOn("Build")

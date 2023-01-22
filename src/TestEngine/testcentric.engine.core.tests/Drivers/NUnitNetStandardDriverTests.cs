@@ -1,9 +1,9 @@
-// ***********************************************************************
+﻿// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric GUI contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-#if NETCOREAPP
+#if NETCOREAPP2_1
 
 using System;
 using System.Collections.Generic;

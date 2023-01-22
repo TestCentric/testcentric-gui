@@ -46,7 +46,7 @@ namespace TestCentric.Engine.Agents
             log.Info($"Running .NET Core 3.1 agent under {RuntimeInformation.FrameworkDescription}");
 #elif NETCOREAPP2_1
             log.Info($"Running .NET Core 2.1 agent under {RuntimeInformation.FrameworkDescription}");
-#elif NET40
+#elif NET462
             log.Info("Running .NET Framework 4.0 agent");
 #elif NET20
             log.Info("Running .NET Framework 2.0 agent");

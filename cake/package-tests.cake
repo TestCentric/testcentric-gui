@@ -15,24 +15,24 @@ static void CheckTestErrors(ref List<string> errorDetail)
     }
 }
 
-private void RunNUnitLite(string testName, string framework, string directory)
+private void RunNUnitLite(string testName, string runtime, string directory)
 {
-	bool isDotNetCore = framework.StartsWith("netcoreapp");
-	string ext = isDotNetCore ? ".dll" : ".exe";
-	string testPath = directory + testName + ext;
+    bool isDotNetCore = runtime.StartsWith("netcoreapp");
+    string ext = isDotNetCore ? ".dll" : ".exe";
+    string testPath = directory + testName + ext;
 
-	Information("==================================================");
-	Information("Running tests under " + framework);
-	Information("==================================================");
+    Information("==================================================");
+    Information("Running tests under " + runtime);
+    Information("==================================================");
 
-	int rc = isDotNetCore
-		? StartProcess("dotnet", testPath)
-		: StartProcess(testPath);
+    int rc = isDotNetCore
+        ? StartProcess("dotnet", testPath)
+        : StartProcess(testPath);
 
-	if (rc > 0)
-		ErrorDetail.Add($"{testName}: {rc} tests failed running under {framework}");
-	else if (rc < 0)
-		ErrorDetail.Add($"{testName} returned rc = {rc} running under {framework}");
+    if (rc > 0)
+        ErrorDetail.Add($"{testName}: {rc} tests failed running under {runtime}");
+    else if (rc < 0)
+        ErrorDetail.Add($"{testName} returned rc = {rc} running under {runtime}");
 }
 
 // Representation of a single test to be run against a pre-built package.
@@ -84,103 +84,59 @@ public abstract class PackageTester
         //Level 1 tests are run each time we build the packages
         PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET 4.6.2",
             "engine-tests/net462/mock-assembly.dll",
-            new ExpectedResult("Failed")
-            {
-                Total = 36,
-                Passed = 23,
-                Failed = 5,
-                Warnings = 1,
-                Inconclusive = 1,
-                Skipped = 7,
-                Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net462AgentLauncher") }
-            }));
+            MockAssemblyExpectedResult("Net462AgentLauncher")));
 
         PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET 3.5",
             "engine-tests/net35/mock-assembly.dll",
-            new ExpectedResult("Failed")
-            {
-                Total = 36,
-                Passed = 23,
-                Failed = 5,
-                Warnings = 1,
-                Inconclusive = 1,
-                Skipped = 7,
-                Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net462AgentLauncher") }
-            }));
+            MockAssemblyExpectedResult("Net462AgentLauncher")));
 
         PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET Core 2.1",
             "engine-tests/netcoreapp2.1/mock-assembly.dll",
-            new ExpectedResult("Failed")
-            {
-                Total = 36,
-                Passed = 23,
-                Failed = 5,
-                Warnings = 1,
-                Inconclusive = 1,
-                Skipped = 7,
-                Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "NetCore31AgentLauncher") }
-            }));
+            MockAssemblyExpectedResult("NetCore31AgentLauncher")));
 
         PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET Core 3.1",
             "engine-tests/netcoreapp3.1/mock-assembly.dll",
-            new ExpectedResult("Failed")
-            {
-                Total = 36,
-                Passed = 23,
-                Failed = 5,
-                Warnings = 1,
-                Inconclusive = 1,
-                Skipped = 7,
-                Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "NetCore31AgentLauncher") }
-            }));
+            MockAssemblyExpectedResult("NetCore31AgentLauncher")));
 
         PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET Core 1.1",
             "engine-tests/netcoreapp1.1/mock-assembly.dll",
-            new ExpectedResult("Failed")
-            {
-                Total = 36,
-                Passed = 23,
-                Failed = 5,
-                Warnings = 1,
-                Inconclusive = 1,
-                Skipped = 7,
-                Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "NetCore31AgentLauncher") }
-            }));
+            MockAssemblyExpectedResult("NetCore31AgentLauncher")));
 
         PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET 5.0",
             "engine-tests/net5.0/mock-assembly.dll",
-            new ExpectedResult("Failed")
-            {
-                Total = 32,
-                Passed = 19,
-                Failed = 5,
-                Warnings = 1,
-                Inconclusive = 1,
-                Skipped = 7,
-                Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net50AgentLauncher") }
-            }));
+            MockAssemblyExpectedResult("Net50AgentLauncher")));
 
         PackageTests.Add(new PackageTest(1, "Run different builds of mock-assembly.dll together",
             "engine-tests/net35/mock-assembly.dll engine-tests/netcoreapp2.1/mock-assembly.dll",
-            new ExpectedResult("Failed")
+            MockAssemblyExpectedResult("Net462AgentLauncher", "NetCore31AgentLauncher")));
+
+        PackageTests.Add(new PackageTest(1, "Run test using AspNetCore under .NET Core 3.1",
+            "engine-tests/netcoreapp3.1/aspnetcore-test.dll",
+            new ExpectedResult("Passed")
             {
-                Total = 72,
-                Passed = 46,
-                Failed = 10,
-                Warnings = 2,
-                Inconclusive = 2,
-                Skipped = 14,
-                Assemblies = new[] {
-                            new ExpectedAssemblyResult("mock-assembly.dll", "Net462AgentLauncher"),
-                            new ExpectedAssemblyResult("mock-assembly.dll", "NetCore31AgentLauncher") }
+                Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "NetCore31AgentLauncher") }
             }));
+
+        PackageTests.Add(new PackageTest(1, "Run test using AspNetCore under .NET 5.0",
+            "engine-tests/net5.0/aspnetcore-test.dll",
+            new ExpectedResult("Passed")
+            {
+                Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net50AgentLauncher") }
+            }));
+
+        if (!parameters.IsRunningOnAppVeyor)
+            PackageTests.Add(new PackageTest(1, "Run test using windows forms under .NET 5.0",
+                "engine-tests/net5.0-windows/windows-forms-test.dll",
+                new ExpectedResult("Passed")
+                {
+                    Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net50AgentLauncher") }
+                }));
 
         // Level 2 tests are run for PRs and when packages will be published
 
         // TODO: Use --config option when it's supported by the extension.
         // Current test relies on the fact that the Release config appears
         // first in the project file.
-        // TODO: Reinstate this when extension is updated to work.
         if (_parameters.Configuration == "Release")
         {
             PackageTests.Add(new PackageTest(1, "Run an NUnit project",
@@ -347,17 +303,37 @@ public abstract class PackageTester
         Console.WriteLine(message);
         Console.WriteLine("=======================================================");
     }
+
+    static ExpectedResult MockAssemblyExpectedResult(params string[] agentNames)
+    {
+        int ncopies = agentNames.Length;
+
+        var assemblies = new ExpectedAssemblyResult[ncopies];
+        for (int i = 0; i < ncopies; i++)
+            assemblies[i] = new ExpectedAssemblyResult("mock-assembly.dll", agentNames[i]);
+
+        return new ExpectedResult("Failed")
+        {
+            Total = 36 * ncopies,
+            Passed = 23 * ncopies,
+            Failed = 5 * ncopies,
+            Warnings = 1 * ncopies,
+            Inconclusive = 1 * ncopies,
+            Skipped = 7 * ncopies,
+            Assemblies = assemblies
+        };
+    }
 }
 
-public class NuGetPackageTester : PackageTester
+public class EnginePackageTester : PackageTester
 {
-    public NuGetPackageTester(BuildParameters parameters) : base(parameters) { }
+    public EnginePackageTester(BuildParameters parameters) : base(parameters) { }
 
     protected override string PackageName => _parameters.EnginePackageName;
     protected override FilePath PackageUnderTest => _parameters.EnginePackage;
-    protected override string PackageTestDirectory => _parameters.NuGetTestDirectory;
+    protected override string PackageTestDirectory => _parameters.EngineTestDirectory;
     protected override string PackageTestBinDirectory => PackageTestDirectory + "tools/";
-    protected override string ExtensionInstallDirectory => PackageTestBinDirectory + "addins";
+    protected override string ExtensionInstallDirectory => _parameters.TestDirectory;
 
     protected override void InstallEngineExtension(string extension)
     {

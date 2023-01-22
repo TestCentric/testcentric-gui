@@ -135,7 +135,9 @@ public class BuildParameters
 	public string NuGetDirectory => ProjectDirectory + "nuget/";
 	public string PackageDirectory => ProjectDirectory + "package/";
 	public string TestDirectory => PackageDirectory + "test/";
-	public string NuGetTestDirectory => TestDirectory + "nuget/";
+	public string EngineTestDirectory => TestDirectory + ENGINE_PACKAGE_ID + "/";
+	public string EngineCoreTestDirectory => TestDirectory + ENGINE_CORE_PACKAGE_ID + "/";
+	public string EngineApiTestDirectory => TestDirectory + ENGINE_API_PACKAGE_ID + "/";
 
 	public string EnginePackageName => ENGINE_PACKAGE_ID + "." + PackageVersion + ".nupkg";
 	public string EngineCorePackageName => ENGINE_CORE_PACKAGE_ID + "." + PackageVersion + ".nupkg";
@@ -171,9 +173,10 @@ public class BuildParameters
 	public XBuildSettings XBuildSettings { get; }
 	public NuGetRestoreSettings RestoreSettings { get; }
 
-	public string[] SupportedEngineRuntimes => new string[] {"net462"};
-	public string[] SupportedCoreRuntimes => new string[] {"net462", "net35", "netcoreapp2.1"};
-	public string[] SupportedAgentRuntimes => new string[] { "net20", "net462", "netcoreapp2.1", "netcoreapp3.1", "net5.0" };
+	public string[] EngineRuntimes => new string[] {"net462"};
+	public string[] EngineCoreRuntimes => new string[] {"net462", "net35", "netstandard2.0", "netcoreapp3.1"};
+	// Unused at present
+	public string[] AgentRuntimes => new string[] { "net20", "net462", "netcoreapp2.1", "netcoreapp3.1", "net5.0" };
 
 	public string ProjectUri => "https://github.com/TestCentric/testcentric-engine";
 	public string GitHubUserId => "charliepoole";
@@ -272,19 +275,21 @@ public class BuildParameters
 		Console.WriteLine("PreReleaseSuffix:             " + BuildVersion.PreReleaseSuffix);
 
 		Console.WriteLine("\nDIRECTORIES");
-		Console.WriteLine("Project:   " + ProjectDirectory);
-		Console.WriteLine("Output:    " + OutputDirectory);
-		Console.WriteLine("Source:    " + SourceDirectory);
-		Console.WriteLine("NuGet:     " + NuGetDirectory);
-		Console.WriteLine("Package:   " + PackageDirectory);
-		Console.WriteLine("NuGetTest: " + NuGetTestDirectory);
+		Console.WriteLine("Project:        " + ProjectDirectory);
+		Console.WriteLine("Output:         " + OutputDirectory);
+		Console.WriteLine("Source:         " + SourceDirectory);
+		Console.WriteLine("NuGet:          " + NuGetDirectory);
+		Console.WriteLine("Package:        " + PackageDirectory);
+		Console.WriteLine("EngineTest:     " + EngineTestDirectory);
+		Console.WriteLine("EngineCoreTest: " + EngineCoreTestDirectory);
+		Console.WriteLine("EngineApiTest:  " + EngineApiTestDirectory);
 
 		Console.WriteLine("\nBUILD");
 		Console.WriteLine("Build With:      " + (UsingXBuild ? "XBuild" : "MSBuild"));
 		Console.WriteLine("Configuration:   " + Configuration);
-		Console.WriteLine("Engine Runtimes: " + string.Join(", ", SupportedEngineRuntimes));
-		Console.WriteLine("Core Runtimes:   " + string.Join(", ", SupportedCoreRuntimes));
-		Console.WriteLine("Agent Runtimes:  " + string.Join(", ", SupportedAgentRuntimes));
+		Console.WriteLine("Engine Runtimes: " + string.Join(", ", EngineRuntimes));
+		Console.WriteLine("Core Runtimes:   " + string.Join(", ", EngineCoreRuntimes));
+		Console.WriteLine("Agent Runtimes:  " + string.Join(", ", AgentRuntimes));
 
 		Console.WriteLine("\nPACKAGING");
 		Console.WriteLine("MyGetPushUrl:              " + MyGetPushUrl);

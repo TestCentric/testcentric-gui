@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using Mono.Cecil;
@@ -27,9 +28,15 @@ namespace TestCentric.Engine.Drivers
 
         public DriverService()
         {
+            log.Debug("Creating ExtensionManager");
             var thisAssembly = Assembly.GetExecutingAssembly();
-            var extensionManager = new ExtensionManager(thisAssembly);
+            var extensionManager = new ExtensionManager(thisAssembly)
+            {
+                InternalTraceLevel = InternalTrace.TraceLevel,
+                WorkDirectory = Environment.CurrentDirectory
+            };
 
+            log.Debug($"Initializing ExtensionManager");
             extensionManager.Initialize(AssemblyHelper.GetDirectoryName(thisAssembly));
 
             foreach (IDriverFactory factory in extensionManager.GetExtensions<IDriverFactory>())
