@@ -110,6 +110,10 @@ public abstract class PackageTester
             "engine-tests/net6.0/mock-assembly.dll",
             MockAssemblyExpectedResult("Net60AgentLauncher")));
 
+        PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET 7.0",
+            "engine-tests/net7.0/mock-assembly.dll",
+            MockAssemblyExpectedResult("Net70AgentLauncher")));
+
         PackageTests.Add(new PackageTest(1, "Run different builds of mock-assembly.dll together",
             "engine-tests/net35/mock-assembly.dll engine-tests/netcoreapp2.1/mock-assembly.dll",
             MockAssemblyExpectedResult("Net462AgentLauncher", "NetCore31AgentLauncher")));
@@ -135,6 +139,13 @@ public abstract class PackageTester
                 Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net60AgentLauncher") }
             }));
 
+        PackageTests.Add(new PackageTest(1, "Run test using AspNetCore under .NET 7.0",
+            "engine-tests/net7.0/aspnetcore-test.dll",
+            new ExpectedResult("Passed")
+            {
+                Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net70AgentLauncher") }
+            }));
+
         if (!parameters.IsRunningOnAppVeyor)
         {
             PackageTests.Add(new PackageTest(1, "Run test using windows forms under .NET 5.0",
@@ -149,6 +160,13 @@ public abstract class PackageTester
                 new ExpectedResult("Passed")
                 {
                     Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net60AgentLauncher") }
+                }));
+
+            PackageTests.Add(new PackageTest(1, "Run test using windows forms under .NET 7.0",
+                "engine-tests/net7.0-windows/windows-forms-test.dll",
+                new ExpectedResult("Passed")
+                {
+                    Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net70AgentLauncher") }
                 }));
         }
 
