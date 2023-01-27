@@ -58,6 +58,7 @@
     <file src="agents/netcoreapp3.1/nunit.engine.api.dll" target="tools/agents/netcoreapp3.1" />
     <file src="agents/netcoreapp3.1/testcentric.engine.metadata.dll" target="tools/agents/netcoreapp3.1" />
 	<file src="agents/netcoreapp3.1/testcentric.extensibility.dll" target="tools/agents/netcoreapp3.1" />
+	<file src="agents/netcoreapp3.1/Microsoft.Extensions.DependencyModel.dll" target="tools/agents/netcoreapp3.1" />
 	<file src="agents/netcoreapp3.1/testcentric.engine.core.dll" target="tools/agents/netcoreapp3.1" />
     <file src="agents/netcoreapp3.1/testcentric.engine.core.pdb" target="tools/agents/netcoreapp3.1" />
     <file src="agents/netcoreapp3.1/testcentric-agent.dll" target="tools/agents/netcoreapp3.1" />
@@ -71,6 +72,7 @@
     <file src="agents/net5.0/nunit.engine.api.dll" target="tools/agents/net5.0" />
     <file src="agents/net5.0/testcentric.engine.metadata.dll" target="tools/agents/net5.0" />
 	<file src="agents/net5.0/testcentric.extensibility.dll" target="tools/agents/net5.0" />
+	<file src="agents/net5.0/Microsoft.Extensions.DependencyModel.dll" target="tools/agents/net5.0" />
 	<file src="agents/net5.0/testcentric.engine.core.dll" target="tools/agents/net5.0" />
     <file src="agents/net5.0/testcentric.engine.core.pdb" target="tools/agents/net5.0" />
     <file src="agents/net5.0/testcentric-agent.dll" target="tools/agents/net5.0" />
