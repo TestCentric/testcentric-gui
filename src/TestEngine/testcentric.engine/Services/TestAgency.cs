@@ -295,9 +295,12 @@ namespace TestCentric.Engine.Services
                     foreach (IAgentLauncher launcher in _extensionService.GetExtensions<IAgentLauncher>())
                         _launchers.Add(launcher);
 
+                // Add builtin agents
                 _launchers.Add(new Net462AgentLauncher());
+                // .NET Core agents are added in ascending version order
                 _launchers.Add(new NetCore31AgentLauncher());
                 _launchers.Add(new Net50AgentLauncher());
+                _launchers.Add(new Net60AgentLauncher());
 
                 _remotingTransport.Start();
                 _tcpTransport.Start();

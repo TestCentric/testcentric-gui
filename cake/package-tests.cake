@@ -106,6 +106,10 @@ public abstract class PackageTester
             "engine-tests/net5.0/mock-assembly.dll",
             MockAssemblyExpectedResult("Net50AgentLauncher")));
 
+        PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET 6.0",
+            "engine-tests/net6.0/mock-assembly.dll",
+            MockAssemblyExpectedResult("Net60AgentLauncher")));
+
         PackageTests.Add(new PackageTest(1, "Run different builds of mock-assembly.dll together",
             "engine-tests/net35/mock-assembly.dll engine-tests/netcoreapp2.1/mock-assembly.dll",
             MockAssemblyExpectedResult("Net462AgentLauncher", "NetCore31AgentLauncher")));
@@ -124,13 +128,29 @@ public abstract class PackageTester
                 Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net50AgentLauncher") }
             }));
 
+        PackageTests.Add(new PackageTest(1, "Run test using AspNetCore under .NET 6.0",
+            "engine-tests/net6.0/aspnetcore-test.dll",
+            new ExpectedResult("Passed")
+            {
+                Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net60AgentLauncher") }
+            }));
+
         if (!parameters.IsRunningOnAppVeyor)
+        {
             PackageTests.Add(new PackageTest(1, "Run test using windows forms under .NET 5.0",
                 "engine-tests/net5.0-windows/windows-forms-test.dll",
                 new ExpectedResult("Passed")
                 {
                     Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net50AgentLauncher") }
                 }));
+
+            PackageTests.Add(new PackageTest(1, "Run test using windows forms under .NET 6.0",
+                "engine-tests/net6.0-windows/windows-forms-test.dll",
+                new ExpectedResult("Passed")
+                {
+                    Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net60AgentLauncher") }
+                }));
+        }
 
         // Level 2 tests are run for PRs and when packages will be published
 
@@ -184,7 +204,6 @@ public abstract class PackageTester
         //    },
         //    NetCore21PluggableAgent));
 
-        // NUnitV2Driver is not yet available for the NUnit 4.0 Api
         //PackageTests.Add(new PackageTest(1, "Run tests using the V2 framework driver",
         //	"v2-tests/net35/v2-test-assembly.dll",
         //	new ExpectedResult("Failed")
