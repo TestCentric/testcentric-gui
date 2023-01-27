@@ -242,6 +242,11 @@ Task("VerifyEnginePackage")
 				"testcentric-agent.dll", "testcentric-agent.pdb", "testcentric-agent.dll.config",
 				"testcentric.engine.core.dll", "testcentric.engine.core.pdb",
 				"nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric.extensibility.dll",
+				"Microsoft.Extensions.DependencyModel.dll", "testcentric-agent.nuget.addins"),
+			HasDirectory("tools/agents/net6.0").WithFiles(
+				"testcentric-agent.dll", "testcentric-agent.pdb", "testcentric-agent.dll.config",
+				"testcentric.engine.core.dll", "testcentric.engine.core.pdb",
+				"nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric.extensibility.dll",
 				"Microsoft.Extensions.DependencyModel.dll", "testcentric-agent.nuget.addins"));
 
 			Information("Verification was successful!");

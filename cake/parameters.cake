@@ -176,7 +176,7 @@ public class BuildParameters
 	public string[] EngineRuntimes => new string[] {"net462"};
 	public string[] EngineCoreRuntimes => new string[] {"net462", "net35", "netstandard2.0", "netcoreapp3.1"};
 	// Unused at present
-	public string[] AgentRuntimes => new string[] { "net20", "net462", "netcoreapp2.1", "netcoreapp3.1", "net5.0" };
+	public string[] AgentRuntimes => new string[] { "net20", "net462", "netcoreapp2.1", "netcoreapp3.1", "net5.0", "net6.0F" };
 
 	public string ProjectUri => "https://github.com/TestCentric/testcentric-engine";
 	public string GitHubUserId => "charliepoole";
