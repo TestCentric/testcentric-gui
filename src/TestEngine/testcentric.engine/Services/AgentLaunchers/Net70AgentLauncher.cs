@@ -13,7 +13,7 @@ using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Services
 {
-    public class Net60AgentLauncher : IAgentLauncher
+    public class Net70AgentLauncher : IAgentLauncher
     {
         public TestAgentInfo AgentInfo => new TestAgentInfo(GetType().Name, TestAgentType.LocalProcess);
 
@@ -22,7 +22,7 @@ namespace TestCentric.Engine.Services
             // Get target runtime
             string runtimeSetting = package.GetSetting(EnginePackageSettings.TargetRuntimeFramework, "");
             var framework = RuntimeFramework.Parse(runtimeSetting).FrameworkName;
-            return framework.Identifier == ".NETCoreApp" && framework.Version.Major <= 6;
+            return framework.Identifier == ".NETCoreApp" && framework.Version.Major <= 7;
         }
 
         public Process CreateProcess(Guid agentId, string agencyUrl, TestPackage package)
@@ -52,7 +52,7 @@ namespace TestCentric.Engine.Services
 
             var agentName = runAsX86 ? "testcentric-agent-x86.dll" : "testcentric-agent.dll";
             var enginePath = AssemblyHelper.GetDirectoryName(Assembly.GetExecutingAssembly());
-            var agentPath = System.IO.Path.Combine(enginePath, $"agents/net6.0/{agentName}");
+            var agentPath = System.IO.Path.Combine(enginePath, $"agents/net7.0/{agentName}");
             var agentArgs = sb.ToString();
 
             var process = new Process();
@@ -65,7 +65,7 @@ namespace TestCentric.Engine.Services
             startInfo.LoadUserProfile = loadUserProfile;
 
             startInfo.FileName = "dotnet";
-            startInfo.Arguments = $"{agentPath} {agentArgs} -f net6.0";
+            startInfo.Arguments = $"{agentPath} {agentArgs} -f net7.0";
 
             return process;
         }
