@@ -9,7 +9,7 @@ using System.Xml;
 using NSubstitute;
 using NUnit.Framework;
 
-using FakeUserSettings = TestCentric.TestUtilities.Fakes.UserSettings;
+using FakeUserSettings = TestCentric.Gui.Fakes.UserSettings;
 
 namespace TestCentric.Gui.Presenters
 {

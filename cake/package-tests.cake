@@ -111,8 +111,8 @@ public abstract class PackageTester : GuiTester
 		PackageTests = new List<PackageTest>();
 
 		// Level 1 tests are run each time we build the packages
-		PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll under .NET 4.5", StandardRunner,
-			"net45/mock-assembly.dll",
+		PackageTests.Add(new PackageTest(1, "Run net462 mock-assembly.dll under .NET 4.6.2", StandardRunner,
+			"net462/mock-assembly.dll",
 			new ExpectedResult("Failed")
 			{
 				Total = 41,
@@ -121,10 +121,10 @@ public abstract class PackageTester : GuiTester
 				Warnings = 0,
 				Inconclusive = 5,
 				Skipped = 7,
-				Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net40AgentLauncher") }
+				Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net462AgentLauncher") }
 			})) ;
 
-		PackageTests.Add(new PackageTest(1, "Run net35 mock-assembly.dll under .NET 4.0", StandardRunner,
+		PackageTests.Add(new PackageTest(1, "Run net35 mock-assembly.dll under .NET 4.6.2", StandardRunner,
 		"net35/mock-assembly.dll",
 		new ExpectedResult("Failed")
 		{
@@ -134,7 +134,7 @@ public abstract class PackageTester : GuiTester
 			Warnings = 0,
 			Inconclusive = 5,
 			Skipped = 7,
-			Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net40AgentLauncher") }
+			Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net462AgentLauncher") }
 		}));
 
 

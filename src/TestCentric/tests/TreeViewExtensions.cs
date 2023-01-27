@@ -5,25 +5,12 @@
 
 using System.Windows.Forms;
 
-namespace TestCentric.TestUtilities
+namespace TestCentric.Gui
 {
-    public static class TreeViewFactory
+    public static class TreeViewExtensions
     {
-        public static TreeView CreateTreeView(params TreeNode[] treeNodes)
-        {
-            return CreateTreeView(false, treeNodes);
-        }
-
-        public static TreeView CreateTreeView(bool checkBoxes, params TreeNode[] treeNodes)
-        {
-            var tv = new TreeView() { CheckBoxes = checkBoxes };
-            tv.Nodes.AddRange(treeNodes);
-            return tv;
-        }
-
         #region Tree Extensions tailored for use in our tests
 
-        // TreeView Extensions
         public static TreeNode Search(this TreeView treeView, string text)
         {
             return Search(treeView.Nodes, text);

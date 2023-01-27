@@ -47,7 +47,7 @@ public class BuildParameters
 		Target = _context.TargetTask.Name;
 		TasksToExecute = _context.TasksToExecute.Select(t => t.Name);
 
-		Configuration = context.Argument("configuration", DEFAULT_CONFIGURATION);
+		Configuration = context.Argument("configuration", context.Argument("c", DEFAULT_CONFIGURATION));
 		ProjectDirectory = context.Environment.WorkingDirectory.FullPath + "/";
 
 		MyGetApiKey = _context.EnvironmentVariable(MYGET_API_KEY);
@@ -96,7 +96,7 @@ public class BuildParameters
 
 	public ICakeContext Context => _context;
 
-	public string Configuration { get; }
+	public string Configuration { get; private set; }
 
 	public BuildVersion BuildVersion { get; }
 	public string PackageVersion => BuildVersion.PackageVersion;
@@ -166,16 +166,26 @@ public class BuildParameters
 	public string[] SupportedEngineRuntimes => new string[] {"net40"};
 
 	public string ProjectUri => "https://github.com/TestCentric/testcentric-gui";
-	public string WebDeployBranch => "gh-pages";
-	public string GitHubUserId => "charliepoole";
-	public string GitHubUserEmail => "charliepoole@gmail.com";
-	public string GitHubPassword { get; }
 	public string GitHubAccessToken { get; }
 
 	private void Validate()
 	{
 		var validationErrors = new List<string>();
 
+		bool validConfig = false;
+		
+		foreach (string config in VALID_CONFIGS)
+		{
+			if (string.Equals(config, Configuration, StringComparison.OrdinalIgnoreCase))
+			{
+				Configuration = config;
+				validConfig = true;
+			}
+		}
+
+		if (!validConfig)
+			validationErrors.Add($"Invalid configuration: {Configuration}");
+			
 		if (TasksToExecute.Contains("PublishPackages"))
 		{
 			if (ShouldPublishToMyGet && string.IsNullOrEmpty(MyGetApiKey))
@@ -192,18 +202,11 @@ public class BuildParameters
 				validationErrors.Add("GitHub Access Token was not set.");		
 		}
 
-		if (TasksToExecute.Contains("DeployWebsite"))
-        {
-			// We use a password rather than an access token for the website
-			if (string.IsNullOrEmpty(GitHubPassword))
-				validationErrors.Add("GitHub password was not set");
-		}
-
 		if (validationErrors.Count > 0)
 		{
 			DumpSettings();
 
-			var msg = new StringBuilder("Parameter validation failed! See settings above.\n\nErrors found:\n");
+			var msg = new StringBuilder("Parameter validation failed! See settings above.\r\n\nErrors found:\r\n");
 			foreach (var error in validationErrors)
 				msg.AppendLine("  " + error);
 

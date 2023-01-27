@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<RootNamespace>TestCentric.Gui</RootNamespace>
 		<AssemblyName>TestCentric.Gui.Tests</AssemblyName>
-		<TargetFramework>net45</TargetFramework>
+		<TargetFramework>net462</TargetFramework>
 		<OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
@@ -24,9 +24,6 @@
         <ProjectReference Include="..\..\tests\mock-assembly\mock-assembly.csproj">
             <Name>mock-assembly</Name>
         </ProjectReference>
-        <ProjectReference Include="..\..\tests\test-utilities\test-utilities.csproj">
-            <Name>test-utilities</Name>
-        </ProjectReference>
     </ItemGroup>
     <ItemGroup>
         <None Include="TestCentric.Gui.Tests.addins">
@@ -40,6 +37,6 @@
         <PackageReference Include="NUnit.Extension.NUnitV2Driver" Version="3.8.0" />
         <PackageReference Include="NUnit.Extension.NUnitV2ResultWriter" Version="3.6.0" />
         <PackageReference Include="NUnit.Extension.VSProjectLoader" Version="3.8.0" />
-        <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.1" />
-    </ItemGroup>
+		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.1" />
+	</ItemGroup>
 </Project>

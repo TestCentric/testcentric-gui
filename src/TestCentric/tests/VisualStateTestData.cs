@@ -5,7 +5,6 @@
 
 using System;
 using System.Windows.Forms;
-using TestCentric.TestUtilities;
 
 namespace TestCentric.Gui
 {
@@ -31,7 +30,7 @@ namespace TestCentric.Gui
             switch (DisplayStrategy)
             {
                 case "NUNIT_TREE":
-                    return TreeViewFactory.CreateTreeView(
+                    return CreateTreeView(
                         true,
                         TN("Assembly1", TN("NUnit", TN("Tests",
                             TN("MyFixture", TN("Test1"), TN("Test2"), TN("Test3"))))),
@@ -43,7 +42,7 @@ namespace TestCentric.Gui
                     switch (Grouping)
                     {
                         case "ASSEMBLY":
-                            return TreeViewFactory.CreateTreeView(
+                            return CreateTreeView(
                                 true,
                                 TN("Assembly1",
                                     TN("MyFixture", TN("Test1"), TN("Test2"), TN("Test3"))),
@@ -53,7 +52,7 @@ namespace TestCentric.Gui
 
                         case "CATEGORY":
                         case "CATEGORY_EXTENDED":
-                            return TreeViewFactory.CreateTreeView(
+                            return CreateTreeView(
                                 true,
                                 TN("None",
                                     TN("MyFixture", TN("Test1"), TN("Test2"), TN("Test3")),
@@ -62,7 +61,7 @@ namespace TestCentric.Gui
 
                         case "OUTCOME":
                         case "DURATION":
-                            return TreeViewFactory.CreateTreeView(
+                            return CreateTreeView(
                                 true,
                                 TN("Not Run",
                                     TN("MyFixture", TN("Test1"), TN("Test2"), TN("Test3")),
@@ -77,13 +76,13 @@ namespace TestCentric.Gui
                     switch (Grouping)
                     {
                         case "ASSEMBLY":
-                            return TreeViewFactory.CreateTreeView(
+                            return CreateTreeView(
                                 true,
                                 TN("Assembly1", TN("Test1"), TN("Test2"), TN("Test3")),
                                 TN("Assembly2", TN("Test4"), TN("Test5"), TN("Test6")));
 
                         case "FIXTURE":
-                            return TreeViewFactory.CreateTreeView(
+                            return CreateTreeView(
                                 true,
                                 TN("MyFixture", TN("Test1"), TN("Test2"), TN("Test3")),
                                 TN("FixtureA", TN("Test4"), TN("Test5")),
@@ -91,13 +90,13 @@ namespace TestCentric.Gui
 
                         case "CATEGORY":
                         case "CATEGORY_EXTENDED":
-                            return TreeViewFactory.CreateTreeView(
+                            return CreateTreeView(
                                 true,
                                 TN("None", TN("Test1"), TN("Test2"), TN("Test3"), TN("Test4"), TN("Test5"), TN("Test6")));
 
                         case "OUTCOME":
                         case "DURATION":
-                            return TreeViewFactory.CreateTreeView(
+                            return CreateTreeView(
                                 true,
                                 TN("Not Run", TN("Test1"), TN("Test2"), TN("Test3"), TN("Test4"), TN("Test5"), TN("Test6")));
 
@@ -134,7 +133,7 @@ namespace TestCentric.Gui
             switch (DisplayStrategy)
             {
                 case "NUNIT_TREE":
-                    return VisualStateFactory.CreateVisualState(
+                    return  CreateVisualState(
                         DisplayStrategy,
                         true,
                         VTN("Assembly1", EXP + TOP,
@@ -152,7 +151,7 @@ namespace TestCentric.Gui
                     switch (Grouping)
                     {
                         case "ASSEMBLY":
-                            return VisualStateFactory.CreateVisualState(
+                            return CreateVisualState(
                                 DisplayStrategy,
                                 true,
                                 VTN("Assembly1", EXP + TOP,
@@ -165,7 +164,7 @@ namespace TestCentric.Gui
 
                         case "CATEGORY":
                         case "CATEGORY_EXTENDED":
-                            return VisualStateFactory.CreateVisualState(
+                            return CreateVisualState(
                                 DisplayStrategy,
                                 true,
                                 VTN("None", EXP + TOP,
@@ -177,7 +176,7 @@ namespace TestCentric.Gui
 
                         case "OUTCOME":
                         case "DURATION":
-                            return VisualStateFactory.CreateVisualState(
+                            return CreateVisualState(
                                 DisplayStrategy,
                                 true,
                                 VTN("Not Run", EXP + TOP,
@@ -195,7 +194,7 @@ namespace TestCentric.Gui
                     switch (Grouping)
                     {
                         case "ASSEMBLY":
-                            return VisualStateFactory.CreateVisualState(
+                            return CreateVisualState(
                                 DisplayStrategy,
                                 true,
                                 VTN("Assembly1", EXP + TOP,
@@ -205,7 +204,7 @@ namespace TestCentric.Gui
                                 VTN("Assembly2", EXP));
 
                         case "FIXTURE":
-                            return VisualStateFactory.CreateVisualState(
+                            return CreateVisualState(
                                 DisplayStrategy,
                                 true,
                                 VTN("MyFixture", EXP + TOP,
@@ -216,7 +215,7 @@ namespace TestCentric.Gui
 
                         case "CATEGORY":
                         case "CATEGORY_EXTENDED":
-                            return VisualStateFactory.CreateVisualState(
+                            return CreateVisualState(
                                 DisplayStrategy,
                                 true,
                                 VTN("None", EXP + TOP,
@@ -226,7 +225,7 @@ namespace TestCentric.Gui
 
                         case "OUTCOME":
                         case "DURATION":
-                            return VisualStateFactory.CreateVisualState(
+                            return CreateVisualState(
                                 DisplayStrategy,
                                 true,
                                 VTN("Not Run", EXP + TOP,
@@ -258,7 +257,7 @@ namespace TestCentric.Gui
                         case "CATEGORY_EXTENDED":
                             return GetExpectedVisualState();
                         case "OUTCOME":
-                            return VisualStateFactory.CreateVisualState(
+                            return  CreateVisualState(
                                 DisplayStrategy,
                                 true,
                                 VTN("Passed", EXP + TOP,
@@ -268,7 +267,7 @@ namespace TestCentric.Gui
                                         VTN("Test3", CHK)),
                                     VTN("FixtureA", EXP + CHK)));
                         case "DURATION":
-                            return VisualStateFactory.CreateVisualState(
+                            return CreateVisualState(
                                 DisplayStrategy,
                                 true,
                                 VTN("Not Run", EXP + TOP,
@@ -290,7 +289,7 @@ namespace TestCentric.Gui
                         case "CATEGORY_EXTENDED":
                             return GetExpectedVisualState();
                         case "OUTCOME":
-                            return VisualStateFactory.CreateVisualState(
+                            return CreateVisualState(
                                 DisplayStrategy,
                                 true,
                                 VTN("Passed", EXP + TOP,
@@ -298,7 +297,7 @@ namespace TestCentric.Gui
                                     VTN("Test2", SEL),
                                     VTN("Test3", CHK)));
                         case "DURATION":
-                            return VisualStateFactory.CreateVisualState(
+                            return CreateVisualState(
                                 DisplayStrategy,
                                 true,
                                 VTN("Not Run", EXP + TOP,
@@ -343,6 +342,41 @@ namespace TestCentric.Gui
                 visualNode.Nodes.AddRange(childNodes);
 
             return visualNode;
+        }
+
+        private static TreeView CreateTreeView(bool checkBoxes, params TreeNode[] treeNodes)
+        {
+            var tv = new TreeView() { CheckBoxes = checkBoxes };
+            tv.Nodes.AddRange(treeNodes);
+            return tv;
+        }
+
+        public static VisualState CreateVisualState(string strategy, bool checkBoxes = false, params VisualTreeNode[] visualTreeNodes)
+        {
+            return CreateVisualState(strategy, null, checkBoxes, visualTreeNodes);
+        }
+
+        public static VisualState CreateVisualState(string strategy, string grouping, bool checkBoxes, params VisualTreeNode[] visualTreeNodes)
+        {
+            VisualState visualState;
+
+            switch (strategy)
+            {
+                case "NUNIT_TREE":
+                    visualState = new VisualState(strategy) { ShowCheckBoxes = checkBoxes };
+                    break;
+                case "FIXTURE_LIST":
+                case "TEST_LIST":
+                    visualState = new VisualState(strategy, grouping) { ShowCheckBoxes = checkBoxes };
+                    break;
+                default:
+                    throw new Exception($"Unrecognized DisplayStrategy: {strategy}");
+            }
+
+            foreach (var visualTreeNode in visualTreeNodes)
+                visualState.Nodes.Add(visualTreeNode);
+
+            return visualState;
         }
 
         // Override ToString so tests deplay clearly

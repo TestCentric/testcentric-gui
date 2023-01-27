@@ -19,7 +19,7 @@ namespace TestCentric.Gui.Presenters.Main
 
             _model.HasTests.Returns(true);
             _model.IsTestRunning.Returns(false);
-            _model.TestPackage.Returns(new NUnit.Engine.TestPackage("dummy.dll"));
+            _model.TestPackage.Returns(new NUnit.Engine.TestPackage(new[] { "dummy.dll" }));
 
             TestNode testNode = new TestNode("<test-suite id='1'/>");
             _model.LoadedTests.Returns(testNode);

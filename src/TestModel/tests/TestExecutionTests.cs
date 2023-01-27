@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 using NUnit.Engine;
 using NUnit.Framework;
 using NSubstitute;
-using TestCentric.TestUtilities.Fakes;
+using TestCentric.Gui.Model.Fakes;
 
 #if false // Not yet working
 namespace TestCentric.Gui.Model
 {
-    public class TestExecutionTests
+    public class TestExecutionTests 
     {
         private static TestNode TEST_CASE_NODE = new TestNode(
             XmlHelper.CreateXmlNode("<test-case id='1234' name='SomeTest' />"));

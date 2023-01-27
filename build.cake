@@ -1,6 +1,6 @@
-#tool nuget:?package=GitVersion.CommandLine&version=5.0.0
-#tool nuget:?package=GitReleaseManager&version=0.11.0
-#tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.8.0"
+#tool nuget:?package=GitVersion.CommandLine&version=5.6.3
+#tool nuget:?package=GitReleaseManager&version=0.12.1
+#tool nuget:?package=NuGet.CommandLine&version=6.0.0
 
 const string SOLUTION = "testcentric-gui.sln";
 const string NUGET_ID = "TestCentric.GuiRunner";
@@ -9,11 +9,12 @@ const string GITHUB_OWNER = "testcentric";
 const string GITHUB_REPO = "testcentric-gui";
 const string DEFAULT_VERSION = "2.0.0";
 const string DEFAULT_CONFIGURATION = "Release";
+static string[] VALID_CONFIGS = new [] { "Release", "Debug" };
 
 // NOTE: This must match what is actually referenced by
 // the GUI test model project. Hopefully, this is a temporary
 // fix, which we can get rid of in the future.
-const string REF_ENGINE_VERSION = "2.0.0-dev00002";
+const string REF_ENGINE_VERSION = "2.0.0-dev00023";
 
 const string PACKAGE_NAME = "testcentric-gui";
 const string NUGET_PACKAGE_NAME = "TestCentric.GuiRunner";
@@ -68,6 +69,9 @@ Task("Clean")
 	{
 		Information("Cleaning " + parameters.OutputDirectory);
 		CleanDirectory(parameters.OutputDirectory);
+
+		Information("Cleaning Package Directory");
+		CleanDirectory(parameters.PackageDirectory);
 	});
 
 //////////////////////////////////////////////////////////////////////
@@ -187,7 +191,7 @@ Task("VerifyZipPackage")
 		Check.That(parameters.ZipTestDirectory,
 			HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt"),
 			HasDirectory("bin").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.zip.addins"),
-			HasDirectory("bin/agents/net40").WithFiles(NET_FRAMEWORK_AGENT_FILES),
+			HasDirectory("bin/agents/net462").WithFiles(NET_FRAMEWORK_AGENT_FILES),
 			HasDirectory("bin/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES),
 			HasDirectory("bin/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES),
 			HasDirectory("bin/Images").WithFiles("DebugTests.png", "RunTests.png", "StopRun.png", "GroupBy_16x.png", "SummaryReport.png"),
@@ -242,7 +246,7 @@ Task("VerifyNuGetPackage")
 		Check.That(parameters.NuGetTestDirectory,
 			HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "testcentric.png"),
 			HasDirectory("tools").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.nuget.addins"),
-			HasDirectory("tools/agents/net40").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
+			HasDirectory("tools/agents/net462").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
 			HasDirectory("tools/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
 			HasDirectory("tools/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
 			HasDirectory("tools/Images").WithFiles("DebugTests.png", "RunTests.png", "StopRun.png", "GroupBy_16x.png", "SummaryReport.png"),
@@ -298,7 +302,7 @@ Task("VerifyChocolateyPackage")
 	{
 		Check.That(parameters.ChocolateyTestDirectory,
 			HasDirectory("tools").WithFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "VERIFICATION.txt", "testcentric.choco.addins").AndFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.choco.addins"),
-			HasDirectory("tools/agents/net40").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
+			HasDirectory("tools/agents/net462").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
 			HasDirectory("tools/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
 			HasDirectory("tools/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
 			HasDirectory("tools/Images").WithFiles("DebugTests.png", "RunTests.png", "StopRun.png", "GroupBy_16x.png", "SummaryReport.png"),
@@ -505,6 +509,9 @@ Task("CreateProductionRelease")
 
 Task("Package")
 	.IsDependentOn("Build")
+	.IsDependentOn("PackageExistingBuild");
+
+Task("PackageExistingBuild")
 	.IsDependentOn("PackageZip")
 	.IsDependentOn("PackageNuGet")
 	.IsDependentOn("PackageChocolatey");
@@ -537,7 +544,7 @@ Task("Travis")
     .IsDependentOn("Build")
     .IsDependentOn("Test");
 
-Task("Full")
+Task("BuildTestAndPackage")
 	.IsDependentOn("DumpSettings")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
@@ -550,4 +557,4 @@ Task("Default")
 // EXECUTION
 //////////////////////////////////////////////////////////////////////
 
-RunTarget(Argument("target", "Default"));
+RunTarget(Argument("target", Argument("t", "Default")));

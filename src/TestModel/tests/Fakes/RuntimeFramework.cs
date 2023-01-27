@@ -6,7 +6,7 @@
 using System;
 using NUnit.Engine;
 
-namespace TestCentric.TestUtilities.Fakes
+namespace TestCentric.Gui.Model.Fakes
 {
     public class RuntimeFramework : IRuntimeFramework
     {
