@@ -7,7 +7,6 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 using NUnit.Framework;
-using TestCentric.TestUtilities;
 
 namespace TestCentric.Gui
 {

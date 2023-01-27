@@ -5,7 +5,7 @@ namespace TestCentric.Gui.SettingsPages
         /// <summary> 
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.IContainer components = null;
+        //private System.ComponentModel.IContainer components = null;
 
         #region Component Designer generated code
 

@@ -17,7 +17,7 @@ namespace TestCentric.Gui.Presenters.Main
 
             _model.HasTests.Returns(true);
             _model.IsTestRunning.Returns(true);
-            _model.TestPackage.Returns(new NUnit.Engine.TestPackage("dummy.dll"));
+            _model.TestPackage.Returns(new NUnit.Engine.TestPackage(new string[] { "dummy.dll" }));
             FireRunStartingEvent(1234);
         }
 

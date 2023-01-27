@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
 
-namespace TestCentric.TestUtilities.Fakes
+namespace TestCentric.Gui.Model.Fakes
 {
     public class ExtensionService : IExtensionService
     {

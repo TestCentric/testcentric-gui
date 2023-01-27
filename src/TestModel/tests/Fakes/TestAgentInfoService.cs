@@ -4,24 +4,22 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Generic;
 using NUnit.Engine;
-using NUnit.Engine.Extensibility;
+using TestCentric.Engine;
 
-namespace TestCentric.TestUtilities.Fakes
+namespace TestCentric.Gui.Model.Fakes
 {
-    public class ResultService : IResultService
+    public class TestAgentInfoService : ITestAgentInfo
     {
-        public string[] Formats
+        public IList<TestAgentInfo> GetAvailableAgents()
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            return new TestAgentInfo[0];
         }
 
-        public IResultWriter GetResultWriter(string format, object[] args)
+        public IList<TestAgentInfo> GetAgentsForPackage(TestPackage package)
         {
-            throw new NotImplementedException();
+            return new TestAgentInfo[0];
         }
     }
 }

@@ -28,6 +28,7 @@ namespace TestCentric.Gui.Elements
             _button = button;
 
             button.Click += (s, e) => Execute?.Invoke();
+            button.CheckedChanged += (s, e) => CheckedChanged.Invoke();
         }
     }
 }

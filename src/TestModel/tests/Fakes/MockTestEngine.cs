@@ -7,7 +7,7 @@ using System;
 using NUnit.Engine;
 using TestCentric.Engine;
 
-namespace TestCentric.TestUtilities.Fakes
+namespace TestCentric.Gui.Model.Fakes
 {
     public class MockTestEngine : ITestEngine
     {

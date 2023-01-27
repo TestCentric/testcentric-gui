@@ -6,7 +6,7 @@
 using System.Collections.Generic;
 using NUnit.Engine;
 
-namespace TestCentric.TestUtilities.Fakes
+namespace TestCentric.Gui.Model.Fakes
 {
     public class AvailableRuntimesService : IAvailableRuntimes
     {

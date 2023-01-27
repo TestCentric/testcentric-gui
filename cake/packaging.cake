@@ -37,6 +37,7 @@ var baseFiles = new string[]
     "nunit.engine.api.dll",
     "testcentric.engine.api.dll",
     "testcentric.engine.metadata.dll",
+    "testcentric.extensibility.dll",
     "testcentric.engine.core.dll",
     "testcentric.engine.dll",
 };

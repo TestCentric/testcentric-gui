@@ -7,8 +7,8 @@ using System;
 using System.Collections.Generic;
 using TestCentric.Engine;
 using NUnit.Framework;
-using TestCentric.TestUtilities.Fakes;
-using RuntimeFramework = TestCentric.TestUtilities.Fakes.RuntimeFramework;
+using TestCentric.Gui.Model.Fakes;
+using RuntimeFramework = TestCentric.Gui.Model.Fakes.RuntimeFramework;
 
 namespace TestCentric.Gui.Model
 {

@@ -63,7 +63,7 @@ namespace TestCentric.Tests
             static MockAssembly()
             {
                 var assembly = typeof(MockAssembly).Assembly;
-                string codeBase = assembly.EscapedCodeBase;
+                string codeBase = assembly.Location;
 
                 AssemblyPath = codeBase.ToLower().StartsWith(Uri.UriSchemeFile)
                     ? new Uri(codeBase).LocalPath

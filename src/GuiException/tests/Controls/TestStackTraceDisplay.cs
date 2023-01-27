@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric GUI contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -66,31 +66,18 @@ namespace NUnit.UiException.Tests.Controls
             return;
         }
 
-        [Test, Apartment(ApartmentState.STA)]
-        public void CopyToClipBoard()
+        [TestCase("hi, there!", true)]
+        [TestCase("", false)]
+        [Apartment(ApartmentState.STA)]
+        public void CopyToClipBoard(string content, bool containsText)
         {
             Clipboard.Clear();
 
-            _traceDisplay.OnStackTraceChanged("hi, there!");
+            _traceDisplay.OnStackTraceChanged(content);
             _traceDisplay.CopyToClipBoard();
 
-            Assert.That(Clipboard.ContainsText(), Is.True);
-            Assert.That(Clipboard.GetText(), Is.EqualTo("hi, there!"));
-
-            // calling twice doesn't add twice same content
-
-            _traceDisplay.CopyToClipBoard();
-            _traceDisplay.CopyToClipBoard();
-            Assert.That(Clipboard.GetText(), Is.EqualTo("hi, there!"));
-
-            // test to fail: calling copy to clipboard
-            // with an empty stack trace is valid
-
-            _traceDisplay.OnStackTraceChanged("");
-            _traceDisplay.CopyToClipBoard();
-            Assert.That(Clipboard.GetText(), Is.EqualTo(""));
-
-            return;
+            Assert.That(Clipboard.ContainsText(), Is.EqualTo(containsText));
+            Assert.That(Clipboard.GetText(), Is.EqualTo(content));
         }
 
         [Test]

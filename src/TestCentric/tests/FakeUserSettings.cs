@@ -3,7 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-namespace TestCentric.TestUtilities.Fakes
+namespace TestCentric.Gui.Fakes
 {
     public class UserSettings : TestCentric.Gui.Model.Settings.UserSettings
     {
