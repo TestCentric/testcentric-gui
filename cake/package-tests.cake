@@ -139,9 +139,8 @@ public abstract class PackageTester
                 Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net60AgentLauncher") }
             }));
 
+        // TODO: AspNetCore test won't run on AppVeyor under .NET 7.0 - we don't yet know why
         if (!parameters.IsRunningOnAppVeyor)
-        {
-            // AspNetCore test won't run on AppVeyor - we don't know why
             PackageTests.Add(new PackageTest(1, "Run test using AspNetCore under .NET 7.0",
                 "engine-tests/net7.0/aspnetcore-test.dll",
                 new ExpectedResult("Passed")
@@ -149,7 +148,8 @@ public abstract class PackageTester
                     Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net70AgentLauncher") }
                 }));
 
-            // Windows Forms tests won't run on AppVeyor, we don't know why
+        // Windows Forms tests won't run on AppVeyor under .NET 5.0 or 7.0, we don't yet know why
+        if (!parameters.IsRunningOnAppVeyor)
             PackageTests.Add(new PackageTest(1, "Run test using windows forms under .NET 5.0",
                 "engine-tests/net5.0-windows/windows-forms-test.dll",
                 new ExpectedResult("Passed")
@@ -157,20 +157,21 @@ public abstract class PackageTester
                     Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net50AgentLauncher") }
                 }));
 
-            PackageTests.Add(new PackageTest(1, "Run test using windows forms under .NET 6.0",
-                "engine-tests/net6.0-windows/windows-forms-test.dll",
-                new ExpectedResult("Passed")
-                {
-                    Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net60AgentLauncher") }
-                }));
+        PackageTests.Add(new PackageTest(1, "Run test using windows forms under .NET 6.0",
+            "engine-tests/net6.0-windows/windows-forms-test.dll",
+            new ExpectedResult("Passed")
+            {
+                Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net60AgentLauncher") }
+            }));
 
+        // Windows Forms tests won't run on AppVeyor under .NET 5.0 or 7.0, we don't yet know why
+        if (!parameters.IsRunningOnAppVeyor)
             PackageTests.Add(new PackageTest(1, "Run test using windows forms under .NET 7.0",
                 "engine-tests/net7.0-windows/windows-forms-test.dll",
                 new ExpectedResult("Passed")
                 {
                     Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net70AgentLauncher") }
                 }));
-        }
 
         // Level 2 tests are run for PRs and when packages will be published
 
