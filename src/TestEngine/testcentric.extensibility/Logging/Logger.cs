@@ -7,12 +7,12 @@ using System;
 using System.IO;
 using NUnit.Engine;
 
-namespace TestCentric.Extensibility
+namespace TestCentric
 {
     /// <summary>
     /// Provides internal logging to the NUnit framework
     /// </summary>
-    internal class Logger : ILogger
+    public class Logger : ILogger
     {
         private const string TimeFmt = "HH:mm:ss.fff";
         private const string TraceFmt = "{0} {1,-5} [{2,2}] {3}: {4}";

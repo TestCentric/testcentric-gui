@@ -6,7 +6,7 @@
 using System;
 using NUnit.Engine;
 
-namespace TestCentric.Extensibility
+namespace TestCentric
 {
     /// <summary>
     /// InternalTrace provides facilities for tracing the execution
@@ -23,7 +23,7 @@ namespace TestCentric.Extensibility
     /// TODO: add some buffering and a separate writer thread as an option.
     /// TODO: figure out a way to turn on trace in specific classes only.
     /// </summary>
-    internal static class InternalTrace
+    public static class InternalTrace
     {
         /// <summary>
         /// Gets a flag indicating whether the InternalTrace is initialized
@@ -56,8 +56,6 @@ namespace TestCentric.Extensibility
                 {
                     TraceWriter = new InternalTraceWriter(logName);
                     TraceWriter.WriteLine("InternalTrace: Initializing at level {0}", TraceLevel);
-                    Console.WriteLine("Internal trace for the testcentric.extensibility assembly initialized");
-                    Console.WriteLine($"  Level: {TraceLevel} Log name: {logName}");
                 }
 
                 Initialized = true;
