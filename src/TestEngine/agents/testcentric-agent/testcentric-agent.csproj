@@ -12,6 +12,7 @@
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
     <OutputPath>..\..\..\..\bin\$(Configuration)\agents\</OutputPath>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	<GenerateRuntimeConfigDevFile>true</GenerateRuntimeConfigDevFile>
     <Title>TestCentric Agent</Title>
   </PropertyGroup>
 
