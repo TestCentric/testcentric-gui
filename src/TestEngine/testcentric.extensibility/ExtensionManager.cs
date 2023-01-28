@@ -34,7 +34,7 @@ namespace TestCentric.Extensibility
             NUNIT_API_VERSION = new Version(3, 16, 2);
 
             var nunitApiAssembly = typeof(IExtensionService).Assembly;
-            // NYI: log.Debug($"  Using API Assembly {nunitApiAssembly.GetName().FullName}");
+            log.Debug($"  Using API Assembly {nunitApiAssembly.GetName().FullName}");
             var attrs = nunitApiAssembly.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false);
 
             if (attrs.Length > 0)
@@ -60,25 +60,18 @@ namespace TestCentric.Extensibility
         /// <param name="startDir">A DirectoryInfo representing the starting directory for locating extensions</param>
         public void Initialize(string startDir)
         {
-            // NYI
-            //if (InternalTraceLevel != InternalTraceLevel.Off && InternalTrace.Initialized)
-            //{
-            //    var logName = string.Format("Extensibility.{0}.log", Process.GetCurrentProcess().Id);
-            //    InternalTrace.Initialize(Path.Combine(WorkDirectory, logName), InternalTraceLevel);
-            //}
-
             // Find all extension points
-            // NYI: log.Info("Initializing extension points");
+            log.Info("Initializing extension points");
             foreach (var assembly in _rootAssemblies)
                 FindExtensionPoints(assembly);
 
             // Find potential extension assemblies
-            // NYI: log.Info("Locating potential extension assemblies");
-            // NYI: log.Info($"Start directory is {startDir}");
+            log.Info("Locating potential extension assemblies");
+            log.Info($"Start directory is {startDir}");
             ProcessAddinsFiles(new DirectoryInfo(startDir), false);
 
             // Check each assembly to see if it contains extensions
-            // NYI: log.Info($"Searching for extensions compatible with NUnit {NUNIT_API_VERSION} API");
+            log.Info($"Searching for extensions compatible with NUnit {NUNIT_API_VERSION} API");
             foreach (var candidate in _extensionAssemblies)
                 FindExtensionsInAssembly(candidate);
         }
@@ -185,7 +178,7 @@ namespace TestCentric.Extensibility
         /// </summary>
         public void FindExtensionPoints(Assembly assembly)
         {
-            // NYI: log.Info("Scanning {0} assembly for extension points", assembly.GetName().Name);
+            log.Info("Scanning {0} assembly for extension points", assembly.GetName().Name);
 
             foreach (ExtensionPointAttribute attr in assembly.GetCustomAttributes(typeof(ExtensionPointAttribute), false))
             {
@@ -205,7 +198,7 @@ namespace TestCentric.Extensibility
                 _extensionPoints.Add(ep);
                 _pathIndex.Add(ep.Path, ep);
 
-                // NYI: log.Info("  Found Path={0}, Type={1}", ep.Path, ep.TypeName);
+                log.Info("  Found Path={0}, Type={1}", ep.Path, ep.TypeName);
             }
 
             foreach (Type type in assembly.GetExportedTypes())
@@ -230,7 +223,7 @@ namespace TestCentric.Extensibility
                     _extensionPoints.Add(ep);
                     _pathIndex.Add(path, ep);
 
-                    // NYI: log.Info("  Found Path={0}, Type={1}", ep.Path, ep.TypeName);
+                    log.Info("  Found Path={0}, Type={1}", ep.Path, ep.TypeName);
                 }
             }
         }
@@ -242,7 +235,7 @@ namespace TestCentric.Extensibility
         /// </summary>
         private ExtensionPoint DeduceExtensionPointFromType(TypeReference typeRef)
         {
-            // NYI: log.Debug($"Trying {typeRef.Name}");
+            log.Debug($"Trying {typeRef.Name}");
             var ep = GetExtensionPoint(typeRef);
             if (ep != null)
                 return ep;
@@ -252,7 +245,7 @@ namespace TestCentric.Extensibility
 
             foreach (InterfaceImplementation iface in typeDef.Interfaces)
             {
-                // NYI: log.Debug($"Trying {iface.InterfaceType.Name}");
+                log.Debug($"Trying {iface.InterfaceType.Name}");
                 ep = DeduceExtensionPointFromType(iface.InterfaceType);
                 if (ep != null)
                     return ep;
@@ -271,7 +264,7 @@ namespace TestCentric.Extensibility
         /// </summary>
         private void ProcessDirectory(DirectoryInfo startDir, bool fromWildCard)
         {
-            // NYI: log.Info("Scanning directory {0} for extensions", startDir.FullName);
+            log.Info("Scanning directory {0} for extensions", startDir.FullName);
 
             if (ProcessAddinsFiles(startDir, fromWildCard) == 0)
                 foreach (var file in startDir.GetFiles("*.dll"))
@@ -300,7 +293,7 @@ namespace TestCentric.Extensibility
         /// </summary>
         private void ProcessAddinsFile(DirectoryInfo baseDir, string fileName, bool fromWildCard)
         {
-            // NYI: log.Info("Processing file " + fileName);
+            log.Info("Processing file " + fileName);
 
             using (var rdr = new StreamReader(fileName))
             {
@@ -386,7 +379,7 @@ namespace TestCentric.Extensibility
         /// </summary>
         internal void FindExtensionsInAssembly(ExtensionAssembly assembly)
         {
-            // NYI: log.Info("Scanning {0} assembly for Extensions", assembly.FilePath);
+            log.Info("Scanning {0} assembly for Extensions", assembly.FilePath);
 
             if (CanLoadTargetFramework(Assembly.GetEntryAssembly(), assembly))
             {
@@ -395,14 +388,14 @@ namespace TestCentric.Extensibility
 
                 foreach (var type in assembly.MainModule.GetTypes())
                 {
-                    // NYI: log.Debug($"Examining Type {type.Name}");
+                    log.Debug($"Examining Type {type.Name}");
 
                     CustomAttribute extensionAttr = type.GetAttribute("NUnit.Engine.Extensibility.ExtensionAttribute");
 
                     if (extensionAttr == null)
                         continue;
 
-                    // NYI: log.Info($"ExtensionAttribute found on {type.Name}");
+                    log.Info($"ExtensionAttribute found on {type.Name}");
 
                     object versionArg = extensionAttr.GetNamedArgument("EngineVersion");
                     if (versionArg != null)
@@ -410,7 +403,7 @@ namespace TestCentric.Extensibility
                         var requiredVersion = new Version((string)versionArg);
                         if (requiredVersion > NUNIT_API_VERSION)
                         {
-                            // NYI: log.Warning($"  Ignoring {type.Name} because it requires NUnit {requiredVersion} API");
+                            log.Warning($"  Ignoring {type.Name} because it requires NUnit {requiredVersion} API");
                             continue;
                         }
                     }
@@ -431,12 +424,12 @@ namespace TestCentric.Extensibility
                         if (name != null && value != null)
                         {
                             node.AddProperty(name, value);
-                            // NYI: log.Info("        ExtensionProperty {0} = {1}", name, value);
+                            log.Info("        ExtensionProperty {0} = {1}", name, value);
                         }
                     }
 
                     _extensions.Add(node);
-                    // NYI: log.Info($"Added extension {node.TypeName}");
+                    log.Info($"Added extension {node.TypeName}");
 
                     ExtensionPoint ep;
                     if (node.Path == null)
@@ -467,7 +460,7 @@ namespace TestCentric.Extensibility
                     }
 
                     ep.Install(node);
-                    // NYI: log.Info($"Installed extension {node.TypeName} at path {node.Path}");
+                    log.Info($"Installed extension {node.TypeName} at path {node.Path}");
                 }
             }
         }
@@ -493,13 +486,13 @@ namespace TestCentric.Extensibility
             {
                 if (extensionFrameworkName?.StartsWith(".NETStandard") != true && extensionFrameworkName?.StartsWith(".NETCoreApp") != true)
                 {
-                    // NYI: log.Info($".NET Core runners require .NET Core or .NET Standard extension for {extensionAsm.FilePath}");
+                    log.Info($".NET Core runners require .NET Core or .NET Standard extension for {extensionAsm.FilePath}");
                     return false;
                 }
             }
             else if (extensionFrameworkName?.StartsWith(".NETCoreApp") == true)
             {
-                // NYI: log.Info($".NET Framework runners cannot load .NET Core extension {extensionAsm.FilePath}");
+                log.Info($".NET Framework runners cannot load .NET Core extension {extensionAsm.FilePath}");
                 return false;
             }
 

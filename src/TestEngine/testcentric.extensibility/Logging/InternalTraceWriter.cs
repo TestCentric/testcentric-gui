@@ -5,7 +5,7 @@
 
 using System.IO;
 
-namespace TestCentric.Extensibility
+namespace TestCentric
 {
     /// <summary>
     /// A trace listener that writes to a separate file per domain
