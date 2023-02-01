@@ -12,8 +12,10 @@ private const string MYGET_PUSH_URL = "https://www.myget.org/F/testcentric/api/v
 private const string NUGET_PUSH_URL = "https://api.nuget.org/v3/index.json";
 
 // Environment Variable names holding API keys
-private const string MYGET_API_KEY = "MYGET_API_KEY";
-private const string NUGET_API_KEY = "NUGET_API_KEY";
+private const string MYGET_API_KEY = "TESTCENTRIC_MYGET_API_KEY";
+private const string FALLBACK_MYGET_API_KEY = "MYGET_API_KEY";
+private const string NUGET_API_KEY = "TESTCENTRIC_NUGET_API_KEY";
+private const string FALLBACK_NUGET_API_KEY = "NUGET_API_KEY";
 private const string GITHUB_ACCESS_TOKEN = "GITHUB_ACCESS_TOKEN";
 
 // Pre-release labels that we publish
@@ -50,8 +52,8 @@ public class BuildParameters
 		Configuration = GetArgument("configuration|c", DEFAULT_CONFIGURATION);
 		ProjectDirectory = context.Environment.WorkingDirectory.FullPath + "/";
 
-		MyGetApiKey = SetupContext.EnvironmentVariable(MYGET_API_KEY);
-		NuGetApiKey = SetupContext.EnvironmentVariable(NUGET_API_KEY);
+        MyGetApiKey = GetApiKey(MYGET_API_KEY, FALLBACK_MYGET_API_KEY);
+        NuGetApiKey = GetApiKey(NUGET_API_KEY, FALLBACK_NUGET_API_KEY);
 		GitHubAccessToken = SetupContext.EnvironmentVariable(GITHUB_ACCESS_TOKEN);
 
 		UsingXBuild = context.EnvironmentVariable("USE_XBUILD") != null;
@@ -307,4 +309,14 @@ public class BuildParameters
 		Console.WriteLine("IsReleaseBranch:              " + IsReleaseBranch);
 		Console.WriteLine("IsProductionRelease:          " + IsProductionRelease);
 	}
+
+    private string GetApiKey(string name, string fallback=null)
+    {
+        var apikey = SetupContext.EnvironmentVariable(name);
+
+        if (string.IsNullOrEmpty(apikey) && fallback != null)
+            apikey = SetupContext.EnvironmentVariable(fallback);
+
+        return apikey;
+    }
 }
