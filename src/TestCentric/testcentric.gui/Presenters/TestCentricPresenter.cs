@@ -195,9 +195,7 @@ namespace TestCentric.Gui.Presenters
 
                 UpdateViewCommands();
 
-                //string resultPath = Path.Combine(TestProject.BasePath, "TestResult.xml");
-                // TODO: Use Work Directory
-                string resultPath = "TestResult.xml";
+                string resultPath = Path.Combine(_model.WorkDirectory, "TestResult.xml");
                 _model.SaveResults(resultPath);
                 //try
                 //{
