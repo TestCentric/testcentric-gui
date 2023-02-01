@@ -107,6 +107,10 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.RunStarting += (ea) =>
             {
+                // Save the visual state in case test run causes an exception
+                // or user terminates cancels the run.
+                Strategy.SaveVisualState();
+
                 CheckPropertiesDisplay();
                 CheckXmlDisplay();
             };
