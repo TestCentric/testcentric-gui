@@ -14,7 +14,7 @@ static string[] VALID_CONFIGS = new [] { "Release", "Debug" };
 // NOTE: This must match what is actually referenced by
 // the GUI test model project. Hopefully, this is a temporary
 // fix, which we can get rid of in the future.
-const string REF_ENGINE_VERSION = "2.0.0-dev00023";
+const string REF_ENGINE_VERSION = "2.0.0-alpha7";
 
 const string PACKAGE_NAME = "testcentric-gui";
 const string NUGET_PACKAGE_NAME = "TestCentric.GuiRunner";
@@ -194,6 +194,8 @@ Task("VerifyZipPackage")
 			HasDirectory("bin/agents/net462").WithFiles(NET_FRAMEWORK_AGENT_FILES),
 			HasDirectory("bin/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES),
 			HasDirectory("bin/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES),
+			HasDirectory("bin/agents/net6.0").WithFiles(NET_CORE_AGENT_FILES),
+			HasDirectory("bin/agents/net7.0").WithFiles(NET_CORE_AGENT_FILES),
 			HasDirectory("bin/Images").WithFiles("DebugTests.png", "RunTests.png", "StopRun.png", "GroupBy_16x.png", "SummaryReport.png"),
 			HasDirectory("bin/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
 			HasDirectory("bin/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
@@ -249,6 +251,8 @@ Task("VerifyNuGetPackage")
 			HasDirectory("tools/agents/net462").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
 			HasDirectory("tools/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
 			HasDirectory("tools/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
+			HasDirectory("tools/agents/net6.0").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
+			HasDirectory("tools/agents/net7.0").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
 			HasDirectory("tools/Images").WithFiles("DebugTests.png", "RunTests.png", "StopRun.png", "GroupBy_16x.png", "SummaryReport.png"),
 			HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
 			HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
@@ -305,6 +309,8 @@ Task("VerifyChocolateyPackage")
 			HasDirectory("tools/agents/net462").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
 			HasDirectory("tools/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
 			HasDirectory("tools/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
+			HasDirectory("tools/agents/net6.0").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
+			HasDirectory("tools/agents/net7.0").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
 			HasDirectory("tools/Images").WithFiles("DebugTests.png", "RunTests.png", "StopRun.png", "GroupBy_16x.png", "SummaryReport.png"),
 			HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
 			HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),

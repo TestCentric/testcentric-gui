@@ -111,19 +111,39 @@ Projects with tests to be run under **TestCentric** must already have some versi
     <file src="$BIN$agents/netcoreapp3.1/testcentric-agent.dll.config" target="tools/agents/netcoreapp3.1" />
     <file src="$BIN$agents/netcoreapp3.1/testcentric-agent.deps.json" target="tools/agents/netcoreapp3.1" />
     <file src="$BIN$agents/netcoreapp3.1/testcentric-agent.runtimeconfig.json" target="tools/agents/netcoreapp3.1" />
-    <file src="$BIN$agents/netcoreapp3.1/testcentric-agent.runtimeconfig.dev.json" target="tools/agents/netcoreapp3.1" />
     <file src="testcentric-agent.choco.addins" target="tools/agents/netcoreapp3.1" />
 
-    <file src="$BIN$agents/net5.0/nunit.engine.api.dll" target="tools/agents/net5.0" />
-    <file src="$BIN$agents/net5.0/testcentric.engine.metadata.dll" target="tools/agents/net5.0" />
-	<file src="$BIN$agents/net5.0/testcentric.extensibility.dll" target="tools/agents/net5.0" />
-	<file src="$BIN$agents/net5.0/Microsoft.Extensions.DependencyModel.dll" target="tools/agents/net5.0" />
-	<file src="$BIN$agents/net5.0/testcentric.engine.core.dll" target="tools/agents/net5.0" />
-    <file src="$BIN$agents/net5.0/testcentric-agent.dll" target="tools/agents/net5.0" />
-    <file src="$BIN$agents/net5.0/testcentric-agent.dll.config" target="tools/agents/net5.0" />
-    <file src="$BIN$agents/net5.0/testcentric-agent.deps.json" target="tools/agents/net5.0" />
-    <file src="$BIN$agents/net5.0/testcentric-agent.runtimeconfig.json" target="tools/agents/net5.0" />
-    <file src="$BIN$agents/net5.0/testcentric-agent.runtimeconfig.dev.json" target="tools/agents/net5.0" />
-    <file src="testcentric-agent.choco.addins" target="tools/agents/net5.0" />
+	  <file src="$BIN$agents/net5.0/nunit.engine.api.dll" target="tools/agents/net5.0" />
+	  <file src="$BIN$agents/net5.0/testcentric.engine.metadata.dll" target="tools/agents/net5.0" />
+	  <file src="$BIN$agents/net5.0/testcentric.extensibility.dll" target="tools/agents/net5.0" />
+	  <file src="$BIN$agents/net5.0/Microsoft.Extensions.DependencyModel.dll" target="tools/agents/net5.0" />
+	  <file src="$BIN$agents/net5.0/testcentric.engine.core.dll" target="tools/agents/net5.0" />
+	  <file src="$BIN$agents/net5.0/testcentric-agent.dll" target="tools/agents/net5.0" />
+	  <file src="$BIN$agents/net5.0/testcentric-agent.dll.config" target="tools/agents/net5.0" />
+	  <file src="$BIN$agents/net5.0/testcentric-agent.deps.json" target="tools/agents/net5.0" />
+	  <file src="$BIN$agents/net5.0/testcentric-agent.runtimeconfig.json" target="tools/agents/net5.0" />
+	  <file src="testcentric-agent.choco.addins" target="tools/agents/net5.0" />
+
+	  <file src="$BIN$agents/net6.0/nunit.engine.api.dll" target="tools/agents/net6.0" />
+	  <file src="$BIN$agents/net6.0/testcentric.engine.metadata.dll" target="tools/agents/net6.0" />
+	  <file src="$BIN$agents/net6.0/testcentric.extensibility.dll" target="tools/agents/net6.0" />
+	  <file src="$BIN$agents/net6.0/Microsoft.Extensions.DependencyModel.dll" target="tools/agents/net6.0" />
+	  <file src="$BIN$agents/net6.0/testcentric.engine.core.dll" target="tools/agents/net6.0" />
+	  <file src="$BIN$agents/net6.0/testcentric-agent.dll" target="tools/agents/net6.0" />
+	  <file src="$BIN$agents/net6.0/testcentric-agent.dll.config" target="tools/agents/net6.0" />
+	  <file src="$BIN$agents/net6.0/testcentric-agent.deps.json" target="tools/agents/net6.0" />
+	  <file src="$BIN$agents/net6.0/testcentric-agent.runtimeconfig.json" target="tools/agents/net6.0" />
+	  <file src="testcentric-agent.choco.addins" target="tools/agents/net6.0" />
+
+	  <file src="$BIN$agents/net7.0/nunit.engine.api.dll" target="tools/agents/net7.0" />
+	  <file src="$BIN$agents/net7.0/testcentric.engine.metadata.dll" target="tools/agents/net7.0" />
+	  <file src="$BIN$agents/net7.0/testcentric.extensibility.dll" target="tools/agents/net7.0" />
+	  <file src="$BIN$agents/net7.0/Microsoft.Extensions.DependencyModel.dll" target="tools/agents/net7.0" />
+	  <file src="$BIN$agents/net7.0/testcentric.engine.core.dll" target="tools/agents/net7.0" />
+	  <file src="$BIN$agents/net7.0/testcentric-agent.dll" target="tools/agents/net7.0" />
+	  <file src="$BIN$agents/net7.0/testcentric-agent.dll.config" target="tools/agents/net7.0" />
+	  <file src="$BIN$agents/net7.0/testcentric-agent.deps.json" target="tools/agents/net7.0" />
+	  <file src="$BIN$agents/net7.0/testcentric-agent.runtimeconfig.json" target="tools/agents/net7.0" />
+	  <file src="testcentric-agent.choco.addins" target="tools/agents/net7.0" />
   </files>
 </package>

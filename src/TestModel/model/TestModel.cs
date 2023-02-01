@@ -82,8 +82,11 @@ namespace TestCentric.Gui.Model
                 ? (NUnit.Engine.InternalTraceLevel)Enum.Parse(typeof(NUnit.Engine.InternalTraceLevel), options.InternalTraceLevel)
                 : NUnit.Engine.InternalTraceLevel.Off;
 
-            // This initializes the trace setting for the process.
-            InternalTrace.Initialize($"InternalTrace.{Process.GetCurrentProcess().Id}.gui.log", traceLevel);
+            var logFile = $"InternalTrace{Process.GetCurrentProcess().Id}.gui.log";
+            if (options.WorkDirectory != null)
+                logFile = Path.Combine(options.WorkDirectory, logFile);
+
+            InternalTrace.Initialize(logFile, traceLevel);
 
             testEngine.InternalTraceLevel = traceLevel;
             if (options.WorkDirectory != null)
@@ -91,9 +94,10 @@ namespace TestCentric.Gui.Model
 
             var model = new TestModel(testEngine, "TestCentric");
 
-
             model.PackageOverrides.Add(EnginePackageSettings.InternalTraceLevel, testEngine.InternalTraceLevel.ToString());
 
+            if (options.WorkDirectory != null)
+                model.PackageOverrides.Add(EnginePackageSettings.WorkDirectory, options.WorkDirectory);
             if (options.MaxAgents >= 0)
                 model.PackageOverrides.Add(EnginePackageSettings.MaxAgents, options.MaxAgents);
             if (options.RunAsX86)
