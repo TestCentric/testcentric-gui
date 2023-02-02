@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using NUnit.Framework;
 
@@ -75,8 +76,18 @@ namespace TestCentric.Gui.Tests
             Assert.That(property.GetValue(options, null), Is.EqualTo(expected));
         }
 
+        [Test]
+        public void SingleTestParameter()
+        {
+            var options = new CommandLineOptions("--param:X=5");
+            Assert.That(options.ErrorMessages, Is.Empty);
+            Assert.That(options.TestParameters, Is.EqualTo(new Dictionary<string, string>() { { "X", "5" } }));
+            Assert.That(options.TestParameters["X"], Is.EqualTo("5"));
+        }
+
         [TestCase("--agents")]
         [TestCase("--trace")]
+        [TestCase("--param")]
         public void InvalidOptionsAreDetectedByMonoOptions(string option)
         {
             // We would prefer to handle all errors ourselves so

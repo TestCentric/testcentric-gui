@@ -68,6 +68,22 @@ namespace TestCentric.Gui
                     InternalTraceLevel = v;
                 });
 
+            Add("param=|p=", "Followed by a key-value pair separated by an equals sign. Test code can access the value by name. This option may be repeated.",
+                v =>
+                {
+                    if (CheckRequiredValue(v, "--param"))
+                    {
+                        string name, val;
+                        int eq = v.IndexOf('=');
+                        if (eq > 0 && eq < v.Length - 1)
+                        {
+                            name = v.Substring(0, eq);
+                            val = v.Substring(eq + 1);
+                            TestParameters[name] = val;
+                        }
+                    }
+                });
+
 #if DEBUG
             Add("debug-agent", "Launch debugger in testcentric-agent when it starts.",
                 v => DebugAgent = v != null);
@@ -120,6 +136,7 @@ namespace TestCentric.Gui
         public int MaxAgents { get; private set; }
         public string InternalTraceLevel { get; private set; }
         public string WorkDirectory { get; private set; }
+        public IDictionary<string, string> TestParameters { get; } = new Dictionary<string, string>();
         public bool DebugAgent { get; private set; }
         public bool SimulateUnloadError { get; private set; }
         public bool SimulateUnloadTimeout { get; private set; }
@@ -171,6 +188,9 @@ namespace TestCentric.Gui
 
         private bool CheckRequiredValue(string val, string option, params string[] validValues)
         {
+            if (string.IsNullOrEmpty(val))
+                ErrorMessages.Add($"Missing required value for option '{option}'");
+
             if (validValues == null || validValues.Length == 0)
                 return true;
 
