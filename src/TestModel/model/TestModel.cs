@@ -109,7 +109,15 @@ namespace TestCentric.Gui.Model
             if (options.SimulateUnloadTimeout)
                 model.PackageOverrides.Add(EnginePackageSettings.SimulateUnloadTimeout, true);
             if (options.TestParameters.Count > 0)
+            {
+                string[] parms = new string[options.TestParameters.Count];
+                int index = 0;
+                foreach (string key in options.TestParameters.Keys)
+                    parms[index++] = $"{key}={options.TestParameters[key]}";
+
                 model.PackageOverrides.Add("TestParametersDictionary", options.TestParameters);
+                model.PackageOverrides.Add("TestParameters", string.Join(";", parms));
+            }
 
             return model;
         }
@@ -555,24 +563,6 @@ namespace TestCentric.Gui.Model
         #endregion
 
         #region Helper Methods
-
-        // Public for testing only
-        public TestPackage MakeTestPackage(CommandLineOptions options)
-        {
-            // Set up package overrides from option settings
-            if (options.TestParameters.Count > 0)
-            {
-                string[] parms = new string[options.TestParameters.Count];
-                int index = 0;
-                foreach (string key in options.TestParameters.Keys)
-                    parms[index++] = $"{key}={options.TestParameters[key]}";
-
-                PackageOverrides.Add("TestParametersDictionary", options.TestParameters);
-                PackageOverrides.Add("TestParameters", string.Join(";", parms));
-            }
-
-            return MakeTestPackage(options.InputFiles);
-        }
 
         // Public for testing only
         public TestPackage MakeTestPackage(IList<string> testFiles)

@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using NUnit.Framework;
 
 namespace TestCentric.Gui.Tests
@@ -83,6 +84,16 @@ namespace TestCentric.Gui.Tests
             Assert.That(options.ErrorMessages, Is.Empty);
             Assert.That(options.TestParameters, Is.EqualTo(new Dictionary<string, string>() { { "X", "5" } }));
             Assert.That(options.TestParameters["X"], Is.EqualTo("5"));
+        }
+
+        [Test]
+        public void MultipleTestParameters()
+        {
+            var options = new CommandLineOptions("--param:X=5", "-p:Y=7");
+            Assert.That(options.ErrorMessages, Is.Empty);
+            Assert.That(options.TestParameters, Is.EqualTo(new Dictionary<string, string>() { { "X", "5" }, { "Y", "7" } }));
+            Assert.That(options.TestParameters["X"], Is.EqualTo("5"));
+            Assert.That(options.TestParameters["Y"], Is.EqualTo("7"));
         }
 
         [TestCase("--agents")]
