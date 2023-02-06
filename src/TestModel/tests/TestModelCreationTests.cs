@@ -23,6 +23,8 @@ namespace TestCentric.Gui.Model
         [TestCase("dummy.dll", "--work=/Some/Directory", "==agents:32")]
         [TestCase("dummy.dll", "--agents:5")]
         [TestCase("dummy.dll", "--X86")]
+        [TestCase("dummy.dll", "--param:X=5")]
+        [TestCase("dummy.dll", "--param:X=5", "-p:Y=7")]
         public void CreateTestModel(params string[] args)
         {
             ITestEngine engine = new MockTestEngine();
@@ -40,6 +42,17 @@ namespace TestCentric.Gui.Model
             var checker = new PackageOverridesChecker(model);
             checker.CheckSetting(options.MaxAgents, EnginePackageSettings.MaxAgents);
             checker.CheckSetting(options.RunAsX86, EnginePackageSettings.RunAsX86);
+
+            if (options.TestParameters.Count > 0)
+            {
+                string[] parms = new string[options.TestParameters.Count];
+                int index = 0;
+                foreach (string key in options.TestParameters.Keys)
+                    parms[index++] = $"{key}={options.TestParameters[key]}";
+
+                checker.CheckSetting(options.TestParameters, "TestParametersDictionary");
+                checker.CheckSetting(string.Join(";", parms), "TestParameters");
+            }
         }
 
         private class PackageOverridesChecker

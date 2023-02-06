@@ -47,23 +47,6 @@ namespace TestCentric.Gui.Model
         }
 
         [Test]
-        public void TestRunParametersAreIncludedInSettings()
-        {
-            var options = new CommandLineOptions("test.dll", "--param:X=5", "--param:Y=7");
-            var settings = _model.MakeTestPackage(options).Settings;
-
-            Assert.That(settings.ContainsKey("TestParametersDictionary"), "TestParametersDictionary setting not included.");
-            var paramDictionary = settings["TestParametersDictionary"] as IDictionary<string, string>;
-            Assert.That(paramDictionary.Keys, Is.EqualTo(new[] { "X", "Y" }));
-            Assert.That(paramDictionary["X"], Is.EqualTo("5"));
-            Assert.That(paramDictionary["Y"], Is.EqualTo("7"));
-
-            Assert.That(settings.ContainsKey("TestParameters"), "TestParameters setting not included.");
-            var paramString = settings["TestParameters"] as string;
-            Assert.That(paramString, Is.EqualTo("X=5;Y=7"));
-        }
-
-        [Test]
         public void PackageReflectsTestParameters()
         {
             var testParms = new Dictionary<string, string>();
