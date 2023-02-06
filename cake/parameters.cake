@@ -15,9 +15,12 @@ private const string NUGET_PUSH_URL = "https://api.nuget.org/v3/index.json";
 private const string CHOCO_PUSH_URL = "https://push.chocolatey.org/";
 
 // Environment Variable names holding API keys
-private const string MYGET_API_KEY = "MYGET_API_KEY";
-private const string NUGET_API_KEY = "NUGET_API_KEY";
-private const string CHOCO_API_KEY = "CHOCO_API_KEY";
+private const string MYGET_API_KEY = "TESTCENTRIC_MYGET_API_KEY";
+private const string FALLBACK_MYGET_API_KEY = "MYGET_API_KEY";
+private const string NUGET_API_KEY = "TESTCENTRIC_NUGET_API_KEY";
+private const string FALLBACK_NUGET_API_KEY = "NUGET_API_KEY";
+private const string CHOCO_API_KEY = "TESTCENTRIC_CHOCO_API_KEY";
+private const string FALLBACK_CHOCO_API_KEY = "CHOCO_API_KEY";
 private const string GITHUB_ACCESS_TOKEN = "GITHUB_ACCESS_TOKEN";
 
 // Pre-release labels that we publish
@@ -50,9 +53,9 @@ public class BuildParameters
 		Configuration = context.Argument("configuration", context.Argument("c", DEFAULT_CONFIGURATION));
 		ProjectDirectory = context.Environment.WorkingDirectory.FullPath + "/";
 
-		MyGetApiKey = _context.EnvironmentVariable(MYGET_API_KEY);
-		NuGetApiKey = _context.EnvironmentVariable(NUGET_API_KEY);
-		ChocolateyApiKey = _context.EnvironmentVariable(CHOCO_API_KEY);
+        MyGetApiKey = GetApiKey(MYGET_API_KEY, FALLBACK_MYGET_API_KEY);
+        NuGetApiKey = GetApiKey(NUGET_API_KEY, FALLBACK_NUGET_API_KEY);
+		ChocolateyApiKey = GetApiKey(CHOCO_API_KEY, FALLBACK_CHOCO_API_KEY);
 		GitHubAccessToken = _context.EnvironmentVariable(GITHUB_ACCESS_TOKEN);
 
 		BuildVersion = new BuildVersion(context, this);
@@ -274,4 +277,14 @@ public class BuildParameters
 		Console.WriteLine("IsReleaseBranch:              " + IsReleaseBranch);
 		Console.WriteLine("IsProductionRelease:          " + IsProductionRelease);
 	}
+
+    private string GetApiKey(string name, string fallback=null)
+    {
+        var apikey = _context.EnvironmentVariable(name);
+
+        if (string.IsNullOrEmpty(apikey) && fallback != null)
+            apikey = _context.EnvironmentVariable(fallback);
+
+        return apikey;
+    }
 }
