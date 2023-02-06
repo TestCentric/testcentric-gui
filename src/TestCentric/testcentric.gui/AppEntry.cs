@@ -50,7 +50,15 @@ namespace TestCentric.Gui
             }
 
             log.Info("Instantiating TestModel");
-            ITestModel model = TestModel.CreateTestModel(options);
+            ITestModel model = null;
+            try
+            {
+                model = TestModel.CreateTestModel(options);
+            }
+            catch(Exception ex)
+            {
+                MessageDisplay.Error(ex.Message);
+            }
 
             log.Info("Constructing Form");
             TestCentricMainView view = new TestCentricMainView();

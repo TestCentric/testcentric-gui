@@ -144,6 +144,7 @@ Task("Test")
 			args.Append($"\"{test}\" ");
 
 		var guiTester = new GuiTester(parameters);
+		Information ($"Running {parameters.OutputDirectory + GUI_RUNNER} with arguments {args}");
 		guiTester.RunGuiUnattended(parameters.OutputDirectory + GUI_RUNNER, args.ToString());
 		var result = new ActualResult(parameters.OutputDirectory + "TestResult.xml");
 
