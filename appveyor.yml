@@ -12,11 +12,11 @@ artifacts:
 - path: package\*.nupkg
 
 environment:
-  MYGET_API_KEY:
+  TESTCENTRIC_MYGET_API_KEY:
     secure: wtAvJDVl2tfwiVcyLExFHLvZVfUWiQRHsfdHBFCNEATeCHo1Nd8JP642PfY8xhji
-  NUGET_API_KEY:
-    secure: PVHROoT0SmGkr9CHgrKapuA0/CcJGHSP63M3fZaNLvcEVbBnzYLeCwpc0PZHhdvD
-  CHOCO_API_KEY:
+  TESTCENTRIC_NUGET_API_KEY:
+    secure: 6lmjTFOrs5IZbOR70rmQNSOuFMPKGxA88/TuGAm1X3mspgj5bn1rnbN/iqTIC2Le
+  TESTCENTRIC_CHOCO_API_KEY:
     secure: aDsu1U+umVYFVybjkBVtVQsatSj3QKbD7VkGQci9mNF3493g9Giao/GABISIaHjT
   GITHUB_PASSWORD:
     secure: 2eNz23Eb1L40g2LPmlPqog==
