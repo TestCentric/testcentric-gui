@@ -47,9 +47,9 @@ public struct PackageTest
     public string Description;
     public string Arguments;
     public ExpectedResult ExpectedResult;
-    public string[] ExtensionsNeeded;
+    public ExtensionSpecifier[] ExtensionsNeeded;
 
-    public PackageTest(int level, string description, string arguments, ExpectedResult expectedResult, params string[] extensionsNeeded)
+    public PackageTest(int level, string description, string arguments, ExpectedResult expectedResult, params ExtensionSpecifier[] extensionsNeeded)
     {
         if (description == null)
             throw new ArgumentNullException(nameof(description));
@@ -64,6 +64,18 @@ public struct PackageTest
         ExpectedResult = expectedResult;
         ExtensionsNeeded = extensionsNeeded;
     }
+}
+
+public struct ExtensionSpecifier
+{
+    public ExtensionSpecifier(string id, string version)
+    {
+        Id = id;
+        Version = version;
+    }
+
+    public string Id;
+    public string Version;
 }
 
 const string DEFAULT_TEST_RESULT_FILE = "TestResult.xml";
@@ -211,19 +223,19 @@ public abstract class PackageTester
             Net20PluggableAgent));
 
         // TODO: NetCore21PluggableAgent is not yet available
-        //PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting Net Core 2.1 using NetCore21PluggableAgent",
-        //    "engine-tests/netcoreapp2.1/mock-assembly.dll --trace",
-        //    new ExpectedResult("Failed")
-        //    {
-        //        Total = 36,
-        //        Passed = 23,
-        //        Failed = 5,
-        //        Warnings = 1,
-        //        Inconclusive = 1,
-        //        Skipped = 7,
-        //        Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "NetCore21AgentLauncher") }
-        //    },
-        //    NetCore21PluggableAgent));
+        /*PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting Net Core 2.1 using NetCore21PluggableAgent",
+            "engine-tests/netcoreapp2.1/mock-assembly.dll --trace",
+            new ExpectedResult("Failed")
+            {
+                Total = 36,
+                Passed = 23,
+                Failed = 5,
+                Warnings = 1,
+                Inconclusive = 1,
+                Skipped = 7,
+                Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "NetCore21AgentLauncher") }
+            },
+            NetCore21PluggableAgent));*/
 
         //PackageTests.Add(new PackageTest(1, "Run tests using the V2 framework driver",
         //	"v2-tests/net35/v2-test-assembly.dll",
@@ -245,10 +257,10 @@ public abstract class PackageTester
     protected abstract string PackageTestBinDirectory { get; }
     protected abstract string ExtensionInstallDirectory { get; }
 
-    protected virtual string NUnitV2Driver => "NUnit.Extension.NUnitV2Driver";
-    protected virtual string NUnitProjectLoader => "NUnit.Extension.NUnitProjectLoader";
-    protected virtual string Net20PluggableAgent => "NUnit.Extension.Net20PluggableAgent";
-    protected virtual string NetCore21PluggableAgent => "NUnit.Extension.NetCore21PluggableAgent";
+    protected virtual ExtensionSpecifier NUnitV2Driver => new ExtensionSpecifier("NUnit.Extension.NUnitV2Driver", "3.9.0");
+    protected virtual ExtensionSpecifier NUnitProjectLoader => new ExtensionSpecifier("NUnit.Extension.NUnitProjectLoader", "3.7.1");
+    protected virtual ExtensionSpecifier Net20PluggableAgent => new ExtensionSpecifier("NUnit.Extension.Net20PluggableAgent", "2.0.0");
+    protected virtual ExtensionSpecifier NetCore21PluggableAgent => new ExtensionSpecifier("NUnit.Extension.NetCore21PluggableAgent", "2.0.0");
 
     // NOTE: Currently, we use the same tests for all packages. There seems to be
     // no reason for the three packages to differ in capability so the only reason
@@ -264,18 +276,18 @@ public abstract class PackageTester
         CheckTestErrors(ref ErrorDetail);
     }
 
-    private void CheckExtensionIsInstalled(string extension)
+    private void CheckExtensionIsInstalled(ExtensionSpecifier extension)
     {
-        bool alreadyInstalled = _context.GetDirectories($"{ExtensionInstallDirectory}{extension}.*").Count > 0;
+        bool alreadyInstalled = _context.GetDirectories($"{ExtensionInstallDirectory}{extension.Id}.*").Count > 0;
 
         if (!alreadyInstalled)
         {
-            DisplayBanner($"Installing {extension}");
+            DisplayBanner($"Installing {extension.Id} version {extension.Version}");
             InstallEngineExtension(extension);
         }
     }
 
-    protected abstract void InstallEngineExtension(string extension);
+    protected abstract void InstallEngineExtension(ExtensionSpecifier extension);
 
     private void RunPackageTests(int testLevel)
     {
@@ -290,7 +302,7 @@ public abstract class PackageTester
         {
             if (packageTest.Level > 0 && packageTest.Level <= testLevel)
             {
-                foreach (string extension in packageTest.ExtensionsNeeded)
+                foreach (ExtensionSpecifier extension in packageTest.ExtensionsNeeded)
                     CheckExtensionIsInstalled(extension);
 
                 var resultFile = _parameters.OutputDirectory + DEFAULT_TEST_RESULT_FILE;
@@ -375,13 +387,13 @@ public class EnginePackageTester : PackageTester
     protected override string PackageTestBinDirectory => PackageTestDirectory + "tools/";
     protected override string ExtensionInstallDirectory => _parameters.TestDirectory;
 
-    protected override void InstallEngineExtension(string extension)
+    protected override void InstallEngineExtension(ExtensionSpecifier extension)
     {
-        _parameters.SetupContext.NuGetInstall(extension,
+        _parameters.SetupContext.NuGetInstall(extension.Id,
             new NuGetInstallSettings()
             {
                 OutputDirectory = ExtensionInstallDirectory,
-                //Prerelease = true
+                Version = extension.Version
             });
     }
 }
