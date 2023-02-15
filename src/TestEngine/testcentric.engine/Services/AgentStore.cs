@@ -6,7 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using TestCentric.Engine.Internal;
+using NUnit.Engine;
 
 namespace TestCentric.Engine.Services
 {
@@ -98,10 +98,10 @@ namespace TestCentric.Engine.Services
             lock (LOCK)
             {
                 if (!_processIndex.TryGetValue(process, out var record))
-                    throw new ArgumentException("An entry for the process must exist in order to mark it as terminated.", nameof(process));
+                    throw new NUnitEngineException("Process terminated without registering an agent.");
 
                 if (record.Status == AgentStatus.Terminated)
-                    throw new ArgumentException("Process has already been marked as terminated");
+                    throw new NUnitEngineException("Attempt to mark process as terminated, which is already terminated.");
 
                 record.Status = AgentStatus.Terminated;
                 try

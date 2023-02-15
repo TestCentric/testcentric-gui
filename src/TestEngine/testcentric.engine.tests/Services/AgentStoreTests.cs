@@ -65,7 +65,8 @@ namespace TestCentric.Engine.Services
         {
             var database = new AgentStore();
 
-            Assert.That(() => database.MarkProcessTerminated(DummyProcess), Throws.ArgumentException.With.Property("ParamName").EqualTo("process"));
+            Assert.That(() => database.MarkProcessTerminated(DummyProcess),
+                Throws.Exception.With.Message.EqualTo("Process terminated without registering an agent."));
         }
 
         [Test]

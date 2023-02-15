@@ -193,7 +193,7 @@ public abstract class PackageTester
         if (_parameters.Configuration == "Release")
         {
             PackageTests.Add(new PackageTest(1, "Run an NUnit project",
-                "TestProject.nunit --trace",
+                "TestProject.nunit",
                 new ExpectedResult("Failed")
                 {
                     Assemblies = new[] {
@@ -222,9 +222,8 @@ public abstract class PackageTester
             },
             Net20PluggableAgent));
 
-        // TODO: NetCore21PluggableAgent is not yet available
-        /*PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting Net Core 2.1 using NetCore21PluggableAgent",
-            "engine-tests/netcoreapp2.1/mock-assembly.dll --trace",
+        PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting Net Core 2.1 using NetCore21PluggableAgent",
+            "engine-tests/netcoreapp2.1/mock-assembly.dll",
             new ExpectedResult("Failed")
             {
                 Total = 36,
@@ -235,7 +234,7 @@ public abstract class PackageTester
                 Skipped = 7,
                 Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "NetCore21AgentLauncher") }
             },
-            NetCore21PluggableAgent));*/
+            NetCore21PluggableAgent));
 
         //PackageTests.Add(new PackageTest(1, "Run tests using the V2 framework driver",
         //	"v2-tests/net35/v2-test-assembly.dll",
@@ -324,7 +323,8 @@ public abstract class PackageTester
                     });
 
                     var result = new ActualResult(resultFile);
-                    var report = new PackageTestReport(packageTest, result);                    reporter.AddReport(report);
+                    var report = new PackageTestReport(packageTest, result);
+                    reporter.AddReport(report);
 
                     Console.WriteLine(report.Errors.Count == 0
                         ? "\nSUCCESS: Test Result matches expected result!"
@@ -351,9 +351,11 @@ public abstract class PackageTester
 
     private void DisplayBanner(string message)
     {
-        Console.WriteLine("\n=======================================================");
+        var bar = new string('-', Math.Max(message.Length, 70));
+        Console.WriteLine();
+        Console.WriteLine(bar);
         Console.WriteLine(message);
-        Console.WriteLine("=======================================================");
+        Console.WriteLine(bar);
     }
 
     static ExpectedResult MockAssemblyExpectedResult(params string[] agentNames)
