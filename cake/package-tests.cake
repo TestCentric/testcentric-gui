@@ -80,9 +80,9 @@ public struct PackageTest
 	public string Description;
 	public string Arguments;
 	public ExpectedResult ExpectedResult;
-	public string[] ExtensionsNeeded;
+	public ExtensionSpecifier[] ExtensionsNeeded;
 	
-	public PackageTest(int level, string name, string description, string arguments, ExpectedResult expectedResult, params string[] extensionsNeeded)
+	public PackageTest(int level, string name, string description, string arguments, ExpectedResult expectedResult, params ExtensionSpecifier[] extensionsNeeded)
 	{
 		Level = level;
 		Name = name;
@@ -91,6 +91,18 @@ public struct PackageTest
 		ExpectedResult = expectedResult;
 		ExtensionsNeeded = extensionsNeeded;
 	}
+}
+
+public struct ExtensionSpecifier
+{
+	public ExtensionSpecifier(string id, string version)
+	{
+		Id = id;
+		Version = version;
+	}
+
+	public string Id;
+	public string Version;
 }
 
 // Abstract base for all package testers. Currently, we only
@@ -218,6 +230,13 @@ public abstract class PackageTester : GuiTester
             MockAssemblyExpectedResult("Net20AgentLauncher"),
 			Net20PluggableAgent));
 
+		// This test installs the .NET Core 2.1 pluggable agent. All subsequent
+		// tests will use that agent for .NET Core tests up to version 2.1.
+		PackageTests.Add(new PackageTest(1, "NetCore21PluggableAgentTest", "Run .NET Core 2.1 mock-assembly.dll under .NET Core 2.1 pluggable agent",
+			"netcoreapp2.1/mock-assembly.dll",
+            MockAssemblyExpectedResult("NetCore21AgentLauncher"),
+			NetCore21PluggableAgent));
+
 		// Multiple assembly tests
 
         PackageTests.Add(new PackageTest(1, "Net462PlusNet35Test", "Run net462 and net35 builds of mock-assembly.dll together",
@@ -267,11 +286,12 @@ public abstract class PackageTester : GuiTester
 	protected abstract string PackageTestBinDirectory { get; }
 	protected abstract string ExtensionInstallDirectory { get; }
 
-	protected virtual string NUnitV2Driver => "NUnit.Extension.NUnitV2Driver";
-	protected virtual string NUnitProjectLoader => "NUnit.Extension.NUnitProjectLoader";
-	protected virtual string Net20PluggableAgent => "NUnit.Extension.Net20PluggableAgent";
+	protected virtual ExtensionSpecifier NUnitV2Driver => new ExtensionSpecifier("NUnit.Extension.NUnitV2Driver", "3.9.0");
+	protected virtual ExtensionSpecifier NUnitProjectLoader => new ExtensionSpecifier("NUnit.Extension.NUnitProjectLoader", "3.7.1");
+	protected virtual ExtensionSpecifier Net20PluggableAgent => new ExtensionSpecifier("NUnit.Extension.Net20PluggableAgent", "2.0.0");
+	protected virtual ExtensionSpecifier NetCore21PluggableAgent => new ExtensionSpecifier("NUnit.Extension.NetCore21PluggableAgent", "2.0.0");
 
-	private List<string> InstalledExtensions { get; } = new List<string>();
+	private List<ExtensionSpecifier> InstalledExtensions { get; } = new List<ExtensionSpecifier>();
 
 	// NOTE: Currently, we use the same tests for all packages. There seems to be
 	// no reason for the three packages to differ in capability so the only reason
@@ -305,19 +325,19 @@ public abstract class PackageTester : GuiTester
 		}
 	}
 
-	private void CheckExtensionIsInstalled(string extension)
+	private void CheckExtensionIsInstalled(ExtensionSpecifier extension)
 	{
-		bool alreadyInstalled = _context.GetDirectories($"{ExtensionInstallDirectory}{extension}.*").Count > 0;
+		bool alreadyInstalled = _context.GetDirectories($"{ExtensionInstallDirectory}{extension.Id}.*").Count > 0;
 
 		if (!alreadyInstalled)
 		{
-			DisplayBanner($"Installing {extension}");
+			DisplayBanner($"Installing {extension.Id}");
 			InstallEngineExtension(extension);
 			InstalledExtensions.Add(extension);
 		}
 	}
 
-	protected abstract void InstallEngineExtension(string extension);
+	protected abstract void InstallEngineExtension(ExtensionSpecifier extension);
 
 	private void RunPackageTests(int testLevel)
 	{
@@ -329,7 +349,7 @@ public abstract class PackageTester : GuiTester
 		{
 			if (packageTest.Level > 0 && packageTest.Level <= testLevel)
 			{
-				foreach (string extension in packageTest.ExtensionsNeeded)
+				foreach (ExtensionSpecifier extension in packageTest.ExtensionsNeeded)
 					CheckExtensionIsInstalled(extension);
 
 				var workDirectory = PackageResultDirectory + packageTest.Name + "/";
@@ -429,15 +449,15 @@ public class ZipPackageTester : PackageTester
 	protected override string PackageTestBinDirectory => PackageTestDirectory + "bin/";
 	protected override string ExtensionInstallDirectory => PackageTestBinDirectory + "addins/";
 	
-	protected override void InstallEngineExtension(string extension)
+	protected override void InstallEngineExtension(ExtensionSpecifier extension)
 	{
-		Console.WriteLine($"Installing {extension} to directory {ExtensionInstallDirectory}");
+		Console.WriteLine($"Installing {extension.Id} to directory {ExtensionInstallDirectory}");
 
-		_parameters.Context.NuGetInstall(extension,
+		_parameters.Context.NuGetInstall(extension.Id,
 			new NuGetInstallSettings()
 			{
 				OutputDirectory = ExtensionInstallDirectory,
-				Prerelease = true
+				Version = extension.Version
 			});
 	}
 }
@@ -453,13 +473,13 @@ public class NuGetPackageTester : PackageTester
 	protected override string PackageTestBinDirectory => PackageTestDirectory + "tools/";
 	protected override string ExtensionInstallDirectory => _parameters.TestDirectory;
 	
-	protected override void InstallEngineExtension(string extension)
+	protected override void InstallEngineExtension(ExtensionSpecifier extension)
 	{
-		_parameters.Context.NuGetInstall(extension,
+		_parameters.Context.NuGetInstall(extension.Id,
 			new NuGetInstallSettings()
 			{
 				OutputDirectory = ExtensionInstallDirectory,
-				Prerelease = true
+				Version = extension.Version
 			});
 	}
 }
@@ -476,19 +496,19 @@ public class ChocolateyPackageTester : PackageTester
 	protected override string ExtensionInstallDirectory => _parameters.TestDirectory;
 	
 	// Chocolatey packages have a different naming convention from NuGet
-	protected override string NUnitV2Driver => "nunit-extension-nunit-v2-driver";
-	protected override string NUnitProjectLoader => "nunit-extension-nunit-project-loader";
-    protected override string Net20PluggableAgent => "nunit-extension-net20-pluggable-agent";
+	protected override ExtensionSpecifier NUnitV2Driver => new ExtensionSpecifier("nunit-extension-nunit-v2-driver", "3.9.0");
+	protected override ExtensionSpecifier NUnitProjectLoader => new ExtensionSpecifier("nunit-extension-nunit-project-loader", "3.7.1");
+    protected override ExtensionSpecifier Net20PluggableAgent => new ExtensionSpecifier("nunit-extension-net20-pluggable-agent", "2.0.0");
+    protected override ExtensionSpecifier NetCore21PluggableAgent => new ExtensionSpecifier("nunit-extension-netcore21-pluggable-agent", "2.0.0");
 
-    protected override void InstallEngineExtension(string extension)
+    protected override void InstallEngineExtension(ExtensionSpecifier extension)
 	{
 		// Install with NuGet because choco requires administrator access
-		_parameters.Context.NuGetInstall(extension,
+		_parameters.Context.NuGetInstall(extension.Id,
 			new NuGetInstallSettings()
 			{
-				Source = new[] { "https://www.myget.org/F/testcentric/api/v3/index.json" },
 				OutputDirectory = ExtensionInstallDirectory,
-				Prerelease = true
+				Version = extension.Version
 			});
 	}
 }
