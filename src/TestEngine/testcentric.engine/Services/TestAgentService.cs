@@ -5,6 +5,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using NUnit.Engine;
 using TestCentric.Engine.Extensibility;
 using TestCentric.Engine.Internal;
