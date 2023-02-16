@@ -5,6 +5,7 @@
 const string SOLUTION = "testcentric-engine.sln";
 const string GITHUB_OWNER = "testcentric";
 const string GITHUB_REPO = "testcentric-engine";
+
 const string DEFAULT_VERSION = "2.0.0";
 const string DEFAULT_CONFIGURATION = "Release";
 static readonly string[] VALID_CONFIGS = { "Release", "Debug" };
@@ -13,7 +14,7 @@ const string ENGINE_PACKAGE_ID = "TestCentric.Engine";
 const string ENGINE_CORE_PACKAGE_ID = "TestCentric.Engine.Core";
 const string ENGINE_API_PACKAGE_ID = "TestCentric.Engine.Api";
 
-static readonly string TEST_BED_EXE = "test-bed.exe";
+const string TEST_BED_EXE = "test-bed.exe";
 
 // Load scripts after defining constants
 #load "./cake/parameters.cake"
@@ -54,10 +55,6 @@ static readonly string TEST_BED_EXE = "test-bed.exe";
 //       1 = Normal CI tests run every time you build a package
 //       2 = Adds more tests for PRs and Dev builds uploaded to MyGet
 //       3 = Adds even more tests prior to publishing a release
-//
-// --nopush
-//     Display a message rather than actually pushing when a publish
-//     step is run. Used for testing the build script.
 //
 //////////////////////////////////////////////////////////////////////
 

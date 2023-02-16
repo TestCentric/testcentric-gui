@@ -23,7 +23,7 @@ public class BuildVersion
         IsReleaseBranch = BranchName.StartsWith("release-");
 
         // TODO: Get GitVersion to work on Linux
-        string packageVersion = parameters.HasArgument("packageVersion")
+        string packageVersion = parameters.HasArgument("packageVersion|package")
             ? parameters.GetArgument("packageVersion|package", DEFAULT_VERSION)
             : CalculatePackageVersion();
 
