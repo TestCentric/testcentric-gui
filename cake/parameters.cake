@@ -34,12 +34,18 @@ public class BuildParameters
 	private ISetupContext _context;
 	private BuildSystem _buildSystem;
 
-	public static BuildParameters Create(ISetupContext context)
-	{
-		var parameters = new BuildParameters(context);
-		parameters.Validate();
+	// BuildParameters is effectively a singleton because it is only created in the Setup method.
+	private static BuildParameters _instance;
 
-		return parameters;
+	public static BuildParameters CreateInstance(ISetupContext context)
+	{
+		if (_instance != null)
+			throw new Exception("BuildParameters instance may only be created once.");
+
+		_instance = new BuildParameters(context);
+		_instance.Validate();
+
+		return _instance;
 	}
 
 	private BuildParameters(ISetupContext context)
@@ -60,8 +66,8 @@ public class BuildParameters
 
 		BuildVersion = new BuildVersion(context, this);
 
-		if (context.HasArgument("testLevel"))
-			PackageTestLevel = context.Argument("testLevel", 1);
+		if (context.HasArgument("testLevel|level"))
+			PackageTestLevel = context.Argument("testLevel|level", 1);
 		else if (!BuildVersion.IsPreRelease)
 			PackageTestLevel = 3;
 		else switch (BuildVersion.PreReleaseLabel)
@@ -174,6 +180,24 @@ public class BuildParameters
 
 	public string ProjectUri => "https://github.com/TestCentric/testcentric-gui";
 	public string GitHubAccessToken { get; }
+
+	public bool HasArgument(string altNames)
+	{
+		foreach (string name in altNames.Split('|'))
+			if (_context.HasArgument(name))
+				return true;
+
+		return false;
+	}
+
+	public T GetArgument<T>(string altNames, T defaultValue)
+	{
+		foreach (string name in altNames.Split('|'))
+			if (_context.HasArgument(name))
+				return _context.Argument(name, defaultValue);
+
+		return defaultValue;
+	}
 
 	private void Validate()
 	{
