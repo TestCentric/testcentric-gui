@@ -2,6 +2,7 @@
 #load "./packaging.cake"
 #load "./package-checks.cake"
 #load "./package-tests.cake"
+#load "./package-tester.cake"
 #load "./test-results.cake"
 #load "./test-reports.cake"
 #load "./check-headers.cake"
