@@ -141,6 +141,8 @@ public class BuildParameters
 	public string EngineTestDirectory => TestDirectory + ENGINE_PACKAGE_ID + "/";
 	public string EngineCoreTestDirectory => TestDirectory + ENGINE_CORE_PACKAGE_ID + "/";
 	public string EngineApiTestDirectory => TestDirectory + ENGINE_API_PACKAGE_ID + "/";
+	public string ResultDirectory => PackageDirectory + "results/";
+	public string EngineResultDirectory => ResultDirectory + ENGINE_PACKAGE_ID + "/";
 
 	public string EnginePackageName => ENGINE_PACKAGE_ID + "." + PackageVersion + ".nupkg";
 	public string EngineCorePackageName => ENGINE_CORE_PACKAGE_ID + "." + PackageVersion + ".nupkg";

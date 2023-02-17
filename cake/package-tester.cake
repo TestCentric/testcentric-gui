@@ -14,57 +14,58 @@ public abstract class PackageTester
         PackageTests = new List<PackageTest>();
 
         //Level 1 tests are run each time we build the packages
-        PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET 4.6.2",
+
+		// Tests of single assemblies targeting each runtime we support
+
+        PackageTests.Add(new PackageTest(1, "Net462Test", "Run mock-assembly.dll targeting .NET 4.6.2",
             "engine-tests/net462/mock-assembly.dll",
             MockAssemblyExpectedResult("Net462AgentLauncher")));
 
-        PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET 3.5",
+        PackageTests.Add(new PackageTest(1, "Net35Test", "Run mock-assembly.dll targeting .NET 3.5",
             "engine-tests/net35/mock-assembly.dll",
             MockAssemblyExpectedResult("Net462AgentLauncher")));
 
-        PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET Core 2.1",
+        PackageTests.Add(new PackageTest(1, "NetCore21Test", "Run mock-assembly.dll targeting .NET Core 2.1",
             "engine-tests/netcoreapp2.1/mock-assembly.dll",
             MockAssemblyExpectedResult("NetCore31AgentLauncher")));
 
-        PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET Core 3.1",
+        PackageTests.Add(new PackageTest(1, "NetCore31Test", "Run mock-assembly.dll targeting .NET Core 3.1",
             "engine-tests/netcoreapp3.1/mock-assembly.dll",
             MockAssemblyExpectedResult("NetCore31AgentLauncher")));
 
-        PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET Core 1.1",
+        PackageTests.Add(new PackageTest(1, "NetCore11Test", "Run mock-assembly.dll targeting .NET Core 1.1",
             "engine-tests/netcoreapp1.1/mock-assembly.dll",
             MockAssemblyExpectedResult("NetCore31AgentLauncher")));
 
-        PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET 5.0",
+        PackageTests.Add(new PackageTest(1, "Net50Test", "Run mock-assembly.dll targeting .NET 5.0",
             "engine-tests/net5.0/mock-assembly.dll",
             MockAssemblyExpectedResult("Net50AgentLauncher")));
 
-        PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET 6.0",
+        PackageTests.Add(new PackageTest(1, "Net60Test", "Run mock-assembly.dll targeting .NET 6.0",
             "engine-tests/net6.0/mock-assembly.dll",
             MockAssemblyExpectedResult("Net60AgentLauncher")));
 
-        PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting .NET 7.0",
+        PackageTests.Add(new PackageTest(1, "Net70Test", "Run mock-assembly.dll targeting .NET 7.0",
             "engine-tests/net7.0/mock-assembly.dll",
             MockAssemblyExpectedResult("Net70AgentLauncher")));
 
-        PackageTests.Add(new PackageTest(1, "Run different builds of mock-assembly.dll together",
-            "engine-tests/net35/mock-assembly.dll engine-tests/netcoreapp2.1/mock-assembly.dll",
-            MockAssemblyExpectedResult("Net462AgentLauncher", "NetCore31AgentLauncher")));
+        // AspNetCore Tests
 
-        PackageTests.Add(new PackageTest(1, "Run test using AspNetCore under .NET Core 3.1",
+        PackageTests.Add(new PackageTest(1, "AspNetCore31Test", "Run test using AspNetCore under .NET Core 3.1",
             "engine-tests/netcoreapp3.1/aspnetcore-test.dll",
             new ExpectedResult("Passed")
             {
                 Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "NetCore31AgentLauncher") }
             }));
 
-        PackageTests.Add(new PackageTest(1, "Run test using AspNetCore under .NET 5.0",
+        PackageTests.Add(new PackageTest(1, "AspNetCore50Test", "Run test using AspNetCore under .NET 5.0",
             "engine-tests/net5.0/aspnetcore-test.dll",
             new ExpectedResult("Passed")
             {
                 Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net50AgentLauncher") }
             }));
 
-        PackageTests.Add(new PackageTest(1, "Run test using AspNetCore under .NET 6.0",
+        PackageTests.Add(new PackageTest(1, "AspNetCore60Test", "Run test using AspNetCore under .NET 6.0",
             "engine-tests/net6.0/aspnetcore-test.dll",
             new ExpectedResult("Passed")
             {
@@ -73,37 +74,45 @@ public abstract class PackageTester
 
         // TODO: AspNetCore test won't run on AppVeyor under .NET 7.0 - we don't yet know why
         if (!parameters.IsRunningOnAppVeyor)
-            PackageTests.Add(new PackageTest(1, "Run test using AspNetCore under .NET 7.0",
+            PackageTests.Add(new PackageTest(1, "AspNetCore70Test", "Run test using AspNetCore under .NET 7.0",
                 "engine-tests/net7.0/aspnetcore-test.dll",
                 new ExpectedResult("Passed")
                 {
                     Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net70AgentLauncher") }
                 }));
 
-        // Windows Forms tests won't run on AppVeyor under .NET 5.0 or 7.0, we don't yet know why
+        // Windows Forms Tests
+
+        // TODO: Windows Forms tests won't run on AppVeyor under .NET 5.0 or 7.0, we don't yet know why
         if (!parameters.IsRunningOnAppVeyor)
-            PackageTests.Add(new PackageTest(1, "Run test using windows forms under .NET 5.0",
+            PackageTests.Add(new PackageTest(1, "Net50WindowsFormsTest", "Run test using windows forms under .NET 5.0",
                 "engine-tests/net5.0-windows/windows-forms-test.dll",
                 new ExpectedResult("Passed")
                 {
                     Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net50AgentLauncher") }
                 }));
 
-        PackageTests.Add(new PackageTest(1, "Run test using windows forms under .NET 6.0",
+        PackageTests.Add(new PackageTest(1, "Net60WindowsFormsTest", "Run test using windows forms under .NET 6.0",
             "engine-tests/net6.0-windows/windows-forms-test.dll",
             new ExpectedResult("Passed")
             {
                 Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net60AgentLauncher") }
             }));
 
-        // Windows Forms tests won't run on AppVeyor under .NET 5.0 or 7.0, we don't yet know why
+        // TODO: Windows Forms tests won't run on AppVeyor under .NET 5.0 or 7.0, we don't yet know why
         if (!parameters.IsRunningOnAppVeyor)
-            PackageTests.Add(new PackageTest(1, "Run test using windows forms under .NET 7.0",
+            PackageTests.Add(new PackageTest(1, "Net70WindowsFormsTest", "Run test using windows forms under .NET 7.0",
                 "engine-tests/net7.0-windows/windows-forms-test.dll",
                 new ExpectedResult("Passed")
                 {
                     Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net70AgentLauncher") }
                 }));
+
+        // Multiple Assembly Tests
+
+        PackageTests.Add(new PackageTest(1, "Net35PlusNetCore21Test", "Run different builds of mock-assembly.dll together",
+            "engine-tests/net35/mock-assembly.dll engine-tests/netcoreapp2.1/mock-assembly.dll",
+            MockAssemblyExpectedResult("Net462AgentLauncher", "NetCore31AgentLauncher")));
 
         // Level 2 tests are run for PRs and when packages will be published
 
@@ -112,7 +121,7 @@ public abstract class PackageTester
         // first in the project file.
         if (_parameters.Configuration == "Release")
         {
-            PackageTests.Add(new PackageTest(1, "Run an NUnit project",
+            PackageTests.Add(new PackageTest(1, "NUnitProjectTest", "Run an NUnit project",
                 "TestProject.nunit",
                 new ExpectedResult("Failed")
                 {
@@ -128,7 +137,7 @@ public abstract class PackageTester
         // NOTE: Package tests using a pluggable agent must be run after all tests
         // that assume no pluggable agents are installed!
 
-        PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting net35 using Net20PluggableAgent",
+        PackageTests.Add(new PackageTest(1, "Net20PluggableAgentTest", "Run mock-assembly.dll targeting net35 using Net20PluggableAgent",
             "engine-tests/net35/mock-assembly.dll",
             new ExpectedResult("Failed")
             {
@@ -142,7 +151,7 @@ public abstract class PackageTester
             },
             Net20PluggableAgent));
 
-        PackageTests.Add(new PackageTest(1, "Run mock-assembly.dll targeting Net Core 2.1 using NetCore21PluggableAgent",
+        PackageTests.Add(new PackageTest(1, "NetCore21PluggableAgentTest", "Run mock-assembly.dll targeting Net Core 2.1 using NetCore21PluggableAgent",
             "engine-tests/netcoreapp2.1/mock-assembly.dll",
             new ExpectedResult("Failed")
             {
@@ -156,7 +165,7 @@ public abstract class PackageTester
             },
             NetCore21PluggableAgent));
 
-        //PackageTests.Add(new PackageTest(1, "Run tests using the V2 framework driver",
+        //PackageTests.Add(new PackageTest(1, "NUnitV2Test", "Run tests using the V2 framework driver",
         //	"v2-tests/net35/v2-test-assembly.dll",
         //	new ExpectedResult("Failed")
         //	{
@@ -173,6 +182,7 @@ public abstract class PackageTester
     protected abstract string PackageName { get; }
     protected abstract FilePath PackageUnderTest { get; }
     protected abstract string PackageTestDirectory { get; }
+	protected abstract string PackageResultDirectory { get; }
     protected abstract string PackageTestBinDirectory { get; }
     protected abstract string ExtensionInstallDirectory { get; }
 
@@ -210,7 +220,6 @@ public abstract class PackageTester
 
     private void RunPackageTests(int testLevel)
     {
-        //string pathToRunner = _parameters.OutputDirectory + TEST_BED_EXE;
         _context.CopyFileToDirectory(
             _parameters.OutputDirectory + TEST_BED_EXE, 
             PackageTestBinDirectory);
@@ -224,7 +233,8 @@ public abstract class PackageTester
                 foreach (ExtensionSpecifier extension in packageTest.ExtensionsNeeded)
                     CheckExtensionIsInstalled(extension);
 
-                var resultFile = _parameters.OutputDirectory + DEFAULT_TEST_RESULT_FILE;
+				var workDirectory = PackageResultDirectory + packageTest.Name + "/";
+				var resultFile = workDirectory + "TestResult.xml";
                 // Delete result file ahead of time so we don't mistakenly
                 // read a left-over file from another test run. Leave the
                 // file after the run in case we need it to debug a failure.
@@ -233,12 +243,14 @@ public abstract class PackageTester
 
                 DisplayBanner(packageTest.Description);
 
+				_context.CreateDirectory(workDirectory);
+
                 try
                 {
                     Console.WriteLine($"Launching {PackageTestBinDirectory}{TEST_BED_EXE}");
                     _context.StartProcess(PackageTestBinDirectory + TEST_BED_EXE, new ProcessSettings()
                     {
-                        Arguments = packageTest.Arguments,
+                        Arguments = packageTest.Arguments + $" --work:\"{workDirectory}\"",
                         WorkingDirectory = _parameters.OutputDirectory
                     });
 
@@ -306,6 +318,7 @@ public class EnginePackageTester : PackageTester
     protected override string PackageName => _parameters.EnginePackageName;
     protected override FilePath PackageUnderTest => _parameters.EnginePackage;
     protected override string PackageTestDirectory => _parameters.EngineTestDirectory;
+    protected override string PackageResultDirectory => _parameters.EngineResultDirectory;
     protected override string PackageTestBinDirectory => PackageTestDirectory + "tools/";
     protected override string ExtensionInstallDirectory => _parameters.TestDirectory;
 

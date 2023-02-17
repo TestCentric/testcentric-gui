@@ -68,6 +68,14 @@ namespace TestCentric.Engine.TestBed
             if (options.DebugAgent)
                 package.AddSetting("DebugAgent", true);
 
+            string resultFile = "TestResult.xml";
+
+            if (!string.IsNullOrEmpty(options.WorkDirectory))
+            {
+                package.AddSetting("WorkDirectory", options.WorkDirectory);
+                resultFile = Path.Combine(options.WorkDirectory, resultFile);
+            }
+
             var runner = TestEngine.GetRunner(package);
 
             var eventHandler = new TestEventHandler();
@@ -77,7 +85,7 @@ namespace TestCentric.Engine.TestBed
 
             ResultReporter.ReportResults(resultNode);
 
-            SaveTestResults(resultNode); 
+            SaveTestResults(resultNode, resultFile); 
 
             Environment.Exit(0);
         }
@@ -111,9 +119,8 @@ namespace TestCentric.Engine.TestBed
                 });
         }
 
-        static void SaveTestResults(XmlNode resultNode)
+        static void SaveTestResults(XmlNode resultNode, string resultFile)
         {
-            string resultFile = "TestResult.xml";
             using (var stream = new FileStream(resultFile, FileMode.Create, FileAccess.Write))
             using (var writer = new StreamWriter(stream))
             {

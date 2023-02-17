@@ -34,12 +34,17 @@ namespace TestCentric.Engine.TestBed
         public int StopTimeout { get; private set; } = 0;
         public int CancelTimeout { get; private set; } = 0;
 
+        public string WorkDirectory { get; private set; }
+
         private void ProcessOption(string arg)
         {
             string opt = arg;
             string val = null;
 
             int eq = arg.IndexOf('=');
+            if (eq < 0)
+                eq = arg.IndexOf(':');
+
             if (eq > 0)
             {
                 opt = arg.Substring(0, eq);
@@ -48,6 +53,10 @@ namespace TestCentric.Engine.TestBed
 
             switch (opt)
             {
+                case "--work":
+                    WorkDirectory = val;
+                    break;
+
                 case "--trace":
                     Trace = true;
                     break;
