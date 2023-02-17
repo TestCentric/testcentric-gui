@@ -49,6 +49,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cake", "cake", "{6C9280F6-6
 		cake\check-headers.cake = cake\check-headers.cake
 		cake\local-targets.cake = cake\local-targets.cake
 		cake\package-checks.cake = cake\package-checks.cake
+		cake\package-tester.cake = cake\package-tester.cake
 		cake\package-tests.cake = cake\package-tests.cake
 		cake\parameters.cake = cake\parameters.cake
 		cake\test-reports.cake = cake\test-reports.cake
