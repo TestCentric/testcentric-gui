@@ -17,7 +17,7 @@ const string ENGINE_API_PACKAGE_ID = "TestCentric.Engine.Api";
 const string TEST_BED_EXE = "test-bed.exe";
 
 // Load scripts after defining constants
-#load "./cake/parameters.cake"
+#load "./cake/build-settings.cake"
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -56,6 +56,10 @@ const string TEST_BED_EXE = "test-bed.exe";
 //       2 = Adds more tests for PRs and Dev builds uploaded to MyGet
 //       3 = Adds even more tests prior to publishing a release
 //
+// --nopush
+//     Indicates that no publishing or releasing should be done. If
+//     publish or release targets are run, a message is displayed.
+//
 //////////////////////////////////////////////////////////////////////
 
 using System.Xml;
@@ -67,16 +71,16 @@ using System.Threading.Tasks;
 // SETUP AND TEARDOWN
 //////////////////////////////////////////////////////////////////////
 
-Setup<BuildParameters>((context) =>
+Setup<BuildSettings>((context) =>
 {
-	var parameters = BuildParameters.CreateInstance(context);
+	var settings = BuildSettings.CreateInstance(context);
 
 	if (BuildSystem.IsRunningOnAppVeyor)
-			AppVeyor.UpdateBuildVersion(parameters.PackageVersion + "-" + AppVeyor.Environment.Build.Number);
+			AppVeyor.UpdateBuildVersion(settings.PackageVersion + "-" + AppVeyor.Environment.Build.Number);
 
-    Information("Building {0} version {1} of TestCentric Engine.", parameters.Configuration, parameters.PackageVersion);
+    Information("Building {0} version {1} of TestCentric Engine.", settings.Configuration, settings.PackageVersion);
 
-	return parameters;
+	return settings;
 });
 
 // If we run target Test, we catch errors here in teardown.
@@ -88,9 +92,9 @@ Teardown(context => CheckTestErrors(ref ErrorDetail));
 //////////////////////////////////////////////////////////////////////
 
 Task("DumpSettings")
-	.Does<BuildParameters>((parameters) =>
+	.Does<BuildSettings>((settings) =>
 	{
-		parameters.DumpSettings();
+		settings.DumpSettings();
 	});
 
 //////////////////////////////////////////////////////////////////////
@@ -98,13 +102,13 @@ Task("DumpSettings")
 //////////////////////////////////////////////////////////////////////
 
 Task("Clean")
-    .Does<BuildParameters>((parameters) =>
+    .Does<BuildSettings>((settings) =>
 	{
-		Information("Cleaning " + parameters.OutputDirectory);
-		CleanDirectory(parameters.OutputDirectory);
+		Information("Cleaning " + settings.OutputDirectory);
+		CleanDirectory(settings.OutputDirectory);
 
         Information("Cleaning Package Directory");
-        CleanDirectory(parameters.PackageDirectory);
+        CleanDirectory(settings.PackageDirectory);
 	});
 
 //////////////////////////////////////////////////////////////////////
@@ -112,9 +116,9 @@ Task("Clean")
 //////////////////////////////////////////////////////////////////////
 
 Task("RestorePackages")
-    .Does<BuildParameters>((parameters) =>
+    .Does<BuildSettings>((settings) =>
 {
-	NuGetRestore(SOLUTION, parameters.RestoreSettings);
+	NuGetRestore(SOLUTION, settings.RestoreSettings);
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -125,15 +129,15 @@ Task("Build")
 	.IsDependentOn("Clean")
 	.IsDependentOn("RestorePackages")
 	.IsDependentOn("CheckHeaders")
-	.Does<BuildParameters>((parameters) =>
+	.Does<BuildSettings>((settings) =>
 	{
-		if (parameters.UsingXBuild)
-			XBuild(SOLUTION, parameters.XBuildSettings
-				.WithProperty("Version", parameters.PackageVersion));
+		if (settings.UsingXBuild)
+			XBuild(SOLUTION, settings.XBuildSettings
+				.WithProperty("Version", settings.PackageVersion));
 				//.WithProperty("NUnitApiVersion", "3.16.2"));
 		else
-			MSBuild(SOLUTION, parameters.MSBuildSettings
-				.WithProperty("Version", parameters.PackageVersion));
+			MSBuild(SOLUTION, settings.MSBuildSettings
+				.WithProperty("Version", settings.PackageVersion));
 				//.WithProperty("NUnitApiVersion", "3.16.2"));
 	});
 
@@ -154,10 +158,10 @@ Task("CheckTestErrors")
 Task("TestEngine")
 	.Description("Tests the TestCentric Engine")
 	.IsDependentOn("Build")
-	.Does<BuildParameters>((parameters) =>
+	.Does<BuildSettings>((settings) =>
 	{
-		foreach (var runtime in parameters.EngineRuntimes)
-			RunNUnitLite("testcentric.engine.tests", runtime, $"{parameters.OutputDirectory}engine-tests/{runtime}/");
+		foreach (var runtime in settings.EngineRuntimes)
+			RunNUnitLite("testcentric.engine.tests", runtime, $"{settings.OutputDirectory}engine-tests/{runtime}/");
 	});
 
 //////////////////////////////////////////////////////////////////////
@@ -167,191 +171,39 @@ Task("TestEngine")
 Task("TestEngineCore")
 	.Description("Tests the TestCentric Engine Core")
 	.IsDependentOn("Build")
-	.Does<BuildParameters>((parameters) =>
+	.Does<BuildSettings>((settings) =>
 	{
-		foreach (var runtime in parameters.EngineCoreRuntimes)
+		foreach (var runtime in settings.EngineCoreRuntimes)
 		{
 			// Only .NET Standard we currently build is 2.0
 			var testUnder = runtime == "netstandard2.0" ? "netcoreapp2.1" : runtime;
-			RunNUnitLite("testcentric.engine.core.tests", testUnder, $"{parameters.OutputDirectory}engine-tests/{testUnder}/");
+			RunNUnitLite("testcentric.engine.core.tests", testUnder, $"{settings.OutputDirectory}engine-tests/{testUnder}/");
 		}
 	});
 
 //////////////////////////////////////////////////////////////////////
-// ENGINE PACKAGE
+// BUILD, VERIFY AND TEST EACH PACKAGE
 //////////////////////////////////////////////////////////////////////
 
-Task("BuildEnginePackage")
-	.Does<BuildParameters>((parameters) =>
+Task("PackageEngine")
+	.Description("Build and Test the Engine Package")
+	.Does<BuildSettings>(settings =>
 	{
-		CreateDirectory(parameters.PackageDirectory);
-
-		Information("Creating package " + parameters.EnginePackageName);
-
-        NuGetPack($"{parameters.NuGetDirectory}/{ENGINE_PACKAGE_ID}.nuspec", new NuGetPackSettings()
-        {
-            Version = parameters.PackageVersion,
-            BasePath = parameters.OutputDirectory,
-            OutputDirectory = parameters.PackageDirectory,
-            NoPackageAnalysis = true
-        });
-    });
-
-Task("InstallEnginePackage")
-	.Does<BuildParameters>((parameters) =>
-	{
-        //CleanDirectory(parameters.NuGetTestDirectory);
-        //Unzip(parameters.EnginePackage, parameters.NuGetTestDirectory);
-		NuGetInstall(ENGINE_PACKAGE_ID,
-            new NuGetInstallSettings()
-            {
-                Source = new [] { parameters.PackageDirectory },
-				Version = parameters.PackageVersion,
-				ExcludeVersion = true,
-                OutputDirectory = parameters.TestDirectory
-            });
-
-        Information($"Installed {parameters.EnginePackageName} at {parameters.TestDirectory}");
-    });
-
-Task("VerifyEnginePackage")
-	.IsDependentOn("InstallEnginePackage")
-	.Does<BuildParameters>((parameters) =>
-	{
-		Check.That(parameters.EngineTestDirectory,
-			HasFiles("LICENSE.txt", "testcentric.png"),
-			HasDirectory("tools").WithFiles(
-				"testcentric.engine.dll", "testcentric.engine.core.dll", "nunit.engine.api.dll",
-				"testcentric.engine.metadata.dll", "testcentric.extensibility.dll",
-				"testcentric.engine.pdb", "testcentric.engine.core.pdb", "test-bed.exe", "test-bed.addins"),
-			HasDirectory("content").WithFile("testcentric.nuget.addins"),
-			HasDirectory("tools/agents/net462").WithFiles(
-				"testcentric-agent.exe", "testcentric-agent.pdb", "testcentric-agent.exe.config",
-				"testcentric-agent-x86.exe", "testcentric-agent-x86.pdb", "testcentric-agent-x86.exe.config",
-				"testcentric.engine.core.dll", "testcentric.engine.core.pdb",
-				"nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "testcentric-agent.nuget.addins"),
-			HasDirectory("tools/agents/netcoreapp3.1").WithFiles(
-				"testcentric-agent.dll", "testcentric-agent.pdb", "testcentric-agent.dll.config",
-				"testcentric.engine.core.dll", "testcentric.engine.core.pdb",
-				"nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric.extensibility.dll",
-				"Microsoft.Extensions.DependencyModel.dll", "testcentric-agent.nuget.addins"),
-			HasDirectory("tools/agents/net5.0").WithFiles(
-				"testcentric-agent.dll", "testcentric-agent.pdb", "testcentric-agent.dll.config",
-				"testcentric.engine.core.dll", "testcentric.engine.core.pdb",
-				"nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric.extensibility.dll",
-				"Microsoft.Extensions.DependencyModel.dll", "testcentric-agent.nuget.addins"),
-			HasDirectory("tools/agents/net6.0").WithFiles(
-				"testcentric-agent.dll", "testcentric-agent.pdb", "testcentric-agent.dll.config",
-				"testcentric.engine.core.dll", "testcentric.engine.core.pdb",
-				"nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric.extensibility.dll",
-				"Microsoft.Extensions.DependencyModel.dll", "testcentric-agent.nuget.addins"),
-			HasDirectory("tools/agents/net7.0").WithFiles(
-				"testcentric-agent.dll", "testcentric-agent.pdb", "testcentric-agent.dll.config",
-				"testcentric.engine.core.dll", "testcentric.engine.core.pdb",
-				"nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric.extensibility.dll",
-				"Microsoft.Extensions.DependencyModel.dll", "testcentric-agent.nuget.addins"));
-
-			Information("Verification was successful!");
+		settings.EnginePackage.BuildVerifyAndTest();
 	});
 
-Task("TestEnginePackage")
-	.IsDependentOn("InstallEnginePackage")
-	.Does<BuildParameters>((parameters) =>
+Task("PackageEngineCore")
+	.Description("Build and Test the Engine Core Package")
+	.Does<BuildSettings>(settings =>
 	{
-		new EnginePackageTester(parameters).RunAllTests();
+		settings.EngineCorePackage.BuildVerifyAndTest();
 	});
 
-//////////////////////////////////////////////////////////////////////
-// ENGINE CORE PACKAGE
-//////////////////////////////////////////////////////////////////////
-
-// NOTE: The testcentric.engine.core assembly and its dependencies are
-// included in all the main packages. It is also published separately 
-// as a nuget package for use in creating pluggable agents and for any
-// other projects, which may want to make use of it.
-
-Task("BuildEngineCorePackage")
-	.Does<BuildParameters>((parameters) =>
+Task("PackageEngineApi")
+	.Description("Build and Test the Engine Api Package")
+	.Does<BuildSettings>(settings =>
 	{
-		NuGetPack($"{parameters.NuGetDirectory}/{ENGINE_CORE_PACKAGE_ID}.nuspec", new NuGetPackSettings()
-		{
-			Version = parameters.PackageVersion,
-			OutputDirectory = parameters.PackageDirectory,
-			NoPackageAnalysis = true
-		});
-	});
-
-Task("VerifyEngineCorePackage")
-	.Does<BuildParameters>((parameters) =>
-	{
-		string dirName = $"{System.Guid.NewGuid()}/";
-
-		try
-		{
-			Unzip(parameters.EngineCorePackage, dirName);
-
-			Check.That(dirName,
-				HasFiles("LICENSE.txt", "testcentric.png"),
-				HasDirectory("lib/net20").WithFiles(
-					"testcentric.engine.core.dll", "testcentric.engine.core.pdb", "nunit.engine.api.dll",
-					"testcentric.engine.metadata.dll", "testcentric.extensibility.dll"),
-				HasDirectory("lib/net462").WithFiles(
-					"testcentric.engine.core.dll", "testcentric.engine.core.pdb", "nunit.engine.api.dll",
-					"testcentric.engine.metadata.dll", "testcentric.extensibility.dll"),
-				HasDirectory("lib/netstandard2.0").WithFiles(
-					"testcentric.engine.core.dll", "testcentric.engine.core.pdb", "nunit.engine.api.dll",
-					"testcentric.engine.metadata.dll", "testcentric.extensibility.dll"));
-		}
-		finally
-		{
-			DeleteDirectory(dirName, new DeleteDirectorySettings()
-			{
-				Recursive = true
-			});
-		}
-
-		Information("Verification was successful!");
-	});
-
-//////////////////////////////////////////////////////////////////////
-// ENGINE API PACKAGE
-//////////////////////////////////////////////////////////////////////
-
-Task("BuildEngineApiPackage")
-	.Does<BuildParameters>((parameters) =>
-	{
-		NuGetPack($"{parameters.NuGetDirectory}/{ENGINE_API_PACKAGE_ID}.nuspec", new NuGetPackSettings()
-		{
-			Version = parameters.PackageVersion,
-			OutputDirectory = parameters.PackageDirectory,
-			NoPackageAnalysis = true
-		});
-	});
-
-Task("VerifyEngineApiPackage")
-	.Does<BuildParameters>((parameters) =>
-	{
-		string dirName = $"{System.Guid.NewGuid()}/";
-
-		try
-		{
-			Unzip(parameters.EngineApiPackage, dirName);
-
-			Check.That(dirName,
-				HasFiles("LICENSE.txt", "testcentric.png"),
-				HasDirectory("lib/net20").WithFiles("testcentric.engine.api.dll", "testcentric.engine.api.pdb"),
-				HasDirectory("lib/net462").WithFiles("testcentric.engine.api.dll", "testcentric.engine.api.pdb"),
-				HasDirectory("lib/netstandard2.0").WithFiles("testcentric.engine.api.dll", "testcentric.engine.api.pdb"));
-		}
-		finally
-		{
-			DeleteDirectory(dirName, new DeleteDirectorySettings()
-			{
-				Recursive = true
-			});
-		}
-
-		Information("Verification was successful!");
+		settings.EngineApiPackage.BuildVerifyAndTest();
 	});
 
 //////////////////////////////////////////////////////////////////////
@@ -374,16 +226,18 @@ Task("PublishPackages")
 // which depends on it, or directly when recovering from errors.
 Task("PublishToMyGet")
 	.Description("Publish packages to MyGet")
-	.Does<BuildParameters>((parameters) =>
+	.Does<BuildSettings>((settings) =>
 	{
-        if (!parameters.ShouldPublishToMyGet)
+        if (!settings.ShouldPublishToMyGet)
             Information("Nothing to publish to MyGet from this run.");
+		else if (settings.NoPush)
+			Information("NoPush option suppressing publication to MyGet");
         else
             try
 			{
-				PushNuGetPackage(parameters.EnginePackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
-				PushNuGetPackage(parameters.EngineCorePackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
-				PushNuGetPackage(parameters.EngineApiPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
+				PushNuGetPackage(settings.EnginePackage.PackageFilePath, settings.MyGetApiKey, settings.MyGetPushUrl);
+				PushNuGetPackage(settings.EngineCorePackage.PackageFilePath, settings.MyGetApiKey, settings.MyGetPushUrl);
+				PushNuGetPackage(settings.EngineApiPackage.PackageFilePath, settings.MyGetApiKey, settings.MyGetPushUrl);
 			}
 			catch(Exception)
 			{
@@ -395,16 +249,18 @@ Task("PublishToMyGet")
 // which depends on it, or directly when recovering from errors.
 Task("PublishToNuGet")
 	.Description("Publish packages to NuGet")
-	.Does<BuildParameters>((parameters) =>
+	.Does<BuildSettings>((settings) =>
 	{
-		if (!parameters.ShouldPublishToNuGet)
+		if (!settings.ShouldPublishToNuGet)
 			Information("Nothing to publish to NuGet from this run.");
+		else if (settings.NoPush)
+			Information("NoPush option suppressing publication to NuGet");
 		else
 			try
 			{
-				PushNuGetPackage(parameters.EnginePackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
-				PushNuGetPackage(parameters.EngineCorePackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
-				PushNuGetPackage(parameters.EngineApiPackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
+				PushNuGetPackage(settings.EnginePackage.PackageFilePath, settings.NuGetApiKey, settings.NuGetPushUrl);
+				PushNuGetPackage(settings.EngineCorePackage.PackageFilePath, settings.NuGetApiKey, settings.NuGetPushUrl);
+				PushNuGetPackage(settings.EngineApiPackage.PackageFilePath, settings.NuGetApiKey, settings.NuGetPushUrl);
 			}
 			catch(Exception)
             {
@@ -417,9 +273,9 @@ Task("PublishToNuGet")
 //////////////////////////////////////////////////////////////////////
 
 Task("CreateDraftRelease")
-    .Does<BuildParameters>((parameters) =>
+    .Does<BuildSettings>((settings) =>
     {
-        if (parameters.IsReleaseBranch)
+        if (settings.IsReleaseBranch)
         {
             // Exit if any PackageTests failed
             CheckTestErrors(ref ErrorDetail);
@@ -429,26 +285,29 @@ Task("CreateDraftRelease")
             // The branch name contains the full information to be used
             // for both the name of the draft release and the milestone,
             // i.e. release-2.0.0, release-2.0.0-beta2, etc.
-            string milestone = parameters.BranchName.Substring(8);
+            string milestone = settings.BranchName.Substring(8);
             string releaseName = $"TestCentric Engine {milestone}";
 
             Information($"Creating draft release for {releaseName}");
 
-            try
-            {
-                GitReleaseManagerCreate(parameters.GitHubAccessToken, GITHUB_OWNER, GITHUB_REPO, new GitReleaseManagerCreateSettings()
-                {
-                    Name = releaseName,
-                    Milestone = milestone
-                });
-            }
-            catch
-            {
-                Error($"Unable to create draft release for {releaseName}.");
-                Error($"Check that there is a {milestone} milestone with at least one closed issue.");
-                Error("");
-                throw;
-            }
+		    if (settings.NoPush)
+			    Information("NoPush option suppressed creation of draft release");
+			else
+				try
+				{
+					GitReleaseManagerCreate(settings.GitHubAccessToken, GITHUB_OWNER, GITHUB_REPO, new GitReleaseManagerCreateSettings()
+					{
+						Name = releaseName,
+						Milestone = milestone
+					});
+				}
+				catch
+				{
+					Error($"Unable to create draft release for {releaseName}.");
+					Error($"Check that there is a {milestone} milestone with at least one closed issue.");
+					Error("");
+					throw;
+				}
         }
         else
         {
@@ -461,21 +320,30 @@ Task("CreateDraftRelease")
 ////////////////////////////////////////////////////////////////////////
 
 Task("CreateProductionRelease")
-    .Does<BuildParameters>((parameters) =>
+    .Does<BuildSettings>((settings) =>
     {
-        if (parameters.IsProductionRelease)
+        if (settings.IsProductionRelease)
         {
             // Exit if any PackageTests failed
             CheckTestErrors(ref ErrorDetail);
 
-            string token = parameters.GitHubAccessToken;
-            string tagName = parameters.PackageVersion;
-            string assets = parameters.GitHubReleaseAssets;
-
+			string tagName = settings.PackageVersion;
             Information($"Publishing release {tagName} to GitHub");
 
-            GitReleaseManagerAddAssets(token, GITHUB_OWNER, GITHUB_REPO, tagName, assets);
-            GitReleaseManagerClose(token, GITHUB_OWNER, GITHUB_REPO, tagName);
+            if (settings.NoPush)
+            {
+                Information("NoPush option suppressed publishing of assets:");
+                foreach (var asset in settings.GitHubReleaseAssets)
+                    Information("  " + asset);
+            }
+			else
+			{
+				string token = settings.GitHubAccessToken;
+				string assets = $"\"{string.Join(',', settings.GitHubReleaseAssets)}\"";
+
+				GitReleaseManagerAddAssets(token, GITHUB_OWNER, GITHUB_REPO, tagName, assets);
+				GitReleaseManagerClose(token, GITHUB_OWNER, GITHUB_REPO, tagName);
+			}
         }
         else
         {
@@ -497,22 +365,6 @@ Task("PackageExistingBuild")
 	.IsDependentOn("PackageEngine")
 	.IsDependentOn("PackageEngineCore")
 	.IsDependentOn("PackageEngineApi");
-
-Task("PackageEngine")
-	.Description("Package the engine")
-	.IsDependentOn("BuildEnginePackage")
-	.IsDependentOn("VerifyEnginePackage")
-	.IsDependentOn("TestEnginePackage");
-
-Task("PackageEngineCore")
-	.Description("Package the engine core separately")
-	.IsDependentOn("BuildEngineCorePackage")
-	.IsDependentOn("VerifyEngineCorePackage");
-
-Task("PackageEngineApi")
-	.Description("Package the engine api separately")
-	.IsDependentOn("BuildEngineApiPackage")
-	.IsDependentOn("VerifyEngineApiPackage");
 
 Task("Test")
 	.Description("Builds and tests engine core and  engine")
@@ -550,6 +402,6 @@ Task("Default")
 // EXECUTION
 //////////////////////////////////////////////////////////////////////
 
-// We can't use the BuildParameters.Target for this because Setup has
-// not yet run and the parameters have not been initialized.
+// We can't use the BuildSettings.Target for this because Setup has
+// not yet run and the settings have not been initialized.
 RunTarget(Argument("target", Argument("t", "Default")));
