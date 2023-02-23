@@ -15,6 +15,15 @@ public struct PackageTest
 	
 	public PackageTest(int level, string name, string description, string arguments, ExpectedResult expectedResult, params ExtensionSpecifier[] extensionsNeeded)
 	{
+        if (name == null)
+            throw new ArgumentNullException(nameof(name));
+        if (description == null)
+            throw new ArgumentNullException(nameof(description));
+        if (arguments == null)
+            throw new ArgumentNullException(nameof(arguments));
+        if (expectedResult == null)
+            throw new ArgumentNullException(nameof(expectedResult));
+
 		Level = level;
 		Name = name;
 		Description = description;
@@ -26,12 +35,14 @@ public struct PackageTest
 
 public struct ExtensionSpecifier
 {
-	public ExtensionSpecifier(string id, string version)
+	public ExtensionSpecifier(string nugetId, string chocoId, string version)
 	{
-		Id = id;
+		NuGetId = nugetId;
+		ChocoId = chocoId;
 		Version = version;
 	}
 
-	public string Id;
+	public string NuGetId;
+	public string ChocoId;
 	public string Version;
 }
