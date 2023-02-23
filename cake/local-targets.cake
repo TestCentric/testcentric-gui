@@ -6,22 +6,22 @@ using System;
 
 // Dependent task for all local targets
 Task("MustBeLocalBuild")
-	.Does<BuildParameters>((parameters) =>
+	.Does<BuildSettings>((settings) =>
 	{
-		if (!parameters.IsLocalBuild)
-			throw new Exception($"{parameters.Target} may only be run locally!");
+		if (!settings.IsLocalBuild)
+			throw new Exception($"{settings.Target} may only be run locally!");
 	});
 
 Task("CleanAll")
 	.Description("Clean both configs and all obj directories")
 	.IsDependentOn("MustBeLocalBuild")
-	.Does<BuildParameters>((parameters) =>
+	.Does<BuildSettings>((settings) =>
 	{
 		Information("Cleaning all output directories");
-		CleanDirectory(parameters.ProjectDirectory + "bin/");
+		CleanDirectory(settings.ProjectDirectory + "bin/");
 
 		Information("Deleting object directories");
-		DeleteObjectDirectories(parameters);
+		DeleteObjectDirectories(settings);
 	});
 
 // Download existing draft release for modification or for use in
@@ -29,14 +29,14 @@ Task("CleanAll")
 Task("DownloadDraftRelease")
 	.Description("Download draft release for local use")
 	.IsDependentOn("MustBeLocalBuild")
-	.Does<BuildParameters>((parameters) =>
+	.Does<BuildSettings>((settings) =>
 	{
-		if (!parameters.IsReleaseBranch)
+		if (!settings.IsReleaseBranch)
 			throw new Exception("DownloadDraftRelease requires a release branch!");
 
-		string milestone = parameters.BranchName.Substring(8);
+		string milestone = settings.BranchName.Substring(8);
 
-		GitReleaseManagerExport(parameters.GitHubAccessToken, GITHUB_OWNER, GITHUB_REPO, "DraftRelease.md",
+		GitReleaseManagerExport(settings.GitHubAccessToken, GITHUB_OWNER, GITHUB_REPO, "DraftRelease.md",
 			new GitReleaseManagerExportSettings() { TagName = milestone });
 	});
 

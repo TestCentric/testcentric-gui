@@ -54,9 +54,9 @@ var PdbFiles = new string[]
     "testcentric.engine.pdb",
 };
 
-private void CreateZipImage(BuildParameters parameters)
+private void CreateZipImage(BuildSettings settings)
 {
-	string zipImageDir = parameters.ZipImageDirectory;
+	string zipImageDir = settings.ZipImageDirectory;
 	string zipImageBinDir = zipImageDir + "bin/";
 
     CreateDirectory(zipImageDir);
@@ -69,13 +69,13 @@ private void CreateZipImage(BuildParameters parameters)
 	CreateDirectory(zipImageBinDir);
 
     foreach (string file in copyFiles)
-        CopyFileToDirectory(parameters.OutputDirectory + file, zipImageBinDir);
+        CopyFileToDirectory(settings.OutputDirectory + file, zipImageBinDir);
 
-    CopyFileToDirectory(parameters.ZipDirectory + "testcentric.zip.addins", parameters.ZipImageDirectory + "bin/");
+    CopyFileToDirectory(settings.ZipDirectory + "testcentric.zip.addins", settings.ZipImageDirectory + "bin/");
 
-    CopyDirectory(parameters.OutputDirectory + "Images", zipImageBinDir + "Images");
+    CopyDirectory(settings.OutputDirectory + "Images", zipImageBinDir + "Images");
 
-    CopyDirectory(parameters.OutputDirectory + "agents", zipImageBinDir + "agents");
+    CopyDirectory(settings.OutputDirectory + "agents", zipImageBinDir + "agents");
 
     // NOTE: Files specific to a particular package are not copied
     // into the image directory but are added separately.
