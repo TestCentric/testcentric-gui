@@ -77,8 +77,9 @@ public abstract class PackageDefinition
     public virtual string SymbolPackageName => throw new System.NotImplementedException($"Symbols are not available for this type of package.");
 
     public abstract string PackageFileName { get; }
-    public abstract string InstallDirectory { get; }
-    public abstract string ResultDirectory { get; }
+    public abstract string PackageInstallDirectory { get; }
+    public abstract string PackageResultDirectory { get; }
+    public abstract string ExtensionInstallDirectory { get; }
 
     public string PackageFilePath => _settings.PackageDirectory + PackageFileName;
 
@@ -99,7 +100,7 @@ public abstract class PackageDefinition
             VerifySymbolPackage();
 
         if (HasTests)
-            TestPackage();
+            RunPackageTests();
     }
 
     public void BuildPackage()
@@ -111,8 +112,8 @@ public abstract class PackageDefinition
     public void InstallPackage()
     {
         DisplayAction("Installing");
-        Console.WriteLine($"Installing package to {InstallDirectory}");
-        _context.CleanDirectory(InstallDirectory);
+        Console.WriteLine($"Installing package to {PackageInstallDirectory}");
+        _context.CleanDirectory(PackageInstallDirectory);
         doInstallPackage();
     }
 
@@ -122,7 +123,7 @@ public abstract class PackageDefinition
 
         bool allOK = true;
         foreach (var check in PackageChecks)
-            allOK &= check.ApplyTo(InstallDirectory);
+            allOK &= check.ApplyTo(PackageInstallDirectory);
 
         if (allOK)
             Console.WriteLine("All checks passed!");
@@ -130,38 +131,54 @@ public abstract class PackageDefinition
             throw new Exception("Verification failed!");
     }
 
-    public void TestPackage()
+    public void RunPackageTests()
     {
         DisplayAction("Testing");
 
         var reporter = new ResultReporter(PackageFileName);
 
-        _context.CleanDirectory(ResultDirectory);
+        _context.CleanDirectory(PackageResultDirectory);
+
+		// Ensure we start out each package with no extensions installed.
+		// If any package test installs an extension, it remains available
+		// for subsequent tests of the same package only.
+		foreach (var dirPath in _context.GetDirectories(ExtensionInstallDirectory + "*"))
+		{
+			string dirName = dirPath.GetDirectoryName();
+			if (dirName.StartsWith("NUnit.Extension.") || dirName.StartsWith("nunit-extension-"))
+			{
+				_context.DeleteDirectory(dirPath, new DeleteDirectorySettings() { Recursive = true });
+				Console.WriteLine("Deleted directory " + dirName);
+			}
+		}
 
         foreach (var packageTest in PackageTests)
         {
             foreach (ExtensionSpecifier extension in packageTest.ExtensionsNeeded)
                 CheckExtensionIsInstalled(extension);
 
-            var testResultDir = ResultDirectory + packageTest.Name + "/";
-			_context.CreateDirectory(testResultDir);
+            var testResultDir = $"{PackageResultDirectory}/{packageTest.Name}/";
             var resultFile = testResultDir + "TestResult.xml";
 
             DisplayBanner(packageTest.Description);
+			DisplayTestEnvironment(packageTest);
+
+			_context.CreateDirectory(testResultDir);
+            string arguments = packageTest.Arguments + $" --work={testResultDir}";
 
             int rc = TestExecutable.EndsWith(".dll")
                 ? _context.StartProcess(
                     "dotnet",
                     new ProcessSettings()
                     {
-                        Arguments = $"\"{InstallDirectory}{TestExecutable}\" {packageTest.Arguments} --work={testResultDir}",
+                        Arguments = $"\"{PackageInstallDirectory}{TestExecutable}\" {arguments}",
                         WorkingDirectory = _settings.OutputDirectory
                     })
                 : _context.StartProcess(
-                    InstallDirectory + TestExecutable,
+                    PackageInstallDirectory + TestExecutable,
                     new ProcessSettings()
                     {
-                        Arguments = $"{packageTest.Arguments} --work={testResultDir}",
+                        Arguments = arguments,
                         WorkingDirectory = _settings.OutputDirectory
                     });
 
@@ -195,27 +212,33 @@ public abstract class PackageDefinition
         DisplayBanner($"{action} package {PackageFileName}");
     }
 
-    public virtual void VerifySymbolPackage() { } // Overridden for NuGet packages
+	private void DisplayTestEnvironment(PackageTest test)
+	{
+		Console.WriteLine("Test Environment");
+		Console.WriteLine($"   OS Version: {Environment.OSVersion.VersionString}");
+		Console.WriteLine($"  CLR Version: {Environment.Version}");
+		//Console.WriteLine($"       Runner: {GuiRunner}");
+		Console.WriteLine($"    Arguments: {test.Arguments}");
+		Console.WriteLine();
+	}
+
+    public virtual void VerifySymbolPackage() { } // Does nothing. Overridden for NuGet packages.
 
     private void CheckExtensionIsInstalled(ExtensionSpecifier extension)
     {
-        bool alreadyInstalled = _context.GetDirectories($"{_settings.PackageTestDirectory}{extension.Id}.*").Count > 0;
+        bool alreadyInstalled = _context.GetDirectories($"{ExtensionInstallDirectory}{extension.Id}.*").Count > 0;
 
         if (!alreadyInstalled)
         {
             DisplayBanner($"Installing {extension.Id} version {extension.Version}");
-            InstallEngineExtension(extension);
-        }
-    }
 
-    private void InstallEngineExtension(ExtensionSpecifier extension)
-    {
-        _settings.SetupContext.NuGetInstall(extension.Id,
-            new NuGetInstallSettings()
-            {
-                OutputDirectory = _settings.PackageTestDirectory,
-                Version = extension.Version
-            });
+            _context.NuGetInstall(extension.Id,
+                new NuGetInstallSettings()
+                {
+                    OutputDirectory = ExtensionInstallDirectory,
+                    Version = extension.Version
+                });
+        }
     }
 }
 
@@ -248,8 +271,9 @@ public class NuGetPackageDefinition : PackageDefinition
 
     public override string PackageFileName => $"{PackageId}.{PackageVersion}.nupkg";
     public override string SymbolPackageName => System.IO.Path.ChangeExtension(PackageFileName, ".snupkg");
-    public override string InstallDirectory => _settings.PackageTestDirectory + PackageId + "/";
-    public override string ResultDirectory => _settings.PackageResultDirectory + PackageId + "/";
+    public override string PackageInstallDirectory => _settings.NuGetTestDirectory + PackageId + "/";
+    public override string PackageResultDirectory => _settings.NuGetResultDirectory + PackageId + "/";
+    public override string ExtensionInstallDirectory => _settings.NuGetTestDirectory;
 
     protected override void doBuildPackage()
     {
@@ -274,7 +298,7 @@ public class NuGetPackageDefinition : PackageDefinition
         {
             Source = new[] { _settings.PackageDirectory },
             Prerelease = true,
-            OutputDirectory = _settings.PackageTestDirectory,
+            OutputDirectory = _settings.NuGetTestDirectory,
             ExcludeVersion = true
         });
     }

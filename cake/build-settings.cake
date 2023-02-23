@@ -393,7 +393,9 @@ public class BuildSettings
 	public string NuGetDirectory => ProjectDirectory + "nuget/";
 	public string PackageDirectory => ProjectDirectory + "package/";
 	public string PackageTestDirectory => PackageDirectory + "tests/";
+	public string NuGetTestDirectory => PackageTestDirectory + "nuget/";
 	public string PackageResultDirectory => PackageDirectory + "results/";
+	public string NuGetResultDirectory => PackageResultDirectory + "nuget/";
 
 	public PackageDefinition EnginePackage { get; }
 	public PackageDefinition EngineCorePackage { get; }
