@@ -335,7 +335,11 @@ public class BuildSettings
 					"testcentric.engine.metadata.dll", "testcentric.extensibility.dll"),
 				HasDirectory("lib/netstandard2.0").WithFiles(
 					"testcentric.engine.core.dll", "testcentric.engine.core.pdb", "nunit.engine.api.dll",
-					"testcentric.engine.metadata.dll", "testcentric.extensibility.dll")
+					"testcentric.engine.metadata.dll", "testcentric.extensibility.dll"),
+				HasDirectory("lib/netcoreapp3.1").WithFiles(
+					"testcentric.engine.core.dll", "testcentric.engine.core.pdb", "nunit.engine.api.dll",
+					"testcentric.engine.metadata.dll", "testcentric.extensibility.dll",
+					"Microsoft.Extensions.DependencyModel.dll")
 			});
 
 		EngineApiPackage = new NuGetPackageDefinition(
