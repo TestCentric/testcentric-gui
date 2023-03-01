@@ -15,11 +15,14 @@ using System.Runtime.Loader;
 using Microsoft.Extensions.DependencyModel;
 using Microsoft.Extensions.DependencyModel.Resolution;
 using Microsoft.Win32;
+using NUnit.Engine;
 
 namespace TestCentric.Engine.Internal
 {
     internal sealed class TestAssemblyResolver : IDisposable
     {
+        static ILogger log = InternalTrace.GetLogger("TestAssemblyResolver");
+
         private readonly ICompilationAssemblyResolver _assemblyResolver;
         private readonly DependencyContext _dependencyContext;
         private readonly AssemblyLoadContext _loadContext;
@@ -60,6 +63,8 @@ namespace TestCentric.Engine.Internal
 
         private Assembly OnResolving(AssemblyLoadContext context, AssemblyName name)
         {
+            log.Info($"Resolving {name}");
+
             foreach (var library in _dependencyContext.RuntimeLibraries)
             {
                 var wrapper = new CompilationLibrary(
@@ -77,21 +82,26 @@ namespace TestCentric.Engine.Internal
                 foreach (var assemblyPath in assemblies)
                 {
                     if (name.Name == Path.GetFileNameWithoutExtension(assemblyPath))
+                    {
+                        log.Info($"Using {assemblyPath}");
                         return _loadContext.LoadFromAssemblyPath(assemblyPath);
+                    }
                 }
             }
 
-            if (name.Version != null)
-                foreach (string frameworkDirectory in AdditionalFrameworkDirectories)
+            foreach (string frameworkDirectory in AdditionalFrameworkDirectories)
+            {
+                var versionDir = FindBestVersionDir(frameworkDirectory, name.Version);
+                if (versionDir != null)
                 {
-                    var versionDir = FindBestVersionDir(frameworkDirectory, name.Version);
-                    if (versionDir != null)
+                    string candidate = Path.Combine(frameworkDirectory, versionDir, name.Name + ".dll");
+                    if (File.Exists(candidate))
                     {
-                        string candidate = Path.Combine(frameworkDirectory, versionDir, name.Name + ".dll");
-                        if (File.Exists(candidate))
-                            return _loadContext.LoadFromAssemblyPath(candidate);
+                        log.Info($"Using {candidate}");
+                        return _loadContext.LoadFromAssemblyPath(candidate);
                     }
                 }
+            }
 
             return null;
         }
@@ -115,19 +125,23 @@ namespace TestCentric.Engine.Internal
             if (targetVersion == null)
                 return null;
 
+            targetVersion = new Version(targetVersion.Major, targetVersion.Minor, targetVersion.Build);
             Version bestVersion = new Version(0, 0);
+            string bestVersionDir = null;
+
             foreach (var subdir in Directory.GetDirectories(libraryDir))
             {
                 Version version;
                 if (TryGetVersionFromString(Path.GetFileName(subdir), out version))
                     if (version >= targetVersion)
                         if (bestVersion.Major == 0 || bestVersion > version)
+                        {
                             bestVersion = version;
+                            bestVersionDir = subdir;
+                        }
             }
 
-            return bestVersion.Major > 0
-                ? bestVersion.ToString()
-                : null;
+            return bestVersionDir;
         }
 
         private static bool TryGetVersionFromString(string text, out Version newVersion)
