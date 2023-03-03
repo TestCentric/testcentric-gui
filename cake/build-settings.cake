@@ -262,6 +262,22 @@ public class BuildSettings
         //        NUnitProjectLoader));
         //}
 
+		const string NET80_MOCK_ASSEMBLY = "../../../net80-pluggable-agent/bin/Release/tests/net8.0/mock-assembly.dll";
+		if (IsLocalBuild && SetupContext.FileExists(OutputDirectory + NET80_MOCK_ASSEMBLY))
+			PackageTests.Add(new PackageTest(1, "NetCore80PluggableAgentTest", "Run mock-assembly.dll targeting Net 8.0 using NetCore80PluggableAgent",
+				NET80_MOCK_ASSEMBLY,
+				new ExpectedResult("Failed")
+				{
+					Total = 36,
+					Passed = 23,
+					Failed = 5,
+					Warnings = 1,
+					Inconclusive = 1,
+					Skipped = 7,
+					Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net80AgentLauncher") }
+				},
+				Net80PluggableAgent));
+
 		NuGetPackage = new NuGetPackageDefinition(
 			this,
 			id: "TestCentric.GuiRunner",
@@ -361,6 +377,8 @@ public class BuildSettings
 		new ExtensionSpecifier("NUnit.Extension.Net20PluggableAgent", "nunit-extension-net20-pluggable-agent", "2.0.0");
 	public ExtensionSpecifier NetCore21PluggableAgent => 
 		new ExtensionSpecifier("NUnit.Extension.NetCore21PluggableAgent", "nunit-extension-netcore21-pluggable-agent", "2.0.0");
+	public ExtensionSpecifier Net80PluggableAgent => 
+		new ExtensionSpecifier("NUnit.Extension.Net80PluggableAgent", "nunit-extension-net80-pluggable-agent", "2.0.0");
 
 	private List<ExtensionSpecifier> InstalledExtensions { get; } = new List<ExtensionSpecifier>();
 	public bool IsLocalBuild => _buildSystem.IsLocalBuild;
