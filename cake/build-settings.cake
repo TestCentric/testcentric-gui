@@ -265,6 +265,22 @@ public class BuildSettings
             },
             NetCore21PluggableAgent));
 
+		const string NET80_MOCK_ASSEMBLY = "../../../net80-pluggable-agent/bin/Release/tests/net8.0/mock-assembly.dll";
+		if (IsLocalBuild && SetupContext.FileExists(OutputDirectory + NET80_MOCK_ASSEMBLY))
+			PackageTests.Add(new PackageTest(1, "NetCore80PluggableAgentTest", "Run mock-assembly.dll targeting Net 8.0 using NetCore80PluggableAgent",
+				NET80_MOCK_ASSEMBLY,
+				new ExpectedResult("Failed")
+				{
+					Total = 36,
+					Passed = 23,
+					Failed = 5,
+					Warnings = 1,
+					Inconclusive = 1,
+					Skipped = 7,
+					Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net80AgentLauncher") }
+				},
+				Net80PluggableAgent));
+
         //PackageTests.Add(new PackageTest(1, "NUnitV2Test", "Run tests using the V2 framework driver",
         //	"v2-tests/net35/v2-test-assembly.dll",
         //	new ExpectedResult("Failed")
@@ -385,6 +401,7 @@ public class BuildSettings
     protected virtual ExtensionSpecifier NUnitProjectLoader => new ExtensionSpecifier("NUnit.Extension.NUnitProjectLoader", "3.7.1");
     protected virtual ExtensionSpecifier Net20PluggableAgent => new ExtensionSpecifier("NUnit.Extension.Net20PluggableAgent", "2.0.0");
     protected virtual ExtensionSpecifier NetCore21PluggableAgent => new ExtensionSpecifier("NUnit.Extension.NetCore21PluggableAgent", "2.0.0");
+    protected virtual ExtensionSpecifier Net80PluggableAgent => new ExtensionSpecifier("NUnit.Extension.Net80PluggableAgent", "2.0.0");
 
 	public bool IsLocalBuild => _buildSystem.IsLocalBuild;
 	public bool IsRunningOnUnix => SetupContext.IsRunningOnUnix();
