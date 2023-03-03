@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using Mono.Cecil;
+using TestCentric.Metadata;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
 

@@ -6,7 +6,7 @@
 using System;
 using System.IO;
 using System.Text;
-using Mono.Cecil;
+using TestCentric.Metadata;
 using NUnit.Engine;
 using TestCentric.Engine.Internal;
 

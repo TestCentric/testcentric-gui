@@ -10,7 +10,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
 using TestCentric.Engine.Internal;
-using Mono.Cecil;
+using TestCentric.Metadata;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
 

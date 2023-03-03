@@ -6,7 +6,7 @@
 using System;
 using System.IO;
 using System.Runtime.Versioning;
-using Mono.Cecil;
+using TestCentric.Metadata;
 
 namespace TestCentric.Extensibility
 {
