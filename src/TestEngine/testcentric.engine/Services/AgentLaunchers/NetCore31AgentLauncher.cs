@@ -6,6 +6,7 @@
 using System;
 using System.Diagnostics;
 using System.Reflection;
+using System.Runtime.Versioning;
 using System.Text;
 using NUnit.Engine;
 using TestCentric.Engine.Extensibility;
@@ -15,7 +16,11 @@ namespace TestCentric.Engine.Services
 {
     public class NetCore31AgentLauncher : IAgentLauncher
     {
-        public TestAgentInfo AgentInfo => new TestAgentInfo(GetType().Name, TestAgentType.LocalProcess);
+        private const string RUNTIME_IDENTIFIER = ".NETCoreApp";
+        private static readonly Version RUNTIME_VERSION = new Version(3, 1, 0);
+        private static readonly FrameworkName TARGET_FRAMEWORK = new FrameworkName(RUNTIME_IDENTIFIER, RUNTIME_VERSION);
+
+        public TestAgentInfo AgentInfo => new TestAgentInfo(GetType().Name, TestAgentType.LocalProcess, TARGET_FRAMEWORK);
 
         public bool CanCreateProcess(TestPackage package)
         {

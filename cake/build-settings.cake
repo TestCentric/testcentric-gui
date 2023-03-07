@@ -365,7 +365,6 @@ public class BuildSettings
 			basePath: ProjectDirectory,
 			checks: new PackageCheck[] {
 				HasFiles("LICENSE.txt", "testcentric.png"),
-				HasDirectory("lib/net20").WithFiles("testcentric.engine.api.dll", "testcentric.engine.api.pdb"),
 				HasDirectory("lib/net462").WithFiles("testcentric.engine.api.dll", "testcentric.engine.api.pdb"),
 				HasDirectory("lib/netstandard2.0").WithFiles("testcentric.engine.api.dll", "testcentric.engine.api.pdb")
 			});

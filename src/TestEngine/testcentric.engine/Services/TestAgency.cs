@@ -338,6 +338,23 @@ namespace TestCentric.Engine.Services
             throw new NUnitEngineException($"No agent available for TestPackage {package.Name}");
         }
 
+        private IAgentLauncher GetLauncherByName(string name)
+        {
+            foreach (var launcher in _launchers)
+                if (launcher.GetType().Name == name)
+                    return launcher;
+
+            return null;
+        }
+
+        //private IAgentLauncher GetBestLauncher(TestPackage package)
+        //{
+        //    foreach (var launcher in _launchers.Where(l => l.CanCreateProcess(package)))
+        //    {
+
+        //    }
+        //}
+
         internal bool IsAgentProcessActive(Guid agentId, out Process process)
         {
             return _agentStore.IsAgentActive(agentId, out process);
