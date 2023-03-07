@@ -3,6 +3,8 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
+using System.Runtime.Versioning;
+
 namespace TestCentric.Engine
 {
     /// <summary>
@@ -13,11 +15,13 @@ namespace TestCentric.Engine
     {
         public string AgentName;
         public TestAgentType AgentType;
+        public FrameworkName TargetRuntime;
 
-        public TestAgentInfo(string agentName, TestAgentType agentType)
+        public TestAgentInfo(string agentName, TestAgentType agentType, FrameworkName targetRuntime)
         {
             AgentName = agentName;
             AgentType = agentType;
+            TargetRuntime = targetRuntime;
         }
     }
 }
