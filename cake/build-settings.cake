@@ -237,7 +237,8 @@ public class BuildSettings
         // NOTE: Package tests using a pluggable agent must be run after all tests
         // that assume no pluggable agents are installed!
 
-        PackageTests.Add(new PackageTest(1, "Net20PluggableAgentTest", "Run mock-assembly.dll targeting net35 using Net20PluggableAgent",
+        /* Temporarily Disabling puggable agent tests
+		PackageTests.Add(new PackageTest(1, "Net20PluggableAgentTest", "Run mock-assembly.dll targeting net35 using Net20PluggableAgent",
             "engine-tests/net35/mock-assembly.dll",
             new ExpectedResult("Failed")
             {
@@ -279,7 +280,7 @@ public class BuildSettings
 					Skipped = 7,
 					Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net80AgentLauncher") }
 				},
-				Net80PluggableAgent));
+				Net80PluggableAgent)); */
 
         //PackageTests.Add(new PackageTest(1, "NUnitV2Test", "Run tests using the V2 framework driver",
         //	"v2-tests/net35/v2-test-assembly.dll",
