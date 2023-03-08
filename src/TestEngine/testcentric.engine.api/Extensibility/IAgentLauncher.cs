@@ -3,7 +3,6 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-#if NETFRAMEWORK
 using System;
 using System.Diagnostics;
 using NUnit.Engine;
@@ -20,4 +19,3 @@ namespace TestCentric.Engine.Extensibility
         Process CreateProcess(Guid agentId, string agencyUrl, TestPackage package);
     }
 }
-#endif

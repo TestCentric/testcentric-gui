@@ -22,8 +22,6 @@
   <files>
 	<file src="LICENSE.txt" />
 	<file src="testcentric.png" />
-    <file src="src/TestEngine/testcentric.engine.api/bin/Release/net462/testcentric.engine.api.dll" target="lib/net462" />
-    <file src="src/TestEngine/testcentric.engine.api/bin/Release/net462/testcentric.engine.api.pdb" target="lib/net462" />
     <file src="src/TestEngine/testcentric.engine.api/bin/Release/netstandard2.0/testcentric.engine.api.dll" target="lib/netstandard2.0" />
     <file src="src/TestEngine/testcentric.engine.api/bin/Release/netstandard2.0/testcentric.engine.api.pdb" target="lib/netstandard2.0" />
   </files>
