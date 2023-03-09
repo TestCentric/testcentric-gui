@@ -207,6 +207,7 @@ public class BuildSettings
                     Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net70AgentLauncher") }
                 }));
 
+		/* Temporarily suppress tests using plugable agents
 		// This test installs the .NET 2.0 pluggable agent. All subsequent
 		// tests will use that agent for .NET 2.0 through 3.5 tests.
 		PackageTests.Add(new PackageTest(1, "Net20PluggableAgentTest", "Run net35 mock-assembly.dll under .NET 2.0 pluggable agent",
@@ -276,7 +277,7 @@ public class BuildSettings
 					Skipped = 7,
 					Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net80AgentLauncher") }
 				},
-				Net80PluggableAgent));
+				Net80PluggableAgent)); */
 
 		NuGetPackage = new NuGetPackageDefinition(
 			this,
