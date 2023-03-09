@@ -290,18 +290,23 @@ namespace TestCentric.Engine.Services
 
             try
             {
-                // Add plugable agents first, so they can override the builtins
-                if (_extensionService != null)
-                    foreach (IAgentLauncher launcher in _extensionService.GetExtensions<IAgentLauncher>())
-                        _launchers.Add(launcher);
-
-                // Add builtin agents
+                // Add builtin agents. These will eventually be removed in
+                // favor of pluggable agents.
                 _launchers.Add(new Net462AgentLauncher());
-                // .NET Core agents are added in ascending version order
                 _launchers.Add(new NetCore31AgentLauncher());
                 _launchers.Add(new Net50AgentLauncher());
                 _launchers.Add(new Net60AgentLauncher());
                 _launchers.Add(new Net70AgentLauncher());
+
+                // Add pluggable agent extensions
+                if (_extensionService != null)
+                    foreach (IAgentLauncher launcher in _extensionService.GetExtensions<IAgentLauncher>())
+                        _launchers.Add(launcher);
+
+                // Sort the list so we can use first agent found by default
+                _launchers.Sort(delegate (IAgentLauncher launcher1, IAgentLauncher launcher2) {
+                    return CompareLaunchers(launcher1, launcher2);
+                });
 
                 _remotingTransport.Start();
                 _tcpTransport.Start();
@@ -315,6 +320,17 @@ namespace TestCentric.Engine.Services
             }
         }
 
+        private static int CompareLaunchers(IAgentLauncher launcher1, IAgentLauncher launcher2)
+        {
+            var runtime1 = launcher1.AgentInfo.TargetRuntime;
+            var runtime2 = launcher2.AgentInfo.TargetRuntime;
+
+            var result = runtime1.Identifier.CompareTo(runtime2.Identifier);
+            if (result == 0)
+                result = runtime1.Version.CompareTo(runtime2.Version);
+
+            return result;
+        }
         #endregion
 
         private Process CreateAgentProcess(Guid agentId, string agencyUrl, TestPackage package)

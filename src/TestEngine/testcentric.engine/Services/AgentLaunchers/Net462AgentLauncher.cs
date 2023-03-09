@@ -16,8 +16,8 @@ namespace TestCentric.Engine.Services
 {
     public class Net462AgentLauncher : IAgentLauncher
     {
-        private const string RUNTIME_IDENTIFIER = ".NETCoreApp";
-        private static readonly Version RUNTIME_VERSION = new Version(5, 0, 0);
+        private const string RUNTIME_IDENTIFIER = ".NETFramework";
+        private static readonly Version RUNTIME_VERSION = new Version(4, 6, 2);
         private static readonly FrameworkName TARGET_FRAMEWORK = new FrameworkName(RUNTIME_IDENTIFIER, RUNTIME_VERSION);
 
         public TestAgentInfo AgentInfo => new TestAgentInfo(GetType().Name, TestAgentType.LocalProcess, TARGET_FRAMEWORK);

@@ -18,7 +18,7 @@ namespace TestCentric.Engine.Services
 
         public static readonly string[] BUILTIN_AGENTS = new string[]
         {
-            "Net462AgentLauncher", "NetCore31AgentLauncher", "Net50AgentLauncher", "Net60AgentLauncher", "Net70AgentLauncher"
+            "NetCore31AgentLauncher", "Net50AgentLauncher", "Net60AgentLauncher", "Net70AgentLauncher", "Net462AgentLauncher"
         };
 
         [SetUp]
