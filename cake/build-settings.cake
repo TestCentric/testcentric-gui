@@ -207,13 +207,13 @@ public class BuildSettings
                     Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net70AgentLauncher") }
                 }));
 
-		/* Temporarily suppress tests using plugable agents
+		// TODO: Temporarily suppress test of .NET 2.0 pluggable agent
 		// This test installs the .NET 2.0 pluggable agent. All subsequent
 		// tests will use that agent for .NET 2.0 through 3.5 tests.
-		PackageTests.Add(new PackageTest(1, "Net20PluggableAgentTest", "Run net35 mock-assembly.dll under .NET 2.0 pluggable agent",
-			"net35/mock-assembly.dll",
-            MockAssemblyExpectedResult("Net20AgentLauncher"),
-			Net20PluggableAgent));
+		//PackageTests.Add(new PackageTest(1, "Net20PluggableAgentTest", "Run net35 mock-assembly.dll under .NET 2.0 pluggable agent",
+		//    "net35/mock-assembly.dll",
+        //    MockAssemblyExpectedResult("Net20AgentLauncher"),
+		//    Net20PluggableAgent));
 
 		// This test installs the .NET Core 2.1 pluggable agent. All subsequent
 		// tests will use that agent for .NET Core tests up to version 2.1.
@@ -226,7 +226,7 @@ public class BuildSettings
 
         PackageTests.Add(new PackageTest(1, "Net462PlusNet35Test", "Run net462 and net35 builds of mock-assembly.dll together",
             "net462/mock-assembly.dll net35/mock-assembly.dll",
-            MockAssemblyExpectedResult("Net462AgentLauncher", "Net20AgentLauncher")));
+            MockAssemblyExpectedResult("Net462AgentLauncher", "Net462AgentLauncher")));
 
         PackageTests.Add(new PackageTest(1, "Net462PlusNet60Test", "Run different builds of mock-assembly.dll together",
             "net462/mock-assembly.dll net6.0/mock-assembly.dll",
@@ -234,6 +234,7 @@ public class BuildSettings
 
         // Level 2 tests are run for PRs and when packages will be published
 
+		// TODO: Suppress V2 tests until driver is working
         //PackageTests.Add(new PackageTest(2, "NUnitV2Test", "Run mock-assembly.dll built for NUnit V2",
         //	"v2-tests/mock-assembly.dll",
         //	new ExpectedResult("Failed")
@@ -263,6 +264,7 @@ public class BuildSettings
         //        NUnitProjectLoader));
         //}
 
+		// TODO: Make this work on AppVeyor
 		const string NET80_MOCK_ASSEMBLY = "../../../net80-pluggable-agent/bin/Release/tests/net8.0/mock-assembly.dll";
 		if (IsLocalBuild && SetupContext.FileExists(OutputDirectory + NET80_MOCK_ASSEMBLY))
 			PackageTests.Add(new PackageTest(1, "NetCore80PluggableAgentTest", "Run mock-assembly.dll targeting Net 8.0 using NetCore80PluggableAgent",
@@ -277,7 +279,7 @@ public class BuildSettings
 					Skipped = 7,
 					Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net80AgentLauncher") }
 				},
-				Net80PluggableAgent)); */
+				Net80PluggableAgent));
 
 		NuGetPackage = new NuGetPackageDefinition(
 			this,
@@ -377,9 +379,9 @@ public class BuildSettings
 	public ExtensionSpecifier Net20PluggableAgent => 
 		new ExtensionSpecifier("NUnit.Extension.Net20PluggableAgent", "nunit-extension-net20-pluggable-agent", "2.0.0");
 	public ExtensionSpecifier NetCore21PluggableAgent => 
-		new ExtensionSpecifier("NUnit.Extension.NetCore21PluggableAgent", "nunit-extension-netcore21-pluggable-agent", "2.0.0");
+		new ExtensionSpecifier("NUnit.Extension.NetCore21PluggableAgent", "nunit-extension-netcore21-pluggable-agent", "2.1.0");
 	public ExtensionSpecifier Net80PluggableAgent => 
-		new ExtensionSpecifier("NUnit.Extension.Net80PluggableAgent", "nunit-extension-net80-pluggable-agent", "2.0.0");
+		new ExtensionSpecifier("NUnit.Extension.Net80PluggableAgent", "nunit-extension-net80-pluggable-agent", "2.1.0");
 
 	private List<ExtensionSpecifier> InstalledExtensions { get; } = new List<ExtensionSpecifier>();
 	public bool IsLocalBuild => _buildSystem.IsLocalBuild;
