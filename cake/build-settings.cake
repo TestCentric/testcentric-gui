@@ -237,20 +237,20 @@ public class BuildSettings
         // NOTE: Package tests using a pluggable agent must be run after all tests
         // that assume no pluggable agents are installed!
 
-        /* Temporarily Disabling puggable agent tests
-		PackageTests.Add(new PackageTest(1, "Net20PluggableAgentTest", "Run mock-assembly.dll targeting net35 using Net20PluggableAgent",
-            "engine-tests/net35/mock-assembly.dll",
-            new ExpectedResult("Failed")
-            {
-                Total = 36,
-                Passed = 23,
-                Failed = 5,
-                Warnings = 1,
-                Inconclusive = 1,
-                Skipped = 7,
-                Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net20AgentLauncher") }
-            },
-            Net20PluggableAgent));
+        // TODO: Disabling Net20PluggableAgentTest until the agent is updated
+		//PackageTests.Add(new PackageTest(1, "Net20PluggableAgentTest", "Run mock-assembly.dll targeting net35 using Net20PluggableAgent",
+        //    "engine-tests/net35/mock-assembly.dll",
+        //    new ExpectedResult("Failed")
+        //    {
+        //        Total = 36,
+        //        Passed = 23,
+        //        Failed = 5,
+        //        Warnings = 1,
+        //        Inconclusive = 1,
+        //        Skipped = 7,
+        //        Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net20AgentLauncher") }
+        //    },
+        //    Net20PluggableAgent));
 
         PackageTests.Add(new PackageTest(1, "NetCore21PluggableAgentTest", "Run mock-assembly.dll targeting Net Core 2.1 using NetCore21PluggableAgent",
             "engine-tests/netcoreapp2.1/mock-assembly.dll",
@@ -280,9 +280,10 @@ public class BuildSettings
 					Skipped = 7,
 					Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net80AgentLauncher") }
 				},
-				Net80PluggableAgent)); */
+				Net80PluggableAgent));
 
-        //PackageTests.Add(new PackageTest(1, "NUnitV2Test", "Run tests using the V2 framework driver",
+        // TODO: Disabling NUnitV2Test until the driver works
+		//PackageTests.Add(new PackageTest(1, "NUnitV2Test", "Run tests using the V2 framework driver",
         //	"v2-tests/net35/v2-test-assembly.dll",
         //	new ExpectedResult("Failed")
         //	{
@@ -399,8 +400,8 @@ public class BuildSettings
     protected virtual ExtensionSpecifier NUnitV2Driver => new ExtensionSpecifier("NUnit.Extension.NUnitV2Driver", "3.9.0");
     protected virtual ExtensionSpecifier NUnitProjectLoader => new ExtensionSpecifier("NUnit.Extension.NUnitProjectLoader", "3.7.1");
     protected virtual ExtensionSpecifier Net20PluggableAgent => new ExtensionSpecifier("NUnit.Extension.Net20PluggableAgent", "2.0.0");
-    protected virtual ExtensionSpecifier NetCore21PluggableAgent => new ExtensionSpecifier("NUnit.Extension.NetCore21PluggableAgent", "2.0.0");
-    protected virtual ExtensionSpecifier Net80PluggableAgent => new ExtensionSpecifier("NUnit.Extension.Net80PluggableAgent", "2.0.0");
+    protected virtual ExtensionSpecifier NetCore21PluggableAgent => new ExtensionSpecifier("NUnit.Extension.NetCore21PluggableAgent", "2.1.0");
+    protected virtual ExtensionSpecifier Net80PluggableAgent => new ExtensionSpecifier("NUnit.Extension.Net80PluggableAgent", "2.1.0");
 
 	public bool IsLocalBuild => _buildSystem.IsLocalBuild;
 	public bool IsRunningOnUnix => SetupContext.IsRunningOnUnix();
