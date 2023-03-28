@@ -3,9 +3,9 @@
 //////////////////////////////////////////////////////////////////////
 
 Task("CreateDraftRelease")
-    .Does<BuildSettings>((settings) =>
+    .Does(() =>
     {
-        if (settings.IsReleaseBranch)
+        if (BuildSettings.IsReleaseBranch)
         {
             // Exit if any PackageTests failed
             CheckTestErrors(ref ErrorDetail);
@@ -15,17 +15,17 @@ Task("CreateDraftRelease")
             // The branch name contains the full information to be used
             // for both the name of the draft release and the milestone,
             // i.e. release-2.0.0, release-2.0.0-beta2, etc.
-            string milestone = settings.BranchName.Substring(8);
+            string milestone = BuildSettings.BranchName.Substring(8);
             string releaseName = $"TestCentric Engine {milestone}";
 
             Information($"Creating draft release for {releaseName}");
 
-		    if (settings.NoPush)
+		    if (BuildSettings.NoPush)
 			    Information("NoPush option suppressed creation of draft release");
 			else
 				try
 				{
-					GitReleaseManagerCreate(settings.GitHubAccessToken, GITHUB_OWNER, GITHUB_REPO, new GitReleaseManagerCreateSettings()
+					GitReleaseManagerCreate(BuildSettings.GitHubAccessToken, GITHUB_OWNER, GITHUB_REPO, new GitReleaseManagerCreateSettings()
 					{
 						Name = releaseName,
 						Milestone = milestone
@@ -50,26 +50,26 @@ Task("CreateDraftRelease")
 ////////////////////////////////////////////////////////////////////////
 
 Task("CreateProductionRelease")
-    .Does<BuildSettings>((settings) =>
+    .Does(() =>
     {
-        if (settings.IsProductionRelease)
+        if (BuildSettings.IsProductionRelease)
         {
             // Exit if any PackageTests failed
             CheckTestErrors(ref ErrorDetail);
 
-			string tagName = settings.PackageVersion;
+			string tagName = BuildSettings.PackageVersion;
             Information($"Publishing release {tagName} to GitHub");
 
-            if (settings.NoPush)
+            if (BuildSettings.NoPush)
             {
                 Information("NoPush option suppressed publishing of assets:");
-                foreach (var asset in settings.GitHubReleaseAssets)
+                foreach (var asset in BuildSettings.GitHubReleaseAssets)
                     Information("  " + asset);
             }
 			else
 			{
-				string token = settings.GitHubAccessToken;
-				string assets = $"\"{string.Join(',', settings.GitHubReleaseAssets)}\"";
+				string token = BuildSettings.GitHubAccessToken;
+				string assets = $"\"{string.Join(',', BuildSettings.GitHubReleaseAssets)}\"";
 
 				GitReleaseManagerAddAssets(token, GITHUB_OWNER, GITHUB_REPO, tagName, assets);
 				GitReleaseManagerClose(token, GITHUB_OWNER, GITHUB_REPO, tagName);

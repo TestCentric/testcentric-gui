@@ -4,39 +4,29 @@
 
 using System;
 
-// Dependent task for all local targets
-Task("MustBeLocalBuild")
-	.Does<BuildSettings>((settings) =>
-	{
-		if (!settings.IsLocalBuild)
-			throw new Exception($"{settings.Target} may only be run locally!");
-	});
-
 Task("CleanAll")
 	.Description("Clean both configs and all obj directories")
-	.IsDependentOn("MustBeLocalBuild")
-	.Does<BuildSettings>((settings) =>
+	.Does(() =>
 	{
 		Information("Cleaning all output directories");
-		CleanDirectory(settings.ProjectDirectory + "bin/");
+		CleanDirectory(BuildSettings.ProjectDirectory + "bin/");
 
 		Information("Deleting object directories");
-		DeleteObjectDirectories(settings);
+		DeleteObjectDirectories();
 	});
 
 // Download existing draft release for modification or for use in
 // updating the CHANGES.md file.
 Task("DownloadDraftRelease")
 	.Description("Download draft release for local use")
-	.IsDependentOn("MustBeLocalBuild")
-	.Does<BuildSettings>((settings) =>
+	.Does(() =>
 	{
-		if (!settings.IsReleaseBranch)
+		if (!BuildSettings.IsReleaseBranch)
 			throw new Exception("DownloadDraftRelease requires a release branch!");
 
-		string milestone = settings.BranchName.Substring(8);
+		string milestone = BuildSettings.BranchName.Substring(8);
 
-		GitReleaseManagerExport(settings.GitHubAccessToken, GITHUB_OWNER, GITHUB_REPO, "DraftRelease.md",
+		GitReleaseManagerExport(BuildSettings.GitHubAccessToken, GITHUB_OWNER, GITHUB_REPO, "DraftRelease.md",
 			new GitReleaseManagerExportSettings() { TagName = milestone });
 	});
 

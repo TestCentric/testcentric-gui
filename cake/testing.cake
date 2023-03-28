@@ -15,10 +15,10 @@ Task("CheckTestErrors")
 Task("TestEngine")
 	.Description("Tests the TestCentric Engine")
 	.IsDependentOn("Build")
-	.Does<BuildSettings>((settings) =>
+	.Does(() =>
 	{
-		foreach (var runtime in settings.EngineRuntimes)
-			RunNUnitLite("testcentric.engine.tests", runtime, $"{settings.OutputDirectory}engine-tests/{runtime}/");
+		foreach (var runtime in BuildSettings.EngineRuntimes)
+			RunNUnitLite("testcentric.engine.tests", runtime, $"{BuildSettings.OutputDirectory}engine-tests/{runtime}/");
 	});
 
 //////////////////////////////////////////////////////////////////////
@@ -28,12 +28,12 @@ Task("TestEngine")
 Task("TestEngineCore")
 	.Description("Tests the TestCentric Engine Core")
 	.IsDependentOn("Build")
-	.Does<BuildSettings>((settings) =>
+	.Does(() =>
 	{
-		foreach (var runtime in settings.EngineCoreRuntimes)
+		foreach (var runtime in BuildSettings.EngineCoreRuntimes)
 		{
 			// Only .NET Standard we currently build is 2.0
 			var testUnder = runtime == "netstandard2.0" ? "netcoreapp2.1" : runtime;
-			RunNUnitLite("testcentric.engine.core.tests", testUnder, $"{settings.OutputDirectory}engine-tests/{testUnder}/");
+			RunNUnitLite("testcentric.engine.core.tests", testUnder, $"{BuildSettings.OutputDirectory}engine-tests/{testUnder}/");
 		}
 	});

@@ -3,13 +3,13 @@
 //////////////////////////////////////////////////////////////////////
 
 Task("Clean")
-    .Does<BuildSettings>((settings) =>
+    .Does(() =>
 	{
-		Information("Cleaning " + settings.OutputDirectory);
-		CleanDirectory(settings.OutputDirectory);
+		Information("Cleaning " + BuildSettings.OutputDirectory);
+		CleanDirectory(BuildSettings.OutputDirectory);
 
         Information("Cleaning Package Directory");
-        CleanDirectory(settings.PackageDirectory);
+        CleanDirectory(BuildSettings.PackageDirectory);
 	});
 
 //////////////////////////////////////////////////////////////////////
@@ -17,9 +17,9 @@ Task("Clean")
 //////////////////////////////////////////////////////////////////////
 
 Task("RestorePackages")
-    .Does<BuildSettings>((settings) =>
+    .Does(() =>
 {
-	NuGetRestore(SOLUTION, settings.RestoreSettings);
+	NuGetRestore(BuildSettings.SolutionFile, BuildSettings.RestoreSettings);
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -30,14 +30,8 @@ Task("Build")
 	.IsDependentOn("Clean")
 	.IsDependentOn("RestorePackages")
 	.IsDependentOn("CheckHeaders")
-	.Does<BuildSettings>((settings) =>
+	.Does(() =>
 	{
-		if (settings.UsingXBuild)
-			XBuild(SOLUTION, settings.XBuildSettings
-				.WithProperty("Version", settings.PackageVersion));
-				//.WithProperty("NUnitApiVersion", "3.16.2"));
-		else
-			MSBuild(SOLUTION, settings.MSBuildSettings
-				.WithProperty("Version", settings.PackageVersion));
-				//.WithProperty("NUnitApiVersion", "3.16.2"));
+		MSBuild(BuildSettings.SolutionFile, BuildSettings.MSBuildSettings
+			.WithProperty("Version", BuildSettings.PackageVersion));
 	});

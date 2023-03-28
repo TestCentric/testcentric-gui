@@ -2,7 +2,6 @@
 #tool nuget:?package=GitVersion.CommandLine&version=5.6.3
 #tool nuget:?package=GitReleaseManager&version=0.12.1
 
-const string SOLUTION = "testcentric-engine.sln";
 const string GITHUB_OWNER = "testcentric";
 const string GITHUB_REPO = "testcentric-engine";
 
@@ -85,31 +84,19 @@ using System.Threading.Tasks;
 // SETUP AND TEARDOWN
 //////////////////////////////////////////////////////////////////////
 
-Setup<BuildSettings>((context) =>
-{
-	var settings = BuildSettings.CreateInstance(context);
+BuildSettings.Initialize(
+	Context,
+	"TestCentric.Engine",
+	"testcentric-engine.sln");
 
-	if (BuildSystem.IsRunningOnAppVeyor)
-			AppVeyor.UpdateBuildVersion(settings.PackageVersion + "-" + AppVeyor.Environment.Build.Number);
+if (BuildSystem.IsRunningOnAppVeyor)
+		AppVeyor.UpdateBuildVersion(BuildSettings.PackageVersion + "-" + AppVeyor.Environment.Build.Number);
 
-    Information("Building {0} version {1} of TestCentric Engine.", settings.Configuration, settings.PackageVersion);
-
-	return settings;
-});
+Information("Building {0} version {1} of TestCentric Engine.", BuildSettings.Configuration, BuildSettings.PackageVersion);
 
 // If we run target Test, we catch errors here in teardown.
 // If we run packaging, the CheckTestErrors Task is run instead.
 Teardown(context => CheckTestErrors(ref ErrorDetail));
-
-//////////////////////////////////////////////////////////////////////
-// DUMP SETTINGS
-//////////////////////////////////////////////////////////////////////
-
-Task("DumpSettings")
-	.Does<BuildSettings>((settings) =>
-	{
-		settings.DumpSettings();
-	});
 
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS

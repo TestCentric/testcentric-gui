@@ -4,21 +4,21 @@
 
 Task("PackageEngine")
 	.Description("Build and Test the Engine Package")
-	.Does<BuildSettings>(settings =>
+	.Does(() =>
 	{
-		settings.EnginePackage.BuildVerifyAndTest();
+		BuildSettings.EnginePackage.BuildVerifyAndTest();
 	});
 
 Task("PackageEngineCore")
 	.Description("Build and Test the Engine Core Package")
-	.Does<BuildSettings>(settings =>
+	.Does(() =>
 	{
-		settings.EngineCorePackage.BuildVerifyAndTest();
+		BuildSettings.EngineCorePackage.BuildVerifyAndTest();
 	});
 
 Task("PackageEngineApi")
 	.Description("Build and Test the Engine Api Package")
-	.Does<BuildSettings>(settings =>
+	.Does(() =>
 	{
-		settings.EngineApiPackage.BuildVerifyAndTest();
+		BuildSettings.EngineApiPackage.BuildVerifyAndTest();
 	});

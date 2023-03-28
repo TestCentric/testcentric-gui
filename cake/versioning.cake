@@ -2,8 +2,7 @@ using System.Text.RegularExpressions;
 
 public class BuildVersion
 {
-    private ISetupContext _context;
-    private BuildSettings _settings;
+    private ICakeContext _context;
     private GitVersion _gitVersion;
 
     // NOTE: This is complicated because (1) the user may have specified 
@@ -13,18 +12,17 @@ public class BuildVersion
     //
     // We simplify things a by figuring out the full package version and
     // then parsing it to provide information that is used in the build.
-    public BuildVersion(ISetupContext context, BuildSettings settings)
+    public BuildVersion(ICakeContext context)
     {
         _context = context;
-        _settings = settings;
         _gitVersion = context.GitVersion();
 
         BranchName = _gitVersion.BranchName;
         IsReleaseBranch = BranchName.StartsWith("release-");
 
         // TODO: Get GitVersion to work on Linux
-        string packageVersion = settings.HasArgument("packageVersion|package")
-            ? settings.GetArgument("packageVersion|package", DEFAULT_VERSION)
+        string packageVersion = _context.HasArgument("packageVersion")
+            ? _context.Argument<string>("packageVersion")
             : CalculatePackageVersion();
 
         int dash = packageVersion.IndexOf('-');

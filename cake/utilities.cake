@@ -2,9 +2,9 @@
 // GLOBALLY ACCESSIBLE UTILITY METHODS CALLED BY CAKE TASKS
 //////////////////////////////////////////////////////////////////////
 
-public void DeleteObjectDirectories(BuildSettings settings)
+public void DeleteObjectDirectories()
 {
-    string pattern = settings.SourceDirectory + "**/obj/";
+    string pattern = BuildSettings.SourceDirectory + "**/obj/";
 
     foreach (var dir in GetDirectories(pattern))
         DeleteDirectory(dir, new DeleteDirectorySettings() { Recursive = true });

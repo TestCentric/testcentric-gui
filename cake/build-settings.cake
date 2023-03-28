@@ -1,43 +1,51 @@
-public class BuildSettings
+//////////////////////////////////////////////////////////////////////
+// DUMP SETTINGS
+//////////////////////////////////////////////////////////////////////
+
+Task("DumpSettings")
+	.Does(() => BuildSettings.DumpSettings());
+
+//////////////////////////////////////////////////////////////////////
+// BUILD SETTINGS
+//////////////////////////////////////////////////////////////////////
+
+public static class BuildSettings
 {
-	private BuildSystem _buildSystem;
+	private static BuildSystem _buildSystem;
 
-	// BuildSettings is effectively a singleton because it is only created in the Setup method.
-	private static BuildSettings _instance;
-
-	public static BuildSettings CreateInstance(ISetupContext context)
+	public static void Initialize(
+		// Required parameters
+		ICakeContext context,
+		string title,
+		// Optional parameters
+		string solutionFile = null)
 	{
-		if (_instance != null)
-			throw new Exception("BuildSettings instance may only be created once.");
+		if (context == null)
+			throw new ArgumentNullException(nameof(context));
+		if (title == null)
+			throw new ArgumentNullException(nameof(title));
 
-		_instance = new BuildSettings(context);
-		_instance.Validate();
+		Context = context;
+		_buildSystem = Context.BuildSystem();
 
-		return _instance;
-	}
+		Title = title;
+		SolutionFile = solutionFile;
+		if (solutionFile == null && title != null)
+		{
+			var sln = title + ".sln";
+			if (System.IO.File.Exists(sln))
+				SolutionFile = sln;
+		}
 
-	private BuildSettings(ISetupContext context)
-	{
-		SetupContext = context;
-		_buildSystem = SetupContext.BuildSystem();
+		//Target = SetupContext.TargetTask.Name;
+		//TasksToExecute = SetupContext.TasksToExecute.Select(t => t.Name);
 
-		Target = SetupContext.TargetTask.Name;
-		TasksToExecute = SetupContext.TasksToExecute.Select(t => t.Name);
+		BuildVersion = new BuildVersion(context);
 
-		Configuration = GetArgument("configuration|c", DEFAULT_CONFIGURATION);
-		NoPush = SetupContext.HasArgument("nopush");
-		ProjectDirectory = context.Environment.WorkingDirectory.FullPath + "/";
-
-        MyGetApiKey = GetApiKey(MYGET_API_KEY, FALLBACK_MYGET_API_KEY);
-        NuGetApiKey = GetApiKey(NUGET_API_KEY, FALLBACK_NUGET_API_KEY);
-		GitHubAccessToken = SetupContext.EnvironmentVariable(GITHUB_ACCESS_TOKEN);
-
-		UsingXBuild = context.EnvironmentVariable("USE_XBUILD") != null;
-		
-		BuildVersion = new BuildVersion(context, this);
-
-		if (HasArgument("testLevel|level"))
-			PackageTestLevel = GetArgument("testLevel|level", 1);
+		if (context.HasArgument("testLevel"))
+			PackageTestLevel = context.Argument<int>("testLevel");
+		else if (context.HasArgument("level"))
+			PackageTestLevel = context.Argument<int>("level");
 		else if (!BuildVersion.IsPreRelease)
 			PackageTestLevel = 3;
 		else switch (BuildVersion.PreReleaseLabel)
@@ -67,24 +75,7 @@ public class BuildSettings
 			DetailedSummary = true,
 		};
 
-		XBuildSettings = new XBuildSettings {
-			Verbosity = Verbosity.Minimal,
-			ToolVersion = XBuildToolVersion.Default,//The highest available XBuild tool version//NET40
-			Configuration = Configuration,
-		};
-
 		RestoreSettings = new NuGetRestoreSettings();
-		// Older Mono version was not picking up the testcentric source
-		// TODO: Check if this is still needed
-		if (UsingXBuild)
-			RestoreSettings.Source = new string [] {
-				"https://www.myget.org/F/testcentric/api/v2/",
-				"https://www.myget.org/F/testcentric/api/v3/index.json",
-				"https://www.nuget.org/api/v2/",
-				"https://api.nuget.org/v3/index.json",
-				"https://www.myget.org/F/nunit/api/v2/",
-				"https://www.myget.org/F/nunit/api/v3/index.json"
-			};
 
 		// Define Package Tests
         //   Level 1 tests are run each time we build the packages
@@ -241,7 +232,7 @@ public class BuildSettings
             NetCore21PluggableAgent));
 
 		const string NET80_MOCK_ASSEMBLY = "../../../net80-pluggable-agent/bin/Release/tests/net8.0/mock-assembly.dll";
-		if (IsLocalBuild && SetupContext.FileExists(OutputDirectory + NET80_MOCK_ASSEMBLY))
+		if (IsLocalBuild && Context.FileExists(OutputDirectory + NET80_MOCK_ASSEMBLY))
 			PackageTests.Add(new PackageTest(1, "NetCore80PluggableAgentTest", "Run mock-assembly.dll targeting Net 8.0 using NetCore80PluggableAgent",
 				NET80_MOCK_ASSEMBLY,
 				new ExpectedResult("Failed")
@@ -272,7 +263,6 @@ public class BuildSettings
 
 		// Define packages
 		EnginePackage = new NuGetPackageDefinition(
-			this,
 			id: "TestCentric.Engine",
 			source: NuGetDirectory + "TestCentric.Engine.nuspec",
 			basePath: OutputDirectory,
@@ -313,7 +303,6 @@ public class BuildSettings
 			tests: PackageTests);
 
 		EngineCorePackage = new NuGetPackageDefinition(
-			this,
 			id: "TestCentric.Engine.Core",
 			source: NuGetDirectory + "TestCentric.Engine.Core.nuspec",
 			basePath: ProjectDirectory,
@@ -335,7 +324,6 @@ public class BuildSettings
 			});
 
 		EngineApiPackage = new NuGetPackageDefinition(
-			this,
 			id: "TestCentric.Engine.Api",
 			source: NuGetDirectory + "TestCentric.Engine.Api.nuspec",
 			basePath: ProjectDirectory,
@@ -351,104 +339,95 @@ public class BuildSettings
 		});
 	}
 
-	public ISetupContext SetupContext { get; }
+	// Cake Context
+	public static ICakeContext Context { get; private set; }
 
-	public string Target { get; }
-	public IEnumerable<string> TasksToExecute { get; }
+	// Targets
+	//public static string Target => Context.TargetTask.Name;
+	//public static IEnumerable<string> TasksToExecute => Context.TasksToExecute.Select(t => t.Name);
+	
+	// Arguments
+	public static string Configuration => Context.Argument("configuration", DEFAULT_CONFIGURATION);
+	public static bool NoPush => Context.HasArgument("nopush");
 
-	public string Configuration { get; private set; }
-	public bool NoPush { get; }
-
-	public BuildVersion BuildVersion { get; }
-	public string PackageVersion => BuildVersion.PackageVersion;
-	public string AssemblyVersion => BuildVersion.AssemblyVersion;
-	public string AssemblyFileVersion => BuildVersion.AssemblyFileVersion;
-	public string AssemblyInformationalVersion => BuildVersion.AssemblyInformationalVersion;
+	// Versioning
+	public static BuildVersion BuildVersion { get; private set; }
+	public static string BranchName => BuildVersion.BranchName;
+	public static bool IsReleaseBranch => BuildVersion.IsReleaseBranch;
+	public static string PackageVersion => BuildVersion.PackageVersion;
+	public static string AssemblyVersion => BuildVersion.AssemblyVersion;
+	public static string AssemblyFileVersion => BuildVersion.AssemblyFileVersion;
+	public static string AssemblyInformationalVersion => BuildVersion.AssemblyInformationalVersion;
+	public static bool IsDevelopmentRelease => PackageVersion.Contains("-dev");
 
     // NOTE: Currently, we use the same tests for all packages. There seems to be
     // no reason for the three packages to differ in capability so the only reason
     // to limit tests on some of them would be efficiency... so far not a problem.
-	public List<PackageTest> PackageTests { get; } = new List<PackageTest>();
-	public int PackageTestLevel { get; }
+	public static List<PackageTest> PackageTests { get; } = new List<PackageTest>();
+	public static int PackageTestLevel { get; private set; }
 
-    protected virtual ExtensionSpecifier NUnitV2Driver => new ExtensionSpecifier("NUnit.Extension.NUnitV2Driver", "3.9.0");
-    protected virtual ExtensionSpecifier NUnitProjectLoader => new ExtensionSpecifier("NUnit.Extension.NUnitProjectLoader", "3.7.1");
-    protected virtual ExtensionSpecifier Net20PluggableAgent => new ExtensionSpecifier("NUnit.Extension.Net20PluggableAgent", "2.0.0");
-    protected virtual ExtensionSpecifier NetCore21PluggableAgent => new ExtensionSpecifier("NUnit.Extension.NetCore21PluggableAgent", "2.1.0");
-    protected virtual ExtensionSpecifier Net80PluggableAgent => new ExtensionSpecifier("NUnit.Extension.Net80PluggableAgent", "2.1.0");
+    public static ExtensionSpecifier NUnitV2Driver => new ExtensionSpecifier("NUnit.Extension.NUnitV2Driver", "3.9.0");
+    public static ExtensionSpecifier NUnitProjectLoader => new ExtensionSpecifier("NUnit.Extension.NUnitProjectLoader", "3.7.1");
+    public static ExtensionSpecifier Net20PluggableAgent => new ExtensionSpecifier("NUnit.Extension.Net20PluggableAgent", "2.0.0");
+    public static ExtensionSpecifier NetCore21PluggableAgent => new ExtensionSpecifier("NUnit.Extension.NetCore21PluggableAgent", "2.1.0");
+    public static ExtensionSpecifier Net80PluggableAgent => new ExtensionSpecifier("NUnit.Extension.Net80PluggableAgent", "2.1.0");
 
-	public bool IsLocalBuild => _buildSystem.IsLocalBuild;
-	public bool IsRunningOnUnix => SetupContext.IsRunningOnUnix();
-	public bool IsRunningOnWindows => SetupContext.IsRunningOnWindows();
-	public bool IsRunningOnAppVeyor => _buildSystem.AppVeyor.IsRunningOnAppVeyor;
+	// Build System
+	public static bool IsLocalBuild => _buildSystem.IsLocalBuild;
+	public static bool IsRunningOnUnix => Context.IsRunningOnUnix();
+	public static bool IsRunningOnWindows => Context.IsRunningOnWindows();
+	public static bool IsRunningOnAppVeyor => _buildSystem.AppVeyor.IsRunningOnAppVeyor;
 
-	public string ProjectDirectory { get; }
-	public string SourceDirectory => ProjectDirectory + "src/";
-	public string OutputDirectory => ProjectDirectory + "bin/" + Configuration + "/";
-	public string NuGetDirectory => ProjectDirectory + "nuget/";
-	public string PackageDirectory => ProjectDirectory + "package/";
-	public string PackageTestDirectory => PackageDirectory + "tests/";
-	public string NuGetTestDirectory => PackageTestDirectory + "nuget/";
-	public string PackageResultDirectory => PackageDirectory + "results/";
-	public string NuGetResultDirectory => PackageResultDirectory + "nuget/";
+	// Standard Directory Structure - not changeable by user
+	public static string ProjectDirectory => Context.Environment.WorkingDirectory.FullPath + "/";
+	public static string SourceDirectory => ProjectDirectory + "src/";
+	public static string OutputDirectory => ProjectDirectory + "bin/" + Configuration + "/";
+	public static string NuGetDirectory => ProjectDirectory + "nuget/";
+	public static string PackageDirectory => ProjectDirectory + "package/";
+	public static string PackageTestDirectory => PackageDirectory + "tests/";
+	public static string NuGetTestDirectory => PackageTestDirectory + "nuget/";
+	public static string PackageResultDirectory => PackageDirectory + "results/";
+	public static string NuGetResultDirectory => PackageResultDirectory + "nuget/";
 
-	public PackageDefinition EnginePackage { get; }
-	public PackageDefinition EngineCorePackage { get; }
-	public PackageDefinition EngineApiPackage { get; }
-	public List<PackageDefinition> AllPackages { get; }
+	// Files
+	public static string Title { get; private set; }
+	public static string SolutionFile { get; private set; }
 
-	public string[] GitHubReleaseAssets => SetupContext.IsRunningOnWindows()
+	public static PackageDefinition EnginePackage { get; private set; }
+	public static PackageDefinition EngineCorePackage { get; private set; }
+	public static PackageDefinition EngineApiPackage { get; private set; }
+	public static List<PackageDefinition> AllPackages { get; private set; }
+
+	public static string[] GitHubReleaseAssets => Context.IsRunningOnWindows()
 		? new [] { EnginePackage.PackageFilePath, EngineCorePackage.PackageFilePath, EngineApiPackage.PackageFilePath }
         : new [] { EnginePackage.PackageFilePath };
 
-	public string MyGetPushUrl => MYGET_PUSH_URL;
-	public string NuGetPushUrl => NUGET_PUSH_URL;
+	// Publishing - MyGet
+	public static string MyGetPushUrl => MYGET_PUSH_URL;
+	public static string MyGetApiKey => Context.EnvironmentVariable(MYGET_API_KEY);
 	
-	public string MyGetApiKey { get; }
-	public string NuGetApiKey { get; }
-	public string GitHubAccessToken { get; }
+	// Publishing - NuGet
+	public static string NuGetPushUrl => NUGET_PUSH_URL;	
+	public static string NuGetApiKey => Context.EnvironmentVariable(NUGET_API_KEY);
 
-    public string BranchName => BuildVersion.BranchName;
-	public bool IsReleaseBranch => BuildVersion.IsReleaseBranch;
+	// Publishing - GetHub
+	public static string GitHubAccessToken => Context.EnvironmentVariable(GITHUB_ACCESS_TOKEN);
 
-	public bool IsPreRelease => BuildVersion.IsPreRelease;
-	public bool ShouldPublishToMyGet =>
+	public static bool IsPreRelease => BuildVersion.IsPreRelease;
+	public static bool ShouldPublishToMyGet =>
 		!IsPreRelease || LABELS_WE_PUBLISH_ON_MYGET.Contains(BuildVersion.PreReleaseLabel);
-	public bool ShouldPublishToNuGet =>
+	public static bool ShouldPublishToNuGet =>
 		!IsPreRelease || LABELS_WE_PUBLISH_ON_NUGET.Contains(BuildVersion.PreReleaseLabel);
-	public bool IsProductionRelease =>
+	public static bool IsProductionRelease =>
 		!IsPreRelease || LABELS_WE_RELEASE_ON_GITHUB.Contains(BuildVersion.PreReleaseLabel);
 	
-	public bool UsingXBuild { get; }
-	public MSBuildSettings MSBuildSettings { get; }
-	public XBuildSettings XBuildSettings { get; }
-	public NuGetRestoreSettings RestoreSettings { get; }
+	public static MSBuildSettings MSBuildSettings { get; private set; }
+	public static NuGetRestoreSettings RestoreSettings { get; private set; }
 
-	public string[] EngineRuntimes => new string[] {"net462"};
-	public string[] EngineCoreRuntimes => new string[] {"net462", "net35", "netstandard2.0", "netcoreapp3.1"};
-	// Unused at present
-	public string[] AgentRuntimes => new string[] {
-		"net20", "net462", "netcoreapp2.1", "netcoreapp3.1", "net5.0", "net6.0", "net7.0" };
+	public static string[] EngineRuntimes => new string[] {"net462"};
+	public static string[] EngineCoreRuntimes => new string[] {"net462", "net35", "netstandard2.0", "netcoreapp3.1"};
 
-	public bool HasArgument(string altNames)
-	{
-		foreach (string name in altNames.Split('|'))
-			if (SetupContext.HasArgument(name))
-				return true;
-
-		return false;
-	}
-
-	public T GetArgument<T>(string altNames, T defaultValue)
-	{
-		foreach (string name in altNames.Split('|'))
-			if (SetupContext.HasArgument(name))
-				return SetupContext.Argument(name, defaultValue);
-
-		return defaultValue;
-	}
-
-	private void Validate()
+	private static void Validate()
 	{
 		var validationErrors = new List<string>();
 		
@@ -457,7 +436,7 @@ public class BuildSettings
 		{
 			if (string.Equals(config, Configuration, StringComparison.OrdinalIgnoreCase))
 			{
-				Configuration = config;
+				//Configuration = config;
 				validConfig = true;
 			}
 		}
@@ -465,7 +444,7 @@ public class BuildSettings
 		if (!validConfig)
 			validationErrors.Add($"Invalid configuration: {Configuration}");
 
-		if (TasksToExecute.Contains("PublishPackages"))
+		/*if (TasksToExecute.Contains("PublishPackages"))
 		{
 			if (ShouldPublishToMyGet && string.IsNullOrEmpty(MyGetApiKey))
 				validationErrors.Add("MyGet ApiKey was not set.");
@@ -477,7 +456,7 @@ public class BuildSettings
 		{
 			if (string.IsNullOrEmpty(GitHubAccessToken))
 				validationErrors.Add("GitHub Access Token was not set.");		
-		}
+		}*/
 
 		if (validationErrors.Count > 0)
 		{
@@ -491,11 +470,11 @@ public class BuildSettings
 		}
 	}
 
-	public void DumpSettings()
+	public static void DumpSettings()
 	{
-		Console.WriteLine("\nTASKS");
-		Console.WriteLine("Target:                       " + Target);
-		Console.WriteLine("TasksToExecute:               " + string.Join(", ", TasksToExecute));
+		//Console.WriteLine("\nTASKS");
+		//Console.WriteLine("Target:                       " + Target);
+		//Console.WriteLine("TasksToExecute:               " + string.Join(", ", TasksToExecute));
 
 		Console.WriteLine("\nENVIRONMENT");
 		Console.WriteLine("IsLocalBuild:                 " + IsLocalBuild);
@@ -521,11 +500,12 @@ public class BuildSettings
 		Console.WriteLine("Package:        " + PackageDirectory);
 
 		Console.WriteLine("\nBUILD");
-		Console.WriteLine("Build With:      " + (UsingXBuild ? "XBuild" : "MSBuild"));
+		Console.WriteLine("Title:           " + Title);
+		Console.WriteLine("SolutionFile:    " + SolutionFile ?? "NULL");
 		Console.WriteLine("Configuration:   " + Configuration);
 		Console.WriteLine("Engine Runtimes: " + string.Join(", ", EngineRuntimes));
 		Console.WriteLine("Core Runtimes:   " + string.Join(", ", EngineCoreRuntimes));
-		Console.WriteLine("Agent Runtimes:  " + string.Join(", ", AgentRuntimes));
+		//Console.WriteLine("Agent Runtimes:  " + string.Join(", ", AgentRuntimes));
 
 		Console.WriteLine("\nPACKAGES");
 		foreach (PackageDefinition package in AllPackages)
@@ -554,17 +534,17 @@ public class BuildSettings
 			Console.WriteLine("  " + asset);
 	}
 
-    private string GetApiKey(string name, string fallback=null)
+    private static string GetApiKey(string name, string fallback=null)
     {
-        var apikey = SetupContext.EnvironmentVariable(name);
+        var apikey = Context.EnvironmentVariable(name);
 
         if (string.IsNullOrEmpty(apikey) && fallback != null)
-            apikey = SetupContext.EnvironmentVariable(fallback);
+            apikey = Context.EnvironmentVariable(fallback);
 
         return apikey;
     }
 
-	private string KeyAvailable(string name)
+	private static string KeyAvailable(string name)
 	{
 		return !string.IsNullOrEmpty(GetApiKey(name)) ? "AVAILABLE" : "NOT AVAILABLE";
 	}
