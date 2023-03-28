@@ -1,13 +1,3 @@
-#load "./versioning.cake"
-#load "./package-checks.cake"
-#load "./package-tests.cake"
-#load "./test-results.cake"
-#load "./test-reports.cake"
-#load "./package-definitions.cake"
-#load "./check-headers.cake"
-#load "./utilities.cake"
-#load "./local-targets.cake"
-
 // URLs for uploading packages
 private const string MYGET_PUSH_URL = "https://www.myget.org/F/testcentric/api/v2";
 private const string NUGET_PUSH_URL = "https://api.nuget.org/v3/index.json";

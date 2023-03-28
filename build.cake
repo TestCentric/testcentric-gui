@@ -18,6 +18,15 @@ const string TEST_BED_EXE = "test-bed.exe";
 
 // Load scripts after defining constants
 #load "./cake/build-settings.cake"
+#load "./cake/check-headers.cake"
+#load "./cake/local-targets.cake"
+#load "./cake/package-checks.cake"
+#load "./cake/package-definitions.cake"
+#load "./cake/package-tests.cake"
+#load "./cake/test-reports.cake"
+#load "./cake/test-results.cake"
+#load "./cake/utilities.cake"
+#load "./cake/versioning.cake"
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
