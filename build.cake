@@ -17,7 +17,7 @@ const string TEST_BED_EXE = "test-bed.exe";
 // Load scripts after defining constants
 #load "../TestCentric.Cake.Recipe/recipe/building.cake"
 #load "./cake/build-settings.cake"
-#load "./cake/check-headers.cake"
+#load "../TestCentric.Cake.Recipe/recipe/check-headers.cake"
 #load "../TestCentric.Cake.Recipe/recipe/constants.cake"
 #load "./cake/package-checks.cake"
 #load "./cake/package-definitions.cake"

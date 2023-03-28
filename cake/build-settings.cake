@@ -21,7 +21,10 @@ public static class BuildSettings
 		string solutionFile = null,
 		string unitTests = null,
 		string githubOwner = null,
-		string githubRepository = null)
+		string githubRepository = null,
+		string copyright = null,
+		string[] standardHeader = null,
+		string[] exemptFiles = null)
 	{
 		if (context == null)
 			throw new ArgumentNullException(nameof(context));
@@ -72,6 +75,16 @@ public static class BuildSettings
 
 		GitHubOwner = githubOwner;
 		GitHubRepository = githubRepository;
+
+		StandardHeader = standardHeader;
+		if (standardHeader == null)
+		{
+			StandardHeader = DEFAULT_STANDARD_HEADER;
+			// We can only replace copyright line in the default header
+			if (copyright != null)
+				StandardHeader[1] = "// " + copyright;
+		}
+		ExemptFiles = exemptFiles ?? new string[0];
 
 		MSBuildSettings = new MSBuildSettings {
 			Verbosity = Verbosity.Minimal,
@@ -403,6 +416,11 @@ public static class BuildSettings
 	//Testing
 	public static string UnitTests { get; set; }
 
+	// Checking 
+	public static string[] StandardHeader { get; private set; }
+	public static string[] ExemptFiles { get; private set; }
+
+	// Packaging
 	public static PackageDefinition EnginePackage { get; private set; }
 	public static PackageDefinition EngineCorePackage { get; private set; }
 	public static PackageDefinition EngineApiPackage { get; private set; }
