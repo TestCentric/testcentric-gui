@@ -27,7 +27,7 @@ const string TEST_BED_EXE = "test-bed.exe";
 #load "./cake/packaging.cake"
 #load "./cake/publishing.cake"
 #load "../TestCentric.Cake.Recipe/recipe/releasing.cake"
-#load "./cake/testing.cake"
+#load "../TestCentric.Cake.Recipe/recipe/testing.cake"
 #load "./cake/utilities.cake"
 #load "./cake/versioning.cake"
 
@@ -80,22 +80,49 @@ using System.Reflection;
 using System.Threading.Tasks;
 
 //////////////////////////////////////////////////////////////////////
-// SETUP AND TEARDOWN
+// INITIALIZE BUILD SETTINGS
 //////////////////////////////////////////////////////////////////////
 
 BuildSettings.Initialize(
 	Context,
 	"TestCentric.Engine",
-	"testcentric-engine.sln");
+	solutionFile: "testcentric-engine.sln",
+	unitTests: "engine-tests/**/*.tests.exe|engine-tests/**/*.tests.dll");
 
 if (BuildSystem.IsRunningOnAppVeyor)
 		AppVeyor.UpdateBuildVersion(BuildSettings.PackageVersion + "-" + AppVeyor.Environment.Build.Number);
 
 Information("Building {0} version {1} of TestCentric Engine.", BuildSettings.Configuration, BuildSettings.PackageVersion);
 
-// If we run target Test, we catch errors here in teardown.
-// If we run packaging, the CheckTestErrors Task is run instead.
-Teardown(context => CheckTestErrors(ref ErrorDetail));
+//////////////////////////////////////////////////////////////////////
+// RUN TESTS OF TESTCENTRIC.ENGINE SEPARATELY
+//////////////////////////////////////////////////////////////////////
+
+Task("TestEngine")
+	.Description("Tests the TestCentric Engine")
+	.IsDependentOn("Build")
+	.Does(() =>
+	{
+		foreach (var runtime in BuildSettings.EngineRuntimes)
+			RunNUnitLite("testcentric.engine.tests", runtime, $"{BuildSettings.OutputDirectory}engine-tests/{runtime}/");
+	});
+
+//////////////////////////////////////////////////////////////////////
+// RUN TESTS OF TESTCENTRIC.ENGINE.CORE SEPARATELY
+//////////////////////////////////////////////////////////////////////
+
+Task("TestEngineCore")
+	.Description("Tests the TestCentric Engine Core")
+	.IsDependentOn("Build")
+	.Does(() =>
+	{
+		foreach (var runtime in BuildSettings.EngineCoreRuntimes)
+		{
+			// Only .NET Standard we currently build is 2.0
+			var testUnder = runtime == "netstandard2.0" ? "netcoreapp2.1" : runtime;
+			RunNUnitLite("testcentric.engine.core.tests", testUnder, $"{BuildSettings.OutputDirectory}engine-tests/{testUnder}/");
+		}
+	});
 
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
@@ -112,17 +139,11 @@ Task("PackageExistingBuild")
 	.IsDependentOn("PackageEngineCore")
 	.IsDependentOn("PackageEngineApi");
 
-Task("Test")
-	.Description("Builds and tests engine core and  engine")
-	.IsDependentOn("TestEngineCore")
-	.IsDependentOn("TestEngine");
-
 Task("AppVeyor")
 	.Description("Targets to run on AppVeyor")
 	.IsDependentOn("DumpSettings")
 	.IsDependentOn("Build")
 	.IsDependentOn("Test")
-	.IsDependentOn("CheckTestErrors")
 	.IsDependentOn("Package")
 	.IsDependentOn("PublishPackages")
 	.IsDependentOn("CreateDraftRelease")
@@ -138,7 +159,6 @@ Task("BuildTestAndPackage")
 	.IsDependentOn("DumpSettings")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
-	.IsDependentOn("CheckTestErrors")
     .IsDependentOn("Package");
 
 Task("Default")

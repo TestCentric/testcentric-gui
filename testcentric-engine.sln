@@ -58,7 +58,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cake", "cake", "{6C9280F6-6
 		cake\test-reports.cake = cake\test-reports.cake
 		cake\test-results.cake = cake\test-results.cake
 		cake\testcentric-gui.cake = cake\testcentric-gui.cake
-		cake\testing.cake = cake\testing.cake
 		cake\utilities.cake = cake\utilities.cake
 		cake\versioning.cake = cake\versioning.cake
 	EndProjectSection

@@ -19,6 +19,7 @@ public static class BuildSettings
 		string title,
 		// Optional parameters
 		string solutionFile = null,
+		string unitTests = null,
 		string githubOwner = null,
 		string githubRepository = null)
 	{
@@ -38,6 +39,7 @@ public static class BuildSettings
 			if (System.IO.File.Exists(sln))
 				SolutionFile = sln;
 		}
+		UnitTests = unitTests;
 
 		//Target = SetupContext.TargetTask.Name;
 		//TasksToExecute = SetupContext.TasksToExecute.Select(t => t.Name);
@@ -397,6 +399,9 @@ public static class BuildSettings
 	// Files
 	public static string Title { get; private set; }
 	public static string SolutionFile { get; private set; }
+
+	//Testing
+	public static string UnitTests { get; set; }
 
 	public static PackageDefinition EnginePackage { get; private set; }
 	public static PackageDefinition EngineCorePackage { get; private set; }
