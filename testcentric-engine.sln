@@ -49,7 +49,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cake", "cake", "{6C9280F6-6
 		cake\build-settings.cake = cake\build-settings.cake
 		cake\building.cake = cake\building.cake
 		cake\check-headers.cake = cake\check-headers.cake
-		cake\constants.cake = cake\constants.cake
 		cake\local-targets.cake = cake\local-targets.cake
 		cake\package-checks.cake = cake\package-checks.cake
 		cake\package-definitions.cake = cake\package-definitions.cake

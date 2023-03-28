@@ -7,7 +7,6 @@ const string GITHUB_OWNER = "testcentric";
 const string GITHUB_REPO = "testcentric-engine";
 
 const string DEFAULT_VERSION = "2.0.0";
-const string DEFAULT_CONFIGURATION = "Release";
 static readonly string[] VALID_CONFIGS = { "Release", "Debug" };
 
 const string ENGINE_PACKAGE_ID = "TestCentric.Engine";
@@ -20,6 +19,7 @@ const string TEST_BED_EXE = "test-bed.exe";
 #load "./cake/building.cake"
 #load "./cake/build-settings.cake"
 #load "./cake/check-headers.cake"
+#load "../TestCentric.Cake.Recipe/recipe/constants.cake"
 #load "./cake/local-targets.cake"
 #load "./cake/package-checks.cake"
 #load "./cake/package-definitions.cake"
