@@ -352,7 +352,7 @@ public static class BuildSettings
 				HasDirectory("lib/netstandard2.0").WithFiles("testcentric.engine.api.dll", "testcentric.engine.api.pdb")
 			});
 
-		AllPackages = new List<PackageDefinition>(new [] {
+		Packages = new List<PackageDefinition>(new [] {
 			EnginePackage,
 			EngineCorePackage,
 			EngineApiPackage
@@ -424,7 +424,7 @@ public static class BuildSettings
 	public static PackageDefinition EnginePackage { get; private set; }
 	public static PackageDefinition EngineCorePackage { get; private set; }
 	public static PackageDefinition EngineApiPackage { get; private set; }
-	public static List<PackageDefinition> AllPackages { get; private set; }
+	public static List<PackageDefinition> Packages { get; private set; }
 
 	public static string[] GitHubReleaseAssets => Context.IsRunningOnWindows()
 		? new [] { EnginePackage.PackageFilePath, EngineCorePackage.PackageFilePath, EngineApiPackage.PackageFilePath }
@@ -538,7 +538,7 @@ public static class BuildSettings
 		//Console.WriteLine("Agent Runtimes:  " + string.Join(", ", AgentRuntimes));
 
 		Console.WriteLine("\nPACKAGES");
-		foreach (PackageDefinition package in AllPackages)
+		foreach (PackageDefinition package in Packages)
 		{
 			Console.WriteLine($"{package.PackageId}");
 			Console.WriteLine($"  FileName: {package.PackageFileName}");

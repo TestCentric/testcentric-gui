@@ -22,7 +22,7 @@ const string TEST_BED_EXE = "test-bed.exe";
 #load "../TestCentric.Cake.Recipe/recipe/package-checks.cake"
 #load "./cake/package-definitions.cake"
 #load "./cake/package-tests.cake"
-#load "./cake/packaging.cake"
+#load "../TestCentric.Cake.Recipe/recipe/packaging.cake"
 #load "./cake/publishing.cake"
 #load "../TestCentric.Cake.Recipe/recipe/releasing.cake"
 #load "../TestCentric.Cake.Recipe/recipe/testing.cake"
@@ -125,19 +125,33 @@ Task("TestEngineCore")
 	});
 
 //////////////////////////////////////////////////////////////////////
-// TASK TARGETS
+// BUILD, VERIFY AND TEST INDIVIDUAL PACKAGES
 //////////////////////////////////////////////////////////////////////
 
-Task("Package")
-	.Description("Build and package all components")
-	.IsDependentOn("Build")
-	.IsDependentOn("PackageExistingBuild");
+Task("PackageEngine")
+	.Description("Build and Test the Engine Package")
+	.Does(() =>
+	{
+		BuildSettings.EnginePackage.BuildVerifyAndTest();
+	});
 
-Task("PackageExistingBuild")
-	.Description("Package all components using existing build")
-	.IsDependentOn("PackageEngine")
-	.IsDependentOn("PackageEngineCore")
-	.IsDependentOn("PackageEngineApi");
+Task("PackageEngineCore")
+	.Description("Build and Test the Engine Core Package")
+	.Does(() =>
+	{
+		BuildSettings.EngineCorePackage.BuildVerifyAndTest();
+	});
+
+Task("PackageEngineApi")
+	.Description("Build and Test the Engine Api Package")
+	.Does(() =>
+	{
+		BuildSettings.EngineApiPackage.BuildVerifyAndTest();
+	});
+
+//////////////////////////////////////////////////////////////////////
+// TASK TARGETS
+//////////////////////////////////////////////////////////////////////
 
 Task("AppVeyor")
 	.Description("Targets to run on AppVeyor")
