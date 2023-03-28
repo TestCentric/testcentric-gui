@@ -18,7 +18,9 @@ public static class BuildSettings
 		ICakeContext context,
 		string title,
 		// Optional parameters
-		string solutionFile = null)
+		string solutionFile = null,
+		string githubOwner = null,
+		string githubRepository = null)
 	{
 		if (context == null)
 			throw new ArgumentNullException(nameof(context));
@@ -65,6 +67,9 @@ public static class BuildSettings
 				PackageTestLevel = 1;
 				break;
 		}
+
+		GitHubOwner = githubOwner;
+		GitHubRepository = githubRepository;
 
 		MSBuildSettings = new MSBuildSettings {
 			Verbosity = Verbosity.Minimal,
@@ -411,6 +416,8 @@ public static class BuildSettings
 	public static string NuGetApiKey => Context.EnvironmentVariable(NUGET_API_KEY);
 
 	// Publishing - GetHub
+	public static string GitHubOwner { get; set; }
+	public static string GitHubRepository { get; set; }
 	public static string GitHubAccessToken => Context.EnvironmentVariable(GITHUB_ACCESS_TOKEN);
 
 	public static bool IsPreRelease => BuildVersion.IsPreRelease;

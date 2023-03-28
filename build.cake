@@ -15,11 +15,10 @@ const string ENGINE_API_PACKAGE_ID = "TestCentric.Engine.Api";
 const string TEST_BED_EXE = "test-bed.exe";
 
 // Load scripts after defining constants
-#load "./cake/building.cake"
+#load "../TestCentric.Cake.Recipe/recipe/building.cake"
 #load "./cake/build-settings.cake"
 #load "./cake/check-headers.cake"
 #load "../TestCentric.Cake.Recipe/recipe/constants.cake"
-#load "./cake/local-targets.cake"
 #load "./cake/package-checks.cake"
 #load "./cake/package-definitions.cake"
 #load "./cake/package-tests.cake"
@@ -27,7 +26,7 @@ const string TEST_BED_EXE = "test-bed.exe";
 #load "./cake/test-results.cake"
 #load "./cake/packaging.cake"
 #load "./cake/publishing.cake"
-#load "./cake/releasing.cake"
+#load "../TestCentric.Cake.Recipe/recipe/releasing.cake"
 #load "./cake/testing.cake"
 #load "./cake/utilities.cake"
 #load "./cake/versioning.cake"
