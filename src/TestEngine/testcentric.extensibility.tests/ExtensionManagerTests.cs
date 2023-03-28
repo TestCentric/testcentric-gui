@@ -1,5 +1,5 @@
 // ***********************************************************************
-// Copyright (c) Charlie Poole and TestCentric GUI contributors.
+// Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
@@ -25,7 +25,7 @@ namespace TestCentric.Extensibility
             "/NUnit/Engine/TypeExtensions/ITestEventListener",
             "/NUnit/Engine/TypeExtensions/IDriverFactory",
             "/NUnit/Engine/TypeExtensions/IService",
-            "/NUnit/Engine/NUnitV2Driver"
+            //"/NUnit/Engine/NUnitV2Driver"
         };
 
         private static readonly Type[] KnownExtensionPointTypes = {
@@ -34,7 +34,7 @@ namespace TestCentric.Extensibility
             typeof(ITestEventListener),
             typeof(IDriverFactory),
             typeof(IService),
-            typeof(IFrameworkDriver)
+            //typeof(IFrameworkDriver)
         };
 
         private static readonly int[] KnownExtensionPointCounts = { 1, 1, 2, 0, 1, 2 };

@@ -1,5 +1,5 @@
 // ***********************************************************************
-// Copyright (c) Charlie Poole and TestCentric GUI contributors.
+// Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
@@ -56,7 +56,7 @@ namespace TestCentric.Extensibility
             var framework = _ea.FrameworkName;
             Assert.That(_ea.FrameworkName.Identifier, Is.EqualTo(".NETFramework"));
 #if NET20 || NET35
-            Assert.That(_ea.FrameworkName.Version, Is.EqualTo(new Version(2, 0, 0)));
+            Assert.That(_ea.FrameworkName.Version, Is.EqualTo(new Version(2, 0)));
 #else
             Assert.That(_ea.FrameworkName.Version, Is.EqualTo(new Version(4, 6, 2)));
 #endif
