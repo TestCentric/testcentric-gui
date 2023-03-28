@@ -46,14 +46,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{23ED18B0
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cake", "cake", "{6C9280F6-6159-4E15-BDC6-F24A3A94F721}"
 	ProjectSection(SolutionItems) = preProject
-		cake\check-headers.cake = cake\check-headers.cake
 		cake\build-settings.cake = cake\build-settings.cake
+		cake\building.cake = cake\building.cake
+		cake\check-headers.cake = cake\check-headers.cake
+		cake\constants.cake = cake\constants.cake
 		cake\local-targets.cake = cake\local-targets.cake
 		cake\package-checks.cake = cake\package-checks.cake
 		cake\package-definitions.cake = cake\package-definitions.cake
 		cake\package-tests.cake = cake\package-tests.cake
+		cake\packaging.cake = cake\packaging.cake
+		cake\publishing.cake = cake\publishing.cake
+		cake\releasing.cake = cake\releasing.cake
 		cake\test-reports.cake = cake\test-reports.cake
 		cake\test-results.cake = cake\test-results.cake
+		cake\testcentric-gui.cake = cake\testcentric-gui.cake
+		cake\testing.cake = cake\testing.cake
 		cake\utilities.cake = cake\utilities.cake
 		cake\versioning.cake = cake\versioning.cake
 	EndProjectSection
@@ -72,6 +79,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{4ED698DF
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestBed", "TestBed", "{13AD1B51-4961-4ED5-8D22-6BF50F2EBECF}"
+	ProjectSection(SolutionItems) = preProject
+		src\TestBed\test-bed.addins = src\TestBed\test-bed.addins
+		src\TestBed\TestProject.nunit = src\TestBed\TestProject.nunit
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "test-engine-test-bed", "src\TestBed\test-engine-test-bed.csproj", "{CD4C6A60-FA53-42A0-97D5-A0415FB19128}"
 EndProject
