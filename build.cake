@@ -26,7 +26,7 @@ const string TEST_BED_EXE = "test-bed.exe";
 #load "../TestCentric.Cake.Recipe/recipe/publishing.cake"
 #load "../TestCentric.Cake.Recipe/recipe/releasing.cake"
 #load "../TestCentric.Cake.Recipe/recipe/testing.cake"
-#load "./cake/test-reports.cake"
+#load "../TestCentric.Cake.Recipe/recipe/test-reports.cake"
 #load "../TestCentric.Cake.Recipe/recipe/test-results.cake"
 #load "../TestCentric.Cake.Recipe/recipe/utilities.cake"
 #load "./cake/versioning.cake"
