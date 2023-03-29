@@ -20,6 +20,7 @@ public enum PackageType
 public abstract class PackageDefinition
 {
     protected ICakeContext _context;
+    private PackageType _packageType;
 
     /// <summary>
     /// Constructor
@@ -47,8 +48,8 @@ public abstract class PackageDefinition
             throw new System.ArgumentException($"Unable to create {packageType} package {id}: Executable must be provided if there are tests", nameof(executable));
 
         _context = BuildSettings.Context;
+        _packageType = packageType;
 
-        PackageType = packageType;
         PackageId = id;
         PackageVersion = BuildSettings.PackageVersion;
         PackageSource = source;
@@ -59,7 +60,6 @@ public abstract class PackageDefinition
         SymbolChecks = symbols;
     }
 
-    public PackageType PackageType { get; }
 	public string PackageId { get; protected set; }
     public string PackageVersion { get; protected set; }
 	public string PackageSource { get; protected set; }
@@ -72,6 +72,9 @@ public abstract class PackageDefinition
     public bool HasChecks => PackageChecks != null;
     public bool HasSymbols => SymbolChecks != null;
     public virtual string SymbolPackageName => throw new System.NotImplementedException($"Symbols are not available for this type of package.");
+
+    public bool IsNuGetPackage => _packageType == PackageType.NuGet;
+	public bool IsChocolateyPackage => _packageType == PackageType.Chocolatey;
 
     public abstract string PackageFileName { get; }
     public abstract string PackageInstallDirectory { get; }

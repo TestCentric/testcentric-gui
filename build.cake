@@ -23,7 +23,7 @@ const string TEST_BED_EXE = "test-bed.exe";
 #load "./cake/package-definitions.cake"
 #load "./cake/package-tests.cake"
 #load "../TestCentric.Cake.Recipe/recipe/packaging.cake"
-#load "./cake/publishing.cake"
+#load "../TestCentric.Cake.Recipe/recipe/publishing.cake"
 #load "../TestCentric.Cake.Recipe/recipe/releasing.cake"
 #load "../TestCentric.Cake.Recipe/recipe/testing.cake"
 #load "./cake/test-reports.cake"
@@ -159,7 +159,7 @@ Task("AppVeyor")
 	.IsDependentOn("Build")
 	.IsDependentOn("Test")
 	.IsDependentOn("Package")
-	.IsDependentOn("PublishPackages")
+	.IsDependentOn("Publish")
 	.IsDependentOn("CreateDraftRelease")
 	.IsDependentOn("CreateProductionRelease");
 

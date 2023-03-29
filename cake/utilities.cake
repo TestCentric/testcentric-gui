@@ -10,16 +10,3 @@ static void DisplayBanner(string message)
     Console.WriteLine(message);
     Console.WriteLine(bar);
 }
-
-private void PushNuGetPackage(FilePath package, string apiKey, string url)
-{
-	CheckPackageExists(package);
-	NuGetPush(package, new NuGetPushSettings() { ApiKey = apiKey, Source = url });
-}
-
-private void CheckPackageExists(FilePath package)
-{
-	if (!FileExists(package))
-		throw new InvalidOperationException(
-			$"Package not found: {package.GetFilename()}.\nCode may have changed since package was last built.");
-}

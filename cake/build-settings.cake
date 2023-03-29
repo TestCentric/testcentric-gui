@@ -438,6 +438,10 @@ public static class BuildSettings
 	public static string NuGetPushUrl => NUGET_PUSH_URL;	
 	public static string NuGetApiKey => Context.EnvironmentVariable(NUGET_API_KEY);
 
+	// Publishing - Chocolatey
+	public static string ChocolateyPushUrl => CHOCO_PUSH_URL;	
+	public static string ChocolateyApiKey => Context.EnvironmentVariable(CHOCO_API_KEY);
+
 	// Publishing - GetHub
 	public static string GitHubOwner { get; set; }
 	public static string GitHubRepository { get; set; }
@@ -448,6 +452,8 @@ public static class BuildSettings
 		!IsPreRelease || LABELS_WE_PUBLISH_ON_MYGET.Contains(BuildVersion.PreReleaseLabel);
 	public static bool ShouldPublishToNuGet =>
 		!IsPreRelease || LABELS_WE_PUBLISH_ON_NUGET.Contains(BuildVersion.PreReleaseLabel);
+	public static bool ShouldPublishToChocolatey =>
+		!IsPreRelease || LABELS_WE_PUBLISH_ON_CHOCOLATEY.Contains(BuildVersion.PreReleaseLabel);
 	public static bool IsProductionRelease =>
 		!IsPreRelease || LABELS_WE_RELEASE_ON_GITHUB.Contains(BuildVersion.PreReleaseLabel);
 	
