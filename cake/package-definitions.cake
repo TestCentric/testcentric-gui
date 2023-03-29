@@ -226,13 +226,15 @@ public abstract class PackageDefinition
 
     private void CheckExtensionIsInstalled(ExtensionSpecifier extension)
     {
-        bool alreadyInstalled = _context.GetDirectories($"{ExtensionInstallDirectory}{extension.Id}.*").Count > 0;
+        string extensionId = _packageType == PackageType.Chocolatey ? extension.ChocoId : extension.NuGetId;
+
+        bool alreadyInstalled = _context.GetDirectories($"{ExtensionInstallDirectory}{extensionId}.*").Count > 0;
 
         if (!alreadyInstalled)
         {
-            DisplayBanner($"Installing {extension.Id} version {extension.Version}");
+            DisplayBanner($"Installing {extensionId} version {extension.Version}");
 
-            _context.NuGetInstall(extension.Id,
+            _context.NuGetInstall(extensionId,
                 new NuGetInstallSettings()
                 {
                     OutputDirectory = ExtensionInstallDirectory,
