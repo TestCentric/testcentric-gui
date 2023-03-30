@@ -20,11 +20,12 @@ const string TEST_BED_EXE = "test-bed.exe";
 #load "../TestCentric.Cake.Recipe/recipe/check-headers.cake"
 #load "../TestCentric.Cake.Recipe/recipe/constants.cake"
 #load "../TestCentric.Cake.Recipe/recipe/package-checks.cake"
-#load "./cake/package-definitions.cake"
+#load "../TestCentric.Cake.Recipe/recipe/package-definition.cake"
 #load "../TestCentric.Cake.Recipe/recipe/package-tests.cake"
 #load "../TestCentric.Cake.Recipe/recipe/packaging.cake"
 #load "../TestCentric.Cake.Recipe/recipe/publishing.cake"
 #load "../TestCentric.Cake.Recipe/recipe/releasing.cake"
+#load "../TestCentric.Cake.Recipe/recipe/testcentric-gui.cake"
 #load "../TestCentric.Cake.Recipe/recipe/testing.cake"
 #load "../TestCentric.Cake.Recipe/recipe/test-reports.cake"
 #load "../TestCentric.Cake.Recipe/recipe/test-results.cake"
@@ -307,11 +308,11 @@ if (BuildSettings.IsLocalBuild && Context.FileExists(BuildSettings.OutputDirecto
 // DEFINE PACKAGES
 //////////////////////////////////////////////////////////////////////
 
-var EnginePackage = new NuGetPackageDefinition(
+var EnginePackage = new NuGetPackage(
 	id: "TestCentric.Engine",
 	source: BuildSettings.NuGetDirectory + "TestCentric.Engine.nuspec",
 	basePath: BuildSettings.OutputDirectory,
-	executable: "tools/test-bed.exe",
+	testRunner: new TestCentricEngineTestBed(),
 	checks: new PackageCheck[] {
 		HasFiles("LICENSE.txt", "testcentric.png"),
 		HasDirectory("tools").WithFiles(
@@ -347,7 +348,7 @@ var EnginePackage = new NuGetPackageDefinition(
 	},
 	tests: packageTests);
 
-var EngineCorePackage = new NuGetPackageDefinition(
+var EngineCorePackage = new NuGetPackage(
 	id: "TestCentric.Engine.Core",
 	source: BuildSettings.NuGetDirectory + "TestCentric.Engine.Core.nuspec",
 	basePath: BuildSettings.ProjectDirectory,
@@ -368,7 +369,7 @@ var EngineCorePackage = new NuGetPackageDefinition(
 			"Microsoft.Extensions.DependencyModel.dll")
 	});
 
-var EngineApiPackage = new NuGetPackageDefinition(
+var EngineApiPackage = new NuGetPackage(
 	id: "TestCentric.Engine.Api",
 	source: BuildSettings.NuGetDirectory + "TestCentric.Engine.Api.nuspec",
 	basePath: BuildSettings.ProjectDirectory,
