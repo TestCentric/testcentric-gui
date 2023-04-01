@@ -2,35 +2,13 @@
 #tool nuget:?package=GitVersion.CommandLine&version=5.6.3
 #tool nuget:?package=GitReleaseManager&version=0.12.1
 
-const string GITHUB_OWNER = "testcentric";
-const string GITHUB_REPO = "testcentric-engine";
-
-const string DEFAULT_VERSION = "2.0.0";
-static readonly string[] VALID_CONFIGS = { "Release", "Debug" };
-
 const string ENGINE_PACKAGE_ID = "TestCentric.Engine";
 const string ENGINE_CORE_PACKAGE_ID = "TestCentric.Engine.Core";
 const string ENGINE_API_PACKAGE_ID = "TestCentric.Engine.Api";
 
 const string TEST_BED_EXE = "test-bed.exe";
 
-// Load scripts after defining constants
-#load "../TestCentric.Cake.Recipe/recipe/building.cake"
-#load "../TestCentric.Cake.Recipe/recipe/build-settings.cake"
-#load "../TestCentric.Cake.Recipe/recipe/check-headers.cake"
-#load "../TestCentric.Cake.Recipe/recipe/constants.cake"
-#load "../TestCentric.Cake.Recipe/recipe/package-checks.cake"
-#load "../TestCentric.Cake.Recipe/recipe/package-definition.cake"
-#load "../TestCentric.Cake.Recipe/recipe/package-tests.cake"
-#load "../TestCentric.Cake.Recipe/recipe/packaging.cake"
-#load "../TestCentric.Cake.Recipe/recipe/publishing.cake"
-#load "../TestCentric.Cake.Recipe/recipe/releasing.cake"
-#load "../TestCentric.Cake.Recipe/recipe/testcentric-gui.cake"
-#load "../TestCentric.Cake.Recipe/recipe/testing.cake"
-#load "../TestCentric.Cake.Recipe/recipe/test-reports.cake"
-#load "../TestCentric.Cake.Recipe/recipe/test-results.cake"
-#load "../TestCentric.Cake.Recipe/recipe/utilities.cake"
-#load "../TestCentric.Cake.Recipe/recipe/versioning.cake"
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.0-dev00033
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -383,6 +361,27 @@ BuildSettings.Packages.AddRange(new [] {
 	EngineCorePackage,
 	EngineApiPackage
 });
+
+//////////////////////////////////////////////////////////////////////
+// TEST BED RUNNER
+//////////////////////////////////////////////////////////////////////
+
+public class TestCentricEngineTestBed : TestRunner
+{
+	public TestCentricEngineTestBed()
+	{
+		ExecutablePath = BuildSettings.NuGetTestDirectory + "TestCentric.Engine/tools/test-bed.exe";
+	}
+
+	public override int Run(string arguments)
+	{
+		return _context.StartProcess(ExecutablePath, new ProcessSettings()
+		{
+			Arguments = arguments,
+			WorkingDirectory = BuildSettings.OutputDirectory
+		});
+	}
+}
 
 //////////////////////////////////////////////////////////////////////
 // RUN TESTS OF TESTCENTRIC.ENGINE SEPARATELY
