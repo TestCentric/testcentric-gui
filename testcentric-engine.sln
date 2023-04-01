@@ -44,20 +44,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{23ED18B0
 		nuget\testcentric.nuget.addins = nuget\testcentric.nuget.addins
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cake", "cake", "{6C9280F6-6159-4E15-BDC6-F24A3A94F721}"
-	ProjectSection(SolutionItems) = preProject
-		cake\check-headers.cake = cake\check-headers.cake
-		cake\build-settings.cake = cake\build-settings.cake
-		cake\local-targets.cake = cake\local-targets.cake
-		cake\package-checks.cake = cake\package-checks.cake
-		cake\package-definitions.cake = cake\package-definitions.cake
-		cake\package-tests.cake = cake\package-tests.cake
-		cake\test-reports.cake = cake\test-reports.cake
-		cake\test-results.cake = cake\test-results.cake
-		cake\utilities.cake = cake\utilities.cake
-		cake\versioning.cake = cake\versioning.cake
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Agents", "Agents", "{804797D1-A019-4846-9295-F2F409434B43}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testcentric-agent", "src\TestEngine\Agents\testcentric-agent\testcentric-agent.csproj", "{68DC97D4-3B2D-46FA-B6F9-A9A052C2EBA7}"
@@ -72,6 +58,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{4ED698DF
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestBed", "TestBed", "{13AD1B51-4961-4ED5-8D22-6BF50F2EBECF}"
+	ProjectSection(SolutionItems) = preProject
+		src\TestBed\test-bed.addins = src\TestBed\test-bed.addins
+		src\TestBed\TestProject.nunit = src\TestBed\TestProject.nunit
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "test-engine-test-bed", "src\TestBed\test-engine-test-bed.csproj", "{CD4C6A60-FA53-42A0-97D5-A0415FB19128}"
 EndProject
@@ -169,7 +159,6 @@ Global
 		{6C0D9A1D-6BC5-4830-82C5-FCC3502776C4} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
 		{5952A5E6-0F93-4A63-A1E4-62EDC47CF9E7} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
 		{23ED18B0-608C-4CB5-A70E-CB95C8B0231C} = {A65042E1-D8BC-48DD-8DE1-F0991F07EA77}
-		{6C9280F6-6159-4E15-BDC6-F24A3A94F721} = {A65042E1-D8BC-48DD-8DE1-F0991F07EA77}
 		{804797D1-A019-4846-9295-F2F409434B43} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
 		{68DC97D4-3B2D-46FA-B6F9-A9A052C2EBA7} = {804797D1-A019-4846-9295-F2F409434B43}
 		{93069114-A4EB-4ED6-A65D-CD0718A5171F} = {804797D1-A019-4846-9295-F2F409434B43}

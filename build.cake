@@ -2,22 +2,13 @@
 #tool nuget:?package=GitVersion.CommandLine&version=5.6.3
 #tool nuget:?package=GitReleaseManager&version=0.12.1
 
-const string SOLUTION = "testcentric-engine.sln";
-const string GITHUB_OWNER = "testcentric";
-const string GITHUB_REPO = "testcentric-engine";
-
-const string DEFAULT_VERSION = "2.0.0";
-const string DEFAULT_CONFIGURATION = "Release";
-static readonly string[] VALID_CONFIGS = { "Release", "Debug" };
-
 const string ENGINE_PACKAGE_ID = "TestCentric.Engine";
 const string ENGINE_CORE_PACKAGE_ID = "TestCentric.Engine.Core";
 const string ENGINE_API_PACKAGE_ID = "TestCentric.Engine.Api";
 
 const string TEST_BED_EXE = "test-bed.exe";
 
-// Load scripts after defining constants
-#load "./cake/build-settings.cake"
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.0-dev00033
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -68,317 +59,390 @@ using System.Reflection;
 using System.Threading.Tasks;
 
 //////////////////////////////////////////////////////////////////////
-// SETUP AND TEARDOWN
+// INITIALIZE BUILD SETTINGS
 //////////////////////////////////////////////////////////////////////
 
-Setup<BuildSettings>((context) =>
+BuildSettings.Initialize(
+	Context,
+	"TestCentric.Engine",
+	solutionFile: "testcentric-engine.sln",
+	unitTests: "engine-tests/**/*.tests.exe|engine-tests/**/*.tests.dll");
+
+if (BuildSystem.IsRunningOnAppVeyor)
+		AppVeyor.UpdateBuildVersion(BuildSettings.PackageVersion + "-" + AppVeyor.Environment.Build.Number);
+
+Information("Building {0} version {1} of TestCentric Engine.", BuildSettings.Configuration, BuildSettings.PackageVersion);
+
+//////////////////////////////////////////////////////////////////////
+// DEFINE PACKAGE TESTS
+//////////////////////////////////////////////////////////////////////
+
+//   Level 1 tests are run each time we build the packages
+//   Level 2 tests are run for PRs and when packages will be published
+//   Level 3 tests are run only when publishing a release
+
+var packageTests = new List<PackageTest>();
+
+// Tests of single assemblies targeting each runtime we support
+
+packageTests.Add(new PackageTest(1, "Net462Test", "Run mock-assembly.dll targeting .NET 4.6.2",
+    "engine-tests/net462/mock-assembly.dll",
+    MockAssemblyExpectedResult("Net462AgentLauncher")));
+
+packageTests.Add(new PackageTest(1, "Net35Test", "Run mock-assembly.dll targeting .NET 3.5",
+    "engine-tests/net35/mock-assembly.dll",
+    MockAssemblyExpectedResult("Net462AgentLauncher")));
+
+packageTests.Add(new PackageTest(1, "NetCore21Test", "Run mock-assembly.dll targeting .NET Core 2.1",
+    "engine-tests/netcoreapp2.1/mock-assembly.dll",
+    MockAssemblyExpectedResult("NetCore31AgentLauncher")));
+
+packageTests.Add(new PackageTest(1, "NetCore31Test", "Run mock-assembly.dll targeting .NET Core 3.1",
+    "engine-tests/netcoreapp3.1/mock-assembly.dll",
+    MockAssemblyExpectedResult("NetCore31AgentLauncher")));
+
+packageTests.Add(new PackageTest(1, "NetCore11Test", "Run mock-assembly.dll targeting .NET Core 1.1",
+    "engine-tests/netcoreapp1.1/mock-assembly.dll",
+    MockAssemblyExpectedResult("NetCore31AgentLauncher")));
+
+packageTests.Add(new PackageTest(1, "Net50Test", "Run mock-assembly.dll targeting .NET 5.0",
+    "engine-tests/net5.0/mock-assembly.dll",
+    MockAssemblyExpectedResult("Net50AgentLauncher")));
+
+packageTests.Add(new PackageTest(1, "Net60Test", "Run mock-assembly.dll targeting .NET 6.0",
+    "engine-tests/net6.0/mock-assembly.dll",
+    MockAssemblyExpectedResult("Net60AgentLauncher")));
+
+packageTests.Add(new PackageTest(1, "Net70Test", "Run mock-assembly.dll targeting .NET 7.0",
+    "engine-tests/net7.0/mock-assembly.dll",
+    MockAssemblyExpectedResult("Net70AgentLauncher")));
+
+static ExpectedResult MockAssemblyExpectedResult(params string[] agentNames)
 {
-	var settings = BuildSettings.CreateInstance(context);
+    int ncopies = agentNames.Length;
 
-	if (BuildSystem.IsRunningOnAppVeyor)
-			AppVeyor.UpdateBuildVersion(settings.PackageVersion + "-" + AppVeyor.Environment.Build.Number);
+    var assemblies = new ExpectedAssemblyResult[ncopies];
+    for (int i = 0; i < ncopies; i++)
+        assemblies[i] = new ExpectedAssemblyResult("mock-assembly.dll", agentNames[i]);
 
-    Information("Building {0} version {1} of TestCentric Engine.", settings.Configuration, settings.PackageVersion);
+    return new ExpectedResult("Failed")
+    {
+        Total = 36 * ncopies,
+        Passed = 23 * ncopies,
+        Failed = 5 * ncopies,
+        Warnings = 1 * ncopies,
+        Inconclusive = 1 * ncopies,
+        Skipped = 7 * ncopies,
+        Assemblies = assemblies
+    };
+}
 
-	return settings;
+// AspNetCore Tests
+
+packageTests.Add(new PackageTest(1, "AspNetCore31Test", "Run test using AspNetCore under .NET Core 3.1",
+    "engine-tests/netcoreapp3.1/aspnetcore-test.dll",
+    new ExpectedResult("Passed")
+    {
+        Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "NetCore31AgentLauncher") }
+    }));
+
+packageTests.Add(new PackageTest(1, "AspNetCore50Test", "Run test using AspNetCore under .NET 5.0",
+    "engine-tests/net5.0/aspnetcore-test.dll",
+    new ExpectedResult("Passed")
+    {
+        Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net50AgentLauncher") }
+    }));
+
+packageTests.Add(new PackageTest(1, "AspNetCore60Test", "Run test using AspNetCore under .NET 6.0",
+    "engine-tests/net6.0/aspnetcore-test.dll",
+    new ExpectedResult("Passed")
+    {
+        Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net60AgentLauncher") }
+    }));
+
+// TODO: AspNetCore test won't run on AppVeyor under .NET 7.0 - we don't yet know why
+if (!BuildSettings.IsRunningOnAppVeyor)
+    packageTests.Add(new PackageTest(1, "AspNetCore70Test", "Run test using AspNetCore under .NET 7.0",
+        "engine-tests/net7.0/aspnetcore-test.dll",
+        new ExpectedResult("Passed")
+        {
+            Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net70AgentLauncher") }
+        }));
+
+// Windows Forms Tests
+
+// TODO: Windows Forms tests won't run on AppVeyor under .NET 5.0 or 7.0, we don't yet know why
+if (!BuildSettings.IsRunningOnAppVeyor)
+    packageTests.Add(new PackageTest(1, "Net50WindowsFormsTest", "Run test using windows forms under .NET 5.0",
+        "engine-tests/net5.0-windows/windows-forms-test.dll",
+        new ExpectedResult("Passed")
+        {
+            Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net50AgentLauncher") }
+        }));
+
+packageTests.Add(new PackageTest(1, "Net60WindowsFormsTest", "Run test using windows forms under .NET 6.0",
+    "engine-tests/net6.0-windows/windows-forms-test.dll",
+    new ExpectedResult("Passed")
+    {
+        Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net60AgentLauncher") }
+    }));
+
+// TODO: Windows Forms tests won't run on AppVeyor under .NET 5.0 or 7.0, we don't yet know why
+if (!BuildSettings.IsRunningOnAppVeyor)
+    packageTests.Add(new PackageTest(1, "Net70WindowsFormsTest", "Run test using windows forms under .NET 7.0",
+        "engine-tests/net7.0-windows/windows-forms-test.dll",
+        new ExpectedResult("Passed")
+        {
+            Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net70AgentLauncher") }
+        }));
+
+// Multiple Assembly Tests
+
+packageTests.Add(new PackageTest(1, "Net35PlusNetCore21Test", "Run different builds of mock-assembly.dll together",
+    "engine-tests/net35/mock-assembly.dll engine-tests/netcoreapp2.1/mock-assembly.dll",
+    MockAssemblyExpectedResult("Net462AgentLauncher", "NetCore31AgentLauncher")));
+
+// TODO: Use --config option when it's supported by the extension.
+// Current test relies on the fact that the Release config appears
+// first in the project file.
+if (BuildSettings.Configuration == "Release")
+{
+    packageTests.Add(new PackageTest(1, "NUnitProjectTest", "Run an NUnit project",
+        "TestProject.nunit",
+        new ExpectedResult("Failed")
+        {
+            Assemblies = new[] {
+                            new ExpectedAssemblyResult("mock-assembly.dll", "Net462AgentLauncher"),
+                            new ExpectedAssemblyResult("mock-assembly.dll", "Net462AgentLauncher"),
+                            new ExpectedAssemblyResult("mock-assembly.dll", "NetCore31AgentLauncher"),
+                            new ExpectedAssemblyResult("mock-assembly.dll", "Net50AgentLauncher") }
+        },
+        BuildSettings.NUnitProjectLoader));
+}
+
+// NOTE: Package tests using a pluggable agent must be run after all tests
+// that assume no pluggable agents are installed!
+
+// TODO: Disabling Net20PluggableAgentTest until the agent is updated
+//packageTests.Add(new PackageTest(1, "Net20PluggableAgentTest", "Run mock-assembly.dll targeting net35 using Net20PluggableAgent",
+//    "engine-tests/net35/mock-assembly.dll",
+//    new ExpectedResult("Failed")
+//    {
+//        Total = 36,
+//        Passed = 23,
+//        Failed = 5,
+//        Warnings = 1,
+//        Inconclusive = 1,
+//        Skipped = 7,
+//        Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net20AgentLauncher") }
+//    },
+//    Net20PluggableAgent));
+
+packageTests.Add(new PackageTest(1, "NetCore21PluggableAgentTest", "Run mock-assembly.dll targeting Net Core 2.1 using NetCore21PluggableAgent",
+    "engine-tests/netcoreapp2.1/mock-assembly.dll",
+    new ExpectedResult("Failed")
+    {
+        Total = 36,
+        Passed = 23,
+        Failed = 5,
+        Warnings = 1,
+        Inconclusive = 1,
+        Skipped = 7,
+        Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "NetCore21AgentLauncher") }
+    },
+    BuildSettings.NetCore21PluggableAgent));
+
+const string NET80_MOCK_ASSEMBLY = "../../../net80-pluggable-agent/bin/Release/tests/net8.0/mock-assembly.dll";
+if (BuildSettings.IsLocalBuild && Context.FileExists(BuildSettings.OutputDirectory + NET80_MOCK_ASSEMBLY))
+	packageTests.Add(new PackageTest(1, "NetCore80PluggableAgentTest", "Run mock-assembly.dll targeting Net 8.0 using NetCore80PluggableAgent",
+		NET80_MOCK_ASSEMBLY,
+		new ExpectedResult("Failed")
+		{
+			Total = 36,
+			Passed = 23,
+			Failed = 5,
+			Warnings = 1,
+			Inconclusive = 1,
+			Skipped = 7,
+			Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net80AgentLauncher") }
+		},
+		BuildSettings.Net80PluggableAgent));
+
+// TODO: Disabling NUnitV2Test until the driver works
+//packageTests.Add(new PackageTest(1, "NUnitV2Test", "Run tests using the V2 framework driver",
+//	"v2-tests/net35/v2-test-assembly.dll",
+//	new ExpectedResult("Failed")
+//	{
+//		Total = 28,
+//		Passed = 18,
+//		Failed = 5,
+//		Warnings = 0,
+//		Inconclusive = 1,
+//		Skipped = 4
+//	},
+//	NUnitV2Driver));
+
+//////////////////////////////////////////////////////////////////////
+// DEFINE PACKAGES
+//////////////////////////////////////////////////////////////////////
+
+var EnginePackage = new NuGetPackage(
+	id: "TestCentric.Engine",
+	source: BuildSettings.NuGetDirectory + "TestCentric.Engine.nuspec",
+	basePath: BuildSettings.OutputDirectory,
+	testRunner: new TestCentricEngineTestBed(),
+	checks: new PackageCheck[] {
+		HasFiles("LICENSE.txt", "testcentric.png"),
+		HasDirectory("tools").WithFiles(
+			"testcentric.engine.dll", "testcentric.engine.core.dll", "nunit.engine.api.dll",
+			"testcentric.engine.metadata.dll", "testcentric.extensibility.dll",
+			"testcentric.engine.pdb", "testcentric.engine.core.pdb", "test-bed.exe", "test-bed.addins"),
+		HasDirectory("content").WithFile("testcentric.nuget.addins"),
+		HasDirectory("tools/agents/net462").WithFiles(
+			"testcentric-agent.exe", "testcentric-agent.pdb", "testcentric-agent.exe.config",
+			"testcentric-agent-x86.exe", "testcentric-agent-x86.pdb", "testcentric-agent-x86.exe.config",
+			"testcentric.engine.core.dll", "testcentric.engine.core.pdb",
+			"nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "testcentric-agent.nuget.addins"),
+		HasDirectory("tools/agents/netcoreapp3.1").WithFiles(
+			"testcentric-agent.dll", "testcentric-agent.pdb", "testcentric-agent.dll.config",
+			"testcentric.engine.core.dll", "testcentric.engine.core.pdb",
+			"nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric.extensibility.dll",
+			"Microsoft.Extensions.DependencyModel.dll", "testcentric-agent.nuget.addins"),
+		HasDirectory("tools/agents/net5.0").WithFiles(
+			"testcentric-agent.dll", "testcentric-agent.pdb", "testcentric-agent.dll.config",
+			"testcentric.engine.core.dll", "testcentric.engine.core.pdb",
+			"nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric.extensibility.dll",
+			"Microsoft.Extensions.DependencyModel.dll", "testcentric-agent.nuget.addins"),
+		HasDirectory("tools/agents/net6.0").WithFiles(
+			"testcentric-agent.dll", "testcentric-agent.pdb", "testcentric-agent.dll.config",
+			"testcentric.engine.core.dll", "testcentric.engine.core.pdb",
+			"nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric.extensibility.dll",
+			"Microsoft.Extensions.DependencyModel.dll", "testcentric-agent.nuget.addins"),
+		HasDirectory("tools/agents/net7.0").WithFiles(
+			"testcentric-agent.dll", "testcentric-agent.pdb", "testcentric-agent.dll.config",
+			"testcentric.engine.core.dll", "testcentric.engine.core.pdb",
+			"nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric.extensibility.dll",
+			"Microsoft.Extensions.DependencyModel.dll", "testcentric-agent.nuget.addins")
+	},
+	tests: packageTests);
+
+var EngineCorePackage = new NuGetPackage(
+	id: "TestCentric.Engine.Core",
+	source: BuildSettings.NuGetDirectory + "TestCentric.Engine.Core.nuspec",
+	basePath: BuildSettings.ProjectDirectory,
+	checks:new PackageCheck[] {
+		HasFiles("LICENSE.txt", "testcentric.png"),
+		HasDirectory("lib/net20").WithFiles(
+			"testcentric.engine.core.dll", "testcentric.engine.core.pdb", "nunit.engine.api.dll",
+			"testcentric.engine.metadata.dll", "testcentric.extensibility.dll"),
+		HasDirectory("lib/net462").WithFiles(
+			"testcentric.engine.core.dll", "testcentric.engine.core.pdb", "nunit.engine.api.dll",
+			"testcentric.engine.metadata.dll", "testcentric.extensibility.dll"),
+		HasDirectory("lib/netstandard2.0").WithFiles(
+			"testcentric.engine.core.dll", "testcentric.engine.core.pdb", "nunit.engine.api.dll",
+			"testcentric.engine.metadata.dll", "testcentric.extensibility.dll"),
+		HasDirectory("lib/netcoreapp3.1").WithFiles(
+			"testcentric.engine.core.dll", "testcentric.engine.core.pdb", "nunit.engine.api.dll",
+			"testcentric.engine.metadata.dll", "testcentric.extensibility.dll",
+			"Microsoft.Extensions.DependencyModel.dll")
+	});
+
+var EngineApiPackage = new NuGetPackage(
+	id: "TestCentric.Engine.Api",
+	source: BuildSettings.NuGetDirectory + "TestCentric.Engine.Api.nuspec",
+	basePath: BuildSettings.ProjectDirectory,
+	checks: new PackageCheck[] {
+		HasFiles("LICENSE.txt", "testcentric.png"),
+		HasDirectory("lib/netstandard2.0").WithFiles("testcentric.engine.api.dll", "testcentric.engine.api.pdb")
+	});
+
+BuildSettings.Packages.AddRange(new [] {
+	EnginePackage,
+	EngineCorePackage,
+	EngineApiPackage
 });
 
-// If we run target Test, we catch errors here in teardown.
-// If we run packaging, the CheckTestErrors Task is run instead.
-Teardown(context => CheckTestErrors(ref ErrorDetail));
-
 //////////////////////////////////////////////////////////////////////
-// DUMP SETTINGS
+// TEST BED RUNNER
 //////////////////////////////////////////////////////////////////////
 
-Task("DumpSettings")
-	.Does<BuildSettings>((settings) =>
-	{
-		settings.DumpSettings();
-	});
-
-//////////////////////////////////////////////////////////////////////
-// CLEAN
-//////////////////////////////////////////////////////////////////////
-
-Task("Clean")
-    .Does<BuildSettings>((settings) =>
-	{
-		Information("Cleaning " + settings.OutputDirectory);
-		CleanDirectory(settings.OutputDirectory);
-
-        Information("Cleaning Package Directory");
-        CleanDirectory(settings.PackageDirectory);
-	});
-
-//////////////////////////////////////////////////////////////////////
-// RESTORE NUGET PACKAGES
-//////////////////////////////////////////////////////////////////////
-
-Task("RestorePackages")
-    .Does<BuildSettings>((settings) =>
+public class TestCentricEngineTestBed : TestRunner
 {
-	NuGetRestore(SOLUTION, settings.RestoreSettings);
-});
-
-//////////////////////////////////////////////////////////////////////
-// BUILD
-//////////////////////////////////////////////////////////////////////
-
-Task("Build")
-	.IsDependentOn("Clean")
-	.IsDependentOn("RestorePackages")
-	.IsDependentOn("CheckHeaders")
-	.Does<BuildSettings>((settings) =>
+	public TestCentricEngineTestBed()
 	{
-		if (settings.UsingXBuild)
-			XBuild(SOLUTION, settings.XBuildSettings
-				.WithProperty("Version", settings.PackageVersion));
-				//.WithProperty("NUnitApiVersion", "3.16.2"));
-		else
-			MSBuild(SOLUTION, settings.MSBuildSettings
-				.WithProperty("Version", settings.PackageVersion));
-				//.WithProperty("NUnitApiVersion", "3.16.2"));
-	});
+		ExecutablePath = BuildSettings.NuGetTestDirectory + "TestCentric.Engine/tools/test-bed.exe";
+	}
+
+	public override int Run(string arguments)
+	{
+		return _context.StartProcess(ExecutablePath, new ProcessSettings()
+		{
+			Arguments = arguments,
+			WorkingDirectory = BuildSettings.OutputDirectory
+		});
+	}
+}
 
 //////////////////////////////////////////////////////////////////////
-// TESTS
-//////////////////////////////////////////////////////////////////////
-
-static var ErrorDetail = new List<string>();
-
-Task("CheckTestErrors")
-    .Description("Checks for errors running the test suites")
-    .Does(() => CheckTestErrors(ref ErrorDetail));
-
-//////////////////////////////////////////////////////////////////////
-// TESTS OF TESTCENTRIC.ENGINE
+// RUN TESTS OF TESTCENTRIC.ENGINE SEPARATELY
 //////////////////////////////////////////////////////////////////////
 
 Task("TestEngine")
 	.Description("Tests the TestCentric Engine")
 	.IsDependentOn("Build")
-	.Does<BuildSettings>((settings) =>
+	.Does(() =>
 	{
-		foreach (var runtime in settings.EngineRuntimes)
-			RunNUnitLite("testcentric.engine.tests", runtime, $"{settings.OutputDirectory}engine-tests/{runtime}/");
+		NUnitLite.RunUnitTests("**/testcentric.engine.tests.exe");
 	});
 
 //////////////////////////////////////////////////////////////////////
-// TESTS OF TESTCENTRIC.ENGINE.CORE
+// RUN TESTS OF TESTCENTRIC.ENGINE.CORE SEPARATELY
 //////////////////////////////////////////////////////////////////////
 
 Task("TestEngineCore")
 	.Description("Tests the TestCentric Engine Core")
 	.IsDependentOn("Build")
-	.Does<BuildSettings>((settings) =>
+	.Does(() =>
 	{
-		foreach (var runtime in settings.EngineCoreRuntimes)
-		{
-			// Only .NET Standard we currently build is 2.0
-			var testUnder = runtime == "netstandard2.0" ? "netcoreapp2.1" : runtime;
-			RunNUnitLite("testcentric.engine.core.tests", testUnder, $"{settings.OutputDirectory}engine-tests/{testUnder}/");
-		}
+		NUnitLite.RunUnitTests("**/testcentric.engine.core.tests.exe|**/testcentric.engine.core.tests.dll");
 	});
 
 //////////////////////////////////////////////////////////////////////
-// BUILD, VERIFY AND TEST EACH PACKAGE
+// BUILD, VERIFY AND TEST INDIVIDUAL PACKAGES
 //////////////////////////////////////////////////////////////////////
 
 Task("PackageEngine")
 	.Description("Build and Test the Engine Package")
-	.Does<BuildSettings>(settings =>
+	.Does(() =>
 	{
-		settings.EnginePackage.BuildVerifyAndTest();
+		EnginePackage.BuildVerifyAndTest();
 	});
 
 Task("PackageEngineCore")
 	.Description("Build and Test the Engine Core Package")
-	.Does<BuildSettings>(settings =>
+	.Does(() =>
 	{
-		settings.EngineCorePackage.BuildVerifyAndTest();
+		EngineCorePackage.BuildVerifyAndTest();
 	});
 
 Task("PackageEngineApi")
 	.Description("Build and Test the Engine Api Package")
-	.Does<BuildSettings>(settings =>
+	.Does(() =>
 	{
-		settings.EngineApiPackage.BuildVerifyAndTest();
+		EngineApiPackage.BuildVerifyAndTest();
 	});
-
-//////////////////////////////////////////////////////////////////////
-// PUBLISH PACKAGES
-//////////////////////////////////////////////////////////////////////
-
-static bool hadPublishingErrors = false;
-
-Task("PublishPackages")
-	.Description("Publish packages according to the current settings")
-	.IsDependentOn("PublishToMyGet")
-    .IsDependentOn("PublishToNuGet")
-    .Does(() =>
-	{
-		if (hadPublishingErrors)
-			throw new Exception("One of the publishing steps failed.");
-	});
-
-// This task may either be run by the PublishPackages task,
-// which depends on it, or directly when recovering from errors.
-Task("PublishToMyGet")
-	.Description("Publish packages to MyGet")
-	.Does<BuildSettings>((settings) =>
-	{
-        if (!settings.ShouldPublishToMyGet)
-            Information("Nothing to publish to MyGet from this run.");
-		else if (settings.NoPush)
-			Information("NoPush option suppressing publication to MyGet");
-        else
-            try
-			{
-				PushNuGetPackage(settings.EnginePackage.PackageFilePath, settings.MyGetApiKey, settings.MyGetPushUrl);
-				PushNuGetPackage(settings.EngineCorePackage.PackageFilePath, settings.MyGetApiKey, settings.MyGetPushUrl);
-				PushNuGetPackage(settings.EngineApiPackage.PackageFilePath, settings.MyGetApiKey, settings.MyGetPushUrl);
-			}
-			catch(Exception)
-			{
-				hadPublishingErrors = true;
-			}
-	});
-
-// This task may either be run by the PublishPackages task,
-// which depends on it, or directly when recovering from errors.
-Task("PublishToNuGet")
-	.Description("Publish packages to NuGet")
-	.Does<BuildSettings>((settings) =>
-	{
-		if (!settings.ShouldPublishToNuGet)
-			Information("Nothing to publish to NuGet from this run.");
-		else if (settings.NoPush)
-			Information("NoPush option suppressing publication to NuGet");
-		else
-			try
-			{
-				PushNuGetPackage(settings.EnginePackage.PackageFilePath, settings.NuGetApiKey, settings.NuGetPushUrl);
-				PushNuGetPackage(settings.EngineCorePackage.PackageFilePath, settings.NuGetApiKey, settings.NuGetPushUrl);
-				PushNuGetPackage(settings.EngineApiPackage.PackageFilePath, settings.NuGetApiKey, settings.NuGetPushUrl);
-			}
-			catch(Exception)
-            {
-				hadPublishingErrors = true;
-			}
-	});
-
-//////////////////////////////////////////////////////////////////////
-// CREATE A DRAFT RELEASE
-//////////////////////////////////////////////////////////////////////
-
-Task("CreateDraftRelease")
-    .Does<BuildSettings>((settings) =>
-    {
-        if (settings.IsReleaseBranch)
-        {
-            // Exit if any PackageTests failed
-            CheckTestErrors(ref ErrorDetail);
-
-            // NOTE: Since this is a release branch, the pre-release label
-            // is "pre", which we don't want to use for the draft release.
-            // The branch name contains the full information to be used
-            // for both the name of the draft release and the milestone,
-            // i.e. release-2.0.0, release-2.0.0-beta2, etc.
-            string milestone = settings.BranchName.Substring(8);
-            string releaseName = $"TestCentric Engine {milestone}";
-
-            Information($"Creating draft release for {releaseName}");
-
-		    if (settings.NoPush)
-			    Information("NoPush option suppressed creation of draft release");
-			else
-				try
-				{
-					GitReleaseManagerCreate(settings.GitHubAccessToken, GITHUB_OWNER, GITHUB_REPO, new GitReleaseManagerCreateSettings()
-					{
-						Name = releaseName,
-						Milestone = milestone
-					});
-				}
-				catch
-				{
-					Error($"Unable to create draft release for {releaseName}.");
-					Error($"Check that there is a {milestone} milestone with at least one closed issue.");
-					Error("");
-					throw;
-				}
-        }
-        else
-        {
-            Information("Skipping Release creation because this is not a release branch");
-        }
-    });
-
-////////////////////////////////////////////////////////////////////////
-//// CREATE A PRODUCTION RELEASE
-////////////////////////////////////////////////////////////////////////
-
-Task("CreateProductionRelease")
-    .Does<BuildSettings>((settings) =>
-    {
-        if (settings.IsProductionRelease)
-        {
-            // Exit if any PackageTests failed
-            CheckTestErrors(ref ErrorDetail);
-
-			string tagName = settings.PackageVersion;
-            Information($"Publishing release {tagName} to GitHub");
-
-            if (settings.NoPush)
-            {
-                Information("NoPush option suppressed publishing of assets:");
-                foreach (var asset in settings.GitHubReleaseAssets)
-                    Information("  " + asset);
-            }
-			else
-			{
-				string token = settings.GitHubAccessToken;
-				string assets = $"\"{string.Join(',', settings.GitHubReleaseAssets)}\"";
-
-				GitReleaseManagerAddAssets(token, GITHUB_OWNER, GITHUB_REPO, tagName, assets);
-				GitReleaseManagerClose(token, GITHUB_OWNER, GITHUB_REPO, tagName);
-			}
-        }
-        else
-        {
-            Information("Skipping CreateProductionRelease because this is not a production release");
-        }
-    });
 
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
-
-Task("Package")
-	.Description("Build and package all components")
-	.IsDependentOn("Build")
-	.IsDependentOn("PackageExistingBuild");
-
-Task("PackageExistingBuild")
-	.Description("Package all components using existing build")
-	.IsDependentOn("PackageEngine")
-	.IsDependentOn("PackageEngineCore")
-	.IsDependentOn("PackageEngineApi");
-
-Task("Test")
-	.Description("Builds and tests engine core and  engine")
-	.IsDependentOn("TestEngineCore")
-	.IsDependentOn("TestEngine");
 
 Task("AppVeyor")
 	.Description("Targets to run on AppVeyor")
 	.IsDependentOn("DumpSettings")
 	.IsDependentOn("Build")
 	.IsDependentOn("Test")
-	.IsDependentOn("CheckTestErrors")
 	.IsDependentOn("Package")
-	.IsDependentOn("PublishPackages")
+	.IsDependentOn("Publish")
 	.IsDependentOn("CreateDraftRelease")
 	.IsDependentOn("CreateProductionRelease");
 
@@ -392,7 +456,6 @@ Task("BuildTestAndPackage")
 	.IsDependentOn("DumpSettings")
     .IsDependentOn("Build")
     .IsDependentOn("Test")
-	.IsDependentOn("CheckTestErrors")
     .IsDependentOn("Package");
 
 Task("Default")
