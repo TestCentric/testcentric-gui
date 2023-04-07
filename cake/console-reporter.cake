@@ -29,7 +29,7 @@ public class ConsoleReporter
     public void DisplayNotRunReport()
     {
         ReportIndex = 0;
-        Console.WriteLine("Tests Not Run");
+        Console.WriteLine("\nTests Not Run");
         Console.WriteLine();
 
         DisplayTestsNotRun(_result.Xml);
@@ -59,7 +59,7 @@ public class ConsoleReporter
     public void DisplayErrorsFailuresAndWarningsReport()
     {
         ReportIndex = 0;
-        Console.WriteLine("Errors, Failures and Warnings");
+        Console.WriteLine("\nErrors, Failures and Warnings");
         Console.WriteLine();
 
         DisplayErrorsFailuresAndWarnings(_result.Xml);
@@ -158,7 +158,7 @@ public class ConsoleReporter
 
     private void DisplaySummaryReport()
     {
-        Console.WriteLine("Test Run Summary");
+        Console.WriteLine("\nTest Run Summary");
         Console.WriteLine($"  Overall result: {_result.OverallResult}");
 
         Console.Write($"  Test Count: {_result.Total}");
