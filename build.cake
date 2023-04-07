@@ -29,14 +29,14 @@ const string GUI_TESTS = "*.Tests.dll";
 #load "./cake/gui-tester.cake"
 #load "./cake/package-checks.cake"
 #load "./cake/package-definitions.cake"
-#load "./cake/package-tests.cake"
+#load "../TestCentric.Cake.Recipe/recipe/package-tests.cake"
 #load "./cake/packaging.cake"
 #load "./cake/publishing.cake"
 #load "./cake/releasing.cake"
 #load "./cake/test-reports.cake"
-#load "./cake/test-results.cake"
+#load "../TestCentric.Cake.Recipe/recipe/test-results.cake"
 #load "./cake/testing.cake"
-#load "./cake/utilities.cake"
+#load "../TestCentric.Cake.Recipe/recipe/utilities.cake"
 #load "./cake/versioning.cake"
 
 
