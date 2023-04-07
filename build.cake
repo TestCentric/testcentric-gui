@@ -27,7 +27,7 @@ const string GUI_TESTS = "*.Tests.dll";
 #load "./cake/check-headers.cake"
 #load "./cake/console-reporter.cake"
 #load "./cake/gui-tester.cake"
-#load "./cake/package-checks.cake"
+#load "../TestCentric.Cake.Recipe/recipe/package-checks.cake"
 #load "./cake/package-definitions.cake"
 #load "../TestCentric.Cake.Recipe/recipe/package-tests.cake"
 #load "./cake/packaging.cake"
