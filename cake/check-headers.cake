@@ -5,7 +5,7 @@
 // Standard Header. Each string represents one line.
 static readonly string[] STD_HDR = new[] {
     "// ***********************************************************************",
-    "// Copyright (c) Charlie Poole and TestCentric GUI contributors.",
+    "// Copyright (c) Charlie Poole and TestCentric contributors.",
     "// Licensed under the MIT License. See LICENSE file in root directory.",
     "// ***********************************************************************"
 };
