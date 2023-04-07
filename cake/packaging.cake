@@ -1,3 +1,46 @@
+////////////////////////////////////////////////////////////////////
+// PACKAGING TARGETS
+//////////////////////////////////////////////////////////////////////
+
+Task("Package")
+	.IsDependentOn("Build")
+	.IsDependentOn("PackageExistingBuild");
+
+Task("PackageExistingBuild")
+	.IsDependentOn("PackageNuGet")
+	.IsDependentOn("PackageChocolatey")
+	.IsDependentOn("PackageZip");
+
+Task("PackageNuGet")
+	.Description("Build and Test the NuGet Package")
+	.Does<BuildSettings>(settings =>
+	{
+		settings.NuGetPackage.BuildVerifyAndTest();
+	});
+
+Task("PackageChocolatey")
+	.Description("Build and Test the Chocolatey Package")
+	.Does<BuildSettings>(settings =>
+	{
+		settings.ChocolateyPackage.BuildVerifyAndTest();
+	});
+
+Task("CreateZipImage")
+	.Description("Create image used for zip package")
+	.Does<BuildSettings>(settings => {
+		Information("Creating Zip Image Directory");
+
+		CreateDirectory(settings.PackageDirectory);
+		CreateZipImage(settings);
+	});
+
+Task("PackageZip")
+	.Description("Build and Test the Zip Package")
+	.IsDependentOn("CreateZipImage")
+	.Does<BuildSettings>(settings =>
+	{
+		settings.ZipPackage.BuildVerifyAndTest();
+	});
 
 //////////////////////////////////////////////////////////////////////
 // PACKAGING METHODS AND CLASSES

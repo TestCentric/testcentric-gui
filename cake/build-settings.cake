@@ -1,15 +1,12 @@
-#load "./versioning.cake"
-#load "./packaging.cake"
-#load "./package-checks.cake"
-#load "./package-tests.cake"
-#load "./gui-tester.cake"
-#load "./test-results.cake"
-#load "./test-reports.cake"
-#load "./package-definitions.cake"
-#load "./check-headers.cake"
-#load "./console-reporter.cake"
-#load "./utilities.cake"
-#load "./local-targets.cake"
+//////////////////////////////////////////////////////////////////////
+// DUMP SETTINGS
+//////////////////////////////////////////////////////////////////////
+
+Task("DumpSettings")
+	.Does<BuildSettings>((settings) =>
+	{
+		settings.DumpSettings();
+	});
 
 // URLs for uploading packages
 private const string MYGET_PUSH_URL = "https://www.myget.org/F/testcentric/api/v2";
@@ -30,6 +27,10 @@ private static readonly string[] LABELS_WE_PUBLISH_ON_MYGET = { "dev" };
 private static readonly string[] LABELS_WE_PUBLISH_ON_NUGET = { "alpha", "beta", "rc" };
 private static readonly string[] LABELS_WE_PUBLISH_ON_CHOCOLATEY = { "alpha", "beta", "rc" };
 private static readonly string[] LABELS_WE_RELEASE_ON_GITHUB = { "alpha", "beta", "rc" };
+
+//////////////////////////////////////////////////////////////////////
+// BUILD SETTINGS
+//////////////////////////////////////////////////////////////////////
 
 public class BuildSettings
 {
