@@ -67,7 +67,7 @@ public class BuildSettings
 		ChocolateyApiKey = GetApiKey(CHOCO_API_KEY, FALLBACK_CHOCO_API_KEY);
 		GitHubAccessToken = SetupContext.EnvironmentVariable(GITHUB_ACCESS_TOKEN);
 
-		BuildVersion = new BuildVersion(context, this);
+		BuildVersion = new BuildVersion(context);
 
 		if (HasArgument("testLevel|level"))
 			PackageTestLevel = GetArgument("testLevel|level", 1);
