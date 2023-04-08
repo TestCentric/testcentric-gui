@@ -106,6 +106,35 @@ BuildSettings.Initialize(
 	exemptFiles: new [] { "Resource.cs", "TextCode.cs" }
 );
 
+TaskTeardown(context =>
+{
+	// The engine package does not restore correctly. As a temporary
+	// fix, we install a local copy and then copy agents and
+	// content to the output directory.
+	if (context.Task.Name == "Build")
+	{
+		string tempEngineInstall = BuildSettings.ProjectDirectory + "tempEngineInstall/";
+
+		CleanDirectory(tempEngineInstall);
+
+		NuGetInstall("TestCentric.Engine", new NuGetInstallSettings()
+		{
+			Version = REF_ENGINE_VERSION,
+			OutputDirectory = tempEngineInstall,
+			ExcludeVersion = true
+		});
+
+		CopyFileToDirectory(
+			tempEngineInstall + "TestCentric.Engine/content/testcentric.nuget.addins",
+			BuildSettings.OutputDirectory);
+		Information("Copied testcentric.nuget.addins");
+		CopyDirectory(
+			tempEngineInstall + "TestCentric.Engine/tools",
+			BuildSettings.OutputDirectory);
+		Information("Copied engine files");
+	}
+});
+
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
