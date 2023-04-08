@@ -21,7 +21,7 @@ const string GUI_RUNNER = "testcentric.exe";
 const string GUI_TESTS = "*.Tests.dll";
 
 // Load scripts after defining constants
-#load "./cake/building.cake"
+#load "../TestCentric.Cake.Recipe/recipe/building.cake"
 #load "./cake/build-settings.cake"
 #load "./cake/check-headers.cake"
 #load "../TestCentric.Cake.Recipe/recipe/console-reporter.cake"
@@ -101,7 +101,8 @@ Teardown(context => CheckTestErrors(ref ErrorDetail));
 //////////////////////////////////////////////////////////////////////
 
 BuildSettings.Initialize(
-	Context
+	Context,
+	SOLUTION
 );
 
 //////////////////////////////////////////////////////////////////////

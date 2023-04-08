@@ -17,13 +17,16 @@ public static class BuildSettings
 	private static BuildSystem _buildSystem;
 
 	public static void Initialize(
-		ICakeContext context)
+		ICakeContext context,
+		string solutionFile)
 	{
 		if (context == null)
 			throw new ArgumentNullException(nameof(context));
 
 		Context = context;
 		_buildSystem = context.BuildSystem();
+
+		SolutionFile = solutionFile;
 
 		Configuration = context.Argument("configuration", context.Argument("c", DEFAULT_CONFIGURATION));
 		NoPush = context.HasArgument("nopush");
@@ -319,6 +322,7 @@ public static class BuildSettings
 	}
 
 	public static ICakeContext Context { get; private set; }
+	public static string SolutionFile { get; private set; }
 
 	public static string Target { get; }
 	public static IEnumerable<string> TasksToExecute { get; }
