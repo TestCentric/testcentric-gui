@@ -3,49 +3,36 @@
 //////////////////////////////////////////////////////////////////////
 
 Task("DumpSettings")
-	.Does<BuildSettings>((settings) =>
+	.Does(() =>
 	{
-		settings.DumpSettings();
+		BuildSettings.DumpSettings();
 	});
 
 //////////////////////////////////////////////////////////////////////
 // BUILD SETTINGS
 //////////////////////////////////////////////////////////////////////
 
-public class BuildSettings
+public static class BuildSettings
 {
-	private BuildSystem _buildSystem;
+	private static BuildSystem _buildSystem;
 
-	// BuildSettings is effectively a singleton because it is only created in the Setup method.
-	private static BuildSettings _instance;
-
-	public static BuildSettings CreateInstance(ISetupContext context)
+	public static void Initialize(
+		ICakeContext context)
 	{
-		if (_instance != null)
-			throw new Exception("BuildSettings instance may only be created once.");
+		if (context == null)
+			throw new ArgumentNullException(nameof(context));
 
-		_instance = new BuildSettings(context);
-		_instance.Validate();
-
-		return _instance;
-	}
-
-	private BuildSettings(ISetupContext context)
-	{
-		SetupContext = context;
-		_buildSystem = SetupContext.BuildSystem();
-
-		Target = SetupContext.TargetTask.Name;
-		TasksToExecute = SetupContext.TasksToExecute.Select(t => t.Name);
+		Context = context;
+		_buildSystem = context.BuildSystem();
 
 		Configuration = context.Argument("configuration", context.Argument("c", DEFAULT_CONFIGURATION));
-		NoPush = SetupContext.HasArgument("nopush");
+		NoPush = context.HasArgument("nopush");
 		ProjectDirectory = context.Environment.WorkingDirectory.FullPath + "/";
 
         MyGetApiKey = GetApiKey(TESTCENTRIC_MYGET_API_KEY, MYGET_API_KEY);
         NuGetApiKey = GetApiKey(TESTCENTRIC_NUGET_API_KEY, NUGET_API_KEY);
 		ChocolateyApiKey = GetApiKey(TESTCENTRIC_CHOCO_API_KEY, CHOCO_API_KEY);
-		GitHubAccessToken = SetupContext.EnvironmentVariable(GITHUB_ACCESS_TOKEN);
+		GitHubAccessToken = context.EnvironmentVariable(GITHUB_ACCESS_TOKEN);
 
 		BuildVersion = new BuildVersion(context);
 
@@ -247,7 +234,7 @@ public class BuildSettings
 
 		// TODO: Make this work on AppVeyor
 		const string NET80_MOCK_ASSEMBLY = "../../../net80-pluggable-agent/bin/Release/tests/net8.0/mock-assembly.dll";
-		if (IsLocalBuild && SetupContext.FileExists(OutputDirectory + NET80_MOCK_ASSEMBLY))
+		if (IsLocalBuild && Context.FileExists(OutputDirectory + NET80_MOCK_ASSEMBLY))
 			PackageTests.Add(new PackageTest(1, "NetCore80PluggableAgentTest", "Run mock-assembly.dll targeting Net 8.0 using NetCore80PluggableAgent",
 				NET80_MOCK_ASSEMBLY,
 				new ExpectedResult("Failed")
@@ -263,7 +250,6 @@ public class BuildSettings
 				Net80PluggableAgent));
 
 		NuGetPackage = new NuGetPackageDefinition(
-			this,
 			id: "TestCentric.GuiRunner",
 			source: NuGetDirectory + "TestCentric.GuiRunner.nuspec",
 			basePath: OutputDirectory,
@@ -285,7 +271,6 @@ public class BuildSettings
 			tests: PackageTests);
 
 		ChocolateyPackage = new ChocolateyPackageDefinition(
-			this,
 			id: "testcentric-gui",
 			source: "choco/testcentric-gui.nuspec",
 			basePath: OutputDirectory,
@@ -306,7 +291,6 @@ public class BuildSettings
 			tests: PackageTests);
 
 		ZipPackage = new ZipPackageDefinition(
-			this,
 			id: "TestCentric.Gui.Runner",
 			source: NuGetDirectory + "TestCentric.Gui.Runner.nuspec",
 			basePath: OutputDirectory,
@@ -334,114 +318,112 @@ public class BuildSettings
 		});
 	}
 
-	public ISetupContext SetupContext { get; }
+	public static ICakeContext Context { get; private set; }
 
-	public string Target { get; }
-	public IEnumerable<string> TasksToExecute { get; }
+	public static string Target { get; }
+	public static IEnumerable<string> TasksToExecute { get; }
 
-	public ICakeContext Context => SetupContext;
+	public static string Configuration { get; private set; }
+	public static bool NoPush { get; private set; }
 
-	public string Configuration { get; private set; }
-	public bool NoPush { get; }
+	public static BuildVersion BuildVersion { get; private set; }
+	public static string PackageVersion => BuildVersion.PackageVersion;
+	public static string AssemblyVersion => BuildVersion.AssemblyVersion;
+	public static string AssemblyFileVersion => BuildVersion.AssemblyFileVersion;
+	public static string AssemblyInformationalVersion => BuildVersion.AssemblyInformationalVersion;
 
-	public BuildVersion BuildVersion { get; }
-	public string PackageVersion => BuildVersion.PackageVersion;
-	public string AssemblyVersion => BuildVersion.AssemblyVersion;
-	public string AssemblyFileVersion => BuildVersion.AssemblyFileVersion;
-	public string AssemblyInformationalVersion => BuildVersion.AssemblyInformationalVersion;
+	public static List<PackageTest> PackageTests { get; } = new List<PackageTest>();
+	public static int PackageTestLevel { get; private set; }
 
-	public List<PackageTest> PackageTests { get; } = new List<PackageTest>();
-	public int PackageTestLevel { get; }
-
-	public ExtensionSpecifier NUnitV2Driver =>
+	public static ExtensionSpecifier NUnitV2Driver =>
 		new ExtensionSpecifier("NUnit.Extension.NUnitV2Driver", "nunit-extension-nunit-v2-driver", "3.9.0");
-	public ExtensionSpecifier NUnitProjectLoader => 
+	public static ExtensionSpecifier NUnitProjectLoader => 
 		new ExtensionSpecifier("NUnit.Extension.NUnitProjectLoader", "nunit-extension-nunit-project-loader", "3.7.1");
-	public ExtensionSpecifier Net20PluggableAgent => 
+	public static ExtensionSpecifier Net20PluggableAgent => 
 		new ExtensionSpecifier("NUnit.Extension.Net20PluggableAgent", "nunit-extension-net20-pluggable-agent", "2.0.0");
-	public ExtensionSpecifier NetCore21PluggableAgent => 
+	public static ExtensionSpecifier NetCore21PluggableAgent => 
 		new ExtensionSpecifier("NUnit.Extension.NetCore21PluggableAgent", "nunit-extension-netcore21-pluggable-agent", "2.1.0");
-	public ExtensionSpecifier Net80PluggableAgent => 
+	public static ExtensionSpecifier Net80PluggableAgent => 
 		new ExtensionSpecifier("NUnit.Extension.Net80PluggableAgent", "nunit-extension-net80-pluggable-agent", "2.1.0");
 
-	private List<ExtensionSpecifier> InstalledExtensions { get; } = new List<ExtensionSpecifier>();
-	public bool IsLocalBuild => _buildSystem.IsLocalBuild;
-	public bool IsRunningOnUnix => SetupContext.IsRunningOnUnix();
-	public bool IsRunningOnWindows => SetupContext.IsRunningOnWindows();
-	public bool IsRunningOnAppVeyor => _buildSystem.AppVeyor.IsRunningOnAppVeyor;
+	private static List<ExtensionSpecifier> InstalledExtensions { get; } = new List<ExtensionSpecifier>();
+	public static bool IsLocalBuild => _buildSystem.IsLocalBuild;
+	public static bool IsRunningOnUnix => Context.IsRunningOnUnix();
+	public static bool IsRunningOnWindows => Context.IsRunningOnWindows();
+	public static bool IsRunningOnAppVeyor => _buildSystem.AppVeyor.IsRunningOnAppVeyor;
 
-	public string ProjectDirectory { get; }
-	public string SourceDirectory => ProjectDirectory + "src/";
-	public string OutputDirectory => ProjectDirectory + "bin/" + Configuration + "/";
-	public string ZipDirectory => ProjectDirectory + "zip/";
-	public string NuGetDirectory => ProjectDirectory + "nuget/";
-	public string ChocoDirectory => ProjectDirectory + "choco/";
-	public string PackageDirectory => ProjectDirectory + "package/";
-	public string PackageTestDirectory => PackageDirectory + "tests/";
-	public string NuGetTestDirectory => PackageTestDirectory + "nuget/";
-	public string ChocoTestDirectory => PackageTestDirectory + "choco/";
-	public string ZipTestDirectory => PackageTestDirectory + "zip/";
-	public string PackageResultDirectory => PackageDirectory + "results/";
-	public string NuGetResultDirectory => PackageResultDirectory + "nuget/";
-	public string ChocoResultDirectory => PackageResultDirectory + "choco/";
-	public string ZipResultDirectory => PackageResultDirectory + "zip/";
-	public string ZipImageDirectory => PackageDirectory + "zipimage/";
+	public static string ProjectDirectory { get; private set; }
+	public static string SourceDirectory => ProjectDirectory + "src/";
+	public static string OutputDirectory => ProjectDirectory + "bin/" + Configuration + "/";
+	public static string ZipDirectory => ProjectDirectory + "zip/";
+	public static string NuGetDirectory => ProjectDirectory + "nuget/";
+	public static string ChocoDirectory => ProjectDirectory + "choco/";
+	public static string PackageDirectory => ProjectDirectory + "package/";
+	public static string PackageTestDirectory => PackageDirectory + "tests/";
+	public static string NuGetTestDirectory => PackageTestDirectory + "nuget/";
+	public static string ChocoTestDirectory => PackageTestDirectory + "choco/";
+	public static string ZipTestDirectory => PackageTestDirectory + "zip/";
+	public static string PackageResultDirectory => PackageDirectory + "results/";
+	public static string NuGetResultDirectory => PackageResultDirectory + "nuget/";
+	public static string ChocoResultDirectory => PackageResultDirectory + "choco/";
+	public static string ZipResultDirectory => PackageResultDirectory + "zip/";
+	public static string ZipImageDirectory => PackageDirectory + "zipimage/";
 
-	public PackageDefinition ZipPackage { get; }
-	public PackageDefinition NuGetPackage { get; }
-	public PackageDefinition ChocolateyPackage { get; }
-	public List<PackageDefinition> AllPackages { get; }
+	public static PackageDefinition ZipPackage { get; private set; }
+	public static PackageDefinition NuGetPackage { get; private set; }
+	public static PackageDefinition ChocolateyPackage { get; private set; }
+	public static List<PackageDefinition> AllPackages { get; private set; }
 
-	public string GitHubReleaseAssets => SetupContext.IsRunningOnWindows()
+	public static string GitHubReleaseAssets => Context.IsRunningOnWindows()
 		? $"\"{ZipPackage},{NuGetPackage},{ChocolateyPackage}\""
         : $"\"{ZipPackage},{NuGetPackage}\"";
 
-	public string MyGetPushUrl => MYGET_PUSH_URL;
-	public string NuGetPushUrl => NUGET_PUSH_URL;
-	public string ChocolateyPushUrl => CHOCO_PUSH_URL;
+	public static string MyGetPushUrl => MYGET_PUSH_URL;
+	public static string NuGetPushUrl => NUGET_PUSH_URL;
+	public static string ChocolateyPushUrl => CHOCO_PUSH_URL;
 	
-	public string MyGetApiKey { get; }
-	public string NuGetApiKey { get; }
-	public string ChocolateyApiKey { get; }
-	public string GitHubAccessToken { get; }
+	public static string MyGetApiKey { get; private set; }
+	public static string NuGetApiKey { get; private set; }
+	public static string ChocolateyApiKey { get; private set; }
+	public static string GitHubAccessToken { get; private set; }
 
-    public string BranchName => BuildVersion.BranchName;
-	public bool IsReleaseBranch => BuildVersion.IsReleaseBranch;
+    public static string BranchName => BuildVersion.BranchName;
+	public static bool IsReleaseBranch => BuildVersion.IsReleaseBranch;
 
-	public bool IsPreRelease => BuildVersion.IsPreRelease;
-	public bool ShouldPublishToMyGet =>
+	public static bool IsPreRelease => BuildVersion.IsPreRelease;
+	public static bool ShouldPublishToMyGet =>
 		!IsPreRelease || LABELS_WE_PUBLISH_ON_MYGET.Contains(BuildVersion.PreReleaseLabel);
-	public bool ShouldPublishToNuGet =>
+	public static bool ShouldPublishToNuGet =>
 		!IsPreRelease || LABELS_WE_PUBLISH_ON_NUGET.Contains(BuildVersion.PreReleaseLabel);
-	public bool ShouldPublishToChocolatey =>
+	public static bool ShouldPublishToChocolatey =>
 		!IsPreRelease || LABELS_WE_PUBLISH_ON_CHOCOLATEY.Contains(BuildVersion.PreReleaseLabel);
-	public bool IsProductionRelease =>
+	public static bool IsProductionRelease =>
 		!IsPreRelease || LABELS_WE_RELEASE_ON_GITHUB.Contains(BuildVersion.PreReleaseLabel);
 	
-	public MSBuildSettings MSBuildSettings { get; }
-	public NuGetRestoreSettings RestoreSettings { get; }
+	public static MSBuildSettings MSBuildSettings { get; private set; }
+	public static NuGetRestoreSettings RestoreSettings { get; private set; }
 
-	public string[] SupportedEngineRuntimes => new string[] {"net40"};
+	public static string[] SupportedEngineRuntimes => new string[] {"net40"};
 
-	public bool HasArgument(string altNames)
+	public static bool HasArgument(string altNames)
 	{
 		foreach (string name in altNames.Split('|'))
-			if (SetupContext.HasArgument(name))
+			if (Context.HasArgument(name))
 				return true;
 
 		return false;
 	}
 
-	public T GetArgument<T>(string altNames, T defaultValue)
+	public static T GetArgument<T>(string altNames, T defaultValue)
 	{
 		foreach (string name in altNames.Split('|'))
-			if (SetupContext.HasArgument(name))
-				return SetupContext.Argument(name, defaultValue);
+			if (Context.HasArgument(name))
+				return Context.Argument(name, defaultValue);
 
 		return defaultValue;
 	}
 
-	private void Validate()
+	private static void Validate()
 	{
 		var validationErrors = new List<string>();
 
@@ -506,11 +488,11 @@ public class BuildSettings
         };
     }
 
-	public void DumpSettings()
+	public static void DumpSettings()
 	{
-		Console.WriteLine("\nTASKS");
-		Console.WriteLine("Target:                       " + Target);
-		Console.WriteLine("TasksToExecute:               " + string.Join(", ", TasksToExecute));
+		//Console.WriteLine("\nTASKS");
+		//Console.WriteLine("Target:                       " + Target);
+		//Console.WriteLine("TasksToExecute:               " + string.Join(", ", TasksToExecute));
 
 		Console.WriteLine("\nENVIRONMENT");
 		Console.WriteLine("IsLocalBuild:                 " + IsLocalBuild);
@@ -571,17 +553,17 @@ public class BuildSettings
 		Console.WriteLine("GitHubAccessToken:          " + KeyAvailable(GITHUB_ACCESS_TOKEN));
 	}
 
-    private string GetApiKey(string name, string fallback=null)
+    private static string GetApiKey(string name, string fallback=null)
     {
-        var apikey = SetupContext.EnvironmentVariable(name);
+        var apikey = Context.EnvironmentVariable(name);
 
         if (string.IsNullOrEmpty(apikey) && fallback != null)
-            apikey = SetupContext.EnvironmentVariable(fallback);
+            apikey = Context.EnvironmentVariable(fallback);
 
         return apikey;
     }
 
-	private string KeyAvailable(string name)
+	private static string KeyAvailable(string name)
 	{
 		return !string.IsNullOrEmpty(GetApiKey(name)) ? "AVAILABLE" : "NOT AVAILABLE";
 	}

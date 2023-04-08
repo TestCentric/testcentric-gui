@@ -13,33 +13,33 @@ Task("PackageExistingBuild")
 
 Task("PackageNuGet")
 	.Description("Build and Test the NuGet Package")
-	.Does<BuildSettings>(settings =>
+	.Does(() =>
 	{
-		settings.NuGetPackage.BuildVerifyAndTest();
+		BuildSettings.NuGetPackage.BuildVerifyAndTest();
 	});
 
 Task("PackageChocolatey")
 	.Description("Build and Test the Chocolatey Package")
-	.Does<BuildSettings>(settings =>
+	.Does(() =>
 	{
-		settings.ChocolateyPackage.BuildVerifyAndTest();
+		BuildSettings.ChocolateyPackage.BuildVerifyAndTest();
 	});
 
 Task("CreateZipImage")
 	.Description("Create image used for zip package")
-	.Does<BuildSettings>(settings => {
+	.Does(() => {
 		Information("Creating Zip Image Directory");
 
-		CreateDirectory(settings.PackageDirectory);
-		CreateZipImage(settings);
+		CreateDirectory(BuildSettings.PackageDirectory);
+		CreateZipImage();
 	});
 
 Task("PackageZip")
 	.Description("Build and Test the Zip Package")
 	.IsDependentOn("CreateZipImage")
-	.Does<BuildSettings>(settings =>
+	.Does(() =>
 	{
-		settings.ZipPackage.BuildVerifyAndTest();
+		BuildSettings.ZipPackage.BuildVerifyAndTest();
 	});
 
 //////////////////////////////////////////////////////////////////////
@@ -97,9 +97,9 @@ var PdbFiles = new string[]
     "testcentric.engine.pdb",
 };
 
-private void CreateZipImage(BuildSettings settings)
+private void CreateZipImage()
 {
-	string zipImageDir = settings.ZipImageDirectory;
+	string zipImageDir = BuildSettings.ZipImageDirectory;
 	string zipImageBinDir = zipImageDir + "bin/";
 
     CreateDirectory(zipImageDir);
@@ -112,13 +112,13 @@ private void CreateZipImage(BuildSettings settings)
 	CreateDirectory(zipImageBinDir);
 
     foreach (string file in copyFiles)
-        CopyFileToDirectory(settings.OutputDirectory + file, zipImageBinDir);
+        CopyFileToDirectory(BuildSettings.OutputDirectory + file, zipImageBinDir);
 
-    CopyFileToDirectory(settings.ZipDirectory + "testcentric.zip.addins", settings.ZipImageDirectory + "bin/");
+    CopyFileToDirectory(BuildSettings.ZipDirectory + "testcentric.zip.addins", BuildSettings.ZipImageDirectory + "bin/");
 
-    CopyDirectory(settings.OutputDirectory + "Images", zipImageBinDir + "Images");
+    CopyDirectory(BuildSettings.OutputDirectory + "Images", zipImageBinDir + "Images");
 
-    CopyDirectory(settings.OutputDirectory + "agents", zipImageBinDir + "agents");
+    CopyDirectory(BuildSettings.OutputDirectory + "agents", zipImageBinDir + "agents");
 
     // NOTE: Files specific to a particular package are not copied
     // into the image directory but are added separately.

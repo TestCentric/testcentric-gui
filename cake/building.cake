@@ -5,13 +5,13 @@
 //////////////////////////////////////////////////////////////////////
 
 Task("Clean")
-    .Does<BuildSettings>((settings) =>
+    .Does(() =>
 	{
-		Information("Cleaning " + settings.OutputDirectory);
-		CleanDirectory(settings.OutputDirectory);
+		Information("Cleaning " + BuildSettings.OutputDirectory);
+		CleanDirectory(BuildSettings.OutputDirectory);
 
 		Information("Cleaning Package Directory");
-		CleanDirectory(settings.PackageDirectory);
+		CleanDirectory(BuildSettings.PackageDirectory);
 	});
 
 //////////////////////////////////////////////////////////////////////
@@ -20,13 +20,13 @@ Task("Clean")
 
 Task("CleanAll")
 	.Description("Clean both configs and all obj directories")
-	.Does<BuildSettings>((settings) =>
+	.Does(() =>
 	{
 		Information("Cleaning all output directories");
-		CleanDirectory(settings.ProjectDirectory + "bin/");
+		CleanDirectory(BuildSettings.ProjectDirectory + "bin/");
 
 		Information("Cleaning Package Directory");
-		CleanDirectory(settings.PackageDirectory);
+		CleanDirectory(BuildSettings.PackageDirectory);
 
 		Information("Deleting object directories");
 		foreach (var dir in GetDirectories("src/**/obj/"))
@@ -50,9 +50,9 @@ Task("DeleteObjectDirectories")
 //////////////////////////////////////////////////////////////////////
 
 Task("RestorePackages")
-    .Does<BuildSettings>((settings) =>
+    .Does(() =>
 {
-    NuGetRestore(SOLUTION, settings.RestoreSettings);
+    NuGetRestore(SOLUTION, BuildSettings.RestoreSettings);
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -63,15 +63,15 @@ Task("Build")
 	.IsDependentOn("Clean")
     .IsDependentOn("RestorePackages")
 	.IsDependentOn("CheckHeaders")
-    .Does<BuildSettings>((settings) =>
+    .Does(() =>
 {
-    MSBuild(SOLUTION, settings.MSBuildSettings.WithProperty("Version", settings.PackageVersion));
+    MSBuild(SOLUTION, BuildSettings.MSBuildSettings.WithProperty("Version", BuildSettings.PackageVersion));
 
 	// The package does not restore correctly. As a temporary
 	// fix, we install a local copy and then copy agents and
 	// content to the output directory.
 
-	string tempEngineInstall = settings.ProjectDirectory + "tempEngineInstall/";
+	string tempEngineInstall = BuildSettings.ProjectDirectory + "tempEngineInstall/";
 
 	CleanDirectory(tempEngineInstall);
 
@@ -84,11 +84,11 @@ Task("Build")
 
 	CopyFileToDirectory(
 		tempEngineInstall + "TestCentric.Engine/content/testcentric.nuget.addins",
-		settings.OutputDirectory);
+		BuildSettings.OutputDirectory);
 	Information("Copied testcentric.nuget.addins");
 	CopyDirectory(
 		tempEngineInstall + "TestCentric.Engine/tools",
-		settings.OutputDirectory);
+		BuildSettings.OutputDirectory);
 	Information("Copied engine files");
 
 });

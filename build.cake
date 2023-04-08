@@ -89,24 +89,20 @@ using System.Reflection;
 using System.Threading.Tasks;
 
 //////////////////////////////////////////////////////////////////////
-// SETUP AND TEARDOWN
+// TEARDOWN
 //////////////////////////////////////////////////////////////////////
-
-Setup<BuildSettings>((context) =>
-{
-	var settings = BuildSettings.CreateInstance(context);
-
-	if (BuildSystem.IsRunningOnAppVeyor)
-			AppVeyor.UpdateBuildVersion(settings.PackageVersion + "-" + AppVeyor.Environment.Build.Number);
-
-    Information("Building {0} version {1} of TestCentric GUI.", settings.Configuration, settings.PackageVersion);
-
-	return settings;
-});
 
 // If we run target Test, we catch errors here in teardown.
 // If we run packaging, the CheckTestErrors Task is run instead.
 Teardown(context => CheckTestErrors(ref ErrorDetail));
+
+//////////////////////////////////////////////////////////////////////
+// INITIALIZE BUILD SETTINGS
+//////////////////////////////////////////////////////////////////////
+
+BuildSettings.Initialize(
+	Context
+);
 
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS

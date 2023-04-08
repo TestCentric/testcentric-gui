@@ -19,17 +19,17 @@ Task("PublishPackages")
 // which depends on it, or directly when recovering from errors.
 Task("PublishToMyGet")
 	.Description("Publish packages to MyGet")
-	.Does<BuildSettings>((settings) =>
+	.Does(() =>
 	{
-        if (!settings.ShouldPublishToMyGet)
+        if (!BuildSettings.ShouldPublishToMyGet)
             Information("Nothing to publish to MyGet from this run.");
-		else if (settings.NoPush)
+		else if (BuildSettings.NoPush)
 			Information("NoPush option suppressing publication to MyGet");
         else
             try
 			{
-				PushNuGetPackage(settings.NuGetPackage.PackageFilePath, settings.MyGetApiKey, settings.MyGetPushUrl);
-				PushChocolateyPackage(settings.ChocolateyPackage.PackageFilePath, settings.MyGetApiKey, settings.MyGetPushUrl);
+				PushNuGetPackage(BuildSettings.NuGetPackage.PackageFilePath, BuildSettings.MyGetApiKey, BuildSettings.MyGetPushUrl);
+				PushChocolateyPackage(BuildSettings.ChocolateyPackage.PackageFilePath, BuildSettings.MyGetApiKey, BuildSettings.MyGetPushUrl);
 			}
 			catch(Exception)
 			{
@@ -41,14 +41,14 @@ Task("PublishToMyGet")
 // which depends on it, or directly when recovering from errors.
 Task("PublishToNuGet")
 	.Description("Publish packages to NuGet")
-	.Does<BuildSettings>((settings) =>
+	.Does(() =>
 	{
-		if (!settings.ShouldPublishToNuGet)
+		if (!BuildSettings.ShouldPublishToNuGet)
 			Information("Nothing to publish to NuGet from this run.");
 		else
 			try
 			{
-				PushNuGetPackage(settings.NuGetPackage.PackageFilePath, settings.NuGetApiKey, settings.NuGetPushUrl);
+				PushNuGetPackage(BuildSettings.NuGetPackage.PackageFilePath, BuildSettings.NuGetApiKey, BuildSettings.NuGetPushUrl);
 			}
 			catch(Exception)
             {
@@ -60,14 +60,14 @@ Task("PublishToNuGet")
 // which depends on it, or directly when recovering from errors.
 Task("PublishToChocolatey")
 	.Description("Publish packages to Chocolatey")
-	.Does<BuildSettings>((settings) =>
+	.Does(() =>
 	{
-		if (!settings.ShouldPublishToChocolatey)
+		if (!BuildSettings.ShouldPublishToChocolatey)
 			Information("Nothing to publish to Chocolatey from this run.");
 		else
 			try
 			{
-				PushChocolateyPackage(settings.ChocolateyPackage.PackageFilePath, settings.ChocolateyApiKey, settings.ChocolateyPushUrl);
+				PushChocolateyPackage(BuildSettings.ChocolateyPackage.PackageFilePath, BuildSettings.ChocolateyApiKey, BuildSettings.ChocolateyPushUrl);
 			}
 			catch(Exception)
             {

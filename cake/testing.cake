@@ -14,17 +14,17 @@ Task("CheckTestErrors")
 
 Task("Test")
 	.IsDependentOn("Build")
-	.Does<BuildSettings>((settings) =>
+	.Does(() =>
 	{
-		var guiTests = GetFiles(settings.OutputDirectory + GUI_TESTS);
+		var guiTests = GetFiles(BuildSettings.OutputDirectory + GUI_TESTS);
 		var args = new StringBuilder();
 		foreach (var test in guiTests)
 			args.Append($"\"{test}\" ");
 
-		var guiTester = new GuiTester(settings);
-		Information ($"Running {settings.OutputDirectory + GUI_RUNNER} with arguments {args}");
-		guiTester.RunGuiUnattended(settings.OutputDirectory + GUI_RUNNER, args.ToString());
-		var result = new ActualResult(settings.OutputDirectory + "TestResult.xml");
+		var guiTester = new GuiTester(Context);
+		Information ($"Running {BuildSettings.OutputDirectory + GUI_RUNNER} with arguments {args}");
+		guiTester.RunGuiUnattended(BuildSettings.OutputDirectory + GUI_RUNNER, args.ToString());
+		var result = new ActualResult(BuildSettings.OutputDirectory + "TestResult.xml");
 
 		new ConsoleReporter(result).Display();
 

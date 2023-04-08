@@ -19,7 +19,6 @@ public enum PackageType
 /// </summary>
 public abstract class PackageDefinition
 {
-    protected BuildSettings _settings;
     protected ICakeContext _context;
 
     /// <summary>
@@ -35,7 +34,6 @@ public abstract class PackageDefinition
     /// <param name="symbols">An array of PackageChecks to be made on the symbol package, if one is created. Optional. Only supported for nuget packages.</param>
     /// <param name="tests">An array of PackageTests to be run against the package. Optional.</param>
 	protected PackageDefinition(
-        BuildSettings settings,
         PackageType packageType,
         string id,
         string source,
@@ -48,12 +46,11 @@ public abstract class PackageDefinition
         if (executable == null && tests != null)
             throw new System.ArgumentException($"Unable to create {packageType} package {id}: Executable must be provided if there are tests", nameof(executable));
 
-        _settings = settings;
-        _context = settings.SetupContext;
+        _context = BuildSettings.Context;
 
         PackageType = packageType;
         PackageId = id;
-        PackageVersion = settings.PackageVersion;
+        PackageVersion = BuildSettings.PackageVersion;
         PackageSource = source;
         BasePath = basePath;
         TestExecutable = executable;
@@ -81,14 +78,14 @@ public abstract class PackageDefinition
     public abstract string PackageResultDirectory { get; }
     public abstract string ExtensionInstallDirectory { get; }
 
-    public string PackageFilePath => _settings.PackageDirectory + PackageFileName;
+    public string PackageFilePath => BuildSettings.PackageDirectory + PackageFileName;
 
     protected abstract void doBuildPackage();
     protected abstract void doInstallPackage();
 
     public void BuildVerifyAndTest()
     {
-        _context.EnsureDirectoryExists(_settings.PackageDirectory);
+        _context.EnsureDirectoryExists(BuildSettings.PackageDirectory);
 
         BuildPackage();
         InstallPackage();
@@ -172,14 +169,14 @@ public abstract class PackageDefinition
                     new ProcessSettings()
                     {
                         Arguments = $"\"{PackageInstallDirectory}{TestExecutable}\" {arguments}",
-                        WorkingDirectory = _settings.OutputDirectory
+                        WorkingDirectory = BuildSettings.OutputDirectory
                     })
                 : _context.StartProcess(
                     PackageInstallDirectory + TestExecutable,
                     new ProcessSettings()
                     {
                         Arguments = arguments,
-                        WorkingDirectory = _settings.OutputDirectory
+                        WorkingDirectory = BuildSettings.OutputDirectory
                     });
 
             try
@@ -265,24 +262,24 @@ public class NuGetPackageDefinition : PackageDefinition
     /// <param name="symbols">An array of PackageChecks to be made on the symbol package, if one is created. Optional. Only supported for nuget packages.</param>
     /// <param name="tests">An array of PackageTests to be run against the package. Optional.</param>
 	public NuGetPackageDefinition(
-        BuildSettings settings, string id, string source, string basePath, string executable = null,
+        string id, string source, string basePath, string executable = null,
         PackageCheck[] checks = null, PackageCheck[] symbols = null, IEnumerable<PackageTest> tests = null)
-      : base (settings, PackageType.NuGet, id, source, basePath, executable: executable, checks: checks, symbols: symbols, tests: tests)
+      : base (PackageType.NuGet, id, source, basePath, executable: executable, checks: checks, symbols: symbols, tests: tests)
     {
     }
 
     public override string PackageFileName => $"{PackageId}.{PackageVersion}.nupkg";
     public override string SymbolPackageName => System.IO.Path.ChangeExtension(PackageFileName, ".snupkg");
-    public override string PackageInstallDirectory => $"{_settings.NuGetTestDirectory}{PackageId}/";
-    public override string PackageResultDirectory => $"{_settings.NuGetResultDirectory}{PackageId}/";
-    public override string ExtensionInstallDirectory => _settings.NuGetTestDirectory;
+    public override string PackageInstallDirectory => $"{BuildSettings.NuGetTestDirectory}{PackageId}/";
+    public override string PackageResultDirectory => $"{BuildSettings.NuGetResultDirectory}{PackageId}/";
+    public override string ExtensionInstallDirectory => BuildSettings.NuGetTestDirectory;
 
     protected override void doBuildPackage()
     {
         var nugetPackSettings = new NuGetPackSettings()
         {
             Version = PackageVersion,
-            OutputDirectory = _settings.PackageDirectory,
+            OutputDirectory = BuildSettings.PackageDirectory,
             BasePath = BasePath,
             NoPackageAnalysis = true,
             Symbols = HasSymbols
@@ -298,9 +295,9 @@ public class NuGetPackageDefinition : PackageDefinition
     {
         _context.NuGetInstall(PackageId, new NuGetInstallSettings
         {
-            Source = new[] { _settings.PackageDirectory },
+            Source = new[] { BuildSettings.PackageDirectory },
             Prerelease = true,
-            OutputDirectory = _settings.NuGetTestDirectory,
+            OutputDirectory = BuildSettings.NuGetTestDirectory,
             ExcludeVersion = true
         });
     }
@@ -324,16 +321,16 @@ public class ChocolateyPackageDefinition : PackageDefinition
     /// <param name="symbols">An array of PackageChecks to be made on the symbol package, if one is created. Optional. Only supported for nuget packages.</param>
     /// <param name="tests">An array of PackageTests to be run against the package. Optional.</param>
 	public ChocolateyPackageDefinition(
-        BuildSettings settings, string id, string source, string basePath, string executable = null,
+        string id, string source, string basePath, string executable = null,
         PackageCheck[] checks = null, IEnumerable<PackageTest> tests = null)
-      : base (settings, PackageType.Chocolatey, id, source, basePath, executable: executable, checks: checks, tests: tests)
+      : base (PackageType.Chocolatey, id, source, basePath, executable: executable, checks: checks, tests: tests)
     {
     }
 
     public override string PackageFileName => $"{PackageId}.{PackageVersion}.nupkg";
-    public override string PackageInstallDirectory => $"{_settings.ChocoTestDirectory}{PackageId}/";
-    public override string PackageResultDirectory => $"{_settings.ChocoResultDirectory}{PackageId}/";
-    public override string ExtensionInstallDirectory => _settings.ChocoTestDirectory;
+    public override string PackageInstallDirectory => $"{BuildSettings.ChocoTestDirectory}{PackageId}/";
+    public override string PackageResultDirectory => $"{BuildSettings.ChocoResultDirectory}{PackageId}/";
+    public override string ExtensionInstallDirectory => BuildSettings.ChocoTestDirectory;
     
     protected override void doBuildPackage()
     {
@@ -341,7 +338,7 @@ public class ChocolateyPackageDefinition : PackageDefinition
             new ChocolateyPackSettings()
             {
                 Version = PackageVersion,
-                OutputDirectory = _settings.PackageDirectory,
+                OutputDirectory = BuildSettings.PackageDirectory,
                 ArgumentCustomization = args => args.Append($"BIN={BasePath}")
             });
     }
@@ -350,7 +347,7 @@ public class ChocolateyPackageDefinition : PackageDefinition
     {
         // TODO: We can't run chocolatey install effectively
         // so for now we just unzip the package.
-        _context.Unzip(_settings.PackageDirectory + PackageFileName, PackageInstallDirectory);
+        _context.Unzip(BuildSettings.PackageDirectory + PackageFileName, PackageInstallDirectory);
     }
 }
 
@@ -372,24 +369,24 @@ public class ZipPackageDefinition : PackageDefinition
     /// <param name="symbols">An array of PackageChecks to be made on the symbol package, if one is created. Optional. Only supported for nuget packages.</param>
     /// <param name="tests">An array of PackageTests to be run against the package. Optional.</param>
 	public ZipPackageDefinition(
-        BuildSettings settings, string id, string source, string basePath, string executable = null,
+        string id, string source, string basePath, string executable = null,
         PackageCheck[] checks = null, IEnumerable<PackageTest> tests = null)
-      : base (settings, PackageType.Zip, id, source, basePath, executable: executable, checks: checks, tests: tests)
+      : base (PackageType.Zip, id, source, basePath, executable: executable, checks: checks, tests: tests)
     {
     }
 
     public override string PackageFileName => $"{PackageId}-{PackageVersion}.zip";
-    public override string PackageInstallDirectory => $"{_settings.ZipTestDirectory}{PackageId}/";
-    public override string PackageResultDirectory => $"{_settings.ZipResultDirectory}{PackageId}/";
-    public override string ExtensionInstallDirectory => $"{_settings.ZipTestDirectory}{PackageId}/bin/addins/";
+    public override string PackageInstallDirectory => $"{BuildSettings.ZipTestDirectory}{PackageId}/";
+    public override string PackageResultDirectory => $"{BuildSettings.ZipResultDirectory}{PackageId}/";
+    public override string ExtensionInstallDirectory => $"{BuildSettings.ZipTestDirectory}{PackageId}/bin/addins/";
   
     protected override void doBuildPackage()
     {
-        _context.Zip(_settings.ZipImageDirectory, _settings.PackageDirectory + PackageFileName);
+        _context.Zip(BuildSettings.ZipImageDirectory, BuildSettings.PackageDirectory + PackageFileName);
     }
 
     protected override void doInstallPackage()
     {
-        _context.Unzip(_settings.PackageDirectory + PackageFileName, PackageInstallDirectory);
+        _context.Unzip(BuildSettings.PackageDirectory + PackageFileName, PackageInstallDirectory);
     }
 }

@@ -1,13 +1,11 @@
 // Class that knows how to run tests against either GUI
 public class GuiTester
 {
-	private BuildSettings _settings;
 	private ICakeContext _context;
 
-	public GuiTester(BuildSettings settings)
+	public GuiTester(ICakeContext context)
 	{
-		_settings = settings;
-		_context = settings.Context;
+		_context = context;
 	}
 
 	public int RunGuiUnattended(string runnerPath, string arguments)
@@ -27,7 +25,7 @@ public class GuiTester
 		return _context.StartProcess(runnerPath, new ProcessSettings()
 		{
 			Arguments = arguments,
-			WorkingDirectory = _settings.OutputDirectory
+			WorkingDirectory = BuildSettings.OutputDirectory
 		});
 	}
 }

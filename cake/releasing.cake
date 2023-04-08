@@ -3,9 +3,9 @@
 //////////////////////////////////////////////////////////////////////
 
 Task("CreateDraftRelease")
-	.Does<BuildSettings>((settings) =>
+	.Does(() =>
 	{
-		if (settings.IsReleaseBranch)
+		if (BuildSettings.IsReleaseBranch)
 		{
 			// Exit if any PackageTests failed
 			CheckTestErrors(ref ErrorDetail);
@@ -15,14 +15,14 @@ Task("CreateDraftRelease")
 			// The branch name contains the full information to be used
 			// for both the name of the draft release and the milestone,
 			// i.e. release-2.0.0, release-2.0.0-beta2, etc.
-			string milestone = settings.BranchName.Substring(8);
+			string milestone = BuildSettings.BranchName.Substring(8);
 			string releaseName = $"TestCentric {milestone}";
 
 			Information($"Creating draft release for {releaseName}");
 
 			try
 			{
-				GitReleaseManagerCreate(settings.GitHubAccessToken, GITHUB_OWNER, GITHUB_REPO, new GitReleaseManagerCreateSettings()
+				GitReleaseManagerCreate(BuildSettings.GitHubAccessToken, GITHUB_OWNER, GITHUB_REPO, new GitReleaseManagerCreateSettings()
 				{
 					Name = releaseName,
 					Milestone = milestone
@@ -48,14 +48,14 @@ Task("CreateDraftRelease")
 
 Task("DownloadDraftRelease")
 	.Description("Download draft release for local use")
-	.Does<BuildSettings>((settings) =>
+	.Does(() =>
 	{
-		if (!settings.IsReleaseBranch)
+		if (!BuildSettings.IsReleaseBranch)
 			throw new Exception("DownloadDraftRelease requires a release branch!");
 
-		string milestone = settings.BranchName.Substring(8);
+		string milestone = BuildSettings.BranchName.Substring(8);
 
-		GitReleaseManagerExport(settings.GitHubAccessToken, GITHUB_OWNER, GITHUB_REPO, "DraftRelease.md",
+		GitReleaseManagerExport(BuildSettings.GitHubAccessToken, GITHUB_OWNER, GITHUB_REPO, "DraftRelease.md",
 			new GitReleaseManagerExportSettings() { TagName = milestone });
 	});
 
@@ -64,16 +64,16 @@ Task("DownloadDraftRelease")
 //////////////////////////////////////////////////////////////////////
 
 Task("CreateProductionRelease")
-	.Does<BuildSettings>((settings) =>
+	.Does(() =>
 	{
-		if (settings.IsProductionRelease)
+		if (BuildSettings.IsProductionRelease)
 		{
 			// Exit if any PackageTests failed
 			CheckTestErrors(ref ErrorDetail);
 
-			string token = settings.GitHubAccessToken;
-			string tagName = settings.PackageVersion;
-			string assets = settings.GitHubReleaseAssets;
+			string token = BuildSettings.GitHubAccessToken;
+			string tagName = BuildSettings.PackageVersion;
+			string assets = BuildSettings.GitHubReleaseAssets;
 
 			Information($"Publishing release {tagName} to GitHub");
 
