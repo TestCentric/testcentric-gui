@@ -33,7 +33,7 @@ const string GUI_TESTS = "*.Tests.dll";
 #load "./cake/packaging.cake"
 #load "./cake/publishing.cake"
 #load "./cake/releasing.cake"
-#load "./cake/test-reports.cake"
+#load "../TestCentric.Cake.Recipe/recipe/test-reports.cake"
 #load "../TestCentric.Cake.Recipe/recipe/test-results.cake"
 #load "./cake/testing.cake"
 #load "../TestCentric.Cake.Recipe/recipe/utilities.cake"
