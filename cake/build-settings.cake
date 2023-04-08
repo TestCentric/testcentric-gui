@@ -18,7 +18,8 @@ public static class BuildSettings
 
 	public static void Initialize(
 		ICakeContext context,
-		string solutionFile)
+		string solutionFile = null,
+		string[] exemptFiles = null)
 	{
 		if (context == null)
 			throw new ArgumentNullException(nameof(context));
@@ -27,6 +28,9 @@ public static class BuildSettings
 		_buildSystem = context.BuildSystem();
 
 		SolutionFile = solutionFile;
+
+		StandardHeader = DEFAULT_STANDARD_HEADER;
+		ExemptFiles = exemptFiles ?? new string[0];
 
 		Configuration = context.Argument("configuration", context.Argument("c", DEFAULT_CONFIGURATION));
 		NoPush = context.HasArgument("nopush");
@@ -323,6 +327,10 @@ public static class BuildSettings
 
 	public static ICakeContext Context { get; private set; }
 	public static string SolutionFile { get; private set; }
+
+	// Checking 
+	public static string[] StandardHeader { get; private set; }
+	public static string[] ExemptFiles { get; private set; }
 
 	public static string Target { get; }
 	public static IEnumerable<string> TasksToExecute { get; }

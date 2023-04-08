@@ -23,7 +23,7 @@ const string GUI_TESTS = "*.Tests.dll";
 // Load scripts after defining constants
 #load "../TestCentric.Cake.Recipe/recipe/building.cake"
 #load "./cake/build-settings.cake"
-#load "./cake/check-headers.cake"
+#load "../TestCentric.Cake.Recipe/recipe/check-headers.cake"
 #load "../TestCentric.Cake.Recipe/recipe/console-reporter.cake"
 #load "../TestCentric.Cake.Recipe/recipe/constants.cake"
 #load "./cake/gui-tester.cake"
@@ -102,7 +102,8 @@ Teardown(context => CheckTestErrors(ref ErrorDetail));
 
 BuildSettings.Initialize(
 	Context,
-	SOLUTION
+	solutionFile: SOLUTION,
+	exemptFiles: new [] { "Resource.cs", "TextCode.cs" }
 );
 
 //////////////////////////////////////////////////////////////////////
