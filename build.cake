@@ -31,7 +31,7 @@ const string GUI_TESTS = "*.Tests.dll";
 #load "./cake/package-definitions.cake"
 #load "../TestCentric.Cake.Recipe/recipe/package-tests.cake"
 #load "./cake/packaging.cake"
-#load "./cake/publishing.cake"
+#load "../TestCentric.Cake.Recipe/recipe/publishing.cake"
 #load "./cake/releasing.cake"
 #load "../TestCentric.Cake.Recipe/recipe/test-reports.cake"
 #load "../TestCentric.Cake.Recipe/recipe/test-results.cake"
@@ -144,7 +144,7 @@ Task("AppVeyor")
 	.IsDependentOn("Build")
 	.IsDependentOn("Test")
 	.IsDependentOn("Package")
-	.IsDependentOn("PublishPackages")
+	.IsDependentOn("Publish")
 	.IsDependentOn("CreateDraftRelease")
 	.IsDependentOn("CreateProductionRelease");
 

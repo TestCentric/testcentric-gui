@@ -318,7 +318,7 @@ public static class BuildSettings
 			},
 			tests: PackageTests);
 
-		AllPackages = new List<PackageDefinition>(new [] {
+		Packages = new List<PackageDefinition>(new [] {
 			NuGetPackage,
 			ChocolateyPackage,
 			ZipPackage
@@ -384,7 +384,7 @@ public static class BuildSettings
 	public static PackageDefinition ZipPackage { get; private set; }
 	public static PackageDefinition NuGetPackage { get; private set; }
 	public static PackageDefinition ChocolateyPackage { get; private set; }
-	public static List<PackageDefinition> AllPackages { get; private set; }
+	public static List<PackageDefinition> Packages { get; private set; }
 
 	public static string GitHubReleaseAssets => Context.IsRunningOnWindows()
 		? $"\"{ZipPackage},{NuGetPackage},{ChocolateyPackage}\""
@@ -536,7 +536,7 @@ public static class BuildSettings
 		Console.WriteLine("Engine Runtimes: " + string.Join(", ", SupportedEngineRuntimes));
 
 		Console.WriteLine("\nPACKAGES");
-		foreach (PackageDefinition package in AllPackages)
+		foreach (PackageDefinition package in Packages)
 		{
 			Console.WriteLine($"{package.PackageFileName}");
 			Console.WriteLine($"  PackageId:               {package.PackageId}");

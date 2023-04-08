@@ -73,6 +73,9 @@ public abstract class PackageDefinition
     public bool HasSymbols => SymbolChecks != null;
     public virtual string SymbolPackageName => throw new System.NotImplementedException($"Symbols are not available for this type of package.");
 
+	public bool IsNuGetPackage => PackageType == PackageType.NuGet;
+	public bool IsChocolateyPackage => PackageType == PackageType.Chocolatey;
+
     public abstract string PackageFileName { get; }
     public abstract string PackageInstallDirectory { get; }
     public abstract string PackageResultDirectory { get; }
