@@ -18,6 +18,7 @@ public static class BuildSettings
 
 	public static void Initialize(
 		ICakeContext context,
+		string title,
 		string solutionFile = null,
 		string[] exemptFiles = null)
 	{
@@ -27,6 +28,7 @@ public static class BuildSettings
 		Context = context;
 		_buildSystem = context.BuildSystem();
 
+		Title = title;
 		SolutionFile = solutionFile;
 
 		StandardHeader = DEFAULT_STANDARD_HEADER;
@@ -327,6 +329,7 @@ public static class BuildSettings
 
 	public static ICakeContext Context { get; private set; }
 	public static string SolutionFile { get; private set; }
+	public static string Title { get; private set; }
 
 	// Checking 
 	public static string[] StandardHeader { get; private set; }
@@ -386,6 +389,8 @@ public static class BuildSettings
 	public static PackageDefinition ChocolateyPackage { get; private set; }
 	public static List<PackageDefinition> Packages { get; private set; }
 
+	public static string GitHubRepository => "testcentric-gui";
+	public static string GitHubOwner => "TestCentric";
 	public static string GitHubReleaseAssets => Context.IsRunningOnWindows()
 		? $"\"{ZipPackage},{NuGetPackage},{ChocolateyPackage}\""
         : $"\"{ZipPackage},{NuGetPackage}\"";

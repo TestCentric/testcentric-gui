@@ -32,7 +32,7 @@ const string GUI_TESTS = "*.Tests.dll";
 #load "../TestCentric.Cake.Recipe/recipe/package-tests.cake"
 #load "./cake/packaging.cake"
 #load "../TestCentric.Cake.Recipe/recipe/publishing.cake"
-#load "./cake/releasing.cake"
+#load "../TestCentric.Cake.Recipe/recipe/releasing.cake"
 #load "../TestCentric.Cake.Recipe/recipe/test-reports.cake"
 #load "../TestCentric.Cake.Recipe/recipe/test-results.cake"
 #load "./cake/testing.cake"
@@ -102,6 +102,7 @@ Teardown(context => CheckTestErrors(ref ErrorDetail));
 
 BuildSettings.Initialize(
 	Context,
+	"TestCentric.GuiRunner",
 	solutionFile: SOLUTION,
 	exemptFiles: new [] { "Resource.cs", "TextCode.cs" }
 );
