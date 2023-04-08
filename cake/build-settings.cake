@@ -8,26 +8,6 @@ Task("DumpSettings")
 		settings.DumpSettings();
 	});
 
-// URLs for uploading packages
-private const string MYGET_PUSH_URL = "https://www.myget.org/F/testcentric/api/v2";
-private const string NUGET_PUSH_URL = "https://api.nuget.org/v3/index.json";
-private const string CHOCO_PUSH_URL = "https://push.chocolatey.org/";
-
-// Environment Variable names holding API keys
-private const string MYGET_API_KEY = "TESTCENTRIC_MYGET_API_KEY";
-private const string FALLBACK_MYGET_API_KEY = "MYGET_API_KEY";
-private const string NUGET_API_KEY = "TESTCENTRIC_NUGET_API_KEY";
-private const string FALLBACK_NUGET_API_KEY = "NUGET_API_KEY";
-private const string CHOCO_API_KEY = "TESTCENTRIC_CHOCO_API_KEY";
-private const string FALLBACK_CHOCO_API_KEY = "CHOCO_API_KEY";
-private const string GITHUB_ACCESS_TOKEN = "GITHUB_ACCESS_TOKEN";
-
-// Pre-release labels that we publish
-private static readonly string[] LABELS_WE_PUBLISH_ON_MYGET = { "dev" };
-private static readonly string[] LABELS_WE_PUBLISH_ON_NUGET = { "alpha", "beta", "rc" };
-private static readonly string[] LABELS_WE_PUBLISH_ON_CHOCOLATEY = { "alpha", "beta", "rc" };
-private static readonly string[] LABELS_WE_RELEASE_ON_GITHUB = { "alpha", "beta", "rc" };
-
 //////////////////////////////////////////////////////////////////////
 // BUILD SETTINGS
 //////////////////////////////////////////////////////////////////////
@@ -62,9 +42,9 @@ public class BuildSettings
 		NoPush = SetupContext.HasArgument("nopush");
 		ProjectDirectory = context.Environment.WorkingDirectory.FullPath + "/";
 
-        MyGetApiKey = GetApiKey(MYGET_API_KEY, FALLBACK_MYGET_API_KEY);
-        NuGetApiKey = GetApiKey(NUGET_API_KEY, FALLBACK_NUGET_API_KEY);
-		ChocolateyApiKey = GetApiKey(CHOCO_API_KEY, FALLBACK_CHOCO_API_KEY);
+        MyGetApiKey = GetApiKey(TESTCENTRIC_MYGET_API_KEY, MYGET_API_KEY);
+        NuGetApiKey = GetApiKey(TESTCENTRIC_NUGET_API_KEY, NUGET_API_KEY);
+		ChocolateyApiKey = GetApiKey(TESTCENTRIC_CHOCO_API_KEY, CHOCO_API_KEY);
 		GitHubAccessToken = SetupContext.EnvironmentVariable(GITHUB_ACCESS_TOKEN);
 
 		BuildVersion = new BuildVersion(context);

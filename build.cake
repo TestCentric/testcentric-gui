@@ -7,7 +7,6 @@ const string GITHUB_OWNER = "testcentric";
 const string GITHUB_REPO = "testcentric-gui";
 
 const string DEFAULT_VERSION = "2.0.0";
-const string DEFAULT_CONFIGURATION = "Release";
 static string[] VALID_CONFIGS = new [] { "Release", "Debug" };
 
 // NOTE: This must match what is actually referenced by
@@ -26,6 +25,7 @@ const string GUI_TESTS = "*.Tests.dll";
 #load "./cake/build-settings.cake"
 #load "./cake/check-headers.cake"
 #load "../TestCentric.Cake.Recipe/recipe/console-reporter.cake"
+#load "../TestCentric.Cake.Recipe/recipe/constants.cake"
 #load "./cake/gui-tester.cake"
 #load "../TestCentric.Cake.Recipe/recipe/package-checks.cake"
 #load "./cake/package-definitions.cake"
