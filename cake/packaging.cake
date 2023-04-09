@@ -7,11 +7,13 @@ Task("Package")
 	.IsDependentOn("PackageExistingBuild");
 
 Task("PackageExistingBuild")
-	.IsDependentOn("PackageNuGet")
-	.IsDependentOn("PackageChocolatey")
-	.IsDependentOn("PackageZip");
+    .Does(() =>
+    {
+        foreach(var package in BuildSettings.Packages)
+            package.BuildVerifyAndTest();
+    });
 
-Task("PackageNuGet")
+/*Task("PackageNuGet")
 	.Description("Build and Test the NuGet Package")
 	.Does(() =>
 	{
@@ -40,7 +42,7 @@ Task("PackageZip")
 	.Does(() =>
 	{
 		BuildSettings.ZipPackage.BuildVerifyAndTest();
-	});
+	});*/
 
 //////////////////////////////////////////////////////////////////////
 // PACKAGING METHODS AND CLASSES

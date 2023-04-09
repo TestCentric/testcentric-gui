@@ -2,7 +2,6 @@
 #tool nuget:?package=GitReleaseManager&version=0.12.1
 #tool nuget:?package=NuGet.CommandLine&version=6.0.0
 
-const string SOLUTION = "testcentric-gui.sln";
 const string GITHUB_OWNER = "testcentric";
 const string GITHUB_REPO = "testcentric-gui";
 
@@ -22,13 +21,13 @@ const string GUI_TESTS = "*.Tests.dll";
 
 // Load scripts after defining constants
 #load "../TestCentric.Cake.Recipe/recipe/building.cake"
-#load "./cake/build-settings.cake"
+#load "./cake/BuildSettings.cake"
 #load "../TestCentric.Cake.Recipe/recipe/check-headers.cake"
-#load "../TestCentric.Cake.Recipe/recipe/console-reporter.cake"
+#load "../TestCentric.Cake.Recipe/recipe/ConsoleReporter.cake"
 #load "../TestCentric.Cake.Recipe/recipe/constants.cake"
 #load "../TestCentric.Cake.Recipe/recipe/package-checks.cake"
 #load "./cake/package-definitions.cake"
-#load "../TestCentric.Cake.Recipe/recipe/package-tests.cake"
+#load "../TestCentric.Cake.Recipe/recipe/PackageTest.cake"
 #load "./cake/packaging.cake"
 #load "../TestCentric.Cake.Recipe/recipe/publishing.cake"
 #load "../TestCentric.Cake.Recipe/recipe/releasing.cake"
@@ -39,6 +38,7 @@ const string GUI_TESTS = "*.Tests.dll";
 #load "../TestCentric.Cake.Recipe/recipe/utilities.cake"
 #load "../TestCentric.Cake.Recipe/recipe/versioning.cake"
 
+#load "./cake/package-tests.cake"
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -89,34 +89,94 @@ using System.Reflection;
 using System.Threading.Tasks;
 
 //////////////////////////////////////////////////////////////////////
-// TEARDOWN
-//////////////////////////////////////////////////////////////////////
-
-// If we run target Test, we catch errors here in teardown.
-// If we run packaging, the CheckTestErrors Task is run instead.
-//Teardown(context => CheckTestErrors(ref ErrorDetail));
-
-//////////////////////////////////////////////////////////////////////
-// INITIALIZE BUILD SETTINGS
+// INITIALIZATION
 //////////////////////////////////////////////////////////////////////
 
 BuildSettings.Initialize(
-	Context,
-	"TestCentric.GuiRunner",
-	solutionFile: SOLUTION,
-	unitTestRunner: new GuiTester(),
+	context: Context,
+	title: "TestCentric.GuiRunner",
+	solutionFile: "testcentric-gui.sln",
+	unitTestRunner: new GuiSelfTester(),
 	exemptFiles: new [] { "Resource.cs", "TextCode.cs" }
 );
+
+DefinePackageTests();
+
+var NuGetPackage = new NuGetPackageDefinition(
+	id: "TestCentric.GuiRunner",
+	source: BuildSettings.NuGetDirectory + "TestCentric.GuiRunner.nuspec",
+	basePath: BuildSettings.OutputDirectory,
+	executable: "tools/testcentric.exe",
+	checks: new PackageCheck[] {
+		HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "testcentric.png"),
+		HasDirectory("tools").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.nuget.addins"),
+		HasDirectory("tools/agents/net462").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
+		HasDirectory("tools/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
+		HasDirectory("tools/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
+		HasDirectory("tools/agents/net6.0").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
+		HasDirectory("tools/agents/net7.0").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
+		HasDirectory("tools/Images").WithFiles("DebugTests.png", "RunTests.png", "StopRun.png", "GroupBy_16x.png", "SummaryReport.png"),
+		HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
+		HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
+		HasDirectory("tools/Images/Tree/Default").WithFiles(TREE_ICONS_PNG),
+		HasDirectory("tools/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG)
+	},
+	tests: PackageTests);
+
+var ChocolateyPackage = new ChocolateyPackageDefinition(
+	id: "testcentric-gui",
+	source: BuildSettings.ChocolateyDirectory + "testcentric-gui.nuspec",
+	basePath: BuildSettings.OutputDirectory,
+	executable: "tools/testcentric.exe",
+	checks: new PackageCheck[] {
+		HasDirectory("tools").WithFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "VERIFICATION.txt", "testcentric.choco.addins").AndFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.choco.addins"),
+		HasDirectory("tools/agents/net462").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
+		HasDirectory("tools/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
+		HasDirectory("tools/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
+		HasDirectory("tools/agents/net6.0").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
+		HasDirectory("tools/agents/net7.0").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
+		HasDirectory("tools/Images").WithFiles("DebugTests.png", "RunTests.png", "StopRun.png", "GroupBy_16x.png", "SummaryReport.png"),
+		HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
+		HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
+		HasDirectory("tools/Images/Tree/Default").WithFiles(TREE_ICONS_PNG),
+		HasDirectory("tools/Images/Tree/Visual%20Studio").WithFiles(TREE_ICONS_PNG)
+	},
+	tests: PackageTests);
+
+var ZipPackage = new ZipPackageDefinition(
+	id: "TestCentric.Gui.Runner",
+	source: BuildSettings.NuGetDirectory + "TestCentric.Gui.Runner.nuspec",
+	basePath: BuildSettings.OutputDirectory,
+	executable: "bin/testcentric.exe",
+	checks: new PackageCheck[] {
+		HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt"),
+		HasDirectory("bin").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.zip.addins"),
+		HasDirectory("bin/agents/net462").WithFiles(NET_FRAMEWORK_AGENT_FILES),
+		HasDirectory("bin/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES),
+		HasDirectory("bin/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES),
+		HasDirectory("bin/agents/net6.0").WithFiles(NET_CORE_AGENT_FILES),
+		HasDirectory("bin/agents/net7.0").WithFiles(NET_CORE_AGENT_FILES),
+		HasDirectory("bin/Images").WithFiles("DebugTests.png", "RunTests.png", "StopRun.png", "GroupBy_16x.png", "SummaryReport.png"),
+		HasDirectory("bin/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
+		HasDirectory("bin/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
+		HasDirectory("bin/Images/Tree/Default").WithFiles(TREE_ICONS_PNG),
+		HasDirectory("bin/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG)
+	},
+	tests: PackageTests);
+
+BuildSettings.Packages.Add(NuGetPackage);
+BuildSettings.Packages.Add(ChocolateyPackage);
+BuildSettings.Packages.Add(ZipPackage);
 
 //////////////////////////////////////////////////////////////////////
 // POST-BUILD ACTION
 //////////////////////////////////////////////////////////////////////
 
+// The engine package does not restore correctly. As a temporary
+// fix, we install a local copy and then copy agents and
+// content to the output directory.
 TaskTeardown(context =>
 {
-	// The engine package does not restore correctly. As a temporary
-	// fix, we install a local copy and then copy agents and
-	// content to the output directory.
 	if (context.Task.Name == "Build")
 	{
 		string tempEngineInstall = BuildSettings.ProjectDirectory + "tempEngineInstall/";
@@ -145,7 +205,7 @@ TaskTeardown(context =>
 // UNIT TEST RUNNER
 //////////////////////////////////////////////////////////////////////
 
-public class GuiTester : TestRunner
+public class GuiSelfTester : TestRunner
 {
 	public override int Run(string arguments)
 	{

@@ -385,7 +385,42 @@ public class ZipPackageDefinition : PackageDefinition
   
     protected override void doBuildPackage()
     {
+        CreateZipImage();
         _context.Zip(BuildSettings.ZipImageDirectory, BuildSettings.PackageDirectory + PackageFileName);
+    }
+
+    // TODO: This code is specific to the GUI package and needs to be
+    // replaced in the recipe with a more general approach
+    private void CreateZipImage()
+    {
+	    string zipImageDir = BuildSettings.ZipImageDirectory;
+
+        _context.CreateDirectory(zipImageDir);
+        _context.CleanDirectory(zipImageDir);
+	    _context.CreateDirectory(zipImageDir + "bin/");
+
+	    _context.CopyFiles(
+            new string[] { "LICENSE.txt", "NOTICES.txt", "CHANGES.txt" }, 
+            zipImageDir);
+
+        var bin = BuildSettings.OutputDirectory;
+        _context.CopyFiles(
+            new string[] {
+                bin + "testcentric.exe", bin + "testcentric.exe.config", bin + "TestCentric.Gui.Runner.dll",
+                bin + "nunit.uiexception.dll", bin + "TestCentric.Gui.Model.dll", bin + "Mono.Options.dll",
+                bin + "nunit.engine.api.dll", bin + "testcentric.engine.api.dll", bin + "testcentric.engine.metadata.dll",
+                bin + "testcentric.extensibility.dll", bin + "testcentric.engine.core.dll", bin + "testcentric.engine.dll"
+            },
+            zipImageDir + "bin/");
+
+        _context.CopyFileToDirectory(BuildSettings.ZipDirectory + "testcentric.zip.addins", BuildSettings.ZipImageDirectory + "bin/");
+
+        _context.CopyDirectory(BuildSettings.OutputDirectory + "Images", zipImageDir + "bin/Images");
+
+        _context.CopyDirectory(BuildSettings.OutputDirectory + "agents", zipImageDir + "bin/agents");
+
+        // NOTE: Files specific to a particular package are not copied
+        // into the image directory but are added separately.
     }
 
     protected override void doInstallPackage()
