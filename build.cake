@@ -26,7 +26,6 @@ const string GUI_TESTS = "*.Tests.dll";
 #load "../TestCentric.Cake.Recipe/recipe/check-headers.cake"
 #load "../TestCentric.Cake.Recipe/recipe/console-reporter.cake"
 #load "../TestCentric.Cake.Recipe/recipe/constants.cake"
-#load "./cake/gui-tester.cake"
 #load "../TestCentric.Cake.Recipe/recipe/package-checks.cake"
 #load "./cake/package-definitions.cake"
 #load "../TestCentric.Cake.Recipe/recipe/package-tests.cake"
@@ -35,7 +34,8 @@ const string GUI_TESTS = "*.Tests.dll";
 #load "../TestCentric.Cake.Recipe/recipe/releasing.cake"
 #load "../TestCentric.Cake.Recipe/recipe/test-reports.cake"
 #load "../TestCentric.Cake.Recipe/recipe/test-results.cake"
-#load "./cake/testing.cake"
+#load "../TestCentric.Cake.Recipe/recipe/testing.cake"
+#load "../TestCentric.Cake.Recipe/recipe/test-runners.cake"
 #load "../TestCentric.Cake.Recipe/recipe/utilities.cake"
 #load "../TestCentric.Cake.Recipe/recipe/versioning.cake"
 
@@ -94,7 +94,7 @@ using System.Threading.Tasks;
 
 // If we run target Test, we catch errors here in teardown.
 // If we run packaging, the CheckTestErrors Task is run instead.
-Teardown(context => CheckTestErrors(ref ErrorDetail));
+//Teardown(context => CheckTestErrors(ref ErrorDetail));
 
 //////////////////////////////////////////////////////////////////////
 // INITIALIZE BUILD SETTINGS
@@ -104,8 +104,13 @@ BuildSettings.Initialize(
 	Context,
 	"TestCentric.GuiRunner",
 	solutionFile: SOLUTION,
+	unitTestRunner: new GuiTester(),
 	exemptFiles: new [] { "Resource.cs", "TextCode.cs" }
 );
+
+//////////////////////////////////////////////////////////////////////
+// POST-BUILD ACTION
+//////////////////////////////////////////////////////////////////////
 
 TaskTeardown(context =>
 {
@@ -135,6 +140,27 @@ TaskTeardown(context =>
 		Information("Copied engine files");
 	}
 });
+
+//////////////////////////////////////////////////////////////////////
+// UNIT TEST RUNNER
+//////////////////////////////////////////////////////////////////////
+
+public class GuiTester : TestRunner
+{
+	public override int Run(string arguments)
+	{
+		if (!arguments.Contains(" --run"))
+			arguments += " --run";
+		if (!arguments.Contains(" --unattended"))
+			arguments += " --unattended";
+		if (!arguments.Contains(" --full-gui"))
+			arguments += " --full-gui";
+
+		ExecutablePath = BuildSettings.OutputDirectory + "testcentric.exe";
+
+		return base.Run(arguments);
+	}
+}
 
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS

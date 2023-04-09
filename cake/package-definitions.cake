@@ -331,9 +331,9 @@ public class ChocolateyPackageDefinition : PackageDefinition
     }
 
     public override string PackageFileName => $"{PackageId}.{PackageVersion}.nupkg";
-    public override string PackageInstallDirectory => $"{BuildSettings.ChocoTestDirectory}{PackageId}/";
-    public override string PackageResultDirectory => $"{BuildSettings.ChocoResultDirectory}{PackageId}/";
-    public override string ExtensionInstallDirectory => BuildSettings.ChocoTestDirectory;
+    public override string PackageInstallDirectory => $"{BuildSettings.ChocolateyTestDirectory}{PackageId}/";
+    public override string PackageResultDirectory => $"{BuildSettings.ChocolateyResultDirectory}{PackageId}/";
+    public override string ExtensionInstallDirectory => BuildSettings.ChocolateyTestDirectory;
     
     protected override void doBuildPackage()
     {

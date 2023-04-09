@@ -17,9 +17,13 @@ public static class BuildSettings
 	private static BuildSystem _buildSystem;
 
 	public static void Initialize(
+		// Required parameters
 		ICakeContext context,
 		string title,
+		// Optional named parameters
 		string solutionFile = null,
+        string unitTests = GUI_TESTS,
+		TestRunner unitTestRunner = null,
 		string[] exemptFiles = null)
 	{
 		if (context == null)
@@ -30,12 +34,13 @@ public static class BuildSettings
 
 		Title = title;
 		SolutionFile = solutionFile;
+		UnitTests= unitTests;
+		UnitTestRunner = unitTestRunner;
 
 		StandardHeader = DEFAULT_STANDARD_HEADER;
 		ExemptFiles = exemptFiles ?? new string[0];
 
 		Configuration = context.Argument("configuration", context.Argument("c", DEFAULT_CONFIGURATION));
-		NoPush = context.HasArgument("nopush");
 		ProjectDirectory = context.Environment.WorkingDirectory.FullPath + "/";
 
         MyGetApiKey = GetApiKey(TESTCENTRIC_MYGET_API_KEY, MYGET_API_KEY);
@@ -327,7 +332,27 @@ public static class BuildSettings
 		});
 	}
 
+	// Cake Context
 	public static ICakeContext Context { get; private set; }
+
+	// Targets - not set until Setup runs
+	public static string Target { get; }
+	public static IEnumerable<string> TasksToExecute { get; set; }
+
+	// Arguments
+	public static string Configuration { get; private set; }
+	public static bool NoPush => Context.HasArgument("nopush");
+
+	// Versioning
+	public static BuildVersion BuildVersion { get; private set; }
+    public static string BranchName => BuildVersion.BranchName;
+	public static bool IsReleaseBranch => BuildVersion.IsReleaseBranch;
+	public static string PackageVersion => BuildVersion.PackageVersion;
+	public static string AssemblyVersion => BuildVersion.AssemblyVersion;
+	public static string AssemblyFileVersion => BuildVersion.AssemblyFileVersion;
+	public static string AssemblyInformationalVersion => BuildVersion.AssemblyInformationalVersion;
+	public static bool IsPreRelease => BuildVersion.IsPreRelease;
+
 	public static string SolutionFile { get; private set; }
 	public static string Title { get; private set; }
 
@@ -335,17 +360,9 @@ public static class BuildSettings
 	public static string[] StandardHeader { get; private set; }
 	public static string[] ExemptFiles { get; private set; }
 
-	public static string Target { get; }
-	public static IEnumerable<string> TasksToExecute { get; }
-
-	public static string Configuration { get; private set; }
-	public static bool NoPush { get; private set; }
-
-	public static BuildVersion BuildVersion { get; private set; }
-	public static string PackageVersion => BuildVersion.PackageVersion;
-	public static string AssemblyVersion => BuildVersion.AssemblyVersion;
-	public static string AssemblyFileVersion => BuildVersion.AssemblyFileVersion;
-	public static string AssemblyInformationalVersion => BuildVersion.AssemblyInformationalVersion;
+	//Testing
+	public static string UnitTests { get; private set; }
+	public static TestRunner UnitTestRunner {get; private set; }
 
 	public static List<PackageTest> PackageTests { get; } = new List<PackageTest>();
 	public static int PackageTestLevel { get; private set; }
@@ -367,6 +384,7 @@ public static class BuildSettings
 	public static bool IsRunningOnWindows => Context.IsRunningOnWindows();
 	public static bool IsRunningOnAppVeyor => _buildSystem.AppVeyor.IsRunningOnAppVeyor;
 
+	// Standard Directory Structure - not changeable by user
 	public static string ProjectDirectory { get; private set; }
 	public static string SourceDirectory => ProjectDirectory + "src/";
 	public static string OutputDirectory => ProjectDirectory + "bin/" + Configuration + "/";
@@ -376,11 +394,13 @@ public static class BuildSettings
 	public static string PackageDirectory => ProjectDirectory + "package/";
 	public static string PackageTestDirectory => PackageDirectory + "tests/";
 	public static string NuGetTestDirectory => PackageTestDirectory + "nuget/";
-	public static string ChocoTestDirectory => PackageTestDirectory + "choco/";
+	public static string NuGetTestRunnerDirectory => NuGetTestDirectory + "runners/";
+	public static string ChocolateyTestDirectory => PackageTestDirectory + "choco/";
+	public static string ChocolateyTestRunnerDirectory => ChocolateyTestDirectory + "runners/";
 	public static string ZipTestDirectory => PackageTestDirectory + "zip/";
 	public static string PackageResultDirectory => PackageDirectory + "results/";
 	public static string NuGetResultDirectory => PackageResultDirectory + "nuget/";
-	public static string ChocoResultDirectory => PackageResultDirectory + "choco/";
+	public static string ChocolateyResultDirectory => PackageResultDirectory + "choco/";
 	public static string ZipResultDirectory => PackageResultDirectory + "zip/";
 	public static string ZipImageDirectory => PackageDirectory + "zipimage/";
 
@@ -404,10 +424,6 @@ public static class BuildSettings
 	public static string ChocolateyApiKey { get; private set; }
 	public static string GitHubAccessToken { get; private set; }
 
-    public static string BranchName => BuildVersion.BranchName;
-	public static bool IsReleaseBranch => BuildVersion.IsReleaseBranch;
-
-	public static bool IsPreRelease => BuildVersion.IsPreRelease;
 	public static bool ShouldPublishToMyGet =>
 		!IsPreRelease || LABELS_WE_PUBLISH_ON_MYGET.Contains(BuildVersion.PreReleaseLabel);
 	public static bool ShouldPublishToNuGet =>
