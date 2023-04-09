@@ -74,7 +74,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "cake", "cake", "{6C9280F6-6
 		cake\package-definitions.cake = cake\package-definitions.cake
 		cake\BuildSettings.cake = cake\BuildSettings.cake
 		cake\package-tests.cake = cake\package-tests.cake
-		cake\packaging.cake = cake\packaging.cake
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mock-assembly-x86", "src\tests\mock-assembly-x86\mock-assembly-x86.csproj", "{80A66FA1-65B5-4AA5-B8BB-8908D0B04598}"

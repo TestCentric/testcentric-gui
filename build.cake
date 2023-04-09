@@ -28,7 +28,7 @@ const string GUI_TESTS = "*.Tests.dll";
 #load "../TestCentric.Cake.Recipe/recipe/package-checks.cake"
 #load "./cake/package-definitions.cake"
 #load "../TestCentric.Cake.Recipe/recipe/PackageTest.cake"
-#load "./cake/packaging.cake"
+#load "../TestCentric.Cake.Recipe/recipe/packaging.cake"
 #load "../TestCentric.Cake.Recipe/recipe/publishing.cake"
 #load "../TestCentric.Cake.Recipe/recipe/releasing.cake"
 #load "../TestCentric.Cake.Recipe/recipe/test-reports.cake"
@@ -101,6 +101,22 @@ BuildSettings.Initialize(
 );
 
 DefinePackageTests();
+
+static readonly string[] ENGINE_FILES = {
+        "testcentric.engine.dll", "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll"};
+static readonly string[] ENGINE_CORE_FILES = {
+        "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll" };
+static readonly string[] NET_FRAMEWORK_AGENT_FILES = {
+        "testcentric-agent.exe", "testcentric-agent.exe.config", "testcentric-agent-x86.exe", "testcentric-agent-x86.exe.config" };
+static readonly string[] NET_CORE_AGENT_FILES = {
+        "testcentric-agent.dll", "testcentric-agent.dll.config" };
+static readonly string[] GUI_FILES = {
+        "testcentric.exe", "testcentric.exe.config", "nunit.uiexception.dll",
+        "TestCentric.Gui.Runner.dll", "TestCentric.Gui.Model.dll", "Mono.Options.dll" };
+static readonly string[] TREE_ICONS_JPG = {
+        "Success.jpg", "Failure.jpg", "Ignored.jpg", "Inconclusive.jpg", "Skipped.jpg" };
+static readonly string[] TREE_ICONS_PNG = {
+        "Success.png", "Failure.png", "Ignored.png", "Inconclusive.png", "Skipped.png" };
 
 var NuGetPackage = new NuGetPackageDefinition(
 	id: "TestCentric.GuiRunner",
