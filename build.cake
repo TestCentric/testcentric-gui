@@ -26,7 +26,7 @@ const string GUI_TESTS = "*.Tests.dll";
 #load "../TestCentric.Cake.Recipe/recipe/ConsoleReporter.cake"
 #load "../TestCentric.Cake.Recipe/recipe/constants.cake"
 #load "../TestCentric.Cake.Recipe/recipe/package-checks.cake"
-#load "./cake/package-definitions.cake"
+#load "../TestCentric.Cake.Recipe/recipe/package-definition.cake"
 #load "../TestCentric.Cake.Recipe/recipe/PackageTest.cake"
 #load "../TestCentric.Cake.Recipe/recipe/packaging.cake"
 #load "../TestCentric.Cake.Recipe/recipe/publishing.cake"
@@ -118,11 +118,11 @@ static readonly string[] TREE_ICONS_JPG = {
 static readonly string[] TREE_ICONS_PNG = {
         "Success.png", "Failure.png", "Ignored.png", "Inconclusive.png", "Skipped.png" };
 
-var NuGetPackage = new NuGetPackageDefinition(
+var nugetPackage = new NuGetPackage(
 	id: "TestCentric.GuiRunner",
 	source: BuildSettings.NuGetDirectory + "TestCentric.GuiRunner.nuspec",
 	basePath: BuildSettings.OutputDirectory,
-	executable: "tools/testcentric.exe",
+	testRunner: new GuiSelfTester(BuildSettings.NuGetTestDirectory + "TestCentric.GuiRunner/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
 		HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "testcentric.png"),
 		HasDirectory("tools").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.nuget.addins"),
@@ -139,11 +139,11 @@ var NuGetPackage = new NuGetPackageDefinition(
 	},
 	tests: PackageTests);
 
-var ChocolateyPackage = new ChocolateyPackageDefinition(
+var chocolateyPackage = new ChocolateyPackage(
 	id: "testcentric-gui",
 	source: BuildSettings.ChocolateyDirectory + "testcentric-gui.nuspec",
 	basePath: BuildSettings.OutputDirectory,
-	executable: "tools/testcentric.exe",
+	testRunner: new GuiSelfTester(BuildSettings.ChocolateyTestDirectory + "testcentric-gui/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
 		HasDirectory("tools").WithFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "VERIFICATION.txt", "testcentric.choco.addins").AndFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.choco.addins"),
 		HasDirectory("tools/agents/net462").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
@@ -155,15 +155,15 @@ var ChocolateyPackage = new ChocolateyPackageDefinition(
 		HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
 		HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
 		HasDirectory("tools/Images/Tree/Default").WithFiles(TREE_ICONS_PNG),
-		HasDirectory("tools/Images/Tree/Visual%20Studio").WithFiles(TREE_ICONS_PNG)
+		HasDirectory("tools/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG)
 	},
 	tests: PackageTests);
 
-var ZipPackage = new ZipPackageDefinition(
-	id: "TestCentric.Gui.Runner",
+var zipPackage = new ZipPackage(
+	id: "TestCentric.GuiRunner",
 	source: BuildSettings.NuGetDirectory + "TestCentric.Gui.Runner.nuspec",
 	basePath: BuildSettings.OutputDirectory,
-	executable: "bin/testcentric.exe",
+	testRunner: new GuiSelfTester(BuildSettings.ZipTestDirectory + "TestCentric.GuiRunner/bin/testcentric.exe"),
 	checks: new PackageCheck[] {
 		HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt"),
 		HasDirectory("bin").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.zip.addins"),
@@ -180,9 +180,9 @@ var ZipPackage = new ZipPackageDefinition(
 	},
 	tests: PackageTests);
 
-BuildSettings.Packages.Add(NuGetPackage);
-BuildSettings.Packages.Add(ChocolateyPackage);
-BuildSettings.Packages.Add(ZipPackage);
+BuildSettings.Packages.Add(nugetPackage);
+BuildSettings.Packages.Add(chocolateyPackage);
+BuildSettings.Packages.Add(zipPackage);
 
 //////////////////////////////////////////////////////////////////////
 // POST-BUILD ACTION
@@ -218,13 +218,22 @@ TaskTeardown(context =>
 });
 
 //////////////////////////////////////////////////////////////////////
-// UNIT TEST RUNNER
+// UNIT AND PACKAGE TEST RUNNER
 //////////////////////////////////////////////////////////////////////
 
 public class GuiSelfTester : TestRunner
 {
+	// NOTE: When constructed as an argument to BuildSettings.Initialize(),
+	// the executable path is not yet known and should not be provided.
+	public GuiSelfTester(string executablePath = null)
+	{
+		ExecutablePath = executablePath;
+	}
+
 	public override int Run(string arguments)
 	{
+
+
 		if (!arguments.Contains(" --run"))
 			arguments += " --run";
 		if (!arguments.Contains(" --unattended"))
@@ -232,11 +241,34 @@ public class GuiSelfTester : TestRunner
 		if (!arguments.Contains(" --full-gui"))
 			arguments += " --full-gui";
 
-		ExecutablePath = BuildSettings.OutputDirectory + "testcentric.exe";
+		if (ExecutablePath == null)
+			ExecutablePath = BuildSettings.OutputDirectory + "testcentric.exe";
 
 		return base.Run(arguments);
 	}
 }
+
+//////////////////////////////////////////////////////////////////////
+// INDIVIDUAL PACKAGES
+//////////////////////////////////////////////////////////////////////
+
+Task("PackageNuGet")
+	.Does(() =>
+	{
+		nugetPackage.BuildVerifyAndTest();
+	});
+
+Task("PackageChocolatey")
+	.Does(() =>
+	{
+		chocolateyPackage.BuildVerifyAndTest();
+	});
+
+Task("PackageZip")
+	.Does(() =>
+	{
+		zipPackage.BuildVerifyAndTest();
+	});
 
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
