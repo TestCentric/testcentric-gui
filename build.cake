@@ -21,7 +21,7 @@ const string GUI_TESTS = "*.Tests.dll";
 
 // Load scripts after defining constants
 #load "../TestCentric.Cake.Recipe/recipe/building.cake"
-#load "./cake/BuildSettings.cake"
+#load "../TestCentric.Cake.Recipe/recipe/BuildSettings.cake"
 #load "../TestCentric.Cake.Recipe/recipe/check-headers.cake"
 #load "../TestCentric.Cake.Recipe/recipe/ConsoleReporter.cake"
 #load "../TestCentric.Cake.Recipe/recipe/constants.cake"
@@ -38,7 +38,7 @@ const string GUI_TESTS = "*.Tests.dll";
 #load "../TestCentric.Cake.Recipe/recipe/utilities.cake"
 #load "../TestCentric.Cake.Recipe/recipe/versioning.cake"
 
-#load "./cake/package-tests.cake"
+#load "./package-tests.cake"
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
