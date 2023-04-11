@@ -8,7 +8,7 @@ const string ENGINE_API_PACKAGE_ID = "TestCentric.Engine.Api";
 
 const string TEST_BED_EXE = "test-bed.exe";
 
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.0-dev00035
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.0-dev00039
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -375,7 +375,7 @@ public class TestCentricEngineTestBed : TestRunner
 
 	public override int Run(string arguments)
 	{
-		return _context.StartProcess(ExecutablePath, new ProcessSettings()
+		return BuildSettings.Context.StartProcess(ExecutablePath, new ProcessSettings()
 		{
 			Arguments = arguments,
 			WorkingDirectory = BuildSettings.OutputDirectory
