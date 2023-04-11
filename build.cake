@@ -2,6 +2,8 @@
 #tool nuget:?package=GitReleaseManager&version=0.12.1
 #tool nuget:?package=NuGet.CommandLine&version=6.0.0
 
+using System.Xml.Serialization;
+
 const string GITHUB_OWNER = "testcentric";
 const string GITHUB_REPO = "testcentric-gui";
 
@@ -120,7 +122,7 @@ static readonly string[] TREE_ICONS_PNG = {
 
 var nugetPackage = new NuGetPackage(
 	id: "TestCentric.GuiRunner",
-	source: BuildSettings.NuGetDirectory + "TestCentric.GuiRunner.nuspec",
+	source: "nuget/TestCentric.GuiRunner.nuspec",
 	basePath: BuildSettings.OutputDirectory,
 	testRunner: new GuiSelfTester(BuildSettings.NuGetTestDirectory + "TestCentric.GuiRunner/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
@@ -161,7 +163,7 @@ var chocolateyPackage = new ChocolateyPackage(
 
 var zipPackage = new ZipPackage(
 	id: "TestCentric.GuiRunner",
-	source: BuildSettings.NuGetDirectory + "TestCentric.Gui.Runner.nuspec",
+	source: BuildSettings.ZipDirectory + "TestCentric.GuiRunner.zspec",
 	basePath: BuildSettings.OutputDirectory,
 	testRunner: new GuiSelfTester(BuildSettings.ZipTestDirectory + "TestCentric.GuiRunner/bin/testcentric.exe"),
 	checks: new PackageCheck[] {
