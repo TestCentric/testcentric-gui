@@ -2,12 +2,12 @@
 #tool nuget:?package=GitReleaseManager&version=0.12.1
 #tool nuget:?package=NuGet.CommandLine&version=6.0.0
 
-const string SOLUTION = "testcentric-gui.sln";
+using System.Xml.Serialization;
+
 const string GITHUB_OWNER = "testcentric";
 const string GITHUB_REPO = "testcentric-gui";
 
 const string DEFAULT_VERSION = "2.0.0";
-const string DEFAULT_CONFIGURATION = "Release";
 static string[] VALID_CONFIGS = new [] { "Release", "Debug" };
 
 // NOTE: This must match what is actually referenced by
@@ -21,8 +21,10 @@ const string NUGET_PACKAGE_NAME = "TestCentric.GuiRunner";
 const string GUI_RUNNER = "testcentric.exe";
 const string GUI_TESTS = "*.Tests.dll";
 
-// Load scripts after defining constants
-#load "./cake/build-settings.cake"
+// Load recipe after defining constants
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.0-dev00039
+
+#load "./package-tests.cake"
 
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -73,348 +75,197 @@ using System.Reflection;
 using System.Threading.Tasks;
 
 //////////////////////////////////////////////////////////////////////
-// SETUP AND TEARDOWN
+// INITIALIZATION
 //////////////////////////////////////////////////////////////////////
 
-Setup<BuildSettings>((context) =>
+BuildSettings.Initialize(
+	context: Context,
+	title: "TestCentric.GuiRunner",
+	solutionFile: "testcentric-gui.sln",
+	unitTestRunner: new GuiSelfTester(),
+	exemptFiles: new [] { "Resource.cs", "TextCode.cs" }
+);
+
+DefinePackageTests();
+
+static readonly string[] ENGINE_FILES = {
+        "testcentric.engine.dll", "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll"};
+static readonly string[] ENGINE_CORE_FILES = {
+        "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll" };
+static readonly string[] NET_FRAMEWORK_AGENT_FILES = {
+        "testcentric-agent.exe", "testcentric-agent.exe.config", "testcentric-agent-x86.exe", "testcentric-agent-x86.exe.config" };
+static readonly string[] NET_CORE_AGENT_FILES = {
+        "testcentric-agent.dll", "testcentric-agent.dll.config" };
+static readonly string[] GUI_FILES = {
+        "testcentric.exe", "testcentric.exe.config", "nunit.uiexception.dll",
+        "TestCentric.Gui.Runner.dll", "TestCentric.Gui.Model.dll", "Mono.Options.dll" };
+static readonly string[] TREE_ICONS_JPG = {
+        "Success.jpg", "Failure.jpg", "Ignored.jpg", "Inconclusive.jpg", "Skipped.jpg" };
+static readonly string[] TREE_ICONS_PNG = {
+        "Success.png", "Failure.png", "Ignored.png", "Inconclusive.png", "Skipped.png" };
+
+var nugetPackage = new NuGetPackage(
+	id: "TestCentric.GuiRunner",
+	source: "nuget/TestCentric.GuiRunner.nuspec",
+	basePath: BuildSettings.OutputDirectory,
+	testRunner: new GuiSelfTester(BuildSettings.NuGetTestDirectory + "TestCentric.GuiRunner/tools/testcentric.exe"),
+	checks: new PackageCheck[] {
+		HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "testcentric.png"),
+		HasDirectory("tools").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.nuget.addins"),
+		HasDirectory("tools/agents/net462").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
+		HasDirectory("tools/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
+		HasDirectory("tools/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
+		HasDirectory("tools/agents/net6.0").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
+		HasDirectory("tools/agents/net7.0").WithFiles(NET_CORE_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
+		HasDirectory("tools/Images").WithFiles("DebugTests.png", "RunTests.png", "StopRun.png", "GroupBy_16x.png", "SummaryReport.png"),
+		HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
+		HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
+		HasDirectory("tools/Images/Tree/Default").WithFiles(TREE_ICONS_PNG),
+		HasDirectory("tools/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG)
+	},
+	tests: PackageTests);
+
+var chocolateyPackage = new ChocolateyPackage(
+	id: "testcentric-gui",
+	source: BuildSettings.ChocolateyDirectory + "testcentric-gui.nuspec",
+	basePath: BuildSettings.OutputDirectory,
+	testRunner: new GuiSelfTester(BuildSettings.ChocolateyTestDirectory + "testcentric-gui/tools/testcentric.exe"),
+	checks: new PackageCheck[] {
+		HasDirectory("tools").WithFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "VERIFICATION.txt", "testcentric.choco.addins").AndFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.choco.addins"),
+		HasDirectory("tools/agents/net462").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
+		HasDirectory("tools/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
+		HasDirectory("tools/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
+		HasDirectory("tools/agents/net6.0").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
+		HasDirectory("tools/agents/net7.0").WithFiles(NET_CORE_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
+		HasDirectory("tools/Images").WithFiles("DebugTests.png", "RunTests.png", "StopRun.png", "GroupBy_16x.png", "SummaryReport.png"),
+		HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
+		HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
+		HasDirectory("tools/Images/Tree/Default").WithFiles(TREE_ICONS_PNG),
+		HasDirectory("tools/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG)
+	},
+	tests: PackageTests);
+
+var zipPackage = new ZipPackage(
+	id: "TestCentric.GuiRunner",
+	source: BuildSettings.ZipDirectory + "TestCentric.GuiRunner.zspec",
+	basePath: BuildSettings.OutputDirectory,
+	testRunner: new GuiSelfTester(BuildSettings.ZipTestDirectory + "TestCentric.GuiRunner/bin/testcentric.exe"),
+	checks: new PackageCheck[] {
+		HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt"),
+		HasDirectory("bin").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.zip.addins"),
+		HasDirectory("bin/agents/net462").WithFiles(NET_FRAMEWORK_AGENT_FILES),
+		HasDirectory("bin/agents/netcoreapp3.1").WithFiles(NET_CORE_AGENT_FILES),
+		HasDirectory("bin/agents/net5.0").WithFiles(NET_CORE_AGENT_FILES),
+		HasDirectory("bin/agents/net6.0").WithFiles(NET_CORE_AGENT_FILES),
+		HasDirectory("bin/agents/net7.0").WithFiles(NET_CORE_AGENT_FILES),
+		HasDirectory("bin/Images").WithFiles("DebugTests.png", "RunTests.png", "StopRun.png", "GroupBy_16x.png", "SummaryReport.png"),
+		HasDirectory("bin/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
+		HasDirectory("bin/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
+		HasDirectory("bin/Images/Tree/Default").WithFiles(TREE_ICONS_PNG),
+		HasDirectory("bin/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG)
+	},
+	tests: PackageTests);
+
+BuildSettings.Packages.Add(nugetPackage);
+BuildSettings.Packages.Add(chocolateyPackage);
+BuildSettings.Packages.Add(zipPackage);
+
+//////////////////////////////////////////////////////////////////////
+// POST-BUILD ACTION
+//////////////////////////////////////////////////////////////////////
+
+// The engine package does not restore correctly. As a temporary
+// fix, we install a local copy and then copy agents and
+// content to the output directory.
+TaskTeardown(context =>
 {
-	var settings = BuildSettings.CreateInstance(context);
+	if (context.Task.Name == "Build")
+	{
+		string tempEngineInstall = BuildSettings.ProjectDirectory + "tempEngineInstall/";
 
-	if (BuildSystem.IsRunningOnAppVeyor)
-			AppVeyor.UpdateBuildVersion(settings.PackageVersion + "-" + AppVeyor.Environment.Build.Number);
+		CleanDirectory(tempEngineInstall);
 
-    Information("Building {0} version {1} of TestCentric GUI.", settings.Configuration, settings.PackageVersion);
+		NuGetInstall("TestCentric.Engine", new NuGetInstallSettings()
+		{
+			Version = REF_ENGINE_VERSION,
+			OutputDirectory = tempEngineInstall,
+			ExcludeVersion = true
+		});
 
-	return settings;
+		CopyFileToDirectory(
+			tempEngineInstall + "TestCentric.Engine/content/testcentric.nuget.addins",
+			BuildSettings.OutputDirectory);
+		Information("Copied testcentric.nuget.addins");
+		CopyDirectory(
+			tempEngineInstall + "TestCentric.Engine/tools",
+			BuildSettings.OutputDirectory);
+		Information("Copied engine files");
+	}
 });
 
-// If we run target Test, we catch errors here in teardown.
-// If we run packaging, the CheckTestErrors Task is run instead.
-Teardown(context => CheckTestErrors(ref ErrorDetail));
-
 //////////////////////////////////////////////////////////////////////
-// DUMP SETTINGS
+// UNIT AND PACKAGE TEST RUNNER
 //////////////////////////////////////////////////////////////////////
 
-Task("DumpSettings")
-	.Does<BuildSettings>((settings) =>
-	{
-		settings.DumpSettings();
-	});
-
-//////////////////////////////////////////////////////////////////////
-// CLEAN
-//////////////////////////////////////////////////////////////////////
-
-Task("Clean")
-    .Does<BuildSettings>((settings) =>
-	{
-		Information("Cleaning " + settings.OutputDirectory);
-		CleanDirectory(settings.OutputDirectory);
-
-		Information("Cleaning Package Directory");
-		CleanDirectory(settings.PackageDirectory);
-	});
-
-//////////////////////////////////////////////////////////////////////
-// RESTORE NUGET PACKAGES
-//////////////////////////////////////////////////////////////////////
-
-Task("RestorePackages")
-    .Does<BuildSettings>((settings) =>
+public class GuiSelfTester : TestRunner
 {
-    NuGetRestore(SOLUTION, settings.RestoreSettings);
-});
-
-//////////////////////////////////////////////////////////////////////
-// BUILD
-//////////////////////////////////////////////////////////////////////
-
-Task("Build")
-	.IsDependentOn("Clean")
-    .IsDependentOn("RestorePackages")
-	.IsDependentOn("CheckHeaders")
-    .Does<BuildSettings>((settings) =>
-{
-    MSBuild(SOLUTION, settings.MSBuildSettings.WithProperty("Version", settings.PackageVersion));
-
-	// The package does not restore correctly. As a temporary
-	// fix, we install a local copy and then copy agents and
-	// content to the output directory.
-
-	string tempEngineInstall = settings.ProjectDirectory + "tempEngineInstall/";
-
-	CleanDirectory(tempEngineInstall);
-
-	NuGetInstall("TestCentric.Engine", new NuGetInstallSettings()
+	// NOTE: When constructed as an argument to BuildSettings.Initialize(),
+	// the executable path is not yet known and should not be provided.
+	public GuiSelfTester(string executablePath = null)
 	{
-		Version = REF_ENGINE_VERSION,
-		OutputDirectory = tempEngineInstall,
-		ExcludeVersion = true
-	});
+		ExecutablePath = executablePath;
+	}
 
-	CopyFileToDirectory(
-		tempEngineInstall + "TestCentric.Engine/content/testcentric.nuget.addins",
-		settings.OutputDirectory);
-	Information("Copied testcentric.nuget.addins");
-	CopyDirectory(
-		tempEngineInstall + "TestCentric.Engine/tools",
-		settings.OutputDirectory);
-	Information("Copied engine files");
-
-});
-
-//////////////////////////////////////////////////////////////////////
-// TESTS
-//////////////////////////////////////////////////////////////////////
-
-static var ErrorDetail = new List<string>();
-
-Task("CheckTestErrors")
-    .Description("Checks for errors running the test suites")
-    .Does(() => CheckTestErrors(ref ErrorDetail));
-
-//////////////////////////////////////////////////////////////////////
-// TESTS OF THE GUI
-//////////////////////////////////////////////////////////////////////
-
-Task("Test")
-	.IsDependentOn("Build")
-	.Does<BuildSettings>((settings) =>
+	public override int Run(string arguments)
 	{
-		var guiTests = GetFiles(settings.OutputDirectory + GUI_TESTS);
-		var args = new StringBuilder();
-		foreach (var test in guiTests)
-			args.Append($"\"{test}\" ");
 
-		var guiTester = new GuiTester(settings);
-		Information ($"Running {settings.OutputDirectory + GUI_RUNNER} with arguments {args}");
-		guiTester.RunGuiUnattended(settings.OutputDirectory + GUI_RUNNER, args.ToString());
-		var result = new ActualResult(settings.OutputDirectory + "TestResult.xml");
 
-		new ConsoleReporter(result).Display();
+		if (!arguments.Contains(" --run"))
+			arguments += " --run";
+		if (!arguments.Contains(" --unattended"))
+			arguments += " --unattended";
+		if (!arguments.Contains(" --full-gui"))
+			arguments += " --full-gui";
 
-		if (result.OverallResult == "Failed")
-			throw new System.Exception("There were test failures or errors. See listing.");
-	});
+		if (ExecutablePath == null)
+			ExecutablePath = BuildSettings.OutputDirectory + "testcentric.exe";
 
-////////////////////////////////////////////////////////////////////
-// BUILD, VERIFY AND TEST EACH PACKAGE
+		return base.Run(arguments);
+	}
+}
+
+//////////////////////////////////////////////////////////////////////
+// INDIVIDUAL PACKAGES
 //////////////////////////////////////////////////////////////////////
 
 Task("PackageNuGet")
-	.Description("Build and Test the NuGet Package")
-	.Does<BuildSettings>(settings =>
+	.Does(() =>
 	{
-		settings.NuGetPackage.BuildVerifyAndTest();
+		nugetPackage.BuildVerifyAndTest();
 	});
 
 Task("PackageChocolatey")
-	.Description("Build and Test the Chocolatey Package")
-	.Does<BuildSettings>(settings =>
+	.Does(() =>
 	{
-		settings.ChocolateyPackage.BuildVerifyAndTest();
-	});
-
-Task("CreateZipImage")
-	.Description("Create image used for zip package")
-	.Does<BuildSettings>(settings => {
-		Information("Creating Zip Image Directory");
-
-		CreateDirectory(settings.PackageDirectory);
-		CreateZipImage(settings);
+		chocolateyPackage.BuildVerifyAndTest();
 	});
 
 Task("PackageZip")
-	.Description("Build and Test the Zip Package")
-	.IsDependentOn("CreateZipImage")
-	.Does<BuildSettings>(settings =>
-	{
-		settings.ZipPackage.BuildVerifyAndTest();
-	});
-
-//////////////////////////////////////////////////////////////////////
-// PUBLISH PACKAGES
-//////////////////////////////////////////////////////////////////////
-
-static bool hadPublishingErrors = false;
-
-Task("PublishPackages")
-	.Description("Publish nuget and chocolatey packages according to the current settings")
-	.IsDependentOn("PublishToMyGet")
-	.IsDependentOn("PublishToNuGet")
-	.IsDependentOn("PublishToChocolatey")
 	.Does(() =>
 	{
-		if (hadPublishingErrors)
-			throw new Exception("One of the publishing steps failed.");
-	});
-
-// This task may either be run by the PublishPackages task,
-// which depends on it, or directly when recovering from errors.
-Task("PublishToMyGet")
-	.Description("Publish packages to MyGet")
-	.Does<BuildSettings>((settings) =>
-	{
-        if (!settings.ShouldPublishToMyGet)
-            Information("Nothing to publish to MyGet from this run.");
-		else if (settings.NoPush)
-			Information("NoPush option suppressing publication to MyGet");
-        else
-            try
-			{
-				PushNuGetPackage(settings.NuGetPackage.PackageFilePath, settings.MyGetApiKey, settings.MyGetPushUrl);
-				PushChocolateyPackage(settings.ChocolateyPackage.PackageFilePath, settings.MyGetApiKey, settings.MyGetPushUrl);
-			}
-			catch(Exception)
-			{
-				hadPublishingErrors = true;
-			}
-	});
-
-// This task may either be run by the PublishPackages task,
-// which depends on it, or directly when recovering from errors.
-Task("PublishToNuGet")
-	.Description("Publish packages to NuGet")
-	.Does<BuildSettings>((settings) =>
-	{
-		if (!settings.ShouldPublishToNuGet)
-			Information("Nothing to publish to NuGet from this run.");
-		else
-			try
-			{
-				PushNuGetPackage(settings.NuGetPackage.PackageFilePath, settings.NuGetApiKey, settings.NuGetPushUrl);
-			}
-			catch(Exception)
-            {
-				hadPublishingErrors = true;
-			}
-	});
-
-// This task may either be run by the PublishPackages task,
-// which depends on it, or directly when recovering from errors.
-Task("PublishToChocolatey")
-	.Description("Publish packages to Chocolatey")
-	.Does<BuildSettings>((settings) =>
-	{
-		if (!settings.ShouldPublishToChocolatey)
-			Information("Nothing to publish to Chocolatey from this run.");
-		else
-			try
-			{
-				PushChocolateyPackage(settings.ChocolateyPackage.PackageFilePath, settings.ChocolateyApiKey, settings.ChocolateyPushUrl);
-			}
-			catch(Exception)
-            {
-				hadPublishingErrors = true;
-			}
-	});
-
-//////////////////////////////////////////////////////////////////////
-// CREATE A DRAFT RELEASE
-//////////////////////////////////////////////////////////////////////
-
-Task("CreateDraftRelease")
-	.Does<BuildSettings>((settings) =>
-	{
-		if (settings.IsReleaseBranch)
-		{
-			// Exit if any PackageTests failed
-			CheckTestErrors(ref ErrorDetail);
-
-			// NOTE: Since this is a release branch, the pre-release label
-			// is "pre", which we don't want to use for the draft release.
-			// The branch name contains the full information to be used
-			// for both the name of the draft release and the milestone,
-			// i.e. release-2.0.0, release-2.0.0-beta2, etc.
-			string milestone = settings.BranchName.Substring(8);
-			string releaseName = $"TestCentric {milestone}";
-
-			Information($"Creating draft release for {releaseName}");
-
-			try
-			{
-				GitReleaseManagerCreate(settings.GitHubAccessToken, GITHUB_OWNER, GITHUB_REPO, new GitReleaseManagerCreateSettings()
-				{
-					Name = releaseName,
-					Milestone = milestone
-				});
-			}
-			catch
-            {
-				Error($"Unable to create draft release for {releaseName}.");
-				Error($"Check that there is a {milestone} milestone with at least one closed issue.");
-				Error("");
-				throw;
-            }
-		}
-		else
-		{
-			Information("Skipping Release creation because this is not a release branch");
-		}
-	});
-
-//////////////////////////////////////////////////////////////////////
-// CREATE A PRODUCTION RELEASE
-//////////////////////////////////////////////////////////////////////
-
-Task("CreateProductionRelease")
-	.Does<BuildSettings>((settings) =>
-	{
-		if (settings.IsProductionRelease)
-		{
-			// Exit if any PackageTests failed
-			CheckTestErrors(ref ErrorDetail);
-
-			string token = settings.GitHubAccessToken;
-			string tagName = settings.PackageVersion;
-			string assets = settings.GitHubReleaseAssets;
-
-			Information($"Publishing release {tagName} to GitHub");
-
-			GitReleaseManagerAddAssets(token, GITHUB_OWNER, GITHUB_REPO, tagName, assets);
-			GitReleaseManagerClose(token, GITHUB_OWNER, GITHUB_REPO, tagName);
-		}
-		else
-		{
-			Information("Skipping CreateProductionRelease because this is not a production release");
-		}
+		zipPackage.BuildVerifyAndTest();
 	});
 
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
 
-Task("Package")
-	.IsDependentOn("Build")
-	.IsDependentOn("PackageExistingBuild");
-
-Task("PackageExistingBuild")
-	.IsDependentOn("PackageNuGet")
-	.IsDependentOn("PackageChocolatey")
-	.IsDependentOn("PackageZip");
-
-//Task("PackageZip")
-//	.IsDependentOn("BuildZipPackage")
-//	.IsDependentOn("VerifyZipPackage")
-//	.IsDependentOn("TestZipPackage");
-
-//Task("PackageNuGet")
-//	.IsDependentOn("BuildNuGetPackage")
-//	.IsDependentOn("VerifyNuGetPackage")
-//	.IsDependentOn("TestNuGetPackage");
-
-//Task("PackageChocolatey")
-//	.IsDependentOn("BuildChocolateyPackage")
-//	.IsDependentOn("VerifyChocolateyPackage")
-//	.IsDependentOn("TestChocolateyPackage");
-
 Task("AppVeyor")
 	.IsDependentOn("DumpSettings")
 	.IsDependentOn("Build")
 	.IsDependentOn("Test")
 	.IsDependentOn("Package")
-	.IsDependentOn("PublishPackages")
+	.IsDependentOn("Publish")
 	.IsDependentOn("CreateDraftRelease")
 	.IsDependentOn("CreateProductionRelease");
 

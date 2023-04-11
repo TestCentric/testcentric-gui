@@ -1,0 +1,23 @@
+# Files for root
+../../LICENSE.txt
+../../NOTICES.txt
+../../CHANGES.txt
+
+# Bin directory
+testcentric.exe => bin/
+testcentric.exe.config => bin/
+TestCentric.Gui.Runner.dll => bin/
+nunit.uiexception.dll => bin/
+TestCentric.Gui.Model.dll => bin/
+Mono.Options.dll => bin/
+nunit.engine.api.dll => bin/
+testcentric.engine.api.dll => bin/
+testcentric.engine.metadata.dll => bin/
+testcentric.extensibility.dll => bin/
+testcentric.engine.core.dll => bin/
+testcentric.engine.dll => bin/
+../../zip/testcentric.zip.addins => bin/ # Copy addins file
+
+# Patterns for images and agents
+Images/**/* => bin/Images/ 
+agents/**/* => bin/agents/
