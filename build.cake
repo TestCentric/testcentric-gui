@@ -21,24 +21,8 @@ const string NUGET_PACKAGE_NAME = "TestCentric.GuiRunner";
 const string GUI_RUNNER = "testcentric.exe";
 const string GUI_TESTS = "*.Tests.dll";
 
-// Load scripts after defining constants
-#load "../TestCentric.Cake.Recipe/recipe/building.cake"
-#load "../TestCentric.Cake.Recipe/recipe/BuildSettings.cake"
-#load "../TestCentric.Cake.Recipe/recipe/check-headers.cake"
-#load "../TestCentric.Cake.Recipe/recipe/ConsoleReporter.cake"
-#load "../TestCentric.Cake.Recipe/recipe/constants.cake"
-#load "../TestCentric.Cake.Recipe/recipe/package-checks.cake"
-#load "../TestCentric.Cake.Recipe/recipe/package-definition.cake"
-#load "../TestCentric.Cake.Recipe/recipe/PackageTest.cake"
-#load "../TestCentric.Cake.Recipe/recipe/packaging.cake"
-#load "../TestCentric.Cake.Recipe/recipe/publishing.cake"
-#load "../TestCentric.Cake.Recipe/recipe/releasing.cake"
-#load "../TestCentric.Cake.Recipe/recipe/test-reports.cake"
-#load "../TestCentric.Cake.Recipe/recipe/test-results.cake"
-#load "../TestCentric.Cake.Recipe/recipe/testing.cake"
-#load "../TestCentric.Cake.Recipe/recipe/test-runners.cake"
-#load "../TestCentric.Cake.Recipe/recipe/utilities.cake"
-#load "../TestCentric.Cake.Recipe/recipe/versioning.cake"
+// Load recipe after defining constants
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.0-dev00039
 
 #load "./package-tests.cake"
 
