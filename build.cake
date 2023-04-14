@@ -8,50 +8,10 @@ const string ENGINE_API_PACKAGE_ID = "TestCentric.Engine.Api";
 
 const string TEST_BED_EXE = "test-bed.exe";
 
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.0-dev00039
-
-//////////////////////////////////////////////////////////////////////
-// ARGUMENTS
-//
-// Arguments taking a value may use  `=` or space to separate the name
-// from the value. Examples of each are shown here.
-//
-// --target=TARGET
-// -t Target
-//
-//    The name of the task to be run, e.g. Test. Defaults to Build.
-//
-// --configuration=CONFIG
-// -c CONFIG
-//
-//     The name of the configuration to build, test and/or package, e.g. Debug.
-//     Defaults to Release.
-//
-// --packageVersion=VERSION
-// --package=VERSION
-//     Specifies the full package version, including any pre-release
-//     suffix. This version is used directly instead of the default
-//     version from the script or that calculated by GitVersion.
-//     Note that all other versions (AssemblyVersion, etc.) are
-//     derived from the package version.
-//
-//     NOTE: We can't use "version" since that's an argument to Cake itself.
-//
-// --testLevel=LEVEL
-// --level=LEVEL
-//     Specifies the level of package testing, which is normally set
-//     automatically for different types of builds like CI, PR, etc.
-//     Used by developers to test packages locally without creating
-//     a PR or publishing the package. Defined levels are
-//       1 = Normal CI tests run every time you build a package
-//       2 = Adds more tests for PRs and Dev builds uploaded to MyGet
-//       3 = Adds even more tests prior to publishing a release
-//
-// --nopush
-//     Indicates that no publishing or releasing should be done. If
-//     publish or release targets are run, a message is displayed.
-//
-//////////////////////////////////////////////////////////////////////
+// Load the recipe
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.0-dev00040
+// Comment out above line and uncomment below for local tests of recipe changes
+//#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
 using System.Xml;
 using System.Text.RegularExpressions;
@@ -217,26 +177,25 @@ if (BuildSettings.Configuration == "Release")
                             new ExpectedAssemblyResult("mock-assembly.dll", "NetCore31AgentLauncher"),
                             new ExpectedAssemblyResult("mock-assembly.dll", "Net50AgentLauncher") }
         },
-        BuildSettings.NUnitProjectLoader));
+        EngineExtensions.NUnitProjectLoader));
 }
 
 // NOTE: Package tests using a pluggable agent must be run after all tests
 // that assume no pluggable agents are installed!
 
-// TODO: Disabling Net20PluggableAgentTest until the agent is updated
-//packageTests.Add(new PackageTest(1, "Net20PluggableAgentTest", "Run mock-assembly.dll targeting net35 using Net20PluggableAgent",
-//    "engine-tests/net35/mock-assembly.dll",
-//    new ExpectedResult("Failed")
-//    {
-//        Total = 36,
-//        Passed = 23,
-//        Failed = 5,
-//        Warnings = 1,
-//        Inconclusive = 1,
-//        Skipped = 7,
-//        Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net20AgentLauncher") }
-//    },
-//    Net20PluggableAgent));
+packageTests.Add(new PackageTest(1, "Net20PluggableAgentTest", "Run mock-assembly.dll targeting net35 using Net20PluggableAgent",
+    "engine-tests/net35/mock-assembly.dll",
+    new ExpectedResult("Failed")
+    {
+        Total = 36,
+        Passed = 23,
+        Failed = 5,
+        Warnings = 1,
+        Inconclusive = 1,
+        Skipped = 7,
+        Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net20AgentLauncher") }
+    },
+	EngineExtensions.Net20PluggableAgent.SetVersion("2.1.0-dev00018")));
 
 packageTests.Add(new PackageTest(1, "NetCore21PluggableAgentTest", "Run mock-assembly.dll targeting Net Core 2.1 using NetCore21PluggableAgent",
     "engine-tests/netcoreapp2.1/mock-assembly.dll",
@@ -250,7 +209,7 @@ packageTests.Add(new PackageTest(1, "NetCore21PluggableAgentTest", "Run mock-ass
         Skipped = 7,
         Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "NetCore21AgentLauncher") }
     },
-    BuildSettings.NetCore21PluggableAgent));
+	EngineExtensions.NetCore21PluggableAgent));
 
 const string NET80_MOCK_ASSEMBLY = "../../../net80-pluggable-agent/bin/Release/tests/net8.0/mock-assembly.dll";
 if (BuildSettings.IsLocalBuild && Context.FileExists(BuildSettings.OutputDirectory + NET80_MOCK_ASSEMBLY))
@@ -266,7 +225,7 @@ if (BuildSettings.IsLocalBuild && Context.FileExists(BuildSettings.OutputDirecto
 			Skipped = 7,
 			Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net80AgentLauncher") }
 		},
-		BuildSettings.Net80PluggableAgent));
+		EngineExtensions.Net80PluggableAgent));
 
 // TODO: Disabling NUnitV2Test until the driver works
 //packageTests.Add(new PackageTest(1, "NUnitV2Test", "Run tests using the V2 framework driver",
