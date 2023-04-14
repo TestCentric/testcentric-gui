@@ -133,13 +133,10 @@ namespace TestCentric.Gui
             // Find matching names
             foreach (var visualNode in visualNodes)
             {
-                Console.WriteLine($"Examining VisualNode {visualNode}");
                 foreach (TreeNode treeNode in treeNodes)
                 {
-                    Console.WriteLine($"Examining TreeNode {treeNode}");
                     if (treeNode.Text == visualNode.Name || treeNode.Text == "Not Run")
                     {
-                        Console.WriteLine($"Applying VisualNode {visualNode.Name} to TreeNode {treeNode.Text}");
                         ApplyVisualNodeToTreeNode(visualNode, treeNode);
                         break;
                     }
