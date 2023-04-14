@@ -111,21 +111,6 @@ public static void DefinePackageTests()
                 Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net70AgentLauncher") }
             }));
 
-	// TODO: Temporarily suppress test of .NET 2.0 pluggable agent
-	// This test installs the .NET 2.0 pluggable agent. All subsequent
-	// tests will use that agent for .NET 2.0 through 3.5 tests.
-	//PackageTests.Add(new PackageTest(1, "Net20PluggableAgentTest", "Run net35 mock-assembly.dll under .NET 2.0 pluggable agent",
-	//    "net35/mock-assembly.dll",
-    //    MockAssemblyExpectedResult("Net20AgentLauncher"),
-	//    Net20PluggableAgent));
-
-	// This test installs the .NET Core 2.1 pluggable agent. All subsequent
-	// tests will use that agent for .NET Core tests up to version 2.1.
-	PackageTests.Add(new PackageTest(1, "NetCore21PluggableAgentTest", "Run .NET Core 2.1 mock-assembly.dll under .NET Core 2.1 pluggable agent",
-		"netcoreapp2.1/mock-assembly.dll",
-        MockAssemblyExpectedResult("NetCore21AgentLauncher"),
-		BuildSettings.NetCore21PluggableAgent));
-
 	// Multiple assembly tests
 
     PackageTests.Add(new PackageTest(1, "Net462PlusNet35Test", "Run net462 and net35 builds of mock-assembly.dll together",
@@ -137,6 +122,19 @@ public static void DefinePackageTests()
         MockAssemblyExpectedResult("Net462AgentLauncher", "Net60AgentLauncher")));
 
     // Level 2 tests are run for PRs and when packages will be published
+
+    // NOTE: Package tests using a pluggable agent must be run after all tests
+    // that assume no pluggable agents are installed!
+
+	PackageTests.Add(new PackageTest(1, "Net20PluggableAgentTest", "Run net35 mock-assembly.dll under .NET 2.0 pluggable agent",
+	    "net35/mock-assembly.dll",
+        MockAssemblyExpectedResult("Net20AgentLauncher"),
+        EngineExtensions.Net20PluggableAgent.SetVersion("2.1.0-dev00018")));
+
+	PackageTests.Add(new PackageTest(1, "NetCore21PluggableAgentTest", "Run .NET Core 2.1 mock-assembly.dll under .NET Core 2.1 pluggable agent",
+		"netcoreapp2.1/mock-assembly.dll",
+        MockAssemblyExpectedResult("NetCore21AgentLauncher"),
+		EngineExtensions.NetCore21PluggableAgent));
 
 	// TODO: Suppress V2 tests until driver is working
     //PackageTests.Add(new PackageTest(2, "NUnitV2Test", "Run mock-assembly.dll built for NUnit V2",
@@ -183,7 +181,7 @@ public static void DefinePackageTests()
 				Skipped = 7,
 				Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net80AgentLauncher") }
 			},
-			BuildSettings.Net80PluggableAgent));
+			EngineExtensions.Net80PluggableAgent));
 
     ExpectedResult MockAssemblyExpectedResult(params string[] agentNames)
     {
