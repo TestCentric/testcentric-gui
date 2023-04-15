@@ -9,9 +9,9 @@ const string ENGINE_API_PACKAGE_ID = "TestCentric.Engine.Api";
 const string TEST_BED_EXE = "test-bed.exe";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.0-dev00040
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.0-dev00041
 // Comment out above line and uncomment below for local tests of recipe changes
-//#load ../TestCentric.Cake.Recipe/recipe/*.cake
+//git #load ../TestCentric.Cake.Recipe/recipe/*.cake
 
 using System.Xml;
 using System.Text.RegularExpressions;
@@ -167,7 +167,7 @@ packageTests.Add(new PackageTest(1, "Net35PlusNetCore21Test", "Run different bui
 // first in the project file.
 if (BuildSettings.Configuration == "Release")
 {
-    packageTests.Add(new PackageTest(1, "NUnitProjectTest", "Run an NUnit project",
+    packageTests.Add(new PackageTest(2, "NUnitProjectTest", "Run an NUnit project",
         "TestProject.nunit",
         new ExpectedResult("Failed")
         {
@@ -183,7 +183,7 @@ if (BuildSettings.Configuration == "Release")
 // NOTE: Package tests using a pluggable agent must be run after all tests
 // that assume no pluggable agents are installed!
 
-packageTests.Add(new PackageTest(1, "Net20PluggableAgentTest", "Run mock-assembly.dll targeting net35 using Net20PluggableAgent",
+packageTests.Add(new PackageTest(2, "Net20PluggableAgentTest", "Run mock-assembly.dll targeting net35 using Net20PluggableAgent",
     "engine-tests/net35/mock-assembly.dll",
     new ExpectedResult("Failed")
     {
@@ -197,7 +197,7 @@ packageTests.Add(new PackageTest(1, "Net20PluggableAgentTest", "Run mock-assembl
     },
 	EngineExtensions.Net20PluggableAgent.SetVersion("2.1.0-dev00018")));
 
-packageTests.Add(new PackageTest(1, "NetCore21PluggableAgentTest", "Run mock-assembly.dll targeting Net Core 2.1 using NetCore21PluggableAgent",
+packageTests.Add(new PackageTest(2, "NetCore21PluggableAgentTest", "Run mock-assembly.dll targeting Net Core 2.1 using NetCore21PluggableAgent",
     "engine-tests/netcoreapp2.1/mock-assembly.dll",
     new ExpectedResult("Failed")
     {
@@ -213,7 +213,7 @@ packageTests.Add(new PackageTest(1, "NetCore21PluggableAgentTest", "Run mock-ass
 
 const string NET80_MOCK_ASSEMBLY = "../../../net80-pluggable-agent/bin/Release/tests/net8.0/mock-assembly.dll";
 if (BuildSettings.IsLocalBuild && Context.FileExists(BuildSettings.OutputDirectory + NET80_MOCK_ASSEMBLY))
-	packageTests.Add(new PackageTest(1, "NetCore80PluggableAgentTest", "Run mock-assembly.dll targeting Net 8.0 using NetCore80PluggableAgent",
+	packageTests.Add(new PackageTest(2, "NetCore80PluggableAgentTest", "Run mock-assembly.dll targeting Net 8.0 using NetCore80PluggableAgent",
 		NET80_MOCK_ASSEMBLY,
 		new ExpectedResult("Failed")
 		{
