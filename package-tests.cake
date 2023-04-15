@@ -126,12 +126,12 @@ public static void DefinePackageTests()
     // NOTE: Package tests using a pluggable agent must be run after all tests
     // that assume no pluggable agents are installed!
 
-	PackageTests.Add(new PackageTest(1, "Net20PluggableAgentTest", "Run net35 mock-assembly.dll under .NET 2.0 pluggable agent",
+	PackageTests.Add(new PackageTest(2, "Net20PluggableAgentTest", "Run net35 mock-assembly.dll under .NET 2.0 pluggable agent",
 	    "net35/mock-assembly.dll",
         MockAssemblyExpectedResult("Net20AgentLauncher"),
         EngineExtensions.Net20PluggableAgent.SetVersion("2.1.0-dev00018")));
 
-	PackageTests.Add(new PackageTest(1, "NetCore21PluggableAgentTest", "Run .NET Core 2.1 mock-assembly.dll under .NET Core 2.1 pluggable agent",
+	PackageTests.Add(new PackageTest(2, "NetCore21PluggableAgentTest", "Run .NET Core 2.1 mock-assembly.dll under .NET Core 2.1 pluggable agent",
 		"netcoreapp2.1/mock-assembly.dll",
         MockAssemblyExpectedResult("NetCore21AgentLauncher"),
 		EngineExtensions.NetCore21PluggableAgent));
@@ -148,28 +148,28 @@ public static void DefinePackageTests()
     //		Inconclusive = 1,
     //		Skipped = 4
     //	},
-    //	NUnitV2Driver));
+    //	EngineExtensions.NUnitV2Driver));
 
     // TODO: Use --config option when it's supported by the extension.
     // Current test relies on the fact that the Release config appears
     // first in the project file.
-    //if (_parameters.Configuration == "Release")
-    //{
-    //    PackageTests.Add(new PackageTest(2, "NUnitProjectTest", "Run an NUnit project",
-    //        "../../GuiTests.nunit",
-    //        new ExpectedResult("Passed")
-    //        {
-    //            Assemblies = new[] {
-    //                    new ExpectedAssemblyResult("TestCentric.Gui.Tests.dll", "net-4.5"),
-    //                    new ExpectedAssemblyResult("TestCentric.Gui.Model.Tests.dll", "net-4.5") }
-    //        },
-    //        NUnitProjectLoader));
-    //}
+    if (BuildSettings.Configuration == "Release")
+    {
+        PackageTests.Add(new PackageTest(2, "NUnitProjectTest", "Run an NUnit project",
+            "../../GuiTests.nunit",
+            new ExpectedResult("Passed")
+            {
+                Assemblies = new[] {
+                        new ExpectedAssemblyResult("TestCentric.Gui.Tests.dll", "net-4.5"),
+                        new ExpectedAssemblyResult("TestCentric.Gui.Model.Tests.dll", "net-4.5") }
+            },
+            EngineExtensions.NUnitProjectLoader));
+    }
 
 	// TODO: Make this work on AppVeyor
 	const string NET80_MOCK_ASSEMBLY = "../../../net80-pluggable-agent/bin/Release/tests/net8.0/mock-assembly.dll";
 	if (BuildSettings.IsLocalBuild && BuildSettings.Context.FileExists(BuildSettings.OutputDirectory + NET80_MOCK_ASSEMBLY))
-		PackageTests.Add(new PackageTest(1, "NetCore80PluggableAgentTest", "Run mock-assembly.dll targeting Net 8.0 using NetCore80PluggableAgent",
+		PackageTests.Add(new PackageTest(2, "NetCore80PluggableAgentTest", "Run mock-assembly.dll targeting Net 8.0 using NetCore80PluggableAgent",
 			NET80_MOCK_ASSEMBLY,
 			new ExpectedResult("Failed")
 			{
