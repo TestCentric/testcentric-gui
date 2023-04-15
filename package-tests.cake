@@ -156,13 +156,9 @@ public static void DefinePackageTests()
     if (BuildSettings.Configuration == "Release")
     {
         PackageTests.Add(new PackageTest(2, "NUnitProjectTest", "Run an NUnit project",
-            "../../GuiTests.nunit",
-            new ExpectedResult("Passed")
-            {
-                Assemblies = new[] {
-                        new ExpectedAssemblyResult("TestCentric.Gui.Tests.dll", "net-4.5"),
-                        new ExpectedAssemblyResult("TestCentric.Gui.Model.Tests.dll", "net-4.5") }
-            },
+            "../../TestProject.nunit",
+            MockAssemblyExpectedResult(
+                "Net20AgentLauncher", "Net462AgentLauncher", "NetCore31AgentLauncher", "Net50AgentLauncher"),
             EngineExtensions.NUnitProjectLoader));
     }
 
