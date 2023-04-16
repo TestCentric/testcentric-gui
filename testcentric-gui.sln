@@ -25,6 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 		testcentric-gui.sln.licenseheader = testcentric-gui.sln.licenseheader
 		src\testcentric.snk = src\testcentric.snk
+		TestProject.nunit = TestProject.nunit
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GuiException", "GuiException", "{35A92AA3-A1E6-426E-8D96-322F3EBF1C8D}"
