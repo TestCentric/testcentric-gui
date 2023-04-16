@@ -19,7 +19,7 @@ namespace TestCentric.Gui
     public class VisualState
     {
         // Default constructor is required for serialization
-        public VisualState() { }
+        public VisualState() : this("NUNIT_TREE") { }
 
         public VisualState(string strategyID)
         {
