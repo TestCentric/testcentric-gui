@@ -10,6 +10,7 @@ using NUnit.Framework;
 
 namespace TestCentric.Gui
 {
+    using System.Linq;
     using Model;
 
     [TestFixtureSource(nameof(TestData))]
@@ -299,5 +300,36 @@ namespace TestCentric.Gui
         };
 
         #endregion
+    }
+
+
+    public class Version1DeserializationTest
+    {
+        // Version 1 of the GUI doesn't save the display strategy
+        [Test]
+        public void CanDeserializeFromVersion1VisualStateWithoutDisplayStrategy()
+        {
+            // XML provided as part of issue #945
+            // V1 Gui does not serialize DisplayStrategy because
+            // it doesn't support multiple strategies.
+            string version1Xml =
+                "<VisualState ShowCheckBoxes=\"false\">\r\n" +
+                    "<TopNode>0-1002</TopNode>\r\n" +
+                    "<SelectedNode>0-1001</SelectedNode>\r\n" +
+                    "<SelectedCategories/>\r\n" +
+                    "<ExcludeCategories>false</ExcludeCategories>\r\n" +
+                    "<Nodes>\r\n" +
+                        "<Node Id=\"0-1002\" Expanded=\"true\"/>\r\n" +
+                        "<Node Id=\"0-1003\" Expanded=\"true\"/>\r\n" +
+                        "<Node Id=\"0-1000\" Expanded=\"true\"/>\r\n" +
+                    "</Nodes>\r\n" +
+                "</VisualState>";
+
+            var reader = new StringReader(version1Xml);
+
+            var vs = VisualState.LoadFrom(reader);
+
+            Assert.That(vs.DisplayStrategy, Is.EqualTo("NUNIT_TREE"));
+        }
     }
 }
