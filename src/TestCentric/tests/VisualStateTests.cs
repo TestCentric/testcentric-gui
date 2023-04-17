@@ -303,11 +303,10 @@ namespace TestCentric.Gui
     }
 
 
-    public class Version1DeserializationTest
+    public class VisualStateSerializationTests
     {
-        // Version 1 of the GUI doesn't save the display strategy
         [Test]
-        public void CanDeserializeFromVersion1VisualStateWithoutDisplayStrategy()
+        public void CanDeserializeVersion1VisualState()
         {
             // XML provided as part of issue #945
             // V1 Gui does not serialize DisplayStrategy because
@@ -330,6 +329,25 @@ namespace TestCentric.Gui
             var vs = VisualState.LoadFrom(reader);
 
             Assert.That(vs.DisplayStrategy, Is.EqualTo("NUNIT_TREE"));
+        }
+
+        [Test]
+        public void ExceptionIsThrownWhenOneNodeContainsAnotherWithTheSameName()
+        {
+            var vs = new VisualState("NUNIT_TREE");
+
+            var node1 = new VisualTreeNode() { Name = "test" };
+            var node2 = new VisualTreeNode() { Name = "test" };
+            
+            // Connect vs => node1 => node2
+            // Not a circular reference but VisualState thinks it is.
+            // TODO: Fix this rather than testing for existing behavior!
+            node1.Nodes.Add(node2);
+            vs.Nodes.Add(node1);
+
+            var writer = new StringWriter();
+            Assert.That(() => vs.Save(writer), Throws.Exception.With.Message.EqualTo(
+                "Unable to serialize VisualState. This may be due to duplicate node names in the tree."));
         }
     }
 }
