@@ -196,7 +196,16 @@ namespace TestCentric.Gui
         public void Save(TextWriter writer)
         {
             XmlSerializer serializer = new XmlSerializer(GetType());
-            serializer.Serialize(writer, this);
+
+            try
+            {
+                serializer.Serialize(writer, this);
+            }
+            catch(InvalidOperationException ex)
+            {
+                throw new Exception(
+                    "Unable to serialize VisualState. This may be due to duplicate node names in the tree.", ex);
+            }
         }
 
         #endregion

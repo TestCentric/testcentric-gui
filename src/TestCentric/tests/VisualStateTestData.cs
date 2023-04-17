@@ -329,7 +329,7 @@ namespace TestCentric.Gui
         const int TOP = 8;
 
         // Helper used to create a VisualTreeNode
-        private static VisualTreeNode VTN(string name, int flags, params VisualTreeNode[] childNodes)
+        public static VisualTreeNode VTN(string name, int flags, params VisualTreeNode[] childNodes)
         {
             bool expand = (flags & EXP) == EXP;
             bool check = (flags & CHK) == CHK;
