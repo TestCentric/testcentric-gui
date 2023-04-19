@@ -41,7 +41,6 @@ BuildSettings.Initialize(
 	context: Context,
 	title: "TestCentric.GuiRunner",
 	solutionFile: "testcentric-gui.sln",
-	unitTestRunner: new GuiSelfTester(),
 	exemptFiles: new [] { "Resource.cs", "TextCode.cs" }
 );
 
@@ -168,7 +167,7 @@ TaskTeardown(context =>
 });
 
 //////////////////////////////////////////////////////////////////////
-// UNIT AND PACKAGE TEST RUNNER
+// PACKAGE TEST RUNNER
 //////////////////////////////////////////////////////////////////////
 
 public class GuiSelfTester : TestRunner
