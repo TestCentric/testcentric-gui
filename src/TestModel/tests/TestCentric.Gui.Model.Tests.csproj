@@ -2,6 +2,7 @@
 	<PropertyGroup>
 		<RootNamespace>TestCentric.Gui.Model</RootNamespace>
 		<AssemblyName>TestCentric.Gui.Model.Tests</AssemblyName>
+		<OutputType>Exe</OutputType>
 		<TargetFramework>net462</TargetFramework>
 		<OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -20,8 +21,9 @@
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="NSubstitute" Version="4.0.0" />
-        <PackageReference Include="NUnit" Version="3.13.2" />
-        <PackageReference Include="NUnit.Engine.Api" Version="3.16.2" />
+		<PackageReference Include="NUnit" Version="3.13.2" />
+		<PackageReference Include="NUnitLite" Version="3.13.2" />
+		<PackageReference Include="NUnit.Engine.Api" Version="3.16.2" />
 		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.1" />
 	</ItemGroup>
 </Project>
