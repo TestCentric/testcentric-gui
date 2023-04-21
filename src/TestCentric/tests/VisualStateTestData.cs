@@ -356,7 +356,7 @@ namespace TestCentric.Gui
             return CreateVisualState(strategy, null, checkBoxes, visualTreeNodes);
         }
 
-        public static VisualState CreateVisualState(string strategy, string grouping, bool checkBoxes, params VisualTreeNode[] visualTreeNodes)
+        public static VisualState CreateVisualState(string strategy, string grouping, bool checkBoxes = false, params VisualTreeNode[] visualTreeNodes)
         {
             VisualState visualState;
 
