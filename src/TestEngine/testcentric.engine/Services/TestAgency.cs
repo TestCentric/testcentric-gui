@@ -293,7 +293,6 @@ namespace TestCentric.Engine.Services
                 // Add builtin agents. These will eventually be removed in
                 // favor of pluggable agents.
                 _launchers.Add(new Net462AgentLauncher());
-                _launchers.Add(new Net50AgentLauncher());
                 _launchers.Add(new Net60AgentLauncher());
                 _launchers.Add(new Net70AgentLauncher());
 

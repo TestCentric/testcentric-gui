@@ -26,7 +26,8 @@ namespace TestCentric.Engine.Services
         public static string[] Runtimes = new string[]
         {
             "net-2.0", "net-3.0", "net-3.5", "net-4.0", "net-4.5",
-            "netcore-1.1", "netcore-2.1", "netcore-3.1", "netcore-5.0"
+            "netcore-1.1", "netcore-2.1", "netcore-3.1", "netcore-5.0",
+            "netcore-6.0", "netcore-7.0"
         };
 
         protected abstract string[] SupportedRuntimes { get; }
@@ -166,23 +167,6 @@ namespace TestCentric.Engine.Services
         {
             string agentPath = Path.Combine(AgentDir, x86 ? AgentNameX86 : AgentName);
             Assert.That(process.StartInfo.FileName, Is.SamePath(agentPath));
-        }
-    }
-
-    public class Net50AgentLauncherTests : AgentLauncherTests<Net50AgentLauncher>
-    {
-        protected override string[] SupportedRuntimes => new string[] { "netcore-1.1", "netcore-2.1", "netcore-3.1", "netcore-5.0" };
-
-        private string AgentDir = Path.Combine(TestContext.CurrentContext.TestDirectory, "agents/net5.0/").Replace('\\', '/');
-
-        private string AgentName = "testcentric-agent.dll";
-        private string AgentNameX86 = "testcentric-agent-x86.dll";
-
-        protected override void CheckAgentPath(Process process, bool x86)
-        {
-            string agentPath = AgentDir + (x86 ? AgentNameX86 : AgentName);
-            Assert.That(process.StartInfo.FileName, Is.EqualTo("dotnet"));
-            Assert.That(process.StartInfo.Arguments.Replace('\\', '/'), Does.StartWith(agentPath));
         }
     }
 }
