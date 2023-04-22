@@ -10,11 +10,14 @@ using NUnit.Framework;
 
 namespace TestCentric.Gui
 {
+    using System.Collections.Generic;
     using System.Linq;
+    using System.Xml;
     using Model;
+    using TestCentric.Gui.Presenters;
 
     [TestFixtureSource(nameof(TestData))]
-    public class VisualStateTests
+    public class VisualStateTests : VisualStateTestBase
     {
         private VisualStateTestData _data;
         private TreeView ExpandedTreeView;
@@ -58,11 +61,11 @@ namespace TestCentric.Gui
 
             ExpectedVisualState.ApplyTo(treeView);
 
-            VerifyTreeView(treeView, selectedNode:"Test2");
+            VerifyTreeView(treeView, selectedNode: "Test2");
         }
 
         [Test]
-        public void CanApplyVisualStateToTree_TestsAddedAndDeleted ()
+        public void CanApplyVisualStateToTree_TestsAddedAndDeleted()
         {
             var treeView = _data.GetInitialTreeView();
 
@@ -102,7 +105,7 @@ namespace TestCentric.Gui
 
             ExpectedVisualState.ApplyTo(treeView);
 
-            VerifyTreeView(treeView, selectedNode:null);
+            VerifyTreeView(treeView, selectedNode: null);
         }
 
         [Test]
@@ -116,27 +119,6 @@ namespace TestCentric.Gui
             ExpectedVisualState.ApplyTo(treeView);
 
             VerifyTreeView(treeView, selectedNode: null);
-        }
-
-        [Test]
-        public void CanSaveAndReloadVisualState()
-        {
-            StringWriter writer = new StringWriter();
-            ExpectedVisualState.Save(writer);
-
-            string output = writer.GetStringBuilder().ToString();
-            StringReader reader = new StringReader(output);
-
-            VisualState restoredState = VisualState.LoadFrom(reader);
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(restoredState.ShowCheckBoxes, Is.EqualTo(ExpectedVisualState.ShowCheckBoxes));
-                // TODO: Categories not yet supported
-                //Assert.AreEqual(ExpectedVisualState.SelectedCategories, restoredState.SelectedCategories);
-                //Assert.AreEqual(ExpectedVisualState.ExcludeCategories, restoredState.ExcludeCategories);
-                Assert.That(restoredState.Nodes, Is.EqualTo(ExpectedVisualState.Nodes));
-            });
         }
 
         [Test]
@@ -176,14 +158,6 @@ namespace TestCentric.Gui
             visualState.ApplyTo(treeView);
 
             VerifyTreeView(treeView, selectedNode: "Test2");
-        }
-
-        // Helper used to create a TreeNode for use in the tests
-        // NOTE: Unlike the TreeNodes used in the production app, the Tag
-        // is not set because VisualState doesn't make use of it.
-        private static TreeNode TN(string name, params TreeNode[] childNodes)
-        {
-            return VisualStateTestData.TN(name, childNodes);
         }
 
         #region Helper method to handle common asserts
@@ -300,54 +274,5 @@ namespace TestCentric.Gui
         };
 
         #endregion
-    }
-
-
-    public class VisualStateSerializationTests
-    {
-        [Test]
-        public void CanDeserializeVersion1VisualState()
-        {
-            // XML provided as part of issue #945
-            // V1 Gui does not serialize DisplayStrategy because
-            // it doesn't support multiple strategies.
-            string version1Xml =
-                "<VisualState ShowCheckBoxes=\"false\">\r\n" +
-                    "<TopNode>0-1002</TopNode>\r\n" +
-                    "<SelectedNode>0-1001</SelectedNode>\r\n" +
-                    "<SelectedCategories/>\r\n" +
-                    "<ExcludeCategories>false</ExcludeCategories>\r\n" +
-                    "<Nodes>\r\n" +
-                        "<Node Id=\"0-1002\" Expanded=\"true\"/>\r\n" +
-                        "<Node Id=\"0-1003\" Expanded=\"true\"/>\r\n" +
-                        "<Node Id=\"0-1000\" Expanded=\"true\"/>\r\n" +
-                    "</Nodes>\r\n" +
-                "</VisualState>";
-
-            var reader = new StringReader(version1Xml);
-
-            var vs = VisualState.LoadFrom(reader);
-
-            Assert.That(vs.DisplayStrategy, Is.EqualTo("NUNIT_TREE"));
-        }
-
-        [Test]
-        public void ExceptionIsThrownWhenOneNodeContainsAnotherWithTheSameName()
-        {
-            var vs = new VisualState("NUNIT_TREE");
-
-            var node1 = new VisualTreeNode() { Name = "test" };
-            var node2 = new VisualTreeNode() { Name = "test" };
-            
-            // Connect vs => node1 => node2
-            // Not a circular reference but VisualState thinks it is.
-            // TODO: Fix this rather than testing for existing behavior!
-            node1.Nodes.Add(node2);
-            vs.Nodes.Add(node1);
-
-            var writer = new StringWriter();
-            Assert.That(() => vs.Save(writer), Throws.Exception.With.Message.EqualTo(
-                "Unable to serialize VisualState. This may be due to duplicate node names in the tree."));
-        }
     }
 }

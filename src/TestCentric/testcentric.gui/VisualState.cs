@@ -9,14 +9,17 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+using System.Xml.Schema;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace TestCentric.Gui
 {
     /// <summary>
     /// The VisualState class holds the latest visual state for a project.
     /// </summary>
-    [Serializable]
-    public class VisualState
+    //[Serializable]
+    public class VisualState : IXmlSerializable
     {
         // Default constructor is required for serialization
         public VisualState() : this("NUNIT_TREE") { }
@@ -37,23 +40,23 @@ namespace TestCentric.Gui
 
         #region Fields
 
-        [XmlAttribute]
+        //[XmlAttribute]
         public string DisplayStrategy;
 
-        [XmlAttribute]
+        //[XmlAttribute]
         public string GroupBy;
 
-        [XmlIgnore]
+        //[XmlIgnore]
         public bool GroupBySpecified => GroupBy != null;
 
-        [XmlAttribute, DefaultValue(false)]
+        //[XmlAttribute, DefaultValue(false)]
         public bool ShowCheckBoxes;
 
         // TODO: Categories not yet supported
         //public List<string> SelectedCategories;
         //public bool ExcludeCategories;
 
-        [XmlArrayItem("Node")]
+        //[XmlArrayItem("Node")]
         public List<VisualTreeNode> Nodes = new List<VisualTreeNode>();
 
         //private Dictionary<string, VisualTreeNode> _nodeIndex = new Dictionary<string, VisualTreeNode>();
@@ -222,40 +225,203 @@ namespace TestCentric.Gui
 
         #endregion
 
+        #region IXmlSerializable Implementation
+
+        public XmlSchema GetSchema()
+        {
+            return null;
+        }
+
+        public void ReadXml(XmlReader reader)
+        {
+            // We start out positioned on the root element which
+            // has already been read for us, so process it.
+
+            // Get DisplayStrategy, which will not be present if the VisualState
+            // was saved using version 1 of the GUI. In that case, we rely on
+            // the default constructor having set the strategy to "NUNIT_TREE".
+            var strategy = reader.GetAttribute("DisplayStrategy");
+            if (strategy != null) DisplayStrategy = strategy;
+            GroupBy = reader.GetAttribute("GroupBy");
+            // GroupBy is null for NUnitTree strategy, otherwise required
+            if (GroupBy == null && strategy != "NUNIT_TREE") GroupBy = "ASSEMBLY";
+            ShowCheckBoxes = reader.GetAttribute("ShowCheckBoxes") == "True";
+
+            while (reader.Read())
+            {
+                switch(reader.NodeType)
+                {
+                    case XmlNodeType.Element:
+                        switch (reader.Name)
+                        {
+                            case "Nodes":
+                                GetNodeList(Nodes);
+                                break;
+                            case "Node":
+                                Console.WriteLine($"Unprocessed {reader.NodeType} {reader.Name}");
+                                break;
+                            default:
+                                Console.WriteLine($"Unexpected Element {reader.Name}");
+                                break;
+                        }
+                        break;
+
+                    case XmlNodeType.EndElement:
+                        switch (reader.Name)
+                        {
+                            case "Nodes":
+                                Console.WriteLine($"Unprocessed {reader.NodeType} {reader.Name}");
+                                break;
+                            case "Node":
+                                Console.WriteLine($"Unprocessed {reader.NodeType} {reader.Name}");
+                                break;
+                            case "VisualState":
+                                break; // Nothing to do
+                            default:
+                                Console.WriteLine($"Unexpected EndElement {reader.Name}");
+                                break;
+                        }
+                        break;
+
+                    default:
+                        Console.WriteLine($"Unexpected NodeType {reader.NodeType}");
+                        break;
+                }
+            }
+
+            //GetNodeList(Nodes);
+
+            //Console.WriteLine($"Finished reading VisualState at depth {reader.Depth}");
+            //reader.ReadEndElement();
+
+            void GetNodeList(List<VisualTreeNode> nodeList)
+            {
+                VisualTreeNode lastNodeRead = null;
+
+                // We  are called when Nodes element has been read,
+                // so we look for individual nodes until we see the
+                // corresponding EndElement.
+                while (reader.Read())
+                {
+                    switch (reader.NodeType)
+                    {
+                        case XmlNodeType.Element:
+                            switch (reader.Name)
+                            {
+                                case "Nodes":
+                                    if (lastNodeRead != null)
+                                        GetNodeList(lastNodeRead.Nodes);
+                                    break;
+                                case "Node":
+                                    lastNodeRead = new VisualTreeNode();
+
+                                    lastNodeRead.Name = reader.GetAttribute("Name");
+                                    lastNodeRead.Expanded = reader.GetAttribute("Expanded") == "True";
+                                    lastNodeRead.Checked = reader.GetAttribute("Checked") == "True";
+                                    lastNodeRead.Selected = reader.GetAttribute("Selected") == "True";
+                                    lastNodeRead.IsTopNode = reader.GetAttribute("IsTopNode") == "True";
+
+                                    nodeList.Add(lastNodeRead);
+
+                                    break;
+                            }
+                            break;
+                        case XmlNodeType.EndElement:
+                            switch (reader.Name)
+                            {
+                                case "Nodes":
+                                    return;
+                                case "Node":
+                                    break;
+                            }
+                            break;
+                    }
+                }
+            }
+
+            //VisualTreeNode GetVisualTreeNode()
+            //{
+            //    var node = new VisualTreeNode();
+
+            //    node.Name = reader.GetAttribute("Name");
+            //    node.Expanded = reader.GetAttribute("Expanded") == "True";
+            //    node.Checked = reader.GetAttribute("Checked") == "True";
+            //    node.Selected = reader.GetAttribute("Selected") == "True";
+            //    node.IsTopNode = reader.GetAttribute("IsTopNode") == "True";
+
+            //    return node;
+            //}
+        }
+
+        public void WriteXml(XmlWriter writer)
+        {
+            writer.WriteAttributeString("DisplayStrategy", DisplayStrategy);
+            if (GroupBy != null)
+                writer.WriteAttributeString("GroupBy", GroupBy);
+            if (ShowCheckBoxes)
+                writer.WriteAttributeString("ShowCheckBoxes", "True");
+            
+            WriteVisualTreeNodes(Nodes);
+
+            void WriteVisualTreeNodes(List<VisualTreeNode> nodes)
+            {
+                writer.WriteStartElement("Nodes");
+
+                foreach (VisualTreeNode node in nodes)
+                    WriteVisualTreeNode(node);
+
+                writer.WriteEndElement();
+            }
+
+            void WriteVisualTreeNode(VisualTreeNode node)
+            {
+                writer.WriteStartElement("Node");
+
+                writer.WriteAttributeString("Name", node.Name);
+                if (node.Expanded)
+                    writer.WriteAttributeString("Expanded", "True");
+                if (node.Checked)
+                    writer.WriteAttributeString("Checked", "True");
+                if (node.Selected)
+                    writer.WriteAttributeString("Selected", "True");
+                if (node.IsTopNode)
+                    writer.WriteAttributeString("IsTopNode", "True");
+
+                if (node.Nodes.Count > 0)
+                    WriteVisualTreeNodes(node.Nodes);
+
+                writer.WriteEndElement();
+            }
+        }
+
+        #endregion
+
         #endregion
     }
 
-    [Serializable]
+    //[Serializable]
     public class VisualTreeNode
     {
-        [XmlAttribute]
+        //[XmlAttribute]
         public string Name;
 
-        [XmlAttribute, DefaultValue(false)]
+        //[XmlAttribute, DefaultValue(false)]
         public bool Expanded;
 
-        [XmlAttribute, DefaultValue(false)]
+        //[XmlAttribute, DefaultValue(false)]
         public bool Checked;
 
-        [XmlAttribute, DefaultValue(false)]
+        //[XmlAttribute, DefaultValue(false)]
         public bool Selected;
 
-        [XmlAttribute, DefaultValue(false)]
+        //[XmlAttribute, DefaultValue(false)]
         public bool IsTopNode;
 
-        [XmlArrayItem("Node")]
+        //[XmlArrayItem("Node")]
         public List<VisualTreeNode> Nodes = new List<VisualTreeNode>();
 
-        [XmlIgnore]
+        //[XmlIgnore]
         public bool NodesSpecified => Nodes.Count > 0;
-
-        /// <summary>
-        /// Return true if this VisualTreeNode matches a TreeNode
-        /// </summary>
-        public bool Matches(TreeNode treeNode)
-        {
-            return Name == treeNode.Text;
-        }
 
         // Provided for use in test output
         public override string ToString()

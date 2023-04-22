@@ -198,6 +198,24 @@ public class GuiSelfTester : TestRunner
 }
 
 //////////////////////////////////////////////////////////////////////
+// INDIVIDUAL TEST RUNS
+//////////////////////////////////////////////////////////////////////
+
+Task("RunTestCentricGuiTests")
+	.IsDependentOn("Build")
+	.Does(() =>
+	{
+		new GuiSelfTester().Run(BuildSettings.OutputDirectory + "TestCentric.Gui.Tests.dll");
+
+		var result = new ActualResult(BuildSettings.OutputDirectory + "TestResult.xml");
+
+		new ConsoleReporter(result).Display();
+
+		if (result.OverallResult == "Failed")
+			throw new System.Exception("There were test failures or errors. See listing.");
+	});
+
+//////////////////////////////////////////////////////////////////////
 // INDIVIDUAL PACKAGES
 //////////////////////////////////////////////////////////////////////
 
