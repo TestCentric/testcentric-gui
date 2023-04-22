@@ -22,11 +22,11 @@ public static void DefinePackageTests()
 
 	PackageTests.Add(new PackageTest(1, "NetCore21Test", "Run .NET Core 2.1 mock-assembly.dll under .NET Core 3.1",
         "netcoreapp2.1/mock-assembly.dll",
-        MockAssemblyExpectedResult("NetCore31AgentLauncher")));
+        MockAssemblyExpectedResult("Net60AgentLauncher")));
 
     PackageTests.Add(new PackageTest(1, "NetCore31Test", "Run mock-assembly.dll under .NET Core 3.1",
         "netcoreapp3.1/mock-assembly.dll",
-        MockAssemblyExpectedResult("NetCore31AgentLauncher")));
+        MockAssemblyExpectedResult("Net60AgentLauncher")));
 
     //    PackageTests.Add(new PackageTest(1, "NetCore11Test", "Run mock-assembly.dll targeting .NET Core 1.1",
     //        "netcoreapp1.1/mock-assembly.dll",
@@ -43,7 +43,7 @@ public static void DefinePackageTests()
 
     PackageTests.Add(new PackageTest(1, "Net50Test", "Run mock-assembly.dll under .NET 5.0",
         "net5.0/mock-assembly.dll",
-        MockAssemblyExpectedResult("Net50AgentLauncher")));
+        MockAssemblyExpectedResult("Net60AgentLauncher")));
 
     PackageTests.Add(new PackageTest(1, "Net60Test", "Run mock-assembly.dll under .NET 6.0",
         "net6.0/mock-assembly.dll",
@@ -59,14 +59,14 @@ public static void DefinePackageTests()
         "netcoreapp3.1/aspnetcore-test.dll",
         new ExpectedResult("Passed")
         {
-            Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "NetCore31AgentLauncher") }
+            Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net60AgentLauncher") }
         }));
 
     PackageTests.Add(new PackageTest(1, "AspNetCore50Test", "Run test using AspNetCore under .NET 5.0",
         "net5.0/aspnetcore-test.dll",
         new ExpectedResult("Passed")
         {
-            Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net50AgentLauncher") }
+            Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net60AgentLauncher") }
         }));
 
     PackageTests.Add(new PackageTest(1, "AspNetCore60Test", "Run test using AspNetCore under .NET 6.0",
@@ -93,7 +93,7 @@ public static void DefinePackageTests()
             "net5.0-windows/windows-forms-test.dll",
             new ExpectedResult("Passed")
             {
-                Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net50AgentLauncher") }
+                Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net60AgentLauncher") }
             }));
 
     PackageTests.Add(new PackageTest(1, "Net60WindowsFormsTest", "Run test using windows forms under .NET 6.0",
@@ -158,7 +158,7 @@ public static void DefinePackageTests()
         PackageTests.Add(new PackageTest(2, "NUnitProjectTest", "Run an NUnit project",
             "../../TestProject.nunit",
             MockAssemblyExpectedResult(
-                "Net20AgentLauncher", "Net462AgentLauncher", "NetCore31AgentLauncher", "Net50AgentLauncher"),
+                "Net20AgentLauncher", "Net462AgentLauncher", "Net60AgentLauncher", "Net60AgentLauncher"),
             EngineExtensions.NUnitProjectLoader));
     }
 
