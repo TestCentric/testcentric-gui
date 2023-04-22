@@ -9,7 +9,7 @@ const string ENGINE_API_PACKAGE_ID = "TestCentric.Engine.Api";
 const string TEST_BED_EXE = "test-bed.exe";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.0-dev00041
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.0-dev00042
 // Comment out above line and uncomment below for local tests of recipe changes
 //git #load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -55,15 +55,15 @@ packageTests.Add(new PackageTest(1, "Net35Test", "Run mock-assembly.dll targetin
 
 packageTests.Add(new PackageTest(1, "NetCore21Test", "Run mock-assembly.dll targeting .NET Core 2.1",
     "engine-tests/netcoreapp2.1/mock-assembly.dll",
-    MockAssemblyExpectedResult("NetCore31AgentLauncher")));
+    MockAssemblyExpectedResult("Net50AgentLauncher")));
 
 packageTests.Add(new PackageTest(1, "NetCore31Test", "Run mock-assembly.dll targeting .NET Core 3.1",
     "engine-tests/netcoreapp3.1/mock-assembly.dll",
-    MockAssemblyExpectedResult("NetCore31AgentLauncher")));
+    MockAssemblyExpectedResult("Net50AgentLauncher")));
 
 packageTests.Add(new PackageTest(1, "NetCore11Test", "Run mock-assembly.dll targeting .NET Core 1.1",
     "engine-tests/netcoreapp1.1/mock-assembly.dll",
-    MockAssemblyExpectedResult("NetCore31AgentLauncher")));
+    MockAssemblyExpectedResult("Net50AgentLauncher")));
 
 packageTests.Add(new PackageTest(1, "Net50Test", "Run mock-assembly.dll targeting .NET 5.0",
     "engine-tests/net5.0/mock-assembly.dll",
@@ -103,7 +103,7 @@ packageTests.Add(new PackageTest(1, "AspNetCore31Test", "Run test using AspNetCo
     "engine-tests/netcoreapp3.1/aspnetcore-test.dll",
     new ExpectedResult("Passed")
     {
-        Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "NetCore31AgentLauncher") }
+        Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net50AgentLauncher") }
     }));
 
 packageTests.Add(new PackageTest(1, "AspNetCore50Test", "Run test using AspNetCore under .NET 5.0",
@@ -160,7 +160,7 @@ if (!BuildSettings.IsRunningOnAppVeyor)
 
 packageTests.Add(new PackageTest(1, "Net35PlusNetCore21Test", "Run different builds of mock-assembly.dll together",
     "engine-tests/net35/mock-assembly.dll engine-tests/netcoreapp2.1/mock-assembly.dll",
-    MockAssemblyExpectedResult("Net462AgentLauncher", "NetCore31AgentLauncher")));
+    MockAssemblyExpectedResult("Net462AgentLauncher", "Net50AgentLauncher")));
 
 // TODO: Use --config option when it's supported by the extension.
 // Current test relies on the fact that the Release config appears
@@ -174,7 +174,7 @@ if (BuildSettings.Configuration == "Release")
             Assemblies = new[] {
                             new ExpectedAssemblyResult("mock-assembly.dll", "Net462AgentLauncher"),
                             new ExpectedAssemblyResult("mock-assembly.dll", "Net462AgentLauncher"),
-                            new ExpectedAssemblyResult("mock-assembly.dll", "NetCore31AgentLauncher"),
+                            new ExpectedAssemblyResult("mock-assembly.dll", "Net50AgentLauncher"),
                             new ExpectedAssemblyResult("mock-assembly.dll", "Net50AgentLauncher") }
         },
         EngineExtensions.NUnitProjectLoader));
@@ -262,11 +262,6 @@ var EnginePackage = new NuGetPackage(
 			"testcentric-agent-x86.exe", "testcentric-agent-x86.pdb", "testcentric-agent-x86.exe.config",
 			"testcentric.engine.core.dll", "testcentric.engine.core.pdb",
 			"nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "testcentric-agent.nuget.addins"),
-		HasDirectory("tools/agents/netcoreapp3.1").WithFiles(
-			"testcentric-agent.dll", "testcentric-agent.pdb", "testcentric-agent.dll.config",
-			"testcentric.engine.core.dll", "testcentric.engine.core.pdb",
-			"nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric.extensibility.dll",
-			"Microsoft.Extensions.DependencyModel.dll", "testcentric-agent.nuget.addins"),
 		HasDirectory("tools/agents/net5.0").WithFiles(
 			"testcentric-agent.dll", "testcentric-agent.pdb", "testcentric-agent.dll.config",
 			"testcentric.engine.core.dll", "testcentric.engine.core.pdb",
