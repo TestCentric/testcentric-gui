@@ -120,25 +120,21 @@ packageTests.Add(new PackageTest(1, "AspNetCore60Test", "Run test using AspNetCo
         Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net60AgentLauncher") }
     }));
 
-// TODO: AspNetCore test won't run on AppVeyor under .NET 7.0 - we don't yet know why
-if (!BuildSettings.IsRunningOnAppVeyor)
-    packageTests.Add(new PackageTest(1, "AspNetCore70Test", "Run test using AspNetCore under .NET 7.0",
-        "engine-tests/net7.0/aspnetcore-test.dll",
-        new ExpectedResult("Passed")
-        {
-            Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net70AgentLauncher") }
-        }));
+packageTests.Add(new PackageTest(1, "AspNetCore70Test", "Run test using AspNetCore under .NET 7.0",
+    "engine-tests/net7.0/aspnetcore-test.dll",
+    new ExpectedResult("Passed")
+    {
+        Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net70AgentLauncher") }
+    }));
 
 // Windows Forms Tests
 
-// TODO: Windows Forms tests won't run on AppVeyor under .NET 5.0 or 7.0, we don't yet know why
-if (!BuildSettings.IsRunningOnAppVeyor)
-    packageTests.Add(new PackageTest(1, "Net50WindowsFormsTest", "Run test using windows forms under .NET 5.0",
-        "engine-tests/net5.0-windows/windows-forms-test.dll",
-        new ExpectedResult("Passed")
-        {
-            Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net60AgentLauncher") }
-        }));
+packageTests.Add(new PackageTest(1, "Net50WindowsFormsTest", "Run test using windows forms under .NET 5.0",
+    "engine-tests/net5.0-windows/windows-forms-test.dll",
+    new ExpectedResult("Passed")
+    {
+        Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net60AgentLauncher") }
+    }));
 
 packageTests.Add(new PackageTest(1, "Net60WindowsFormsTest", "Run test using windows forms under .NET 6.0",
     "engine-tests/net6.0-windows/windows-forms-test.dll",
@@ -147,14 +143,12 @@ packageTests.Add(new PackageTest(1, "Net60WindowsFormsTest", "Run test using win
         Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net60AgentLauncher") }
     }));
 
-// TODO: Windows Forms tests won't run on AppVeyor under .NET 5.0 or 7.0, we don't yet know why
-if (!BuildSettings.IsRunningOnAppVeyor)
-    packageTests.Add(new PackageTest(1, "Net70WindowsFormsTest", "Run test using windows forms under .NET 7.0",
-        "engine-tests/net7.0-windows/windows-forms-test.dll",
-        new ExpectedResult("Passed")
-        {
-            Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net70AgentLauncher") }
-        }));
+packageTests.Add(new PackageTest(1, "Net70WindowsFormsTest", "Run test using windows forms under .NET 7.0",
+    "engine-tests/net7.0-windows/windows-forms-test.dll",
+    new ExpectedResult("Passed")
+    {
+        Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net70AgentLauncher") }
+    }));
 
 // Multiple Assembly Tests
 
@@ -182,50 +176,6 @@ if (BuildSettings.Configuration == "Release")
 
 // NOTE: Package tests using a pluggable agent must be run after all tests
 // that assume no pluggable agents are installed!
-
-packageTests.Add(new PackageTest(2, "Net20PluggableAgentTest", "Run mock-assembly.dll targeting net35 using Net20PluggableAgent",
-    "engine-tests/net35/mock-assembly.dll",
-    new ExpectedResult("Failed")
-    {
-        Total = 36,
-        Passed = 23,
-        Failed = 5,
-        Warnings = 1,
-        Inconclusive = 1,
-        Skipped = 7,
-        Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net20AgentLauncher") }
-    },
-	EngineExtensions.Net20PluggableAgent.SetVersion("2.1.0-dev00018")));
-
-packageTests.Add(new PackageTest(2, "NetCore21PluggableAgentTest", "Run mock-assembly.dll targeting Net Core 2.1 using NetCore21PluggableAgent",
-    "engine-tests/netcoreapp2.1/mock-assembly.dll",
-    new ExpectedResult("Failed")
-    {
-        Total = 36,
-        Passed = 23,
-        Failed = 5,
-        Warnings = 1,
-        Inconclusive = 1,
-        Skipped = 7,
-        Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "NetCore21AgentLauncher") }
-    },
-	EngineExtensions.NetCore21PluggableAgent));
-
-const string NET80_MOCK_ASSEMBLY = "../../../net80-pluggable-agent/bin/Release/tests/net8.0/mock-assembly.dll";
-if (BuildSettings.IsLocalBuild && Context.FileExists(BuildSettings.OutputDirectory + NET80_MOCK_ASSEMBLY))
-	packageTests.Add(new PackageTest(2, "NetCore80PluggableAgentTest", "Run mock-assembly.dll targeting Net 8.0 using NetCore80PluggableAgent",
-		NET80_MOCK_ASSEMBLY,
-		new ExpectedResult("Failed")
-		{
-			Total = 36,
-			Passed = 23,
-			Failed = 5,
-			Warnings = 1,
-			Inconclusive = 1,
-			Skipped = 7,
-			Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "Net80AgentLauncher") }
-		},
-		EngineExtensions.Net80PluggableAgent));
 
 // TODO: Disabling NUnitV2Test until the driver works
 //packageTests.Add(new PackageTest(1, "NUnitV2Test", "Run tests using the V2 framework driver",
