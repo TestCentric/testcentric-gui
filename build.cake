@@ -26,6 +26,7 @@ BuildSettings.Initialize(
 	Context,
 	"TestCentric.Engine",
 	solutionFile: "testcentric-engine.sln",
+	githubRepository: "testcentric-engine",
 	unitTests: "engine-tests/**/*.tests.exe|engine-tests/**/*.tests.dll");
 
 if (BuildSystem.IsRunningOnAppVeyor)
