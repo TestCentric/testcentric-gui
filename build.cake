@@ -1,6 +1,4 @@
 #tool nuget:?package=GitVersion.CommandLine&version=5.6.3
-#tool nuget:?package=GitReleaseManager&version=0.12.1
-#tool nuget:?package=NuGet.CommandLine&version=6.0.0
 
 using System.Xml.Serialization;
 
@@ -13,7 +11,7 @@ static string[] VALID_CONFIGS = new [] { "Release", "Debug" };
 // NOTE: This must match what is actually referenced by
 // the GUI test model project. Hopefully, this is a temporary
 // fix, which we can get rid of in the future.
-const string REF_ENGINE_VERSION = "2.0.0-dev00064";
+const string REF_ENGINE_VERSION = "2.0.0-alpha8";
 
 const string PACKAGE_NAME = "testcentric-gui";
 const string NUGET_PACKAGE_NAME = "TestCentric.GuiRunner";
@@ -22,7 +20,7 @@ const string GUI_RUNNER = "testcentric.exe";
 const string GUI_TESTS = "*.Tests.dll";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.0-dev00043
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.0-dev00061
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -41,30 +39,26 @@ BuildSettings.Initialize(
 	context: Context,
 	title: "TestCentric.GuiRunner",
 	solutionFile: "testcentric-gui.sln",
+	githubRepository: "testcentric-gui",
 	exemptFiles: new [] { "Resource.cs", "TextCode.cs" }
 );
 
-if (BuildSystem.IsRunningOnAppVeyor)
-		AppVeyor.UpdateBuildVersion(BuildSettings.PackageVersion + "-" + AppVeyor.Environment.Build.Number);
-
-Information("Building {0} version {1} of TestCentric GUI Runner.", BuildSettings.Configuration, BuildSettings.PackageVersion);
-
 DefinePackageTests();
 
-static readonly string[] ENGINE_FILES = {
+static readonly FilePath[] ENGINE_FILES = {
         "testcentric.engine.dll", "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll"};
-static readonly string[] ENGINE_CORE_FILES = {
+static readonly FilePath[] ENGINE_CORE_FILES = {
         "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll" };
-static readonly string[] NET_FRAMEWORK_AGENT_FILES = {
+static readonly FilePath[] NET_FRAMEWORK_AGENT_FILES = {
         "testcentric-agent.exe", "testcentric-agent.exe.config", "testcentric-agent-x86.exe", "testcentric-agent-x86.exe.config" };
-static readonly string[] NET_CORE_AGENT_FILES = {
+static readonly FilePath[] NET_CORE_AGENT_FILES = {
         "testcentric-agent.dll", "testcentric-agent.dll.config" };
-static readonly string[] GUI_FILES = {
+static readonly FilePath[] GUI_FILES = {
         "testcentric.exe", "testcentric.exe.config", "nunit.uiexception.dll",
         "TestCentric.Gui.Runner.dll", "TestCentric.Gui.Model.dll", "Mono.Options.dll" };
-static readonly string[] TREE_ICONS_JPG = {
+static readonly FilePath[] TREE_ICONS_JPG = {
         "Success.jpg", "Failure.jpg", "Ignored.jpg", "Inconclusive.jpg", "Skipped.jpg" };
-static readonly string[] TREE_ICONS_PNG = {
+static readonly FilePath[] TREE_ICONS_PNG = {
         "Success.png", "Failure.png", "Ignored.png", "Inconclusive.png", "Skipped.png" };
 
 var nugetPackage = new NuGetPackage(
@@ -247,12 +241,6 @@ Task("AppVeyor")
 Task("Travis")
     .IsDependentOn("Build")
     .IsDependentOn("Test");
-
-Task("BuildTestAndPackage")
-	.IsDependentOn("DumpSettings")
-    .IsDependentOn("Build")
-    .IsDependentOn("Test")
-    .IsDependentOn("Package");
 
 Task("Default")
     .IsDependentOn("Build");
