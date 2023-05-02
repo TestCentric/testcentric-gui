@@ -1,6 +1,4 @@
 #tool NuGet.CommandLine&version=6.0.0
-#tool nuget:?package=GitVersion.CommandLine&version=5.6.3
-#tool nuget:?package=GitReleaseManager&version=0.12.1
 
 const string ENGINE_PACKAGE_ID = "TestCentric.Engine";
 const string ENGINE_CORE_PACKAGE_ID = "TestCentric.Engine.Core";
@@ -9,7 +7,7 @@ const string ENGINE_API_PACKAGE_ID = "TestCentric.Engine.Api";
 const string TEST_BED_EXE = "test-bed.exe";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.0-dev00043
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.0-dev00061
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -28,11 +26,6 @@ BuildSettings.Initialize(
 	solutionFile: "testcentric-engine.sln",
 	githubRepository: "testcentric-engine",
 	unitTests: "engine-tests/**/*.tests.exe|engine-tests/**/*.tests.dll");
-
-if (BuildSystem.IsRunningOnAppVeyor)
-		AppVeyor.UpdateBuildVersion(BuildSettings.PackageVersion + "-" + AppVeyor.Environment.Build.Number);
-
-Information("Building {0} version {1} of TestCentric Engine.", BuildSettings.Configuration, BuildSettings.PackageVersion);
 
 //////////////////////////////////////////////////////////////////////
 // DEFINE PACKAGE TESTS
@@ -350,13 +343,6 @@ Task("Travis")
 	.Description("Targets to run on Travis")
     .IsDependentOn("Build")
     .IsDependentOn("Test");
-
-Task("BuildTestAndPackage")
-	.Description("Build, Test and Package")
-	.IsDependentOn("DumpSettings")
-    .IsDependentOn("Build")
-    .IsDependentOn("Test")
-    .IsDependentOn("Package");
 
 Task("Default")
     .IsDependentOn("Build");
