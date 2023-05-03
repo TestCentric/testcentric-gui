@@ -77,6 +77,22 @@ namespace TestCentric.Engine.TestBed
                     CancelTimeout = int.Parse(val);
                     break;
 
+                case "--disable":
+                    switch(val)
+                    {
+                        case "Net462Agent":
+                            Services.Net462AgentLauncher.Enabled = false;
+                            break;
+                        case "Net60Agent":
+                            Services.Net60AgentLauncher.Enabled = false;
+                            break;
+                        case "Net70Agent":
+                            Services.Net70AgentLauncher.Enabled = false;
+                            break;
+                    }
+                    break;
+
+
                 default:
                     throw new ArgumentException($"Invalid option: '{arg}'");
             }
