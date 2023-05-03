@@ -16,6 +16,8 @@ namespace TestCentric.Engine.Services
 {
     public class Net60AgentLauncher : IAgentLauncher
     {
+        public static bool Enabled = true;
+
         private const string RUNTIME_IDENTIFIER = ".NETCoreApp";
         private static readonly Version RUNTIME_VERSION = new Version(6, 0, 0);
         private static readonly FrameworkName TARGET_FRAMEWORK = new FrameworkName(RUNTIME_IDENTIFIER, RUNTIME_VERSION);

@@ -16,6 +16,8 @@ namespace TestCentric.Engine.Services
 {
     public class Net462AgentLauncher : IAgentLauncher
     {
+        public static bool Enabled = true;
+
         private const string RUNTIME_IDENTIFIER = ".NETFramework";
         private static readonly Version RUNTIME_VERSION = new Version(4, 6, 2);
         private static readonly FrameworkName TARGET_FRAMEWORK = new FrameworkName(RUNTIME_IDENTIFIER, RUNTIME_VERSION);
