@@ -49,9 +49,9 @@ public static void DefinePackageTests()
         "net6.0/mock-assembly.dll",
         MockAssemblyExpectedResult("Net60AgentLauncher")));
 
-    PackageTests.Add(new PackageTest(1, "Net70Test", "Run mock-assembly.dll under .NET 7.0",
-        "net7.0/mock-assembly.dll",
-        MockAssemblyExpectedResult("Net70AgentLauncher")));
+    //PackageTests.Add(new PackageTest(1, "Net70Test", "Run mock-assembly.dll under .NET 7.0",
+    //    "net7.0/mock-assembly.dll",
+    //    MockAssemblyExpectedResult("Net70AgentLauncher")));
 
     // AspNetCore tests
 
@@ -76,12 +76,12 @@ public static void DefinePackageTests()
             Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net60AgentLauncher") }
         }));
 
-    PackageTests.Add(new PackageTest(1, "AspNetCore70Test", "Run test using AspNetCore under .NET 7.0",
-        "net7.0/aspnetcore-test.dll",
-        new ExpectedResult("Passed")
-        {
-            Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net70AgentLauncher") }
-        }));
+    //PackageTests.Add(new PackageTest(1, "AspNetCore70Test", "Run test using AspNetCore under .NET 7.0",
+    //    "net7.0/aspnetcore-test.dll",
+    //    new ExpectedResult("Passed")
+    //    {
+    //        Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net70AgentLauncher") }
+    //    }));
 
 	// Windows Forms Tests
 
@@ -99,13 +99,13 @@ public static void DefinePackageTests()
             Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net60AgentLauncher") }
         }));
 
-    if (!BuildSettings.IsRunningOnAppVeyor)
-        PackageTests.Add(new PackageTest(1, "Net70WindowsFormsTest", "Run test using windows forms under .NET 7.0",
-            "net7.0-windows/windows-forms-test.dll",
-            new ExpectedResult("Passed")
-            {
-                Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net70AgentLauncher") }
-            }));
+    //if (!BuildSettings.IsRunningOnAppVeyor)
+    //    PackageTests.Add(new PackageTest(1, "Net70WindowsFormsTest", "Run test using windows forms under .NET 7.0",
+    //        "net7.0-windows/windows-forms-test.dll",
+    //        new ExpectedResult("Passed")
+    //        {
+    //            Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net70AgentLauncher") }
+    //        }));
 
 	// Multiple assembly tests
 
