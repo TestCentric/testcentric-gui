@@ -7,9 +7,9 @@ const string ENGINE_API_PACKAGE_ID = "TestCentric.Engine.Api";
 const string TEST_BED_EXE = "test-bed.exe";
 
 // Load the recipe
-//#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.0-dev00062
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.0-dev00063
 // Comment out above line and uncomment below for local tests of recipe changes
-#load ../TestCentric.Cake.Recipe/recipe/*.cake
+//#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
 using System.Xml;
 using System.Text.RegularExpressions;
