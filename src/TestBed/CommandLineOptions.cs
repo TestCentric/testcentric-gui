@@ -86,9 +86,6 @@ namespace TestCentric.Engine.TestBed
                         case "Net60Agent":
                             Services.Net60AgentLauncher.Enabled = false;
                             break;
-                        case "Net70Agent":
-                            Services.Net70AgentLauncher.Enabled = false;
-                            break;
                     }
                     break;
 
