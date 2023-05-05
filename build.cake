@@ -7,7 +7,7 @@ const string ENGINE_API_PACKAGE_ID = "TestCentric.Engine.Api";
 const string TEST_BED_EXE = "test-bed.exe";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.0-dev00063
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.0-dev00065
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -31,7 +31,7 @@ BuildSettings.Initialize(
 // DEFINE PACKAGE TESTS
 //////////////////////////////////////////////////////////////////////
 
-// TODO: We need a way to pre-load the standard agents in testng
+// TODO: We need a way to pre-load the standard agents for testing
 
 //   Level 1 tests are run each time we build the packages
 //   Level 2 tests are run for PRs and when packages will be published
@@ -51,8 +51,7 @@ packageTests.Add(new PackageTest(1, "Net35Test", "Run mock-assembly.dll targetin
 
 packageTests.Add(new PackageTest(1, "NetCore21Test", "Run mock-assembly.dll targeting .NET Core 2.1",
     "engine-tests/netcoreapp2.1/mock-assembly.dll",
-    MockAssemblyExpectedResult("Net70AgentLauncher"),
-	EngineExtensions.Net70PluggableAgent));
+    MockAssemblyExpectedResult("Net70AgentLauncher")));
 
 packageTests.Add(new PackageTest(1, "NetCore31Test", "Run mock-assembly.dll targeting .NET Core 3.1",
     "engine-tests/netcoreapp3.1/mock-assembly.dll",
@@ -212,7 +211,10 @@ var EnginePackage = new NuGetPackage(
 			"testcentric.engine.core.dll", "testcentric.engine.core.pdb",
 			"nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "testcentric-agent.nuget.addins")
 	},
-	tests: packageTests);
+	tests: packageTests,
+	preload: new [] {
+		EngineExtensions.Net70PluggableAgent.NuGetPackage
+	});
 
 var EngineCorePackage = new NuGetPackage(
 	id: "TestCentric.Engine.Core",
