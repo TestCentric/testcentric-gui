@@ -20,9 +20,9 @@ const string GUI_RUNNER = "testcentric.exe";
 const string GUI_TESTS = "*.Tests.dll";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.0-dev00061
+//#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.0-dev00063
 // Comment out above line and uncomment below for local tests of recipe changes
-//#load ../TestCentric.Cake.Recipe/recipe/*.cake
+#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
 #load "./package-tests.cake"
 
@@ -39,6 +39,7 @@ BuildSettings.Initialize(
 	context: Context,
 	title: "TestCentric.GuiRunner",
 	solutionFile: "testcentric-gui.sln",
+	nugetVerbosity: NuGetVerbosity.Detailed,
 	githubRepository: "testcentric-gui",
 	exemptFiles: new [] { "Resource.cs", "TextCode.cs" }
 );
@@ -169,8 +170,6 @@ public class GuiSelfTester : TestRunner
 
 	public override int Run(string arguments)
 	{
-
-
 		if (!arguments.Contains(" --run"))
 			arguments += " --run";
 		if (!arguments.Contains(" --unattended"))
