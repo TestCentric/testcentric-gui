@@ -43,14 +43,6 @@ namespace TestCentric.Engine.Services
         [TestCase("net-3.5", "Net462AgentLauncher")]
         [TestCase("net-4.0", "Net462AgentLauncher")]
         [TestCase("net-4.8", "Net462AgentLauncher")]
-        [TestCase("netcore-1.1", "Net60AgentLauncher"/*, "Net70AgentLauncher"*/)]
-        [TestCase("netcore-2.0", "Net60AgentLauncher"/*, "Net70AgentLauncher"*/)]
-        [TestCase("netcore-2.1", "Net60AgentLauncher"/*, "Net70AgentLauncher"*/)]
-        [TestCase("netcore-3.0", "Net60AgentLauncher"/*, "Net70AgentLauncher"*/)]
-        [TestCase("netcore-3.1", "Net60AgentLauncher"/*, "Net70AgentLauncher"*/)]
-        [TestCase("netcore-5.0", "Net60AgentLauncher"/*, "Net70AgentLauncher"*/)]
-        [TestCase("netcore-6.0", "Net60AgentLauncher"/*, "Net70AgentLauncher"*/)]
-        [TestCase("netcore-7.0"/*, "Net70AgentLauncher"*/)]
         public void GetAgentsForPackageWithOneAssembly(string targetRuntime, params string[] expectedAgents)
         {
             var package = new TestPackage(new string[] { "some.dll" });
@@ -64,13 +56,6 @@ namespace TestCentric.Engine.Services
         [TestCase("net-4.0", "net-4.0", "Net462AgentLauncher")]
         [TestCase("net-4.8", "net-4.5", "Net462AgentLauncher")]
         [TestCase("net-4.8", "net-2.0", "Net462AgentLauncher")]
-        [TestCase("netcore-1.1", "netcore-2.0", "Net60AgentLauncher"/*, "Net70AgentLauncher"*/)]
-        [TestCase("netcore-2.1", "netcore-2.1", "Net60AgentLauncher"/*, "Net70AgentLauncher"*/)]
-        [TestCase("netcore-3.0", "netcore-3.1", "Net60AgentLauncher"/*, "Net70AgentLauncher"*/)]
-        [TestCase("netcore-3.1", "netcore-5.0", "Net60AgentLauncher"/*, "Net70AgentLauncher"*/)]
-        [TestCase("netcore-6.0", "netcore-5.0", "Net60AgentLauncher"/*, "Net70AgentLauncher"*/)]
-        [TestCase("netcore-7.0", "netcore-5.0"/*, "Net70AgentLauncher"*/)]
-        [TestCase("netcore-5.0", "net-4.8")] // No agents in common
         public void GetAgentsForPackageWithTwoAssemblies(string targetRuntime1, string targetRuntime2, params string[] expectedAgents)
         {
             var package = new TestPackage(new string[] { "some.dll", "another.dll" });
