@@ -294,8 +294,6 @@ namespace TestCentric.Engine.Services
                 // favor of pluggable agents.
                 if (Net462AgentLauncher.Enabled)
                     _launchers.Add(new Net462AgentLauncher());
-                if (Net60AgentLauncher.Enabled)
-                    _launchers.Add(new Net60AgentLauncher());
 
                 // Add pluggable agent extensions
                 if (_extensionService != null)

@@ -7,7 +7,7 @@ const string ENGINE_API_PACKAGE_ID = "TestCentric.Engine.Api";
 const string TEST_BED_EXE = "test-bed.exe";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.0-dev00063
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.0-dev00065
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -31,6 +31,8 @@ BuildSettings.Initialize(
 // DEFINE PACKAGE TESTS
 //////////////////////////////////////////////////////////////////////
 
+// TODO: We need a way to pre-load the standard agents for testing
+
 //   Level 1 tests are run each time we build the packages
 //   Level 2 tests are run for PRs and when packages will be published
 //   Level 3 tests are run only when publishing a release
@@ -49,28 +51,27 @@ packageTests.Add(new PackageTest(1, "Net35Test", "Run mock-assembly.dll targetin
 
 packageTests.Add(new PackageTest(1, "NetCore21Test", "Run mock-assembly.dll targeting .NET Core 2.1",
     "engine-tests/netcoreapp2.1/mock-assembly.dll",
-    MockAssemblyExpectedResult("Net60AgentLauncher")));
+    MockAssemblyExpectedResult("Net70AgentLauncher")));
 
 packageTests.Add(new PackageTest(1, "NetCore31Test", "Run mock-assembly.dll targeting .NET Core 3.1",
     "engine-tests/netcoreapp3.1/mock-assembly.dll",
-    MockAssemblyExpectedResult("Net60AgentLauncher")));
+    MockAssemblyExpectedResult("Net70AgentLauncher")));
 
 packageTests.Add(new PackageTest(1, "NetCore11Test", "Run mock-assembly.dll targeting .NET Core 1.1",
     "engine-tests/netcoreapp1.1/mock-assembly.dll",
-    MockAssemblyExpectedResult("Net60AgentLauncher")));
+    MockAssemblyExpectedResult("Net70AgentLauncher")));
 
 packageTests.Add(new PackageTest(1, "Net50Test", "Run mock-assembly.dll targeting .NET 5.0",
     "engine-tests/net5.0/mock-assembly.dll",
-    MockAssemblyExpectedResult("Net60AgentLauncher")));
+    MockAssemblyExpectedResult("Net70AgentLauncher")));
 
 packageTests.Add(new PackageTest(1, "Net60Test", "Run mock-assembly.dll targeting .NET 6.0",
     "engine-tests/net6.0/mock-assembly.dll",
-    MockAssemblyExpectedResult("Net60AgentLauncher")));
+    MockAssemblyExpectedResult("Net70AgentLauncher")));
 
 packageTests.Add(new PackageTest(1, "Net70Test", "Run mock-assembly.dll targeting .NET 7.0",
     "engine-tests/net7.0/mock-assembly.dll",
-    MockAssemblyExpectedResult("Net70AgentLauncher"),
-	EngineExtensions.Net70PluggableAgent));
+    MockAssemblyExpectedResult("Net70AgentLauncher")));
 
 static ExpectedResult MockAssemblyExpectedResult(params string[] agentNames)
 {
@@ -98,21 +99,21 @@ packageTests.Add(new PackageTest(1, "AspNetCore31Test", "Run test using AspNetCo
     "engine-tests/netcoreapp3.1/aspnetcore-test.dll",
     new ExpectedResult("Passed")
     {
-        Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net60AgentLauncher") }
+        Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net70AgentLauncher") }
     }));
 
 packageTests.Add(new PackageTest(1, "AspNetCore50Test", "Run test using AspNetCore under .NET 5.0",
     "engine-tests/net5.0/aspnetcore-test.dll",
     new ExpectedResult("Passed")
     {
-        Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net60AgentLauncher") }
+        Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net70AgentLauncher") }
     }));
 
 packageTests.Add(new PackageTest(1, "AspNetCore60Test", "Run test using AspNetCore under .NET 6.0",
     "engine-tests/net6.0/aspnetcore-test.dll",
     new ExpectedResult("Passed")
     {
-        Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net60AgentLauncher") }
+        Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net70AgentLauncher") }
     }));
 
 packageTests.Add(new PackageTest(1, "AspNetCore70Test", "Run test using AspNetCore under .NET 7.0",
@@ -129,14 +130,14 @@ packageTests.Add(new PackageTest(1, "Net50WindowsFormsTest", "Run test using win
     "engine-tests/net5.0-windows/windows-forms-test.dll",
     new ExpectedResult("Passed")
     {
-        Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net60AgentLauncher") }
+        Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net70AgentLauncher") }
     }));
 
 packageTests.Add(new PackageTest(1, "Net60WindowsFormsTest", "Run test using windows forms under .NET 6.0",
     "engine-tests/net6.0-windows/windows-forms-test.dll",
     new ExpectedResult("Passed")
     {
-        Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net60AgentLauncher") }
+        Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net70AgentLauncher") }
     }));
 
 packageTests.Add(new PackageTest(1, "Net70WindowsFormsTest", "Run test using windows forms under .NET 7.0",
@@ -151,7 +152,7 @@ packageTests.Add(new PackageTest(1, "Net70WindowsFormsTest", "Run test using win
 
 packageTests.Add(new PackageTest(1, "Net35PlusNetCore21Test", "Run different builds of mock-assembly.dll together",
     "engine-tests/net35/mock-assembly.dll engine-tests/netcoreapp2.1/mock-assembly.dll",
-    MockAssemblyExpectedResult("Net462AgentLauncher", "Net60AgentLauncher")));
+    MockAssemblyExpectedResult("Net462AgentLauncher", "Net70AgentLauncher")));
 
 // TODO: Use --config option when it's supported by the extension.
 // Current test relies on the fact that the Release config appears
@@ -165,8 +166,8 @@ if (BuildSettings.Configuration == "Release")
             Assemblies = new[] {
                             new ExpectedAssemblyResult("mock-assembly.dll", "Net462AgentLauncher"),
                             new ExpectedAssemblyResult("mock-assembly.dll", "Net462AgentLauncher"),
-                            new ExpectedAssemblyResult("mock-assembly.dll", "Net60AgentLauncher"),
-                            new ExpectedAssemblyResult("mock-assembly.dll", "Net60AgentLauncher") }
+                            new ExpectedAssemblyResult("mock-assembly.dll", "Net70AgentLauncher"),
+                            new ExpectedAssemblyResult("mock-assembly.dll", "Net70AgentLauncher") }
         },
         EngineExtensions.NUnitProjectLoader));
 }
@@ -208,19 +209,12 @@ var EnginePackage = new NuGetPackage(
 			"testcentric-agent.exe", "testcentric-agent.pdb", "testcentric-agent.exe.config",
 			"testcentric-agent-x86.exe", "testcentric-agent-x86.pdb", "testcentric-agent-x86.exe.config",
 			"testcentric.engine.core.dll", "testcentric.engine.core.pdb",
-			"nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "testcentric-agent.nuget.addins"),
-		HasDirectory("tools/agents/net6.0").WithFiles(
-			"testcentric-agent.dll", "testcentric-agent.pdb", "testcentric-agent.dll.config",
-			"testcentric.engine.core.dll", "testcentric.engine.core.pdb",
-			"nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric.extensibility.dll",
-			"Microsoft.Extensions.DependencyModel.dll", "testcentric-agent.nuget.addins"),
-		HasDirectory("tools/agents/net7.0").WithFiles(
-			"testcentric-agent.dll", "testcentric-agent.pdb", "testcentric-agent.dll.config",
-			"testcentric.engine.core.dll", "testcentric.engine.core.pdb",
-			"nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric.extensibility.dll",
-			"Microsoft.Extensions.DependencyModel.dll", "testcentric-agent.nuget.addins")
+			"nunit.engine.api.dll", "testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "testcentric-agent.nuget.addins")
 	},
-	tests: packageTests);
+	tests: packageTests,
+	preload: new [] {
+		EngineExtensions.Net70PluggableAgent.NuGetPackage
+	});
 
 var EngineCorePackage = new NuGetPackage(
 	id: "TestCentric.Engine.Core",

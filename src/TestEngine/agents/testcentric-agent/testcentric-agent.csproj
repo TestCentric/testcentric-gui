@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <RootNamespace>TestCentric.Agent</RootNamespace>
-    <TargetFrameworks>net462;net6.0;net7.0</TargetFrameworks>
+    <TargetFrameworks>net462</TargetFrameworks>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <ApplicationManifest>..\app.manifest</ApplicationManifest>
     <ApplicationIcon>..\..\..\..\nunit.ico</ApplicationIcon>
