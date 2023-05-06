@@ -290,11 +290,6 @@ namespace TestCentric.Engine.Services
 
             try
             {
-                // Add builtin agents. These will eventually be removed in
-                // favor of pluggable agents.
-                if (Net462AgentLauncher.Enabled)
-                    _launchers.Add(new Net462AgentLauncher());
-
                 // Add pluggable agent extensions
                 if (_extensionService != null)
                     foreach (IAgentLauncher launcher in _extensionService.GetExtensions<IAgentLauncher>())
