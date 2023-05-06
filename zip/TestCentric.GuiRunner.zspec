@@ -20,4 +20,4 @@ testcentric.engine.dll => bin/
 
 # Patterns for images and agents
 Images/**/* => bin/Images/ 
-agents/**/* => bin/agents/
+agents/net462/* => bin/agents/net462/

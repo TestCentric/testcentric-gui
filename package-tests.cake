@@ -51,8 +51,7 @@ public static void DefinePackageTests()
 
     PackageTests.Add(new PackageTest(1, "Net70Test", "Run mock-assembly.dll under .NET 7.0",
         "net7.0/mock-assembly.dll --trace:Debug",
-        MockAssemblyExpectedResult("Net70AgentLauncher"),
-        EngineExtensions.Net70PluggableAgent));
+        MockAssemblyExpectedResult("Net70AgentLauncher")));
 
     // AspNetCore tests
 

@@ -41,10 +41,9 @@ NUnit engine extensions are supported but no extensions are bundled with the GUI
 Projects with tests to be run under **TestCentric** must already have some version of the NUnit framework installed separtely.
         </description>
         <dependencies>
-	        <group>
-		        <dependency id="nunit-extension-net70-pluggable-agent" version="2.0.0" />
-	        </group>
-        </dependencies>
+			<dependency id="nunit-extension-net60-pluggable-agent" version="2.0.0" />
+			<dependency id="nunit-extension-net70-pluggable-agent" version="2.0.0" />
+		</dependencies>
     </metadata>
     <files>
         <file src="../LICENSE.txt" target="tools" />
@@ -106,27 +105,5 @@ Projects with tests to be run under **TestCentric** must already have some versi
         <file src="$BIN$agents/net462/testcentric-agent-x86.exe" target="tools/agents/net462" />
         <file src="$BIN$agents/net462/testcentric-agent-x86.exe.config" target="tools/agents/net462" />
         <file src="testcentric-agent.choco.addins" target="tools/agents/net462" />
-
-        <file src="$BIN$agents/net6.0/nunit.engine.api.dll" target="tools/agents/net6.0" />
-        <file src="$BIN$agents/net6.0/testcentric.engine.metadata.dll" target="tools/agents/net6.0" />
-        <file src="$BIN$agents/net6.0/testcentric.extensibility.dll" target="tools/agents/net6.0" />
-        <file src="$BIN$agents/net6.0/Microsoft.Extensions.DependencyModel.dll" target="tools/agents/net6.0" />
-        <file src="$BIN$agents/net6.0/testcentric.engine.core.dll" target="tools/agents/net6.0" />
-        <file src="$BIN$agents/net6.0/testcentric-agent.dll" target="tools/agents/net6.0" />
-        <file src="$BIN$agents/net6.0/testcentric-agent.dll.config" target="tools/agents/net6.0" />
-        <file src="$BIN$agents/net6.0/testcentric-agent.deps.json" target="tools/agents/net6.0" />
-        <file src="$BIN$agents/net6.0/testcentric-agent.runtimeconfig.json" target="tools/agents/net6.0" />
-        <file src="testcentric-agent.choco.addins" target="tools/agents/net6.0" />
-
-        <file src="$BIN$agents/net7.0/nunit.engine.api.dll" target="tools/agents/net7.0" />
-        <file src="$BIN$agents/net7.0/testcentric.engine.metadata.dll" target="tools/agents/net7.0" />
-        <file src="$BIN$agents/net7.0/testcentric.extensibility.dll" target="tools/agents/net7.0" />
-        <file src="$BIN$agents/net7.0/Microsoft.Extensions.DependencyModel.dll" target="tools/agents/net7.0" />
-        <file src="$BIN$agents/net7.0/testcentric.engine.core.dll" target="tools/agents/net7.0" />
-        <file src="$BIN$agents/net7.0/testcentric-agent.dll" target="tools/agents/net7.0" />
-        <file src="$BIN$agents/net7.0/testcentric-agent.dll.config" target="tools/agents/net7.0" />
-        <file src="$BIN$agents/net7.0/testcentric-agent.deps.json" target="tools/agents/net7.0" />
-        <file src="$BIN$agents/net7.0/testcentric-agent.runtimeconfig.json" target="tools/agents/net7.0" />
-        <file src="testcentric-agent.choco.addins" target="tools/agents/net7.0" />
     </files>
 </package>
