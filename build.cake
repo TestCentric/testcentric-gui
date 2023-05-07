@@ -7,7 +7,7 @@ const string ENGINE_API_PACKAGE_ID = "TestCentric.Engine.Api";
 const string TEST_BED_EXE = "test-bed.exe";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.0-dev00068
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.0-dev00070
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -41,13 +41,13 @@ var packageTests = new List<PackageTest>();
 
 // Tests of single assemblies targeting each runtime we support
 
-/*packageTests.Add(new PackageTest(1, "Net462Test", "Run mock-assembly.dll targeting .NET 4.6.2",
+packageTests.Add(new PackageTest(1, "Net462Test", "Run mock-assembly.dll targeting .NET 4.6.2",
     "engine-tests/net462/mock-assembly.dll",
     MockAssemblyExpectedResult("Net462AgentLauncher")));
 
 packageTests.Add(new PackageTest(1, "Net35Test", "Run mock-assembly.dll targeting .NET 3.5",
     "engine-tests/net35/mock-assembly.dll",
-    MockAssemblyExpectedResult("Net462AgentLauncher")));*/
+    MockAssemblyExpectedResult("Net462AgentLauncher")));
 
 packageTests.Add(new PackageTest(1, "NetCore21Test", "Run mock-assembly.dll targeting .NET Core 2.1",
     "engine-tests/netcoreapp2.1/mock-assembly.dll",
@@ -148,27 +148,27 @@ packageTests.Add(new PackageTest(1, "Net70WindowsFormsTest", "Run test using win
 
 // Multiple Assembly Tests
 
-//packageTests.Add(new PackageTest(1, "Net35PlusNetCore21Test", "Run different builds of mock-assembly.dll together",
-//    "engine-tests/net35/mock-assembly.dll engine-tests/netcoreapp2.1/mock-assembly.dll",
-//    MockAssemblyExpectedResult("Net462AgentLauncher", "Net60AgentLauncher")));
+packageTests.Add(new PackageTest(1, "Net35PlusNetCore21Test", "Run different builds of mock-assembly.dll together",
+    "engine-tests/net35/mock-assembly.dll engine-tests/netcoreapp2.1/mock-assembly.dll",
+    MockAssemblyExpectedResult("Net462AgentLauncher", "Net60AgentLauncher")));
 
 // TODO: Use --config option when it's supported by the extension.
 // Current test relies on the fact that the Release config appears
 // first in the project file.
-//if (BuildSettings.Configuration == "Release")
-//{
-//    packageTests.Add(new PackageTest(2, "NUnitProjectTest", "Run an NUnit project",
-//        "TestProject.nunit",
-//        new ExpectedResult("Failed")
-//        {
-//            Assemblies = new[] {
-//                            new ExpectedAssemblyResult("mock-assembly.dll", "Net462AgentLauncher"),
-//                            new ExpectedAssemblyResult("mock-assembly.dll", "Net462AgentLauncher"),
-//                            new ExpectedAssemblyResult("mock-assembly.dll", "Net60AgentLauncher"),
-//                            new ExpectedAssemblyResult("mock-assembly.dll", "Net60AgentLauncher") }
-//        },
-//        EngineExtensions.NUnitProjectLoader));
-//}
+if (BuildSettings.Configuration == "Release")
+{
+    packageTests.Add(new PackageTest(2, "NUnitProjectTest", "Run an NUnit project",
+        "TestProject.nunit",
+        new ExpectedResult("Failed")
+        {
+            Assemblies = new[] {
+                            new ExpectedAssemblyResult("mock-assembly.dll", "Net462AgentLauncher"),
+                            new ExpectedAssemblyResult("mock-assembly.dll", "Net462AgentLauncher"),
+                            new ExpectedAssemblyResult("mock-assembly.dll", "Net60AgentLauncher"),
+                            new ExpectedAssemblyResult("mock-assembly.dll", "Net60AgentLauncher") }
+        },
+        NUnitProjectLoader));
+}
 
 // NOTE: Package tests using a pluggable agent must be run after all tests
 // that assume no pluggable agents are installed!
@@ -205,7 +205,7 @@ var EnginePackage = new NuGetPackage(
 			"test-bed.addins", "testcentric.nuget.addins")
 	},
 	tests: packageTests,
-	preloadedExtensions: new [] { Net60PluggableAgent, Net70PluggableAgent }
+	preloadedExtensions: new [] { Net462PluggableAgent, Net60PluggableAgent, Net70PluggableAgent }
 );
 
 var EngineCorePackage = new NuGetPackage(

@@ -333,7 +333,6 @@ namespace TestCentric.Engine.Services
             foreach (var launcher in _launchers)
             {
                 var launcherName = launcher.GetType().Name;
-                log.Debug($"Examining launcher {launcherName}");
 
                 if (launcherName == requestedAgentName || requestedAgentName == "DEFAULT" && launcher.CanCreateProcess(package))
                 {
