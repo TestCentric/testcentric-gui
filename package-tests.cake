@@ -142,7 +142,7 @@ public static void DefinePackageTests()
             "../../TestProject.nunit",
             MockAssemblyExpectedResult(
                 "Net462AgentLauncher", "Net462AgentLauncher", "Net60AgentLauncher", "Net60AgentLauncher"),
-            EngineExtensions.NUnitProjectLoader));
+            NUnitProjectLoader));
     }
 
     ExpectedResult MockAssemblyExpectedResult(params string[] agentNames)
