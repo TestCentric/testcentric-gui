@@ -41,6 +41,7 @@ NUnit engine extensions are supported but no extensions are bundled with the GUI
 Projects with tests to be run under **TestCentric** must already have some version of the NUnit framework installed separtely.
         </description>
         <dependencies>
+			<dependency id="nunit-extension-net462-pluggable-agent" version="2.0.1" />
 			<dependency id="nunit-extension-net60-pluggable-agent" version="2.0.0" />
 			<dependency id="nunit-extension-net70-pluggable-agent" version="2.0.0" />
 		</dependencies>
@@ -95,15 +96,5 @@ Projects with tests to be run under **TestCentric** must already have some versi
         <file src="$BIN$Images/Tree/Visual Studio/Inconclusive.png" target="tools/Images/Tree/Visual Studio" />
         <file src="$BIN$Images/Tree/Visual Studio/Skipped.png" target="tools/Images/Tree/Visual Studio" />
         <file src="$BIN$Images/Tree/Visual Studio/Success.png" target="tools/Images/Tree/Visual Studio" />
-
-        <file src="$BIN$agents/net462/nunit.engine.api.dll" target="tools/agents/net462" />
-        <file src="$BIN$agents/net462/testcentric.engine.metadata.dll" target="tools/agents/net462" />
-        <file src="$BIN$agents/net462/testcentric.extensibility.dll" target="tools/agents/net462" />
-        <file src="$BIN$agents/net462/testcentric.engine.core.dll" target="tools/agents/net462" />
-        <file src="$BIN$agents/net462/testcentric-agent.exe" target="tools/agents/net462" />
-        <file src="$BIN$agents/net462/testcentric-agent.exe.config" target="tools/agents/net462" />
-        <file src="$BIN$agents/net462/testcentric-agent-x86.exe" target="tools/agents/net462" />
-        <file src="$BIN$agents/net462/testcentric-agent-x86.exe.config" target="tools/agents/net462" />
-        <file src="testcentric-agent.choco.addins" target="tools/agents/net462" />
     </files>
 </package>

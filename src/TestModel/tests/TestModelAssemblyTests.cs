@@ -10,6 +10,7 @@ using NUnit.Engine;
 
 namespace TestCentric.Gui.Model
 {
+    [Ignore("Unable to load assemblies in unit tests because agents are not yet installed")]
     public class TestModelAssemblyTests
     {
         private const string MOCK_ASSEMBLY = "mock-assembly.dll";
@@ -23,7 +24,9 @@ namespace TestCentric.Gui.Model
             Assert.NotNull(engine, "Unable to create engine instance for testing");
 
             _model = new TestModel(engine);
-            _model.LoadTests(new[] { Path.Combine(TestContext.CurrentContext.TestDirectory, MOCK_ASSEMBLY) });
+            var mockAssemblyPath = Path.Combine(TestContext.CurrentContext.TestDirectory, MOCK_ASSEMBLY);
+            Assert.That(File.Exists(mockAssemblyPath));
+            _model.LoadTests(new[] { mockAssemblyPath });
         }
 
         [TearDown]

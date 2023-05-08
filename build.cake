@@ -11,7 +11,7 @@ static string[] VALID_CONFIGS = new [] { "Release", "Debug" };
 // NOTE: This must match what is actually referenced by
 // the GUI test model project. Hopefully, this is a temporary
 // fix, which we can get rid of in the future.
-const string REF_ENGINE_VERSION = "2.0.0-dev00015";
+const string REF_ENGINE_VERSION = "2.0.0-dev00017";
 
 const string PACKAGE_NAME = "testcentric-gui";
 const string NUGET_PACKAGE_NAME = "TestCentric.GuiRunner";
@@ -20,7 +20,7 @@ const string GUI_RUNNER = "testcentric.exe";
 const string GUI_TESTS = "*.Tests.dll";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.0-dev00066
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.0-dev00071
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -62,8 +62,9 @@ static readonly FilePath[] TREE_ICONS_PNG = {
         "Success.png", "Failure.png", "Ignored.png", "Inconclusive.png", "Skipped.png" };
 
 var preloadedExtensions = new [] {
-	EngineExtensions.Net60PluggableAgent.NuGetPackage,
-	EngineExtensions.Net70PluggableAgent.NuGetPackage
+	Net462PluggableAgent,
+	Net60PluggableAgent,
+	Net70PluggableAgent
 };
 
 var nugetPackage = new NuGetPackage(
@@ -74,7 +75,6 @@ var nugetPackage = new NuGetPackage(
 	checks: new PackageCheck[] {
 		HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "testcentric.png"),
 		HasDirectory("tools").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.nuget.addins"),
-		HasDirectory("tools/agents/net462").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFiles(ENGINE_CORE_FILES).AndFile("testcentric-agent.nuget.addins"),
 		HasDirectory("tools/Images").WithFiles("DebugTests.png", "RunTests.png", "StopRun.png", "GroupBy_16x.png", "SummaryReport.png"),
 		HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
 		HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
@@ -82,7 +82,7 @@ var nugetPackage = new NuGetPackage(
 		HasDirectory("tools/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG)
 	},
 	tests: PackageTests,
-	preload: preloadedExtensions);
+	preloadedExtensions: preloadedExtensions);
 
 var chocolateyPackage = new ChocolateyPackage(
 	id: "testcentric-gui",
@@ -91,7 +91,6 @@ var chocolateyPackage = new ChocolateyPackage(
 	testRunner: new GuiSelfTester(BuildSettings.ChocolateyTestDirectory + "testcentric-gui/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
 		HasDirectory("tools").WithFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "VERIFICATION.txt", "testcentric.choco.addins").AndFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.choco.addins"),
-		HasDirectory("tools/agents/net462").WithFiles(NET_FRAMEWORK_AGENT_FILES).AndFile("testcentric-agent.choco.addins"),
 		HasDirectory("tools/Images").WithFiles("DebugTests.png", "RunTests.png", "StopRun.png", "GroupBy_16x.png", "SummaryReport.png"),
 		HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
 		HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
@@ -99,7 +98,7 @@ var chocolateyPackage = new ChocolateyPackage(
 		HasDirectory("tools/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG)
 	},
 	tests: PackageTests,
-	preload: preloadedExtensions);
+	preloadedExtensions: preloadedExtensions);
 
 var zipPackage = new ZipPackage(
 	id: "TestCentric.GuiRunner",
@@ -109,7 +108,6 @@ var zipPackage = new ZipPackage(
 	checks: new PackageCheck[] {
 		HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt"),
 		HasDirectory("bin").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.zip.addins"),
-		HasDirectory("bin/agents/net462").WithFiles(NET_FRAMEWORK_AGENT_FILES),
 		HasDirectory("bin/Images").WithFiles("DebugTests.png", "RunTests.png", "StopRun.png", "GroupBy_16x.png", "SummaryReport.png"),
 		HasDirectory("bin/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
 		HasDirectory("bin/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
@@ -117,7 +115,7 @@ var zipPackage = new ZipPackage(
 		HasDirectory("bin/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG)
 	},
 	tests: PackageTests,
-	preload: preloadedExtensions);
+	preloadedExtensions: preloadedExtensions);
 
 BuildSettings.Packages.Add(nugetPackage);
 BuildSettings.Packages.Add(chocolateyPackage);
@@ -145,10 +143,6 @@ TaskTeardown(context =>
 			ExcludeVersion = true
 		});
 
-		CopyFileToDirectory(
-			tempEngineInstall + "TestCentric.Engine/content/testcentric.nuget.addins",
-			BuildSettings.OutputDirectory);
-		Information("Copied testcentric.nuget.addins");
 		CopyDirectory(
 			tempEngineInstall + "TestCentric.Engine/tools",
 			BuildSettings.OutputDirectory);

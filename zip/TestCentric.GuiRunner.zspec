@@ -18,6 +18,5 @@ testcentric.engine.core.dll => bin/
 testcentric.engine.dll => bin/
 ../../zip/testcentric.zip.addins => bin/ # Copy addins file
 
-# Patterns for images and agents
+# Pattern for images
 Images/**/* => bin/Images/ 
-agents/net462/* => bin/agents/net462/
