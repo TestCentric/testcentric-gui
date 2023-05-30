@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using NUnit.Engine;
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -81,62 +82,70 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
             bool keepRunning = true;
             var socketReader = new SocketReader(_clientSocket, new BinarySerializationProtocol());
 
-            while (keepRunning)
+            try
             {
-                log.Debug("Waiting for a command");
-                var command = socketReader.GetNextMessage<CommandMessage>();
-                log.Debug($"Received {command.CommandName} command");
-
-                switch (command.CommandName)
+                while (keepRunning)
                 {
-                    case "CreateRunner":
-                        var package = (TestPackage)command.Arguments[0];
-                        _runner = CreateRunner(package);
-                        break;
-                    case "Load":
-                        SendResult(_runner.Load());
-                        break;
-                    case "Reload":
-                        SendResult(_runner.Reload());
-                        break;
-                    case "Unload":
-                        _runner.Unload();
-                        break;
-                    case "Explore":
-                        var filter = (TestFilter)command.Arguments[0];
-                        //log.Debug($"  Filter = {filter.Text}");
-                        log.Debug("Calling Explore");
-                        var result = _runner.Explore(filter);
-                        log.Debug("Got Explore Result");
-                        SendResult(result);
-                        break;
-                    case "CountTestCases":
-                        filter = (TestFilter)command.Arguments[0];
-                        log.Debug($"  Filter = {filter.Text}");
-                        SendResult(_runner.CountTestCases(filter));
-                        break;
-                    case "Run":
-                        filter = (TestFilter)command.Arguments[0];
-                        log.Debug($"  Filter = {filter.Text}");
-                        Thread runnerThread = new Thread(RunTests);
-                        runnerThread.Start(filter);
-                        break;
+                    log.Debug("Waiting for a command");
+                    var command = socketReader.GetNextMessage<CommandMessage>();
+                    log.Debug($"Received {command.CommandName} command");
 
-                    case "RunAsync":
-                        filter = (TestFilter)command.Arguments[0];
-                        log.Debug($"  Filter = {filter.Text}");
-                        SendResult(_runner.RunAsync(this, filter));
-                        break;
+                    switch (command.CommandName)
+                    {
+                        case "CreateRunner":
+                            var package = (TestPackage)command.Arguments[0];
+                            _runner = CreateRunner(package);
+                            break;
+                        case "Load":
+                            SendResult(_runner.Load());
+                            break;
+                        case "Reload":
+                            SendResult(_runner.Reload());
+                            break;
+                        case "Unload":
+                            _runner.Unload();
+                            break;
+                        case "Explore":
+                            var filter = (TestFilter)command.Arguments[0];
+                            //log.Debug($"  Filter = {filter.Text}");
+                            log.Debug("Calling Explore");
+                            var result = _runner.Explore(filter);
+                            log.Debug("Got Explore Result");
+                            SendResult(result);
+                            break;
+                        case "CountTestCases":
+                            filter = (TestFilter)command.Arguments[0];
+                            log.Debug($"  Filter = {filter.Text}");
+                            SendResult(_runner.CountTestCases(filter));
+                            break;
+                        case "Run":
+                            filter = (TestFilter)command.Arguments[0];
+                            log.Debug($"  Filter = {filter.Text}");
+                            Thread runnerThread = new Thread(RunTests);
+                            runnerThread.Start(filter);
+                            break;
 
-                    case "StopRun":
-                        var force = (bool)command.Arguments[0];
-                        _runner.StopRun(force);
-                        break;
+                        case "RunAsync":
+                            filter = (TestFilter)command.Arguments[0];
+                            log.Debug($"  Filter = {filter.Text}");
+                            SendResult(_runner.RunAsync(this, filter));
+                            break;
 
-                    case "Stop":
-                        keepRunning = false;
-                        break;
+                        case "StopRun":
+                            var force = (bool)command.Arguments[0];
+                            _runner.StopRun(force);
+                            break;
+
+                        case "Stop":
+                            keepRunning = false;
+                            break;
+                    }
                 }
+            }
+            catch(Exception ex)
+            {
+                log.Error(ex.ToString());
+                throw;
             }
 
             log.Info("Terminating command loop");
