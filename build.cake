@@ -7,7 +7,7 @@ const string ENGINE_API_PACKAGE_ID = "TestCentric.Engine.Api";
 const string TEST_BED_EXE = "test-bed.exe";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.0
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.1-dev00025
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -193,8 +193,14 @@ if (BuildSettings.Configuration == "Release")
 
 var EnginePackage = new NuGetPackage(
 	id: "TestCentric.Engine",
-	source: BuildSettings.NuGetDirectory + "TestCentric.Engine.nuspec",
-	basePath: BuildSettings.OutputDirectory,
+	description: "This package provides the TestCentric Engine, used by runner applications to load and excute NUnit tests.",
+	packageContent: new PackageContent(
+		new FilePath[] { "../../LICENSE.txt", "../../testcentric.png" },
+		new DirectoryContent("tools").WithFiles(
+			"testcentric.engine.dll", "testcentric.engine.core.dll", "testcentric.engine.api.dll",
+			"testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "nunit.engine.api.dll",
+			"testcentric.engine.pdb", "testcentric.engine.core.pdb", "test-bed.exe",
+			"test-bed.addins", "../../testcentric.nuget.addins")),
 	testRunner: new TestCentricEngineTestBed(),
 	checks: new PackageCheck[] {
 		HasFiles("LICENSE.txt", "testcentric.png"),
@@ -210,8 +216,27 @@ var EnginePackage = new NuGetPackage(
 
 var EngineCorePackage = new NuGetPackage(
 	id: "TestCentric.Engine.Core",
-	source: BuildSettings.NuGetDirectory + "TestCentric.Engine.Core.nuspec",
-	basePath: BuildSettings.ProjectDirectory,
+	title: "TestCentric Engine Core Assembly",
+	description: "This package includes the TestCentric engine.core assembly, which forms part of the TestCentric engine. It is provided in a separate package use in creating pluggable agents.",
+	basePath: "src/TestEngine/testcentric.engine.core/bin/" + BuildSettings.Configuration,
+	packageContent: new PackageContent(
+		new FilePath[] { "../../../../../LICENSE.txt", "../../../../../testcentric.png" },
+		new DirectoryContent("lib/net20").WithFiles(
+			"net20/testcentric.engine.core.dll", "net20/testcentric.engine.core.pdb",
+			"net20/testcentric.engine.metadata.dll", "net20/testcentric.extensibility.dll",
+			"net20/nunit.engine.api.dll"),
+		new DirectoryContent("lib/net462").WithFiles(
+			"net462/testcentric.engine.core.dll", "net462/testcentric.engine.core.pdb",
+			"net462/testcentric.engine.metadata.dll", "net462/testcentric.extensibility.dll",
+			"net462/nunit.engine.api.dll"),
+		new DirectoryContent("lib/netstandard2.0").WithFiles(
+			"netstandard2.0/testcentric.engine.core.dll", "netstandard2.0/testcentric.engine.core.pdb",
+			"netstandard2.0/testcentric.engine.metadata.dll", "netstandard2.0/testcentric.extensibility.dll",
+			"netstandard2.0/nunit.engine.api.dll"),
+		new DirectoryContent("lib/netcoreapp3.1").WithFiles(
+			"netcoreapp3.1/testcentric.engine.core.dll", "netcoreapp3.1/testcentric.engine.core.pdb",
+			"netcoreapp3.1/testcentric.engine.metadata.dll", "netcoreapp3.1/testcentric.extensibility.dll",
+			"netcoreapp3.1/Microsoft.Extensions.DependencyModel.dll", "netcoreapp3.1/nunit.engine.api.dll")),
 	checks:new PackageCheck[] {
 		HasFiles("LICENSE.txt", "testcentric.png"),
 		HasDirectory("lib/net20").WithFiles(
@@ -231,8 +256,13 @@ var EngineCorePackage = new NuGetPackage(
 
 var EngineApiPackage = new NuGetPackage(
 	id: "TestCentric.Engine.Api",
-	source: BuildSettings.NuGetDirectory + "TestCentric.Engine.Api.nuspec",
-	basePath: BuildSettings.ProjectDirectory,
+	title: "TestCentric Engine Api Assembly",
+	description: "This package includes the testcentric.agent.api assembly, containing the interfaces used in creating pluggable agents.",
+	basePath: "src/TestEngine/testcentric.engine.api/bin/" + BuildSettings.Configuration,
+	packageContent: new PackageContent(
+		new FilePath[] { "../../../../../LICENSE.txt", "../../../../../testcentric.png" },
+		new DirectoryContent("lib/netstandard2.0").WithFiles(
+			"netstandard2.0/testcentric.engine.api.dll", "netstandard2.0/testcentric.engine.api.pdb")),
 	checks: new PackageCheck[] {
 		HasFiles("LICENSE.txt", "testcentric.png"),
 		HasDirectory("lib/netstandard2.0").WithFiles("testcentric.engine.api.dll", "testcentric.engine.api.pdb")

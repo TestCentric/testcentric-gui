@@ -35,21 +35,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testcentric.engine.tests", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testcentric.engine.core.tests", "src\TestEngine\testcentric.engine.core.tests\testcentric.engine.core.tests.csproj", "{5952A5E6-0F93-4A63-A1E4-62EDC47CF9E7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{23ED18B0-608C-4CB5-A70E-CB95C8B0231C}"
-	ProjectSection(SolutionItems) = preProject
-		nuget\testcentric-agent.nuget.addins = nuget\testcentric-agent.nuget.addins
-		nuget\TestCentric.Engine.Api.nuspec = nuget\TestCentric.Engine.Api.nuspec
-		nuget\TestCentric.Engine.Core.nuspec = nuget\TestCentric.Engine.Core.nuspec
-		nuget\TestCentric.Engine.nuspec = nuget\TestCentric.Engine.nuspec
-		nuget\testcentric.nuget.addins = nuget\testcentric.nuget.addins
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testcentric.engine.api", "src\TestEngine\testcentric.engine.api\testcentric.engine.api.csproj", "{58918B08-2D50-4044-8AF9-586B9B48DACF}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{4ED698DF-CE5D-4A52-B103-9F350DEAC03F}"
-	ProjectSection(SolutionItems) = preProject
-		nuget\build\TestCentric.Engine.targets = nuget\build\TestCentric.Engine.targets
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestBed", "TestBed", "{13AD1B51-4961-4ED5-8D22-6BF50F2EBECF}"
 	ProjectSection(SolutionItems) = preProject
@@ -144,9 +130,7 @@ Global
 		{0BF010FE-FA9D-4131-A832-E88C12A131DD} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
 		{6C0D9A1D-6BC5-4830-82C5-FCC3502776C4} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
 		{5952A5E6-0F93-4A63-A1E4-62EDC47CF9E7} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
-		{23ED18B0-608C-4CB5-A70E-CB95C8B0231C} = {A65042E1-D8BC-48DD-8DE1-F0991F07EA77}
 		{58918B08-2D50-4044-8AF9-586B9B48DACF} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
-		{4ED698DF-CE5D-4A52-B103-9F350DEAC03F} = {23ED18B0-608C-4CB5-A70E-CB95C8B0231C}
 		{CD4C6A60-FA53-42A0-97D5-A0415FB19128} = {13AD1B51-4961-4ED5-8D22-6BF50F2EBECF}
 		{CE239574-9291-41D8-8D82-2B605714DD6C} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
 		{B6D3AEAE-ECDA-4047-A9BA-CC6DA3EBEDF8} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
