@@ -7,9 +7,9 @@ const string ENGINE_API_PACKAGE_ID = "TestCentric.Engine.Api";
 const string TEST_BED_EXE = "test-bed.exe";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.1-dev00025
+//#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.1-dev00025
 // Comment out above line and uncomment below for local tests of recipe changes
-//#load ../TestCentric.Cake.Recipe/recipe/*.cake
+#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
 using System.Xml;
 using System.Text.RegularExpressions;
@@ -25,7 +25,8 @@ BuildSettings.Initialize(
 	"TestCentric.Engine",
 	solutionFile: "testcentric-engine.sln",
 	githubRepository: "testcentric-engine",
-	unitTests: "engine-tests/**/*.tests.exe|engine-tests/**/*.tests.dll");
+	unitTests: "**/*.tests.exe|**/*.tests.dll"
+);
 
 //////////////////////////////////////////////////////////////////////
 // DEFINE PACKAGE TESTS
