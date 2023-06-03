@@ -7,7 +7,7 @@ const string ENGINE_API_PACKAGE_ID = "TestCentric.Engine.Api";
 const string TEST_BED_EXE = "test-bed.exe";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.1-dev00025
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.1-dev00029
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -25,7 +25,8 @@ BuildSettings.Initialize(
 	"TestCentric.Engine",
 	solutionFile: "testcentric-engine.sln",
 	githubRepository: "testcentric-engine",
-	unitTests: "engine-tests/**/*.tests.exe|engine-tests/**/*.tests.dll");
+	unitTests: "**/*.tests.exe|**/*.tests.dll"
+);
 
 //////////////////////////////////////////////////////////////////////
 // DEFINE PACKAGE TESTS
@@ -193,6 +194,7 @@ if (BuildSettings.Configuration == "Release")
 
 var EnginePackage = new NuGetPackage(
 	id: "TestCentric.Engine",
+	//source: "src/TestEngine/testcentric.engine/testcentric.engine.csproj",
 	description: "This package provides the TestCentric Engine, used by runner applications to load and excute NUnit tests.",
 	packageContent: new PackageContent(
 		new FilePath[] { "../../LICENSE.txt", "../../testcentric.png" },
@@ -265,7 +267,7 @@ var EngineApiPackage = new NuGetPackage(
 			"netstandard2.0/testcentric.engine.api.dll", "netstandard2.0/testcentric.engine.api.pdb")),
 	checks: new PackageCheck[] {
 		HasFiles("LICENSE.txt", "testcentric.png"),
-		HasDirectory("lib/netstandard2.0").WithFiles("testcentric.engine.api.dll", "testcentric.engine.api.pdb")
+		HasDirectory("lib/netstandard2.0").WithFiles("testcentric.engine.api.dll")
 	});
 
 BuildSettings.Packages.AddRange(new [] {

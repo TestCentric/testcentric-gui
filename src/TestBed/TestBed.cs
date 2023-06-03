@@ -59,10 +59,10 @@ namespace TestCentric.Engine.TestBed
 
             var package = new TestPackage(options.Files);
 
-            if (options.Trace)
+            if (options.Trace != null)
             {
-                package.AddSetting("InternalTraceLevel", "Debug");
-                TestEngine.InternalTraceLevel = InternalTraceLevel.Debug;
+                package.AddSetting("InternalTraceLevel", options.Trace);
+                TestEngine.InternalTraceLevel = (InternalTraceLevel)Enum.Parse(typeof(InternalTraceLevel), options.Trace);
             }
 
             if (options.DebugAgent)

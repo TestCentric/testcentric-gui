@@ -295,10 +295,13 @@ namespace TestCentric.Engine.Services
                     foreach (IAgentLauncher launcher in _extensionService.GetExtensions<IAgentLauncher>())
                         _launchers.Add(launcher);
 
+                // TODO: Sorting is temporarily suppressed until agents can be fixed.
+                // The call to GetLogger in the static constructor causes an exception.
+
                 // Sort the list so we can use first agent found by default
-                _launchers.Sort(delegate (IAgentLauncher launcher1, IAgentLauncher launcher2) {
-                    return CompareLaunchers(launcher1, launcher2);
-                });
+                //_launchers.Sort(delegate (IAgentLauncher launcher1, IAgentLauncher launcher2) {
+                //    return CompareLaunchers(launcher1, launcher2);
+                //});
 
                 _remotingTransport.Start();
                 _tcpTransport.Start();

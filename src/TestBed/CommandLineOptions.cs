@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace TestCentric.Engine.TestBed
 {
@@ -29,12 +30,17 @@ namespace TestCentric.Engine.TestBed
 
         public List<String> Files { get; } = new List<string>();
         public bool DebugAgent { get; private set; }
-        public bool Trace { get; private set; }
+        public string Trace { get; private set; }
         public bool ListExtensions { get; private set; }
         public int StopTimeout { get; private set; } = 0;
         public int CancelTimeout { get; private set; } = 0;
 
         public string WorkDirectory { get; private set; }
+
+        static readonly string[] ValidTraceSettings = new[]
+        {
+            "Off", "Error", "Warning", "Info", "Debug"
+        };
 
         private void ProcessOption(string arg)
         {
@@ -58,7 +64,9 @@ namespace TestCentric.Engine.TestBed
                     break;
 
                 case "--trace":
-                    Trace = true;
+                    if (!ValidTraceSettings.Contains(val))
+                        throw new ArgumentException($"Invalid trace setting: '{val}'");
+                    Trace = val;
                     break;
 
                 case "--debug-agent":
