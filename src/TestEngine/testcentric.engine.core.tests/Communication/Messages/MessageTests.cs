@@ -38,17 +38,17 @@ namespace TestCentric.Engine.Communication.Messages
         [TestCase("Run", EMPTY_FILTER)]
         [TestCase("RunAsync", EMPTY_FILTER)]
         [TestCase("StopRun", "FORCE")]
-        public void CommandMessageBaseTests(string commandName, params object[] args)
+        public void CommandMessageTests(string commandName, object argument=null)
         {
-            var cmd = new CommandMessage(commandName, args);
+            var cmd = new CommandMessage(commandName, argument);
             Assert.That(cmd.CommandName, Is.EqualTo(commandName));
-            Assert.That(cmd.Arguments, Is.EqualTo(args));
+            Assert.That(cmd.Argument, Is.EqualTo(argument));
 
             var bytes = _wireProtocol.Encode(cmd);
             var messages = new List<TestEngineMessage>(_wireProtocol.Decode(bytes));
             var decoded = messages[0] as CommandMessage;
             Assert.That(decoded.CommandName, Is.EqualTo(commandName));
-            Assert.That(decoded.Arguments, Is.EqualTo(args));
+            Assert.That(decoded.Argument, Is.EqualTo(argument));
         }
     }
 }

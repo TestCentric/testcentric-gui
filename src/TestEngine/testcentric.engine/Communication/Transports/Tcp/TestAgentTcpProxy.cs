@@ -104,9 +104,9 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
             throw new NotImplementedException();
         }
 
-        private void SendCommandMessage(string command, params object[] arguments)
+        private void SendCommandMessage(string command, object argument = null)
         {
-            _socket.Send(_wireProtocol.Encode(new CommandMessage(command, arguments)));
+            _socket.Send(_wireProtocol.Encode(new CommandMessage(command, argument)));
             log.Debug($"Sent {command} command");
         }
 

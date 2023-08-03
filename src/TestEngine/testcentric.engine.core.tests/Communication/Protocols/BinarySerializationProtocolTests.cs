@@ -114,7 +114,7 @@ namespace TestCentric.Engine.Communication.Protocols
 
             foreach (var command in commands)
             {
-                var buffer = wireProtocol.Encode(new CommandMessage(command));
+                var buffer = wireProtocol.Encode(new CommandMessage(command, null));
                 stream.Write(buffer, 0, buffer.Length);
             }
 

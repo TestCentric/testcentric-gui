@@ -89,15 +89,15 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
                     log.Debug("Waiting for a command");
                     var command = socketReader.GetNextMessage<CommandMessage>();
                     log.Debug($"Received {command.CommandName} command");
-                    if (command.Arguments == null || command.Arguments.Length == 0)
+                    if (command.Argument == null)
                         log.Debug($"  No Argument provided");
                     else
-                        log.Debug($"  Argument Type: {command.Arguments[0].GetType()}");
+                        log.Debug($"  Argument Type: {command.Argument.GetType()}");
 
                     switch (command.CommandName)
                     {
                         case "CreateRunner":
-                            var package = (TestPackage)command.Arguments[0];
+                            var package = (TestPackage)command.Argument;
                             _runner = CreateRunner(package);
                             break;
                         case "Load":
@@ -129,7 +129,7 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
                             break;
 
                         case "StopRun":
-                            var force = (bool)command.Arguments[0];
+                            var force = (bool)command.Argument;
                             _runner.StopRun(force);
                             break;
 
@@ -150,7 +150,7 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
 
             TestFilter GetFilterArgument(CommandMessage command)
             {
-                var filterText = (string)command.Arguments[0];
+                var filterText = (string)command.Argument;
                 log.Debug($"  Filter = {filterText}");
                 return new TestFilter(filterText);
             }

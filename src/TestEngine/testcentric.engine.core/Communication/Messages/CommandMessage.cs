@@ -10,14 +10,14 @@ namespace TestCentric.Engine.Communication.Messages
     [Serializable]
     public class CommandMessage : TestEngineMessage
     {
-        public CommandMessage(string commandName, params object[] arguments)
+        public CommandMessage(string commandName, object argument)
         {
             CommandName = commandName;
-            Arguments = arguments;
+            Argument = argument;
         }
 
         public string CommandName { get; }
 
-        public object[] Arguments { get; }
+        public object Argument { get; }
     }
 }
