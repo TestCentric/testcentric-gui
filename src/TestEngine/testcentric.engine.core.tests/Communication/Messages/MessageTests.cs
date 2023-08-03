@@ -38,7 +38,7 @@ namespace TestCentric.Engine.Communication.Messages
         [TestCase("Run", EMPTY_FILTER)]
         [TestCase("RunAsync", EMPTY_FILTER)]
         [TestCase("StopRun", "FORCE")]
-        public void CommandMessageTests(string commandName, object argument=null)
+        public void CommandMessageConstructionTests(string commandName, object argument = null)
         {
             var cmd = new CommandMessage(commandName, argument);
             Assert.That(cmd.CommandName, Is.EqualTo(commandName));
@@ -49,6 +49,50 @@ namespace TestCentric.Engine.Communication.Messages
             var decoded = messages[0] as CommandMessage;
             Assert.That(decoded.CommandName, Is.EqualTo(commandName));
             Assert.That(decoded.Argument, Is.EqualTo(argument));
+        }
+
+        [TestCase("StartAgent")]
+        [TestCase("StopAgent")]
+        [TestCase("CreateRunner", "TESTPACKAGE")]
+        [TestCase("Load")]
+        [TestCase("Reload")]
+        [TestCase("Unload")]
+        [TestCase("Explore", EMPTY_FILTER)]
+        [TestCase("CountTestCases", EMPTY_FILTER)]
+        [TestCase("Run", EMPTY_FILTER)]
+        [TestCase("RunAsync", EMPTY_FILTER)]
+        [TestCase("StopRun", "FORCE")]
+        public void CommandMessageEncodingTests(string commandName, object argument = null)
+        {
+            var cmd = new CommandMessage(commandName, argument);
+
+            var bytes = _wireProtocol.Encode(cmd);
+            var messages = new List<TestEngineMessage>(_wireProtocol.Decode(bytes));
+            var decoded = messages[0] as CommandMessage;
+            Assert.That(decoded.CommandName, Is.EqualTo(commandName));
+            Assert.That(decoded.Argument, Is.EqualTo(argument));
+        }
+
+        [Test]
+        public void ProgressMessageTest()
+        {
+            var msg = new ProgressMessage("PROGRESS");
+            Assert.That(msg.Report, Is.EqualTo("PROGRESS"));
+            var bytes = _wireProtocol.Encode(msg);
+            var messages = new List<TestEngineMessage>(_wireProtocol.Decode(bytes));
+            var decoded = messages[0] as ProgressMessage;
+            Assert.That(decoded.Report, Is.EqualTo("PROGRESS"));
+        }
+
+        [Test]
+        public void CommandReturnMessageTest()
+        {
+            var msg = new CommandReturnMessage("RESULT");
+            Assert.That(msg.ReturnValue, Is.EqualTo("RESULT"));
+            var bytes = _wireProtocol.Encode(msg);
+            var messages = new List<TestEngineMessage>(_wireProtocol.Decode(bytes));
+            var decoded = messages[0] as CommandReturnMessage;
+            Assert.That(decoded.ReturnValue, Is.EqualTo("RESULT"));
         }
     }
 }
