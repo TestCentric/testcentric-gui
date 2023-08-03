@@ -2,7 +2,7 @@
   "profiles": {
     "testcentric.engine.core.tests": {
       "commandName": "Project",
-      "commandLineArgs": "--test:TestCentric.Engine.Internal.TestFilterExtensionTests"
+      "commandLineArgs": "--test:TestCentric.Engine.Communication.Messages"
     }
   }
 }

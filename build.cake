@@ -7,7 +7,7 @@ const string ENGINE_API_PACKAGE_ID = "TestCentric.Engine.Api";
 const string TEST_BED_EXE = "test-bed.exe";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.1-dev00029
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.1-dev00030
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -43,7 +43,7 @@ var packageTests = new List<PackageTest>();
 // Tests of single assemblies targeting each runtime we support
 
 packageTests.Add(new PackageTest(1, "Net462Test", "Run mock-assembly.dll targeting .NET 4.6.2",
-    "engine-tests/net462/mock-assembly.dll",
+    "engine-tests/net462/mock-assembly.dll --trace:Debug",
     MockAssemblyExpectedResult("Net462AgentLauncher")));
 
 packageTests.Add(new PackageTest(1, "Net35Test", "Run mock-assembly.dll targeting .NET 3.5",
@@ -67,7 +67,7 @@ packageTests.Add(new PackageTest(1, "Net50Test", "Run mock-assembly.dll targetin
     MockAssemblyExpectedResult("Net60AgentLauncher")));
 
 packageTests.Add(new PackageTest(1, "Net60Test", "Run mock-assembly.dll targeting .NET 6.0",
-    "engine-tests/net6.0/mock-assembly.dll",
+    "engine-tests/net6.0/mock-assembly.dll --trace:Debug",
     MockAssemblyExpectedResult("Net60AgentLauncher")));
 
 packageTests.Add(new PackageTest(1, "Net70Test", "Run mock-assembly.dll targeting .NET 7.0",
@@ -270,10 +270,11 @@ var EngineApiPackage = new NuGetPackage(
 		HasDirectory("lib/netstandard2.0").WithFiles("testcentric.engine.api.dll")
 	});
 
+// NOTE: Order is important here
 BuildSettings.Packages.AddRange(new [] {
-	EnginePackage,
+	EngineApiPackage,
 	EngineCorePackage,
-	EngineApiPackage
+	EnginePackage
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -325,11 +326,11 @@ Task("TestEngineCore")
 // BUILD, VERIFY AND TEST INDIVIDUAL PACKAGES
 //////////////////////////////////////////////////////////////////////
 
-Task("PackageEngine")
-	.Description("Build and Test the Engine Package")
+Task("PackageEngineApi")
+	.Description("Build and Test the Engine Api Package")
 	.Does(() =>
 	{
-		EnginePackage.BuildVerifyAndTest();
+		EngineApiPackage.BuildVerifyAndTest();
 	});
 
 Task("PackageEngineCore")
@@ -339,14 +340,13 @@ Task("PackageEngineCore")
 		EngineCorePackage.BuildVerifyAndTest();
 	});
 
-Task("PackageEngineApi")
-	.Description("Build and Test the Engine Api Package")
+Task("PackageEngine")
+	.Description("Build and Test the Engine Package")
 	.Does(() =>
 	{
-		EngineApiPackage.BuildVerifyAndTest();
+		EnginePackage.BuildVerifyAndTest();
 	});
 
-//////////////////////////////////////////////////////////////////////
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
 
@@ -355,7 +355,9 @@ Task("AppVeyor")
 	.IsDependentOn("DumpSettings")
 	.IsDependentOn("Build")
 	.IsDependentOn("Test")
-	.IsDependentOn("Package")
+	.IsDependentOn("PackageEngineApi")
+	.IsDependentOn("PackageEngineCore")
+	.IsDependentOn("PackageEngine")
 	.IsDependentOn("Publish")
 	.IsDependentOn("CreateDraftRelease")
 	.IsDependentOn("CreateProductionRelease");

@@ -69,20 +69,20 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
 
         public int CountTestCases(TestFilter filter)
         {
-            SendCommandMessage("CountTestCases", filter);
+            SendCommandMessage("CountTestCases", filter.Text);
             return CommandResult<int>();
         }
 
         public TestEngineResult Run(ITestEventListener listener, TestFilter filter)
         {
-            SendCommandMessage("Run", filter);
+            SendCommandMessage("Run", filter.Text);
 
             return TestRunResult(listener);
         }
 
         public AsyncTestEngineResult RunAsync(ITestEventListener listener, TestFilter filter)
         {
-            SendCommandMessage("RunAsync", filter);
+            SendCommandMessage("RunAsync", filter.Text);
             // TODO: Should we get the async result from the agent or just use our own?
             return CommandResult<AsyncTestEngineResult>();
             //return new AsyncTestEngineResult();
@@ -95,7 +95,7 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
 
         public TestEngineResult Explore(TestFilter filter)
         {
-            SendCommandMessage("Explore", filter);
+            SendCommandMessage("Explore", filter.Text);
             return CommandResult<TestEngineResult>();
         }
 

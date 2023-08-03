@@ -89,6 +89,10 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
                     log.Debug("Waiting for a command");
                     var command = socketReader.GetNextMessage<CommandMessage>();
                     log.Debug($"Received {command.CommandName} command");
+                    if (command.Arguments == null || command.Arguments.Length == 0)
+                        log.Debug($"  No Argument provided");
+                    else
+                        log.Debug($"  Argument Type: {command.Arguments[0].GetType()}");
 
                     switch (command.CommandName)
                     {
@@ -106,28 +110,21 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
                             _runner.Unload();
                             break;
                         case "Explore":
-                            var filter = (TestFilter)command.Arguments[0];
-                            //log.Debug($"  Filter = {filter.Text}");
-                            log.Debug("Calling Explore");
-                            var result = _runner.Explore(filter);
-                            log.Debug("Got Explore Result");
-                            SendResult(result);
+                            var filter = GetFilterArgument(command);
+                            SendResult(_runner.Explore(filter));
                             break;
                         case "CountTestCases":
-                            filter = (TestFilter)command.Arguments[0];
-                            log.Debug($"  Filter = {filter.Text}");
+                            filter = GetFilterArgument(command);
                             SendResult(_runner.CountTestCases(filter));
                             break;
                         case "Run":
-                            filter = (TestFilter)command.Arguments[0];
-                            log.Debug($"  Filter = {filter.Text}");
+                            filter = GetFilterArgument(command);
                             Thread runnerThread = new Thread(RunTests);
                             runnerThread.Start(filter);
                             break;
 
                         case "RunAsync":
-                            filter = (TestFilter)command.Arguments[0];
-                            log.Debug($"  Filter = {filter.Text}");
+                            filter = GetFilterArgument(command);
                             SendResult(_runner.RunAsync(this, filter));
                             break;
 
@@ -150,6 +147,13 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
 
             log.Info("Terminating command loop");
             Stop();
+
+            TestFilter GetFilterArgument(CommandMessage command)
+            {
+                var filterText = (string)command.Arguments[0];
+                log.Debug($"  Filter = {filterText}");
+                return new TestFilter(filterText);
+            }
         }
 
         private void RunTests(object filter)
