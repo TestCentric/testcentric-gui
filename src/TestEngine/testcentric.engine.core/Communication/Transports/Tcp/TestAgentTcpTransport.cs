@@ -128,9 +128,12 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
                             SendResult(_runner.RunAsync(this, filter));
                             break;
 
-                        case "StopRun":
-                            var force = (bool)command.Argument;
-                            _runner.StopRun(force);
+                        case "RequestStop":
+                            _runner.RequestStop();
+                            break;
+
+                        case "ForcedStop":
+                            _runner.ForcedStop();
                             break;
 
                         case "Stop":

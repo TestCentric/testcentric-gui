@@ -174,14 +174,14 @@ namespace TestCentric.Engine.Runners
         /// <param name="force">If true, cancel any ongoing test threads, otherwise wait for them to complete.</param>
         public void StopRun(bool force)
         {
-            log.Info(force ? "Cancelling test run" : "Requesting stop");
-
-            _engineRunner.StopRun(force);
-
-            // When running under .NET Core, the test framework will not be able to kill the
-            // threads currently running tests. We handle cleanup here in case that happens.
             if (force)
             {
+                log.Info("Cancelling test run");
+
+                // When running under .NET Core, the test framework will not be able to kill the
+                // threads currently running tests. We handle cleanup here in case that happens.
+                _engineRunner.ForcedStop();
+
                 // Send completion events for any tests, which were still running
                 _eventDispatcher.IssuePendingNotifications();
 
@@ -189,6 +189,12 @@ namespace TestCentric.Engine.Runners
 
                 // Signal completion of the run
                 _eventDispatcher.DispatchEvent($"<test-run id='{TestPackage.ID}' result='Failed' label='Cancelled' />");
+            }
+            else
+            {
+                log.Info("Requesting stop");
+
+                _engineRunner.RequestStop();
             }
         }
 

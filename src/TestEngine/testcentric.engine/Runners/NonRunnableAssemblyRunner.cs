@@ -35,7 +35,11 @@ namespace TestCentric.Engine.Runners
             return new TestEngineResult(Result.LoadResult);
         }
 
-        public override void StopRun(bool force)
+        public override void RequestStop()
+        {
+        }
+
+        public override void ForcedStop()
         {
         }
     }

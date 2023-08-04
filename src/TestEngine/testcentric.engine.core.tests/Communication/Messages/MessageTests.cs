@@ -43,12 +43,6 @@ namespace TestCentric.Engine.Communication.Messages
             var cmd = new CommandMessage(commandName, argument);
             Assert.That(cmd.CommandName, Is.EqualTo(commandName));
             Assert.That(cmd.Argument, Is.EqualTo(argument));
-
-            var bytes = _wireProtocol.Encode(cmd);
-            var messages = new List<TestEngineMessage>(_wireProtocol.Decode(bytes));
-            var decoded = messages[0] as CommandMessage;
-            Assert.That(decoded.CommandName, Is.EqualTo(commandName));
-            Assert.That(decoded.Argument, Is.EqualTo(argument));
         }
 
         [TestCase("StartAgent")]
@@ -61,7 +55,8 @@ namespace TestCentric.Engine.Communication.Messages
         [TestCase("CountTestCases", EMPTY_FILTER)]
         [TestCase("Run", EMPTY_FILTER)]
         [TestCase("RunAsync", EMPTY_FILTER)]
-        [TestCase("StopRun", "FORCE")]
+        [TestCase("StopRun")]
+        [TestCase("ForcedStop")]
         public void CommandMessageEncodingTests(string commandName, object argument = null)
         {
             var cmd = new CommandMessage(commandName, argument);

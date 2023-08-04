@@ -88,9 +88,14 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
             //return new AsyncTestEngineResult();
         }
 
-        public void StopRun(bool force)
+        public void RequestStop()
         {
-            SendCommandMessage("StopRun", force);
+            SendCommandMessage("RequestStop");
+        }
+
+        public void ForcedStop()
+        {
+            SendCommandMessage("ForcedStop");
         }
 
         public TestEngineResult Explore(TestFilter filter)
