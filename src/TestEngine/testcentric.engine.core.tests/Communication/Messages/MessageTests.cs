@@ -77,14 +77,14 @@ namespace TestCentric.Engine.Communication.Messages
         [Test]
         public void CommandReturnMessageTest()
         {
-            var msg = new CommandReturnMessage("RESULT");
+            var msg = new TestEngineMessage("RSLT", "RESULT");
             Assert.That(msg.MessageType, Is.EqualTo("RSLT"));
-            Assert.That(msg.ReturnValue, Is.EqualTo("RESULT"));
+            Assert.That(msg.MessageData, Is.EqualTo("RESULT"));
             var bytes = _wireProtocol.Encode(msg);
             var messages = new List<TestEngineMessage>(_wireProtocol.Decode(bytes));
-            var decoded = messages[0] as CommandReturnMessage;
+            var decoded = messages[0];
             Assert.That(decoded.MessageType, Is.EqualTo("RSLT"));
-            Assert.That(decoded.ReturnValue, Is.EqualTo("RESULT"));
+            Assert.That(decoded.MessageData, Is.EqualTo("RESULT"));
         }
     }
 }

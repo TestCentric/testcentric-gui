@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection.Emit;
 using System.Xml;
 using NUnit.Engine;
 
@@ -55,8 +56,6 @@ namespace TestCentric.Engine.Internal
             {
                 xmlWriter.WriteAttributeString("id", package.ID);
 
-                if (package.Name != null)
-                    xmlWriter.WriteAttributeString("name", package.Name);
                 if (package.FullName != null)
                     xmlWriter.WriteAttributeString("fullname", package.FullName);
             }
@@ -90,16 +89,32 @@ namespace TestCentric.Engine.Internal
             if (topNode.Name != "TestPackage")
                 throw new ArgumentException("Xml provided is not a TestPackage");
 
-            // For now, assume it's not anonymous
+            return CreateTestPackage(topNode);
+        }
+
+        private TestPackage CreateTestPackage(XmlNode topNode)
+        {
+            // For now, assume package is not anonymous
             var id = topNode.GetAttribute("id");
-            var name = topNode.GetAttribute ("name");
             var fullName = topNode.GetAttribute("fullname");
 
-            var package = new TestPackage(fullName);
+            var package = fullName != null
+                ? new TestPackage(fullName)
+                : new TestPackage(new string[0]);
 
-            var settings = topNode.FirstChild;
-            foreach (XmlNode node in settings.Attributes)
-                package.AddSetting(node.Name, node.Value);
+            foreach (XmlNode child in topNode.ChildNodes)
+            {
+                switch (child.Name)
+                {
+                    case "Settings":
+                        foreach (XmlNode node in child.Attributes)
+                            package.AddSetting(node.Name, node.Value);
+                        break;
+                    case "TestPackage":
+                        package.AddSubPackage(CreateTestPackage(child));
+                        break;
+                }
+            }
 
             return package;
         }

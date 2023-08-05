@@ -112,21 +112,21 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
                             _runner = CreateRunner(package);
                             break;
                         case "Load":
-                            SendResult(_runner.Load());
+                            SendResult(_runner.Load().Xml.OuterXml);
                             break;
                         case "Reload":
-                            SendResult(_runner.Reload());
+                            SendResult(_runner.Reload().Xml.OuterXml);
                             break;
                         case "Unload":
                             _runner.Unload();
                             break;
                         case "Explore":
                             var filter = new TestFilter(command.Argument);
-                            SendResult(_runner.Explore(filter));
+                            SendResult(_runner.Explore(filter).Xml.OuterXml);
                             break;
                         case "CountTestCases":
                             filter = new TestFilter(command.Argument);
-                            SendResult(_runner.CountTestCases(filter));
+                            SendResult(_runner.CountTestCases(filter).ToString());
                             break;
                         case "Run":
                             filter = new TestFilter(command.Argument);
@@ -136,7 +136,7 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
 
                         case "RunAsync":
                             filter = new TestFilter(command.Argument);
-                            SendResult(_runner.RunAsync(this, filter));
+                            _runner.RunAsync(this, filter);
                             break;
 
                         case "RequestStop":
@@ -165,12 +165,12 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
 
         private void RunTests(object filter)
         {
-            SendResult(_runner.Run(this, (TestFilter)filter));
+            SendResult(_runner.Run(this, (TestFilter)filter).Xml.OuterXml);
         }
 
-        private void SendResult(object result)
+        private void SendResult(string result)
         {
-            var resultMessage = new CommandReturnMessage(result);
+            var resultMessage = new TestEngineMessage("RSLT", result);
             var bytes = new BinarySerializationProtocol().Encode(resultMessage);
             log.Debug($"Sending result {result.GetType().Name}, length={bytes.Length}");
             _clientSocket.Send(bytes);

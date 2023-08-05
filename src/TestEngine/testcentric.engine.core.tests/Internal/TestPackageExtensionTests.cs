@@ -32,7 +32,6 @@ namespace TestCentric.Engine.Internal
             var node = doc.DocumentElement;
             Assert.That(node.Name, Is.EqualTo("TestPackage"));
             Assert.That(node.HasAttribute("id"));
-            Assert.That(node.GetAttribute("name"), Is.EqualTo("test1.dll"));
             Assert.That(node.GetAttribute("fullname"), Is.EqualTo(Path.GetFullPath("test1.dll")));
 
             var settings = node.FirstChild;

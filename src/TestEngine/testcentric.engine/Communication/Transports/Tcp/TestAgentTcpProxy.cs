@@ -42,7 +42,7 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
         public bool Start()
         {
             SendCommandMessage("Start");
-            return CommandResult<bool>();
+            return bool.Parse(GetCommandResult());
         }
 
         public void Stop()
@@ -53,7 +53,7 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
         public TestEngineResult Load()
         {
             SendCommandMessage("Load");
-            return CommandResult<TestEngineResult>();
+            return new TestEngineResult(GetCommandResult());
         }
 
         public void Unload()
@@ -64,13 +64,13 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
         public TestEngineResult Reload()
         {
             SendCommandMessage("Reload");
-            return CommandResult<TestEngineResult>();
+            return new TestEngineResult(GetCommandResult());
         }
 
         public int CountTestCases(TestFilter filter)
         {
             SendCommandMessage("CountTestCases", filter.Text);
-            return CommandResult<int>();
+            return int.Parse(GetCommandResult());
         }
 
         public TestEngineResult Run(ITestEventListener listener, TestFilter filter)
@@ -82,10 +82,9 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
 
         public AsyncTestEngineResult RunAsync(ITestEventListener listener, TestFilter filter)
         {
-            SendCommandMessage("RunAsync", filter.Text);
-            // TODO: Should we get the async result from the agent or just use our own?
-            return CommandResult<AsyncTestEngineResult>();
-            //return new AsyncTestEngineResult();
+            SendCommandMessage("RunAsync", ((TestFilter)filter).Text);
+
+            return new AsyncTestEngineResult();
         }
 
         public void RequestStop()
@@ -101,7 +100,7 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
         public TestEngineResult Explore(TestFilter filter)
         {
             SendCommandMessage("Explore", filter.Text);
-            return CommandResult<TestEngineResult>();
+            return new TestEngineResult(GetCommandResult());
         }
 
         public void Dispose()
@@ -115,10 +114,10 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
             log.Debug($"Sent {command} command");
         }
 
-        private T CommandResult<T>()
+        private string GetCommandResult()
         {
             log.Debug("Waiting for command result");
-            return (T)new SocketReader(_socket, _wireProtocol).GetNextMessage<CommandReturnMessage>().ReturnValue;
+            return new SocketReader(_socket, _wireProtocol).GetNextMessage().MessageData;
         }
 
         // Return the result of a test run as a TestEngineResult. ProgressMessages
@@ -128,19 +127,18 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
             var rdr = new SocketReader(_socket, _wireProtocol);
             while (true)
             {
-                var receivedMessage = rdr.GetNextMessage();
-                var receivedType = receivedMessage.GetType();
+                var message = rdr.GetNextMessage();
 
-                var returnMessage = receivedMessage as CommandReturnMessage;
-                if (returnMessage != null)
-                    return (TestEngineResult)returnMessage.ReturnValue;
-
-                if (receivedMessage.MessageType != "PROG")
-                //var progressMessage = receivedMessage as ProgressMessage;
-                //if (progressMessage == null)
-                    throw new InvalidOperationException($"Expected either a ProgressMessage or a CommandReturnMessage but received a {receivedType}");
-
-                listener.OnTestEvent(receivedMessage.MessageData);
+                switch(message.MessageType)
+                {
+                    case "RSLT":
+                        return new TestEngineResult(message.MessageData);
+                    case "PROG":
+                        listener.OnTestEvent(message.MessageData);
+                        break;
+                    default:
+                        throw new InvalidOperationException($"Expected either a ProgressMessage or a CommandReturnMessage but received a {message.MessageType} message");
+                }
             }
         }
     }

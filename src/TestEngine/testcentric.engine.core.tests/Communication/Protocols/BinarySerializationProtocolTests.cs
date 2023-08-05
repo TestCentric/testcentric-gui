@@ -9,6 +9,7 @@ using System.IO;
 using NUnit.Engine;
 using NUnit.Framework;
 using TestCentric.Engine.Communication.Messages;
+using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Communication.Protocols
 {
@@ -54,17 +55,18 @@ namespace TestCentric.Engine.Communication.Protocols
         public void DecodeSingleMessage()
         {
             var originalPackage = new TestPackage(new string[] { "mock-assembly.dll", "notest-assembly.dll" });
-            var originalMessage = new CommandReturnMessage(originalPackage);
+            var originalMessage = new TestEngineMessage("RSLT", originalPackage.ToXml());
 
             var bytes = wireProtocol.Encode(originalMessage);
             Console.WriteLine($"Serialized {bytes.Length} bytes.");
 
             var messages = new List<TestEngineMessage>(wireProtocol.Decode(bytes));
             Assert.That(messages.Count, Is.EqualTo(1));
-            var message = messages[0] as CommandReturnMessage;
+            var message = messages[0];
 
-            Assert.That(message.ReturnValue, Is.TypeOf<TestPackage>());
-            ComparePackages((TestPackage)message.ReturnValue, originalPackage);
+            Assert.That(message.MessageType, Is.EqualTo("RSLT"));
+            var newPackage = new TestPackageSerializer().Deserialize(message.MessageData);
+            ComparePackages(newPackage, originalPackage);
         }
 
         [TestCase(1)]
@@ -75,7 +77,7 @@ namespace TestCentric.Engine.Communication.Protocols
             const int SPLIT_SIZE = 1000;
 
             var originalPackage = new TestPackage(new string[] { "mock-assembly.dll", "notest-assembly.dll" });
-            var originalMessage = new CommandReturnMessage(originalPackage);
+            var originalMessage = new TestEngineMessage("RSLT", originalPackage.ToXml());
 
             var msgBytes = wireProtocol.Encode(originalMessage);
             var msgLength = msgBytes.Length;
@@ -98,10 +100,11 @@ namespace TestCentric.Engine.Communication.Protocols
                 Assert.That(messages.Count, Is.EqualTo(expectedCount));
             }
 
-            foreach (CommandReturnMessage message in messages)
+            foreach (TestEngineMessage message in messages)
             {
-                Assert.That(message.ReturnValue, Is.TypeOf<TestPackage>());
-                ComparePackages((TestPackage)message.ReturnValue, originalPackage);
+                Assert.That(message.MessageType, Is.EqualTo("RSLT"));
+                var newPackage = new TestPackageSerializer().Deserialize(message.MessageData);
+                ComparePackages(newPackage, originalPackage);
             }
         }
 
