@@ -77,6 +77,7 @@ namespace TestCentric.Engine.Internal
                 foreach(string key in _package.Settings.Keys)
                 {
                     Assert.That(newPackage.Settings.ContainsKey(key), $"Key '{key}' not found");
+                    // TODO: These should be equal, not just have the same string representation
                     Assert.That(newPackage.Settings[key].ToString(), Is.EqualTo(_package.Settings[key].ToString()));
                 }
             });

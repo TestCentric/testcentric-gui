@@ -34,7 +34,6 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
         public ITestEngineRunner CreateRunner(TestPackage package)
         {
             SendCommandMessage("CreateRunner", package.ToXml());
-            //SendCommandMessage("CreateRunner", package);
 
             // Agent also functions as the runner
             return this;
@@ -110,7 +109,7 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
             throw new NotImplementedException();
         }
 
-        private void SendCommandMessage(string command, object argument = null)
+        private void SendCommandMessage(string command, string argument = null)
         {
             _socket.Send(_wireProtocol.Encode(new CommandMessage(command, argument)));
             log.Debug($"Sent {command} command");

@@ -108,9 +108,7 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
                     switch (command.CommandName)
                     {
                         case "CreateRunner":
-                            var package = new TestPackageSerializer().Deserialize((string)command.Argument);
-                            //log.Debug($"CreateRunner for package {package.FullName}");
-                            //var package = (TestPackage)command.Argument;
+                            var package = new TestPackageSerializer().Deserialize(command.Argument);
                             _runner = CreateRunner(package);
                             break;
                         case "Load":
@@ -123,21 +121,21 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
                             _runner.Unload();
                             break;
                         case "Explore":
-                            var filter = GetFilterArgument(command);
+                            var filter = new TestFilter(command.Argument);
                             SendResult(_runner.Explore(filter));
                             break;
                         case "CountTestCases":
-                            filter = GetFilterArgument(command);
+                            filter = new TestFilter(command.Argument);
                             SendResult(_runner.CountTestCases(filter));
                             break;
                         case "Run":
-                            filter = GetFilterArgument(command);
+                            filter = new TestFilter(command.Argument);
                             Thread runnerThread = new Thread(RunTests);
                             runnerThread.Start(filter);
                             break;
 
                         case "RunAsync":
-                            filter = GetFilterArgument(command);
+                            filter = new TestFilter(command.Argument);
                             SendResult(_runner.RunAsync(this, filter));
                             break;
 
@@ -163,13 +161,6 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
 
             log.Info("Terminating command loop");
             Stop();
-
-            TestFilter GetFilterArgument(CommandMessage command)
-            {
-                var filterText = (string)command.Argument;
-                log.Debug($"  Filter = {filterText}");
-                return new TestFilter(filterText);
-            }
         }
 
         private void RunTests(object filter)

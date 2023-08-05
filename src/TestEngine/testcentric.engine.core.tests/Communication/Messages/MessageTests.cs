@@ -40,7 +40,7 @@ namespace TestCentric.Engine.Communication.Messages
         };
 
         [TestCaseSource(nameof(MessageTestData))]
-        public void CommandMessageConstructionTests(string commandName, object argument)
+        public void CommandMessageConstructionTests(string commandName, string argument)
         {
             var cmd = new CommandMessage(commandName, argument);
             Assert.That(cmd.CommandName, Is.EqualTo(commandName));
@@ -48,7 +48,7 @@ namespace TestCentric.Engine.Communication.Messages
         }
 
         [TestCaseSource(nameof(MessageTestData))]
-        public void CommandMessageEncodingTests(string commandName, object argument)
+        public void CommandMessageEncodingTests(string commandName, string argument)
         {
             var cmd = new CommandMessage(commandName, argument);
 
