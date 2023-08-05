@@ -8,7 +8,15 @@ using System;
 namespace TestCentric.Engine.Communication.Messages
 {
     [Serializable]
-    public abstract class TestEngineMessage
+    public class TestEngineMessage
     {
+        public TestEngineMessage(string messageType, string messageData)
+        {
+            MessageType = messageType;
+            MessageData = messageData;
+        }
+
+        public string MessageType { get; }
+        public string MessageData { get; }
     }
 }

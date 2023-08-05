@@ -178,7 +178,7 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
 
         public void OnTestEvent(string report)
         {
-            var progressMessage = new ProgressMessage(report);
+            var progressMessage = new TestEngineMessage("PROG", report);
             var bytes = new BinarySerializationProtocol().Encode(progressMessage);
             _clientSocket.Send(bytes);
         }

@@ -135,11 +135,12 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
                 if (returnMessage != null)
                     return (TestEngineResult)returnMessage.ReturnValue;
 
-                var progressMessage = receivedMessage as ProgressMessage;
-                if (progressMessage == null)
+                if (receivedMessage.MessageType != "PROG")
+                //var progressMessage = receivedMessage as ProgressMessage;
+                //if (progressMessage == null)
                     throw new InvalidOperationException($"Expected either a ProgressMessage or a CommandReturnMessage but received a {receivedType}");
 
-                listener.OnTestEvent(progressMessage.Report);
+                listener.OnTestEvent(receivedMessage.MessageData);
             }
         }
     }

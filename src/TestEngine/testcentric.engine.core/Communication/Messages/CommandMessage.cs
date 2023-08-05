@@ -11,6 +11,7 @@ namespace TestCentric.Engine.Communication.Messages
     public class CommandMessage : TestEngineMessage
     {
         public CommandMessage(string commandName, string argument)
+            : base("CMND", argument)
         {
             CommandName = commandName;
             Argument = argument;

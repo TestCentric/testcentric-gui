@@ -10,7 +10,7 @@ namespace TestCentric.Engine.Communication.Messages
     [Serializable]
     public class CommandReturnMessage : TestEngineMessage
     {
-        public CommandReturnMessage(object returnValue)
+        public CommandReturnMessage(object returnValue) : base("RSLT", null)
         {
             ReturnValue = returnValue;
         }
