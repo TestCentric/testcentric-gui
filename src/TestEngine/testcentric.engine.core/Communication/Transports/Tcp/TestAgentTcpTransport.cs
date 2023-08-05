@@ -12,6 +12,9 @@ using TestCentric.Engine.Agents;
 using TestCentric.Engine.Internal;
 using TestCentric.Engine.Communication.Messages;
 using TestCentric.Engine.Communication.Protocols;
+using System.Runtime.Serialization;
+using System.Xml;
+using System.IO;
 
 namespace TestCentric.Engine.Communication.Transports.Tcp
 {
@@ -74,6 +77,14 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
 
         public ITestEngineRunner CreateRunner(TestPackage package)
         {
+            log.Debug("Create runner for test package");
+            log.Debug($"  Id={package.ID}");
+            log.Debug($"  Name={package.Name}");
+            log.Debug($"  FullName={package.FullName}");
+            log.Debug("  Settings:");
+            foreach(var key in package.Settings.Keys)
+                log.Debug($"    {key}={package.Settings[key]}");
+
             return Agent.CreateRunner(package);
         }
 
@@ -97,7 +108,9 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
                     switch (command.CommandName)
                     {
                         case "CreateRunner":
-                            var package = (TestPackage)command.Argument;
+                            var package = new TestPackageSerializer().Deserialize((string)command.Argument);
+                            //log.Debug($"CreateRunner for package {package.FullName}");
+                            //var package = (TestPackage)command.Argument;
                             _runner = CreateRunner(package);
                             break;
                         case "Load":

@@ -33,7 +33,8 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
 
         public ITestEngineRunner CreateRunner(TestPackage package)
         {
-            SendCommandMessage("CreateRunner", package);
+            SendCommandMessage("CreateRunner", package.ToXml());
+            //SendCommandMessage("CreateRunner", package);
 
             // Agent also functions as the runner
             return this;

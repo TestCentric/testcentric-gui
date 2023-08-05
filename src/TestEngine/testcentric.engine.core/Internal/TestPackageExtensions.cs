@@ -6,6 +6,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Xml;
+using System.Xml.Serialization;
 using NUnit.Engine;
 
 namespace TestCentric.Engine.Internal
@@ -48,6 +50,20 @@ namespace TestCentric.Engine.Internal
 
             foreach (var subPackage in package.SubPackages)
                 AccumulatePackages(subPackage, selection, selector);
+        }
+
+        public static string ToXml(this TestPackage package)
+        {
+            var stringWriter = new StringWriter();
+            //var settings = new XmlWriterSettings { OmitXmlDeclaration = true };
+            //var xmlWriter = XmlWriter.Create(stringWriter, settings);
+
+            new TestPackageSerializer().Serialize(stringWriter, package);
+
+            //xmlWriter.Flush();
+            //xmlWriter.Close();
+
+            return stringWriter.ToString();
         }
     }
 }

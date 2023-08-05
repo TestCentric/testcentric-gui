@@ -12,52 +12,43 @@ using NUnit.Engine;
 using NUnit.Framework;
 using TestCentric.Engine.Communication.Messages;
 using TestCentric.Engine.Communication.Protocols;
+using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Communication.Messages
 {
     public class MessageTests
     {
-        static readonly object[] NO_ARGS = new object[0];
-
         const string EMPTY_FILTER = "</filter>";
-        static readonly object[] FILTER_ARGS = new object[] { EMPTY_FILTER };
-
-        static readonly TestPackage TEST_PACKAGE = new TestPackage("mock-assembly.dll");
-        static readonly object[] PACKAGE_ARGS = new object[] { TEST_PACKAGE };
+        static readonly string TEST_PACKAGE = new TestPackage("mock-assembly.dll").ToXml();
 
         private BinarySerializationProtocol _wireProtocol = new BinarySerializationProtocol();
 
-        [TestCase("StartAgent")]
-        [TestCase("StopAgent")]
-        [TestCase("CreateRunner", "TESTPACKAGE")]
-        [TestCase("Load")]
-        [TestCase("Reload")]
-        [TestCase("Unload")]
-        [TestCase("Explore", EMPTY_FILTER)]
-        [TestCase("CountTestCases", EMPTY_FILTER)]
-        [TestCase("Run", EMPTY_FILTER)]
-        [TestCase("RunAsync", EMPTY_FILTER)]
-        [TestCase("StopRun", "FORCE")]
-        public void CommandMessageConstructionTests(string commandName, object argument = null)
+        static TestCaseData[] MessageTestData = new TestCaseData[]
+        {
+            new TestCaseData("StartAgent", null),
+            new TestCaseData("StopAgent", null),
+            new TestCaseData("CreateRunner", TEST_PACKAGE),
+            new TestCaseData("Load", null),
+            new TestCaseData("Reload", null),
+            new TestCaseData("Unload", null),
+            new TestCaseData("Explore", EMPTY_FILTER),
+            new TestCaseData("CountTestCases", EMPTY_FILTER),
+            new TestCaseData("Run", EMPTY_FILTER),
+            new TestCaseData("RunAsync", EMPTY_FILTER),
+            new TestCaseData("RequestStop", null),
+            new TestCaseData("ForcedStop", null)
+        };
+
+        [TestCaseSource(nameof(MessageTestData))]
+        public void CommandMessageConstructionTests(string commandName, object argument)
         {
             var cmd = new CommandMessage(commandName, argument);
             Assert.That(cmd.CommandName, Is.EqualTo(commandName));
             Assert.That(cmd.Argument, Is.EqualTo(argument));
         }
 
-        [TestCase("StartAgent")]
-        [TestCase("StopAgent")]
-        [TestCase("CreateRunner", "TESTPACKAGE")]
-        [TestCase("Load")]
-        [TestCase("Reload")]
-        [TestCase("Unload")]
-        [TestCase("Explore", EMPTY_FILTER)]
-        [TestCase("CountTestCases", EMPTY_FILTER)]
-        [TestCase("Run", EMPTY_FILTER)]
-        [TestCase("RunAsync", EMPTY_FILTER)]
-        [TestCase("StopRun")]
-        [TestCase("ForcedStop")]
-        public void CommandMessageEncodingTests(string commandName, object argument = null)
+        [TestCaseSource(nameof(MessageTestData))]
+        public void CommandMessageEncodingTests(string commandName, object argument)
         {
             var cmd = new CommandMessage(commandName, argument);
 
