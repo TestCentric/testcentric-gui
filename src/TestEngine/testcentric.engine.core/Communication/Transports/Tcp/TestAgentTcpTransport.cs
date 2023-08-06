@@ -98,7 +98,7 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
                 while (keepRunning)
                 {
                     log.Debug("Waiting for a command");
-                    var command = socketReader.GetNextMessage<CommandMessage>();
+                    var command = socketReader.GetNextMessage();
                     log.Debug($"Received {command.CommandName} command");
                     if (command.Argument == null)
                         log.Debug($"  No Argument provided");
@@ -107,43 +107,43 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
 
                     switch (command.CommandName)
                     {
-                        case "CreateRunner":
+                        case MessageType.CreateRunner:
                             var package = new TestPackageSerializer().Deserialize(command.Argument);
                             _runner = CreateRunner(package);
                             break;
-                        case "Load":
+                        case MessageType.LoadCommand:
                             SendResult(_runner.Load().Xml.OuterXml);
                             break;
-                        case "Reload":
+                        case MessageType.ReloadCommand:
                             SendResult(_runner.Reload().Xml.OuterXml);
                             break;
-                        case "Unload":
+                        case MessageType.UnloadCommand:
                             _runner.Unload();
                             break;
-                        case "Explore":
+                        case MessageType.ExploreCommand:
                             var filter = new TestFilter(command.Argument);
                             SendResult(_runner.Explore(filter).Xml.OuterXml);
                             break;
-                        case "CountTestCases":
+                        case MessageType.CountCasesCommand:
                             filter = new TestFilter(command.Argument);
                             SendResult(_runner.CountTestCases(filter).ToString());
                             break;
-                        case "Run":
+                        case MessageType.RunCommand:
                             filter = new TestFilter(command.Argument);
                             Thread runnerThread = new Thread(RunTests);
                             runnerThread.Start(filter);
                             break;
 
-                        case "RunAsync":
+                        case MessageType.RunAsyncCommand:
                             filter = new TestFilter(command.Argument);
                             _runner.RunAsync(this, filter);
                             break;
 
-                        case "RequestStop":
+                        case MessageType.RequestStopCommand:
                             _runner.RequestStop();
                             break;
 
-                        case "ForcedStop":
+                        case MessageType.ForcedStopCommand:
                             _runner.ForcedStop();
                             break;
 
@@ -170,7 +170,7 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
 
         private void SendResult(string result)
         {
-            var resultMessage = new TestEngineMessage("RSLT", result);
+            var resultMessage = new TestEngineMessage(MessageType.CommandResult, result);
             var bytes = new BinarySerializationProtocol().Encode(resultMessage);
             log.Debug($"Sending result {result.GetType().Name}, length={bytes.Length}");
             _clientSocket.Send(bytes);
@@ -178,7 +178,7 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
 
         public void OnTestEvent(string report)
         {
-            var progressMessage = new TestEngineMessage("PROG", report);
+            var progressMessage = new TestEngineMessage(MessageType.ProgressReport, report);
             var bytes = new BinarySerializationProtocol().Encode(progressMessage);
             _clientSocket.Send(bytes);
         }

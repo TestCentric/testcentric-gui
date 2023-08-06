@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Castle.Components.DictionaryAdapter;
 using NUnit.Engine;
@@ -25,25 +26,23 @@ namespace TestCentric.Engine.Communication.Messages
 
         static TestCaseData[] MessageTestData = new TestCaseData[]
         {
-            new TestCaseData("StartAgent", null),
-            new TestCaseData("StopAgent", null),
-            new TestCaseData("CreateRunner", TEST_PACKAGE),
-            new TestCaseData("Load", null),
-            new TestCaseData("Reload", null),
-            new TestCaseData("Unload", null),
-            new TestCaseData("Explore", EMPTY_FILTER),
-            new TestCaseData("CountTestCases", EMPTY_FILTER),
-            new TestCaseData("Run", EMPTY_FILTER),
-            new TestCaseData("RunAsync", EMPTY_FILTER),
-            new TestCaseData("RequestStop", null),
-            new TestCaseData("ForcedStop", null)
+            new TestCaseData(MessageType.CreateRunner, TEST_PACKAGE),
+            new TestCaseData(MessageType.LoadCommand, null),
+            new TestCaseData(MessageType.ReloadCommand, null),
+            new TestCaseData(MessageType.UnloadCommand, null),
+            new TestCaseData(MessageType.ExploreCommand, EMPTY_FILTER),
+            new TestCaseData(MessageType.CountCasesCommand, EMPTY_FILTER),
+            new TestCaseData(MessageType.RunCommand, EMPTY_FILTER),
+            new TestCaseData(MessageType.RunAsyncCommand, EMPTY_FILTER),
+            new TestCaseData(MessageType.RequestStopCommand, null),
+            new TestCaseData(MessageType.ForcedStopCommand, null)
         };
 
         [TestCaseSource(nameof(MessageTestData))]
         public void CommandMessageConstructionTests(string commandName, string argument)
         {
-            var cmd = new CommandMessage(commandName, argument);
-            Assert.That(cmd.MessageType, Is.EqualTo("CMND"));
+            var cmd = new TestEngineMessage(commandName, argument);
+            Assert.That(cmd.Type, Is.EqualTo(commandName));
             Assert.That(cmd.CommandName, Is.EqualTo(commandName));
             Assert.That(cmd.Argument, Is.EqualTo(argument));
         }
@@ -51,12 +50,12 @@ namespace TestCentric.Engine.Communication.Messages
         [TestCaseSource(nameof(MessageTestData))]
         public void CommandMessageEncodingTests(string commandName, string argument)
         {
-            var cmd = new CommandMessage(commandName, argument);
+            var cmd = new TestEngineMessage(commandName, argument);
 
             var bytes = _wireProtocol.Encode(cmd);
             var messages = new List<TestEngineMessage>(_wireProtocol.Decode(bytes));
-            var decoded = messages[0] as CommandMessage;
-            Assert.That(decoded.MessageType, Is.EqualTo("CMND"));
+            var decoded = messages[0];
+            Assert.That(decoded.Type, Is.EqualTo(commandName));
             Assert.That(decoded.CommandName, Is.EqualTo(commandName));
             Assert.That(decoded.Argument, Is.EqualTo(argument));
         }
@@ -64,27 +63,29 @@ namespace TestCentric.Engine.Communication.Messages
         [Test]
         public void ProgressMessageTest()
         {
-            var msg = new TestEngineMessage("PROG", "PROGRESS");
-            Assert.That(msg.MessageType, Is.EqualTo("PROG"));
-            Assert.That(msg.MessageData, Is.EqualTo("PROGRESS"));
+            const string REPORT = "Progress report";
+            var msg = new TestEngineMessage(MessageType.ProgressReport, REPORT);
+            Assert.That(msg.Type, Is.EqualTo(MessageType.ProgressReport));
+            Assert.That(msg.Data, Is.EqualTo(REPORT));
             var bytes = _wireProtocol.Encode(msg);
             var messages = new List<TestEngineMessage>(_wireProtocol.Decode(bytes));
             var decoded = messages[0];
-            Assert.That(decoded.MessageType, Is.EqualTo("PROG"));
-            Assert.That(decoded.MessageData, Is.EqualTo("PROGRESS"));
+            Assert.That(decoded.Type, Is.EqualTo(MessageType.ProgressReport));
+            Assert.That(decoded.Data, Is.EqualTo(REPORT));
         }
 
         [Test]
         public void CommandReturnMessageTest()
         {
-            var msg = new TestEngineMessage("RSLT", "RESULT");
-            Assert.That(msg.MessageType, Is.EqualTo("RSLT"));
-            Assert.That(msg.MessageData, Is.EqualTo("RESULT"));
+            const string RESULT = "Result text";
+            var msg = new TestEngineMessage(MessageType.CommandResult, RESULT);
+            Assert.That(msg.Type, Is.EqualTo(MessageType.CommandResult));
+            Assert.That(msg.Data, Is.EqualTo(RESULT));
             var bytes = _wireProtocol.Encode(msg);
             var messages = new List<TestEngineMessage>(_wireProtocol.Decode(bytes));
             var decoded = messages[0];
-            Assert.That(decoded.MessageType, Is.EqualTo("RSLT"));
-            Assert.That(decoded.MessageData, Is.EqualTo("RESULT"));
+            Assert.That(decoded.Type, Is.EqualTo(MessageType.CommandResult));
+            Assert.That(decoded.Data, Is.EqualTo(RESULT));
         }
     }
 }

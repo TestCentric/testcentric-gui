@@ -12,11 +12,15 @@ namespace TestCentric.Engine.Communication.Messages
     {
         public TestEngineMessage(string messageType, string messageData)
         {
-            MessageType = messageType;
-            MessageData = messageData;
+            Type = messageType;
+            Data = messageData;
         }
 
-        public string MessageType { get; }
-        public string MessageData { get; }
+        public string Type { get; }
+        public string Data { get; }
+
+        // Alias properties for convenience
+        public string CommandName => Type;
+        public string Argument => Data;
     }
 }
