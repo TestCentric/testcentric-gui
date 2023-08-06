@@ -10,17 +10,17 @@ namespace TestCentric.Engine.Communication.Messages
     [Serializable]
     public class TestEngineMessage
     {
-        public TestEngineMessage(string messageType, string messageData)
+        public TestEngineMessage(string code, string data)
         {
-            Type = messageType;
-            Data = messageData;
+            Code = code;
+            Data = data;
         }
 
-        public string Type { get; }
+        public string Code { get; }
         public string Data { get; }
 
         // Alias properties for convenience
-        public string CommandName => Type;
+        public string CommandName => Code;
         public string Argument => Data;
     }
 }

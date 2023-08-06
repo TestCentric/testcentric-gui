@@ -33,7 +33,7 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
 
         public ITestEngineRunner CreateRunner(TestPackage package)
         {
-            SendCommandMessage(MessageType.CreateRunner, package.ToXml());
+            SendCommandMessage(MessageCode.CreateRunner, package.ToXml());
 
             // Agent also functions as the runner
             return this;
@@ -46,49 +46,49 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
             throw new NotImplementedException("Not used for TCP Transport");
         }
 
-        public void Stop() => SendCommandMessage(MessageType.StopAgent);
+        public void Stop() => SendCommandMessage(MessageCode.StopAgent);
 
         public TestEngineResult Load()
         {
-            SendCommandMessage(MessageType.LoadCommand);
+            SendCommandMessage(MessageCode.LoadCommand);
             return new TestEngineResult(GetCommandResult());
         }
 
-        public void Unload() => SendCommandMessage(MessageType.UnloadCommand);
+        public void Unload() => SendCommandMessage(MessageCode.UnloadCommand);
 
         public TestEngineResult Reload()
         {
-            SendCommandMessage(MessageType.ReloadCommand);
+            SendCommandMessage(MessageCode.ReloadCommand);
             return new TestEngineResult(GetCommandResult());
         }
 
         public int CountTestCases(TestFilter filter)
         {
-            SendCommandMessage(MessageType.CountCasesCommand, filter.Text);
+            SendCommandMessage(MessageCode.CountCasesCommand, filter.Text);
             return int.Parse(GetCommandResult());
         }
 
         public TestEngineResult Run(ITestEventListener listener, TestFilter filter)
         {
-            SendCommandMessage(MessageType.RunCommand, filter.Text);
+            SendCommandMessage(MessageCode.RunCommand, filter.Text);
 
             return TestRunResult(listener);
         }
 
         public AsyncTestEngineResult RunAsync(ITestEventListener listener, TestFilter filter)
         {
-            SendCommandMessage(MessageType.RunAsyncCommand, ((TestFilter)filter).Text);
+            SendCommandMessage(MessageCode.RunAsyncCommand, ((TestFilter)filter).Text);
 
             return new AsyncTestEngineResult();
         }
 
-        public void RequestStop() => SendCommandMessage(MessageType.RequestStopCommand);
+        public void RequestStop() => SendCommandMessage(MessageCode.RequestStopCommand);
 
-        public void ForcedStop() => SendCommandMessage(MessageType.ForcedStopCommand);
+        public void ForcedStop() => SendCommandMessage(MessageCode.ForcedStopCommand);
 
         public TestEngineResult Explore(TestFilter filter)
         {
-            SendCommandMessage(MessageType.ExploreCommand, filter.Text);
+            SendCommandMessage(MessageCode.ExploreCommand, filter.Text);
             return new TestEngineResult(GetCommandResult());
         }
 
@@ -118,15 +118,15 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
             {
                 var message = rdr.GetNextMessage();
 
-                switch(message.Type)
+                switch(message.Code)
                 {
-                    case MessageType.CommandResult:
+                    case MessageCode.CommandResult:
                         return new TestEngineResult(message.Data);
-                    case MessageType.ProgressReport:
+                    case MessageCode.ProgressReport:
                         listener.OnTestEvent(message.Data);
                         break;
                     default:
-                        throw new InvalidOperationException($"Expected either a ProgressMessage or a CommandReturnMessage but received a {message.Type} message");
+                        throw new InvalidOperationException($"Expected either a ProgressMessage or a CommandReturnMessage but received a {message.Code} message");
                 }
             }
         }

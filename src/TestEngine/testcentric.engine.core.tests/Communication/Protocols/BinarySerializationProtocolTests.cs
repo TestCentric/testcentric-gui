@@ -38,24 +38,10 @@ namespace TestCentric.Engine.Communication.Protocols
         }
 
         [Test]
-        public void SerializeMessage()
-        {
-            var originalPackage = new TestPackage(new string[] { "mock-assembly.dll", "notest-assembly.dll" });
-
-            var bytes = wireProtocol.SerializeMessage(originalPackage);
-            Console.WriteLine($"Serialized {bytes.Length} bytes.");
-
-            object newPackage = wireProtocol.DeserializeMessage(bytes);
-
-            Assert.That(newPackage, Is.TypeOf<TestPackage>());
-            ComparePackages((TestPackage)newPackage, originalPackage);
-        }
-
-        [Test]
         public void DecodeSingleMessage()
         {
             var originalPackage = new TestPackage(new string[] { "mock-assembly.dll", "notest-assembly.dll" });
-            var originalMessage = new TestEngineMessage(MessageType.CommandResult, originalPackage.ToXml());
+            var originalMessage = new TestEngineMessage(MessageCode.CommandResult, originalPackage.ToXml());
 
             var bytes = wireProtocol.Encode(originalMessage);
             Console.WriteLine($"Serialized {bytes.Length} bytes.");
@@ -64,7 +50,7 @@ namespace TestCentric.Engine.Communication.Protocols
             Assert.That(messages.Count, Is.EqualTo(1));
             var message = messages[0];
 
-            Assert.That(message.Type, Is.EqualTo(MessageType.CommandResult));
+            Assert.That(message.Code, Is.EqualTo(MessageCode.CommandResult));
             var newPackage = new TestPackageSerializer().Deserialize(message.Data);
             ComparePackages(newPackage, originalPackage);
         }
@@ -77,7 +63,7 @@ namespace TestCentric.Engine.Communication.Protocols
             const int SPLIT_SIZE = 1000;
 
             var originalPackage = new TestPackage(new string[] { "mock-assembly.dll", "notest-assembly.dll" });
-            var originalMessage = new TestEngineMessage(MessageType.CommandResult, originalPackage.ToXml());
+            var originalMessage = new TestEngineMessage(MessageCode.CommandResult, originalPackage.ToXml());
 
             var msgBytes = wireProtocol.Encode(originalMessage);
             var msgLength = msgBytes.Length;
@@ -102,7 +88,7 @@ namespace TestCentric.Engine.Communication.Protocols
 
             foreach (TestEngineMessage message in messages)
             {
-                Assert.That(message.Type, Is.EqualTo(MessageType.CommandResult));
+                Assert.That(message.Code, Is.EqualTo(MessageCode.CommandResult));
                 var newPackage = new TestPackageSerializer().Deserialize(message.Data);
                 ComparePackages(newPackage, originalPackage);
             }
@@ -111,7 +97,7 @@ namespace TestCentric.Engine.Communication.Protocols
         [Test]
         public void DecodeMultipleMessages()
         {
-            var commands = new string[] { "One", "Two", "Three", "Four", "Five", "Six" };
+            var commands = new string[] { "CMD1", "CMD2", "CMD3", "CMD4", "CMD5", "CMD6" };
 
             var stream = new MemoryStream();
 
