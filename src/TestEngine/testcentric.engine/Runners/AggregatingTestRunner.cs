@@ -171,13 +171,21 @@ namespace TestCentric.Engine.Runners
         }
 
         /// <summary>
-        /// Cancel the ongoing test run. If no  test is running, the call is ignored.
+        /// Request the ongoing test run to stop. If no  test is running, the call is ignored.
         /// </summary>
-        /// <param name="force">If true, cancel any ongoing test threads, otherwise wait for them to complete.</param>
-        public override void StopRun(bool force)
+        public override void RequestStop()
         {
             foreach (var runner in Runners)
-                runner.StopRun(force);
+                runner.RequestStop();
+        }
+
+        /// <summary>
+        /// Force the ongoing test run to stop. If no  test is running, the call is ignored.
+        /// </summary>
+        public override void ForcedStop()
+        {
+            foreach (var runner in Runners)
+                runner.ForcedStop();
         }
 
         protected override void Dispose(bool disposing)

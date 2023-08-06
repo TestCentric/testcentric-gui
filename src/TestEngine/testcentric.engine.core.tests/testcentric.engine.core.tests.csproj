@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	
     <PropertyGroup>
-        <RootNamespace>NUnit.Engine</RootNamespace>
+        <RootNamespace>TestCentric.Engine</RootNamespace>
         <TargetFrameworks>net35;net462;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
         <CheckEolTargetFramework>false</CheckEolTargetFramework>
         <OutputType>Exe</OutputType>
@@ -44,8 +44,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="NUnit" Version="3.12.0" />
-        <PackageReference Include="NUnitLite" Version="3.12.0" />
+        <PackageReference Include="NUnit" Version="3.13.3" />
+        <PackageReference Include="NUnitLite" Version="3.13.3" />
         <PackageReference Include="NUnit.Engine.Api" Version="3.16.2" />
     </ItemGroup>
   

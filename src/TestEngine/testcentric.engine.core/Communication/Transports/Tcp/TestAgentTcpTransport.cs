@@ -12,6 +12,9 @@ using TestCentric.Engine.Agents;
 using TestCentric.Engine.Internal;
 using TestCentric.Engine.Communication.Messages;
 using TestCentric.Engine.Communication.Protocols;
+using System.Runtime.Serialization;
+using System.Xml;
+using System.IO;
 
 namespace TestCentric.Engine.Communication.Transports.Tcp
 {
@@ -74,6 +77,14 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
 
         public ITestEngineRunner CreateRunner(TestPackage package)
         {
+            log.Debug("Create runner for test package");
+            log.Debug($"  Id={package.ID}");
+            log.Debug($"  Name={package.Name}");
+            log.Debug($"  FullName={package.FullName}");
+            log.Debug("  Settings:");
+            foreach(var key in package.Settings.Keys)
+                log.Debug($"    {key}={package.Settings[key]}");
+
             return Agent.CreateRunner(package);
         }
 
@@ -87,53 +98,53 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
                 while (keepRunning)
                 {
                     log.Debug("Waiting for a command");
-                    var command = socketReader.GetNextMessage<CommandMessage>();
+                    var command = socketReader.GetNextMessage();
                     log.Debug($"Received {command.CommandName} command");
+                    if (command.Argument == null)
+                        log.Debug($"  No Argument provided");
+                    else
+                        log.Debug($"  Argument Type: {command.Argument.GetType()}");
 
                     switch (command.CommandName)
                     {
-                        case "CreateRunner":
-                            var package = (TestPackage)command.Arguments[0];
+                        case MessageCode.CreateRunner:
+                            var package = new TestPackageSerializer().Deserialize(command.Argument);
                             _runner = CreateRunner(package);
                             break;
-                        case "Load":
-                            SendResult(_runner.Load());
+                        case MessageCode.LoadCommand:
+                            SendResult(_runner.Load().Xml.OuterXml);
                             break;
-                        case "Reload":
-                            SendResult(_runner.Reload());
+                        case MessageCode.ReloadCommand:
+                            SendResult(_runner.Reload().Xml.OuterXml);
                             break;
-                        case "Unload":
+                        case MessageCode.UnloadCommand:
                             _runner.Unload();
                             break;
-                        case "Explore":
-                            var filter = (TestFilter)command.Arguments[0];
-                            //log.Debug($"  Filter = {filter.Text}");
-                            log.Debug("Calling Explore");
-                            var result = _runner.Explore(filter);
-                            log.Debug("Got Explore Result");
-                            SendResult(result);
+                        case MessageCode.ExploreCommand:
+                            var filter = new TestFilter(command.Argument);
+                            SendResult(_runner.Explore(filter).Xml.OuterXml);
                             break;
-                        case "CountTestCases":
-                            filter = (TestFilter)command.Arguments[0];
-                            log.Debug($"  Filter = {filter.Text}");
-                            SendResult(_runner.CountTestCases(filter));
+                        case MessageCode.CountCasesCommand:
+                            filter = new TestFilter(command.Argument);
+                            SendResult(_runner.CountTestCases(filter).ToString());
                             break;
-                        case "Run":
-                            filter = (TestFilter)command.Arguments[0];
-                            log.Debug($"  Filter = {filter.Text}");
+                        case MessageCode.RunCommand:
+                            filter = new TestFilter(command.Argument);
                             Thread runnerThread = new Thread(RunTests);
                             runnerThread.Start(filter);
                             break;
 
-                        case "RunAsync":
-                            filter = (TestFilter)command.Arguments[0];
-                            log.Debug($"  Filter = {filter.Text}");
-                            SendResult(_runner.RunAsync(this, filter));
+                        case MessageCode.RunAsyncCommand:
+                            filter = new TestFilter(command.Argument);
+                            _runner.RunAsync(this, filter);
                             break;
 
-                        case "StopRun":
-                            var force = (bool)command.Arguments[0];
-                            _runner.StopRun(force);
+                        case MessageCode.RequestStopCommand:
+                            _runner.RequestStop();
+                            break;
+
+                        case MessageCode.ForcedStopCommand:
+                            _runner.ForcedStop();
                             break;
 
                         case "Stop":
@@ -154,12 +165,12 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
 
         private void RunTests(object filter)
         {
-            SendResult(_runner.Run(this, (TestFilter)filter));
+            SendResult(_runner.Run(this, (TestFilter)filter).Xml.OuterXml);
         }
 
-        private void SendResult(object result)
+        private void SendResult(string result)
         {
-            var resultMessage = new CommandReturnMessage(result);
+            var resultMessage = new TestEngineMessage(MessageCode.CommandResult, result);
             var bytes = new BinarySerializationProtocol().Encode(resultMessage);
             log.Debug($"Sending result {result.GetType().Name}, length={bytes.Length}");
             _clientSocket.Send(bytes);
@@ -167,7 +178,7 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
 
         public void OnTestEvent(string report)
         {
-            var progressMessage = new ProgressMessage(report);
+            var progressMessage = new TestEngineMessage(MessageCode.ProgressReport, report);
             var bytes = new BinarySerializationProtocol().Encode(progressMessage);
             _clientSocket.Send(bytes);
         }

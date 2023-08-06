@@ -170,13 +170,19 @@ namespace TestCentric.Engine.Communication.Transports.Remoting
         }
 
         /// <summary>
-        /// Cancel the ongoing test run. If no  test is running, the call is ignored.
+        /// Request stopping the ongoing test run. If no  test is running, the call is ignored.
         /// </summary>
-        /// <param name="force">If true, cancel any ongoing test threads, otherwise wait for them to complete.</param>
-        public void StopRun(bool force)
+        public void RequestStop()
         {
-            if (_runner != null)
-                _runner.StopRun(force);
+            _runner?.RequestStop();
+        }
+
+        /// <summary>
+        /// Force the ongoing test run to stop. If no  test is running, the call is ignored.
+        /// </summary>
+        public void ForcedStop()
+        {
+            _runner?.ForcedStop();
         }
 
         #endregion

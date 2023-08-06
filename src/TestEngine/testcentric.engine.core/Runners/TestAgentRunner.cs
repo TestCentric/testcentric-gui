@@ -180,28 +180,26 @@ namespace TestCentric.Engine.Runners
         /// Cancel the ongoing test run. If no  test is running, the call is ignored.
         /// </summary>
         /// <param name="force">If true, cancel any ongoing test threads, otherwise wait for them to complete.</param>
-        public override void StopRun(bool force)
+        public override void RequestStop()
         {
-            if (force)
-            {
-                log.Info("Cancelling test run");
-                Environment.Exit(0);
-            }
-            else
-            {
-                log.Info("Requesting stop");
+            log.Info("Requesting stop");
 
-                EnsurePackageIsLoaded();
+            EnsurePackageIsLoaded();
 
-                try
-                {
-                    _driver.StopRun(false);
-                }
-                catch (Exception ex) when (!(ex is NUnitEngineException))
-                {
-                    throw new NUnitEngineException("An exception occurred in the driver while stopping the run.", ex);
-                }
+            try
+            {
+                _driver.StopRun(false);
             }
+            catch (Exception ex) when (!(ex is NUnitEngineException))
+            {
+                throw new NUnitEngineException("An exception occurred in the driver while stopping the run.", ex);
+            }
+        }
+
+        public override void ForcedStop()
+        {
+            log.Info("Cancelling test run");
+            Environment.Exit(0);
         }
 
         private void EnsurePackageIsLoaded()

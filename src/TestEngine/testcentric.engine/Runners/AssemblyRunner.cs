@@ -167,19 +167,39 @@ namespace TestCentric.Engine.Runners
         private bool _runCancelled;
 
         /// <summary>
-        /// Cancel the ongoing test run. If no  test is running, the call is ignored.
+        /// Request the ongoing test run to stop. If no  test is running, the call is ignored.
         /// </summary>
-        /// <param name="force">If true, cancel any ongoing test threads, otherwise wait for them to complete.</param>
-        public override void StopRun(bool force)
+        public override void RequestStop()
         {
-            log.Info(force ? "Cancelling test run" : "Requesting stop");
-            _runCancelled = force;
+            log.Info("Requesting stop");
+            _runCancelled = false;
 
             if (_remoteRunner != null)
             {
                 try
                 {
-                    _remoteRunner.StopRun(force);
+                    _remoteRunner.RequestStop();
+                }
+                catch (Exception e)
+                {
+                    log.Error("Failed to stop the remote run. {0}", ExceptionHelper.BuildMessageAndStackTrace(e));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Force the ongoing test run to stop. If no  test is running, the call is ignored.
+        /// </summary>
+        public override void ForcedStop()
+        {
+            log.Info("Cancelling test run");
+            _runCancelled = true;
+
+            if (_remoteRunner != null)
+            {
+                try
+                {
+                    _remoteRunner.ForcedStop();
                 }
                 catch (Exception e)
                 {
