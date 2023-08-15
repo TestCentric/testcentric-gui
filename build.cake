@@ -7,7 +7,7 @@ const string ENGINE_API_PACKAGE_ID = "TestCentric.Engine.Api";
 const string TEST_BED_EXE = "test-bed.exe";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.1-dev00030
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.1-dev00034
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -43,7 +43,7 @@ var packageTests = new List<PackageTest>();
 // Tests of single assemblies targeting each runtime we support
 
 packageTests.Add(new PackageTest(1, "Net462Test", "Run mock-assembly.dll targeting .NET 4.6.2",
-    "engine-tests/net462/mock-assembly.dll --trace:Debug",
+    "engine-tests/net462/mock-assembly.dll",
     MockAssemblyExpectedResult("Net462AgentLauncher")));
 
 packageTests.Add(new PackageTest(1, "Net35Test", "Run mock-assembly.dll targeting .NET 3.5",
@@ -67,11 +67,11 @@ packageTests.Add(new PackageTest(1, "Net50Test", "Run mock-assembly.dll targetin
     MockAssemblyExpectedResult("Net60AgentLauncher")));
 
 packageTests.Add(new PackageTest(1, "Net60Test", "Run mock-assembly.dll targeting .NET 6.0",
-    "engine-tests/net6.0/mock-assembly.dll --trace:Debug",
+    "engine-tests/net6.0/mock-assembly.dll",
     MockAssemblyExpectedResult("Net60AgentLauncher")));
 
 packageTests.Add(new PackageTest(1, "Net70Test", "Run mock-assembly.dll targeting .NET 7.0",
-    "engine-tests/net7.0/mock-assembly.dll",
+    "engine-tests/net7.0/mock-assembly.dll --trace:Debug",
     MockAssemblyExpectedResult("Net70AgentLauncher")));
 
 static ExpectedResult MockAssemblyExpectedResult(params string[] agentNames)
