@@ -7,7 +7,7 @@ const string ENGINE_API_PACKAGE_ID = "TestCentric.Engine.Api";
 const string TEST_BED_EXE = "test-bed.exe";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.1-dev00034
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.1-dev00035
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -43,7 +43,7 @@ var packageTests = new List<PackageTest>();
 // Tests of single assemblies targeting each runtime we support
 
 packageTests.Add(new PackageTest(1, "Net462Test", "Run mock-assembly.dll targeting .NET 4.6.2",
-    "engine-tests/net462/mock-assembly.dll",
+    "engine-tests/net462/mock-assembly.dll --trace:Debug",
     MockAssemblyExpectedResult("Net462AgentLauncher")));
 
 packageTests.Add(new PackageTest(1, "Net35Test", "Run mock-assembly.dll targeting .NET 3.5",
@@ -213,7 +213,10 @@ var EnginePackage = new NuGetPackage(
 			"test-bed.addins", "testcentric.nuget.addins")
 	},
 	tests: packageTests,
-	preloadedExtensions: new [] { Net462PluggableAgent, Net60PluggableAgent, Net70PluggableAgent }
+	preloadedExtensions: new [] {
+		Net462PluggableAgent.SetVersion("2.1.0-dev00010"),
+		Net60PluggableAgent.SetVersion("2.1.0-dev00019"),
+		Net70PluggableAgent.SetVersion("2.1.0-dev00009") }
 );
 
 var EngineCorePackage = new NuGetPackage(
