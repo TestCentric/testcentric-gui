@@ -61,12 +61,6 @@ static readonly FilePath[] TREE_ICONS_JPG = {
 static readonly FilePath[] TREE_ICONS_PNG = {
         "Success.png", "Failure.png", "Ignored.png", "Inconclusive.png", "Skipped.png" };
 
-var preloadedExtensions = new [] {
-	Net462PluggableAgent,
-	Net60PluggableAgent,
-	Net70PluggableAgent
-};
-
 var nugetPackage = new NuGetPackage(
 	id: "TestCentric.GuiRunner",
 	source: "nuget/TestCentric.GuiRunner.nuspec",
@@ -81,8 +75,8 @@ var nugetPackage = new NuGetPackage(
 		HasDirectory("tools/Images/Tree/Default").WithFiles(TREE_ICONS_PNG),
 		HasDirectory("tools/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG)
 	},
-	tests: PackageTests,
-	preloadedExtensions: preloadedExtensions);
+	tests: PackageTests
+);
 
 var chocolateyPackage = new ChocolateyPackage(
 	id: "testcentric-gui",
@@ -97,8 +91,8 @@ var chocolateyPackage = new ChocolateyPackage(
 		HasDirectory("tools/Images/Tree/Default").WithFiles(TREE_ICONS_PNG),
 		HasDirectory("tools/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG)
 	},
-	tests: PackageTests,
-	preloadedExtensions: preloadedExtensions);
+	tests: PackageTests
+);
 
 var zipPackage = new ZipPackage(
 	id: "TestCentric.GuiRunner",
@@ -115,7 +109,12 @@ var zipPackage = new ZipPackage(
 		HasDirectory("bin/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG)
 	},
 	tests: PackageTests,
-	preloadedExtensions: preloadedExtensions);
+	preloadedExtensions: new[] {
+		Net462PluggableAgent,
+		Net60PluggableAgent,
+		Net70PluggableAgent
+	}
+);
 
 BuildSettings.Packages.Add(nugetPackage);
 BuildSettings.Packages.Add(chocolateyPackage);

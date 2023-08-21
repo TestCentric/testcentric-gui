@@ -76,6 +76,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "zip", "zip", "{76D01D8E-B522-45D8-9835-B0F0FAE48A0A}"
 	ProjectSection(SolutionItems) = preProject
 		zip\testcentric-agent.zip.addins = zip\testcentric-agent.zip.addins
+		zip\TestCentric.GuiRunner.zspec = zip\TestCentric.GuiRunner.zspec
 		zip\testcentric.zip.addins = zip\testcentric.zip.addins
 	EndProjectSection
 EndProject
