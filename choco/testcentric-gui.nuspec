@@ -57,44 +57,44 @@ Projects with tests to be run under **TestCentric** must already have some versi
         <file src="testcentric-agent-x86.exe.ignore" target="tools" />
         <file src="testcentric.choco.addins" target="tools" />
     
-        <file src="$BIN$testcentric.exe" target="tools" />
-        <file src="$BIN$testcentric.exe.config" target="tools" />
-        <file src="$BIN$TestCentric.Gui.Runner.dll" target="tools" />
-        <file src="$BIN$nunit.uiexception.dll" target="tools" />
-        <file src="$BIN$TestCentric.Gui.Model.dll" target="tools" />
-        <file src="$BIN$Mono.Options.dll" target="tools" />
-        <file src="$BIN$nunit.engine.api.dll" target="tools" />
-        <file src="$BIN$testcentric.engine.api.dll" target="tools" />
-        <file src="$BIN$testcentric.engine.metadata.dll" target="tools" />
-        <file src="$BIN$testcentric.extensibility.dll" target="tools" />
-        <file src="$BIN$testcentric.engine.core.dll" target="tools" />
-        <file src="$BIN$testcentric.engine.dll" target="tools" />
+        <file src="../bin/Release/testcentric.exe" target="tools" />
+        <file src="../bin/Release/testcentric.exe.config" target="tools" />
+        <file src="../bin/Release/TestCentric.Gui.Runner.dll" target="tools" />
+        <file src="../bin/Release/nunit.uiexception.dll" target="tools" />
+        <file src="../bin/Release/TestCentric.Gui.Model.dll" target="tools" />
+        <file src="../bin/Release/Mono.Options.dll" target="tools" />
+        <file src="../bin/Release/nunit.engine.api.dll" target="tools" />
+        <file src="../bin/Release/testcentric.engine.api.dll" target="tools" />
+        <file src="../bin/Release/testcentric.engine.metadata.dll" target="tools" />
+        <file src="../bin/Release/testcentric.extensibility.dll" target="tools" />
+        <file src="../bin/Release/testcentric.engine.core.dll" target="tools" />
+        <file src="../bin/Release/testcentric.engine.dll" target="tools" />
 
-        <file src="$BIN$Images/RunTests.png" target="tools/Images" />
-        <file src="$BIN$Images/DebugTests.png" target="tools/Images" />
-        <file src="$BIN$Images/GroupBy_16x.png" target="tools/Images" />
-        <file src="$BIN$Images/StopRun.png" target="tools/Images" />
-        <file src="$BIN$Images/SummaryReport.png" target="tools/Images" />
+        <file src="../bin/Release/Images/RunTests.png" target="tools/Images" />
+        <file src="../bin/Release/Images/DebugTests.png" target="tools/Images" />
+        <file src="../bin/Release/Images/GroupBy_16x.png" target="tools/Images" />
+        <file src="../bin/Release/Images/StopRun.png" target="tools/Images" />
+        <file src="../bin/Release/Images/SummaryReport.png" target="tools/Images" />
 
-        <file src="$BIN$Images/Tree/Circles/Failure.jpg" target="tools/Images/Tree/Circles" />
-        <file src="$BIN$Images/Tree/Circles/Ignored.jpg" target="tools/Images/Tree/Circles" />
-        <file src="$BIN$Images/Tree/Circles/Inconclusive.jpg" target="tools/Images/Tree/Circles" />
-        <file src="$BIN$Images/Tree/Circles/Skipped.jpg" target="tools/Images/Tree/Circles" />
-        <file src="$BIN$Images/Tree/Circles/Success.jpg" target="tools/Images/Tree/Circles" />
-        <file src="$BIN$Images/Tree/Classic/Failure.jpg" target="tools/Images/Tree/Classic" />
-        <file src="$BIN$Images/Tree/Classic/Ignored.jpg" target="tools/Images/Tree/Classic" />
-        <file src="$BIN$Images/Tree/Classic/Inconclusive.jpg" target="tools/Images/Tree/Classic" />
-        <file src="$BIN$Images/Tree/Classic/Skipped.jpg" target="tools/Images/Tree/Classic" />
-        <file src="$BIN$Images/Tree/Classic/Success.jpg" target="tools/Images/Tree/Classic" />
-        <file src="$BIN$Images/Tree/Default/Failure.png" target="tools/Images/Tree/Default" />
-        <file src="$BIN$Images/Tree/Default/Ignored.png" target="tools/Images/Tree/Default" />
-        <file src="$BIN$Images/Tree/Default/Inconclusive.png" target="tools/Images/Tree/Default" />
-        <file src="$BIN$Images/Tree/Default/Skipped.png" target="tools/Images/Tree/Default" />
-        <file src="$BIN$Images/Tree/Default/Success.png" target="tools/Images/Tree/Default" />
-        <file src="$BIN$Images/Tree/Visual Studio/Failure.png" target="tools/Images/Tree/Visual Studio" />
-        <file src="$BIN$Images/Tree/Visual Studio/Ignored.png" target="tools/Images/Tree/Visual Studio" />
-        <file src="$BIN$Images/Tree/Visual Studio/Inconclusive.png" target="tools/Images/Tree/Visual Studio" />
-        <file src="$BIN$Images/Tree/Visual Studio/Skipped.png" target="tools/Images/Tree/Visual Studio" />
-        <file src="$BIN$Images/Tree/Visual Studio/Success.png" target="tools/Images/Tree/Visual Studio" />
+        <file src="../bin/Release/Images/Tree/Circles/Failure.jpg" target="tools/Images/Tree/Circles" />
+        <file src="../bin/Release/Images/Tree/Circles/Ignored.jpg" target="tools/Images/Tree/Circles" />
+        <file src="../bin/Release/Images/Tree/Circles/Inconclusive.jpg" target="tools/Images/Tree/Circles" />
+        <file src="../bin/Release/Images/Tree/Circles/Skipped.jpg" target="tools/Images/Tree/Circles" />
+        <file src="../bin/Release/Images/Tree/Circles/Success.jpg" target="tools/Images/Tree/Circles" />
+        <file src="../bin/Release/Images/Tree/Classic/Failure.jpg" target="tools/Images/Tree/Classic" />
+        <file src="../bin/Release/Images/Tree/Classic/Ignored.jpg" target="tools/Images/Tree/Classic" />
+        <file src="../bin/Release/Images/Tree/Classic/Inconclusive.jpg" target="tools/Images/Tree/Classic" />
+        <file src="../bin/Release/Images/Tree/Classic/Skipped.jpg" target="tools/Images/Tree/Classic" />
+        <file src="../bin/Release/Images/Tree/Classic/Success.jpg" target="tools/Images/Tree/Classic" />
+        <file src="../bin/Release/Images/Tree/Default/Failure.png" target="tools/Images/Tree/Default" />
+        <file src="../bin/Release/Images/Tree/Default/Ignored.png" target="tools/Images/Tree/Default" />
+        <file src="../bin/Release/Images/Tree/Default/Inconclusive.png" target="tools/Images/Tree/Default" />
+        <file src="../bin/Release/Images/Tree/Default/Skipped.png" target="tools/Images/Tree/Default" />
+        <file src="../bin/Release/Images/Tree/Default/Success.png" target="tools/Images/Tree/Default" />
+        <file src="../bin/Release/Images/Tree/Visual Studio/Failure.png" target="tools/Images/Tree/Visual Studio" />
+        <file src="../bin/Release/Images/Tree/Visual Studio/Ignored.png" target="tools/Images/Tree/Visual Studio" />
+        <file src="../bin/Release/Images/Tree/Visual Studio/Inconclusive.png" target="tools/Images/Tree/Visual Studio" />
+        <file src="../bin/Release/Images/Tree/Visual Studio/Skipped.png" target="tools/Images/Tree/Visual Studio" />
+        <file src="../bin/Release/Images/Tree/Visual Studio/Success.png" target="tools/Images/Tree/Visual Studio" />
     </files>
 </package>
