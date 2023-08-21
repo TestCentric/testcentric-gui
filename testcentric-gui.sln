@@ -53,7 +53,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "choco", "choco", "{7A082D44
 		choco\testcentric-agent-x86.exe.ignore = choco\testcentric-agent-x86.exe.ignore
 		choco\testcentric-agent.choco.addins = choco\testcentric-agent.choco.addins
 		choco\testcentric-agent.exe.ignore = choco\testcentric-agent.exe.ignore
-		choco\testcentric-gui.nuspec = choco\testcentric-gui.nuspec
 		choco\testcentric.choco.addins = choco\testcentric.choco.addins
 		choco\VERIFICATION.txt = choco\VERIFICATION.txt
 	EndProjectSection

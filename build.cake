@@ -61,10 +61,22 @@ static readonly FilePath[] TREE_ICONS_JPG = {
 static readonly FilePath[] TREE_ICONS_PNG = {
         "Success.png", "Failure.png", "Ignored.png", "Inconclusive.png", "Skipped.png" };
 
+private const string GUI_DESCRIPTION =
+	"The TestCentric Runner for NUnit (**TestCentric**) is a GUI runner aimed at eventually supporting a range of .NET testing frameworks. In the 1.x release series, we are concentrating on support of NUnit tests. The user interface is based on the layout and feature set of the of the original NUnit GUI, with the internals modified so as to run NUnit 3 tests." +
+	"\r\n\nThis package includes the both the standard TestCentric GUI runner (`testcentric.exe`) and an experiental runner (`tc-next.exe`) which is available for... wait for it... experimentation! The package incorporates the TestCentric test engine, a modified version of the NUnit engine." +
+	"\r\n\n### Features" +
+	"\r\n\nMost features of the NUnit V2 Gui runner are supported. See CHANGES.txt for more detailed information." +
+	"\r\n\nNUnit engine extensions are supported but no extensions are bundled with the GUI itself. They must be installed separately **using chocolatey**. In particular, to run NUnit V2 tests, you should install the **NUnit V2 Framework Driver Extension**." + 
+	"\r\n\n**Warning:** When using the GUI chocolatey package, **only** chocolatey-packaged extensions will be availble. This is by design." +
+	"\r\n\n### Prerequisites" +
+	"\r\n\n**TestCentric** requires .NET 4.5 or later in order to function, although your tests may run in a separate process under other framework versions." +
+	"\r\n\nProjects with tests to be run under **TestCentric** must already have some version of the NUnit framework installed separtely.";
+
 var nugetPackage = new NuGetPackage(
 	id: "TestCentric.GuiRunner",
 	source: "nuget/TestCentric.GuiRunner.nuspec",
 	basePath: BuildSettings.OutputDirectory,
+	description: GUI_DESCRIPTION,
 	testRunner: new GuiSelfTester(BuildSettings.NuGetTestDirectory + "TestCentric.GuiRunner/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
 		HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "testcentric.png"),
@@ -80,8 +92,30 @@ var nugetPackage = new NuGetPackage(
 
 var chocolateyPackage = new ChocolateyPackage(
 	id: "testcentric-gui",
-	source: BuildSettings.ChocolateyDirectory + "testcentric-gui.nuspec",
-	basePath: BuildSettings.OutputDirectory,
+	//source: BuildSettings.ChocolateyDirectory + "testcentric-gui.nuspec",
+	//basePath: BuildSettings.OutputDirectory,
+	description: GUI_DESCRIPTION,
+	packageContent: new PackageContent(
+		new DirectoryContent("tools").WithFiles(
+			"../../LICENSE.txt", "../../NOTICES.txt", "../../CHANGES.txt", "../../testcentric.png",
+			"../../choco/VERIFICATION.txt", "../../choco/testcentric.choco.addins",
+			"../../choco/testcentric-agent.exe.ignore",	"../../choco/testcentric-agent-x86.exe.ignore",
+			"testcentric.exe", "testcentric.exe.config", "TestCentric.Gui.Runner.dll",
+			"nunit.uiexception.dll", "TestCentric.Gui.Model.dll", "Mono.Options.dll",
+			"testcentric.engine.dll", "testcentric.engine.core.dll", "testcentric.engine.api.dll",
+			"testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "nunit.engine.api.dll",
+			"testcentric.engine.pdb", "testcentric.engine.core.pdb", "test-bed.exe", "test-bed.addins"),
+		new DirectoryContent("tools/Images").WithFiles(
+			"Images/DebugTests.png", "Images/RunTests.png", "Images/StopRun.png", "Images/GroupBy_16x.png", "Images/SummaryReport.png"),
+		new DirectoryContent("tools/Images/Tree/Circles").WithFiles(
+			"Images/Tree/Circles/Success.jpg", "Images/Tree/Circles/Failure.jpg", "Images/Tree/Circles/Ignored.jpg", "Images/Tree/Circles/Inconclusive.jpg", "Images/Tree/Circles/Skipped.jpg"),
+		new DirectoryContent("tools/Images/Tree/Classic").WithFiles(
+			"Images/Tree/Classic/Success.jpg", "Images/Tree/Classic/Failure.jpg", "Images/Tree/Classic/Ignored.jpg", "Images/Tree/Classic/Inconclusive.jpg", "Images/Tree/Classic/Skipped.jpg"),
+		new DirectoryContent("tools/Images/Tree/Default").WithFiles(
+			"Images/Tree/Default/Success.png", "Images/Tree/Default/Failure.png", "Images/Tree/Default/Ignored.png", "Images/Tree/Default/Inconclusive.png", "Images/Tree/Default/Skipped.png"),
+		new DirectoryContent("tools/Images/Tree/Visual Studio").WithFiles(
+			"Images/Tree/Visual Studio/Success.png", "Images/Tree/Visual Studio/Failure.png", "Images/Tree/Visual Studio/Ignored.png", "Images/Tree/Visual Studio/Inconclusive.png", "Images/Tree/Visual Studio/Skipped.png")
+	),
 	testRunner: new GuiSelfTester(BuildSettings.ChocolateyTestDirectory + "testcentric-gui/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
 		HasDirectory("tools").WithFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "VERIFICATION.txt", "testcentric.choco.addins").AndFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.choco.addins"),
@@ -91,7 +125,12 @@ var chocolateyPackage = new ChocolateyPackage(
 		HasDirectory("tools/Images/Tree/Default").WithFiles(TREE_ICONS_PNG),
 		HasDirectory("tools/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG)
 	},
-	tests: PackageTests
+	tests: PackageTests,
+	preloadedExtensions: new[] {
+		Net462PluggableAgent,
+		Net60PluggableAgent,
+		Net70PluggableAgent
+	}
 );
 
 var zipPackage = new ZipPackage(
@@ -179,6 +218,31 @@ public class GuiSelfTester : TestRunner
 }
 
 //////////////////////////////////////////////////////////////////////
+// INDIVIDUAL PACKAGES
+//////////////////////////////////////////////////////////////////////
+
+Task("PackageNuGet")
+	.IsDependentOn("Build")
+	.Does(() =>
+	{
+		nugetPackage.BuildVerifyAndTest();
+	});
+
+Task("PackageChocolatey")
+	.IsDependentOn("Build")
+	.Does(() =>
+	{
+		chocolateyPackage.BuildVerifyAndTest();
+	});
+
+Task("PackageZip")
+	.IsDependentOn("Build")
+	.Does(() =>
+	{
+		zipPackage.BuildVerifyAndTest();
+	});
+
+//////////////////////////////////////////////////////////////////////
 // INDIVIDUAL TEST RUNS
 //////////////////////////////////////////////////////////////////////
 
@@ -194,28 +258,6 @@ Task("RunTestCentricGuiTests")
 
 		if (result.OverallResult == "Failed")
 			throw new System.Exception("There were test failures or errors. See listing.");
-	});
-
-//////////////////////////////////////////////////////////////////////
-// INDIVIDUAL PACKAGES
-//////////////////////////////////////////////////////////////////////
-
-Task("PackageNuGet")
-	.Does(() =>
-	{
-		nugetPackage.BuildVerifyAndTest();
-	});
-
-Task("PackageChocolatey")
-	.Does(() =>
-	{
-		chocolateyPackage.BuildVerifyAndTest();
-	});
-
-Task("PackageZip")
-	.Does(() =>
-	{
-		zipPackage.BuildVerifyAndTest();
 	});
 
 //////////////////////////////////////////////////////////////////////
