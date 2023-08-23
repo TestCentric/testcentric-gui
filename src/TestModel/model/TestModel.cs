@@ -68,7 +68,10 @@ namespace TestCentric.Gui.Model
 
         public static ITestModel CreateTestModel(CommandLineOptions options)
         {
-            return CreateTestModel(TestEngineActivator.CreateInstance(), options);
+            var engine = TestEngineActivator.CreateInstance();
+            if (engine == null)
+                throw new NUnit.Engine.NUnitEngineNotFoundException();
+            return CreateTestModel(engine, options);
         }
 
         // Public for testing
