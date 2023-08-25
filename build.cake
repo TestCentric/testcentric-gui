@@ -72,10 +72,14 @@ private const string GUI_DESCRIPTION =
 	"\r\n\n**TestCentric** requires .NET 4.5 or later in order to function, although your tests may run in a separate process under other framework versions." +
 	"\r\n\nProjects with tests to be run under **TestCentric** must already have some version of the NUnit framework installed separtely.";
 
+private static ExtensionSpecifier[] BUNDLED_AGENTS = new [] {
+	Net462PluggableAgent,
+	Net60PluggableAgent,
+	Net70PluggableAgent
+};
+
 var nugetPackage = new NuGetPackage(
 	id: "TestCentric.GuiRunner",
-	//source: "nuget/TestCentric.GuiRunner.nuspec",
-	//basePath: BuildSettings.OutputDirectory,
 	description: GUI_DESCRIPTION,
 	packageContent: new PackageContent()
 		.WithRootFiles("../../LICENSE.txt", "../../NOTICES.txt", "../../CHANGES.txt", "../../testcentric.png")
@@ -96,10 +100,7 @@ var nugetPackage = new NuGetPackage(
 				"Images/Tree/Default/Success.png", "Images/Tree/Default/Failure.png", "Images/Tree/Default/Ignored.png", "Images/Tree/Default/Inconclusive.png", "Images/Tree/Default/Skipped.png"),
 			new DirectoryContent("tools/Images/Tree/Visual Studio").WithFiles(
 				"Images/Tree/Visual Studio/Success.png", "Images/Tree/Visual Studio/Failure.png", "Images/Tree/Visual Studio/Ignored.png", "Images/Tree/Visual Studio/Inconclusive.png", "Images/Tree/Visual Studio/Skipped.png") )
-		.WithDependencies(
-			Net462PluggableAgent,
-			Net60PluggableAgent,
-			Net70PluggableAgent),
+		.WithDependencies( BUNDLED_AGENTS ),
 	testRunner: new GuiSelfTester(BuildSettings.NuGetTestDirectory + "TestCentric.GuiRunner/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
 		HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "testcentric.png"),
@@ -115,8 +116,6 @@ var nugetPackage = new NuGetPackage(
 
 var chocolateyPackage = new ChocolateyPackage(
 	id: "testcentric-gui",
-	//source: BuildSettings.ChocolateyDirectory + "testcentric-gui.nuspec",
-	//basePath: BuildSettings.OutputDirectory,
 	description: GUI_DESCRIPTION,
 	packageContent: new PackageContent()
 		.WithDirectories(
@@ -139,10 +138,7 @@ var chocolateyPackage = new ChocolateyPackage(
 				"Images/Tree/Default/Success.png", "Images/Tree/Default/Failure.png", "Images/Tree/Default/Ignored.png", "Images/Tree/Default/Inconclusive.png", "Images/Tree/Default/Skipped.png"),
 			new DirectoryContent("tools/Images/Tree/Visual Studio").WithFiles(
 				"Images/Tree/Visual Studio/Success.png", "Images/Tree/Visual Studio/Failure.png", "Images/Tree/Visual Studio/Ignored.png", "Images/Tree/Visual Studio/Inconclusive.png", "Images/Tree/Visual Studio/Skipped.png") )
-		.WithDependencies(
-			Net462PluggableAgent,
-			Net60PluggableAgent,
-			Net70PluggableAgent),
+		.WithDependencies( BUNDLED_AGENTS ),
 	testRunner: new GuiSelfTester(BuildSettings.ChocolateyTestDirectory + "testcentric-gui/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
 		HasDirectory("tools").WithFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "VERIFICATION.txt", "testcentric.choco.addins").AndFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.choco.addins"),
@@ -173,11 +169,7 @@ var zipPackage = new ZipPackage(
 		HasDirectory("bin/addins/NUnit.Extension.Net70PluggableAgent.2.0.0"),
 	},
 	tests: PackageTests,
-	bundledExtensions: new[] {
-		Net462PluggableAgent,
-		Net60PluggableAgent,
-		Net70PluggableAgent
-	}
+	bundledExtensions: BUNDLED_AGENTS
 );
 
 BuildSettings.Packages.Add(nugetPackage);
