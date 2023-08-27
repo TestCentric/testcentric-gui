@@ -7,6 +7,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using NUnit.Engine;
@@ -110,11 +111,11 @@ namespace TestCentric.Gui.Model
 
             // Check for engine loaded as a NuGet or Chocolatey package dependency
             string thisAssemblyPath = typeof(TestEngineActivator).Assembly.Location;
-            string toolsDir = Path.GetDirectoryName(thisAssemblyPath);
-            // Is it really 'tools'?
-            if (Path.GetFileName(toolsDir) == "tools")
+            string thisAssemblyDir = Path.GetDirectoryName(thisAssemblyPath);
+            // Is assembly directory 'tools'?
+            if (Path.GetFileName(thisAssemblyDir) == "tools")
             {
-                string packageDir = Path.GetDirectoryName(toolsDir);
+                string packageDir = Path.GetDirectoryName(thisAssemblyDir);
                 // Is it our nuget package?
                 if (Path.GetFileName(packageDir).StartsWith("TestCentric.GuiRunner"))
                 {
