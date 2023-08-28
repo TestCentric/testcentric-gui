@@ -153,34 +153,8 @@ var chocolateyPackage = new ChocolateyPackage(
 	tests: PackageTests
 );
 
-var zipPackage = new ZipPackage(
-	id: "TestCentric.GuiRunner",
-	source: BuildSettings.ZipDirectory + "TestCentric.GuiRunner.zspec",
-	basePath: BuildSettings.OutputDirectory,
-	testRunner: new GuiSelfTester(BuildSettings.ZipTestDirectory + "TestCentric.GuiRunner/bin/testcentric.exe"),
-	checks: new PackageCheck[] {
-		HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt"),
-		HasDirectory("bin").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.zip.addins"),
-		HasDirectory("bin/Images").WithFiles("DebugTests.png", "RunTests.png", "StopRun.png", "GroupBy_16x.png", "SummaryReport.png"),
-		HasDirectory("bin/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
-		HasDirectory("bin/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
-		HasDirectory("bin/Images/Tree/Default").WithFiles(TREE_ICONS_PNG),
-		HasDirectory("bin/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG),
-		HasDirectory("bin/addins/NUnit.Extension.Net462PluggableAgent.2.0.1"),
-		HasDirectory("bin/addins/NUnit.Extension.Net60PluggableAgent.2.0.0"),
-		HasDirectory("bin/addins/NUnit.Extension.Net70PluggableAgent.2.0.0"),
-	},
-	tests: PackageTests,
-	bundledExtensions: new [] {
-		Net462PluggableAgent,
-		Net60PluggableAgent,
-		Net70PluggableAgent
-	}
-);
-
 BuildSettings.Packages.Add(nugetPackage);
 BuildSettings.Packages.Add(chocolateyPackage);
-BuildSettings.Packages.Add(zipPackage);
 
 //////////////////////////////////////////////////////////////////////
 // POST-BUILD ACTION
@@ -255,13 +229,6 @@ Task("PackageChocolatey")
 	.Does(() =>
 	{
 		chocolateyPackage.BuildVerifyAndTest();
-	});
-
-Task("PackageZip")
-	.IsDependentOn("Build")
-	.Does(() =>
-	{
-		zipPackage.BuildVerifyAndTest();
 	});
 
 //////////////////////////////////////////////////////////////////////
