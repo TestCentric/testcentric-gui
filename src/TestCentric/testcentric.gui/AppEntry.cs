@@ -13,6 +13,7 @@ namespace TestCentric.Gui
     using Model;
     using Views;
     using Presenters;
+    using System.Linq;
 
     /// <summary>
     /// Class to manage application startup.
@@ -58,6 +59,18 @@ namespace TestCentric.Gui
             catch(Exception ex)
             {
                 MessageDisplay.Error(ex.Message);
+                return 3;
+            }
+
+            if (model.Services.ExtensionService.GetExtensionNodes("/NUnit/Engine/TypeExtensions/IAgentLauncher").Count() == 0)
+            {
+                if (!MessageDisplay.OkCancel(
+                    "Either the GUI was installed without any agents or all the installed agents have been deleted.\r\n\r\n" +
+                    "You must install at least one agent in order to be able to load or run tests.\r\n\r\n" +
+                    "Install agents using the same source (i.e. nuget or choolatey) from which you installed the GUI itself.\r\n\r\n" +
+                    "You should select agents which match the target platforms you are using for development.\r\n\r\n" +
+                    "Click 'OK' to continue with extremely limited functionality, 'Cancel' to exit."))
+                return 4;
             }
 
             log.Info("Constructing Form");

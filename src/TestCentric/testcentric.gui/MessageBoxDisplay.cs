@@ -59,6 +59,16 @@ namespace TestCentric.Gui
             return MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
         }
 
+        public static bool OkCancel(string message)
+        {
+            return OkCancel(message, DEFAULT_CAPTION);
+        }
+
+        public static bool OkCancel(string message, string caption)
+        {
+            return MessageBox.Show(message, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.OK;
+        }
+
         #endregion
 
         #region IMessageDisplay Implementation
@@ -76,6 +86,11 @@ namespace TestCentric.Gui
         bool IMessageDisplay.YesNo(string message)
         {
             return YesNo(message, _caption);
+        }
+
+        bool IMessageDisplay.OkCancel(string message)
+        {
+            return OkCancel(message, _caption);
         }
 
         #endregion
