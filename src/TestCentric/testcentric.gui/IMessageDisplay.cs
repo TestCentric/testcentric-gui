@@ -17,5 +17,7 @@ namespace TestCentric.Gui
         void Info(string message);
 
         bool YesNo(string message);
+
+        bool OkCancel(string message);
     }
 }
