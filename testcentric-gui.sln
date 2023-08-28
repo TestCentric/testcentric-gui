@@ -53,7 +53,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "choco", "choco", "{7A082D44
 		choco\testcentric-agent-x86.exe.ignore = choco\testcentric-agent-x86.exe.ignore
 		choco\testcentric-agent.choco.addins = choco\testcentric-agent.choco.addins
 		choco\testcentric-agent.exe.ignore = choco\testcentric-agent.exe.ignore
-		choco\testcentric-gui.nuspec = choco\testcentric-gui.nuspec
 		choco\testcentric.choco.addins = choco\testcentric.choco.addins
 		choco\VERIFICATION.txt = choco\VERIFICATION.txt
 	EndProjectSection
@@ -67,7 +66,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{23ED18B0-608C-4CB5-A70E-CB95C8B0231C}"
 	ProjectSection(SolutionItems) = preProject
 		nuget\testcentric-agent.nuget.addins = nuget\testcentric-agent.nuget.addins
-		nuget\TestCentric.GuiRunner.nuspec = nuget\TestCentric.GuiRunner.nuspec
 		nuget\testcentric.nuget.addins = nuget\testcentric.nuget.addins
 	EndProjectSection
 EndProject
@@ -76,6 +74,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "zip", "zip", "{76D01D8E-B522-45D8-9835-B0F0FAE48A0A}"
 	ProjectSection(SolutionItems) = preProject
 		zip\testcentric-agent.zip.addins = zip\testcentric-agent.zip.addins
+		zip\TestCentric.GuiRunner.zspec = zip\TestCentric.GuiRunner.zspec
 		zip\testcentric.zip.addins = zip\testcentric.zip.addins
 	EndProjectSection
 EndProject

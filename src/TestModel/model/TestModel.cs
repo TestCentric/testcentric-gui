@@ -68,7 +68,10 @@ namespace TestCentric.Gui.Model
 
         public static ITestModel CreateTestModel(CommandLineOptions options)
         {
-            return CreateTestModel(TestEngineActivator.CreateInstance(), options);
+            var engine = TestEngineActivator.CreateInstance();
+            if (engine == null)
+                throw new NUnit.Engine.NUnitEngineNotFoundException();
+            return CreateTestModel(engine, options);
         }
 
         // Public for testing
@@ -275,6 +278,7 @@ namespace TestCentric.Gui.Model
 
         public void LoadTests(IList<string> files)
         {
+            log.Info($"Loading test files '{string.Join("', '", files.ToArray())}'");
             if (IsPackageLoaded)
                 UnloadTests();
 
@@ -284,18 +288,23 @@ namespace TestCentric.Gui.Model
             TestFiles.AddRange(files);
 
             TestPackage = MakeTestPackage(files);
+            log.Debug("Created TestPackage");
             _lastTestRun = null;
             _lastRunWasDebugRun = false;
 
             Runner = TestEngine.GetRunner(TestPackage);
+            log.Debug($"Got {Runner.GetType().Name} for package");
 
             try
             {
+                log.Debug("Loading tests");
                 LoadedTests = new TestNode(Runner.Explore(NUnit.Engine.TestFilter.Empty));
+                log.Debug($"Loaded {LoadedTests.Xml.GetAttribute("TestCaseCount")} tests");
             }
             catch(Exception ex)
             {
                 _events.FireTestLoadFailure(ex);
+                log.Error("Failed to load tests", ex);
                 return;
             }
 

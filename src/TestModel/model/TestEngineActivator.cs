@@ -4,8 +4,11 @@
 // ***********************************************************************
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Text;
+using System.Windows.Forms;
 using Microsoft.Win32;
 using NUnit.Engine;
 
@@ -58,7 +61,7 @@ namespace TestCentric.Gui.Model
         {
             try
             {
-                Assembly engine = FindNewestEngine(minVersion);
+                Assembly engine = FindEngineAssembly(minVersion);
                 if (engine == null)
                 {
                     throw new NUnitEngineNotFoundException();
@@ -73,32 +76,62 @@ namespace TestCentric.Gui.Model
             {
                 throw new Exception("Failed to load the test engine", ex);
             }
-        }
+        } 
 
-        private static Assembly FindNewestEngine(Version minVersion)
+        private static Assembly FindEngineAssembly(Version minVersion)
         {
-            var newestVersionFound = new Version();
-
-            // Check the Application BaseDirectory
+            // Check the Application BaseDirectory first. If engine exists there, we'll try to use it
             string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, DefaultAssemblyName);
-            Assembly newestAssemblyFound = CheckPathForEngine(path, minVersion, ref newestVersionFound, null);
+            if (File.Exists(path))
+            {
+                var assembly = Assembly.ReflectionOnlyLoadFrom(path);
+                var version = assembly.GetName().Version;
+                if (version >= minVersion) return assembly;
+                // If minimum assembly in base directory doesn't meet minimum version requirement, that's an error
+                throw new Exception($"Assembly in base directory is version {version} but minimum version required is {minVersion}");
+            }
 
-            // Check Probing Path if not found in Base Directory. This
-            // allows the console or other runner to be executed with
-            // a different application base and still function. In
-            // particular, we do this in some tests of NUnit.
-            if (newestAssemblyFound == null && AppDomain.CurrentDomain.RelativeSearchPath != null)
+            // Check Probing Path if not found in Base Directory. This allows a runner to be executed
+            // using a different application base and still function.
+            if (AppDomain.CurrentDomain.RelativeSearchPath != null)
             {
                 foreach (string relpath in AppDomain.CurrentDomain.RelativeSearchPath.Split(new char[] { ';' }))
                 {
                     path = Path.Combine(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relpath), DefaultAssemblyName);
-                    newestAssemblyFound = CheckPathForEngine(path, minVersion, ref newestVersionFound, null);
-                    if (newestAssemblyFound != null)
-                        break;
+                    if (File.Exists(path))
+                    {
+                        var assembly = Assembly.ReflectionOnlyLoadFrom(path);
+                        var version = assembly.GetName().Version;
+                        if (version >= minVersion) return assembly;
+                        // Just ignore assemblies in probing path if they don't meet minimum requirement
+                        // TODO: Should we throw here as for the base directory?
+                    }
                 }
             }
 
-            return newestAssemblyFound;
+            // Check for engine loaded as a NuGet or Chocolatey package dependency
+            string thisAssemblyPath = typeof(TestEngineActivator).Assembly.Location;
+            string thisAssemblyDir = Path.GetDirectoryName(thisAssemblyPath);
+            // Is assembly directory 'tools'?
+            if (Path.GetFileName(thisAssemblyDir) == "tools")
+            {
+                string packageDir = Path.GetDirectoryName(thisAssemblyDir);
+                // Is it our nuget package?
+                if (Path.GetFileName(packageDir).StartsWith("TestCentric.GuiRunner"))
+                {
+                    var parentDir = Path.GetDirectoryName(packageDir);
+                    path = Path.Combine(parentDir, "TestCentric.Engine", "tools", DefaultAssemblyName);
+                    if (File.Exists(path))
+                    {
+                        var assembly = Assembly.ReflectionOnlyLoadFrom(path);
+                        var version = assembly.GetName().Version;
+                        if (version >= minVersion) return assembly;
+                        // TODO: Should we throw here if version does't match?
+                    }
+                }
+            }
+
+            throw new NUnitEngineNotFoundException();
         }
 
         private static Assembly CheckPathForEngine(string path, Version minVersion, ref Version newestVersionFound, Assembly newestAssemblyFound)

@@ -11,6 +11,7 @@ using System.Xml;
 
 namespace TestCentric.Gui.Presenters
 {
+    using System.Diagnostics;
     using System.Drawing;
     using System.Windows.Forms;
     using Model;
@@ -119,7 +120,21 @@ namespace TestCentric.Gui.Presenters
             _view.Categories = testNode.GetPropertyList("Category");
             _view.TestCount = testNode.TestCount.ToString();
             _view.RunState = testNode.RunState.ToString();
-            _view.SkipReason = testNode.GetProperty("_SKIPREASON");
+            
+            StringBuilder reason = new StringBuilder(testNode.GetProperty("_SKIPREASON"));
+            
+            string message = testNode.Xml.SelectSingleNode("failure/message")?.InnerText;
+            if (!string.IsNullOrEmpty(message))
+            {
+                if (reason.Length > 0)
+                    reason.Append("\r\n");
+                reason.Append(message);
+                string stackTrace = testNode.Xml.SelectSingleNode("failure/stack-trace")?.InnerText;
+                if (!string.IsNullOrEmpty(stackTrace))
+                    reason.Append($"\r\n{stackTrace}");
+            }
+
+            _view.SkipReason = reason.ToString();
 
             DisplayTestProperties(testNode);
 
