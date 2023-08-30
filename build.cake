@@ -214,9 +214,9 @@ var EnginePackage = new NuGetPackage(
 	},
 	tests: packageTests,
 	preloadedExtensions: new [] {
-		new PackageReference("NUnit.Extension.Net462PluggableAgent", "2.1.0-dev00010"),
+		new PackageReference("NUnit.Extension.Net462PluggableAgent", "2.1.0-dev00011"),
 		new PackageReference("NUnit.Extension.Net60PluggableAgent", "2.1.0-dev00019"),
-		new PackageReference("NUnit.Extension.Net70PluggableAgent", "2.1.0-dev00009") }
+		new PackageReference("NUnit.Extension.Net70PluggableAgent", "2.1.0-dev00010") }
 );
 
 var EngineCorePackage = new NuGetPackage(
