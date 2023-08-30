@@ -43,13 +43,24 @@ namespace TestCentric.Engine.Agents
         /// <summary>
         /// Stops the agent, releasing any resources
         /// </summary>
-        public abstract void Stop();
+        public virtual void Stop()
+        {
+            // Override if any action is needed
+        }
 
         /// <summary>
         ///  Creates a test runner
         /// </summary>
         public abstract ITestEngineRunner CreateRunner(TestPackage package);
 
+        /// <summary>
+        /// Wait for the agent to complete it's work and stop
+        /// </summary>
+        /// <remarks>
+        /// This is not called by the engine but only by our pluggable agents.
+        /// </remarks>
+        /// <param name="timeout"></param>
+        /// <returns></returns>
         public bool WaitForStop(int timeout)
         {
             return StopSignal.WaitOne(timeout);

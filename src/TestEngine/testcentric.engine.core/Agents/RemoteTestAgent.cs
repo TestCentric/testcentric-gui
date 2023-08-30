@@ -18,13 +18,21 @@ namespace TestCentric.Engine.Agents
     /// to it. Rather, it reports back to the sponsoring TestAgency upon
     /// startup so that the agency may in turn provide it to clients for use.
     /// </summary>
+    /// <remarks>
+    /// In the current implementation, we use remoting for agents targeting the .NET framework
+    /// and our own TCP protocol for agents targeting .NET Core.
+    /// </remarks>
     public class RemoteTestAgent : TestAgent
     {
         private static readonly Logger log = InternalTrace.GetLogger(typeof(RemoteTestAgent));
 
         /// <summary>
-        /// Construct a RemoteTestAgent
+        /// Construct a RemoteTestAgent.
         /// </summary>
+        /// <remarks>
+        /// The constructor is not referenced in the engine project because the engine doesn't
+        /// create RemoteTestAgents. All agents are now pluggable, so only the plugins use this.
+        /// </remarks>
         public RemoteTestAgent(Guid agentId)
             : base(agentId) { }
 
@@ -39,11 +47,14 @@ namespace TestCentric.Engine.Agents
             return Transport.Start();
         }
 
+#if NETFRAMEWORK
+        // For remoting, the agent stops the transport, but for TCP the transport is stopped directly
         public override void Stop()
         {
             log.Debug("Stopping");
             Transport.Stop();
         }
+#endif
 
         public override ITestEngineRunner CreateRunner(TestPackage package)
         {

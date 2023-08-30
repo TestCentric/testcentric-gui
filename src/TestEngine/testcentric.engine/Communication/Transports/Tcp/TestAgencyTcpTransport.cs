@@ -58,13 +58,13 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
             _agency.Register(agent);
         }
 
-        public void WaitForStop()
-        {
-            lock( _theLock )
-            {
-                Monitor.Wait( _theLock );
-            }
-        }
+        //public void WaitForStop()
+        //{
+        //    lock( _theLock )
+        //    {
+        //        Monitor.Wait( _theLock );
+        //    }
+        //}
 
         public void Dispose()
         {

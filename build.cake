@@ -7,7 +7,7 @@ const string ENGINE_API_PACKAGE_ID = "TestCentric.Engine.Api";
 const string TEST_BED_EXE = "test-bed.exe";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.1-dev00035
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.1-dev00044
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -214,9 +214,9 @@ var EnginePackage = new NuGetPackage(
 	},
 	tests: packageTests,
 	preloadedExtensions: new [] {
-		Net462PluggableAgent.SetVersion("2.1.0-dev00010"),
-		Net60PluggableAgent.SetVersion("2.1.0-dev00019"),
-		Net70PluggableAgent.SetVersion("2.1.0-dev00009") }
+		new PackageReference("NUnit.Extension.Net462PluggableAgent", "2.1.0-dev00010"),
+		new PackageReference("NUnit.Extension.Net60PluggableAgent", "2.1.0-dev00019"),
+		new PackageReference("NUnit.Extension.Net70PluggableAgent", "2.1.0-dev00009") }
 );
 
 var EngineCorePackage = new NuGetPackage(
@@ -273,7 +273,6 @@ var EngineApiPackage = new NuGetPackage(
 		HasDirectory("lib/netstandard2.0").WithFiles("testcentric.engine.api.dll")
 	});
 
-// NOTE: Order is important here
 BuildSettings.Packages.AddRange(new [] {
 	EngineApiPackage,
 	EngineCorePackage,

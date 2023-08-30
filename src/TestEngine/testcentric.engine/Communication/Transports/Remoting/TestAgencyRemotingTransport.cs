@@ -101,13 +101,13 @@ namespace TestCentric.Engine.Communication.Transports.Remoting
             _agency.Register(agent);
         }
 
-        public void WaitForStop()
-        {
-            lock( _theLock )
-            {
-                Monitor.Wait( _theLock );
-            }
-        }
+        //public void WaitForStop()
+        //{
+        //    lock( _theLock )
+        //    {
+        //        Monitor.Wait( _theLock );
+        //    }
+        //}
 
         public void Dispose()
         {
