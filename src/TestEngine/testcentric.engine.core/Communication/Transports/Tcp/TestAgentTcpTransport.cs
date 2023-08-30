@@ -26,6 +26,7 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
         private Socket _clientSocket;
         private ITestEngineRunner _runner;
 
+        // Transport is only created by the pluggable agents, not by the engine itself
         public TestAgentTcpTransport(RemoteTestAgent agent, string serverUrl)
         {
             Guard.ArgumentNotNull(agent, nameof(agent));
@@ -72,7 +73,7 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
 
         public void Stop()
         {
-            //Agent.StopSignal.Set();
+            // Nothing to do for TCP as it's all handled in the transport.
         }
 
         public ITestEngineRunner CreateRunner(TestPackage package)

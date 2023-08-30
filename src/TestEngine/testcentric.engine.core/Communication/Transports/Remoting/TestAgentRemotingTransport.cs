@@ -26,6 +26,7 @@ namespace TestCentric.Engine.Communication.Transports.Remoting
         private ITestAgency _agency;
         private readonly CurrentMessageCounter _currentMessageCounter = new CurrentMessageCounter();
 
+        // Transport is only created by the pluggable agents, not by the engine itself.
         public TestAgentRemotingTransport(RemoteTestAgent agent, string agencyUrl)
         {
             Agent = agent;
@@ -86,10 +87,6 @@ namespace TestCentric.Engine.Communication.Transports.Remoting
                 // Shut down nicely
                 _channel.StopListening(null);
                 ChannelServices.UnregisterChannel(_channel);
-
-                // Signal to other threads that it's okay to exit the process or start a new channel, etc.
-                log.Info("Set stop signal");
-                Agent.StopSignal.Set();
             });
         }
 
