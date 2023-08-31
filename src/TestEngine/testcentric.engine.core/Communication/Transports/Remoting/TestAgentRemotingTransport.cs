@@ -35,6 +35,8 @@ namespace TestCentric.Engine.Communication.Transports.Remoting
 
         public TestAgent Agent { get; }
 
+        #region ITestAgent Implementation
+
         public Guid Id => Agent.Id;
 
         public bool Start()
@@ -99,11 +101,7 @@ namespace TestCentric.Engine.Communication.Transports.Remoting
             return this;
         }
 
-        public void Dispose()
-        {
-            Agent.Dispose();
-            _runner.Dispose();
-        }
+        #endregion
 
         #region ITestEngineRunner Implementation
 
@@ -183,6 +181,12 @@ namespace TestCentric.Engine.Communication.Transports.Remoting
         public void ForcedStop()
         {
             _runner?.ForcedStop();
+        }
+
+        public void Dispose()
+        {
+            Agent.Dispose();
+            _runner.Dispose();
         }
 
         #endregion

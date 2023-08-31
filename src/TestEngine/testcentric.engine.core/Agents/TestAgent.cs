@@ -49,8 +49,10 @@ namespace TestCentric.Engine.Agents
         }
 
         /// <summary>
-        ///  Creates a test runner
+        ///  Creates a test runner for a TestPackage
         /// </summary>
+        /// <param name="package">The TestPackage for which a runner is to be created</param>
+        /// <returns>An ITestEngineRunner</returns>
         public abstract ITestEngineRunner CreateRunner(TestPackage package);
 
         /// <summary>
