@@ -87,6 +87,9 @@ namespace TestCentric.Engine.Communication.Transports.Remoting
                 // Shut down nicely
                 _channel.StopListening(null);
                 ChannelServices.UnregisterChannel(_channel);
+
+                // Make sure the agent exits
+                Agent.StopSignal.Set();
             });
         }
 
