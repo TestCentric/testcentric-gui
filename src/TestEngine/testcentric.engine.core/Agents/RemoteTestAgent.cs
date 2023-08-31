@@ -40,6 +40,11 @@ namespace TestCentric.Engine.Agents
 
         public int ProcessId => System.Diagnostics.Process.GetCurrentProcess().Id;
 
+
+        /// <summary>
+        /// Starts the agent, performing any required initialization
+        /// </summary>
+        /// <returns><c>true</c> if the agent was started successfully.</returns>
         public override bool Start()
         {
             Guard.OperationValid(Transport != null, "Transport must be set before calling Start().");
@@ -47,15 +52,29 @@ namespace TestCentric.Engine.Agents
             return Transport.Start();
         }
 
-#if NETFRAMEWORK
-        // For remoting, the agent stops the transport, but for TCP the transport is stopped directly
+        /// <summary>
+        /// Stop the agent, releasing any resources
+        /// </summary>
+        /// <remarks>
+        /// Using the Remoting transport, the agent stops the transport. Using TCP
+        /// transport, the transport stops the agent.
+        /// </remarks>
         public override void Stop()
         {
             log.Debug("Stopping");
+#if NETFRAMEWORK
+            // For remoting, the agent stops the transport, but for TCP the transport is stopped directly
             Transport.Stop();
-        }
 #endif
+            StopSignal.Set();
+        }
 
+
+        /// <summary>
+        /// Creates a test runner for a TestPackage
+        /// </summary>
+        /// <param name="package">The TestPackage for which a runner is to be created</param>
+        /// <returns>An ITestEngineRunner</returns>
         public override ITestEngineRunner CreateRunner(TestPackage package)
         {
             Console.WriteLine("Creating the runner");

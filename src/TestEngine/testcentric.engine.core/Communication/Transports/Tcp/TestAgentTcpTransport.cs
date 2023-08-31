@@ -73,7 +73,7 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
 
         public void Stop()
         {
-            Agent.StopSignal.Set();
+            Agent.Stop();
         }
 
         public ITestEngineRunner CreateRunner(TestPackage package)
