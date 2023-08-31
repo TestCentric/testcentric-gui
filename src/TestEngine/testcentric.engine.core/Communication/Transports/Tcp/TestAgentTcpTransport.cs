@@ -73,7 +73,7 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
 
         public void Stop()
         {
-            // Nothing to do for TCP as it's all handled in the transport.
+            Agent.StopSignal.Set();
         }
 
         public ITestEngineRunner CreateRunner(TestPackage package)
@@ -148,7 +148,7 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
                             _runner.ForcedStop();
                             break;
 
-                        case "Stop":
+                        case MessageCode.StopAgent:
                             keepRunning = false;
                             break;
                     }
