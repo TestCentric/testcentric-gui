@@ -432,6 +432,7 @@ namespace TestCentric.Gui.Model
             if (testNode == null)
                 throw new ArgumentNullException(nameof(testNode));
 
+            log.Info($"Running test: {testNode.GetAttribute("name")}");
             RunTests(new TestRunSpecification(testNode, CategoryFilter));
         }
 
@@ -440,6 +441,7 @@ namespace TestCentric.Gui.Model
             if (tests == null)
                 throw new ArgumentNullException(nameof(tests));
 
+            log.Info($"Running test: {string.Join(", ", tests.Select(node => node.GetAttribute("name").ToArray()))}");
             RunTests(new TestRunSpecification(tests, CategoryFilter));
         }
 
@@ -448,6 +450,7 @@ namespace TestCentric.Gui.Model
             if (_lastTestRun == null)
                 throw new InvalidOperationException("RepeatLastRun called before any tests were run");
 
+            log.Info($"Running test: {string.Join(", ", _lastTestRun.SelectedTests.Select(node => node.GetAttribute("name").ToArray()))}");
             RunTests(_lastTestRun);
         }
 
@@ -466,9 +469,19 @@ namespace TestCentric.Gui.Model
 
         public void SaveResults(string filePath, string format = "nunit3")
         {
-            var resultWriter = Services.ResultService.GetResultWriter(format, new object[0]);
-            var results = GetResultForTest(LoadedTests.Id);
-            resultWriter.WriteResultFile(results.Xml, filePath);
+            log.Debug($"Saving test results to {filePath} in {format} format");
+
+            try
+            {
+                var resultWriter = Services.ResultService.GetResultWriter(format, new object[0]);
+                var results = GetResultForTest(LoadedTests.Id);
+                log.Debug(results.Xml.OuterXml);
+                resultWriter.WriteResultFile(results.Xml, filePath);
+            }
+            catch(Exception ex)
+            {
+                log.Error("Failed to save results", ex);
+            }
         }
 
         public TestNode GetTestById(string id)

@@ -12,6 +12,8 @@ namespace TestCentric.Gui.Model
 {
     public class TestEventDispatcher : ITestEvents, ITestEventListener
     {
+        private static Logger log = InternalTrace.GetLogger("TestEventDispatcher");
+
         private TestModel _model;
 
         private Dictionary<string, ProjectInfo> _projectLookup;
@@ -129,6 +131,7 @@ namespace TestCentric.Gui.Model
         public void OnTestEvent(string report)
         {
             XmlNode xmlNode = XmlHelper.CreateXmlNode(report);
+            log.Debug($"Received event {xmlNode.Name}");
 
             switch (xmlNode.Name)
             {
@@ -217,12 +220,22 @@ namespace TestCentric.Gui.Model
 
             foreach (var projectNode in _model.LoadedTests.Select(tn => tn.Type == "Project"))
             {
-                var projectInfo = new ProjectInfo(projectNode);
+                var name = projectNode.GetAttribute("name");
 
-                foreach (var child in projectNode.Select((tn) => tn.Type == "Assembly"))
+                // TODO: Figure out why we are seeing duplicate assembly ids
+                try
                 {
-                    projectInfo.AssembliesToRun++;
-                    _projectLookup.Add(child.GetAttribute("id"), projectInfo);
+                    var projectInfo = new ProjectInfo(projectNode);
+
+                    foreach (var child in projectNode.Select((tn) => tn.Type == "Assembly"))
+                    {
+                        projectInfo.AssembliesToRun++;
+                        _projectLookup.Add(child.GetAttribute("id"), projectInfo);
+                    }
+                }
+                catch(Exception ex)
+                {
+                    log.Error("Unexpected exception", ex);
                 }
             }
         }
