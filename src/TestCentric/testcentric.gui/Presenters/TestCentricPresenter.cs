@@ -191,6 +191,7 @@ namespace TestCentric.Gui.Presenters
             // Separate internal method for testing
             void OnRunFinished(ResultNode result)
             {
+                log.Debug("Test run complete");
                 OnLongRunningOperationComplete();
 
                 UpdateViewCommands();
@@ -274,7 +275,10 @@ namespace TestCentric.Gui.Presenters
                 // Load test specified on command line or
                 // the most recent one if options call for it
                 if (_options.InputFiles.Count != 0)
+                {
+                    log.Debug($"Loading files from command-line: {string.Join(", ", _options.InputFiles.ToArray())}");
                     LoadTests(_options.InputFiles);
+                }
                 else if (_settings.Gui.LoadLastProject && !_options.NoLoad)
                 {
                     foreach (string entry in _recentFiles.Entries)
@@ -300,7 +304,10 @@ namespace TestCentric.Gui.Presenters
 
                 // Run loaded test automatically if called for
                 if (_model.IsPackageLoaded && _options.RunAllTests)
+                {
+                    log.Debug("Running all tests");
                     _model.RunTests(_model.LoadedTests);
+                }
                 // Currently, --unattended without --run does nothing except exit.
                 else if (_options.Unattended)
                     _view.Close();

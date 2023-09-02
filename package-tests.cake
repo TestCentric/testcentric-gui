@@ -13,7 +13,7 @@ public static void DefinePackageTests()
 	// Tests of single assemblies targeting each runtime we support
 
 	PackageTests.Add(new PackageTest(1, "Net462Test", "Run net462 mock-assembly.dll under .NET 4.6.2",
-		"net462/mock-assembly.dll",
+		"net462/mock-assembly.dll --trace:Debug",
 		MockAssemblyExpectedResult("Net462AgentLauncher")));
 
 	PackageTests.Add(new PackageTest(1, "Net35Test", "Run net35 mock-assembly.dll under .NET 4.6.2",
@@ -110,17 +110,15 @@ public static void DefinePackageTests()
 	// Multiple assembly tests
 
     PackageTests.Add(new PackageTest(1, "Net462PlusNet35Test", "Run net462 and net35 builds of mock-assembly.dll together",
-        "net462/mock-assembly.dll net35/mock-assembly.dll",
+        "net462/mock-assembly.dll net35/mock-assembly.dll --trace:Debug",
         MockAssemblyExpectedResult("Net462AgentLauncher", "Net462AgentLauncher")));
 
     PackageTests.Add(new PackageTest(1, "Net462PlusNet60Test", "Run different builds of mock-assembly.dll together",
         "net462/mock-assembly.dll net6.0/mock-assembly.dll",
         MockAssemblyExpectedResult("Net462AgentLauncher", "Net60AgentLauncher")));
 
-    // Level 2 tests are run for PRs and when packages will be published
-
 	// TODO: Suppress V2 tests until driver is working
-    //PackageTests.Add(new PackageTest(2, "NUnitV2Test", "Run mock-assembly.dll built for NUnit V2",
+    //PackageTests.Add(new PackageTest(1, "NUnitV2Test", "Run mock-assembly.dll built for NUnit V2",
     //	"v2-tests/mock-assembly.dll",
     //	new ExpectedResult("Failed")
     //	{
@@ -138,8 +136,8 @@ public static void DefinePackageTests()
     // first in the project file.
     if (BuildSettings.Configuration == "Release")
     {
-        PackageTests.Add(new PackageTest(2, "NUnitProjectTest", "Run an NUnit project",
-            "../../TestProject.nunit",
+        PackageTests.Add(new PackageTest(1, "NUnitProjectTest", "Run an NUnit project",
+            "../../TestProject.nunit --trace:Debug",
             MockAssemblyExpectedResult(
                 "Net462AgentLauncher", "Net462AgentLauncher", "Net60AgentLauncher", "Net60AgentLauncher"),
             NUnitProjectLoader));
