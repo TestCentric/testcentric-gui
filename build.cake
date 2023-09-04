@@ -11,13 +11,13 @@ static string[] VALID_CONFIGS = new [] { "Release", "Debug" };
 // NOTE: This must match what is actually referenced by
 // the GUI test model project. Hopefully, this is a temporary
 // fix, which we can get rid of in the future.
-const string REF_ENGINE_VERSION = "2.0.0-dev00032";
+const string REF_ENGINE_VERSION = "2.0.0-beta2";
 
 // We must use the latest versions of the pre-installed agents
 // which use the engine version specified above.
-const string NET462_AGENT_VERSION = "2.1.0-dev00016";
-const string NET60_AGENT_VERSION = "2.1.0-dev00022";
-const string NET70_AGENT_VERSION = "2.1.0-dev00012";
+const string NET462_AGENT_VERSION = "2.1.1";
+const string NET60_AGENT_VERSION = "2.1.0";
+const string NET70_AGENT_VERSION = "2.1.0";
 
 const string PACKAGE_NAME = "testcentric-gui";
 const string NUGET_PACKAGE_NAME = "TestCentric.GuiRunner";
@@ -26,7 +26,7 @@ const string GUI_RUNNER = "testcentric.exe";
 const string GUI_TESTS = "*.Tests.dll";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.1-dev00044
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.1-dev00045
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
