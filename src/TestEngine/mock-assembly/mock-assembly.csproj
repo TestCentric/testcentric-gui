@@ -7,7 +7,7 @@
 	<OutputPath>..\..\..\bin\$(Configuration)\engine-tests\</OutputPath>
 	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\nunit.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\testcentric.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <!-- Properties used in generating AssemblyInfo.cs for this project -->
