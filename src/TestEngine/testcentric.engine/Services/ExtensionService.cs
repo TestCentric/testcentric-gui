@@ -32,8 +32,11 @@ namespace TestCentric.Engine.Services
         private readonly IExtensionManager _extensionManager;
 
         public ExtensionService()
+            : this(new ExtensionManager(ENGINE_ASSEMBLY, ENGINE_API_ASSEMBLY, TESTCENTRIC_API_ASSEMBLY)) { }
+
+        public ExtensionService(IExtensionManager extensionManager)
         {
-            _extensionManager = new ExtensionManager(ENGINE_ASSEMBLY, ENGINE_API_ASSEMBLY, TESTCENTRIC_API_ASSEMBLY);
+            _extensionManager = extensionManager;
         }
 
         #region IExtensionService Implementation
@@ -85,6 +88,8 @@ namespace TestCentric.Engine.Services
 
         public IList<Assembly> RootAssemblies { get; } = new List<Assembly>();
 
+        public string ExtensionBaseDirectory { get; set; } = ENGINE_DIRECTORY;
+
         public IEnumerable<ExtensionNode> GetExtensionNodes<T>(bool includeDisabled = false)
         {
             return _extensionManager.GetExtensionNodes<T>(includeDisabled);
@@ -103,7 +108,7 @@ namespace TestCentric.Engine.Services
         {
             try
             {
-                _extensionManager.Initialize(ENGINE_DIRECTORY);
+                _extensionManager.Initialize(ExtensionBaseDirectory);
                 Status = ServiceStatus.Started;
             }
             catch
