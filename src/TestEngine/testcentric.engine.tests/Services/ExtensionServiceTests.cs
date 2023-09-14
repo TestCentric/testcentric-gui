@@ -3,7 +3,6 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-#if false // needs to be reorganized to provide access to some extension manager calls
 using System;
 using System.Linq;
 using System.IO;
@@ -14,6 +13,7 @@ using NUnit.Engine.Extensibility;
 using NUnit.Framework;
 using TestCentric.Engine.Internal;
 using TestCentric.Engine.Extensibility;
+using TestCentric.Extensibility;
 
 namespace TestCentric.Engine.Services
 {
@@ -28,7 +28,8 @@ namespace TestCentric.Engine.Services
             "/NUnit/Engine/TypeExtensions/IResultWriter",
             "/NUnit/Engine/TypeExtensions/ITestEventListener",
             "/NUnit/Engine/TypeExtensions/IDriverFactory",
-            "/NUnit/Engine/TypeExtensions/IService"
+            "/NUnit/Engine/TypeExtensions/IService",
+            "/NUnit/Engine/TypeExtensions/IAgentLauncher"
         };
 
         private static readonly Type[] KnownExtensionPointTypes = {
@@ -36,7 +37,8 @@ namespace TestCentric.Engine.Services
             typeof(IResultWriter),
             typeof(ITestEventListener),
             typeof(IDriverFactory),
-            typeof(IService)
+            typeof(IService),
+            typeof(IAgentLauncher)
         };
 
         private static readonly int[] KnownExtensionPointCounts = { 1, 1, 2, 0, 1 };
@@ -45,15 +47,10 @@ namespace TestCentric.Engine.Services
         [SetUp]
         public void CreateService()
         {
+            // Initialize service to use actual extension points with dummy extensions installed
             _serviceInterface = _serviceClass = new ExtensionService();
-
-            // Rather than actually starting the service, which would result
-            // in finding the extensions actually in use on the current system,
-            // we simulate the start using this assemblies dummy extensions.
-            _serviceClass.FindExtensionPoints(typeof(TestEngine).Assembly);
-            _serviceClass.FindExtensionPoints(typeof(ITestEngine).Assembly);
-
-            _serviceClass.FindExtensionsInAssembly(new ExtensionAssembly(GetType().Assembly.Location, false));
+            _serviceClass.ExtensionBaseDirectory = Path.GetDirectoryName(GetType().Assembly.Location);
+            _serviceClass.StartService();
         }
 
         [Test]
@@ -73,17 +70,7 @@ namespace TestCentric.Engine.Services
             Assert.That(ep.TypeName, Is.EqualTo(type.FullName));
         }
 
-        [Test, Sequential]
-        public void CanGetExtensionPointByType(
-            [ValueSource(nameof(KnownExtensionPointPaths))] string path,
-            [ValueSource(nameof(KnownExtensionPointTypes))] Type type)
-        {
-            var ep = _serviceClass.GetExtensionPoint(type);
-            Assert.NotNull(ep);
-            Assert.That(ep.Path, Is.EqualTo(path));
-            Assert.That(ep.TypeName, Is.EqualTo(type.FullName));
-        }
-
+#if false // needs to be reorganized to provide access to some extension manager calls
 #pragma warning disable 414
         private static readonly string[] KnownExtensions = {
             "TestCentric.Engine.DummyProjectLoaderExtension",
@@ -275,6 +262,6 @@ namespace TestCentric.Engine.Services
         {
             return GetSiblingDirectory("netcoreapp2.1");
         }
+#endif
     }
 }
-#endif
