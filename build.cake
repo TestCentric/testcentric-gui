@@ -214,9 +214,9 @@ var EnginePackage = new NuGetPackage(
 	},
 	tests: packageTests,
 	preloadedExtensions: new [] {
-		new PackageReference("NUnit.Extension.Net462PluggableAgent", "2.2.0-dev00006"),
-		new PackageReference("NUnit.Extension.Net60PluggableAgent", "2.2.0-dev00003"),
-		new PackageReference("NUnit.Extension.Net70PluggableAgent", "2.2.0-dev00006") }
+		new PackageReference("TestCentric.Extension.Net462PluggableAgent", "2.2.0"),
+		new PackageReference("TestCentric.Extension.Net60PluggableAgent", "2.2.0"),
+		new PackageReference("TestCentric.Extension.Net70PluggableAgent", "2.2.0") }
 );
 
 var EngineCorePackage = new NuGetPackage(
