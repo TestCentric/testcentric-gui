@@ -118,7 +118,7 @@ TestResult.xml
 *.VisualState.xml
 
 # Packaging Directory
-package
+packaging
 
 # Tools pulled from nuget
 tools

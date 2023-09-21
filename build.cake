@@ -7,7 +7,7 @@ const string ENGINE_API_PACKAGE_ID = "TestCentric.Engine.Api";
 const string TEST_BED_EXE = "test-bed.exe";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.1-dev00044
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00048
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -31,8 +31,6 @@ BuildSettings.Initialize(
 //////////////////////////////////////////////////////////////////////
 // DEFINE PACKAGE TESTS
 //////////////////////////////////////////////////////////////////////
-
-// TODO: We need a way to pre-load the standard agents for testing
 
 //   Level 1 tests are run each time we build the packages
 //   Level 2 tests are run for PRs and when packages will be published
@@ -214,9 +212,9 @@ var EnginePackage = new NuGetPackage(
 	},
 	tests: packageTests,
 	preloadedExtensions: new [] {
-		new PackageReference("TestCentric.Extension.Net462PluggableAgent", "2.2.0"),
-		new PackageReference("TestCentric.Extension.Net60PluggableAgent", "2.2.0"),
-		new PackageReference("TestCentric.Extension.Net70PluggableAgent", "2.2.0") }
+		new PackageReference("TestCentric.Extension.Net462PluggableAgent", "2.3.0-dev00007"),
+		new PackageReference("TestCentric.Extension.Net60PluggableAgent", "2.3.0-dev00003"),
+		new PackageReference("TestCentric.Extension.Net70PluggableAgent", "2.3.0-dev00004") }
 );
 
 var EngineCorePackage = new NuGetPackage(
