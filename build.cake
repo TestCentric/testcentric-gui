@@ -26,7 +26,7 @@ const string GUI_RUNNER = "testcentric.exe";
 const string GUI_TESTS = "*.Tests.dll";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.1-dev00045
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00048
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
