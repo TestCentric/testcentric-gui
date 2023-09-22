@@ -1,2 +1,4 @@
 ../../nunit-extension-*/tools/     # find extensions installed under chocolatey
 ../../../nunit-extension-*/tools/
+../../testcentric-extension-*/tools/     # find extensions installed under chocolatey
+../../../testcentric-extension-*/tools/

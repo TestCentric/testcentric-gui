@@ -11,13 +11,13 @@ static string[] VALID_CONFIGS = new [] { "Release", "Debug" };
 // NOTE: This must match what is actually referenced by
 // the GUI test model project. Hopefully, this is a temporary
 // fix, which we can get rid of in the future.
-const string REF_ENGINE_VERSION = "2.0.0-beta2";
+const string REF_ENGINE_VERSION = "2.0.0-dev00008";
 
 // We must use the latest versions of the pre-installed agents
 // which use the engine version specified above.
-const string NET462_AGENT_VERSION = "2.1.1";
-const string NET60_AGENT_VERSION = "2.1.0";
-const string NET70_AGENT_VERSION = "2.1.0";
+const string NET462_AGENT_VERSION = "2.3.0-dev00007";
+const string NET60_AGENT_VERSION = "2.3.0-dev00003";
+const string NET70_AGENT_VERSION = "2.3.0-dev00004";
 
 const string PACKAGE_NAME = "testcentric-gui";
 const string NUGET_PACKAGE_NAME = "TestCentric.GuiRunner";
@@ -26,7 +26,7 @@ const string GUI_RUNNER = "testcentric.exe";
 const string GUI_TESTS = "*.Tests.dll";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.0.1-dev00045
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00048
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -101,9 +101,9 @@ var nugetPackage = new NuGetPackage(
 			new DirectoryContent("tools/Images/Tree/Visual Studio").WithFiles(
 				"Images/Tree/Visual Studio/Success.png", "Images/Tree/Visual Studio/Failure.png", "Images/Tree/Visual Studio/Ignored.png", "Images/Tree/Visual Studio/Inconclusive.png", "Images/Tree/Visual Studio/Skipped.png") )
 		.WithDependencies(
-			new PackageReference("NUnit.Extension.Net462PluggableAgent", NET462_AGENT_VERSION),
-			new PackageReference("NUnit.Extension.Net60PluggableAgent", NET60_AGENT_VERSION),
-			new PackageReference("NUnit.Extension.Net70PluggableAgent", NET70_AGENT_VERSION)
+			new PackageReference("TestCentric.Extension.Net462PluggableAgent", NET462_AGENT_VERSION),
+			new PackageReference("TestCentric.Extension.Net60PluggableAgent", NET60_AGENT_VERSION),
+			new PackageReference("TestCentric.Extension.Net70PluggableAgent", NET70_AGENT_VERSION)
 		),
 	testRunner: new GuiSelfTester(BuildSettings.NuGetTestDirectory + "TestCentric.GuiRunner/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
@@ -143,9 +143,9 @@ var chocolateyPackage = new ChocolateyPackage(
 			new DirectoryContent("tools/Images/Tree/Visual Studio").WithFiles(
 				"Images/Tree/Visual Studio/Success.png", "Images/Tree/Visual Studio/Failure.png", "Images/Tree/Visual Studio/Ignored.png", "Images/Tree/Visual Studio/Inconclusive.png", "Images/Tree/Visual Studio/Skipped.png") )
 		.WithDependencies(
-			new PackageReference("nunit-extension-net462-pluggable-agent", NET462_AGENT_VERSION),
-			new PackageReference("nunit-extension-net60-pluggable-agent", NET60_AGENT_VERSION),
-			new PackageReference("nunit-extension-net70-pluggable-agent", NET70_AGENT_VERSION)
+			new PackageReference("testcentric-extension-net462-pluggable-agent", NET462_AGENT_VERSION),
+			new PackageReference("testcentric-extension-net60-pluggable-agent", NET60_AGENT_VERSION),
+			new PackageReference("testcentric-extension-net70-pluggable-agent", NET70_AGENT_VERSION)
 		),
 	testRunner: new GuiSelfTester(BuildSettings.ChocolateyTestDirectory + "testcentric-gui/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
