@@ -5,12 +5,13 @@
 
 using System;
 using System.Diagnostics;
+using System.IO;
 using NUnit.Engine;
 using NUnit.Engine.Extensibility;
 
 namespace TestCentric.Engine.Extensibility
 {
-    [TypeExtensionPoint(
+    [TypeExtensionPoint("/TestCentric/Engine/TypeExtensions/IAgentLauncher",
         Description = "Launches an Agent Process for supported target runtimes")]
     public interface IAgentLauncher
     {

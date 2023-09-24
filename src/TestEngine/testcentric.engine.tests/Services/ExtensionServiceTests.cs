@@ -29,7 +29,7 @@ namespace TestCentric.Engine.Services
             "/NUnit/Engine/TypeExtensions/ITestEventListener",
             "/NUnit/Engine/TypeExtensions/IDriverFactory",
             "/NUnit/Engine/TypeExtensions/IService",
-            "/NUnit/Engine/TypeExtensions/IAgentLauncher"
+            "/TestCentric/Engine/TypeExtensions/IAgentLauncher"
         };
 
         private static readonly Type[] KnownExtensionPointTypes = {
