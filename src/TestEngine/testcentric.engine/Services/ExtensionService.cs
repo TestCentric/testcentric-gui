@@ -108,7 +108,7 @@ namespace TestCentric.Engine.Services
         {
             try
             {
-                _extensionManager.Initialize(ExtensionBaseDirectory);
+                _extensionManager.Initialize(ExtensionBaseDirectory, "/NUnit/Engine/TypeExtensions/");
                 Status = ServiceStatus.Started;
             }
             catch
