@@ -11,7 +11,7 @@ static string[] VALID_CONFIGS = new [] { "Release", "Debug" };
 // NOTE: This must match what is actually referenced by
 // the GUI test model project. Hopefully, this is a temporary
 // fix, which we can get rid of in the future.
-const string REF_ENGINE_VERSION = "2.0.0-dev00008";
+const string REF_ENGINE_VERSION = "2.0.0-dev00010";
 
 // We must use the latest versions of the pre-installed agents
 // which use the engine version specified above.

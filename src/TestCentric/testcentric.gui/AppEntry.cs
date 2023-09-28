@@ -62,7 +62,7 @@ namespace TestCentric.Gui
                 return 3;
             }
 
-            if (model.Services.ExtensionService.GetExtensionNodes("/NUnit/Engine/TypeExtensions/IAgentLauncher").Count() == 0)
+            if (model.Services.ExtensionService.GetExtensionNodes("/TestCentric/Engine/TypeExtensions/IAgentLauncher").Count() == 0)
             {
                 if (!MessageDisplay.OkCancel(
                     "Either the GUI was installed without any agents or all the installed agents have been deleted.\r\n\r\n" +
