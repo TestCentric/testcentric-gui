@@ -29,15 +29,7 @@ namespace TestCentric.Engine.Services
         static readonly Assembly TESTCENTRIC_API_ASSEMBLY = typeof(IAgentLauncher).Assembly;
         static readonly string ENGINE_DIRECTORY = Path.GetDirectoryName(AssemblyHelper.GetAssemblyPath(ENGINE_ASSEMBLY));
 
-        private readonly IExtensionManager _extensionManager;
-
-        public ExtensionService()
-            : this(new ExtensionManager(ENGINE_ASSEMBLY, ENGINE_API_ASSEMBLY, TESTCENTRIC_API_ASSEMBLY)) { }
-
-        public ExtensionService(IExtensionManager extensionManager)
-        {
-            _extensionManager = extensionManager;
-        }
+        private IExtensionManager _extensionManager;
 
         #region IExtensionService Implementation
 
@@ -108,7 +100,13 @@ namespace TestCentric.Engine.Services
         {
             try
             {
-                _extensionManager.Initialize(ExtensionBaseDirectory, "/NUnit/Engine/TypeExtensions/");
+                _extensionManager = new ExtensionManager(ENGINE_ASSEMBLY, ENGINE_API_ASSEMBLY, TESTCENTRIC_API_ASSEMBLY)
+                {
+                    DefaultTypeExtensionPrefix = "/NUnit/Engine/TypeExtensions/"
+                };                   
+                
+                _extensionManager.Initialize();
+
                 Status = ServiceStatus.Started;
             }
             catch
