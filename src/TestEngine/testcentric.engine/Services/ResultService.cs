@@ -11,7 +11,7 @@ using TestCentric.Extensibility;
 
 namespace TestCentric.Engine.Services
 {
-    public class ResultService : Service, IResultService
+    class ResultService : Service, IResultService
     {
         private readonly string[] BUILT_IN_FORMATS = new string[] { "nunit3", "cases", "user" };
         private IEnumerable<ExtensionNode> _extensionNodes = new ExtensionNode[0];

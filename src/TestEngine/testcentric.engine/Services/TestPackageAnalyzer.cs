@@ -17,7 +17,7 @@ namespace TestCentric.Engine.Services
     /// ensure that all information needed by lower levels of the engine
     /// is explicitly specified.
     /// </summary>
-    public class TestPackageAnalyzer : Service
+    class TestPackageAnalyzer : Service
     {
         static Logger log = InternalTrace.GetLogger(typeof(TestPackageAnalyzer));
 

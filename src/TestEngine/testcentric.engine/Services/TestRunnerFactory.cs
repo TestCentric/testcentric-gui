@@ -15,7 +15,7 @@ namespace TestCentric.Engine.Services
     /// runner for a given package to be loaded and run either in a
     /// separate process or within the same process.
     /// </summary>
-    public class TestRunnerFactory : Service, ITestRunnerFactory
+    class TestRunnerFactory : Service, ITestRunnerFactory
     {
         /// <summary>
         /// Returns a test runner based on the settings in a TestPackage.

@@ -17,7 +17,7 @@ namespace TestCentric.Engine.Services
     /// <remarks>
     /// Depends on ExtensionService (optional)
     /// </remarks>
-    public class ProjectService : Service, IProjectService
+    class ProjectService : Service, IProjectService
     {
         Dictionary<string, ExtensionNode> _extensionIndex = new Dictionary<string, ExtensionNode>();
 

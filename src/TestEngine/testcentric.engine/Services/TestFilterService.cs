@@ -7,7 +7,7 @@ using NUnit.Engine;
 
 namespace TestCentric.Engine.Services
 {
-    public class TestFilterService : Service, ITestFilterService
+    class TestFilterService : Service, ITestFilterService
     {
         public ITestFilterBuilder GetTestFilterBuilder()
         {
