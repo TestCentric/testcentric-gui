@@ -10,7 +10,7 @@ namespace TestCentric.Engine.Services
     /// <summary>
     /// A Test Runner factory can supply a suitable test runner for a given package
     /// </summary>
-    public interface ITestRunnerFactory
+    internal interface ITestRunnerFactory
     {
         /// <summary>
         /// Return a suitable runner for the package provided as an argument

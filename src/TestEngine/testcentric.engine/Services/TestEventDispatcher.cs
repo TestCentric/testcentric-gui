@@ -16,7 +16,7 @@ namespace TestCentric.Engine.Services
     /// <summary>
     /// TestEventDispatcher is used to send test events to a number of listeners
     /// </summary>
-    public class TestEventDispatcher : MarshalByRefObject, ITestEventListener, IService
+    class TestEventDispatcher : MarshalByRefObject, ITestEventListener, IService
     {
         private object _eventLock = new object();
         private ExtensionService _extensionService;

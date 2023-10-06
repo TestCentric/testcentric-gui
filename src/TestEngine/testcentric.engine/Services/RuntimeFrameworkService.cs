@@ -16,7 +16,7 @@ using TestCentric.Engine.Services.RuntimeLocators;
 
 namespace TestCentric.Engine.Services
 {
-    public class RuntimeFrameworkService : Service, IRuntimeFrameworkService, IAvailableRuntimes
+    class RuntimeFrameworkService : Service, IRuntimeFrameworkService, IAvailableRuntimes
     {
         private static readonly string DEFAULT_WINDOWS_MONO_DIR =
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "Mono");

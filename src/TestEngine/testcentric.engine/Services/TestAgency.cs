@@ -27,7 +27,7 @@ namespace TestCentric.Engine.Services
     /// but only one, ProcessAgent is implemented
     /// at this time.
     /// </summary>
-    public class TestAgency : ITestAgentProvider, ITestAgency, IService
+    class TestAgency : ITestAgentProvider, ITestAgency, IService
     {
         private static readonly Logger log = InternalTrace.GetLogger(typeof(TestAgency));
 

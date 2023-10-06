@@ -20,7 +20,7 @@ namespace TestCentric.Engine.Services
     /// separate service because it will eventually allow
     /// extensions in support of new test frameworks.
     /// </remarks>
-    public class TestFrameworkService : Service, ITestFrameworkService
+    class TestFrameworkService : Service, ITestFrameworkService
     {
         static Logger log = InternalTrace.GetLogger(typeof(TestFrameworkService));
 

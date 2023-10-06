@@ -14,7 +14,7 @@ namespace TestCentric.Engine.Services
     /// An object implementing ITestAgentProvider is able to provide
     /// test agents, which satisfy the criteria specified in a TestPackage.
     /// </summary>
-    public interface ITestAgentProvider : ITestAgentInfo
+    internal interface ITestAgentProvider : ITestAgentInfo
     {
         /// <summary>
         /// Returns true if an agent can be found, which is suitable

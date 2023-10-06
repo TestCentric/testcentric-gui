@@ -20,7 +20,7 @@ namespace TestCentric.Engine.Services
     /// maintains them in a database. It can return extension nodes or
     /// actual extension objects on request.
     /// </summary>
-    public class ExtensionService : Service, IExtensionService
+    class ExtensionService : Service, IExtensionService
     {
         static Logger log = InternalTrace.GetLogger(typeof(ExtensionService));
 
