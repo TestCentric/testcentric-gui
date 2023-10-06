@@ -12,7 +12,7 @@ namespace TestCentric.Engine.Services
     /// The ITestFrameworkService interface is able to detect known
     /// test frameworks referenced by an assembly.
     /// </summary>
-    public interface ITestFrameworkService
+    internal interface ITestFrameworkService
     {
         /// <summary>
         /// Returns a list of test frameworks known to this service.
@@ -30,7 +30,7 @@ namespace TestCentric.Engine.Services
     /// The ITestFramework interface represents a reference
     /// to a known test framework found in a test assembly.
     /// </summary>
-    public interface ITestFrameworkReference
+    internal interface ITestFrameworkReference
     {
         /// <summary>
         /// Gets the name of the test framework.
