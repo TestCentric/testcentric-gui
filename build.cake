@@ -354,7 +354,7 @@ Task("AppVeyor")
 	.IsDependentOn("Test")
 	.IsDependentOn("PackageEngineApi")
 	.IsDependentOn("PackageEngineCore")
-	.IsDependentOn("PackageEngine")
+	//.IsDependentOn("PackageEngine")
 	.IsDependentOn("Publish")
 	.IsDependentOn("CreateDraftRelease")
 	.IsDependentOn("CreateProductionRelease");
