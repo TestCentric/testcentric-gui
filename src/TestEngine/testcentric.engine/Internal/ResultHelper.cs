@@ -6,7 +6,6 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
-using NUnit.Engine;
 
 namespace TestCentric.Engine.Internal
 {

@@ -4,14 +4,9 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using System.Xml;
-using NUnit.Engine;
-using NUnit.Engine.Extensibility;
 using TestCentric.Engine.Drivers;
 using TestCentric.Engine.Internal;
+using TestCentric.Engine.Extensibility;
 
 namespace TestCentric.Engine.Runners
 {
@@ -73,9 +68,9 @@ namespace TestCentric.Engine.Runners
             {
                 return new TestEngineResult(_driver.Explore(filter.Text));
             }
-            catch (Exception ex) when (!(ex is NUnitEngineException))
+            catch (Exception ex) when (!(ex is EngineException))
             {
-                throw new NUnitEngineException("An exception occurred in the driver while exploring tests.", ex);
+                throw new EngineException("An exception occurred in the driver while exploring tests.", ex);
             }
         }
 
@@ -113,9 +108,9 @@ namespace TestCentric.Engine.Runners
             {
                 return new TestEngineResult(_driver.Load(testFile, TestPackage.Settings));
             }
-            catch (Exception ex) when (!(ex is NUnitEngineException))
+            catch (Exception ex) when (!(ex is EngineException))
             {
-                throw new NUnitEngineException("An exception occurred in the driver while loading tests.", ex);
+                throw new EngineException("An exception occurred in the driver while loading tests.", ex);
             }
         }
 
@@ -133,9 +128,9 @@ namespace TestCentric.Engine.Runners
             {
                 return _driver.CountTestCases(filter.Text);
             }
-            catch (Exception ex) when (!(ex is NUnitEngineException))
+            catch (Exception ex) when (!(ex is EngineException))
             {
-                throw new NUnitEngineException("An exception occurred in the driver while counting test cases.", ex);
+                throw new EngineException("An exception occurred in the driver while counting test cases.", ex);
             }
         }
 
@@ -164,10 +159,10 @@ namespace TestCentric.Engine.Runners
                     driverResult = _driver.Run(listener, filter.Text);
                     log.Debug("Got driver Result");
                 }
-                catch (Exception ex) when (!(ex is NUnitEngineException))
+                catch (Exception ex) when (!(ex is EngineException))
                 {
                     log.Debug("An exception occurred in the driver while running tests.", ex);
-                    throw new NUnitEngineException("An exception occurred in the driver while running tests.", ex);
+                    throw new EngineException("An exception occurred in the driver while running tests.", ex);
                 }
 
             if (_assemblyResolver != null)
@@ -190,9 +185,9 @@ namespace TestCentric.Engine.Runners
             {
                 _driver.StopRun(false);
             }
-            catch (Exception ex) when (!(ex is NUnitEngineException))
+            catch (Exception ex) when (!(ex is EngineException))
             {
-                throw new NUnitEngineException("An exception occurred in the driver while stopping the run.", ex);
+                throw new EngineException("An exception occurred in the driver while stopping the run.", ex);
             }
         }
 

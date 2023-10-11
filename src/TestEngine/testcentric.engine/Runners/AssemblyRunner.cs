@@ -4,7 +4,6 @@
 // ***********************************************************************
 
 using System;
-using NUnit.Engine;
 using TestCentric.Engine.Internal;
 using TestCentric.Engine.Services;
 
@@ -236,7 +235,7 @@ namespace TestCentric.Engine.Runners
                 if (_agentService.IsAgentAvailable(TestPackage))
                     _agent = _agentService.GetAgent(TestPackage);
                 else
-                    throw new NUnitEngineException($"No agent can be found for package {TestPackage.Name}.");
+                    throw new EngineException($"No agent can be found for package {TestPackage.Name}.");
 
                 log.Debug($"Got agent {_agent.Id:B}");
             }

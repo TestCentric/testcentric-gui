@@ -5,7 +5,6 @@
 
 using System;
 using System.Threading;
-using NUnit.Engine;
 
 namespace TestCentric.Engine.Agents
 {

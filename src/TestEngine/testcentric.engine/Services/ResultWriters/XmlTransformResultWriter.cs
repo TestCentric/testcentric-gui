@@ -5,10 +5,9 @@
 
 using System;
 using System.IO;
-using System.Text;
 using System.Xml;
 using System.Xml.Xsl;
-using NUnit.Engine.Extensibility;
+using TestCentric.Engine.Extensibility;
 
 namespace TestCentric.Engine.Services
 {

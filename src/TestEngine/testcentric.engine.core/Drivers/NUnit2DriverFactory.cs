@@ -6,9 +6,9 @@
 #if NETFRAMEWORK
 using System;
 using System.Reflection;
-using NUnit.Engine.Extensibility;
 using TestCentric.Extensibility;
 using TestCentric.Engine.Internal;
+using TestCentric.Engine.Extensibility;
 
 namespace TestCentric.Engine.Drivers
 {

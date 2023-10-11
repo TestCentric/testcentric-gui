@@ -5,16 +5,14 @@
 
 using System;
 using System.Reflection;
-using NUnit.Engine;
-using NUnit.Engine.Extensibility;
-using TestCentric.Engine.Internal;
+using TestCentric.Engine.Extensibility;
 
 namespace TestCentric.Engine.Drivers
 {
     public class NUnit3DriverFactory : IDriverFactory
     {
         private const string NUNIT_FRAMEWORK = "nunit.framework";
-        static ILogger log = InternalTrace.GetLogger(typeof(NUnit3DriverFactory));
+        static Logger log = InternalTrace.GetLogger(typeof(NUnit3DriverFactory));
 
         /// <summary>
         /// Gets a flag indicating whether a given assembly name and version

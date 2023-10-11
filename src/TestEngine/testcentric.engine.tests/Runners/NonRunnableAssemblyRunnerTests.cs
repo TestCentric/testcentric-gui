@@ -6,8 +6,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
-using NUnit.Engine;
-using NUnit.Engine.Extensibility;
 using NUnit.Framework;
 using TestCentric.Engine.Internal;
 

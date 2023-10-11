@@ -3,7 +3,6 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-using NUnit.Engine;
 using TestCentric.Engine.Runners;
 
 namespace TestCentric.Engine.Services.Fakes

@@ -4,7 +4,6 @@
 // ***********************************************************************
 
 using System;
-using NUnit.Engine;
 
 namespace TestCentric.Engine
 {
@@ -41,7 +40,7 @@ namespace TestCentric.Engine
                 case "netcore":
                     return Runtime.NetCore;
                 default:
-                    throw new NUnitEngineException($"Invalid runtime specified: {s}");
+                    throw new EngineException($"Invalid runtime specified: {s}");
             }
         }
 
@@ -54,11 +53,11 @@ namespace TestCentric.Engine
                 case FrameworkIdentifiers.NetCoreApp:
                     return Runtime.NetCore;
                 case FrameworkIdentifiers.NetStandard:
-                    throw new NUnitEngineException(
+                    throw new EngineException(
                         "Test assemblies must target a specific platform, rather than .NETStandard.");
             }
 
-            throw new NUnitEngineException("Unrecognized Target Framework Identifier: " + s);
+            throw new EngineException("Unrecognized Target Framework Identifier: " + s);
         }
 
         #endregion

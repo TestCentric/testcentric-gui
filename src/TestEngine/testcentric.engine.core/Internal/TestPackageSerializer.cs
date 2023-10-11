@@ -4,11 +4,8 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Reflection.Emit;
 using System.Xml;
-using NUnit.Engine;
 
 namespace TestCentric.Engine.Internal
 {

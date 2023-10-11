@@ -7,12 +7,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Xml;
 using TestCentric.Tests.Assemblies;
 using TestCentric.Engine.Internal;
+using TestCentric.Engine.Extensibility;
 using NUnit.Framework;
-using NUnit.Engine;
-using NUnit.Engine.Extensibility;
 
 namespace TestCentric.Engine.Drivers
 {

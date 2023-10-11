@@ -8,8 +8,6 @@ using System.Linq;
 using System.IO;
 using System.Reflection;
 using System.Collections.Generic;
-using NUnit.Engine;
-using NUnit.Engine.Extensibility;
 using NUnit.Framework;
 using TestCentric.Engine.Internal;
 using TestCentric.Engine.Extensibility;
@@ -24,11 +22,11 @@ namespace TestCentric.Engine.Services
 
 #pragma warning disable 414
         private static readonly string[] KnownExtensionPointPaths = {
-            "/NUnit/Engine/TypeExtensions/IProjectLoader",
-            "/NUnit/Engine/TypeExtensions/IResultWriter",
-            "/NUnit/Engine/TypeExtensions/ITestEventListener",
-            "/NUnit/Engine/TypeExtensions/IDriverFactory",
-            "/NUnit/Engine/TypeExtensions/IService",
+            "/TestCentric/Engine/TypeExtensions/IProjectLoader",
+            "/TestCentric/Engine/TypeExtensions/IResultWriter",
+            "/TestCentric/Engine/TypeExtensions/ITestEventListener",
+            "/TestCentric/Engine/TypeExtensions/IDriverFactory",
+            "/TestCentric/Engine/TypeExtensions/IService",
             "/TestCentric/Engine/TypeExtensions/IAgentLauncher"
         };
 

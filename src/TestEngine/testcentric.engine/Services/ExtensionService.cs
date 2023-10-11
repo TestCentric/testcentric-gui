@@ -3,13 +3,9 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using NUnit.Engine;
-using NUnit.Engine.Extensibility;
-using TestCentric.Engine.Extensibility;
 using TestCentric.Engine.Internal;
 using TestCentric.Extensibility;
 
@@ -22,11 +18,10 @@ namespace TestCentric.Engine.Services
     /// </summary>
     class ExtensionService : Service, IExtensionService
     {
-        static Logger log = InternalTrace.GetLogger(typeof(ExtensionService));
+        static readonly Logger log = InternalTrace.GetLogger(typeof(ExtensionService));
 
         static readonly Assembly ENGINE_ASSEMBLY = Assembly.GetExecutingAssembly();
         static readonly Assembly ENGINE_API_ASSEMBLY = typeof(ITestEngine).Assembly;
-        static readonly Assembly TESTCENTRIC_API_ASSEMBLY = typeof(IAgentLauncher).Assembly;
         static readonly string ENGINE_DIRECTORY = Path.GetDirectoryName(AssemblyHelper.GetAssemblyPath(ENGINE_ASSEMBLY));
 
         private IExtensionManager _extensionManager;
@@ -82,7 +77,7 @@ namespace TestCentric.Engine.Services
 
         public string ExtensionBaseDirectory { get; set; } = ENGINE_DIRECTORY;
 
-        public IEnumerable<ExtensionNode> GetExtensionNodes<T>(bool includeDisabled = false)
+        public IEnumerable<IExtensionNode> GetExtensionNodes<T>(bool includeDisabled = false)
         {
             return _extensionManager.GetExtensionNodes<T>(includeDisabled);
         }
@@ -100,9 +95,11 @@ namespace TestCentric.Engine.Services
         {
             try
             {
-                _extensionManager = new ExtensionManager(ENGINE_ASSEMBLY, ENGINE_API_ASSEMBLY, TESTCENTRIC_API_ASSEMBLY)
+                
+                _extensionManager = new ExtensionManager(ENGINE_ASSEMBLY, ENGINE_API_ASSEMBLY)
                 {
-                    DefaultTypeExtensionPrefix = "/NUnit/Engine/TypeExtensions/"
+                    DefaultTypeExtensionPrefix = "/TestCentric/Engine/TypeExtensions/",
+                    InitialAddinsDirectory = ENGINE_DIRECTORY
                 };                   
                 
                 _extensionManager.Initialize();

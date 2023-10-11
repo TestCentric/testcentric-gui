@@ -4,10 +4,9 @@
 // ***********************************************************************
 
 using System;
-using System.Text;
 using System.Xml;
 using System.IO;
-using NUnit.Engine.Extensibility;
+using TestCentric.Engine.Extensibility;
 using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Services

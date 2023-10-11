@@ -3,11 +3,11 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-using NUnit.Engine.Extensibility;
 using NUnit.Framework;
 
-namespace TestCentric.Engine.Extensibility
+namespace TestCentric.Extensibility
 {
+    // TODO: Move to TestCentric.Extensibility.Tests project
     public class ExtensionAttributeTests
     {
         [Test]

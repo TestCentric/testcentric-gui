@@ -5,7 +5,6 @@
 
 #if NETFRAMEWORK
 using System;
-using NUnit.Engine;
 using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Runners

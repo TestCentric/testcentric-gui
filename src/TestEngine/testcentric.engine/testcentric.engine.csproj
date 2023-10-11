@@ -49,9 +49,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="NUnit.Engine.Api" Version="3.16.2" />
 		<PackageReference Include="TestCentric.Metadata" Version="2.0.0" />
-		<PackageReference Include="TestCentric.Extensibility" Version="2.0.0-dev00018" />
+		<PackageReference Include="TestCentric.Extensibility" Version="2.0.0-dev00026" />
 	</ItemGroup>
 
 </Project>

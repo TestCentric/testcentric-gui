@@ -4,7 +4,6 @@
 // ***********************************************************************
 
 using System.IO;
-using NUnit.Engine;
 using TestCentric.Engine.Internal;
 using TestCentric.Engine.Runners;
 

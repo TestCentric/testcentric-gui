@@ -15,13 +15,12 @@ using System.Runtime.Loader;
 using Microsoft.Extensions.DependencyModel;
 using Microsoft.Extensions.DependencyModel.Resolution;
 using Microsoft.Win32;
-using NUnit.Engine;
 
 namespace TestCentric.Engine.Internal
 {
     internal sealed class TestAssemblyResolver : IDisposable
     {
-        static ILogger log = InternalTrace.GetLogger("TestAssemblyResolver");
+        static Logger log = InternalTrace.GetLogger("TestAssemblyResolver");
 
         private readonly ICompilationAssemblyResolver _assemblyResolver;
         private readonly DependencyContext _dependencyContext;

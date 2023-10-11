@@ -5,13 +5,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using TestCentric.Metadata;
-using NUnit.Engine;
-using NUnit.Engine.Extensibility;
 using TestCentric.Engine.Internal;
+using TestCentric.Engine.Extensibility;
 using TestCentric.Extensibility;
 
 namespace TestCentric.Engine.Drivers
@@ -22,7 +20,7 @@ namespace TestCentric.Engine.Drivers
     /// </summary>
     public class DriverService : IDriverService
     {
-        static readonly ILogger log = InternalTrace.GetLogger("DriverService");
+        static readonly Logger log = InternalTrace.GetLogger("DriverService");
 
         readonly IList<IDriverFactory> _factories = new List<IDriverFactory>();
 
@@ -30,14 +28,15 @@ namespace TestCentric.Engine.Drivers
         {
             log.Debug("Creating ExtensionManager");
             var thisAssembly = Assembly.GetExecutingAssembly();
-            var extensionManager = new ExtensionManager(thisAssembly)
-            {
-                InternalTraceLevel = InternalTrace.TraceLevel,
-                WorkDirectory = Environment.CurrentDirectory
+            var extensionManager = new ExtensionManager(thisAssembly) {
+                DefaultTypeExtensionPrefix = "/TestCentric/Engine/TypeExtensions/",
+                InitialAddinsDirectory = Path.GetDirectoryName(thisAssembly.Location)
+                //InternalTraceLevel = InternalTrace.TraceLevel,
+                //WorkDirectory = Environment.CurrentDirectory
             };
 
             log.Debug($"Initializing ExtensionManager");
-            extensionManager.Initialize(AssemblyHelper.GetDirectoryName(thisAssembly));
+            extensionManager.Initialize();
 
             foreach (IDriverFactory factory in extensionManager.GetExtensions<IDriverFactory>())
                 _factories.Add(factory);

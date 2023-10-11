@@ -3,7 +3,6 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-using NUnit.Engine;
 using System;
 using System.Net;
 using System.Net.Sockets;
@@ -12,9 +11,7 @@ using TestCentric.Engine.Agents;
 using TestCentric.Engine.Internal;
 using TestCentric.Engine.Communication.Messages;
 using TestCentric.Engine.Communication.Protocols;
-using System.Runtime.Serialization;
-using System.Xml;
-using System.IO;
+using TestCentric.Engine.Extensibility;
 
 namespace TestCentric.Engine.Communication.Transports.Tcp
 {

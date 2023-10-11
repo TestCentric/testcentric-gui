@@ -9,9 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
-using NUnit.Engine;
-using NUnit.Engine.Extensibility;
-using TestCentric.Engine.Internal;
+using TestCentric.Engine.Extensibility;
 
 namespace TestCentric.Engine.Drivers
 {
@@ -30,7 +28,7 @@ namespace TestCentric.Engine.Drivers
         private static readonly string RUN_ACTION = CONTROLLER_TYPE + "+RunTestsAction";
         private static readonly string STOP_RUN_ACTION = CONTROLLER_TYPE + "+StopRunAction";
 
-        static ILogger log = InternalTrace.GetLogger("NUnitFrameworkDriver");
+        static Logger log = InternalTrace.GetLogger("NUnitFrameworkDriver");
 
         AppDomain _testDomain;
         AssemblyName _reference;
@@ -67,7 +65,7 @@ namespace TestCentric.Engine.Drivers
             }
             catch (SerializationException ex)
             {
-                throw new NUnitEngineException("The NUnit 3 driver cannot support this test assembly. Use a platform specific runner.", ex);
+                throw new EngineException("The NUnit 3 driver cannot support this test assembly. Use a platform specific runner.", ex);
             }
 
             CallbackHandler handler = new CallbackHandler();
@@ -168,7 +166,7 @@ namespace TestCentric.Engine.Drivers
             }
             catch (TargetInvocationException ex)
             {
-                throw new NUnitEngineException("The NUnit 3 driver encountered an error while executing reflected code.", ex.InnerException);
+                throw new EngineException("The NUnit 3 driver encountered an error while executing reflected code.", ex.InnerException);
             }
         }
     }

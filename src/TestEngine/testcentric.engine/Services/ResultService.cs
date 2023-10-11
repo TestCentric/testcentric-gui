@@ -5,8 +5,7 @@
 
 using System;
 using System.Collections.Generic;
-using NUnit.Engine;
-using NUnit.Engine.Extensibility;
+using TestCentric.Engine.Extensibility;
 using TestCentric.Extensibility;
 
 namespace TestCentric.Engine.Services
@@ -14,7 +13,7 @@ namespace TestCentric.Engine.Services
     class ResultService : Service, IResultService
     {
         private readonly string[] BUILT_IN_FORMATS = new string[] { "nunit3", "cases", "user" };
-        private IEnumerable<ExtensionNode> _extensionNodes = new ExtensionNode[0];
+        private IEnumerable<IExtensionNode> _extensionNodes = new ExtensionNode[0];
 
         private string[] _formats;
         public string[] Formats
@@ -56,7 +55,8 @@ namespace TestCentric.Engine.Services
                     foreach (var node in _extensionNodes)
                         foreach (var supported in node.GetValues("Format"))
                             if (supported == format)
-                                return node.ExtensionObject as IResultWriter;
+                                // HACK
+                                return ((ExtensionNode)node).ExtensionObject as IResultWriter;
                     return null;
             }
         }

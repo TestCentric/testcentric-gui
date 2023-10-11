@@ -4,7 +4,6 @@
 // ***********************************************************************
 
 using System;
-using NUnit.Engine;
 using TestCentric.Engine.Internal;
 using TestCentric.Engine.Communication.Transports;
 using TestCentric.Engine.Runners;
