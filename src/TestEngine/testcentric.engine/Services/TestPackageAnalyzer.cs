@@ -7,7 +7,6 @@ using System;
 using System.IO;
 using System.Text;
 using TestCentric.Metadata;
-using NUnit.Engine;
 using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Services
@@ -65,7 +64,7 @@ namespace TestCentric.Engine.Services
             }
 
             if (sb.Length > 0)
-                throw new NUnitEngineException($"The following errors were detected in the TestPackage:\n{sb}");
+                throw new EngineException($"The following errors were detected in the TestPackage:\n{sb}");
         }
 
         /// <summary>

@@ -9,13 +9,12 @@ using System.Linq;
 using System.Threading;
 using System.Diagnostics;
 using System.Net.Sockets;
-using NUnit.Engine;
-using TestCentric.Engine;
 using TestCentric.Engine.Agents;
 using TestCentric.Engine.Extensibility;
 using TestCentric.Engine.Internal;
 using TestCentric.Engine.Communication.Transports.Remoting;
 using TestCentric.Engine.Communication.Transports.Tcp;
+using System.Runtime.Versioning;
 
 namespace TestCentric.Engine.Services
 {
@@ -317,8 +316,8 @@ namespace TestCentric.Engine.Services
 
         private static int CompareLaunchers(IAgentLauncher launcher1, IAgentLauncher launcher2)
         {
-            var runtime1 = launcher1.AgentInfo.TargetRuntime;
-            var runtime2 = launcher2.AgentInfo.TargetRuntime;
+            var runtime1 = new FrameworkName(launcher1.AgentInfo.TargetRuntime);
+            var runtime2 = new FrameworkName(launcher2.AgentInfo.TargetRuntime);
 
             var result = runtime1.Identifier.CompareTo(runtime2.Identifier);
             if (result == 0)
@@ -345,7 +344,7 @@ namespace TestCentric.Engine.Services
                 }
             }
 
-            throw new NUnitEngineException($"No agent available for TestPackage {package.Name}");
+            throw new EngineException($"No agent available for TestPackage {package.Name}");
         }
 
         private IAgentLauncher GetLauncherByName(string name)
@@ -405,7 +404,7 @@ namespace TestCentric.Engine.Services
                     break;
             }
 
-            throw new NUnitEngineException(errorMsg);
+            throw new EngineException(errorMsg);
         }
     }
 }

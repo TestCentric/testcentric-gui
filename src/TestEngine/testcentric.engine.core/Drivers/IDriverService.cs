@@ -4,7 +4,7 @@
 // ***********************************************************************
 
 using System;
-using NUnit.Engine.Extensibility;
+using TestCentric.Engine.Extensibility;
 
 namespace TestCentric.Engine.Drivers
 {

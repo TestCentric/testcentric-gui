@@ -15,9 +15,9 @@ namespace TestCentric.Engine
     {
         public string AgentName;
         public TestAgentType AgentType;
-        public FrameworkName TargetRuntime;
+        public string TargetRuntime;
 
-        public TestAgentInfo(string agentName, TestAgentType agentType, FrameworkName targetRuntime)
+        public TestAgentInfo(string agentName, TestAgentType agentType, string targetRuntime)
         {
             AgentName = agentName;
             AgentType = agentType;

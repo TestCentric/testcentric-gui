@@ -3,11 +3,8 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Xml;
-using NUnit.Engine;
 using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Services

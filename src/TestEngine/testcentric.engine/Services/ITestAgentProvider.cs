@@ -4,9 +4,6 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
-using NUnit.Engine;
-using TestCentric.Engine.Extensibility;
 
 namespace TestCentric.Engine.Services
 {

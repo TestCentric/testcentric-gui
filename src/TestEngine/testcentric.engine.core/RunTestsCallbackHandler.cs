@@ -6,7 +6,7 @@
 #if NETFRAMEWORK
 using System;
 using System.Web.UI;
-using NUnit.Engine;
+using TestCentric.Engine.Extensibility;
 
 namespace TestCentric.Engine
 {

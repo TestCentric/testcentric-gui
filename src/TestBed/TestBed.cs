@@ -9,7 +9,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
-using NUnit.Engine;
 
 namespace TestCentric.Engine.TestBed
 {

@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
-using NUnit.Engine;
 
 namespace TestCentric.Engine.Internal
 {
@@ -82,7 +81,7 @@ namespace TestCentric.Engine.Internal
         {
             var result = new List<Exception>();
 
-            var unloadException = exception as NUnitEngineUnloadException;
+            var unloadException = exception as EngineUnloadException;
             if (unloadException?.AggregatedExceptions != null)
             {
                 result.AddRange(unloadException.AggregatedExceptions);

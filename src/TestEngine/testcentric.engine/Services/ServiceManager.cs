@@ -5,9 +5,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Reflection;
-using NUnit.Engine;
-using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Services
 {

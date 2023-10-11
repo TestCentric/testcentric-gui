@@ -5,8 +5,7 @@
 
 using System.Collections.Generic;
 using System.IO;
-using NUnit.Engine;
-using NUnit.Engine.Extensibility;
+using TestCentric.Engine.Extensibility;
 using TestCentric.Extensibility;
 
 namespace TestCentric.Engine.Services
@@ -118,9 +117,10 @@ namespace TestCentric.Engine.Services
                                 if (ext != null)
                                 {
                                     if (_extensionIndex.ContainsKey(ext))
-                                        throw new NUnitEngineException(string.Format("ProjectLoader extension {0} is already handled by another extension.", ext));
+                                        throw new EngineException(string.Format("ProjectLoader extension {0} is already handled by another extension.", ext));
 
-                                    _extensionIndex.Add(ext, node);
+                                    // HACK
+                                    _extensionIndex.Add(ext, (ExtensionNode)node);
                                 }
                             }
                         }

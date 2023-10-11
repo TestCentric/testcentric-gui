@@ -7,10 +7,10 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
+using TestCentric.Engine.Extensibility;
 using TestCentric.Engine.Internal;
 using TestCentric.Tests.Assemblies;
 using NUnit.Framework;
-using NUnit.Engine;
 
 namespace TestCentric.Engine.Drivers
 {
@@ -133,7 +133,7 @@ namespace TestCentric.Engine.Drivers
 
             var invalidFilter = "<filter><invalidElement>foo</invalidElement></filter>";
             var ex = Assert.Catch(() => _driver.Run(new NullListener(), invalidFilter));
-            Assert.That(ex, Is.TypeOf<NUnitEngineException>());
+            Assert.That(ex, Is.TypeOf<EngineException>());
         }
 
         private static string GetSkipReason(XmlNode result)

@@ -11,7 +11,6 @@ using System.Text;
 using System.Threading;
 using System.Reflection;
 using System.Security.Principal;
-using NUnit.Engine;
 
 namespace TestCentric.Engine.Internal
 {
@@ -113,7 +112,7 @@ namespace TestCentric.Engine.Internal
         {
             private readonly AppDomain _domain;
             private Thread _unloadThread;
-            private NUnitEngineException _unloadException;
+            private EngineException _unloadException;
 
             public DomainUnloader(AppDomain domain)
             {
@@ -141,11 +140,11 @@ namespace TestCentric.Engine.Internal
                     log.Error(msg);
                     Kill(_unloadThread);
 
-                    throw new NUnitEngineUnloadException(msg);
+                    throw new EngineUnloadException(msg);
                 }
 
                 if (_unloadException != null)
-                    throw new NUnitEngineUnloadException("Exception encountered unloading application domain", _unloadException);
+                    throw new EngineUnloadException("Exception encountered unloading application domain", _unloadException);
             }
 
             private void UnloadOnThread()
@@ -167,7 +166,7 @@ namespace TestCentric.Engine.Internal
                     var msg = DomainDetailsBuilder.DetailsFor(_domain,
                         $"Exception encountered unloading application domain: {ex.Message}");
 
-                    _unloadException = new NUnitEngineException(msg);
+                    _unloadException = new EngineException(msg);
                     log.Error(msg);
                 }
             }

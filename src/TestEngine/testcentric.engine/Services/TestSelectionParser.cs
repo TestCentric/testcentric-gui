@@ -6,7 +6,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using NUnit.Engine;
 
 // Missing XML Docs
 #pragma warning disable 1591

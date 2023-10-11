@@ -9,8 +9,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using NUnit.Engine;
-using NUnit.Engine.Extensibility;
+using TestCentric.Engine.Extensibility;
 using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Drivers
@@ -36,7 +35,7 @@ namespace TestCentric.Engine.Drivers
         static readonly string RUN_ASYNC_METHOD = "RunTests";
         static readonly string STOP_RUN_METHOD = "StopRun";
 
-        static ILogger log = InternalTrace.GetLogger(nameof(NUnitNetCore31Driver));
+        static Logger log = InternalTrace.GetLogger(nameof(NUnitNetCore31Driver));
 
         Assembly _testAssembly;
         Assembly _frameworkAssembly;
@@ -72,7 +71,7 @@ namespace TestCentric.Engine.Drivers
             {
                 var msg = string.Format(FAILED_TO_LOAD_TEST_ASSEMBLY, assemblyPath);
                 log.Error(msg);
-                throw new NUnitEngineException(msg, e);
+                throw new EngineException(msg, e);
             }
             log.Debug($"Loaded {assemblyPath}");
 
@@ -80,7 +79,7 @@ namespace TestCentric.Engine.Drivers
             if (nunitRef == null)
             {
                 log.Error(FAILED_TO_LOAD_NUNIT);
-                throw new NUnitEngineException(FAILED_TO_LOAD_NUNIT);
+                throw new EngineException(FAILED_TO_LOAD_NUNIT);
             }
 
             try
@@ -90,7 +89,7 @@ namespace TestCentric.Engine.Drivers
             catch (Exception e)
             {
                 log.Error($"{FAILED_TO_LOAD_NUNIT}\r\n{e}");
-                throw new NUnitEngineException(FAILED_TO_LOAD_NUNIT, e);
+                throw new EngineException(FAILED_TO_LOAD_NUNIT, e);
             }
             log.Debug("Loaded nunit.framework");
 
@@ -98,7 +97,7 @@ namespace TestCentric.Engine.Drivers
             if (_frameworkController == null)
             {
                 log.Error(INVALID_FRAMEWORK_MESSAGE);
-                throw new NUnitEngineException(INVALID_FRAMEWORK_MESSAGE);
+                throw new EngineException(INVALID_FRAMEWORK_MESSAGE);
             }
 
             _frameworkControllerType = _frameworkController.GetType();
@@ -203,7 +202,7 @@ namespace TestCentric.Engine.Drivers
         {
             if (method == null)
             {
-                throw new NUnitEngineException(INVALID_FRAMEWORK_MESSAGE);
+                throw new EngineException(INVALID_FRAMEWORK_MESSAGE);
             }
 
             using (_assemblyLoadContext.EnterContextualReflection())

@@ -10,61 +10,67 @@
 	    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     </PropertyGroup>
 
-  <!-- Properties used in generating AssemblyInfo.cs for this project -->
-  <PropertyGroup>
-    <AssemblyTitle>TestCentric Engine Core</AssemblyTitle>
-    <Description>Core functionality used by both the engine and agents.</Description>
-    <Version Condition="'$(Version)'==''">2.0.0-IDE</Version>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net20|AnyCPU'">
-    <NoWarn>1701;1702;618</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net20|AnyCPU'">
-    <NoWarn>1701;1702;618</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net462|AnyCPU'">
-    <NoWarn>1701;1702;618</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net462|AnyCPU'">
-    <NoWarn>1701;1702;618</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
-    <NoWarn>1701;1702;618</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
-    <NoWarn>1701;1702;618</NoWarn>
-  </PropertyGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)'=='net20'">
-    <Reference Include="System.Runtime.Remoting" />
-    <Reference Include="System.Web" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)'=='net462'">
-    <Reference Include="System.Runtime.Remoting" />
-    <Reference Include="System.Web" />
-  </ItemGroup>
-
-  <!--<ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.6'">
-	  <PackageReference Include="Microsoft.Win32.Registry.AccessControl" Version="4.7.0" />
-	  <PackageReference Include="Microsoft.DotNet.InternalAbstractions" Version="1.0.0" />
-    <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
-    <PackageReference Include="System.Xml.XPath.XmlDocument" Version="4.3.0" />
-  </ItemGroup>-->
-
-  <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
-	<PackageReference Include="Microsoft.Win32.Registry" Version="4.3.0" />
-  </ItemGroup>
+    <!-- Properties used in generating AssemblyInfo.cs for this project -->
+    <PropertyGroup>
+        <AssemblyTitle>TestCentric Engine Core</AssemblyTitle>
+        <Description>Core functionality used by both the engine and agents.</Description>
+        <Version Condition="'$(Version)'==''">2.0.0-IDE</Version>
+    </PropertyGroup>
 	
-  <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp3.1'">
-	<PackageReference Include="Microsoft.Win32.Registry" Version="4.3.0" />
-	<PackageReference Include="Microsoft.Extensions.DependencyModel" Version="3.1.0" />
-  </ItemGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net20|AnyCPU'">
+        <NoWarn>1701;1702;618</NoWarn>
+    </PropertyGroup>
+    
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net20|AnyCPU'">
+        <NoWarn>1701;1702;618</NoWarn>
+    </PropertyGroup>
+    
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net462|AnyCPU'">
+        <NoWarn>1701;1702;618</NoWarn>
+    </PropertyGroup>
+  
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net462|AnyCPU'">
+        <NoWarn>1701;1702;618</NoWarn>
+    </PropertyGroup>
+  
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+        <NoWarn>1701;1702;618</NoWarn>
+    </PropertyGroup>
+  
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
+        <NoWarn>1701;1702;618</NoWarn>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="NUnit.Engine.Api" Version="3.16.2" />
-    <PackageReference Include="TestCentric.Metadata" Version="2.0.0" />
-	<PackageReference Include="TestCentric.Extensibility" Version="2.0.0-dev00012" />
-  </ItemGroup>
+    <ItemGroup Condition="'$(TargetFramework)'=='net20'">
+        <Reference Include="System.Runtime.Remoting" />
+        <Reference Include="System.Web" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)'=='net462'">
+        <Reference Include="System.Runtime.Remoting" />
+        <Reference Include="System.Web" />
+    </ItemGroup>
+
+    <!--<ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.6'">
+	    <PackageReference Include="Microsoft.Win32.Registry.AccessControl" Version="4.7.0" />
+	    <PackageReference Include="Microsoft.DotNet.InternalAbstractions" Version="1.0.0" />
+        <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
+        <PackageReference Include="System.Xml.XPath.XmlDocument" Version="4.3.0" />
+    </ItemGroup>-->
+
+    <ItemGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+	    <PackageReference Include="Microsoft.Win32.Registry" Version="4.3.0" />
+    </ItemGroup>
+	
+    <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp3.1'">
+	    <PackageReference Include="Microsoft.Win32.Registry" Version="4.3.0" />
+	    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="3.1.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="TestCentric.Metadata" Version="2.0.0" />
+	    <PackageReference Include="TestCentric.Extensibility" Version="2.0.0-dev00026" />
+	    <ProjectReference Include="..\testcentric.engine.api\TestCentric.Engine.Api.csproj" />
+    </ItemGroup>
 
 </Project>

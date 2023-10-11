@@ -3,13 +3,9 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using NSubstitute;
-using NUnit.Engine;
 
 #if !NETCOREAPP2_1
 namespace TestCentric.Engine.Services
@@ -64,7 +60,7 @@ namespace TestCentric.Engine.Services
         {
             _package.AddSetting(EnginePackageSettings.RequestedRuntimeFramework, INVALID_RUNTIME);
 
-            var exception = Assert.Throws<NUnitEngineException>(() => Validate());
+            var exception = Assert.Throws<EngineException>(() => Validate());
 
             CheckMessageContent(exception.Message, $"The requested framework {INVALID_RUNTIME} is unknown or not available.");
         }
@@ -77,7 +73,7 @@ namespace TestCentric.Engine.Services
             foreach (var setting in settings)
                 _package.AddSetting(setting, "something"); // Test doesn't use the value
 
-            var exception = Assert.Throws<NUnitEngineException>(() => Validate());
+            var exception = Assert.Throws<EngineException>(() => Validate());
 
             var errors = new List<string>();
             foreach (var setting in settings)
@@ -92,7 +88,7 @@ namespace TestCentric.Engine.Services
             _package.AddSetting("ProcessModel", "something"); // Test doesn't use the value
             _package.AddSetting("DomainUsage", "something"); // Test doesn't use the value
 
-            var exception = Assert.Throws<NUnitEngineException>(() => Validate());
+            var exception = Assert.Throws<EngineException>(() => Validate());
 
             CheckMessageContent(exception.Message,
                 $"The requested framework {INVALID_RUNTIME} is unknown or not available.",

@@ -3,15 +3,8 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using Castle.Components.DictionaryAdapter;
-using NUnit.Engine;
 using NUnit.Framework;
-using TestCentric.Engine.Communication.Messages;
 using TestCentric.Engine.Communication.Protocols;
 using TestCentric.Engine.Internal;
 

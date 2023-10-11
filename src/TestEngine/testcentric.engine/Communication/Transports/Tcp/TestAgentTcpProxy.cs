@@ -5,9 +5,9 @@
 
 using System;
 using System.Net.Sockets;
-using NUnit.Engine;
 using TestCentric.Engine.Communication.Messages;
 using TestCentric.Engine.Communication.Protocols;
+using TestCentric.Engine.Extensibility;
 using TestCentric.Engine.Internal;
 
 namespace TestCentric.Engine.Communication.Transports.Tcp

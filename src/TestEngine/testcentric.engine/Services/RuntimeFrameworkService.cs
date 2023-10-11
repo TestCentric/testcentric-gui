@@ -5,13 +5,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using Microsoft.Win32;
-using NUnit.Engine;
-using TestCentric.Engine.Internal;
 using TestCentric.Engine.Services.RuntimeLocators;
 
 namespace TestCentric.Engine.Services
@@ -170,7 +166,7 @@ namespace TestCentric.Engine.Services
 
             RuntimeFramework requestedFramework;
             if (!RuntimeFramework.TryParse(name, out requestedFramework))
-                throw new NUnitEngineException("Invalid or unknown framework requested: " + name);
+                throw new EngineException("Invalid or unknown framework requested: " + name);
 
             return IsAvailable(requestedFramework);
         }
@@ -245,12 +241,12 @@ namespace TestCentric.Engine.Services
             {
                 RuntimeFramework requestedFramework;
                 if (!RuntimeFramework.TryParse(requestedFrameworkSetting, out requestedFramework))
-                    throw new NUnitEngineException("Invalid or unknown framework requested: " + requestedFrameworkSetting);
+                    throw new EngineException("Invalid or unknown framework requested: " + requestedFrameworkSetting);
 
                 log.Debug($"Requested framework for {package.Name} is {requestedFramework}");
 
                 if (!IsAvailable(requestedFramework))
-                    throw new NUnitEngineException("Requested framework is not available: " + requestedFrameworkSetting);
+                    throw new EngineException("Requested framework is not available: " + requestedFrameworkSetting);
 
                 package.Settings[EnginePackageSettings.TargetRuntimeFramework] = requestedFrameworkSetting;
                 return requestedFramework;

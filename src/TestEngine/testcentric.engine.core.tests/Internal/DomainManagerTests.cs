@@ -6,7 +6,6 @@
 #if NETFRAMEWORK
 using System;
 using System.IO;
-using NUnit.Engine;
 using NUnit.Framework;
 using TestCentric.Tests.Assemblies;
 
@@ -81,7 +80,7 @@ namespace TestCentric.Engine.Internal
             var domain = _domainManager.CreateDomain(_package);
             _domainManager.Unload(domain);
 
-            Assert.That(() => _domainManager.Unload(domain), Throws.TypeOf<NUnitEngineUnloadException>());
+            Assert.That(() => _domainManager.Unload(domain), Throws.TypeOf<EngineUnloadException>());
 
             CheckDomainIsUnloaded(domain);
         }
