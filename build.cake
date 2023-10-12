@@ -261,11 +261,14 @@ var EngineApiPackage = new NuGetPackage(
 	basePath: "src/TestEngine/testcentric.engine.api/bin/" + BuildSettings.Configuration,
 	packageContent: new PackageContent(
 		new FilePath[] { "../../../../../LICENSE.txt", "../../../../../testcentric.png" },
+		new DirectoryContent("lib/net20").WithFiles(
+			"net20/testcentric.engine.api.dll", "net20/testcentric.engine.api.pdb"),
 		new DirectoryContent("lib/netstandard2.0").WithFiles(
 			"netstandard2.0/testcentric.engine.api.dll", "netstandard2.0/testcentric.engine.api.pdb")),
 	checks: new PackageCheck[] {
 		HasFiles("LICENSE.txt", "testcentric.png"),
-		HasDirectory("lib/netstandard2.0").WithFiles("testcentric.engine.api.dll")
+		HasDirectory("lib/net20").WithFiles("testcentric.engine.api.dll"),
+		HasDirectory("lib/net20").WithFiles("testcentric.engine.api.dll")
 	});
 
 BuildSettings.Packages.AddRange(new [] {
