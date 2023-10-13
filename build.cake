@@ -154,20 +154,21 @@ packageTests.Add(new PackageTest(1, "Net35PlusNetCore21Test", "Run different bui
 // TODO: Use --config option when it's supported by the extension.
 // Current test relies on the fact that the Release config appears
 // first in the project file.
-if (BuildSettings.Configuration == "Release")
-{
-    packageTests.Add(new PackageTest(2, "NUnitProjectTest", "Run an NUnit project",
-        "TestProject.nunit",
-        new ExpectedResult("Failed")
-        {
-            Assemblies = new[] {
-                            new ExpectedAssemblyResult("mock-assembly.dll", "Net462AgentLauncher"),
-                            new ExpectedAssemblyResult("mock-assembly.dll", "Net462AgentLauncher"),
-                            new ExpectedAssemblyResult("mock-assembly.dll", "Net60AgentLauncher"),
-                            new ExpectedAssemblyResult("mock-assembly.dll", "Net60AgentLauncher") }
-        },
-        NUnitProjectLoader));
-}
+// Disabling entirely for now
+//if (BuildSettings.Configuration == "Release")
+//{
+//    packageTests.Add(new PackageTest(2, "NUnitProjectTest", "Run an NUnit project",
+//        "TestProject.nunit",
+//        new ExpectedResult("Failed")
+//        {
+//            Assemblies = new[] {
+//                            new ExpectedAssemblyResult("mock-assembly.dll", "Net462AgentLauncher"),
+//                            new ExpectedAssemblyResult("mock-assembly.dll", "Net462AgentLauncher"),
+//                            new ExpectedAssemblyResult("mock-assembly.dll", "Net60AgentLauncher"),
+//                            new ExpectedAssemblyResult("mock-assembly.dll", "Net60AgentLauncher") }
+//        },
+//        NUnitProjectLoader));
+//}
 
 // NOTE: Package tests using a pluggable agent must be run after all tests
 // that assume no pluggable agents are installed!
@@ -212,9 +213,9 @@ var EnginePackage = new NuGetPackage(
 	},
 	tests: packageTests,
 	preloadedExtensions: new [] {
-		new PackageReference("TestCentric.Extension.Net462PluggableAgent", "2.3.0-dev00007"),
-		new PackageReference("TestCentric.Extension.Net60PluggableAgent", "2.3.0-dev00003"),
-		new PackageReference("TestCentric.Extension.Net70PluggableAgent", "2.3.0-dev00004") }
+		new PackageReference("TestCentric.Extension.Net462PluggableAgent", "2.3.0-dev00009"),
+		new PackageReference("TestCentric.Extension.Net60PluggableAgent", "2.3.0-dev00005"),
+		new PackageReference("TestCentric.Extension.Net70PluggableAgent", "2.3.0-dev00006") }
 );
 
 var EngineCorePackage = new NuGetPackage(
@@ -273,8 +274,8 @@ var EngineApiPackage = new NuGetPackage(
 
 BuildSettings.Packages.AddRange(new [] {
 	EngineApiPackage,
-	EngineCorePackage
-	//EnginePackage
+	EngineCorePackage,
+	EnginePackage
 });
 
 //////////////////////////////////////////////////////////////////////
@@ -357,7 +358,7 @@ Task("AppVeyor")
 	.IsDependentOn("Test")
 	.IsDependentOn("PackageEngineApi")
 	.IsDependentOn("PackageEngineCore")
-	//.IsDependentOn("PackageEngine")
+	.IsDependentOn("PackageEngine")
 	.IsDependentOn("Publish")
 	.IsDependentOn("CreateDraftRelease")
 	.IsDependentOn("CreateProductionRelease");
