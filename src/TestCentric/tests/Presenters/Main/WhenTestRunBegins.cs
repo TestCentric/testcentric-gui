@@ -5,6 +5,7 @@
 
 using NSubstitute;
 using NUnit.Framework;
+using TestCentric.Engine;
 
 namespace TestCentric.Gui.Presenters.Main
 {
@@ -17,7 +18,7 @@ namespace TestCentric.Gui.Presenters.Main
 
             _model.HasTests.Returns(true);
             _model.IsTestRunning.Returns(true);
-            _model.TestPackage.Returns(new NUnit.Engine.TestPackage(new string[] { "dummy.dll" }));
+            _model.TestPackage.Returns(new TestPackage(new string[] { "dummy.dll" }));
             FireRunStartingEvent(1234);
         }
 

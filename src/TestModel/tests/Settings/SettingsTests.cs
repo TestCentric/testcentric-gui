@@ -7,8 +7,8 @@ using System;
 using System.Drawing;
 using System.Security.Principal;
 using System.Windows.Forms;
-using NUnit.Engine;
 using NUnit.Framework;
+using TestCentric.Engine;
 
 namespace TestCentric.Gui.Model.Settings
 {

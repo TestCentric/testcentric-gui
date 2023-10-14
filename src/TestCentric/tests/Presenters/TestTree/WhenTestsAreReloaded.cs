@@ -5,6 +5,7 @@
 
 using NUnit.Framework;
 using NSubstitute;
+using TestCentric.Engine;
 
 namespace TestCentric.Gui.Presenters.TestTree
 {
@@ -22,7 +23,7 @@ namespace TestCentric.Gui.Presenters.TestTree
 
             TestNode testNode = new TestNode("<test-suite id='1'/>");
             _model.LoadedTests.Returns(testNode);
-            _model.TestPackage.Returns(new NUnit.Engine.TestPackage("dummy.dll"));
+            _model.TestPackage.Returns(new TestPackage("dummy.dll"));
 
             FireTestReloadedEvent(testNode);
         }

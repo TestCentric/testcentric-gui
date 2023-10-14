@@ -5,7 +5,7 @@
 
 using System;
 using System.Collections.Generic;
-using NUnit.Engine;
+using TestCentric.Engine;
 
 namespace TestCentric.Gui.Model.Fakes
 {

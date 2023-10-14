@@ -4,13 +4,10 @@
 // ***********************************************************************
 
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Text;
-using System.Windows.Forms;
 using Microsoft.Win32;
-using NUnit.Engine;
+using TestCentric.Engine;
 
 namespace TestCentric.Gui.Model
 {
@@ -64,11 +61,11 @@ namespace TestCentric.Gui.Model
                 Assembly engine = FindEngineAssembly(minVersion);
                 if (engine == null)
                 {
-                    throw new NUnitEngineNotFoundException();
+                    throw new EngineNotFoundException();
                 }
                 return (ITestEngine)AppDomain.CurrentDomain.CreateInstanceFromAndUnwrap(engine.CodeBase, DefaultTypeName);
             }
-            catch (NUnitEngineNotFoundException)
+            catch (EngineNotFoundException)
             {
                 throw;
             }
@@ -131,7 +128,7 @@ namespace TestCentric.Gui.Model
                 }
             }
 
-            throw new NUnitEngineNotFoundException();
+            throw new EngineNotFoundException();
         }
 
         private static Assembly CheckPathForEngine(string path, Version minVersion, ref Version newestVersionFound, Assembly newestAssemblyFound)
