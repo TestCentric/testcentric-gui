@@ -4,8 +4,8 @@
 // ***********************************************************************
 
 using System;
-using NUnit.Engine;
-using NUnit.Engine.Extensibility;
+using TestCentric.Engine;
+using TestCentric.Engine.Extensibility;
 
 namespace TestCentric.Gui.Model.Fakes
 {

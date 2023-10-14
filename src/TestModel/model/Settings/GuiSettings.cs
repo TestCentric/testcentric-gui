@@ -4,7 +4,6 @@
 // ***********************************************************************
 
 using System.Drawing;
-using NUnit.Engine;
 
 namespace TestCentric.Gui.Model.Settings
 {

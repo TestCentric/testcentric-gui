@@ -11,13 +11,13 @@ static string[] VALID_CONFIGS = new [] { "Release", "Debug" };
 // NOTE: This must match what is actually referenced by
 // the GUI test model project. Hopefully, this is a temporary
 // fix, which we can get rid of in the future.
-const string REF_ENGINE_VERSION = "2.0.0-dev00010";
+const string REF_ENGINE_VERSION = "2.0.0-dev00023";
 
 // We must use the latest versions of the pre-installed agents
 // which use the engine version specified above.
-const string NET462_AGENT_VERSION = "2.3.0-dev00007";
-const string NET60_AGENT_VERSION = "2.3.0-dev00003";
-const string NET70_AGENT_VERSION = "2.3.0-dev00004";
+const string NET462_AGENT_VERSION = "2.3.0-dev00009";
+const string NET60_AGENT_VERSION = "2.3.0-dev00005";
+const string NET70_AGENT_VERSION = "2.3.0-dev00006";
 
 const string PACKAGE_NAME = "testcentric-gui";
 const string NUGET_PACKAGE_NAME = "TestCentric.GuiRunner";
@@ -52,9 +52,9 @@ BuildSettings.Initialize(
 DefinePackageTests();
 
 static readonly FilePath[] ENGINE_FILES = {
-        "testcentric.engine.dll", "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll"};
+        "testcentric.engine.dll", "testcentric.engine.core.dll", "testcentric.engine.api.dll", "testcentric.engine.metadata.dll"};
 static readonly FilePath[] ENGINE_CORE_FILES = {
-        "testcentric.engine.core.dll", "nunit.engine.api.dll", "testcentric.engine.metadata.dll" };
+        "testcentric.engine.core.dll", "testcentric.engine.api.dll", "testcentric.engine.metadata.dll" };
 static readonly FilePath[] NET_FRAMEWORK_AGENT_FILES = {
         "testcentric-agent.exe", "testcentric-agent.exe.config", "testcentric-agent-x86.exe", "testcentric-agent-x86.exe.config" };
 static readonly FilePath[] NET_CORE_AGENT_FILES = {
@@ -88,7 +88,7 @@ var nugetPackage = new NuGetPackage(
 				"testcentric.exe", "testcentric.exe.config", "TestCentric.Gui.Runner.dll",
 				"nunit.uiexception.dll", "TestCentric.Gui.Model.dll", "Mono.Options.dll",
 				"testcentric.engine.dll", "testcentric.engine.core.dll", "testcentric.engine.api.dll",
-				"testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "nunit.engine.api.dll",
+				"testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll",
 				"testcentric.engine.pdb", "testcentric.engine.core.pdb", "../../nuget/testcentric.nuget.addins"),
 			new DirectoryContent("tools/Images").WithFiles(
 				"Images/DebugTests.png", "Images/RunTests.png", "Images/StopRun.png", "Images/GroupBy_16x.png", "Images/SummaryReport.png"),
@@ -130,7 +130,7 @@ var chocolateyPackage = new ChocolateyPackage(
 				"testcentric.exe", "testcentric.exe.config", "TestCentric.Gui.Runner.dll",
 				"nunit.uiexception.dll", "TestCentric.Gui.Model.dll", "Mono.Options.dll",
 				"testcentric.engine.dll", "testcentric.engine.core.dll", "testcentric.engine.api.dll",
-				"testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "nunit.engine.api.dll",
+				"testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll",
 				"testcentric.engine.pdb", "testcentric.engine.core.pdb", "test-bed.exe", "test-bed.addins"),
 			new DirectoryContent("tools/Images").WithFiles(
 				"Images/DebugTests.png", "Images/RunTests.png", "Images/StopRun.png", "Images/GroupBy_16x.png", "Images/SummaryReport.png"),

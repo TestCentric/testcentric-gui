@@ -6,7 +6,6 @@
 using System.IO;
 using NUnit.Framework;
 using TestCentric.Tests.Assemblies;
-using NUnit.Engine;
 
 namespace TestCentric.Gui.Model
 {

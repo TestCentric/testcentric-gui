@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NUnit.Engine;
 using NUnit.Framework;
 using NSubstitute;
 using TestCentric.Gui.Model.Fakes;

@@ -9,8 +9,7 @@ using System.Linq;
 using NUnit.Framework;
 using TestCentric.Common;
 using TestCentric.Gui.Model.Fakes;
-
-using TestPackage = NUnit.Engine.TestPackage;
+using TestCentric.Engine;
 
 namespace TestCentric.Gui.Model
 {
