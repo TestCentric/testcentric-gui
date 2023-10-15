@@ -1,0 +1,13 @@
+next-version: 2.0.0
+mode: ContinuousDelivery
+legacy-semver-padding: 5
+build-metadata-padding: 5
+commits-since-version-source-padding: 5
+branches:
+  master:
+    regex: ^main$
+    tag: dev
+  release:
+    tag: pre
+  pull-request:
+    tag: pr
