@@ -2,7 +2,7 @@
   
   <PropertyGroup>
     <RootNamespace>TestCentric.Engine</RootNamespace>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net20;net462;netstandard2.0</TargetFrameworks>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\testcentric.snk</AssemblyOriginatorKeyFile>
 	  <DebugType>Full</DebugType>
