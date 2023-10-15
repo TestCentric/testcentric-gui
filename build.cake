@@ -32,12 +32,15 @@ var EngineApiPackage = new NuGetPackage(
 	title: "TestCentric Engine Api Assembly",
 	description: "This package includes the testcentric.agent.api assembly, containing the interfaces used in creating pluggable agents.",
 	basePath: "bin/" + BuildSettings.Configuration,
-	packageContent: new PackageContent(
-		new FilePath[] { "../../LICENSE.txt", "../../testcentric.png" },
-		new DirectoryContent("lib/netstandard2.0").WithFiles(
-			"netstandard2.0/testcentric.engine.api.dll", "netstandard2.0/testcentric.engine.api.pdb")),
+	source: "nuget/TestCentric.Engine.Api.nuspec",
+	//packageContent: new PackageContent(
+	//	new FilePath[] { "../../LICENSE.txt", "../../testcentric.png" },
+	//	new DirectoryContent("lib/netstandard2.0").WithFiles(
+	//		"netstandard2.0/testcentric.engine.api.dll", "netstandard2.0/testcentric.engine.api.pdb")),
 	checks: new PackageCheck[] {
 		HasFiles("LICENSE.txt", "testcentric.png"),
+		HasDirectory("lib/net20").WithFiles("testcentric.engine.api.dll"),
+		HasDirectory("lib/net462").WithFiles("testcentric.engine.api.dll"),
 		HasDirectory("lib/netstandard2.0").WithFiles("testcentric.engine.api.dll")
 	});
 

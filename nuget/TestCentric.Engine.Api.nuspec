@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+    
+	<metadata>
+        <id>TestCentric.Engine.Api</id>
+        <version>0.0.0</version>
+        <title>TestCentric Engine Api Assembly</title>
+        <authors>Charlie Poole</authors>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <license type="expression">MIT</license>
+        <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+        <icon>testcentric.png</icon>
+        <projectUrl>https://test-centric.org/</projectUrl>
+        <description>This package includes the TestCentric.Engine.Api assembly, containing the interfaces used in working with the testcentric engine.</description>
+        <copyright>Copyright (c) 2021-2023 Charlie Poole</copyright>
+        <language>en-US</language>
+        <tags>testcentric</tags>
+        <repository type="Git" url="https://github.com/TestCentric/TestCentric.Engine.Api" />
+    </metadata>
+	
+	<files>
+		<file src="../../LICENSE.txt" />
+		<file src="../../testcentric.png" />
+		<file src="net20/TestCentric.Engine.Api.dll" target="lib/net20/" />
+		<file src="net462/TestCentric.Engine.Api.dll" target="lib/net462/" />
+		<file src="netstandard2.0/TestCentric.Engine.Api.dll" target="lib/netstandard2.0/" />
+	</files>
+</package>
