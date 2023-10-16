@@ -44,13 +44,14 @@
 	</ItemGroup>
   
 	<ItemGroup>
-		<ProjectReference Include="..\testcentric.engine.api\testcentric.engine.api.csproj" />
 		<ProjectReference Include="..\testcentric.engine.core\testcentric.engine.core.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="TestCentric.Engine.Api" Version="2.0.0-dev00007" />
 		<PackageReference Include="TestCentric.Metadata" Version="2.0.0" />
-		<PackageReference Include="TestCentric.Extensibility" Version="2.0.0-dev00026" />
+		<PackageReference Include="TestCentric.Extensibility" Version="2.0.0-dev00030" />
+		<PackageReference Include="TestCentric.InternalTrace" Version="1.0.0-dev00002" />
 	</ItemGroup>
 
 </Project>
