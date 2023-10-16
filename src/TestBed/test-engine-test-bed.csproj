@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TestEngine\testcentric.engine\testcentric.engine.csproj" />
+	  <PackageReference Include="TestCentric.InternalTrace" Version="1.0.0-dev00002" />
   </ItemGroup>
 
 </Project>

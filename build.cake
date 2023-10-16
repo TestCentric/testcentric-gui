@@ -7,7 +7,7 @@ const string ENGINE_API_PACKAGE_ID = "TestCentric.Engine.Api";
 const string TEST_BED_EXE = "test-bed.exe";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00048
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00050
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -199,7 +199,7 @@ var EnginePackage = new NuGetPackage(
 		new FilePath[] { "../../LICENSE.txt", "../../testcentric.png" },
 		new DirectoryContent("tools").WithFiles(
 			"testcentric.engine.dll", "testcentric.engine.core.dll", "testcentric.engine.api.dll",
-			"testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll",
+			"testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll", "TestCentric.InternalTrace.dll",
 			"testcentric.engine.pdb", "testcentric.engine.core.pdb", "test-bed.exe",
 			"test-bed.addins", "../../testcentric.nuget.addins")),
 	testRunner: new TestCentricEngineTestBed(),
@@ -207,7 +207,7 @@ var EnginePackage = new NuGetPackage(
 		HasFiles("LICENSE.txt", "testcentric.png"),
 		HasDirectory("tools").WithFiles(
 			"testcentric.engine.dll", "testcentric.engine.core.dll", "testcentric.engine.api.dll",
-			"testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll",
+			"testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll", "TestCentric.InternalTrace.dll",
 			"testcentric.engine.pdb", "testcentric.engine.core.pdb", "test-bed.exe",
 			"test-bed.addins", "testcentric.nuget.addins")
 	},
@@ -255,25 +255,7 @@ var EngineCorePackage = new NuGetPackage(
 			"Microsoft.Extensions.DependencyModel.dll")
 	});
 
-var EngineApiPackage = new NuGetPackage(
-	id: "TestCentric.Engine.Api",
-	title: "TestCentric Engine Api Assembly",
-	description: "This package includes the testcentric.agent.api assembly, containing the interfaces used in creating pluggable agents.",
-	basePath: "src/TestEngine/testcentric.engine.api/bin/" + BuildSettings.Configuration,
-	packageContent: new PackageContent(
-		new FilePath[] { "../../../../../LICENSE.txt", "../../../../../testcentric.png" },
-		new DirectoryContent("lib/net20").WithFiles(
-			"net20/testcentric.engine.api.dll", "net20/testcentric.engine.api.pdb"),
-		new DirectoryContent("lib/netstandard2.0").WithFiles(
-			"netstandard2.0/testcentric.engine.api.dll", "netstandard2.0/testcentric.engine.api.pdb")),
-	checks: new PackageCheck[] {
-		HasFiles("LICENSE.txt", "testcentric.png"),
-		HasDirectory("lib/net20").WithFiles("testcentric.engine.api.dll"),
-		HasDirectory("lib/net20").WithFiles("testcentric.engine.api.dll")
-	});
-
 BuildSettings.Packages.AddRange(new [] {
-	EngineApiPackage,
 	EngineCorePackage,
 	EnginePackage
 });
@@ -327,13 +309,6 @@ Task("TestEngineCore")
 // BUILD, VERIFY AND TEST INDIVIDUAL PACKAGES
 //////////////////////////////////////////////////////////////////////
 
-Task("PackageEngineApi")
-	.Description("Build and Test the Engine Api Package")
-	.Does(() =>
-	{
-		EngineApiPackage.BuildVerifyAndTest();
-	});
-
 Task("PackageEngineCore")
 	.Description("Build and Test the Engine Core Package")
 	.Does(() =>
@@ -356,7 +331,6 @@ Task("AppVeyor")
 	.IsDependentOn("DumpSettings")
 	.IsDependentOn("Build")
 	.IsDependentOn("Test")
-	.IsDependentOn("PackageEngineApi")
 	.IsDependentOn("PackageEngineCore")
 	.IsDependentOn("PackageEngine")
 	.IsDependentOn("Publish")
