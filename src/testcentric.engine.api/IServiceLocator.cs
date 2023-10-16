@@ -11,7 +11,7 @@ namespace TestCentric.Engine
     /// IServiceLocator allows clients to locate any NUnit services
     /// for which the interface is referenced. In normal use, this
     /// linits it to those services using interfaces defined in the 
-    /// nunit.engine.api assembly.
+    /// TestCentric.Engine.Api assembly.
     /// </summary>
     public interface IServiceLocator
     {

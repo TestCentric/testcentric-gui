@@ -16,14 +16,14 @@ namespace TestCentric.Engine
     {
         internal static readonly Version DefaultMinimumVersion = new Version(3, 0);
 
-        private const string DefaultAssemblyName = "nunit.engine.dll";
-        internal const string DefaultTypeName = "NUnit.Engine.TestEngine";
+        private const string DefaultAssemblyName = "TestCentric.Engine.dll";
+        internal const string DefaultTypeName = "TestCentric.Engine.TestEngine";
 
 #if NETSTANDARD2_0
         /// <summary>
         /// Create an instance of the test engine.
         /// </summary>
-        /// <returns>An <see cref="NUnit.Engine.ITestEngine"/></returns>
+        /// <returns>A <see cref="TestCentric.Engine.ITestEngine"/></returns>
         public static ITestEngine CreateInstance()
         {
             var apiLocation = typeof(TestEngineActivator).Assembly.Location;
@@ -40,7 +40,7 @@ namespace TestCentric.Engine
         /// </summary>
         /// <param name="unused">This parameter is no longer used but has not been removed to ensure API compatibility.</param>
         /// <exception cref="NUnitEngineNotFoundException">Thrown when a test engine of the required minimum version is not found</exception>
-        /// <returns>An <see cref="NUnit.Engine.ITestEngine"/></returns>
+        /// <returns>A <see cref="TestCemtric.Engine.ITestEngine"/></returns>
         public static ITestEngine CreateInstance()
         {
             return CreateInstance(DefaultMinimumVersion);

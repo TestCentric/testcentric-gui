@@ -33,14 +33,13 @@
 	<!-- Properties used in generating AssemblyInfo.cs for this project -->
 	<PropertyGroup>
 		<AssemblyTitle>TestCentric Engine Api</AssemblyTitle>
-		<Description>Defines an additional API specific to the TestCentric engine.</Description>
+		<Description>Defines the API for the TestCentric engine.</Description>
 		<Version Condition="'$(Version)'==''">2.0.0-IDE</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="NUnit.Engine.Api" Version="3.16.2" />
-		<PackageReference Include="TestCentric.Extensibility.Api" Version="2.0.0-adev00029" />
-		<PackageReference Include="TestCentric.InternalTrace" Version="1.0.0-adev00001" />
+		<PackageReference Include="TestCentric.Extensibility.Api" Version="2.0.0-dev00030" />
+		<PackageReference Include="TestCentric.InternalTrace" Version="1.0.0-dev00002" />
 	</ItemGroup>
 
 </Project>

@@ -5,8 +5,7 @@
 
 using System;
 using System.Diagnostics;
-using NUnit.Engine;
-using NUnit.Engine.Extensibility;
+using TestCentric.Extensibility;
 
 namespace TestCentric.Engine.Extensibility
 {

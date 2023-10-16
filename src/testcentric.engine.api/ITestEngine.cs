@@ -41,9 +41,9 @@ namespace TestCentric.Engine
         /// used in the Engine.
         ///
         /// This interface is not normally called by user code. Programs linking
-        /// only to the nunit.engine.api assembly are given a
+        /// only to the TestCentric.Engine.Api assembly are given a
         /// pre-initialized instance of TestEngine. Programs
-        /// that link directly to nunit.engine usually do so
+        /// that link directly to TestCentric.Engine usually do so
         /// in order to perform custom initialization.
         /// </summary>
         void Initialize();
