@@ -11,7 +11,7 @@ static string[] VALID_CONFIGS = new [] { "Release", "Debug" };
 // NOTE: This must match what is actually referenced by
 // the GUI test model project. Hopefully, this is a temporary
 // fix, which we can get rid of in the future.
-const string REF_ENGINE_VERSION = "2.0.0-dev00023";
+const string REF_ENGINE_VERSION = "2.0.0-dev00025";
 
 // We must use the latest versions of the pre-installed agents
 // which use the engine version specified above.
@@ -26,7 +26,7 @@ const string GUI_RUNNER = "testcentric.exe";
 const string GUI_TESTS = "*.Tests.dll";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00048
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00050
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -87,7 +87,7 @@ var nugetPackage = new NuGetPackage(
 			new DirectoryContent("tools").WithFiles(
 				"testcentric.exe", "testcentric.exe.config", "TestCentric.Gui.Runner.dll",
 				"nunit.uiexception.dll", "TestCentric.Gui.Model.dll", "Mono.Options.dll",
-				"testcentric.engine.dll", "testcentric.engine.core.dll", "testcentric.engine.api.dll",
+				"testcentric.engine.dll", "testcentric.engine.core.dll", "testcentric.engine.api.dll", "TestCentric.InternalTrace.dll",
 				"testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll",
 				"testcentric.engine.pdb", "testcentric.engine.core.pdb", "../../nuget/testcentric.nuget.addins"),
 			new DirectoryContent("tools/Images").WithFiles(
@@ -129,7 +129,7 @@ var chocolateyPackage = new ChocolateyPackage(
 				"../../choco/testcentric-agent.exe.ignore",	"../../choco/testcentric-agent-x86.exe.ignore",
 				"testcentric.exe", "testcentric.exe.config", "TestCentric.Gui.Runner.dll",
 				"nunit.uiexception.dll", "TestCentric.Gui.Model.dll", "Mono.Options.dll",
-				"testcentric.engine.dll", "testcentric.engine.core.dll", "testcentric.engine.api.dll",
+				"testcentric.engine.dll", "testcentric.engine.core.dll", "testcentric.engine.api.dll", "TestCentric.InternalTrace.dll",
 				"testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll",
 				"testcentric.engine.pdb", "testcentric.engine.core.pdb", "test-bed.exe", "test-bed.addins"),
 			new DirectoryContent("tools/Images").WithFiles(
