@@ -1,13 +1,5 @@
-#tool NuGet.CommandLine&version=6.0.0
-
-const string ENGINE_PACKAGE_ID = "TestCentric.Engine";
-const string ENGINE_CORE_PACKAGE_ID = "TestCentric.Engine.Core";
-const string ENGINE_API_PACKAGE_ID = "TestCentric.Engine.Api";
-
-const string TEST_BED_EXE = "test-bed.exe";
-
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00050
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00055
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -188,10 +180,10 @@ packageTests.Add(new PackageTest(1, "Net35PlusNetCore21Test", "Run different bui
 //	NUnitV2Driver));
 
 //////////////////////////////////////////////////////////////////////
-// DEFINE PACKAGES
+// DEFINE PACKAGE
 //////////////////////////////////////////////////////////////////////
 
-var EnginePackage = new NuGetPackage(
+BuildSettings.Packages.Add(new NuGetPackage(
 	id: "TestCentric.Engine",
 	//source: "src/TestEngine/testcentric.engine/testcentric.engine.csproj",
 	description: "This package provides the TestCentric Engine, used by runner applications to load and excute NUnit tests.",
@@ -200,7 +192,7 @@ var EnginePackage = new NuGetPackage(
 		new DirectoryContent("tools").WithFiles(
 			"testcentric.engine.dll", "testcentric.engine.core.dll", "testcentric.engine.api.dll",
 			"testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll", "TestCentric.InternalTrace.dll",
-			"testcentric.engine.pdb", "testcentric.engine.core.pdb", "test-bed.exe",
+			"testcentric.engine.pdb", "test-bed.exe",
 			"test-bed.addins", "../../testcentric.nuget.addins")),
 	testRunner: new TestCentricEngineTestBed(),
 	checks: new PackageCheck[] {
@@ -208,57 +200,15 @@ var EnginePackage = new NuGetPackage(
 		HasDirectory("tools").WithFiles(
 			"testcentric.engine.dll", "testcentric.engine.core.dll", "testcentric.engine.api.dll",
 			"testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll", "TestCentric.InternalTrace.dll",
-			"testcentric.engine.pdb", "testcentric.engine.core.pdb", "test-bed.exe",
+			"testcentric.engine.pdb", "test-bed.exe",
 			"test-bed.addins", "testcentric.nuget.addins")
 	},
 	tests: packageTests,
 	preloadedExtensions: new [] {
-		new PackageReference("TestCentric.Extension.Net462PluggableAgent", "2.3.0-dev00009"),
-		new PackageReference("TestCentric.Extension.Net60PluggableAgent", "2.3.0-dev00005"),
-		new PackageReference("TestCentric.Extension.Net70PluggableAgent", "2.3.0-dev00006") }
-);
-
-var EngineCorePackage = new NuGetPackage(
-	id: "TestCentric.Engine.Core",
-	title: "TestCentric Engine Core Assembly",
-	description: "This package includes the TestCentric engine.core assembly, which forms part of the TestCentric engine. It is provided in a separate package use in creating pluggable agents.",
-	basePath: "src/TestEngine/testcentric.engine.core/bin/" + BuildSettings.Configuration,
-	packageContent: new PackageContent(
-		new FilePath[] { "../../../../../LICENSE.txt", "../../../../../testcentric.png" },
-		new DirectoryContent("lib/net20").WithFiles(
-			"net20/testcentric.engine.core.dll", "net20/testcentric.engine.core.pdb", "net20/testcentric.engine.api.dll",
-			"net20/testcentric.engine.metadata.dll", "net20/testcentric.extensibility.dll", "net20/testcentric.extensibility.api.dll" ),
-		new DirectoryContent("lib/net462").WithFiles(
-			"net462/testcentric.engine.core.dll", "net462/testcentric.engine.core.pdb", "net462/testcentric.engine.api.dll",
-			"net462/testcentric.engine.metadata.dll", "net462/testcentric.extensibility.dll", "net462/testcentric.extensibility.api.dll" ),
-		new DirectoryContent("lib/netstandard2.0").WithFiles(
-			"netstandard2.0/testcentric.engine.core.dll", "netstandard2.0/testcentric.engine.core.pdb", "netstandard2.0/testcentric.engine.api.dll",
-			"netstandard2.0/testcentric.engine.metadata.dll", "netstandard2.0/testcentric.extensibility.dll", "netstandard2.0/testcentric.extensibility.api.dll" ),
-		new DirectoryContent("lib/netcoreapp3.1").WithFiles(
-			"netcoreapp3.1/testcentric.engine.core.dll", "netcoreapp3.1/testcentric.engine.core.pdb", "netcoreapp3.1/testcentric.engine.api.dll",
-			"netcoreapp3.1/testcentric.engine.metadata.dll", "netcoreapp3.1/testcentric.extensibility.dll", "netcoreapp3.1/testcentric.extensibility.api.dll",
-			"netcoreapp3.1/Microsoft.Extensions.DependencyModel.dll" )),
-	checks:new PackageCheck[] {
-		HasFiles("LICENSE.txt", "testcentric.png"),
-		HasDirectory("lib/net20").WithFiles(
-			"testcentric.engine.core.dll", "testcentric.engine.core.pdb", "testcentric.engine.api.dll",
-			"testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll"),
-		HasDirectory("lib/net462").WithFiles(
-			"testcentric.engine.core.dll", "testcentric.engine.core.pdb", "testcentric.engine.api.dll",
-			"testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll"),
-		HasDirectory("lib/netstandard2.0").WithFiles(
-			"testcentric.engine.core.dll", "testcentric.engine.core.pdb", "testcentric.engine.api.dll",
-			"testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll"),
-		HasDirectory("lib/netcoreapp3.1").WithFiles(
-			"testcentric.engine.core.dll", "testcentric.engine.core.pdb", "testcentric.engine.api.dll",
-			"testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll",
-			"Microsoft.Extensions.DependencyModel.dll")
-	});
-
-BuildSettings.Packages.AddRange(new [] {
-	EngineCorePackage,
-	EnginePackage
-});
+		new PackageReference("TestCentric.Extension.Net462PluggableAgent", "2.3.0-dev00012"),
+		new PackageReference("TestCentric.Extension.Net60PluggableAgent", "2.3.0-dev00008"),
+		new PackageReference("TestCentric.Extension.Net70PluggableAgent", "2.3.0-dev00011") }
+));
 
 //////////////////////////////////////////////////////////////////////
 // TEST BED RUNNER
@@ -282,47 +232,6 @@ public class TestCentricEngineTestBed : TestRunner
 }
 
 //////////////////////////////////////////////////////////////////////
-// RUN TESTS OF TESTCENTRIC.ENGINE SEPARATELY
-//////////////////////////////////////////////////////////////////////
-
-Task("TestEngine")
-	.Description("Tests the TestCentric Engine")
-	.IsDependentOn("Build")
-	.Does(() =>
-	{
-		NUnitLite.RunUnitTests("**/testcentric.engine.tests.exe");
-	});
-
-//////////////////////////////////////////////////////////////////////
-// RUN TESTS OF TESTCENTRIC.ENGINE.CORE SEPARATELY
-//////////////////////////////////////////////////////////////////////
-
-Task("TestEngineCore")
-	.Description("Tests the TestCentric Engine Core")
-	.IsDependentOn("Build")
-	.Does(() =>
-	{
-		NUnitLite.RunUnitTests("**/testcentric.engine.core.tests.exe|**/testcentric.engine.core.tests.dll");
-	});
-
-//////////////////////////////////////////////////////////////////////
-// BUILD, VERIFY AND TEST INDIVIDUAL PACKAGES
-//////////////////////////////////////////////////////////////////////
-
-Task("PackageEngineCore")
-	.Description("Build and Test the Engine Core Package")
-	.Does(() =>
-	{
-		EngineCorePackage.BuildVerifyAndTest();
-	});
-
-Task("PackageEngine")
-	.Description("Build and Test the Engine Package")
-	.Does(() =>
-	{
-		EnginePackage.BuildVerifyAndTest();
-	});
-
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
 
@@ -331,8 +240,7 @@ Task("AppVeyor")
 	.IsDependentOn("DumpSettings")
 	.IsDependentOn("Build")
 	.IsDependentOn("Test")
-	.IsDependentOn("PackageEngineCore")
-	.IsDependentOn("PackageEngine")
+	.IsDependentOn("Package")
 	.IsDependentOn("Publish")
 	.IsDependentOn("CreateDraftRelease")
 	.IsDependentOn("CreateProductionRelease");
@@ -349,6 +257,4 @@ Task("Default")
 // EXECUTION
 //////////////////////////////////////////////////////////////////////
 
-// We can't use the BuildSettings.Target for this because Setup has
-// not yet run and the settings have not been initialized.
-RunTarget(Argument("target", Argument("t", "Default")));
+RunTarget(CommandLineOptions.Target);
