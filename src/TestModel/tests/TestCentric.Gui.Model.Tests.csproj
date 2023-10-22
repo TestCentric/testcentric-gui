@@ -15,12 +15,8 @@
     </ItemGroup>
     
 	<ItemGroup>
-        <ProjectReference Include="..\..\tests\mock-assembly\mock-assembly.csproj">
-          <Name>mock-assembly</Name>
-        </ProjectReference>
-        <ProjectReference Include="..\model\TestCentric.Gui.Model.csproj">
-          <Name>TestCentric.Gui.Model</Name>
-        </ProjectReference>
+        <ProjectReference Include="..\..\tests\mock-assembly\mock-assembly.csproj" />
+        <ProjectReference Include="..\model\TestCentric.Gui.Model.csproj" />
     </ItemGroup>
     
 	<ItemGroup>

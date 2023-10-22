@@ -1,31 +1,38 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <RootNamespace>NUnit.UiException.Tests</RootNamespace>
-    <AssemblyName>nunit.uiexception.tests</AssemblyName>
-	<OutputType>Exe</OutputType>
-	<TargetFramework>net462</TargetFramework>
-    <OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System.Windows.Forms" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\UiException\nunit.uiexception.dll.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="data\Basic.cs" />
-    <EmbeddedResource Include="data\HelloWorld.txt" />
-    <EmbeddedResource Include="data\TextCode.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="NSubstitute" Version="4.0.0" />
-	  <PackageReference Include="NUnit" Version="3.13.2" />
-	  <PackageReference Include="NUnitLite" Version="3.13.2" />
-	  <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.1" />
-  </ItemGroup>
+    
+	<PropertyGroup>
+        <RootNamespace>NUnit.UiException.Tests</RootNamespace>
+        <AssemblyName>nunit.uiexception.tests</AssemblyName>
+	    <OutputType>Exe</OutputType>
+	    <TargetFramework>net462</TargetFramework>
+        <OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    </PropertyGroup>
+    
+	<ItemGroup>
+        <Reference Include="System.Windows.Forms" />
+    </ItemGroup>
+    
+	<ItemGroup>
+        <ProjectReference Include="..\UiException\nunit.uiexception.dll.csproj" />
+    </ItemGroup>
+    
+	<ItemGroup>
+        <EmbeddedResource Include="data\Basic.cs" />
+        <EmbeddedResource Include="data\HelloWorld.txt" />
+        <EmbeddedResource Include="data\TextCode.txt" />
+    </ItemGroup>
+    
+	<ItemGroup>
+        <None Include="app.config" />
+    </ItemGroup>
+    
+	<ItemGroup>
+        <PackageReference Include="NSubstitute" Version="4.0.0" />
+	    <PackageReference Include="NUnit" Version="3.13.2" />
+	    <PackageReference Include="NUnitLite" Version="3.13.2" />
+	    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.1" />
+    </ItemGroup>
+	
 </Project>
