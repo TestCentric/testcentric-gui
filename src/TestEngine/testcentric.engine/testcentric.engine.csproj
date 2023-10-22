@@ -42,16 +42,13 @@
 		<Reference Include="System.Runtime.Remoting" />
 		<Reference Include="System.Web" />
 	</ItemGroup>
-  
-	<ItemGroup>
-		<ProjectReference Include="..\testcentric.engine.core\testcentric.engine.core.csproj" />
-	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="TestCentric.Engine.Api" Version="2.0.0-dev00007" />
+		<PackageReference Include="TestCentric.Engine.Core" Version="2.0.0-beta3" />
+		<PackageReference Include="TestCentric.Engine.Api" Version="2.0.0-beta3" />
 		<PackageReference Include="TestCentric.Metadata" Version="2.0.0" />
-		<PackageReference Include="TestCentric.Extensibility" Version="2.0.0-dev00030" />
-		<PackageReference Include="TestCentric.InternalTrace" Version="1.0.0-dev00002" />
+		<PackageReference Include="TestCentric.Extensibility" Version="2.0.0" />
+		<PackageReference Include="TestCentric.InternalTrace" Version="1.0.0" />
 	</ItemGroup>
 
 </Project>
