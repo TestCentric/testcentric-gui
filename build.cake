@@ -1,32 +1,18 @@
-#tool nuget:?package=GitVersion.CommandLine&version=5.6.3
-
 using System.Xml.Serialization;
-
-const string GITHUB_OWNER = "testcentric";
-const string GITHUB_REPO = "testcentric-gui";
-
-const string DEFAULT_VERSION = "2.0.0";
-static string[] VALID_CONFIGS = new [] { "Release", "Debug" };
 
 // NOTE: This must match what is actually referenced by
 // the GUI test model project. Hopefully, this is a temporary
 // fix, which we can get rid of in the future.
-const string REF_ENGINE_VERSION = "2.0.0-dev00025";
+const string REF_ENGINE_VERSION = "2.0.0-beta3";
 
 // We must use the latest versions of the pre-installed agents
 // which use the engine version specified above.
-const string NET462_AGENT_VERSION = "2.3.0-dev00009";
-const string NET60_AGENT_VERSION = "2.3.0-dev00005";
-const string NET70_AGENT_VERSION = "2.3.0-dev00006";
-
-const string PACKAGE_NAME = "testcentric-gui";
-const string NUGET_PACKAGE_NAME = "TestCentric.GuiRunner";
-
-const string GUI_RUNNER = "testcentric.exe";
-const string GUI_TESTS = "*.Tests.dll";
+const string NET462_AGENT_VERSION = "2.3.0-dev00012";
+const string NET60_AGENT_VERSION = "2.3.0-dev00008";
+const string NET70_AGENT_VERSION = "2.3.0-dev00011";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00050
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00055
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -89,7 +75,7 @@ var nugetPackage = new NuGetPackage(
 				"nunit.uiexception.dll", "TestCentric.Gui.Model.dll", "Mono.Options.dll",
 				"testcentric.engine.dll", "testcentric.engine.core.dll", "testcentric.engine.api.dll", "TestCentric.InternalTrace.dll",
 				"testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll",
-				"testcentric.engine.pdb", "testcentric.engine.core.pdb", "../../nuget/testcentric.nuget.addins"),
+				"testcentric.engine.pdb", "../../nuget/testcentric.nuget.addins"),
 			new DirectoryContent("tools/Images").WithFiles(
 				"Images/DebugTests.png", "Images/RunTests.png", "Images/StopRun.png", "Images/GroupBy_16x.png", "Images/SummaryReport.png"),
 			new DirectoryContent("tools/Images/Tree/Circles").WithFiles(
@@ -131,7 +117,7 @@ var chocolateyPackage = new ChocolateyPackage(
 				"nunit.uiexception.dll", "TestCentric.Gui.Model.dll", "Mono.Options.dll",
 				"testcentric.engine.dll", "testcentric.engine.core.dll", "testcentric.engine.api.dll", "TestCentric.InternalTrace.dll",
 				"testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll",
-				"testcentric.engine.pdb", "testcentric.engine.core.pdb", "test-bed.exe", "test-bed.addins"),
+				"testcentric.engine.pdb", "../../choco/testcentric.choco.addins"),
 			new DirectoryContent("tools/Images").WithFiles(
 				"Images/DebugTests.png", "Images/RunTests.png", "Images/StopRun.png", "Images/GroupBy_16x.png", "Images/SummaryReport.png"),
 			new DirectoryContent("tools/Images/Tree/Circles").WithFiles(
@@ -279,4 +265,4 @@ Task("Default")
 // EXECUTION
 //////////////////////////////////////////////////////////////////////
 
-RunTarget(Argument("target", Argument("t", "Default")));
+RunTarget(CommandLineOptions.Target);
