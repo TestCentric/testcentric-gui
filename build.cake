@@ -12,7 +12,7 @@ const string NET60_AGENT_VERSION = "2.3.0";
 const string NET70_AGENT_VERSION = "2.3.0";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00055
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00057
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -238,7 +238,8 @@ Task("RunTestCentricGuiTests")
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
-
+Task ("Indirect")
+	.IsDependentOn("CreateDraftRelease");
 Task("AppVeyor")
 	.IsDependentOn("DumpSettings")
 	.IsDependentOn("Build")
