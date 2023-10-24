@@ -7,9 +7,9 @@ const string REF_ENGINE_VERSION = "2.0.0-beta3";
 
 // We must use the latest versions of the pre-installed agents
 // which use the engine version specified above.
-const string NET462_AGENT_VERSION = "2.3.0-dev00012";
-const string NET60_AGENT_VERSION = "2.3.0-dev00008";
-const string NET70_AGENT_VERSION = "2.3.0-dev00011";
+const string NET462_AGENT_VERSION = "2.3.0";
+const string NET60_AGENT_VERSION = "2.3.0";
+const string NET70_AGENT_VERSION = "2.3.0";
 
 // Load the recipe
 #load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00055
