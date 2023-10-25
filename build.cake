@@ -1,5 +1,5 @@
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00055
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00058
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -159,7 +159,7 @@ packageTests.Add(new PackageTest(1, "Net35PlusNetCore21Test", "Run different bui
 //                            new ExpectedAssemblyResult("mock-assembly.dll", "Net60AgentLauncher"),
 //                            new ExpectedAssemblyResult("mock-assembly.dll", "Net60AgentLauncher") }
 //        },
-//        NUnitProjectLoader));
+//        KnownExtensions.NUnitProjectLoader));
 //}
 
 // NOTE: Package tests using a pluggable agent must be run after all tests
@@ -205,9 +205,9 @@ BuildSettings.Packages.Add(new NuGetPackage(
 	},
 	tests: packageTests,
 	preloadedExtensions: new [] {
-		new PackageReference("TestCentric.Extension.Net462PluggableAgent", "2.3.0-dev00012"),
-		new PackageReference("TestCentric.Extension.Net60PluggableAgent", "2.3.0-dev00008"),
-		new PackageReference("TestCentric.Extension.Net70PluggableAgent", "2.3.0-dev00011") }
+        KnownExtensions.Net462PluggableAgent.NuGetPackage,
+        KnownExtensions.Net60PluggableAgent.NuGetPackage,
+        KnownExtensions.Net70PluggableAgent.NuGetPackage }
 ));
 
 //////////////////////////////////////////////////////////////////////
