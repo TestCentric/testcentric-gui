@@ -1,27 +1,14 @@
-using System.Xml.Serialization;
-
 // NOTE: This must match what is actually referenced by
 // the GUI test model project. Hopefully, this is a temporary
 // fix, which we can get rid of in the future.
 const string REF_ENGINE_VERSION = "2.0.0-beta3";
 
-// We must use the latest versions of the pre-installed agents
-// which use the engine version specified above.
-const string NET462_AGENT_VERSION = "2.3.0";
-const string NET60_AGENT_VERSION = "2.3.0";
-const string NET70_AGENT_VERSION = "2.3.0";
-
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00057
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00058
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
 #load "./package-tests.cake"
-
-using System.Xml;
-using System.Text.RegularExpressions;
-using System.Reflection;
-using System.Threading.Tasks;
 
 //////////////////////////////////////////////////////////////////////
 // INITIALIZATION
@@ -35,16 +22,14 @@ BuildSettings.Initialize(
 	exemptFiles: new [] { "Resource.cs", "TextCode.cs" }
 );
 
+//////////////////////////////////////////////////////////////////////
+// COMMON DEFINITIONS USED IN BOTH PACKAGES
+//////////////////////////////////////////////////////////////////////
+
 DefinePackageTests();
 
 static readonly FilePath[] ENGINE_FILES = {
         "testcentric.engine.dll", "testcentric.engine.core.dll", "testcentric.engine.api.dll", "testcentric.engine.metadata.dll"};
-static readonly FilePath[] ENGINE_CORE_FILES = {
-        "testcentric.engine.core.dll", "testcentric.engine.api.dll", "testcentric.engine.metadata.dll" };
-static readonly FilePath[] NET_FRAMEWORK_AGENT_FILES = {
-        "testcentric-agent.exe", "testcentric-agent.exe.config", "testcentric-agent-x86.exe", "testcentric-agent-x86.exe.config" };
-static readonly FilePath[] NET_CORE_AGENT_FILES = {
-        "testcentric-agent.dll", "testcentric-agent.dll.config" };
 static readonly FilePath[] GUI_FILES = {
         "testcentric.exe", "testcentric.exe.config", "nunit.uiexception.dll",
         "TestCentric.Gui.Runner.dll", "TestCentric.Gui.Model.dll", "Mono.Options.dll" };
@@ -63,6 +48,10 @@ private const string GUI_DESCRIPTION =
 	"\r\n\n### Prerequisites" +
 	"\r\n\n**TestCentric** requires .NET 4.5 or later in order to function, although your tests may run in a separate process under other framework versions." +
 	"\r\n\nProjects with tests to be run under **TestCentric** must already have some version of the NUnit framework installed separtely.";
+
+//////////////////////////////////////////////////////////////////////
+// DEFINE PACKAGES
+//////////////////////////////////////////////////////////////////////
 
 var nugetPackage = new NuGetPackage(
 	id: "TestCentric.GuiRunner",
@@ -85,9 +74,9 @@ var nugetPackage = new NuGetPackage(
 			new DirectoryContent("tools/Images/Tree/Visual Studio").WithFiles(
 				"Images/Tree/Visual Studio/Success.png", "Images/Tree/Visual Studio/Failure.png", "Images/Tree/Visual Studio/Ignored.png", "Images/Tree/Visual Studio/Inconclusive.png", "Images/Tree/Visual Studio/Skipped.png") )
 		.WithDependencies(
-			new PackageReference("TestCentric.Extension.Net462PluggableAgent", NET462_AGENT_VERSION),
-			new PackageReference("TestCentric.Extension.Net60PluggableAgent", NET60_AGENT_VERSION),
-			new PackageReference("TestCentric.Extension.Net70PluggableAgent", NET70_AGENT_VERSION)
+			KnownExtensions.Net462PluggableAgent.NuGetPackage,
+			KnownExtensions.Net60PluggableAgent.NuGetPackage,
+			KnownExtensions.Net70PluggableAgent.NuGetPackage
 		),
 	testRunner: new GuiSelfTester(BuildSettings.NuGetTestDirectory + "TestCentric.GuiRunner/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
@@ -124,9 +113,9 @@ var chocolateyPackage = new ChocolateyPackage(
 			new DirectoryContent("tools/Images/Tree/Visual Studio").WithFiles(
 				"Images/Tree/Visual Studio/Success.png", "Images/Tree/Visual Studio/Failure.png", "Images/Tree/Visual Studio/Ignored.png", "Images/Tree/Visual Studio/Inconclusive.png", "Images/Tree/Visual Studio/Skipped.png") )
 		.WithDependencies(
-			new PackageReference("testcentric-extension-net462-pluggable-agent", NET462_AGENT_VERSION),
-			new PackageReference("testcentric-extension-net60-pluggable-agent", NET60_AGENT_VERSION),
-			new PackageReference("testcentric-extension-net70-pluggable-agent", NET70_AGENT_VERSION)
+			KnownExtensions.Net462PluggableAgent.ChocoPackage,
+			KnownExtensions.Net60PluggableAgent.ChocoPackage,
+			KnownExtensions.Net70PluggableAgent.ChocoPackage
 		),
 	testRunner: new GuiSelfTester(BuildSettings.ChocolateyTestDirectory + "testcentric-gui/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
