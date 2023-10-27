@@ -1,7 +1,7 @@
 // NOTE: This must match what is actually referenced by
 // the GUI test model project. Hopefully, this is a temporary
 // fix, which we can get rid of in the future.
-const string REF_ENGINE_VERSION = "2.0.0-beta3";
+const string REF_ENGINE_VERSION = "2.0.0-dev00004";
 
 // Load the recipe
 #load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00058
