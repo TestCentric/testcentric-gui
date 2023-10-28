@@ -19,12 +19,8 @@ using System.Runtime.Versioning;
 namespace TestCentric.Engine.Services
 {
     /// <summary>
-    /// The TestAgency class provides RemoteTestAgents
-    /// on request and tracks their status. Agents
-    /// are wrapped in an instance of the TestAgent
-    /// class. Multiple agent types are supported
-    /// but only one, ProcessAgent is implemented
-    /// at this time.
+    /// The TestAgency class provides ITestAgents
+    /// on request and tracks their status.
     /// </summary>
     class TestAgency : ITestAgentProvider, ITestAgency, IService
     {
