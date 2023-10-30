@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -13,6 +14,7 @@ using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
 using TestCentric.Engine.Internal;
 using TestCentric.Engine.Services;
+using System.Runtime.Serialization.Formatters;
 
 namespace TestCentric.Engine.Communication.Transports.Remoting
 {
@@ -48,7 +50,7 @@ namespace TestCentric.Engine.Communication.Transports.Remoting
         {
             lock (_theLock)
             {
-                _channel = TcpChannelUtils.GetTcpChannel(_uri + "Channel", _port, 100);
+                _channel = GetTcpChannel(_uri + "Channel", _port);
 
                 RemotingServices.Marshal(this, _uri);
                 _isMarshalled = true;
@@ -65,6 +67,50 @@ namespace TestCentric.Engine.Communication.Transports.Remoting
             }
 
             return true;
+        }
+
+        private static TcpChannel GetTcpChannel(string name, int port)
+        {
+            var existingChannel = ChannelServices.GetChannel(name) as TcpChannel;
+            if (existingChannel != null) return existingChannel;
+
+            // NOTE: Retries are normally only needed when rapidly creating
+            // and destroying channels, as in running the NUnit tests.
+            for (var retries = 0; retries < 10; retries++)
+                try
+                {
+                    var newChannel = CreateTcpChannel(name, port);
+                    ChannelServices.RegisterChannel(newChannel, false);
+                    return newChannel;
+                }
+                catch (Exception ex)
+                {
+                    log.Error("Failed to create/register channel." + Environment.NewLine + ExceptionHelper.BuildMessageAndStackTrace(ex));
+                    Thread.Sleep(300);
+                }
+
+            return null;
+        }
+
+        private static TcpChannel CreateTcpChannel(string name, int port)
+        {
+            var props = new Dictionary<string, object>
+            {
+                { "port", port },
+                { "name", name },
+                { "bindTo", "127.0.0.1" }
+            };
+
+            var serverProvider = new BinaryServerFormatterSinkProvider {
+                TypeFilterLevel = TypeFilterLevel.Full
+            };
+
+            var clientProvider = new BinaryClientFormatterSinkProvider();
+
+            return new TcpChannel(
+                props,
+                clientProvider,
+                (IServerChannelSinkProvider)serverProvider);
         }
 
         [System.Runtime.Remoting.Messaging.OneWay]
