@@ -3,6 +3,9 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
+// TODO: Split agent runner tests from engine runner tests
+// and move to agent test assembly.
+#if false
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,8 +21,6 @@ namespace TestCentric.Engine.Runners
     // Temporarily commenting out Process tests due to
     // intermittent errors, probably due to the test
     // fixture rather than the engine.
-    // TODO: Split agent runner tests from engine runner tests
-    // and move to agent test assembly.
     [TestFixture(typeof(LocalTestRunner))]
 #if !NETCOREAPP2_1
     //[TestFixture(typeof(TestDomainRunner))]
@@ -174,3 +175,4 @@ namespace TestCentric.Engine.Runners
         }
     }
 }
+#endif

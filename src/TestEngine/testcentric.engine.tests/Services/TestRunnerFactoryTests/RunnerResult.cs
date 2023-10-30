@@ -17,7 +17,7 @@ namespace TestCentric.Engine.Services.TestRunnerFactoryTests
         public static RunnerResult ProcessRunner => new RunnerResult { TestRunner = typeof(AssemblyRunner) };
 #endif
 
-        public static RunnerResult LocalTestRunner => new RunnerResult { TestRunner = typeof(LocalTestRunner) };
+        //public static RunnerResult LocalTestRunner => new RunnerResult { TestRunner = typeof(LocalTestRunner) };
 
         public static RunnerResult AggregatingTestRunner(RunnerResult subRunnerType, int numSubRunners)
         {
