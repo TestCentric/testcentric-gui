@@ -18,7 +18,7 @@
 		<PackageReference Include="TestCentric.InternalTrace" Version="1.0.0" />
 		<PackageReference Include="TestCentric.Extensibility" Version="2.0.0" />
 		<PackageReference Include="TestCentric.Engine.Api" Version="2.0.0-beta3" />
-		<PackageReference Include="TestCentric.Engine" Version="2.0.0-dev00004" />
+		<PackageReference Include="TestCentric.Engine" Version="2.0.0-dev00009" />
 	</ItemGroup>
   
 </Project>
