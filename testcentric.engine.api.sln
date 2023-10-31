@@ -27,6 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{79FED62B
 		nuget\TestCentric.Engine.Api.nuspec = nuget\TestCentric.Engine.Api.nuspec
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCentric.Engine.Api.Tests", "src\TestCentric.Engine.Api.Tests\TestCentric.Engine.Api.Tests.csproj", "{3A99C7F4-4918-42BC-8364-0618F454B616}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{66CDBCC4-AAFE-42CD-8C02-BA6ACC99C81C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66CDBCC4-AAFE-42CD-8C02-BA6ACC99C81C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66CDBCC4-AAFE-42CD-8C02-BA6ACC99C81C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A99C7F4-4918-42BC-8364-0618F454B616}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A99C7F4-4918-42BC-8364-0618F454B616}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A99C7F4-4918-42BC-8364-0618F454B616}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A99C7F4-4918-42BC-8364-0618F454B616}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
