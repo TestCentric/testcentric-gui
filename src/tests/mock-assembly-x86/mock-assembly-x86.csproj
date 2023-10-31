@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<RootNamespace>NUnit.Tests</RootNamespace>
 		<TargetFramework>net462</TargetFramework>
@@ -15,6 +15,6 @@
 	  <None Remove="Properties\**" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="NUnit" Version="3.13.2" />
+		<PackageReference Include="NUnit" Version="3.13.3" />
 	</ItemGroup>
 </Project>
