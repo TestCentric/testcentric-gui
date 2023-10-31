@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<RootNamespace>TestCentric.Engine</RootNamespace>
+		<TargetFrameworks>net35;net462;netcoreapp2.1</TargetFrameworks>
+		<CheckEolTargetFramework>false</CheckEolTargetFramework>
+		<OutputType>Exe</OutputType>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="NUnit" Version="3.13.3" />
+		<PackageReference Include="NUnitLite" Version="3.13.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\TestCentric.Engine.Api\TestCentric.Engine.Api.csproj" />
+	</ItemGroup>
+
+</Project>
