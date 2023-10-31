@@ -1,9 +1,5 @@
-#tool NuGet.CommandLine&version=6.0.0
-
-const string ENGINE_API_PACKAGE_ID = "TestCentric.Engine.Api";
-
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00050
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00058
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -19,8 +15,8 @@ using System.Threading.Tasks;
 BuildSettings.Initialize(
 	Context,
 	"TestCentric.Engine.Api",
-	solutionFile: "testcentric.engine.api.sln",
-	githubRepository: "testcentric.engine.api"
+	solutionFile: "TestCentric.Engine.Api.sln",
+	githubRepository: "TestCentric.Engine.Api"
 );
 
 //////////////////////////////////////////////////////////////////////
@@ -33,15 +29,11 @@ var EngineApiPackage = new NuGetPackage(
 	description: "This package includes the testcentric.agent.api assembly, containing the interfaces used in creating pluggable agents.",
 	basePath: "bin/" + BuildSettings.Configuration,
 	source: "nuget/TestCentric.Engine.Api.nuspec",
-	//packageContent: new PackageContent(
-	//	new FilePath[] { "../../LICENSE.txt", "../../testcentric.png" },
-	//	new DirectoryContent("lib/netstandard2.0").WithFiles(
-	//		"netstandard2.0/testcentric.engine.api.dll", "netstandard2.0/testcentric.engine.api.pdb")),
 	checks: new PackageCheck[] {
 		HasFiles("LICENSE.txt", "testcentric.png"),
-		HasDirectory("lib/net20").WithFiles("testcentric.engine.api.dll"),
-		HasDirectory("lib/net462").WithFiles("testcentric.engine.api.dll"),
-		HasDirectory("lib/netstandard2.0").WithFiles("testcentric.engine.api.dll")
+		HasDirectory("lib/net20").WithFiles("TestCentric.Engine.Api.dll"),
+		HasDirectory("lib/net462").WithFiles("TestCentric.Engine.Api.dll"),
+		HasDirectory("lib/netstandard2.0").WithFiles("Testcentric.Engine.Api.dll")
 	});
 
 BuildSettings.Packages.Add(EngineApiPackage);
@@ -72,6 +64,4 @@ Task("Default")
 // EXECUTION
 //////////////////////////////////////////////////////////////////////
 
-// We can't use the BuildSettings.Target for this because Setup has
-// not yet run and the settings have not been initialized.
-RunTarget(Argument("target", Argument("t", "Default")));
+RunTarget(CommandLineOptions.Target);
