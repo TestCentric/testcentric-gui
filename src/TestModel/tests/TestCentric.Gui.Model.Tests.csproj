@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	
 	<PropertyGroup>
 		<RootNamespace>TestCentric.Gui.Model</RootNamespace>
@@ -26,7 +26,7 @@
 		<PackageReference Include="TestCentric.InternalTrace" Version="1.0.0" />
 		<PackageReference Include="TestCentric.Engine.Api" Version="2.0.0-beta3" />
 		<PackageReference Include="TestCentric.Extensibility" Version="2.0.0" />
-		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.1" />
+		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
 	</ItemGroup>
 	
 </Project>

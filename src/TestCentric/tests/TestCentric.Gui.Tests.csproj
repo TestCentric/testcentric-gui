@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	
 	<PropertyGroup>
 		<RootNamespace>TestCentric.Gui</RootNamespace>
@@ -36,7 +36,7 @@
         <PackageReference Include="NUnit.Extension.NUnitV2Driver" Version="3.8.0" />
         <PackageReference Include="NUnit.Extension.NUnitV2ResultWriter" Version="3.6.0" />
         <PackageReference Include="NUnit.Extension.VSProjectLoader" Version="3.8.0" />
-		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.1" />
+		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
 	</ItemGroup>
 	
 </Project>
