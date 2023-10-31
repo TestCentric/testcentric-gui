@@ -1,6 +1,6 @@
 # TestCentric Test Engine
 
-[![Build status](https://ci.appveyor.com/api/projects/status/i7ymql47e8bo2rel/branch/main?svg=true)](https://ci.appveyor.com/project/CharliePoole/testcentric-engine/branch/main)
+[![Build status](https://ci.appveyor.com/api/projects/status/i7ymql47e8bo2rel/branch/main?svg=true)](https://ci.appveyor.com/project/CharliePoole/testcentric-engine-api/branch/main)
 
 The **TestCentric Test Engine** was originally created to support the **TestCentric GUI** and was
 included with it through the 1.x release series. Beginning with version 2.0, it is provided as an
