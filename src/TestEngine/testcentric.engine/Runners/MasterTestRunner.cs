@@ -240,7 +240,7 @@ namespace TestCentric.Engine.Runners
 
                 // Add package settings to reflect the target runtime
                 // and test framework usage of each assembly.
-                foreach (var package in TestPackage.Select(p => p.IsAssemblyPackage()))
+                foreach (var package in TestPackage.Select(p => p.IsAssemblyPackage))
                     if (File.Exists(package.FullName))
                         _packageAnalyzer.ApplyImageSettings(package);
 

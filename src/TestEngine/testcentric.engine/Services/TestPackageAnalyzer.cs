@@ -98,7 +98,7 @@ namespace TestCentric.Engine.Services
         public void ApplyImageSettings(TestPackage package)
         {
             Guard.ArgumentNotNull(package, nameof(package));
-            Guard.ArgumentValid(package.IsAssemblyPackage(), "ApplyImageSettings called for non-assembly", nameof(package));
+            Guard.ArgumentValid(package.IsAssemblyPackage, "ApplyImageSettings called for non-assembly", nameof(package));
 
             var assembly = AssemblyDefinition.ReadAssembly(package.FullName);
 

@@ -23,7 +23,7 @@ namespace TestCentric.Engine.Services
         /// <returns>A TestRunner</returns>
         public ITestEngineRunner MakeTestRunner(TestPackage package)
         {
-            var packageList = package.Select(p => !p.HasSubPackages());
+            var packageList = package.Select(p => !p.HasSubPackages);
 
             if (packageList.Count > 1)
                 return new AggregatingTestRunner(ServiceContext, package);
