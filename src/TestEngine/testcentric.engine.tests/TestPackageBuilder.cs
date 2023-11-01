@@ -33,10 +33,9 @@ namespace TestCentric.Engine
             return new TestPackage(testFiles);
         }
 
-        // TODO: this needs to be different if using the 4.0 API
         public static TestPackage MakeSubPackage(string testFile)
         {
-            return new TestPackage(testFile);
+            return new TestPackage(testFile).SubPackages[0];
         }
     }
 }
