@@ -83,7 +83,7 @@ namespace TestCentric.Engine.Services
             var validAgentNames = new List<string>(availableAgents.Select(info => info.AgentName));
 
             // Look at each included assembly package to see if any names should be removed
-            foreach (var assemblyPackage in targetPackage.Select(p => p.IsAssemblyPackage()))
+            foreach (var assemblyPackage in targetPackage.Select(p => p.IsAssemblyPackage))
             {
                 // Collect names of agents that work for each assembly
                 var agentsForAssembly = new List<string>();

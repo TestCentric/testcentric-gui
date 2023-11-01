@@ -36,7 +36,7 @@ namespace TestCentric.Engine.Runners
             get
             {
                 var maxAgents = TestPackage.GetSetting(EnginePackageSettings.MaxAgents, Environment.ProcessorCount);
-                return Math.Min(maxAgents, TestPackage.Select(p => !p.HasSubPackages()).Count);
+                return Math.Min(maxAgents, TestPackage.Select(p => !p.HasSubPackages).Count);
             }
         }
 
@@ -47,7 +47,7 @@ namespace TestCentric.Engine.Runners
         {
             _testRunnerFactory = services.GetService<ITestRunnerFactory>();
 
-            _packageList = new List<TestPackage>(package.Select(p => !p.HasSubPackages()));
+            _packageList = new List<TestPackage>(package.Select(p => !p.HasSubPackages));
             Runners = new List<ITestEngineRunner>();
             foreach (var subPackage in _packageList)
             {

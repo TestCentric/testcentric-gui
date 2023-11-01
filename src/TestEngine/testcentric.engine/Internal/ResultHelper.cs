@@ -73,7 +73,7 @@ namespace TestCentric.Engine.Internal
             // we expanded.
             bool hasProjects = false;
             foreach (var p in testPackage.SubPackages)
-                hasProjects |= p.HasSubPackages();
+                hasProjects |= p.HasSubPackages;
 
             // If no Projects, there's nothing to do
             if (!hasProjects)
@@ -99,7 +99,7 @@ namespace TestCentric.Engine.Internal
 
             foreach (var subPackage in testPackage.SubPackages)
             {
-                if (subPackage.HasSubPackages())
+                if (subPackage.HasSubPackages)
                 {
                     // This is a project, create an intermediate result
                     var projectResult = new TestEngineResult();
