@@ -90,10 +90,26 @@ namespace TestCentric.Engine
         /// </summary>
         public string FullName { get; private set; }
 
+        public bool IsAssemblyPackage {
+            get
+            {
+                if (FullName == null)
+                    return false;
+
+                var ext = Path.GetExtension(FullName).ToLowerInvariant();
+                return ext == ".dll" || ext == ".exe";
+            }
+        }
+
         /// <summary>
         /// Gets the list of SubPackages contained in this package
         /// </summary>
         public IList<TestPackage> SubPackages { get; } = new List<TestPackage>();
+
+        /// <summary>
+        /// Returns true if this package has any SubPackages.
+        /// </summary>
+        public bool HasSubPackages => SubPackages.Count > 0;
 
         /// <summary>
         /// Gets the settings dictionary for this package.
@@ -155,6 +171,26 @@ namespace TestCentric.Engine
             return Settings.ContainsKey(name)
                 ? (T)Settings[name]
                 : defaultSetting;
+        }
+
+        public delegate bool SelectorDelegate(TestPackage p);
+
+        public IList<TestPackage> Select(SelectorDelegate selector)
+        {
+            var selection = new List<TestPackage>();
+
+            AccumulatePackages(this, selection, selector);
+
+            return selection;
+        }
+
+        private static void AccumulatePackages(TestPackage package, IList<TestPackage> selection, SelectorDelegate selector)
+        {
+            if (selector(package))
+                selection.Add(package);
+
+            foreach (var subPackage in package.SubPackages)
+                AccumulatePackages(subPackage, selection, selector);
         }
     }
 }

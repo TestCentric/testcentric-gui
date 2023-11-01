@@ -36,12 +36,20 @@ namespace TestCentric.Engine.Api
         {
             Assert.Null(_package.Name);
             Assert.Null(_package.FullName);
+            Assert.False(_package.IsAssemblyPackage);
+        }
+
+        [Test]
+        public void PackageHasSubPackages()
+        {
+            Assert.That(_package.HasSubPackages);
         }
 
         [Test]
         public void HasSubPackageForEachFile()
         {
             Assert.That(_package.SubPackages.Count, Is.EqualTo(_fileNames.Length));
+
             for (int i = 0; i < _fileNames.Length; i++)
             {
                 TestPackage subPackage = _package.SubPackages[i];
@@ -49,6 +57,7 @@ namespace TestCentric.Engine.Api
 
                 Assert.That(subPackage.Name, Is.EqualTo(fileName));
                 Assert.That(subPackage.FullName, Is.EqualTo(Path.GetFullPath(fileName)));
+                Assert.That(subPackage.IsAssemblyPackage);
             }
         }
 
@@ -56,7 +65,18 @@ namespace TestCentric.Engine.Api
         public void SubPackagesHaveNoSubPackages()
         {
             foreach (TestPackage subPackage in _package.SubPackages)
+            {
                 Assert.That(subPackage.SubPackages.Count, Is.EqualTo(0));
+                Assert.False(subPackage.HasSubPackages);
+            }
+        }
+
+        [Test]
+        public void CanSelectPackages()
+        {
+            var selection = _package.Select(p => p.Name != null && p.Name.StartsWith("test"));
+
+            Assert.That(selection, Is.EquivalentTo(_package.SubPackages));
         }
     }
 }
