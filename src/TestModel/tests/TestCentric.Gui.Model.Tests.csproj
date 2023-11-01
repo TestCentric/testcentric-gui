@@ -24,7 +24,7 @@
 		<PackageReference Include="NUnit" Version="3.13.2" />
 		<PackageReference Include="NUnitLite" Version="3.13.2" />
 		<PackageReference Include="TestCentric.InternalTrace" Version="1.0.0" />
-		<PackageReference Include="TestCentric.Engine.Api" Version="2.0.0-beta3" />
+		<PackageReference Include="TestCentric.Engine.Api" Version="2.0.0-dev00010" />
 		<PackageReference Include="TestCentric.Extensibility" Version="2.0.0" />
 		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
 	</ItemGroup>
