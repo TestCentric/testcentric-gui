@@ -29,6 +29,8 @@ namespace TestCentric.Engine
     [Serializable]
     public class TestPackage
     {
+        #region Construction and Initialization
+
         /// <summary>
         /// Construct a top-level TestPackage that wraps one or more
         /// test files, contained as subpackages.
@@ -94,6 +96,10 @@ namespace TestCentric.Engine
             return (_nextID++).ToString();
         }
 
+        #endregion
+
+        #region Properties
+
         /// <summary>
         /// Every test package gets a unique ID used to prefix test IDs within that package.
         /// </summary>
@@ -143,8 +149,13 @@ namespace TestCentric.Engine
         /// </summary>
         public IDictionary<string, object> Settings { get; } = new Dictionary<string, object>();
 
+        #endregion
+
+        #region Methods
+
         /// <summary>
-        /// Add a subpackage to the package.
+        /// Add a subpackage to the package and apply all the settings
+        /// from the current package to the subpackage.
         /// </summary>
         /// <param name="subPackage">The subpackage to be added</param>
         public void AddSubPackage(TestPackage subPackage)
@@ -202,6 +213,10 @@ namespace TestCentric.Engine
 
         public delegate bool SelectorDelegate(TestPackage p);
 
+        /// <summary>
+        /// Select individual packages from the tree of packages
+        /// based on a selection criteria.
+        /// </summary>
         public IList<TestPackage> Select(SelectorDelegate selector)
         {
             var selection = new List<TestPackage>();
@@ -285,7 +300,7 @@ namespace TestCentric.Engine
             }
         }
 
-        public TestPackage Deserialize(string xml)
+        public static TestPackage Deserialize(string xml)
         {
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(xml);
@@ -295,5 +310,7 @@ namespace TestCentric.Engine
 
             return new TestPackage(topNode);
         }
+
+        #endregion
     }
 }
