@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Xml;
 
 namespace TestCentric.Engine
 {
@@ -52,6 +53,32 @@ namespace TestCentric.Engine
         public TestPackage(IList<string> testFiles)
         {
             InitializeSubPackages(testFiles);
+        }
+
+        /// <summary>
+        /// Private constructor used in deserializing package from
+        /// it's XML representation.
+        /// </summary>
+        /// <param name="node"></param>
+        private TestPackage(XmlNode node)
+        {
+            ID = node.Attributes["id"]?.Value;
+            FullName = node.Attributes["name"]?.Value;
+
+            foreach (XmlNode child in node.ChildNodes)
+            {
+                switch (child.Name)
+                {
+                    case "Settings":
+                        foreach (XmlNode attr in child.Attributes)
+                            AddSetting(attr.Name, attr.Value);
+                        break;
+                    case "TestPackage":
+                        var childName = child.Attributes["fullname"]?.Value;
+                        AddSubPackage(new TestPackage(child));
+                        break;
+                }
+            }
         }
 
         private void InitializeSubPackages(IList<string> testFiles)
@@ -191,6 +218,82 @@ namespace TestCentric.Engine
 
             foreach (var subPackage in package.SubPackages)
                 AccumulatePackages(subPackage, selection, selector);
+        }
+
+        public string ToXml()
+        {
+            var stringWriter = new StringWriter();
+            Serialize(stringWriter);
+            return stringWriter.ToString();
+        }
+
+        /// <summary>
+        /// Convenience method to serialize a TestPackage to a StringWriter
+        /// without an XML declaration.
+        /// </summary>
+        /// <param name="writer">An StringWriter to use</param>
+        public void Serialize(StringWriter writer)
+        {
+            // Assume we don't want the Xml declaration in our string
+            var settings = new XmlWriterSettings { OmitXmlDeclaration = true };
+            var xmlWriter = XmlWriter.Create(writer, settings);
+            Serialize(xmlWriter);
+            xmlWriter.Flush();
+            xmlWriter.Close();
+        }
+
+        /// <summary>
+        /// Serialize a TestPackage to an XmlWriter
+        /// </summary>
+        /// <param name="xmlWriter">An XmlWriter to use</param>
+        /// <param name="package">The package to be serialized</param>
+        public void Serialize(XmlWriter xmlWriter)
+        {
+            xmlWriter.WriteStartElement("TestPackage");
+
+            WritePackageAttributes();
+            WriteSettings();
+            WriteSubPackages();
+
+            xmlWriter.WriteEndElement();
+
+            void WritePackageAttributes()
+            {
+                xmlWriter.WriteAttributeString("id", ID);
+
+                if (FullName != null)
+                    xmlWriter.WriteAttributeString("fullname", FullName);
+            }
+
+            void WriteSettings()
+            {
+                if (Settings.Count != 0)
+                {
+                    xmlWriter.WriteStartElement("Settings");
+
+                    foreach (var pair in Settings)
+                        xmlWriter.WriteAttributeString(pair.Key, pair.Value.ToString());
+
+                    xmlWriter.WriteEndElement();
+                }
+            }
+
+            void WriteSubPackages()
+            {
+                foreach (var subPackage in SubPackages)
+                    subPackage.Serialize(xmlWriter);
+            }
+        }
+
+        public TestPackage Deserialize(string xml)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            var topNode = doc.DocumentElement;
+            if (topNode.Name != "TestPackage")
+                throw new ArgumentException("Xml provided is not a TestPackage");
+
+            return new TestPackage(topNode);
         }
     }
 }
