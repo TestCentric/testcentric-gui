@@ -65,7 +65,7 @@ namespace TestCentric.Engine
         private TestPackage(XmlNode node)
         {
             ID = node.Attributes["id"]?.Value;
-            FullName = node.Attributes["name"]?.Value;
+            FullName = node.Attributes["fullname"]?.Value;
 
             foreach (XmlNode child in node.ChildNodes)
             {
