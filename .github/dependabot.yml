@@ -5,7 +5,7 @@
 
 version: 2
 updates:
-  - package-ecosystem: "nuget" # See documentation for possible values
+  - package-ecosystem: "nuget"
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
@@ -13,4 +13,3 @@ updates:
       - dependency-name: NUnit
       - dependency-name: NUnitLite
       - dependency-name: NUnit.Extension.*
-      - dependency-name: cake.tool
