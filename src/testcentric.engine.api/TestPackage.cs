@@ -3,10 +3,11 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 
 namespace TestCentric.Engine
 {
@@ -26,8 +27,7 @@ namespace TestCentric.Engine
     /// package, changing settings as needed. This gives the best chance for the
     /// tests in the reloaded assembly to match those originally loaded.
     /// </summary>
-    [Serializable]
-    public class TestPackage
+    public class TestPackage : IXmlSerializable
     {
         #region Construction and Initialization
 
@@ -58,30 +58,9 @@ namespace TestCentric.Engine
         }
 
         /// <summary>
-        /// Private constructor used in deserializing package from
-        /// it's XML representation.
+        /// Default Constructor is required for XmlSerializer
         /// </summary>
-        /// <param name="node"></param>
-        private TestPackage(XmlNode node)
-        {
-            ID = node.Attributes["id"]?.Value;
-            FullName = node.Attributes["fullname"]?.Value;
-
-            foreach (XmlNode child in node.ChildNodes)
-            {
-                switch (child.Name)
-                {
-                    case "Settings":
-                        foreach (XmlNode attr in child.Attributes)
-                            AddSetting(attr.Name, attr.Value);
-                        break;
-                    case "TestPackage":
-                        var childName = child.Attributes["fullname"]?.Value;
-                        AddSubPackage(new TestPackage(child));
-                        break;
-                }
-            }
-        }
+        public TestPackage() { }
 
         private void InitializeSubPackages(IList<string> testFiles)
         {
@@ -107,7 +86,7 @@ namespace TestCentric.Engine
         /// The generated ID is only unique for packages created within the same application domain.
         /// For that reason, NUnit pre-creates all test packages that will be needed.
         /// </remarks>
-        public string ID { get; } = GetNextID();
+        public string ID { get; private set; } = GetNextID();
 
         /// <summary>
         /// Gets the name of the package
@@ -235,42 +214,67 @@ namespace TestCentric.Engine
                 AccumulatePackages(subPackage, selection, selector);
         }
 
-        public string ToXml()
+        public XmlSchema GetSchema() => null;
+
+        public void ReadXml(XmlReader reader)
         {
-            var stringWriter = new StringWriter();
-            Serialize(stringWriter);
-            return stringWriter.ToString();
+            // We start out positioned on the root element which
+            // has already been read for us, so process its attributes.
+            ID = reader.GetAttribute("id");
+            FullName = reader.GetAttribute("fullname");
+
+            while (reader.Read())
+            {
+                switch (reader.NodeType)
+                {
+                    case XmlNodeType.Element:
+                        switch (reader.Name)
+                        {
+                            case "Settings":
+                                while (reader.MoveToNextAttribute())
+                                    AddSetting(reader.Name, reader.Value);
+                                reader.MoveToElement();
+                                break;
+
+                            case "TestPackage":
+                                ReadSubPackage();
+                                break;
+
+                            default:
+                                break;
+                        }
+                        break;
+
+                    case XmlNodeType.EndElement:
+                        switch (reader.Name)
+                        {
+                            case "TestPackage":
+                                return;
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+
+            void ReadSubPackage()
+            {
+                var subPackage = new TestPackage();
+                SubPackages.Add(subPackage);
+                subPackage.ReadXml(reader);
+            }
         }
 
-        /// <summary>
-        /// Convenience method to serialize a TestPackage to a StringWriter
-        /// without an XML declaration.
-        /// </summary>
-        /// <param name="writer">An StringWriter to use</param>
-        public void Serialize(StringWriter writer)
+        public void WriteXml(XmlWriter xmlWriter)
         {
-            // Assume we don't want the Xml declaration in our string
-            var settings = new XmlWriterSettings { OmitXmlDeclaration = true };
-            var xmlWriter = XmlWriter.Create(writer, settings);
-            Serialize(xmlWriter);
-            xmlWriter.Flush();
-            xmlWriter.Close();
-        }
-
-        /// <summary>
-        /// Serialize a TestPackage to an XmlWriter
-        /// </summary>
-        /// <param name="xmlWriter">An XmlWriter to use</param>
-        /// <param name="package">The package to be serialized</param>
-        public void Serialize(XmlWriter xmlWriter)
-        {
-            xmlWriter.WriteStartElement("TestPackage");
+            //writer.WriteStartElement("TestPackage");
 
             WritePackageAttributes();
             WriteSettings();
             WriteSubPackages();
 
-            xmlWriter.WriteEndElement();
+            //xmlWriter.WriteEndElement();
 
             void WritePackageAttributes()
             {
@@ -296,19 +300,12 @@ namespace TestCentric.Engine
             void WriteSubPackages()
             {
                 foreach (var subPackage in SubPackages)
-                    subPackage.Serialize(xmlWriter);
+                {
+                    xmlWriter.WriteStartElement("TestPackage");
+                    subPackage.WriteXml(xmlWriter);
+                    xmlWriter.WriteEndElement();
+                }
             }
-        }
-
-        public static TestPackage Deserialize(string xml)
-        {
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(xml);
-            var topNode = doc.DocumentElement;
-            if (topNode.Name != "TestPackage")
-                throw new ArgumentException("Xml provided is not a TestPackage");
-
-            return new TestPackage(topNode);
         }
 
         #endregion
