@@ -3,6 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
@@ -218,63 +219,63 @@ namespace TestCentric.Engine
 
         public void ReadXml(XmlReader reader)
         {
-            // We start out positioned on the root element which
-            // has already been read for us, so process its attributes.
-            ID = reader.GetAttribute("id");
-            FullName = reader.GetAttribute("fullname");
+            ProcessPackage(this);
 
-            while (reader.Read())
+            void ProcessPackage(TestPackage package)
             {
-                switch (reader.NodeType)
+                // We start out positioned on the root element which
+                // has already been read for us, so process its attributes.
+                package.ID = reader.GetAttribute("id");
+                package.FullName = reader.GetAttribute("fullname");
+
+                if (reader.IsEmptyElement)
+                    return;
+
+                while (reader.Read())
                 {
-                    case XmlNodeType.Element:
-                        switch (reader.Name)
-                        {
-                            case "Settings":
-                                while (reader.MoveToNextAttribute())
-                                    AddSetting(reader.Name, reader.Value);
-                                reader.MoveToElement();
-                                break;
+                    switch(reader.NodeType)
+                    {
+                        case XmlNodeType.Element:
+                            switch(reader.Name)
+                            {
+                                case "Settings":
+                                    while (reader.MoveToNextAttribute())
+                                        package.AddSetting(reader.Name, reader.Value);
+                                    reader.MoveToElement();
+                                    break;
+                                
+                                case "TestPackage":
+                                    var subPackage = new TestPackage();
+                                    ProcessPackage(subPackage);
+                                    package.SubPackages.Add(subPackage);
+                                    break;
+                                
+                                default:
+                                    throw new Exception($"Unexpected Element: {reader.Name}");
+                            }
+                            break;
 
-                            case "TestPackage":
-                                ReadSubPackage();
-                                break;
+                        case XmlNodeType.EndElement:
+                            switch(reader.Name)
+                            {
+                                case "TestPackage":
+                                    return;
 
-                            default:
-                                break;
-                        }
-                        break;
-
-                    case XmlNodeType.EndElement:
-                        switch (reader.Name)
-                        {
-                            case "TestPackage":
-                                return;
-                        }
-                        break;
-
-                    default:
-                        break;
+                                default:
+                                    throw new Exception($"Unexpected EndElement: {reader.Name}");
+                            }
+                    }
                 }
-            }
 
-            void ReadSubPackage()
-            {
-                var subPackage = new TestPackage();
-                SubPackages.Add(subPackage);
-                subPackage.ReadXml(reader);
+                SubPackages.Add(package);
             }
         }
 
         public void WriteXml(XmlWriter xmlWriter)
         {
-            //writer.WriteStartElement("TestPackage");
-
             WritePackageAttributes();
             WriteSettings();
             WriteSubPackages();
-
-            //xmlWriter.WriteEndElement();
 
             void WritePackageAttributes()
             {

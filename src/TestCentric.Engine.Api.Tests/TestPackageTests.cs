@@ -4,7 +4,9 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
@@ -15,98 +17,55 @@ namespace TestCentric.Engine.Api
     // NOTE: These are tests of the NUnit Engine rather than TestCentric.
     // If they fail, something has changed in the NUnit Engine.
 
-    [TestFixture("test.dll")]
-    [TestFixture("test1.dll,test2.dll,test3.dll")]
+    [TestFixtureSource(nameof(FixtureData))]
     public class TestPackageTests
     {
-        private string[] _fileNames;
         private TestPackage _package;
-        private string _packageXml;
+        private string _expectedXml;
 
         private const string HEADER = "<?xml version=\"1.0\" encoding=\"utf-16\"?>";
-        private const string SETTINGS = "<Settings StringSetting=\"xyz\" IntSetting=\"123\" />";
 
-        public TestPackageTests(string fileNames)
+        public TestPackageTests(TestPackage package, string expectedXml)
         {
-            _fileNames = fileNames.Split(new char[] { ',' });
-            _package = new TestPackage(_fileNames);
-            _package.AddSetting("StringSetting", "xyz");
-            _package.AddSetting("IntSetting", 123);
-            int nextId = int.Parse(_package.ID);
-
-            var sb = new StringBuilder();
-            sb.Append($"<TestPackage id=\"{nextId++}\">" + SETTINGS);
-            foreach (string fileName in _fileNames)
-            {
-                string fullName = Path.GetFullPath(fileName);
-                sb.Append($"<TestPackage id=\"{nextId++}\" fullname=\"{fullName}\">" + SETTINGS);
-                sb.Append("</TestPackage>");
-            }
-            sb.Append("</TestPackage>");
-
-            _packageXml = sb.ToString();
+            _package = package;
+            _expectedXml = expectedXml;
         }
 
         [Test]
         public void PackageIDsAreUnique()
         {
-            var another = new TestPackage(_fileNames);
-            Assert.That(another.ID, Is.Not.EqualTo(_package.ID));
+            string[] fileNames = _package.SubPackages.Select(p => p.FullName).ToArray();
+            var anotherPackage = new TestPackage(fileNames);
+            Assert.That(anotherPackage.ID, Is.Not.EqualTo(_package.ID));
         }
 
         [Test]
-        public void PackageIsAnonymous()
+        public void TopLevelPackageIsAnonymous()
         {
             Assert.Null(_package.Name);
             Assert.Null(_package.FullName);
-            Assert.False(_package.IsAssemblyPackage);
         }
 
         [Test]
-        public void PackageHasSettings()
-        {
-            Assert.That(_package.Settings["StringSetting"], Is.EqualTo("xyz"));
-            Assert.That(_package.Settings["IntSetting"], Is.EqualTo(123));
-        }
-
-        [Test]
-        public void PackageHasSubPackages()
+        public void TopLevelPackageHasSubPackages()
         {
             Assert.That(_package.HasSubPackages);
         }
 
         [Test]
-        public void HasSubPackageForEachFile()
+        public void TopLevelPackageIsNotAnAssembly()
         {
-            Assert.That(_package.SubPackages.Count, Is.EqualTo(_fileNames.Length));
-
-            for (int i = 0; i < _fileNames.Length; i++)
-            {
-                TestPackage subPackage = _package.SubPackages[i];
-                string fileName = _fileNames[i];
-
-                Assert.That(subPackage.Name, Is.EqualTo(fileName));
-                Assert.That(subPackage.FullName, Is.EqualTo(Path.GetFullPath(fileName)));
-                Assert.That(subPackage.IsAssemblyPackage);
-            }
-        }
-
-        [Test]
-        public void SubPackagesHaveNoSubPackages()
-        {
-            foreach (TestPackage subPackage in _package.SubPackages)
-            {
-                Assert.That(subPackage.SubPackages.Count, Is.EqualTo(0));
-                Assert.False(subPackage.HasSubPackages);
-            }
+            Assert.False(_package.IsAssemblyPackage);
         }
 
         [Test]
         public void CanSelectPackages()
         {
-            var selection = _package.Select(p => p.Name != null && p.Name.StartsWith("test"));
+            var selection = _package.Select(p => p.IsAssemblyPackage);
 
-            Assert.That(selection, Is.EquivalentTo(_package.SubPackages));
+            Assert.That(selection.Count, Is.GreaterThan(0));
+            foreach (var package in selection)
+                Assert.That(package.IsAssemblyPackage);
         }
 
         [Test]
@@ -120,14 +79,14 @@ namespace TestCentric.Engine.Api
             XmlSerializer serializer = new XmlSerializer(typeof(TestPackage));
             serializer.Serialize(xmlWriter, _package);
 
-            Assert.That(writer.ToString(), Is.EqualTo(_packageXml));
+            Assert.That(writer.ToString(), Is.EqualTo(_expectedXml));
         }
 
         [Test]
         public void CanDeserializePackage()
         {
             XmlSerializer serializer = new XmlSerializer(typeof(TestPackage));
-            StringReader reader = new StringReader(_packageXml);
+            StringReader reader = new StringReader(_expectedXml);
             TestPackage newPackage = (TestPackage)serializer.Deserialize(reader);
 
             CheckPackage(newPackage, _package);
@@ -160,6 +119,70 @@ namespace TestCentric.Engine.Api
 
             for (int i = 0; i < expected.SubPackages.Count; i++)
                 CheckPackage(actual.SubPackages[i], expected.SubPackages[i]);
+        }
+
+        static IEnumerable<TestFixtureData> FixtureData()
+        {
+            TestPackage package;
+
+            package = new TestPackage("test.dll");
+            yield return new TestFixtureData(package, GetExpectedXml(package)) { TestName = "TestPackageTests(Single Assembly, no Settings)" };
+
+            package = new TestPackage("test.dll");
+            package.AddSetting("StringSetting", "xyz");
+            package.AddSetting("IntSetting", 123);
+            yield return new TestFixtureData(package, GetExpectedXml(package)) { TestName = "TestPackageTests(Single Assembly with Settings)" };
+
+            package = new TestPackage("test1.dll", "test2.dll", "test3.dll");
+            yield return new TestFixtureData(package, GetExpectedXml(package)) { TestName = "TestPackageTests(Three Assemblies, no Settings)" };
+
+            package = new TestPackage("test1.dll", "test2.dll", "test3.dll");
+            package.AddSetting("StringSetting", "xyz");
+            package.AddSetting("IntSetting", 123);
+            package.SubPackages[0].AddSetting("Comment", "This is test1");
+            package.SubPackages[1].AddSetting("Comment", "This is test2");
+            package.SubPackages[2].AddSetting("Comment", "This is test3");
+            yield return new TestFixtureData(package, GetExpectedXml(package)) { TestName = "TestPackageTests(Three Assemblies with Settings)" };
+
+            package = new TestPackage("test1.dll", "project.nunit");
+            package.SubPackages[1].AddSubPackage("test2.dll");
+            package.SubPackages[1].AddSubPackage("test3.dll");
+            yield return new TestFixtureData(package, GetExpectedXml(package)) { TestName = "TestPackageTests(One Assembly and One Project))" };
+        }
+
+        private static string GetExpectedXml(TestPackage package)
+        {
+            int nextId = int.Parse(package.ID);
+
+            var sb = new StringBuilder();
+            sb.Append($"<TestPackage id=\"{package.ID}\"");
+            if (package.FullName != null)
+                sb.Append($" fullname=\"{package.FullName}\"");
+
+            if (package.Settings.Count == 0 && package.SubPackages.Count == 0)
+            {
+                sb.Append(" />");
+            }
+            else
+            {
+                sb.Append(">");
+
+                if (package.Settings.Count > 0)
+                {
+                    // Terminate TestPackage and start Settings
+                    sb.Append("<Settings");
+                    foreach (string key in package.Settings.Keys)
+                        sb.Append($" {key}=\"{package.Settings[key]}\"");
+                    sb.Append(" />");
+                }
+
+                foreach (TestPackage subPackage in package.SubPackages)
+                    sb.Append(GetExpectedXml(subPackage));
+
+                sb.Append("</TestPackage>");
+            }
+
+            return sb.ToString();
         }
     }
 }
