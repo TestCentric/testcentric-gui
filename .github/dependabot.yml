@@ -8,4 +8,9 @@ updates:
   - package-ecosystem: "nuget"
     directory: "/" # Location of package manifests
     schedule:
-      interval: "daily"
+      interval: "weekly"
+    ignore:
+      - dependency-name: NUnit
+      - dependency-name: NUnitLite
+      - dependency-name: NUnit.Extension.*
+      
