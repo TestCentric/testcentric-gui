@@ -1,14 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   
-  <PropertyGroup>
-    <RootNamespace>TestCentric.Engine</RootNamespace>
-    <TargetFrameworks>net20;net462;netstandard2.0</TargetFrameworks>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\testcentric.snk</AssemblyOriginatorKeyFile>
-	  <DebugType>Full</DebugType>
-	  <OutputPath>..\..\bin\$(Configuration)</OutputPath>
-	  <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-  </PropertyGroup>
+	<PropertyGroup>
+		<RootNamespace>TestCentric.Engine</RootNamespace>
+		<TargetFrameworks>net20;net462;netstandard2.0</TargetFrameworks>
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>..\testcentric.snk</AssemblyOriginatorKeyFile>
+		<DebugType>Full</DebugType>
+		<OutputPath>..\..\bin\$(Configuration)</OutputPath>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<CheckEolTargetFramework>false</CheckEolTargetFramework>
+	</PropertyGroup>
 
 	<PropertyGroup>
 		<PackageId>TestCentric.Engine.Api</PackageId>
