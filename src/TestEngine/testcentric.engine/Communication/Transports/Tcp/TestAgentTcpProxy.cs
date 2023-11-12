@@ -4,7 +4,10 @@
 // ***********************************************************************
 
 using System;
+using System.IO;
 using System.Net.Sockets;
+using System.Xml;
+using System.Xml.Serialization;
 using TestCentric.Engine.Communication.Messages;
 using TestCentric.Engine.Communication.Protocols;
 using TestCentric.Engine.Extensibility;
@@ -22,6 +25,7 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
 
         private Socket _socket;
         private BinarySerializationProtocol _wireProtocol = new BinarySerializationProtocol();
+        private XmlSerializer _testPackageSerializer = new XmlSerializer(typeof(TestPackage));
 
         public TestAgentTcpProxy(Socket socket, Guid id)
         {
@@ -33,7 +37,10 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
 
         public ITestEngineRunner CreateRunner(TestPackage package)
         {
-            SendCommandMessage(MessageCode.CreateRunner, package.ToXml());
+            var writer = new StringWriter();
+            var xmlWriter = XmlWriter.Create(writer, new XmlWriterSettings() { OmitXmlDeclaration = true });
+            _testPackageSerializer.Serialize(xmlWriter, package);
+            SendCommandMessage(MessageCode.CreateRunner, writer.ToString());
 
             // Agent also functions as the runner
             return this;

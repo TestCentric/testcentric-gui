@@ -205,9 +205,9 @@ BuildSettings.Packages.Add(new NuGetPackage(
 	},
 	tests: packageTests,
 	preloadedExtensions: new [] {
-        KnownExtensions.Net462PluggableAgent.SetVersion("2.4.0-dev00002").NuGetPackage,
-        KnownExtensions.Net60PluggableAgent.SetVersion("2.4.0-dev00002").NuGetPackage,
-        KnownExtensions.Net70PluggableAgent.SetVersion("2.4.0-dev00006").NuGetPackage }
+        KnownExtensions.Net462PluggableAgent.SetVersion("2.4.0-dev00007").NuGetPackage,
+        KnownExtensions.Net60PluggableAgent.SetVersion("2.4.0-dev00007").NuGetPackage,
+        KnownExtensions.Net70PluggableAgent.SetVersion("2.4.0-dev00010").NuGetPackage }
 ));
 
 //////////////////////////////////////////////////////////////////////
