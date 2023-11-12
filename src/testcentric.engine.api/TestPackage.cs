@@ -28,6 +28,7 @@ namespace TestCentric.Engine
     /// package, changing settings as needed. This gives the best chance for the
     /// tests in the reloaded assembly to match those originally loaded.
     /// </summary>
+    [Serializable]
     public class TestPackage : IXmlSerializable
     {
         #region Construction and Initialization
