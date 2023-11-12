@@ -1,10 +1,10 @@
 // NOTE: This must match what is actually referenced by
 // the GUI test model project. Hopefully, this is a temporary
 // fix, which we can get rid of in the future.
-const string REF_ENGINE_VERSION = "2.0.0-dev00013";
+const string REF_ENGINE_VERSION = "2.0.0-dev00014";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00058
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00060
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -74,11 +74,11 @@ var nugetPackage = new NuGetPackage(
 			new DirectoryContent("tools/Images/Tree/Visual Studio").WithFiles(
 				"Images/Tree/Visual Studio/Success.png", "Images/Tree/Visual Studio/Failure.png", "Images/Tree/Visual Studio/Ignored.png", "Images/Tree/Visual Studio/Inconclusive.png", "Images/Tree/Visual Studio/Skipped.png") )
 		.WithDependencies(
-			KnownExtensions.Net462PluggableAgent.NuGetPackage,
-			KnownExtensions.Net60PluggableAgent.NuGetPackage,
-			KnownExtensions.Net70PluggableAgent.NuGetPackage
+			KnownExtensions.Net462PluggableAgent.SetVersion("2.4.0-dev00007").NuGetPackage,
+			KnownExtensions.Net60PluggableAgent.SetVersion("2.4.0-dev00007").NuGetPackage,
+			KnownExtensions.Net70PluggableAgent.SetVersion("2.4.0-dev00010").NuGetPackage
 		),
-	testRunner: new GuiSelfTester(BuildSettings.NuGetTestDirectory + "TestCentric.GuiRunner/tools/testcentric.exe"),
+	testRunner: new GuiSelfTester(BuildSettings.NuGetTestDirectory + "TestCentric.GuiRunner." + BuildSettings.PackageVersion + "/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
 		HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "testcentric.png"),
 		HasDirectory("tools").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.nuget.addins"),
@@ -113,11 +113,11 @@ var chocolateyPackage = new ChocolateyPackage(
 			new DirectoryContent("tools/Images/Tree/Visual Studio").WithFiles(
 				"Images/Tree/Visual Studio/Success.png", "Images/Tree/Visual Studio/Failure.png", "Images/Tree/Visual Studio/Ignored.png", "Images/Tree/Visual Studio/Inconclusive.png", "Images/Tree/Visual Studio/Skipped.png") )
 		.WithDependencies(
-			KnownExtensions.Net462PluggableAgent.ChocoPackage,
-			KnownExtensions.Net60PluggableAgent.ChocoPackage,
-			KnownExtensions.Net70PluggableAgent.ChocoPackage
+			KnownExtensions.Net462PluggableAgent.SetVersion("2.4.0-dev00007").ChocoPackage,
+			KnownExtensions.Net60PluggableAgent.SetVersion("2.4.0-dev00007").ChocoPackage,
+			KnownExtensions.Net70PluggableAgent.SetVersion("2.4.0-dev00010").ChocoPackage
 		),
-	testRunner: new GuiSelfTester(BuildSettings.ChocolateyTestDirectory + "testcentric-gui/tools/testcentric.exe"),
+	testRunner: new GuiSelfTester(BuildSettings.ChocolateyTestDirectory + "testcentric-gui." + BuildSettings.PackageVersion + "/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
 		HasDirectory("tools").WithFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "VERIFICATION.txt", "testcentric.choco.addins").AndFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.choco.addins"),
 		HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
