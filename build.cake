@@ -1,7 +1,7 @@
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00058
+//#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00062
 // Comment out above line and uncomment below for local tests of recipe changes
-//#load ../TestCentric.Cake.Recipe/recipe/*.cake
+#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
 using System.Xml;
 using System.Text.RegularExpressions;
@@ -205,9 +205,9 @@ BuildSettings.Packages.Add(new NuGetPackage(
 	},
 	tests: packageTests,
 	preloadedExtensions: new [] {
-        KnownExtensions.Net462PluggableAgent.SetVersion("2.4.0-dev00007").NuGetPackage,
-        KnownExtensions.Net60PluggableAgent.SetVersion("2.4.0-dev00007").NuGetPackage,
-        KnownExtensions.Net70PluggableAgent.SetVersion("2.4.0-dev00010").NuGetPackage }
+        KnownExtensions.Net462PluggableAgent.SetVersion("2.4.0-dev00010").NuGetPackage,
+        KnownExtensions.Net60PluggableAgent.SetVersion("2.4.0-dev00008").NuGetPackage,
+        KnownExtensions.Net70PluggableAgent.SetVersion("2.4.0-dev00011").NuGetPackage }
 ));
 
 //////////////////////////////////////////////////////////////////////
@@ -218,11 +218,12 @@ public class TestCentricEngineTestBed : TestRunner
 {
 	public TestCentricEngineTestBed()
 	{
-		ExecutablePath = BuildSettings.NuGetTestDirectory + "TestCentric.Engine/tools/test-bed.exe";
+		ExecutablePath = BuildSettings.NuGetTestDirectory + "TestCentric.Engine." + BuildSettings.PackageVersion + "/tools/test-bed.exe";
 	}
 
 	public override int Run(string arguments)
 	{
+        Console.WriteLine("Trying to run " + ExecutablePath);
 		return BuildSettings.Context.StartProcess(ExecutablePath, new ProcessSettings()
 		{
 			Arguments = arguments,
