@@ -5,7 +5,7 @@
 
 namespace TestCentric.Engine.Communication.Transports
 {
-    public interface ITestAgencyTransport : ITransport
+    public interface ITestAgencyTransport
     {
         string ServerUrl { get; }
     }
