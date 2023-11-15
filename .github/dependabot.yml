@@ -13,4 +13,4 @@ updates:
       - dependency-name: NUnit
       - dependency-name: NUnitLite
       - dependency-name: NUnit.Extension.*
-      
+      - dependency-name: TestCentric.*      
