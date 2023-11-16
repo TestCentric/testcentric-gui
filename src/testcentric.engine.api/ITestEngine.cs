@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System;
+using TestCentric.Engine.Services;
 
 namespace TestCentric.Engine
 {

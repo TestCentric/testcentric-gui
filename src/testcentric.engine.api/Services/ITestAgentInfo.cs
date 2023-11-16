@@ -5,7 +5,7 @@
 
 using System.Collections.Generic;
 
-namespace TestCentric.Engine
+namespace TestCentric.Engine.Services
 {
     public interface ITestAgentInfo
     {

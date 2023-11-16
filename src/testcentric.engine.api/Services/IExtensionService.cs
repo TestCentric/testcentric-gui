@@ -6,7 +6,7 @@
 using System.Collections.Generic;
 using TestCentric.Extensibility;
 
-namespace TestCentric.Engine
+namespace TestCentric.Engine.Services
 {
     /// <summary>
     /// The IExtensionService interface allows a runner to manage extensions.
