@@ -5,7 +5,7 @@
 
 using TestCentric.Extensibility;
 
-namespace TestCentric.Engine
+namespace TestCentric.Engine.Services
 {
     /// <summary>
     /// Enumeration representing the status of a service

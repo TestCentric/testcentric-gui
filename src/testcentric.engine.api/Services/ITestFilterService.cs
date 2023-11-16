@@ -3,18 +3,16 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-using System.Collections.Generic;
-
-namespace TestCentric.Engine
+namespace TestCentric.Engine.Services
 {
     /// <summary>
-    /// Interface that returns a list of available runtime frameworks.
+    /// The TestFilterService provides builders that can create TestFilters
     /// </summary>
-    public interface IAvailableRuntimes
+    public interface ITestFilterService
     {
         /// <summary>
-        /// Gets a list of available runtime frameworks.
+        /// Get an uninitialized TestFilterBuilder
         /// </summary>
-        IList<IRuntimeFramework> AvailableRuntimes { get; }
+        ITestFilterBuilder GetTestFilterBuilder();
     }
 }

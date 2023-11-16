@@ -5,7 +5,7 @@
 
 using TestCentric.Engine.Extensibility;
 
-namespace TestCentric.Engine
+namespace TestCentric.Engine.Services
 {
     /// <summary>
     /// IResultWriterService provides result writers for a specified
