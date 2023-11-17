@@ -4,7 +4,7 @@
 // ***********************************************************************
 
 using System;
-using TestCentric.Engine;
+using TestCentric.Engine.Services;
 using TestCentric.Engine.Extensibility;
 
 namespace TestCentric.Gui.Model.Fakes

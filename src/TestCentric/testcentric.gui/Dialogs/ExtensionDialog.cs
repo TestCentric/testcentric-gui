@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
-using TestCentric.Engine;
+using TestCentric.Engine.Services;
 using TestCentric.Extensibility;
 
 namespace TestCentric.Gui.Dialogs

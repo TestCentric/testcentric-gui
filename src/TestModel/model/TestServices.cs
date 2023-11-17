@@ -5,12 +5,10 @@
 
 using System;
 using TestCentric.Engine;
+using TestCentric.Engine.Services;
 
 namespace TestCentric.Gui.Model
 {
-    using Services;
-    using Settings;
-
     /// <summary>
     /// TestServices caches commonly used services.
     /// </summary>

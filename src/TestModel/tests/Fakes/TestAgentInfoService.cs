@@ -5,6 +5,7 @@
 
 using System.Collections.Generic;
 using TestCentric.Engine;
+using TestCentric.Engine.Services;
 
 namespace TestCentric.Gui.Model.Fakes
 {
