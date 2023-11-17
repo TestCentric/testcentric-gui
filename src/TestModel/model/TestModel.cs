@@ -9,8 +9,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using TestCentric.Common;
 using TestCentric.Engine;
+using TestCentric.Engine.Services;
 
 namespace TestCentric.Gui.Model
 {
