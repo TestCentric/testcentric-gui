@@ -74,6 +74,9 @@ namespace TestCentric.Engine.TestBed
                 resultFile = Path.Combine(options.WorkDirectory, resultFile);
             }
 
+            if (!string.IsNullOrEmpty(options.RequestedRuntime))
+                package.AddSetting(EnginePackageSettings.RequestedRuntimeFramework, options.RequestedRuntime);
+
             var runner = TestEngine.GetRunner(package);
 
             var eventHandler = new TestEventHandler();
