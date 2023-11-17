@@ -8,6 +8,7 @@ using System.IO;
 using System.Xml;
 using TestCentric.Extensibility;
 using TestCentric.Engine.Extensibility;
+using TestCentric.Engine.Services;
 
 namespace TestCentric.Engine
 {
