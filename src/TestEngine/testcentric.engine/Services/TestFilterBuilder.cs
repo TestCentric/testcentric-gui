@@ -9,7 +9,7 @@ using System.Text;
 // Missing XML Docs
 #pragma warning disable 1591
 
-namespace TestCentric.Engine
+namespace TestCentric.Engine.Services
 {
     public class TestFilterBuilder : ITestFilterBuilder
     {
