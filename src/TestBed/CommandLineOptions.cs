@@ -31,6 +31,7 @@ namespace TestCentric.Engine.TestBed
         public List<String> Files { get; } = new List<string>();
         public bool DebugAgent { get; private set; }
         public string Trace { get; private set; }
+        public string RequestedRuntime { get; private set; }
         public bool ListExtensions { get; private set; }
         public int StopTimeout { get; private set; } = 0;
         public int CancelTimeout { get; private set; } = 0;
@@ -67,6 +68,10 @@ namespace TestCentric.Engine.TestBed
                     if (!ValidTraceSettings.Contains(val))
                         throw new ArgumentException($"Invalid trace setting: '{val}'");
                     Trace = val;
+                    break;
+
+                case "--runtime":
+                    RequestedRuntime = val;
                     break;
 
                 case "--debug-agent":

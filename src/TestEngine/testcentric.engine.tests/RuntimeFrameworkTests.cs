@@ -153,6 +153,11 @@ namespace TestCentric.Engine
             new FrameworkData(Runtime.NetCore, new Version(2,0), "netcore-2.0", ".NETCore 2.0", ".NETCoreApp,Version=2.0"),
             new FrameworkData(Runtime.NetCore, new Version(2,1), "netcore-2.1", ".NETCore 2.1", ".NETCoreApp,Version=2.1"),
             new FrameworkData(Runtime.NetCore, new Version(3,0), "netcore-3.0", ".NETCore 3.0", ".NETCoreApp,Version=3.0"),
+            new FrameworkData(Runtime.NetCore, new Version(3,1), "netcore-3.1", ".NETCore 3.1", ".NETCoreApp,Version=3.1"),
+            new FrameworkData(Runtime.NetCore, new Version(5,0), "netcore-5.0", ".NETCore 5.0", ".NETCoreApp,Version=5.0"),
+            new FrameworkData(Runtime.NetCore, new Version(6,0), "netcore-6.0", ".NETCore 6.0", ".NETCoreApp,Version=6.0"),
+            new FrameworkData(Runtime.NetCore, new Version(7,0), "netcore-7.0", ".NETCore 7.0", ".NETCoreApp,Version=7.0"),
+            new FrameworkData(Runtime.NetCore, new Version(8,0), "netcore-8.0", ".NETCore 8.0", ".NETCoreApp,Version=8.0"),
         };
 #pragma warning restore 414
     }
