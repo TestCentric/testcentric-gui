@@ -12,6 +12,7 @@
         <icon>testcentric.png</icon>
         <projectUrl>https://test-centric.org/</projectUrl>
         <description>This package includes the TestCentric.Engine.Api assembly, containing the interfaces used in working with the testcentric engine.</description>
+		<readme>README.md</readme>
         <copyright>Copyright (c) 2021-2023 Charlie Poole</copyright>
         <language>en-US</language>
         <tags>testcentric</tags>
@@ -20,6 +21,7 @@
 	
 	<files>
 		<file src="../../LICENSE.txt" />
+		<file src="../../README.md" />
 		<file src="../../testcentric.png" />
 		<file src="net20/TestCentric.Engine.Api.dll" target="lib/net20/" />
 		<file src="net462/TestCentric.Engine.Api.dll" target="lib/net462/" />
