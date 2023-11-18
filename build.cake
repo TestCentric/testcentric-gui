@@ -64,10 +64,12 @@ packageTests.Add(new PackageTest(1, "Net70Test", "Run mock-assembly.dll targetin
     "engine-tests/net7.0/mock-assembly.dll --trace:Debug",
     MockAssemblyExpectedResult("Net70AgentLauncher")));
 
-// We can't yet mock-assembly under .NET 8.0 until we use VS 17.8
-packageTests.Add(new PackageTest(1, "Net80Test", "Run mock-assembly.dll targeting .NET 7.0 under .NET 8.0",
-    "engine-tests/net7.0/mock-assembly.dll --trace:Debug --runtime:netcore-8.0",
-    MockAssemblyExpectedResult("Net80AgentLauncher")));
+// We can't yet mock-assembly under .NET 8.0 until we use VS 17.8, so we just run the .NET 7.0
+// build under .NET 8.0. On AppVeyor, we can't even do that.
+if (!BuildSettings.IsRunningOnAppVeyor)
+    packageTests.Add(new PackageTest(1, "Net80Test", "Run mock-assembly.dll targeting .NET 7.0 under .NET 8.0",
+        "engine-tests/net7.0/mock-assembly.dll --trace:Debug --runtime:netcore-8.0",
+        MockAssemblyExpectedResult("Net80AgentLauncher")));
 
 static ExpectedResult MockAssemblyExpectedResult(params string[] agentNames)
 {
