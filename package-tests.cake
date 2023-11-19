@@ -83,6 +83,14 @@ public static void DefinePackageTests()
             Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net70AgentLauncher") }
         }));
 
+    // TODO: Need a --runtime command-line option to do this test
+    //// We can't yet mock-assembly under .NET 8.0 until we use VS 17.8, so we just run the .NET 7.0
+    //// build under .NET 8.0. On AppVeyor, we can't even do that.
+    //if (!BuildSettings.IsRunningOnAppVeyor)
+    //    packageTests.Add(new PackageTest(1, "Net80Test", "Run mock-assembly.dll targeting .NET 7.0 under .NET 8.0",
+    //        "engine-tests/net7.0/mock-assembly.dll --trace:Debug --runtime:netcore-8.0",
+    //        MockAssemblyExpectedResult("Net80AgentLauncher")));
+
 	// Windows Forms Tests
 
     PackageTests.Add(new PackageTest(1, "Net50WindowsFormsTest", "Run test using windows forms under .NET 5.0",

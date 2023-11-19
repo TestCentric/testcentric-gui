@@ -1,10 +1,10 @@
 // NOTE: This must match what is actually referenced by
 // the GUI test model project. Hopefully, this is a temporary
 // fix, which we can get rid of in the future.
-const string REF_ENGINE_VERSION = "2.0.0-dev00030";
+const string REF_ENGINE_VERSION = "2.0.0-dev00035";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00063
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00065
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -74,9 +74,10 @@ var nugetPackage = new NuGetPackage(
 			new DirectoryContent("tools/Images/Tree/Visual Studio").WithFiles(
 				"Images/Tree/Visual Studio/Success.png", "Images/Tree/Visual Studio/Failure.png", "Images/Tree/Visual Studio/Ignored.png", "Images/Tree/Visual Studio/Inconclusive.png", "Images/Tree/Visual Studio/Skipped.png") )
 		.WithDependencies(
-			KnownExtensions.Net462PluggableAgent.SetVersion("2.4.0-dev00011").NuGetPackage,
-			KnownExtensions.Net60PluggableAgent.SetVersion("2.4.0-dev00009").NuGetPackage,
-			KnownExtensions.Net70PluggableAgent.SetVersion("2.4.0-dev00012").NuGetPackage
+			KnownExtensions.Net462PluggableAgent.NuGetPackage,
+			KnownExtensions.Net60PluggableAgent.NuGetPackage,
+			KnownExtensions.Net70PluggableAgent.NuGetPackage,
+			KnownExtensions.Net80PluggableAgent.NuGetPackage
 		),
 	testRunner: new GuiSelfTester(BuildSettings.NuGetTestDirectory + "TestCentric.GuiRunner." + BuildSettings.PackageVersion + "/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
@@ -113,9 +114,10 @@ var chocolateyPackage = new ChocolateyPackage(
 			new DirectoryContent("tools/Images/Tree/Visual Studio").WithFiles(
 				"Images/Tree/Visual Studio/Success.png", "Images/Tree/Visual Studio/Failure.png", "Images/Tree/Visual Studio/Ignored.png", "Images/Tree/Visual Studio/Inconclusive.png", "Images/Tree/Visual Studio/Skipped.png") )
 		.WithDependencies(
-			KnownExtensions.Net462PluggableAgent.SetVersion("2.4.0-dev00011").ChocoPackage,
-			KnownExtensions.Net60PluggableAgent.SetVersion("2.4.0-dev00009").ChocoPackage,
-			KnownExtensions.Net70PluggableAgent.SetVersion("2.4.0-dev00012").ChocoPackage
+			KnownExtensions.Net462PluggableAgent.ChocoPackage,
+			KnownExtensions.Net60PluggableAgent.ChocoPackage,
+			KnownExtensions.Net70PluggableAgent.ChocoPackage,
+			KnownExtensions.Net80PluggableAgent.ChocoPackage
 		),
 	testRunner: new GuiSelfTester(BuildSettings.ChocolateyTestDirectory + "testcentric-gui." + BuildSettings.PackageVersion + "/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
@@ -123,7 +125,7 @@ var chocolateyPackage = new ChocolateyPackage(
 		HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
 		HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
 		HasDirectory("tools/Images/Tree/Default").WithFiles(TREE_ICONS_PNG),
-		HasDirectory("tools/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG)
+		HasDirectory("tools/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG),
 	},
 	tests: PackageTests
 );
