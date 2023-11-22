@@ -6,6 +6,7 @@
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
     <OutputPath>..\..\..\bin\$(Configuration)\engine-tests\</OutputPath>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
+	  <NuGetAudit>false</NuGetAudit>
   </PropertyGroup>
 
   <!-- Properties used in generating AssemblyInfo.cs for this project -->

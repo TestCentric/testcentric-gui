@@ -5,6 +5,7 @@
 		<CheckEolTargetFramework>false</CheckEolTargetFramework>
 		<OutputPath>..\..\..\bin\$(Configuration)\engine-tests\</OutputPath>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<NuGetAudit>false</NuGetAudit>
 	</PropertyGroup>
 	
 	<ItemGroup>

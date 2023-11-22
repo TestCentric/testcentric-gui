@@ -1,5 +1,5 @@
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00064
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00066
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -64,11 +64,9 @@ packageTests.Add(new PackageTest(1, "Net70Test", "Run mock-assembly.dll targetin
     "engine-tests/net7.0/mock-assembly.dll --trace:Debug",
     MockAssemblyExpectedResult("Net70AgentLauncher")));
 
-// We can't yet mock-assembly under .NET 8.0 until we use VS 17.8, so we just run the .NET 7.0
-// build under .NET 8.0. On AppVeyor, we can't even do that.
 if (!BuildSettings.IsRunningOnAppVeyor)
-    packageTests.Add(new PackageTest(1, "Net80Test", "Run mock-assembly.dll targeting .NET 7.0 under .NET 8.0",
-        "engine-tests/net7.0/mock-assembly.dll --trace:Debug --runtime:netcore-8.0",
+    packageTests.Add(new PackageTest(1, "Net80Test", "Run mock-assembly.dll targeting .NET 8.0",
+        "engine-tests/net8.0/mock-assembly.dll",
         MockAssemblyExpectedResult("Net80AgentLauncher")));
 
 static ExpectedResult MockAssemblyExpectedResult(params string[] agentNames)
@@ -212,10 +210,10 @@ BuildSettings.Packages.Add(new NuGetPackage(
 	},
 	tests: packageTests,
 	preloadedExtensions: new [] {
-        KnownExtensions.Net462PluggableAgent.SetVersion("2.4.0").NuGetPackage,
-        KnownExtensions.Net60PluggableAgent.SetVersion("2.4.0").NuGetPackage,
-        KnownExtensions.Net70PluggableAgent.SetVersion("2.4.0").NuGetPackage,
-        KnownExtensions.Net80PluggableAgent.SetVersion("2.3.0").NuGetPackage }
+        KnownExtensions.Net462PluggableAgent.NuGetPackage,
+        KnownExtensions.Net60PluggableAgent.NuGetPackage,
+        KnownExtensions.Net70PluggableAgent.NuGetPackage,
+        KnownExtensions.Net80PluggableAgent.NuGetPackage }
 ));
 
 //////////////////////////////////////////////////////////////////////
