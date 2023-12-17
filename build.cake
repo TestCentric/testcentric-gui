@@ -40,17 +40,19 @@ packageTests.Add(new PackageTest(1, "Net35Test", "Run mock-assembly.dll targetin
     "engine-tests/net35/mock-assembly.dll",
     MockAssemblyExpectedResult("Net462AgentLauncher")));
 
-packageTests.Add(new PackageTest(1, "NetCore21Test", "Run mock-assembly.dll targeting .NET Core 2.1",
-    "engine-tests/netcoreapp2.1/mock-assembly.dll",
-    MockAssemblyExpectedResult("Net60AgentLauncher")));
-
 packageTests.Add(new PackageTest(1, "NetCore31Test", "Run mock-assembly.dll targeting .NET Core 3.1",
     "engine-tests/netcoreapp3.1/mock-assembly.dll",
     MockAssemblyExpectedResult("Net60AgentLauncher")));
 
-packageTests.Add(new PackageTest(1, "NetCore11Test", "Run mock-assembly.dll targeting .NET Core 1.1",
-    "engine-tests/netcoreapp1.1/mock-assembly.dll",
-    MockAssemblyExpectedResult("Net60AgentLauncher")));
+if (!BuildSettings.IsRunningOnAppVeyor)
+    packageTests.Add(new PackageTest(1, "NetCore21Test", "Run mock-assembly.dll targeting .NET Core 2.1",
+        "engine-tests/netcoreapp2.1/mock-assembly.dll",
+        MockAssemblyExpectedResult("Net60AgentLauncher")));
+
+if (!BuildSettings.IsRunningOnAppVeyor)
+    packageTests.Add(new PackageTest(1, "NetCore11Test", "Run mock-assembly.dll targeting .NET Core 1.1",
+        "engine-tests/netcoreapp1.1/mock-assembly.dll",
+        MockAssemblyExpectedResult("Net60AgentLauncher")));
 
 packageTests.Add(new PackageTest(1, "Net50Test", "Run mock-assembly.dll targeting .NET 5.0",
     "engine-tests/net5.0/mock-assembly.dll",
@@ -145,7 +147,7 @@ packageTests.Add(new PackageTest(1, "Net70WindowsFormsTest", "Run test using win
 // Multiple Assembly Tests
 
 packageTests.Add(new PackageTest(1, "Net35PlusNetCore21Test", "Run different builds of mock-assembly.dll together",
-    "engine-tests/net35/mock-assembly.dll engine-tests/netcoreapp2.1/mock-assembly.dll",
+    "engine-tests/net35/mock-assembly.dll engine-tests/net6.0/mock-assembly.dll",
     MockAssemblyExpectedResult("Net462AgentLauncher", "Net60AgentLauncher")));
 
 // TODO: Use --config option when it's supported by the extension.
