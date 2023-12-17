@@ -197,7 +197,7 @@ BuildSettings.Packages.Add(new NuGetPackage(
 	packageContent: new PackageContent(
 		new FilePath[] { "../../LICENSE.txt", "../../testcentric.png" },
 		new DirectoryContent("tools").WithFiles(
-			"testcentric.engine.dll", "testcentric.engine.core.dll", "testcentric.engine.api.dll",
+			"testcentric.engine.dll", "testcentric.engine.api.dll",
 			"testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll", "TestCentric.InternalTrace.dll",
 			"testcentric.engine.pdb", "test-bed.exe",
 			"test-bed.addins", "../../testcentric.nuget.addins")),
@@ -205,7 +205,7 @@ BuildSettings.Packages.Add(new NuGetPackage(
 	checks: new PackageCheck[] {
 		HasFiles("LICENSE.txt", "testcentric.png"),
 		HasDirectory("tools").WithFiles(
-			"testcentric.engine.dll", "testcentric.engine.core.dll", "testcentric.engine.api.dll",
+			"testcentric.engine.dll", "testcentric.engine.api.dll",
 			"testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll", "TestCentric.InternalTrace.dll",
 			"testcentric.engine.pdb", "test-bed.exe",
 			"test-bed.addins", "testcentric.nuget.addins")
