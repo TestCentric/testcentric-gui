@@ -45,9 +45,9 @@
 
 	<ItemGroup>
 		<PackageReference Include="TestCentric.Engine.Api" Version="2.0.0-dev00003" />
-		<PackageReference Include="TestCentric.Metadata" Version="2.0.0" />
-		<PackageReference Include="TestCentric.Extensibility" Version="2.0.0" />
-		<PackageReference Include="TestCentric.InternalTrace" Version="1.0.0" />
+		<PackageReference Include="TestCentric.Metadata" Version="3.0.1" />
+		<PackageReference Include="TestCentric.Extensibility" Version="3.0.0-dev00013" />
+		<PackageReference Include="TestCentric.InternalTrace" Version="1.1.0" />
 	</ItemGroup>
 
 </Project>

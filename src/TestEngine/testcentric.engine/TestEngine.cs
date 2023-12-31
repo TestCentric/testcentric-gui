@@ -51,11 +51,8 @@ namespace TestCentric.Engine
         /// </summary>
         public void Initialize()
         {
-            if(InternalTraceLevel != InternalTraceLevel.Off && !InternalTrace.Initialized)
-            {
-                var logName = string.Format("InternalTrace.{0}.log", Process.GetCurrentProcess().Id);
-                InternalTrace.Initialize(Path.Combine(WorkDirectory, logName), InternalTraceLevel);
-            }
+            var logName = string.Format("InternalTrace.{0}.log", Process.GetCurrentProcess().Id);
+            InternalTrace.Initialize(Path.Combine(WorkDirectory, logName), InternalTraceLevel);
 
             // If caller added services beforehand, we don't add any
             if (_services.ServiceCount == 0)
