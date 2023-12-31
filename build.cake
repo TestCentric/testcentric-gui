@@ -1,5 +1,5 @@
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00066
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00067
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -33,7 +33,7 @@ var packageTests = new List<PackageTest>();
 // Tests of single assemblies targeting each runtime we support
 
 packageTests.Add(new PackageTest(1, "Net462Test", "Run mock-assembly.dll targeting .NET 4.6.2",
-    "engine-tests/net462/mock-assembly.dll --trace:Debug",
+    "engine-tests/net462/mock-assembly.dll",
     MockAssemblyExpectedResult("Net462AgentLauncher")));
 
 packageTests.Add(new PackageTest(1, "Net35Test", "Run mock-assembly.dll targeting .NET 3.5",
@@ -63,7 +63,7 @@ packageTests.Add(new PackageTest(1, "Net60Test", "Run mock-assembly.dll targetin
     MockAssemblyExpectedResult("Net60AgentLauncher")));
 
 packageTests.Add(new PackageTest(1, "Net70Test", "Run mock-assembly.dll targeting .NET 7.0",
-    "engine-tests/net7.0/mock-assembly.dll --trace:Debug",
+    "engine-tests/net7.0/mock-assembly.dll",
     MockAssemblyExpectedResult("Net70AgentLauncher")));
 
 if (!BuildSettings.IsRunningOnAppVeyor)
@@ -198,24 +198,24 @@ BuildSettings.Packages.Add(new NuGetPackage(
 		new FilePath[] { "../../LICENSE.txt", "../../testcentric.png" },
 		new DirectoryContent("tools").WithFiles(
 			"testcentric.engine.dll", "testcentric.engine.api.dll",
-			"testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll", "TestCentric.InternalTrace.dll",
-			"testcentric.engine.pdb", "test-bed.exe",
+			"testcentric.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll", "TestCentric.InternalTrace.dll",
+			"testcentric.engine.pdb", "test-bed.exe", "test-bed.exe.config",
 			"test-bed.addins", "../../testcentric.nuget.addins")),
 	testRunner: new TestCentricEngineTestBed(),
 	checks: new PackageCheck[] {
 		HasFiles("LICENSE.txt", "testcentric.png"),
 		HasDirectory("tools").WithFiles(
 			"testcentric.engine.dll", "testcentric.engine.api.dll",
-			"testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll", "TestCentric.InternalTrace.dll",
-			"testcentric.engine.pdb", "test-bed.exe",
+			"testcentric.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll", "TestCentric.InternalTrace.dll",
+			"testcentric.engine.pdb", "test-bed.exe", "test-bed.exe.config",
 			"test-bed.addins", "testcentric.nuget.addins")
 	},
 	tests: packageTests,
 	preloadedExtensions: new [] {
-        KnownExtensions.Net462PluggableAgent.NuGetPackage,
-        KnownExtensions.Net60PluggableAgent.NuGetPackage,
-        KnownExtensions.Net70PluggableAgent.NuGetPackage,
-        KnownExtensions.Net80PluggableAgent.NuGetPackage }
+        KnownExtensions.Net462PluggableAgent.NuGetPackage.LatestDevBuild,
+        KnownExtensions.Net60PluggableAgent.NuGetPackage.LatestDevBuild,
+        KnownExtensions.Net70PluggableAgent.NuGetPackage.LatestDevBuild,
+        KnownExtensions.Net80PluggableAgent.NuGetPackage.LatestDevBuild }
 ));
 
 //////////////////////////////////////////////////////////////////////
