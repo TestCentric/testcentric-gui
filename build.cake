@@ -1,7 +1,7 @@
 // NOTE: This must match what is actually referenced by
 // the GUI test model project. Hopefully, this is a temporary
 // fix, which we can get rid of in the future.
-const string REF_ENGINE_VERSION = "2.0.0-beta4";
+const string REF_ENGINE_VERSION = "2.0.0-dev00008";
 
 // Load the recipe
 #load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00066
@@ -29,7 +29,7 @@ BuildSettings.Initialize(
 DefinePackageTests();
 
 static readonly FilePath[] ENGINE_FILES = {
-        "testcentric.engine.dll", "testcentric.engine.core.dll", "testcentric.engine.api.dll", "testcentric.engine.metadata.dll"};
+        "testcentric.engine.dll", "testcentric.engine.api.dll", "testcentric.metadata.dll"};
 static readonly FilePath[] GUI_FILES = {
         "testcentric.exe", "testcentric.exe.config", "nunit.uiexception.dll",
         "TestCentric.Gui.Runner.dll", "TestCentric.Gui.Model.dll", "Mono.Options.dll" };
@@ -62,9 +62,9 @@ var nugetPackage = new NuGetPackage(
 			new DirectoryContent("tools").WithFiles(
 				"testcentric.exe", "testcentric.exe.config", "TestCentric.Gui.Runner.dll",
 				"nunit.uiexception.dll", "TestCentric.Gui.Model.dll", "Mono.Options.dll",
-				"testcentric.engine.dll", "testcentric.engine.core.dll", "testcentric.engine.api.dll", "TestCentric.InternalTrace.dll",
-				"testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll",
-				"testcentric.engine.pdb", "../../nuget/testcentric.nuget.addins"),
+				"TestCentric.Engine.dll", "TestCentric.Engine.Api.dll", "TestCentric.InternalTrace.dll",
+				"TestCentric.Metadata.dll", "TestCentric.Extensibility.dll", "TestCentric.Extensibility.Api.dll",
+				"TestCentric.Engine.pdb", "../../nuget/testcentric.nuget.addins"),
 			new DirectoryContent("tools/Images/Tree/Circles").WithFiles(
 				"Images/Tree/Circles/Success.jpg", "Images/Tree/Circles/Failure.jpg", "Images/Tree/Circles/Ignored.jpg", "Images/Tree/Circles/Inconclusive.jpg", "Images/Tree/Circles/Skipped.jpg"),
 			new DirectoryContent("tools/Images/Tree/Classic").WithFiles(
@@ -74,10 +74,10 @@ var nugetPackage = new NuGetPackage(
 			new DirectoryContent("tools/Images/Tree/Visual Studio").WithFiles(
 				"Images/Tree/Visual Studio/Success.png", "Images/Tree/Visual Studio/Failure.png", "Images/Tree/Visual Studio/Ignored.png", "Images/Tree/Visual Studio/Inconclusive.png", "Images/Tree/Visual Studio/Skipped.png") )
 		.WithDependencies(
-			KnownExtensions.Net462PluggableAgent.NuGetPackage,
-			KnownExtensions.Net60PluggableAgent.NuGetPackage,
-			KnownExtensions.Net70PluggableAgent.NuGetPackage,
-			KnownExtensions.Net80PluggableAgent.NuGetPackage
+			KnownExtensions.Net462PluggableAgent.NuGetPackage.LatestDevBuild,
+			KnownExtensions.Net60PluggableAgent.NuGetPackage.LatestDevBuild,
+			KnownExtensions.Net70PluggableAgent.NuGetPackage.LatestDevBuild,
+			KnownExtensions.Net80PluggableAgent.NuGetPackage.LatestDevBuild
 		),
 	testRunner: new GuiSelfTester(BuildSettings.NuGetTestDirectory + "TestCentric.GuiRunner." + BuildSettings.PackageVersion + "/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
@@ -102,8 +102,8 @@ var chocolateyPackage = new ChocolateyPackage(
 				"../../choco/testcentric-agent.exe.ignore",	"../../choco/testcentric-agent-x86.exe.ignore",
 				"testcentric.exe", "testcentric.exe.config", "TestCentric.Gui.Runner.dll",
 				"nunit.uiexception.dll", "TestCentric.Gui.Model.dll", "Mono.Options.dll",
-				"testcentric.engine.dll", "testcentric.engine.core.dll", "testcentric.engine.api.dll", "TestCentric.InternalTrace.dll",
-				"testcentric.engine.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll",
+				"TestCentric.Engine.dll", "TestCentric.Engine.Api.dll", "TestCentric.InternalTrace.dll",
+				"TestCentric.Metadata.dll", "TestCentric.Extensibility.dll", "TestCentric.Extensibility.Api.dll",
 				"testcentric.engine.pdb", "../../choco/testcentric.choco.addins"),
 			new DirectoryContent("tools/Images/Tree/Circles").WithFiles(
 				"Images/Tree/Circles/Success.jpg", "Images/Tree/Circles/Failure.jpg", "Images/Tree/Circles/Ignored.jpg", "Images/Tree/Circles/Inconclusive.jpg", "Images/Tree/Circles/Skipped.jpg"),
@@ -114,10 +114,10 @@ var chocolateyPackage = new ChocolateyPackage(
 			new DirectoryContent("tools/Images/Tree/Visual Studio").WithFiles(
 				"Images/Tree/Visual Studio/Success.png", "Images/Tree/Visual Studio/Failure.png", "Images/Tree/Visual Studio/Ignored.png", "Images/Tree/Visual Studio/Inconclusive.png", "Images/Tree/Visual Studio/Skipped.png") )
 		.WithDependencies(
-			KnownExtensions.Net462PluggableAgent.ChocoPackage,
-			KnownExtensions.Net60PluggableAgent.ChocoPackage,
-			KnownExtensions.Net70PluggableAgent.ChocoPackage,
-			KnownExtensions.Net80PluggableAgent.ChocoPackage
+			KnownExtensions.Net462PluggableAgent.ChocoPackage.LatestDevBuild,
+			KnownExtensions.Net60PluggableAgent.ChocoPackage.LatestDevBuild,
+			KnownExtensions.Net70PluggableAgent.ChocoPackage.LatestDevBuild,
+			KnownExtensions.Net80PluggableAgent.ChocoPackage.LatestDevBuild
 		),
 	testRunner: new GuiSelfTester(BuildSettings.ChocolateyTestDirectory + "testcentric-gui." + BuildSettings.PackageVersion + "/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
