@@ -7,7 +7,7 @@
         <SignAssembly>true</SignAssembly>
         <AssemblyOriginatorKeyFile>..\..\testcentric.snk</AssemblyOriginatorKeyFile>
         <DebugType>Full</DebugType>
-        <OutputPath>bin\$(Configuration)</OutputPath>
+        <OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
       </PropertyGroup>
 

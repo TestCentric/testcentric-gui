@@ -1,5 +1,5 @@
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00067
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00069
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -16,8 +16,8 @@ BuildSettings.Initialize(
 	Context,
 	"TestCentric.Engine",
 	solutionFile: "testcentric-engine.sln",
-	githubRepository: "testcentric-engine",
-	unitTests: "**/*.tests.exe|**/*.tests.dll"
+	githubRepository: "testcentric-engine"
+	//unitTests: "**/*.tests.exe|**/*.tests.dll"
 );
 
 //////////////////////////////////////////////////////////////////////
@@ -174,7 +174,7 @@ packageTests.Add(new PackageTest(1, "Net35PlusNetCore21Test", "Run different bui
 
 // TODO: Disabling NUnitV2Test until the driver works
 //packageTests.Add(new PackageTest(1, "NUnitV2Test", "Run tests using the V2 framework driver",
-//	"v2-tests/net35/v2-test-assembly.dll",
+//	"v2-tests/net35/v2-test-assembly.dll --trace:Debug",
 //	new ExpectedResult("Failed")
 //	{
 //		Total = 28,
@@ -184,7 +184,7 @@ packageTests.Add(new PackageTest(1, "Net35PlusNetCore21Test", "Run different bui
 //		Inconclusive = 1,
 //		Skipped = 4
 //	},
-//	NUnitV2Driver));
+//	KnownExtensions.NUnitV2Driver));
 
 //////////////////////////////////////////////////////////////////////
 // DEFINE PACKAGE
