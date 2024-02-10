@@ -16,9 +16,17 @@ public static void DefinePackageTests()
 		"net462/mock-assembly.dll --trace:Debug",
 		MockAssemblyExpectedResult("Net462AgentLauncher")));
 
+	PackageTests.Add(new PackageTest(1, "Net462X86Test", "Run net462 mock-assembly-x86.dll under .NET 4.6.2",
+		"net462/mock-assembly-x86.dll --trace:Debug",
+		MockAssemblyX86ExpectedResult("Net462AgentLauncher")));
+
 	PackageTests.Add(new PackageTest(1, "Net35Test", "Run net35 mock-assembly.dll under .NET 4.6.2",
 	"net35/mock-assembly.dll",
         MockAssemblyExpectedResult("Net462AgentLauncher")));
+
+	PackageTests.Add(new PackageTest(1, "Net35X86Test", "Run net35 mock-assembly-x86.dll under .NET 4.6.2",
+	"net35/mock-assembly-x86.dll",
+        MockAssemblyX86ExpectedResult("Net462AgentLauncher")));
 
 	if (!BuildSettings.IsRunningOnAppVeyor)
         PackageTests.Add(new PackageTest(1, "NetCore21Test", "Run .NET Core 2.1 mock-assembly.dll under .NET Core 3.1",
@@ -163,6 +171,26 @@ public static void DefinePackageTests()
             Failed = 7 * ncopies,
             Warnings = 0 * ncopies,
             Inconclusive = 5 * ncopies,
+            Skipped = 7 * ncopies,
+            Assemblies = assemblies
+        };
+    }
+
+    ExpectedResult MockAssemblyX86ExpectedResult(params string[] agentNames)
+    {
+        int ncopies = agentNames.Length;
+
+        var assemblies = new ExpectedAssemblyResult[ncopies];
+        for (int i = 0; i < ncopies; i++)
+            assemblies[i] = new ExpectedAssemblyResult("mock-assembly-x86.dll", agentNames[i]);
+
+        return new ExpectedResult("Failed")
+        {
+            Total = 31 * ncopies,
+            Passed = 18 * ncopies,
+            Failed = 5 * ncopies,
+            Warnings = 0 * ncopies,
+            Inconclusive = 1 * ncopies,
             Skipped = 7 * ncopies,
             Assemblies = assemblies
         };
