@@ -1,10 +1,10 @@
 // NOTE: This must match what is actually referenced by
 // the GUI test model project. Hopefully, this is a temporary
 // fix, which we can get rid of in the future.
-const string REF_ENGINE_VERSION = "2.0.0-dev00008";
+const string REF_ENGINE_VERSION = "2.0.0-dev00010";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00066
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00082
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -104,7 +104,7 @@ var chocolateyPackage = new ChocolateyPackage(
 				"nunit.uiexception.dll", "TestCentric.Gui.Model.dll", "Mono.Options.dll",
 				"TestCentric.Engine.dll", "TestCentric.Engine.Api.dll", "TestCentric.InternalTrace.dll",
 				"TestCentric.Metadata.dll", "TestCentric.Extensibility.dll", "TestCentric.Extensibility.Api.dll",
-				"testcentric.engine.pdb", "../../choco/testcentric.choco.addins"),
+				"testcentric.engine.pdb"),
 			new DirectoryContent("tools/Images/Tree/Circles").WithFiles(
 				"Images/Tree/Circles/Success.jpg", "Images/Tree/Circles/Failure.jpg", "Images/Tree/Circles/Ignored.jpg", "Images/Tree/Circles/Inconclusive.jpg", "Images/Tree/Circles/Skipped.jpg"),
 			new DirectoryContent("tools/Images/Tree/Classic").WithFiles(
@@ -251,4 +251,4 @@ Task("Default")
 // EXECUTION
 //////////////////////////////////////////////////////////////////////
 
-RunTarget(CommandLineOptions.Target);
+RunTarget(CommandLineOptions.Target.Value);
