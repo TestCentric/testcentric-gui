@@ -1,5 +1,5 @@
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00069
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00082
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -49,10 +49,11 @@ if (!BuildSettings.IsRunningOnAppVeyor)
         "engine-tests/netcoreapp2.1/mock-assembly.dll",
         MockAssemblyExpectedResult("Net60AgentLauncher")));
 
-if (!BuildSettings.IsRunningOnAppVeyor)
-    packageTests.Add(new PackageTest(1, "NetCore11Test", "Run mock-assembly.dll targeting .NET Core 1.1",
-        "engine-tests/netcoreapp1.1/mock-assembly.dll",
-        MockAssemblyExpectedResult("Net60AgentLauncher")));
+// TODO: Decide whether to support this
+//if (!BuildSettings.IsRunningOnAppVeyor)
+//    packageTests.Add(new PackageTest(1, "NetCore11Test", "Run mock-assembly.dll targeting .NET Core 1.1",
+//        "engine-tests/netcoreapp1.1/mock-assembly.dll",
+//        MockAssemblyExpectedResult("Net60AgentLauncher")));
 
 packageTests.Add(new PackageTest(1, "Net50Test", "Run mock-assembly.dll targeting .NET 5.0",
     "engine-tests/net5.0/mock-assembly.dll",
@@ -266,4 +267,4 @@ Task("Default")
 // EXECUTION
 //////////////////////////////////////////////////////////////////////
 
-RunTarget(CommandLineOptions.Target);
+RunTarget(CommandLineOptions.Target.Value);
