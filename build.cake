@@ -1,5 +1,5 @@
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00082
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.1
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -39,29 +39,7 @@ var EngineApiPackage = new NuGetPackage(
 BuildSettings.Packages.Add(EngineApiPackage);
 
 //////////////////////////////////////////////////////////////////////
-// TASK TARGETS
-//////////////////////////////////////////////////////////////////////
-
-Task("AppVeyor")
-	.Description("Targets to run on AppVeyor")
-	.IsDependentOn("DumpSettings")
-	.IsDependentOn("Build")
-	.IsDependentOn("Test")
-	.IsDependentOn("Package")
-	.IsDependentOn("Publish")
-	.IsDependentOn("CreateDraftRelease")
-	.IsDependentOn("CreateProductionRelease");
-
-Task("Travis")
-	.Description("Targets to run on Travis")
-    .IsDependentOn("Build")
-    .IsDependentOn("Test");
-
-Task("Default")
-    .IsDependentOn("Build");
-
-//////////////////////////////////////////////////////////////////////
 // EXECUTION
 //////////////////////////////////////////////////////////////////////
 
-RunTarget(CommandLineOptions.Target.Value);
+Build.Run();
