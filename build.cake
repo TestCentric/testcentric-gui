@@ -1,10 +1,10 @@
 // NOTE: This must match what is actually referenced by
 // the GUI test model project. Hopefully, this is a temporary
 // fix, which we can get rid of in the future.
-const string REF_ENGINE_VERSION = "2.0.0-dev00010";
+const string REF_ENGINE_VERSION = "2.0.0-beta5";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00082
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.2
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -74,10 +74,10 @@ var nugetPackage = new NuGetPackage(
 			new DirectoryContent("tools/Images/Tree/Visual Studio").WithFiles(
 				"Images/Tree/Visual Studio/Success.png", "Images/Tree/Visual Studio/Failure.png", "Images/Tree/Visual Studio/Ignored.png", "Images/Tree/Visual Studio/Inconclusive.png", "Images/Tree/Visual Studio/Skipped.png") )
 		.WithDependencies(
-			KnownExtensions.Net462PluggableAgent.NuGetPackage.LatestDevBuild,
-			KnownExtensions.Net60PluggableAgent.NuGetPackage.LatestDevBuild,
-			KnownExtensions.Net70PluggableAgent.NuGetPackage.LatestDevBuild,
-			KnownExtensions.Net80PluggableAgent.NuGetPackage.LatestDevBuild
+			new PackageReference("TestCentric.Extension.Net462PluggableAgent", "2.4.2"),
+			new PackageReference("TestCentric.Extension.Net60PluggableAgent", "2.4.1"),
+			new PackageReference("TestCentric.Extension.Net70PluggableAgent", "2.4.1"),
+			new PackageReference("TestCentric.Extension.Net80PluggableAgent", "2.4.1")
 		),
 	testRunner: new GuiSelfTester(BuildSettings.NuGetTestDirectory + "TestCentric.GuiRunner." + BuildSettings.PackageVersion + "/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
@@ -114,10 +114,10 @@ var chocolateyPackage = new ChocolateyPackage(
 			new DirectoryContent("tools/Images/Tree/Visual Studio").WithFiles(
 				"Images/Tree/Visual Studio/Success.png", "Images/Tree/Visual Studio/Failure.png", "Images/Tree/Visual Studio/Ignored.png", "Images/Tree/Visual Studio/Inconclusive.png", "Images/Tree/Visual Studio/Skipped.png") )
 		.WithDependencies(
-			KnownExtensions.Net462PluggableAgent.ChocoPackage.LatestDevBuild,
-			KnownExtensions.Net60PluggableAgent.ChocoPackage.LatestDevBuild,
-			KnownExtensions.Net70PluggableAgent.ChocoPackage.LatestDevBuild,
-			KnownExtensions.Net80PluggableAgent.ChocoPackage.LatestDevBuild
+			new PackageReference("testcentric-extension-net462-pluggable-agent", "2.4.2"),
+			new PackageReference("testcentric-extension-net60-pluggable-agent", "2.4.1"),
+			new PackageReference("testcentric-extension-net70-pluggable-agent", "2.4.1"),
+			new PackageReference("testcentric-extension-net80-pluggable-agent", "2.4.1")
 		),
 	testRunner: new GuiSelfTester(BuildSettings.ChocolateyTestDirectory + "testcentric-gui." + BuildSettings.PackageVersion + "/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
@@ -227,28 +227,7 @@ Task("RunTestCentricGuiTests")
 	});
 
 //////////////////////////////////////////////////////////////////////
-// TASK TARGETS
-//////////////////////////////////////////////////////////////////////
-Task ("Indirect")
-	.IsDependentOn("CreateDraftRelease");
-Task("AppVeyor")
-	.IsDependentOn("DumpSettings")
-	.IsDependentOn("Build")
-	.IsDependentOn("Test")
-	.IsDependentOn("Package")
-	.IsDependentOn("Publish")
-	.IsDependentOn("CreateDraftRelease")
-	.IsDependentOn("CreateProductionRelease");
-
-Task("Travis")
-    .IsDependentOn("Build")
-    .IsDependentOn("Test");
-
-Task("Default")
-    .IsDependentOn("Build");
-
-//////////////////////////////////////////////////////////////////////
 // EXECUTION
 //////////////////////////////////////////////////////////////////////
 
-RunTarget(CommandLineOptions.Target.Value);
+Build.Run();
