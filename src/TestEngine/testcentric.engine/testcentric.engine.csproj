@@ -44,10 +44,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="TestCentric.Engine.Api" Version="2.0.0-dev00005" />
-		<PackageReference Include="TestCentric.Extensibility" Version="3.0.0-dev00018" />
-		<PackageReference Include="TestCentric.Metadata" Version="3.0.2-dev00002" />
-		<PackageReference Include="TestCentric.InternalTrace" Version="1.2.0-dev00013" />
+		<PackageReference Include="TestCentric.Engine.Api" Version="2.0.0-beta5" />
+		<PackageReference Include="TestCentric.Extensibility" Version="3.0.0" />
+		<PackageReference Include="TestCentric.Metadata" Version="3.0.2" />
+		<PackageReference Include="TestCentric.InternalTrace" Version="1.2.0" />
 	</ItemGroup>
 
 </Project>

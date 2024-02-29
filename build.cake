@@ -1,5 +1,5 @@
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.0-dev00082
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.2
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -213,10 +213,10 @@ BuildSettings.Packages.Add(new NuGetPackage(
 	},
 	tests: packageTests,
 	preloadedExtensions: new [] {
-        KnownExtensions.Net462PluggableAgent.NuGetPackage.LatestDevBuild,
-        KnownExtensions.Net60PluggableAgent.NuGetPackage.LatestDevBuild,
-        KnownExtensions.Net70PluggableAgent.NuGetPackage.LatestDevBuild,
-        KnownExtensions.Net80PluggableAgent.NuGetPackage.LatestDevBuild }
+        new PackageReference("TestCentric.Extension.Net462PluggableAgent", "2.4.2"),
+        new PackageReference("TestCentric.Extension.Net60PluggableAgent", "2.4.1"),
+        new PackageReference("TestCentric.Extension.Net70PluggableAgent", "2.4.1"),
+        new PackageReference("TestCentric.Extension.Net80PluggableAgent", "2.4.1") }
 ));
 
 //////////////////////////////////////////////////////////////////////
@@ -242,29 +242,7 @@ public class TestCentricEngineTestBed : TestRunner
 }
 
 //////////////////////////////////////////////////////////////////////
-// TASK TARGETS
-//////////////////////////////////////////////////////////////////////
-
-Task("AppVeyor")
-	.Description("Targets to run on AppVeyor")
-	.IsDependentOn("DumpSettings")
-	.IsDependentOn("Build")
-	.IsDependentOn("Test")
-	.IsDependentOn("Package")
-	.IsDependentOn("Publish")
-	.IsDependentOn("CreateDraftRelease")
-	.IsDependentOn("CreateProductionRelease");
-
-Task("Travis")
-	.Description("Targets to run on Travis")
-    .IsDependentOn("Build")
-    .IsDependentOn("Test");
-
-Task("Default")
-    .IsDependentOn("Build");
-
-//////////////////////////////////////////////////////////////////////
 // EXECUTION
 //////////////////////////////////////////////////////////////////////
 
-RunTarget(CommandLineOptions.Target.Value);
+Build.Run();
