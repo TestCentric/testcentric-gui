@@ -395,10 +395,13 @@ namespace TestCentric.Gui.Model
         {
             _events.FireTestsReloading();
 
+#if true
+            Runner.Reload();
+#else
             // NOTE: The `ITestRunner.Reload` method supported by the engine
             // has some problems, so we simulate Unload+Load. See issue #328.
 
-            // Replace Runner in case settings changed
+                // Replace Runner in case settings changed
             UnloadTestsIgnoringErrors();
             Runner.Dispose();
             Runner = TestEngine.GetRunner(TestPackage);
@@ -408,6 +411,7 @@ namespace TestCentric.Gui.Model
             AvailableCategories = GetAvailableCategories();
 
             ClearResults();
+#endif
 
             _events.FireTestReloaded(LoadedTests);
         }
@@ -542,9 +546,9 @@ namespace TestCentric.Gui.Model
             CategoryFilter = catFilter;
         }
 
-        #endregion
+#endregion
 
-        #endregion
+#endregion
 
         #region IDisposable Implementation
 
