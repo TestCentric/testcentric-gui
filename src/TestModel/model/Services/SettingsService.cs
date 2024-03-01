@@ -14,9 +14,9 @@ namespace TestCentric.Gui.Model.Services
     /// </summary>
     public class SettingsService : SettingsStore
     {
-        private const string SETTINGS_FILE = "Nunit30Settings.xml";
+        private const string SETTINGS_FILE = "TestCentricSettings.xml";
         private static readonly string APPLICATION_DIRECTORY = 
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "NUnit");
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "TestCentric");
 
         public SettingsService(bool writeable)
             : base(Path.Combine(APPLICATION_DIRECTORY, SETTINGS_FILE), writeable) { }
