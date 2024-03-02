@@ -108,8 +108,8 @@ namespace TestCentric.Gui.Views
 
         public string TestCount
         {
-            get { return testCount.Text; }
-            set { InvokeIfRequired(() => { testCount.Text = value; }); }
+            get { return testCaseCount.Text; }
+            set { InvokeIfRequired(() => { testCaseCount.Text = value; }); }
         }
 
         public string RunState

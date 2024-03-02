@@ -48,8 +48,8 @@ namespace TestCentric.Gui.Dialogs
             _resultNode = _model.GetResultForTest(_testNode.Id);
             _packageSettings = _model.GetPackageSettingsForTest(_testNode.Id);
 
-            testResult.Text = _resultNode?.Outcome.ToString() ?? _testNode.RunState.ToString();
-            testResult.Font = new Font(this.Font, FontStyle.Bold);
+            outcome.Text = _resultNode?.Outcome.ToString() ?? _testNode.RunState.ToString();
+            outcome.Font = new Font(this.Font, FontStyle.Bold);
             if (_testNode.Type == "Project" || _testNode.Type == "Assembly")
                 TestName = Path.GetFileName(_testNode.Name);
             else
@@ -58,12 +58,12 @@ namespace TestCentric.Gui.Dialogs
             // Display each groupBox, for which there is data.
             // Boxes are displayed top-down at the vertical
             // offset
-            int verticalOffset = packageGroupBox.Top;
+            int verticalOffset = packagePanel.Top;
 
             if (_packageSettings != null)
                 verticalOffset = DisplayPackageGroupBox(verticalOffset) + 4;
             else
-                packageGroupBox.Hide();
+                packagePanel.Hide();
 
             // Test details are always shown
             verticalOffset = DisplayTestGroupBox(verticalOffset) + 4;
@@ -71,7 +71,7 @@ namespace TestCentric.Gui.Dialogs
             if (_resultNode != null)
                 verticalOffset = DisplayResultGroupBox(verticalOffset) + 4;
             else
-                resultGroupBox.Hide();
+                resultPanel.Hide();
 
             ClientSize = new Size(
                 ClientSize.Width, verticalOffset);
@@ -92,19 +92,19 @@ namespace TestCentric.Gui.Dialogs
 
         private int DisplayPackageGroupBox(int verticalOffset)
         {
-            packageGroupBox.Location = new Point(
-                packageGroupBox.Location.X, verticalOffset);
+            packagePanel.Location = new Point(
+                packagePanel.Location.X, verticalOffset);
 
             FillPackageSettingsList(_packageSettings);
-            packageGroupBox.Show();
+            packagePanel.Show();
 
-            return packageGroupBox.Bottom;
+            return packagePanel.Bottom;
         }
 
         private int DisplayTestGroupBox(int verticalOffset)
         {
-            testGroupBox.Location = new Point(
-                packageGroupBox.Location.X, verticalOffset);
+            testPanel.Location = new Point(
+                packagePanel.Location.X, verticalOffset);
 
             testType.Text = _testNode.Type;
 
@@ -129,17 +129,17 @@ namespace TestCentric.Gui.Dialogs
             //        break;
             //}
 
-            ignoreReason.Text = _testNode.GetProperty("_SKIPREASON");
+            skipReason.Text = _testNode.GetProperty("_SKIPREASON");
 
             FillPropertyList();
 
-            return testGroupBox.Bottom;
+            return testPanel.Bottom;
         }
 
         private int DisplayResultGroupBox(int verticalOffset)
         {
-            resultGroupBox.Location = new Point(
-                resultGroupBox.Location.X, verticalOffset);
+            resultPanel.Location = new Point(
+                resultPanel.Location.X, verticalOffset);
 
             elapsedTime.Text = _resultNode.Duration.ToString("f3");
             assertCount.Text = _resultNode.AssertCount.ToString();
@@ -156,9 +156,9 @@ namespace TestCentric.Gui.Dialogs
                 ? FormatStackTrace(_resultNode.StackTrace)
                 : string.Empty;
 
-            resultGroupBox.Show();
+            resultPanel.Show();
 
-            return resultGroupBox.Bottom;
+            return resultPanel.Bottom;
         }
 
         private static string FormatStackTrace(string stackTrace)
@@ -182,7 +182,7 @@ namespace TestCentric.Gui.Dialogs
         private void FillPropertyList()
         {
             var sb = new StringBuilder();
-            foreach (string item in _testNode.GetAllProperties(hiddenProperties.Checked))
+            foreach (string item in _testNode.GetAllProperties(displayHiddenProperties.Checked))
             {
                 if (sb.Length > 0)
                     sb.Append(Environment.NewLine);

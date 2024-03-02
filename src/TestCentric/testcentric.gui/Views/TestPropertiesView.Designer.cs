@@ -46,7 +46,7 @@ namespace TestCentric.Gui.Views
             this.assertCountLabel = new System.Windows.Forms.Label();
             this.assertCount = new System.Windows.Forms.Label();
             this.messageLabel = new System.Windows.Forms.Label();
-            this.testCount = new System.Windows.Forms.Label();
+            this.testCaseCount = new System.Windows.Forms.Label();
             this.runStateLabel = new System.Windows.Forms.Label();
             this.testCountLabel = new System.Windows.Forms.Label();
             this.runState = new System.Windows.Forms.Label();
@@ -233,12 +233,12 @@ namespace TestCentric.Gui.Views
             this.messageLabel.TabIndex = 25;
             this.messageLabel.Text = "Messages:";
             // 
-            // testCount
+            // testCaseCount
             // 
-            this.testCount.Location = new System.Drawing.Point(74, 87);
-            this.testCount.Name = "testCount";
-            this.testCount.Size = new System.Drawing.Size(71, 13);
-            this.testCount.TabIndex = 10;
+            this.testCaseCount.Location = new System.Drawing.Point(74, 87);
+            this.testCaseCount.Name = "testCaseCount";
+            this.testCaseCount.Size = new System.Drawing.Size(71, 13);
+            this.testCaseCount.TabIndex = 10;
             // 
             // runStateLabel
             // 
@@ -327,7 +327,7 @@ namespace TestCentric.Gui.Views
             this.testPanel.Controls.Add(this.testTypeLabel);
             this.testPanel.Controls.Add(this.runState);
             this.testPanel.Controls.Add(this.testCountLabel);
-            this.testPanel.Controls.Add(this.testCount);
+            this.testPanel.Controls.Add(this.testCaseCount);
             this.testPanel.Controls.Add(this.testType);
             this.testPanel.Controls.Add(this.runStateLabel);
             this.testPanel.Controls.Add(this.fullNameLabel);
@@ -509,7 +509,7 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.Label assertCount;
         private System.Windows.Forms.Label messageLabel;
         private TestCentric.Gui.Controls.ExpandingLabel assertions;
-        private System.Windows.Forms.Label testCount;
+        private System.Windows.Forms.Label testCaseCount;
         private System.Windows.Forms.Label runStateLabel;
         private System.Windows.Forms.Label testCountLabel;
         private System.Windows.Forms.Label runState;
