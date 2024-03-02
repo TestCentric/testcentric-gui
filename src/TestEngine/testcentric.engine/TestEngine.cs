@@ -36,7 +36,21 @@ namespace TestCentric.Engine
 
         public string WorkDirectory { get; set; } = Environment.CurrentDirectory;
 
-        public InternalTraceLevel InternalTraceLevel { get; set; } = InternalTraceLevel.Off;
+        private InternalTraceLevel _internalTraceLevel;
+        public InternalTraceLevel InternalTraceLevel 
+        {
+            get {  return _internalTraceLevel; }
+            set
+            {
+                _internalTraceLevel = value;
+
+                if (InternalTrace.Initialized) // ensure log file is not changed
+                    InternalTrace.Initialize(InternalTrace.TraceWriter.LogPath, value);
+                else
+                    InternalTrace.Initialize(value);
+            }
+        }
+        
 
         /// <summary>
         /// Initialize the engine. This includes initializing mono addins,
