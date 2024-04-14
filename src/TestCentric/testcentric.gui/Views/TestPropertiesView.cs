@@ -35,7 +35,7 @@ namespace TestCentric.Gui.Views
         {
             InvokeIfRequired(() =>
             {
-                packagePanel.Visible = true;
+                packageSettingsPanel.Visible = true;
                 splitContainer1.Panel1Collapsed = false;
             });
         }
@@ -43,7 +43,7 @@ namespace TestCentric.Gui.Views
         {
             InvokeIfRequired(() =>
             {
-                packagePanel.Visible = false;
+                packageSettingsPanel.Visible = false;
                 splitContainer1.Panel1Collapsed = true;
             });
         }

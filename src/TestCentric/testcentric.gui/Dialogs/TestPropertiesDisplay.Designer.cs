@@ -37,9 +37,9 @@ namespace TestCentric.Gui.Dialogs
             this.properties = new TestCentric.Gui.Controls.ExpandingLabel();
             this.propertiesLabel = new System.Windows.Forms.Label();
             this.testCaseCount = new System.Windows.Forms.Label();
-            this.skipReason = new TestCentric.Gui.Controls.ExpandingLabel();
-            this.reasonLabel = new System.Windows.Forms.Label();
-            this.testCountLabel = new System.Windows.Forms.Label();
+            this.ignoreReason = new TestCentric.Gui.Controls.ExpandingLabel();
+            this.ignoreReasonLabel = new System.Windows.Forms.Label();
+            this.testCaseCountLabel = new System.Windows.Forms.Label();
             this.runState = new System.Windows.Forms.Label();
             this.runStateLabel = new System.Windows.Forms.Label();
             this.testType = new System.Windows.Forms.Label();
@@ -60,12 +60,12 @@ namespace TestCentric.Gui.Dialogs
             this.stackTraceLabel = new System.Windows.Forms.Label();
             this.message = new TestCentric.Gui.Controls.ExpandingLabel();
             this.stackTrace = new TestCentric.Gui.Controls.ExpandingLabel();
-            this.packagePanel = new System.Windows.Forms.Panel();
+            this.packageSettingsPanel = new System.Windows.Forms.Panel();
             this.packageSettingsLabel = new System.Windows.Forms.Label();
             this.packageSettings = new TestCentric.Gui.Controls.ExpandingLabel();
             this.testPanel.SuspendLayout();
             this.resultPanel.SuspendLayout();
-            this.packagePanel.SuspendLayout();
+            this.packageSettingsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // testPanel
@@ -79,9 +79,9 @@ namespace TestCentric.Gui.Dialogs
             this.testPanel.Controls.Add(this.properties);
             this.testPanel.Controls.Add(this.propertiesLabel);
             this.testPanel.Controls.Add(this.testCaseCount);
-            this.testPanel.Controls.Add(this.skipReason);
-            this.testPanel.Controls.Add(this.reasonLabel);
-            this.testPanel.Controls.Add(this.testCountLabel);
+            this.testPanel.Controls.Add(this.ignoreReason);
+            this.testPanel.Controls.Add(this.ignoreReasonLabel);
+            this.testPanel.Controls.Add(this.testCaseCountLabel);
             this.testPanel.Controls.Add(this.runState);
             this.testPanel.Controls.Add(this.runStateLabel);
             this.testPanel.Controls.Add(this.testType);
@@ -148,37 +148,37 @@ namespace TestCentric.Gui.Dialogs
             this.testCaseCount.Size = new System.Drawing.Size(71, 13);
             this.testCaseCount.TabIndex = 9;
             // 
-            // skipReason
+            // ignoreReason
             // 
-            this.skipReason.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.ignoreReason.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.skipReason.CopySupported = true;
-            this.skipReason.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Vertical;
-            this.skipReason.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.skipReason.Location = new System.Drawing.Point(101, 90);
-            this.skipReason.Name = "skipReason";
-            this.skipReason.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.skipReason.Size = new System.Drawing.Size(212, 13);
-            this.skipReason.TabIndex = 13;
+            this.ignoreReason.CopySupported = true;
+            this.ignoreReason.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Vertical;
+            this.ignoreReason.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.ignoreReason.Location = new System.Drawing.Point(101, 90);
+            this.ignoreReason.Name = "ignoreReason";
+            this.ignoreReason.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.ignoreReason.Size = new System.Drawing.Size(212, 13);
+            this.ignoreReason.TabIndex = 13;
             // 
-            // reasonLabel
+            // ignoreReasonLabel
             // 
-            this.reasonLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.reasonLabel.Location = new System.Drawing.Point(5, 90);
-            this.reasonLabel.Name = "reasonLabel";
-            this.reasonLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.reasonLabel.Size = new System.Drawing.Size(80, 16);
-            this.reasonLabel.TabIndex = 12;
-            this.reasonLabel.Text = "Reason:";
+            this.ignoreReasonLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.ignoreReasonLabel.Location = new System.Drawing.Point(5, 90);
+            this.ignoreReasonLabel.Name = "ignoreReasonLabel";
+            this.ignoreReasonLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.ignoreReasonLabel.Size = new System.Drawing.Size(80, 16);
+            this.ignoreReasonLabel.TabIndex = 12;
+            this.ignoreReasonLabel.Text = "Reason:";
             // 
-            // testCountLabel
+            // testCaseCountLabel
             // 
-            this.testCountLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.testCountLabel.Location = new System.Drawing.Point(5, 73);
-            this.testCountLabel.Name = "testCountLabel";
-            this.testCountLabel.Size = new System.Drawing.Size(80, 15);
-            this.testCountLabel.TabIndex = 8;
-            this.testCountLabel.Text = "Test Count:";
+            this.testCaseCountLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.testCaseCountLabel.Location = new System.Drawing.Point(5, 73);
+            this.testCaseCountLabel.Name = "testCaseCountLabel";
+            this.testCaseCountLabel.Size = new System.Drawing.Size(80, 15);
+            this.testCaseCountLabel.TabIndex = 8;
+            this.testCaseCountLabel.Text = "Test Count:";
             // 
             // runState
             // 
@@ -385,19 +385,19 @@ namespace TestCentric.Gui.Dialogs
             this.stackTrace.Size = new System.Drawing.Size(310, 64);
             this.stackTrace.TabIndex = 9;
             // 
-            // packagePanel
+            // packageSettingsPanel
             // 
-            this.packagePanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.packageSettingsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.packagePanel.BackColor = System.Drawing.SystemColors.Control;
-            this.packagePanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.packagePanel.Controls.Add(this.packageSettingsLabel);
-            this.packagePanel.Controls.Add(this.packageSettings);
-            this.packagePanel.Location = new System.Drawing.Point(6, 30);
-            this.packagePanel.Name = "packagePanel";
-            this.packagePanel.Size = new System.Drawing.Size(324, 96);
-            this.packagePanel.TabIndex = 4;
-            this.packagePanel.Text = "Package Settings";
+            this.packageSettingsPanel.BackColor = System.Drawing.SystemColors.Control;
+            this.packageSettingsPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.packageSettingsPanel.Controls.Add(this.packageSettingsLabel);
+            this.packageSettingsPanel.Controls.Add(this.packageSettings);
+            this.packageSettingsPanel.Location = new System.Drawing.Point(6, 30);
+            this.packageSettingsPanel.Name = "packageSettingsPanel";
+            this.packageSettingsPanel.Size = new System.Drawing.Size(324, 96);
+            this.packageSettingsPanel.TabIndex = 4;
+            this.packageSettingsPanel.Text = "Package Settings";
             // 
             // packageSettingsLabel
             // 
@@ -427,7 +427,7 @@ namespace TestCentric.Gui.Dialogs
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(336, 500);
-            this.Controls.Add(this.packagePanel);
+            this.Controls.Add(this.packageSettingsPanel);
             this.Controls.Add(this.resultPanel);
             this.Controls.Add(this.testPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -437,48 +437,65 @@ namespace TestCentric.Gui.Dialogs
             this.ResizeEnd += new System.EventHandler(this.TestPropertiesDialog_ResizeEnd);
             this.Controls.SetChildIndex(this.testPanel, 0);
             this.Controls.SetChildIndex(this.resultPanel, 0);
-            this.Controls.SetChildIndex(this.packagePanel, 0);
+            this.Controls.SetChildIndex(this.packageSettingsPanel, 0);
             this.testPanel.ResumeLayout(false);
             this.testPanel.PerformLayout();
             this.resultPanel.ResumeLayout(false);
-            this.packagePanel.ResumeLayout(false);
-            this.packagePanel.PerformLayout();
+            this.packageSettingsPanel.ResumeLayout(false);
+            this.packageSettingsPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private System.Windows.Forms.Panel testPanel;
-        private ExpandingLabel description;
-        private System.Windows.Forms.Label categories;
-        private TestCentric.Gui.Controls.ExpandingLabel properties;
-        private System.Windows.Forms.Label propertiesLabel;
-        private System.Windows.Forms.Label testCaseCount;
-        private ExpandingLabel skipReason;
-        private System.Windows.Forms.Label reasonLabel;
-        private System.Windows.Forms.Label testCountLabel;
-        private System.Windows.Forms.Label runState;
-        private System.Windows.Forms.Label runStateLabel;
-        private System.Windows.Forms.Label testType;
-        private System.Windows.Forms.Label testTypeLabel;
-        private System.Windows.Forms.Label categoriesLabel;
-        private System.Windows.Forms.Label descriptionLabel;
-        private ExpandingLabel fullName;
-        private System.Windows.Forms.Label fullNameLabel;
-        private System.Windows.Forms.Panel resultPanel;
-        private System.Windows.Forms.Label assertCountLabel;
-        private System.Windows.Forms.Label messageLabel;
-        private System.Windows.Forms.Label elapsedTimeLabel;
-        private System.Windows.Forms.Label stackTraceLabel;
-        private ExpandingLabel message;
-        private ExpandingLabel stackTrace;
-        private System.Windows.Forms.CheckBox displayHiddenProperties;
-        private System.Windows.Forms.Panel packagePanel;
-        private TestCentric.Gui.Controls.ExpandingLabel packageSettings;
-        private System.Windows.Forms.Label outcome;
+
+        private System.Windows.Forms.Panel packageSettingsPanel;
+
         private System.Windows.Forms.Label packageSettingsLabel;
+        private TestCentric.Gui.Controls.ExpandingLabel packageSettings;
+
+        private System.Windows.Forms.Panel testPanel;
+
+        private System.Windows.Forms.Label testTypeLabel;
+        private System.Windows.Forms.Label testType;
+
+        private System.Windows.Forms.Label fullNameLabel;
+        private ExpandingLabel fullName;
+
+        private System.Windows.Forms.Label descriptionLabel;
+        private ExpandingLabel description;
+
+        private System.Windows.Forms.Label categoriesLabel;
+        private System.Windows.Forms.Label categories;
+
+        private System.Windows.Forms.Label testCaseCountLabel;
+        private System.Windows.Forms.Label testCaseCount;
+
+        private System.Windows.Forms.Label runStateLabel;
+        private System.Windows.Forms.Label runState;
+
+        private System.Windows.Forms.Label ignoreReasonLabel;
+        private ExpandingLabel ignoreReason;
+
+        private System.Windows.Forms.Label propertiesLabel;
+        private System.Windows.Forms.CheckBox displayHiddenProperties;
+        private TestCentric.Gui.Controls.ExpandingLabel properties;
+
+        private System.Windows.Forms.Panel resultPanel;
+
         private System.Windows.Forms.Label outcomeLabel;
+        private System.Windows.Forms.Label outcome;
+
+        private System.Windows.Forms.Label elapsedTimeLabel;
         private System.Windows.Forms.Label elapsedTime;
+
+        private System.Windows.Forms.Label assertCountLabel;
         private System.Windows.Forms.Label assertCount;
+
+        private System.Windows.Forms.Label messageLabel;
+        private ExpandingLabel message;
+
+        private System.Windows.Forms.Label stackTraceLabel;
+        private ExpandingLabel stackTrace;
     }
 }

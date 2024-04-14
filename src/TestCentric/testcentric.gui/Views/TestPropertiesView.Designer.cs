@@ -48,7 +48,7 @@ namespace TestCentric.Gui.Views
             this.messageLabel = new System.Windows.Forms.Label();
             this.testCaseCount = new System.Windows.Forms.Label();
             this.runStateLabel = new System.Windows.Forms.Label();
-            this.testCountLabel = new System.Windows.Forms.Label();
+            this.testCaseCountLabel = new System.Windows.Forms.Label();
             this.runState = new System.Windows.Forms.Label();
             this.resultPanel = new System.Windows.Forms.Panel();
             this.output = new TestCentric.Gui.Controls.ExpandingLabel();
@@ -59,7 +59,7 @@ namespace TestCentric.Gui.Views
             this.properties = new TestCentric.Gui.Controls.ExpandingLabel();
             this.description = new TestCentric.Gui.Controls.ExpandingLabel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.packagePanel = new System.Windows.Forms.Panel();
+            this.packageSettingsPanel = new System.Windows.Forms.Panel();
             this.packageSettings = new TestCentric.Gui.Controls.ExpandingLabel();
             this.packageSettingsLabel = new System.Windows.Forms.Label();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
@@ -69,7 +69,7 @@ namespace TestCentric.Gui.Views
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.packagePanel.SuspendLayout();
+            this.packageSettingsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
@@ -250,11 +250,11 @@ namespace TestCentric.Gui.Views
             // 
             // testCountLabel
             // 
-            this.testCountLabel.Location = new System.Drawing.Point(5, 87);
-            this.testCountLabel.Name = "testCountLabel";
-            this.testCountLabel.Size = new System.Drawing.Size(62, 13);
-            this.testCountLabel.TabIndex = 9;
-            this.testCountLabel.Text = "Test Count:";
+            this.testCaseCountLabel.Location = new System.Drawing.Point(5, 87);
+            this.testCaseCountLabel.Name = "testCountLabel";
+            this.testCaseCountLabel.Size = new System.Drawing.Size(62, 13);
+            this.testCaseCountLabel.TabIndex = 9;
+            this.testCaseCountLabel.Text = "Test Count:";
             // 
             // runState
             // 
@@ -326,7 +326,7 @@ namespace TestCentric.Gui.Views
             this.testPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.testPanel.Controls.Add(this.testTypeLabel);
             this.testPanel.Controls.Add(this.runState);
-            this.testPanel.Controls.Add(this.testCountLabel);
+            this.testPanel.Controls.Add(this.testCaseCountLabel);
             this.testPanel.Controls.Add(this.testCaseCount);
             this.testPanel.Controls.Add(this.testType);
             this.testPanel.Controls.Add(this.runStateLabel);
@@ -393,7 +393,7 @@ namespace TestCentric.Gui.Views
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.BackColor = System.Drawing.SystemColors.Control;
-            this.splitContainer1.Panel1.Controls.Add(this.packagePanel);
+            this.splitContainer1.Panel1.Controls.Add(this.packageSettingsPanel);
             this.splitContainer1.Panel1MinSize = 96;
             // 
             // splitContainer1.Panel2
@@ -404,16 +404,16 @@ namespace TestCentric.Gui.Views
             this.splitContainer1.SplitterDistance = 140;
             this.splitContainer1.TabIndex = 31;
             // 
-            // packagePanel
+            // packageSettingsPanel
             // 
-            this.packagePanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.packagePanel.Controls.Add(this.packageSettings);
-            this.packagePanel.Controls.Add(this.packageSettingsLabel);
-            this.packagePanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.packagePanel.Location = new System.Drawing.Point(0, 0);
-            this.packagePanel.Name = "packagePanel";
-            this.packagePanel.Size = new System.Drawing.Size(522, 140);
-            this.packagePanel.TabIndex = 30;
+            this.packageSettingsPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.packageSettingsPanel.Controls.Add(this.packageSettings);
+            this.packageSettingsPanel.Controls.Add(this.packageSettingsLabel);
+            this.packageSettingsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.packageSettingsPanel.Location = new System.Drawing.Point(0, 0);
+            this.packageSettingsPanel.Name = "packageSettingsPanel";
+            this.packageSettingsPanel.Size = new System.Drawing.Size(522, 140);
+            this.packageSettingsPanel.TabIndex = 30;
             // 
             // packageSettings
             // 
@@ -475,8 +475,8 @@ namespace TestCentric.Gui.Views
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            this.packagePanel.ResumeLayout(false);
-            this.packagePanel.PerformLayout();
+            this.packageSettingsPanel.ResumeLayout(false);
+            this.packageSettingsPanel.PerformLayout();
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
@@ -488,39 +488,57 @@ namespace TestCentric.Gui.Views
         #endregion
 
         private System.Windows.Forms.Label header;
-        private System.Windows.Forms.Label testTypeLabel;
-        private System.Windows.Forms.Label testType;
-        private System.Windows.Forms.Label fullNameLabel;
-        private TestCentric.Gui.Controls.ExpandingLabel fullName;
-        private System.Windows.Forms.Label descriptionLabel;
-        private TestCentric.Gui.Controls.ExpandingLabel description;
-        private System.Windows.Forms.Label categoriesLabel;
-        private System.Windows.Forms.Label categories;
-        private System.Windows.Forms.Label propertiesLabel;
-        private TestCentric.Gui.Controls.ExpandingLabel properties;
-        private System.Windows.Forms.Label reasonLabel;
-        private TestCentric.Gui.Controls.ExpandingLabel skipReason;
-        private System.Windows.Forms.CheckBox displayHiddenProperties;
-        private System.Windows.Forms.Label outcomeLabel;
-        private System.Windows.Forms.Label outcome;
-        private System.Windows.Forms.Label elapsedTimeLabel;
-        private System.Windows.Forms.Label elapsedTime;
-        private System.Windows.Forms.Label assertCountLabel;
-        private System.Windows.Forms.Label assertCount;
-        private System.Windows.Forms.Label messageLabel;
-        private TestCentric.Gui.Controls.ExpandingLabel assertions;
-        private System.Windows.Forms.Label testCaseCount;
-        private System.Windows.Forms.Label runStateLabel;
-        private System.Windows.Forms.Label testCountLabel;
-        private System.Windows.Forms.Label runState;
-        private System.Windows.Forms.Panel resultPanel;
-        private System.Windows.Forms.Panel testPanel;
-        private System.Windows.Forms.Panel packagePanel;
-        private TestCentric.Gui.Controls.ExpandingLabel output;
-        private System.Windows.Forms.Label outputLabel;
-        private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.SplitContainer splitContainer2;
+
+        private System.Windows.Forms.Panel packageSettingsPanel;
+
         private System.Windows.Forms.Label packageSettingsLabel;
         private TestCentric.Gui.Controls.ExpandingLabel packageSettings;
+
+        private System.Windows.Forms.Panel testPanel;
+
+        private System.Windows.Forms.Label testTypeLabel;
+        private System.Windows.Forms.Label testType;
+
+        private System.Windows.Forms.Label fullNameLabel;
+        private TestCentric.Gui.Controls.ExpandingLabel fullName;
+
+        private System.Windows.Forms.Label descriptionLabel;
+        private TestCentric.Gui.Controls.ExpandingLabel description;
+
+        private System.Windows.Forms.Label categoriesLabel;
+        private System.Windows.Forms.Label categories;
+
+        private System.Windows.Forms.Label testCaseCountLabel;
+        private System.Windows.Forms.Label testCaseCount;
+
+        private System.Windows.Forms.Label runStateLabel;
+        private System.Windows.Forms.Label runState;
+
+        private System.Windows.Forms.Label reasonLabel;
+        private TestCentric.Gui.Controls.ExpandingLabel skipReason;
+
+        private System.Windows.Forms.Label propertiesLabel;
+        private System.Windows.Forms.CheckBox displayHiddenProperties;
+        private TestCentric.Gui.Controls.ExpandingLabel properties;
+
+        private System.Windows.Forms.Panel resultPanel;
+
+        private System.Windows.Forms.Label outcomeLabel;
+        private System.Windows.Forms.Label outcome;
+
+        private System.Windows.Forms.Label elapsedTimeLabel;
+        private System.Windows.Forms.Label elapsedTime;
+
+        private System.Windows.Forms.Label assertCountLabel;
+        private System.Windows.Forms.Label assertCount;
+
+        private System.Windows.Forms.Label messageLabel;
+        private TestCentric.Gui.Controls.ExpandingLabel assertions;
+
+        private System.Windows.Forms.Label outputLabel;
+        private TestCentric.Gui.Controls.ExpandingLabel output;
+
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.SplitContainer splitContainer2;
     }
 }

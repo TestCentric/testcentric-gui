@@ -55,21 +55,21 @@ namespace TestCentric.Gui.Dialogs
             else
                 TestName = _testNode.Name;
 
-            // Display each groupBox, for which there is data.
+            // Display each panel for which there is data.
             // Boxes are displayed top-down at the vertical
             // offset
-            int verticalOffset = packagePanel.Top;
+            int verticalOffset = packageSettingsPanel.Top;
 
             if (_packageSettings != null)
-                verticalOffset = DisplayPackageGroupBox(verticalOffset) + 4;
+                verticalOffset = DisplayPackagePanel(verticalOffset) + 4;
             else
-                packagePanel.Hide();
+                packageSettingsPanel.Hide();
 
             // Test details are always shown
-            verticalOffset = DisplayTestGroupBox(verticalOffset) + 4;
+            verticalOffset = DisplayTestPanel(verticalOffset) + 4;
 
             if (_resultNode != null)
-                verticalOffset = DisplayResultGroupBox(verticalOffset) + 4;
+                verticalOffset = DisplayResultPanel(verticalOffset) + 4;
             else
                 resultPanel.Hide();
 
@@ -90,21 +90,21 @@ namespace TestCentric.Gui.Dialogs
                 Invoke(new Action(() => Display(_treeNode)));
         }
 
-        private int DisplayPackageGroupBox(int verticalOffset)
+        private int DisplayPackagePanel(int verticalOffset)
         {
-            packagePanel.Location = new Point(
-                packagePanel.Location.X, verticalOffset);
+            packageSettingsPanel.Location = new Point(
+                packageSettingsPanel.Location.X, verticalOffset);
 
             FillPackageSettingsList(_packageSettings);
-            packagePanel.Show();
+            packageSettingsPanel.Show();
 
-            return packagePanel.Bottom;
+            return packageSettingsPanel.Bottom;
         }
 
-        private int DisplayTestGroupBox(int verticalOffset)
+        private int DisplayTestPanel(int verticalOffset)
         {
             testPanel.Location = new Point(
-                packagePanel.Location.X, verticalOffset);
+                packageSettingsPanel.Location.X, verticalOffset);
 
             testType.Text = _testNode.Type;
 
@@ -129,14 +129,14 @@ namespace TestCentric.Gui.Dialogs
             //        break;
             //}
 
-            skipReason.Text = _testNode.GetProperty("_SKIPREASON");
+            ignoreReason.Text = _testNode.GetProperty("_SKIPREASON");
 
             FillPropertyList();
 
             return testPanel.Bottom;
         }
 
-        private int DisplayResultGroupBox(int verticalOffset)
+        private int DisplayResultPanel(int verticalOffset)
         {
             resultPanel.Location = new Point(
                 resultPanel.Location.X, verticalOffset);
