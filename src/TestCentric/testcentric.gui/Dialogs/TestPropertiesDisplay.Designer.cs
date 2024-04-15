@@ -385,7 +385,7 @@ namespace TestCentric.Gui.Dialogs
             this.stackTrace.Size = new System.Drawing.Size(310, 64);
             this.stackTrace.TabIndex = 9;
             // 
-            // packageSettingsPanel
+            // packageSettingsDisplay
             // 
             this.packageSettingsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -394,7 +394,7 @@ namespace TestCentric.Gui.Dialogs
             this.packageSettingsPanel.Controls.Add(this.packageSettingsLabel);
             this.packageSettingsPanel.Controls.Add(this.packageSettings);
             this.packageSettingsPanel.Location = new System.Drawing.Point(6, 30);
-            this.packageSettingsPanel.Name = "packageSettingsPanel";
+            this.packageSettingsPanel.Name = "packageSettingsDisplay";
             this.packageSettingsPanel.Size = new System.Drawing.Size(324, 96);
             this.packageSettingsPanel.TabIndex = 4;
             this.packageSettingsPanel.Text = "Package Settings";

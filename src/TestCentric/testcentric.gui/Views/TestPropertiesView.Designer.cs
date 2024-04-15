@@ -59,9 +59,7 @@ namespace TestCentric.Gui.Views
             this.properties = new TestCentric.Gui.Controls.ExpandingLabel();
             this.description = new TestCentric.Gui.Controls.ExpandingLabel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.packageSettingsPanel = new System.Windows.Forms.Panel();
-            this.packageSettings = new TestCentric.Gui.Controls.ExpandingLabel();
-            this.packageSettingsLabel = new System.Windows.Forms.Label();
+            this.packageSettingsDisplay = new TestCentric.Gui.Controls.PackageSettingsDisplay();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.resultPanel.SuspendLayout();
             this.testPanel.SuspendLayout();
@@ -69,7 +67,7 @@ namespace TestCentric.Gui.Views
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.packageSettingsPanel.SuspendLayout();
+            this.packageSettingsDisplay.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
@@ -393,7 +391,7 @@ namespace TestCentric.Gui.Views
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.BackColor = System.Drawing.SystemColors.Control;
-            this.splitContainer1.Panel1.Controls.Add(this.packageSettingsPanel);
+            this.splitContainer1.Panel1.Controls.Add(this.packageSettingsDisplay);
             this.splitContainer1.Panel1MinSize = 96;
             // 
             // splitContainer1.Panel2
@@ -404,37 +402,13 @@ namespace TestCentric.Gui.Views
             this.splitContainer1.SplitterDistance = 140;
             this.splitContainer1.TabIndex = 31;
             // 
-            // packageSettingsPanel
+            // packageSettingsDisplay
             // 
-            this.packageSettingsPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.packageSettingsPanel.Controls.Add(this.packageSettings);
-            this.packageSettingsPanel.Controls.Add(this.packageSettingsLabel);
-            this.packageSettingsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.packageSettingsPanel.Location = new System.Drawing.Point(0, 0);
-            this.packageSettingsPanel.Name = "packageSettingsPanel";
-            this.packageSettingsPanel.Size = new System.Drawing.Size(522, 140);
-            this.packageSettingsPanel.TabIndex = 30;
-            // 
-            // packageSettings
-            // 
-            this.packageSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.packageSettings.BackColor = System.Drawing.Color.LightYellow;
-            this.packageSettings.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
-            this.packageSettings.Location = new System.Drawing.Point(6, 22);
-            this.packageSettings.Name = "packageSettings";
-            this.packageSettings.Size = new System.Drawing.Size(509, 105);
-            this.packageSettings.TabIndex = 1;
-            // 
-            // packageSettingsLabel
-            // 
-            this.packageSettingsLabel.AutoSize = true;
-            this.packageSettingsLabel.Location = new System.Drawing.Point(5, 4);
-            this.packageSettingsLabel.Name = "packageSettingsLabel";
-            this.packageSettingsLabel.Size = new System.Drawing.Size(94, 13);
-            this.packageSettingsLabel.TabIndex = 0;
-            this.packageSettingsLabel.Text = "Package Settings:";
+            this.packageSettingsDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.packageSettingsDisplay.Location = new System.Drawing.Point(0, 0);
+            this.packageSettingsDisplay.Name = "packageSettingsDisplay";
+            this.packageSettingsDisplay.Size = new System.Drawing.Size(522, 140);
+            this.packageSettingsDisplay.TabIndex = 30;
             // 
             // splitContainer2
             // 
@@ -475,8 +449,8 @@ namespace TestCentric.Gui.Views
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            this.packageSettingsPanel.ResumeLayout(false);
-            this.packageSettingsPanel.PerformLayout();
+            this.packageSettingsDisplay.ResumeLayout(false);
+            this.packageSettingsDisplay.PerformLayout();
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
@@ -489,10 +463,7 @@ namespace TestCentric.Gui.Views
 
         private System.Windows.Forms.Label header;
 
-        private System.Windows.Forms.Panel packageSettingsPanel;
-
-        private System.Windows.Forms.Label packageSettingsLabel;
-        private TestCentric.Gui.Controls.ExpandingLabel packageSettings;
+        private TestCentric.Gui.Controls.PackageSettingsDisplay packageSettingsDisplay;
 
         private System.Windows.Forms.Panel testPanel;
 

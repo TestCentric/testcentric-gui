@@ -35,7 +35,7 @@ namespace TestCentric.Gui.Views
         {
             InvokeIfRequired(() =>
             {
-                packageSettingsPanel.Visible = true;
+                packageSettingsDisplay.Visible = true;
                 splitContainer1.Panel1Collapsed = false;
             });
         }
@@ -43,7 +43,7 @@ namespace TestCentric.Gui.Views
         {
             InvokeIfRequired(() =>
             {
-                packageSettingsPanel.Visible = false;
+                packageSettingsDisplay.Visible = false;
                 splitContainer1.Panel1Collapsed = true;
             });
         }
@@ -166,8 +166,8 @@ namespace TestCentric.Gui.Views
         }
         public string PackageSettings
         {
-            get { return packageSettings.Text; }
-            set { InvokeIfRequired(() => { packageSettings.Text = value; }); }
+            get { return packageSettingsDisplay.Text; }
+            set { InvokeIfRequired(() => { packageSettingsDisplay.Text = value; }); }
         }
 
         #region Helper Methods
