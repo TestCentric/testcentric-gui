@@ -59,7 +59,7 @@ namespace TestCentric.Gui.Views
         {
             InvokeIfRequired(() =>
             {
-                resultPanel.Visible = true;
+                testResultDisplay.Visible = true;
                 splitContainer2.Panel2Collapsed = false;
                 ClientSize = new Size(ClientSize.Width, splitContainer1.Bottom + 2);
             });
@@ -68,7 +68,7 @@ namespace TestCentric.Gui.Views
         {
             InvokeIfRequired(() =>
             {
-                resultPanel.Visible = false;
+                testResultDisplay.Visible = false;
                 splitContainer2.Panel2Collapsed = true;
                 ClientSize = new Size(ClientSize.Width, splitContainer1.Bottom + 2);
             });
@@ -129,45 +129,46 @@ namespace TestCentric.Gui.Views
 
         public string Outcome
         {
-            get { return outcome.Text; }
-            set { InvokeIfRequired(() => { outcome.Text = value; }); }
+            get { return testResultDisplay.Outcome; }
+            set { testResultDisplay.Outcome = value; }
         }
 
         public string ElapsedTime
         {
-            get { return elapsedTime.Text; }
-            set { InvokeIfRequired(() => { elapsedTime.Text = value; }); }
+            get { return testResultDisplay.ElapsedTime; }
+            set { testResultDisplay.ElapsedTime = value; }
         }
 
         public string AssertCount
         {
-            get { return assertCount.Text; }
-            set { InvokeIfRequired(() => { assertCount.Text = value; }); }
+            get { return testResultDisplay.AssertCount; }
+            set { testResultDisplay.AssertCount = value; }
         }
 
         public string Assertions
         {
-            get { return assertions.Text; }
-            set { InvokeIfRequired(() => { assertions.Text = value; }); }
+            get { return testResultDisplay.Assertions; }
+            set { testResultDisplay.Assertions = value; }
         }
 
         public string Output
         {
-            get { return output.Text; }
-            set { InvokeIfRequired(() => { output.Text = value; }); }
+            get { return testResultDisplay.Output; }
+            set { testResultDisplay.Output = value; }
         }
+
         public string PackageSettings
         {
             get { return packageSettingsDisplay.Text; }
-            set { InvokeIfRequired(() => { packageSettingsDisplay.Text = value; }); }
+            set { packageSettingsDisplay.Text = value; }
         }
 
         #region Helper Methods
 
         private void InvokeIfRequired(MethodInvoker _delegate)
         {
-            if (this.InvokeRequired)
-                this.BeginInvoke(_delegate);
+            if (InvokeRequired)
+                BeginInvoke(_delegate);
             else
                 _delegate();
         }

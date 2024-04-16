@@ -268,7 +268,7 @@ namespace TestCentric.Gui.Dialogs
             this.displayHiddenProperties.UseVisualStyleBackColor = true;
             this.displayHiddenProperties.CheckedChanged += new System.EventHandler(this.hiddenProperties_CheckedChanged);
             // 
-            // resultPanel
+            // testResultDisplay
             // 
             this.resultPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -285,7 +285,7 @@ namespace TestCentric.Gui.Dialogs
             this.resultPanel.Controls.Add(this.message);
             this.resultPanel.Controls.Add(this.stackTrace);
             this.resultPanel.Location = new System.Drawing.Point(6, 349);
-            this.resultPanel.Name = "resultPanel";
+            this.resultPanel.Name = "testResultDisplay";
             this.resultPanel.Size = new System.Drawing.Size(324, 145);
             this.resultPanel.TabIndex = 0;
             this.resultPanel.Text = "Result";

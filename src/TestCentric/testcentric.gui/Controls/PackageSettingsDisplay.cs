@@ -23,8 +23,8 @@ namespace TestCentric.Gui.Controls
 
         private void InvokeIfRequired(MethodInvoker _delegate)
         {
-            if (this.InvokeRequired)
-                this.BeginInvoke(_delegate);
+            if (InvokeRequired)
+                BeginInvoke(_delegate);
             else
                 _delegate();
         }
