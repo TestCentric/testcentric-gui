@@ -17,43 +17,31 @@ namespace TestCentric.Gui.Controls
         public string Outcome
         {
             get { return outcome.Text; }
-            set { InvokeIfRequired(() => { outcome.Text = value; }); }
+            set { this.InvokeIfRequired(() => { outcome.Text = value; }); }
         }
 
         public string ElapsedTime
         {
             get { return elapsedTime.Text; }
-            set { InvokeIfRequired(() => { elapsedTime.Text = value; }); }
+            set { this.InvokeIfRequired(() => { elapsedTime.Text = value; }); }
         }
 
         public string AssertCount
         {
             get { return assertCount.Text; }
-            set { InvokeIfRequired(() => { assertCount.Text = value; }); }
+            set { this.InvokeIfRequired(() => { assertCount.Text = value; }); }
         }
 
         public string Assertions
         {
             get { return assertions.Text; }
-            set { InvokeIfRequired(() => { assertions.Text = value; }); }
+            set { this.InvokeIfRequired(() => { assertions.Text = value; }); }
         }
 
         public string Output
         {
             get { return output.Text; }
-            set { InvokeIfRequired(() => { output.Text = value; }); }
+            set { this.InvokeIfRequired(() => { output.Text = value; }); }
         }
-
-        #region Helper Methods
-
-        private void InvokeIfRequired(MethodInvoker _delegate)
-        {
-            if (InvokeRequired)
-                BeginInvoke(_delegate);
-            else
-                _delegate();
-        }
-
-        #endregion
     }
 }

@@ -34,7 +34,6 @@ namespace TestCentric.Gui.Views
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.packageSettingsDisplay = new TestCentric.Gui.Controls.PackageSettingsDisplay();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.testResultDisplay.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -59,12 +58,17 @@ namespace TestCentric.Gui.Views
             // 
             // testResultDisplay
             // 
+            this.testResultDisplay.AssertCount = "";
+            this.testResultDisplay.Assertions = "";
             this.testResultDisplay.BackColor = System.Drawing.SystemColors.Control;
             this.testResultDisplay.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.testResultDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.testResultDisplay.ElapsedTime = "";
             this.testResultDisplay.Location = new System.Drawing.Point(0, 0);
             this.testResultDisplay.Name = "testResultDisplay";
-            this.testResultDisplay.Size = new System.Drawing.Size(522, 200);
+            this.testResultDisplay.Outcome = "";
+            this.testResultDisplay.Output = "";
+            this.testResultDisplay.Size = new System.Drawing.Size(522, 228);
             this.testResultDisplay.TabIndex = 29;
             // 
             // testPropertiesDisplay
@@ -79,7 +83,7 @@ namespace TestCentric.Gui.Views
             this.testPropertiesDisplay.Name = "testPropertiesDisplay";
             this.testPropertiesDisplay.Properties = "";
             this.testPropertiesDisplay.RunState = "";
-            this.testPropertiesDisplay.Size = new System.Drawing.Size(522, 224);
+            this.testPropertiesDisplay.Size = new System.Drawing.Size(522, 209);
             this.testPropertiesDisplay.SkipReason = "";
             this.testPropertiesDisplay.TabIndex = 30;
             this.testPropertiesDisplay.TestCount = "";
@@ -93,18 +97,19 @@ namespace TestCentric.Gui.Views
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
-            // splitContainer1.Panel1
+            // splitContainer1.Panel1 (contains the package settings)
             // 
             this.splitContainer1.Panel1.BackColor = System.Drawing.SystemColors.Control;
             this.splitContainer1.Panel1.Controls.Add(this.packageSettingsDisplay);
-            this.splitContainer1.Panel1MinSize = 96;
+            this.splitContainer1.Panel1MinSize = 80;
             // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.BackColor = System.Drawing.SystemColors.Control;
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
+            this.splitContainer1.Panel2MinSize = 400;
             this.splitContainer1.Size = new System.Drawing.Size(522, 572);
-            this.splitContainer1.SplitterDistance = 140;
+            this.splitContainer1.SplitterDistance = 127;
             this.splitContainer1.TabIndex = 31;
             // 
             // packageSettingsDisplay
@@ -113,7 +118,7 @@ namespace TestCentric.Gui.Views
             this.packageSettingsDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
             this.packageSettingsDisplay.Location = new System.Drawing.Point(0, 0);
             this.packageSettingsDisplay.Name = "packageSettingsDisplay";
-            this.packageSettingsDisplay.Size = new System.Drawing.Size(522, 140);
+            this.packageSettingsDisplay.Size = new System.Drawing.Size(522, 127);
             this.packageSettingsDisplay.TabIndex = 30;
             // 
             // splitContainer2
@@ -134,8 +139,8 @@ namespace TestCentric.Gui.Views
             // 
             this.splitContainer2.Panel2.BackColor = System.Drawing.SystemColors.Control;
             this.splitContainer2.Panel2.Controls.Add(this.testResultDisplay);
-            this.splitContainer2.Size = new System.Drawing.Size(522, 428);
-            this.splitContainer2.SplitterDistance = 224;
+            this.splitContainer2.Size = new System.Drawing.Size(522, 441);
+            this.splitContainer2.SplitterDistance = 209;
             this.splitContainer2.TabIndex = 31;
             // 
             // TestPropertiesView
@@ -148,8 +153,7 @@ namespace TestCentric.Gui.Views
             this.Controls.Add(this.header);
             this.Name = "TestPropertiesView";
             this.Size = new System.Drawing.Size(522, 590);
-            this.testResultDisplay.ResumeLayout(false);
-            this.testResultDisplay.PerformLayout();
+            this.MinimumSize = new System.Drawing.Size(522, 500);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();

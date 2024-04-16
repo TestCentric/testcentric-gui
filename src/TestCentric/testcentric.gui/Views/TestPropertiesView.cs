@@ -12,9 +12,17 @@ namespace TestCentric.Gui.Views
 
     public partial class TestPropertiesView : UserControl, ITestPropertiesView
     {
+        public event CommandHandler DisplayHiddenPropertiesChanged;
+
         public TestPropertiesView()
         {
             InitializeComponent();
+
+            // Re-raise the event from the panel here
+            testPropertiesDisplay.DisplayHiddenPropertiesChanged += () =>
+            {
+                DisplayHiddenPropertiesChanged?.Invoke();
+            };
         }
 
         public string Header

@@ -9,7 +9,7 @@ namespace TestCentric.Gui.Views
 
     public interface ITestPropertiesView : IView
     {
-        //event CommandHandler DisplayHiddenPropertiesChanged;
+        event CommandHandler DisplayHiddenPropertiesChanged;
 
         bool Visible { get; set; }
         string Header { get; set; }

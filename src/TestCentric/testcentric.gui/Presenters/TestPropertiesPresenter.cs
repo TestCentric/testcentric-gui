@@ -41,7 +41,7 @@ namespace TestCentric.Gui.Presenters
             _model.Events.TestUnloaded += (ea) => _view.Visible = false;
             _model.Events.RunFinished += (ea) => DisplaySelectedItem();
             _model.Events.SelectedItemChanged += (ea) => OnSelectedItemChanged(ea.TestItem);
-            //_view.DisplayHiddenPropertiesChanged += () => DisplaySelectedItem();
+            _view.DisplayHiddenPropertiesChanged += () => DisplaySelectedItem();
         }
 
         private void OnSelectedItemChanged(ITestItem testItem)
@@ -249,7 +249,7 @@ namespace TestCentric.Gui.Presenters
         {
             if (testNode.RunState == RunState.NotRunnable
                 && testNode.Type == "Assembly"
-                && !String.IsNullOrEmpty(testNode.FullName))
+                && !string.IsNullOrEmpty(testNode.FullName))
             {
                 var fi = new FileInfo(testNode.FullName);
                 string extension = fi.Extension.ToLower();

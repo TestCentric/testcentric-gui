@@ -7,17 +7,14 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Controls
 {
-    public partial class PackageSettingsDisplay : UserControl
+    static public class MethodInvocationHelper
     {
-        public PackageSettingsDisplay()
+        public static void InvokeIfRequired(this Control ctrl, MethodInvoker _delegate)
         {
-            InitializeComponent();
-        }
-
-        public override string Text
-        {
-            get { return packageSettings.Text; }
-            set { this.InvokeIfRequired(() => { packageSettings.Text = value; }); }
+            if (ctrl.InvokeRequired)
+                ctrl.BeginInvoke(_delegate);
+            else
+                _delegate();
         }
     }
 }

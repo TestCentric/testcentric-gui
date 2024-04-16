@@ -50,7 +50,7 @@ namespace TestCentric.Gui.Controls
             this.packageSettings.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
             this.packageSettings.Location = new System.Drawing.Point(6, 22);
             this.packageSettings.Name = "packageSettings";
-            this.packageSettings.Size = new System.Drawing.Size(509, 112);
+            this.packageSettings.Size = new System.Drawing.Size(509, 45);
             this.packageSettings.TabIndex = 1;
             // 
             // PackageSettingsDisplay
@@ -61,7 +61,7 @@ namespace TestCentric.Gui.Controls
             this.Controls.Add(this.packageSettings);
             this.Controls.Add(this.packageSettingsLabel);
             this.Name = "PackageSettingsDisplay";
-            this.Size = new System.Drawing.Size(522, 140);
+            this.Size = new System.Drawing.Size(522, 73);
             this.ResumeLayout(false);
             this.PerformLayout();
 

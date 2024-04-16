@@ -146,6 +146,7 @@ namespace TestCentric.Gui.Controls
             this.Controls.Add(this.outcome);
             this.Name = "TestResultDisplay";
             this.Size = new System.Drawing.Size(473, 231);
+            this.Size = new System.Drawing.Size(473, 180);
             this.ResumeLayout(false);
             this.PerformLayout();
 
