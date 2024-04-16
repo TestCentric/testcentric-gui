@@ -29,16 +29,6 @@ namespace TestCentric.Gui.Views
         private void InitializeComponent()
         {
             this.header = new System.Windows.Forms.Label();
-            this.testTypeLabel = new System.Windows.Forms.Label();
-            this.testType = new System.Windows.Forms.Label();
-            this.fullNameLabel = new System.Windows.Forms.Label();
-            this.descriptionLabel = new System.Windows.Forms.Label();
-            this.categoriesLabel = new System.Windows.Forms.Label();
-            this.categories = new System.Windows.Forms.Label();
-            this.propertiesLabel = new System.Windows.Forms.Label();
-            this.reasonLabel = new System.Windows.Forms.Label();
-            this.skipReason = new TestCentric.Gui.Controls.ExpandingLabel();
-            this.displayHiddenProperties = new System.Windows.Forms.CheckBox();
             this.outcomeLabel = new System.Windows.Forms.Label();
             this.outcome = new System.Windows.Forms.Label();
             this.elapsedTimeLabel = new System.Windows.Forms.Label();
@@ -46,23 +36,16 @@ namespace TestCentric.Gui.Views
             this.assertCountLabel = new System.Windows.Forms.Label();
             this.assertCount = new System.Windows.Forms.Label();
             this.messageLabel = new System.Windows.Forms.Label();
-            this.testCaseCount = new System.Windows.Forms.Label();
-            this.runStateLabel = new System.Windows.Forms.Label();
-            this.testCaseCountLabel = new System.Windows.Forms.Label();
-            this.runState = new System.Windows.Forms.Label();
             this.resultPanel = new System.Windows.Forms.Panel();
             this.output = new TestCentric.Gui.Controls.ExpandingLabel();
             this.outputLabel = new System.Windows.Forms.Label();
             this.assertions = new TestCentric.Gui.Controls.ExpandingLabel();
-            this.testPanel = new System.Windows.Forms.Panel();
-            this.fullName = new TestCentric.Gui.Controls.ExpandingLabel();
-            this.properties = new TestCentric.Gui.Controls.ExpandingLabel();
-            this.description = new TestCentric.Gui.Controls.ExpandingLabel();
+            this.testPropertiesDisplay = new Controls.TestPropertiesDisplay();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.packageSettingsDisplay = new TestCentric.Gui.Controls.PackageSettingsDisplay();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.resultPanel.SuspendLayout();
-            this.testPanel.SuspendLayout();
+            this.testPropertiesDisplay.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -85,96 +68,6 @@ namespace TestCentric.Gui.Views
             this.header.Padding = new System.Windows.Forms.Padding(2);
             this.header.Size = new System.Drawing.Size(522, 18);
             this.header.TabIndex = 0;
-            // 
-            // testTypeLabel
-            // 
-            this.testTypeLabel.Location = new System.Drawing.Point(5, 4);
-            this.testTypeLabel.Name = "testTypeLabel";
-            this.testTypeLabel.Size = new System.Drawing.Size(58, 13);
-            this.testTypeLabel.TabIndex = 1;
-            this.testTypeLabel.Text = "Test Type:";
-            // 
-            // testType
-            // 
-            this.testType.Location = new System.Drawing.Point(74, 4);
-            this.testType.Name = "testType";
-            this.testType.Size = new System.Drawing.Size(117, 13);
-            this.testType.TabIndex = 2;
-            // 
-            // fullNameLabel
-            // 
-            this.fullNameLabel.Location = new System.Drawing.Point(5, 21);
-            this.fullNameLabel.Name = "fullNameLabel";
-            this.fullNameLabel.Size = new System.Drawing.Size(57, 13);
-            this.fullNameLabel.TabIndex = 3;
-            this.fullNameLabel.Text = "Full Name:";
-            // 
-            // descriptionLabel
-            // 
-            this.descriptionLabel.Location = new System.Drawing.Point(5, 43);
-            this.descriptionLabel.Name = "descriptionLabel";
-            this.descriptionLabel.Size = new System.Drawing.Size(63, 13);
-            this.descriptionLabel.TabIndex = 5;
-            this.descriptionLabel.Text = "Description:";
-            // 
-            // categoriesLabel
-            // 
-            this.categoriesLabel.Location = new System.Drawing.Point(5, 65);
-            this.categoriesLabel.Name = "categoriesLabel";
-            this.categoriesLabel.Size = new System.Drawing.Size(60, 13);
-            this.categoriesLabel.TabIndex = 7;
-            this.categoriesLabel.Text = "Categories:";
-            // 
-            // categories
-            // 
-            this.categories.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.categories.AutoEllipsis = true;
-            this.categories.BackColor = System.Drawing.Color.LightYellow;
-            this.categories.Location = new System.Drawing.Point(74, 65);
-            this.categories.Name = "categories";
-            this.categories.Size = new System.Drawing.Size(441, 18);
-            this.categories.TabIndex = 8;
-            // 
-            // propertiesLabel
-            // 
-            this.propertiesLabel.Location = new System.Drawing.Point(5, 131);
-            this.propertiesLabel.Name = "propertiesLabel";
-            this.propertiesLabel.Padding = new System.Windows.Forms.Padding(0, 1, 0, 0);
-            this.propertiesLabel.Size = new System.Drawing.Size(57, 14);
-            this.propertiesLabel.TabIndex = 15;
-            this.propertiesLabel.Text = "Properties:";
-            // 
-            // reasonLabel
-            // 
-            this.reasonLabel.Location = new System.Drawing.Point(5, 109);
-            this.reasonLabel.Name = "reasonLabel";
-            this.reasonLabel.Size = new System.Drawing.Size(47, 13);
-            this.reasonLabel.TabIndex = 13;
-            this.reasonLabel.Text = "Reason:";
-            // 
-            // skipReason
-            // 
-            this.skipReason.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.skipReason.AutoEllipsis = true;
-            this.skipReason.BackColor = System.Drawing.Color.LightYellow;
-            this.skipReason.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
-            this.skipReason.Location = new System.Drawing.Point(74, 109);
-            this.skipReason.Name = "skipReason";
-            this.skipReason.Size = new System.Drawing.Size(441, 18);
-            this.skipReason.TabIndex = 14;
-            // 
-            // displayHiddenProperties
-            // 
-            this.displayHiddenProperties.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.displayHiddenProperties.Location = new System.Drawing.Point(74, 131);
-            this.displayHiddenProperties.Name = "displayHiddenProperties";
-            this.displayHiddenProperties.Size = new System.Drawing.Size(157, 19);
-            this.displayHiddenProperties.TabIndex = 16;
-            this.displayHiddenProperties.Text = "Display hidden properties";
-            this.displayHiddenProperties.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-            this.displayHiddenProperties.UseVisualStyleBackColor = true;
             // 
             // outcomeLabel
             // 
@@ -231,39 +124,6 @@ namespace TestCentric.Gui.Views
             this.messageLabel.TabIndex = 25;
             this.messageLabel.Text = "Messages:";
             // 
-            // testCaseCount
-            // 
-            this.testCaseCount.Location = new System.Drawing.Point(74, 87);
-            this.testCaseCount.Name = "testCaseCount";
-            this.testCaseCount.Size = new System.Drawing.Size(71, 13);
-            this.testCaseCount.TabIndex = 10;
-            // 
-            // runStateLabel
-            // 
-            this.runStateLabel.Location = new System.Drawing.Point(169, 87);
-            this.runStateLabel.Name = "runStateLabel";
-            this.runStateLabel.Size = new System.Drawing.Size(61, 13);
-            this.runStateLabel.TabIndex = 11;
-            this.runStateLabel.Text = "Run State: ";
-            // 
-            // testCountLabel
-            // 
-            this.testCaseCountLabel.Location = new System.Drawing.Point(5, 87);
-            this.testCaseCountLabel.Name = "testCountLabel";
-            this.testCaseCountLabel.Size = new System.Drawing.Size(62, 13);
-            this.testCaseCountLabel.TabIndex = 9;
-            this.testCaseCountLabel.Text = "Test Count:";
-            // 
-            // runState
-            // 
-            this.runState.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.runState.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.runState.Location = new System.Drawing.Point(236, 87);
-            this.runState.Name = "runState";
-            this.runState.Size = new System.Drawing.Size(239, 17);
-            this.runState.TabIndex = 12;
-            // 
             // resultPanel
             // 
             this.resultPanel.BackColor = System.Drawing.SystemColors.Control;
@@ -318,67 +178,11 @@ namespace TestCentric.Gui.Views
             this.assertions.Size = new System.Drawing.Size(509, 53);
             this.assertions.TabIndex = 26;
             // 
-            // testPanel
+            // testPropertiesDisplay
             // 
-            this.testPanel.BackColor = System.Drawing.SystemColors.Control;
-            this.testPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.testPanel.Controls.Add(this.testTypeLabel);
-            this.testPanel.Controls.Add(this.runState);
-            this.testPanel.Controls.Add(this.testCaseCountLabel);
-            this.testPanel.Controls.Add(this.testCaseCount);
-            this.testPanel.Controls.Add(this.testType);
-            this.testPanel.Controls.Add(this.runStateLabel);
-            this.testPanel.Controls.Add(this.fullNameLabel);
-            this.testPanel.Controls.Add(this.propertiesLabel);
-            this.testPanel.Controls.Add(this.fullName);
-            this.testPanel.Controls.Add(this.properties);
-            this.testPanel.Controls.Add(this.descriptionLabel);
-            this.testPanel.Controls.Add(this.reasonLabel);
-            this.testPanel.Controls.Add(this.description);
-            this.testPanel.Controls.Add(this.skipReason);
-            this.testPanel.Controls.Add(this.categoriesLabel);
-            this.testPanel.Controls.Add(this.displayHiddenProperties);
-            this.testPanel.Controls.Add(this.categories);
-            this.testPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.testPanel.Location = new System.Drawing.Point(0, 0);
-            this.testPanel.Name = "testPanel";
-            this.testPanel.Size = new System.Drawing.Size(522, 224);
-            this.testPanel.TabIndex = 30;
-            // 
-            // fullName
-            // 
-            this.fullName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.fullName.AutoEllipsis = true;
-            this.fullName.BackColor = System.Drawing.Color.LightYellow;
-            this.fullName.Location = new System.Drawing.Point(74, 21);
-            this.fullName.Name = "fullName";
-            this.fullName.Size = new System.Drawing.Size(441, 18);
-            this.fullName.TabIndex = 4;
-            // 
-            // properties
-            // 
-            this.properties.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.properties.BackColor = System.Drawing.Color.LightYellow;
-            this.properties.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
-            this.properties.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.properties.Location = new System.Drawing.Point(6, 150);
-            this.properties.Name = "properties";
-            this.properties.Size = new System.Drawing.Size(509, 67);
-            this.properties.TabIndex = 17;
-            // 
-            // description
-            // 
-            this.description.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.description.AutoEllipsis = true;
-            this.description.BackColor = System.Drawing.Color.LightYellow;
-            this.description.Location = new System.Drawing.Point(74, 43);
-            this.description.Name = "description";
-            this.description.Size = new System.Drawing.Size(441, 18);
-            this.description.TabIndex = 6;
+            this.testPropertiesDisplay.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.testPropertiesDisplay.Location = new System.Drawing.Point(0, 0);
+            this.testPropertiesDisplay.TabIndex = 30;
             // 
             // splitContainer1
             // 
@@ -421,7 +225,7 @@ namespace TestCentric.Gui.Views
             // splitContainer2.Panel1
             // 
             this.splitContainer2.Panel1.BackColor = System.Drawing.SystemColors.Control;
-            this.splitContainer2.Panel1.Controls.Add(this.testPanel);
+            this.splitContainer2.Panel1.Controls.Add(this.testPropertiesDisplay);
             this.splitContainer2.Panel1MinSize = 200;
             // 
             // splitContainer2.Panel2
@@ -444,7 +248,7 @@ namespace TestCentric.Gui.Views
             this.Size = new System.Drawing.Size(522, 590);
             this.resultPanel.ResumeLayout(false);
             this.resultPanel.PerformLayout();
-            this.testPanel.ResumeLayout(false);
+            this.testPropertiesDisplay.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
@@ -462,35 +266,8 @@ namespace TestCentric.Gui.Views
         #endregion
 
         private System.Windows.Forms.Label header;
-
         private TestCentric.Gui.Controls.PackageSettingsDisplay packageSettingsDisplay;
-
-        private System.Windows.Forms.Panel testPanel;
-
-        private System.Windows.Forms.Label testTypeLabel;
-        private System.Windows.Forms.Label testType;
-
-        private System.Windows.Forms.Label fullNameLabel;
-        private TestCentric.Gui.Controls.ExpandingLabel fullName;
-
-        private System.Windows.Forms.Label descriptionLabel;
-        private TestCentric.Gui.Controls.ExpandingLabel description;
-
-        private System.Windows.Forms.Label categoriesLabel;
-        private System.Windows.Forms.Label categories;
-
-        private System.Windows.Forms.Label testCaseCountLabel;
-        private System.Windows.Forms.Label testCaseCount;
-
-        private System.Windows.Forms.Label runStateLabel;
-        private System.Windows.Forms.Label runState;
-
-        private System.Windows.Forms.Label reasonLabel;
-        private TestCentric.Gui.Controls.ExpandingLabel skipReason;
-
-        private System.Windows.Forms.Label propertiesLabel;
-        private System.Windows.Forms.CheckBox displayHiddenProperties;
-        private TestCentric.Gui.Controls.ExpandingLabel properties;
+        private TestCentric.Gui.Controls.TestPropertiesDisplay testPropertiesDisplay;
 
         private System.Windows.Forms.Panel resultPanel;
 

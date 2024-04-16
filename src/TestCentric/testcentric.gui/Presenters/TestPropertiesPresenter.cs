@@ -41,7 +41,7 @@ namespace TestCentric.Gui.Presenters
             _model.Events.TestUnloaded += (ea) => _view.Visible = false;
             _model.Events.RunFinished += (ea) => DisplaySelectedItem();
             _model.Events.SelectedItemChanged += (ea) => OnSelectedItemChanged(ea.TestItem);
-            _view.DisplayHiddenPropertiesChanged += () => DisplaySelectedItem();
+            //_view.DisplayHiddenPropertiesChanged += () => DisplaySelectedItem();
         }
 
         private void OnSelectedItemChanged(ITestItem testItem)

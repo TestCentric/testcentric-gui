@@ -12,17 +12,9 @@ namespace TestCentric.Gui.Views
 
     public partial class TestPropertiesView : UserControl, ITestPropertiesView
     {
-        public event CommandHandler DisplayHiddenPropertiesChanged;
-
         public TestPropertiesView()
         {
             InitializeComponent();
-
-            displayHiddenProperties.CheckedChanged += (s, e) =>
-            {
-                if (DisplayHiddenPropertiesChanged != null)
-                    DisplayHiddenPropertiesChanged();
-            };
         }
 
         public string Header
@@ -52,14 +44,14 @@ namespace TestCentric.Gui.Views
         {
             InvokeIfRequired(() =>
             {
-                testPanel.Visible = true;
+                testPropertiesDisplay.Visible = true;
             });
         }
         public void HideTestPanel()
         {
             InvokeIfRequired(() =>
             {
-                testPanel.Visible = false;
+                testPropertiesDisplay.Visible = false;
             });
         }
 
@@ -84,55 +76,55 @@ namespace TestCentric.Gui.Views
 
         public string TestType
         {
-            get { return testType.Text; }
-            set { InvokeIfRequired(() => { testType.Text = value; }); }
+            get { return testPropertiesDisplay.TestType; }
+            set { testPropertiesDisplay.TestType = value; }
         }
 
         public string FullName
         {
-            get { return fullName.Text; }
-            set { InvokeIfRequired(() => { fullName.Text = value; }); }
+            get { return testPropertiesDisplay.FullName; }
+            set { testPropertiesDisplay.FullName = value; }
         }
 
         public string Description
         {
-            get { return description.Text; }
-            set { InvokeIfRequired(() => { description.Text = value; }); }
+            get { return testPropertiesDisplay.Description; }
+            set { testPropertiesDisplay.Description = value; }
         }
 
         public string Categories
         {
-            get { return categories.Text; }
-            set { InvokeIfRequired(() => { categories.Text = value; }); }
+            get { return testPropertiesDisplay.Categories; }
+            set { testPropertiesDisplay.Categories = value; }
         }
 
         public string TestCount
         {
-            get { return testCaseCount.Text; }
-            set { InvokeIfRequired(() => { testCaseCount.Text = value; }); }
+            get { return testPropertiesDisplay.TestCount; }
+            set { testPropertiesDisplay.TestCount = value; }
         }
 
         public string RunState
         {
-            get { return runState.Text; }
-            set { InvokeIfRequired(() => { runState.Text = value; }); }
+            get { return testPropertiesDisplay.RunState; }
+            set { testPropertiesDisplay.RunState = value; }
         }
 
         public string SkipReason
         {
-            get { return skipReason.Text; }
-            set { InvokeIfRequired(() => { skipReason.Text = value; }); }
+            get { return testPropertiesDisplay.SkipReason; }
+            set { testPropertiesDisplay.SkipReason = value; }
         }
 
         public bool DisplayHiddenProperties
         {
-            get { return displayHiddenProperties.Checked; }
+            get { return testPropertiesDisplay.DisplayHiddenProperties; }
         }
 
         public string Properties
         {
-            get { return properties.Text; }
-            set { properties.Text = value; }
+            get { return testPropertiesDisplay.Properties; }
+            set { testPropertiesDisplay.Properties = value; }
         }
 
         public string Outcome
