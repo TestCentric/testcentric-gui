@@ -114,9 +114,7 @@ namespace TestCentric.Gui.Model
         {
             var propNode = Xml.SelectSingleNode("properties/property[@name='" + name + "']");
 
-            return (propNode != null)
-                ? propNode.GetAttribute("value")
-                : null;
+            return propNode?.GetAttribute("value");
         }
 
         public string[] GetProperties(string name)

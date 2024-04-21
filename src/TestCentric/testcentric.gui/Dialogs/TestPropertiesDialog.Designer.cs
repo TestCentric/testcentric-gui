@@ -2,7 +2,7 @@ namespace TestCentric.Gui.Dialogs
 {
     using Controls;
 
-    partial class TestPropertiesDisplay
+    partial class TestPropertiesDialog
     {
         /// <summary>
         /// Required designer variable.
@@ -30,7 +30,7 @@ namespace TestCentric.Gui.Dialogs
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TestPropertiesDisplay));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TestPropertiesDialog));
             this.testPanel = new System.Windows.Forms.Panel();
             this.description = new TestCentric.Gui.Controls.ExpandingLabel();
             this.categories = new System.Windows.Forms.Label();
@@ -268,7 +268,7 @@ namespace TestCentric.Gui.Dialogs
             this.displayHiddenProperties.UseVisualStyleBackColor = true;
             this.displayHiddenProperties.CheckedChanged += new System.EventHandler(this.hiddenProperties_CheckedChanged);
             // 
-            // testResultDisplay
+            // testResultSubView
             // 
             this.resultPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -285,7 +285,7 @@ namespace TestCentric.Gui.Dialogs
             this.resultPanel.Controls.Add(this.message);
             this.resultPanel.Controls.Add(this.stackTrace);
             this.resultPanel.Location = new System.Drawing.Point(6, 349);
-            this.resultPanel.Name = "testResultDisplay";
+            this.resultPanel.Name = "testResultSubView";
             this.resultPanel.Size = new System.Drawing.Size(324, 145);
             this.resultPanel.TabIndex = 0;
             this.resultPanel.Text = "Result";
@@ -385,7 +385,7 @@ namespace TestCentric.Gui.Dialogs
             this.stackTrace.Size = new System.Drawing.Size(310, 64);
             this.stackTrace.TabIndex = 9;
             // 
-            // packageSettingsDisplay
+            // testPackageSubView
             // 
             this.packageSettingsPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -394,7 +394,7 @@ namespace TestCentric.Gui.Dialogs
             this.packageSettingsPanel.Controls.Add(this.packageSettingsLabel);
             this.packageSettingsPanel.Controls.Add(this.packageSettings);
             this.packageSettingsPanel.Location = new System.Drawing.Point(6, 30);
-            this.packageSettingsPanel.Name = "packageSettingsDisplay";
+            this.packageSettingsPanel.Name = "testPackageSubView";
             this.packageSettingsPanel.Size = new System.Drawing.Size(324, 96);
             this.packageSettingsPanel.TabIndex = 4;
             this.packageSettingsPanel.Text = "Package Settings";
@@ -421,7 +421,7 @@ namespace TestCentric.Gui.Dialogs
             this.packageSettings.Size = new System.Drawing.Size(310, 64);
             this.packageSettings.TabIndex = 1;
             // 
-            // TestPropertiesDisplay
+            // TestPropertiesSubView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -432,7 +432,7 @@ namespace TestCentric.Gui.Dialogs
             this.Controls.Add(this.testPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(0);
-            this.Name = "TestPropertiesDisplay";
+            this.Name = "TestPropertiesSubView";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.ResizeEnd += new System.EventHandler(this.TestPropertiesDialog_ResizeEnd);
             this.Controls.SetChildIndex(this.testPanel, 0);

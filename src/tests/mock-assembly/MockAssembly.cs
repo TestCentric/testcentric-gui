@@ -118,7 +118,7 @@ namespace TestCentric.Tests
                 Assert.Fail("Intentional failure");
             }
 
-            [Test, Property("TargetMethod", "SomeClassName"), Property("Size", 5), /*Property("TargetType", typeof( System.Threading.Thread ))*/]
+            [Test, Property("TargetMethod", "SomeClassName"), Property("Size", 5), Property("TargetType", "SomeType"), Property("Priority", "3"), Property("User", "Somebody")]
             public void TestWithManyProperties()
             { }
 
@@ -156,8 +156,19 @@ namespace TestCentric.Tests
             }
 
             [Test]
-            public void MultipleFailuresTest()
+            public void MultipleFailuresTestWithTextOutput()
             {
+                Console.WriteLine("Console.WriteLine #1");
+                TestContext.Progress.WriteLine("Progress #1");
+                Console.WriteLine("Console.WriteLine #2");
+                Console.WriteLine("Console.WriteLine #3");
+                TestContext.Progress.WriteLine("Progress #2");
+                TestContext.Progress.WriteLine("Progress #3");
+                Console.WriteLine("Console.WriteLine #4");
+                Console.WriteLine("Console.WriteLine #5");
+                TestContext.Progress.WriteLine("Progress #4");
+                Console.WriteLine("Console.WriteLine #6");
+
                 Assert.Multiple( () => 
                 {
                     Assert.That(2 + 2, Is.EqualTo(5));

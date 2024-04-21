@@ -16,7 +16,7 @@ namespace TestCentric.Gui.Dialogs
     using Model;
     using Views;
 
-    public partial class TestPropertiesDisplay : PinnableDisplay
+    public partial class TestPropertiesDialog : PinnableDisplay
     {
         private ITestModel _model;
         private ITestTreeView _view;
@@ -28,7 +28,7 @@ namespace TestCentric.Gui.Dialogs
 
         private int _clientWidth;
 
-        public TestPropertiesDisplay(ITestModel model, ITestTreeView view)
+        public TestPropertiesDialog(ITestModel model, ITestTreeView view)
         {
             _model = model;
             _view = view;
