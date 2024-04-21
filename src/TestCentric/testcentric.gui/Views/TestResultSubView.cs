@@ -5,11 +5,11 @@
 
 using System.Windows.Forms;
 
-namespace TestCentric.Gui.Controls
+namespace TestCentric.Gui.Views
 {
-    public partial class TestResultDisplay : UserControl
+    public partial class TestResultSubView : UserControlView
     {
-        public TestResultDisplay()
+        public TestResultSubView()
         {
             InitializeComponent();
         }

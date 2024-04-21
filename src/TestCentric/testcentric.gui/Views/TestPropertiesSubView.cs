@@ -14,13 +14,13 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using TestCentric.Gui.Elements;
 
-namespace TestCentric.Gui.Controls
+namespace TestCentric.Gui.Views
 {
-    public partial class TestPropertiesDisplay : UserControl
+    public partial class TestPropertiesSubView : UserControlView
     {
         public event CommandHandler DisplayHiddenPropertiesChanged;
 
-        public TestPropertiesDisplay()
+        public TestPropertiesSubView()
         {
             InitializeComponent();
 

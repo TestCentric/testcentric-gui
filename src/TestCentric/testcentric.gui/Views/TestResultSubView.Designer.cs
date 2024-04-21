@@ -1,6 +1,8 @@
-namespace TestCentric.Gui.Controls
+using TestCentric.Gui.Controls;
+
+namespace TestCentric.Gui.Views
 {
-    partial class TestResultDisplay
+    partial class TestResultSubView
     {
         /// <summary> 
         /// Required designer variable.

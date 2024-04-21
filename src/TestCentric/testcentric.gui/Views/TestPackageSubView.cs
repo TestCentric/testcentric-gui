@@ -5,11 +5,11 @@
 
 using System.Windows.Forms;
 
-namespace TestCentric.Gui.Controls
+namespace TestCentric.Gui.Views
 {
-    public partial class PackageSettingsDisplay : UserControl
+    public partial class TestPackageSubView : UserControlView
     {
-        public PackageSettingsDisplay()
+        public TestPackageSubView()
         {
             InitializeComponent();
         }

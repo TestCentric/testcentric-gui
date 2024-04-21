@@ -1,6 +1,6 @@
-namespace TestCentric.Gui.Controls
+namespace TestCentric.Gui.Views
 {
-    partial class PackageSettingsDisplay
+    partial class TestPackageSubView
     {
         /// <summary> 
         /// Required designer variable.

@@ -29,10 +29,10 @@ namespace TestCentric.Gui.Views
         private void InitializeComponent()
         {
             this.header = new System.Windows.Forms.Label();
-            this.testResultDisplay = new TestCentric.Gui.Controls.TestResultDisplay();
-            this.testPropertiesDisplay = new TestCentric.Gui.Controls.TestPropertiesDisplay();
+            this.testResultDisplay = new TestCentric.Gui.Views.TestResultSubView();
+            this.testPropertiesDisplay = new TestCentric.Gui.Views.TestPropertiesSubView();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.packageSettingsDisplay = new TestCentric.Gui.Controls.PackageSettingsDisplay();
+            this.packageSettingsDisplay = new TestCentric.Gui.Views.TestPackageSubView();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -169,9 +169,9 @@ namespace TestCentric.Gui.Views
         #endregion
 
         private System.Windows.Forms.Label header;
-        private TestCentric.Gui.Controls.PackageSettingsDisplay packageSettingsDisplay;
-        private TestCentric.Gui.Controls.TestPropertiesDisplay testPropertiesDisplay;
-        private TestCentric.Gui.Controls.TestResultDisplay testResultDisplay;
+        private TestCentric.Gui.Views.TestPackageSubView packageSettingsDisplay;
+        private TestCentric.Gui.Views.TestPropertiesSubView testPropertiesDisplay;
+        private TestCentric.Gui.Views.TestResultSubView testResultDisplay;
 
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
