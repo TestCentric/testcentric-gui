@@ -112,9 +112,7 @@
             <AutoGen>True</AutoGen>
             <DependentUpon>Resources.resx</DependentUpon>
         </Compile>
-        <Compile Update="Views\TestResultSubView.cs">
-          <SubType>UserControl</SubType>
-        </Compile>
+        <Compile Update="Views\TestResultSubView.cs" />
     </ItemGroup>
     
 	<ItemGroup>

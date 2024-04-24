@@ -11,9 +11,7 @@ using System.Xml;
 
 namespace TestCentric.Gui.Presenters
 {
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Windows.Forms;
+    using System.Linq;
     using Model;
     using Views;
 
@@ -24,7 +22,7 @@ namespace TestCentric.Gui.Presenters
 
         private ITestItem _selectedItem;
 
-        public TestPropertiesPresenter(ITestPropertiesView view, ITestModel model)
+        public TestPropertiesPresenter(TestPropertiesView view, ITestModel model)
         {
             _view = view;
             _model = model;
@@ -42,6 +40,7 @@ namespace TestCentric.Gui.Presenters
             _model.Events.RunFinished += (ea) => DisplaySelectedItem();
             _model.Events.SelectedItemChanged += (ea) => OnSelectedItemChanged(ea.TestItem);
             _view.DisplayHiddenPropertiesChanged += () => DisplaySelectedItem();
+            _view.Resize += (s, e) => DisplaySelectedItem();
         }
 
         private void OnSelectedItemChanged(ITestItem testItem)
@@ -52,31 +51,22 @@ namespace TestCentric.Gui.Presenters
 
         private void DisplaySelectedItem()
         {
-            TestNode testNode = _selectedItem as TestNode;
-            ResultNode resultNode = null;
-
             // TODO: Insert checks for errors in the XML
             if (_selectedItem != null)
             {
                 _view.Header = _selectedItem.Name;
 
+                var testNode = _selectedItem as TestNode;
                 if (testNode != null)
                 {
                     //_view.SuspendLayout();
 
-                    var packageSettings = _model.GetPackageSettingsForTest(testNode.Id);
-                    if (packageSettings != null)
-                        DisplayPackageSettingsPanel(packageSettings);
-                    else
-                        HidePackagePanel();
+                    InitializeTestPackageSubView(testNode);
+                    InitializeTestPropertiesSubView(testNode);                    
+                    InitializeTestResultSubView(testNode);
+                    InitializeTestOutputSubView(testNode);
 
-                    DisplayTestPanel(testNode);
-
-                    resultNode = _model.GetResultForTest(testNode.Id);
-                    if (resultNode != null)
-                        DisplayResultPanel(resultNode);
-                    else
-                        HideResultPanel();
+                    AdjustSubViewHeights();
 
                     //_view.ResumeLayout();
                 }
@@ -92,37 +82,117 @@ namespace TestCentric.Gui.Presenters
             // dynamically, since the global application font may be changed.
         }
 
-        private void DisplayPackageSettingsPanel(IDictionary<string, object> settings)
+        private void InitializeTestPackageSubView(TestNode testNode)
         {
-            var sb = new StringBuilder();
-            foreach (var key in settings.Keys)
+            var packageSettings = _model.GetPackageSettingsForTest(testNode.Id);
+            var visible = packageSettings != null;
+
+            if (visible)
             {
-                if (sb.Length > 0)
-                    sb.Append(Environment.NewLine);
-                sb.Append($"{key} = {settings[key]}");
+                var sb = new StringBuilder();
+                foreach (var key in packageSettings.Keys)
+                {
+                    if (sb.Length > 0)
+                        sb.Append(Environment.NewLine);
+                    sb.Append($"{key} = {packageSettings[key]}");
+                }
+
+                _view.TestPackageSubView.PackageSettings = sb.ToString();
             }
-
-            _view.PackageSettings = sb.ToString();
-
-            _view.ShowPackagePanel();
+                
+            _view.TestPackageSubView.Visible = visible;
         }
 
-        private void HidePackagePanel()
+        private void InitializeTestPropertiesSubView(TestNode testNode)
         {
-            _view.HidePackagePanel();
-        }
-
-        private void DisplayTestPanel(TestNode testNode)
-        {
+            // TestPropertiesSubView is always visible
             _view.TestType = GetTestType(testNode);
             _view.FullName = testNode.FullName;
             _view.Description = testNode.GetProperty("Description");
             _view.Categories = testNode.GetPropertyList("Category");
             _view.TestCount = testNode.TestCount.ToString();
             _view.RunState = testNode.RunState.ToString();
-            
+            _view.SkipReason = GetSkipReason(testNode);
+            _view.Properties = GetTestProperties(testNode);
+        }
+
+        private void InitializeTestResultSubView(TestNode testNode)
+        {
+            var resultNode = _model.GetResultForTest(testNode.Id);
+            var visible = resultNode != null;
+
+            if (visible)
+            {
+                _view.Outcome = resultNode.Outcome.ToString();
+                _view.ElapsedTime = resultNode.Duration.ToString("f3");
+                _view.AssertCount = resultNode.AssertCount.ToString();
+                _view.Assertions = GetAssertionResults(resultNode);
+            }
+
+            _view.TestResultSubView.Visible = visible;
+        }
+
+        private void InitializeTestOutputSubView(TestNode testNode)
+        {
+            var resultNode = _model.GetResultForTest(testNode.Id);
+            var visible = resultNode != null;
+
+            if (visible)
+                _view.Output = resultNode.Xml.SelectSingleNode("output")?.InnerText;
+
+            _view.TestOutputSubView.Visible = visible;
+        }
+
+        private void AdjustSubViewHeights()
+        {
+            var visibleSubViews = _view.SubViews.Where(x => x.Visible);
+
+            // Add up the MinHeights of each visible subviow
+            int totalMinHeights = 0;
+            foreach (var subView in visibleSubViews)
+                totalMinHeights += subView.MinimumSize.Height;
+
+            if (totalMinHeights > _view.ClientHeight)
+            {
+                // Use MinHeight for all sub-views.
+                foreach (var subView in visibleSubViews)
+                    subView.Height = subView.MinimumSize.Height;
+            }
+            else 
+            {
+                // We know that MinHeight will fit but possibly more. Use
+                // the excess space for each sub-view until all is used.
+                int excessSpace = _view.ClientHeight - totalMinHeights;
+                foreach (var subView in _view.SubViews.Where(v => v.Visible))
+                {
+                    int iCanUse = Math.Min(excessSpace, subView.FullHeight - subView.MinimumSize.Height);
+                   
+                    subView.Height = subView.MinimumSize.Height + iCanUse;
+                    excessSpace -= iCanUse;
+                }
+            }
+        }
+
+        #region Helper Methods
+
+        public static string GetTestType(TestNode testNode)
+        {
+            if (testNode.RunState == RunState.NotRunnable
+                && testNode.Type == "Assembly"
+                && !string.IsNullOrEmpty(testNode.FullName))
+            {
+                var fi = new FileInfo(testNode.FullName);
+                string extension = fi.Extension.ToLower();
+                if (extension != ".exe" && extension != ".dll")
+                    return "Unknown";
+            }
+            return testNode.Type;
+        }
+
+        private string GetSkipReason(TestNode testNode)
+        {
             StringBuilder reason = new StringBuilder(testNode.GetProperty("_SKIPREASON"));
-            
+
             string message = testNode.Xml.SelectSingleNode("failure/message")?.InnerText;
             if (!string.IsNullOrEmpty(message))
             {
@@ -134,19 +204,10 @@ namespace TestCentric.Gui.Presenters
                     reason.Append($"\r\n{stackTrace}");
             }
 
-            _view.SkipReason = reason.ToString();
-
-            DisplayTestProperties(testNode);
-
-            _view.ShowTestPanel();
+            return reason.ToString();
         }
 
-        public void HideTestPanel()
-        {
-            _view.HideTestPanel();
-        }
-
-        private void DisplayTestProperties(TestNode testNode)
+        private string GetTestProperties(TestNode testNode)
         {
             var sb = new StringBuilder();
             foreach (string item in testNode.GetAllProperties(_view.DisplayHiddenProperties))
@@ -155,28 +216,41 @@ namespace TestCentric.Gui.Presenters
                     sb.Append(Environment.NewLine);
                 sb.Append(item);
             }
-            _view.Properties = sb.ToString();
+            return sb.ToString();
         }
 
-        private void DisplayResultPanel(ResultNode resultNode)
+        // Sometimes, the message may have leading blank lines and/or
+        // may be longer than Windows really wants to display.
+        private string TrimMessage(string message)
         {
-            _view.Outcome = resultNode.Outcome.ToString();
+            if (message != null)
+            {
+                if (message.Length > 64000)
+                    message = message.Substring(0, 64000);
 
-            _view.ElapsedTime = resultNode.Duration.ToString("f3");
-            _view.AssertCount = resultNode.AssertCount.ToString();
+                int start = 0;
+                for (int i = 0; i < message.Length; i++)
+                {
+                    switch (message[i])
+                    {
+                        case ' ':
+                        case '\t':
+                            break;
+                        case '\r':
+                        case '\n':
+                            start = i + 1;
+                            break;
 
-            DisplayAssertionResults(resultNode);
-            DisplayOutput(resultNode);
+                        default:
+                            return start == 0 ? message : message.Substring(start);
+                    }
+                }
+            }
 
-            _view.ShowResultPanel();
+            return message;
         }
 
-        public void HideResultPanel()
-        {
-            _view.HideResultPanel();
-        }
-
-        private void DisplayAssertionResults(ResultNode resultNode)
+        private string GetAssertionResults(ResultNode resultNode)
         {
             StringBuilder sb;
             var assertionResults = resultNode.Assertions;
@@ -211,7 +285,7 @@ namespace TestCentric.Gui.Presenters
 
             }
 
-            _view.Assertions = sb.ToString();
+            return sb.ToString();
         }
 
         // Some versions of the framework return the stacktrace
@@ -237,59 +311,6 @@ namespace TestCentric.Gui.Presenters
             }
 
             return sb.ToString();
-        }
-
-        private void DisplayOutput(ResultNode resultNode)
-        {
-            var output = resultNode.Xml.SelectSingleNode("output");
-            _view.Output = output != null ? output.InnerText : "";
-        }
-
-        public static string GetTestType(TestNode testNode)
-        {
-            if (testNode.RunState == RunState.NotRunnable
-                && testNode.Type == "Assembly"
-                && !string.IsNullOrEmpty(testNode.FullName))
-            {
-                var fi = new FileInfo(testNode.FullName);
-                string extension = fi.Extension.ToLower();
-                if (extension != ".exe" && extension != ".dll")
-                    return "Unknown";
-            }
-            return testNode.Type;
-        }
-
-        #region Helper Methods
-
-        // Sometimes, the message may have leading blank lines and/or
-        // may be longer than Windows really wants to display.
-        private string TrimMessage(string message)
-        {
-            if (message != null)
-            {
-                if (message.Length > 64000)
-                    message = message.Substring(0, 64000);
-
-                int start = 0;
-                for (int i = 0; i < message.Length; i++)
-                {
-                    switch (message[i])
-                    {
-                        case ' ':
-                        case '\t':
-                            break;
-                        case '\r':
-                        case '\n':
-                            start = i + 1;
-                            break;
-
-                        default:
-                            return start == 0 ? message : message.Substring(start);
-                    }
-                }
-            }
-
-            return message;
         }
 
         #endregion

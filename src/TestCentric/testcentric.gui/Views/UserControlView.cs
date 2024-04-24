@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -12,7 +12,7 @@ namespace TestCentric.Gui.Views
     /// </summary>
     public class UserControlView : UserControl
     {
-        protected void InvokeIfRequired(MethodInvoker _delegate)
+        public void InvokeIfRequired(MethodInvoker _delegate)
         {
             if (InvokeRequired)
                 BeginInvoke(_delegate);

@@ -7,12 +7,14 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
-    public partial class TestResultSubView : UserControlView
+    public partial class TestResultSubView : TestPropertiesView.SubView
     {
         public TestResultSubView()
         {
             InitializeComponent();
         }
+
+        public override int FullHeight => assertions.Top + HeightNeededForControl(assertions) + 8;
 
         public string Outcome
         {
@@ -36,12 +38,6 @@ namespace TestCentric.Gui.Views
         {
             get { return assertions.Text; }
             set { this.InvokeIfRequired(() => { assertions.Text = value; }); }
-        }
-
-        public string Output
-        {
-            get { return output.Text; }
-            set { this.InvokeIfRequired(() => { output.Text = value; }); }
         }
     }
 }

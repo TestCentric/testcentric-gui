@@ -16,7 +16,7 @@ using TestCentric.Gui.Elements;
 
 namespace TestCentric.Gui.Views
 {
-    public partial class TestPropertiesSubView : UserControlView
+    public partial class TestPropertiesSubView : TestPropertiesView.SubView
     {
         public event CommandHandler DisplayHiddenPropertiesChanged;
 
@@ -30,7 +30,9 @@ namespace TestCentric.Gui.Views
             };
         }
 
-        public string TestType
+        public override int FullHeight => properties.Top + HeightNeededForControl(properties) + 4;
+
+       public string TestType
         {
             get { return testType.Text; }
             set { this.InvokeIfRequired(() => { testType.Text = value; }); }

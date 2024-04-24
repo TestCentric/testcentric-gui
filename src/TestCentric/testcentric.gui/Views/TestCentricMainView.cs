@@ -901,7 +901,7 @@ namespace TestCentric.Gui.Views
             this.propertiesView.Location = new System.Drawing.Point(0, 0);
             this.propertiesView.Name = "propertiesView";
             this.propertiesView.Outcome = "";
-            this.propertiesView.Output = "";
+            //this.propertiesView.Output = "";
             this.propertiesView.PackageSettings = "";
             this.propertiesView.Properties = "";
             this.propertiesView.RunState = "";

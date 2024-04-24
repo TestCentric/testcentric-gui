@@ -50,18 +50,20 @@ namespace TestCentric.Gui.Views
             this.packageSettings.Expansion = TestCentric.Gui.Controls.TipWindow.ExpansionStyle.Both;
             this.packageSettings.Location = new System.Drawing.Point(6, 22);
             this.packageSettings.Name = "packageSettings";
-            this.packageSettings.Size = new System.Drawing.Size(509, 45);
+            this.packageSettings.Size = new System.Drawing.Size(509, 40);
             this.packageSettings.TabIndex = 1;
             // 
-            // PackageSettingsDisplay
+            // TestPackageSubView
             // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Controls.Add(this.packageSettings);
             this.Controls.Add(this.packageSettingsLabel);
-            this.Name = "PackageSettingsDisplay";
-            this.Size = new System.Drawing.Size(522, 73);
+            this.Name = "TestPackageSubView";
+            this.Size = new System.Drawing.Size(522, 70);
+            this.MinimumSize = new System.Drawing.Size(0, 70);
             this.ResumeLayout(false);
             this.PerformLayout();
 

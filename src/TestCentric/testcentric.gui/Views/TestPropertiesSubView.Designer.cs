@@ -135,7 +135,7 @@ namespace TestCentric.Gui.Views
             this.properties.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.properties.Location = new System.Drawing.Point(5, 159);
             this.properties.Name = "properties";
-            this.properties.Size = new System.Drawing.Size(467, 85);
+            this.properties.Size = new System.Drawing.Size(467, 40);
             this.properties.TabIndex = 31;
             // 
             // descriptionLabel
@@ -207,7 +207,7 @@ namespace TestCentric.Gui.Views
             this.categories.Size = new System.Drawing.Size(399, 18);
             this.categories.TabIndex = 23;
             // 
-            // TestPropertiesDisplay
+            // TestPropertiesSubView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -229,8 +229,9 @@ namespace TestCentric.Gui.Views
             this.Controls.Add(this.categories);
             this.Controls.Add(this.testType);
             this.Controls.Add(this.testTypeLabel);
-            this.Name = "TestPropertiesDisplay";
-            this.Size = new System.Drawing.Size(476, 250);
+            this.Name = "TestPropertiesSubView";
+            this.Size = new System.Drawing.Size(476, 204);
+            this.MinimumSize = new System.Drawing.Size(0, 204);
             this.ResumeLayout(false);
 
         }

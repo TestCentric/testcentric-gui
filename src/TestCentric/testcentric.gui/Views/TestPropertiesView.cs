@@ -8,9 +8,11 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
+    using System;
+    using System.ComponentModel;
     using Elements;
 
-    public partial class TestPropertiesView : UserControl, ITestPropertiesView
+    public partial class TestPropertiesView : UserControlView, ITestPropertiesView
     {
         public event CommandHandler DisplayHiddenPropertiesChanged;
 
@@ -19,11 +21,25 @@ namespace TestCentric.Gui.Views
             InitializeComponent();
 
             // Re-raise the event from the panel here
-            testPropertiesDisplay.DisplayHiddenPropertiesChanged += () =>
+            testPropertiesSubView.DisplayHiddenPropertiesChanged += () =>
             {
                 DisplayHiddenPropertiesChanged?.Invoke();
             };
+
+            flowLayoutPanel1.Layout += FlowLayoutPanel1_Layout;
         }
+
+        private void FlowLayoutPanel1_Layout(object sender, LayoutEventArgs e)
+        {
+            var subViewWidth = flowLayoutPanel1.ClientRectangle.Width - 4;
+            header.Width = subViewWidth;
+            testPackageSubView.Width = subViewWidth;
+            testPropertiesSubView.Width = subViewWidth;
+            testResultSubView.Width = subViewWidth;
+            testOutputSubView.Width = subViewWidth;
+        }
+
+        public int ClientHeight => ClientRectangle.Height - TestPackageSubView.Top - 40; // Value of 40 allows for non-client areas and spacing
 
         public string Header
         {
@@ -31,154 +47,127 @@ namespace TestCentric.Gui.Views
             set { InvokeIfRequired(() => { header.Text = value; }); }
         }
 
-        public void ShowPackagePanel()
-        {
-            InvokeIfRequired(() =>
-            {
-                packageSettingsDisplay.Visible = true;
-                splitContainer1.Panel1Collapsed = false;
-            });
-        }
-        public void HidePackagePanel()
-        {
-            InvokeIfRequired(() =>
-            {
-                packageSettingsDisplay.Visible = false;
-                splitContainer1.Panel1Collapsed = true;
-            });
-        }
+        public TestPackageSubView TestPackageSubView => testPackageSubView;
 
-        public void ShowTestPanel()
-        {
-            InvokeIfRequired(() =>
-            {
-                testPropertiesDisplay.Visible = true;
-            });
-        }
-        public void HideTestPanel()
-        {
-            InvokeIfRequired(() =>
-            {
-                testPropertiesDisplay.Visible = false;
-            });
-        }
+        public TestPropertiesSubView TestPropertiesSubView => testPropertiesSubView;
 
-        public void ShowResultPanel()
-        {
-            InvokeIfRequired(() =>
-            {
-                testResultDisplay.Visible = true;
-                splitContainer2.Panel2Collapsed = false;
-                ClientSize = new Size(ClientSize.Width, splitContainer1.Bottom + 2);
-            });
-        }
-        public void HideResultPanel()
-        {
-            InvokeIfRequired(() =>
-            {
-                testResultDisplay.Visible = false;
-                splitContainer2.Panel2Collapsed = true;
-                ClientSize = new Size(ClientSize.Width, splitContainer1.Bottom + 2);
-            });
-        }
+        public TestResultSubView TestResultSubView => testResultSubView;
+
+        public TestOutputSubView TestOutputSubView => testOutputSubView;
+
+        public SubView[] SubViews => new SubView[] { testPackageSubView, testPropertiesSubView, testResultSubView, testOutputSubView }; 
 
         public string TestType
         {
-            get { return testPropertiesDisplay.TestType; }
-            set { testPropertiesDisplay.TestType = value; }
+            get { return testPropertiesSubView.TestType; }
+            set { testPropertiesSubView.TestType = value; }
         }
 
         public string FullName
         {
-            get { return testPropertiesDisplay.FullName; }
-            set { testPropertiesDisplay.FullName = value; }
+            get { return testPropertiesSubView.FullName; }
+            set { testPropertiesSubView.FullName = value; }
         }
 
         public string Description
         {
-            get { return testPropertiesDisplay.Description; }
-            set { testPropertiesDisplay.Description = value; }
+            get { return testPropertiesSubView.Description; }
+            set { testPropertiesSubView.Description = value; }
         }
 
         public string Categories
         {
-            get { return testPropertiesDisplay.Categories; }
-            set { testPropertiesDisplay.Categories = value; }
+            get { return testPropertiesSubView.Categories; }
+            set { testPropertiesSubView.Categories = value; }
         }
 
         public string TestCount
         {
-            get { return testPropertiesDisplay.TestCount; }
-            set { testPropertiesDisplay.TestCount = value; }
+            get { return testPropertiesSubView.TestCount; }
+            set { testPropertiesSubView.TestCount = value; }
         }
 
         public string RunState
         {
-            get { return testPropertiesDisplay.RunState; }
-            set { testPropertiesDisplay.RunState = value; }
+            get { return testPropertiesSubView.RunState; }
+            set { testPropertiesSubView.RunState = value; }
         }
 
         public string SkipReason
         {
-            get { return testPropertiesDisplay.SkipReason; }
-            set { testPropertiesDisplay.SkipReason = value; }
+            get { return testPropertiesSubView.SkipReason; }
+            set { testPropertiesSubView.SkipReason = value; }
         }
 
         public bool DisplayHiddenProperties
         {
-            get { return testPropertiesDisplay.DisplayHiddenProperties; }
+            get { return testPropertiesSubView.DisplayHiddenProperties; }
         }
 
         public string Properties
         {
-            get { return testPropertiesDisplay.Properties; }
-            set { testPropertiesDisplay.Properties = value; }
+            get { return testPropertiesSubView.Properties; }
+            set { testPropertiesSubView.Properties = value; }
         }
 
         public string Outcome
         {
-            get { return testResultDisplay.Outcome; }
-            set { testResultDisplay.Outcome = value; }
+            get { return testResultSubView.Outcome; }
+            set { testResultSubView.Outcome = value; }
         }
 
         public string ElapsedTime
         {
-            get { return testResultDisplay.ElapsedTime; }
-            set { testResultDisplay.ElapsedTime = value; }
+            get { return testResultSubView.ElapsedTime; }
+            set { testResultSubView.ElapsedTime = value; }
         }
 
         public string AssertCount
         {
-            get { return testResultDisplay.AssertCount; }
-            set { testResultDisplay.AssertCount = value; }
+            get { return testResultSubView.AssertCount; }
+            set { testResultSubView.AssertCount = value; }
         }
 
         public string Assertions
         {
-            get { return testResultDisplay.Assertions; }
-            set { testResultDisplay.Assertions = value; }
+            get { return testResultSubView.Assertions; }
+            set { testResultSubView.Assertions = value; }
         }
 
         public string Output
         {
-            get { return testResultDisplay.Output; }
-            set { testResultDisplay.Output = value; }
+            get { return testOutputSubView.Output; }
+            set { testOutputSubView.Output = value; }
         }
 
         public string PackageSettings
         {
-            get { return packageSettingsDisplay.Text; }
-            set { packageSettingsDisplay.Text = value; }
+            get { return testPackageSubView.PackageSettings; }
+            set { testPackageSubView.PackageSettings = value; }
         }
 
-        #region Helper Methods
+        #region Nested Subview class
 
-        private void InvokeIfRequired(MethodInvoker _delegate)
+        /// <summary>
+        /// Each sub-view class used by TestPropertyView must inherit from
+        /// this class. Ideally, the class would be abstract but the Windows
+        /// Forms designer does no handle abstract classes. Therefore, we
+        /// use virtual messages which throw instead.
+        /// </summary>
+        public class SubView : UserControlView
         {
-            if (InvokeRequired)
-                BeginInvoke(_delegate);
-            else
-                _delegate();
+            protected const int SUBVIEW_SPACING = 4;
+            protected const int EXPANDABLE_FIELD_MINIMUM_HEIGHT = 40;
+
+            public virtual int FullHeight => throw new System.NotImplementedException();
+
+            protected int HeightNeededForControl(Control ctrl)
+            {
+                Graphics g = this.CreateGraphics();
+                var sizeNeeded = g.MeasureString(ctrl.Text, ctrl.Font, ctrl.Width);
+                int heightNeeded = (int)System.Math.Ceiling(sizeNeeded.Height);
+                return System.Math.Max(EXPANDABLE_FIELD_MINIMUM_HEIGHT, heightNeeded);
+            }
         }
 
         #endregion
