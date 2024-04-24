@@ -25,10 +25,6 @@
     </ItemGroup>
     
 	<ItemGroup>
-        <None Include="app.config" />
-    </ItemGroup>
-    
-	<ItemGroup>
         <PackageReference Include="NSubstitute" Version="5.1.0" />
 	    <PackageReference Include="NUnit" Version="3.13.2" />
 	    <PackageReference Include="NUnitLite" Version="3.13.2" />

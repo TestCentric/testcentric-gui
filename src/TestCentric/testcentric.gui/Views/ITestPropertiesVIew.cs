@@ -5,13 +5,17 @@
 
 namespace TestCentric.Gui.Views
 {
+    using System;
     using Elements;
 
     public interface ITestPropertiesView : IView
     {
+        event EventHandler Resize;
         event CommandHandler DisplayHiddenPropertiesChanged;
 
         bool Visible { get; set; }
+        int ClientHeight { get; }
+
         string Header { get; set; }
         string TestType { get; set; }
         string FullName { get; set; }
@@ -29,12 +33,11 @@ namespace TestCentric.Gui.Views
         string Output { get; set; }
         string PackageSettings { get; set; }
 
-        void ShowPackagePanel();
-        void HidePackagePanel();
-        void ShowTestPanel();
-        void HideTestPanel();
-        void ShowResultPanel();
-        void HideResultPanel();
+        TestPackageSubView TestPackageSubView { get; }
+        TestPropertiesSubView TestPropertiesSubView { get; }
+        TestResultSubView TestResultSubView { get; }
+        TestOutputSubView TestOutputSubView { get; }
 
+        TestPropertiesView.SubView[] SubViews { get; }
     }
 }

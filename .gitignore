@@ -116,6 +116,7 @@ UpgradeLog*.XML
 # NUnit Files
 TestResult.xml
 *.VisualState.xml
+!TestResultSubView*
 
 # Packaging Directory
 packaging

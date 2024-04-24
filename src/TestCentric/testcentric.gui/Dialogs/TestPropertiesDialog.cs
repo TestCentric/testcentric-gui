@@ -16,7 +16,7 @@ namespace TestCentric.Gui.Dialogs
     using Model;
     using Views;
 
-    public partial class TestPropertiesDisplay : PinnableDisplay
+    public partial class TestPropertiesDialog : PinnableDisplay
     {
         private ITestModel _model;
         private ITestTreeView _view;
@@ -28,7 +28,7 @@ namespace TestCentric.Gui.Dialogs
 
         private int _clientWidth;
 
-        public TestPropertiesDisplay(ITestModel model, ITestTreeView view)
+        public TestPropertiesDialog(ITestModel model, ITestTreeView view)
         {
             _model = model;
             _view = view;
@@ -48,30 +48,30 @@ namespace TestCentric.Gui.Dialogs
             _resultNode = _model.GetResultForTest(_testNode.Id);
             _packageSettings = _model.GetPackageSettingsForTest(_testNode.Id);
 
-            testResult.Text = _resultNode?.Outcome.ToString() ?? _testNode.RunState.ToString();
-            testResult.Font = new Font(this.Font, FontStyle.Bold);
+            outcome.Text = _resultNode?.Outcome.ToString() ?? _testNode.RunState.ToString();
+            outcome.Font = new Font(this.Font, FontStyle.Bold);
             if (_testNode.Type == "Project" || _testNode.Type == "Assembly")
                 TestName = Path.GetFileName(_testNode.Name);
             else
                 TestName = _testNode.Name;
 
-            // Display each groupBox, for which there is data.
+            // Display each panel for which there is data.
             // Boxes are displayed top-down at the vertical
             // offset
-            int verticalOffset = packageGroupBox.Top;
+            int verticalOffset = packageSettingsPanel.Top;
 
             if (_packageSettings != null)
-                verticalOffset = DisplayPackageGroupBox(verticalOffset) + 4;
+                verticalOffset = DisplayPackagePanel(verticalOffset) + 4;
             else
-                packageGroupBox.Hide();
+                packageSettingsPanel.Hide();
 
             // Test details are always shown
-            verticalOffset = DisplayTestGroupBox(verticalOffset) + 4;
+            verticalOffset = DisplayTestPanel(verticalOffset) + 4;
 
             if (_resultNode != null)
-                verticalOffset = DisplayResultGroupBox(verticalOffset) + 4;
+                verticalOffset = DisplayResultPanel(verticalOffset) + 4;
             else
-                resultGroupBox.Hide();
+                resultPanel.Hide();
 
             ClientSize = new Size(
                 ClientSize.Width, verticalOffset);
@@ -90,21 +90,21 @@ namespace TestCentric.Gui.Dialogs
                 Invoke(new Action(() => Display(_treeNode)));
         }
 
-        private int DisplayPackageGroupBox(int verticalOffset)
+        private int DisplayPackagePanel(int verticalOffset)
         {
-            packageGroupBox.Location = new Point(
-                packageGroupBox.Location.X, verticalOffset);
+            packageSettingsPanel.Location = new Point(
+                packageSettingsPanel.Location.X, verticalOffset);
 
             FillPackageSettingsList(_packageSettings);
-            packageGroupBox.Show();
+            packageSettingsPanel.Show();
 
-            return packageGroupBox.Bottom;
+            return packageSettingsPanel.Bottom;
         }
 
-        private int DisplayTestGroupBox(int verticalOffset)
+        private int DisplayTestPanel(int verticalOffset)
         {
-            testGroupBox.Location = new Point(
-                packageGroupBox.Location.X, verticalOffset);
+            testPanel.Location = new Point(
+                packageSettingsPanel.Location.X, verticalOffset);
 
             testType.Text = _testNode.Type;
 
@@ -133,13 +133,13 @@ namespace TestCentric.Gui.Dialogs
 
             FillPropertyList();
 
-            return testGroupBox.Bottom;
+            return testPanel.Bottom;
         }
 
-        private int DisplayResultGroupBox(int verticalOffset)
+        private int DisplayResultPanel(int verticalOffset)
         {
-            resultGroupBox.Location = new Point(
-                resultGroupBox.Location.X, verticalOffset);
+            resultPanel.Location = new Point(
+                resultPanel.Location.X, verticalOffset);
 
             elapsedTime.Text = _resultNode.Duration.ToString("f3");
             assertCount.Text = _resultNode.AssertCount.ToString();
@@ -156,9 +156,9 @@ namespace TestCentric.Gui.Dialogs
                 ? FormatStackTrace(_resultNode.StackTrace)
                 : string.Empty;
 
-            resultGroupBox.Show();
+            resultPanel.Show();
 
-            return resultGroupBox.Bottom;
+            return resultPanel.Bottom;
         }
 
         private static string FormatStackTrace(string stackTrace)
@@ -182,7 +182,7 @@ namespace TestCentric.Gui.Dialogs
         private void FillPropertyList()
         {
             var sb = new StringBuilder();
-            foreach (string item in _testNode.GetAllProperties(hiddenProperties.Checked))
+            foreach (string item in _testNode.GetAllProperties(displayHiddenProperties.Checked))
             {
                 if (sb.Length > 0)
                     sb.Append(Environment.NewLine);

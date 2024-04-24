@@ -271,7 +271,7 @@ namespace TestCentric.Gui.Presenters
             return visualState != null;
         }
 
-        TestPropertiesDisplay _propertiesDisplay;
+        TestPropertiesDialog _propertiesDisplay;
 
         private void ShowPropertiesDisplay()
         {
@@ -279,7 +279,7 @@ namespace TestCentric.Gui.Presenters
             {
                 var mainForm = ((Control)_view).FindForm();
 
-                _propertiesDisplay = new TestPropertiesDisplay(_model, _view)
+                _propertiesDisplay = new TestPropertiesDialog(_model, _view)
                 {
                     Owner = mainForm,
                     Font = mainForm.Font,

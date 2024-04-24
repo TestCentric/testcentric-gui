@@ -37,15 +37,14 @@ namespace TestCentric.Gui.Controls
             // 
             // runSummary
             // 
-            this.runSummary.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.runSummary.BackColor = System.Drawing.Color.LightYellow;
-            this.runSummary.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.runSummary.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.runSummary.Location = new System.Drawing.Point(3, 19);
+            this.runSummary.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Left;
+            this.runSummary.BackColor = Color.LightYellow;
+            this.runSummary.BorderStyle = BorderStyle.None;
+            this.runSummary.Font = new Font("Microsoft Sans Serif", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            this.runSummary.Location = new Point(3, 19);
             this.runSummary.Multiline = true;
             this.runSummary.Name = "runSummary";
-            this.runSummary.Size = new System.Drawing.Size(469, 120);
+            this.runSummary.Size = new Size(469, 120);
             this.runSummary.TabIndex = 2;
             // 
             // RunSummaryDisplay
@@ -76,15 +75,16 @@ namespace TestCentric.Gui.Controls
             runSummary.Text = report;
             runSummary.Select(0, 0);
 
+            int availableWidth = ClientSize.Width - runSummary.Left - 4;
             Graphics g = Graphics.FromHwnd(runSummary.Handle);
             SizeF sizeNeeded = g.MeasureString(
-                report, runSummary.Font, ClientSize.Width - runSummary.Left - 8);
+                report, runSummary.Font, availableWidth);
 
             runSummary.ClientSize = new Size(
-                (int)Math.Ceiling(sizeNeeded.Width),
+                availableWidth,
                 (int)Math.Ceiling(sizeNeeded.Height));
 
-            ClientSize = new Size(ClientSize.Width, runSummary.Bottom + 8);
+            ClientSize = new Size(ClientSize.Width, runSummary.Bottom + 4);
         }
     }
 }

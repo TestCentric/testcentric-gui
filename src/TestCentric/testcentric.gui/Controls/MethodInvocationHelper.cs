@@ -5,17 +5,14 @@
 
 using System.Windows.Forms;
 
-namespace TestCentric.Gui.Views
+namespace TestCentric.Gui.Controls
 {
-    /// <summary>
-    /// Base class for views implemented as a user control
-    /// </summary>
-    public class UserControlView : UserControl
+    static public class MethodInvocationHelper
     {
-        public void InvokeIfRequired(MethodInvoker _delegate)
+        public static void InvokeIfRequired(this Control ctrl, MethodInvoker _delegate)
         {
-            if (InvokeRequired)
-                BeginInvoke(_delegate);
+            if (ctrl.InvokeRequired)
+                ctrl.BeginInvoke(_delegate);
             else
                 _delegate();
         }

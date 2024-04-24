@@ -70,6 +70,7 @@ namespace TestCentric.Gui.Model
             var engine = TestEngineActivator.CreateInstance();
             if (engine == null)
                 throw new EngineNotFoundException();
+
             return CreateTestModel(engine, options);
         }
 
@@ -84,11 +85,9 @@ namespace TestCentric.Gui.Model
                 ? (InternalTraceLevel)Enum.Parse(typeof(InternalTraceLevel), options.InternalTraceLevel)
                 : InternalTraceLevel.Off;
 
-            var logFile = $"InternalTrace{Process.GetCurrentProcess().Id}.gui.log";
+            var logFile = $"InternalTrace.{Process.GetCurrentProcess().Id}.log";
             if (options.WorkDirectory != null)
                 logFile = Path.Combine(options.WorkDirectory, logFile);
-
-            InternalTrace.Initialize(logFile, traceLevel);
 
             testEngine.InternalTraceLevel = traceLevel;
             if (options.WorkDirectory != null)
