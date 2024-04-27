@@ -209,7 +209,7 @@ namespace TestCentric.Gui.Presenters
                 //}
 
                 //if (e.Result.Outcome.Status == TestStatus.Failed)
-                //    _view.Activate();
+                //    _treeView.Activate();
 
                 // Display the run summary
                 _view.RunSummaryButton.Checked = true;

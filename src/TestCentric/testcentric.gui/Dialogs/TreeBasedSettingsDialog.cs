@@ -98,7 +98,7 @@ namespace TestCentric.Gui.Dialogs
             this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             // 
-            // panel1
+            // testPropertiesView
             // 
             this.panel1.Location = new System.Drawing.Point(208, 16);
             this.panel1.Name = "panel1";

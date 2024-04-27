@@ -2,5 +2,11 @@
 # Install any NUnit extensions into the project and it will be found
 # when running tests in the development environment, where the engine
 # is copied to the output directory.
-../../packages/NUnit.Extension.*/**/tools/     # nuget v2 layout
-../../../packages/NUnit.Extension.*/**/tools/  # nuget v3 layout
+
+# nuget v2 layout
+../../extensions/NUnit.Extension.*/**/tools/
+../../extensions/TestCentric.Extension.*/**/tools/
+
+#nuget v3 layout
+../../../extensions/NUnit.Extension.*/**/tools/
+../../../extensions/TestCentric.Extension.*/**/tools/
