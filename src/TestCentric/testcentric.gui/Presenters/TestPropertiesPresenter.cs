@@ -17,6 +17,8 @@ namespace TestCentric.Gui.Presenters
 
     public class TestPropertiesPresenter
     {
+        private static readonly Logger log = InternalTrace.GetLogger(typeof(TestPropertiesPresenter));
+
         private readonly ITestPropertiesView _view;
         private readonly ITestModel _model;
 
@@ -59,7 +61,7 @@ namespace TestCentric.Gui.Presenters
                 var testNode = _selectedItem as TestNode;
                 if (testNode != null)
                 {
-                    //_view.SuspendLayout();
+                    //_treeView.SuspendLayout();
 
                     InitializeTestPackageSubView(testNode);
                     InitializeTestPropertiesSubView(testNode);                    
@@ -68,15 +70,15 @@ namespace TestCentric.Gui.Presenters
 
                     AdjustSubViewHeights();
 
-                    //_view.ResumeLayout();
+                    //_treeView.ResumeLayout();
                 }
             }
 
             // HACK: results won't display on Linux otherwise
             //if (Path.DirectorySeparatorChar == '/') // Running on Linux or Unix
-            //    _view.ResultPanelVisible = true;
+            //    _treeView.ResultPanelVisible = true;
             //else
-            //    _view.ResultPanelVisible = resultNode != null;
+            //    _treeView.ResultPanelVisible = resultNode != null;
 
             // TODO: We should actually try to set the font for bold items
             // dynamically, since the global application font may be changed.
@@ -163,7 +165,7 @@ namespace TestCentric.Gui.Presenters
                 // We know that MinHeight will fit but possibly more. Use
                 // the excess space for each sub-view until all is used.
                 int excessSpace = _view.ClientHeight - totalMinHeights;
-                foreach (var subView in _view.SubViews.Where(v => v.Visible))
+                foreach (var subView in visibleSubViews)
                 {
                     int iCanUse = Math.Min(excessSpace, subView.FullHeight - subView.MinimumSize.Height);
                    

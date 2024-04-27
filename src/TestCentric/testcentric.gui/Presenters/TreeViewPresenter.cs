@@ -186,16 +186,33 @@ namespace TestCentric.Gui.Presenters
                 {
                     _model.ActiveTestItem = testItem;
 
+                    // Selected item is either a TestSelection or a TestNode. When
+                    // CheckBoxes are off, the active item is used as the selection.
+                    var selection = testItem as TestSelection;
+                    var node = testItem as TestNode;
+
                     if (!_view.CheckBoxes)
                     {
-                        // When CheckBoxes are off, the active item is also used as the
-                        // selection. It's either a TestSelection or a TestNode.
-                        var selection = testItem as TestSelection;
-                        var node = testItem as TestNode;
                         // If it's a TestNode, make a TestSelection
                         if (selection == null && node != null)
                             selection = new TestSelection() { node };
                         _model.SelectedTests = selection;
+                    }
+
+                    if (_propertiesDisplay != null)
+                    {
+                        if (_propertiesDisplay.Pinned)
+                            _propertiesDisplay.Display(treeNode);
+                        else
+                            ClosePropertiesDisplay();
+                    }
+
+                    if (_xmlDisplay != null)
+                    {
+                        if (_xmlDisplay.Pinned)
+                            _xmlDisplay.Display(treeNode);
+                        else
+                            CloseXmlDisplay();
                     }
                 }
             };
@@ -212,7 +229,7 @@ namespace TestCentric.Gui.Presenters
             };
 
             // Node selected in tree
-            //_view.SelectedNodesChanged += (nodes) =>
+            //_treeView.SelectedNodesChanged += (nodes) =>
             //{
             //    var selection = new TestSelection();
             //    foreach (TreeNode tn in nodes)
@@ -373,7 +390,7 @@ namespace TestCentric.Gui.Presenters
         {
             // TODO: Config Menu is hidden until changing the config actually works
             bool displayConfigMenu = false;
-            //var test = _view.ContextNode?.Tag as TestNode;
+            //var test = _treeView.ContextNode?.Tag as TestNode;
             //if (test != null && test.IsProject)
             //{
             //    NUnit.Engine.TestPackage package = _model.GetPackageForTest(test.Id);
@@ -382,13 +399,13 @@ namespace TestCentric.Gui.Presenters
 
             //    if (configNames.Length > 0)
             //    {
-            //        _view.ActiveConfiguration.MenuItems.Clear();
+            //        _treeView.ActiveConfiguration.MenuItems.Clear();
             //        foreach (string config in configNames)
             //        {
             //            var configEntry = new ToolStripMenuItem(config);
             //            configEntry.Checked = config == activeConfig;
             //            configEntry.Click += (sender, e) => _model.ReloadPackage(package, ((ToolStripMenuItem)sender).Text);
-            //            _view.ActiveConfiguration.MenuItems.Add(configEntry);
+            //            _treeView.ActiveConfiguration.MenuItems.Add(configEntry);
             //        }
 
             //        //displayConfigMenu = true;

@@ -50,19 +50,17 @@ namespace TestCentric.Gui.Views
             // 
             // flowLayoutPanel1
             // 
-            this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.flowLayoutPanel1.BackColor = System.Drawing.SystemColors.Control;
             this.flowLayoutPanel1.Controls.Add(this.header);
             this.flowLayoutPanel1.Controls.Add(this.testPackageSubView);
             this.flowLayoutPanel1.Controls.Add(this.testPropertiesSubView);
             this.flowLayoutPanel1.Controls.Add(this.testResultSubView);
             this.flowLayoutPanel1.Controls.Add(this.testOutputSubView);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(522, 506);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(525, 526);
             this.flowLayoutPanel1.TabIndex = 32;
             this.flowLayoutPanel1.WrapContents = false;
             // 
@@ -70,6 +68,7 @@ namespace TestCentric.Gui.Views
             // 
             this.testPackageSubView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.testPackageSubView.Location = new System.Drawing.Point(3, 21);
+            this.testPackageSubView.MinimumSize = new System.Drawing.Size(2, 70);
             this.testPackageSubView.Name = "testPackageSubView";
             this.testPackageSubView.PackageSettings = "";
             this.testPackageSubView.Size = new System.Drawing.Size(516, 71);
@@ -83,6 +82,7 @@ namespace TestCentric.Gui.Views
             this.testPropertiesSubView.Description = "";
             this.testPropertiesSubView.FullName = "";
             this.testPropertiesSubView.Location = new System.Drawing.Point(3, 98);
+            this.testPropertiesSubView.MinimumSize = new System.Drawing.Size(2, 204);
             this.testPropertiesSubView.Name = "testPropertiesSubView";
             this.testPropertiesSubView.Properties = "";
             this.testPropertiesSubView.RunState = "";
@@ -102,9 +102,10 @@ namespace TestCentric.Gui.Views
             this.testResultSubView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.testResultSubView.ElapsedTime = "";
             this.testResultSubView.Location = new System.Drawing.Point(3, 313);
+            this.testResultSubView.MinimumSize = new System.Drawing.Size(2, 108);
             this.testResultSubView.Name = "testResultSubView";
             this.testResultSubView.Outcome = "";
-            this.testResultSubView.Size = new System.Drawing.Size(0, 111);
+            this.testResultSubView.Size = new System.Drawing.Size(519, 111);
             this.testResultSubView.TabIndex = 29;
             // 
             // testOutputSubView
@@ -114,9 +115,10 @@ namespace TestCentric.Gui.Views
             this.testOutputSubView.BackColor = System.Drawing.SystemColors.Control;
             this.testOutputSubView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.testOutputSubView.Location = new System.Drawing.Point(3, 430);
+            this.testOutputSubView.MinimumSize = new System.Drawing.Size(2, 70);
             this.testOutputSubView.Name = "testOutputSubView";
             this.testOutputSubView.Output = "";
-            this.testOutputSubView.Size = new System.Drawing.Size(516, 72);
+            this.testOutputSubView.Size = new System.Drawing.Size(519, 72);
             this.testOutputSubView.TabIndex = 29;
             // 
             // TestPropertiesView

@@ -55,7 +55,7 @@ namespace TestCentric.Gui.Views
 
         public TestOutputSubView TestOutputSubView => testOutputSubView;
 
-        public SubView[] SubViews => new SubView[] { testPackageSubView, testPropertiesSubView, testResultSubView, testOutputSubView }; 
+        public SubView[] SubViews => new SubView[] { TestPackageSubView, TestPropertiesSubView, TestResultSubView, TestOutputSubView }; 
 
         public string TestType
         {
