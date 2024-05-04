@@ -57,6 +57,7 @@ namespace TestCentric.Gui.Dialogs
             //
             // TODO: Add any constructor code after InitializeComponent call
             //
+            extensionListView.Resize += (s, e) => { extensionListView.Columns[0].Width = extensionListView.Width - 75; };
         }
 
         /// <summary>
@@ -91,15 +92,15 @@ namespace TestCentric.Gui.Dialogs
             this.extensionPointsListBox = new System.Windows.Forms.ListBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.assemblyPathLabel = new TestCentric.Gui.Controls.ExpandingLabel();
+            this.assemblyVersionLabel = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.propertiesTextBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.extensionDescriptionTextBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.assemblyVersionLabel = new System.Windows.Forms.Label();
+            this.assemblyPathLabel = new TestCentric.Gui.Controls.ExpandingLabel();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -167,6 +168,8 @@ namespace TestCentric.Gui.Dialogs
             // 
             // extensionPointsListBox
             // 
+            this.extensionPointsListBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.extensionPointsListBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.extensionPointsListBox.FormattingEnabled = true;
             this.extensionPointsListBox.Location = new System.Drawing.Point(9, 19);
@@ -177,6 +180,8 @@ namespace TestCentric.Gui.Dialogs
             // 
             // groupBox1
             // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.extensionPointDescriptionTextBox);
             this.groupBox1.Controls.Add(this.extensionPointsListBox);
             this.groupBox1.Controls.Add(this.label1);
@@ -208,15 +213,33 @@ namespace TestCentric.Gui.Dialogs
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Installed Extensions";
             // 
-            // assemblyPathLabel
+            // assemblyVersionLabel
             // 
-            this.assemblyPathLabel.BackColor = System.Drawing.SystemColors.Window;
-            this.assemblyPathLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.assemblyPathLabel.Location = new System.Drawing.Point(64, 249);
-            this.assemblyPathLabel.Name = "assemblyPathLabel";
-            this.assemblyPathLabel.Padding = new System.Windows.Forms.Padding(0, 2, 0, 2);
-            this.assemblyPathLabel.Size = new System.Drawing.Size(373, 21);
-            this.assemblyPathLabel.TabIndex = 9;
+            this.assemblyVersionLabel.BackColor = System.Drawing.SystemColors.Window;
+            this.assemblyVersionLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.assemblyVersionLabel.Location = new System.Drawing.Point(63, 281);
+            this.assemblyVersionLabel.Name = "assemblyVersionLabel";
+            this.assemblyVersionLabel.Padding = new System.Windows.Forms.Padding(0, 2, 0, 2);
+            this.assemblyVersionLabel.Size = new System.Drawing.Size(60, 21);
+            this.assemblyVersionLabel.TabIndex = 12;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(12, 281);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(45, 13);
+            this.label6.TabIndex = 11;
+            this.label6.Text = "Version:";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(12, 250);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(32, 13);
+            this.label5.TabIndex = 10;
+            this.label5.Text = "Path:";
             // 
             // label4
             // 
@@ -229,6 +252,8 @@ namespace TestCentric.Gui.Dialogs
             // 
             // propertiesTextBox
             // 
+            this.propertiesTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.propertiesTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.propertiesTextBox.Location = new System.Drawing.Point(6, 171);
             this.propertiesTextBox.Multiline = true;
@@ -247,6 +272,8 @@ namespace TestCentric.Gui.Dialogs
             // 
             // extensionDescriptionTextBox
             // 
+            this.extensionDescriptionTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.extensionDescriptionTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.extensionDescriptionTextBox.Location = new System.Drawing.Point(6, 110);
             this.extensionDescriptionTextBox.Multiline = true;
@@ -262,33 +289,17 @@ namespace TestCentric.Gui.Dialogs
             this.label2.TabIndex = 3;
             this.label2.Text = "Description:";
             // 
-            // label5
+            // assemblyPathLabel
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 250);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(32, 13);
-            this.label5.TabIndex = 10;
-            this.label5.Text = "Path:";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(12, 281);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(45, 13);
-            this.label6.TabIndex = 11;
-            this.label6.Text = "Version:";
-            // 
-            // assemblyVersionLabel
-            // 
-            this.assemblyVersionLabel.BackColor = System.Drawing.SystemColors.Window;
-            this.assemblyVersionLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.assemblyVersionLabel.Location = new System.Drawing.Point(63, 281);
-            this.assemblyVersionLabel.Name = "assemblyVersionLabel";
-            this.assemblyVersionLabel.Padding = new System.Windows.Forms.Padding(0, 2, 0, 2);
-            this.assemblyVersionLabel.Size = new System.Drawing.Size(60, 21);
-            this.assemblyVersionLabel.TabIndex = 12;
+            this.assemblyPathLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.assemblyPathLabel.BackColor = System.Drawing.SystemColors.Window;
+            this.assemblyPathLabel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.assemblyPathLabel.Location = new System.Drawing.Point(64, 249);
+            this.assemblyPathLabel.Name = "assemblyPathLabel";
+            this.assemblyPathLabel.Padding = new System.Windows.Forms.Padding(0, 2, 0, 2);
+            this.assemblyPathLabel.Size = new System.Drawing.Size(373, 21);
+            this.assemblyPathLabel.TabIndex = 9;
             // 
             // ExtensionDialog
             // 
@@ -297,6 +308,8 @@ namespace TestCentric.Gui.Dialogs
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximumSize = new System.Drawing.Size(2048, 569);
+            this.MinimumSize = new System.Drawing.Size(480, 569);
             this.Name = "ExtensionDialog";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
