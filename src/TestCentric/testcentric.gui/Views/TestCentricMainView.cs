@@ -285,7 +285,6 @@ namespace TestCentric.Gui.Views
             this.mainMenu.SuspendLayout();
             this.rightPanel.SuspendLayout();
             this.progressPanel.SuspendLayout();
-            this.runSummaryDisplay.SuspendLayout();
             this.resultTabs.SuspendLayout();
             this.propertiesTab.SuspendLayout();
             this.errorTab.SuspendLayout();
@@ -400,7 +399,6 @@ namespace TestCentric.Gui.Views
             this.displayFormatButton.Size = new System.Drawing.Size(29, 21);
             this.displayFormatButton.Text = "Display";
             this.displayFormatButton.ToolTipText = "Tree Display Format";
-            this.displayFormatButton.DropDown.Closing += DisplayFormatDropDown_Closing;
             // 
             // nunitTreeMenuItem
             // 
@@ -819,7 +817,7 @@ namespace TestCentric.Gui.Views
             this.progressPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.progressPanel.Location = new System.Drawing.Point(0, 0);
             this.progressPanel.Name = "progressPanel";
-            this.progressPanel.Size = new System.Drawing.Size(498, 102);
+            this.progressPanel.Size = new System.Drawing.Size(498, 107);
             this.progressPanel.TabIndex = 3;
             // 
             // runSummaryDisplay
@@ -827,7 +825,7 @@ namespace TestCentric.Gui.Views
             this.runSummaryDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.runSummaryDisplay.BackColor = System.Drawing.Color.LightYellow;
-            this.runSummaryDisplay.Location = new System.Drawing.Point(3, 23);
+            this.runSummaryDisplay.Location = new System.Drawing.Point(3, 28);
             this.runSummaryDisplay.Name = "runSummaryDisplay";
             this.runSummaryDisplay.Size = new System.Drawing.Size(488, 76);
             this.runSummaryDisplay.TabIndex = 5;
@@ -840,7 +838,7 @@ namespace TestCentric.Gui.Views
             this.runSummaryButton.FlatAppearance.BorderSize = 0;
             this.runSummaryButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.runSummaryButton.Image = ((System.Drawing.Image)(resources.GetObject("runSummaryButton.Image")));
-            this.runSummaryButton.Location = new System.Drawing.Point(472, 2);
+            this.runSummaryButton.Location = new System.Drawing.Point(472, 4);
             this.runSummaryButton.Name = "runSummaryButton";
             this.runSummaryButton.Size = new System.Drawing.Size(19, 19);
             this.runSummaryButton.TabIndex = 4;
@@ -852,14 +850,14 @@ namespace TestCentric.Gui.Views
             // 
             this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar.BackColor = System.Drawing.SystemColors.Control;
+            this.progressBar.BackColor = System.Drawing.Color.Transparent;
             this.progressBar.CausesValidation = false;
             this.progressBar.Enabled = false;
             this.progressBar.ForeColor = System.Drawing.SystemColors.Highlight;
             this.progressBar.Location = new System.Drawing.Point(0, 2);
             this.progressBar.Name = "progressBar";
             this.progressBar.Progress = 0;
-            this.progressBar.Size = new System.Drawing.Size(471, 19);
+            this.progressBar.Size = new System.Drawing.Size(471, 24);
             this.progressBar.Status = TestCentric.Gui.Views.ProgressBarStatus.Success;
             this.progressBar.TabIndex = 3;
             // 
@@ -901,7 +899,7 @@ namespace TestCentric.Gui.Views
             this.propertiesView.Location = new System.Drawing.Point(0, 0);
             this.propertiesView.Name = "propertiesView";
             this.propertiesView.Outcome = "";
-            //this.propertiesView.Output = "";
+            this.propertiesView.Output = "";
             this.propertiesView.PackageSettings = "";
             this.propertiesView.Properties = "";
             this.propertiesView.RunState = "";
@@ -1007,8 +1005,6 @@ namespace TestCentric.Gui.Views
             this.rightPanel.ResumeLayout(false);
             this.rightPanel.PerformLayout();
             this.progressPanel.ResumeLayout(false);
-            this.runSummaryDisplay.ResumeLayout(false);
-            this.runSummaryDisplay.PerformLayout();
             this.resultTabs.ResumeLayout(false);
             this.propertiesTab.ResumeLayout(false);
             this.errorTab.ResumeLayout(false);
