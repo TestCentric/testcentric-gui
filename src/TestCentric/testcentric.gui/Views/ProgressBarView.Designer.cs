@@ -1,4 +1,4 @@
-﻿namespace TestCentric.Gui.Views
+namespace TestCentric.Gui.Views
 {
     partial class ProgressBarView
     {
@@ -33,11 +33,12 @@
             // 
             // testProgressBar
             // 
-            this.testProgressBar.Status = TestCentric.Gui.Controls.ProgressBarStatus.Success;
             this.testProgressBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.testProgressBar.Location = new System.Drawing.Point(0, 0);
             this.testProgressBar.Name = "testProgressBar";
-            this.testProgressBar.Size = new System.Drawing.Size(239, 19);
+            this.testProgressBar.ShowPercentComplete = true;
+            this.testProgressBar.Size = new System.Drawing.Size(239, 24);
+            this.testProgressBar.Status = TestCentric.Gui.Controls.ProgressBarStatus.Success;
             this.testProgressBar.TabIndex = 0;
             // 
             // ProgressBarView
@@ -46,7 +47,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.testProgressBar);
             this.Name = "ProgressBarView";
-            this.Size = new System.Drawing.Size(239, 19);
+            this.Size = new System.Drawing.Size(239, 24);
             this.ResumeLayout(false);
 
         }

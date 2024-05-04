@@ -1,8 +1,9 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -41,6 +42,7 @@ namespace TestCentric.Gui.Controls
         #region Properties
 
         private ProgressBarStatus _status = ProgressBarStatus.Success;
+        [Browsable(false)]
         public ProgressBarStatus Status
         {
             get { return _status; }
@@ -55,6 +57,9 @@ namespace TestCentric.Gui.Controls
             }
         }
 
+        [Browsable(true), Category("Appearance")]
+        public bool ShowPercentComplete { get; set; }
+
         #endregion
 
         #region Methods
@@ -68,6 +73,16 @@ namespace TestCentric.Gui.Controls
             rec.Inflate(-1, -1);
             rec.Width = (int)(rec.Width * ((double)Value / Maximum));
             e.Graphics.FillRectangle(_brush, rec); //2, 2, rec.Width, rec.Height);
+
+            int percentComplete = Value * 100 / Maximum;
+            if (ShowPercentComplete && percentComplete > 0)
+            {
+                string text = $"{(int)percentComplete}%";
+                float fontSize = ClientRectangle.Height / 2;
+                Font font = new Font( FontFamily.GenericMonospace, fontSize, FontStyle.Bold);
+                int textWidth = e.Graphics.MeasureString(text, font).ToSize().Width;
+                e.Graphics.DrawString(text, font, Brushes.Black, new Point((rec.Width - textWidth)/2, 2));
+            }
         }
 
         private void CreateNewBrush()
