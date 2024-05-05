@@ -12,6 +12,7 @@ using System.Xml.Serialization;
 using System.Xml.Schema;
 using System.Xml;
 using System.Xml.Linq;
+using TestCentric.Gui.Controls;
 
 namespace TestCentric.Gui
 {
@@ -78,31 +79,34 @@ namespace TestCentric.Gui
         {
             ShowCheckBoxes = treeView.CheckBoxes;
 
-            foreach (TreeNode treeNode in treeView.Nodes)
-                ProcessTreeNode(treeNode, this.Nodes);
+            treeView.InvokeIfRequired(() =>
+            {
+                foreach (TreeNode treeNode in treeView.Nodes)
+                    ProcessTreeNode(treeNode, this.Nodes);
+            });
 
             return this;
-        }
 
-        private void ProcessTreeNode(TreeNode treeNode, List<VisualTreeNode> visualNodes)
-        {
-            bool isSelectedNode = treeNode == treeNode.TreeView.SelectedNode;
-            bool isTopNode = treeNode == treeNode.TreeView.TopNode;
-
-            var visualNode = new VisualTreeNode()
+            void ProcessTreeNode(TreeNode treeNode, List<VisualTreeNode> visualNodes)
             {
-                Name = treeNode.Text,
-                Expanded = treeNode.IsExpanded,
-                Checked = treeNode.Checked,
-                Selected = isSelectedNode,
-                IsTopNode = isTopNode
-            };
+                bool isSelectedNode = treeNode == treeNode.TreeView.SelectedNode;
+                bool isTopNode = treeNode == treeNode.TreeView.TopNode;
 
-            if (treeNode.IsExpanded || treeNode.Checked || isSelectedNode || isTopNode)
-                RecordVisualNode(visualNode, visualNodes);
+                var visualNode = new VisualTreeNode()
+                {
+                    Name = treeNode.Text,
+                    Expanded = treeNode.IsExpanded,
+                    Checked = treeNode.Checked,
+                    Selected = isSelectedNode,
+                    IsTopNode = isTopNode
+                };
 
-            foreach (TreeNode childNode in treeNode.Nodes)
-                ProcessTreeNode(childNode, visualNode.Nodes);
+                if (treeNode.IsExpanded || treeNode.Checked || isSelectedNode || isTopNode)
+                    RecordVisualNode(visualNode, visualNodes);
+
+                foreach (TreeNode childNode in treeNode.Nodes)
+                    ProcessTreeNode(childNode, visualNode.Nodes);
+            }
         }
 
         private void RecordVisualNode(VisualTreeNode visualNode, List<VisualTreeNode> visualNodes)

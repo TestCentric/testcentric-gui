@@ -102,7 +102,7 @@ namespace TestCentric.Gui.Presenters
                 _view.TestPackageSubView.PackageSettings = sb.ToString();
             }
                 
-            _view.TestPackageSubView.Visible = visible;
+            _view.TestPackageSubView.InvokeIfRequired(() => _view.TestPackageSubView.Visible = visible);
         }
 
         private void InitializeTestPropertiesSubView(TestNode testNode)
@@ -131,7 +131,7 @@ namespace TestCentric.Gui.Presenters
                 _view.Assertions = GetAssertionResults(resultNode);
             }
 
-            _view.TestResultSubView.Visible = visible;
+            _view.TestResultSubView.InvokeIfRequired(() => _view.TestResultSubView.Visible = visible);
         }
 
         private void InitializeTestOutputSubView(TestNode testNode)
@@ -142,7 +142,7 @@ namespace TestCentric.Gui.Presenters
             if (visible)
                 _view.Output = resultNode.Xml.SelectSingleNode("output")?.InnerText;
 
-            _view.TestOutputSubView.Visible = visible;
+            _view.TestOutputSubView.InvokeIfRequired(() => _view.TestOutputSubView.Visible = visible);
         }
 
         private void AdjustSubViewHeights()
@@ -169,7 +169,7 @@ namespace TestCentric.Gui.Presenters
                 {
                     int iCanUse = Math.Min(excessSpace, subView.FullHeight - subView.MinimumSize.Height);
                    
-                    subView.Height = subView.MinimumSize.Height + iCanUse;
+                    subView.InvokeIfRequired(() => subView.Height = subView.MinimumSize.Height + iCanUse);
                     excessSpace -= iCanUse;
                 }
             }
