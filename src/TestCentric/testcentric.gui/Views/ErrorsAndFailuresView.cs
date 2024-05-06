@@ -16,7 +16,7 @@ namespace TestCentric.Gui.Views
     /// <summary>
     /// Summary description for ErrorDisplay.
     /// </summary>
-    public class ErrorsAndFailuresView : UserControlView, IErrorsAndFailuresView
+    public partial class ErrorsAndFailuresView : UserControlView, IErrorsAndFailuresView
     {
         static Logger log = InternalTrace.GetLogger("ErrorsAndFailureView");
 
@@ -26,16 +26,6 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.Timer hoverTimer;
         TipWindow tipWindow;
 
-        private System.Windows.Forms.ListBox detailList;
-        public StackTraceDisplay stackTraceDisplay;
-        public ErrorBrowser errorBrowser;
-        private SourceCodeDisplay sourceCode;
-        public System.Windows.Forms.Splitter tabSplitter;
-        private System.Windows.Forms.ContextMenuStrip detailListContextMenuStrip;
-        private System.Windows.Forms.ToolStripMenuItem copyDetailMenuItem;
-        private Label noErrorsMessage;
-        private System.ComponentModel.IContainer components;
-
         #region Construction and Disposal
 
         public ErrorsAndFailuresView()
@@ -44,7 +34,6 @@ namespace TestCentric.Gui.Views
             InitializeComponent();
 
             sourceCode = new SourceCodeDisplay();
-
             errorBrowser.RegisterDisplay(sourceCode);
             errorBrowser.RegisterDisplay(stackTraceDisplay);
 
@@ -64,126 +53,6 @@ namespace TestCentric.Gui.Views
             };
         }
 
-        /// <summary> 
-        /// Clean up any resources being used.
-        /// </summary>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (components != null)
-                {
-                    components.Dispose();
-                }
-            }
-            base.Dispose(disposing);
-        }
-
-        #endregion
-
-        #region Component Designer generated code
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
-            this.components = new System.ComponentModel.Container();
-            this.noErrorsMessage = new System.Windows.Forms.Label();
-            this.detailList = new System.Windows.Forms.ListBox();
-            this.tabSplitter = new System.Windows.Forms.Splitter();
-            this.errorBrowser = new NUnit.UiException.Controls.ErrorBrowser();
-            this.stackTraceDisplay = new NUnit.UiException.Controls.StackTraceDisplay();
-            this.detailListContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.copyDetailMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.detailListContextMenuStrip.SuspendLayout();
-            this.SuspendLayout();
-            // 
-            // noErrorsMessage
-            // 
-            this.noErrorsMessage.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.noErrorsMessage.AutoSize = true;
-            this.noErrorsMessage.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.noErrorsMessage.Location = new System.Drawing.Point(120, 45);
-            this.noErrorsMessage.Name = "noErrorsMessage";
-            this.noErrorsMessage.Size = new System.Drawing.Size(229, 20);
-            this.noErrorsMessage.TabIndex = 1;
-            this.noErrorsMessage.Text = "No Errors, Failures or Warnings";
-            // 
-            // detailList
-            // 
-            this.detailList.Dock = System.Windows.Forms.DockStyle.Top;
-            this.detailList.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.detailList.Font = new System.Drawing.Font("Courier New", 8F);
-            this.detailList.HorizontalScrollbar = true;
-            this.detailList.Location = new System.Drawing.Point(0, 0);
-            this.detailList.Name = "detailList";
-            this.detailList.ScrollAlwaysVisible = true;
-            this.detailList.Size = new System.Drawing.Size(496, 128);
-            this.detailList.TabIndex = 1;
-            this.detailList.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.detailList_DrawItem);
-            this.detailList.MeasureItem += new System.Windows.Forms.MeasureItemEventHandler(this.detailList_MeasureItem);
-            this.detailList.SelectedIndexChanged += new System.EventHandler(this.detailList_SelectedIndexChanged);
-            this.detailList.MouseLeave += new System.EventHandler(this.detailList_MouseLeave);
-            this.detailList.MouseHover += new System.EventHandler(this.OnMouseHover);
-            this.detailList.MouseMove += new System.Windows.Forms.MouseEventHandler(this.detailList_MouseMove);
-            // 
-            // tabSplitter
-            // 
-            this.tabSplitter.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tabSplitter.Location = new System.Drawing.Point(0, 128);
-            this.tabSplitter.MinSize = 100;
-            this.tabSplitter.Name = "tabSplitter";
-            this.tabSplitter.Size = new System.Drawing.Size(496, 9);
-            this.tabSplitter.TabIndex = 3;
-            this.tabSplitter.TabStop = false;
-            this.tabSplitter.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.tabSplitter_SplitterMoved);
-            // 
-            // errorBrowser
-            // 
-            this.errorBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.errorBrowser.Location = new System.Drawing.Point(0, 137);
-            this.errorBrowser.Name = "errorBrowser";
-            this.errorBrowser.SelectedDisplay = null;
-            this.errorBrowser.Size = new System.Drawing.Size(496, 151);
-            this.errorBrowser.StackTraceSource = null;
-            this.errorBrowser.TabIndex = 4;
-            // 
-            // stackTraceDisplay
-            // 
-            this.stackTraceDisplay.Font = new System.Drawing.Font("Courier New", 8F);
-            this.stackTraceDisplay.Location = new System.Drawing.Point(0, 0);
-            this.stackTraceDisplay.Name = "stackTraceDisplay";
-            this.stackTraceDisplay.Size = new System.Drawing.Size(150, 150);
-            this.stackTraceDisplay.TabIndex = 0;
-            // 
-            // detailListContextMenuStrip
-            // 
-            this.detailListContextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.copyDetailMenuItem});
-            this.detailListContextMenuStrip.Name = "detailListContextMenuStrip";
-            this.detailListContextMenuStrip.Size = new System.Drawing.Size(103, 26);
-            // 
-            // copyDetailMenuItem
-            // 
-            this.copyDetailMenuItem.Name = "copyDetailMenuItem";
-            this.copyDetailMenuItem.Size = new System.Drawing.Size(102, 22);
-            this.copyDetailMenuItem.Text = "Copy";
-            this.copyDetailMenuItem.Click += new System.EventHandler(this.copyDetailMenuItem_Click);
-            // 
-            // ErrorsAndFailuresView
-            // 
-            this.Controls.Add(this.noErrorsMessage);
-            this.Controls.Add(this.errorBrowser);
-            this.Controls.Add(this.tabSplitter);
-            this.Controls.Add(this.detailList);
-            this.Name = "ErrorsAndFailuresView";
-            this.Size = new System.Drawing.Size(496, 288);
-            this.detailListContextMenuStrip.ResumeLayout(false);
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
-        }
         #endregion
 
         #region IErrorsAndFailuresView Members
@@ -192,6 +61,12 @@ namespace TestCentric.Gui.Views
         public event EventHandler SourceCodeSplitterDistanceChanged;
         public event EventHandler SourceCodeSplitOrientationChanged;
         public event EventHandler SourceCodeDisplayChanged;
+
+        public string Header
+        {
+            get { return header.Text; }
+            set { InvokeIfRequired(() => header.Text = value); }
+        }
 
         public bool EnableToolTips { get; set; }
 
@@ -276,12 +151,12 @@ namespace TestCentric.Gui.Views
             });
         }
 
-        public void AddResult(string testName, string message, string stackTrace)
+        public void AddResult(string status, string testName, string message, string stackTrace)
         {
             InvokeIfRequired(() =>
             {
                 noErrorsMessage.Hide();
-                InsertTestResultItem(new TestResultItem(testName, message, stackTrace));
+                InsertTestResultItem(new TestResultItem(status, testName, message, stackTrace));
             });
         }
 

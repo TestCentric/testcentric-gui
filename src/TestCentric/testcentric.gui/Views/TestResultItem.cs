@@ -14,12 +14,14 @@ namespace TestCentric.Gui.Views
     /// </summary>
     public class TestResultItem
     {
+        private string _status;
         private string _testName;
         private string _message;
         private string _rawStackTrace;
 
-        public TestResultItem(string testName, string message, string stackTrace)
+        public TestResultItem(string status, string testName, string message, string stackTrace)
         {
+            this._status = status;
             this._testName = testName;
             this._message = message;
             this._rawStackTrace = stackTrace;
@@ -28,14 +30,14 @@ namespace TestCentric.Gui.Views
         public override string ToString()
         {
             if (_message?.Length > 64000)
-                return string.Format("{0}:{1}{2}", _testName, Environment.NewLine, _message.Substring(0, 64000));
+                return string.Format("{0}: {1}{2}{3}", _status, _testName, Environment.NewLine, _message.Substring(0, 64000));
 
             return GetMessage();
         }
 
         public string GetMessage()
         {
-            return String.Format("{0}:{1}{2}", _testName, Environment.NewLine, _message);
+            return String.Format("{0}: {1}{2}{3}", _status, _testName, Environment.NewLine, _message);
         }
 
         public string FilteredStackTrace

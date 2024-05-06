@@ -15,7 +15,7 @@ namespace TestCentric.Gui.Views
         [TestCase(null, "stack trace string")]
         public void ToStringTest(string message, string stackTrace)
         {
-            var item = new TestResultItem("dummy test name", message, stackTrace);
+            var item = new TestResultItem("STATUS", "dummy test name", message, stackTrace);
             Assert.IsNotNull(item.ToString());
         }
     }

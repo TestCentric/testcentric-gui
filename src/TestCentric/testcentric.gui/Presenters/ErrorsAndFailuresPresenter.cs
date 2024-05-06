@@ -9,6 +9,7 @@ using System.Windows.Forms;
 namespace TestCentric.Gui.Presenters
 {
     using System.Drawing.Text;
+    using System.Xml;
     using Model;
     using Model.Settings;
     using Views;
@@ -66,6 +67,7 @@ namespace TestCentric.Gui.Presenters
                 var testNode = e.TestItem as TestNode;
                 _selectedResult = testNode == null ? null : _model.GetResultForTest(testNode.Id);
 
+                _view.Header = e.TestItem.Name;
                 UpdateDisplay();
             };
 
@@ -115,21 +117,48 @@ namespace TestCentric.Gui.Presenters
 
             if (_selectedResult != null &&
                 (_selectedResult.Status == TestStatus.Failed || _selectedResult.Status == TestStatus.Warning) &&
-                _selectedResult.Site != FailureSite.Parent && _selectedResult.Site != FailureSite.Child)
+                _selectedResult.Site != FailureSite.Parent)
             {
-                var testName = _selectedResult.FullName;
-                var message = _selectedResult.Message;
-                var stackTrace = _selectedResult.StackTrace;
+                string status = _selectedResult.Outcome.Label;
+                if (string.IsNullOrEmpty(status))
+                    status = _selectedResult.Status.ToString();
+                string testName = _selectedResult.FullName;
 
                 if (_selectedResult.IsSuite && _selectedResult.Site == FailureSite.SetUp)
                     testName += " (TestFixtureSetUp)";
 
                 if (_selectedResult.Assertions.Count > 0)
                     foreach (var assertion in _selectedResult.Assertions)
-                        _view.AddResult(testName, assertion.Message, assertion.StackTrace);
+                        AddResult(testName, assertion);
                 else
-                    _view.AddResult(testName, message, stackTrace);
+                    AddResult(_selectedResult);
             }
+        }
+
+        private void AddResult(string testName, AssertionResult assertion)
+        {
+            string status = assertion.Status;
+            if (string.IsNullOrEmpty(status))
+                status = GetStatusDisplay(_selectedResult);
+            _view.AddResult(status, testName, IndentMessage(assertion.Message), assertion.StackTrace);
+        }
+
+        private void AddResult(ResultNode resultNode)
+        {
+            _view.AddResult(GetStatusDisplay(resultNode), resultNode.FullName, IndentMessage(resultNode.Message), resultNode.StackTrace);
+        }
+
+        private string GetStatusDisplay(ResultNode resultNode)
+        {
+            string status = _selectedResult.Outcome.Label;
+            if (string.IsNullOrEmpty(status))
+                status = _selectedResult.Status.ToString();
+            return status;
+        }
+
+        private string IndentMessage(string message)
+        {
+            return message.StartsWith("  ") ? message : "  " + message;
         }
     }
 }

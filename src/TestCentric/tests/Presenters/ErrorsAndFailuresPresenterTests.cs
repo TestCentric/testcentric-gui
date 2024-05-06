@@ -225,9 +225,9 @@ namespace TestCentric.Gui.Presenters
         {
             // NOTE: We only verify that something was sent, not the content
             if (shouldDisplay)
-                _view.Received().AddResult(Arg.Compat.Any<string>(), Arg.Compat.Any<string>(), Arg.Compat.Any<string>());
+                _view.Received().AddResult(Arg.Compat.Any<string>(), Arg.Compat.Any<string>(), Arg.Compat.Any<string>(), Arg.Compat.Any<string>());
             else
-                _view.DidNotReceiveWithAnyArgs().AddResult(null, null, null);
+                _view.DidNotReceiveWithAnyArgs().AddResult(null, null, null, null);
         }
     }
 }
