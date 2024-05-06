@@ -158,7 +158,7 @@ namespace TestCentric.Gui.Presenters
 
         private string IndentMessage(string message)
         {
-            return message.StartsWith("  ") ? message : "  " + message;
+            return message == null ? null : message.StartsWith("  ") ? message : "  " + message;
         }
     }
 }
