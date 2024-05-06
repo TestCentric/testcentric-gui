@@ -8,6 +8,8 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Presenters
 {
+    using System.Drawing.Text;
+    using System.Xml;
     using Model;
     using Model.Settings;
     using Views;
@@ -17,6 +19,9 @@ namespace TestCentric.Gui.Presenters
         private IErrorsAndFailuresView _view;
         private ITestModel _model;
         private UserSettings _settings;
+
+        private ITestItem _selectedItem;
+        private ResultNode _selectedResult;
 
         public ErrorsAndFailuresPresenter(IErrorsAndFailuresView view, ITestModel model)
         {
@@ -44,9 +49,7 @@ namespace TestCentric.Gui.Presenters
             // Events that arise in the model
 
             _model.Events.TestLoaded += (e) => _view.Clear();
-
             _model.Events.TestUnloaded += (e) => _view.Clear();
-
             _model.Events.TestReloaded += (e) =>
             {
                 if (_settings.Gui.ClearResultsOnReload)
@@ -55,18 +58,17 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.RunStarting += (e) => _view.Clear();
 
-            _model.Events.TestFinished += (TestResultEventArgs e) =>
-            {
-                if (e.Result.Status == TestStatus.Failed || e.Result.Status == TestStatus.Warning)
-                    if (e.Result.Site != FailureSite.Parent)
-                        AddResult(e.Result);
-            };
+            _model.Events.TestFinished += (TestResultEventArgs e) => OnNewResult(e.Result);
+            _model.Events.SuiteFinished += (TestResultEventArgs e) => OnNewResult(e.Result);
 
-            _model.Events.SuiteFinished += (TestResultEventArgs e) =>
+            _model.Events.SelectedItemChanged += (TestItemEventArgs e) =>
             {
-                if (e.Result.Status == TestStatus.Failed || e.Result.Status == TestStatus.Warning)
-                    if (e.Result.Site != FailureSite.Parent && e.Result.Site != FailureSite.Child)
-                        AddResult(e.Result);
+                _selectedItem = e.TestItem;
+                var testNode = e.TestItem as TestNode;
+                _selectedResult = testNode == null ? null : _model.GetResultForTest(testNode.Id);
+
+                _view.Header = e.TestItem.Name;
+                UpdateDisplay();
             };
 
             _model.Settings.Changed += (object sender, SettingsEventArgs e) =>
@@ -100,20 +102,63 @@ namespace TestCentric.Gui.Presenters
             };
         }
 
-        private void AddResult(ResultNode result)
+        private void OnNewResult(ResultNode resultNode)
         {
-            var testName = result.FullName;
-            var message = result.Message;
-            var stackTrace = result.StackTrace;
+            if (resultNode.Name == _selectedItem?.Name)
+            {
+                _selectedResult = resultNode;
+                UpdateDisplay();
+            }
+        }
 
-            if (result.IsSuite && result.Site == FailureSite.SetUp)
-                testName += " (TestFixtureSetUp)";
+        private void UpdateDisplay()
+        {
+            _view.Clear();
 
-            if (result.Assertions.Count > 0)
-                foreach(var assertion in result.Assertions)
-                    _view.AddResult(testName, assertion.Message, assertion.StackTrace);
-            else
-                _view.AddResult(testName, message, stackTrace);
+            if (_selectedResult != null &&
+                (_selectedResult.Status == TestStatus.Failed || _selectedResult.Status == TestStatus.Warning) &&
+                _selectedResult.Site != FailureSite.Parent)
+            {
+                string status = _selectedResult.Outcome.Label;
+                if (string.IsNullOrEmpty(status))
+                    status = _selectedResult.Status.ToString();
+                string testName = _selectedResult.FullName;
+
+                if (_selectedResult.IsSuite && _selectedResult.Site == FailureSite.SetUp)
+                    testName += " (TestFixtureSetUp)";
+
+                if (_selectedResult.Assertions.Count > 0)
+                    foreach (var assertion in _selectedResult.Assertions)
+                        AddResult(testName, assertion);
+                else
+                    AddResult(_selectedResult);
+            }
+        }
+
+        private void AddResult(string testName, AssertionResult assertion)
+        {
+            string status = assertion.Status;
+            if (string.IsNullOrEmpty(status))
+                status = GetStatusDisplay(_selectedResult);
+            _view.AddResult(status, testName, IndentMessage(assertion.Message), assertion.StackTrace);
+        }
+
+        private void AddResult(ResultNode resultNode)
+        {
+            _view.AddResult(GetStatusDisplay(resultNode), resultNode.FullName, IndentMessage(resultNode.Message), resultNode.StackTrace);
+        }
+
+        private string GetStatusDisplay(ResultNode resultNode)
+        {
+            string status = _selectedResult.Outcome.Label;
+            if (string.IsNullOrEmpty(status))
+                status = _selectedResult.Status.ToString();
+            return status;
+        }
+
+        private string IndentMessage(string message)
+        {
+            return message == null ? null : message.StartsWith("  ") ? message : "  " + message;
         }
     }
 }

@@ -9,9 +9,13 @@
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<CheckEolTargetFramework>false</CheckEolTargetFramework>
 	</PropertyGroup>
-	
-	<ItemGroup>
+
+	<ItemGroup Condition="'$TargetFramework'=='net48'">
+		<PackageReference Include="NUnit" Version="4.1" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$TargetFramework'!='net48'">
 		<PackageReference Include="NUnit" Version="3.13.2" />
 	</ItemGroup>
-	
+
 </Project>

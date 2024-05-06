@@ -19,13 +19,13 @@ namespace TestCentric.Gui
 
         public ControlTester(Control control)
         {
-            this.control = control;
+            _control = control;
         }
 
         // TODO: Rewrite using generics when we move to .NET 2.0
 
         // The control we are testing
-        private Control control;
+        protected Control _control;
 
         // Various ways of looking at this control's controls
         private ControlCollection controls;
@@ -37,11 +37,11 @@ namespace TestCentric.Gui
         /// </summary>
         public Control Control
         {
-            get { return control; }
+            get { return _control; }
             set
             {
-                control = value;
-                controls = new ControlCollection(control.Controls);
+                _control = value;
+                controls = new ControlCollection(_control.Controls);
             }
         }
 
@@ -53,7 +53,7 @@ namespace TestCentric.Gui
         {
             bool gotName = false;
             System.Type gotType = null;
-            foreach (Control ctl in control.Controls)
+            foreach (Control ctl in _control.Controls)
             {
                 if (ctl.Name == expectedName)
                 {
@@ -69,7 +69,7 @@ namespace TestCentric.Gui
             if (gotName)
                 Assert.Fail("Expected control {0} to be a {1} but was {2}", expectedName, expectedType.Name, gotType.Name);
             else
-                Assert.Fail("{0} does not contain {1} control", control.Name, expectedName);
+                Assert.Fail("{0} does not contain {1} control", _control.Name, expectedName);
         }
 
         #endregion

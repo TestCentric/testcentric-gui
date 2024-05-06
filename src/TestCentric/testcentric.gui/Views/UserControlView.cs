@@ -3,6 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
+using System;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
@@ -18,6 +19,13 @@ namespace TestCentric.Gui.Views
                 BeginInvoke(_delegate);
             else
                 _delegate();
+        }
+
+        public T InvokeIfRequired<T>(Func<T> func)
+        {
+            return InvokeRequired
+                ? (T)Invoke(func)
+                : (T)func();
         }
     }
 }

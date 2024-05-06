@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -16,6 +16,8 @@ namespace TestCentric.Gui.Views
         event EventHandler SourceCodeSplitOrientationChanged;
         event EventHandler SourceCodeDisplayChanged;
 
+        string Header { get; set; }
+
         bool EnableToolTips { get; set; }
         Font Font { get; set; }
         int SplitterPosition { get; set; }
@@ -24,6 +26,6 @@ namespace TestCentric.Gui.Views
         bool SourceCodeDisplay { get; set; }
 
         void Clear();
-        void AddResult(string testName, string message, string stackTrace);
+        void AddResult(string status, string testName, string message, string stackTrace);
     }
 }

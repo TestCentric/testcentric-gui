@@ -93,7 +93,7 @@ namespace TestCentric.Gui.Presenters
         [TestCase("Failed", FailureSite.Parent, false)]
         [TestCase("Failed", FailureSite.SetUp, true)]
         [TestCase("Failed", FailureSite.TearDown, true)]
-        [TestCase("Failed", FailureSite.Child, false)]
+        [TestCase("Failed", FailureSite.Child, true)]
         [TestCase("Failed", FailureSite.Test, true)]
         [TestCase("Failed:Error", FailureSite.Test, true)]
         [TestCase("Failed:Invalid", FailureSite.Test, true)]
@@ -102,7 +102,7 @@ namespace TestCentric.Gui.Presenters
         [TestCase("Warning", FailureSite.SetUp, true)]
         [TestCase("Warning", FailureSite.TearDown, true)]
         [TestCase("Warning", FailureSite.Parent, false)]
-        [TestCase("Warning", FailureSite.Child, false)]
+        [TestCase("Warning", FailureSite.Child, true)]
         [TestCase("Skipped", FailureSite.Test, false)]
         [TestCase("Skipped:Ignored", FailureSite.Test, false)]
         [TestCase("Inconclusive", FailureSite.Test, false)]
@@ -225,9 +225,9 @@ namespace TestCentric.Gui.Presenters
         {
             // NOTE: We only verify that something was sent, not the content
             if (shouldDisplay)
-                _view.Received().AddResult(Arg.Compat.Any<string>(), Arg.Compat.Any<string>(), Arg.Compat.Any<string>());
+                _view.Received().AddResult(Arg.Compat.Any<string>(), Arg.Compat.Any<string>(), Arg.Compat.Any<string>(), Arg.Compat.Any<string>());
             else
-                _view.DidNotReceiveWithAnyArgs().AddResult(null, null, null);
+                _view.DidNotReceiveWithAnyArgs().AddResult(null, null, null, null);
         }
     }
 }

@@ -27,9 +27,13 @@ namespace TestCentric.Gui.Views
         [Test]
         public void ControlsExist()
         {
-            AssertControlExists("detailList", typeof(ListBox));
-            AssertControlExists("tabSplitter", typeof(Splitter));
-            AssertControlExists("errorBrowser", typeof(NUnit.UiException.Controls.ErrorBrowser));
+            AssertControlExists("header", typeof(Label));
+            AssertControlExists("panel1", typeof(Panel));
+
+            var panelTester = new ControlTester(_control.Controls["panel1"]);
+            panelTester.AssertControlExists("detailList", typeof(ListBox));
+            panelTester.AssertControlExists("tabSplitter", typeof(Splitter));
+            panelTester.AssertControlExists("errorBrowser", typeof(NUnit.UiException.Controls.ErrorBrowser));
         }
 
         //[Test]
