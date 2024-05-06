@@ -7,6 +7,6 @@
 		<CheckEolTargetFramework>false</CheckEolTargetFramework>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="NUnit" Version="3.13.2" />
+		<PackageReference Include="NUnit" Version="3.14.0" />
 	</ItemGroup>
 </Project>
