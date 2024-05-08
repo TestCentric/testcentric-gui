@@ -53,7 +53,7 @@ namespace TestCentric.Engine.Services
         {
             var current = _runtimeService.CurrentFramework;
             Console.WriteLine("Current framework is {0} ({1})", current.DisplayName, current.Id);
-            Assert.That(_runtimeService.IsAvailable(current.Id), "{0} not available", current);
+            Assert.That(_runtimeService.IsAvailable(current.Id), $"{current} not available");
         }
 
         [Test]

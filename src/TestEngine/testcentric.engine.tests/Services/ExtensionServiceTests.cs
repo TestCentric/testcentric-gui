@@ -63,7 +63,7 @@ namespace TestCentric.Engine.Services
             [ValueSource(nameof(KnownExtensionPointTypes))] Type type)
         {
             var ep = _serviceInterface.GetExtensionPoint(path);
-            Assert.NotNull(ep);
+            Assert.That(ep, Is.Not.Null);
             Assert.That(ep.Path, Is.EqualTo(path));
             Assert.That(ep.TypeName, Is.EqualTo(type.FullName));
         }

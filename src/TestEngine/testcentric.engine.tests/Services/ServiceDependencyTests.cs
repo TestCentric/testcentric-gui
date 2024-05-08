@@ -65,7 +65,7 @@ namespace TestCentric.Engine.Services
             _services.Add(new FakeService2());
             _services.ServiceManager.StartServices();
             var fake1 = _services.GetService<FakeService1>();
-            Assert.Null(fake1);
+            Assert.That(fake1, Is.Null);
             Assert.That(
                 () => _services.GetService<FakeService2>(),
                 Throws.TypeOf<InvalidOperationException>());

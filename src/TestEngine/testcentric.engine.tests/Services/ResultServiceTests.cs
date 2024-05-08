@@ -42,7 +42,7 @@ namespace TestCentric.Engine.Services
         {
             var writer = _resultService.GetResultWriter(format, args);
 
-            Assert.NotNull(writer);
+            Assert.That(writer, Is.Not.Null);
             return writer.GetType().Name;
         }
 

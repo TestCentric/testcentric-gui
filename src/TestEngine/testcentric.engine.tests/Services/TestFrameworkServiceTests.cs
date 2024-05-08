@@ -26,8 +26,8 @@ namespace TestCentric.Engine.Services
         public void GetFrameworkReferenced()
         {
             var framework = _service.GetFrameworkReference(THIS_ASSEMBLY);
-            Assert.NotNull(framework);
-            Assert.NotNull(framework.FrameworkReference);
+            Assert.That(framework, Is.Not.Null);
+            Assert.That(framework.FrameworkReference, Is.Not.Null);
             Assert.That(framework.Name, Is.EqualTo("nunit.framework"));
         }
 
@@ -35,7 +35,7 @@ namespace TestCentric.Engine.Services
         public void GetFrameworkReferenceReturnsNull()
         {
             var framework = _service.GetFrameworkReference(NON_TEST_ASSEMBLY);
-            Assert.Null(framework);
+            Assert.That(framework, Is.Null);
         }
     }
 }
