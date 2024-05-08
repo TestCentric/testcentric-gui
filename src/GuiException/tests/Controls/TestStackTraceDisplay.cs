@@ -24,9 +24,9 @@ namespace NUnit.UiException.Tests.Controls
         [Test]
         public void DefaultState()
         {
-            Assert.NotNull(_traceDisplay.PluginItem);
+            Assert.That(_traceDisplay.PluginItem, Is.Not.Null);
             Assert.That(_traceDisplay.PluginItem.Text, Is.EqualTo("Display actual stack trace"));
-            Assert.NotNull(_traceDisplay.OptionItems);
+            Assert.That(_traceDisplay.OptionItems, Is.Not.Null);
             Assert.That(_traceDisplay.OptionItems.Length, Is.EqualTo(1));
             Assert.That(_traceDisplay.OptionItems[0].Text, Is.EqualTo("Copy stack trace to clipboard"));
 

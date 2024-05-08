@@ -67,9 +67,9 @@ namespace TestCentric.Gui
             }
 
             if (gotName)
-                Assert.Fail("Expected control {0} to be a {1} but was {2}", expectedName, expectedType.Name, gotType.Name);
+                Assert.Fail($"Expected control {expectedName} to be a {expectedType.Name} but was {gotType.Name}");
             else
-                Assert.Fail("{0} does not contain {1} control", _control.Name, expectedName);
+                Assert.Fail($"{_control.Name} does not contain {expectedName} control");
         }
 
         #endregion

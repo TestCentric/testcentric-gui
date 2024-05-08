@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -57,7 +57,7 @@ namespace NUnit.UiException.Tests.CodeFormatters
         [Test]
         public void Empty()
         {
-            Assert.NotNull(FormattedCode.Empty);
+            Assert.That(FormattedCode.Empty, Is.Not.Null);
             Assert.That(FormattedCode.Empty, Is.EqualTo(new FormattedCode()));
         }
 
