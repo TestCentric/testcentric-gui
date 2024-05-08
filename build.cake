@@ -1,7 +1,7 @@
 // NOTE: This must match what is actually referenced by
 // the GUI test model project. Hopefully, this is a temporary
 // fix, which we can get rid of in the future.
-const string REF_ENGINE_VERSION = "2.0.0-dev00004";
+const string REF_ENGINE_VERSION = "2.0.0-dev00005";
 
 // Load the recipe
 #load nuget:?package=TestCentric.Cake.Recipe&version=1.2.0
@@ -74,10 +74,10 @@ var nugetPackage = new NuGetPackage(
 			new DirectoryContent("tools/Images/Tree/Visual Studio").WithFiles(
 				"Images/Tree/Visual Studio/Success.png", "Images/Tree/Visual Studio/Failure.png", "Images/Tree/Visual Studio/Ignored.png", "Images/Tree/Visual Studio/Inconclusive.png", "Images/Tree/Visual Studio/Skipped.png") )
 		.WithDependencies(
-			KnownExtensions.Net462PluggableAgent.NuGetPackage.LatestDevBuild,
-			KnownExtensions.Net60PluggableAgent.NuGetPackage.LatestDevBuild,
-			KnownExtensions.Net70PluggableAgent.NuGetPackage.LatestDevBuild,
-			KnownExtensions.Net80PluggableAgent.NuGetPackage.LatestDevBuild
+			KnownExtensions.Net462PluggableAgent.NuGetPackage.LatestRelease,
+			KnownExtensions.Net60PluggableAgent.NuGetPackage.LatestRelease,
+			KnownExtensions.Net70PluggableAgent.NuGetPackage.LatestRelease,
+			KnownExtensions.Net80PluggableAgent.NuGetPackage.LatestRelease
 		),
 	testRunner: new GuiSelfTester(BuildSettings.NuGetTestDirectory + "TestCentric.GuiRunner." + BuildSettings.PackageVersion + "/tools/testcentric.exe"),
 	checks: new PackageCheck[] {

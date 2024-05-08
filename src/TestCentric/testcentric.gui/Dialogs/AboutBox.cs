@@ -43,6 +43,10 @@ namespace TestCentric.Gui.Dialogs
             object[] objectAttrs = executingAssembly.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false);
             if (objectAttrs.Length > 0)
                 versionText = $"Version {((AssemblyInformationalVersionAttribute)objectAttrs[0]).InformationalVersion}";
+            // Truncate the informational version to get the version with optional pre-release label.
+            int plus = versionText.IndexOf('+');
+            if (plus > 0)
+                versionText = versionText.Substring(0, plus);
 
             objectAttrs = executingAssembly.GetCustomAttributes(typeof(AssemblyConfigurationAttribute), false);
             if (objectAttrs.Length > 0)
