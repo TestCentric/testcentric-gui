@@ -1,5 +1,5 @@
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.1.2
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.2.0
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -82,7 +82,7 @@ static ExpectedResult MockAssemblyExpectedResult(params string[] agentNames)
 
     return new ExpectedResult("Failed")
     {
-        Total = 36 * ncopies,
+        Total = 37 * ncopies,
         Passed = 23 * ncopies,
         Failed = 5 * ncopies,
         Warnings = 1 * ncopies,
@@ -213,10 +213,10 @@ BuildSettings.Packages.Add(new NuGetPackage(
 	},
 	tests: packageTests,
 	preloadedExtensions: new [] {
-        new PackageReference("TestCentric.Extension.Net462PluggableAgent", "2.4.2"),
-        new PackageReference("TestCentric.Extension.Net60PluggableAgent", "2.4.1"),
-        new PackageReference("TestCentric.Extension.Net70PluggableAgent", "2.4.1"),
-        new PackageReference("TestCentric.Extension.Net80PluggableAgent", "2.4.1") }
+        KnownExtensions.Net462PluggableAgent.NuGetPackage.LatestDevBuild,
+        KnownExtensions.Net60PluggableAgent.NuGetPackage.LatestDevBuild,
+        KnownExtensions.Net70PluggableAgent.NuGetPackage.LatestDevBuild,
+        KnownExtensions.Net80PluggableAgent.NuGetPackage.LatestDevBuild }
 ));
 
 //////////////////////////////////////////////////////////////////////
