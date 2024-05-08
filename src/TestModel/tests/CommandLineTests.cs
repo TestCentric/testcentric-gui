@@ -25,7 +25,7 @@ namespace TestCentric.Gui.Tests
             for (int i = 0; i < files.Length; i++)
                 Assert.That(options.InputFiles[i], Is.EqualTo(files[i]));
 
-            Assert.True(options.Validate());
+            Assert.That(options.Validate(), Is.True);
         }
 
         [TestCase("NoLoad", false)]
@@ -115,14 +115,14 @@ namespace TestCentric.Gui.Tests
         public void InvalidOptionsAreDetected(string option)
         {
             var options = new CommandLineOptions(option);
-            Assert.IsFalse(options.Validate());
+            Assert.That(options.Validate(), Is.False);
             Assert.That(options.ErrorMessages.Count, Is.EqualTo(1));
         }
 
         private static PropertyInfo GetPropertyInfo(string propertyName)
         {
             PropertyInfo property = typeof(CommandLineOptions).GetProperty(propertyName);
-            Assert.IsNotNull(property, "The property '{0}' is not defined", propertyName);
+            Assert.That(property, Is.Not.Null, $"The property '{propertyName}' is not defined");
             return property;
         }
     }

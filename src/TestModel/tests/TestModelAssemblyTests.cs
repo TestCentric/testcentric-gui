@@ -20,7 +20,7 @@ namespace TestCentric.Gui.Model
         public void CreateTestModel()
         {
             var engine = TestEngineActivator.CreateInstance();
-            Assert.NotNull(engine, "Unable to create engine instance for testing");
+            Assert.That(engine, Is.Not.Null, "Unable to create engine instance for testing");
 
             _model = new TestModel(engine);
             var mockAssemblyPath = Path.Combine(TestContext.CurrentContext.TestDirectory, MOCK_ASSEMBLY);
@@ -38,8 +38,8 @@ namespace TestCentric.Gui.Model
         public void CheckStateAfterLoading()
         {
             Assert.That(_model.HasTests, "HasTests");
-            Assert.NotNull(_model.LoadedTests, "Tests");
-            Assert.False(_model.HasResults, "HasResults");
+            Assert.That(_model.LoadedTests, Is.Not.Null, "Tests");
+            Assert.That(_model.HasResults, Is.False, "HasResults");
 
             var testRun = _model.LoadedTests;
             Assert.That(testRun.Xml.Name, Is.EqualTo("test-run"), "Expected test-run element");
@@ -57,10 +57,10 @@ namespace TestCentric.Gui.Model
         public void CheckGetTestById(string testName)
         {
             var testNode = FindTestByName(_model.LoadedTests, testName);
-            Assert.NotNull(testNode, $"Internal Test Error: Can't find {testName} in mock-assembly");
+            Assert.That(testNode, Is.Not.Null, $"Internal Test Error: Can't find {testName} in mock-assembly");
 
             var foundTest = _model.GetTestById(testNode.Id);
-            Assert.NotNull(foundTest, $"No test found with id {testNode.Id}");
+            Assert.That(foundTest, Is.Not.Null, $"No test found with id {testNode.Id}");
             Assert.That(foundTest.Name, Is.EqualTo(testName), "Found the test but name is wrong");
         }
 
@@ -85,11 +85,11 @@ namespace TestCentric.Gui.Model
             var package2 = _model.GetPackageForTest(_model.LoadedTests.Children[0].Id);
             var nopackage = _model.GetPackageForTest(_model.LoadedTests.Children[0].Children[0].Id);
 
-            Assert.NotNull(package1, "Package1");
-            Assert.NotNull(package2, "Package2");
-            Assert.Null(nopackage);
+            Assert.That(package1, Is.Not.Null, "Package1");
+            Assert.That(package2, Is.Not.Null, "Package2");
+            Assert.That(nopackage, Is.Null);
 
-            Assert.Null(package1.Name);
+            Assert.That(package1.Name, Is.Null);
             Assert.That(package1.SubPackages.Count, Is.EqualTo(1));
 
             Assert.That(package2.Name, Is.EqualTo(MOCK_ASSEMBLY));
@@ -104,7 +104,7 @@ namespace TestCentric.Gui.Model
             RunAllTestsAndWaitForCompletion();
 
             Assert.That(_model.HasTests, "HasTests");
-            Assert.NotNull(_model.LoadedTests, "Tests");
+            Assert.That(_model.LoadedTests, Is.Not.Null, "Tests");
             Assert.That(_model.HasResults, "HasResults");
         }
 
@@ -113,9 +113,9 @@ namespace TestCentric.Gui.Model
         {
             _model.UnloadTests();
 
-            Assert.False(_model.HasTests, "HasTests");
-            Assert.Null(_model.LoadedTests, "Tests");
-            Assert.False(_model.HasResults, "HasResults");
+            Assert.That(_model.HasTests, Is.False, "HasTests");
+            Assert.That(_model.LoadedTests, Is.Null, "Tests");
+            Assert.That(_model.HasResults, Is.False, "HasResults");
         }
 
         [Test]
@@ -124,8 +124,8 @@ namespace TestCentric.Gui.Model
             _model.ReloadTests();
 
             Assert.That(_model.HasTests, "HasTests");
-            Assert.NotNull(_model.LoadedTests, "Tests");
-            Assert.False(_model.HasResults, "HasResults");
+            Assert.That(_model.LoadedTests, Is.Not.Null, "Tests");
+            Assert.That(_model.HasResults, Is.False, "HasResults");
         }
 
         [Test]

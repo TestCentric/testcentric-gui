@@ -8,14 +8,43 @@
 		<OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<CheckEolTargetFramework>false</CheckEolTargetFramework>
+		<NuGetAudit>false</NuGetAudit>
 	</PropertyGroup>
 
-	<ItemGroup Condition="'$TargetFramework'=='net48'">
-		<PackageReference Include="NUnit" Version="4.1" />
+	<ItemGroup Condition="'$(TargetFramework)' == 'net35'">
+		<PackageReference Include="NUnit" Version="3.14.0" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$TargetFramework'!='net48'">
+	<ItemGroup Condition="'$(TargetFramework)' == 'net462'">
+		<PackageReference Include="NUnit" Version="4.1.0" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+		<PackageReference Include="NUnit" Version="4.1.0" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
 		<PackageReference Include="NUnit" Version="3.14.0" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
+		<PackageReference Include="NUnit" Version="3.14.0" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
+		<PackageReference Include="NUnit" Version="3.14.0" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+		<PackageReference Include="NUnit" Version="4.1.0" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
+		<PackageReference Include="NUnit" Version="4.1.0" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+		<PackageReference Include="NUnit" Version="4.1.0" />
 	</ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -69,8 +69,8 @@ namespace NUnit.UiException.Tests.Controls
             _panel.Toolbar = _aToolbar;
 
             Assert.That(_panel.Toolbar, Is.EqualTo(_aToolbar));
-            Assert.True(_panel.Controls.Contains(_aToolbar));
-            Assert.False(_panel.Controls.Contains(prev));
+            Assert.That(_panel.Controls.Contains(_aToolbar));
+            Assert.That(_panel.Controls.Contains(prev), Is.False);
             CheckLayout(_panel.Toolbar, 0, 0, 200, ErrorPanelLayout.TOOLBAR_HEIGHT);
 
             // restoring default state
@@ -78,8 +78,8 @@ namespace NUnit.UiException.Tests.Controls
             _panel.Toolbar = null;
 
             Assert.That(_panel.Toolbar, Is.EqualTo(prev));
-            Assert.False(_panel.Controls.Contains(_aToolbar));
-            Assert.True(_panel.Controls.Contains(prev));
+            Assert.That(_panel.Controls.Contains(_aToolbar), Is.False);
+            Assert.That(_panel.Controls.Contains(prev));
             CheckLayout(_panel.Toolbar, 0, 0, 200, ErrorPanelLayout.TOOLBAR_HEIGHT);
 
             return;
@@ -96,8 +96,8 @@ namespace NUnit.UiException.Tests.Controls
             _panel.Content = _aContent;
 
             Assert.That(_panel.Content, Is.EqualTo(_aContent));
-            Assert.True(_panel.Controls.Contains(_aContent));
-            Assert.False(_panel.Controls.Contains(prev));
+            Assert.That(_panel.Controls.Contains(_aContent));
+            Assert.That(_panel.Controls.Contains(prev), Is.False);
             CheckLayout(_panel.Content, 0, ErrorPanelLayout.TOOLBAR_HEIGHT, 200,
                 200 - ErrorPanelLayout.TOOLBAR_HEIGHT);
 
@@ -106,8 +106,8 @@ namespace NUnit.UiException.Tests.Controls
             _panel.Content = null;
 
             Assert.That(_panel.Content, Is.EqualTo(prev));
-            Assert.False(_panel.Controls.Contains(_aContent));
-            Assert.True(_panel.Controls.Contains(prev));
+            Assert.That(_panel.Controls.Contains(_aContent), Is.False);
+            Assert.That(_panel.Controls.Contains(prev));
             CheckLayout(_panel.Content, 0, ErrorPanelLayout.TOOLBAR_HEIGHT, 200,
                 200 - ErrorPanelLayout.TOOLBAR_HEIGHT);
 

@@ -29,7 +29,7 @@ namespace TestCentric.Gui.Views
         {
             var element = prop.GetValue(View, new object[0]) as IViewElement;
 
-            Assert.NotNull(element, $"Element {prop.Name} was not initialized");
+            Assert.That(element, Is.Not.Null, $"Element {prop.Name} was not initialized");
         }
 
         static protected IEnumerable<PropertyInfo> GetViewElementProperties()
