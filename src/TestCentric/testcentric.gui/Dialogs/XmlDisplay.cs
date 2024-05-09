@@ -15,6 +15,9 @@ namespace TestCentric.Gui.Dialogs
     public partial class XmlDisplay : PinnableDisplay
     {
         private ITestModel _model;
+
+        private TreeNode _treeNode;
+        private TestNode _testNode;
         
         public XmlDisplay(ITestModel model)
         {
@@ -43,16 +46,23 @@ namespace TestCentric.Gui.Dialogs
             if (treeNode == null)
                 throw new ArgumentNullException(nameof(treeNode));
 
-            var testNode = treeNode.Tag as TestNode;
+            _treeNode = treeNode;
+            _testNode = treeNode.Tag as TestNode;
 
             SuspendLayout();
-            TestName = testNode.Name;
-            var fullXml = GetFullXml(testNode);
+            TestName = _testNode.Name;
+            var fullXml = GetFullXml(_testNode);
             xmlTextBox.Rtf = new Xml2RtfConverter(2).Convert(fullXml);
 
             ResumeLayout();
 
             Show();
+        }
+
+        public void OnTestFinished(ResultNode result)
+        {
+            if (result.Id == _testNode.Id)
+                Invoke(new Action(() => Display(_treeNode)));
         }
 
         private XmlNode GetFullXml(TestNode testNode)
