@@ -272,6 +272,7 @@ namespace TestCentric.Gui.Presenters
             Strategy.OnTestFinished(args.Result);
 
             _propertiesDisplay?.OnTestFinished(args.Result);
+            _xmlDisplay?.OnTestFinished(args.Result);
         }
 
         private bool TryLoadVisualState(out VisualState visualState)
