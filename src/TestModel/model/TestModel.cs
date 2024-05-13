@@ -95,34 +95,7 @@ namespace TestCentric.Gui.Model
             if (options.WorkDirectory != null)
                 testEngine.WorkDirectory = options.WorkDirectory;
 
-            var model = new TestModel(testEngine, options);
-
-            model.PackageOverrides.Add(EnginePackageSettings.InternalTraceLevel, testEngine.InternalTraceLevel.ToString());
-
-            if (options.WorkDirectory != null)
-                model.PackageOverrides.Add(EnginePackageSettings.WorkDirectory, options.WorkDirectory);
-            if (options.MaxAgents >= 0)
-                model.PackageOverrides.Add(EnginePackageSettings.MaxAgents, options.MaxAgents);
-            if (options.RunAsX86)
-                model.PackageOverrides.Add(EnginePackageSettings.RunAsX86, true);
-            if (options.DebugAgent)
-                model.PackageOverrides.Add(EnginePackageSettings.DebugAgent, true);
-            if (options.SimulateUnloadError)
-                model.PackageOverrides.Add(EnginePackageSettings.SimulateUnloadError, true);
-            if (options.SimulateUnloadTimeout)
-                model.PackageOverrides.Add(EnginePackageSettings.SimulateUnloadTimeout, true);
-            if (options.TestParameters.Count > 0)
-            {
-                string[] parms = new string[options.TestParameters.Count];
-                int index = 0;
-                foreach (string key in options.TestParameters.Keys)
-                    parms[index++] = $"{key}={options.TestParameters[key]}";
-
-                model.PackageOverrides.Add("TestParametersDictionary", options.TestParameters);
-                model.PackageOverrides.Add("TestParameters", string.Join(";", parms));
-            }
-
-            return model;
+            return new TestModel(testEngine, options);
         }
 
         #endregion
@@ -194,8 +167,6 @@ namespace TestCentric.Gui.Model
 
         public bool IsProjectLoaded => TestProject != null;
 
-        public IDictionary<string, object> PackageOverrides { get; } = new Dictionary<string, object>();
-
         public TestNode LoadedTests { get; private set; }
         public bool HasTests => LoadedTests != null;
 
@@ -260,13 +231,21 @@ namespace TestCentric.Gui.Model
 
         #region Methods
 
-        public void CreateNewProject(IList<string> filenames)
+        /// <summary>
+        /// Create a new unnamed project, assign it to our TestProject property and
+        /// load tests for the project. We return the project as well.
+        /// </summary>
+        /// <param name="filenames">The test files contained as subprojects of the new project.</param>
+        /// <returns>The newly created test project</returns>
+        public TestCentricProject CreateNewProject(IList<string> filenames)
         {
             if (IsProjectLoaded && HasTests)
                 UnloadTests();
 
             TestProject = new TestCentricProject(this, filenames);
             TestProject.LoadTests();
+
+            return TestProject;
         }
 
         public void OpenProject(string filename)

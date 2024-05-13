@@ -33,27 +33,28 @@ namespace TestCentric.Gui.Model
             Assert.That(_model.TestProject.TestFiles, Is.EqualTo(testFiles));
         }
 
+        // TODO: Remove? Use and test fluent methods?
         [TestCase(EnginePackageSettings.RequestedRuntimeFramework, "net-2.0")]
         [TestCase(EnginePackageSettings.MaxAgents, 8)]
         [TestCase(EnginePackageSettings.ShadowCopyFiles, false)]
         public void PackageReflectsPackageSettings(string key, object value)
         {
-            _model.PackageOverrides[key] = value;
-            _model.CreateNewProject(new[] { "my.dll" });
+            _model.CreateNewProject(new[] { "my.dll" }).AddSetting(key, value);
 
             Assert.That(_model.TestProject.Settings.ContainsKey(key));
             Assert.That(_model.TestProject.Settings[key], Is.EqualTo(value));
         }
 
+        // TODO: Remove? Use and test fluent methods?
         [Test]
         public void PackageReflectsTestParameters()
         {
-            var testParms = new Dictionary<string, string>();
-            testParms.Add("parm1", "value1");
-            testParms.Add("parm2", "value2");
-            _model.PackageOverrides.Add("TestParametersDictionary", testParms);
-
-            _model.CreateNewProject(new[] { "my.dll" });
+            var testParms = new Dictionary<string, string>
+            {
+                { "parm1", "value1" },
+                { "parm2", "value2" }
+            };
+            _model.CreateNewProject(new[] { "my.dll" }).AddSetting("TestParametersDictionary", testParms);
 
             Assert.That(_model.TestProject.Settings.ContainsKey("TestParametersDictionary"));
             var parms = _model.TestProject.Settings["TestParametersDictionary"] as IDictionary<string, string>;

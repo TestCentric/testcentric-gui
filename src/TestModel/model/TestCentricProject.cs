@@ -33,27 +33,44 @@ namespace TestCentric.Gui.Model
             TestFiles = filenames;
 
             var engineSettings = _model.Settings.Engine;
-
-            // We use AddSetting rather than just setting the value because
-            // it propagates the setting to all subprojects.
+            var options = model.Options;
 
             if (engineSettings.Agents > 0)
                 AddSetting(EnginePackageSettings.MaxAgents, engineSettings.Agents);
-
             if (engineSettings.SetPrincipalPolicy)
                 AddSetting(EnginePackageSettings.PrincipalPolicy, engineSettings.PrincipalPolicy);
-
-            //if (Options.InternalTraceLevel != null)
-            //    package.AddSetting(EnginePackageSettings.InternalTraceLevel, Options.InternalTraceLevel);
-
             AddSetting(EnginePackageSettings.ShadowCopyFiles, engineSettings.ShadowCopyFiles);
+
+            if (options != null) // Happens when we test
+            {
+                AddSetting(EnginePackageSettings.InternalTraceLevel, options.InternalTraceLevel ?? "Off");
+                if (options.WorkDirectory != null)
+                    AddSetting(EnginePackageSettings.WorkDirectory, options.WorkDirectory);
+                if (options.MaxAgents >= 0)
+                    Settings[EnginePackageSettings.MaxAgents] = options.MaxAgents;
+                if (options.RunAsX86)
+                    AddSetting(EnginePackageSettings.RunAsX86, true);
+                if (options.DebugAgent)
+                    AddSetting(EnginePackageSettings.DebugAgent, true);
+                if (options.SimulateUnloadError)
+                    AddSetting(EnginePackageSettings.SimulateUnloadError, true);
+                if (options.SimulateUnloadTimeout)
+                    AddSetting(EnginePackageSettings.SimulateUnloadTimeout, true);
+                if (options.TestParameters.Count > 0)
+                {
+                    string[] parms = new string[options.TestParameters.Count];
+                    int index = 0;
+                    foreach (string key in options.TestParameters.Keys)
+                        parms[index++] = $"{key}={options.TestParameters[key]}";
+
+                    AddSetting("TestParametersDictionary", options.TestParameters);
+                    AddSetting("TestParameters", string.Join(";", parms));
+                }
+            }
 
             foreach (var subpackage in SubPackages)
                 if (Path.GetExtension(subpackage.Name) == ".sln")
                     subpackage.AddSetting(EnginePackageSettings.SkipNonTestAssemblies, true);
-
-            foreach (var entry in _model.PackageOverrides)
-                AddSetting(entry.Key, entry.Value);
         }
 
         public void LoadTests()

@@ -262,9 +262,6 @@ namespace TestCentric.Gui.Presenters
                 _view.GuiLayout.SelectedItem = _guiLayout;
                 SetGuiLayout(_guiLayout);
 
-                var settings = _model.PackageOverrides;
-                if (_options.MaxAgents >= 0)
-                    _model.Settings.Engine.Agents = _options.MaxAgents;
                 _view.RunAsX86.Checked = _options.RunAsX86;
             };
 
@@ -402,8 +399,6 @@ namespace TestCentric.Gui.Presenters
                     var menuItem = new ToolStripMenuItem(menuText);
                     menuItem.Click += (sender, ea) =>
                     {
-                        // HACK: We are loading new files, cancel any runtime override
-                        _model.PackageOverrides.Remove(EnginePackageSettings.RequestedRuntimeFramework);
                         string path = ((ToolStripMenuItem)sender).Text.Substring(2);
                         _model.CreateNewProject(new[] { path });
                     };
@@ -609,9 +604,9 @@ namespace TestCentric.Gui.Presenters
                 dlg.Font = _settings.Gui.Font;
                 dlg.StartPosition = FormStartPosition.CenterParent;
 
-                if (_model.PackageOverrides.ContainsKey("TestParametersDictionary"))
+                if (_model.TestProject.Settings.ContainsKey("TestParametersDictionary"))
                 {
-                    var testParms = _model.PackageOverrides["TestParametersDictionary"] as IDictionary<string, string>;
+                    var testParms = _model.TestProject.Settings["TestParametersDictionary"] as IDictionary<string, string>;
                     foreach (string key in testParms.Keys)
                         dlg.Parameters.Add(key, testParms[key]);
                 }
@@ -633,11 +628,7 @@ namespace TestCentric.Gui.Presenters
         {
             var files = _view.DialogManager.SelectMultipleFiles("New Project", CreateOpenFileFilter());
             if (files.Count > 0)
-            {
-                // HACK: We are loading new files, cancel any runtime override
-                _model.PackageOverrides.Remove(EnginePackageSettings.RequestedRuntimeFramework);
                 _model.CreateNewProject(files);
-            }
         }
 
         private void OpenProject()
@@ -808,16 +799,17 @@ namespace TestCentric.Gui.Presenters
 
         private void ChangePackageSettingAndReload(string key, object setting)
         {
+            var settings = _model.TestProject.Settings;
             if (setting == null || setting as string == "DEFAULT")
-                _model.PackageOverrides.Remove(key);
+                settings.Remove(key);
             else
-                _model.PackageOverrides[key] = setting;
+                settings[key] = setting;
 
             // Even though the _model has a Reload method, we cannot use it because Reload
             // does not re-create the Engine.  Since we just changed a setting, we must
             // re-create the Engine by unloading/reloading the tests. We make a copy of
             // __model.TestFiles because the method does an unload before it loads.
-            _model.CreateNewProject(new List<string>(_model.TestProject.TestFiles));
+            _model.TestProject.LoadTests();
         }
 
         private void applyFont(Font font)

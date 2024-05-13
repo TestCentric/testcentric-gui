@@ -161,7 +161,6 @@ namespace TestCentric.Gui.Dialogs
 
             foreach(var entry in PackageSettingChanges)
             {
-                Model.PackageOverrides[entry.Key] = entry.Value;
                 Model.TestProject.AddSetting(entry.Key, entry.Value);
             }
         }
