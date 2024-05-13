@@ -114,10 +114,10 @@ var chocolateyPackage = new ChocolateyPackage(
 			new DirectoryContent("tools/Images/Tree/Visual Studio").WithFiles(
 				"Images/Tree/Visual Studio/Success.png", "Images/Tree/Visual Studio/Failure.png", "Images/Tree/Visual Studio/Ignored.png", "Images/Tree/Visual Studio/Inconclusive.png", "Images/Tree/Visual Studio/Skipped.png") )
 		.WithDependencies(
-			KnownExtensions.Net462PluggableAgent.ChocoPackage.LatestDevBuild,
-			KnownExtensions.Net60PluggableAgent.ChocoPackage.LatestDevBuild,
-			KnownExtensions.Net70PluggableAgent.ChocoPackage.LatestDevBuild,
-			KnownExtensions.Net80PluggableAgent.ChocoPackage.LatestDevBuild
+			KnownExtensions.Net462PluggableAgent.ChocoPackage.LatestRelease,
+			KnownExtensions.Net60PluggableAgent.ChocoPackage.LatestRelease,
+			KnownExtensions.Net70PluggableAgent.ChocoPackage.LatestRelease,
+			KnownExtensions.Net80PluggableAgent.ChocoPackage.LatestRelease
 		),
 	testRunner: new GuiSelfTester(BuildSettings.ChocolateyTestDirectory + "testcentric-gui." + BuildSettings.PackageVersion + "/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
