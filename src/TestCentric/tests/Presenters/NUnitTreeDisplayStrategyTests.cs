@@ -27,12 +27,14 @@ namespace TestCentric.Gui.Presenters.TestTree
             _model = Substitute.For<ITestModel>();
             _settings = new Fakes.UserSettings();
             _model.Settings.Returns(_settings);
-            _model.TestFiles.Returns(new List<string>());
 
             // We can't construct a TreeNodeCollection, so we fake it
             var nodes = new TreeNode().Nodes;
             nodes.Add(new TreeNode("test.dll"));
             _view.Nodes.Returns(nodes);
+
+            var project = new TestCentricProject(_model, "dummy.dll");
+            _model.TestProject.Returns(project);
 
             _strategy = GetDisplayStrategy();
         }

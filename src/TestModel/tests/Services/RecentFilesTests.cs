@@ -22,7 +22,7 @@ namespace TestCentric.Gui.Model.Services
         [SetUp]
         public void SetUp()
         {
-            _recentFiles = new RecentFiles(new SettingsStore(), "Testing.");
+            _recentFiles = new RecentFiles(new SettingsStore());
         }
 
         [Test]

@@ -5,7 +5,6 @@
 
 using NSubstitute;
 using NUnit.Framework;
-using TestCentric.Engine;
 
 namespace TestCentric.Gui.Presenters.Main
 {
@@ -22,20 +21,14 @@ namespace TestCentric.Gui.Presenters.Main
             _model.HasResults.Returns(true);
             _model.ResultSummary.Returns(new ResultSummary() { FailureCount = 1 });
             _model.IsTestRunning.Returns(false);
-            _model.TestPackage.Returns(new TestPackage(new[] { "dummy.dll" }));
 
             var resultNode = new ResultNode("<test-run id='XXX' result='Failed' />");
             FireRunFinishedEvent(resultNode);
         }
 
-#if NYI // Add after implementation of project or package saving
         [TestCase("NewProjectCommand", true)]
         [TestCase("OpenProjectCommand", true)]
-        [TestCase("SaveCommand", true)]
-        [TestCase("SaveAsCommand", true)
-#endif
-
-        [TestCase("OpenCommand", true)]
+        [TestCase("SaveProjectCommand", true)]
         [TestCase("CloseCommand", true)]
         [TestCase("AddTestFilesCommand", true)]
         [TestCase("ReloadTestsCommand", true)]

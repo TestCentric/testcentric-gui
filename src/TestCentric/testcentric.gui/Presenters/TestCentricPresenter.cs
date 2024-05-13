@@ -115,9 +115,9 @@ namespace TestCentric.Gui.Presenters
 
                 UpdateViewCommands();
 
-                _lastFilesLoaded = _model.TestFiles.ToArray();
-                if (_lastFilesLoaded.Length == 1)
-                    _view.SetTitleBar(_lastFilesLoaded.First());
+                _lastFilesLoaded = _model.TestProject.TestFiles.ToArray();
+
+                _view.Title = _model.TestProject?.FileName;
             };
 
             _model.Events.TestsUnloading += (TestEventArgse) =>
@@ -173,7 +173,7 @@ namespace TestCentric.Gui.Presenters
                 else
                 {
                     _model.UnloadTests();
-                    _model.LoadTests(_lastFilesLoaded);
+                    _model.CreateNewProject(_lastFilesLoaded);
                 }
             };
 
@@ -272,20 +272,20 @@ namespace TestCentric.Gui.Presenters
             {
                 Application.DoEvents();
 
-                // Load test specified on command line or
-                // the most recent one if options call for it
+                // Create an unnamed TestCentricProject and load test specified on command line
                 if (_options.InputFiles.Count != 0)
                 {
                     log.Debug($"Loading files from command-line: {string.Join(", ", _options.InputFiles.ToArray())}");
-                    LoadTests(_options.InputFiles);
+                    _model.CreateNewProject(_options.InputFiles);
                 }
                 else if (_settings.Gui.LoadLastProject && !_options.NoLoad)
                 {
+                    // Find the most recent file loaded, which still exists
                     foreach (string entry in _recentFiles.Entries)
                     {
                         if (entry != null && File.Exists(entry))
                         {
-                            LoadTests(entry);
+                            _model.CreateNewProject(new[] { entry });
                             break;
                         }
                     }
@@ -303,7 +303,7 @@ namespace TestCentric.Gui.Presenters
                 //}
 
                 // Run loaded test automatically if called for
-                if (_model.IsPackageLoaded && _options.RunAllTests)
+                if (_model.HasTests && _options.RunAllTests)
                 {
                     log.Debug("Running all tests");
                     _model.RunTests(_model.LoadedTests);
@@ -320,7 +320,7 @@ namespace TestCentric.Gui.Presenters
 
             _view.FormClosing += (s, e) =>
             {
-                if (_model.IsPackageLoaded)
+                if (_model.IsProjectLoaded)
                 {
                     if (_model.IsTestRunning)
                     {
@@ -344,10 +344,11 @@ namespace TestCentric.Gui.Presenters
 
             _view.FileMenu.Popup += () =>
             {
-                bool isPackageLoaded = _model.IsPackageLoaded;
+                bool isPackageLoaded = _model.IsProjectLoaded;
                 bool isTestRunning = _model.IsTestRunning;
 
-                _view.OpenCommand.Enabled = !isTestRunning;
+                _view.NewProjectCommand.Enabled = !isTestRunning;
+                _view.OpenProjectCommand.Enabled = !isTestRunning;
                 _view.CloseCommand.Enabled = isPackageLoaded && !isTestRunning;
 
                 _view.ReloadTestsCommand.Enabled = isPackageLoaded && !isTestRunning;
@@ -364,7 +365,10 @@ namespace TestCentric.Gui.Presenters
                 //}
             };
 
-            _view.OpenCommand.Execute += () => OpenProject();
+            _view.NewProjectCommand.Execute += () => NewProject();
+            _view.OpenProjectCommand.Execute += () => OpenProject();
+            _view.SaveProjectCommand.Execute += () => SaveProject();
+
             _view.CloseCommand.Execute += () => CloseProject();
             _view.AddTestFilesCommand.Execute += () => AddTestFiles();
             _view.ReloadTestsCommand.Execute += () => ReloadTests();
@@ -401,7 +405,7 @@ namespace TestCentric.Gui.Presenters
                         // HACK: We are loading new files, cancel any runtime override
                         _model.PackageOverrides.Remove(EnginePackageSettings.RequestedRuntimeFramework);
                         string path = ((ToolStripMenuItem)sender).Text.Substring(2);
-                        _model.LoadTests(new[] { path });
+                        _model.CreateNewProject(new[] { path });
                     };
                     menuItems.Add(menuItem);
                     if (num >= _settings.Gui.RecentProjects.MaxFiles) break;
@@ -623,27 +627,27 @@ namespace TestCentric.Gui.Presenters
 
         #region Public Methods
 
-        #region Open Methods
+        #region Project Management
 
-        private void OpenProject()
+        private void NewProject()
         {
-            var files = _view.DialogManager.SelectMultipleFiles("Open Project", CreateOpenFileFilter());
+            var files = _view.DialogManager.SelectMultipleFiles("New Project", CreateOpenFileFilter());
             if (files.Count > 0)
             {
                 // HACK: We are loading new files, cancel any runtime override
                 _model.PackageOverrides.Remove(EnginePackageSettings.RequestedRuntimeFramework);
-                LoadTests(files);
+                _model.CreateNewProject(files);
             }
         }
 
-        public void LoadTests(string testFileName)
+        private void OpenProject()
         {
-            LoadTests(new[] { testFileName });
+            _model.OpenProject("dummy");
         }
 
-        private void LoadTests(IList<string> testFileNames)
+        private void SaveProject()
         {
-            _model.LoadTests(testFileNames);
+            _model.SaveProject("dummy");
         }
 
         #endregion
@@ -671,10 +675,10 @@ namespace TestCentric.Gui.Presenters
 
             if (filesToAdd.Count > 0)
             {
-                var files = new List<string>(_model.TestFiles);
+                var files = new List<string>(_model.TestProject.TestFiles);
                 files.AddRange(filesToAdd);
 
-                _model.LoadTests(files);
+                _model.CreateNewProject(files);
             }
         }
 
@@ -753,7 +757,10 @@ namespace TestCentric.Gui.Presenters
 
             _view.RunSummaryButton.Enabled = testLoaded && !testRunning && hasResults;
 
-            _view.OpenCommand.Enabled = !testRunning & !testLoading;
+            _view.NewProjectCommand.Enabled = !testLoading && !testRunning;
+            _view.OpenProjectCommand.Enabled = !testLoading && !testRunning;
+            _view.SaveProjectCommand.Enabled = testLoaded && !testRunning;
+
             _view.CloseCommand.Enabled = testLoaded & !testRunning;
             _view.AddTestFilesCommand.Enabled = testLoaded && !testRunning;
             _view.ReloadTestsCommand.Enabled = testLoaded && !testRunning;
@@ -810,7 +817,7 @@ namespace TestCentric.Gui.Presenters
             // does not re-create the Engine.  Since we just changed a setting, we must
             // re-create the Engine by unloading/reloading the tests. We make a copy of
             // __model.TestFiles because the method does an unload before it loads.
-            LoadTests(new List<string>(_model.TestFiles));
+            _model.CreateNewProject(new List<string>(_model.TestProject.TestFiles));
         }
 
         private void applyFont(Font font)

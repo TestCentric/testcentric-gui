@@ -5,6 +5,7 @@
 		<OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<CheckEolTargetFramework>false</CheckEolTargetFramework>
+		<NugetAudit>false</NugetAudit>
 	</PropertyGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net35'">

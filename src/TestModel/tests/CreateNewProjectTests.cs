@@ -13,7 +13,7 @@ using TestCentric.Engine;
 
 namespace TestCentric.Gui.Model
 {
-    public class MakeTestPackageTests
+    public class CreateNewProjectTests
     {
         private TestModel _model;
 
@@ -28,9 +28,9 @@ namespace TestCentric.Gui.Model
         [TestCase("tests.nunit")]
         public void PackageContainsOneSubPackagePerTestFile(params string[] testFiles)
         {
-            TestPackage package = _model.MakeTestPackage(testFiles);
+            _model.CreateNewProject(testFiles);
 
-            Assert.That(package.SubPackages.Select(p => p.Name), Is.EqualTo(testFiles));
+            Assert.That(_model.TestProject.TestFiles, Is.EqualTo(testFiles));
         }
 
         [TestCase(EnginePackageSettings.RequestedRuntimeFramework, "net-2.0")]
@@ -39,10 +39,10 @@ namespace TestCentric.Gui.Model
         public void PackageReflectsPackageSettings(string key, object value)
         {
             _model.PackageOverrides[key] = value;
-            TestPackage package = _model.MakeTestPackage(new[] { "my.dll" });
+            _model.CreateNewProject(new[] { "my.dll" });
 
-            Assert.That(package.Settings.ContainsKey(key));
-            Assert.That(package.Settings[key], Is.EqualTo(value));
+            Assert.That(_model.TestProject.Settings.ContainsKey(key));
+            Assert.That(_model.TestProject.Settings[key], Is.EqualTo(value));
         }
 
         [Test]
@@ -53,10 +53,10 @@ namespace TestCentric.Gui.Model
             testParms.Add("parm2", "value2");
             _model.PackageOverrides.Add("TestParametersDictionary", testParms);
 
-            TestPackage package = _model.MakeTestPackage(new[] { "my.dll" });
+            _model.CreateNewProject(new[] { "my.dll" });
 
-            Assert.That(package.Settings.ContainsKey("TestParametersDictionary"));
-            var parms = package.Settings["TestParametersDictionary"] as IDictionary<string, string>;
+            Assert.That(_model.TestProject.Settings.ContainsKey("TestParametersDictionary"));
+            var parms = _model.TestProject.Settings["TestParametersDictionary"] as IDictionary<string, string>;
             Assert.That(parms, Is.Not.Null);
 
             Assert.That(parms, Contains.Key("parm1"));
@@ -86,10 +86,10 @@ namespace TestCentric.Gui.Model
         [TestCase("my.sln,another.sln")]
         public void PackageForSolutionFileHasSkipNonTestAssemblies(string files)
         {
-            TestPackage package = _model.MakeTestPackage(files.Split(','));
+            _model.CreateNewProject(files.Split(','));
             string skipKey = EnginePackageSettings.SkipNonTestAssemblies;
 
-            foreach (var subpackage in package.SubPackages)
+            foreach (var subpackage in _model.TestProject.SubPackages)
             {
                 if (subpackage.Name.EndsWith(".sln"))
                 {

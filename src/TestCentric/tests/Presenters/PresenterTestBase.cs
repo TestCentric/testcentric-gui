@@ -32,7 +32,7 @@ namespace TestCentric.Gui.Presenters
             _model = Substitute.For<ITestModel>();
             _settings = new FakeUserSettings();
             _model.Settings.Returns(_settings);
-            _model.TestFiles.Returns(new List<string>());
+            //_model.TestProject.Returns(new TestCentricProject(_model, "Dummy.dll"));
         }
 
         #region Helper Methods

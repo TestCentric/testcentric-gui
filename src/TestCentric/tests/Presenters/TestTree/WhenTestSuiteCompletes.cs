@@ -28,7 +28,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         [TestCaseSource("resultData")]
         public void TreeShowsProperResult(ResultState resultState, int expectedIndex)
         {
-            _model.IsPackageLoaded.Returns(true);
+            _model.IsProjectLoaded.Returns(true);
             _model.HasTests.Returns(true);
 
             var result = resultState.Status.ToString();
@@ -39,6 +39,9 @@ namespace TestCentric.Gui.Presenters.TestTree
                 ? string.Format("<test-suite id='123' result='{0}'/>", result)
                 : string.Format("<test-suite id='123' result='{0}' label='{1}'/>", result, label));
             _model.LoadedTests.Returns(testNode);
+
+            var project = new TestCentricProject(_model, "dummy.dll");
+            _model.TestProject.Returns(project);
 
             _model.Events.TestLoaded += Raise.Event<TestNodeEventHandler>(new TestNodeEventArgs(testNode));
             _model.Events.SuiteFinished += Raise.Event<TestResultEventHandler>(new TestResultEventArgs(resultNode));

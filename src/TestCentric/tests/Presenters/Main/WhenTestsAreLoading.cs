@@ -18,14 +18,10 @@ namespace TestCentric.Gui.Presenters.Main
             FireTestsLoadingEvent(new[] { "test.dll" });
         }
 
-#if NYI // Add after implementation of project or package saving
         [TestCase("NewProjectCommand", false)]
         [TestCase("OpenProjectCommand", false)]
-        [TestCase("SaveCommand", false)]
-        [TestCase("SaveAsCommand", false)
-#endif
+        [TestCase("SaveProjectCommand", false)]
 
-        [TestCase("OpenCommand", false)]
         [TestCase("CloseCommand", false)]
         [TestCase("AddTestFilesCommand", false)]
         [TestCase("ReloadTestsCommand", false)]

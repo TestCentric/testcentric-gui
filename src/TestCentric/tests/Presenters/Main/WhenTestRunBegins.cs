@@ -5,7 +5,7 @@
 
 using NSubstitute;
 using NUnit.Framework;
-using TestCentric.Engine;
+using TestCentric.Gui.Model;
 
 namespace TestCentric.Gui.Presenters.Main
 {
@@ -18,18 +18,12 @@ namespace TestCentric.Gui.Presenters.Main
 
             _model.HasTests.Returns(true);
             _model.IsTestRunning.Returns(true);
-            _model.TestPackage.Returns(new TestPackage(new string[] { "dummy.dll" }));
             FireRunStartingEvent(1234);
         }
 
-#if NYI // Add after implementation of project or package saving
         [TestCase("NewProjectCommand", false)]
         [TestCase("OpenProjectCommand", false)]
-        [TestCase("SaveCommand", false)]
-        [TestCase("SaveAsCommand", false)
-#endif
-
-        [TestCase("OpenCommand", false)]
+        [TestCase("SaveProjectCommand", false)]
         [TestCase("CloseCommand", false)]
         [TestCase("AddTestFilesCommand", false)]
         [TestCase("ReloadTestsCommand", false)]

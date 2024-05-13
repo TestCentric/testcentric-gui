@@ -5,7 +5,6 @@
 
 using NSubstitute;
 using NUnit.Framework;
-using TestCentric.Engine;
 
 namespace TestCentric.Gui.Presenters.Main
 {
@@ -20,21 +19,19 @@ namespace TestCentric.Gui.Presenters.Main
 
             _model.HasTests.Returns(true);
             _model.IsTestRunning.Returns(false);
-            _model.TestPackage.Returns(new TestPackage(new[] { "dummy.dll" }));
 
             TestNode testNode = new TestNode("<test-suite id='1'/>");
             _model.LoadedTests.Returns(testNode);
+
+            var project = new TestCentricProject(_model, "dummy.dll");
+            _model.TestProject.Returns(project);
             FireTestLoadedEvent(testNode);
         }
 
-#if NYI // Add after implementation of project or package saving
         [TestCase("NewProjectCommand", true)]
         [TestCase("OpenProjectCommand", true)]
-        [TestCase("SaveCommand", true)]
-        [TestCase("SaveAsCommand", true)
-#endif
+        [TestCase("SaveProjectCommand", true)]
 
-        [TestCase("OpenCommand", true)]
         [TestCase("CloseCommand", true)]
         [TestCase("AddTestFilesCommand", true)]
         [TestCase("ReloadTestsCommand", true)]

@@ -20,14 +20,10 @@ namespace TestCentric.Gui.Presenters.Main
             FireTestUnloadedEvent();
         }
 
-#if NYI // Add after implementation of project or package saving
         [TestCase("NewProjectCommand", true)]
         [TestCase("OpenProjectCommand", true)]
-        [TestCase("SaveCommand", false)]
-        [TestCase("SaveAsCommand", false)
-#endif
+        [TestCase("SaveProjectCommand", false)]
 
-        [TestCase("OpenCommand", true)]
         [TestCase("CloseCommand", false)]
         [TestCase("AddTestFilesCommand", false)]
         [TestCase("ReloadTestsCommand", false)]

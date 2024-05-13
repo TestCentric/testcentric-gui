@@ -67,7 +67,7 @@ namespace TestCentric.Gui.Presenters
         /// </summary>
         public abstract void OnTestLoaded(TestNode testNode, VisualState visualState);
 
-        public void SaveVisualState() => CreateVisualState().Save(VisualState.GetVisualStateFileName(_model.TestFiles[0]));
+        public void SaveVisualState() => CreateVisualState().Save(VisualState.GetVisualStateFileName(_model.TestProject.TestFiles[0]));
 
         protected abstract VisualState CreateVisualState();
 

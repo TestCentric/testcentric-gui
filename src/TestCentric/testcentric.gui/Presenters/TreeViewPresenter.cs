@@ -279,9 +279,9 @@ namespace TestCentric.Gui.Presenters
         {
             visualState = null;
 
-            if (_model.TestFiles.Count > 0)
+            if (_model.TestProject.TestFiles.Count > 0)
             {
-                var filename = VisualState.GetVisualStateFileName(_model.TestFiles[0]);
+                var filename = VisualState.GetVisualStateFileName(_model.TestProject.TestFiles[0]);
                 if (File.Exists(filename))
                     visualState = VisualState.LoadFrom(filename);
             }
@@ -417,20 +417,6 @@ namespace TestCentric.Gui.Presenters
 
             var layout = _model.Settings.Gui.GuiLayout;
             _view.TestPropertiesCommand.Visible = layout == "Mini";
-        }
-
-        private void ChangePackageSettingAndReload(string key, object setting)
-        {
-            if (setting == null || setting as string == "DEFAULT")
-                _model.PackageOverrides.Remove(key);
-            else
-                _model.PackageOverrides[key] = setting;
-
-            // Even though the _model has a Reload method, we cannot use it because Reload
-            // does not re-create the Engine.  Since we just changed a setting, we must
-            // re-create the Engine by unloading/reloading the tests. We make a copy of
-            // __model.TestFiles because the method does an unload before it loads.
-            _model.LoadTests(new List<string>(_model.TestFiles));
         }
 
         #endregion
