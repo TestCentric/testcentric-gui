@@ -13,20 +13,13 @@ namespace TestCentric.Gui.Model.Services
     {
         private IList<string> _fileEntries = new List<string>();
         private ISettings _userSettings;
-        private string _prefix;
+        private const string PREFIX = "TestCentric.Gui.RecentProjects";
 
         private const int MAX_FILES = 24;
 
-        public RecentFiles(ISettings userSettings, string applicationPrefix)
+        public RecentFiles(ISettings userSettings)
         {
             _userSettings = userSettings;
-            _prefix = applicationPrefix ?? string.Empty;
-
-            if (_prefix != string.Empty && !_prefix.EndsWith("."))
-                _prefix += ".";
-
-            _prefix += "Gui.RecentProjects";
-
             LoadEntries();
         }
 
@@ -90,7 +83,7 @@ namespace TestCentric.Gui.Model.Services
 
         private string GetRecentFileKey(int index)
         {
-            return string.Format("{0}.File{1}", _prefix, index);
+            return $"{PREFIX}.File{index}";
         }
     }
 }

@@ -17,8 +17,10 @@ namespace TestCentric.Gui.Presenters.Main
         [TestCase("SaveAsCommand", false)]
 #endif
 
-        [TestCase("OpenCommand", true)]
-        [TestCase("CloseCommand", false)]
+        [TestCase("NewProjectCommand", true)]
+        [TestCase("OpenProjectCommand", true)]
+        [TestCase("SaveProjectCommand", false)]
+        [TestCase("CloseProjectCommand", false)]
         [TestCase("AddTestFilesCommand", false)]
         [TestCase("ReloadTestsCommand", false)]
         [TestCase("RecentFilesMenu", true)]

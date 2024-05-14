@@ -16,6 +16,8 @@ namespace TestCentric.Gui.Model
     {
         #region General Properties
 
+        CommandLineOptions Options { get; }
+
         // Work Directory
         string WorkDirectory { get; }
 
@@ -45,14 +47,9 @@ namespace TestCentric.Gui.Model
 
         #region Current State of the Model
 
-        TestPackage TestPackage { get; }
+        TestCentricProject TestProject { get; }
 
-        bool IsPackageLoaded { get; }
-
-        List<string> TestFiles { get; }
-
-
-        IDictionary<string, object> PackageOverrides { get; }
+        bool IsProjectLoaded { get; }
 
         // TestNode hierarchy representing the discovered tests
         TestNode LoadedTests { get; }
@@ -95,13 +92,14 @@ namespace TestCentric.Gui.Model
 
         #region Methods
 
-        // Create a new empty project using a default name
-        void NewProject();
+        // Create a new project containing the provided test files
+        TestCentricProject CreateNewProject(IList<string> filenames);
 
-        // Create a new project given a filename
-        void NewProject(string filename);
+        void OpenProject(string filename);
 
-        void SaveProject();
+        void SaveProject(string filename);
+
+        void CloseProject();
 
         #region Loading and Unloading Tests
 

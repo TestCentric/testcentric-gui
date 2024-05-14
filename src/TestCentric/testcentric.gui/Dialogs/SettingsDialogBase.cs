@@ -161,8 +161,7 @@ namespace TestCentric.Gui.Dialogs
 
             foreach(var entry in PackageSettingChanges)
             {
-                Model.PackageOverrides[entry.Key] = entry.Value;
-                Model.TestPackage.AddSetting(entry.Key, entry.Value);
+                Model.TestProject.AddSetting(entry.Key, entry.Value);
             }
         }
         #endregion
@@ -181,7 +180,7 @@ namespace TestCentric.Gui.Dialogs
 
             // NOTE: Currently, all changes require reload. If this changes
             // we will need to add some filtering here.
-            if (Model.IsPackageLoaded && PackageSettingChanges.Count > 0)
+            if (Model.IsProjectLoaded && PackageSettingChanges.Count > 0)
             {
                 if (MessageDisplay.YesNo("Some changes will only take effect when you reload the test project. Do you want to reload now?"))
                     _reloadProjectOnClose = true;

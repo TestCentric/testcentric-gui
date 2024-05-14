@@ -39,6 +39,36 @@ namespace TestCentric.Gui.Model
 
         #region Public Methods to Fire Events
 
+        //public void FireTestCentricProjectLoading()
+        //{
+        //    TestCentricProjectLoading?.Invoke(new TestEventArgs());
+        //}
+
+        //public void FireTestCentricProjecReloading()
+        //{
+        //    TestCentricProjectReloading?.Invoke(new TestEventArgs());
+        //}
+
+        //public void FireTestCentricProjectUnloading()
+        //{
+        //    TestCentricProjectUnloading?.Invoke(new TestEventArgs());
+        //}
+
+        public void FireTestCentricProjectLoaded()
+        {
+            TestCentricProjectLoaded?.Invoke(new TestEventArgs());
+        }
+
+        public void FireTestCentricProjecReloaded()
+        {
+            TestCentricProjectReloaded?.Invoke(new TestEventArgs());
+        }
+
+        public void FireTestCentricProjectUnloaded()
+        {
+            TestCentricProjectUnloaded?.Invoke(new TestEventArgs());
+        }
+
         public void FireTestsLoading(IList<string> files)
         {
             TestsLoading?.Invoke(new TestFilesLoadingEventArgs(files));
@@ -92,6 +122,11 @@ namespace TestCentric.Gui.Model
         #endregion
 
         #region ITestEvents Implementation
+
+        // TestCentricProject loading events
+        public event TestEventHandler TestCentricProjectLoaded;
+        public event TestEventHandler TestCentricProjectReloaded;
+        public event TestEventHandler TestCentricProjectUnloaded;
 
         // Test loading events
         public event TestFilesLoadingEventHandler TestsLoading;

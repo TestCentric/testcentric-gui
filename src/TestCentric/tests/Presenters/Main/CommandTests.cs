@@ -44,9 +44,9 @@ namespace TestCentric.Gui.Presenters.Main
             _model.NUnitProjectSupport.Returns(nunitSupport);
             _model.VisualStudioSupport.Returns(vsSupport);
 
-            _view.OpenCommand.Execute += Raise.Event<CommandHandler>();
+            _view.NewProjectCommand.Execute += Raise.Event<CommandHandler>();
 
-            _view.DialogManager.Received().SelectMultipleFiles("Open Project", filter);
+            _view.DialogManager.Received().SelectMultipleFiles("New Project", filter);
         }
 
         [Test]
@@ -55,19 +55,19 @@ namespace TestCentric.Gui.Presenters.Main
             var files = new string[] { Path.GetFullPath("/path/to/test.dll") };
             _view.DialogManager.SelectMultipleFiles(null, null).ReturnsForAnyArgs(files);
 
-            _view.OpenCommand.Execute += Raise.Event<CommandHandler>();
+            _view.NewProjectCommand.Execute += Raise.Event<CommandHandler>();
 
-            _model.Received().LoadTests(files);
+            _model.Received().CreateNewProject(files);
         }
 
         [Test]
-        public void OpenCommand_NoFileSelected_DoesNotLoadTests()
+        public void NewProjectCommand_NoFileSelected_DoesNotCreateProject()
         {
             _view.DialogManager.SelectMultipleFiles(null, null).ReturnsForAnyArgs(NO_FILES_SELECTED);
 
-            _view.OpenCommand.Execute += Raise.Event<CommandHandler>();
+            _view.NewProjectCommand.Execute += Raise.Event<CommandHandler>();
 
-            _model.DidNotReceiveWithAnyArgs().LoadTests(null);
+            _model.DidNotReceiveWithAnyArgs().CreateNewProject(null);
         }
 
         [TestCase(false, false, "Assemblies (*.dll,*.exe)|*.dll;*.exe|All Files (*.*)|*.*")]
@@ -92,7 +92,8 @@ namespace TestCentric.Gui.Presenters.Main
             var testFiles = new List<string>();
             testFiles.Add("FILE1");
             testFiles.Add("FILE2");
-            _model.TestFiles.Returns(testFiles);
+            var project = new TestCentricProject(_model, testFiles);
+            _model.TestProject.Returns(project);
 
             var filesToAdd = new string[] { Path.GetFullPath("/path/to/test.dll") };
             _view.DialogManager.SelectMultipleFiles(null, null).ReturnsForAnyArgs(filesToAdd);
@@ -102,24 +103,24 @@ namespace TestCentric.Gui.Presenters.Main
 
             _view.AddTestFilesCommand.Execute += Raise.Event<CommandHandler>();
 
-            _model.Received().LoadTests(Arg.Compat.Is<List<string>>(l => l.SequenceEqual(allFiles)));
+            _model.Received().CreateNewProject(Arg.Compat.Is<List<string>>(l => l.SequenceEqual(allFiles)));
         }
 
         [Test]
-        public void AddTestFilesCommand_WhenNothingIsSelected_DoesNotLoadTests()
+        public void AddTestFilesCommand_WhenNothingIsSelected_DoesNotCreateProject()
         {
             _view.DialogManager.SelectMultipleFiles(null, null).ReturnsForAnyArgs(NO_FILES_SELECTED);
 
             _view.AddTestFilesCommand.Execute += Raise.Event<CommandHandler>();
 
-            _model.DidNotReceive().LoadTests(Arg.Compat.Any<IList<string>>());
+            _model.DidNotReceiveWithAnyArgs().CreateNewProject(null);
         }
 
         [Test]
-        public void CloseCommand_CallsUnloadTest()
+        public void CloseProjectCommand_CallsCloseProject()
         {
-            _view.CloseCommand.Execute += Raise.Event<CommandHandler>();
-            _model.Received().UnloadTests();
+            _view.CloseProjectCommand.Execute += Raise.Event<CommandHandler>();
+            _model.Received().CloseProject();
         }
 
         //[Test]

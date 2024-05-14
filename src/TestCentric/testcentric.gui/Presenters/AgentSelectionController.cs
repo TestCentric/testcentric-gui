@@ -25,7 +25,7 @@ namespace TestCentric.Gui.Presenters
 
         public bool AllowAgentSelection()
         {
-            var package = _model.TestPackage;
+            var package = _model.TestProject;
             return package != null &&
                 _model.GetAgentsForPackage(package).Count > 1;
         }
@@ -44,8 +44,8 @@ namespace TestCentric.Gui.Presenters
 
             agentMenu.MenuItems.Add(defaultMenuItem);
 
-            var agentsToEnable = _model.GetAgentsForPackage(_model.TestPackage);
-            var selectedAgentName = _model.TestPackage.GetSetting(EnginePackageSettings.SelectedAgentName, "DEFAULT");
+            var agentsToEnable = _model.GetAgentsForPackage(_model.TestProject);
+            var selectedAgentName = _model.TestProject.GetSetting(EnginePackageSettings.SelectedAgentName, "DEFAULT");
             
             foreach (var agentName in _model.AvailableAgents)
             {
@@ -60,6 +60,7 @@ namespace TestCentric.Gui.Presenters
 
             // Go through all menu items and check one
             bool isItemChecked = false;
+            var packageSettings = _model.TestProject.Settings;
             foreach (ToolStripMenuItem item in agentMenu.MenuItems)
             {
                 if ((string)item.Tag == selectedAgentName)
@@ -68,24 +69,24 @@ namespace TestCentric.Gui.Presenters
                     item.Click += (s, e) =>
                     {
                         item.Checked = true;
+                        
                         if (item.Tag == null || item.Tag as string == "DEFAULT")
-                            _model.PackageOverrides.Remove(EnginePackageSettings.SelectedAgentName);
+                            packageSettings.Remove(EnginePackageSettings.SelectedAgentName);
                         else
-                            _model.PackageOverrides[EnginePackageSettings.SelectedAgentName] = item.Tag;
+                            packageSettings[EnginePackageSettings.SelectedAgentName] = item.Tag;
 
                         // Even though the _model has a Reload method, we cannot use it because Reload
                         // does not re-create the Engine.  Since we just changed a setting, we must
                         // re-create the Engine by unloading/reloading the tests. We make a copy of
                         // __model.TestFiles because the method does an unload before it loads.
-                        _model.LoadTests(new List<string>(_model.TestFiles));
+                        _model.TestProject.LoadTests();
                     };
             }
 
             if (!isItemChecked)
             {
                 defaultMenuItem.Checked = true;
-                _model.TestPackage.Settings.Remove(EnginePackageSettings.SelectedAgentName);
-                _model.PackageOverrides.Remove(EnginePackageSettings.SelectedAgentName);
+                packageSettings.Remove(EnginePackageSettings.SelectedAgentName);
             }
         }
     }

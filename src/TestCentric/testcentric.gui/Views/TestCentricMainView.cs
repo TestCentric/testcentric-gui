@@ -36,7 +36,6 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.MenuStrip mainMenu;
 
         private System.Windows.Forms.ToolStripMenuItem fileMenu;
-        private System.Windows.Forms.ToolStripMenuItem openMenuItem;
         private System.Windows.Forms.ToolStripMenuItem recentFilesMenu;
         private System.Windows.Forms.ToolStripMenuItem closeMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitMenuItem;
@@ -105,6 +104,10 @@ namespace TestCentric.Gui.Views
         private ToolStripButton rerunButton;
         private CheckBox runSummaryButton;
         private RunSummaryDisplay runSummaryDisplay;
+        private ToolStripMenuItem newProjectMenuItem;
+        private ToolStripMenuItem openProjectMenuItem;
+        private ToolStripMenuItem saveProjectMenuItem;
+        private ToolStripSeparator toolStripSeparator6;
         private TextOutputView textOutputView1;
 
         #endregion
@@ -125,8 +128,10 @@ namespace TestCentric.Gui.Views
 
             // Initialize File Menu Commands
             FileMenu = new PopupMenuElement(fileMenu);
-            OpenCommand = new CommandMenuElement(openMenuItem);
-            CloseCommand = new CommandMenuElement(closeMenuItem);
+            NewProjectCommand = new CommandMenuElement(newProjectMenuItem);
+            OpenProjectCommand = new CommandMenuElement(openProjectMenuItem);
+            SaveProjectCommand = new CommandMenuElement(saveProjectMenuItem);
+            CloseProjectCommand = new CommandMenuElement(closeMenuItem);
             AddTestFilesCommand = new CommandMenuElement(addTestFileMenuItem);
             ReloadTestsCommand = new CommandMenuElement(reloadTestsMenuItem);
             SelectAgentMenu = new PopupMenuElement(selectAgentMenu);
@@ -223,7 +228,10 @@ namespace TestCentric.Gui.Views
             this.runParametersButton = new System.Windows.Forms.ToolStripButton();
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.fileMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.openMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newProjectMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openProjectMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveProjectMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.closeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addTestFileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -492,8 +500,11 @@ namespace TestCentric.Gui.Views
             // fileMenu
             // 
             this.fileMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openMenuItem,
+            this.newProjectMenuItem,
+            this.openProjectMenuItem,
+            this.saveProjectMenuItem,
             this.closeMenuItem,
+            this.toolStripSeparator6,
             this.addTestFileMenuItem,
             this.toolStripSeparator1,
             this.reloadTestsMenuItem,
@@ -508,35 +519,51 @@ namespace TestCentric.Gui.Views
             this.fileMenu.Size = new System.Drawing.Size(37, 20);
             this.fileMenu.Text = "&File";
             // 
-            // openMenuItem
+            // newProjectMenuItem
             // 
-            this.openMenuItem.Name = "openMenuItem";
-            this.openMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openMenuItem.Size = new System.Drawing.Size(179, 22);
-            this.openMenuItem.Text = "&Open...";
+            this.newProjectMenuItem.Name = "newProjectMenuItem";
+            this.newProjectMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newProjectMenuItem.Text = "&New Project";
+            // 
+            // openProjectMenuItem
+            // 
+            this.openProjectMenuItem.Name = "openProjectMenuItem";
+            this.openProjectMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openProjectMenuItem.Text = "&Open Project";
+            // 
+            // saveProjectMenuItem
+            // 
+            this.saveProjectMenuItem.Name = "saveProjectMenuItem";
+            this.saveProjectMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveProjectMenuItem.Text = "&Save Project";
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(177, 6);
             // 
             // closeMenuItem
             // 
             this.closeMenuItem.Name = "closeMenuItem";
-            this.closeMenuItem.Size = new System.Drawing.Size(179, 22);
-            this.closeMenuItem.Text = "&Close";
+            this.closeMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.closeMenuItem.Text = "&Close Project";
             // 
             // addTestFileMenuItem
             // 
             this.addTestFileMenuItem.Name = "addTestFileMenuItem";
-            this.addTestFileMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.addTestFileMenuItem.Size = new System.Drawing.Size(180, 22);
             this.addTestFileMenuItem.Text = "&Add Test File...";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(176, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // reloadTestsMenuItem
             // 
             this.reloadTestsMenuItem.Name = "reloadTestsMenuItem";
             this.reloadTestsMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-            this.reloadTestsMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.reloadTestsMenuItem.Size = new System.Drawing.Size(180, 22);
             this.reloadTestsMenuItem.Text = "&Reload Tests";
             // 
             // selectAgentMenu
@@ -544,7 +571,7 @@ namespace TestCentric.Gui.Views
             this.selectAgentMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.selectAgentDummyMenuItem});
             this.selectAgentMenu.Name = "selectAgentMenu";
-            this.selectAgentMenu.Size = new System.Drawing.Size(179, 22);
+            this.selectAgentMenu.Size = new System.Drawing.Size(180, 22);
             this.selectAgentMenu.Text = "Select Agent";
             // 
             // selectAgentDummyMenuItem
@@ -556,25 +583,25 @@ namespace TestCentric.Gui.Views
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(176, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
             // 
             // runAsX86MenuItem
             // 
             this.runAsX86MenuItem.Name = "runAsX86MenuItem";
-            this.runAsX86MenuItem.Size = new System.Drawing.Size(179, 22);
+            this.runAsX86MenuItem.Size = new System.Drawing.Size(180, 22);
             this.runAsX86MenuItem.Text = "Run as X86";
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(176, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(177, 6);
             // 
             // recentFilesMenu
             // 
             this.recentFilesMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.recentFilesDummyMenuItem});
             this.recentFilesMenu.Name = "recentFilesMenu";
-            this.recentFilesMenu.Size = new System.Drawing.Size(179, 22);
+            this.recentFilesMenu.Size = new System.Drawing.Size(180, 22);
             this.recentFilesMenu.Text = "Recent &Files";
             // 
             // recentFilesDummyMenuItem
@@ -586,12 +613,12 @@ namespace TestCentric.Gui.Views
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(176, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(177, 6);
             // 
             // exitMenuItem
             // 
             this.exitMenuItem.Name = "exitMenuItem";
-            this.exitMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.exitMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitMenuItem.Text = "E&xit";
             // 
             // viewMenu
@@ -923,6 +950,7 @@ namespace TestCentric.Gui.Views
             // 
             this.errorsAndFailuresView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.errorsAndFailuresView1.EnableToolTips = false;
+            this.errorsAndFailuresView1.Header = "Test name goes here";
             this.errorsAndFailuresView1.Location = new System.Drawing.Point(0, 0);
             this.errorsAndFailuresView1.Name = "errorsAndFailuresView1";
             this.errorsAndFailuresView1.Size = new System.Drawing.Size(490, 333);
@@ -1029,6 +1057,12 @@ namespace TestCentric.Gui.Views
 
         public event EventHandler SplitterPositionChanged;
 
+        public string Title
+        {
+            get { return Text; }
+            set { Text = value ?? "UNNAMED.tcproj"; }
+        }
+
         public bool Maximized
         {
             get { return WindowState == FormWindowState.Maximized; }
@@ -1053,8 +1087,10 @@ namespace TestCentric.Gui.Views
 
         // File Menu Items
         public IPopup FileMenu { get; }
-        public ICommand OpenCommand { get; }
-        public ICommand CloseCommand { get; }
+        public ICommand NewProjectCommand { get; }
+        public ICommand OpenProjectCommand { get; }
+        public ICommand SaveProjectCommand { get; }
+        public ICommand CloseProjectCommand { get; }
         public ICommand AddTestFilesCommand { get; }
         public ICommand ReloadTestsCommand { get; }
         public IPopup SelectAgentMenu { get; }
@@ -1155,17 +1191,6 @@ namespace TestCentric.Gui.Views
         #endregion
 
         #region Helper Methods
-
-        /// <summary>
-        /// Set the title bar based on the loaded file or project
-        /// </summary>
-        /// <param name="fileName"></param>
-        public void SetTitleBar(string fileName)
-        {
-            Text = fileName == null
-                ? "NUnit"
-                : string.Format("{0} - NUnit", Path.GetFileName(fileName));
-        }
 
         private static Font MakeBold(Font font)
         {

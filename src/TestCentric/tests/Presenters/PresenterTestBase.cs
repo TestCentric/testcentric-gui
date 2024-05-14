@@ -32,7 +32,7 @@ namespace TestCentric.Gui.Presenters
             _model = Substitute.For<ITestModel>();
             _settings = new FakeUserSettings();
             _model.Settings.Returns(_settings);
-            _model.TestFiles.Returns(new List<string>());
+            //_model.TestProject.Returns(new TestCentricProject(_model, "Dummy.dll"));
         }
 
         #region Helper Methods
@@ -46,6 +46,16 @@ namespace TestCentric.Gui.Presenters
                 if (typeof(IViewElement).IsAssignableFrom(prop.PropertyType))
                     prop.GetValue(_view).ClearReceivedCalls();
             }
+        }
+
+        protected void FireProjectLoadedEvent()
+        {
+            _model.Events.TestCentricProjectLoaded += Raise.Event<TestEventHandler>(new TestEventArgs());
+        }
+
+        protected void FireProjectUnloadedEvent()
+        {
+            _model.Events.TestCentricProjectUnloaded += Raise.Event<TestEventHandler>(new TestEventArgs());
         }
 
         protected void FireTestsLoadingEvent(IList<string> testFiles)

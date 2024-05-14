@@ -7,8 +7,8 @@ namespace TestCentric.Gui.Model.Settings
 {
     public class UserSettings : SettingsGroup
     {
-        public UserSettings(ISettings settings, string prefix=null)
-            : base(settings, prefix) { }
+        public UserSettings(ISettings settings)
+            : base(settings, "TestCentric") { }
 
         public GuiSettings Gui
         {

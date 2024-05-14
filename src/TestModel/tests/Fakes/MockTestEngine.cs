@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System;
+using System.Xml;
 using TestCentric.Engine;
 using TestCentric.Engine.Services;
 
@@ -71,11 +72,71 @@ namespace TestCentric.Gui.Model.Fakes
 
         ITestRunner ITestEngine.GetRunner(TestPackage package)
         {
-            throw new NotImplementedException();
+            return new MasterTestRunner();
         }
 
         void ITestEngine.Initialize()
         {
+        }
+
+        #endregion
+
+        #region Fake MasterTestRunner
+
+        public class MasterTestRunner : ITestRunner
+        {
+            bool ITestRunner.IsTestRunning
+            {
+                get
+                {
+                    throw new NotImplementedException();
+                }
+            }
+
+            int ITestRunner.CountTestCases(Engine.TestFilter filter)
+            {
+                throw new NotImplementedException();
+            }
+
+            void IDisposable.Dispose()
+            {
+                throw new NotImplementedException();
+            }
+
+            XmlNode ITestRunner.Explore(Engine.TestFilter filter)
+            {
+                throw new NotImplementedException();
+            }
+
+            XmlNode ITestRunner.Load()
+            {
+                throw new NotImplementedException();
+            }
+
+            XmlNode ITestRunner.Reload()
+            {
+                throw new NotImplementedException();
+            }
+
+            XmlNode ITestRunner.Run(ITestEventListener listener, Engine.TestFilter filter)
+            {
+                throw new NotImplementedException();
+            }
+
+            ITestRun ITestRunner.RunAsync(ITestEventListener listener, Engine.TestFilter filter)
+            {
+                throw new NotImplementedException();
+            }
+
+            void ITestRunner.StopRun(bool force)
+            {
+                throw new NotImplementedException();
+            }
+
+            void ITestRunner.Unload()
+            {
+                throw new NotImplementedException();
+            }
         }
 
         #endregion

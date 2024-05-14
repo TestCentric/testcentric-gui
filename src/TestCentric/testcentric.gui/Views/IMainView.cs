@@ -14,6 +14,9 @@ namespace TestCentric.Gui.Views
 
     public interface IMainView
     {
+        // Title Bar
+        string Title { get; set; }
+
         // View Parameters
         Point Location { get; set; }
         Size Size { get; set; }
@@ -26,8 +29,11 @@ namespace TestCentric.Gui.Views
 
         // File Menu Items
         IPopup FileMenu { get; }
-        ICommand OpenCommand { get; }
-        ICommand CloseCommand { get; }
+        ICommand NewProjectCommand { get; }
+        ICommand OpenProjectCommand { get; }
+        ICommand SaveProjectCommand { get; }
+
+        ICommand CloseProjectCommand { get; }
         ICommand AddTestFilesCommand { get; }
         ICommand ReloadTestsCommand { get; }
         IPopup SelectAgentMenu { get; }
@@ -88,7 +94,6 @@ namespace TestCentric.Gui.Views
 
         // Methods used by Presenter
         void Configure(bool useFullGui);
-        void SetTitleBar(string fileName);
 
         // Form methods that we have to use
         void Close();

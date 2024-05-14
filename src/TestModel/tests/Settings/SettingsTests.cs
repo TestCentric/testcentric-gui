@@ -26,7 +26,7 @@ namespace TestCentric.Gui.Model.Settings
         public void SetUp()
         {
             ISettings settingsService = new SettingsStore();
-            _userSettings = new UserSettings(settingsService, APPLICATION_PREFIX);
+            _userSettings = new UserSettings(settingsService);
             settingsService.Changed += (object s, SettingsEventArgs e) => { _changeEvent = e; };
         }
 

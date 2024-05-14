@@ -40,16 +40,18 @@ namespace TestCentric.Gui.Model
 
         #region Constructor and Creation
 
-        public TestModel(ITestEngine testEngine, string applicationPrefix = null)
+        public TestModel(ITestEngine testEngine, CommandLineOptions options = null)
         {
             TestEngine = testEngine;
+            Options = options ?? new CommandLineOptions();
+
             _settingsService = new SettingsService(true);
             _events = new TestEventDispatcher(this);
             _assemblyWatcher = new AssemblyWatcher();
 
             _settingsService.LoadSettings();
-            Settings = new UserSettings(_settingsService, applicationPrefix);
-            RecentFiles = new RecentFiles(_settingsService, applicationPrefix);
+            Settings = new UserSettings(_settingsService);
+            RecentFiles = new RecentFiles(_settingsService);
 
             Services = new TestServices(testEngine);
 
@@ -93,34 +95,7 @@ namespace TestCentric.Gui.Model
             if (options.WorkDirectory != null)
                 testEngine.WorkDirectory = options.WorkDirectory;
 
-            var model = new TestModel(testEngine, "TestCentric");
-
-            model.PackageOverrides.Add(EnginePackageSettings.InternalTraceLevel, testEngine.InternalTraceLevel.ToString());
-
-            if (options.WorkDirectory != null)
-                model.PackageOverrides.Add(EnginePackageSettings.WorkDirectory, options.WorkDirectory);
-            if (options.MaxAgents >= 0)
-                model.PackageOverrides.Add(EnginePackageSettings.MaxAgents, options.MaxAgents);
-            if (options.RunAsX86)
-                model.PackageOverrides.Add(EnginePackageSettings.RunAsX86, true);
-            if (options.DebugAgent)
-                model.PackageOverrides.Add(EnginePackageSettings.DebugAgent, true);
-            if (options.SimulateUnloadError)
-                model.PackageOverrides.Add(EnginePackageSettings.SimulateUnloadError, true);
-            if (options.SimulateUnloadTimeout)
-                model.PackageOverrides.Add(EnginePackageSettings.SimulateUnloadTimeout, true);
-            if (options.TestParameters.Count > 0)
-            {
-                string[] parms = new string[options.TestParameters.Count];
-                int index = 0;
-                foreach (string key in options.TestParameters.Keys)
-                    parms[index++] = $"{key}={options.TestParameters[key]}";
-
-                model.PackageOverrides.Add("TestParametersDictionary", options.TestParameters);
-                model.PackageOverrides.Add("TestParameters", string.Join(";", parms));
-            }
-
-            return model;
+            return new TestModel(testEngine, options);
         }
 
         #endregion
@@ -128,6 +103,9 @@ namespace TestCentric.Gui.Model
         #region ITestModel Implementation
 
         #region General Properties
+
+        // Command-line options
+        public CommandLineOptions Options { get; }
 
         // Work Directory
         public string WorkDirectory { get { return TestEngine.WorkDirectory; } }
@@ -182,18 +160,15 @@ namespace TestCentric.Gui.Model
 
         #region Current State of the Model
 
-        // The current TestPackage loaded by the model
-        public TestPackage TestPackage { get; private set; }
+        /// <summary>
+        /// The current TestProject
+        /// </summary>
+        public TestCentricProject TestProject { get; set; }
 
-        public bool IsPackageLoaded { get { return TestPackage != null; } }
-
-        // The list of files passed to the model to load.
-        public List<string> TestFiles { get; } = new List<string>();
-
-        public IDictionary<string, object> PackageOverrides { get; } = new Dictionary<string, object>();
+        public bool IsProjectLoaded => TestProject != null;
 
         public TestNode LoadedTests { get; private set; }
-        public bool HasTests { get { return LoadedTests != null; } }
+        public bool HasTests => LoadedTests != null;
 
         public IList<string> AvailableCategories { get; private set; }
 
@@ -256,41 +231,58 @@ namespace TestCentric.Gui.Model
 
         #region Methods
 
-        public void NewProject()
+        /// <summary>
+        /// Create a new unnamed project, assign it to our TestProject property and
+        /// load tests for the project. We return the project as well.
+        /// </summary>
+        /// <param name="filenames">The test files contained as subprojects of the new project.</param>
+        /// <returns>The newly created test project</returns>
+        public TestCentricProject CreateNewProject(IList<string> filenames)
         {
-            NewProject("Dummy");
+            if (IsProjectLoaded)
+                CloseProject();
+
+            TestProject = new TestCentricProject(this, filenames);
+
+            _events.FireTestCentricProjectLoaded();
+
+            TestProject.LoadTests();
+
+            return TestProject;
         }
 
-        public const string PROJECT_SAVE_MESSAGE =
-            "It's not yet decided if we will implement saving of projects. The alternative is to require use of the project editor, which already supports this.";
-
-        public void NewProject(string filename)
+        public void OpenProject(string filename)
         {
-            throw new NotImplementedException(PROJECT_SAVE_MESSAGE);
+            throw new NotImplementedException();
         }
 
-        public void SaveProject()
+        public void SaveProject(string fileName)
         {
-            throw new NotImplementedException(PROJECT_SAVE_MESSAGE);
+            throw new NotImplementedException();
+        }
+
+        public void CloseProject()
+        {
+            if (HasTests)
+                UnloadTests();
+
+            TestProject = null;
+
+            _events.FireTestCentricProjectUnloaded();
         }
 
         public void LoadTests(IList<string> files)
         {
             log.Info($"Loading test files '{string.Join("', '", files.ToArray())}'");
-            if (IsPackageLoaded)
+            if (IsProjectLoaded && LoadedTests != null)
                 UnloadTests();
 
             _events.FireTestsLoading(files);
 
-            TestFiles.Clear();
-            TestFiles.AddRange(files);
-
-            TestPackage = MakeTestPackage(files);
-            log.Debug("Created TestPackage");
             _lastTestRun = null;
             _lastRunWasDebugRun = false;
 
-            Runner = TestEngine.GetRunner(TestPackage);
+            Runner = TestEngine.GetRunner(TestProject);
             log.Debug($"Got {Runner.GetType().Name} for package");
 
             try
@@ -318,7 +310,7 @@ namespace TestCentric.Gui.Model
 
             _events.FireTestLoaded(LoadedTests);
 
-            foreach (var subPackage in TestPackage.SubPackages)
+            foreach (var subPackage in TestProject.SubPackages)
                 RecentFiles.Latest = subPackage.FullName;
         }
 
@@ -343,7 +335,7 @@ namespace TestCentric.Gui.Model
         private void MapTestsToPackages()
         {
             _packageMap.Clear();
-            MapTestToPackage(LoadedTests, TestPackage);
+            MapTestToPackage(LoadedTests, TestProject);
         }
 
         private void MapTestToPackage(TestNode test, TestPackage package)
@@ -356,7 +348,7 @@ namespace TestCentric.Gui.Model
 
         public IList<string> GetAgentsForPackage(TestPackage package = null)
         {
-            if (package == null) package = TestPackage;
+            if (package == null) package = TestProject;
 
             return new List<string>(
                 Services.TestAgentService.GetAgentsForPackage(package).Select(a => a.AgentName));
@@ -370,8 +362,6 @@ namespace TestCentric.Gui.Model
             Runner.Dispose();
             LoadedTests = null;
             AvailableCategories = null;
-            TestPackage = null;
-            TestFiles.Clear();
             ClearResults();
             _assemblyWatcher.Stop();
 
@@ -555,7 +545,7 @@ namespace TestCentric.Gui.Model
         {
             try
             {
-                if (IsPackageLoaded)
+                if (IsProjectLoaded)
                     UnloadTests();
 
                 if (Runner != null)
@@ -587,36 +577,6 @@ namespace TestCentric.Gui.Model
         #endregion
 
         #region Helper Methods
-
-        // Public for testing only
-        public TestPackage MakeTestPackage(IList<string> testFiles)
-        {
-            var package = new TestPackage(testFiles);
-            var engineSettings = Settings.Engine;
-
-            // We use AddSetting rather than just setting the value because
-            // it propagates the setting to all subprojects.
-
-            if (engineSettings.Agents > 0)
-                package.AddSetting(EnginePackageSettings.MaxAgents, engineSettings.Agents);
-
-            if (engineSettings.SetPrincipalPolicy)
-                package.AddSetting(EnginePackageSettings.PrincipalPolicy, engineSettings.PrincipalPolicy);
-
-            //if (Options.InternalTraceLevel != null)
-            //    package.AddSetting(EnginePackageSettings.InternalTraceLevel, Options.InternalTraceLevel);
-
-            package.AddSetting(EnginePackageSettings.ShadowCopyFiles, engineSettings.ShadowCopyFiles);
-
-            foreach (var subpackage in package.SubPackages)
-                if (Path.GetExtension(subpackage.Name) == ".sln")
-                    subpackage.AddSetting(EnginePackageSettings.SkipNonTestAssemblies, true);
-
-            foreach (var entry in PackageOverrides)
-                package.AddSetting(entry.Key, entry.Value);
-
-            return package;
-        }
 
         // The engine returns more values than we really want.
         // For example, we don't currently distinguish between
@@ -699,12 +659,12 @@ namespace TestCentric.Gui.Model
             // in a different mode than last time.
             if (_lastRunWasDebugRun != debuggingRequested)
             {
-                foreach (var subPackage in TestPackage.SubPackages)
+                foreach (var subPackage in TestProject.SubPackages)
                 {
                     subPackage.Settings["DebugTests"] = debuggingRequested;
                 }
 
-                Runner = TestEngine.GetRunner(TestPackage);
+                Runner = TestEngine.GetRunner(TestProject);
                 Runner.Load();
 
                 // It is not strictly necessary to load the tests

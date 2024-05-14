@@ -20,7 +20,7 @@ namespace TestCentric.Gui.Model
         [TestCase("dummy.dll", "--trace=Warning")]
         [TestCase("dummy.dll", "--trace=Info", "--work=/Path/To/Directory")]
         [TestCase("dummy.dll", "--trace=Debug")]
-        [TestCase("dummy.dll", "--work=/Some/Directory", "==agents:32")]
+        [TestCase("dummy.dll", "--work=/Some/Directory", "--agents:32")]
         [TestCase("dummy.dll", "--agents:5")]
         [TestCase("dummy.dll", "--X86")]
         [TestCase("dummy.dll", "--param:X=5")]
@@ -33,13 +33,12 @@ namespace TestCentric.Gui.Model
 
             Assert.That(model, Is.Not.Null, "Unable to create TestModel");
 
-            string expectedTraceLevel = options.InternalTraceLevel ?? "Off";
-            string actualTraceLevel = model.PackageOverrides[EnginePackageSettings.InternalTraceLevel] as string;
-            Assert.That(actualTraceLevel, Is.EqualTo(expectedTraceLevel));
-
             Assert.That(engine.WorkDirectory, Is.EqualTo(options.WorkDirectory));
+            Assert.That(engine.InternalTraceLevel.ToString(), Is.EqualTo(options.InternalTraceLevel ?? "Off"));
 
-            var checker = new PackageOverridesChecker(model);
+            var project = model.CreateNewProject(options.InputFiles);
+            var checker = new PackageSettingsChecker(project.Settings);
+
             checker.CheckSetting(options.MaxAgents, EnginePackageSettings.MaxAgents);
             checker.CheckSetting(options.RunAsX86, EnginePackageSettings.RunAsX86);
 
@@ -55,21 +54,21 @@ namespace TestCentric.Gui.Model
             }
         }
 
-        private class PackageOverridesChecker
+        private class PackageSettingsChecker
         {
-            private IDictionary<string, object> _dictionary;
+            private IDictionary<string, object> _settings;
 
-            public PackageOverridesChecker(ITestModel model)
+            public PackageSettingsChecker(IDictionary<string, object> settings)
             {
-                _dictionary = model.PackageOverrides;
+                _settings = settings;
             }
 
             public void CheckSetting(bool option, string key)
             {
-                if (option || _dictionary.ContainsKey(key))
+                if (option || _settings.ContainsKey(key))
                 {
-                    Assert.That(_dictionary, Contains.Key(key));
-                    Assert.That(_dictionary[key], Is.EqualTo(option));
+                    Assert.That(_settings, Contains.Key(key));
+                    Assert.That(_settings[key], Is.EqualTo(option));
                 }
             }
 
@@ -77,11 +76,11 @@ namespace TestCentric.Gui.Model
             {
                 if (option != null)
                 {
-                    Assert.That(_dictionary, Contains.Key(key));
-                    Assert.That(_dictionary[key], Is.EqualTo(option));
+                    Assert.That(_settings, Contains.Key(key));
+                    Assert.That(_settings[key], Is.EqualTo(option));
                 }
                 else
-                    Assert.That(_dictionary, Does.Not.ContainKey(key));
+                    Assert.That(_settings, Does.Not.ContainKey(key));
             }
         }
     }
