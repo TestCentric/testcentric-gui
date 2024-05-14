@@ -99,6 +99,8 @@ namespace TestCentric.Gui.Model
 
         void SaveProject(string filename);
 
+        void CloseProject();
+
         #region Loading and Unloading Tests
 
         void LoadTests(IList<string> files);

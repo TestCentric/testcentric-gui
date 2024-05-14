@@ -61,13 +61,13 @@ namespace TestCentric.Gui.Presenters.Main
         }
 
         [Test]
-        public void NewProjectCommand_NoFileSelected_DoesNotLoadTests()
+        public void NewProjectCommand_NoFileSelected_DoesNotCreateProject()
         {
             _view.DialogManager.SelectMultipleFiles(null, null).ReturnsForAnyArgs(NO_FILES_SELECTED);
 
             _view.NewProjectCommand.Execute += Raise.Event<CommandHandler>();
 
-            _model.DidNotReceiveWithAnyArgs().LoadTests(null);
+            _model.DidNotReceiveWithAnyArgs().CreateNewProject(null);
         }
 
         [TestCase(false, false, "Assemblies (*.dll,*.exe)|*.dll;*.exe|All Files (*.*)|*.*")]
@@ -107,20 +107,20 @@ namespace TestCentric.Gui.Presenters.Main
         }
 
         [Test]
-        public void AddTestFilesCommand_WhenNothingIsSelected_DoesNotLoadTests()
+        public void AddTestFilesCommand_WhenNothingIsSelected_DoesNotCreateProject()
         {
             _view.DialogManager.SelectMultipleFiles(null, null).ReturnsForAnyArgs(NO_FILES_SELECTED);
 
             _view.AddTestFilesCommand.Execute += Raise.Event<CommandHandler>();
 
-            _model.DidNotReceive().LoadTests(Arg.Compat.Any<IList<string>>());
+            _model.DidNotReceiveWithAnyArgs().CreateNewProject(null);
         }
 
         [Test]
-        public void CloseCommand_CallsUnloadTest()
+        public void CloseProjectCommand_CallsCloseProject()
         {
-            _view.CloseCommand.Execute += Raise.Event<CommandHandler>();
-            _model.Received().UnloadTests();
+            _view.CloseProjectCommand.Execute += Raise.Event<CommandHandler>();
+            _model.Received().CloseProject();
         }
 
         //[Test]

@@ -29,7 +29,7 @@ namespace TestCentric.Gui.Presenters.Main
         [TestCase("NewProjectCommand", true)]
         [TestCase("OpenProjectCommand", true)]
         [TestCase("SaveProjectCommand", true)]
-        [TestCase("CloseCommand", true)]
+        [TestCase("CloseProjectCommand", true)]
         [TestCase("AddTestFilesCommand", true)]
         [TestCase("ReloadTestsCommand", true)]
         [TestCase("RecentFilesMenu", true)]

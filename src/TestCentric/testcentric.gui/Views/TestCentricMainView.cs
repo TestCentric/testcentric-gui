@@ -131,7 +131,7 @@ namespace TestCentric.Gui.Views
             NewProjectCommand = new CommandMenuElement(newProjectMenuItem);
             OpenProjectCommand = new CommandMenuElement(openProjectMenuItem);
             SaveProjectCommand = new CommandMenuElement(saveProjectMenuItem);
-            CloseCommand = new CommandMenuElement(closeMenuItem);
+            CloseProjectCommand = new CommandMenuElement(closeMenuItem);
             AddTestFilesCommand = new CommandMenuElement(addTestFileMenuItem);
             ReloadTestsCommand = new CommandMenuElement(reloadTestsMenuItem);
             SelectAgentMenu = new PopupMenuElement(selectAgentMenu);
@@ -503,8 +503,8 @@ namespace TestCentric.Gui.Views
             this.newProjectMenuItem,
             this.openProjectMenuItem,
             this.saveProjectMenuItem,
-            this.toolStripSeparator6,
             this.closeMenuItem,
+            this.toolStripSeparator6,
             this.addTestFileMenuItem,
             this.toolStripSeparator1,
             this.reloadTestsMenuItem,
@@ -523,19 +523,19 @@ namespace TestCentric.Gui.Views
             // 
             this.newProjectMenuItem.Name = "newProjectMenuItem";
             this.newProjectMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.newProjectMenuItem.Text = "New Project";
+            this.newProjectMenuItem.Text = "&New Project";
             // 
             // openProjectMenuItem
             // 
             this.openProjectMenuItem.Name = "openProjectMenuItem";
             this.openProjectMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.openProjectMenuItem.Text = "Open Project";
+            this.openProjectMenuItem.Text = "&Open Project";
             // 
             // saveProjectMenuItem
             // 
             this.saveProjectMenuItem.Name = "saveProjectMenuItem";
             this.saveProjectMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.saveProjectMenuItem.Text = "Save Project";
+            this.saveProjectMenuItem.Text = "&Save Project";
             // 
             // toolStripSeparator6
             // 
@@ -546,7 +546,7 @@ namespace TestCentric.Gui.Views
             // 
             this.closeMenuItem.Name = "closeMenuItem";
             this.closeMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.closeMenuItem.Text = "&Close";
+            this.closeMenuItem.Text = "&Close Project";
             // 
             // addTestFileMenuItem
             // 
@@ -1090,7 +1090,7 @@ namespace TestCentric.Gui.Views
         public ICommand NewProjectCommand { get; }
         public ICommand OpenProjectCommand { get; }
         public ICommand SaveProjectCommand { get; }
-        public ICommand CloseCommand { get; }
+        public ICommand CloseProjectCommand { get; }
         public ICommand AddTestFilesCommand { get; }
         public ICommand ReloadTestsCommand { get; }
         public IPopup SelectAgentMenu { get; }

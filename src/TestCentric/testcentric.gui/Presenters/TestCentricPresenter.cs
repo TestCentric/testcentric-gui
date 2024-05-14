@@ -98,6 +98,16 @@ namespace TestCentric.Gui.Presenters
         {
             #region Model Events
 
+            _model.Events.TestCentricProjectLoaded += (TestEventArgs e) =>
+            {
+                _view.Title = $"TestCentric - {_model.TestProject?.FileName ?? "UNNAMED.tcproj"}";
+            };
+
+            _model.Events.TestCentricProjectUnloaded += (TestEventArgs e) =>
+            {
+                _view.Title = "TestCentric Runner for NUnit";
+            };
+
             _model.Events.TestsLoading += (TestFilesLoadingEventArgs e) =>
             {
                 UpdateViewCommands(testLoading: true);
@@ -116,8 +126,6 @@ namespace TestCentric.Gui.Presenters
                 UpdateViewCommands();
 
                 _lastFilesLoaded = _model.TestProject.TestFiles.ToArray();
-
-                _view.Title = _model.TestProject?.FileName;
             };
 
             _model.Events.TestsUnloading += (TestEventArgse) =>
@@ -346,7 +354,7 @@ namespace TestCentric.Gui.Presenters
 
                 _view.NewProjectCommand.Enabled = !isTestRunning;
                 _view.OpenProjectCommand.Enabled = !isTestRunning;
-                _view.CloseCommand.Enabled = isPackageLoaded && !isTestRunning;
+                _view.CloseProjectCommand.Enabled = isPackageLoaded && !isTestRunning;
 
                 _view.ReloadTestsCommand.Enabled = isPackageLoaded && !isTestRunning;
 
@@ -366,7 +374,7 @@ namespace TestCentric.Gui.Presenters
             _view.OpenProjectCommand.Execute += () => OpenProject();
             _view.SaveProjectCommand.Execute += () => SaveProject();
 
-            _view.CloseCommand.Execute += () => CloseProject();
+            _view.CloseProjectCommand.Execute += () => CloseProject();
             _view.AddTestFilesCommand.Execute += () => AddTestFiles();
             _view.ReloadTestsCommand.Execute += () => ReloadTests();
 
@@ -650,7 +658,7 @@ namespace TestCentric.Gui.Presenters
             //DialogResult result = SaveProjectIfDirty();
 
             //if (result != DialogResult.Cancel)
-            _model.UnloadTests();
+            _model.CloseProject();
 
             //return result;
             return DialogResult.OK;
@@ -752,7 +760,7 @@ namespace TestCentric.Gui.Presenters
             _view.OpenProjectCommand.Enabled = !testLoading && !testRunning;
             _view.SaveProjectCommand.Enabled = testLoaded && !testRunning;
 
-            _view.CloseCommand.Enabled = testLoaded & !testRunning;
+            _view.CloseProjectCommand.Enabled = testLoaded & !testRunning;
             _view.AddTestFilesCommand.Enabled = testLoaded && !testRunning;
             _view.ReloadTestsCommand.Enabled = testLoaded && !testRunning;
             _view.RecentFilesMenu.Enabled = !testRunning && !testLoading;

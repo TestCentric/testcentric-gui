@@ -25,7 +25,7 @@ namespace TestCentric.Gui.Model
             _model = new TestModel(engine);
             var mockAssemblyPath = Path.Combine(TestContext.CurrentContext.TestDirectory, MOCK_ASSEMBLY);
             Assert.That(File.Exists(mockAssemblyPath));
-            _model.LoadTests(new[] { mockAssemblyPath });
+            _model.CreateNewProject(new[] { mockAssemblyPath }).LoadTests();
         }
 
         [TearDown]

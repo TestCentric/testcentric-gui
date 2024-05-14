@@ -48,6 +48,16 @@ namespace TestCentric.Gui.Presenters
             }
         }
 
+        protected void FireProjectLoadedEvent()
+        {
+            _model.Events.TestCentricProjectLoaded += Raise.Event<TestEventHandler>(new TestEventArgs());
+        }
+
+        protected void FireProjectUnloadedEvent()
+        {
+            _model.Events.TestCentricProjectUnloaded += Raise.Event<TestEventHandler>(new TestEventArgs());
+        }
+
         protected void FireTestsLoadingEvent(IList<string> testFiles)
         {
             _model.Events.TestsLoading += Raise.Event<TestFilesLoadingEventHandler>(new TestFilesLoadingEventArgs(testFiles));

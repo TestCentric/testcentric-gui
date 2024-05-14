@@ -25,6 +25,11 @@ namespace TestCentric.Gui.Model
     /// </summary>
     public interface ITestEvents
     {
+        // Events related to loading and unloading TestCentric projects
+        event TestEventHandler TestCentricProjectLoaded;
+        event TestEventHandler TestCentricProjectReloaded;
+        event TestEventHandler TestCentricProjectUnloaded;
+
         // Events related to loading and unloading tests.
         event TestFilesLoadingEventHandler TestsLoading;
         event TestEventHandler TestsReloading;

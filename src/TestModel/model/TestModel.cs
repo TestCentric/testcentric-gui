@@ -239,10 +239,13 @@ namespace TestCentric.Gui.Model
         /// <returns>The newly created test project</returns>
         public TestCentricProject CreateNewProject(IList<string> filenames)
         {
-            if (IsProjectLoaded && HasTests)
-                UnloadTests();
+            if (IsProjectLoaded)
+                CloseProject();
 
             TestProject = new TestCentricProject(this, filenames);
+
+            _events.FireTestCentricProjectLoaded();
+
             TestProject.LoadTests();
 
             return TestProject;
@@ -258,6 +261,16 @@ namespace TestCentric.Gui.Model
             throw new NotImplementedException();
         }
 
+        public void CloseProject()
+        {
+            if (HasTests)
+                UnloadTests();
+
+            TestProject = null;
+
+            _events.FireTestCentricProjectUnloaded();
+        }
+
         public void LoadTests(IList<string> files)
         {
             log.Info($"Loading test files '{string.Join("', '", files.ToArray())}'");
@@ -265,12 +278,6 @@ namespace TestCentric.Gui.Model
                 UnloadTests();
 
             _events.FireTestsLoading(files);
-
-            if (!IsProjectLoaded)
-            {
-                CreateNewProject(files);
-                log.Debug("Created TestProject");
-            }
 
             _lastTestRun = null;
             _lastRunWasDebugRun = false;
@@ -355,7 +362,6 @@ namespace TestCentric.Gui.Model
             Runner.Dispose();
             LoadedTests = null;
             AvailableCategories = null;
-            TestProject = null;
             ClearResults();
             _assemblyWatcher.Stop();
 

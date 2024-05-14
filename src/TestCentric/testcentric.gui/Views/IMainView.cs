@@ -33,7 +33,7 @@ namespace TestCentric.Gui.Views
         ICommand OpenProjectCommand { get; }
         ICommand SaveProjectCommand { get; }
 
-        ICommand CloseCommand { get; }
+        ICommand CloseProjectCommand { get; }
         ICommand AddTestFilesCommand { get; }
         ICommand ReloadTestsCommand { get; }
         IPopup SelectAgentMenu { get; }
