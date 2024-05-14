@@ -1,9 +1,10 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
 using System.Drawing;
+using TestCentric.Gui.Elements;
 
 namespace TestCentric.Gui.Views
 {
@@ -14,6 +15,13 @@ namespace TestCentric.Gui.Views
             InitializeComponent();
 
             richTextBox1.ContextMenuStrip = contextMenuStrip1;
+
+            Labels = new CheckedToolStripMenuGroup(labelsToolStripMenuItem);
+            //LabelsOn = new CheckedMenuElement(labelsOnToolStripMenuItem);
+            //LabelsOff = new CheckedMenuElement(labelsOffToolStripMenuItem);
+            //LabelsBefore = new CheckedMenuElement(labelsBeforeToolStripMenuItem);
+            //LabelsAfter = new CheckedMenuElement(labelsAfterToolStripMenuItem);
+            //LabelsBeforeAndAfter = new CheckedMenuElement(labelsBeforeAndAfterToolStripMenuItem);
         }
 
         public bool WordWrap
@@ -21,6 +29,13 @@ namespace TestCentric.Gui.Views
             get { return richTextBox1.WordWrap; }
             set { richTextBox1.WordWrap = value; }
         }
+
+        public ISelection Labels { get; set; }
+        //public IChecked LabelsOn { get; private set; }
+        //public IChecked LabelsOff { get; private set; }
+        //public IChecked LabelsBefore { get; private set; }
+        //public IChecked LabelsAfter { get; private set; }
+        //public IChecked LabelsBeforeAndAfter { get; private set; }
 
         public void Clear()
         {

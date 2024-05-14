@@ -345,7 +345,7 @@ namespace TestCentric.Gui.Presenters
         private void Label(string testName, bool condition = true)
         {
             if (condition)
-                _view.Write($"=> {testName}{NL}", Color.Green);
+                _view.Write($"=> {testName}{NL}", Arg.Any<Color>());
         }
 
         /// <summary>
@@ -354,7 +354,7 @@ namespace TestCentric.Gui.Presenters
         private void Label(string testName, string result, bool condition = true)
         {
             if (condition)
-                _view.Write($"{Displayed(result)} => {testName}{NL}", Color.Green);
+                _view.Write($"{Displayed(result)} => {testName}{NL}", Arg.Any<Color>());
         }
 
         /// <summary>
@@ -371,7 +371,7 @@ namespace TestCentric.Gui.Presenters
         /// </summary>
         private void VerifyLabelWasWritten(string testName)
         {
-            _view.Received().Write($"=> {testName}{NL}", Color.Green);
+            _view.Received().Write($"=> {testName}{NL}", Arg.Any<Color>());
         }
 
         /// <summary>
@@ -379,7 +379,7 @@ namespace TestCentric.Gui.Presenters
         /// </summary>
         private void VerifyLabelWasWritten(string testName, string result)
         {
-            _view.Received().Write($"{Displayed(result)} => {testName}{NL}", Color.Green);
+            _view.Received().Write($"{Displayed(result)} => {testName}{NL}", Arg.Any<Color>());
         }
 
         private static string Displayed(string result)

@@ -8,20 +8,18 @@ using System.Drawing;
 
 namespace TestCentric.Gui.Presenters
 {
+    using System.Collections.Generic;
+    using System.Drawing.Drawing2D;
     using Model;
     using Views;
 
     public class TextOutputPresenter
     {
-        public static Color WarningColor = Color.Yellow;
-        static readonly Color ErrorColor = Color.Red;
-        static readonly Color LabelColor = Color.Green;
         static readonly Color OutputColor = Color.Black;
 
         ITextOutputView _view;
         ITestModel _model;
 
-        private string _labels;
         private bool _displayBeforeOutput = true;
         private bool _displayBeforeTest = false;
         private bool _displayAfterTest = false;
@@ -29,7 +27,16 @@ namespace TestCentric.Gui.Presenters
         private string _currentLabel = null;
         private string _lastTestOutput = null;
 
+        private List<Action> OutputActions = new List<Action>();
+
+        private Action<TestNodeEventArgs> TestStartingAction { get; set; }
+        private Action<TestResultEventArgs> TestFinishedAction { get; set; }
+        private Action<TestResultEventArgs> SuiteFinishedAction { get; set; }
+        private Action<TestOutputEventArgs> TestOutputAction { get; set; }
+
         bool _wantNewLine = false;
+
+        #region Construction and Initialization
 
         public TextOutputPresenter(ITextOutputView view, ITestModel model)
         {
@@ -41,8 +48,64 @@ namespace TestCentric.Gui.Presenters
             WireUpEvents();
         }
 
+        private void Initialize(bool clearDisplay = false)
+        {
+            var labels = _model.Settings.Gui.TextOutput.Labels;
+
+            _displayBeforeTest = labels == "ALL" || labels == "BEFORE" || labels == "BEFOREANDAFTER";
+            _displayAfterTest = labels == "AFTER" || labels == "BEFOREANDAFTER";
+            _displayBeforeOutput = _displayBeforeTest || _displayAfterTest || labels == "ON";
+
+            _currentLabel = _lastTestOutput = null;
+            _wantNewLine = false;
+
+            if (clearDisplay)
+                _view.Clear();
+        }
+
         private void WireUpEvents()
         {
+            TestStartingAction = (e) =>
+            {
+                if (_displayBeforeTest)
+                    WriteLabelLine(e.Test.FullName, OutputColor);
+            };
+
+            TestFinishedAction = (e) =>
+            {
+                if (e.Result.Output != null)
+                {
+                    if (_displayBeforeOutput)
+                        WriteLabelLine(e.Result.FullName, OutputColor);
+
+                    WriteOutputLine(e.Result.FullName, e.Result.Output, OutputColor);
+                }
+
+                if (_displayAfterTest)
+                    WriteLabelLineAfterTest(e.Result.FullName, e.Result.Outcome);
+            };
+
+            SuiteFinishedAction = (e) =>
+            {
+                if (e.Result.Output != null)
+                {
+                    if (_displayBeforeOutput)
+                        WriteLabelLine(e.Result.FullName, OutputColor);
+
+                    FlushNewLineIfNeeded();
+                    WriteOutputLine(e.Result.FullName, e.Result.Output, OutputColor);
+                }
+            };
+
+            TestOutputAction = (e) =>
+            {
+                if (_displayBeforeOutput && e.TestName != null)
+                    WriteLabelLine(e.TestName, OutputColor);
+
+                WriteOutputLine(e.TestName, e.Text,
+                    e.Stream == "Error" ? Color.Red : Color.Black);
+            };
+
             _model.Events.TestLoaded += ((TestNodeEventArgs e) =>
             {
                 Initialize(true);
@@ -65,73 +128,73 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.TestStarting += (TestNodeEventArgs e) =>
             {
-                if (_displayBeforeTest)
-                    WriteLabelLine(e.Test.FullName);
+                OutputActions.Add(() => TestStartingAction(e));
+
+                TestStartingAction(e);
             };
 
             _model.Events.TestFinished += (TestResultEventArgs e) =>
             {
-                if (e.Result.Output != null)
-                {
-                    if (_displayBeforeOutput)
-                        WriteLabelLine(e.Result.FullName);
+                OutputActions.Add(() => TestFinishedAction(e));
 
-                    WriteOutputLine(e.Result.FullName, e.Result.Output, OutputColor);
-                }
-
-                if (_displayAfterTest)
-                {
-                    var status = e.Result.Outcome.Label;
-                    if (string.IsNullOrEmpty(status))
-                        status = e.Result.Outcome.Status.ToString();
-                    WriteLabelLineAfterTest(e.Result.FullName, status);
-                }
+                TestFinishedAction(e);
             };
 
             _model.Events.SuiteFinished += (TestResultEventArgs e) =>
             {
-                if (e.Result.Output != null)
-                {
-                    if (_displayBeforeOutput)
-                        WriteLabelLine(e.Result.FullName);
+                OutputActions.Add(() => SuiteFinishedAction(e));
 
-                    FlushNewLineIfNeeded();
-                    WriteOutputLine(e.Result.FullName, e.Result.Output, OutputColor);
-                }
+                SuiteFinishedAction(e);
             };
 
             _model.Events.TestOutput += (TestOutputEventArgs e) =>
             {
-                if (_displayBeforeOutput && e.TestName != null)
-                    WriteLabelLine(e.TestName);
+                OutputActions.Add(() => TestOutputAction(e));
 
-                WriteOutputLine(e.TestName, e.Text,
-                    e.Stream == "Error" ? ErrorColor : OutputColor);
+                TestOutputAction(e);
             };
+
+            //_model.Settings.Gui.TextOutput.Changed += (s, e) => 
+            //{ 
+            //    _view.LabelsOn.Checked = e.SettingName
+            //};
+
+            //_model.Events.SelectedItemChanged += (e) =>
+            //{
+            //    var testNode = _model.ActiveTestItem as TestNode;
+            //    _view.
+            //}
+
+            _view.Labels.SelectionChanged += () => ChangeLabelSetting(_view.Labels.SelectedItem);
+
+            //_view.LabelsOff.CheckedChanged += () => ChangeLabelSetting("OFF");
+            //_view.LabelsOn.CheckedChanged += () => ChangeLabelSetting("ON");
+            //_view.LabelsBefore.CheckedChanged += () => ChangeLabelSetting("BEFORE");
+            //_view.LabelsAfter.CheckedChanged += () => ChangeLabelSetting("AFTER");
+            //_view.LabelsBeforeAndAfter.CheckedChanged += () => ChangeLabelSetting("BEFOREANDAFTER");
         }
 
-        private void Initialize(bool clearDisplay = false)
+        private void ChangeLabelSetting(string labels)
         {
-            _labels = _model.Settings.Gui.TextOutput.Labels;
-            _displayBeforeTest = _labels == "ALL" || _labels == "BEFORE" || _labels == "BEFOREANDAFTER";
-            _displayAfterTest = _labels == "AFTER" || _labels == "BEFOREANDAFTER";
-            _displayBeforeOutput = _displayBeforeTest || _displayAfterTest || _labels == "ON";
+            _model.Settings.Gui.TextOutput.Labels = labels;
+            Initialize(true);
 
-            _currentLabel = _lastTestOutput = null;
-            _wantNewLine = false;
-
-            if (clearDisplay)
-                _view.Clear();
+            foreach (var action in OutputActions)
+            {
+                action();
+            }
         }
 
-        private void WriteLabelLine(string label)
+        #endregion
+
+        private void WriteLabelLine(string label, Color color)
         {
             if (label != _currentLabel)
             {
                 FlushNewLineIfNeeded();
                 _lastTestOutput = label;
 
-                WriteLine($"=> {label}", LabelColor);
+                WriteLine($"=> {label}", color);
 
                 _currentLabel = label;
             }
@@ -154,12 +217,21 @@ namespace TestCentric.Gui.Presenters
             }
         }
 
-        private void WriteLabelLineAfterTest(string label, string status)
+        private void WriteLabelLineAfterTest(string label, ResultState outcome)
         {
             FlushNewLineIfNeeded();
             _lastTestOutput = label;
 
-            WriteLine($"{status} => {label}", LabelColor);
+            var status = outcome.Label;
+            if (string.IsNullOrEmpty(status))
+                status = outcome.Status.ToString();
+
+            var labelColor =
+                outcome.Status == TestStatus.Passed ? Color.Green :
+                outcome.Status == TestStatus.Failed ? Color.Red :
+                outcome.Status == TestStatus.Warning ? Color.DarkOrange : Color.Purple;
+
+            WriteLine($"{status} => {label}", labelColor);
 
             _currentLabel = label;
         }

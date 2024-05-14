@@ -51,7 +51,7 @@ namespace TestCentric.Gui.Model
         public ResultNode Result { get; set; }
     }
 
-    public class TestItemEventArgs : EventArgs
+    public class TestItemEventArgs : TestEventArgs
     {
         public TestItemEventArgs(ITestItem testItem)
         {
@@ -61,7 +61,7 @@ namespace TestCentric.Gui.Model
         public ITestItem TestItem { get; private set; }
     }
 
-    public class TestOutputEventArgs : EventArgs
+    public class TestOutputEventArgs : TestEventArgs
     {
         public TestOutputEventArgs(string testName, string stream, string text)
         {
@@ -75,7 +75,7 @@ namespace TestCentric.Gui.Model
         public string Text { get; }
     }
 
-    public class UnhandledExceptionEventArgs : EventArgs
+    public class UnhandledExceptionEventArgs : TestEventArgs
     {
         public UnhandledExceptionEventArgs(string message, string stackTrace)
         {
@@ -87,7 +87,7 @@ namespace TestCentric.Gui.Model
         public string StackTrace;
     }
 
-    public class TestFilesLoadingEventArgs : EventArgs
+    public class TestFilesLoadingEventArgs : TestEventArgs
     {
         public TestFilesLoadingEventArgs(IList<string> testFilesLoading)
         {
@@ -97,7 +97,7 @@ namespace TestCentric.Gui.Model
         public IList<string> TestFilesLoading { get; }
     }
 
-    public class TestLoadFailureEventArgs : EventArgs
+    public class TestLoadFailureEventArgs : TestEventArgs
     {
         public TestLoadFailureEventArgs(Exception ex)
         {
