@@ -69,13 +69,13 @@ namespace TestCentric.Gui.Views
             this.toolStripSeparator2,
             this.labelsToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(159, 126);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 148);
             this.contextMenuStrip1.Opened += new System.EventHandler(this.contextMenuStrip1_Opened);
             // 
             // copyToolStripMenuItem
             // 
             this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.copyToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.copyToolStripMenuItem.Text = "&Copy";
             this.copyToolStripMenuItem.ToolTipText = "Copy selected text to the clipboard.";
             this.copyToolStripMenuItem.Click += new System.EventHandler(this.copyToolStripMenuItem_Click);
@@ -83,7 +83,7 @@ namespace TestCentric.Gui.Views
             // selectAllToolStripMenuItem
             // 
             this.selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
-            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.selectAllToolStripMenuItem.Text = "Select &All";
             this.selectAllToolStripMenuItem.ToolTipText = "Select all text displayed.";
             this.selectAllToolStripMenuItem.Click += new System.EventHandler(this.selectAllToolStripMenuItem_Click);
@@ -91,12 +91,12 @@ namespace TestCentric.Gui.Views
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(155, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // wordWrapToolStripMenuItem
             // 
             this.wordWrapToolStripMenuItem.Name = "wordWrapToolStripMenuItem";
-            this.wordWrapToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.wordWrapToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.wordWrapToolStripMenuItem.Text = "&Word Wrap";
             this.wordWrapToolStripMenuItem.ToolTipText = "Toggle word-wrap.";
             this.wordWrapToolStripMenuItem.Click += new System.EventHandler(this.wordWrapToolStripMenuItem_Click);
@@ -108,7 +108,7 @@ namespace TestCentric.Gui.Views
             this.decreaseToolStripMenuItem,
             this.resetToolStripMenuItem});
             this.fontToolStripMenuItem.Name = "fontToolStripMenuItem";
-            this.fontToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.fontToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.fontToolStripMenuItem.Text = "Font";
             // 
             // increaseToolStripMenuItem
@@ -135,7 +135,7 @@ namespace TestCentric.Gui.Views
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(155, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(177, 6);
             // 
             // labelsToolStripMenuItem
             // 
@@ -146,13 +146,14 @@ namespace TestCentric.Gui.Views
             this.labelsAfterToolStripMenuItem,
             this.labelsBeforeAndAfterToolStripMenuItem});
             this.labelsToolStripMenuItem.Name = "labelsToolStripMenuItem";
-            this.labelsToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
+            this.labelsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.labelsToolStripMenuItem.Text = "Test Case Labels";
             // 
             // labelsOffToolStripMenuItem
             // 
             this.labelsOffToolStripMenuItem.Name = "labelsOffToolStripMenuItem";
             this.labelsOffToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.labelsOffToolStripMenuItem.Tag = "OFF";
             this.labelsOffToolStripMenuItem.Text = "Off";
             this.labelsOffToolStripMenuItem.ToolTipText = "Displays output without any labels.";
             // 
@@ -160,6 +161,7 @@ namespace TestCentric.Gui.Views
             // 
             this.labelsOnToolStripMenuItem.Name = "labelsOnToolStripMenuItem";
             this.labelsOnToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.labelsOnToolStripMenuItem.Tag = "ON";
             this.labelsOnToolStripMenuItem.Text = "On";
             this.labelsOnToolStripMenuItem.ToolTipText = "Displays a label immediately before any text output.\r\n        Repeats the label i" +
     "f output is interleaved.";
@@ -168,6 +170,7 @@ namespace TestCentric.Gui.Views
             // 
             this.labelsBeforeToolStripMenuItem.Name = "labelsBeforeToolStripMenuItem";
             this.labelsBeforeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.labelsBeforeToolStripMenuItem.Tag = "BEFORE";
             this.labelsBeforeToolStripMenuItem.Text = "Before";
             this.labelsBeforeToolStripMenuItem.ToolTipText = "Displays a label at the start of each  test, even if no output is produced.\r\n    " +
     "    Repeats the label if output is interleaved.";
@@ -176,6 +179,7 @@ namespace TestCentric.Gui.Views
             // 
             this.labelsAfterToolStripMenuItem.Name = "labelsAfterToolStripMenuItem";
             this.labelsAfterToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.labelsAfterToolStripMenuItem.Tag = "AFTER";
             this.labelsAfterToolStripMenuItem.Text = "After";
             this.labelsAfterToolStripMenuItem.ToolTipText = "Displays a label at the end of every test, including pass/fail status.\r\n        R" +
     "epeats the label if output is interleaved.";
@@ -184,6 +188,7 @@ namespace TestCentric.Gui.Views
             // 
             this.labelsBeforeAndAfterToolStripMenuItem.Name = "labelsBeforeAndAfterToolStripMenuItem";
             this.labelsBeforeAndAfterToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.labelsBeforeAndAfterToolStripMenuItem.Tag = "BEFOREANDAFTER";
             this.labelsBeforeAndAfterToolStripMenuItem.Text = "Before and After";
             this.labelsBeforeAndAfterToolStripMenuItem.ToolTipText = "Displays labels for both the start and the end of every test.\r\n        Repeats th" +
     "e label if output is interleaved.";

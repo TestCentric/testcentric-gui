@@ -11,11 +11,12 @@ namespace TestCentric.Gui.Views
     public interface ITextOutputView
     {
         bool WordWrap { get; set; }
-        ICommand LabelsOn { get; }
-        ICommand LabelsOff { get; }
-        ICommand LabelsBefore { get; }
-        ICommand LabelsAfter { get; }
-        ICommand LabelsBeforeAndAfter { get; }
+        ISelection Labels { get; set; }
+        //IChecked LabelsOn { get; }
+        //IChecked LabelsOff { get; }
+        //IChecked LabelsBefore { get; }
+        //IChecked LabelsAfter { get; }
+        //IChecked LabelsBeforeAndAfter { get; }
         void Clear();
         void Write(string text);
         void Write(string text, Color color);

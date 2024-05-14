@@ -16,11 +16,12 @@ namespace TestCentric.Gui.Views
 
             richTextBox1.ContextMenuStrip = contextMenuStrip1;
 
-            LabelsOn = new CommandMenuElement(labelsOnToolStripMenuItem);
-            LabelsOff = new CommandMenuElement(labelsOffToolStripMenuItem);
-            LabelsBefore = new CommandMenuElement(labelsBeforeToolStripMenuItem);
-            LabelsAfter = new CommandMenuElement(labelsAfterToolStripMenuItem);
-            LabelsBeforeAndAfter = new CommandMenuElement(labelsBeforeAndAfterToolStripMenuItem);
+            Labels = new CheckedToolStripMenuGroup(labelsToolStripMenuItem);
+            //LabelsOn = new CheckedMenuElement(labelsOnToolStripMenuItem);
+            //LabelsOff = new CheckedMenuElement(labelsOffToolStripMenuItem);
+            //LabelsBefore = new CheckedMenuElement(labelsBeforeToolStripMenuItem);
+            //LabelsAfter = new CheckedMenuElement(labelsAfterToolStripMenuItem);
+            //LabelsBeforeAndAfter = new CheckedMenuElement(labelsBeforeAndAfterToolStripMenuItem);
         }
 
         public bool WordWrap
@@ -29,11 +30,12 @@ namespace TestCentric.Gui.Views
             set { richTextBox1.WordWrap = value; }
         }
 
-        public ICommand LabelsOn { get; private set; }
-        public ICommand LabelsOff { get; private set; }
-        public ICommand LabelsBefore { get; private set; }
-        public ICommand LabelsAfter { get; private set; }
-        public ICommand LabelsBeforeAndAfter { get; private set; }
+        public ISelection Labels { get; set; }
+        //public IChecked LabelsOn { get; private set; }
+        //public IChecked LabelsOff { get; private set; }
+        //public IChecked LabelsBefore { get; private set; }
+        //public IChecked LabelsAfter { get; private set; }
+        //public IChecked LabelsBeforeAndAfter { get; private set; }
 
         public void Clear()
         {
