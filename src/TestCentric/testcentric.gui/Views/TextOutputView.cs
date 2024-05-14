@@ -1,9 +1,10 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
 using System.Drawing;
+using TestCentric.Gui.Elements;
 
 namespace TestCentric.Gui.Views
 {
@@ -14,6 +15,12 @@ namespace TestCentric.Gui.Views
             InitializeComponent();
 
             richTextBox1.ContextMenuStrip = contextMenuStrip1;
+
+            LabelsOn = new CommandMenuElement(labelsOnToolStripMenuItem);
+            LabelsOff = new CommandMenuElement(labelsOffToolStripMenuItem);
+            LabelsBefore = new CommandMenuElement(labelsBeforeToolStripMenuItem);
+            LabelsAfter = new CommandMenuElement(labelsAfterToolStripMenuItem);
+            LabelsBeforeAndAfter = new CommandMenuElement(labelsBeforeAndAfterToolStripMenuItem);
         }
 
         public bool WordWrap
@@ -21,6 +28,12 @@ namespace TestCentric.Gui.Views
             get { return richTextBox1.WordWrap; }
             set { richTextBox1.WordWrap = value; }
         }
+
+        public ICommand LabelsOn { get; private set; }
+        public ICommand LabelsOff { get; private set; }
+        public ICommand LabelsBefore { get; private set; }
+        public ICommand LabelsAfter { get; private set; }
+        public ICommand LabelsBeforeAndAfter { get; private set; }
 
         public void Clear()
         {
