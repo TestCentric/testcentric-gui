@@ -16,6 +16,8 @@ namespace TestCentric.Gui.Model
     {
         private ITestModel _model;
 
+        public static bool IsProjectFile(string path) => Path.GetExtension(path).ToLower() == ".tcproj";
+
         public string FileName => Path.GetFileName(ProjectPath);
         public string ProjectPath { get; private set; }
 
@@ -73,8 +75,14 @@ namespace TestCentric.Gui.Model
             }
 
             foreach (var subpackage in SubPackages)
-                if (Path.GetExtension(subpackage.Name) == ".sln")
-                    subpackage.AddSetting(EnginePackageSettings.SkipNonTestAssemblies, true);
+                switch(Path.GetExtension(subpackage.Name))
+                {
+                    case ".sln":
+                        subpackage.AddSetting(EnginePackageSettings.SkipNonTestAssemblies, true);
+                        break;
+                    case ".tcproj":
+                        throw new InvalidOperationException("A TestCentric project may not contain another TestCentric project.");
+                }
         }
 
         public void Load(string path)

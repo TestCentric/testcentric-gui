@@ -24,7 +24,7 @@ namespace TestCentric.Gui.Presenters.Main
             _model.LoadedTests.Returns(testNode);
 
             var project = new TestCentricProject(_model, "dummy.dll");
-            _model.TestProject.Returns(project);
+            _model.TestCentricProject.Returns(project);
             FireTestLoadedEvent(testNode);
         }
 

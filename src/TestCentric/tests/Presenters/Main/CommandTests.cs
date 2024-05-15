@@ -93,7 +93,7 @@ namespace TestCentric.Gui.Presenters.Main
             testFiles.Add("FILE1");
             testFiles.Add("FILE2");
             var project = new TestCentricProject(_model, testFiles);
-            _model.TestProject.Returns(project);
+            _model.TestCentricProject.Returns(project);
 
             var filesToAdd = new string[] { Path.GetFullPath("/path/to/test.dll") };
             _view.DialogManager.SelectMultipleFiles(null, null).ReturnsForAnyArgs(filesToAdd);

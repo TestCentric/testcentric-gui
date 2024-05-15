@@ -51,7 +51,6 @@ namespace TestCentric.Gui.Presenters
 
         private string _guiLayout;
 
-        private readonly RecentFiles _recentFiles;
 
         private AgentSelectionController _agentSelectionController;
 
@@ -74,7 +73,6 @@ namespace TestCentric.Gui.Presenters
             _options = options;
 
             _settings = _model.Settings;
-            _recentFiles = _model.RecentFiles;
 
             _agentSelectionController = new AgentSelectionController(_model, _view);
 
@@ -100,7 +98,7 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.TestCentricProjectLoaded += (TestEventArgs e) =>
             {
-                _view.Title = $"TestCentric - {_model.TestProject?.FileName ?? "UNNAMED.tcproj"}";
+                _view.Title = $"TestCentric - {_model.TestCentricProject?.FileName ?? "UNNAMED.tcproj"}";
             };
 
             _model.Events.TestCentricProjectUnloaded += (TestEventArgs e) =>
@@ -125,7 +123,7 @@ namespace TestCentric.Gui.Presenters
 
                 UpdateViewCommands();
 
-                _lastFilesLoaded = _model.TestProject.TestFiles.ToArray();
+                _lastFilesLoaded = _model.TestCentricProject.TestFiles.ToArray();
             };
 
             _model.Events.TestsUnloading += (TestEventArgse) =>
@@ -278,23 +276,12 @@ namespace TestCentric.Gui.Presenters
                 Application.DoEvents();
 
                 // Create an unnamed TestCentricProject and load test specified on command line
-                if (_options.InputFiles.Count != 0)
-                {
-                    log.Debug($"Loading files from command-line: {string.Join(", ", _options.InputFiles.ToArray())}");
+                if (_options.InputFiles.Count == 1)
+                    _model.OpenExistingFile(_options.InputFiles[0]);
+                else if (_options.InputFiles.Count >1)
                     _model.CreateNewProject(_options.InputFiles);
-                }
                 else if (_settings.Gui.LoadLastProject && !_options.NoLoad)
-                {
-                    // Find the most recent file loaded, which still exists
-                    foreach (string entry in _recentFiles.Entries)
-                    {
-                        if (entry != null && File.Exists(entry))
-                        {
-                            _model.CreateNewProject(new[] { entry });
-                            break;
-                        }
-                    }
-                }
+                    _model.OpenMostRecentFile();
 
                 //if ( guiOptions.include != null || guiOptions.exclude != null)
                 //{
@@ -408,7 +395,7 @@ namespace TestCentric.Gui.Presenters
                     menuItem.Click += (sender, ea) =>
                     {
                         string path = ((ToolStripMenuItem)sender).Text.Substring(2);
-                        _model.CreateNewProject(new[] { path });
+                        _model.OpenExistingFile(path);
                     };
                     menuItems.Add(menuItem);
                     if (num >= _settings.Gui.RecentProjects.MaxFiles) break;
@@ -612,9 +599,9 @@ namespace TestCentric.Gui.Presenters
                 dlg.Font = _settings.Gui.Font;
                 dlg.StartPosition = FormStartPosition.CenterParent;
 
-                if (_model.TestProject.Settings.ContainsKey("TestParametersDictionary"))
+                if (_model.TestCentricProject.Settings.ContainsKey("TestParametersDictionary"))
                 {
-                    var testParms = _model.TestProject  .Settings["TestParametersDictionary"] as IDictionary<string, string>;
+                    var testParms = _model.TestCentricProject  .Settings["TestParametersDictionary"] as IDictionary<string, string>;
                     foreach (string key in testParms.Keys)
                         dlg.Parameters.Add(key, testParms[key]);
                 }
@@ -643,12 +630,12 @@ namespace TestCentric.Gui.Presenters
         {
             var projectPath = _view.DialogManager.GetFileOpenPath("Open TestCentric Project", "TestCentric Project (*.tcproj) | *.tcproj");
             if (projectPath != null)
-                _model.OpenProject(projectPath);
+                _model.OpenExistingProject(projectPath);
         }
 
         private void SaveProject()
         {
-            var projectPath = _view.DialogManager.GetFileSavePath("Save TestCentric Project", "TestCentric Project(*.tcproj) | *.tcproj", null, null);
+            var projectPath = _view.DialogManager.GetFileSavePath("Save TestCentric Project", "TestCentric Project(*.tcproj) | *.tcproj", _model.WorkDirectory, null);
             if (projectPath != null)
             {
                 try
@@ -689,7 +676,7 @@ namespace TestCentric.Gui.Presenters
 
             if (filesToAdd.Count > 0)
             {
-                var files = new List<string>(_model.TestProject.TestFiles);
+                var files = new List<string>(_model.TestCentricProject.TestFiles);
                 files.AddRange(filesToAdd);
 
                 _model.CreateNewProject(files);
@@ -822,7 +809,7 @@ namespace TestCentric.Gui.Presenters
 
         private void ChangePackageSettingAndReload(string key, object setting)
         {
-            var settings = _model.TestProject.Settings;
+            var settings = _model.TestCentricProject.Settings;
             if (setting == null || setting as string == "DEFAULT")
                 settings.Remove(key);
             else
@@ -832,7 +819,7 @@ namespace TestCentric.Gui.Presenters
             // does not re-create the Engine.  Since we just changed a setting, we must
             // re-create the Engine by unloading/reloading the tests. We make a copy of
             // __model.TestFiles because the method does an unload before it loads.
-            _model.TestProject.LoadTests();
+            _model.TestCentricProject.LoadTests();
         }
 
         private void applyFont(Font font)

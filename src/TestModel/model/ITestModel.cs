@@ -47,7 +47,7 @@ namespace TestCentric.Gui.Model
 
         #region Current State of the Model
 
-        TestCentricProject TestProject { get; }
+        TestCentricProject TestCentricProject { get; }
 
         bool IsProjectLoaded { get; }
 
@@ -95,7 +95,11 @@ namespace TestCentric.Gui.Model
         // Create a new project containing the provided test files
         TestCentricProject CreateNewProject(IList<string> filenames);
 
-        void OpenProject(string filename);
+        void OpenExistingProject(string filename);
+
+        void OpenMostRecentFile();
+
+        void OpenExistingFile(string filename);
 
         void SaveProject(string filename);
 

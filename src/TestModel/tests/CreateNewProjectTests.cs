@@ -30,7 +30,7 @@ namespace TestCentric.Gui.Model
         {
             _model.CreateNewProject(testFiles);
 
-            Assert.That(_model.TestProject.TestFiles, Is.EqualTo(testFiles));
+            Assert.That(_model.TestCentricProject.TestFiles, Is.EqualTo(testFiles));
         }
 
         // TODO: Remove? Use and test fluent methods?
@@ -92,7 +92,7 @@ namespace TestCentric.Gui.Model
             _model.CreateNewProject(files.Split(','));
             string skipKey = EnginePackageSettings.SkipNonTestAssemblies;
 
-            foreach (var subpackage in _model.TestProject.SubPackages)
+            foreach (var subpackage in _model.TestCentricProject.SubPackages)
             {
                 if (subpackage.Name.EndsWith(".sln"))
                 {

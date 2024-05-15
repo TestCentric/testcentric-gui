@@ -34,7 +34,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             _view.Nodes.Returns(nodes);
 
             var project = new TestCentricProject(_model, "dummy.dll");
-            _model.TestProject.Returns(project);
+            _model.TestCentricProject.Returns(project);
 
             _strategy = GetDisplayStrategy();
         }
