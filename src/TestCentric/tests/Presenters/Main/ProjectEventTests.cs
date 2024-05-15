@@ -20,7 +20,7 @@ namespace TestCentric.Gui.Presenters.Main
         public void WhenProjectIsCreated_TitleBarIsSet()
         {
             var project = new TestCentricProject(_model, "dummy.dll");
-            _model.TestProject.Returns(project);
+            _model.TestCentricProject.Returns(project);
 
             FireProjectLoadedEvent();
 

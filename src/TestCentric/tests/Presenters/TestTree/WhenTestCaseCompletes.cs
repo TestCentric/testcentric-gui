@@ -41,7 +41,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             _model.LoadedTests.Returns(testNode);
 
             var project = new TestCentricProject(_model, "dummy.dll");
-            _model.TestProject.Returns(project);
+            _model.TestCentricProject.Returns(project);
 
             //var treeNode = _adapter.MakeTreeNode(result);
             //_adapter.NodeIndex[suiteResult.Id] = treeNode;

@@ -25,7 +25,7 @@ namespace TestCentric.Gui.Presenters
 
         public bool AllowAgentSelection()
         {
-            var package = _model.TestProject;
+            var package = _model.TestCentricProject;
             return package != null &&
                 _model.GetAgentsForPackage(package).Count > 1;
         }
@@ -44,8 +44,8 @@ namespace TestCentric.Gui.Presenters
 
             agentMenu.MenuItems.Add(defaultMenuItem);
 
-            var agentsToEnable = _model.GetAgentsForPackage(_model.TestProject);
-            var selectedAgentName = _model.TestProject.GetSetting(EnginePackageSettings.SelectedAgentName, "DEFAULT");
+            var agentsToEnable = _model.GetAgentsForPackage(_model.TestCentricProject);
+            var selectedAgentName = _model.TestCentricProject.GetSetting(EnginePackageSettings.SelectedAgentName, "DEFAULT");
             
             foreach (var agentName in _model.AvailableAgents)
             {
@@ -60,7 +60,7 @@ namespace TestCentric.Gui.Presenters
 
             // Go through all menu items and check one
             bool isItemChecked = false;
-            var packageSettings = _model.TestProject.Settings;
+            var packageSettings = _model.TestCentricProject.Settings;
             foreach (ToolStripMenuItem item in agentMenu.MenuItems)
             {
                 if ((string)item.Tag == selectedAgentName)
@@ -79,7 +79,7 @@ namespace TestCentric.Gui.Presenters
                         // does not re-create the Engine.  Since we just changed a setting, we must
                         // re-create the Engine by unloading/reloading the tests. We make a copy of
                         // __model.TestFiles because the method does an unload before it loads.
-                        _model.TestProject.LoadTests();
+                        _model.TestCentricProject.LoadTests();
                     };
             }
 

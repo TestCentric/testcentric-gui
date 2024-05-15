@@ -15,6 +15,7 @@ using TestCentric.Engine.Services;
 
 namespace TestCentric.Gui.Model
 {
+    using System.Runtime.InteropServices;
     using Services;
     using Settings;
 
@@ -164,9 +165,9 @@ namespace TestCentric.Gui.Model
         /// <summary>
         /// The current TestProject
         /// </summary>
-        public TestCentricProject TestProject { get; set; }
+        public TestCentricProject TestCentricProject { get; set; }
 
-        public bool IsProjectLoaded => TestProject != null;
+        public bool IsProjectLoaded => TestCentricProject != null;
 
         public TestNode LoadedTests { get; private set; }
         public bool HasTests => LoadedTests != null;
@@ -243,30 +244,51 @@ namespace TestCentric.Gui.Model
             if (IsProjectLoaded)
                 CloseProject();
 
-            TestProject = new TestCentricProject(this, filenames);
+            TestCentricProject = new TestCentricProject(this, filenames);
 
             _events.FireTestCentricProjectLoaded();
 
-            TestProject.LoadTests();
+            TestCentricProject.LoadTests();
 
-            return TestProject;
+            return TestCentricProject;
         }
 
-        public void OpenProject(string projectPath)
+        public void OpenExistingProject(string projectPath)
         {
             if (IsProjectLoaded)
                 CloseProject();
 
-            TestProject = new TestCentricProject(this);
+            TestCentricProject = new TestCentricProject(this);
 
-            TestProject.Load(projectPath);
+            TestCentricProject.Load(projectPath);
 
             _events.FireTestCentricProjectLoaded();
         }
 
+        public void OpenMostRecentFile()
+        {
+            // Find the most recent file loaded, which still exists
+            foreach (string entry in RecentFiles.Entries)
+            {
+                if (entry != null && File.Exists(entry))
+                {
+                    OpenExistingFile(entry);
+                    break;
+                }
+            }
+        }
+
+        public void OpenExistingFile(string filename)
+        {
+            if (TestCentricProject.IsProjectFile(filename))
+                OpenExistingProject(filename);
+            else
+                CreateNewProject(new[] { filename });
+        }
+
         public void SaveProject(string filename)
         {
-            TestProject.SaveAs(filename);
+            TestCentricProject.SaveAs(filename);
         }
 
         public void CloseProject()
@@ -274,7 +296,7 @@ namespace TestCentric.Gui.Model
             if (HasTests)
                 UnloadTests();
 
-            TestProject = null;
+            TestCentricProject = null;
 
             _events.FireTestCentricProjectUnloaded();
         }
@@ -290,7 +312,7 @@ namespace TestCentric.Gui.Model
             _lastTestRun = null;
             _lastRunWasDebugRun = false;
 
-            Runner = TestEngine.GetRunner(TestProject);
+            Runner = TestEngine.GetRunner(TestCentricProject);
             log.Debug($"Got {Runner.GetType().Name} for package");
 
             try
@@ -318,8 +340,11 @@ namespace TestCentric.Gui.Model
 
             _events.FireTestLoaded(LoadedTests);
 
-            foreach (var subPackage in TestProject.SubPackages)
-                RecentFiles.Latest = subPackage.FullName;
+            if (TestCentricProject.ProjectPath == null)
+                foreach (var subPackage in TestCentricProject.SubPackages)
+                    RecentFiles.Latest = subPackage.FullName;
+            else 
+                RecentFiles.Latest = TestCentricProject.ProjectPath;
         }
 
         private Dictionary<string, TestNode> _testsById = new Dictionary<string, TestNode>();
@@ -343,7 +368,7 @@ namespace TestCentric.Gui.Model
         private void MapTestsToPackages()
         {
             _packageMap.Clear();
-            MapTestToPackage(LoadedTests, TestProject);
+            MapTestToPackage(LoadedTests, TestCentricProject);
         }
 
         private void MapTestToPackage(TestNode test, TestPackage package)
@@ -356,7 +381,7 @@ namespace TestCentric.Gui.Model
 
         public IList<string> GetAgentsForPackage(TestPackage package = null)
         {
-            if (package == null) package = TestProject;
+            if (package == null) package = TestCentricProject;
 
             return new List<string>(
                 Services.TestAgentService.GetAgentsForPackage(package).Select(a => a.AgentName));
@@ -401,7 +426,7 @@ namespace TestCentric.Gui.Model
                 // Replace Runner in case settings changed
             UnloadTestsIgnoringErrors();
             Runner.Dispose();
-            Runner = TestEngine.GetRunner(TestProject);
+            Runner = TestEngine.GetRunner(TestCentricProject);
 
             // Discover tests
             LoadedTests = new TestNode(Runner.Explore(Engine.TestFilter.Empty));
@@ -667,12 +692,12 @@ namespace TestCentric.Gui.Model
             // in a different mode than last time.
             if (_lastRunWasDebugRun != debuggingRequested)
             {
-                foreach (var subPackage in TestProject.SubPackages)
+                foreach (var subPackage in TestCentricProject.SubPackages)
                 {
                     subPackage.Settings["DebugTests"] = debuggingRequested;
                 }
 
-                Runner = TestEngine.GetRunner(TestProject);
+                Runner = TestEngine.GetRunner(TestCentricProject);
                 Runner.Load();
 
                 // It is not strictly necessary to load the tests

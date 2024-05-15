@@ -19,7 +19,7 @@ namespace TestCentric.Gui.Presenters.TestTree
 
             _model.HasTests.Returns(true);
             _model.IsTestRunning.Returns(false);
-            _model.TestProject.Returns(new TestCentricProject(_model, "dummy.dll"));
+            _model.TestCentricProject.Returns(new TestCentricProject(_model, "dummy.dll"));
 
             TestNode testNode = new TestNode("<test-suite id='1'/>");
             _model.LoadedTests.Returns(testNode);

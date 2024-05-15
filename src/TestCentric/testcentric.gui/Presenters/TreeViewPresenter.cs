@@ -279,9 +279,9 @@ namespace TestCentric.Gui.Presenters
         {
             visualState = null;
 
-            if (_model.TestProject.TestFiles.Count > 0)
+            if (_model.TestCentricProject.TestFiles.Count > 0)
             {
-                var filename = VisualState.GetVisualStateFileName(_model.TestProject.TestFiles[0]);
+                var filename = VisualState.GetVisualStateFileName(_model.TestCentricProject.TestFiles[0]);
                 if (File.Exists(filename))
                     visualState = VisualState.LoadFrom(filename);
             }
