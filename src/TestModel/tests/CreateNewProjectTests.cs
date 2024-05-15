@@ -39,10 +39,11 @@ namespace TestCentric.Gui.Model
         [TestCase(EnginePackageSettings.ShadowCopyFiles, false)]
         public void PackageReflectsPackageSettings(string key, object value)
         {
-            _model.CreateNewProject(new[] { "my.dll" }).AddSetting(key, value);
+            var package = _model.CreateNewProject(new[] { "my.dll" });
+            package.AddSetting(key, value);
 
-            Assert.That(_model.TestProject.Settings.ContainsKey(key));
-            Assert.That(_model.TestProject.Settings[key], Is.EqualTo(value));
+            Assert.That(package.Settings.ContainsKey(key));
+            Assert.That(package.Settings[key], Is.EqualTo(value));
         }
 
         // TODO: Remove? Use and test fluent methods?
@@ -54,10 +55,11 @@ namespace TestCentric.Gui.Model
                 { "parm1", "value1" },
                 { "parm2", "value2" }
             };
-            _model.CreateNewProject(new[] { "my.dll" }).AddSetting("TestParametersDictionary", testParms);
+            var package = _model.CreateNewProject(new[] { "my.dll" });
+            package.AddSetting("TestParametersDictionary", testParms);
 
-            Assert.That(_model.TestProject.Settings.ContainsKey("TestParametersDictionary"));
-            var parms = _model.TestProject.Settings["TestParametersDictionary"] as IDictionary<string, string>;
+            Assert.That(package.Settings.ContainsKey("TestParametersDictionary"));
+            var parms = package.Settings["TestParametersDictionary"] as IDictionary<string, string>;
             Assert.That(parms, Is.Not.Null);
 
             Assert.That(parms, Contains.Key("parm1"));

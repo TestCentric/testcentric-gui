@@ -6,9 +6,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Xml.Serialization;
 using TestCentric.Engine;
 using TestCentric.Gui.Model.Settings;
 
@@ -19,7 +17,7 @@ namespace TestCentric.Gui.Model
         private ITestModel _model;
 
         public string FileName => Path.GetFileName(ProjectPath);
-        public string ProjectPath { get; }
+        public string ProjectPath { get; private set; }
 
         public IList<String> TestFiles { get; private set; }
 
@@ -71,6 +69,33 @@ namespace TestCentric.Gui.Model
             foreach (var subpackage in SubPackages)
                 if (Path.GetExtension(subpackage.Name) == ".sln")
                     subpackage.AddSetting(EnginePackageSettings.SkipNonTestAssemblies, true);
+        }
+
+        public void SaveAs(string projectPath)
+        {
+            ProjectPath = projectPath;
+            Save();
+        }
+
+        public void Save()
+        {
+            using (StreamWriter writer = new StreamWriter(ProjectPath))
+                Save(writer);
+        }
+
+        public void Save(TextWriter writer)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(TestPackage));
+
+            try
+            {
+                serializer.Serialize(writer, this);
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new Exception(
+                    "Unable to serialize TestProject.", ex);
+            }
         }
 
         public void LoadTests()

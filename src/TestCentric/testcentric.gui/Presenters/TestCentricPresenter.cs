@@ -614,7 +614,7 @@ namespace TestCentric.Gui.Presenters
 
                 if (_model.TestProject.Settings.ContainsKey("TestParametersDictionary"))
                 {
-                    var testParms = _model.TestProject.Settings["TestParametersDictionary"] as IDictionary<string, string>;
+                    var testParms = _model.TestProject  .Settings["TestParametersDictionary"] as IDictionary<string, string>;
                     foreach (string key in testParms.Keys)
                         dlg.Parameters.Add(key, testParms[key]);
                 }
@@ -641,12 +641,27 @@ namespace TestCentric.Gui.Presenters
 
         private void OpenProject()
         {
-            _model.OpenProject("dummy");
+            var projectPath = _view.DialogManager.GetFileOpenPath("Open TestCentric Project", "TestCentric Project (*.tcproj) | *.tcproj");
+            if (projectPath != null)
+                _model.OpenProject(projectPath);
         }
 
         private void SaveProject()
         {
-            _model.SaveProject("dummy");
+            var projectPath = _view.DialogManager.GetFileSavePath("Save TestCentric Project", "TestCentric Project(*.tcproj) | *.tcproj", null, null);
+            if (projectPath != null)
+            {
+                try
+                {
+                    _model.SaveProject(projectPath);
+
+                    _view.MessageDisplay.Info(String.Format($"Results saved to {projectPath}"));
+                }
+                catch (Exception exception)
+                {
+                    _view.MessageDisplay.Error("Unable to Save Results\n\n" + MessageBuilder.FromException(exception));
+                }
+            }
         }
 
         #endregion

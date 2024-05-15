@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+    using System.Xml.Serialization;
 using TestCentric.Engine;
 using TestCentric.Engine.Services;
 
@@ -256,9 +257,9 @@ namespace TestCentric.Gui.Model
             throw new NotImplementedException();
         }
 
-        public void SaveProject(string fileName)
+        public void SaveProject(string filename)
         {
-            throw new NotImplementedException();
+            TestProject.SaveAs(filename);
         }
 
         public void CloseProject()

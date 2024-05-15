@@ -154,11 +154,6 @@ namespace TestCentric.Gui.Presenters
                 TestOutputAction(e);
             };
 
-            //_model.Settings.Gui.TextOutput.Changed += (s, e) => 
-            //{ 
-            //    _view.LabelsOn.Checked = e.SettingName
-            //};
-
             //_model.Events.SelectedItemChanged += (e) =>
             //{
             //    var testNode = _model.ActiveTestItem as TestNode;
@@ -166,12 +161,6 @@ namespace TestCentric.Gui.Presenters
             //}
 
             _view.Labels.SelectionChanged += () => ChangeLabelSetting(_view.Labels.SelectedItem);
-
-            //_view.LabelsOff.CheckedChanged += () => ChangeLabelSetting("OFF");
-            //_view.LabelsOn.CheckedChanged += () => ChangeLabelSetting("ON");
-            //_view.LabelsBefore.CheckedChanged += () => ChangeLabelSetting("BEFORE");
-            //_view.LabelsAfter.CheckedChanged += () => ChangeLabelSetting("AFTER");
-            //_view.LabelsBeforeAndAfter.CheckedChanged += () => ChangeLabelSetting("BEFOREANDAFTER");
         }
 
         private void ChangeLabelSetting(string labels)
