@@ -17,11 +17,6 @@ namespace TestCentric.Gui.Views
             richTextBox1.ContextMenuStrip = contextMenuStrip1;
 
             Labels = new CheckedToolStripMenuGroup(labelsToolStripMenuItem);
-            //LabelsOn = new CheckedMenuElement(labelsOnToolStripMenuItem);
-            //LabelsOff = new CheckedMenuElement(labelsOffToolStripMenuItem);
-            //LabelsBefore = new CheckedMenuElement(labelsBeforeToolStripMenuItem);
-            //LabelsAfter = new CheckedMenuElement(labelsAfterToolStripMenuItem);
-            //LabelsBeforeAndAfter = new CheckedMenuElement(labelsBeforeAndAfterToolStripMenuItem);
         }
 
         public bool WordWrap
@@ -31,11 +26,6 @@ namespace TestCentric.Gui.Views
         }
 
         public ISelection Labels { get; set; }
-        //public IChecked LabelsOn { get; private set; }
-        //public IChecked LabelsOff { get; private set; }
-        //public IChecked LabelsBefore { get; private set; }
-        //public IChecked LabelsAfter { get; private set; }
-        //public IChecked LabelsBeforeAndAfter { get; private set; }
 
         public void Clear()
         {

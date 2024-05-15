@@ -12,11 +12,7 @@ namespace TestCentric.Gui.Views
     {
         bool WordWrap { get; set; }
         ISelection Labels { get; set; }
-        //IChecked LabelsOn { get; }
-        //IChecked LabelsOff { get; }
-        //IChecked LabelsBefore { get; }
-        //IChecked LabelsAfter { get; }
-        //IChecked LabelsBeforeAndAfter { get; }
+
         void Clear();
         void Write(string text);
         void Write(string text, Color color);
