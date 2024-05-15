@@ -252,9 +252,16 @@ namespace TestCentric.Gui.Model
             return TestProject;
         }
 
-        public void OpenProject(string filename)
+        public void OpenProject(string projectPath)
         {
-            throw new NotImplementedException();
+            if (IsProjectLoaded)
+                CloseProject();
+
+            TestProject = new TestCentricProject(this);
+
+            TestProject.Load(projectPath);
+
+            _events.FireTestCentricProjectLoaded();
         }
 
         public void SaveProject(string filename)
@@ -385,7 +392,7 @@ namespace TestCentric.Gui.Model
         {
             _events.FireTestsReloading();
 
-#if true
+#if false
             Runner.Reload();
 #else
             // NOTE: The `ITestRunner.Reload` method supported by the engine
@@ -394,7 +401,7 @@ namespace TestCentric.Gui.Model
                 // Replace Runner in case settings changed
             UnloadTestsIgnoringErrors();
             Runner.Dispose();
-            Runner = TestEngine.GetRunner(TestPackage);
+            Runner = TestEngine.GetRunner(TestProject);
 
             // Discover tests
             LoadedTests = new TestNode(Runner.Explore(Engine.TestFilter.Empty));

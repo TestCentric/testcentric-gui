@@ -21,6 +21,12 @@ namespace TestCentric.Gui.Model
 
         public IList<String> TestFiles { get; private set; }
 
+        public TestCentricProject(ITestModel model)
+        {
+            _model = model;
+            TestFiles = new List<String>();
+        }
+
         public TestCentricProject(ITestModel model, string filename)
             : this(model, new string[] { filename }) { }
 
@@ -71,6 +77,33 @@ namespace TestCentric.Gui.Model
                     subpackage.AddSetting(EnginePackageSettings.SkipNonTestAssemblies, true);
         }
 
+        public void Load(string path)
+        {
+            ProjectPath = path;
+
+            using (StreamReader reader = new StreamReader(ProjectPath))
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(TestPackage));
+
+                try
+                {
+                    var newPackage = (TestPackage)serializer.Deserialize(reader);
+
+                    foreach (var subPackage in newPackage.SubPackages)
+                    {
+                        TestFiles.Add(subPackage.FullName);
+                        AddSubPackage(subPackage.FullName);
+                    }
+
+                    LoadTests();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Unable to deserialize TestProject.", ex);
+                }
+            }
+        }
+
         public void SaveAs(string projectPath)
         {
             ProjectPath = projectPath;
@@ -91,10 +124,9 @@ namespace TestCentric.Gui.Model
             {
                 serializer.Serialize(writer, this);
             }
-            catch (InvalidOperationException ex)
+            catch (Exception ex)
             {
-                throw new Exception(
-                    "Unable to serialize TestProject.", ex);
+                throw new Exception("Unable to serialize TestProject.", ex);
             }
         }
 
