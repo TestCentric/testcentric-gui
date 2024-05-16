@@ -326,8 +326,9 @@ namespace TestCentric.Gui.Presenters
                         _model.StopTestRun(true);
                     }
 
-                    if (CloseProject() == DialogResult.Cancel)
-                        e.Cancel = true;
+                    CloseProject();
+                    //if (CloseProject() == DialogResult.Cancel)
+                    //    e.Cancel = true;
                 }
 
                 if (!e.Cancel)
@@ -641,8 +642,6 @@ namespace TestCentric.Gui.Presenters
                 try
                 {
                     _model.SaveProject(projectPath);
-
-                    _view.MessageDisplay.Info(String.Format($"Results saved to {projectPath}"));
                 }
                 catch (Exception exception)
                 {
@@ -655,15 +654,15 @@ namespace TestCentric.Gui.Presenters
 
         #region Close Methods
 
-        public DialogResult CloseProject()
+        public void CloseProject()
         {
-            //DialogResult result = SaveProjectIfDirty();
+            if (!_options.Unattended && _model.TestCentricProject.IsDirty &&
+                _view.MessageDisplay.YesNo($"Do you want to save {_model.TestCentricProject.Name}?"))
+            {
+                SaveProject();
+            }
 
-            //if (result != DialogResult.Cancel)
             _model.CloseProject();
-
-            //return result;
-            return DialogResult.OK;
         }
 
         #endregion

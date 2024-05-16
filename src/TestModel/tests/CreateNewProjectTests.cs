@@ -5,7 +5,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using NUnit.Framework;
 using TestCentric.Common;
 using TestCentric.Gui.Model.Fakes;
@@ -21,6 +21,13 @@ namespace TestCentric.Gui.Model
         public void CreateModel()
         {
             _model = new TestModel(new MockTestEngine());
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            if (File.Exists("temp.tcproj"))
+                File.Delete("temp.tcproj");
         }
 
         [TestCase("my.test.assembly.dll")]
@@ -102,6 +109,48 @@ namespace TestCentric.Gui.Model
                 else
                     Assert.That(subpackage.Settings, Does.Not.ContainKey(skipKey));
             }
+        }
+
+
+        [Test]
+        public void NewProjectIsDirty()
+        {
+            var project = new TestCentricProject(_model, new[] { "dummy.dll" });
+            Assert.That(project.IsDirty);
+        }
+
+        public void NewProjectIsNotDirtyAfterSaving()
+        {
+            var project = new TestCentricProject(_model, new[] { "dummy.dll" });
+            project.SaveAs("temp.tcproj");
+            Assert.That(project.IsDirty, Is.False);
+        }
+
+        [Test]
+        public void LoadedProjectIsNotDirty()
+        {
+            var project = new TestCentricProject(_model);
+            project.SaveAs("temp.tcproj");
+            project.Load("temp.tcproj");
+            Assert.That(project.IsDirty, Is.False);
+        }
+
+        [Test]
+        public void AddingSubProjectMakesProjectDirty()
+        {
+            var project = _model.CreateNewProject(new[] { "dummy.dll" });
+            project.SaveAs("temp.tcproj");
+            project.AddSubPackage("another.dll");
+            Assert.That(project.IsDirty);
+        }
+
+        [Test]
+        public void AddingSettingMakesProjectDirty()
+        {
+            var project = _model.CreateNewProject(new[] { "dummy.dll" });
+            project.SaveAs("temp.tcproj");
+            project.AddSetting("NewSetting", "VALUE");
+            Assert.That(project.IsDirty);
         }
     }
 }

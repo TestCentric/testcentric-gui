@@ -15,6 +15,7 @@ namespace TestCentric.Gui.Presenters.Main
     using Elements;
     using Views;
     using Model;
+    using NSubstitute.Core.Arguments;
 
     public class CommandTests : MainPresenterTestBase
     {
@@ -116,10 +117,17 @@ namespace TestCentric.Gui.Presenters.Main
             _model.DidNotReceiveWithAnyArgs().CreateNewProject(null);
         }
 
-        [Test]
-        public void CloseProjectCommand_CallsCloseProject()
+        [TestCase(false)]
+        [TestCase(true)]
+        public void CloseProjectCommand_CallsCloseProject(bool dirty)
         {
+            var project = new TestCentricProject(_model, "dummy.dll");
+            if (dirty) project.AddSetting("SomeSetting", "VALUE");
+            _model.TestCentricProject.Returns(project);
+            _view.MessageDisplay.YesNo(Arg.Any<string>()).Returns(false);
+
             _view.CloseProjectCommand.Execute += Raise.Event<CommandHandler>();
+
             _model.Received().CloseProject();
         }
 
