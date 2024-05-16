@@ -23,6 +23,8 @@ namespace TestCentric.Gui.Model
 
         public IList<String> TestFiles { get; private set; }
 
+        public bool IsDirty { get; private set; }
+
         public TestCentricProject(ITestModel model)
         {
             _model = model;
@@ -37,6 +39,7 @@ namespace TestCentric.Gui.Model
         {
             _model = model;
             TestFiles = filenames;
+            IsDirty = true;
 
             var engineSettings = _model.Settings.Engine;
             var options = model.Options;
@@ -136,6 +139,8 @@ namespace TestCentric.Gui.Model
             {
                 throw new Exception("Unable to serialize TestProject.", ex);
             }
+
+            IsDirty = false;
         }
 
         public void LoadTests()
@@ -146,6 +151,23 @@ namespace TestCentric.Gui.Model
         public void UnloadTests()
         {
 
+        }
+
+        public new void AddSubPackage(string fullName)
+        {
+            base.AddSubPackage(fullName);
+            IsDirty = true;
+        }
+        public new void AddSubPackage(TestPackage subPackage)
+        {
+            base.AddSubPackage(subPackage);
+            IsDirty = true;
+        }
+
+        public new void AddSetting(string key, object value)
+        {
+            base.AddSetting(key, value);
+            IsDirty = true;
         }
     }
 }
