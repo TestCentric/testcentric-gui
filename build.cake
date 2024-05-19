@@ -1,5 +1,5 @@
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.2.0
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.2.1-dev00008
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -213,7 +213,7 @@ BuildSettings.Packages.Add(new NuGetPackage(
 	},
 	tests: packageTests,
 	preloadedExtensions: new [] {
-        KnownExtensions.Net462PluggableAgent.NuGetPackage.LatestRelease,
+        KnownExtensions.Net462PluggableAgent.NuGetPackage.LatestDevBuild,
         KnownExtensions.Net60PluggableAgent.NuGetPackage.LatestRelease,
         KnownExtensions.Net70PluggableAgent.NuGetPackage.LatestRelease,
         KnownExtensions.Net80PluggableAgent.NuGetPackage.LatestRelease }

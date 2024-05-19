@@ -31,7 +31,7 @@ create:
   include-sha-section: true
   sha-section-heading: "SHA256 Hashes of the release artifacts"
   sha-section-line-format: "- `{1}\t{0}`"
-  allow-update-to-published: false
+  allow-update-to-published: true
 # Configuration values used when exporting release notes
 export:
   include-created-date-in-title: true
