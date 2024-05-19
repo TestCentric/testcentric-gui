@@ -32,6 +32,12 @@ namespace TestCentric.Engine.Api
         }
 
         [Test]
+        public void TestPackageIsXmlSerializable()
+        {
+            Assert.That(_package, Is.XmlSerializable);
+        }
+
+        [Test]
         public void PackageIDsAreUnique()
         {
             string[] fileNames = _package.SubPackages.Select(p => p.FullName).ToArray();
