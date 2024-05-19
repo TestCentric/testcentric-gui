@@ -10,6 +10,7 @@ using System.Text;
 
 namespace TestCentric.Engine
 {
+    [Serializable]
     public class SettingsDictionary : IDictionary<string, object>
     {
         private Dictionary<string, object> _settings = new Dictionary<string, object>();
