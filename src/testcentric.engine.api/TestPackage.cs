@@ -4,7 +4,9 @@
 // ***********************************************************************
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Xml;
 using System.Xml.Schema;
@@ -43,7 +45,7 @@ namespace TestCentric.Engine
         /// </remarks>
         public TestPackage(params string[] testFiles)
         {
-            InitializeSubPackages(testFiles);
+            InitializeTestPackage(testFiles);
         }
 
         /// <summary>
@@ -56,7 +58,7 @@ namespace TestCentric.Engine
         /// </remarks>
         public TestPackage(IList<string> testFiles)
         {
-            InitializeSubPackages(testFiles);
+            InitializeTestPackage(testFiles);
         }
 
         /// <summary>
@@ -64,10 +66,21 @@ namespace TestCentric.Engine
         /// </summary>
         public TestPackage() { }
 
-        private void InitializeSubPackages(IList<string> testFiles)
+        private void InitializeTestPackage(IList<string> testFiles)
         {
             foreach (string testFile in testFiles)
                 AddSubPackage(testFile);
+
+            foreach (TestPackage subPackage in SubPackages)
+            {
+                subPackage.Changed += (s, e) => OnChanged();
+                subPackage.Settings.Changed += (s, e) => OnChanged();
+            }
+
+            Settings.Changed += (s, e) => OnChanged();
+#if !NET20
+            SubPackages.CollectionChanged += (s, e) => OnChanged();
+#endif
         }
 
         private static int _nextID = 0;
@@ -79,7 +92,9 @@ namespace TestCentric.Engine
 
         #endregion
 
-        #region Properties
+        #region Properties and Events
+
+        public event EventHandler Changed;
 
         /// <summary>
         /// Every test package gets a unique ID used to prefix test IDs within that package.
@@ -118,7 +133,11 @@ namespace TestCentric.Engine
         /// <summary>
         /// Gets the list of SubPackages contained in this package
         /// </summary>
+#if NET20
         public IList<TestPackage> SubPackages { get; } = new List<TestPackage>();
+#else
+        public ObservableCollection<TestPackage> SubPackages { get; } = new ObservableCollection<TestPackage>();
+#endif
 
         /// <summary>
         /// Returns true if this package has any SubPackages.
@@ -128,9 +147,9 @@ namespace TestCentric.Engine
         /// <summary>
         /// Gets the settings dictionary for this package.
         /// </summary>
-        public IDictionary<string, object> Settings { get; } = new Dictionary<string, object>();
+        public SettingsDictionary Settings { get; } = new SettingsDictionary();
 
-        #endregion
+#endregion
 
         #region Methods
 
@@ -141,10 +160,16 @@ namespace TestCentric.Engine
         /// <param name="subPackage">The subpackage to be added</param>
         public void AddSubPackage(TestPackage subPackage)
         {
+            SuspendChangeEvents();
+
             SubPackages.Add(subPackage);
 
             foreach (var key in Settings.Keys)
                 subPackage.Settings[key] = Settings[key];
+
+            ResumeChangeEvents();
+
+            subPackage.Changed += (s, e) => OnChanged();
         }
 
         /// <summary>
@@ -154,10 +179,24 @@ namespace TestCentric.Engine
         /// <param name="packageName">The name of the subpackage to be added</param>
         public TestPackage AddSubPackage(string packageName)
         {
+            SuspendChangeEvents();
+
             var subPackage = new TestPackage() { FullName = Path.GetFullPath(packageName) };
             SubPackages.Add(subPackage);
 
+            ResumeChangeEvents();
+
+            subPackage.Changed += (s, e) => OnChanged();
+
             return subPackage;
+        }
+
+        public bool RemoveSubPackage(string packageName)
+        {
+            var subPackage = new TestPackage() { FullName = Path.GetFullPath(packageName) };
+            bool removed = SubPackages.Remove(subPackage);
+            if (removed) OnChanged();
+            return removed;
         }
 
         /// <summary>
@@ -174,9 +213,13 @@ namespace TestCentric.Engine
         /// </remarks>
         public void AddSetting(string name, object value)
         {
+            SuspendChangeEvents();
+
             Settings[name] = value;
             foreach (var subPackage in SubPackages)
                 subPackage.AddSetting(name, value);
+
+            ResumeChangeEvents();
         }
 
         /// <summary>
@@ -234,30 +277,30 @@ namespace TestCentric.Engine
 
                 while (reader.Read())
                 {
-                    switch(reader.NodeType)
+                    switch (reader.NodeType)
                     {
                         case XmlNodeType.Element:
-                            switch(reader.Name)
+                            switch (reader.Name)
                             {
                                 case "Settings":
                                     while (reader.MoveToNextAttribute())
                                         package.AddSetting(reader.Name, reader.Value);
                                     reader.MoveToElement();
                                     break;
-                                
+
                                 case "TestPackage":
                                     var subPackage = new TestPackage();
                                     ProcessPackage(subPackage);
                                     package.SubPackages.Add(subPackage);
                                     break;
-                                
+
                                 default:
                                     throw new Exception($"Unexpected Element: {reader.Name}");
                             }
                             break;
 
                         case XmlNodeType.EndElement:
-                            switch(reader.Name)
+                            switch (reader.Name)
                             {
                                 case "TestPackage":
                                     return;
@@ -308,6 +351,25 @@ namespace TestCentric.Engine
                     xmlWriter.WriteEndElement();
                 }
             }
+        }
+
+        private bool _changeEventsSuspended;
+
+        private void SuspendChangeEvents()
+        {
+            _changeEventsSuspended = true;
+        }
+
+        private void ResumeChangeEvents()
+        {
+            _changeEventsSuspended = false;
+            OnChanged();
+        }
+
+        protected virtual void OnChanged()
+        {
+            if (!_changeEventsSuspended)
+                Changed?.Invoke(this, EventArgs.Empty);
         }
 
         #endregion
