@@ -78,7 +78,7 @@ namespace TestCentric.Engine
             }
 
             Settings.Changed += (s, e) => OnChanged();
-#if !NET20
+#if false
             SubPackages.CollectionChanged += (s, e) => OnChanged();
 #endif
         }
@@ -133,7 +133,7 @@ namespace TestCentric.Engine
         /// <summary>
         /// Gets the list of SubPackages contained in this package
         /// </summary>
-#if NET20
+#if true
         public IList<TestPackage> SubPackages { get; } = new List<TestPackage>();
 #else
         public ObservableCollection<TestPackage> SubPackages { get; } = new ObservableCollection<TestPackage>();

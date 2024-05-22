@@ -80,7 +80,7 @@ namespace TestCentric.Engine
             Assert.That(_changeCount, Is.EqualTo(2));
         }
 
-#if !NET20 && !NET35
+#if false
         [Test]
         public void AddSubPackageDirectly()
         {
