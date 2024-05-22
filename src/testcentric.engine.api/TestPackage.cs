@@ -263,7 +263,9 @@ namespace TestCentric.Engine
 
         public void ReadXml(XmlReader reader)
         {
+            SuspendChangeEvents();
             ProcessPackage(this);
+            ResumeChangeEvents();
 
             void ProcessPackage(TestPackage package)
             {
