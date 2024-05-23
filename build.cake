@@ -1,7 +1,7 @@
 // NOTE: This must match what is actually referenced by
 // the GUI test model project. Hopefully, this is a temporary
 // fix, which we can get rid of in the future.
-const string REF_ENGINE_VERSION = "2.0.0-dev00008";
+//const string REF_ENGINE_VERSION = "2.0.0-dev00008";
 
 // Load the recipe
 #load nuget:?package=TestCentric.Cake.Recipe&version=1.2.1
@@ -64,7 +64,7 @@ var nugetPackage = new NuGetPackage(
 				"nunit.uiexception.dll", "TestCentric.Gui.Model.dll", "Mono.Options.dll",
 				"TestCentric.Engine.dll", "TestCentric.Engine.Api.dll", "TestCentric.InternalTrace.dll",
 				"TestCentric.Metadata.dll", "TestCentric.Extensibility.dll", "TestCentric.Extensibility.Api.dll",
-				"TestCentric.Engine.pdb", "../../nuget/testcentric.nuget.addins"),
+				"../../nuget/testcentric.nuget.addins"),
 			new DirectoryContent("tools/Images/Tree/Circles").WithFiles(
 				"Images/Tree/Circles/Success.jpg", "Images/Tree/Circles/Failure.jpg", "Images/Tree/Circles/Ignored.jpg", "Images/Tree/Circles/Inconclusive.jpg", "Images/Tree/Circles/Skipped.jpg"),
 			new DirectoryContent("tools/Images/Tree/Classic").WithFiles(
@@ -103,8 +103,7 @@ var chocolateyPackage = new ChocolateyPackage(
 				"testcentric.exe", "testcentric.exe.config", "TestCentric.Gui.Runner.dll",
 				"nunit.uiexception.dll", "TestCentric.Gui.Model.dll", "Mono.Options.dll",
 				"TestCentric.Engine.dll", "TestCentric.Engine.Api.dll", "TestCentric.InternalTrace.dll",
-				"TestCentric.Metadata.dll", "TestCentric.Extensibility.dll", "TestCentric.Extensibility.Api.dll",
-				"testcentric.engine.pdb"),
+				"TestCentric.Metadata.dll", "TestCentric.Extensibility.dll", "TestCentric.Extensibility.Api.dll"),
 			new DirectoryContent("tools/Images/Tree/Circles").WithFiles(
 				"Images/Tree/Circles/Success.jpg", "Images/Tree/Circles/Failure.jpg", "Images/Tree/Circles/Ignored.jpg", "Images/Tree/Circles/Inconclusive.jpg", "Images/Tree/Circles/Skipped.jpg"),
 			new DirectoryContent("tools/Images/Tree/Classic").WithFiles(
@@ -140,26 +139,26 @@ BuildSettings.Packages.Add(chocolateyPackage);
 // The current engine package does not restore correctly. As a temporary
 // fix, we install a local copy and then copy agents and
 // content to the output directory.
-TaskTeardown(context =>
-{
-	if (context.Task.Name == "Build")
-	{
-		string engineInstallDir = BuildSettings.PackageTestDirectory;
+//TaskTeardown(context =>
+//{
+	//if (context.Task.Name == "Build")
+	//{
+		//string engineInstallDir = BuildSettings.PackageTestDirectory;
 
-		CleanDirectory(engineInstallDir);
-		NuGetInstall("TestCentric.Engine", new NuGetInstallSettings()
-		{
-			Version = REF_ENGINE_VERSION,
-			OutputDirectory = engineInstallDir,
-			ExcludeVersion = true
-		});
+		//CleanDirectory(engineInstallDir);
+		//NuGetInstall("TestCentric.Engine", new NuGetInstallSettings()
+		//{
+			//Version = REF_ENGINE_VERSION,
+			//OutputDirectory = engineInstallDir,
+			//ExcludeVersion = true
+		//});
 
-		CopyDirectory(
-			engineInstallDir + "TestCentric.Engine/tools",
-			BuildSettings.OutputDirectory);
-		Information("Copied engine files to output directory");
-	}
-});
+		//CopyDirectory(
+			//engineInstallDir + "TestCentric.Engine/tools",
+			//BuildSettings.OutputDirectory);
+		//Information("Copied engine files to output directory");
+	//}
+//});
 
 //////////////////////////////////////////////////////////////////////
 // PACKAGE TEST RUNNER
