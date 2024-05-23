@@ -197,7 +197,7 @@ BuildSettings.Packages.Add(new NuGetPackage(
 	description: "This package provides the TestCentric Engine, used by runner applications to load and excute NUnit tests.",
 	packageContent: new PackageContent(
 		new FilePath[] { "../../LICENSE.txt", "../../testcentric.png" },
-		new DirectoryContent("tools").WithFiles(
+		new DirectoryContent("lib").WithFiles(
 			"testcentric.engine.dll", "testcentric.engine.api.dll",
 			"testcentric.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll", "TestCentric.InternalTrace.dll",
 			"testcentric.engine.pdb", "test-bed.exe", "test-bed.exe.config",
@@ -205,7 +205,7 @@ BuildSettings.Packages.Add(new NuGetPackage(
 	testRunner: new TestCentricEngineTestBed(),
 	checks: new PackageCheck[] {
 		HasFiles("LICENSE.txt", "testcentric.png"),
-		HasDirectory("tools").WithFiles(
+		HasDirectory("lib").WithFiles(
 			"testcentric.engine.dll", "testcentric.engine.api.dll",
 			"testcentric.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll", "TestCentric.InternalTrace.dll",
 			"testcentric.engine.pdb", "test-bed.exe", "test-bed.exe.config",
@@ -215,8 +215,8 @@ BuildSettings.Packages.Add(new NuGetPackage(
 	preloadedExtensions: new [] {
         KnownExtensions.Net462PluggableAgent.NuGetPackage.LatestDevBuild,
         KnownExtensions.Net60PluggableAgent.NuGetPackage.LatestRelease,
-        KnownExtensions.Net70PluggableAgent.NuGetPackage.LatestRelease,
-        KnownExtensions.Net80PluggableAgent.NuGetPackage.LatestRelease }
+        KnownExtensions.Net70PluggableAgent.NuGetPackage.LatestDevBuild,
+        KnownExtensions.Net80PluggableAgent.NuGetPackage.LatestDevBuild }
 ));
 
 //////////////////////////////////////////////////////////////////////
@@ -227,7 +227,7 @@ public class TestCentricEngineTestBed : TestRunner
 {
 	public TestCentricEngineTestBed()
 	{
-		ExecutablePath = BuildSettings.NuGetTestDirectory + "TestCentric.Engine." + BuildSettings.PackageVersion + "/tools/test-bed.exe";
+		ExecutablePath = BuildSettings.NuGetTestDirectory + "TestCentric.Engine." + BuildSettings.PackageVersion + "/lib/test-bed.exe";
 	}
 
 	public override int Run(string arguments)
