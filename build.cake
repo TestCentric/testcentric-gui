@@ -1,10 +1,10 @@
 // NOTE: This must match what is actually referenced by
 // the GUI test model project. Hopefully, this is a temporary
 // fix, which we can get rid of in the future.
-const string REF_ENGINE_VERSION = "2.0.0-dev00005";
+const string REF_ENGINE_VERSION = "2.0.0-dev00008";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.2.0
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.2.1
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -74,7 +74,7 @@ var nugetPackage = new NuGetPackage(
 			new DirectoryContent("tools/Images/Tree/Visual Studio").WithFiles(
 				"Images/Tree/Visual Studio/Success.png", "Images/Tree/Visual Studio/Failure.png", "Images/Tree/Visual Studio/Ignored.png", "Images/Tree/Visual Studio/Inconclusive.png", "Images/Tree/Visual Studio/Skipped.png") )
 		.WithDependencies(
-			KnownExtensions.Net462PluggableAgent.NuGetPackage.LatestRelease,
+			KnownExtensions.Net462PluggableAgent.NuGetPackage.LatestDevBuild,
 			KnownExtensions.Net60PluggableAgent.NuGetPackage.LatestRelease,
 			KnownExtensions.Net70PluggableAgent.NuGetPackage.LatestRelease,
 			KnownExtensions.Net80PluggableAgent.NuGetPackage.LatestRelease
@@ -114,7 +114,7 @@ var chocolateyPackage = new ChocolateyPackage(
 			new DirectoryContent("tools/Images/Tree/Visual Studio").WithFiles(
 				"Images/Tree/Visual Studio/Success.png", "Images/Tree/Visual Studio/Failure.png", "Images/Tree/Visual Studio/Ignored.png", "Images/Tree/Visual Studio/Inconclusive.png", "Images/Tree/Visual Studio/Skipped.png") )
 		.WithDependencies(
-			KnownExtensions.Net462PluggableAgent.ChocoPackage.LatestRelease,
+			KnownExtensions.Net462PluggableAgent.ChocoPackage.LatestDevBuild,
 			KnownExtensions.Net60PluggableAgent.ChocoPackage.LatestRelease,
 			KnownExtensions.Net70PluggableAgent.ChocoPackage.LatestRelease,
 			KnownExtensions.Net80PluggableAgent.ChocoPackage.LatestRelease

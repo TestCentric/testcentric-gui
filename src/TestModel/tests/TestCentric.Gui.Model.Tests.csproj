@@ -9,7 +9,7 @@
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
-    
+	
 	<ItemGroup>
         <Reference Include="System.Windows.Forms" />
     </ItemGroup>
@@ -23,10 +23,10 @@
         <PackageReference Include="NSubstitute" Version="5.1.0" />
 		<PackageReference Include="NUnit" Version="4.1.0" />
 		<PackageReference Include="NUnitLite" Version="4.1.0" />
-		<PackageReference Include="TestCentric.Engine.Api" Version="2.0.0-beta5" />
+		<PackageReference Include="TestCentric.Engine.Api" Version="2.0.0-dev00010" />
 		<PackageReference Include="TestCentric.Extensibility" Version="3.0.0" />
 		<PackageReference Include="TestCentric.InternalTrace" Version="1.2.0" />
 		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
 	</ItemGroup>
-	
+    
 </Project>
