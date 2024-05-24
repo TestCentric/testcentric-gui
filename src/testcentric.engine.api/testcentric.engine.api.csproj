@@ -40,6 +40,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="TestCentric.Extensibility.Api" Version="3.0.0" />
+		<PackageReference Include="NUnit.Engine.Api" Version="3.11.1" />
 		<PackageReference Include="TestCentric.InternalTrace" Version="1.2.0" />
 	</ItemGroup>
 
