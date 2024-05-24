@@ -17,12 +17,12 @@ namespace TestCentric.Engine
     /// </summary>
     [TypeExtensionPoint(
         Description = "Allows an extension to process progress reports and other events from the test.")]
-    public interface ITestEventListener : NUnit.Engine.ITestEventListener
+    public interface ITestEventListener
     {
         /// <summary>
         /// Handle a progress report or other event.
         /// </summary>
         /// <param name="report">An XML progress report.</param>
-        //void OnTestEvent(string report);
+        void OnTestEvent(string report);
     }
 }

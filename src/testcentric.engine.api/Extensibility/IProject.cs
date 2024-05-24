@@ -11,24 +11,24 @@ namespace TestCentric.Engine.Extensibility
     /// <summary>
     /// Interface for the various project types that the engine can load.
     /// </summary>
-    public interface IProject : NUnit.Engine.Extensibility.IProject
+    public interface IProject
     {
         /// <summary>
         /// Gets the path to the file storing this project, if any.
         /// If the project has not been saved, this is null.
         /// </summary>
-        //string ProjectPath { get; }
+        string ProjectPath { get; }
 
         /// <summary>
         /// Gets the active configuration, as defined
         /// by the particular project.
         /// </summary>
-        //string ActiveConfigName { get; }
+        string ActiveConfigName { get; }
 
         /// <summary>
         /// Gets a list of the configs for this project
         /// </summary>
-        //IList<string> ConfigNames { get; }
+        IList<string> ConfigNames { get; }
 
         /// <summary>
         /// Gets a test package for the primary or active
@@ -37,7 +37,7 @@ namespace TestCentric.Engine.Extensibility
         /// specified in the project format.
         /// </summary>
         /// <returns>A TestPackage</returns>
-        //TestPackage GetTestPackage();
+        TestPackage GetTestPackage();
 
         /// <summary>
         /// Gets a TestPackage for a specific configuration
@@ -47,6 +47,6 @@ namespace TestCentric.Engine.Extensibility
         /// </summary>
         /// <param name="configName">The name of the config to use</param>
         /// <returns>A TestPackage for the named configuration.</returns>
-        //TestPackage GetTestPackage(string configName);
+        TestPackage GetTestPackage(string configName);
     }
 }
