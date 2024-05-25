@@ -49,12 +49,6 @@ if (!BuildSettings.IsRunningOnAppVeyor)
         "engine-tests/netcoreapp2.1/mock-assembly.dll",
         MockAssemblyExpectedResult("Net60AgentLauncher")));
 
-// TODO: Decide whether to support this
-//if (!BuildSettings.IsRunningOnAppVeyor)
-//    packageTests.Add(new PackageTest(1, "NetCore11Test", "Run mock-assembly.dll targeting .NET Core 1.1",
-//        "engine-tests/netcoreapp1.1/mock-assembly.dll",
-//        MockAssemblyExpectedResult("Net60AgentLauncher")));
-
 packageTests.Add(new PackageTest(1, "Net50Test", "Run mock-assembly.dll targeting .NET 5.0",
     "engine-tests/net5.0/mock-assembly.dll",
     MockAssemblyExpectedResult("Net60AgentLauncher")));
@@ -198,7 +192,7 @@ BuildSettings.Packages.Add(new NuGetPackage(
 	packageContent: new PackageContent(
 		new FilePath[] { "../../LICENSE.txt", "../../testcentric.png" },
 		new DirectoryContent("lib").WithFiles(
-			"testcentric.engine.dll", "testcentric.engine.api.dll",
+			"testcentric.engine.dll", "testcentric.engine.api.dll", "nunit.engine.api.dll",
 			"testcentric.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll", "TestCentric.InternalTrace.dll",
 			"testcentric.engine.pdb", "test-bed.exe", "test-bed.exe.config",
 			"test-bed.addins", "../../testcentric.nuget.addins")),
@@ -206,7 +200,7 @@ BuildSettings.Packages.Add(new NuGetPackage(
 	checks: new PackageCheck[] {
 		HasFiles("LICENSE.txt", "testcentric.png"),
 		HasDirectory("lib").WithFiles(
-			"testcentric.engine.dll", "testcentric.engine.api.dll",
+			"testcentric.engine.dll", "testcentric.engine.api.dll", "nunit.engine.api.dll",
 			"testcentric.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll", "TestCentric.InternalTrace.dll",
 			"testcentric.engine.pdb", "test-bed.exe", "test-bed.exe.config",
 			"test-bed.addins", "testcentric.nuget.addins")

@@ -108,6 +108,8 @@ namespace TestCentric.Engine.Services
             _extensionService = ServiceContext.GetService<ExtensionService>();
             foreach (var extension in _extensionService.GetExtensions<ITestEventListener>())
                 _listenerExtensions.Add(extension);
+            foreach (var extension in _extensionService.GetExtensions<NUnit.Engine.ITestEventListener>())
+                _listenerExtensions.Add(new NUnitTestEventListenerWrapper(extension));
 
             Status = _extensionService == null
                 ? ServiceStatus.Error

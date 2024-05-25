@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  
+	<PropertyGroup>
+		<RootNamespace>TestCentric.Tests</RootNamespace>
+		<TargetFrameworks>net462</TargetFrameworks>
+		<CheckEolTargetFramework>false</CheckEolTargetFramework>
+		<OutputPath>..\..\..\bin\$(Configuration)\engine-tests\</OutputPath>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>..\..\testcentric.snk</AssemblyOriginatorKeyFile>
+		<NuGetAudit>false</NuGetAudit>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="NUnit.Engine.Api" Version="3.11.1" />
+	</ItemGroup>
+
+</Project>
