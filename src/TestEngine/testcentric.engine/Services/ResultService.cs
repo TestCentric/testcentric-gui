@@ -3,6 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
+using NUnit.Engine;
 using System;
 using System.Collections.Generic;
 using TestCentric.Engine.Extensibility;
@@ -13,7 +14,7 @@ namespace TestCentric.Engine.Services
     class ResultService : Service, IResultService
     {
         private readonly string[] BUILT_IN_FORMATS = new string[] { "nunit3", "cases", "user" };
-        private IEnumerable<IExtensionNode> _extensionNodes = new ExtensionNode[0];
+        private List<IExtensionNode> _extensionNodes = new List<IExtensionNode>();
 
         private string[] _formats;
         public string[] Formats
@@ -55,8 +56,11 @@ namespace TestCentric.Engine.Services
                     foreach (var node in _extensionNodes)
                         foreach (var supported in node.GetValues("Format"))
                             if (supported == format)
-                                // HACK
-                                return ((ExtensionNode)node).ExtensionObject as IResultWriter;
+                            {
+                                // HACK until we change IExtensionNode definition or use ExtensionNode directly
+                                var obj = ((ExtensionNode)node).ExtensionObject;
+                                return obj as IResultWriter ?? new NUnitResultWriterWrapper(obj as NUnit.Engine.Extensibility.IResultWriter);
+                            }
                     return null;
             }
         }
@@ -68,7 +72,10 @@ namespace TestCentric.Engine.Services
                 var extensionService = ServiceContext.GetService<ExtensionService>();
 
                 if (extensionService != null && extensionService.Status == ServiceStatus.Started)
-                    _extensionNodes = extensionService.GetExtensionNodes<IResultWriter>();
+                {
+                    _extensionNodes.AddRange(extensionService.GetExtensionNodes<IResultWriter>());
+                    _extensionNodes.AddRange(extensionService.GetExtensionNodes<NUnit.Engine.ITestEventListener>());
+                }
 
                 // If there is no extension service, we start anyway using builtin writers
                 Status = ServiceStatus.Started;
