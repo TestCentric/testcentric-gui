@@ -17,7 +17,7 @@ namespace TestCentric.Engine.Services
     {
         private const string MOCK_ASSEMBLY = "mock-assembly.dll";
 
-#if NETCOREAPP2_1
+#if NETCOREAPP
         private NUnitNetStandardDriver _driver;
 #else
         private NUnit3FrameworkDriver _driver;
@@ -27,7 +27,7 @@ namespace TestCentric.Engine.Services
         public void LoadAssembly()
         {
             var mockAssemblyPath = System.IO.Path.Combine(TestContext.CurrentContext.TestDirectory, MOCK_ASSEMBLY);
-#if NETCOREAPP2_1
+#if NETCOREAPP
             _driver = new NUnitNetStandardDriver();
 #else
             var assemblyName = typeof(NUnit.Framework.TestAttribute).Assembly.GetName();

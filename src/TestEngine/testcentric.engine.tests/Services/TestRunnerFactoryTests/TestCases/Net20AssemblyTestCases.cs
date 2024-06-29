@@ -13,7 +13,7 @@ using NUnit.Framework;
 
 namespace TestCentric.Engine.Services.TestRunnerFactoryTests.TestCases
 {
-#if !NETCOREAPP
+#if NETFRAMEWORK
     internal static class Net20AssemblyTestCases
     {
         private static readonly string ExceptionMessage =

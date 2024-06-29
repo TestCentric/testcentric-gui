@@ -18,7 +18,7 @@ namespace TestCentric.Engine.Runners
     // intermittent errors, probably due to the test
     // fixture rather than the engine.
     [TestFixture(typeof(LocalTestRunner))]
-#if !NETCOREAPP2_1
+#if NETFRAMEWORK
     [TestFixture(typeof(TestDomainRunner))]
     //[TestFixture(typeof(ProcessRunner))]
     [TestFixture(typeof(MultipleTestDomainRunner), 1)]
@@ -50,7 +50,7 @@ namespace TestCentric.Engine.Runners
             _services = new ServiceContext();
             _services.Add(new Services.ExtensionService());
             _services.Add(new Services.ProjectService());
-#if !NETCOREAPP2_1
+#if NETFRAMEWORK
             _services.Add(new Services.DomainManager());
             _services.Add(new Services.RuntimeFrameworkService());
             _services.Add(new Services.TestAgency("ProcessRunnerTests", 0));
@@ -117,7 +117,7 @@ namespace TestCentric.Engine.Runners
         [Test]
         public void RunAsync()
         {
-#if !NETCOREAPP2_1
+#if NETFRAMEWORK
             if (_runner is ProcessRunner || _runner is MultipleTestProcessRunner)
                 Assert.Ignore("RunAsync is not working for ProcessRunner");
 #endif

@@ -11,7 +11,7 @@ using NUnit.Framework;
 using NSubstitute;
 using NUnit.Engine;
 
-#if !NETCOREAPP2_1
+#if NETFRAMEWORK
 namespace TestCentric.Engine.Runners
 {
     public class TestPackageValidatorTests

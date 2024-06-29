@@ -13,7 +13,7 @@ using NUnit.Framework;
 
 namespace TestCentric.Engine.Services.TestRunnerFactoryTests.TestCases
 {
-#if !NETCOREAPP
+#if NETFRAMEWORK
     internal class Net20MixedProjectAndAssemblyTestCases
     {
         public static IEnumerable<TestCaseData> TestCases

@@ -46,7 +46,6 @@ namespace TestCentric.Tests
             public const int Warnings = 0;
             public const int Inconclusive = 1;
 
-#if !NETCOREAPP1_1
             public static string AssemblyPath;
 
             static MockAssembly()
@@ -59,7 +58,6 @@ namespace TestCentric.Tests
 //                    ? new Uri(codeBase).LocalPath
 //                   : assembly.Location;
             }
-#endif
         }
 
         [TestFixture(Description = "Fake Test Fixture")]

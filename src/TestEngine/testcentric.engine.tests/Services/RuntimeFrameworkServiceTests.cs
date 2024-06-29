@@ -3,7 +3,7 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-#if !NETCOREAPP2_1
+#if NETFRAMEWORK
 using System;
 using System.Collections.Generic;
 using System.IO;

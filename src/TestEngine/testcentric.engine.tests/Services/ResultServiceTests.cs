@@ -48,7 +48,7 @@ namespace TestCentric.Engine.Services
             return writer.GetType().Name;
         }
 
-#if !NETCOREAPP2_1
+#if NETFRAMEWORK
         [Test]
         public void CanGetWriterUser()
         {

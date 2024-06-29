@@ -12,7 +12,7 @@ namespace TestCentric.Engine.Services.TestRunnerFactoryTests
 {
     public class RunnerResult
     {
-#if !NETCOREAPP
+#if NETFRAMEWORK
         public static RunnerResult TestDomainRunner => new RunnerResult { TestRunner = typeof(TestDomainRunner) };
         public static RunnerResult ProcessRunner => new RunnerResult { TestRunner = typeof(ProcessRunner) };
 #endif

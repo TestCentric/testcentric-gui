@@ -12,9 +12,7 @@ namespace TestCentric.Engine.Runners.Fakes
     {
         public EmptyDirectTestRunner(IServiceLocator services, TestPackage package) : base(services, package)
         {
-#if !NETCOREAPP1_1
             TestDomain = AppDomain.CurrentDomain;
-#endif
         }
 
         public new void LoadPackage()

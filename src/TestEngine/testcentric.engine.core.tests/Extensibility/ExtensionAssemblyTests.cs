@@ -3,7 +3,6 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-#if !NETCOREAPP1_1
 using System;
 using System.Reflection;
 using NUnit.Framework;
@@ -50,7 +49,7 @@ namespace TestCentric.Engine.Extensibility
             Assert.That(_ea.AssemblyVersion, Is.EqualTo(THIS_ASSEMBLY_VERSION));
         }
 
-#if !NETCOREAPP2_1
+#if !NETCOREAPP
         [Test]
         public void TargetFramework()
         {
@@ -63,4 +62,3 @@ namespace TestCentric.Engine.Extensibility
 #endif
     }
 }
-#endif

@@ -10,7 +10,7 @@ using NUnit.Framework;
 
 namespace TestCentric.Engine.Services.TestRunnerFactoryTests.TestCases
 {
-#if NETCOREAPP2_1
+#if NETCOREAPP
     internal static class NetStandardTestCases
     {
         public class TestRunnerFactoryData : TestCaseData
@@ -51,7 +51,6 @@ namespace TestCentric.Engine.Services.TestRunnerFactoryTests.TestCases
                         }
                     });
 
-#if NETCOREAPP2_1
                 yield return new TestRunnerFactoryData(
                     "SingleProject (list ctor)",
                     new TestPackage(new[] { "a.nunit" }),
@@ -165,7 +164,6 @@ namespace TestCentric.Engine.Services.TestRunnerFactoryTests.TestCases
                         }
                     }
                 );
-#endif
             }
         }
     }

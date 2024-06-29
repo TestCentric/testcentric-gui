@@ -140,7 +140,7 @@ namespace TestCentric.Engine.Services
             //May be null on mono
             Assume.That(Assembly.GetEntryAssembly(), Is.Not.Null, "Entry assembly is null, framework loading validation will be skipped.");
 
-#if NETCOREAPP2_1
+#if NETCOREAPP
             var assemblyName = Path.Combine(GetNetFrameworkSiblingDirectory(), "testcentric.engine.tests.exe");
 #elif NET462
             var assemblyName = Path.Combine(GetNetCoreSiblingDirectory(), "testcentric.engine.tests.dll");
@@ -194,7 +194,7 @@ namespace TestCentric.Engine.Services
 
         public static IEnumerable<TestCaseData> ValidCombos()
         {
-#if NETCOREAPP2_1
+#if NETCOREAPP
             Assembly netstandard = typeof(ExtensionService).Assembly;
             Assembly netcore = Assembly.GetExecutingAssembly();
 
@@ -216,7 +216,7 @@ namespace TestCentric.Engine.Services
 
         public static IEnumerable<TestCaseData> InvalidTargetFrameworkCombos()
         {
-#if NETCOREAPP2_1
+#if NETCOREAPP
             Assembly netstandard = typeof(ExtensionService).Assembly;
             Assembly netcore = Assembly.GetExecutingAssembly();
 
@@ -239,7 +239,7 @@ namespace TestCentric.Engine.Services
 
         public static IEnumerable<TestCaseData> InvalidRunnerCombos()
         {
-#if NETCOREAPP2_1
+#if NETCOREAPP
             Assembly netstandard = typeof(ExtensionService).Assembly;
             Assembly netcore = Assembly.GetExecutingAssembly();
 
@@ -276,7 +276,7 @@ namespace TestCentric.Engine.Services
 
         private static string GetNetCoreSiblingDirectory()
         {
-            return GetSiblingDirectory("netcoreapp2.1");
+            return GetSiblingDirectory("netcoreapp3.1");
         }
     }
 }
