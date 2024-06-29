@@ -9,7 +9,7 @@ using TestCentric.Engine.Runners;
 
 namespace TestCentric.Engine.Services.TestRunnerFactoryTests.Results
 {
-#if !NETCOREAPP
+#if NETFRAMEWORK
     internal static class Net20ExpectedRunnerResults
     {
         private static readonly string ExceptionMessage =

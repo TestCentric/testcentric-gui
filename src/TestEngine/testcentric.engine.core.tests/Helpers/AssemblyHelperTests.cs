@@ -3,7 +3,6 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-#if !NETCOREAPP1_1
 using System.IO;
 using NUnit.Framework;
 
@@ -61,4 +60,3 @@ namespace TestCentric.Engine.Helpers
         }
     }
 }
-#endif

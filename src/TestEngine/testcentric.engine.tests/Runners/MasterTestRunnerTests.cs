@@ -56,7 +56,7 @@ namespace TestCentric.Engine.Runners
             // 1. These tests document current behavior. In some cases we may want to change that behavior.
             // 2. The .NET Standard builds don't seem to handle notest-assembly correctly, so those entries are commented out.
             // 3. The .NET Standard 1.6 build is not intended to handle projects.
-#if NETCOREAPP2_1
+#if NETCOREAPP
             new TestRunData( "mock-assembly.dll", MockAssemblyData ),
             new TestRunData( "mock-assembly.dll,mock-assembly.dll", MockAssemblyData, MockAssemblyData ),
             //new TestRunData( "notest-assembly.dll", NoTestAssemblyData ),
@@ -99,7 +99,7 @@ namespace TestCentric.Engine.Runners
             projectService.Add("project4.nunit", notestsPath, notestsPath);
             _services.Add(projectService);
             _services.Add(new PackageSettingsService());
-#if !NETCOREAPP2_1
+#if NETFRAMEWORK
             _services.Add(new DomainManager());
             _services.Add(new RuntimeFrameworkService());
 #endif

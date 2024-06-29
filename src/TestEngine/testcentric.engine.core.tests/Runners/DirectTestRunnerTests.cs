@@ -28,10 +28,8 @@ namespace TestCentric.Engine.Runners
 
             var driverService = Substitute.For<IDriverService>();
             driverService.GetDriver(
-#if !NETCOREAPP1_1
                 AppDomain.CurrentDomain,
                 string.Empty,
-#endif 
                 string.Empty, 
                 false).ReturnsForAnyArgs(_driver);
 

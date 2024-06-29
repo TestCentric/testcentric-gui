@@ -31,7 +31,7 @@ namespace TestCentric.Engine.Services
             Assert.That(_factory.Status, Is.EqualTo(ServiceStatus.Started), "Failed to start service");
         }
 
-#if NETCOREAPP1_1 || NETCOREAPP2_1
+#if NETCOREAPP
         [TestCase("x.dll", null, typeof(LocalTestRunner))]
         [TestCase("x.dll y.dll", null, typeof(LocalTestRunner))]
         [TestCase("x.dll y.dll z.dll", null, typeof(LocalTestRunner))]

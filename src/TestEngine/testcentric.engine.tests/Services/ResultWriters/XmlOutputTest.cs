@@ -3,7 +3,7 @@
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
 
-#if !NETCOREAPP // TODO: Can't instantiate engine under .NET CORE since it's not in the agent directory
+#if NETFRAMEWORK // TODO: Can't instantiate engine under .NET CORE since it's not in the agent directory
 using System;
 using System.Collections.Generic;
 using System.IO;

@@ -20,9 +20,7 @@ namespace TestCentric.Engine.Services
         public void CreateDriverFactory()
         {
             var serviceContext = new ServiceContext();
-#if !NETCOREAPP1_1
             serviceContext.Add(new ExtensionService());
-#endif
             _driverService = new DriverService();
             serviceContext.Add(_driverService);
             serviceContext.ServiceManager.StartServices();
@@ -35,7 +33,7 @@ namespace TestCentric.Engine.Services
         }
 
 
-#if NETCOREAPP1_1 || NETCOREAPP2_1
+#if NETCOREAPP
         [TestCase("mock-assembly.dll", false, typeof(NUnitNetStandardDriver))]
         [TestCase("mock-assembly.dll", true, typeof(SkippedAssemblyFrameworkDriver))]
         [TestCase("notest-assembly.dll", false, typeof(NUnitNetStandardDriver))]
@@ -54,13 +52,9 @@ namespace TestCentric.Engine.Services
         public void CorrectDriverIsUsed(string fileName, bool skipNonTestAssemblies, Type expectedType)
         {
             var driver = _driverService.GetDriver(
-#if !NETCOREAPP1_1
                 AppDomain.CurrentDomain,
-#endif
                 Path.Combine(TestContext.CurrentContext.TestDirectory, fileName),
-#if !NETCOREAPP1_1
                 null,
-#endif
                 skipNonTestAssemblies);
 
             Assert.That(driver, Is.InstanceOf(expectedType));
