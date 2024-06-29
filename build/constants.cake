@@ -12,7 +12,6 @@ const string SOLUTION = "testcentric-gui.sln";
 
 const string PACKAGE_NAME = "testcentric-gui";
 const string NUGET_PACKAGE_NAME = "TestCentric.GuiRunner";
-const string METADATA_PACKAGE_NAME = "TestCentric.Metadata";
 
 const string GUI_RUNNER = "testcentric.exe";
 const string ALL_TESTS = "*.Tests.dll";

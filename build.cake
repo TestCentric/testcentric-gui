@@ -330,26 +330,6 @@ Task("TestChocolateyPackage")
 	});
 
 //////////////////////////////////////////////////////////////////////
-// METADATA PACKAGE
-//////////////////////////////////////////////////////////////////////
-
-// NOTE: The testcentric.engine.metadata assembly is included in all the
-// main packages. It is also published separately as a nuget package for
-// use in other projects, which may want to make use of it.
-
-Task("BuildMetadataPackage")
-	.IsDependentOn("Build")
-	.Does<BuildParameters>((parameters) =>
-	{
-        NuGetPack($"{parameters.NuGetDirectory}/TestCentric.Metadata.nuspec", new NuGetPackSettings()
-        {
-            Version = parameters.PackageVersion,
-            OutputDirectory = parameters.PackageDirectory,
-            NoPackageAnalysis = true
-        });
-	});
-
-//////////////////////////////////////////////////////////////////////
 // PUBLISH PACKAGES
 //////////////////////////////////////////////////////////////////////
 
@@ -362,7 +342,6 @@ Task("PublishPackages")
 		if (parameters.ShouldPublishToMyGet)
 		{
 			PushNuGetPackage(parameters.NuGetPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
-			PushNuGetPackage(parameters.MetadataPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
 			PushChocolateyPackage(parameters.ChocolateyPackage, parameters.MyGetApiKey, parameters.MyGetPushUrl);
 			nothingToPublish = false;
 		}
@@ -370,7 +349,6 @@ Task("PublishPackages")
 		if (parameters.ShouldPublishToNuGet)
 		{
 			PushNuGetPackage(parameters.NuGetPackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
-			PushNuGetPackage(parameters.MetadataPackage, parameters.NuGetApiKey, parameters.NuGetPushUrl);
 			nothingToPublish = false;
 		}
 
@@ -515,8 +493,7 @@ Task("BuildPackages")
 	.IsDependentOn("CheckTestErrors")
     .IsDependentOn("BuildZipPackage")
 	.IsDependentOn("BuildNuGetPackage")
-    .IsDependentOn("BuildChocolateyPackage")
-	.IsDependentOn("BuildMetadataPackage");
+    .IsDependentOn("BuildChocolateyPackage");
 
 Task("TestPackages")
 	.IsDependentOn("BuildPackages")
