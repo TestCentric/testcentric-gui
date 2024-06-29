@@ -1,36 +1,41 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <RootNamespace>TestCentric.Engine</RootNamespace>
-    <TargetFrameworks>net20;net462;netstandard2.0</TargetFrameworks>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\nunit.snk</AssemblyOriginatorKeyFile>
-	<DebugType>Full</DebugType>
-	<OutputPath>..\..\..\bin\$(Configuration)\engine\</OutputPath>
-	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-  </PropertyGroup>
-  <ItemGroup Condition="'$(TargetFramework)'=='net20'">
-    <Reference Include="System.Runtime.Remoting" />
-    <Reference Include="System.Web" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)'=='net462'">
-    <Reference Include="System.Runtime.Remoting" />
-    <Reference Include="System.Web" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\CommonEngineAssemblyInfo.cs" Link="Properties\CommonEngineAssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\testcentric.engine.metadata\testcentric.engine.metadata.csproj" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.6' or '$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="Microsoft.Win32.Registry.AccessControl" Version="4.7.0" />
-    <PackageReference Include="Microsoft.DotNet.InternalAbstractions" Version="1.0.0" />
-    <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
-    <PackageReference Include="System.Reflection" Version="4.3.0" />
-    <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
-    <PackageReference Include="System.Xml.XPath.XmlDocument" Version="4.3.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="NUnit.Engine.Api" Version="3.11.1" />
-  </ItemGroup>
+  
+	<PropertyGroup>
+        <RootNamespace>TestCentric.Engine</RootNamespace>
+        <TargetFrameworks>net20;net462;netstandard2.0</TargetFrameworks>
+        <SignAssembly>true</SignAssembly>
+        <AssemblyOriginatorKeyFile>..\..\nunit.snk</AssemblyOriginatorKeyFile>
+	    <DebugType>Full</DebugType>
+	    <OutputPath>..\..\..\bin\$(Configuration)\engine\</OutputPath>
+	    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    </PropertyGroup>
+  
+	<ItemGroup Condition="'$(TargetFramework)'=='net20'">
+        <Reference Include="System.Runtime.Remoting" />
+        <Reference Include="System.Web" />
+    </ItemGroup>
+  
+	<ItemGroup Condition="'$(TargetFramework)'=='net462'">
+        <Reference Include="System.Runtime.Remoting" />
+        <Reference Include="System.Web" />
+    </ItemGroup>
+  
+	<ItemGroup>
+        <Compile Include="..\CommonEngineAssemblyInfo.cs" Link="Properties\CommonEngineAssemblyInfo.cs" />
+    </ItemGroup>
+  
+	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+        <PackageReference Include="Microsoft.Win32.Registry.AccessControl" Version="4.7.0" />
+        <PackageReference Include="Microsoft.DotNet.InternalAbstractions" Version="1.0.0" />
+        <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
+        <PackageReference Include="System.Reflection" Version="4.3.0" />
+        <PackageReference Include="System.Diagnostics.Process" Version="4.3.0" />
+        <PackageReference Include="System.Xml.XPath.XmlDocument" Version="4.3.0" />
+    </ItemGroup>
+  
+	<ItemGroup>
+        <PackageReference Include="NUnit.Engine.Api" Version="3.11.1" />
+	    <PackageReference Include="TestCentric.Metadata" Version="1.7.1" />
+    </ItemGroup>
+	
 </Project>

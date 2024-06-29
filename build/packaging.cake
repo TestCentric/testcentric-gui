@@ -32,7 +32,7 @@ var PdbFiles = new string[]
     "TestCentric.Gui.Runner.pdb",
     "nunit.uiexception.pdb",
     "TestCentric.Gui.Model.pdb",
-    "testcentric.engine.metadata.pdb",
+    //"testcentric.engine.metadata.pdb",
     "testcentric.engine.core.pdb",
     "testcentric.engine.pdb",
 };
