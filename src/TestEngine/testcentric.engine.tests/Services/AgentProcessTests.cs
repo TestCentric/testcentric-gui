@@ -41,6 +41,7 @@ namespace TestCentric.Engine.Services
         [TestCase("net-2.0", true, "agents/net20/testcentric-agent-x86.exe")]
         [TestCase("netcore-3.1", false, "agents/netcoreapp3.1/testcentric-agent.dll")]
         [TestCase("netcore-3.1", true, "agents/netcoreapp3.1/testcentric-agent-x86.dll")]
+        [TestCase("netcore-6.0", false, "agents/net6.0/testcentric-agent.dll")]
         public void AgentSelection(string runtime, bool x86, string agentPath)
         {
             _package.Settings[EnginePackageSettings.TargetRuntimeFramework] = runtime;

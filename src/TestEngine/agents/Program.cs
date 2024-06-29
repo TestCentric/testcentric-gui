@@ -74,7 +74,9 @@ namespace TestCentric.Engine.Agents
             log.Info("Agent process {0} starting", pid);
 
             // TODO: CurrentFramework throws under .NET 5.0
-#if NET5_0
+#if NET6_0
+            log.Info("Running under .NET 6.0");
+#elif NET5_0
             log.Info("Running under .NET 5.0");
 #else
             log.Info("Running under version {0}, {1}",
@@ -91,7 +93,7 @@ namespace TestCentric.Engine.Agents
 
             // Custom Service Initialization
             engine.Services.Add(new ExtensionService());
-#if !NETCOREAPP
+#if NETFRAMEWORK
             engine.Services.Add(new DomainManager());
 #endif
             engine.Services.Add(new InProcessTestRunnerFactory());
