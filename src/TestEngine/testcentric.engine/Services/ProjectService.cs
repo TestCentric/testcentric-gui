@@ -110,7 +110,11 @@ namespace TestCentric.Engine.Services
                     {
                         Status = ServiceStatus.Started;
 
-                        foreach (var node in extensionService.GetExtensionNodes<IProjectLoader>())
+                        var extensionNodes = new List<IExtensionNode>();
+                        extensionNodes.AddRange(extensionService.GetExtensionNodes<IProjectLoader>());
+                        extensionNodes.AddRange(extensionService.GetExtensionNodes<NUnit.Engine.Extensibility.IProjectLoader>());
+
+                        foreach (var node in extensionNodes)
                         {
                             foreach (string ext in node.GetValues("FileExtension"))
                             {

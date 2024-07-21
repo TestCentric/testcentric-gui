@@ -1,5 +1,5 @@
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.2.1-dev00008
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.2.1-dev00010
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -151,7 +151,7 @@ packageTests.Add(new PackageTest(1, "Net35PlusNetCore21Test", "Run different bui
 // Disabling entirely for now
 //if (BuildSettings.Configuration == "Release")
 //{
-//    packageTests.Add(new PackageTest(2, "NUnitProjectTest", "Run an NUnit project",
+//    packageTests.Add(new PackageTest(1, "NUnitProjectTest", "Run an NUnit project",
 //        "TestProject.nunit",
 //        new ExpectedResult("Failed")
 //        {
@@ -217,17 +217,18 @@ BuildSettings.Packages.Add(new NuGetPackage(
 // TEST BED RUNNER
 //////////////////////////////////////////////////////////////////////
 
-public class TestCentricEngineTestBed : TestRunner
+public class TestCentricEngineTestBed : TestRunner, IPackageTestRunner
 {
+    private FilePath _executablePath;
+
 	public TestCentricEngineTestBed()
 	{
-		ExecutablePath = BuildSettings.NuGetTestDirectory + "TestCentric.Engine." + BuildSettings.PackageVersion + "/lib/test-bed.exe";
+		_executablePath = BuildSettings.NuGetTestDirectory + "TestCentric.Engine." + BuildSettings.PackageVersion + "/lib/test-bed.exe";
 	}
 
-	public override int Run(string arguments)
+	public int RunPackageTest(string arguments)
 	{
-        Console.WriteLine("Trying to run " + ExecutablePath);
-		return BuildSettings.Context.StartProcess(ExecutablePath, new ProcessSettings()
+		return BuildSettings.Context.StartProcess(_executablePath, new ProcessSettings()
 		{
 			Arguments = arguments,
 			WorkingDirectory = BuildSettings.OutputDirectory
