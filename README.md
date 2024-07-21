@@ -1,4 +1,4 @@
-# TestCentric Test Engine
+﻿# TestCentric Test Engine
 
 [![Build status](https://ci.appveyor.com/api/projects/status/i7ymql47e8bo2rel/branch/main?svg=true)](https://ci.appveyor.com/project/CharliePoole/testcentric-engine/branch/main)
 
