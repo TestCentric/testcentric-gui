@@ -1,5 +1,5 @@
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.2.1-dev00008
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.2.1-dev00010
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -16,7 +16,8 @@ BuildSettings.Initialize(
 	Context,
 	"TestCentric.Engine.Api",
 	solutionFile: "TestCentric.Engine.Api.sln",
-	githubRepository: "TestCentric.Engine.Api"
+	githubRepository: "TestCentric.Engine.Api",
+	unitTests: "**/*.Tests.exe"
 );
 
 //////////////////////////////////////////////////////////////////////
