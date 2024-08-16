@@ -66,6 +66,9 @@ namespace TestCentric.Gui.Controls
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            if (Maximum == 0)       // No progress can be painted in this case
+                return;
+
             Rectangle rec = this.ClientRectangle;
             rec.Inflate(-2, -2);
             if (ProgressBarRenderer.IsSupported)
