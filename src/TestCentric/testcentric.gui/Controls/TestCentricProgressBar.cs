@@ -64,6 +64,20 @@ namespace TestCentric.Gui.Controls
 
         #region Methods
 
+        public int GetProgressWidth(Rectangle rec)
+        {
+            if (Maximum == 0)
+                return 0;
+            return (int)(rec.Width * ((double)Value / Maximum));
+        }
+
+        public int GetPercentCompleted()
+        {
+            if (Maximum == 0)
+                return 0;
+            return Value * 100 / Maximum;
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
             Rectangle rec = this.ClientRectangle;
@@ -71,10 +85,10 @@ namespace TestCentric.Gui.Controls
             if (ProgressBarRenderer.IsSupported)
                 ProgressBarRenderer.DrawHorizontalBar(e.Graphics, rec);
             rec.Inflate(-1, -1);
-            rec.Width = (int)(rec.Width * ((double)Value / Maximum));
+            rec.Width = GetProgressWidth(rec);
             e.Graphics.FillRectangle(_brush, rec); //2, 2, rec.Width, rec.Height);
 
-            int percentComplete = Value * 100 / Maximum;
+            int percentComplete = GetPercentCompleted();
             if (ShowPercentComplete && percentComplete > 0)
             {
                 string text = $"{(int)percentComplete}%";
