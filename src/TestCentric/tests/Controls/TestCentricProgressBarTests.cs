@@ -11,7 +11,6 @@ namespace TestCentric.Gui.Controls
     [TestFixture]
     public class TestCentricProgressBarTests
     {
-        [Test]
         [TestCase(0, 0)]
         [TestCase(50, 100)]
         [TestCase(100, 200)]
@@ -40,7 +39,6 @@ namespace TestCentric.Gui.Controls
             Assert.That(width, Is.EqualTo(0));
         }
 
-        [Test]
         [TestCase(0, 0)]
         [TestCase(50, 50)]
         [TestCase(100, 100)]
