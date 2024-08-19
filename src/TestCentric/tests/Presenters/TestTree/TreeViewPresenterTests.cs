@@ -9,15 +9,26 @@ using NSubstitute;
 
 namespace TestCentric.Gui.Presenters.TestTree
 {
-    using Views;
-    using Model;
-    using Elements;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System;
-
     public class TreeViewPresenterTests : TreeViewPresenterTestBase
     {
+        [TestCase(true)]
+        [TestCase(false)]
+        public void WhenSettingsAreChanged_ShowCheckBoxes_NewSettingIsApplied(bool showCheckBoxSetting)
+        {
+            _model.Settings.Gui.TestTree.ShowCheckBoxes = showCheckBoxSetting;
+
+            Assert.That(_view.ShowCheckBoxes.Checked, Is.EqualTo(showCheckBoxSetting));
+        }
+
+        [TestCase("Default")]
+        [TestCase("VisualStudio")]
+        public void WhenSettingsAreChanged_AlternateImageSet_NewSettingIsApplied(string imageSet)
+        {
+            _model.Settings.Gui.TestTree.AlternateImageSet = imageSet;
+
+            Assert.That(_view.AlternateImageSet, Is.EqualTo(imageSet));
+        }
+
         // TODO: Version 1 Test - Make it work if needed.
         //[Test]
         //public void WhenContextNodeIsNotNull_RunCommandExecutesThatTest()
@@ -75,7 +86,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         //public void WhenContextMenuIsDisplayed_RunCheckedCommandVisibilityIsSet(
         //    [Values] bool showCheckBoxes)
         //{
-            
+
         //    var testNode = new TestNode(XmlHelper.CreateXmlNode("<test-case/>"));
         //    var treeNode = new TreeNode()
         //    {

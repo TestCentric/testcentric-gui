@@ -9,9 +9,14 @@ using NSubstitute;
 namespace TestCentric.Gui.Presenters.TestTree
 {
     using Model;
+    using System.IO;
+    using System.Windows.Forms;
 
     public class WhenTestsAreLoaded : TreeViewPresenterTestBase
     {
+        // Use dedicated test file name; Used for VisualState file too
+        const string TestFileName = "TreeViewPresenterTestsLoaded.dll";
+
         [SetUp]
         public void SimulateTestLoad()
         {
@@ -19,11 +24,59 @@ namespace TestCentric.Gui.Presenters.TestTree
 
             _model.HasTests.Returns(true);
             _model.IsTestRunning.Returns(false);
-            _model.TestCentricProject.Returns(new TestCentricProject(_model, "dummy.dll"));
+            var project = new TestCentricProject(_model, TestFileName);
+            _model.TestCentricProject.Returns(project);
 
             TestNode testNode = new TestNode("<test-suite id='1'/>");
             _model.LoadedTests.Returns(testNode);
             FireTestLoadedEvent(testNode);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            // Delete VisualState file to prevent any unintended side effects
+            string fileName = VisualState.GetVisualStateFileName(TestFileName);
+            if (File.Exists(fileName))
+                File.Delete(fileName);
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TestLoaded_NoVisualState_ShowCheckBox_IsAppliedFromSettings(bool showCheckBoxSetting)
+        {
+            // Arrange: adapt settings
+            _model.Settings.Gui.TestTree.ShowCheckBoxes = showCheckBoxSetting;
+
+            // Act: load tests
+            TestNode testNode = new TestNode("<test-suite id='1'/>");
+            _model.LoadedTests.Returns(testNode);
+            FireTestLoadedEvent(testNode);
+
+            // Assert
+            Assert.That(_view.ShowCheckBoxes.Checked, Is.EqualTo(showCheckBoxSetting));
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TestLoaded_WithVisualState_ShowCheckBox_IsAppliedFromVisualState(bool showCheckBox)
+        {
+            // Arrange: Create and save VisualState file
+            VisualState visualState = new VisualState();
+            visualState.ShowCheckBoxes = showCheckBox;
+            string fileName = VisualState.GetVisualStateFileName(TestFileName);
+            visualState.Save(fileName);
+
+            var tv = new TreeView();
+            _view.TreeView.Returns(tv);
+
+            // Act: Load tests
+            TestNode testNode = new TestNode("<test-suite id='1'/>");
+            _model.LoadedTests.Returns(testNode);
+            FireTestLoadedEvent(testNode);
+
+            // Assert
+            Assert.That(_view.ShowCheckBoxes.Checked, Is.EqualTo(showCheckBox));
         }
 
         // TODO: Version 1 Test - Make it work if needed.
