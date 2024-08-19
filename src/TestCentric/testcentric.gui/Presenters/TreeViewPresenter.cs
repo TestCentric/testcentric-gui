@@ -55,9 +55,8 @@ namespace TestCentric.Gui.Presenters
             {
                 EnsureNonRunnableFilesAreVisible(ea.Test);
 
-                VisualState visualState;
-
-                if (TryLoadVisualState(out visualState))
+                bool visualStateLoaded = TryLoadVisualState(out VisualState visualState);
+                if (visualStateLoaded)
                 {
                     switch (visualState.DisplayStrategy)
                     {
@@ -77,6 +76,7 @@ namespace TestCentric.Gui.Presenters
                 else
                     Strategy = new NUnitTreeDisplayStrategy(_view, _model);
 
+                _view.ShowCheckBoxes.Checked = visualStateLoaded ? visualState.ShowCheckBoxes : _treeSettings.ShowCheckBoxes;
                 Strategy.OnTestLoaded(ea.Test, visualState);
                 CheckPropertiesDisplay();
                 CheckXmlDisplay();
@@ -129,6 +129,9 @@ namespace TestCentric.Gui.Presenters
                     case "TestCentric.Gui.TestTree.TestList.GroupBy":
                     case "TestCentric.Gui.TestTree.FixtureList.GroupBy":
                         Strategy.Reload();
+                        break;
+                    case "TestCentric.Gui.TestTree.ShowCheckBoxes":
+                        _view.ShowCheckBoxes.Checked = _treeSettings.ShowCheckBoxes;
                         break;
                 }
             };
