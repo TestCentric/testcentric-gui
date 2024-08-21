@@ -16,6 +16,7 @@ namespace TestCentric.Gui.Presenters
     using System.Xml;
     using System.Drawing;
     using System.IO;
+    using TestCentric.Gui.Controls;
 
     /// <summary>
     /// TreeViewPresenter is the presenter for the TestTreeView
@@ -326,7 +327,7 @@ namespace TestCentric.Gui.Presenters
         {
             if (_propertiesDisplay != null)
             {
-                _propertiesDisplay.Close();
+                _propertiesDisplay.InvokeIfRequired(() => _propertiesDisplay.Close());
                 _propertiesDisplay = null;
             }
         }
@@ -380,14 +381,13 @@ namespace TestCentric.Gui.Presenters
 
         private void CloseXmlDisplay()
         {
-            _xmlDisplay?.Close();
+            _xmlDisplay?.InvokeIfRequired(() => _xmlDisplay?.Close());
         }
 
         private void CheckXmlDisplay()
         {
             if (_xmlDisplay != null && !_xmlDisplay.Pinned)
-                _xmlDisplay.Close();
-
+                CloseXmlDisplay();
         }
 
         private void InitializeContextMenu()
