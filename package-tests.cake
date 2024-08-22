@@ -121,11 +121,11 @@ public static void DefinePackageTests()
 
 	// Multiple assembly tests
 
-    PackageTests.Add(new PackageTest(1, "Net462PlusNet35Test", "Run net462 and net35 builds of mock-assembly.dll together",
+    PackageTests.Add(new PackageTest(1, "Net462PlusNet35Test", "Run .NET 4.6.2 and .NET 3.5 builds of mock-assembly.dll together",
         "net462/mock-assembly.dll net35/mock-assembly.dll --trace:Debug",
         MockAssemblyExpectedResult("Net462AgentLauncher", "Net462AgentLauncher")));
 
-    PackageTests.Add(new PackageTest(1, "Net462PlusNet60Test", "Run different builds of mock-assembly.dll together",
+    PackageTests.Add(new PackageTest(1, "Net462PlusNet60Test", "Run .NET 4.6.2 and .NET 6.0 builds of mock-assembly.dll together",
         "net462/mock-assembly.dll net6.0/mock-assembly.dll",
         MockAssemblyExpectedResult("Net462AgentLauncher", "Net60AgentLauncher")));
 

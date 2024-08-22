@@ -1,10 +1,10 @@
 // NOTE: This must match what is actually referenced by
 // the GUI test model project. Hopefully, this is a temporary
 // fix, which we can get rid of in the future.
-//const string REF_ENGINE_VERSION = "2.0.0-dev00008";
+const string REF_ENGINE_VERSION = "2.0.0-dev00023";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.2.1
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.2.1-dev00010
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -64,7 +64,7 @@ var nugetPackage = new NuGetPackage(
 				"nunit.uiexception.dll", "TestCentric.Gui.Model.dll", "Mono.Options.dll",
 				"TestCentric.Engine.dll", "TestCentric.Engine.Api.dll", "TestCentric.InternalTrace.dll",
 				"TestCentric.Metadata.dll", "TestCentric.Extensibility.dll", "TestCentric.Extensibility.Api.dll",
-				"../../nuget/testcentric.nuget.addins"),
+				"nunit.engine.api.dll", "../../nuget/testcentric.nuget.addins"),
 			new DirectoryContent("tools/Images/Tree/Circles").WithFiles(
 				"Images/Tree/Circles/Success.jpg", "Images/Tree/Circles/Failure.jpg", "Images/Tree/Circles/Ignored.jpg", "Images/Tree/Circles/Inconclusive.jpg", "Images/Tree/Circles/Skipped.jpg"),
 			new DirectoryContent("tools/Images/Tree/Classic").WithFiles(
@@ -101,7 +101,7 @@ var chocolateyPackage = new ChocolateyPackage(
 				"../../choco/VERIFICATION.txt", "../../choco/testcentric.choco.addins",
 				"../../choco/testcentric-agent.exe.ignore",	"../../choco/testcentric-agent-x86.exe.ignore",
 				"testcentric.exe", "testcentric.exe.config", "TestCentric.Gui.Runner.dll",
-				"nunit.uiexception.dll", "TestCentric.Gui.Model.dll", "Mono.Options.dll",
+				"nunit.uiexception.dll", "TestCentric.Gui.Model.dll", "Mono.Options.dll", "nunit.engine.api.dll",
 				"TestCentric.Engine.dll", "TestCentric.Engine.Api.dll", "TestCentric.InternalTrace.dll",
 				"TestCentric.Metadata.dll", "TestCentric.Extensibility.dll", "TestCentric.Extensibility.Api.dll"),
 			new DirectoryContent("tools/Images/Tree/Circles").WithFiles(
@@ -133,47 +133,21 @@ BuildSettings.Packages.Add(nugetPackage);
 BuildSettings.Packages.Add(chocolateyPackage);
 
 //////////////////////////////////////////////////////////////////////
-// POST-BUILD ACTION
-//////////////////////////////////////////////////////////////////////
-
-// The current engine package does not restore correctly. As a temporary
-// fix, we install a local copy and then copy agents and
-// content to the output directory.
-//TaskTeardown(context =>
-//{
-	//if (context.Task.Name == "Build")
-	//{
-		//string engineInstallDir = BuildSettings.PackageTestDirectory;
-
-		//CleanDirectory(engineInstallDir);
-		//NuGetInstall("TestCentric.Engine", new NuGetInstallSettings()
-		//{
-			//Version = REF_ENGINE_VERSION,
-			//OutputDirectory = engineInstallDir,
-			//ExcludeVersion = true
-		//});
-
-		//CopyDirectory(
-			//engineInstallDir + "TestCentric.Engine/tools",
-			//BuildSettings.OutputDirectory);
-		//Information("Copied engine files to output directory");
-	//}
-//});
-
-//////////////////////////////////////////////////////////////////////
 // PACKAGE TEST RUNNER
 //////////////////////////////////////////////////////////////////////
 
-public class GuiSelfTester : TestRunner
+public class GuiSelfTester : TestRunner, IPackageTestRunner
 {
+	private FilePath _executablePath;
+
 	// NOTE: When constructed as an argument to BuildSettings.Initialize(),
 	// the executable path is not yet known and should not be provided.
 	public GuiSelfTester(string executablePath = null)
 	{
-		ExecutablePath = executablePath;
+		_executablePath = executablePath;
 	}
 
-	public override int Run(string arguments)
+	public int RunPackageTest(string arguments)
 	{
 		if (!arguments.Contains(" --run"))
 			arguments += " --run";
@@ -182,10 +156,11 @@ public class GuiSelfTester : TestRunner
 		if (!arguments.Contains(" --full-gui"))
 			arguments += " --full-gui";
 
-		if (ExecutablePath == null)
-			ExecutablePath = BuildSettings.OutputDirectory + "testcentric.exe";
+		if (_executablePath == null)
+			_executablePath = BuildSettings.OutputDirectory + "testcentric.exe";
 
-		return base.Run(arguments);
+		Console.WriteLine($"Running {_executablePath} with arguments {arguments}");
+		return base.RunTest(_executablePath, arguments);
 	}
 }
 
@@ -205,24 +180,6 @@ Task("PackageChocolatey")
 	.Does(() =>
 	{
 		chocolateyPackage.BuildVerifyAndTest();
-	});
-
-//////////////////////////////////////////////////////////////////////
-// INDIVIDUAL TEST RUNS
-//////////////////////////////////////////////////////////////////////
-
-Task("RunTestCentricGuiTests")
-	.IsDependentOn("Build")
-	.Does(() =>
-	{
-		new GuiSelfTester().Run(BuildSettings.OutputDirectory + "TestCentric.Gui.Tests.dll");
-
-		var result = new ActualResult(BuildSettings.OutputDirectory + "TestResult.xml");
-
-		new ConsoleReporter(result).Display();
-
-		if (result.OverallResult == "Failed")
-			throw new System.Exception("There were test failures or errors. See listing.");
 	});
 
 //////////////////////////////////////////////////////////////////////
