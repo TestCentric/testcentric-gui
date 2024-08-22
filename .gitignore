@@ -118,8 +118,8 @@ TestResult.xml
 *.VisualState.xml
 !TestResultSubView*
 
-# Packaging Directory
-packaging
+# Package Directory
+package
 
 # Temporary Directory for Engine Installation
 tempEngineInstall
