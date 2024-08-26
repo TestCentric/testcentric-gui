@@ -133,6 +133,10 @@ namespace TestCentric.Gui.Presenters
                     case "TestCentric.Gui.TestTree.ShowCheckBoxes":
                         _view.ShowCheckBoxes.Checked = _treeSettings.ShowCheckBoxes;
                         break;
+                    case "TestCentric.Gui.GuiLayout":
+                        if (_model.Settings.Gui.GuiLayout == "Full")
+                            ClosePropertiesDisplay();
+                        break;
                 }
             };
 
