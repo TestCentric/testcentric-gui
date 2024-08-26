@@ -353,6 +353,7 @@ namespace TestCentric.Gui.Views
             this.rerunButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.rerunButton.Name = "rerunButton";
             this.rerunButton.Size = new System.Drawing.Size(23, 21);
+            this.rerunButton.ToolTipText = "Repeat last test run";
             // 
             // runFailedButton
             // 
