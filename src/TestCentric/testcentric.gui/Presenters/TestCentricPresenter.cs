@@ -130,6 +130,7 @@ namespace TestCentric.Gui.Presenters
             {
                 UpdateViewCommands();
 
+                _view.RunSummaryDisplay.Hide();
                 BeginLongRunningOperation("Unloading...");
             };
 
@@ -144,6 +145,7 @@ namespace TestCentric.Gui.Presenters
             {
                 UpdateViewCommands();
 
+                _view.RunSummaryDisplay.Hide();
                 BeginLongRunningOperation("Reloading...");
             };
 
