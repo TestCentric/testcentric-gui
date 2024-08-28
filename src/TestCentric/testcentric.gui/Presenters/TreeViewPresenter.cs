@@ -112,6 +112,7 @@ namespace TestCentric.Gui.Presenters
                 // or user terminates cancels the run.
                 Strategy.SaveVisualState();
 
+                _view.ResetAllTreeNodeImages(); 
                 CheckPropertiesDisplay();
                 CheckXmlDisplay();
             };
