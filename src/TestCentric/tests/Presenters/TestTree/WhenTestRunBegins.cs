@@ -3,22 +3,47 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-using NUnit.Framework;
+using System.IO;
+using System.Windows.Forms;
 using NSubstitute;
+using NUnit.Framework;
+using TestCentric.Gui.Model;
 
 namespace TestCentric.Gui.Presenters.TestTree
 {
-    public class WhenTestRunBegins
+    public class WhenTestRunBegins : TreeViewPresenterTestBase
     {
-        // TODO: Version 1 Test - Make it work if needed.
-        ////[Test] // TODO: simulate actual loading
-        //public void WhenTestRunStarts_RunCommandIsDisabled()
-        //{
-        //    ClearAllReceivedCalls();
-        //    FireRunStartingEvent(1234);
+        // Use dedicated test file name; Used for VisualState file too
+        const string TestFileName = "TreeViewPresenterTestRunBegin.dll";
 
-        //    _view.RunCommand.Received().Enabled = false;
-        //}
+        [TearDown]
+        public void TearDown()
+        {
+            // Delete VisualState file to prevent any unintended side effects
+            string fileName = VisualState.GetVisualStateFileName(TestFileName);
+            if (File.Exists(fileName))
+                File.Delete(fileName);
+        }
+
+        [Test]
+        public void WhenTestRunStarts_TreeNodeImagesAreReset()
+        {
+            // Arrange
+            var tv = new TreeView();
+            _view.TreeView.Returns(tv);
+
+            var project = new TestCentricProject(_model, TestFileName);
+            _model.TestCentricProject.Returns(project);
+            TestNode testNode = new TestNode("<test-suite id='1'/>");
+            _model.LoadedTests.Returns(testNode);
+            FireTestLoadedEvent(testNode);
+
+            // Act
+            FireRunStartingEvent(1234);
+
+            // Assert
+            _view.Received().ResetAllTreeNodeImages();
+        }
 
         // TODO: Version 1 Test - Make it work if needed.
         //[Test]
