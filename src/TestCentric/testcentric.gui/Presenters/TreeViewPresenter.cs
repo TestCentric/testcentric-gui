@@ -58,24 +58,9 @@ namespace TestCentric.Gui.Presenters
 
                 bool visualStateLoaded = TryLoadVisualState(out VisualState visualState);
                 if (visualStateLoaded)
-                {
-                    switch (visualState.DisplayStrategy)
-                    {
-                        case "NUNIT_TREE":
-                            Strategy = new NUnitTreeDisplayStrategy(_view, _model);
-                            break;
-                        case "FIXTURE_LIST":
-                            Strategy = new FixtureListDisplayStrategy(_view, _model);
-                            break;
-                        case "TEST_LIST":
-                            Strategy = new TestListDisplayStrategy(_view, _model);
-                            break;
-                        default:
-                            throw new Exception($"Invalid DisplayStrategy: {visualState.DisplayStrategy}");
-                    }
-                }
-                else
-                    Strategy = new NUnitTreeDisplayStrategy(_view, _model);
+                    UpdateTreeSettingsFromVisualState(visualState);
+
+                Strategy = CreateDisplayStrategy(_treeSettings.DisplayFormat, _view, _model);
 
                 _view.ShowCheckBoxes.Checked = visualStateLoaded ? visualState.ShowCheckBoxes : _treeSettings.ShowCheckBoxes;
                 Strategy.OnTestLoaded(ea.Test, visualState);
@@ -128,6 +113,11 @@ namespace TestCentric.Gui.Presenters
                         _view.AlternateImageSet = _treeSettings.AlternateImageSet;
                         break;
                     case "TestCentric.Gui.TestTree.DisplayFormat":
+                        {
+                            Strategy = CreateDisplayStrategy(_treeSettings.DisplayFormat, _view, _model);
+                            Strategy.Reload();
+                            break;
+                        }
                     case "TestCentric.Gui.TestTree.TestList.GroupBy":
                     case "TestCentric.Gui.TestTree.FixtureList.GroupBy":
                         Strategy.Reload();
@@ -265,6 +255,38 @@ namespace TestCentric.Gui.Presenters
             //            CloseXmlDisplay();
             //    }
             //};
+        }
+
+        private void UpdateTreeSettingsFromVisualState(VisualState visualState)
+        {
+            _treeSettings.DisplayFormat = visualState.DisplayStrategy;
+            if (visualState.DisplayStrategy == "TEST_LIST")
+            {
+                _treeSettings.TestList.GroupBy = visualState.GroupBy;
+            }
+            else if (visualState.DisplayStrategy == "FIXTURE_LIST")
+            {
+                _treeSettings.FixtureList.GroupBy = visualState.GroupBy;
+            }
+        }
+        private static DisplayStrategy CreateDisplayStrategy(string displayStrategy, ITestTreeView treeView, ITestModel testModel)
+        {
+            DisplayStrategy strategy = null;
+            switch (displayStrategy)
+            {
+                case "FIXTURE_LIST":
+                    strategy = new FixtureListDisplayStrategy(treeView, testModel);
+                    break;
+                case "TEST_LIST":
+                    strategy = new TestListDisplayStrategy(treeView, testModel);
+                    break;
+                case "NUNIT_TREE":
+                default:
+                    strategy = new NUnitTreeDisplayStrategy(treeView, testModel);
+                    break;
+            }
+
+            return strategy;
         }
 
         private void EnsureNonRunnableFilesAreVisible(TestNode testNode)

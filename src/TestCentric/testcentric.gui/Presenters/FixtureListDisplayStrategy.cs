@@ -36,13 +36,19 @@ namespace TestCentric.Gui.Presenters
             get { return "Fixtures By " + DefaultGroupSetting; }
         }
 
-        protected override VisualState CreateVisualState() => new VisualState("FIXTURE_LIST", _grouping.ID).LoadFrom(_view.TreeView);
+        protected override VisualState CreateVisualState() => new VisualState("FIXTURE_LIST", _grouping?.ID).LoadFrom(_view.TreeView);
 
         public override void OnTestLoaded(TestNode testNode, VisualState visualState)
         {
             ClearTree();
 
-            switch (DefaultGroupSetting)
+            string groupBy = DefaultGroupSetting;
+            if (_grouping == null || _grouping.ID != groupBy)
+            {
+                _grouping = CreateTestGrouping(groupBy);
+            }
+
+            switch (groupBy)
             {
                 default:
                 case "ASSEMBLY":

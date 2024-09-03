@@ -252,6 +252,16 @@ namespace TestCentric.Gui.Presenters
                     case "TestCentric.Gui.MainForm.ShowStatusBar":
                         _view.StatusBarView.Visible = _settings.Gui.MainForm.ShowStatusBar;
                         break;
+                    case "TestCentric.Gui.TestTree.DisplayFormat":
+                        _view.DisplayFormat.SelectedItem = _settings.Gui.TestTree.DisplayFormat;
+                        UpdateTreeDisplayMenuItem();
+                        break;
+                    case "TestCentric.Gui.TestTree.TestList.GroupBy":
+                        _view.GroupBy.SelectedItem = _settings.Gui.TestTree.TestList.GroupBy;
+                        break;
+                    case "TestCentric.Gui.TestTree.FixtureList.GroupBy":
+                        _view.GroupBy.SelectedItem = _settings.Gui.TestTree.FixtureList.GroupBy;
+                        break;
                 }
             };
 
@@ -473,7 +483,7 @@ namespace TestCentric.Gui.Presenters
 
             _view.DisplayFormat.SelectionChanged += () =>
             {
-                SetTreeDisplayFormat(_view.DisplayFormat.SelectedItem);
+                _settings.Gui.TestTree.DisplayFormat = _view.DisplayFormat.SelectedItem;
             };
 
             _view.GroupBy.SelectionChanged += () =>
@@ -907,8 +917,11 @@ namespace TestCentric.Gui.Presenters
             }
         }
 
-        private void SetTreeDisplayFormat(string displayFormat)
-        {
+        private void UpdateTreeDisplayMenuItem()
+        { 
+            // Get current display format from settings
+            string displayFormat = _settings.Gui.TestTree.DisplayFormat;
+
             _view.DisplayFormat.SelectedItem = displayFormat;
 
             switch (displayFormat)

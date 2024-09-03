@@ -40,7 +40,13 @@ namespace TestCentric.Gui.Presenters
         {
             ClearTree();
 
-            switch (DefaultGroupSetting)
+            string groupBy = DefaultGroupSetting;
+            if (_grouping == null || _grouping.ID != groupBy)
+            {
+                _grouping = CreateTestGrouping(groupBy);
+            }
+
+            switch (groupBy)
             {
                 default:
                 case "ASSEMBLY":
@@ -85,7 +91,7 @@ namespace TestCentric.Gui.Presenters
             visualState?.ApplyTo(_view.TreeView);
         }
 
-        protected override VisualState CreateVisualState() => new VisualState("TEST_LIST", _grouping.ID).LoadFrom(_view.TreeView);
+        protected override VisualState CreateVisualState() => new VisualState("TEST_LIST", _grouping?.ID).LoadFrom(_view.TreeView);
 
         #endregion
 
