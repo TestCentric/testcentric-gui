@@ -25,7 +25,7 @@ namespace TestCentric.Gui.Presenters
     /// We currently support three different strategies:
     /// NunitTreeDisplay, TestListDisplay and FixtureListDisplay.
     /// </summary>
-    public abstract class DisplayStrategy
+    public abstract class DisplayStrategy : ITreeDisplayStrategy
     {
         // TODO: This class is temporarily using image index values
         // from TestSuiteTreeNode rather than TestTreeView.
