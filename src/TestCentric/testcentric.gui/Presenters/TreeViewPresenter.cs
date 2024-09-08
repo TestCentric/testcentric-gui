@@ -97,6 +97,7 @@ namespace TestCentric.Gui.Presenters
                 // or user terminates cancels the run.
                 Strategy.SaveVisualState();
 
+                _model.ClearResults();
                 _view.ResetAllTreeNodeImages(); 
                 CheckPropertiesDisplay();
                 CheckXmlDisplay();
@@ -114,13 +115,21 @@ namespace TestCentric.Gui.Presenters
                         break;
                     case "TestCentric.Gui.TestTree.DisplayFormat":
                         {
-                            Strategy = CreateDisplayStrategy(_treeSettings.DisplayFormat, _view, _model);
-                            Strategy.Reload();
+                            // Check if strategy is already up-to-date (for example: while project loading)
+                            string displayFormat = _treeSettings.DisplayFormat;
+                            if (Strategy?.StrategyID != displayFormat)
+                            { 
+                                Strategy = CreateDisplayStrategy(displayFormat, _view, _model);
+                                Strategy.Reload();
+                            }
                             break;
                         }
                     case "TestCentric.Gui.TestTree.TestList.GroupBy":
                     case "TestCentric.Gui.TestTree.FixtureList.GroupBy":
-                        Strategy.Reload();
+                        // Checks if grouping is already up-to-date (for example: while project loading)
+                        GroupDisplayStrategy groupStrategy = Strategy as GroupDisplayStrategy;
+                        if (groupStrategy != null && !groupStrategy.IsGroupingUpToDate())
+                            Strategy.Reload();
                         break;
                     case "TestCentric.Gui.TestTree.ShowCheckBoxes":
                         _view.ShowCheckBoxes.Checked = _treeSettings.ShowCheckBoxes;
@@ -154,6 +163,9 @@ namespace TestCentric.Gui.Presenters
                     var testNode = _view.ContextNode.Tag as TestNode;
                     if (testNode != null)
                         _model.RunTests(testNode);
+                    var groupNode = _view.ContextNode.Tag as TestGroup;
+                    if (groupNode != null)
+                        _model.RunTests(groupNode);
                 }
             };
 

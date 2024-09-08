@@ -91,6 +91,12 @@ namespace TestCentric.Gui.Presenters
             visualState?.ApplyTo(_view.TreeView);
         }
 
+        public override bool IsGroupingUpToDate()
+        {
+            string groupId = _settings.Gui.TestTree.TestList.GroupBy;
+            return _grouping?.ID == groupId;
+        }
+
         protected override VisualState CreateVisualState() => new VisualState("TEST_LIST", _grouping?.ID).LoadFrom(_view.TreeView);
 
         #endregion
