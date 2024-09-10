@@ -3,7 +3,6 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-using System.IO;
 using System.Windows.Forms;
 using NSubstitute;
 using NUnit.Framework;
@@ -13,18 +12,6 @@ namespace TestCentric.Gui.Presenters.TestTree
 {
     public class WhenTestRunBegins : TreeViewPresenterTestBase
     {
-        // Use dedicated test file name; Used for VisualState file too
-        const string TestFileName = "TreeViewPresenterTestRunBegin.dll";
-
-        [TearDown]
-        public void TearDown()
-        {
-            // Delete VisualState file to prevent any unintended side effects
-            string fileName = VisualState.GetVisualStateFileName(TestFileName);
-            if (File.Exists(fileName))
-                File.Delete(fileName);
-        }
-
         [Test]
         public void WhenTestRunStarts_TreeNodeImagesAreReset()
         {
@@ -32,7 +19,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             var tv = new TreeView();
             _view.TreeView.Returns(tv);
 
-            var project = new TestCentricProject(_model, TestFileName);
+            var project = new TestCentricProject(_model, "Dummy.dll");
             _model.TestCentricProject.Returns(project);
             TestNode testNode = new TestNode("<test-suite id='1'/>");
             _model.LoadedTests.Returns(testNode);

@@ -26,16 +26,18 @@ namespace TestCentric.Gui.Presenters
         private ITestTreeView _view;
         private ITestModel _model;
         private Model.Settings.TestTreeSettings _treeSettings;
+        private ITreeDisplayStrategyFactory _treeDisplayStrategyFactory;
 
         // Accessed by tests
-        public DisplayStrategy Strategy { get; private set; }
+        public ITreeDisplayStrategy Strategy { get; private set; }
 
         #region Constructor
 
-        public TreeViewPresenter(ITestTreeView treeView, ITestModel model)
+        public TreeViewPresenter(ITestTreeView treeView, ITestModel model, ITreeDisplayStrategyFactory factory)
         {
             _view = treeView;
             _model = model;
+            _treeDisplayStrategyFactory = factory;
 
             _treeSettings = _model.Settings.Gui.TestTree;
 
@@ -57,25 +59,7 @@ namespace TestCentric.Gui.Presenters
                 EnsureNonRunnableFilesAreVisible(ea.Test);
 
                 bool visualStateLoaded = TryLoadVisualState(out VisualState visualState);
-                if (visualStateLoaded)
-                {
-                    switch (visualState.DisplayStrategy)
-                    {
-                        case "NUNIT_TREE":
-                            Strategy = new NUnitTreeDisplayStrategy(_view, _model);
-                            break;
-                        case "FIXTURE_LIST":
-                            Strategy = new FixtureListDisplayStrategy(_view, _model);
-                            break;
-                        case "TEST_LIST":
-                            Strategy = new TestListDisplayStrategy(_view, _model);
-                            break;
-                        default:
-                            throw new Exception($"Invalid DisplayStrategy: {visualState.DisplayStrategy}");
-                    }
-                }
-                else
-                    Strategy = new NUnitTreeDisplayStrategy(_view, _model);
+                Strategy = _treeDisplayStrategyFactory.Create(visualState?.DisplayStrategy, _view, _model);
 
                 _view.ShowCheckBoxes.Checked = visualStateLoaded ? visualState.ShowCheckBoxes : _treeSettings.ShowCheckBoxes;
                 Strategy.OnTestLoaded(ea.Test, visualState);
@@ -273,7 +257,7 @@ namespace TestCentric.Gui.Presenters
             // tests are found. Should handle other error situations
             // including one non-runnable file out of several files.
             if (testNode.TestCount == 0)
-                Strategy = new NUnitTreeDisplayStrategy(_view, _model);
+                Strategy = _treeDisplayStrategyFactory.Create("NUNIT_TREE", _view, _model);
         }
 
         private void OnTestFinished(TestResultEventArgs args)
