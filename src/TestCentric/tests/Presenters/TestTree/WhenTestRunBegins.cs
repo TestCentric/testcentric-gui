@@ -16,6 +16,12 @@ namespace TestCentric.Gui.Presenters.TestTree
         // Use dedicated test file name; Used for VisualState file too
         const string TestFileName = "TreeViewPresenterTestRunBegin.dll";
 
+        [OneTimeSetUp]
+        public void OneTimeSetUp()
+        {
+            _treeDisplayStrategyFactory = new TreeDisplayStrategyFactory();
+        }
+
         [TearDown]
         public void TearDown()
         {

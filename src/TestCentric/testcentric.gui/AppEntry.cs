@@ -82,7 +82,7 @@ namespace TestCentric.Gui
             new TestPropertiesPresenter(view.TestPropertiesView, model);
             new ErrorsAndFailuresPresenter(view.ErrorsAndFailuresView, model);
             new TextOutputPresenter(view.TextOutputView, model);
-            new TreeViewPresenter(view.TreeView, model);
+            new TreeViewPresenter(view.TreeView, model, new TreeDisplayStrategyFactory());
             new TestCentricPresenter(view, model, options);
 
             try

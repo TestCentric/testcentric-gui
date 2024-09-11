@@ -28,6 +28,9 @@ namespace TestCentric.Gui.Presenters.TestTree
         [TestCaseSource("resultData")]
         public void TreeShowsProperResult(ResultState resultState, int expectedIndex)
         {
+            // Use concrete class NUnitTreeDisplayStrategy for this test case to assert SetImageIndex call
+            _treeDisplayStrategyFactory.Create("NUNIT_TREE", _view, _model)
+                .Returns((x) => new NUnitTreeDisplayStrategy(x.Arg<ITestTreeView>(), x.Arg<ITestModel>()));
             _model.IsProjectLoaded.Returns(true);
             _model.HasTests.Returns(true);
 

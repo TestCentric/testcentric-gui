@@ -17,13 +17,14 @@ namespace TestCentric.Gui.Presenters.TestTree
     public class TreeViewPresenterTestBase : PresenterTestBase<ITestTreeView>
     {
         protected TreeViewPresenter _presenter;
+        protected ITreeDisplayStrategyFactory _treeDisplayStrategyFactory = Substitute.For<ITreeDisplayStrategyFactory>();
 
         [SetUp]
         public void CreatePresenter()
         {
             _view.TreeContextMenu.Returns(new ContextMenuStrip());
 
-            _presenter = new TreeViewPresenter(_view, _model);
+            _presenter = new TreeViewPresenter(_view, _model, _treeDisplayStrategyFactory);
 
             // Make it look like the view loaded
             _view.Load += Raise.Event<System.EventHandler>(_view, new System.EventArgs());
