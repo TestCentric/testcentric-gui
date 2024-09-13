@@ -29,13 +29,6 @@ namespace TestCentric.Gui.Presenters
         #endregion
 
         #region Public Methods
-
-        /// <summary>
-        /// Checks if the GroupBy value from the settings
-        /// is applied as current grouping
-        /// </summary>
-        public virtual bool IsGroupingUpToDate() => false;
-
         /// <summary>
         /// Post a test result to the tree, changing the treeNode
         /// color to reflect success or failure. Overridden here

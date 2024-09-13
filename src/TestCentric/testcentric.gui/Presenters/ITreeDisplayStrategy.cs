@@ -10,11 +10,6 @@ namespace TestCentric.Gui.Presenters
     public interface ITreeDisplayStrategy
     {
         /// <summary>
-        /// The identifier of the strategy
-        /// </summary>
-        string StrategyID { get; }
-
-        /// <summary>
         /// Called when a test is loaded: build of all tree nodes and apply VisualState
         /// (for example: expand/collapse nodes)
         /// </summary>

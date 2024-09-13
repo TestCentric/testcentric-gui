@@ -9,6 +9,7 @@ using NSubstitute;
 namespace TestCentric.Gui.Presenters.TestTree
 {
     using Model;
+    using System;
     using System.IO;
     using System.Windows.Forms;
 
@@ -85,10 +86,10 @@ namespace TestCentric.Gui.Presenters.TestTree
             Assert.That(_view.ShowCheckBoxes.Checked, Is.EqualTo(showCheckBox));
         }
 
-        [TestCase("NUNIT_TREE")]
-        [TestCase("FIXTURE_LIST")]
-        [TestCase("TEST_LIST")]
-        public void TestLoaded_WithVisualState_TreeStrategy_IsCreatedFromVisualState(string displayFormat)
+        [TestCase("NUNIT_TREE", typeof(NUnitTreeDisplayStrategy))]
+        [TestCase("FIXTURE_LIST", typeof(FixtureListDisplayStrategy))]
+        [TestCase("TEST_LIST", typeof(TestListDisplayStrategy))]
+        public void TestLoaded_WithVisualState_TreeStrategy_IsCreatedFromVisualState(string displayFormat, Type expectedStrategy)
         {
             // Arrange: Create and save VisualState file
             VisualState visualState = new VisualState();
@@ -105,13 +106,13 @@ namespace TestCentric.Gui.Presenters.TestTree
             FireTestLoadedEvent(testNode);
 
             // Assert
-            Assert.That(_presenter.Strategy.StrategyID, Is.EqualTo(displayFormat));
+            Assert.That(_presenter.Strategy, Is.TypeOf(expectedStrategy));
         }
 
-        [TestCase("NUNIT_TREE")]
-        [TestCase("FIXTURE_LIST")]
-        [TestCase("TEST_LIST")]
-        public void TestLoaded_NoVisualState_TreeStrategy_IsCreatedFromSettings(string displayFormat)
+        [TestCase("NUNIT_TREE", typeof(NUnitTreeDisplayStrategy))]
+        [TestCase("FIXTURE_LIST", typeof(FixtureListDisplayStrategy))]
+        [TestCase("TEST_LIST", typeof(TestListDisplayStrategy))]
+        public void TestLoaded_NoVisualState_TreeStrategy_IsCreatedFromSettings(string displayFormat, Type expectedStrategy)
         {
             // Arrange: adapt settings
             _model.Settings.Gui.TestTree.DisplayFormat = displayFormat;
@@ -125,7 +126,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             FireTestLoadedEvent(testNode);
 
             // Assert
-            Assert.That(_presenter.Strategy.StrategyID, Is.EqualTo(displayFormat));
+            Assert.That(_presenter.Strategy, Is.TypeOf(expectedStrategy));
         }
 
         [TestCase("NUNIT_TREE")]

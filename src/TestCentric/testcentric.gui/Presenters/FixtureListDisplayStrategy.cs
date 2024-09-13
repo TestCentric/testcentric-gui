@@ -79,12 +79,6 @@ namespace TestCentric.Gui.Presenters
             visualState?.ApplyTo(_view.TreeView);
         }
 
-        public override bool IsGroupingUpToDate()
-        {
-            string groupId = _settings.Gui.TestTree.FixtureList.GroupBy;
-            return _grouping?.ID == groupId;
-        }
-
         #endregion
 
         #region Protected Members
