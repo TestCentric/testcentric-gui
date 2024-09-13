@@ -937,8 +937,7 @@ namespace TestCentric.Gui.Presenters
                 case "FIXTURE_LIST":
                     _view.GroupBy.Enabled = true;
                     // HACK: Should be handled by the element itself
-                    Elements.CheckedToolStripMenuGroup menuGroup = _view.GroupBy as Elements.CheckedToolStripMenuGroup;
-                    if (menuGroup != null)
+                    if (_view.GroupBy is Elements.CheckedToolStripMenuGroup menuGroup)
                         menuGroup.MenuItems[1].Enabled = false;
                     _view.GroupBy.SelectedItem = _settings.Gui.TestTree.FixtureList.GroupBy;
                     break;
