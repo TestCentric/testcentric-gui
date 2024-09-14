@@ -59,7 +59,9 @@ namespace TestCentric.Gui.Presenters
                 EnsureNonRunnableFilesAreVisible(ea.Test);
 
                 bool visualStateLoaded = TryLoadVisualState(out VisualState visualState);
-                Strategy = _treeDisplayStrategyFactory.Create(visualState?.DisplayStrategy, _view, _model);
+                if (visualStateLoaded)
+                    UpdateTreeSettingsFromVisualState(visualState);
+                Strategy = _treeDisplayStrategyFactory.Create(_treeSettings.DisplayFormat, _view, _model);
 
                 _view.ShowCheckBoxes.Checked = visualStateLoaded ? visualState.ShowCheckBoxes : _treeSettings.ShowCheckBoxes;
                 Strategy.OnTestLoaded(ea.Test, visualState);
@@ -96,6 +98,7 @@ namespace TestCentric.Gui.Presenters
                 // or user terminates cancels the run.
                 Strategy.SaveVisualState();
 
+                _model.ClearResults();
                 _view.ResetAllTreeNodeImages(); 
                 CheckPropertiesDisplay();
                 CheckXmlDisplay();
@@ -112,6 +115,11 @@ namespace TestCentric.Gui.Presenters
                         _view.AlternateImageSet = _treeSettings.AlternateImageSet;
                         break;
                     case "TestCentric.Gui.TestTree.DisplayFormat":
+                        {
+                            Strategy = CreateDisplayStrategy(_treeSettings.DisplayFormat, _view, _model);
+                            Strategy.Reload();
+                            break;
+                        }
                     case "TestCentric.Gui.TestTree.TestList.GroupBy":
                     case "TestCentric.Gui.TestTree.FixtureList.GroupBy":
                         Strategy.Reload();
@@ -145,9 +153,10 @@ namespace TestCentric.Gui.Presenters
             {
                 if (_view.ContextNode != null)
                 {
-                    var testNode = _view.ContextNode.Tag as TestNode;
-                    if (testNode != null)
+                    if (_view.ContextNode.Tag is TestNode testNode)
                         _model.RunTests(testNode);
+                    else if (_view.ContextNode.Tag is TestGroup groupNode)
+                        _model.RunTests(groupNode);
                 }
             };
 
@@ -249,6 +258,38 @@ namespace TestCentric.Gui.Presenters
             //            CloseXmlDisplay();
             //    }
             //};
+        }
+
+        private void UpdateTreeSettingsFromVisualState(VisualState visualState)
+        {
+            _treeSettings.DisplayFormat = visualState.DisplayStrategy;
+            if (visualState.DisplayStrategy == "TEST_LIST")
+            {
+                _treeSettings.TestList.GroupBy = visualState.GroupBy;
+            }
+            else if (visualState.DisplayStrategy == "FIXTURE_LIST")
+            {
+                _treeSettings.FixtureList.GroupBy = visualState.GroupBy;
+            }
+        }
+        private static DisplayStrategy CreateDisplayStrategy(string displayStrategy, ITestTreeView treeView, ITestModel testModel)
+        {
+            DisplayStrategy strategy = null;
+            switch (displayStrategy)
+            {
+                case "FIXTURE_LIST":
+                    strategy = new FixtureListDisplayStrategy(treeView, testModel);
+                    break;
+                case "TEST_LIST":
+                    strategy = new TestListDisplayStrategy(treeView, testModel);
+                    break;
+                case "NUNIT_TREE":
+                default:
+                    strategy = new NUnitTreeDisplayStrategy(treeView, testModel);
+                    break;
+            }
+
+            return strategy;
         }
 
         private void EnsureNonRunnableFilesAreVisible(TestNode testNode)

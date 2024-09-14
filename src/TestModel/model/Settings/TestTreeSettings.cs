@@ -38,6 +38,12 @@ namespace TestCentric.Gui.Model.Settings
             set { SaveSetting(nameof(ShowCheckBoxes), value); }
         }
 
+        public string DisplayFormat
+        {
+            get { return GetSetting(nameof(DisplayFormat), "NUNIT_TREE"); }
+            set { SaveSetting(nameof(DisplayFormat), value); }
+        }
+
         public class FixtureListSettings : SettingsGroup
         {
             public FixtureListSettings(ISettings settings, string prefix) : base(settings, prefix + "FixtureList") { }

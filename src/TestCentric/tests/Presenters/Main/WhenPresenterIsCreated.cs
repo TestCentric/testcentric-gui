@@ -45,5 +45,52 @@ namespace TestCentric.Gui.Presenters.Main
         {
             ViewElement(propName).Received().Visible = visible;
         }
+
+        [TestCase("NUNIT_TREE")]
+        [TestCase("FIXTURE_LIST")]
+        [TestCase("TEST_LIST")]
+        public void CheckMenu_DisplayFormat_SelectedItem_IsInitialzedFromSettings(string displayFormat)
+        {
+            // 1. Arrange
+            _settings.Gui.TestTree.DisplayFormat = displayFormat;
+
+            // 2. Act
+            _presenter = new TestCentricPresenter(_view, _model, new CommandLineOptions());
+
+            // 3. Assert
+            _view.DisplayFormat.Received().SelectedItem = displayFormat;
+        }
+
+        [TestCase("ASSEMBLY")]
+        [TestCase("CATEGORY")]
+        [TestCase("OUTCOME")]
+        public void CheckMenu_GroupBy_SelectedItem_FixtureList_IsInitialzedFromSettings(string groupBy)
+        {
+            // 1. Arrange
+            _settings.Gui.TestTree.DisplayFormat = "FIXTURE_LIST";
+            _settings.Gui.TestTree.FixtureList.GroupBy = groupBy;
+
+            // 2. Act
+            _presenter = new TestCentricPresenter(_view, _model, new CommandLineOptions());
+
+            // 3. Assert
+            _view.GroupBy.Received().SelectedItem = groupBy;
+        }
+
+        [TestCase("ASSEMBLY")]
+        [TestCase("CATEGORY")]
+        [TestCase("OUTCOME")]
+        public void CheckMenu_GroupBy_SelectedItem_TestList_IsInitialzedFromSettings(string groupBy)
+        {
+            // 1. Arrange
+            _settings.Gui.TestTree.DisplayFormat = "TEST_LIST";
+            _settings.Gui.TestTree.TestList.GroupBy = groupBy;
+
+            // 2. Act
+            _presenter = new TestCentricPresenter(_view, _model, new CommandLineOptions());
+
+            // 3. Assert
+            _view.GroupBy.Received().SelectedItem = groupBy;
+        }
     }
 }

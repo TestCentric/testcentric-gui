@@ -80,6 +80,7 @@ namespace TestCentric.Gui.Presenters
             _view.ResultTabs.SelectedIndex = _settings.Gui.SelectedTab;
 
             UpdateViewCommands();
+            UpdateTreeDisplayMenuItem();
 
             foreach (string format in _model.ResultFormats)
                 if (format != "cases" && format != "user")
@@ -251,6 +252,16 @@ namespace TestCentric.Gui.Presenters
                         break;
                     case "TestCentric.Gui.MainForm.ShowStatusBar":
                         _view.StatusBarView.Visible = _settings.Gui.MainForm.ShowStatusBar;
+                        break;
+                    case "TestCentric.Gui.TestTree.DisplayFormat":
+                        _view.DisplayFormat.SelectedItem = _settings.Gui.TestTree.DisplayFormat;
+                        UpdateTreeDisplayMenuItem();
+                        break;
+                    case "TestCentric.Gui.TestTree.TestList.GroupBy":
+                        _view.GroupBy.SelectedItem = _settings.Gui.TestTree.TestList.GroupBy;
+                        break;
+                    case "TestCentric.Gui.TestTree.FixtureList.GroupBy":
+                        _view.GroupBy.SelectedItem = _settings.Gui.TestTree.FixtureList.GroupBy;
                         break;
                 }
             };
@@ -473,7 +484,7 @@ namespace TestCentric.Gui.Presenters
 
             _view.DisplayFormat.SelectionChanged += () =>
             {
-                SetTreeDisplayFormat(_view.DisplayFormat.SelectedItem);
+                _settings.Gui.TestTree.DisplayFormat = _view.DisplayFormat.SelectedItem;
             };
 
             _view.GroupBy.SelectionChanged += () =>
@@ -907,8 +918,11 @@ namespace TestCentric.Gui.Presenters
             }
         }
 
-        private void SetTreeDisplayFormat(string displayFormat)
-        {
+        private void UpdateTreeDisplayMenuItem()
+        { 
+            // Get current display format from settings
+            string displayFormat = _settings.Gui.TestTree.DisplayFormat;
+
             _view.DisplayFormat.SelectedItem = displayFormat;
 
             switch (displayFormat)
@@ -923,7 +937,8 @@ namespace TestCentric.Gui.Presenters
                 case "FIXTURE_LIST":
                     _view.GroupBy.Enabled = true;
                     // HACK: Should be handled by the element itself
-                    ((Elements.CheckedToolStripMenuGroup)_view.GroupBy).MenuItems[1].Enabled = false;
+                    if (_view.GroupBy is Elements.CheckedToolStripMenuGroup menuGroup)
+                        menuGroup.MenuItems[1].Enabled = false;
                     _view.GroupBy.SelectedItem = _settings.Gui.TestTree.FixtureList.GroupBy;
                     break;
             }

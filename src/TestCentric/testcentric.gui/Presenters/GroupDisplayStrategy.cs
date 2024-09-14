@@ -29,7 +29,6 @@ namespace TestCentric.Gui.Presenters
         #endregion
 
         #region Public Methods
-
         /// <summary>
         /// Post a test result to the tree, changing the treeNode
         /// color to reflect success or failure. Overridden here
@@ -84,7 +83,7 @@ namespace TestCentric.Gui.Presenters
             // for groupings that display each node once.
             var treeNode = treeNodes[0];
             var oldParent = treeNode.Parent;
-            var oldGroup = oldParent.Tag as TestGroup;
+            var oldGroup = oldParent?.Tag as TestGroup;
 
             // We only have to proceed for tests that are direct
             // descendants of a group node.
@@ -155,12 +154,6 @@ namespace TestCentric.Gui.Presenters
         protected void SetDefaultTestGrouping()
         {
             _grouping = CreateTestGrouping(DefaultGroupSetting);
-        }
-
-        protected void SetTestGrouping(string groupBy)
-        {
-            _grouping = CreateTestGrouping(groupBy);
-            DefaultGroupSetting = groupBy;
         }
 
         protected abstract string DefaultGroupSetting { get; set; }
