@@ -124,7 +124,6 @@ namespace TestCentric.Gui.Dialogs
             this.extensionListView.UseCompatibleStateImageBehavior = false;
             this.extensionListView.View = System.Windows.Forms.View.Details;
             this.extensionListView.SelectedIndexChanged += new System.EventHandler(this.extensionListView_SelectedIndexChanged);
-            this.extensionListView.Resize += new System.EventHandler(this.extensionListView_Resize);
             // 
             // extensionNameColumn
             // 
@@ -399,11 +398,6 @@ namespace TestCentric.Gui.Dialogs
 
                 assemblyVersionLabel.Text = extension.AssemblyVersion.ToString(); ;
             }
-        }
-
-        private void extensionListView_Resize(object sender, System.EventArgs e)
-        {
-            AutoSizeFirstColumnOfListView();
         }
 
         private void AutoSizeFirstColumnOfListView()
