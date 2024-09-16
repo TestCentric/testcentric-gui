@@ -792,26 +792,26 @@ namespace TestCentric.Gui.Views
             // 
             this.testCentricHelpMenuItem.Name = "testCentricHelpMenuItem";
             this.testCentricHelpMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            this.testCentricHelpMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.testCentricHelpMenuItem.Size = new System.Drawing.Size(180, 22);
             this.testCentricHelpMenuItem.Text = "TestCentric ...";
             // 
             // nunitHelpMenuItem
             // 
-            this.nunitHelpMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.None;
+            this.nunitHelpMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.nunitHelpMenuItem.Name = "nunitHelpMenuItem";
             this.nunitHelpMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F1)));
-            this.nunitHelpMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.nunitHelpMenuItem.Size = new System.Drawing.Size(180, 22);
             this.nunitHelpMenuItem.Text = "NUnit ...";
             // 
             // helpMenuSeparator1
             // 
             this.helpMenuSeparator1.Name = "helpMenuSeparator1";
-            this.helpMenuSeparator1.Size = new System.Drawing.Size(174, 6);
+            this.helpMenuSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // aboutMenuItem
             // 
             this.aboutMenuItem.Name = "aboutMenuItem";
-            this.aboutMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.aboutMenuItem.Size = new System.Drawing.Size(180, 22);
             this.aboutMenuItem.Text = "&About TestCentric...";
             // 
             // treeSplitter
