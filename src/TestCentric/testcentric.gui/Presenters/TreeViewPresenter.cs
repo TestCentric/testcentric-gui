@@ -116,7 +116,7 @@ namespace TestCentric.Gui.Presenters
                         break;
                     case "TestCentric.Gui.TestTree.DisplayFormat":
                         {
-                            Strategy = CreateDisplayStrategy(_treeSettings.DisplayFormat, _view, _model);
+                            Strategy = _treeDisplayStrategyFactory.Create(_treeSettings.DisplayFormat, _view, _model);
                             Strategy.Reload();
                             break;
                         }
@@ -271,25 +271,6 @@ namespace TestCentric.Gui.Presenters
             {
                 _treeSettings.FixtureList.GroupBy = visualState.GroupBy;
             }
-        }
-        private static DisplayStrategy CreateDisplayStrategy(string displayStrategy, ITestTreeView treeView, ITestModel testModel)
-        {
-            DisplayStrategy strategy = null;
-            switch (displayStrategy)
-            {
-                case "FIXTURE_LIST":
-                    strategy = new FixtureListDisplayStrategy(treeView, testModel);
-                    break;
-                case "TEST_LIST":
-                    strategy = new TestListDisplayStrategy(treeView, testModel);
-                    break;
-                case "NUNIT_TREE":
-                default:
-                    strategy = new NUnitTreeDisplayStrategy(treeView, testModel);
-                    break;
-            }
-
-            return strategy;
         }
 
         private void EnsureNonRunnableFilesAreVisible(TestNode testNode)
