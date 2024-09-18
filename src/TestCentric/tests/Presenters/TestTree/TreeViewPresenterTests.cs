@@ -6,6 +6,9 @@
 using System.Windows.Forms;
 using NUnit.Framework;
 using NSubstitute;
+using TestCentric.Gui.Model;
+using System;
+using System.Runtime.InteropServices;
 
 namespace TestCentric.Gui.Presenters.TestTree
 {
@@ -27,6 +30,81 @@ namespace TestCentric.Gui.Presenters.TestTree
             _model.Settings.Gui.TestTree.AlternateImageSet = imageSet;
 
             Assert.That(_view.AlternateImageSet, Is.EqualTo(imageSet));
+        }
+
+        [Test]
+        public void WhenContextMenuIsDisplayed_SelectedNodeIsGroup_ViewAsXmlContextMenu_IsDisabled()
+        {
+            // 1. Arrange
+            TreeNode treeNode = new TreeNode("TreeNode");
+            TestGroup testGroup = new TestGroup("MyGroup");
+            treeNode.Tag = testGroup;
+
+            _view.ContextNode.Returns(treeNode);
+
+            // 2. Act
+            _view.ContextMenuOpening += Raise.Event<EventHandler>();
+
+            // 3. Assert
+            Assert.That(_view.ViewAsXmlCommand.Enabled, Is.False);
+        }
+
+        [Test]
+        public void WhenContextMenuIsDisplayed_SelectedNodeIsTestNode_ViewAsXmlContextMenu_IsEnabled()
+        {
+            // 1. Arrange
+            TreeNode treeNode = new TreeNode("TreeNode");
+            TestNode testNode = new TestNode("<test-suite id='1'/>");
+            treeNode.Tag = testNode;
+
+            _view.ContextNode.Returns(treeNode);
+
+            // 2. Act
+            _view.ContextMenuOpening += Raise.Event<EventHandler>();
+
+            // 3. Assert
+            Assert.That(_view.ViewAsXmlCommand.Enabled, Is.True);
+        }
+
+        [Test]
+        public void WhenContextMenuIsDisplayed_NoSelectedNode_ViewAsXmlContextMenu_IsEnabled()
+        {
+            // 1. Arrange
+            TreeNode treeNode = new TreeNode("TreeNode");
+            treeNode.Tag = null;
+            _view.ContextNode.Returns(treeNode);
+
+            // 2. Act
+            _view.ContextMenuOpening += Raise.Event<EventHandler>();
+
+            // 3. Assert
+            Assert.That(_view.ViewAsXmlCommand.Enabled, Is.True);
+        }
+
+        [Test]
+        public void WhenContextMenuIsDisplayed_GuiMiniLayout_TestPropertiesContextMenu_IsVisible()
+        {
+            // 1. Arrange
+            _model.Settings.Gui.GuiLayout = "Mini";
+
+            // 2. Act
+            _view.ContextMenuOpening += Raise.Event<EventHandler>();
+
+            // 3. Assert
+            Assert.That(_view.TestPropertiesCommand.Visible, Is.True);
+        }
+
+        [Test]
+        public void WhenContextMenuIsDisplayed_GuiFullLayout_TestPropertiesContextMenu_IsNotVisible()
+        {
+            // 1. Arrange
+            _model.Settings.Gui.GuiLayout = "Full";
+
+            // 2. Act
+            _view.ContextMenuOpening += Raise.Event<EventHandler>();
+
+            // 3. Assert
+            Assert.That(_view.TestPropertiesCommand.Visible, Is.False);
         }
 
         // TODO: Version 1 Test - Make it work if needed.

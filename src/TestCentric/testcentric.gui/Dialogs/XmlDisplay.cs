@@ -50,8 +50,10 @@ namespace TestCentric.Gui.Dialogs
             _testNode = treeNode.Tag as TestNode;
 
             SuspendLayout();
-            TestName = _testNode.Name;
-            var fullXml = GetFullXml(_testNode);
+            TestName = (treeNode.Tag as ITestItem)?.Name;
+
+            // Display empty XML content for TestGroup nodes (for example category nodes)
+            XmlNode fullXml = (_testNode != null) ? GetFullXml(_testNode) : null;
             xmlTextBox.Rtf = new Xml2RtfConverter(2).Convert(fullXml);
 
             ResumeLayout();

@@ -450,6 +450,9 @@ namespace TestCentric.Gui.Presenters
 
             var layout = _model.Settings.Gui.GuiLayout;
             _view.TestPropertiesCommand.Visible = layout == "Mini";
+
+            // For example test category nodes or test result nodes (passed/failed)
+            _view.ViewAsXmlCommand.Enabled = !(_view?.ContextNode?.Tag is TestGroup);
         }
 
         #endregion
