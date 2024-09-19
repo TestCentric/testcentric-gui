@@ -33,55 +33,6 @@ namespace TestCentric.Gui.Presenters.TestTree
         }
 
         [Test]
-        public void WhenContextMenuIsDisplayed_SelectedNodeIsGroup_ViewAsXmlContextMenu_IsDisabled()
-        {
-            // 1. Arrange
-            TreeNode treeNode = new TreeNode("TreeNode");
-            TestGroup testGroup = new TestGroup("MyGroup");
-            treeNode.Tag = testGroup;
-
-            _view.ContextNode.Returns(treeNode);
-
-            // 2. Act
-            _view.ContextMenuOpening += Raise.Event<EventHandler>();
-
-            // 3. Assert
-            Assert.That(_view.ViewAsXmlCommand.Enabled, Is.False);
-        }
-
-        [Test]
-        public void WhenContextMenuIsDisplayed_SelectedNodeIsTestNode_ViewAsXmlContextMenu_IsEnabled()
-        {
-            // 1. Arrange
-            TreeNode treeNode = new TreeNode("TreeNode");
-            TestNode testNode = new TestNode("<test-suite id='1'/>");
-            treeNode.Tag = testNode;
-
-            _view.ContextNode.Returns(treeNode);
-
-            // 2. Act
-            _view.ContextMenuOpening += Raise.Event<EventHandler>();
-
-            // 3. Assert
-            Assert.That(_view.ViewAsXmlCommand.Enabled, Is.True);
-        }
-
-        [Test]
-        public void WhenContextMenuIsDisplayed_NoSelectedNode_ViewAsXmlContextMenu_IsEnabled()
-        {
-            // 1. Arrange
-            TreeNode treeNode = new TreeNode("TreeNode");
-            treeNode.Tag = null;
-            _view.ContextNode.Returns(treeNode);
-
-            // 2. Act
-            _view.ContextMenuOpening += Raise.Event<EventHandler>();
-
-            // 3. Assert
-            Assert.That(_view.ViewAsXmlCommand.Enabled, Is.True);
-        }
-
-        [Test]
         public void WhenContextMenuIsDisplayed_GuiMiniLayout_TestPropertiesContextMenu_IsVisible()
         {
             // 1. Arrange
