@@ -122,7 +122,7 @@ namespace TestCentric.Gui.Presenters
                         }
                     case "TestCentric.Gui.TestTree.TestList.GroupBy":
                     case "TestCentric.Gui.TestTree.FixtureList.GroupBy":
-                        Strategy.Reload();
+                        Strategy?.Reload();
                         break;
                     case "TestCentric.Gui.TestTree.ShowCheckBoxes":
                         _view.ShowCheckBoxes.Checked = _treeSettings.ShowCheckBoxes;

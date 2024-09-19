@@ -17,7 +17,7 @@ namespace TestCentric.Gui.Dialogs
         private ITestModel _model;
 
         private TreeNode _treeNode;
-        private TestNode _testNode;
+        private ITestItem _testItem;
         
         public XmlDisplay(ITestModel model)
         {
@@ -47,11 +47,17 @@ namespace TestCentric.Gui.Dialogs
                 throw new ArgumentNullException(nameof(treeNode));
 
             _treeNode = treeNode;
-            _testNode = treeNode.Tag as TestNode;
+            _testItem = treeNode.Tag as ITestItem;
+
+            if (_testItem == null)
+                throw new ArgumentException("Unknown object associated to treenode");
 
             SuspendLayout();
-            TestName = _testNode.Name;
-            var fullXml = GetFullXml(_testNode);
+            TestName = _testItem.Name;
+
+            // Display empty XML content for TestGroup nodes (for example category nodes)
+            TestNode testNode = _testItem as TestNode;
+            XmlNode fullXml = (testNode != null) ? GetFullXml(testNode) : null;
             xmlTextBox.Rtf = new Xml2RtfConverter(2).Convert(fullXml);
 
             ResumeLayout();
@@ -61,7 +67,8 @@ namespace TestCentric.Gui.Dialogs
 
         public void OnTestFinished(ResultNode result)
         {
-            if (result.Id == _testNode.Id)
+            TestNode testNode = _testItem as TestNode;
+            if (testNode != null && result.Id == testNode.Id)
                 Invoke(new Action(() => Display(_treeNode)));
         }
 
