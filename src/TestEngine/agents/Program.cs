@@ -74,7 +74,11 @@ namespace TestCentric.Engine.Agents
             log.Info("Agent process {0} starting", pid);
 
             // TODO: CurrentFramework throws under .NET 5.0
-#if NET6_0
+#if NET8_0
+            log.Info("Running under .NET 8.0");
+#elif NET7_0
+            log.Info("Running under .NET 7.0");
+#elif NET6_0
             log.Info("Running under .NET 6.0");
 #elif NET5_0
             log.Info("Running under .NET 5.0");

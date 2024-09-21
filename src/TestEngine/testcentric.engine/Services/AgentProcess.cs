@@ -127,6 +127,10 @@ namespace TestCentric.Engine.Services
                         case 6:
                             agentPath = Path.Combine(engineDir, "agents/net6.0/" + agentName + ".dll");
                             break;
+                        case 7:
+                        case 8:
+                            agentPath = Path.Combine(engineDir, "agents/net8.0/" + agentName + ".dll");
+                            break;
                     }
                     break;
             }
