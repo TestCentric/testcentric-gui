@@ -170,7 +170,7 @@ public class BuildParameters
 
 	public string[] SupportedEngineRuntimes => new string[] {"net462", "netcoreapp3.1"};
 	public string[] SupportedCoreRuntimes => new string[] {"net462", "net35", "netcoreapp3.1"};
-	public string[] SupportedAgentRuntimes => new string[] { "net20", "net462", "netcoreapp3.1", "net5.0", "net6.0", "net8.0" };
+	public string[] SupportedAgentRuntimes => new string[] { "net20", "net462", "netcoreapp3.1", "net6.0", "net8.0" };
 
 	public string ProjectUri => "https://github.com/TestCentric/testcentric-gui";
 	public string WebDeployBranch => "gh-pages";
