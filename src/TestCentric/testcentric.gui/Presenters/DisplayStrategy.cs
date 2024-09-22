@@ -88,6 +88,10 @@ namespace TestCentric.Gui.Presenters
             _view.ResetAllTreeNodeImages();
         }
 
+        public virtual void OnTestRunFinished()
+        {
+        }
+
         // Called when either the display strategy or the grouping
         // changes. May need to distinguish these cases.
         public void Reload()

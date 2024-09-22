@@ -47,7 +47,12 @@ namespace TestCentric.Gui.Presenters
         public override void OnTestRunStarting()
         {
             base.OnTestRunStarting();
-            _grouping?.OnTestRunStarting();
+            _view.InvokeIfRequired(() => _grouping?.OnTestRunStarting());
+        }
+
+        public override void OnTestRunFinished()
+        {
+            _view.InvokeIfRequired(() => _grouping?.OnTestRunFinished());
         }
 
         // TODO: Move this to TestGroup? Would need access to results.
@@ -203,6 +208,27 @@ namespace TestCentric.Gui.Presenters
                 }
                 if (topNode != null)
                     topNode.EnsureVisible();
+            }
+        }
+
+        private void UpdateTestResult(ResultNode result)
+        {
+            var imageIndex = CalcImageIndex(result.Outcome);
+            if (imageIndex >= TestTreeView.SuccessIndex)
+            {
+                var treeNodes = GetTreeNodesForTest(result);
+                foreach (var treeNode in treeNodes)
+                {
+                    var parentNode = treeNode.Parent;
+                    if (parentNode != null)
+                    {
+                        var group = parentNode.Tag as TestGroup;
+                        if (group != null && imageIndex > group.ImageIndex)
+                        {
+                            parentNode.SelectedImageIndex = parentNode.ImageIndex = group.ImageIndex = imageIndex;
+                        }
+                    }
+                }
             }
         }
 

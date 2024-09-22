@@ -65,7 +65,12 @@ namespace TestCentric.Gui.Presenters
             foreach (TestGroup testGroup in Groups)
             {
                 testGroup.ImageIndex = 0;
+                testGroup.TreeNode.ImageIndex = testGroup.TreeNode.SelectedImageIndex = 0;
             }
+        }
+
+        public virtual void OnTestRunFinished()
+        {
         }
 
         /// <summary>

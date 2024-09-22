@@ -104,6 +104,11 @@ namespace TestCentric.Gui.Presenters
                 CheckXmlDisplay();
             };
 
+            _model.Events.RunFinished += (ea) =>
+            {
+                Strategy?.OnTestRunFinished();
+            };
+
             _model.Events.TestFinished += OnTestFinished;
             _model.Events.SuiteFinished += OnTestFinished;
 

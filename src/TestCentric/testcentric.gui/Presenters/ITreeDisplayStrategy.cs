@@ -41,6 +41,11 @@ namespace TestCentric.Gui.Presenters
         void OnTestRunStarting();
 
         /// <summary>
+        /// Called when a test run is finished
+        /// </summary>
+        void OnTestRunFinished();
+
+        /// <summary>
         /// Collapse all tree nodes beneath the fixture nodes
         /// </summary>
         void CollapseToFixtures();
