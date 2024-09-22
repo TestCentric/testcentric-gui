@@ -118,6 +118,7 @@ namespace TestCentric.Gui.Views
         private ToolStripSeparator toolStripSeparator5;
         private ToolStripSeparator toolStripSeparator6;
         private ToolStripSeparator toolStripSeparator7;
+        private ToolStripMenuItem commandLineOptionsMenuItem;
         private TextOutputView textOutputView1;
 
         #endregion
@@ -187,6 +188,7 @@ namespace TestCentric.Gui.Views
             TestCentricHelpCommand = new ToolStripMenuElement(testCentricHelpMenuItem);
             NUnitHelpCommand = new ToolStripMenuElement(nunitHelpMenuItem);
             AboutCommand = new ToolStripMenuElement(aboutMenuItem);
+            CommandLineOptionsCommand = new ToolStripMenuElement(commandLineOptionsMenuItem);
 
             DialogManager = new DialogManager();
             LongRunningOperation = new LongRunningOperationDisplay(this);
@@ -280,6 +282,7 @@ namespace TestCentric.Gui.Views
             this.nunitHelpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpMenuSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.commandLineOptionsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.treeSplitter = new System.Windows.Forms.Splitter();
             this.rightPanel = new System.Windows.Forms.Panel();
             this.resultTabs = new System.Windows.Forms.TabControl();
@@ -290,9 +293,9 @@ namespace TestCentric.Gui.Views
             this.outputTab = new System.Windows.Forms.TabPage();
             this.textOutputView1 = new TestCentric.Gui.Views.TextOutputView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.runSummary = new TestCentric.Gui.Controls.ExpandingLabel();
             this.forceStopButton = new System.Windows.Forms.Button();
             this.stopButton = new System.Windows.Forms.Button();
-            this.runSummary = new TestCentric.Gui.Controls.ExpandingLabel();
             this.runButton = new System.Windows.Forms.Button();
             this.progressBar = new TestCentric.Gui.Views.ProgressBarView();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -767,7 +770,8 @@ namespace TestCentric.Gui.Views
             this.testCentricHelpMenuItem,
             this.nunitHelpMenuItem,
             this.helpMenuSeparator1,
-            this.aboutMenuItem});
+            this.aboutMenuItem,
+            this.commandLineOptionsMenuItem});
             this.helpItem.Name = "helpItem";
             this.helpItem.Size = new System.Drawing.Size(44, 20);
             this.helpItem.Text = "&Help";
@@ -776,26 +780,32 @@ namespace TestCentric.Gui.Views
             // 
             this.testCentricHelpMenuItem.Name = "testCentricHelpMenuItem";
             this.testCentricHelpMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            this.testCentricHelpMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.testCentricHelpMenuItem.Size = new System.Drawing.Size(209, 22);
             this.testCentricHelpMenuItem.Text = "TestCentric ...";
             // 
             // nunitHelpMenuItem
             // 
             this.nunitHelpMenuItem.Name = "nunitHelpMenuItem";
             this.nunitHelpMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F1)));
-            this.nunitHelpMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.nunitHelpMenuItem.Size = new System.Drawing.Size(209, 22);
             this.nunitHelpMenuItem.Text = "NUnit ...";
             // 
             // helpMenuSeparator1
             // 
             this.helpMenuSeparator1.Name = "helpMenuSeparator1";
-            this.helpMenuSeparator1.Size = new System.Drawing.Size(174, 6);
+            this.helpMenuSeparator1.Size = new System.Drawing.Size(206, 6);
             // 
             // aboutMenuItem
             // 
             this.aboutMenuItem.Name = "aboutMenuItem";
-            this.aboutMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.aboutMenuItem.Size = new System.Drawing.Size(209, 22);
             this.aboutMenuItem.Text = "&About TestCentric...";
+            // 
+            // commandlineOptionsMenuItem
+            // 
+            this.commandLineOptionsMenuItem.Name = "commandlineOptionsMenuItem";
+            this.commandLineOptionsMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.commandLineOptionsMenuItem.Text = "Command-line Options...";
             // 
             // treeSplitter
             // 
@@ -904,6 +914,16 @@ namespace TestCentric.Gui.Views
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             // 
+            // runSummary
+            // 
+            this.runSummary.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.runSummary.AutoEllipsis = true;
+            this.runSummary.Location = new System.Drawing.Point(8, 89);
+            this.runSummary.Name = "runSummary";
+            this.runSummary.Size = new System.Drawing.Size(480, 21);
+            this.runSummary.TabIndex = 5;
+            // 
             // forceStopButton
             // 
             this.forceStopButton.Location = new System.Drawing.Point(75, 16);
@@ -921,16 +941,6 @@ namespace TestCentric.Gui.Views
             this.stopButton.Size = new System.Drawing.Size(64, 31);
             this.stopButton.TabIndex = 4;
             this.stopButton.Text = "&Stop";
-            // 
-            // runSummary
-            // 
-            this.runSummary.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.runSummary.AutoEllipsis = true;
-            this.runSummary.Location = new System.Drawing.Point(8, 89);
-            this.runSummary.Name = "runSummary";
-            this.runSummary.Size = new System.Drawing.Size(480, 21);
-            this.runSummary.TabIndex = 5;
             // 
             // runButton
             // 
@@ -1142,6 +1152,7 @@ namespace TestCentric.Gui.Views
         public ICommand TestCentricHelpCommand { get; }
         public ICommand NUnitHelpCommand { get; }
         public ICommand AboutCommand { get; }
+        public ICommand CommandLineOptionsCommand { get; }
 
         public IDialogManager DialogManager { get; }
         public ILongRunningOperationDisplay LongRunningOperation { get;  }

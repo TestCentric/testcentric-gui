@@ -968,14 +968,15 @@ namespace Mono.Options
                 }
 
                 bool indent = false;
-                string prefix = new string(' ', OptionWidth + 2);
+                string prefix = new string(' ', OptionWidth);
                 foreach (string line in GetLines(localizer(GetDescription(p.Description))))
                 {
                     if (indent)
                         o.Write(prefix);
-                    o.WriteLine(line);
+                    o.WriteLine(line.Trim());
                     indent = true;
                 }
+                o.WriteLine();
             }
         }
 
@@ -994,7 +995,7 @@ namespace Mono.Options
             }
             else
             {
-                Write(o, ref written, "      --");
+                Write(o, ref written, "  --");
                 Write(o, ref written, names[0]);
             }
 

@@ -504,6 +504,14 @@ namespace TestCentric.Gui.Presenters
                 }
             };
 
+            _view.CommandLineOptionsCommand.Execute += () =>
+            {
+                using (HelpDisplay helpDisplay = new HelpDisplay(_options))
+                {
+                    helpDisplay.ShowDialog();
+                }
+            };
+
             _view.ResultTabs.SelectionChanged += () =>
             {
                 _settings.Gui.SelectedTab = _view.ResultTabs.SelectedIndex;

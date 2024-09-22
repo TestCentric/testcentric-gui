@@ -9,6 +9,7 @@
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>..\..\testcentric.snk</AssemblyOriginatorKeyFile>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<LangVersion>11</LangVersion>
 	</PropertyGroup>
 	<ItemGroup>
 	  <None Remove="Images\pinned.gif" />
