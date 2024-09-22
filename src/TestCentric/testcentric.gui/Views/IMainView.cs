@@ -73,6 +73,7 @@ namespace TestCentric.Gui.Views
         ICommand TestCentricHelpCommand { get; }
         ICommand NUnitHelpCommand { get; }
         ICommand AboutCommand { get; }
+        ICommand CommandLineOptionsCommand { get; }
 
         // SubViews
         TestTreeView TreeView { get; }
