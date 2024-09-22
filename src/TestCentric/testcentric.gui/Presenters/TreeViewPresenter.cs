@@ -99,7 +99,7 @@ namespace TestCentric.Gui.Presenters
                 Strategy.SaveVisualState();
 
                 _model.ClearResults();
-                _view.ResetAllTreeNodeImages(); 
+                Strategy.OnTestRunStarting();
                 CheckPropertiesDisplay();
                 CheckXmlDisplay();
             };

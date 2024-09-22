@@ -60,6 +60,14 @@ namespace TestCentric.Gui.Presenters
             // Override to take any necessary action
         }
 
+        public void OnTestRunStarting()
+        {
+            foreach (TestGroup testGroup in Groups)
+            {
+                testGroup.ImageIndex = 0;
+            }
+        }
+
         /// <summary>
         /// Returns an array of groups in which a TestNode is categorized.
         /// </summary>

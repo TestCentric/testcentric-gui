@@ -38,8 +38,16 @@ namespace TestCentric.Gui.Presenters
         public override void OnTestFinished(ResultNode result)
         {
             base.OnTestFinished(result);
+            _view.InvokeIfRequired(() => _grouping?.OnTestFinished(result));
+        }
 
-            ApplyResultToGroup(result, false);
+        /// <summary>
+        /// Reset all tree node images when a test run starts (also the image index of group nodes which a managed by the grouping)
+        /// </summary>
+        public override void OnTestRunStarting()
+        {
+            base.OnTestRunStarting();
+            _grouping?.OnTestRunStarting();
         }
 
         // TODO: Move this to TestGroup? Would need access to results.
