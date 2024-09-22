@@ -52,16 +52,6 @@ namespace TestCentric.Gui.Presenters
             _displayStrategy.ApplyResultToGroup(result, false);
         }
 
-        public override void OnTestRunFinished()
-        {
-            // Can be moved to base class TestGrouping in next step
-            foreach (TestGroup group in Groups)
-            {
-                int imageIndex = _displayStrategy.CalcImageIndexForGroup(group);
-                group.TreeNode.ImageIndex = group.TreeNode.SelectedImageIndex = group.ImageIndex = imageIndex;
-            }
-        }
-
         public override TestGroup[] SelectGroups(TestNode testNode)
         {
             return new TestGroup[] { SelectGroup(testNode) };

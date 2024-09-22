@@ -69,8 +69,16 @@ namespace TestCentric.Gui.Presenters
             }
         }
 
-        public virtual void OnTestRunFinished()
+        public void OnTestRunFinished()
         {
+            // Update tree node icon for all group nodes at the end of a test run
+            // The icon state can be finally determined for duration and outcome grouping only at this point in time
+            // For category grouping, the status can already be partially determined in OnTestFinished event; But finally only at the end of a test run
+            foreach (TestGroup group in Groups)
+            {
+                int imageIndex = _displayStrategy.CalcImageIndexForGroup(group);
+                group.TreeNode.ImageIndex = group.TreeNode.SelectedImageIndex = group.ImageIndex = imageIndex;
+            }
         }
 
         /// <summary>
