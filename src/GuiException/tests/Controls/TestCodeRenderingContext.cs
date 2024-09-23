@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric GUI contributors.
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
@@ -25,9 +25,9 @@ namespace NUnit.UiException.Tests.Controls
         [Test]
         public void DefaultState()
         {
-            Assert.NotNull(_context);
-            Assert.NotNull(_context.Graphics);
-            Assert.NotNull(_context.Font);
+            Assert.That(_context, Is.Not.Null);
+            Assert.That(_context.Graphics, Is.Not.Null);
+            Assert.That(_context.Font, Is.Not.Null);
             Assert.That(_context.Font.Size, Is.EqualTo(8));
 
             Assert.That(_context.CurrentLine, Is.EqualTo(-1));
@@ -53,13 +53,13 @@ namespace NUnit.UiException.Tests.Controls
 
         void CheckBrushes(CodeRenderingContext context)
         {
-            Assert.NotNull(_context.BackgroundBrush);
-            Assert.NotNull(_context.CurrentLineBackBrush);
-            Assert.NotNull(_context.CurrentLineForeBrush);
-            Assert.NotNull(_context.KeywordBrush);
-            Assert.NotNull(_context.CommentBrush);
-            Assert.NotNull(_context.CodeBrush);
-            Assert.NotNull(_context.StringBrush);
+            Assert.That(_context.BackgroundBrush, Is.Not.Null);
+            Assert.That(_context.CurrentLineBackBrush, Is.Not.Null);
+            Assert.That(_context.CurrentLineForeBrush, Is.Not.Null);
+            Assert.That(_context.KeywordBrush, Is.Not.Null);
+            Assert.That(_context.CommentBrush, Is.Not.Null);
+            Assert.That(_context.CodeBrush, Is.Not.Null);
+            Assert.That(_context.StringBrush, Is.Not.Null);
 
             Assert.That(_context.GetBrush(ClassificationTag.Code),
                 Is.SameAs(_context.CodeBrush));
@@ -75,13 +75,13 @@ namespace NUnit.UiException.Tests.Controls
 
         void CheckPens(CodeRenderingContext context)
         {
-            Assert.NotNull(_context.BackgroundPen);
-            Assert.NotNull(_context.CurrentLineBackPen);
-            Assert.NotNull(_context.CurrentLineForePen);
-            Assert.NotNull(_context.KeywordPen);
-            Assert.NotNull(_context.CommentPen);
-            Assert.NotNull(_context.CodePen);
-            Assert.NotNull(_context.StringPen);
+            Assert.That(_context.BackgroundPen, Is.Not.Null);
+            Assert.That(_context.CurrentLineBackPen, Is.Not.Null);
+            Assert.That(_context.CurrentLineForePen, Is.Not.Null);
+            Assert.That(_context.KeywordPen, Is.Not.Null);
+            Assert.That(_context.CommentPen, Is.Not.Null);
+            Assert.That(_context.CodePen, Is.Not.Null);
+            Assert.That(_context.StringPen, Is.Not.Null);
 
             Assert.That(_context.GetPen(ClassificationTag.Code),
                Is.SameAs(_context.CodePen));

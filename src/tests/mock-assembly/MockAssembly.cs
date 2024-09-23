@@ -26,9 +26,7 @@ namespace TestCentric.Tests
                         + IgnoredFixture.Tests
                         + ExplicitFixture.Tests
                         + BadFixture.Tests
-#if !NET5_0
                         + FixtureWithTestCases.Tests
-#endif
                         + ParameterizedFixture.Tests
                         + GenericFixtureConstants.Tests;
 
@@ -207,7 +205,6 @@ namespace TestCentric.Tests
         public void SomeTest() { }
     }
 
-#if !NET5_0 // Under the nunit 3.10 framework, these tests cause an error
     [TestFixture]
     public class FixtureWithTestCases
     {
@@ -226,7 +223,6 @@ namespace TestCentric.Tests
         {
         }
     }
-#endif
 
     [TestFixture(5)]
     [TestFixture(42)]

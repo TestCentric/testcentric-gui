@@ -40,7 +40,7 @@ namespace TestCentric.Engine
         {
             PropertyInfo prop = typeof(Runtime).GetProperty(name,
                 BindingFlags.Public | BindingFlags.Static | BindingFlags.GetProperty);
-            Assert.NotNull(prop, $"Property {name} not found");
+            Assert.That(prop, Is.Not.Null, $"Property {name} not found");
             var runtime = prop.GetValue(null, null);
             Assert.That(runtime.ToString(), Is.EqualTo(name));
         }

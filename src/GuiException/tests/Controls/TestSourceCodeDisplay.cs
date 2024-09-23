@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric GUI contributors.
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
@@ -37,23 +37,23 @@ namespace NUnit.UiException.Tests.Controls
         {
             SourceCodeDisplay code = new SourceCodeDisplay();
 
-            Assert.NotNull(code.PluginItem);
+            Assert.That(code.PluginItem, Is.Not.Null);
             Assert.That(code.PluginItem.Text, Is.EqualTo("Display source code context"));
-            Assert.NotNull(code.OptionItems);
+            Assert.That(code.OptionItems, Is.Not.Null);
             Assert.That(code.OptionItems.Length, Is.EqualTo(1));
-            Assert.NotNull(code.Content);
+            Assert.That(code.Content, Is.Not.Null);
             Assert.That(code.Content, Is.TypeOf(typeof(SplitterBox)));
 
             SplitterBox splitter = code.Content as SplitterBox;
             Assert.That(splitter.Controls.Count, Is.EqualTo(2));
 
             CodeBox codeBox = splitter.Control2 as CodeBox;
-            Assert.NotNull(codeBox);
-            Assert.True(codeBox.ShowCurrentLine);
+            Assert.That(codeBox, Is.Not.Null);
+            Assert.That(codeBox.ShowCurrentLine, Is.True);
             Assert.That(codeBox.CurrentLineBackColor, Is.EqualTo(Color.Red));
             Assert.That(codeBox.CurrentLineForeColor, Is.EqualTo(Color.White));
 
-            Assert.True(code.AutoSelectFirstItem);
+            Assert.That(code.AutoSelectFirstItem, Is.True);
             Assert.That(code.ListOrderPolicy, Is.EqualTo(ErrorListOrderPolicy.InitialOrder));
             Assert.That(code.SplitOrientation, Is.EqualTo(Orientation.Vertical));
             Assert.That(code.SplitterDistance, Is.EqualTo(0.5f));
@@ -156,8 +156,8 @@ namespace NUnit.UiException.Tests.Controls
             SplitterBox splitter = sourceDisplay.Content as SplitterBox;
             CodeBox box = splitter.Control2 as CodeBox;
 
-            Assert.IsTrue(box.Text.Contains("Cannot open file: 'C:\\unknownFolder\\unknownFile.cs'"));
-            Assert.IsTrue(box.Text.Contains("Error:"));
+            Assert.That(box.Text.Contains("Cannot open file: 'C:\\unknownFolder\\unknownFile.cs'"));
+            Assert.That(box.Text.Contains("Error:"));
 
             return;
         }

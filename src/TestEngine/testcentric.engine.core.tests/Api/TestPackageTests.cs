@@ -58,7 +58,7 @@ namespace TestCentric.Engine.Api
         [Test]
         public void PackageIsAnonymous()
         {
-            Assert.Null(package.FullName);
+            Assert.That(package.FullName, Is.Null);
         }
 
         [Test]

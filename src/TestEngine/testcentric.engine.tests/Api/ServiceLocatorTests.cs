@@ -32,7 +32,7 @@ namespace TestCentric.Engine.Api
         public void CanAccessService(Type serviceType)
         {
             IService service = _testEngine.Services.GetService(serviceType) as IService;
-            Assert.NotNull(service, "GetService(Type) returned null");
+            Assert.That(service, Is.Not.Null, "GetService(Type) returned null");
             Assert.That(service, Is.InstanceOf(serviceType));
             Assert.That(service.Status, Is.EqualTo(ServiceStatus.Started));
         }

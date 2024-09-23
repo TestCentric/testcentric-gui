@@ -36,14 +36,14 @@ namespace TestCentric.Gui.Presenters
         [Test]
         public void RuntimeSelection_WhenTestPackageIsNull_NotAllowed()
         {
-            Assert.False(_controller.AllowRuntimeSelection());
+            Assert.That(_controller.AllowRuntimeSelection(), Is.False);
         }
 
         [Test]
         public void RuntimeSelection_WithoutImageTargetFrameworName_NotAllowed()
         {
             _model.TestPackage.Returns(_package);
-            Assert.False(_controller.AllowRuntimeSelection());
+            Assert.That(_controller.AllowRuntimeSelection(), Is.False);
         }
 
         [TestCase("Default", true)]

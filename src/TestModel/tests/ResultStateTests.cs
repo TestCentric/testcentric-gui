@@ -18,7 +18,7 @@ namespace TestCentric.Gui.Model
         {
             ResultState resultState = new ResultState(status);
 
-            Assert.AreEqual(status, resultState.Status);
+            Assert.That(resultState.Status, Is.EqualTo(status));
         }
 
         [Test]
@@ -26,7 +26,7 @@ namespace TestCentric.Gui.Model
         {
             ResultState resultState = new ResultState(TestStatus.Failed);
 
-            Assert.AreEqual(string.Empty, resultState.Label);
+            Assert.That(resultState.Label, Is.Empty);
         }
 
         [TestCase(TestStatus.Failed)]
@@ -37,7 +37,7 @@ namespace TestCentric.Gui.Model
         {
             ResultState resultState = new ResultState(status, string.Empty);
 
-            Assert.AreEqual(status, resultState.Status);
+            Assert.That(resultState.Status, Is.EqualTo(status));
         }
 
         [TestCase("")]
@@ -46,7 +46,7 @@ namespace TestCentric.Gui.Model
         {
             ResultState resultState = new ResultState(TestStatus.Failed, label);
 
-            Assert.AreEqual(label, resultState.Label);
+            Assert.That(resultState.Label, Is.EqualTo(label));
         }
 
         [Test]
@@ -54,7 +54,7 @@ namespace TestCentric.Gui.Model
         {
             ResultState resultState = new ResultState(TestStatus.Failed, null);
 
-            Assert.AreEqual(string.Empty, resultState.Label);
+            Assert.That(resultState.Label, Is.Empty);
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace TestCentric.Gui.Model
         {
             ResultState resultState = new ResultState(TestStatus.Failed);
 
-            Assert.AreEqual(FailureSite.Test, resultState.Site);
+            Assert.That(resultState.Site, Is.EqualTo(FailureSite.Test));
         }
 
         [TestCase("")]
@@ -71,7 +71,7 @@ namespace TestCentric.Gui.Model
         {
             ResultState resultState = new ResultState(TestStatus.Failed, label);
 
-            Assert.AreEqual(FailureSite.Test, resultState.Site);
+            Assert.That(resultState.Site, Is.EqualTo(FailureSite.Test));
         }
 
         [TestCase("", FailureSite.Parent)]
@@ -80,7 +80,7 @@ namespace TestCentric.Gui.Model
         {
             ResultState resultState = new ResultState(TestStatus.Failed, label, site);
 
-            Assert.AreEqual(site, resultState.Site);
+            Assert.That(resultState.Site, Is.EqualTo(site));
         }
 
         [TestCase(TestStatus.Skipped, null, "Skipped")]
@@ -90,7 +90,7 @@ namespace TestCentric.Gui.Model
         {
             ResultState resultState = new ResultState(status, label);
 
-            Assert.AreEqual(expected, resultState.ToString());
+            Assert.That(resultState.ToString(), Is.EqualTo(expected));
         }
 
         #region EqualityTests
@@ -98,43 +98,43 @@ namespace TestCentric.Gui.Model
         [Test]
         public void TestEquality_StatusSpecified()
         {
-            Assert.AreEqual(new ResultState(TestStatus.Failed), new ResultState(TestStatus.Failed));
+            Assert.That(new ResultState(TestStatus.Failed), Is.EqualTo(new ResultState(TestStatus.Failed)));
         }
 
         [Test]
         public void TestEquality_StatusAndLabelSpecified()
         {
-            Assert.AreEqual(new ResultState(TestStatus.Skipped, "Ignored"), new ResultState(TestStatus.Skipped, "Ignored"));
+            Assert.That(new ResultState(TestStatus.Skipped, "Ignored"), Is.EqualTo(new ResultState(TestStatus.Skipped, "Ignored")));
         }
 
         [Test]
         public void TestEquality_StatusAndSiteSpecified()
         {
-            Assert.AreEqual(new ResultState(TestStatus.Failed, FailureSite.SetUp), new ResultState(TestStatus.Failed, FailureSite.SetUp));
+            Assert.That(new ResultState(TestStatus.Failed, FailureSite.SetUp), Is.EqualTo(new ResultState(TestStatus.Failed, FailureSite.SetUp)));
         }
 
         [Test]
         public void TestEquality_StatusLabelAndSiteSpecified()
         {
-            Assert.AreEqual(new ResultState(TestStatus.Failed, "Error", FailureSite.Child), new ResultState(TestStatus.Failed, "Error", FailureSite.Child));
+            Assert.That(new ResultState(TestStatus.Failed, "Error", FailureSite.Child), Is.EqualTo(new ResultState(TestStatus.Failed, "Error", FailureSite.Child)));
         }
 
         [Test]
         public void TestEquality_StatusDiffers()
         {
-            Assert.AreNotEqual(new ResultState(TestStatus.Passed), new ResultState(TestStatus.Failed));
+            Assert.That(new ResultState(TestStatus.Failed), Is.Not.EqualTo(new ResultState(TestStatus.Passed)));
         }
 
         [Test]
         public void TestEquality_LabelDiffers()
         {
-            Assert.AreNotEqual(new ResultState(TestStatus.Failed, "Error"), new ResultState(TestStatus.Failed));
+            Assert.That(new ResultState(TestStatus.Failed), Is.Not.EqualTo(new ResultState(TestStatus.Failed, "Error")));
         }
 
         [Test]
         public void TestEquality_SiteDiffers()
         {
-            Assert.AreNotEqual(new ResultState(TestStatus.Failed, "Error", FailureSite.Child), new ResultState(TestStatus.Failed, "Error", FailureSite.SetUp));
+            Assert.That(new ResultState(TestStatus.Failed, "Error", FailureSite.SetUp), Is.Not.EqualTo(new ResultState(TestStatus.Failed, "Error", FailureSite.Child)));
         }
 
 
@@ -144,18 +144,15 @@ namespace TestCentric.Gui.Model
             var rs = new ResultState(TestStatus.Passed);
             var s = "123";
 
-            Assert.AreNotEqual(rs, s);
-            Assert.AreNotEqual(s, rs);
-            Assert.False(rs.Equals(s));
+            Assert.That(rs, Is.Not.EqualTo(s));
+            Assert.That(s, Is.Not.EqualTo(rs));
         }
 
         [Test]
         public void TestEquality_Null()
         {
             var rs = new ResultState(TestStatus.Passed);
-            Assert.AreNotEqual(null, rs);
-            Assert.AreNotEqual(rs, null);
-            Assert.False(rs.Equals(null));
+            Assert.That(rs, Is.Not.EqualTo(null));
         }
 
         #endregion
@@ -183,9 +180,9 @@ namespace TestCentric.Gui.Model
         {
             ResultState resultState = ResultState.Inconclusive;
 
-            Assert.AreEqual(TestStatus.Inconclusive, resultState.Status, "Status not correct.");
-            Assert.AreEqual(string.Empty, resultState.Label, "Label not correct.");
-            Assert.AreEqual(FailureSite.Test, resultState.Site, "Site not correct.");
+            Assert.That(resultState.Status, Is.EqualTo(TestStatus.Inconclusive), "Status not correct.");
+            Assert.That(resultState.Label, Is.Empty, "Label not correct.");
+            Assert.That(resultState.Site, Is.EqualTo(FailureSite.Test), "Site not correct.");
         }
 
         [Test]
@@ -193,9 +190,9 @@ namespace TestCentric.Gui.Model
         {
             ResultState resultState = ResultState.NotRunnable;
 
-            Assert.AreEqual(TestStatus.Failed, resultState.Status, "Status not correct.");
-            Assert.AreEqual("Invalid", resultState.Label, "Label not correct.");
-            Assert.AreEqual(FailureSite.Test, resultState.Site, "Site not correct.");
+            Assert.That(resultState.Status, Is.EqualTo(TestStatus.Failed), "Status not correct.");
+            Assert.That(resultState.Label, Is.EqualTo("Invalid"), "Label not correct.");
+            Assert.That(resultState.Site, Is.EqualTo(FailureSite.Test), "Site not correct.");
         }
 
         [Test]
@@ -203,9 +200,9 @@ namespace TestCentric.Gui.Model
         {
             ResultState resultState = ResultState.Skipped;
 
-            Assert.AreEqual(TestStatus.Skipped, resultState.Status, "Status not correct.");
-            Assert.AreEqual(string.Empty, resultState.Label, "Label not correct.");
-            Assert.AreEqual(FailureSite.Test, resultState.Site, "Site not correct.");
+            Assert.That(resultState.Status, Is.EqualTo(TestStatus.Skipped), "Status not correct.");
+            Assert.That(resultState.Label, Is.EqualTo(string.Empty), "Label not correct.");
+            Assert.That(resultState.Site, Is.EqualTo(FailureSite.Test), "Site not correct.");
         }
 
         [Test]
@@ -213,9 +210,9 @@ namespace TestCentric.Gui.Model
         {
             ResultState resultState = ResultState.Ignored;
 
-            Assert.AreEqual(TestStatus.Skipped, resultState.Status, "Status not correct.");
-            Assert.AreEqual("Ignored", resultState.Label, "Label not correct.");
-            Assert.AreEqual(FailureSite.Test, resultState.Site, "Site not correct.");
+            Assert.That(resultState.Status, Is.EqualTo(TestStatus.Skipped), "Status not correct.");
+            Assert.That(resultState.Label, Is.EqualTo("Ignored"), "Label not correct.");
+            Assert.That(resultState.Site, Is.EqualTo(FailureSite.Test), "Site not correct.");
         }
 
         [Test]
@@ -223,9 +220,9 @@ namespace TestCentric.Gui.Model
         {
             ResultState resultState = ResultState.Success;
 
-            Assert.AreEqual(TestStatus.Passed, resultState.Status, "Status not correct.");
-            Assert.AreEqual(string.Empty, resultState.Label, "Label not correct.");
-            Assert.AreEqual(FailureSite.Test, resultState.Site, "Site not correct.");
+            Assert.That(resultState.Status, Is.EqualTo(TestStatus.Passed), "Status not correct.");
+            Assert.That(resultState.Label, Is.EqualTo(string.Empty), "Label not correct.");
+            Assert.That(resultState.Site, Is.EqualTo(FailureSite.Test), "Site not correct.");
         }
 
         [Test]
@@ -233,9 +230,9 @@ namespace TestCentric.Gui.Model
         {
             ResultState resultState = ResultState.Failure;
 
-            Assert.AreEqual(TestStatus.Failed, resultState.Status, "Status not correct.");
-            Assert.AreEqual(string.Empty, resultState.Label, "Label not correct.");
-            Assert.AreEqual(FailureSite.Test, resultState.Site, "Site not correct.");
+            Assert.That(resultState.Status, Is.EqualTo(TestStatus.Failed), "Status not correct.");
+            Assert.That(resultState.Label, Is.EqualTo(string.Empty), "Label not correct.");
+            Assert.That(resultState.Site, Is.EqualTo(FailureSite.Test), "Site not correct.");
         }
 
         [Test]
@@ -243,9 +240,9 @@ namespace TestCentric.Gui.Model
         {
             ResultState resultState = ResultState.ChildFailure;
 
-            Assert.AreEqual(TestStatus.Failed, resultState.Status);
-            Assert.AreEqual(string.Empty, resultState.Label);
-            Assert.AreEqual(FailureSite.Child, resultState.Site, "Site not correct.");
+            Assert.That(resultState.Status, Is.EqualTo(TestStatus.Failed));
+            Assert.That(resultState.Label, Is.EqualTo(string.Empty));
+            Assert.That(resultState.Site, Is.EqualTo(FailureSite.Child), "Site not correct.");
         }
 
         [Test]
@@ -253,8 +250,8 @@ namespace TestCentric.Gui.Model
         {
             ResultState resultState = ResultState.Error;
 
-            Assert.AreEqual(TestStatus.Failed, resultState.Status, "Status not correct.");
-            Assert.AreEqual("Error", resultState.Label, "Label not correct.");
+            Assert.That(resultState.Status, Is.EqualTo(TestStatus.Failed), "Status not correct.");
+            Assert.That(resultState.Label, Is.EqualTo("Error"), "Label not correct.");
             //Assert.AreEqual(FailureSite.Test, resultState.Site, "Site not correct.");
         }
 
@@ -263,8 +260,8 @@ namespace TestCentric.Gui.Model
         {
             ResultState resultState = ResultState.Cancelled;
 
-            Assert.AreEqual(TestStatus.Failed, resultState.Status, "Status not correct.");
-            Assert.AreEqual("Cancelled", resultState.Label, "Label not correct.");
+            Assert.That(resultState.Status, Is.EqualTo(TestStatus.Failed), "Status not correct.");
+            Assert.That(resultState.Label, Is.EqualTo("Cancelled"), "Label not correct.");
             //Assert.AreEqual(FailureSite.Test, resultState.Site, "Site not correct.");
         }
 

@@ -43,13 +43,13 @@ namespace TestCentric.Engine.Services
             {
                 Assert.That(package.GetSetting(EnginePackageSettings.ImageRuntimeVersion, ""), Is.EqualTo(""));
                 Assert.That(package.GetSetting(EnginePackageSettings.ImageTargetFrameworkName, ""), Is.EqualTo(""));
-                Assert.False(package.GetSetting(EnginePackageSettings.ImageRequiresX86, false));
-                Assert.False(package.GetSetting(EnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver, false));
+                Assert.That(package.GetSetting(EnginePackageSettings.ImageRequiresX86, false), Is.False);
+                Assert.That(package.GetSetting(EnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver, false), Is.False);
 
                 Assert.That(subPackage.GetSetting(EnginePackageSettings.ImageRuntimeVersion, ""), Is.EqualTo(""));
                 Assert.That(subPackage.GetSetting(EnginePackageSettings.ImageTargetFrameworkName, ""), Is.EqualTo(""));
-                Assert.False(subPackage.GetSetting(EnginePackageSettings.ImageRequiresX86, false));
-                Assert.False(subPackage.GetSetting(EnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver, false));
+                Assert.That(subPackage.GetSetting(EnginePackageSettings.ImageRequiresX86, false), Is.False);
+                Assert.That(subPackage.GetSetting(EnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver, false), Is.False);
             });
         }
 
@@ -99,7 +99,7 @@ namespace TestCentric.Engine.Services
 
             _packageService.UpdatePackage(package);
 
-            Assert.True(package.GetSetting(EnginePackageSettings.ImageRequiresX86, false));
+            Assert.That(package.GetSetting(EnginePackageSettings.ImageRequiresX86, false));
         }
 
         [Test]
@@ -111,7 +111,7 @@ namespace TestCentric.Engine.Services
 
             _packageService.UpdatePackage(package);
 
-            Assert.True(package.GetSetting(EnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver, false));
+            Assert.That(package.GetSetting(EnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver, false));
         }
     }
 }

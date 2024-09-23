@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric GUI contributors.
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
@@ -53,7 +53,7 @@ namespace NUnit.UiException.Tests.Controls
         [Test]
         public void NewStripButton()
         {
-            Assert.NotNull(ErrorToolbar.NewStripButton(true, "text", new Bitmap(10, 10), null));
+            Assert.That(ErrorToolbar.NewStripButton(true, "text", new Bitmap(10, 10), null), Is.Not.Null);
         }
 
         [Test]
@@ -66,7 +66,7 @@ namespace NUnit.UiException.Tests.Controls
             Assert.That(_filledToolbar.Count, Is.EqualTo(2));
             Assert.That(_filledToolbar[0], Is.Not.Null);
             Assert.That(_filledToolbar[1], Is.Not.Null);
-            Assert.NotNull(_filledToolbar.SelectedDisplay);
+            Assert.That(_filledToolbar.SelectedDisplay, Is.Not.Null);
             Assert.That(_filledToolbar.SelectedDisplay, Is.SameAs(_raw));
 
             return;
@@ -82,7 +82,7 @@ namespace NUnit.UiException.Tests.Controls
             }
             catch (Exception e)
             {
-                Assert.True(e.Message.Contains("display"));
+                Assert.That(e.Message.Contains("display"));
             }
 
             try
@@ -93,7 +93,7 @@ namespace NUnit.UiException.Tests.Controls
             }
             catch (Exception e)
             {
-                Assert.True(e.Message.Contains("PluginItem"));
+                Assert.That(e.Message.Contains("PluginItem"));
             }
 
             return;
@@ -122,31 +122,31 @@ namespace NUnit.UiException.Tests.Controls
             // check ability to select raw display
 
             _filledToolbar.SelectedDisplay = _raw;
-            Assert.NotNull(_filledToolbar.SelectedDisplay);
+            Assert.That(_filledToolbar.SelectedDisplay, Is.Not.Null);
             Assert.That(_filledToolbar.SelectedDisplay, Is.SameAs(_raw));
-            Assert.True(_rendererChangeNotification);
+            Assert.That(_rendererChangeNotification, Is.True);
 
             // check ability to select browser display
 
             _rendererChangeNotification = false;
             _filledToolbar.SelectedDisplay = _browser;
-            Assert.NotNull(_filledToolbar.SelectedDisplay);
+            Assert.That(_filledToolbar.SelectedDisplay, Is.Not.Null);
             Assert.That(_filledToolbar.SelectedDisplay, Is.SameAs(_browser));
-            Assert.True(_rendererChangeNotification);
+            Assert.That(_rendererChangeNotification, Is.True);
 
             // check ability to clear selection
 
             _rendererChangeNotification = false;
             _filledToolbar.SelectedDisplay = null;
             Assert.That(_filledToolbar.SelectedDisplay, Is.Null);
-            Assert.True(_rendererChangeNotification);
+            Assert.That(_rendererChangeNotification, Is.True);
 
             // event should be raised when a real
             // change occurs
 
             _rendererChangeNotification = false;
             _filledToolbar.SelectedDisplay = null;
-            Assert.False(_rendererChangeNotification);
+            Assert.That(_rendererChangeNotification, Is.False);
 
             return;
         }
@@ -162,22 +162,22 @@ namespace NUnit.UiException.Tests.Controls
             _raw.PluginItem.Returns(rawView);
             _raw.OptionItems.Returns((ToolStripItem[])null);
             _emptyToolbar.Register(_raw);
-            Assert.True(_emptyToolbar.Items.Contains(rawView));
+            Assert.That(_emptyToolbar.Items.Contains(rawView));
 
             _browser.PluginItem.Returns(browserView);
             _browser.OptionItems.Returns(btns);
             _emptyToolbar.Register(_browser);
-            Assert.True(_emptyToolbar.Items.Contains(rawView));
-            Assert.True(_emptyToolbar.Items.Contains(browserView));
-            Assert.True(_emptyToolbar.Items.Contains(btns[0]));
+            Assert.That(_emptyToolbar.Items.Contains(rawView));
+            Assert.That(_emptyToolbar.Items.Contains(browserView));
+            Assert.That(_emptyToolbar.Items.Contains(btns[0]));
 
             // clear part
 
             _emptyToolbar.Clear();
             Assert.That(_emptyToolbar.Count, Is.EqualTo(0));
-            Assert.False(_emptyToolbar.Items.Contains(rawView));
-            Assert.False(_emptyToolbar.Items.Contains(browserView));
-            Assert.False(_emptyToolbar.Items.Contains(btns[0]));
+            Assert.That(_emptyToolbar.Items.Contains(rawView), Is.False);
+            Assert.That(_emptyToolbar.Items.Contains(browserView), Is.False);
+            Assert.That(_emptyToolbar.Items.Contains(btns[0]), Is.False);
 
             return;
         }
@@ -193,11 +193,11 @@ namespace NUnit.UiException.Tests.Controls
             toolbar.Register(code);
 
             raw.PluginItem.PerformClick();
-            Assert.NotNull(toolbar.SelectedDisplay);
+            Assert.That(toolbar.SelectedDisplay, Is.Not.Null);
             Assert.That(toolbar.SelectedDisplay, Is.EqualTo(raw));
 
             code.PluginItem.PerformClick();
-            Assert.NotNull(toolbar.SelectedDisplay);
+            Assert.That(toolbar.SelectedDisplay, Is.Not.Null);
             Assert.That(toolbar.SelectedDisplay, Is.EqualTo(code));
 
             return;
@@ -214,16 +214,16 @@ namespace NUnit.UiException.Tests.Controls
             toolbar.Register(code);
 
             toolbar.SelectedDisplay = raw;
-            Assert.True(((ToolStripButton)raw.PluginItem).Checked);
-            Assert.False(((ToolStripButton)code.PluginItem).Checked);
+            Assert.That(((ToolStripButton)raw.PluginItem).Checked);
+            Assert.That(((ToolStripButton)code.PluginItem).Checked, Is.False);
 
             toolbar.SelectedDisplay = code;
-            Assert.False(((ToolStripButton)raw.PluginItem).Checked);
-            Assert.True(((ToolStripButton)code.PluginItem).Checked);
+            Assert.That(((ToolStripButton)raw.PluginItem).Checked, Is.False);
+            Assert.That(((ToolStripButton)code.PluginItem).Checked);
 
             toolbar.SelectedDisplay = null;
-            Assert.False(((ToolStripButton)raw.PluginItem).Checked);
-            Assert.False(((ToolStripButton)code.PluginItem).Checked);
+            Assert.That(((ToolStripButton)raw.PluginItem).Checked, Is.False);
+            Assert.That(((ToolStripButton)code.PluginItem).Checked, Is.False);
 
             return;
         }

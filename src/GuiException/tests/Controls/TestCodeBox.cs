@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric GUI contributors.
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
@@ -76,11 +76,11 @@ namespace NUnit.UiException.Tests.Controls
 
             Assert.That(box.Language, Is.EqualTo(""));
 
-            Assert.True(box.AutoScroll);
+            Assert.That(box.AutoScroll);
             Assert.That(box.AutoScrollPosition, Is.EqualTo(new Point(0, 0)));
             Assert.That(box.AutoScrollMinSize, Is.EqualTo(new Size(0, 0)));
 
-            Assert.False(box.ShowCurrentLine);
+            Assert.That(box.ShowCurrentLine, Is.False);
             Assert.That(box.CurrentLine, Is.EqualTo(-1));
             Assert.That(box.CurrentLineBackColor, Is.EqualTo(Color.Red));
             Assert.That(box.CurrentLineForeColor, Is.EqualTo(Color.White));

@@ -37,8 +37,8 @@ namespace TestCentric.Gui.Tests
             var testSuite = new TestNode("<test-suite id='123' type='Assembly' name='mytest.dll' fullname='/A/B/C/mytest.dll' testcasecount='42' runstate='Runnable'/>");
             TestSuiteTreeNode node = new TestSuiteTreeNode(testSuite);
 
-            Assert.AreEqual("mytest.dll", node.Text);
-            Assert.AreEqual("Assembly", node.TestType);
+            Assert.That(node.Text, Is.EqualTo("mytest.dll"));
+            Assert.That(node.TestType, Is.EqualTo("Assembly"));
         }
 
         [Test]
@@ -47,8 +47,8 @@ namespace TestCentric.Gui.Tests
             var testFixture = new TestNode("<test-suite id='123' type='TestFixture' name='SomeFixture' fullname='/A/B/C/mytest.dll' testcasecount='42' runstate='Runnable'/>");
             TestSuiteTreeNode node = new TestSuiteTreeNode(testFixture);
 
-            Assert.AreEqual("SomeFixture", node.Text);
-            Assert.AreEqual("TestFixture", node.TestType);
+            Assert.That(node.Text, Is.EqualTo("SomeFixture"));
+            Assert.That(node.TestType, Is.EqualTo("TestFixture"));
         }
 
         [Test]
@@ -57,8 +57,8 @@ namespace TestCentric.Gui.Tests
             var testCase = new TestNode("<test-case id='123' name='SomeTest' fullname='A.B.C.SomeTest' runstate='Ignored'/>");
             TestSuiteTreeNode node = new TestSuiteTreeNode(testCase);
 
-            Assert.AreEqual("SomeTest", node.Text);
-            Assert.AreEqual("TestCase", node.TestType);
+            Assert.That(node.Text, Is.EqualTo("SomeTest"));
+            Assert.That(node.TestType, Is.EqualTo("TestCase"));
         }
 
         [TestCase("Unknown", TestSuiteTreeNode.InitIndex)]
@@ -69,8 +69,8 @@ namespace TestCentric.Gui.Tests
             var testCase = new TestNode($"<test-case id='123' name='SomeTest' fullname='A.B.C.SomeTest' runstate='{runState}'/>");
             TestSuiteTreeNode node = new TestSuiteTreeNode(testCase);
 
-            Assert.AreEqual(expectedIndex, node.ImageIndex);
-            Assert.AreEqual(expectedIndex, node.SelectedImageIndex);
+            Assert.That(node.ImageIndex, Is.EqualTo(expectedIndex));
+            Assert.That(node.SelectedImageIndex, Is.EqualTo(expectedIndex));
         }
 
         [TestCase("Inconclusive", TestSuiteTreeNode.InconclusiveIndex)]
@@ -92,9 +92,9 @@ namespace TestCentric.Gui.Tests
             var result = new ResultNode($"<test-case id='123' name='SomeTest' fullname='A.B.C.SomeTest' runstate='Runnable' {resultPart}/>");
             TestSuiteTreeNode node = new TestSuiteTreeNode(result);
 
-            Assert.AreEqual(expectedIndex, node.ImageIndex);
-            Assert.AreEqual(expectedIndex, node.SelectedImageIndex);
-            Assert.AreEqual(outcome, node.StatusText);
+            Assert.That(node.ImageIndex, Is.EqualTo(expectedIndex));
+            Assert.That(node.SelectedImageIndex, Is.EqualTo(expectedIndex));
+            Assert.That(node.StatusText, Is.EqualTo(outcome));
         }
 
         [TestCase("Unknown", TestSuiteTreeNode.InitIndex)]
@@ -104,13 +104,13 @@ namespace TestCentric.Gui.Tests
         {
             var result = new ResultNode($"<test-case id='123' name='SomeTest' fullname='A.B.C.SomeTest' runstate='{runState}' result='Failed'/>");
             TestSuiteTreeNode node = new TestSuiteTreeNode(result);
-            Assert.AreEqual(TestSuiteTreeNode.FailureIndex, node.ImageIndex);
-            Assert.AreEqual(TestSuiteTreeNode.FailureIndex, node.SelectedImageIndex);
+            Assert.That(node.ImageIndex, Is.EqualTo(TestSuiteTreeNode.FailureIndex));
+            Assert.That(node.SelectedImageIndex, Is.EqualTo(TestSuiteTreeNode.FailureIndex));
 
             node.ClearResults();
-            Assert.AreEqual(null, node.Result);
-            Assert.AreEqual(expectedIndex, node.ImageIndex);
-            Assert.AreEqual(expectedIndex, node.SelectedImageIndex);
+            Assert.That(node.Result, Is.Null);
+            Assert.That(node.ImageIndex, Is.EqualTo(expectedIndex));
+            Assert.That(node.SelectedImageIndex, Is.EqualTo(expectedIndex));
         }
 
         //[Test]

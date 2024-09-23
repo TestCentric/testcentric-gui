@@ -192,37 +192,35 @@ public abstract class PackageTester : GuiTester
 			"engine-tests/netcoreapp3.1/mock-assembly.dll",
 			new ExpectedResult("Failed")
 			{
-				Total = 31,
-				Passed = 18,
-				Failed = 5,
-				Warnings = 0,
-				Inconclusive = 1,
-				Skipped = 7
-			}));
+                Total = 31,
+                Passed = 18,
+                Failed = 5,
+                Warnings = 0,
+                Inconclusive = 1,
+                Skipped = 7
+            }));
 		PackageTests.Add(new PackageTest(1, "Net60Test", "Run mock-assembly.dll under .NET 6.0",
 			"engine-tests/net6.0/mock-assembly.dll",
 			new ExpectedResult("Failed")
 			{
-				// 27 rather than 31 tests due to a bug in nunit.framework 3.11
-				Total = 27,
-				Passed = 14,
-				Failed = 5,
-				Warnings = 0,
-				Inconclusive = 1,
-				Skipped = 7
-			}));
+                Total = 31,
+                Passed = 18,
+                Failed = 5,
+                Warnings = 0,
+                Inconclusive = 1,
+                Skipped = 7
+            }));
 		PackageTests.Add(new PackageTest(1, "Net80Test", "Run mock-assembly.dll under .NET 8.0",
 			"engine-tests/net8.0/mock-assembly.dll --trace:Debug",
 			new ExpectedResult("Failed")
 			{
-				// 27 rather than 31 tests due to a bug in nunit.framework 3.11
-				Total = 27,
-				Passed = 14,
-				Failed = 5,
-				Warnings = 0,
-				Inconclusive = 1,
-				Skipped = 7
-			}));
+                Total = 31,
+                Passed = 18,
+                Failed = 5,
+                Warnings = 0,
+                Inconclusive = 1,
+                Skipped = 7
+            }));
 		PackageTests.Add( new PackageTest(1, "Net35PlusNetCore31Test", "Run different builds of mock-assembly.dll together",
 			"engine-tests/net35/mock-assembly.dll engine-tests/netcoreapp3.1/mock-assembly.dll",
 			new ExpectedResult("Failed")
