@@ -99,7 +99,7 @@ namespace TestCentric.Gui.Model
         void RunAllTests();
 
         // Debug all tests
-        void DebugAllTests();
+        //void DebugAllTests();
 
         // Run just the specified ITestItem
         void RunTests(ITestItem testItem);
@@ -118,9 +118,6 @@ namespace TestCentric.Gui.Model
 
         // Get the TestPackage represented by a test,if available
         TestPackage GetPackageForTest(string id);
-
-        // Clear the results for all tests
-        void ClearResults();
 
         // Broadcast event when SelectedTestItem changes
         void NotifySelectedItemChanged(ITestItem testItem);

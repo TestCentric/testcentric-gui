@@ -219,12 +219,6 @@ namespace TestCentric.Gui.Presenters
 
             _view.RunCommand.Execute += () =>
             {
-                if (_settings.Engine.ReloadOnRun)
-                {
-                    _model.ClearResults();
-                    _model.ReloadTests();
-                }
-
                 if (_view.ContextNode != null)
                     _model.RunTests(_view.ContextNode.Test);
                 else
@@ -233,12 +227,6 @@ namespace TestCentric.Gui.Presenters
 
             _view.DebugCommand.Execute += () =>
             {
-                if (_settings.Engine.ReloadOnRun)
-                {
-                    _model.ClearResults();
-                    _model.ReloadTests();
-                }
-
                 if (_view.ContextNode != null)
                     _model.DebugTests(_view.ContextNode.Test);
                 else
