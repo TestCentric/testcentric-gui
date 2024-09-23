@@ -60,17 +60,19 @@ namespace TestCentric.Gui.Presenters
             _view.ShowCheckBoxes.Checked = showCheckBoxes;
 
             _view.RunCommand.Enabled = false;
+            _view.DebugCommand.Enabled = false;
 
             WireUpEvents();
         }
 
         private void WireUpEvents()
         {
-            _model.Events.TestsLoading += (e) => _view.RunCommand.Enabled = false;
+            _model.Events.TestsLoading += (e) => _view.RunCommand.Enabled = _view.DebugCommand.Enabled = false;
 
             _model.Events.TestLoaded += (e) =>
             {
                 _view.RunCommand.Enabled = true;
+                _view.DebugCommand.Enabled = true;
                 _view.CheckPropertiesDialog();
 
                 LoadTests(GetTopDisplayNode(e.Test));
@@ -102,6 +104,7 @@ namespace TestCentric.Gui.Presenters
                 reloadState = VisualState.LoadFrom(_view);
 
                 _view.RunCommand.Enabled = false;
+                _view.DebugCommand.Enabled = false;
             };
 
             _model.Events.TestReloaded += (e) =>
@@ -118,6 +121,7 @@ namespace TestCentric.Gui.Presenters
                     _view.Accept(new TestFilterVisitor(_treeFilter));
 
                 _view.RunCommand.Enabled = true;
+                _view.DebugCommand.Enabled = true;
             };
 
             _model.Events.TestChanged += (e) =>
@@ -131,6 +135,7 @@ namespace TestCentric.Gui.Presenters
             _model.Events.TestsUnloading += (e) =>
             {
                 _view.RunCommand.Enabled = false;
+                _view.DebugCommand.Enabled = false;
 
                 _view.ClosePropertiesDialog();
 
@@ -152,17 +157,18 @@ namespace TestCentric.Gui.Presenters
                 _treeMap.Clear();
             };
 
-            _model.Events.TestUnloaded += (e) => _view.RunCommand.Enabled = false;
+            _model.Events.TestUnloaded += (e) => _view.RunCommand.Enabled = _view.DebugCommand.Enabled = false;
 
             _model.Events.RunStarting += (e) =>
             {
                 foreach (var node in _view.Tree.Nodes)
                     ((TestSuiteTreeNode)node).ClearResults();
                 _view.RunCommand.Enabled = false;
+                _view.DebugCommand.Enabled = false;
                 _view.CheckPropertiesDialog();
             };
 
-            _model.Events.RunFinished += (e) => _view.RunCommand.Enabled = true;
+            _model.Events.RunFinished += (e) => _view.RunCommand.Enabled = _view.DebugCommand.Enabled = true;
 
             _model.Events.TestFinished += (e) => SetTestResult(e.Result);
 
@@ -213,16 +219,18 @@ namespace TestCentric.Gui.Presenters
 
             _view.RunCommand.Execute += () =>
             {
-                if (_settings.Engine.ReloadOnRun)
-                {
-                    _model.ClearResults();
-                    _model.ReloadTests();
-                }
-
                 if (_view.ContextNode != null)
                     _model.RunTests(_view.ContextNode.Test);
                 else
                     _model.RunTests(new TestSelection(_view.SelectedTests));
+            };
+
+            _view.DebugCommand.Execute += () =>
+            {
+                if (_view.ContextNode != null)
+                    _model.DebugTests(_view.ContextNode.Test);
+                else
+                    _model.DebugTests(new TestSelection(_view.SelectedTests));
             };
 
             _view.Tree.ContextMenuStrip.Opened += (s, e) => InitializeContextMenu();

@@ -39,6 +39,7 @@ namespace TestCentric.Gui.Views
             this.projectMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.activeConfigurationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editProjectMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.showCheckBoxesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.expandAllMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.collapseAllMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -47,7 +48,7 @@ namespace TestCentric.Gui.Views
             this.buttonPanel = new System.Windows.Forms.Panel();
             this.checkFailedButton = new System.Windows.Forms.Button();
             this.clearAllButton = new System.Windows.Forms.Button();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.debugMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.treePanel.SuspendLayout();
             this.treeMenu.SuspendLayout();
             this.buttonPanel.SuspendLayout();
@@ -80,6 +81,7 @@ namespace TestCentric.Gui.Views
             // 
             this.treeMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.runMenuItem,
+            this.debugMenuItem,
             this.propertiesMenuItem,
             this.failedAssumptionsMenuItem,
             this.projectMenuItem,
@@ -89,7 +91,7 @@ namespace TestCentric.Gui.Views
             this.collapseAllMenuItem,
             this.hideTestsMenuItem});
             this.treeMenu.Name = "treeMenu";
-            this.treeMenu.Size = new System.Drawing.Size(210, 208);
+            this.treeMenu.Size = new System.Drawing.Size(210, 230);
             // 
             // runMenuItem
             // 
@@ -130,10 +132,15 @@ namespace TestCentric.Gui.Views
             this.editProjectMenuItem.Size = new System.Drawing.Size(180, 22);
             this.editProjectMenuItem.Text = "Edit...";
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(206, 6);
+            // 
             // showCheckBoxesMenuItem
             // 
-            this.showCheckBoxesMenuItem.Name = "showCheckBoxesMenuItem";
             this.showCheckBoxesMenuItem.CheckOnClick = true;
+            this.showCheckBoxesMenuItem.Name = "showCheckBoxesMenuItem";
             this.showCheckBoxesMenuItem.Size = new System.Drawing.Size(209, 22);
             this.showCheckBoxesMenuItem.Text = "Show CheckBoxes";
             // 
@@ -193,10 +200,12 @@ namespace TestCentric.Gui.Views
             this.clearAllButton.TabIndex = 0;
             this.clearAllButton.Text = "Clear All";
             // 
-            // toolStripSeparator1
+            // debugToolStripMenuItem
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(206, 6);
+            this.debugMenuItem.Name = "debugToolStripMenuItem";
+            this.debugMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.debugMenuItem.Text = "&Debug";
+            this.debugMenuItem.Click += new System.EventHandler(this.debugToolStripMenuItem_Click);
             // 
             // TestTreeView
             // 
@@ -233,5 +242,6 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.ToolStripMenuItem activeConfigurationMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editProjectMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem debugMenuItem;
     }
 }

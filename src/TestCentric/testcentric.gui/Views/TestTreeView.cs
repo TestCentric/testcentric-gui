@@ -41,6 +41,7 @@ namespace TestCentric.Gui.Views
             InitializeComponent();
 
             RunCommand = new ToolStripMenuElement(runMenuItem);
+            DebugCommand = new ToolStripMenuElement(debugMenuItem);
             ShowFailedAssumptions = new ToolStripMenuElement(failedAssumptionsMenuItem);
             ProjectMenu = new ToolStripMenuElement(projectMenuItem);
             ActiveConfiguration = new ToolStripMenuElement(activeConfigurationMenuItem);
@@ -113,6 +114,7 @@ namespace TestCentric.Gui.Views
         public event FileDropEventHandler FileDrop;
 
         public ICommand RunCommand { get; private set; }
+        public ICommand DebugCommand { get; private set; }
         public IChecked ShowFailedAssumptions { get; private set; }
         public IToolStripMenu ProjectMenu { get; private set; }
         public IToolStripMenu ActiveConfiguration { get; private set; }
@@ -432,5 +434,10 @@ namespace TestCentric.Gui.Views
         }
 
         #endregion
+
+        private void debugToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

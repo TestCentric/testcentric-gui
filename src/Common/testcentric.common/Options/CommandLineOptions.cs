@@ -79,6 +79,9 @@ namespace TestCentric.Gui
                     InternalTraceLevel = v;
                 });
 
+            this.Add("debug", "Launch debugger when user tests start",
+                v => DebugTests = v != null);
+
 #if DEBUG
             this.Add("debug-agent", "Launch debugger in testcentric-agent when it starts.",
                 v => DebugAgent = v != null);
@@ -126,6 +129,7 @@ namespace TestCentric.Gui
         public int MaxAgents { get; private set; }
         public string InternalTraceLevel { get; private set; }
         public string WorkDirectory { get; private set; }
+        public bool DebugTests { get; private set; }
         public bool DebugAgent { get; private set; }
 
         // Error Processing
