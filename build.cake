@@ -2,7 +2,7 @@ static string Target; Target = GetArgument("target|t", "Default");
 static string Configuration; Configuration = GetArgument("configuration|c", "Release");
 
 #tool nuget:?package=NUnit.ConsoleRunner&version=3.10.0
-#tool nuget:?package=GitVersion.CommandLine&version=5.0.0
+#tool nuget:?package=GitVersion.CommandLine&version=5.12.0
 #tool nuget:?package=GitReleaseManager&version=0.11.0
 
 #load "./build/parameters.cake"

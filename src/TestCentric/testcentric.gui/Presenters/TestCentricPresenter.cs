@@ -255,7 +255,7 @@ namespace TestCentric.Gui.Presenters
 
                 // Run loaded test automatically if called for
                 if (_model.IsPackageLoaded && _options.RunAllTests)
-                    RunAllTests();
+                    _model.RunAllTests();
                 // Currently, --unattended without --run does nothing except exit.
                 else if (_options.Unattended)
                     _view.Close();
@@ -428,7 +428,7 @@ namespace TestCentric.Gui.Presenters
                 _view.StatusBarView.Visible = _view.StatusBarCommand.Checked;
             };
 
-            _view.RunAllCommand.Execute += () => RunAllTests();
+            _view.RunAllCommand.Execute += () => _model.RunAllTests();
             _view.RunSelectedCommand.Execute += () => RunSelectedTests();
             _view.RunFailedCommand.Execute += () => RunFailedTests();
 
@@ -628,12 +628,6 @@ namespace TestCentric.Gui.Presenters
 
         #region Run Methods
 
-        public void RunAllTests()
-        {
-            _model.ClearResults();
-            _model.RunAllTests();
-        }
-
         public void RunSelectedTests()
         {
             RunTests(_view.TreeView.SelectedTests);
@@ -651,12 +645,6 @@ namespace TestCentric.Gui.Presenters
 
         public void RunTests(TestNode[] tests)
         {
-            if (_settings.Engine.ReloadOnRun)
-            {
-                _model.ClearResults();
-                _model.ReloadTests();
-            }
-
             if (tests != null && tests.Length > 0)
                 _model.RunTests(new TestSelection(tests));
         }
