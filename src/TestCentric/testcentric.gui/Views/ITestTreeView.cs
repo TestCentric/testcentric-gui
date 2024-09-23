@@ -20,6 +20,7 @@ namespace TestCentric.Gui.Views
         ContextMenuStrip ContextMenuStrip { get; }
 
         ICommand RunCommand { get; }
+        ICommand DebugCommand { get; }
         IChecked ShowFailedAssumptions { get; }
         IToolStripMenu ProjectMenu { get; }
         IToolStripMenu ActiveConfiguration { get; }

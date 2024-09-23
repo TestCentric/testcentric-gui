@@ -89,6 +89,8 @@ namespace TestCentric.Gui.Model
                 model.PackageOverrides.Add(EnginePackageSettings.MaxAgents, options.MaxAgents);
             if (options.RunAsX86)
                 model.PackageOverrides.Add(EnginePackageSettings.RunAsX86, true);
+            if (options.DebugTests)
+                model.PackageOverrides.Add("DebugTests", true);
             if (options.DebugAgent)
                 model.PackageOverrides.Add("DebugAgent", true);
 

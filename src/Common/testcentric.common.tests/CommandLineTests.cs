@@ -33,6 +33,7 @@ namespace TestCentric.Gui.Tests
         [TestCase("ProcessModel", null)]
         [TestCase("DomainUsage", null)]
         [TestCase("InternalTraceLevel", null)]
+        [TestCase("DebugTests", false)]
         [TestCase("DebugAgent", false)]
         [TestCase("Unattended", false)]
         public void DefaultOptionValues(string propertyName, object val)
@@ -64,6 +65,7 @@ namespace TestCentric.Gui.Tests
         [TestCase("InternalTraceLevel", "--trace:Debug")]
         [TestCase("ShowHelp", "--help", true)]
         [TestCase("ShowHelp", "-h", true)]
+        [TestCase("DebugTests", "--debug", true)]
 #if DEBUG
         [TestCase("DebugAgent", "--debug-agent", true)]
 #endif
@@ -110,7 +112,7 @@ namespace TestCentric.Gui.Tests
         private static PropertyInfo GetPropertyInfo(string propertyName)
         {
             PropertyInfo property = typeof(CommandLineOptions).GetProperty(propertyName);
-            Assert.That(property, Is.Not.Null, "The property '{0}' is not defined", propertyName);
+            Assert.That(property, Is.Not.Null, $"The property '{propertyName}' is not defined");
             return property;
         }
     }
