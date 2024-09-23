@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric GUI contributors.
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
@@ -20,7 +20,7 @@ namespace TestCentric.Gui.Model
             Assert.That(testNode.Type, Is.EqualTo("TestCase"));
             Assert.That(testNode.TestCount, Is.EqualTo(1));
             Assert.That(testNode.RunState, Is.EqualTo(RunState.Ignored));
-            Assert.False(testNode.IsSuite);
+            Assert.That(testNode.IsSuite, Is.False);
         }
 
         [Test]

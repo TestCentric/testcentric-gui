@@ -1,4 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	
 	<PropertyGroup>
 		<RootNamespace>NUnit.Tests</RootNamespace>
 		<TargetFrameworks>net35;net462</TargetFrameworks>
@@ -8,10 +9,18 @@
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<PlatformTarget>x86</PlatformTarget>
 	</PropertyGroup>
-	<ItemGroup>
-		<PackageReference Include="NUnit" Version="3.11.0" />
+
+	<ItemGroup Condition="'$(TargetFramework)'=='net462'">
+		<PackageReference Include="NUnit" Version="4.2.2" />
 	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Properties\" />
+
+	<ItemGroup Condition="'$(TargetFramework)'!='net462'">
+		<PackageReference Include="NUnit" Version="3.14.0" />
 	</ItemGroup>
+
+
+	<ItemGroup>
+		<Folder Include="Properties\" />
+	</ItemGroup>
+
 </Project>

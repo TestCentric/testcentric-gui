@@ -35,7 +35,7 @@ namespace TestCentric.Gui.Model
             var options = new CommandLineOptions(args);
             var model = TestModel.CreateTestModel(engine, options);
 
-            Assert.NotNull(model, "Unable to create TestModel");
+            Assert.That(model, Is.Not.Null, "Unable to create TestModel");
 
             string expectedTraceLevel = options.InternalTraceLevel ?? "Off";
             string actualTraceLevel = model.PackageOverrides[EnginePackageSettings.InternalTraceLevel] as string;

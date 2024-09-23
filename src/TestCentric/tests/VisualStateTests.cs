@@ -36,11 +36,11 @@ namespace TestCentric.Gui.Tests
             StringReader reader = new StringReader(output);
             VisualState newState = VisualState.LoadFrom(reader);
 
-            Assert.AreEqual(state.ShowCheckBoxes, newState.ShowCheckBoxes, "ShowCheckBoxes");
-            Assert.AreEqual(state.TopNode, newState.TopNode, "TopNode");
-            Assert.AreEqual(state.SelectedNode, newState.SelectedNode, "SelectedNode");
-            Assert.AreEqual(state.SelectedCategories, newState.SelectedCategories, "SelectedCategories");
-            Assert.AreEqual(state.ExcludeCategories, newState.ExcludeCategories, "ExcludeCategories");
+            Assert.That(newState.ShowCheckBoxes, Is.EqualTo(state.ShowCheckBoxes), "ShowCheckBoxes");
+            Assert.That(newState.TopNode, Is.EqualTo(state.TopNode), "TopNode");
+            Assert.That(newState.SelectedNode, Is.EqualTo(state.SelectedNode), "SelectedNode");
+            Assert.That(newState.SelectedCategories, Is.EqualTo(state.SelectedCategories), "SelectedCategories");
+            Assert.That(newState.ExcludeCategories, Is.EqualTo(state.ExcludeCategories), "ExcludeCategories");
         }
     }
 }

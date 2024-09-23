@@ -33,7 +33,7 @@ namespace TestCentric.Gui.Model.Settings
         [Test]
         public void GetSetting_WhenNotPresent_ReturnsNull()
         {
-            Assert.IsNull(_settings.GetSetting("X"));
+            Assert.That(_settings.GetSetting("X"), Is.Null);
         }
 
         [TestCaseSource(nameof(TestCases))]

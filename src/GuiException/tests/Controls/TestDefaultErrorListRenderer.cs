@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric GUI contributors.
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
@@ -41,7 +41,7 @@ namespace NUnit.UiException.Tests.Controls
         [Test]
         public void DefaultState()
         {
-            Assert.NotNull(_renderer.Font);
+            Assert.That(_renderer.Font, Is.Not.Null);
             Assert.That(_renderer.Font.Size, Is.EqualTo(8.25f));
 
             return;
@@ -95,16 +95,16 @@ namespace NUnit.UiException.Tests.Controls
             int itemHeight = _renderer.Font.Height * 4 + 6;
 
             item = _renderer.ItemAt(_filled.Items, _gr, new Point(0, 0));
-            Assert.NotNull(item);
+            Assert.That(item, Is.Not.Null);
             Assert.That(item, Is.EqualTo(_filled.Items[0]));
 
             item = _renderer.ItemAt(_filled.Items, _gr, new Point(0, itemHeight + 1));
-            Assert.NotNull(item);
+            Assert.That(item, Is.Not.Null);
             Assert.That(item, Is.EqualTo(_filled.Items[1]));
 
-            Assert.Null(_renderer.ItemAt(_filled.Items, _gr, new Point(0, 480)));
-            Assert.Null(_renderer.ItemAt(_filled.Items, _gr, new Point(0, -1)));
-            Assert.Null(_renderer.ItemAt(null, _gr, new Point(0, 0)));
+            Assert.That(_renderer.ItemAt(_filled.Items, _gr, new Point(0, 480)), Is.Null);
+            Assert.That(_renderer.ItemAt(_filled.Items, _gr, new Point(0, -1)), Is.Null);
+            Assert.That(_renderer.ItemAt(null, _gr, new Point(0, 0)), Is.Null);
 
             return;
         }
@@ -119,7 +119,7 @@ namespace NUnit.UiException.Tests.Controls
             // measuring an empty list returns 0x0
 
             docSize = renderer.GetDocumentSize(_empty.Items, _gr);
-            Assert.NotNull(docSize);
+            Assert.That(docSize, Is.Not.Null);
             Assert.That(docSize, Is.EqualTo(new Size(0, 0)));
 
             // measure for a non empty list relies on the longest item
@@ -133,7 +133,7 @@ namespace NUnit.UiException.Tests.Controls
             }
 
             docSize = renderer.GetDocumentSize(_filled.Items, _gr);
-            Assert.NotNull(docSize);
+            Assert.That(docSize, Is.Not.Null);
             Assert.That(docSize.Width, Is.EqualTo((int)maxSize.Width));
             int itemHeight = renderer.Font.Height * 4 + 6;
             Assert.That(docSize.Height, Is.EqualTo(_filled.Items.Count * itemHeight));
@@ -176,18 +176,18 @@ namespace NUnit.UiException.Tests.Controls
             // no change - true the second time
 
             renderer.DrawToGraphics(_filled.Items, _filled.Items[0], _gr, viewport);
-            Assert.False(renderer.IsDirty(_filled.Items, _filled.Items[0], viewport));
+            Assert.That(renderer.IsDirty(_filled.Items, _filled.Items[0], viewport), Is.False);
 
             // changing the list set dirty flag
 
             renderer.DrawToGraphics(_filled.Items, _filled.Items[0], _gr, viewport);
-            Assert.True(renderer.IsDirty(_empty.Items, _filled.Items[0], viewport));
+            Assert.That(renderer.IsDirty(_empty.Items, _filled.Items[0], viewport));
 
             // changes selected item
 
             renderer.DrawToGraphics(_filled.Items, _filled.Items[0], _gr, viewport);
-            Assert.True(renderer.IsDirty(_filled.Items, null, viewport));
-            Assert.True(renderer.IsDirty(_filled.Items,
+            Assert.That(renderer.IsDirty(_filled.Items, null, viewport));
+            Assert.That(renderer.IsDirty(_filled.Items,
                 new ErrorItem(_filled.Items[0].Path,
                               _filled.Items[0].FullyQualifiedMethodName,
                               _filled.Items[0].LineNumber),
@@ -196,19 +196,19 @@ namespace NUnit.UiException.Tests.Controls
             // changes viewport
 
             renderer.DrawToGraphics(_filled.Items, _filled.Items[0], _gr, viewport);
-            Assert.True(renderer.IsDirty(_filled.Items, _filled.Items[0], new Rectangle()));
+            Assert.That(renderer.IsDirty(_filled.Items, _filled.Items[0], new Rectangle()));
 
             // reversing item order set dirty flag
 
             renderer.DrawToGraphics(_filled.Items, _filled.Items[0], _gr, viewport);
             _filled.Items.Reverse();
-            Assert.True(renderer.IsDirty(_filled.Items, _filled.Items[_filled.Items.Count - 1], viewport));
+            Assert.That(renderer.IsDirty(_filled.Items, _filled.Items[_filled.Items.Count - 1], viewport), Is.True);
 
             // Calling GetDocumentSize set dirty flag
 
             renderer.DrawToGraphics(_filled.Items, _filled.Items[0], _gr, viewport);
             renderer.GetDocumentSize(_filled.Items, _gr);
-            Assert.True(renderer.IsDirty(_filled.Items, _filled.Items[0], viewport));
+            Assert.That(renderer.IsDirty(_filled.Items, _filled.Items[0], viewport), Is.True);
 
             return;
         }

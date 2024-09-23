@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric GUI contributors.
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
@@ -35,8 +35,8 @@ namespace NUnit.UiException.Tests.Controls
             Assert.That(_vertical.Width, Is.EqualTo(150));
             Assert.That(_vertical.Height, Is.EqualTo(150));
 
-            Assert.NotNull(_vertical.Control1);
-            Assert.NotNull(_vertical.Control2);
+            Assert.That(_vertical.Control1, Is.Not.Null);
+            Assert.That(_vertical.Control2, Is.Not.Null);
 
             Assert.That(_vertical.Controls.Count, Is.EqualTo(2));
             Assert.That(_vertical.Controls[0], Is.SameAs(_vertical.Control1));
@@ -60,7 +60,7 @@ namespace NUnit.UiException.Tests.Controls
             left = Math.Min(left, splitter.Width - SplitterBox.SPLITTER_SIZE);
 
             Assert.That(splitter.Orientation, Is.EqualTo(Orientation.Vertical));
-            Assert.False(splitter.SplitterRectangle.IsEmpty);
+            Assert.That(splitter.SplitterRectangle.IsEmpty, Is.False);
 
             Assert.That(splitter.SplitterRectangle.Left, Is.EqualTo(left));
             Assert.That(splitter.SplitterRectangle.Top, Is.EqualTo(0));
@@ -86,7 +86,7 @@ namespace NUnit.UiException.Tests.Controls
             top = Math.Min(top, splitter.Height - SplitterBox.SPLITTER_SIZE);
 
             Assert.That(splitter.Orientation, Is.EqualTo(Orientation.Horizontal));
-            Assert.False(splitter.SplitterRectangle.IsEmpty);
+            Assert.That(splitter.SplitterRectangle.IsEmpty, Is.False);
             Assert.That(splitter.SplitterRectangle,
                 Is.EqualTo(new Rectangle(0, top, splitter.Width, SplitterBox.SPLITTER_SIZE)));
 
@@ -105,9 +105,9 @@ namespace NUnit.UiException.Tests.Controls
 
         void CheckVerticalRectangles(TestingSplitterBox splitter)
         {
-            Assert.False(splitter.Collapse1Rectangle.IsEmpty);
-            Assert.False(splitter.DirectionRectangle.IsEmpty);
-            Assert.False(splitter.Collapse2Rectangle.IsEmpty);
+            Assert.That(splitter.Collapse1Rectangle.IsEmpty, Is.False);
+            Assert.That(splitter.DirectionRectangle.IsEmpty, Is.False);
+            Assert.That(splitter.Collapse2Rectangle.IsEmpty, Is.False);
 
             int y = (splitter.Height - 41) / 2;
 
@@ -132,9 +132,9 @@ namespace NUnit.UiException.Tests.Controls
 
         void CheckHorizontalRectangles(TestingSplitterBox splitter)
         {
-            Assert.False(splitter.Collapse1Rectangle.IsEmpty);
-            Assert.False(splitter.DirectionRectangle.IsEmpty);
-            Assert.False(splitter.Collapse2Rectangle.IsEmpty);
+            Assert.That(splitter.Collapse1Rectangle.IsEmpty, Is.False);
+            Assert.That(splitter.DirectionRectangle.IsEmpty, Is.False   );
+            Assert.That(splitter.Collapse2Rectangle.IsEmpty, Is.False);
 
             int x = (splitter.Width - 41) / 2;
             int y = splitter.SplitterRectangle.Top;
@@ -161,18 +161,18 @@ namespace NUnit.UiException.Tests.Controls
             Panel panel = new Panel();
 
             _vertical.Control1 = panel;
-            Assert.False(_vertical.Controls.Contains(control1));
-            Assert.True(_vertical.Controls.Contains(panel));
+            Assert.That(_vertical.Controls.Contains(control1), Is.False);
+            Assert.That(_vertical.Controls.Contains(panel), Is.True);
             CheckVerticalLayout(_vertical, 0.5f);
 
             _vertical.Control1 = null;
-            Assert.True(_vertical.Controls.Contains(control1));
-            Assert.False(_vertical.Controls.Contains(panel));
+            Assert.That(_vertical.Controls.Contains(control1), Is.True);
+            Assert.That(_vertical.Controls.Contains(panel), Is.False);
             CheckVerticalLayout(_vertical, 0.5f);
 
             _vertical.Control1 = null;
-            Assert.True(_vertical.Controls.Contains(control1));
-            Assert.False(_vertical.Controls.Contains(panel));
+            Assert.That(_vertical.Controls.Contains(control1), Is.True);
+            Assert.That(_vertical.Controls.Contains(panel), Is.False);
             CheckVerticalLayout(_vertical, 0.5f);
 
             return;
@@ -185,18 +185,18 @@ namespace NUnit.UiException.Tests.Controls
             Panel panel = new Panel();
 
             _vertical.Control2 = panel;
-            Assert.False(_vertical.Controls.Contains(control2));
-            Assert.True(_vertical.Controls.Contains(panel));
+            Assert.That(_vertical.Controls.Contains(control2), Is.False);
+            Assert.That(_vertical.Controls.Contains(panel), Is.True);
             CheckVerticalLayout(_vertical, 0.5f);
 
             _vertical.Control2 = null;
-            Assert.True(_vertical.Controls.Contains(control2));
-            Assert.False(_vertical.Controls.Contains(panel));
+            Assert.That(_vertical.Controls.Contains(control2), Is.True);
+            Assert.That(_vertical.Controls.Contains(panel), Is.False);
             CheckVerticalLayout(_vertical, 0.5f);
 
             _vertical.Control2 = null;
-            Assert.True(_vertical.Controls.Contains(control2));
-            Assert.False(_vertical.Controls.Contains(panel));
+            Assert.That(_vertical.Controls.Contains(control2), Is.True);
+            Assert.That(_vertical.Controls.Contains(panel), Is.False);
             CheckVerticalLayout(_vertical, 0.5f);
 
             return;

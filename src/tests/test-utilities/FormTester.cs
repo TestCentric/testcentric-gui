@@ -168,9 +168,9 @@ namespace TestCentric.TestUtilities
             }
 
             if (gotName)
-                Assert.Fail("Expected control {0} to be a {1} but was {2}", expectedName, expectedType.Name, gotType.Name);
+                Assert.Fail($"Expected control {expectedName} to be a {expectedType.Name} but was {gotType.Name}");
             else
-                Assert.Fail("{0} does not contain {1} control", control.Name, expectedName);
+                Assert.Fail($"{control.Name} does not contain {expectedName} control");
         }
 
         public void AssertControlsAreStackedVertically(params string[] names)
@@ -181,7 +181,7 @@ namespace TestCentric.TestUtilities
                 if (prior != null)
                 {
                     if (Controls[prior].Bottom > Controls[current].Top)
-                        Assert.Fail("The {0} control should be above the {1} control", prior, current);
+                        Assert.Fail($"The {prior} control should be above the {current} control");
                 }
                 prior = current;
             }

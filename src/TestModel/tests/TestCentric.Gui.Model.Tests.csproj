@@ -1,22 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
 	<PropertyGroup>
 		<RootNamespace>TestCentric.Gui.Model</RootNamespace>
 		<AssemblyName>TestCentric.Gui.Model.Tests</AssemblyName>
+		<OutputType>Exe</OutputType>
 		<TargetFramework>net462</TargetFramework>
 		<OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	</PropertyGroup>
-    <ItemGroup>
+    
+	<ItemGroup>
         <Reference Include="System.Windows.Forms" />
     </ItemGroup>
-    <ItemGroup>
+    
+	<ItemGroup>
         <Compile Include="..\..\CommonAssemblyInfo.cs">
             <Link>Properties\CommonAssemblyInfo.cs</Link>
         </Compile>
     </ItemGroup>
-    <ItemGroup>
+    
+	<ItemGroup>
         <ProjectReference Include="..\..\Common\testcentric.common\TestCentric.Common.csproj">
           <Name>TestCentric.Common</Name>
         </ProjectReference>
@@ -36,10 +41,13 @@
           <Name>TestCentric.Gui.Model</Name>
         </ProjectReference>
     </ItemGroup>
-    <ItemGroup>
+    
+	<ItemGroup>
         <PackageReference Include="NSubstitute" Version="4.0.0" />
-        <PackageReference Include="NUnit" Version="3.11.0" />
-        <PackageReference Include="NUnit.Engine.Api" Version="3.11.1" />
-        <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.1" />
+		<PackageReference Include="NUnit" Version="4.2.2" />
+		<PackageReference Include="NUnitLite" Version="4.2.2" />
+		<PackageReference Include="NUnit.Engine.Api" Version="3.11.1" />
+        <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
     </ItemGroup>
+
 </Project>

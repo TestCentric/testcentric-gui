@@ -123,6 +123,18 @@ Task("CheckTestErrors")
     .Does(() => CheckTestErrors(ref ErrorDetail));
 
 //////////////////////////////////////////////////////////////////////
+// TESTS OF TESTCENTRIC.COMMON
+//////////////////////////////////////////////////////////////////////
+
+Task("TestCommon")
+    .Description("Tests the TestCenric.Common assembly")
+    .IsDependentOn("Build")
+    .Does<BuildParameters>((parameters) =>
+    {
+        RunNUnitLite("TestCentric.Common.Tests", "net462", parameters.OutputDirectory);
+    });
+
+//////////////////////////////////////////////////////////////////////
 // TESTS OF TESTCENTRIC.ENGINE
 //////////////////////////////////////////////////////////////////////
 
@@ -140,27 +152,49 @@ Task("TestEngine")
 //////////////////////////////////////////////////////////////////////
 
 Task("TestEngineCore")
-	.Description("Tests the TestCentric Engine Core")
-	.IsDependentOn("Build")
-	.Does<BuildParameters>((parameters) =>
-	{
-		foreach (var runtime in parameters.SupportedCoreRuntimes)
-			RunNUnitLite("testcentric.engine.core.tests", runtime, $"{parameters.OutputDirectory}engine-tests/{runtime}/");
-	});
+    .Description("Tests the TestCentric Engine Core")
+    .IsDependentOn("Build")
+    .Does<BuildParameters>((parameters) =>
+    {
+        foreach (var runtime in parameters.SupportedCoreRuntimes)
+            RunNUnitLite("testcentric.engine.core.tests", runtime, $"{parameters.OutputDirectory}engine-tests/{runtime}/");
+    });
+
+//////////////////////////////////////////////////////////////////////
+// TESTS OF NUNIT.UIEXCEPTION
+//////////////////////////////////////////////////////////////////////
+
+Task("TestGuiException")
+    .Description("Tests the nunit.uiexcepiton assembly")
+    .IsDependentOn("Build")
+    .Does<BuildParameters>((parameters) =>
+    {
+        RunNUnitLite("nunit.uiexception.tests", "net462", parameters.OutputDirectory);
+    });
+
+//////////////////////////////////////////////////////////////////////
+// TESTS OF THE GUI MODEL
+//////////////////////////////////////////////////////////////////////
+
+Task("TestGuiModel")
+    .Description("Tests the TestCentric GUI Runner")
+    .IsDependentOn("Build")
+    .Does<BuildParameters>((parameters) =>
+    {
+        RunNUnitLite("TestCentric.Gui.Model.Tests", "net462", parameters.OutputDirectory);
+    });
 
 //////////////////////////////////////////////////////////////////////
 // TESTS OF THE GUI
 //////////////////////////////////////////////////////////////////////
 
 Task("TestGui")
+    .Description("Tests the TestCentric GUI Runner")
     .IsDependentOn("Build")
     .Does<BuildParameters>((parameters) =>
-	{
-		NUnit3(
-			parameters.OutputDirectory + ALL_TESTS,
-			new NUnit3Settings { NoResults = true }
-		);
-	});
+    {
+        RunNUnitLite("TestCentric.Gui.Tests", "net462", parameters.OutputDirectory);
+    });
 
 /////////////////////////////////////////////////////////////////////
 // PACKAGING
@@ -485,8 +519,11 @@ Task("Package")
 	.IsDependentOn("TestPackages");
 
 Task("Test")
+	.IsDependentOn("TestCommon")
 	.IsDependentOn("TestEngineCore")
 	.IsDependentOn("TestEngine")
+	.IsDependentOn("TestGuiException")
+    .IsDependentOn("TestGuiModel")
 	.IsDependentOn("TestGui");
 
 Task("BuildPackages")

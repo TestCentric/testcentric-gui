@@ -49,7 +49,7 @@ namespace TestCentric.Engine.Services
         public void SelectRuntimeFramework(string assemblyName, bool runAsX86)
         {
             var assemblyPath = Path.Combine(TestContext.CurrentContext.TestDirectory, assemblyName);
-            FileAssert.Exists(assemblyPath, $"File not found: {assemblyPath}");
+            Assert.That(File.Exists(assemblyPath), $"File not found: {assemblyPath}");
             var package = new TestPackage(assemblyPath);
 
             _packageManager.UpdatePackage(package);
@@ -73,7 +73,7 @@ namespace TestCentric.Engine.Services
         {
             var current = RuntimeFramework.CurrentFramework;
             Console.WriteLine("Current framework is {0} ({1})", current.DisplayName, current.Id);
-            Assert.That(_runtimeService.IsAvailable(current), "{0} not available", current);
+            Assert.That(_runtimeService.IsAvailable(current), $"{current} not available");
         }
 
         [Test]

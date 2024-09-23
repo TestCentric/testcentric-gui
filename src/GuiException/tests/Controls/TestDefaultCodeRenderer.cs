@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric GUI contributors.
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
@@ -67,7 +67,7 @@ namespace NUnit.UiException.Tests.Controls
             }
             catch (Exception e)
             {
-                Assert.True(e.Message.Contains("code"));
+                Assert.That(e.Message.Contains("code"));
             }
 
             try
@@ -77,7 +77,7 @@ namespace NUnit.UiException.Tests.Controls
             }
             catch (Exception e)
             {
-                Assert.True(e.Message.Contains("g"));
+                Assert.That(e.Message.Contains("g"));
             }
 
             return;
@@ -93,7 +93,7 @@ namespace NUnit.UiException.Tests.Controls
             }
             catch (Exception e)
             {
-                Assert.True(e.Message.Contains("code"));
+                Assert.That(e.Message.Contains("code"));
             }
 
             try
@@ -103,7 +103,7 @@ namespace NUnit.UiException.Tests.Controls
             }
             catch (Exception e)
             {
-                Assert.True(e.Message.Contains("g"));
+                Assert.That(e.Message.Contains("g"));
             }
 
             try
@@ -113,7 +113,7 @@ namespace NUnit.UiException.Tests.Controls
             }
             catch (Exception e)
             {
-                Assert.True(e.Message.Contains("font"));
+                Assert.That(e.Message.Contains("font"));
             }
 
             return;
@@ -129,7 +129,7 @@ namespace NUnit.UiException.Tests.Controls
             }
             catch (Exception e)
             {
-                Assert.True(e.Message.Contains("g"));
+                Assert.That(e.Message.Contains("g"));
             }
 
             try
@@ -139,7 +139,7 @@ namespace NUnit.UiException.Tests.Controls
             }
             catch (Exception e)
             {
-                Assert.True(e.Message.Contains("font"));
+                Assert.That(e.Message.Contains("font"));
             }
         }
 

@@ -37,7 +37,7 @@ namespace TestCentric.Engine.Services
         {
             var domain = _domainManager.CreateDomain(_package);
 
-            Assert.NotNull(domain);
+            Assert.That(domain, Is.Not.Null);
             var setup = domain.SetupInformation;
 
             Assert.That(setup.ApplicationName, Does.StartWith("Tests_"));
@@ -61,7 +61,7 @@ namespace TestCentric.Engine.Services
             _package.Settings["BasePath"] = basePath;
             var domain = _domainManager.CreateDomain(_package);
 
-            Assert.NotNull(domain);
+            Assert.That(domain, Is.Not.Null);
             var setup = domain.SetupInformation;
 
             Assert.That(setup.ApplicationName, Does.StartWith("Tests_"));

@@ -58,7 +58,7 @@ namespace TestCentric.Gui.Model
 
             Assert.That(package.Settings.ContainsKey("TestParametersDictionary"));
             var parms = package.Settings["TestParametersDictionary"] as IDictionary<string, string>;
-            Assert.NotNull(parms);
+            Assert.That(parms, Is.Not.Null);
 
             Assert.That(parms, Contains.Key("parm1"));
             Assert.That(parms, Contains.Key("parm2"));

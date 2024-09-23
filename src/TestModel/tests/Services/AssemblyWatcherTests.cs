@@ -61,8 +61,8 @@ namespace TestCentric.Gui.Model.Services
             }
 
             WaitForTimerExpiration();
-            Assert.AreEqual(1, handler.Counter);
-            Assert.AreEqual(Path.GetFullPath(fileName), handler.FileName);
+            Assert.That(handler.Counter, Is.EqualTo(1));
+            Assert.That(handler.FileName, Is.EqualTo(Path.GetFullPath(fileName)));
         }
 
         [Test]
@@ -75,8 +75,8 @@ namespace TestCentric.Gui.Model.Services
             writer.Close();
 
             WaitForTimerExpiration();
-            Assert.AreEqual(1, handler.Counter);
-            Assert.AreEqual(Path.GetFullPath(fileName), handler.FileName);
+            Assert.That(handler.Counter, Is.EqualTo(1));
+            Assert.That(handler.FileName, Is.EqualTo(Path.GetFullPath(fileName)));
         }
 
         [Test]
@@ -88,7 +88,7 @@ namespace TestCentric.Gui.Model.Services
             fi.Attributes = FileAttributes.Hidden | attr;
 
             WaitForTimerExpiration();
-            Assert.AreEqual(0, handler.Counter);
+            Assert.That(handler.Counter, Is.EqualTo(0));
         }
 
         [Test]
@@ -99,7 +99,7 @@ namespace TestCentric.Gui.Model.Services
             fi.Delete();
 
             WaitForTimerExpiration();
-            Assert.AreEqual(0, handler.Counter);
+            Assert.That(handler.Counter, Is.EqualTo(0));
         }
 
         private static void WaitForTimerExpiration()

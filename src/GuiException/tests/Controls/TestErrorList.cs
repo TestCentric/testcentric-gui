@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric GUI contributors.
 // Licensed under the MIT License. See LICENSE.txt in root directory.
 // ***********************************************************************
@@ -59,11 +59,11 @@ namespace NUnit.UiException.Tests.Controls
         [Test]
         public void DefaultState()
         {
-            Assert.False(_list.AutoSelectFirstItem);
-            Assert.Null(_list.StackTrace);
-            Assert.NotNull(_list.Items);
+            Assert.That(_list.AutoSelectFirstItem, Is.False);
+            Assert.That(_list.StackTrace, Is.Null);
+            Assert.That(_list.Items, Is.Not.Null);
             Assert.That(_list.Items.Count, Is.EqualTo(0));
-            Assert.Null(_list.SelectedItem);
+            Assert.That(_list.SelectedItem, Is.Null);
             Assert.That(_list.HoveredIndex, Is.EqualTo(-1));
             Assert.That(_list.ListOrderPolicy, Is.EqualTo(ErrorListOrderPolicy.InitialOrder));
 
@@ -82,7 +82,7 @@ namespace NUnit.UiException.Tests.Controls
 
             _list.AutoSelectFirstItem = true;
             _list.StackTrace = _trace1;
-            Assert.NotNull(_list.SelectedItem);
+            Assert.That(_list.SelectedItem, Is.Not.Null);
             Assert.That(_list.SelectedItem, Is.EqualTo(_list.Items[0]));
 
             // Test #2:
@@ -91,7 +91,7 @@ namespace NUnit.UiException.Tests.Controls
             // should be null
 
             _list.StackTrace = "à SomeClass.SomeMethod()";
-            Assert.Null(_list.SelectedItem);
+            Assert.That(_list.SelectedItem, Is.Null);
 
             // Test #3
             // Populate StackTrace with one localizable item.
@@ -100,7 +100,7 @@ namespace NUnit.UiException.Tests.Controls
 
             _list.AutoSelectFirstItem = false;
             _list.StackTrace = "à SomeClass.SomeMethod() dans C:\\folder\\file.cs:ligne 1";
-            Assert.Null(_list.SelectedItem);
+            Assert.That(_list.SelectedItem, Is.Null);
 
             return;
         }
@@ -135,7 +135,7 @@ namespace NUnit.UiException.Tests.Controls
             _selectionNotification = false;
             _list.SelectedItem = _list.Items[0];
             Assert.That(_list.SelectedItem, Is.EqualTo(_list.Items[0]));
-            Assert.True(_selectionNotification);
+            Assert.That(_selectionNotification, Is.True);
 
             // attempting to select an item not localizable
             // has no effect
@@ -143,7 +143,7 @@ namespace NUnit.UiException.Tests.Controls
             _selectionNotification = false;
             _list.SelectedItem = _list.Items[1];
             Assert.That(_list.SelectedItem, Is.EqualTo(_list.Items[0]));
-            Assert.False(_selectionNotification);
+            Assert.That(_selectionNotification, Is.False);
 
             // attempting to select an item not in the list
             // has no effect
@@ -151,12 +151,12 @@ namespace NUnit.UiException.Tests.Controls
             _selectionNotification = false;
             _list.SelectedItem = new ErrorItem("C:\\folder\\file42.cs", "SomeClass42.SomeMethod42()", 3);
             Assert.That(_list.SelectedItem, Is.EqualTo(_list.Items[0]));
-            Assert.False(_selectionNotification);
+            Assert.That(_selectionNotification, Is.False);
 
             // can pass null to SelectedItem
             _list.SelectedItem = null;
-            Assert.Null(_list.SelectedItem);
-            Assert.True(_selectionNotification);
+            Assert.That(_list.SelectedItem, Is.Null);
+            Assert.That(_selectionNotification, Is.True);
 
             // select an item an clear StackTrace
             // selection should be reset to null
@@ -164,8 +164,8 @@ namespace NUnit.UiException.Tests.Controls
             _list.SelectedItem = _list.Items[0];
             _selectionNotification = false;
             _list.StackTrace = null;
-            Assert.Null(_list.SelectedItem);
-            Assert.True(_selectionNotification);
+            Assert.That(_list.SelectedItem, Is.Null);
+            Assert.That(_selectionNotification, Is.True);
 
             return;
         }
@@ -244,7 +244,7 @@ namespace NUnit.UiException.Tests.Controls
 
             Assert.That(list.Items.Count, Is.EqualTo(1));
             Assert.That(list.Items[0].BaseMethodName, Is.EqualTo("Fail to parse stack trace"));
-            Assert.IsFalse(list.Items[0].HasSourceAttachment);
+            Assert.That(list.Items[0].HasSourceAttachment, Is.False);
 
             return;
         }
@@ -284,7 +284,7 @@ namespace NUnit.UiException.Tests.Controls
             _mockRenderer.ItemAt(_list.Items, _list.WorkingGraphics, point).Returns(_list.Items[0]);
             _list.FireClick(point);
 
-            Assert.NotNull(_list.SelectedItem);
+            Assert.That(_list.SelectedItem, Is.Not.Null);
             Assert.That(_list.SelectedItem, Is.EqualTo(_list.Items[0]));
 
             // simulate a click in 10, 110 - this element is not clickable => no source
@@ -294,7 +294,7 @@ namespace NUnit.UiException.Tests.Controls
             _mockRenderer.ItemAt(_list.Items, _list.WorkingGraphics, point).Returns(_list.Items[1]);
             _list.FireClick(point);
 
-            Assert.NotNull(_list.SelectedItem);
+            Assert.That(_list.SelectedItem, Is.Not.Null);
             Assert.That(_list.SelectedItem, Is.SameAs(selection));
 
             return;
@@ -315,23 +315,23 @@ namespace NUnit.UiException.Tests.Controls
             point = new Point(0, 0);
             _mockRenderer.ItemAt(_list.Items, _list.WorkingGraphics, point).Returns(_list.Items[0]);
             _list.FireMouseMove(point);
-            Assert.True(_list.ITEM_ENTERED_NOTIFICATION);
+            Assert.That(_list.ITEM_ENTERED_NOTIFICATION);
             Assert.That(_list.HoveredIndex, Is.EqualTo(0));
 
             _list.ResetFlags();
             point = new Point(0, 50);
             _mockRenderer.ItemAt(_list.Items, _list.WorkingGraphics, point).Returns(_list.Items[1]);
             _list.FireMouseMove(point);
-            Assert.False(_list.ITEM_ENTERED_NOTIFICATION); // items[1] is not hoverable...
-            Assert.True(_list.ITEM_LEAVED_NOTIFICATION); // has left items[0]            
+            Assert.That(_list.ITEM_ENTERED_NOTIFICATION, Is.False); // items[1] is not hoverable...
+            Assert.That(_list.ITEM_LEAVED_NOTIFICATION); // has left items[0]            
             Assert.That(_list.HoveredIndex, Is.EqualTo(-1));
 
             _list.ResetFlags();
             point = new Point(0, 100);
             _mockRenderer.ItemAt(_list.Items, _list.WorkingGraphics, point).Returns(_list.Items[3]);
             _list.FireMouseMove(point);
-            Assert.True(_list.ITEM_ENTERED_NOTIFICATION); // items[3] is hoverable...
-            Assert.False(_list.ITEM_LEAVED_NOTIFICATION); // items[1] was not hoverable
+            Assert.That(_list.ITEM_ENTERED_NOTIFICATION); // items[3] is hoverable...
+            Assert.That(_list.ITEM_LEAVED_NOTIFICATION, Is.False); // items[1] was not hoverable
             Assert.That(_list.HoveredIndex, Is.EqualTo(3));
 
             // reset of stack trace causes HoverIndex to reset as well
