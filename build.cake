@@ -1,9 +1,8 @@
 static string Target; Target = GetArgument("target|t", "Default");
 static string Configuration; Configuration = GetArgument("configuration|c", "Release");
 
-#tool nuget:?package=NUnit.ConsoleRunner&version=3.10.0
 #tool nuget:?package=GitVersion.CommandLine&version=5.0.0
-#tool nuget:?package=GitReleaseManager&version=0.11.0
+#tool nuget:?package=GitReleaseManager&version=0.18.0
 
 #load "./build/parameters.cake"
 
@@ -418,9 +417,6 @@ Task("CreateDraftRelease")
 				Name = releaseName,
 				Milestone = milestone
 			});
-
-			GitReleaseManagerExport(parameters.GitHubAccessToken, GITHUB_OWNER, GITHUB_REPO, "DraftRelease.md",
-				new GitReleaseManagerExportSettings() { TagName = milestone });
 		}
 		else
 		{
