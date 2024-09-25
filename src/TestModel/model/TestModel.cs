@@ -36,7 +36,7 @@ namespace TestCentric.Gui.Model
 
         private SettingsService _settingsService;
 
-        private TestRunSpecification _lastTestRun;
+        private TestRunSpecification _lastTestRun = TestRunSpecification.Empty;
 
         private bool _lastRunWasDebugRun;
 
@@ -208,6 +208,8 @@ namespace TestCentric.Gui.Model
 
         private class TestRunSpecification
         {
+            public static TestRunSpecification Empty = new TestRunSpecification(new TestSelection(), null, false);
+
             // The selected tests to run (ITestItem may be a TestSelection or a TestNode
             public TestSelection SelectedTests { get; }
 
@@ -215,17 +217,22 @@ namespace TestCentric.Gui.Model
             // NOTE: Currently, filter is always empty
             public TestFilter CategoryFilter { get; }
 
-            public TestRunSpecification(TestSelection selectedTests, TestFilter filter)
+            public bool DebuggingRequested { get; }
+
+            public bool IsEmpty => SelectedTests.Count == 0;
+
+            public TestRunSpecification(TestSelection selectedTests, TestFilter filter, bool debuggingRequested)
             {
                 SelectedTests = selectedTests;
                 CategoryFilter = filter;
+                DebuggingRequested = debuggingRequested;
             }
 
-            public TestRunSpecification(TestNode testNode, TestFilter filter)
+            public TestRunSpecification(TestNode testNode, TestFilter filter, bool debuggingRequested)
             {
-                SelectedTests = new TestSelection();
-                SelectedTests.Add(testNode);
+                SelectedTests = new TestSelection { testNode };
                 CategoryFilter = filter;
+                DebuggingRequested = debuggingRequested;
             }
         }
 
@@ -309,7 +316,7 @@ namespace TestCentric.Gui.Model
 
             _events.FireTestsLoading(files);
 
-            _lastTestRun = null;
+            _lastTestRun = TestRunSpecification.Empty;
             _lastRunWasDebugRun = false;
 
             Runner = TestEngine.GetRunner(TestCentricProject);
@@ -458,7 +465,7 @@ namespace TestCentric.Gui.Model
                 throw new ArgumentNullException(nameof(testNode));
 
             log.Info($"Running test: {testNode.GetAttribute("name")}");
-            RunTests(new TestRunSpecification(testNode, CategoryFilter));
+            RunTests(new TestRunSpecification(testNode, CategoryFilter, false));
         }
 
         public void RunTests(TestSelection tests)
@@ -467,7 +474,7 @@ namespace TestCentric.Gui.Model
                 throw new ArgumentNullException(nameof(tests));
 
             log.Info($"Running test: {string.Join(", ", tests.Select(node => node.GetAttribute("name").ToArray()))}");
-            RunTests(new TestRunSpecification(tests, CategoryFilter));
+            RunTests(new TestRunSpecification(tests, CategoryFilter, false));
         }
 
         public void RepeatLastRun()
@@ -484,7 +491,8 @@ namespace TestCentric.Gui.Model
             if (testNode == null)
                 throw new ArgumentNullException(nameof(testNode));
 
-            DebugTests(testNode.GetTestFilter());
+            log.Info($"Debugging test: {testNode.GetAttribute("name")}");
+            RunTests(new TestRunSpecification(testNode, CategoryFilter, true));
         }
 
         public void StopTestRun(bool force)
@@ -648,16 +656,42 @@ namespace TestCentric.Gui.Model
             return runtimes;
         }
 
-        // All Test running except for DebugTests eventually comes down to this method
+        // All Test running eventually comes down to this method
         private void RunTests(TestRunSpecification runSpec)
         {
+            if (runSpec == null)
+                throw new ArgumentNullException(nameof(runSpec));
+            if (_lastTestRun == null)
+                throw new InvalidOperationException("Field '_lastTestRun' is null");
+
             // Create a test filter incorporating both the
             // selected tests and the category filter.
             var filter = runSpec.SelectedTests.GetTestFilter();
             if (!runSpec.CategoryFilter.IsEmpty)
                 filter = TestFilter.MakeAndFilter(filter, runSpec.CategoryFilter);
 
-            SetTestDebuggingFlag(false);
+            // We need to re-create the test runner because settings such
+            // as debugging have already been passed to the test runner.
+            // For performance reasons, we only do this if we did run
+            // in a different mode than last time.
+            //if (_lastTestRun.IsEmpty || _lastRunWasDebugRun != runSpec.DebuggingRequested)
+            if (_lastRunWasDebugRun != runSpec.DebuggingRequested)
+            {
+                foreach (var subPackage in TestCentricProject.SubPackages)
+                {
+                    subPackage.Settings["DebugTests"] = runSpec.DebuggingRequested;
+                }
+
+                Runner = TestEngine.GetRunner(TestCentricProject);
+
+                // It is not strictly necessary to load the tests
+                // because the runner will do that automatically, however,
+                // the initial test count will be incorrect causing UI crashes.
+                Runner.Load();
+
+                _lastRunWasDebugRun = runSpec.DebuggingRequested;
+            }
+
             _lastTestRun = runSpec;
 
             // TODO: Does this belong here? Maybe need to do before creating the run specification.
@@ -671,16 +705,6 @@ namespace TestCentric.Gui.Model
                 ReloadTests();
             }
 
-            Runner.RunAsync(_events, filter.AsNUnitFilter());
-        }
-
-        private void DebugTests(TestFilter filter)
-        {
-            SetTestDebuggingFlag(true);
-
-            // We bypass use RunTests(RunSpecification) here because
-            // we don't want to either save this as the last test run
-            // or reload the tests.
             Runner.RunAsync(_events, filter.AsNUnitFilter());
         }
 
