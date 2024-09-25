@@ -674,7 +674,6 @@ namespace TestCentric.Gui.Model
             // as debugging have already been passed to the test runner.
             // For performance reasons, we only do this if we did run
             // in a different mode than last time.
-            //if (_lastTestRun.IsEmpty || _lastRunWasDebugRun != runSpec.DebuggingRequested)
             if (_lastRunWasDebugRun != runSpec.DebuggingRequested)
             {
                 foreach (var subPackage in TestCentricProject.SubPackages)
@@ -706,30 +705,6 @@ namespace TestCentric.Gui.Model
             }
 
             Runner.RunAsync(_events, filter.AsNUnitFilter());
-        }
-
-        private void SetTestDebuggingFlag(bool debuggingRequested)
-        {
-            // We need to re-create the test runner because settings such
-            // as debugging have already been passed to the test runner.
-            // For performance reasons, we only do this if we did run
-            // in a different mode than last time.
-            if (_lastRunWasDebugRun != debuggingRequested)
-            {
-                foreach (var subPackage in TestCentricProject.SubPackages)
-                {
-                    subPackage.Settings["DebugTests"] = debuggingRequested;
-                }
-
-                Runner = TestEngine.GetRunner(TestCentricProject);
-                Runner.Load();
-
-                // It is not strictly necessary to load the tests
-                // because the runner will do that automatically, however,
-                // the initial test count will be incorrect causing UI crashes.
-
-                _lastRunWasDebugRun = debuggingRequested;
-            }
         }
 
         public IList<string> GetAvailableCategories()
