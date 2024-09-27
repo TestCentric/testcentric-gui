@@ -1,4 +1,4 @@
-// This file contains both constants and static readonly values, which
+set// This file contains both constants and static readonly values, which
 // are used as constants. The latter must not depend in any way on the
 // contents of other cake files, which are loaded after this one.
 

@@ -1,22 +1,131 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
-  <metadata>
-    <id>TestCentric.GuiRunner</id>
-    <version>0.0.0</version>
-    <description>This package includes the TestCentric GUI runner and test engine.</description>
-    <authors>Charlie Poole</authors>
-    <owners>Charlie Poole</owners>
-    <projectUrl>http://test-centric.org</projectUrl>
-    <license type="expression">MIT</license>
-    <iconUrl>https://cdn.rawgit.com/TestCentric/resources/main/images/icon/nunit_256.png</iconUrl>
-    <icon>testcentric.png</icon>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <releaseNotes>https://raw.githubusercontent.com/TestCentric/testcentric-gui/main/CHANGES.txt</releaseNotes>
-    <copyright>Copyright (c) 2018-2020 Charlie Poole</copyright>
-    <language>en-US</language>
-    <tags>testcentric nunit gui runner test centric testing tdd</tags>
-    <repository type="git" url="https://github.com/TestCentric/testcentric-gui"/>
-    <title>TestCentric Runner for NUnit</title>
-  </metadata>
+    <metadata>
+        <id>TestCentric.GuiRunner</id>
+        <version>0.0.0</version>
+        <title>TestCentric Runner for NUnit</title>
+        <authors>Charlie Poole</authors>
+        <owners>Charlie Poole</owners>
+        <license type="expression">MIT</license>
+		<licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <icon>testcentric.png</icon>
+		<iconUrl>https://raw.githubusercontent.com/TestCentric/testcentric-gui/main/testcentric.png</iconUrl>
+		<projectUrl>http://test-centric.org</projectUrl>
+        <description>This package includes the TestCentric GUI runner and test engine.</description>
+        <releaseNotes>https://raw.githubusercontent.com/TestCentric/testcentric-gui/main/CHANGES.txt</releaseNotes>
+        <copyright>Copyright (c) 2018-2024 Charlie Poole</copyright>
+        <language>en-US</language>
+        <tags>testcentric nunit gui runner test centric testing tdd</tags>
+        <repository type="git" url="https://github.com/TestCentric/testcentric-gui"/>
+    </metadata>
+	<files>
+		<file src="../../LICENSE.txt" />
+		<file src="../../NOTICES.txt" />
+		<file src="../../CHANGES.txt" />
+		<file src="../../testcentric.png" />
+		<file src="nunit.engine.api.dll" target="tools" />
+		<file src="nunit.uiexception.dll" target="tools" />
+		<file src="nunit.uiexception.pdb" target="tools" />
+		<file src="TestCentric.Engine.Core.dll" target="tools" />
+		<file src="TestCentric.Engine.Core.pdb" target="tools" />
+		<file src="TestCentric.Engine.dll" target="tools" />
+		<file src="TestCentric.Engine.pdb" target="tools" />
+		<file src="TestCentric.Engine.Metadata.dll" target="tools" />
+		<file src="testcentric.exe" target="tools" />
+		<file src="testcentric.pdb" target="tools" />
+		<file src="testcentric.exe.config" target="tools" />
+		<file src="TestCentric.Common.dll" target="tools" />
+		<file src="TestCentric.Common.pdb" target="tools" />
+		<file src="TestCentric.Gui.Components.dll" target="tools" />
+		<file src="TestCentric.Gui.Components.pdb" target="tools" />
+		<file src="TestCentric.Gui.Model.dll" target="tools" />
+		<file src="TestCentric.Gui.Model.pdb" target="tools" />
+		<file src="TestCentric.Gui.Runner.dll" target="tools" />
+		<file src="TestCentric.Gui.Runner.pdb" target="tools" />
+		<file src="../../nuget/testcentric.nuget.addins" target="tools" />
+
+		<file src="agents/net462/nunit.engine.api.dll" target="tools/agents/net462" />
+		<file src="agents/net462/TestCentric.Engine.Core.dll" target="tools/agents/net462" />
+		<file src="agents/net462/TestCentric.Engine.Core.pdb" target="tools/agents/net462" />
+		<file src="agents/net462/TestCentric.Engine.Metadata.dll" target="tools/agents/net462" />
+		<file src="agents/net462/testcentric-agent.exe" target="tools/agents/net462" />
+		<file src="agents/net462/testcentric-agent.exe.config" target="tools/agents/net462" />
+		<file src="agents/net462/testcentric-agent.pdb" target="tools/agents/net462" />
+		<file src="agents/net462/testcentric-agent-x86.exe" target="tools/agents/net462" />
+		<file src="agents/net462/testcentric-agent-x86.exe.config" target="tools/agents/net462" />
+		<file src="agents/net462/testcentric-agent-x86.pdb" target="tools/agents/net462" />
+		<file src="../../nuget/testcentric-agent.nuget.addins" target="tools/agents/net462" />
+
+		<file src="agents/net20/nunit.engine.api.dll" target="tools/agents/net20" />
+		<file src="agents/net20/TestCentric.Engine.Core.dll" target="tools/agents/net20" />
+		<file src="agents/net20/TestCentric.Engine.Core.pdb" target="tools/agents/net20" />
+		<file src="agents/net20/TestCentric.Engine.Metadata.dll" target="tools/agents/net20" />
+		<file src="agents/net20/testcentric-agent.exe" target="tools/agents/net20" />
+		<file src="agents/net20/testcentric-agent.exe.config" target="tools/agents/net20" />
+		<file src="agents/net20/testcentric-agent.pdb" target="tools/agents/net20" />
+		<file src="agents/net20/testcentric-agent-x86.exe" target="tools/agents/net20" />
+		<file src="agents/net20/testcentric-agent-x86.exe.config" target="tools/agents/net20" />
+		<file src="agents/net20/testcentric-agent-x86.pdb" target="tools/agents/net20" />
+		<file src="../../nuget/testcentric-agent.nuget.addins" target="tools/agents/net20" />
+
+		<file src="agents/net8.0/nunit.engine.api.dll" target="tools/agents/net8.0" />
+		<file src="agents/net8.0/TestCentric.Engine.Core.dll" target="tools/agents/net8.0" />
+		<file src="agents/net8.0/TestCentric.Engine.Core.pdb" target="tools/agents/net8.0" />
+		<file src="agents/net8.0/TestCentric.Engine.Metadata.dll" target="tools/agents/net8.0" />
+		<file src="agents/net8.0/testcentric-agent.dll" target="tools/agents/net8.0" />
+		<file src="agents/net8.0/testcentric-agent.dll.config" target="tools/agents/net8.0" />
+		<file src="agents/net8.0/testcentric-agent.exe" target="tools/agents/net8.0" />
+		<file src="agents/net8.0/testcentric-agent.pdb" target="tools/agents/net8.0" />
+		<file src="agents/net8.0/testcentric-agent.deps.json" target="tools/agents/net8.0" />
+		<file src="agents/net8.0/testcentric-agent.runtimeconfig.json" target="tools/agents/net8.0" />
+		<file src="../../nuget/testcentric-agent.nuget.addins" target="tools/agents/net8.0" />
+
+		<file src="agents/net6.0/nunit.engine.api.dll" target="tools/agents/net6.0" />
+		<file src="agents/net6.0/TestCentric.Engine.Core.dll" target="tools/agents/net6.0" />
+		<file src="agents/net6.0/TestCentric.Engine.Core.pdb" target="tools/agents/net6.0" />
+		<file src="agents/net6.0/TestCentric.Engine.Metadata.dll" target="tools/agents/net6.0" />
+		<file src="agents/net6.0/testcentric-agent.dll" target="tools/agents/net6.0" />
+		<file src="agents/net6.0/testcentric-agent.dll.config" target="tools/agents/net6.0" />
+		<file src="agents/net6.0/testcentric-agent.exe" target="tools/agents/net6.0" />
+		<file src="agents/net6.0/testcentric-agent.pdb" target="tools/agents/net6.0" />
+		<file src="agents/net6.0/testcentric-agent.deps.json" target="tools/agents/net6.0" />
+		<file src="agents/net6.0/testcentric-agent.runtimeconfig.json" target="tools/agents/net6.0" />
+		<file src="../../nuget/testcentric-agent.nuget.addins" target="tools/agents/net6.0" />
+
+		<file src="agents/netcoreapp3.1/nunit.engine.api.dll" target="tools/agents/netcoreapp3.1 "/>
+		<file src="agents/netcoreapp3.1/TestCentric.Engine.Core.dll" target="tools/agents/netcoreapp3.1" />
+		<file src="agents/netcoreapp3.1/TestCentric.Engine.Core.pdb" target="tools/agents/netcoreapp3.1" />
+		<file src="agents/netcoreapp3.1/TestCentric.Engine.Metadata.dll" target="tools/agents/netcoreapp3.1" />
+		<file src="agents/netcoreapp3.1/testcentric-agent.dll" target="tools/agents/netcoreapp3.1" />
+		<file src="agents/netcoreapp3.1/testcentric-agent.dll.config" target="tools/agents/netcoreapp3.1" />
+		<file src="agents/netcoreapp3.1/testcentric-agent.exe" target="tools/agents/netcoreapp3.1" />
+		<file src="agents/netcoreapp3.1/testcentric-agent.pdb" target="tools/agents/netcoreapp3.1" />
+		<file src="agents/netcoreapp3.1/testcentric-agent.deps.json" target="tools/agents/netcoreapp3.1" />
+		<file src="agents/netcoreapp3.1/testcentric-agent.runtimeconfig.dev.json" target="tools/agents/netcoreapp3.1" />
+		<file src="agents/netcoreapp3.1/testcentric-agent.runtimeconfig.json" target="tools/agents/netcoreapp3.1" />
+		<file src="../../nuget/testcentric-agent.nuget.addins" target="tools/agents/netcoreapp3.1" />
+
+		<file src="Images/Tree/Circles/Success.jpg" target="tools/Images/Tree/Circles" />
+		<file src="Images/Tree/Circles/Failure.jpg" target="tools/Images/Tree/Circles" />
+		<file src="Images/Tree/Circles/Ignored.jpg" target="tools/Images/Tree/Circles" />
+		<file src="Images/Tree/Circles/Inconclusive.jpg" target="tools/Images/Tree/Circles" />
+		<file src="Images/Tree/Circles/Skipped.jpg" target="tools/Images/Tree/Circles" />
+		<file src="Images/Tree/Classic/Success.jpg" target="tools/Images/Tree/Classic" />
+		<file src="Images/Tree/Classic/Failure.jpg" target="tools/Images/Tree/Classic" />
+		<file src="Images/Tree/Classic/Ignored.jpg" target="tools/Images/Tree/Classic" />
+		<file src="Images/Tree/Classic/Inconclusive.jpg" target="tools/Images/Tree/Classic" />
+		<file src="Images/Tree/Classic/Skipped.jpg" target="tools/Images/Tree/Classic" />
+		<file src="Images/Tree/Default/Success.png" target="tools/Images/Tree/Default" />
+		<file src="Images/Tree/Default/Failure.png" target="tools/Images/Tree/Default" />
+		<file src="Images/Tree/Default/Ignored.png" target="tools/Images/Tree/Default" />
+		<file src="Images/Tree/Default/Inconclusive.png" target="tools/Images/Tree/Default" />
+		<file src="Images/Tree/Default/Skipped.png" target="tools/Images/Tree/Default" />
+		<file src="Images/Tree/Visual Studio/Success.png" target="tools/Images/Tree/Visual Studio" />
+		<file src="Images/Tree/Visual Studio/Failure.png" target="tools/Images/Tree/Visual Studio" />
+		<file src="Images/Tree/Visual Studio/Ignored.png" target="tools/Images/Tree/Visual Studio" />
+		<file src="Images/Tree/Visual Studio/Inconclusive.png" target="tools/Images/Tree/Visual Studio" />
+		<file src="Images/Tree/Visual Studio/Skipped.png" target="tools/Images/Tree/Visual Studio" />
+	</files>
 </package>
