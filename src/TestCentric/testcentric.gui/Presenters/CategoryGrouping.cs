@@ -43,31 +43,6 @@ namespace TestCentric.Gui.Presenters
                     group.ImageIndex = _displayStrategy.CalcImageIndexForGroup(group);
         }
 
-        public override void OnTestFinished(ResultNode result)
-        {
-            var imageIndex = DisplayStrategy.CalcImageIndex(result.Outcome);
-            if (imageIndex >= TestTreeView.SuccessIndex)
-            {
-                var treeNodes = _displayStrategy.GetTreeNodesForTest(result);
-                foreach (var treeNode in treeNodes)
-                {
-                    var parentNode = treeNode.Parent;
-                    TestGroup group = treeNode.Parent?.Tag as TestGroup;
-                    if (group == null)
-                    {
-                        continue;
-                    }
-
-                    // Category nodes are updated either as soon as a test result for all children is present or at the end of the test run (method OnTestRunFinished)
-                    if (TestResultExistsForAllChildren(group))
-                    {
-                        int groupImageIndex = _displayStrategy.CalcImageIndexForGroup(group);
-                        parentNode.SelectedImageIndex = parentNode.ImageIndex = group.ImageIndex = imageIndex;
-                    }
-                }
-            }
-        }
-
         public override TestGroup[] SelectGroups(TestNode testNode)
         {
             List<TestGroup> groups = new List<TestGroup>();
@@ -115,26 +90,6 @@ namespace TestCentric.Gui.Presenters
 
                 return x.Name.CompareTo(y.Name);
             });
-        }
-
-        private bool TestResultExistsForAllChildren(TestGroup group)
-        {
-            foreach (TestNode testItem in group)
-            {
-                ResultNode result = _displayStrategy.GetResultForTest(testItem);
-                if (result == null)
-                {
-                    return false;
-                }
-
-                var imageIndexInGroup = DisplayStrategy.CalcImageIndex(result.Outcome);
-                if (imageIndexInGroup < TestTreeView.SuccessIndex)
-                {
-                    return false;
-                }
-            }
-
-            return true;
         }
 
         #endregion

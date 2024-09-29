@@ -211,27 +211,6 @@ namespace TestCentric.Gui.Presenters
             }
         }
 
-        private void UpdateTestResult(ResultNode result)
-        {
-            var imageIndex = CalcImageIndex(result.Outcome);
-            if (imageIndex >= TestTreeView.SuccessIndex)
-            {
-                var treeNodes = GetTreeNodesForTest(result);
-                foreach (var treeNode in treeNodes)
-                {
-                    var parentNode = treeNode.Parent;
-                    if (parentNode != null)
-                    {
-                        var group = parentNode.Tag as TestGroup;
-                        if (group != null && imageIndex > group.ImageIndex)
-                        {
-                            parentNode.SelectedImageIndex = parentNode.ImageIndex = group.ImageIndex = imageIndex;
-                        }
-                    }
-                }
-            }
-        }
-
         #endregion
     }
 }

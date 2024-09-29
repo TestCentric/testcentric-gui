@@ -106,7 +106,7 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.RunFinished += (ea) =>
             {
-                Strategy?.OnTestRunFinished();
+                Strategy.OnTestRunFinished();
             };
 
             _model.Events.TestFinished += OnTestFinished;
