@@ -28,7 +28,7 @@ namespace TestCentric.Gui.Presenters
 
         #region Overrides
 
-        public override string ID => _includeAncestors ? "CATEGORY_EXTENDED" : "CATEGORY";
+        public override string ID => "CATEGORY";
 
         public override void Load(IEnumerable<TestNode> tests)
         {
@@ -41,27 +41,6 @@ namespace TestCentric.Gui.Presenters
             if (_displayStrategy.HasResults)
                 foreach (var group in Groups)
                     group.ImageIndex = _displayStrategy.CalcImageIndexForGroup(group);
-        }
-
-        public override void OnTestFinished(ResultNode result)
-        {
-            var imageIndex = DisplayStrategy.CalcImageIndex(result.Outcome);
-            if (imageIndex >= TestTreeView.SuccessIndex)
-            {
-                var treeNodes = _displayStrategy.GetTreeNodesForTest(result);
-                foreach (var treeNode in treeNodes)
-                {
-                    var parentNode = treeNode.Parent;
-                    if (parentNode != null)
-                    {
-                        var group = parentNode.Tag as TestGroup;
-                        if (group != null && imageIndex > group.ImageIndex)
-                        {
-                            parentNode.SelectedImageIndex = parentNode.ImageIndex = group.ImageIndex = imageIndex;
-                        }
-                    }
-                }
-            }
         }
 
         public override TestGroup[] SelectGroups(TestNode testNode)
@@ -81,7 +60,8 @@ namespace TestCentric.Gui.Presenters
                     Groups.Add(group);
                 }
 
-                groups.Add(group);
+                if (!groups.Contains(group))
+                    groups.Add(group);
             }
 
             if (groups.Count == 0)

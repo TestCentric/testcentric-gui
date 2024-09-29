@@ -66,7 +66,6 @@ namespace TestCentric.Gui.Presenters
                     break;
 
                 case "CATEGORY":
-                case "CATEGORY_EXTENDED":
                 case "OUTCOME":
                 case "DURATION":
                     _grouping.Load(GetTestFixtures(testNode));

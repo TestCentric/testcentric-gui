@@ -202,7 +202,6 @@ namespace TestCentric.Gui
                                 Assert.That(treeView.Search("Assembly2").IsExpanded, "Assembly2 not expanded");
                                 break;
                             case "CATEGORY":
-                            case "CATEGORY_EXTENDED":
                                 Assert.That(treeView.Search("None").IsExpanded, "Category 'None' not expanded");
                                 break;
                             case "OUTCOME":
@@ -234,7 +233,6 @@ namespace TestCentric.Gui
                                 }
                                 break;
                             case "CATEGORY":
-                            case "CATEGORY_EXTENDED":
                                 Assert.That(treeView.Search("None").IsExpanded, "Category 'None' not expanded");
                                 break;
                             case "OUTCOME":
@@ -262,13 +260,11 @@ namespace TestCentric.Gui
             new VisualStateTestData("NUNIT_TREE"),
             new VisualStateTestData("FIXTURE_LIST", "ASSEMBLY"),
             new VisualStateTestData("FIXTURE_LIST", "CATEGORY"),
-            new VisualStateTestData("FIXTURE_LIST", "CATEGORY_EXTENDED"),
             new VisualStateTestData("FIXTURE_LIST", "OUTCOME"),
             new VisualStateTestData("FIXTURE_LIST", "DURATION"),
             new VisualStateTestData("TEST_LIST", "ASSEMBLY"),
             new VisualStateTestData("TEST_LIST", "FIXTURE"),
             new VisualStateTestData("TEST_LIST", "CATEGORY"),
-            new VisualStateTestData("TEST_LIST", "CATEGORY_EXTENDED"),
             new VisualStateTestData("TEST_LIST", "OUTCOME"),
             new VisualStateTestData("TEST_LIST", "DURATION")
         };
