@@ -83,7 +83,7 @@ namespace TestCentric.Gui.Presenters
             _view.Add(treeNode);
         }
 
-        public void ApplyResultToGroup(ResultNode result, bool updateImages)
+        public void ApplyResultToGroup(ResultNode result)
         {
             var treeNodes = GetTreeNodesForTest(result);
 
@@ -126,21 +126,11 @@ namespace TestCentric.Gui.Presenters
                 else // update old group
                 {
                     oldParent.Text = GroupDisplayName(oldGroup);
-                    if (updateImages)
-                        oldParent.ImageIndex = oldParent.SelectedImageIndex = oldGroup.ImageIndex =
-                            CalcImageIndexForGroup(oldGroup);
                 }
 
                 newParent.Nodes.Add(treeNode);
                 newParent.Text = GroupDisplayName(newGroup);
                 newParent.Expand();
-
-                if (updateImages)
-                {
-                    var imageIndex = DisplayStrategy.CalcImageIndex(result.Outcome);
-                    if (imageIndex >= TestTreeView.SuccessIndex && imageIndex > newGroup.ImageIndex)
-                        newParent.ImageIndex = newParent.SelectedImageIndex = newGroup.ImageIndex = imageIndex;
-                }
 
                 if (newGroup.Count == 1)
                 {
@@ -180,6 +170,7 @@ namespace TestCentric.Gui.Presenters
                 case "DURATION":
                     return new DurationGrouping(this);
                 case "CATEGORY":
+                    // Tree display format 'Test_List' should consider categories on test fixtures and test cases
                     return new CategoryGrouping(this, StrategyID == "TEST_LIST");
             }
 

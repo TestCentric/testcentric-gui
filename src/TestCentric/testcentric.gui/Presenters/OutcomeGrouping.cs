@@ -52,7 +52,7 @@ namespace TestCentric.Gui.Presenters
         /// </summary>
         public override void OnTestFinished(ResultNode result)
         {
-            _displayStrategy.ApplyResultToGroup(result, false);
+            _displayStrategy.ApplyResultToGroup(result);
         }
 
         public override TestGroup[] SelectGroups(TestNode testNode)
