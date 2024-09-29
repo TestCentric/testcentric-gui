@@ -91,7 +91,6 @@ namespace TestCentric.Gui.Views
         private ToolStripMenuItem byAssemblyMenuItem;
         private ToolStripMenuItem byFixtureMenuItem;
         private ToolStripMenuItem byCategoryMenuItem;
-        private ToolStripMenuItem byExtendedCategoryMenuItem;
         private ToolStripMenuItem byOutcomeMenuItem;
         private ToolStripMenuItem byDurationMenuItem;
         private ToolStripButton stopRunButton;
@@ -175,7 +174,7 @@ namespace TestCentric.Gui.Views
                 nunitTreeMenuItem, fixtureListMenuItem, testListMenuItem);
             GroupBy = new CheckedToolStripMenuGroup(
                 "testGrouping",
-                byAssemblyMenuItem, byFixtureMenuItem, byCategoryMenuItem, byExtendedCategoryMenuItem, byOutcomeMenuItem, byDurationMenuItem);
+                byAssemblyMenuItem, byFixtureMenuItem, byCategoryMenuItem, byOutcomeMenuItem, byDurationMenuItem);
             RunParametersButton = new ToolStripButtonElement(runParametersButton);
             RunSummaryButton = new CheckBoxElement(runSummaryButton);
 
@@ -222,7 +221,6 @@ namespace TestCentric.Gui.Views
             this.byAssemblyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.byFixtureMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.byCategoryMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.byExtendedCategoryMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.byOutcomeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.byDurationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runParametersButton = new System.Windows.Forms.ToolStripButton();
@@ -399,7 +397,6 @@ namespace TestCentric.Gui.Views
             this.byAssemblyMenuItem,
             this.byFixtureMenuItem,
             this.byCategoryMenuItem,
-            this.byExtendedCategoryMenuItem,
             this.byOutcomeMenuItem,
             this.byDurationMenuItem});
             this.displayFormatButton.Image = ((System.Drawing.Image)(resources.GetObject("displayFormatButton.Image")));
@@ -455,13 +452,6 @@ namespace TestCentric.Gui.Views
             this.byCategoryMenuItem.Size = new System.Drawing.Size(198, 22);
             this.byCategoryMenuItem.Tag = "CATEGORY";
             this.byCategoryMenuItem.Text = "By Category";
-            // 
-            // byExtendedCategoryMenuItem
-            // 
-            this.byExtendedCategoryMenuItem.Name = "byExtendedCategoryMenuItem";
-            this.byExtendedCategoryMenuItem.Size = new System.Drawing.Size(198, 22);
-            this.byExtendedCategoryMenuItem.Tag = "CATEGORY_EXTENDED";
-            this.byExtendedCategoryMenuItem.Text = "By Category (Extended)";
             // 
             // byOutcomeMenuItem
             // 

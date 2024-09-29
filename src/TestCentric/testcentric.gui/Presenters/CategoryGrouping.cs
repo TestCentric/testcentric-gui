@@ -28,7 +28,7 @@ namespace TestCentric.Gui.Presenters
 
         #region Overrides
 
-        public override string ID => _includeAncestors ? "CATEGORY_EXTENDED" : "CATEGORY";
+        public override string ID => "CATEGORY";
 
         public override void Load(IEnumerable<TestNode> tests)
         {

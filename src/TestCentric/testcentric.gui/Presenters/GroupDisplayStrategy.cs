@@ -180,9 +180,7 @@ namespace TestCentric.Gui.Presenters
                 case "DURATION":
                     return new DurationGrouping(this);
                 case "CATEGORY":
-                    return new CategoryGrouping(this, false);
-                case "CATEGORY_EXTENDED":
-                    return new CategoryGrouping(this, true);
+                    return new CategoryGrouping(this, StrategyID == "TEST_LIST");
             }
 
             return null;

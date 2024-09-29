@@ -51,7 +51,6 @@ namespace TestCentric.Gui
                                     TN("FixtureB", TN("Test6"))));
 
                         case "CATEGORY":
-                        case "CATEGORY_EXTENDED":
                             return CreateTreeView(
                                 true,
                                 TN("None",
@@ -89,7 +88,6 @@ namespace TestCentric.Gui
                                 TN("FixtureB", TN("Test6")));
 
                         case "CATEGORY":
-                        case "CATEGORY_EXTENDED":
                             return CreateTreeView(
                                 true,
                                 TN("None", TN("Test1"), TN("Test2"), TN("Test3"), TN("Test4"), TN("Test5"), TN("Test6")));
@@ -120,7 +118,7 @@ namespace TestCentric.Gui
                 tv.TopNode = tv.Search("Assembly1");
             else if (Grouping == "FIXTURE")
                 tv.TopNode = tv.Search("MyFixture");
-            else if (Grouping == "CATEGORY" || Grouping == "CATEGORY_EXTENDED")
+            else if (Grouping == "CATEGORY")
                 tv.TopNode = tv.Search("None");
             else if (Grouping == "OUTCOME" || Grouping == "DURATION")
                 tv.TopNode = tv.Search("Not Run");
@@ -163,7 +161,6 @@ namespace TestCentric.Gui
                                     VTN("FixtureA", EXP + CHK)));
 
                         case "CATEGORY":
-                        case "CATEGORY_EXTENDED":
                             return CreateVisualState(
                                 DisplayStrategy,
                                 true,
@@ -214,7 +211,6 @@ namespace TestCentric.Gui
                                 VTN("FixtureA", EXP + CHK));
 
                         case "CATEGORY":
-                        case "CATEGORY_EXTENDED":
                             return CreateVisualState(
                                 DisplayStrategy,
                                 true,
@@ -254,7 +250,6 @@ namespace TestCentric.Gui
                         case "ASSEMBLY":
                         case "FIXTURE":
                         case "CATEGORY":
-                        case "CATEGORY_EXTENDED":
                             return GetExpectedVisualState();
                         case "OUTCOME":
                             return  CreateVisualState(
@@ -286,7 +281,6 @@ namespace TestCentric.Gui
                         case "ASSEMBLY":
                         case "FIXTURE":
                         case "CATEGORY":
-                        case "CATEGORY_EXTENDED":
                             return GetExpectedVisualState();
                         case "OUTCOME":
                             return CreateVisualState(
