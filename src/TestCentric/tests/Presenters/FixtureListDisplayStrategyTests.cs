@@ -60,6 +60,37 @@ namespace TestCentric.Gui.Presenters
         }
 
         [Test]
+        public void OnTestLoaded_CategoryGrouping_MultipleCategoriesAtOneFixture_AllGroupNodesAreCreated()
+        {
+            // 1. Arrange
+            ITestTreeView view = Substitute.For<ITestTreeView>();
+            ITestModel model = Substitute.For<ITestModel>();
+            var settings = new FakeUserSettings();
+
+            List<TreeNode> treeNodes = new List<TreeNode>();
+            view.Add(Arg.Do<TreeNode>(x => treeNodes.Add(x)));
+
+            model.Settings.Returns(settings);
+            settings.Gui.TestTree.FixtureList.GroupBy = "CATEGORY";
+
+            TestNode testNode = new TestNode(
+                        $"<test-suite type='TestFixture' id='3-1000'> " +
+                            $"<properties> <property name='Category' value='Category_1' /> </properties> " +
+                            $"<properties> <property name='Category' value='Category_2' /> </properties> " +
+                        "</test-suite>");
+
+            // 2. Act           
+            FixtureListDisplayStrategy strategy = new FixtureListDisplayStrategy(view, model);
+            strategy.OnTestLoaded(testNode, null);
+
+            // 3. Assert
+            Assert.That(treeNodes.Count, Is.EqualTo(2));
+            AssertTreeNodeAndTestGroup(treeNodes, "None", 0);
+            AssertTreeNodeAndTestGroup(treeNodes, "Category_1", 1);
+            AssertTreeNodeAndTestGroup(treeNodes, "Category_2", 1);
+        }
+
+        [Test]
         [TestCase("2.0", "2.0", "2.0", 1, 3, 0, 0, 0)]
         [TestCase("0.5", "2.0", "2.0", 2, 2, 1, 0, 0)]
         [TestCase("0.5", "0.5", "2.0", 2, 1, 2, 0, 0)]

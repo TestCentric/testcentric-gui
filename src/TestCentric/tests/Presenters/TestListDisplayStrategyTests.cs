@@ -64,9 +64,10 @@ namespace TestCentric.Gui.Presenters
 
         [Test]
         [TestCase("Category_1", "", "", "", 1, 0, 3, 0, 0)]
-        // [TestCase("Category_1", "Category_1", "", "", 1, 0, 3, 0, 0)]
-        // [TestCase("Category_1", "Category_1", "Category_1", "Category_1", 1, 0, 3, 0, 0)]
+        [TestCase("Category_1", "Category_1", "", "", 1, 0, 3, 0, 0)]
+        [TestCase("Category_1", "Category_1", "Category_1", "Category_1", 1, 0, 3, 0, 0)]
         [TestCase("Category_1", "Category_2", "Category_2", "Category_2", 2, 0, 3, 3, 0)]
+        [TestCase("Category_1", "Category_3", "Category_2", "Category_1", 3, 0, 3, 1, 1)]
         public void OnTestLoaded_CategoryGrouping_CategoryAtTestFixture_AllGroupNodesAreCreated(string categoryTestFixture, string categoryTestcase1, string categoryTestcase2, string categoryTestcase3, int expectedNodes, int expectedInNonCategory, int expectedInCategory1, int expectedInCategory2, int expectedInCategory3)
         {
             // 1. Arrange
@@ -99,6 +100,77 @@ namespace TestCentric.Gui.Presenters
             AssertTreeNodeAndTestGroup(treeNodes, "Category_1", expectedInCategory1);
             AssertTreeNodeAndTestGroup(treeNodes, "Category_2", expectedInCategory2);
             AssertTreeNodeAndTestGroup(treeNodes, "Category_3", expectedInCategory3);
+        }
+
+        [Test]
+        public void OnTestLoaded_CategoryGrouping_MultipleCategoriesAtOneFixture_AllGroupNodesAreCreated()
+        {
+            // 1. Arrange
+            ITestTreeView view = Substitute.For<ITestTreeView>();
+            ITestModel model = Substitute.For<ITestModel>();
+            var settings = new FakeUserSettings();
+
+            List<TreeNode> treeNodes = new List<TreeNode>();
+            view.Add(Arg.Do<TreeNode>(x => treeNodes.Add(x)));
+
+            model.Settings.Returns(settings);
+            settings.Gui.TestTree.TestList.GroupBy = "CATEGORY";
+
+            TestNode testNode = new TestNode(
+                        "<test-suite type='TestFixture' id='3-1000'> " +
+                            "<properties> " +
+                                "<property name='Category' value='Category_1' /> " +
+                                "<property name='Category' value='Category_2' /> " +
+                            "</properties> " +
+                            CreateTestcaseXml("3-1000", "") +
+                            CreateTestcaseXml("3-1001", "") +
+                            CreateTestcaseXml("3-1002", "") +
+                        "</test-suite>");
+
+            // 2. Act           
+            TestListDisplayStrategy strategy = new TestListDisplayStrategy(view, model);
+            strategy.OnTestLoaded(testNode, null);
+
+            // 3. Assert
+            Assert.That(treeNodes.Count, Is.EqualTo(2));
+            AssertTreeNodeAndTestGroup(treeNodes, "None", 0);
+            AssertTreeNodeAndTestGroup(treeNodes, "Category_1", 3);
+            AssertTreeNodeAndTestGroup(treeNodes, "Category_2", 3);
+        }
+
+        [Test]
+        public void OnTestLoaded_CategoryGrouping_MultipleCategoriesAtOneTestcase_AllGroupNodesAreCreated()
+        {
+            // 1. Arrange
+            ITestTreeView view = Substitute.For<ITestTreeView>();
+            ITestModel model = Substitute.For<ITestModel>();
+            var settings = new FakeUserSettings();
+
+            List<TreeNode> treeNodes = new List<TreeNode>();
+            view.Add(Arg.Do<TreeNode>(x => treeNodes.Add(x)));
+
+            model.Settings.Returns(settings);
+            settings.Gui.TestTree.TestList.GroupBy = "CATEGORY";
+
+            TestNode testNode = new TestNode(
+                "<test-suite type='TestFixture'> " +
+                    "<test-case  id='3-1000'> " +
+                        "<properties> " +
+                            "<property name='Category' value='Category_1' /> " +
+                            "<property name='Category' value='Category_2' /> " +
+                        "</properties> " +
+                    "</test-case>" +
+                "</test-suite>");
+
+            // 2. Act           
+            TestListDisplayStrategy strategy = new TestListDisplayStrategy(view, model);
+            strategy.OnTestLoaded(testNode, null);
+
+            // 3. Assert
+            Assert.That(treeNodes.Count, Is.EqualTo(2));
+            AssertTreeNodeAndTestGroup(treeNodes, "None", 0);
+            AssertTreeNodeAndTestGroup(treeNodes, "Category_1", 1);
+            AssertTreeNodeAndTestGroup(treeNodes, "Category_2", 1);
         }
 
         [Test]

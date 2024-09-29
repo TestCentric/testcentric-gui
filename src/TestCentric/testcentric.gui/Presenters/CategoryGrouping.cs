@@ -60,7 +60,8 @@ namespace TestCentric.Gui.Presenters
                     Groups.Add(group);
                 }
 
-                groups.Add(group);
+                if (!groups.Contains(group))
+                    groups.Add(group);
             }
 
             if (groups.Count == 0)
