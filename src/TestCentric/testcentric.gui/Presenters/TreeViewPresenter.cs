@@ -438,8 +438,8 @@ namespace TestCentric.Gui.Presenters
             _view.TestPropertiesCommand.Visible = layout == "Mini";
 
             // If a test is already running, no new test run should be started.
-            _view.RunContextCommand.Enabled = !_model.IsTestRunning;
-            _view.DebugContextCommand.Enabled = !_model.IsTestRunning;
+            _view.RunContextCommand.Enabled = _model.HasTests && !_model.IsTestRunning;
+            _view.DebugContextCommand.Enabled = _model.HasTests && !_model.IsTestRunning;
         }
 
         #endregion

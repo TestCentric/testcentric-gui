@@ -58,11 +58,14 @@ namespace TestCentric.Gui.Presenters.TestTree
             Assert.That(_view.TestPropertiesCommand.Visible, Is.False);
         }
 
-        [TestCase(true, false)]
-        [TestCase(false, true)]
-        public void WhenContextMenuIsDisplayed_RunCommand_EnabledState_IsUpdated(bool isTestRunning, bool expectedEnabled)
+        [TestCase(true, true, false)]
+        [TestCase(true, false, true)]
+        [TestCase(false, false, false)]
+        [TestCase(false, true, false)]
+        public void WhenContextMenuIsDisplayed_RunCommand_EnabledState_IsUpdated(bool hasTests, bool isTestRunning, bool expectedEnabled)
         {
             // 1. Arrange
+            _model.HasTests.Returns(hasTests);
             _model.IsTestRunning.Returns(isTestRunning);
 
             // 2. Act
@@ -72,11 +75,14 @@ namespace TestCentric.Gui.Presenters.TestTree
             Assert.That(_view.RunContextCommand.Enabled, Is.EqualTo(expectedEnabled));
         }
 
-        [TestCase(true, false)]
-        [TestCase(false, true)]
-        public void WhenContextMenuIsDisplayed_DebugCommand_EnabledState_IsUpdated(bool isTestRunning, bool expectedEnabled)
+        [TestCase(true, true, false)]
+        [TestCase(true, false, true)]
+        [TestCase(false, false, false)]
+        [TestCase(false, true, false)]
+        public void WhenContextMenuIsDisplayed_DebugCommand_EnabledState_IsUpdated(bool hasTests, bool isTestRunning, bool expectedEnabled)
         {
             // 1. Arrange
+            _model.HasTests.Returns(hasTests);
             _model.IsTestRunning.Returns(isTestRunning);
 
             // 2. Act
