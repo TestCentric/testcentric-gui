@@ -58,6 +58,34 @@ namespace TestCentric.Gui.Presenters.TestTree
             Assert.That(_view.TestPropertiesCommand.Visible, Is.False);
         }
 
+        [TestCase(true, false)]
+        [TestCase(false, true)]
+        public void WhenContextMenuIsDisplayed_RunCommand_EnabledState_IsUpdated(bool isTestRunning, bool expectedEnabled)
+        {
+            // 1. Arrange
+            _model.IsTestRunning.Returns(isTestRunning);
+
+            // 2. Act
+            _view.ContextMenuOpening += Raise.Event<EventHandler>();
+
+            // 3. Assert
+            Assert.That(_view.RunContextCommand.Enabled, Is.EqualTo(expectedEnabled));
+        }
+
+        [TestCase(true, false)]
+        [TestCase(false, true)]
+        public void WhenContextMenuIsDisplayed_DebugCommand_EnabledState_IsUpdated(bool isTestRunning, bool expectedEnabled)
+        {
+            // 1. Arrange
+            _model.IsTestRunning.Returns(isTestRunning);
+
+            // 2. Act
+            _view.ContextMenuOpening += Raise.Event<EventHandler>();
+
+            // 3. Assert
+            Assert.That(_view.DebugContextCommand.Enabled, Is.EqualTo(expectedEnabled));
+        }
+
         // TODO: Version 1 Test - Make it work if needed.
         //[Test]
         //public void WhenContextNodeIsNotNull_RunCommandExecutesThatTest()
