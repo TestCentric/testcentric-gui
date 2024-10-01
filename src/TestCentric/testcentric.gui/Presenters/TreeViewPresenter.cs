@@ -17,6 +17,7 @@ namespace TestCentric.Gui.Presenters
     using System.Drawing;
     using System.IO;
     using TestCentric.Gui.Controls;
+    using System.Linq;
 
     /// <summary>
     /// TreeViewPresenter is the presenter for the TestTreeView
@@ -227,11 +228,19 @@ namespace TestCentric.Gui.Presenters
             _view.AfterCheck += (treeNode) =>
             {
                 var checkedNodes = _view.CheckedNodes;
-                var selection = new TestSelection();
 
+                IList<TestNode> selectedTests = new List<TestNode>();
                 foreach (var node in checkedNodes)
-                    selection.Add(node.Tag as TestNode);
-                
+                {
+                    if (node.Tag is TestNode testNode)
+                        selectedTests.Add(testNode);
+
+                    if (node.Tag is TestGroup testGroup)
+                        foreach (TestNode testNodeInGroup in testGroup)
+                            selectedTests.Add(testNodeInGroup);
+                }
+
+                var selection = new TestSelection(selectedTests.Distinct());
                 _model.SelectedTests = selection;
             };
 
