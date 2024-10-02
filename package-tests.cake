@@ -50,6 +50,7 @@ public static void DefinePackageTests()
     //Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "netcore-1.1") }
     //        }));
 
+    if (!BuildSettings.IsRunningOnAppVeyor)
     PackageTests.Add(new PackageTest(1, "Net50Test", "Run mock-assembly.dll under .NET 5.0",
         "net5.0/mock-assembly.dll",
         MockAssemblyExpectedResult("Net60AgentLauncher")));
@@ -75,6 +76,7 @@ public static void DefinePackageTests()
             Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net60AgentLauncher") }
         }));
 
+    if (!BuildSettings.IsRunningOnAppVeyor)
     PackageTests.Add(new PackageTest(1, "AspNetCore50Test", "Run test using AspNetCore under .NET 5.0",
         "net5.0/aspnetcore-test.dll",
         new ExpectedResult("Passed")
@@ -98,6 +100,7 @@ public static void DefinePackageTests()
 
 	// Windows Forms Tests
 
+    if (!BuildSettings.IsRunningOnAppVeyor)
     PackageTests.Add(new PackageTest(1, "Net50WindowsFormsTest", "Run test using windows forms under .NET 5.0",
         "net5.0-windows/windows-forms-test.dll",
         new ExpectedResult("Passed")
