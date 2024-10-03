@@ -219,7 +219,7 @@ namespace TestCentric.Gui.Model
 
             public bool DebuggingRequested { get; }
 
-            public bool IsEmpty => SelectedTests.Count == 0;
+            public bool IsEmpty => SelectedTests.Count() == 0;
 
             public TestRunSpecification(TestSelection selectedTests, TestFilter filter, bool debuggingRequested)
             {

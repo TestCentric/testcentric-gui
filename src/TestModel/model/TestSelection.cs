@@ -4,29 +4,37 @@
 // ***********************************************************************
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TestCentric.Gui.Model
 {
-    public delegate string GroupingFunction(TestNode testNode);
-
     /// <summary>
-    /// TestSelection is an List of TestNodes, implementing
+    /// TestSelection is a collection of TestNodes, implementing
     /// the ITestItem interface so that the entire selection
     /// may be selected for execution.
     /// </summary>
-    public class TestSelection : List<TestNode>, ITestItem
+    public class TestSelection : IEnumerable<TestNode>, ITestItem
     {
-        public TestSelection() : base() { }
+        private HashSet<TestNode> _nodes;
 
-        public TestSelection(IEnumerable<TestNode> tests) : base(tests) { }
+        public TestSelection() 
+        { 
+            _nodes = new HashSet<TestNode>();
+        }
+
+        public TestSelection(IEnumerable<TestNode> tests) 
+        { 
+            _nodes = new HashSet<TestNode>(tests);
+        }
 
         public virtual string Name { get { return GetType().Name; } }
 
         public virtual TestFilter GetTestFilter()
         {
-            return Count == 1
-                ? this[0].GetTestFilter() // This allows nodes with special handling for filters to apply it.
+            return _nodes.Count == 1
+                ? this.First().GetTestFilter() // This allows nodes with special handling for filters to apply it.
                 : TestFilter.MakeIdFilter(this);
         }
 
@@ -36,38 +44,44 @@ namespace TestCentric.Gui.Model
         /// <param name="id"></param>
         public void RemoveId(string id)
         {
-            for (int index = 0; index < Count; index++)
-                if (this[index].Id == id)
-                {
-                    RemoveAt(index);
-                    break;
-                }
+            TestNode testNode = this.FirstOrDefault(x => x.Id == id);
+            if (testNode != null)
+                _nodes.Remove(testNode);
         }
 
-        // TODO: Not used now but wait till all experimental classes are ported
-        //public IDictionary<string, TestSelection> GroupBy(GroupingFunction groupingFunction)
-        //{
-        //    var groups = new Dictionary<string, TestSelection>();
+        /// <summary>
+        /// Add a ITestItem to the TestSelection (either a TestNode or a TestSelection)
+        /// </summary>
+        public void Add(ITestItem item)
+        {
+            if (item == null) 
+                throw new ArgumentNullException("item");
 
-        //    foreach (TestNode testNode in this)
-        //    {
-        //        var groupName = groupingFunction(testNode);
+            if (item is TestNode testNode)
+                _nodes.Add(testNode);
+            else if (item is TestSelection testSelection)
+            {
+                foreach (var subItem in testSelection)
+                    _nodes.Add(subItem);
+            }
+        }
 
-        //        TestSelection group = null;
-        //        if (!groups.ContainsKey(groupName))
-        //        {
-        //            group = new TestSelection();
-        //            groups[groupName] = group;
-        //        }
-        //        else
-        //        {
-        //            group = groups[groupName];
-        //        }
+        /// <summary>
+        /// Clear all nodes from collection
+        /// </summary>
+        public void Clear()
+        {
+            _nodes.Clear();
+        }
 
-        //        group.Add(testNode);
-        //    }
+        public IEnumerator<TestNode> GetEnumerator()
+        {
+            return _nodes.GetEnumerator();
+        }
 
-        //    return groups;
-        //}
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 }

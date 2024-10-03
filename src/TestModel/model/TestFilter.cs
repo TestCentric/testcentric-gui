@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Xml;
 
@@ -46,10 +47,10 @@ namespace TestCentric.Gui.Model
             return new TestFilter($"<filter><id>{test.Id}</id></filter>");
         }
 
-        public static TestFilter MakeIdFilter(IList<TestNode> testNodes)
+        public static TestFilter MakeIdFilter(IEnumerable<TestNode> testNodes)
         {
-            if (testNodes.Count == 1)
-                return MakeIdFilter(testNodes[0]);
+            if (testNodes.Count() == 1)
+                return MakeIdFilter(testNodes.First());
 
             StringBuilder sb = new StringBuilder("<filter><or>");
 

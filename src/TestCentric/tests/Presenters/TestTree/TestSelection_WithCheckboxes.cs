@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using NSubstitute;
 using NUnit.Framework;
@@ -60,7 +61,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             _view.CheckedNodes.Returns(new List<TreeNode>( new[] { TEST_CASE_TREE_NODE }));
 
             _view.AfterCheck += Raise.Event<TreeNodeActionHandler>(TEST_CASE_TREE_NODE);
-            _model.Received().SelectedTests = Arg.Is<TestSelection>(s => s.Count == 1 && s.Contains(TEST_CASE_NODE));
+            _model.Received().SelectedTests = Arg.Is<TestSelection>(s => s.Count() == 1 && s.Contains(TEST_CASE_NODE));
         }
 
         [Test]

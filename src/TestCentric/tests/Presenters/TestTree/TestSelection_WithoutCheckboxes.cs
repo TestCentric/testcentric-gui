@@ -10,6 +10,7 @@ using NUnit.Framework;
 
 namespace TestCentric.Gui.Presenters.TestTree
 {
+    using System.Linq;
     using Elements;
     using TestCentric.Gui.Model;
     using Views;
@@ -52,7 +53,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         public void WhenSelectedNodeChanges_SelectedTestsAreSet(TreeNode treeNode, TestNode testNode)
         {
             _view.SelectedNodeChanged += Raise.Event<TreeNodeActionHandler>(treeNode);
-            _model.Received().SelectedTests = Arg.Is<TestSelection>(s => s.Count == 1 && s[0] == testNode);
+            _model.Received().SelectedTests = Arg.Is<TestSelection>(s => s.Count() == 1 && s.First() == testNode);
         }
     }
 }
