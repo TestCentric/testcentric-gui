@@ -6,6 +6,7 @@
 namespace TestCentric.Gui.Presenters
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Windows.Forms;
     using NSubstitute;
     using NUnit.Framework;
@@ -200,7 +201,7 @@ namespace TestCentric.Gui.Presenters
             // Assert testGroup
             TestGroup testGroup = treeNode.Tag as TestGroup;
             Assert.That(testGroup, Is.Not.Null);
-            Assert.That(testGroup.Count, Is.EqualTo(expectedInGroup));
+            Assert.That(testGroup.Count(), Is.EqualTo(expectedInGroup));
         }
 
         private string CreateTestFixtureXml(string testId, string category)

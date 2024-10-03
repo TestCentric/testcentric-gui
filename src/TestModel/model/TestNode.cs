@@ -167,18 +167,8 @@ namespace TestCentric.Gui.Model
 
         public TestSelection Select(TestNodePredicate predicate)
         {
-            return Select(predicate, null);
-        }
-
-        public TestSelection Select(TestNodePredicate predicate, Comparison<TestNode> comparer)
-        {
             var selection = new TestSelection();
-
             Accumulate(selection, this, predicate);
-
-            if (comparer != null)
-                selection.Sort(comparer);
-
             return selection;
         }
 
