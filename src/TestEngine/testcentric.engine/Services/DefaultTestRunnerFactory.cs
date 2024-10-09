@@ -64,6 +64,7 @@ namespace TestCentric.Engine.Services
                     return new ProcessRunner(this.ServiceContext, package);
 
                 case ProcessModel.InProcess:
+                    package.AddSetting(EnginePackageSettings.SelectedAgentName, "inprocess");
                     return base.MakeTestRunner(package);
             }
         }

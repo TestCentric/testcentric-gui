@@ -1,0 +1,7 @@
+﻿<NUnitProject>
+  <Settings processModel="Default" domainUsage="Default" />
+  <Config name="Release" appbase="bin/Release">
+    <assembly path="TestCentric.Gui.Tests.exe" />
+    <assembly path="TestCentric.Gui.Model.Tests.exe" />
+  </Config>
+</NUnitProject>

@@ -13,6 +13,7 @@ using TestCentric.Engine.Internal;
 using NUnit.Engine;
 using TestCentric.Engine.Communication.Transports.Remoting;
 using TestCentric.Engine.Communication.Transports.Tcp;
+using Mono.Cecil;
 
 namespace TestCentric.Engine.Services
 {
@@ -80,6 +81,9 @@ namespace TestCentric.Engine.Services
         {
             var agentId = Guid.NewGuid();
             var process = new AgentProcess(this, package, agentId);
+
+            package.AddSetting(EnginePackageSettings.SelectedAgentName, process.TargetRuntime.Id);
+
             process.Exited += (sender, e) => OnAgentExit((Process)sender, agentId);
 
             process.Start();
