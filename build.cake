@@ -1,5 +1,5 @@
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.2.1-dev00010
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.3.2
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -17,7 +17,6 @@ BuildSettings.Initialize(
 	"TestCentric.Engine",
 	solutionFile: "testcentric-engine.sln",
 	githubRepository: "testcentric-engine"
-	//unitTests: "**/*.tests.exe|**/*.tests.dll"
 );
 
 //////////////////////////////////////////////////////////////////////
@@ -45,13 +44,15 @@ packageTests.Add(new PackageTest(1, "NetCore31Test", "Run mock-assembly.dll targ
     MockAssemblyExpectedResult("Net60AgentLauncher")));
 
 if (!BuildSettings.IsRunningOnAppVeyor)
+{
     packageTests.Add(new PackageTest(1, "NetCore21Test", "Run mock-assembly.dll targeting .NET Core 2.1",
         "engine-tests/netcoreapp2.1/mock-assembly.dll",
         MockAssemblyExpectedResult("Net60AgentLauncher")));
 
-packageTests.Add(new PackageTest(1, "Net50Test", "Run mock-assembly.dll targeting .NET 5.0",
-    "engine-tests/net5.0/mock-assembly.dll",
-    MockAssemblyExpectedResult("Net60AgentLauncher")));
+    packageTests.Add(new PackageTest(1, "Net50Test", "Run mock-assembly.dll targeting .NET 5.0",
+        "engine-tests/net5.0/mock-assembly.dll",
+        MockAssemblyExpectedResult("Net60AgentLauncher")));
+}
 
 packageTests.Add(new PackageTest(1, "Net60Test", "Run mock-assembly.dll targeting .NET 6.0",
     "engine-tests/net6.0/mock-assembly.dll",
@@ -95,12 +96,13 @@ packageTests.Add(new PackageTest(1, "AspNetCore31Test", "Run test using AspNetCo
         Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net60AgentLauncher") }
     }));
 
-packageTests.Add(new PackageTest(1, "AspNetCore50Test", "Run test using AspNetCore under .NET 5.0",
-    "engine-tests/net5.0/aspnetcore-test.dll",
-    new ExpectedResult("Passed")
-    {
-        Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net60AgentLauncher") }
-    }));
+if (!BuildSettings.IsRunningOnAppVeyor)
+    packageTests.Add(new PackageTest(1, "AspNetCore50Test", "Run test using AspNetCore under .NET 5.0",
+        "engine-tests/net5.0/aspnetcore-test.dll",
+        new ExpectedResult("Passed")
+        {
+            Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net60AgentLauncher") }
+        }));
 
 packageTests.Add(new PackageTest(1, "AspNetCore60Test", "Run test using AspNetCore under .NET 6.0",
     "engine-tests/net6.0/aspnetcore-test.dll",
@@ -118,12 +120,13 @@ packageTests.Add(new PackageTest(1, "AspNetCore70Test", "Run test using AspNetCo
 
 // Windows Forms Tests
 
-packageTests.Add(new PackageTest(1, "Net50WindowsFormsTest", "Run test using windows forms under .NET 5.0",
-    "engine-tests/net5.0-windows/windows-forms-test.dll",
-    new ExpectedResult("Passed")
-    {
-        Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net60AgentLauncher") }
-    }));
+if (!BuildSettings.IsRunningOnAppVeyor)
+    packageTests.Add(new PackageTest(1, "Net50WindowsFormsTest", "Run test using windows forms under .NET 5.0",
+        "engine-tests/net5.0-windows/windows-forms-test.dll",
+        new ExpectedResult("Passed")
+        {
+            Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net60AgentLauncher") }
+        }));
 
 packageTests.Add(new PackageTest(1, "Net60WindowsFormsTest", "Run test using windows forms under .NET 6.0",
     "engine-tests/net6.0-windows/windows-forms-test.dll",
