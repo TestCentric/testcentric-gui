@@ -22,16 +22,6 @@ namespace TestCentric.Gui.Model
         }
 
         [Test]
-        public void SortByNameTest()
-        {
-            _selection.Sort((x, y) => x.Name.CompareTo(y.Name));
-
-            Assert.That(_selection[0].Name, Is.EqualTo("Dick"));
-            Assert.That(_selection[1].Name, Is.EqualTo("Harry"));
-            Assert.That(_selection[2].Name, Is.EqualTo("Tom"));
-        }
-
-        [Test]
         public void RemoveTestNode()
         {
             _selection.RemoveId("2");

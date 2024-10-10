@@ -230,7 +230,7 @@ namespace TestCentric.Gui.Presenters
                 var selection = new TestSelection();
 
                 foreach (var node in checkedNodes)
-                    selection.Add(node.Tag as TestNode);
+                    selection.Add(node.Tag as ITestItem);
                 
                 _model.SelectedTests = selection;
             };

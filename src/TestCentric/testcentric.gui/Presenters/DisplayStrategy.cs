@@ -13,6 +13,7 @@ namespace TestCentric.Gui.Presenters
     using Views;
 	using Elements;
     using System.IO;
+    using System.Linq;
 
     /// <summary>
     /// DisplayStrategy is the abstract base for the various
@@ -167,7 +168,7 @@ namespace TestCentric.Gui.Presenters
 
         public string GroupDisplayName(TestGroup group)
         {
-            return string.Format("{0} ({1})", group.Name, group.Count);
+            return string.Format("{0} ({1})", group.Name, group.Count());
         }
 
         public static int CalcImageIndex(ResultState outcome)

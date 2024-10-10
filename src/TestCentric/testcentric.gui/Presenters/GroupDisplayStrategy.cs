@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Presenters
 {
+    using System.Linq;
     using Model;
     using Views;
 
@@ -121,7 +122,7 @@ namespace TestCentric.Gui.Presenters
                 treeNode.Remove();
 
                 // If it was last test in group, remove group
-                if (oldGroup.Count == 0)
+                if (oldGroup.Count() == 0)
                     oldParent.Remove();
                 else // update old group
                 {
@@ -132,12 +133,12 @@ namespace TestCentric.Gui.Presenters
                 newParent.Text = GroupDisplayName(newGroup);
                 newParent.Expand();
 
-                if (newGroup.Count == 1)
+                if (newGroup.Count() == 1)
                 {
                     _view.Clear();
                     TreeNode topNode = null;
                     foreach (var group in _grouping.Groups)
-                        if (group.Count > 0)
+                        if (group.Count() > 0)
                         {
                             Add(group.TreeNode);
                             if (topNode == null)
@@ -188,7 +189,7 @@ namespace TestCentric.Gui.Presenters
                     var treeNode = MakeTreeNode(group, true);
                     group.TreeNode = treeNode;
                     treeNode.Expand();
-                    if (group.Count > 0)
+                    if (group.Count() > 0)
                     {
                         _view.Add(treeNode);
                         if (topNode == null)

@@ -9,6 +9,9 @@ using NSubstitute;
 using TestCentric.Gui.Model;
 using System;
 using System.Runtime.InteropServices;
+using TestCentric.Gui.Views;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace TestCentric.Gui.Presenters.TestTree
 {
@@ -90,6 +93,104 @@ namespace TestCentric.Gui.Presenters.TestTree
 
             // 3. Assert
             Assert.That(_view.DebugContextCommand.Enabled, Is.EqualTo(expectedEnabled));
+        }
+
+        [Test]
+        public void TreeCheckBoxClicked_NoNodeSelected_SelectedTestsInModel_AreEmpty()
+        {
+            // 1. Arrange
+            IList<TreeNode> checkedNodes = new List<TreeNode>();
+            _view.CheckedNodes.Returns(checkedNodes);
+
+            // 2. Act
+            _view.AfterCheck += Raise.Event<TreeNodeActionHandler>((TreeNode)null);
+
+            // 3. Assert
+            TestSelection testSelection = _model.SelectedTests;
+            Assert.That(testSelection, Is.Empty);
+        }
+
+        [Test]
+        public void TreeCheckBoxClicked_TreeNodesAreSelected_AllTests_AreSelected()
+        {
+            // 1. Arrange
+            var treeNode1 = new TreeNode() { Tag = new TestNode("<test-case id='1' />") };
+            var treeNode2 = new TreeNode() { Tag = new TestNode("<test-case id='2' />") };
+
+            IList<TreeNode> checkedNodes = new List<TreeNode>() { treeNode1, treeNode2 };
+            _view.CheckedNodes.Returns(checkedNodes);
+
+            // 2. Act
+            _view.AfterCheck += Raise.Event<TreeNodeActionHandler>((TreeNode)null);
+
+            // 3. Assert
+            TestSelection testSelection = _model.SelectedTests;
+            Assert.That(testSelection.Count(), Is.EqualTo(2));
+        }
+
+        [Test]
+        public void TreeCheckBoxClicked_GroupIsSelected_AllTestsOfGroup_AreSelected()
+        {
+            // 1. Arrange
+            var subTestNode1 = new TestNode("<test-case id='2' />");
+            var subTestNode2 = new TestNode("<test-case id='3' />");
+            var testGroup = new TestGroup("Category_1") {  subTestNode1, subTestNode2 };
+
+            var treeNode1 = new TreeNode() { Tag = testGroup };
+
+            IList<TreeNode> checkedNodes = new List<TreeNode>() { treeNode1 };
+            _view.CheckedNodes.Returns(checkedNodes);
+
+            // 2. Act
+            _view.AfterCheck += Raise.Event<TreeNodeActionHandler>((TreeNode)null);
+
+            // 3. Assert
+            TestSelection testSelection = _model.SelectedTests;
+            Assert.That(testSelection.Count(), Is.EqualTo(2));
+        }
+
+        [Test]
+        public void TreeCheckBoxClicked_TreeNodeAndGroupIsSelected_AllTests_AreSelected()
+        {
+            // 1. Arrange
+            var subTestNode1 = new TestNode("<test-case id='1' />");
+            var subTestNode2 = new TestNode("<test-case id='2' />");
+            var testGroup = new TestGroup("Category_1") { subTestNode1, subTestNode2 };
+
+            var treeNode1 = new TreeNode() { Tag = testGroup };
+            var treeNode2 = new TreeNode() { Tag = new TestNode("<test-case id='3' />") };
+
+            IList<TreeNode> checkedNodes = new List<TreeNode>() { treeNode1, treeNode2 };
+            _view.CheckedNodes.Returns(checkedNodes);
+
+            // 2. Act
+            _view.AfterCheck += Raise.Event<TreeNodeActionHandler>((TreeNode)null);
+
+            // 3. Assert
+            TestSelection testSelection = _model.SelectedTests;
+            Assert.That(testSelection.Count(), Is.EqualTo(3));
+        }
+
+        [Test]
+        public void TreeCheckBoxClicked_TreeNodeInsideGroupIsSelected_AllTests_AreSelected()
+        {
+            // 1. Arrange
+            var subTestNode1 = new TestNode("<test-case id='1' />");
+            var subTestNode2 = new TestNode("<test-case id='2' />");
+            var testGroup = new TestGroup("Category_1") { subTestNode1, subTestNode2 };
+
+            var treeNode1 = new TreeNode() { Tag = testGroup };
+            var treeNode2 = new TreeNode() { Tag = subTestNode1 };
+
+            IList<TreeNode> checkNodes = new List<TreeNode>() { treeNode1, treeNode2 };
+            _view.CheckedNodes.Returns(checkNodes);
+
+            // 2. Act
+            _view.AfterCheck += Raise.Event<TreeNodeActionHandler>((TreeNode)null);
+
+            // 3. Assert
+            TestSelection testSelection = _model.SelectedTests;
+            Assert.That(testSelection.Count(), Is.EqualTo(2));
         }
 
         // TODO: Version 1 Test - Make it work if needed.
