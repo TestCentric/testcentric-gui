@@ -78,6 +78,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aspnetcore-test", "src\test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "windows-forms-test", "src\tests\windows-forms-test\windows-forms-test.csproj", "{51B2B3DC-7EC7-46B4-B51F-53C164F44A4B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{A841D26B-422E-40EF-AE78-019B6BEB5B73}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{8F99EF67-A6E4-4F47-85B6-3B3E683B6A14}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\testcentric-gui-ci.yml = .github\workflows\testcentric-gui-ci.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -156,6 +163,8 @@ Global
 		{A0A0C740-487E-420C-9515-29E0016D05E6} = {0F939442-8450-41CF-8BB7-FAA00866F4E4}
 		{D5D58A65-C6FC-4B93-B6D3-86201D8F8219} = {0F939442-8450-41CF-8BB7-FAA00866F4E4}
 		{51B2B3DC-7EC7-46B4-B51F-53C164F44A4B} = {0F939442-8450-41CF-8BB7-FAA00866F4E4}
+		{A841D26B-422E-40EF-AE78-019B6BEB5B73} = {A65042E1-D8BC-48DD-8DE1-F0991F07EA77}
+		{8F99EF67-A6E4-4F47-85B6-3B3E683B6A14} = {A841D26B-422E-40EF-AE78-019B6BEB5B73}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CDFF439B-8888-4133-8734-86F4F899BC40}
