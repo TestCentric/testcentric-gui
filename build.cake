@@ -75,10 +75,10 @@ var nugetPackage = new NuGetPackage(
 				"Images/Tree/Visual Studio/Success.png", "Images/Tree/Visual Studio/Failure.png", "Images/Tree/Visual Studio/Ignored.png", "Images/Tree/Visual Studio/Inconclusive.png", "Images/Tree/Visual Studio/Skipped.png") )
 		.WithDependencies(
 			KnownExtensions.Net462PluggableAgent.NuGetPackage.LatestDevBuild,
-			KnownExtensions.Net60PluggableAgent.NuGetPackage.LatestRelease,
-			KnownExtensions.Net70PluggableAgent.NuGetPackage.LatestRelease,
-			KnownExtensions.Net80PluggableAgent.NuGetPackage.LatestRelease
-		),
+			KnownExtensions.Net60PluggableAgent.NuGetPackage.LatestDevBuild,
+			KnownExtensions.Net70PluggableAgent.NuGetPackage.LatestDevBuild,
+			KnownExtensions.Net80PluggableAgent.NuGetPackage.LatestDevBuild
+        ),
 	testRunner: new GuiSelfTester(BuildSettings.NuGetTestDirectory + "TestCentric.GuiRunner." + BuildSettings.PackageVersion + "/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
 		HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "testcentric.png"),
@@ -114,10 +114,10 @@ var chocolateyPackage = new ChocolateyPackage(
 				"Images/Tree/Visual Studio/Success.png", "Images/Tree/Visual Studio/Failure.png", "Images/Tree/Visual Studio/Ignored.png", "Images/Tree/Visual Studio/Inconclusive.png", "Images/Tree/Visual Studio/Skipped.png") )
 		.WithDependencies(
 			KnownExtensions.Net462PluggableAgent.ChocoPackage.LatestDevBuild,
-			KnownExtensions.Net60PluggableAgent.ChocoPackage.LatestRelease,
-			KnownExtensions.Net70PluggableAgent.ChocoPackage.LatestRelease,
-			KnownExtensions.Net80PluggableAgent.ChocoPackage.LatestRelease
-		),
+			KnownExtensions.Net60PluggableAgent.ChocoPackage.LatestDevBuild,
+			KnownExtensions.Net70PluggableAgent.ChocoPackage.LatestDevBuild,
+			KnownExtensions.Net80PluggableAgent.ChocoPackage.LatestDevBuild
+        ),
 	testRunner: new GuiSelfTester(BuildSettings.ChocolateyTestDirectory + "testcentric-gui." + BuildSettings.PackageVersion + "/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
 		HasDirectory("tools").WithFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "VERIFICATION.txt", "testcentric.choco.addins").AndFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.choco.addins"),
