@@ -211,7 +211,7 @@ BuildSettings.Packages.Add(new NuGetPackage(
 	tests: packageTests,
 	preloadedExtensions: new [] {
         KnownExtensions.Net462PluggableAgent.NuGetPackage.LatestDevBuild,
-        KnownExtensions.Net60PluggableAgent.NuGetPackage.LatestRelease,
+        KnownExtensions.Net60PluggableAgent.NuGetPackage.LatestDevBuild,
         KnownExtensions.Net70PluggableAgent.NuGetPackage.LatestDevBuild,
         KnownExtensions.Net80PluggableAgent.NuGetPackage.LatestDevBuild }
 ));
