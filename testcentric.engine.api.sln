@@ -27,7 +27,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget", "nuget", "{79FED62B
 		nuget\TestCentric.Engine.Api.nuspec = nuget\TestCentric.Engine.Api.nuspec
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCentric.Engine.Api.Tests", "src\TestCentric.Engine.Api.Tests\TestCentric.Engine.Api.Tests.csproj", "{3A99C7F4-4918-42BC-8364-0618F454B616}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestCentric.Engine.Api.Tests", "src\TestCentric.Engine.Api.Tests\TestCentric.Engine.Api.Tests.csproj", "{3A99C7F4-4918-42BC-8364-0618F454B616}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{4EF13283-256F-4CFE-97B7-2FFFB23145B0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{660649B9-30E3-4A6B-85C8-68CF25097169}"
+	ProjectSection(SolutionItems) = preProject
+		..\TestCentric.InternalTrace\.github\workflows\testcentric-internal-trace.ci.yml = ..\TestCentric.InternalTrace\.github\workflows\testcentric-internal-trace.ci.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +56,8 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{79FED62B-5228-43F8-8DB9-95841F8534B3} = {E5D814AC-758E-4AB0-94F2-465CD467362C}
+		{4EF13283-256F-4CFE-97B7-2FFFB23145B0} = {E5D814AC-758E-4AB0-94F2-465CD467362C}
+		{660649B9-30E3-4A6B-85C8-68CF25097169} = {4EF13283-256F-4CFE-97B7-2FFFB23145B0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4AA81645-C1F0-4C48-A401-63D326070B6E}
