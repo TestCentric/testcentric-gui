@@ -954,7 +954,8 @@ namespace TestCentric.Gui.Presenters
         private void RunSelectedTests()
         {
             var testSelection = _model.SelectedTests;
-            _model.RunTests(testSelection);
+            if (testSelection != null)
+                _model.RunTests(testSelection);
         }
 
         private void RunFailedTests()

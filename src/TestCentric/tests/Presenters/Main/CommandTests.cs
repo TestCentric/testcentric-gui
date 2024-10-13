@@ -250,9 +250,17 @@ namespace TestCentric.Gui.Presenters.Main
         [Test]
         public void RunButton_RunsSelectedTests()
         {
-            // TODO: Specify Results and test with specific argument
+            var testSelection = new TestSelection();
+            _model.SelectedTests = testSelection;
             _view.RunSelectedButton.Execute += Raise.Event<CommandHandler>();
-            _model.Received().RunTests(Arg.Any<TestSelection>());
+            _model.Received().RunTests(testSelection);
+        }
+
+        [Test]
+        public void RunButton_NoTestSelected_DidnotRunTests()
+        {
+            _view.RunSelectedButton.Execute += Raise.Event<CommandHandler>();
+            _model.DidNotReceiveWithAnyArgs().RunTests(Arg.Any<TestSelection>());
         }
 
         [Test]
