@@ -39,7 +39,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="TestCentric.Extensibility.Api" Version="3.0.2-dev00001" />
+		<PackageReference Include="TestCentric.Extensibility.Api" Version="3.0.2-dev00003" />
 		<PackageReference Include="TestCentric.InternalTrace" Version="1.2.1" />
 	</ItemGroup>
 
