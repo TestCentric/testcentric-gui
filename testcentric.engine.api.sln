@@ -33,7 +33,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{4EF1
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{660649B9-30E3-4A6B-85C8-68CF25097169}"
 	ProjectSection(SolutionItems) = preProject
-		..\TestCentric.InternalTrace\.github\workflows\testcentric-internal-trace.ci.yml = ..\TestCentric.InternalTrace\.github\workflows\testcentric-internal-trace.ci.yml
+		.github\workflows\testcentric-engine-api-ci.yml = .github\workflows\testcentric-engine-api-ci.yml
 	EndProjectSection
 EndProject
 Global
