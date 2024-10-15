@@ -21,6 +21,7 @@ namespace TestCentric.Gui.Presenters.Main
             _model.HasResults.Returns(true);
             _model.ResultSummary.Returns(new ResultSummary() { FailureCount = 1 });
             _model.IsTestRunning.Returns(false);
+            _model.SelectedTests.Returns(new TestSelection(new[] { new TestNode("<test-case id='1' />") }));
 
             var resultNode = new ResultNode("<test-run id='XXX' result='Failed' />");
             FireRunFinishedEvent(resultNode);

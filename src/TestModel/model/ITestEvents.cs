@@ -13,6 +13,7 @@ namespace TestCentric.Gui.Model
     public delegate void TestNodeEventHandler(TestNodeEventArgs args);
     public delegate void TestResultEventHandler(TestResultEventArgs args);
     public delegate void TestItemEventHandler(TestItemEventArgs args);
+    public delegate void TestSelectionEventHandler(TestSelectionEventArgs args);
     public delegate void TestOutputEventHandler(TestOutputEventArgs args);
     public delegate void UnhandledExceptionEventHandler(UnhandledExceptionEventArgs args);
     public delegate void TestFilesLoadingEventHandler(TestFilesLoadingEventArgs args);
@@ -57,6 +58,7 @@ namespace TestCentric.Gui.Model
         // Event used to broadcast a change in the selected
         // item, so that all presenters may be notified.
         event TestItemEventHandler SelectedItemChanged;
+        event TestSelectionEventHandler SelectedTestsChanged;
 
         event TestEventHandler CategorySelectionChanged;
     }

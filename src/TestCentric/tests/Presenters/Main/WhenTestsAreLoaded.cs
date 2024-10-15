@@ -22,6 +22,7 @@ namespace TestCentric.Gui.Presenters.Main
 
             TestNode testNode = new TestNode("<test-suite id='1'/>");
             _model.LoadedTests.Returns(testNode);
+            _model.SelectedTests.Returns(new TestSelection(new[] { testNode }));
 
             var project = new TestCentricProject(_model, "dummy.dll");
             _model.TestCentricProject.Returns(project);
