@@ -231,6 +231,8 @@ namespace TestCentric.Gui.Presenters
                 }
             };
 
+            _model.Events.SelectedTestsChanged += (e) => UpdateViewCommands();
+
             _settings.Changed += (s, e) =>
             {
                 switch (e.SettingName)
@@ -754,9 +756,10 @@ namespace TestCentric.Gui.Presenters
             bool hasFailures = _model.HasResults && _model.ResultSummary.FailedCount > 0;
 
             _view.RunAllButton.Enabled =
-            _view.RunSelectedButton.Enabled =
             _view.DisplayFormatButton.Enabled =
             _view.RunParametersButton.Enabled = testLoaded && !testRunning;
+
+            _view.RunSelectedButton.Enabled = testLoaded && !testRunning && _model.SelectedTests != null && _model.SelectedTests.Any();
 
             _view.RerunButton.Enabled = testLoaded && !testRunning && hasResults;
 

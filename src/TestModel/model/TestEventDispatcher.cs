@@ -114,6 +114,11 @@ namespace TestCentric.Gui.Model
             SelectedItemChanged?.Invoke(new TestItemEventArgs(testItem));
         }
 
+        public void FireSelectedTestsChanged(TestSelection testSelection)
+        {
+            SelectedTestsChanged?.Invoke(new TestSelectionEventArgs(testSelection));
+        }
+
         public void FireCategorySelectionChanged()
         {
             CategorySelectionChanged?.Invoke(new TestEventArgs());
@@ -156,6 +161,7 @@ namespace TestCentric.Gui.Model
 
         // Test Selection Event
         public event TestItemEventHandler SelectedItemChanged;
+        public event TestSelectionEventHandler SelectedTestsChanged;
 
         public event TestEventHandler CategorySelectionChanged;
 

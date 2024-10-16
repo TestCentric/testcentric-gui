@@ -250,9 +250,10 @@ namespace TestCentric.Gui.Presenters.Main
         [Test]
         public void RunButton_RunsSelectedTests()
         {
-            // TODO: Specify Results and test with specific argument
+            var testSelection = new TestSelection();
+            _model.SelectedTests = testSelection;
             _view.RunSelectedButton.Execute += Raise.Event<CommandHandler>();
-            _model.Received().RunTests(Arg.Any<TestSelection>());
+            _model.Received().RunTests(testSelection);
         }
 
         [Test]
@@ -308,6 +309,45 @@ namespace TestCentric.Gui.Presenters.Main
         {
             _view.ForceStopButton.Execute += Raise.Event<CommandHandler>();
             _model.Received().StopTestRun(true);
+        }
+
+        [Test]
+        public void RunSelectedTestCommand_NoTestsSelected_IsDisabled()
+        {
+            // Arrange
+            _model.HasTests.Returns(true);
+            _model.SelectedTests = null;
+
+            // Act + Assert
+            Assert.That(_view.RunSelectedButton.Enabled, Is.False);
+        }
+
+        [Test]
+        public void SelectedTestsChanged_NoTestSelected_CommandIsDisabled()
+        {
+            // Arrange
+            _model.HasTests.Returns(true);
+            _model.SelectedTests.Returns(new TestSelection());
+
+            // Act
+            _model.Events.SelectedTestsChanged += Raise.Event<TestSelectionEventHandler>(new TestSelectionEventArgs(null));
+
+            // Assert
+            Assert.That(_view.RunSelectedButton.Enabled, Is.False);
+        }
+
+        [Test]
+        public void SelectedTestsChanged_TestSelected_CommandIsEnabled()
+        {
+            // Arrange
+            _model.HasTests.Returns(true);
+            _model.SelectedTests.Returns(new TestSelection(new[] { new TestNode("<test-case id='1' />") }));
+
+            // Act
+            _model.Events.SelectedTestsChanged += Raise.Event<TestSelectionEventHandler>(new TestSelectionEventArgs(null));
+
+            // Assert
+            Assert.That(_view.RunSelectedButton.Enabled, Is.True);
         }
     }
 }

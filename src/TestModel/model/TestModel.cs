@@ -194,7 +194,12 @@ namespace TestCentric.Gui.Model
         /// <summary>
         ///  Gets or sets the list of selected tests.
         /// </summary>
-        public TestSelection SelectedTests { get; set; }
+        public TestSelection SelectedTests 
+        { 
+            get {  return _selectedTests; }
+            set { _selectedTests = value; _events?.FireSelectedTestsChanged(_selectedTests); }
+        }
+        private TestSelection _selectedTests;
 
         public List<string> SelectedCategories { get; private set; }
 

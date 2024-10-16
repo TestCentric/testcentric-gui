@@ -61,6 +61,16 @@ namespace TestCentric.Gui.Model
         public ITestItem TestItem { get; private set; }
     }
 
+    public class TestSelectionEventArgs : TestEventArgs
+    {
+        public TestSelectionEventArgs(TestSelection testSelection)
+        {
+            TestSelection = testSelection;
+        }
+
+        public TestSelection TestSelection { get; private set; }
+    }
+
     public class TestOutputEventArgs : TestEventArgs
     {
         public TestOutputEventArgs(string testName, string stream, string text)
