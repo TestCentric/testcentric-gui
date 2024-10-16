@@ -5,37 +5,39 @@ public static void DefinePackageTests()
     if (BuildSettings.Context == null)
         throw new Exception("Trying to use BuildSettings before it is initialized");
 
-	// Define Package Tests
+    // Define Package Tests
     //   Level 1 tests are run each time we build the packages
     //   Level 2 tests are run for PRs and when packages will be published
     //   Level 3 tests are run only when publishing a release
 
-	// Tests of single assemblies targeting each runtime we support
+    // Tests of single assemblies targeting each runtime we support
 
-	PackageTests.Add(new PackageTest(1, "Net462Test", "Run net462 mock-assembly.dll under .NET 4.6.2",
-		"net462/mock-assembly.dll",
-		MockAssemblyExpectedResult("Net462AgentLauncher")));
-
-	PackageTests.Add(new PackageTest(1, "Net462X86Test", "Run net462 mock-assembly-x86.dll under .NET 4.6.2",
-		"net462/mock-assembly-x86.dll",
-		MockAssemblyX86ExpectedResult("Net462AgentLauncher")));
-
-	PackageTests.Add(new PackageTest(1, "Net35Test", "Run net35 mock-assembly.dll under .NET 4.6.2",
-	"net35/mock-assembly.dll",
+    PackageTests.Add(new PackageTest(1, "Net462Test", "Run net462 mock-assembly.dll under .NET 4.6.2",
+        "net462/mock-assembly.dll",
         MockAssemblyExpectedResult("Net462AgentLauncher")));
 
-	PackageTests.Add(new PackageTest(1, "Net35X86Test", "Run net35 mock-assembly-x86.dll under .NET 4.6.2",
-	"net35/mock-assembly-x86.dll",
+    PackageTests.Add(new PackageTest(1, "Net462X86Test", "Run net462 mock-assembly-x86.dll under .NET 4.6.2",
+        "net462/mock-assembly-x86.dll",
         MockAssemblyX86ExpectedResult("Net462AgentLauncher")));
 
-	if (!BuildSettings.IsRunningOnAppVeyor)
+    PackageTests.Add(new PackageTest(1, "Net35Test", "Run net35 mock-assembly.dll under .NET 4.6.2",
+    "net35/mock-assembly.dll",
+        MockAssemblyExpectedResult("Net462AgentLauncher")));
+
+    PackageTests.Add(new PackageTest(1, "Net35X86Test", "Run net35 mock-assembly-x86.dll under .NET 4.6.2",
+    "net35/mock-assembly-x86.dll",
+        MockAssemblyX86ExpectedResult("Net462AgentLauncher")));
+
+    if (BuildSettings.IsLocalBuild)
+    {
         PackageTests.Add(new PackageTest(1, "NetCore21Test", "Run .NET Core 2.1 mock-assembly.dll under .NET Core 3.1",
             "netcoreapp2.1/mock-assembly.dll",
             MockAssemblyExpectedResult("Net60AgentLauncher")));
 
-    PackageTests.Add(new PackageTest(1, "NetCore31Test", "Run mock-assembly.dll under .NET Core 3.1",
-        "netcoreapp3.1/mock-assembly.dll",
-        MockAssemblyExpectedResult("Net60AgentLauncher")));
+        PackageTests.Add(new PackageTest(1, "NetCore31Test", "Run mock-assembly.dll under .NET Core 3.1",
+            "netcoreapp3.1/mock-assembly.dll",
+            MockAssemblyExpectedResult("Net60AgentLauncher")));
+    }
 
     //    PackageTests.Add(new PackageTest(1, "NetCore11Test", "Run mock-assembly.dll targeting .NET Core 1.1",
     //        "netcoreapp1.1/mock-assembly.dll",
@@ -50,10 +52,10 @@ public static void DefinePackageTests()
     //Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "netcore-1.1") }
     //        }));
 
-    if (!BuildSettings.IsRunningOnAppVeyor)
-    PackageTests.Add(new PackageTest(1, "Net50Test", "Run mock-assembly.dll under .NET 5.0",
-        "net5.0/mock-assembly.dll",
-        MockAssemblyExpectedResult("Net60AgentLauncher")));
+    if (BuildSettings.IsLocalBuild)
+        PackageTests.Add(new PackageTest(1, "Net50Test", "Run mock-assembly.dll under .NET 5.0",
+            "net5.0/mock-assembly.dll",
+            MockAssemblyExpectedResult("Net60AgentLauncher")));
 
     PackageTests.Add(new PackageTest(1, "Net60Test", "Run mock-assembly.dll under .NET 6.0",
         "net6.0/mock-assembly.dll",
@@ -69,20 +71,22 @@ public static void DefinePackageTests()
 
     // AspNetCore tests
 
-	PackageTests.Add(new PackageTest(1, "AspNetCore31Test", "Run test using AspNetCore under .NET Core 3.1",
-        "netcoreapp3.1/aspnetcore-test.dll",
-        new ExpectedResult("Passed")
-        {
-            Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net60AgentLauncher") }
-        }));
+    if (BuildSettings.IsLocalBuild)
+    {
+        PackageTests.Add(new PackageTest(1, "AspNetCore31Test", "Run test using AspNetCore under .NET Core 3.1",
+            "netcoreapp3.1/aspnetcore-test.dll",
+            new ExpectedResult("Passed")
+            {
+                Assemblies = new[] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net60AgentLauncher") }
+            }));
 
-    if (!BuildSettings.IsRunningOnAppVeyor)
-    PackageTests.Add(new PackageTest(1, "AspNetCore50Test", "Run test using AspNetCore under .NET 5.0",
-        "net5.0/aspnetcore-test.dll",
-        new ExpectedResult("Passed")
-        {
-            Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net60AgentLauncher") }
-        }));
+        PackageTests.Add(new PackageTest(1, "AspNetCore50Test", "Run test using AspNetCore under .NET 5.0",
+            "net5.0/aspnetcore-test.dll",
+            new ExpectedResult("Passed")
+            {
+                Assemblies = new[] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net60AgentLauncher") }
+            }));
+    }
 
     PackageTests.Add(new PackageTest(1, "AspNetCore60Test", "Run test using AspNetCore under .NET 6.0",
         "net6.0/aspnetcore-test.dll",
@@ -100,13 +104,13 @@ public static void DefinePackageTests()
 
 	// Windows Forms Tests
 
-    if (!BuildSettings.IsRunningOnAppVeyor)
-    PackageTests.Add(new PackageTest(1, "Net50WindowsFormsTest", "Run test using windows forms under .NET 5.0",
-        "net5.0-windows/windows-forms-test.dll",
-        new ExpectedResult("Passed")
-        {
-            Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net60AgentLauncher") }
-        }));
+    if (BuildSettings.IsLocalBuild)
+        PackageTests.Add(new PackageTest(1, "Net50WindowsFormsTest", "Run test using windows forms under .NET 5.0",
+            "net5.0-windows/windows-forms-test.dll",
+            new ExpectedResult("Passed")
+            {
+                Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net60AgentLauncher") }
+            }));
 
     PackageTests.Add(new PackageTest(1, "Net60WindowsFormsTest", "Run test using windows forms under .NET 6.0",
         "net6.0-windows/windows-forms-test.dll",
