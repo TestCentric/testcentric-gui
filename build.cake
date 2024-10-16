@@ -4,7 +4,7 @@
 const string REF_ENGINE_VERSION = "2.0.0-dev00023";
 
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.3.2
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.3.3
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -74,10 +74,10 @@ var nugetPackage = new NuGetPackage(
 			new DirectoryContent("tools/Images/Tree/Visual Studio").WithFiles(
 				"Images/Tree/Visual Studio/Success.png", "Images/Tree/Visual Studio/Failure.png", "Images/Tree/Visual Studio/Ignored.png", "Images/Tree/Visual Studio/Inconclusive.png", "Images/Tree/Visual Studio/Skipped.png") )
 		.WithDependencies(
-			KnownExtensions.Net462PluggableAgent.NuGetPackage.LatestDevBuild,
-			KnownExtensions.Net60PluggableAgent.NuGetPackage.LatestDevBuild,
-			KnownExtensions.Net70PluggableAgent.NuGetPackage.LatestDevBuild,
-			KnownExtensions.Net80PluggableAgent.NuGetPackage.LatestDevBuild
+			KnownExtensions.Net462PluggableAgent.SetVersion("2.5.1").NuGetPackage,
+			KnownExtensions.Net60PluggableAgent.SetVersion("2.5.1").NuGetPackage,
+			KnownExtensions.Net70PluggableAgent.SetVersion("2.5.1").NuGetPackage,
+			KnownExtensions.Net80PluggableAgent.SetVersion("2.5.1").NuGetPackage
         ),
 	testRunner: new GuiSelfTester(BuildSettings.NuGetTestDirectory + "TestCentric.GuiRunner." + BuildSettings.PackageVersion + "/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
@@ -113,10 +113,10 @@ var chocolateyPackage = new ChocolateyPackage(
 			new DirectoryContent("tools/Images/Tree/Visual Studio").WithFiles(
 				"Images/Tree/Visual Studio/Success.png", "Images/Tree/Visual Studio/Failure.png", "Images/Tree/Visual Studio/Ignored.png", "Images/Tree/Visual Studio/Inconclusive.png", "Images/Tree/Visual Studio/Skipped.png") )
 		.WithDependencies(
-			KnownExtensions.Net462PluggableAgent.ChocoPackage.LatestDevBuild,
-			KnownExtensions.Net60PluggableAgent.ChocoPackage.LatestDevBuild,
-			KnownExtensions.Net70PluggableAgent.ChocoPackage.LatestDevBuild,
-			KnownExtensions.Net80PluggableAgent.ChocoPackage.LatestDevBuild
+			KnownExtensions.Net462PluggableAgent.SetVersion("2.5.1").ChocoPackage,
+			KnownExtensions.Net60PluggableAgent.SetVersion("2.5.1").ChocoPackage,
+			KnownExtensions.Net70PluggableAgent.SetVersion("2.5.1").ChocoPackage,
+			KnownExtensions.Net80PluggableAgent.SetVersion("2.5.1").ChocoPackage
         ),
 	testRunner: new GuiSelfTester(BuildSettings.ChocolateyTestDirectory + "testcentric-gui." + BuildSettings.PackageVersion + "/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
