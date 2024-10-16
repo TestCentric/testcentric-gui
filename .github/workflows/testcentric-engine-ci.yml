@@ -1,0 +1,11 @@
+﻿name: TestCentric.Engine.CI
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+
+jobs:
+  ContinuousIntegration:
+    uses: TestCentric/TestCentric.Workflows/.github/workflows/testcentric-ci.yml@main
+    secrets: inherit
