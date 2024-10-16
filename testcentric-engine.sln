@@ -50,6 +50,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "windows-forms-test", "src\T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testcentric.engine.tests", "src\TestEngine\testcentric.engine.tests\testcentric.engine.tests.csproj", "{5C9826A6-4A5C-4CE4-9BCE-4C4DB091EECB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{5EF03E03-77C4-4CF0-8FBA-E07025257A1A}"
+	ProjectSection(SolutionItems) = preProject
+		.github\dependabot.yml = .github\dependabot.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{4A075BD7-F73E-42FF-87E6-41A6226B9628}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\testcentric-engine-ci.yml = .github\workflows\testcentric-engine-ci.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -106,6 +116,8 @@ Global
 		{6100F27F-D346-4F18-841E-EEA2BD2CC08E} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
 		{81412379-ABD5-4079-A32A-1C887FA74674} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
 		{5C9826A6-4A5C-4CE4-9BCE-4C4DB091EECB} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
+		{5EF03E03-77C4-4CF0-8FBA-E07025257A1A} = {A65042E1-D8BC-48DD-8DE1-F0991F07EA77}
+		{4A075BD7-F73E-42FF-87E6-41A6226B9628} = {5EF03E03-77C4-4CF0-8FBA-E07025257A1A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CDFF439B-8888-4133-8734-86F4F899BC40}

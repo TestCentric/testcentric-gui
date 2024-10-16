@@ -1,5 +1,5 @@
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.3.2
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.3.3
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -39,12 +39,12 @@ packageTests.Add(new PackageTest(1, "Net35Test", "Run mock-assembly.dll targetin
     "engine-tests/net35/mock-assembly.dll",
     MockAssemblyExpectedResult("Net462AgentLauncher")));
 
-packageTests.Add(new PackageTest(1, "NetCore31Test", "Run mock-assembly.dll targeting .NET Core 3.1",
-    "engine-tests/netcoreapp3.1/mock-assembly.dll",
-    MockAssemblyExpectedResult("Net60AgentLauncher")));
-
-if (!BuildSettings.IsRunningOnAppVeyor)
+if (BuildSettings.IsLocalBuild)
 {
+    packageTests.Add(new PackageTest(1, "NetCore31Test", "Run mock-assembly.dll targeting .NET Core 3.1",
+        "engine-tests/netcoreapp3.1/mock-assembly.dll",
+        MockAssemblyExpectedResult("Net60AgentLauncher")));
+
     packageTests.Add(new PackageTest(1, "NetCore21Test", "Run mock-assembly.dll targeting .NET Core 2.1",
         "engine-tests/netcoreapp2.1/mock-assembly.dll",
         MockAssemblyExpectedResult("Net60AgentLauncher")));
@@ -62,10 +62,9 @@ packageTests.Add(new PackageTest(1, "Net70Test", "Run mock-assembly.dll targetin
     "engine-tests/net7.0/mock-assembly.dll",
     MockAssemblyExpectedResult("Net70AgentLauncher")));
 
-if (!BuildSettings.IsRunningOnAppVeyor)
-    packageTests.Add(new PackageTest(1, "Net80Test", "Run mock-assembly.dll targeting .NET 8.0",
-        "engine-tests/net8.0/mock-assembly.dll",
-        MockAssemblyExpectedResult("Net80AgentLauncher")));
+packageTests.Add(new PackageTest(1, "Net80Test", "Run mock-assembly.dll targeting .NET 8.0",
+    "engine-tests/net8.0/mock-assembly.dll",
+    MockAssemblyExpectedResult("Net80AgentLauncher")));
 
 static ExpectedResult MockAssemblyExpectedResult(params string[] agentNames)
 {
@@ -89,20 +88,22 @@ static ExpectedResult MockAssemblyExpectedResult(params string[] agentNames)
 
 // AspNetCore Tests
 
-packageTests.Add(new PackageTest(1, "AspNetCore31Test", "Run test using AspNetCore under .NET Core 3.1",
-    "engine-tests/netcoreapp3.1/aspnetcore-test.dll",
-    new ExpectedResult("Passed")
-    {
-        Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net60AgentLauncher") }
-    }));
+if (BuildSettings.IsLocalBuild)
+{
+    packageTests.Add(new PackageTest(1, "AspNetCore31Test", "Run test using AspNetCore under .NET Core 3.1",
+        "engine-tests/netcoreapp3.1/aspnetcore-test.dll",
+        new ExpectedResult("Passed")
+        {
+            Assemblies = new[] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net60AgentLauncher") }
+        }));
 
-if (!BuildSettings.IsRunningOnAppVeyor)
     packageTests.Add(new PackageTest(1, "AspNetCore50Test", "Run test using AspNetCore under .NET 5.0",
         "engine-tests/net5.0/aspnetcore-test.dll",
         new ExpectedResult("Passed")
         {
-            Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net60AgentLauncher") }
+            Assemblies = new[] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net60AgentLauncher") }
         }));
+}
 
 packageTests.Add(new PackageTest(1, "AspNetCore60Test", "Run test using AspNetCore under .NET 6.0",
     "engine-tests/net6.0/aspnetcore-test.dll",
@@ -120,7 +121,7 @@ packageTests.Add(new PackageTest(1, "AspNetCore70Test", "Run test using AspNetCo
 
 // Windows Forms Tests
 
-if (!BuildSettings.IsRunningOnAppVeyor)
+if (BuildSettings.IsLocalBuild)
     packageTests.Add(new PackageTest(1, "Net50WindowsFormsTest", "Run test using windows forms under .NET 5.0",
         "engine-tests/net5.0-windows/windows-forms-test.dll",
         new ExpectedResult("Passed")
@@ -210,10 +211,10 @@ BuildSettings.Packages.Add(new NuGetPackage(
 	},
 	tests: packageTests,
 	preloadedExtensions: new [] {
-        KnownExtensions.Net462PluggableAgent.NuGetPackage.LatestDevBuild,
-        KnownExtensions.Net60PluggableAgent.NuGetPackage.LatestDevBuild,
-        KnownExtensions.Net70PluggableAgent.NuGetPackage.LatestDevBuild,
-        KnownExtensions.Net80PluggableAgent.NuGetPackage.LatestDevBuild }
+        KnownExtensions.Net462PluggableAgent.SetVersion("2.5.1").NuGetPackage,
+        KnownExtensions.Net60PluggableAgent.SetVersion("2.5.1").NuGetPackage,
+        KnownExtensions.Net70PluggableAgent.SetVersion("2.5.1").NuGetPackage,
+        KnownExtensions.Net80PluggableAgent.SetVersion("2.5.1").NuGetPackage }
 ));
 
 //////////////////////////////////////////////////////////////////////

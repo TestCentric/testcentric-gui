@@ -4,6 +4,7 @@
 // ***********************************************************************
 
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using TestCentric.Engine.Internal;
@@ -95,15 +96,9 @@ namespace TestCentric.Engine.Services
         {
             try
             {
-                
-                _extensionManager = new ExtensionManager(ENGINE_ASSEMBLY, ENGINE_API_ASSEMBLY)
-                {
-                    DefaultTypeExtensionPrefix = "/TestCentric/Engine/TypeExtensions/",
-                    InitialAddinsDirectory = ENGINE_DIRECTORY
-                };                   
-                
-                _extensionManager.Initialize();
-
+                _extensionManager = new ExtensionManager("/TestCentric/Engine/TypeExtensions/");
+                _extensionManager.FindExtensionPoints(ENGINE_ASSEMBLY, ENGINE_API_ASSEMBLY);
+                _extensionManager.FindExtensions(ENGINE_DIRECTORY);
                 Status = ServiceStatus.Started;
             }
             catch
