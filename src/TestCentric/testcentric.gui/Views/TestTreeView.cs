@@ -42,6 +42,7 @@ namespace TestCentric.Gui.Views
             DebugContextCommand = new CommandMenuElement(this.debugMenuItem);
             ActiveConfiguration = new PopupMenuElement(this.activeConfigMenuItem);
             ShowCheckBoxes = new CheckedMenuElement(showCheckboxesMenuItem);
+            ShowTestDuration = new CheckedMenuElement(showTestDurationMenuItem);
             ExpandAllCommand = new CommandMenuElement(expandAllMenuItem);
             CollapseAllCommand = new CommandMenuElement(collapseAllMenuItem);
             CollapseToFixturesCommand = new CommandMenuElement(collapseToFixturesMenuItem);
@@ -115,6 +116,7 @@ namespace TestCentric.Gui.Views
         public ICommand DebugContextCommand { get; private set; }
         public IToolStripMenu ActiveConfiguration { get; private set; }
         public IChecked ShowCheckBoxes { get; private set; }
+        public IChecked ShowTestDuration { get; private set; }
         public ICommand ExpandAllCommand { get; private set; }
         public ICommand CollapseAllCommand { get; private set; }
         public ICommand CollapseToFixturesCommand { get; private set; }

@@ -49,5 +49,11 @@ namespace TestCentric.Gui.Presenters
         /// Collapse all tree nodes beneath the fixture nodes
         /// </summary>
         void CollapseToFixtures();
+
+        /// <summary>
+        /// Update all tree node names
+        /// If setting 'ShowDuration' is active and test results are available, show test duration in tree node.
+        /// </summary>
+        void UpdateTreeNodeNames();
     }
 }

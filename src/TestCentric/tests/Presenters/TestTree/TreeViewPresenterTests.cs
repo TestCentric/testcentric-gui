@@ -12,6 +12,7 @@ using System.Runtime.InteropServices;
 using TestCentric.Gui.Views;
 using System.Collections.Generic;
 using System.Linq;
+using TestCentric.Gui.Elements;
 
 namespace TestCentric.Gui.Presenters.TestTree
 {
@@ -33,6 +34,20 @@ namespace TestCentric.Gui.Presenters.TestTree
             _model.Settings.Gui.TestTree.AlternateImageSet = imageSet;
 
             Assert.That(_view.AlternateImageSet, Is.EqualTo(imageSet));
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void WhenContextMenu_ShowTestDuration_IsClicked_SettingsIsUpdated(bool showTestDuration)
+        {
+            // 1. Arrange
+            _view.ShowTestDuration.Checked = showTestDuration;
+
+            // 2. Act
+            _view.ShowTestDuration.CheckedChanged += Raise.Event<CommandHandler>();
+
+            // 3. Assert
+            Assert.That(_model.Settings.Gui.TestTree.ShowTestDuration, Is.EqualTo(showTestDuration));
         }
 
         [Test]
