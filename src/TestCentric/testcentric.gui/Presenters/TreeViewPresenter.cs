@@ -42,6 +42,7 @@ namespace TestCentric.Gui.Presenters
             _treeSettings = _model.Settings.Gui.TestTree;
 
             _view.ShowCheckBoxes.Checked = _view.CheckBoxes = _treeSettings.ShowCheckBoxes;
+            _view.ShowTestDuration.Checked = _treeSettings.ShowTestDuration;
             _view.AlternateImageSet = _treeSettings.AlternateImageSet;
 
             WireUpEvents();
@@ -152,6 +153,12 @@ namespace TestCentric.Gui.Presenters
             _view.ShowCheckBoxes.CheckedChanged += () =>
             {
                 _view.CheckBoxes = _view.ShowCheckBoxes.Checked;
+            };
+
+            _view.ShowTestDuration.CheckedChanged += () =>
+            {
+                _treeSettings.ShowTestDuration = _view.ShowTestDuration.Checked;
+                Strategy?.UpdateTreeNodeNames();
             };
 
             _view.RunContextCommand.Execute += () =>

@@ -40,6 +40,7 @@ namespace TestCentric.Gui.Views
             this.activeConfigMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.showCheckboxesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showTestDurationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.expandAllMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.collapseAllMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.collapseToFixturesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -71,6 +72,7 @@ namespace TestCentric.Gui.Views
             this.activeConfigMenuItem,
             this.contextMenuSeparator2,
             this.showCheckboxesMenuItem,
+            this.showTestDurationMenuItem,
             this.expandAllMenuItem,
             this.collapseAllMenuItem,
             this.collapseToFixturesMenuItem});
@@ -124,6 +126,13 @@ namespace TestCentric.Gui.Views
             this.showCheckboxesMenuItem.Size = new System.Drawing.Size(190, 22);
             this.showCheckboxesMenuItem.Text = "Show Checkboxes";
             // 
+            // showTestDurationMenuItem
+            // 
+            this.showTestDurationMenuItem.CheckOnClick = true;
+            this.showTestDurationMenuItem.Name = "showTestDurationMenuItem";
+            this.showTestDurationMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.showTestDurationMenuItem.Text = "Show Test Duration";
+            // 
             // expandAllMenuItem
             // 
             this.expandAllMenuItem.Name = "expandAllMenuItem";
@@ -174,6 +183,7 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.ToolStripMenuItem collapseToFixturesMenuItem;
         private System.Windows.Forms.ImageList treeImages;
         private System.Windows.Forms.ToolStripMenuItem showCheckboxesMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showTestDurationMenuItem;
         private System.Windows.Forms.ToolStripMenuItem debugMenuItem;
         private System.Windows.Forms.ToolStripMenuItem activeConfigMenuItem;
         private System.Windows.Forms.ToolStripSeparator contextMenuSeparator2;

@@ -24,6 +24,13 @@ namespace TestCentric.Gui.Presenters.TestTree
             _view.ShowCheckBoxes.Received().Checked = showCheckBoxes;
         }
 
+        [Test]
+        public void ShowTestDurationIsSet()
+        {
+            bool showTestDuration = _settings.Gui.TestTree.ShowTestDuration;
+            _view.ShowTestDuration.Received().Checked = showTestDuration;
+        }
+
         //[Test]
         //public void StrategyIsSet()
         //{

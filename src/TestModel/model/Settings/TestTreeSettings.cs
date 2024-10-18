@@ -38,6 +38,12 @@ namespace TestCentric.Gui.Model.Settings
             set { SaveSetting(nameof(ShowCheckBoxes), value); }
         }
 
+        public bool ShowTestDuration
+        {
+            get { return GetSetting(nameof(ShowTestDuration), false); }
+            set { SaveSetting(nameof(ShowTestDuration), value); }
+        }
+
         public string DisplayFormat
         {
             get { return GetSetting(nameof(DisplayFormat), "NUNIT_TREE"); }
