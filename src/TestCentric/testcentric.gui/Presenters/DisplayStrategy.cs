@@ -81,12 +81,16 @@ namespace TestCentric.Gui.Presenters
         {
             int imageIndex = CalcImageIndex(result.Outcome);
             foreach (TreeNode treeNode in GetTreeNodesForTest(result))
+            {
                 _view.SetImageIndex(treeNode, imageIndex);
+                UpdateTreeNodeName(treeNode);
+            }
         }
 
         public virtual void OnTestRunStarting()
         {
             _view.ResetAllTreeNodeImages();
+            UpdateTreeNodeNames();
         }
 
         public virtual void OnTestRunFinished()
@@ -132,7 +136,8 @@ namespace TestCentric.Gui.Presenters
 
         public TreeNode MakeTreeNode(TestNode testNode, bool recursive)
         {
-            TreeNode treeNode = new TreeNode(testNode.Name);
+            string treeNodeName = GetTestNodeDisplayName(testNode);
+            TreeNode treeNode = new TreeNode(treeNodeName);
             treeNode.Tag = testNode;
 
             int imageIndex = TestTreeView.SkippedIndex;
@@ -169,6 +174,46 @@ namespace TestCentric.Gui.Presenters
         public string GroupDisplayName(TestGroup group)
         {
             return string.Format("{0} ({1})", group.Name, group.Count());
+        }
+
+        private string GetTestNodeDisplayName(TestNode testNode)
+        {
+            string treeNodeName = testNode.Name;
+
+            // Check if test result is available for this node
+            ResultNode result = _model.GetResultForTest(testNode.Id);
+            if (_settings.Gui.TestTree.ShowTestDuration && result != null)
+                treeNodeName = testNode.Name + $" [{result.Duration:0.000}s]";
+
+            return treeNodeName;
+        }
+
+        /// <summary>
+        /// Update all tree node names
+        /// If setting 'ShowDuration' is active and test results are available, show test duration in tree node.
+        /// </summary>
+        public void UpdateTreeNodeNames()
+        {
+            UpdateTreeNodeNames(_view.Nodes);
+        }
+
+        private void UpdateTreeNodeNames(TreeNodeCollection nodes)
+        {
+            foreach (TreeNode treeNode in nodes)
+            {
+                UpdateTreeNodeName(treeNode);
+                UpdateTreeNodeNames(treeNode.Nodes);
+            }
+        }
+
+        private void UpdateTreeNodeName(TreeNode treeNode)
+        {
+            TestNode testNode = treeNode.Tag as TestNode;           // Update for TestFixture or Testcase nodes only
+            if (testNode == null)
+                return;
+
+            string treeNodeName = GetTestNodeDisplayName(testNode);
+            _view.InvokeIfRequired(() => treeNode.Text = treeNodeName);
         }
 
         public static int CalcImageIndex(ResultState outcome)
