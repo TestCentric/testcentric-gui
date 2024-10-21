@@ -30,6 +30,12 @@ namespace TestCentric.Gui
             DisplayStrategy = strategyID;
         }
 
+        public VisualState(string strategyID, bool showNamespace)
+        {
+            DisplayStrategy = strategyID;
+            ShowNamespace = showNamespace;
+        }
+
         public VisualState(string strategyID, string groupID)
         {
             if (strategyID == "NUNIT_TREE")
@@ -52,6 +58,8 @@ namespace TestCentric.Gui
 
         //[XmlAttribute, DefaultValue(false)]
         public bool ShowCheckBoxes;
+
+        public bool ShowNamespace;
 
         // TODO: Categories not yet supported
         //public List<string> SelectedCategories;
@@ -250,6 +258,7 @@ namespace TestCentric.Gui
             // GroupBy is null for NUnitTree strategy, otherwise required
             if (GroupBy == null && strategy != "NUNIT_TREE") GroupBy = "ASSEMBLY";
             ShowCheckBoxes = reader.GetAttribute("ShowCheckBoxes") == "True";
+            ShowNamespace = reader.GetAttribute("ShowNamespace") == "True";
 
             while (reader.Read())
             {
@@ -364,7 +373,9 @@ namespace TestCentric.Gui
                 writer.WriteAttributeString("GroupBy", GroupBy);
             if (ShowCheckBoxes)
                 writer.WriteAttributeString("ShowCheckBoxes", "True");
-            
+            if (ShowNamespace)
+                writer.WriteAttributeString("ShowNamespace", "True");
+
             WriteVisualTreeNodes(Nodes);
 
             void WriteVisualTreeNodes(List<VisualTreeNode> nodes)

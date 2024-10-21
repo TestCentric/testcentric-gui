@@ -68,6 +68,7 @@ namespace TestCentric.Gui
                 Assert.That(docElement.Name, Is.EqualTo("VisualState"));
                 Assert.That(docElement.GetAttribute("DisplayStrategy"), Is.EqualTo(vs.DisplayStrategy));
                 Assert.That(docElement.GetAttribute("ShowCheckBoxes"), Is.EqualTo(vs.ShowCheckBoxes ? "True" : ""));
+                Assert.That(docElement.GetAttribute("ShowNamespace"), Is.EqualTo(vs.ShowNamespace ? "True" : ""));
                 Assert.That(firstChild.Name, Is.EqualTo("Nodes"));
                 Assert.That(topNodes.Count, Is.EqualTo(vs.Nodes.Count));
                 for (int i = 0; i < topNodes.Count; i++)
@@ -146,6 +147,14 @@ namespace TestCentric.Gui
                         "NUNIT_TREE",
                         checkBoxes: true))
                     .SetName("NUnitTree_EmptyWithOneAttribute)");
+
+                yield return new TestCaseData(
+                    VisualStateTestData.CreateVisualState(
+                        "NUNIT_TREE",
+                        null,
+                        checkBoxes: true,
+                        showNamespace: true))
+                    .SetName("NUnitTree_EmptyWithTwoAttributes)");
 
                 yield return new TestCaseData(
                     VisualStateTestData.CreateVisualState(

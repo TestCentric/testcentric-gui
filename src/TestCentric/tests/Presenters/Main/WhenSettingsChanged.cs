@@ -44,5 +44,16 @@ namespace TestCentric.Gui.Presenters.Main
             // 2. Assert
             _view.GroupBy.SelectedItem = groupBy;
         }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void ShowNamespace_SettingChanged_MenuItemIsUpdated(bool showNamespace)
+        {
+            // 1. Act
+            _settings.Gui.TestTree.ShowNamespace = showNamespace;
+
+            // 2. Assert
+            _view.ShowNamespace.Checked = showNamespace;
+        }
     }
 }

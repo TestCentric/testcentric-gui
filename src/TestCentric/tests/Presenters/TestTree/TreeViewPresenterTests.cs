@@ -27,6 +27,21 @@ namespace TestCentric.Gui.Presenters.TestTree
             Assert.That(_view.ShowCheckBoxes.Checked, Is.EqualTo(showCheckBoxSetting));
         }
 
+        [TestCase(true)]
+        [TestCase(false)]
+        public void WhenSettingsAreChanged_ShowNamespace_StrategyIsReloaed(bool showNamespace)
+        {
+            ITreeDisplayStrategy strategy = Substitute.For<ITreeDisplayStrategy>();
+            _treeDisplayStrategyFactory.Create(null, null, null).ReturnsForAnyArgs(strategy);
+            _model.Settings.Gui.TestTree.DisplayFormat = "NUNIT_TREE";
+
+            // Act
+            _model.Settings.Gui.TestTree.ShowNamespace = showNamespace;
+
+            // Assert
+            strategy.Received(2).Reload();
+        }
+
         [TestCase("Default")]
         [TestCase("VisualStudio")]
         public void WhenSettingsAreChanged_AlternateImageSet_NewSettingIsApplied(string imageSet)

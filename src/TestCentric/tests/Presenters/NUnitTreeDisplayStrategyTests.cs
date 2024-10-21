@@ -180,6 +180,156 @@ namespace TestCentric.Gui.Presenters.TestTree
             // Assert
             Assert.That(treeNode.Text, Does.Match(@"Test1"));
         }
+
+        [Test]
+        public void OnTestLoaded_Namespaces_AreShown_NamespaceNodes_AreCreated()
+        {
+            // Arrange
+            _settings.Gui.TestTree.ShowNamespace = true;
+            string xml = 
+                "<test-suite type='Assembly' id='1-1030' name='Library.Test.dll'>" +
+                    "<test-suite type='TestSuite' id='1-1031' name='Library'>" +
+                    "</test-suite>" +
+                "</test-suite>";
+
+            // Act
+            _strategy.OnTestLoaded(new TestNode(xml), null);
+
+            // Assert
+            _view.Received().Add(Arg.Compat.Is<TreeNode>(tn => (tn.Tag as TestNode).Id == "1-1031"));
+        }
+
+        [Test]
+        public void OnTestLoaded_Namespaces_AreNotShown_NamespaceNodes_AreNotCreated()
+        {
+            // Arrange
+            _settings.Gui.TestTree.ShowNamespace = false;
+            string xml =
+                "<test-suite type='Assembly' id='1-1030' name='Library.Test.dll'>" +
+                    "<test-suite type='TestSuite' id='1-1031' name='Library'>" +
+                    "</test-suite>" +
+                "</test-suite>";
+
+            // Act
+            _strategy.OnTestLoaded(new TestNode(xml), null);
+
+            // Assert
+            _view.DidNotReceive().Add(Arg.Compat.Is<TreeNode>(tn => (tn.Tag as TestNode).Id == "1-1031"));
+        }
+
+        [Test]
+        public void OnTestLoaded_NamespacesNodes_ContainingOneNamespace_AreFolded()
+        {
+            // Arrange
+            string xml =
+                "<test-suite type='Assembly' id='1-1030' name='Library.Test.dll'>" +
+                    "<test-suite type='TestSuite' id='1-1031' name='Library'>" +
+                        "<test-suite type='TestSuite' id='1-1032' name='Test'>" +
+                            "<test-suite type='TestSuite' id='1-1033' name='Folder'>" +
+                            "</test-suite>" +
+                        "</test-suite>" +
+                    "</test-suite>" +
+                "</test-suite>";
+
+            TreeNode treeNode = null;
+            _view.Add(Arg.Do<TreeNode>(tn => treeNode = tn));
+
+            // Act
+            _strategy.OnTestLoaded(new TestNode(xml), null);
+
+            // Assert
+            Assert.That((treeNode.Tag as TestNode).Id, Is.EqualTo("1-1033"));
+            Assert.That(treeNode.Text, Is.EqualTo("Library.Test.Folder"));
+            Assert.That(treeNode.Nodes.Count, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void OnTestLoaded_NamespacesNode_ContainingTwoNamespaces_AreNotFolded()
+        {
+            // Arrange
+            string xml =
+                "<test-suite type='Assembly' id='1-1030' name='Library.Test.dll'>" +
+                    "<test-suite type='TestSuite' id='1-1031' name='Library'>" +
+                        @"<test-suite type='TestSuite' id='1-1032' name='Test' />" +
+                        @"<test-suite type='TestSuite' id='1-1033' name='Folder' />" +
+                    "</test-suite>" +
+                "</test-suite>";
+
+            TreeNode treeNode = null;
+            _view.Add(Arg.Do<TreeNode>(tn => treeNode = tn));
+
+            // Act
+            _strategy.OnTestLoaded(new TestNode(xml), null);
+
+            // Assert
+            Assert.That((treeNode.Tag as TestNode).Id, Is.EqualTo("1-1031"));
+            Assert.That(treeNode.Text, Is.EqualTo("Library"));
+
+            var child1 = treeNode.Nodes[0];
+            Assert.That((child1.Tag as TestNode).Id, Is.EqualTo("1-1032"));
+            Assert.That(child1.Text, Is.EqualTo("Test"));
+
+            var child2 = treeNode.Nodes[1];
+            Assert.That((child2.Tag as TestNode).Id, Is.EqualTo("1-1033"));
+            Assert.That(child2.Text, Is.EqualTo("Folder"));
+        }
+
+        [Test]
+        public void OnTestLoaded_SetupFixtureNode_ContainingOneNamespace_AreFolded()
+        {
+            // Arrange
+            string xml =
+                "<test-suite type='Assembly' id='1-1030' name='Library.Test.dll'>" +
+                    "<test-suite type='SetUpFixture' id='1-1031' name='Library'>" +
+                        "<test-suite type='TestSuite' id='1-1032' name='Test'>" +
+                            "<test-suite type='SetUpFixture' id='1-1033' name='Folder'>" +
+                            "</test-suite>" +
+                        "</test-suite>" +
+                    "</test-suite>" +
+                "</test-suite>";
+
+            TreeNode treeNode = null;
+            _view.Add(Arg.Do<TreeNode>(tn => treeNode = tn));
+
+            // Act
+            _strategy.OnTestLoaded(new TestNode(xml), null);
+
+            // Assert
+            Assert.That((treeNode.Tag as TestNode).Id, Is.EqualTo("1-1033"));
+            Assert.That(treeNode.Text, Is.EqualTo("Library.Test.Folder"));
+            Assert.That(treeNode.Nodes.Count, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void OnTestLoaded_SetupFixtureNode_ContainingTwoNamespaces_AreNotFolded()
+        {
+            // Arrange
+            string xml =
+                "<test-suite type='Assembly' id='1-1030' name='Library.Test.dll'>" +
+                    "<test-suite type='SetUpFixture' id='1-1031' name='Library'>" +
+                        @"<test-suite type='TestSuite' id='1-1032' name='Test' />" +
+                        @"<test-suite type='TestSuite' id='1-1033' name='Folder' />" +
+                    "</test-suite>" +
+                "</test-suite>";
+
+            TreeNode treeNode = null;
+            _view.Add(Arg.Do<TreeNode>(tn => treeNode = tn));
+
+            // Act
+            _strategy.OnTestLoaded(new TestNode(xml), null);
+
+            // Assert
+            Assert.That((treeNode.Tag as TestNode).Id, Is.EqualTo("1-1031"));
+            Assert.That(treeNode.Text, Is.EqualTo("Library"));
+
+            var child1 = treeNode.Nodes[0];
+            Assert.That((child1.Tag as TestNode).Id, Is.EqualTo("1-1032"));
+            Assert.That(child1.Text, Is.EqualTo("Test"));
+
+            var child2 = treeNode.Nodes[1];
+            Assert.That((child2.Tag as TestNode).Id, Is.EqualTo("1-1033"));
+            Assert.That(child2.Text, Is.EqualTo("Folder"));
+        }
     }
 
 

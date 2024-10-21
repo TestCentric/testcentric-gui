@@ -349,5 +349,19 @@ namespace TestCentric.Gui.Presenters.Main
             // Assert
             Assert.That(_view.RunSelectedButton.Enabled, Is.True);
         }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void ShowNamespaceChanged_ChangesModelSetting(bool isChecked)
+        {
+            // Arrange
+            _view.ShowNamespace.Checked.Returns(isChecked);
+
+            // Act
+            _view.ShowNamespace.CheckedChanged += Raise.Event<CommandHandler>();
+
+            // Assert
+            Assert.That(_model.Settings.Gui.TestTree.ShowNamespace, Is.EqualTo(isChecked));
+        }
     }
 }

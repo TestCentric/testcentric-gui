@@ -128,6 +128,7 @@ namespace TestCentric.Gui.Presenters
                         }
                     case "TestCentric.Gui.TestTree.TestList.GroupBy":
                     case "TestCentric.Gui.TestTree.FixtureList.GroupBy":
+                    case "TestCentric.Gui.TestTree.ShowNamespace":
                         Strategy?.Reload();
                         break;
                     case "TestCentric.Gui.TestTree.ShowCheckBoxes":
@@ -283,6 +284,8 @@ namespace TestCentric.Gui.Presenters
             {
                 _treeSettings.FixtureList.GroupBy = visualState.GroupBy;
             }
+
+            _treeSettings.ShowNamespace = visualState.ShowNamespace;
         }
 
         private void EnsureNonRunnableFilesAreVisible(TestNode testNode)

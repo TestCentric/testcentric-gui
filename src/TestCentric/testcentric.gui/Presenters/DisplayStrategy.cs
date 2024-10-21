@@ -176,14 +176,19 @@ namespace TestCentric.Gui.Presenters
             return string.Format("{0} ({1})", group.Name, group.Count());
         }
 
+        protected virtual string GetTestNodeName(TestNode testNode)
+        {
+            return testNode.Name;
+        }
+
         private string GetTestNodeDisplayName(TestNode testNode)
         {
-            string treeNodeName = testNode.Name;
+            string treeNodeName = GetTestNodeName(testNode);
 
             // Check if test result is available for this node
             ResultNode result = _model.GetResultForTest(testNode.Id);
             if (_settings.Gui.TestTree.ShowTestDuration && result != null)
-                treeNodeName = testNode.Name + $" [{result.Duration:0.000}s]";
+                treeNodeName += $" [{result.Duration:0.000}s]";
 
             return treeNodeName;
         }
