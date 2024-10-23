@@ -133,6 +133,8 @@ namespace TestCentric.Gui
                 case "NUNIT_TREE":
                     return  CreateVisualState(
                         DisplayStrategy,
+                        null,
+                        true,
                         true,
                         VTN("Assembly1", EXP + TOP,
                             VTN("NUnit", EXP,
@@ -351,6 +353,11 @@ namespace TestCentric.Gui
         }
 
         public static VisualState CreateVisualState(string strategy, string grouping, bool checkBoxes = false, params VisualTreeNode[] visualTreeNodes)
+        {
+            return CreateVisualState(strategy, grouping, checkBoxes, false, visualTreeNodes);
+        }
+
+        public static VisualState CreateVisualState(string strategy, string grouping, bool checkBoxes = false, bool showNamespace = false, params VisualTreeNode[] visualTreeNodes)
         {
             VisualState visualState;
 

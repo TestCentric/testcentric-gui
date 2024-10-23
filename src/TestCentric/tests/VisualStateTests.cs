@@ -139,6 +139,7 @@ namespace TestCentric.Gui
             Assert.Multiple(() =>
             {
                 Assert.That(restoredState.ShowCheckBoxes, Is.EqualTo(visualState.ShowCheckBoxes));
+                Assert.That(restoredState.ShowNamespace, Is.EqualTo(visualState.ShowNamespace));
                 // TODO: Categories not yet supported
                 //Assert.AreEqual(ExpectedVisualState.SelectedCategories, restoredState.SelectedCategories);
                 //Assert.AreEqual(ExpectedVisualState.ExcludeCategories, restoredState.ExcludeCategories);

@@ -136,7 +136,7 @@ namespace TestCentric.Gui.Presenters
 
         public TreeNode MakeTreeNode(TestNode testNode, bool recursive)
         {
-            string treeNodeName = GetTestNodeDisplayName(testNode);
+            string treeNodeName = GetTreeNodeDisplayName(testNode);
             TreeNode treeNode = new TreeNode(treeNodeName);
             treeNode.Tag = testNode;
 
@@ -176,14 +176,19 @@ namespace TestCentric.Gui.Presenters
             return string.Format("{0} ({1})", group.Name, group.Count());
         }
 
-        private string GetTestNodeDisplayName(TestNode testNode)
+        protected virtual string GetTreeNodeName(TestNode testNode)
         {
-            string treeNodeName = testNode.Name;
+            return testNode.Name;
+        }
+
+        private string GetTreeNodeDisplayName(TestNode testNode)
+        {
+            string treeNodeName = GetTreeNodeName(testNode);
 
             // Check if test result is available for this node
             ResultNode result = _model.GetResultForTest(testNode.Id);
             if (_settings.Gui.TestTree.ShowTestDuration && result != null)
-                treeNodeName = testNode.Name + $" [{result.Duration:0.000}s]";
+                treeNodeName += $" [{result.Duration:0.000}s]";
 
             return treeNodeName;
         }
@@ -212,7 +217,7 @@ namespace TestCentric.Gui.Presenters
             if (testNode == null)
                 return;
 
-            string treeNodeName = GetTestNodeDisplayName(testNode);
+            string treeNodeName = GetTreeNodeDisplayName(testNode);
             _view.InvokeIfRequired(() => treeNode.Text = treeNodeName);
         }
 

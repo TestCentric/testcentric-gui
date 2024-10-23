@@ -86,6 +86,44 @@ namespace TestCentric.Gui.Presenters.TestTree
             Assert.That(_view.ShowCheckBoxes.Checked, Is.EqualTo(showCheckBox));
         }
 
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TestLoaded_NoVisualState_ShowNamespace_IsAppliedFromSettings(bool showNamespace)
+        {
+            // Arrange: adapt settings
+            _model.Settings.Gui.TestTree.ShowNamespace = showNamespace;
+
+            // Act: load tests
+            TestNode testNode = new TestNode("<test-suite id='1'/>");
+            _model.LoadedTests.Returns(testNode);
+            FireTestLoadedEvent(testNode);
+
+            // Assert
+            Assert.That(_model.Settings.Gui.TestTree.ShowNamespace, Is.EqualTo(showNamespace));
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TestLoaded_WithVisualState_ShowNamespace_IsAppliedFromVisualState(bool showNamespace)
+        {
+            // Arrange: Create and save VisualState file
+            VisualState visualState = new VisualState();
+            visualState.ShowNamespace = showNamespace;
+            string fileName = VisualState.GetVisualStateFileName(TestFileName);
+            visualState.Save(fileName);
+
+            var tv = new TreeView();
+            _view.TreeView.Returns(tv);
+
+            // Act: Load tests
+            TestNode testNode = new TestNode("<test-suite id='1'/>");
+            _model.LoadedTests.Returns(testNode);
+            FireTestLoadedEvent(testNode);
+
+            // Assert
+            Assert.That(_settings.Gui.TestTree.ShowNamespace, Is.EqualTo(showNamespace));
+        }
+
         [TestCase("NUNIT_TREE", typeof(NUnitTreeDisplayStrategy))]
         [TestCase("FIXTURE_LIST", typeof(FixtureListDisplayStrategy))]
         [TestCase("TEST_LIST", typeof(TestListDisplayStrategy))]

@@ -265,6 +265,9 @@ namespace TestCentric.Gui.Presenters
                     case "TestCentric.Gui.TestTree.FixtureList.GroupBy":
                         _view.GroupBy.SelectedItem = _settings.Gui.TestTree.FixtureList.GroupBy;
                         break;
+                    case "TestCentric.Gui.TestTree.ShowNamespace":
+                        _view.ShowNamespace.SelectedIndex = _settings.Gui.TestTree.ShowNamespace ? 0 : 1;
+                        break;
                 }
             };
 
@@ -487,6 +490,11 @@ namespace TestCentric.Gui.Presenters
             _view.DisplayFormat.SelectionChanged += () =>
             {
                 _settings.Gui.TestTree.DisplayFormat = _view.DisplayFormat.SelectedItem;
+            };
+
+            _view.ShowNamespace.SelectionChanged += () =>
+            {
+                _settings.Gui.TestTree.ShowNamespace = _view.ShowNamespace.SelectedIndex == 0;
             };
 
             _view.GroupBy.SelectionChanged += () =>
@@ -945,6 +953,9 @@ namespace TestCentric.Gui.Presenters
                     _view.GroupBy.SelectedItem = _settings.Gui.TestTree.FixtureList.GroupBy;
                     break;
             }
+
+            _view.ShowNamespace.SelectedIndex = _settings.Gui.TestTree.ShowNamespace ? 0 : 1;
+            _view.ShowNamespace.Enabled = displayFormat == "NUNIT_TREE";
         }
 
         private void RunAllTests()
