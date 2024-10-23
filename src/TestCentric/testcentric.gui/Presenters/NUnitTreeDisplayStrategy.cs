@@ -48,13 +48,13 @@ namespace TestCentric.Gui.Presenters
 
         protected override VisualState CreateVisualState() => new VisualState("NUNIT_TREE", _settings.Gui.TestTree.ShowNamespace).LoadFrom(_view.TreeView);
 
-        protected override string GetTestNodeName(TestNode testNode)
+        protected override string GetTreeNodeName(TestNode testNode)
         {
             // For folded namespace nodes use the combined name of all folded nodes ("Library.Test.Folder")
             if (_foldedNodeNames.TryGetValue(testNode, out var name)) 
                 return name;
 
-            return base.GetTestNodeName(testNode);
+            return base.GetTreeNodeName(testNode);
         }
 
         private TreeNode CreateNUnitTreeNode(TreeNode parentNode, TestNode testNode)
@@ -64,9 +64,18 @@ namespace TestCentric.Gui.Presenters
             if (ShowTreeNodeType(testNode))
             {
                 if (IsNamespaceNode(testNode))
-                    testNode = GetFoldedNamespaceNode(testNode);
+                {
+                    // Get list of all namespace nodes which can be folded
+                    // And get name of folded namespaces and store in dictionary for later usage
+                    IList<TestNode> foldedNodes = FoldNamespaceNodes(testNode);
+                    _foldedNodeNames[foldedNodes.First()] = GetFoldedNamespaceName(foldedNodes);
 
-                treeNode = MakeTreeNode(testNode, false);
+                    treeNode = MakeTreeNode(foldedNodes.First(), false);    // Create TreeNode representing the first node
+                    testNode = foldedNodes.Last();                          // But proceed building up tree with last node
+                }
+                else
+                    treeNode = MakeTreeNode(testNode, false);
+
                 parentNode?.Nodes.Add(treeNode);
                 parentNode = treeNode;
             }
@@ -89,17 +98,6 @@ namespace TestCentric.Gui.Presenters
                 return _settings.Gui.TestTree.ShowNamespace;
 
             return true;
-        }
-
-        private TestNode GetFoldedNamespaceNode(TestNode testNode)
-        {
-            // Get list of all namespace nodes which can be folded
-            IList<TestNode> foldedNodes = FoldNamespaceNodes(testNode);
-
-            // Get name of folded namespaces and store in dictionary for later usage
-            TestNode resultNode = foldedNodes.Last();
-            _foldedNodeNames[resultNode] = GetFoldedNamespaceName(foldedNodes);
-            return resultNode;
         }
 
         private string GetFoldedNamespaceName(IList<TestNode> foldedNamespaces)

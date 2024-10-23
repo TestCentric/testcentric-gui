@@ -45,15 +45,15 @@ namespace TestCentric.Gui.Presenters.Main
             _view.GroupBy.SelectedItem = groupBy;
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void ShowNamespace_SettingChanged_MenuItemIsUpdated(bool showNamespace)
+        [TestCase(true, 0)]
+        [TestCase(false, 1)]
+        public void ShowNamespace_SettingChanged_MenuItemIsUpdated(bool showNamespace, int expectedMenuIndex)
         {
             // 1. Act
             _settings.Gui.TestTree.ShowNamespace = showNamespace;
 
             // 2. Assert
-            _view.ShowNamespace.Checked = showNamespace;
+            _view.ShowNamespace.SelectedIndex = expectedMenuIndex;
         }
     }
 }

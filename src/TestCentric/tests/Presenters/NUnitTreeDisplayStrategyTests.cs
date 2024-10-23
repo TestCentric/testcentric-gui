@@ -238,7 +238,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             _strategy.OnTestLoaded(new TestNode(xml), null);
 
             // Assert
-            Assert.That((treeNode.Tag as TestNode).Id, Is.EqualTo("1-1033"));
+            Assert.That((treeNode.Tag as TestNode).Id, Is.EqualTo("1-1031"));
             Assert.That(treeNode.Text, Is.EqualTo("Library.Test.Folder"));
             Assert.That(treeNode.Nodes.Count, Is.EqualTo(0));
         }
@@ -295,7 +295,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             _strategy.OnTestLoaded(new TestNode(xml), null);
 
             // Assert
-            Assert.That((treeNode.Tag as TestNode).Id, Is.EqualTo("1-1033"));
+            Assert.That((treeNode.Tag as TestNode).Id, Is.EqualTo("1-1031"));
             Assert.That(treeNode.Text, Is.EqualTo("Library.Test.Folder"));
             Assert.That(treeNode.Nodes.Count, Is.EqualTo(0));
         }

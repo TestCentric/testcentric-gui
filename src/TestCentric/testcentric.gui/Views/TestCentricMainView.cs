@@ -88,6 +88,7 @@ namespace TestCentric.Gui.Views
         private ToolStripMenuItem fixtureListMenuItem;
         private ToolStripMenuItem testListMenuItem;
         private ToolStripMenuItem nunitTreeShowNamespaceMenuItem;
+        private ToolStripMenuItem nunitTreeHideNamespaceMenuItem;
         private ToolStripSeparator toolStripSeparator13;
         private ToolStripMenuItem byAssemblyMenuItem;
         private ToolStripMenuItem byFixtureMenuItem;
@@ -176,7 +177,7 @@ namespace TestCentric.Gui.Views
             GroupBy = new CheckedToolStripMenuGroup(
                 "testGrouping",
                 byAssemblyMenuItem, byFixtureMenuItem, byCategoryMenuItem, byOutcomeMenuItem, byDurationMenuItem);
-            ShowNamespace = new CheckedMenuElement(nunitTreeShowNamespaceMenuItem);
+            ShowNamespace = new CheckedToolStripMenuGroup("showNamespace", nunitTreeShowNamespaceMenuItem, nunitTreeHideNamespaceMenuItem);
             RunParametersButton = new ToolStripButtonElement(runParametersButton);
             RunSummaryButton = new CheckBoxElement(runSummaryButton);
 
@@ -220,6 +221,7 @@ namespace TestCentric.Gui.Views
             this.fixtureListMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testListMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nunitTreeShowNamespaceMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nunitTreeHideNamespaceMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
             this.byAssemblyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.byFixtureMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -415,7 +417,15 @@ namespace TestCentric.Gui.Views
             this.nunitTreeShowNamespaceMenuItem.Name = "NUNIT_TREE_SHOW_NAMESPACE";
             this.nunitTreeShowNamespaceMenuItem.Size = new System.Drawing.Size(198, 22);
             this.nunitTreeShowNamespaceMenuItem.Tag = "NUNIT_TREE_SHOW_NAMESPACE";
-            this.nunitTreeShowNamespaceMenuItem.Text = "Namespace";
+            this.nunitTreeShowNamespaceMenuItem.Text = "Show Namespace";
+
+            // 
+            // nunitTreeHideNamespaceMenuItem
+            // 
+            this.nunitTreeHideNamespaceMenuItem.Name = "NUNIT_TREE_HIDE_NAMESPACE";
+            this.nunitTreeHideNamespaceMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.nunitTreeHideNamespaceMenuItem.Tag = "NUNIT_TREE_HIDE_NAMESPACE";
+            this.nunitTreeHideNamespaceMenuItem.Text = "Hide Namespace";
 
             // 
             // nunitTreeMenuItem
@@ -424,7 +434,7 @@ namespace TestCentric.Gui.Views
             this.nunitTreeMenuItem.Size = new System.Drawing.Size(198, 22);
             this.nunitTreeMenuItem.Tag = "NUNIT_TREE";
             this.nunitTreeMenuItem.Text = "NUnit Tree";
-            nunitTreeMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { nunitTreeShowNamespaceMenuItem });
+            nunitTreeMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { nunitTreeShowNamespaceMenuItem, nunitTreeHideNamespaceMenuItem });
 
             // 
             // fixtureListMenuItem
@@ -1138,7 +1148,7 @@ namespace TestCentric.Gui.Views
         public IViewElement DisplayFormatButton { get; private set; }
         public ISelection DisplayFormat { get; private set; }
         public ISelection GroupBy { get; private set; }
-        public IChecked ShowNamespace { get; private set; }
+        public ISelection ShowNamespace { get; private set; }
         public ICommand RunParametersButton { get; private set; }
 
         public IChecked RunSummaryButton { get; private set; }
