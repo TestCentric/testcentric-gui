@@ -38,7 +38,8 @@ namespace TestCentric.Gui.Presenters
             _foldedNodeNames.Clear();
 
             foreach (var topLevelNode in testNode.Children)
-                _view.Add(CreateNUnitTreeNode(null, topLevelNode));
+                if (topLevelNode.IsVisible)
+                    _view.Add(CreateNUnitTreeNode(null, topLevelNode));
 
             if (visualState != null)
                 visualState.ApplyTo(_view.TreeView);
@@ -81,9 +82,8 @@ namespace TestCentric.Gui.Presenters
             }
 
             foreach (TestNode child in testNode.Children)
-            {
-                CreateNUnitTreeNode(parentNode, child);
-            }
+                if (child.IsVisible)
+                    CreateNUnitTreeNode(parentNode, child);
 
             return treeNode;
         }

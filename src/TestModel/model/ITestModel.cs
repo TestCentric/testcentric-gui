@@ -88,6 +88,11 @@ namespace TestCentric.Gui.Model
 
         TestFilter CategoryFilter { get; }
 
+        /// <summary>
+        /// Provides filter functionality: by outcome, by duration, by category...
+        /// </summary>
+        ITestCentricTestFilter TestCentricTestFilter { get; }
+
         #endregion
 
         #region Methods

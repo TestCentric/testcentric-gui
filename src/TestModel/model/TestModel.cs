@@ -56,6 +56,7 @@ namespace TestCentric.Gui.Model
             RecentFiles = new RecentFiles(_settingsService);
 
             Services = new TestServices(testEngine);
+            TestCentricTestFilter = new TestCentricTestFilter(this, () => _events.FireTestFilterChanged());
 
             AvailableAgents = new List<string>(
                 Services.TestAgentService.GetAvailableAgents().Select((a) => a.AgentName));
@@ -206,6 +207,8 @@ namespace TestCentric.Gui.Model
         public bool ExcludeSelectedCategories { get; private set; }
 
         public TestFilter CategoryFilter { get; private set; } = TestFilter.Empty;
+
+        public ITestCentricTestFilter TestCentricTestFilter { get; private set; }
 
         #endregion
 
