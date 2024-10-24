@@ -61,5 +61,6 @@ namespace TestCentric.Gui.Model
         event TestSelectionEventHandler SelectedTestsChanged;
 
         event TestEventHandler CategorySelectionChanged;
+        event TestEventHandler TestFilterChanged;
     }
 }
