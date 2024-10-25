@@ -124,6 +124,11 @@ namespace TestCentric.Gui.Model
             CategorySelectionChanged?.Invoke(new TestEventArgs());
         }
 
+        public void FireTestFilterChanged()
+        {
+            TestFilterChanged?.Invoke(new TestEventArgs());
+        }
+
         #endregion
 
         #region ITestEvents Implementation
@@ -164,6 +169,7 @@ namespace TestCentric.Gui.Model
         public event TestSelectionEventHandler SelectedTestsChanged;
 
         public event TestEventHandler CategorySelectionChanged;
+        public event TestEventHandler TestFilterChanged;
 
         #endregion
 

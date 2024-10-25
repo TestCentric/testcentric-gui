@@ -33,6 +33,7 @@ namespace TestCentric.Gui.Model
 
         public TestNode(XmlNode xmlNode)
         {
+            IsVisible = true;
             Xml = xmlNode;
 
             // It's a quirk of the test engine that the test-run element does;
@@ -76,6 +77,10 @@ namespace TestCentric.Gui.Model
         public bool IsAssembly => Type == "Assembly";
         public bool IsProject => Type == "Project";
 
+        /// <summary>
+        /// Controls if the TestNode should be visible or hidden in the TestTree
+        /// </summary>
+        public bool IsVisible { get; set; }
         public int TestCount => IsSuite ? GetAttribute("testcasecount", 0) : 1;
         public RunState RunState => GetRunState();
 
