@@ -16,5 +16,15 @@ namespace TestCentric.Gui.Model
         /// Filters the loaded TestNodes by outcome
         /// </summary>
         IEnumerable<string> OutcomeFilter { get; set; }
+
+        string TextFilter { get; set; }
+
+        IEnumerable<string> CategoryFilter { get; set; }
+
+        IEnumerable<string> AllCategories { get; }
+
+        void ClearAllFilters();
+
+        void Init();
     }
 }

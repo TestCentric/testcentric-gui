@@ -17,6 +17,8 @@ namespace TestCentric.Gui.Presenters
     using System.Drawing;
     using System.IO;
     using TestCentric.Gui.Controls;
+    using System.Linq;
+    using TestCentric.Gui.Elements;
 
     /// <summary>
     /// TreeViewPresenter is the presenter for the TestTreeView
@@ -44,6 +46,9 @@ namespace TestCentric.Gui.Presenters
             _view.ShowCheckBoxes.Checked = _view.CheckBoxes = _treeSettings.ShowCheckBoxes;
             _view.ShowTestDuration.Checked = _treeSettings.ShowTestDuration;
             _view.AlternateImageSet = _treeSettings.AlternateImageSet;
+
+            // TEMP HACK: 
+            (_view.FilterByCategory as ToolStripFilterByCategoryButton).InitModel(_model);
 
             WireUpEvents();
         }
@@ -246,6 +251,33 @@ namespace TestCentric.Gui.Presenters
                     selection.Add(node.Tag as ITestItem);
                 
                 _model.SelectedTests = selection;
+            };
+
+            _view.OutcomeFilter.SelectionChanged += () =>
+            {
+                var filter = _view.OutcomeFilter.SelectedItems;
+                _model.TestCentricTestFilter.OutcomeFilter = filter;
+            };
+
+            _view.TextFilter.SelectionChanged += () =>
+            {
+                var text = _view.TextFilter.Text;
+                _model.TestCentricTestFilter.TextFilter = text;
+            };
+
+            _view.FilterByCategory.SelectionChanged += () =>
+            {
+                _model.TestCentricTestFilter.CategoryFilter = _view.FilterByCategory.SelectedItems;
+            };
+
+            _view.ClearAllFilterCommand.Execute += () =>
+            {
+                _model.TestCentricTestFilter.ClearAllFilters();
+
+                _view.TextFilter.Text = "";
+                _view.OutcomeFilter.SelectedItems = _model.TestCentricTestFilter.OutcomeFilter;
+                _view.FilterByCategory.SelectedItems = _model.TestCentricTestFilter.CategoryFilter;
+
             };
 
             // Node selected in tree

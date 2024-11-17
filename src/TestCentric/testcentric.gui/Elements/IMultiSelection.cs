@@ -3,25 +3,20 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
+using System.Collections.Generic;
+
 namespace TestCentric.Gui.Elements
 {
     /// <summary>
-    /// The ISelection interface represents a single UI element
-    /// or a group of elements that allow the user to select one
-    /// of a set of items.
+    /// The IMultiSelection interface represents a group of UI elements
+    /// that allow the user to select a set of items.
     /// </summary>
-    public interface ISelection : IViewElement
+    public interface IMultiSelection : IViewElement
     {
         /// <summary>
-        /// Gets or sets the index of the currently selected item
+        /// Gets or sets the string values of the currently selected items
         /// </summary>
-        int SelectedIndex { get; set; }
-
-        /// <summary>
-        /// Gets or sets the string value of the currently selected item
-        /// </summary>
-        string SelectedItem { get; set; }
-        bool Enabled { get; set; }
+        IEnumerable<string> SelectedItems { get; set; }
 
         /// <summary>
         /// Refresh selection if possible, otherwise noop

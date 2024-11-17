@@ -13,6 +13,7 @@ namespace TestCentric.Gui.Views
     using System;
     using System.Collections.Generic;
     using Elements;
+    using TestCentric.Gui.Dialogs;
 
     public partial class TestTreeView : UserControl, ITestTreeView
     {
@@ -48,8 +49,18 @@ namespace TestCentric.Gui.Views
             CollapseToFixturesCommand = new CommandMenuElement(collapseToFixturesMenuItem);
             TestPropertiesCommand = new CommandMenuElement(testPropertiesMenuItem);
             ViewAsXmlCommand = new CommandMenuElement(viewAsXmlMenuItem);
-
+            OutcomeFilter = new CheckedOutcomeButtonGroup(new[] { filterOutcomeAllButton, filterOutcomePassedButton, filterOutcomeFailedButton, filterOutcomeNotRunButton });
+            TextFilter = new ToolStripTextBoxElement(filterTextBox);
+            FilterByCategory = new ToolStripFilterByCategoryButton(filterByCategory);
+            ClearAllFilterCommand = new ToolStripButtonElement(filterClearAllButton);
             TreeView = treeView;
+
+            LoadOutcomeFilterImages();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TestTreeView));
+            //filterOutcomeAllButton.ImageScaling = ToolStripItemImageScaling.None;
+            filterOutcomeAllButton.Image = (Image)resources.GetObject("select-all-small");
+
+            filterClearAllButton.Image = (Image)resources.GetObject("delete-small");
 
             // NOTE: We use MouseDown here rather than MouseUp because
             // the menu strip Opening event occurs before MouseUp.
@@ -124,6 +135,12 @@ namespace TestCentric.Gui.Views
         public ICommand ViewAsXmlCommand { get; private set; }
 
         public TreeView TreeView { get; private set; }
+
+        public IMultiSelection OutcomeFilter {  get; private set; }
+        public IMultiSelection FilterByCategory { get; private set; }
+        public ISelection TextFilter { get; private set; }
+        public ICommand ClearAllFilterCommand { get; private set; }
+
         public TreeNode ContextNode { get; private set; }
         public ContextMenuStrip TreeContextMenu => TreeView.ContextMenuStrip;
 
@@ -210,6 +227,21 @@ namespace TestCentric.Gui.Views
                 LoadAlternateImage(index, imageNames[index], imageDir);
             this.Invalidate();
             this.Refresh();
+
+            LoadOutcomeFilterImages();
+        }
+
+        private void LoadOutcomeFilterImages()
+        {
+            if (string.IsNullOrEmpty(AlternateImageSet))
+                return;
+
+            string imageDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                Path.Combine("Images", Path.Combine("Tree", AlternateImageSet)));
+
+            filterOutcomeFailedButton.Image = LoadAlternateImage("Failure", imageDir);
+            filterOutcomePassedButton.Image = LoadAlternateImage("Success", imageDir);
+            filterOutcomeNotRunButton.Image = LoadAlternateImage("Skipped", imageDir);
         }
 
         #endregion
@@ -218,6 +250,13 @@ namespace TestCentric.Gui.Views
 
         private void LoadAlternateImage(int index, string name, string imageDir)
         {
+            Image image = LoadAlternateImage(name, imageDir);
+            if (image != null)
+                treeImages.Images[index] = image;
+        }
+
+        private Image LoadAlternateImage(string name, string imageDir)
+        {
             string[] extensions = { ".png", ".jpg" };
 
             foreach (string ext in extensions)
@@ -225,10 +264,11 @@ namespace TestCentric.Gui.Views
                 string filePath = Path.Combine(imageDir, name + ext);
                 if (File.Exists(filePath))
                 {
-                    treeImages.Images[index] = Image.FromFile(filePath);
-                    break;
+                    return Image.FromFile(filePath);
                 }
             }
+
+            return null;
         }
 
         private IList<TreeNode> GetCheckedNodes()

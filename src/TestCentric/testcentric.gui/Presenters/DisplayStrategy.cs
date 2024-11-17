@@ -101,10 +101,11 @@ namespace TestCentric.Gui.Presenters
         // changes. May need to distinguish these cases.
         public void Reload()
         {
+            var visualState = CreateVisualState();
             TestNode testNode = _model.LoadedTests;
             if (testNode != null)
             {
-                OnTestLoaded(testNode, null);
+                OnTestLoaded(testNode, visualState);
 
                 if (_view.Nodes != null) // TODO: Null when mocked
                     foreach (TreeNode treeNode in _view.Nodes)

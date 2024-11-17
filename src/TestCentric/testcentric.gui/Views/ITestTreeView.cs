@@ -35,6 +35,12 @@ namespace TestCentric.Gui.Views
         ICommand TestPropertiesCommand { get; }
         ICommand ViewAsXmlCommand { get; }
 
+        IMultiSelection OutcomeFilter { get; }
+        IMultiSelection FilterByCategory { get; }
+        ISelection TextFilter { get; }
+
+        ICommand ClearAllFilterCommand { get; }
+
         // Tree Properties
         ContextMenuStrip TreeContextMenu { get; }
 
