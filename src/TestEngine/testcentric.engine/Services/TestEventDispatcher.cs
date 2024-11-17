@@ -32,6 +32,7 @@ namespace TestCentric.Engine.Services
 
         public void InitializeForRun()
         {
+            _runCancelled = false;
             _workItemTracker.Clear();
             _allItemsComplete.Reset();
             Listeners = new List<ITestEventListener>(_listenerExtensions);

@@ -204,6 +204,9 @@ namespace TestCentric.Engine.Runners
                 {
                     log.Error("Failed to stop the remote run. {0}", ExceptionHelper.BuildMessageAndStackTrace(e));
                 }
+
+                _agent = null;
+                _remoteRunner = null;
             }
         }
 
