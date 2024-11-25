@@ -28,7 +28,7 @@
         <PackageReference Include="NSubstitute" Version="5.3.0" />
 	    <PackageReference Include="NUnit" Version="4.1.0" />
 	    <PackageReference Include="NUnitLite" Version="4.1.0" />
-	    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+	    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.6.0" />
     </ItemGroup>
 	
 </Project>
