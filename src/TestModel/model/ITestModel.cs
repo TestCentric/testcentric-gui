@@ -11,6 +11,7 @@ namespace TestCentric.Gui.Model
     using TestCentric.Engine;
     using Services;
     using Settings;
+    using TestCentric.Gui.Model.Filter;
 
     public interface ITestModel : IDisposable
     {
