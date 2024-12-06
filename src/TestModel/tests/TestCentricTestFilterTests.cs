@@ -9,6 +9,7 @@ using System.Linq;
 using NSubstitute;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
+using TestCentric.Gui.Model.Filter;
 
 namespace TestCentric.Gui.Model
 {
@@ -85,7 +86,7 @@ namespace TestCentric.Gui.Model
 
             // Assert
             Assert.That(allCategories.Count(), Is.EqualTo(1));
-            Assert.That(allCategories, Contains.Item(TestCentricTestFilter.NoCategory));
+            Assert.That(allCategories, Contains.Item(CategoryFilter.NoCategory));
         }
 
         [Test]
@@ -104,7 +105,7 @@ namespace TestCentric.Gui.Model
             // Assert
             Assert.That(allCategories.Count(), Is.EqualTo(2));
             Assert.That(allCategories, Contains.Item("Feature_1"));
-            Assert.That(allCategories, Contains.Item(TestCentricTestFilter.NoCategory));
+            Assert.That(allCategories, Contains.Item(CategoryFilter.NoCategory));
         }
 
         [Test]
@@ -128,11 +129,11 @@ namespace TestCentric.Gui.Model
             var allCategories = testFilter.AllCategories;
             Assert.That(allCategories.Count(), Is.EqualTo(2));
             Assert.That(allCategories, Contains.Item("Feature_1"));
-            Assert.That(allCategories, Contains.Item(TestCentricTestFilter.NoCategory));
+            Assert.That(allCategories, Contains.Item(CategoryFilter.NoCategory));
 
             var outcomeFilter = testFilter.OutcomeFilter;
             Assert.That(outcomeFilter.Count, Is.EqualTo(1));
-            Assert.That(outcomeFilter, Contains.Item(TestCentricTestFilter.AllOutcome));
+            Assert.That(outcomeFilter, Contains.Item(OutcomeFilter.AllOutcome));
 
             Assert.That(testFilter.TextFilter, Is.Empty);
         }
@@ -141,11 +142,11 @@ namespace TestCentric.Gui.Model
     {
                 new object[] { new List<string>() { "Passed" },  new List<string>() { "3-1000", "3-1001", "3-1010", "3-1011", "3-1012", "3-1020", "3-1022" } },
                 new object[] { new List<string>() { "Failed" }, new List<string>() { "3-1000", "3-1001", "3-1020", "3-1021" } },
-                new object[] { new List<string>() { TestCentricTestFilter.NotRunOutcome }, new List<string>() { "3-1000", "3-1001", "3-1030", "3-1031", "3-1032" } },
-                new object[] { new List<string>() { "Passed", TestCentricTestFilter.NotRunOutcome }, new List<string>() { "3-1000", "3-1001", "3-1010", "3-1011", "3-1012", "3-1020", "3-1022", "3-1030", "3-1031", "3-1032" } },
+                new object[] { new List<string>() { OutcomeFilter.NotRunOutcome }, new List<string>() { "3-1000", "3-1001", "3-1030", "3-1031", "3-1032" } },
+                new object[] { new List<string>() { "Passed", OutcomeFilter.NotRunOutcome }, new List<string>() { "3-1000", "3-1001", "3-1010", "3-1011", "3-1012", "3-1020", "3-1022", "3-1030", "3-1031", "3-1032" } },
                 new object[] { new List<string>() { "Passed", "Failed" }, new List<string>() { "3-1000", "3-1001", "3-1010", "3-1011", "3-1012", "3-1020", "3-1022", "3-1020", "3-1021" } },
-                new object[] { new List<string>() { TestCentricTestFilter.NotRunOutcome, "Failed" }, new List<string>() { "3-1000", "3-1001", "3-1030", "3-1031", "3-1032", "3-1020", "3-1021" } },
-                new object[] { new List<string>() { TestCentricTestFilter.AllOutcome }, new List<string>() { "3-1000", "3-1001", "3-1010", "3-1011", "3-1012", "3-1020", "3-1021", "3-1022", "3-1030", "3-1031", "3-1032" } },
+                new object[] { new List<string>() { OutcomeFilter.NotRunOutcome, "Failed" }, new List<string>() { "3-1000", "3-1001", "3-1030", "3-1031", "3-1032", "3-1020", "3-1021" } },
+                new object[] { new List<string>() { OutcomeFilter.AllOutcome }, new List<string>() { "3-1000", "3-1001", "3-1010", "3-1011", "3-1012", "3-1020", "3-1021", "3-1022", "3-1030", "3-1031", "3-1032" } },
             };
 
         [Test]
@@ -184,11 +185,11 @@ namespace TestCentric.Gui.Model
 {
                 new object[] { new List<string>() { "Passed" },  new List<string>() { "3-1000", "3-1000", "3-1110", "3-1111", "3-1112", "3-1200", "3-1210", "3-1212" } },
                 new object[] { new List<string>() { "Failed" }, new List<string>() { "3-1000", "3-1200", "3-1210", "3-1211", "3-1400", "3-1411" } },
-                new object[] { new List<string>() { TestCentricTestFilter.NotRunOutcome }, new List<string>() { "3-1000", "3-1300", "3-1310", "3-1311", "3-1400", "3-1410", "3-1412" } },
-                new object[] { new List<string>() { "Passed", TestCentricTestFilter.NotRunOutcome }, new List<string>() { "3-1000", "3-1100", "3-1110", "3-1111", "3-1112", "3-1200", "3-1212", "3-1300", "3-1310", "3-1311", "3-1312", "3-1400", "3-1410", "3-1412" } },
+                new object[] { new List<string>() { OutcomeFilter.NotRunOutcome }, new List<string>() { "3-1000", "3-1300", "3-1310", "3-1311", "3-1400", "3-1410", "3-1412" } },
+                new object[] { new List<string>() { "Passed", OutcomeFilter.NotRunOutcome }, new List<string>() { "3-1000", "3-1100", "3-1110", "3-1111", "3-1112", "3-1200", "3-1212", "3-1300", "3-1310", "3-1311", "3-1312", "3-1400", "3-1410", "3-1412" } },
                 new object[] { new List<string>() { "Passed", "Failed" }, new List<string>() { "3-1000", "3-1100", "3-1110", "3-1111", "3-1112", "3-1200", "3-1210", "3-1211", "3-1212", "3-1400", "3-1411" } },
-                new object[] { new List<string>() { TestCentricTestFilter.NotRunOutcome, "Failed" }, new List<string>() { "3-1000", "3-1200", "3-1210", "3-1211", "3-1300", "3-1310", "3-1311", "3-1312", "3-1400", "3-1410", "3-1411", "3-1412" } },
-                new object[] { new List<string>() { TestCentricTestFilter.AllOutcome }, new List<string>() { "3-1000", "3-1100", "3-1110", "3-1111", "3-1112", "3-1200", "3-1210", "3-1211", "3-1212", "3-1300", "3-1310", "3-1311", "3-1312", "3-1400", "3-1410", "3-1411", "3-1412" } },
+                new object[] { new List<string>() { OutcomeFilter.NotRunOutcome, "Failed" }, new List<string>() { "3-1000", "3-1200", "3-1210", "3-1211", "3-1300", "3-1310", "3-1311", "3-1312", "3-1400", "3-1410", "3-1411", "3-1412" } },
+                new object[] { new List<string>() { OutcomeFilter.AllOutcome }, new List<string>() { "3-1000", "3-1100", "3-1110", "3-1111", "3-1112", "3-1200", "3-1210", "3-1211", "3-1212", "3-1300", "3-1310", "3-1311", "3-1312", "3-1400", "3-1410", "3-1411", "3-1412" } },
             };
 
         [Test]
@@ -284,8 +285,8 @@ namespace TestCentric.Gui.Model
             new object[] { new[] { "Category_1", "Category_2" }, new List<string>() { "3-1100", "3-1000", "3-1110", "3-1111", "3-1112", "3-1200", "3-1211", "3-1300", "3-1311", "3-1312" } },
             new object[] { new[] { "Category_2" }, new List<string>() { "3-1000", "3-1100", "3-1110", "3-1111", "3-1112", "3-1200", "3-1211", "3-1300", "3-1312" } },
             new object[] { new[] { "Category_3" }, new List<string>() { "3-1000", "3-1300", "3-1320", "3-1321" } },
-            new object[] { new[] { "Category_3", TestCentricTestFilter.NoCategory }, new List<string>() { "3-1000", "3-1200", "3-1210", "3-1212", "3-1300", "3-1320", "3-1321", "3-1322" } },
-            new object[] { new[] { TestCentricTestFilter.NoCategory }, new List<string>() { "3-1000", "3-1200", "3-1210", "3-1212", "3-1300", "3-1320", "3-1322" } },
+            new object[] { new[] { "Category_3", CategoryFilter.NoCategory }, new List<string>() { "3-1000", "3-1200", "3-1210", "3-1212", "3-1300", "3-1320", "3-1321", "3-1322" } },
+            new object[] { new[] { CategoryFilter.NoCategory }, new List<string>() { "3-1000", "3-1200", "3-1210", "3-1212", "3-1300", "3-1320", "3-1322" } },
         };
 
         [Test]
@@ -329,13 +330,13 @@ namespace TestCentric.Gui.Model
         {
             new object[] { new[] { "Category_1" }, new[] { "Passed" }, "", new List<string>() { "3-1000", "3-1100", "3-1110", "3-1111", "3-1112" } },
             new object[] { new[] { "Category_2" }, new[] { "Failed" }, "", new List<string>() { "3-1000", "3-1200", "3-1211" } },
-            new object[] { new[] { "Category_2" }, new[] { TestCentricTestFilter.NotRunOutcome }, "", new List<string>() { "3-1000", "3-1300", "3-1312" } },
-            new object[] { new[] { "Category_2" }, new[] { TestCentricTestFilter.AllOutcome }, "", new List<string>() { "3-1000", "3-1100", "3-1110", "3-1111", "3-1112", "3-1200", "3-1211", "3-1300", "3-1312" } },
+            new object[] { new[] { "Category_2" }, new[] { OutcomeFilter.NotRunOutcome }, "", new List<string>() { "3-1000", "3-1300", "3-1312" } },
+            new object[] { new[] { "Category_2" }, new[] { OutcomeFilter.AllOutcome }, "", new List<string>() { "3-1000", "3-1100", "3-1110", "3-1111", "3-1112", "3-1200", "3-1211", "3-1300", "3-1312" } },
             new object[] { new[] { "Category_2" }, new[] { "Passed", "Failed" }, "TestB", new List<string>() { "3-1000", "3-1100", "3-1110", "3-1112" } },
-            new object[] { new[] { "Category_1" }, new[] { TestCentricTestFilter.AllOutcome }, "NamespaceC", new List<string>() { "3-1000", "3-1300", "3-1311", "3-1312" } },
+            new object[] { new[] { "Category_1" }, new[] { OutcomeFilter.AllOutcome }, "NamespaceC", new List<string>() { "3-1000", "3-1300", "3-1311", "3-1312" } },
             new object[] { new[] { "Category_1", "Category_2"}, new[] { "Failed" }, "TestA", new List<string>() { "3-1000", "3-1200", "3-1210", "3-1211" } },
             new object[] { new[] { "Category_3" }, new[] { "Failed" }, "TestC", new List<string>() { "3-1000", "3-1300", "3-1320", "3-1321" } },
-            new object[] { new[] { TestCentricTestFilter.NoCategory }, new[] { TestCentricTestFilter.NotRunOutcome }, "NamespaceC", new List<string>() { "3-1000", "3-1300", "3-1320", "3-1322" } },
+            new object[] { new[] { CategoryFilter.NoCategory }, new[] { OutcomeFilter.NotRunOutcome }, "NamespaceC", new List<string>() { "3-1000", "3-1300", "3-1320", "3-1322" } },
         };
 
         [Test]
@@ -379,10 +380,10 @@ namespace TestCentric.Gui.Model
 
         private static object[] FilterByCategoryCategoryAndTextAllInvisibleTestCases =
 {
-            new object[] { new[] { "Category_XY" }, new[] { TestCentricTestFilter.AllOutcome }, ""},
+            new object[] { new[] { "Category_XY" }, new[] { OutcomeFilter.AllOutcome }, ""},
             new object[] { new[] { "Category_1" }, new[] { "Passed", "Failed" }, "NamespaceXY"},
-            new object[] { new[] { "Category_3" }, new[] { TestCentricTestFilter.NotRunOutcome }, ""},
-            new object[] { new[] { TestCentricTestFilter.NoCategory }, new[] { TestCentricTestFilter.NotRunOutcome }, "TestC"},
+            new object[] { new[] { "Category_3" }, new[] { OutcomeFilter.NotRunOutcome }, ""},
+            new object[] { new[] { CategoryFilter.NoCategory }, new[] { OutcomeFilter.NotRunOutcome }, "TestC"},
             new object[] { new[] { "Category_2" }, new[] { "Failed" }, "TestB"},
         };
 

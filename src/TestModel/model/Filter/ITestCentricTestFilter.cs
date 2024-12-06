@@ -5,7 +5,7 @@
 
 using System.Collections.Generic;
 
-namespace TestCentric.Gui.Model
+namespace TestCentric.Gui.Model.Filter
 {
     /// <summary>
     /// Provides filter functionality: by outcome, by duration, by category...

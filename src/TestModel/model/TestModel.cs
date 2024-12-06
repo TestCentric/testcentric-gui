@@ -18,6 +18,7 @@ namespace TestCentric.Gui.Model
     using System.Runtime.InteropServices;
     using Services;
     using Settings;
+    using TestCentric.Gui.Model.Filter;
 
     public class TestModel : ITestModel
     {
