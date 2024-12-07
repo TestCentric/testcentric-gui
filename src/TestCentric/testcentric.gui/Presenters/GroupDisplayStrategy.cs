@@ -25,6 +25,7 @@ namespace TestCentric.Gui.Presenters
         public GroupDisplayStrategy(ITestTreeView view, ITestModel model)
             : base(view, model)
         {
+            _view.SetTestFilterVisibility(false);
         }
 
         #endregion

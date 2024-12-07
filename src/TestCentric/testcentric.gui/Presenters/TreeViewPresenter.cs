@@ -248,6 +248,12 @@ namespace TestCentric.Gui.Presenters
                 _model.SelectedTests = selection;
             };
 
+            _view.OutcomeFilter.SelectionChanged += () =>
+            {
+                var filter = _view.OutcomeFilter.SelectedItems;
+                _model.TestCentricTestFilter.OutcomeFilter = filter;
+            };
+
             // Node selected in tree
             //_treeView.SelectedNodesChanged += (nodes) =>
             //{

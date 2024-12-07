@@ -20,6 +20,22 @@ namespace TestCentric.Gui.Presenters
     internal class TestListDisplayStrategyTests
     {
         [Test]
+        public void OnStrategyCreated_OutcomeFilter_IsInvisible()
+        {
+            // 1. Arrange
+            ITestTreeView view = Substitute.For<ITestTreeView>();
+            ITestModel model = Substitute.For<ITestModel>();
+            var settings = new FakeUserSettings();
+            model.Settings.Returns(settings);
+
+            // 2. Act           
+            TestListDisplayStrategy strategy = new TestListDisplayStrategy(view, model);
+
+            // 3. Assert
+            view.Received().SetTestFilterVisibility(false);
+        }
+
+        [Test]
         [TestCase("", "", "", 1, 3, 0, 0, 0)]
         [TestCase("Category_1", "", "", 2, 2, 1, 0, 0)]
         [TestCase("Category_1", "Category_1", "", 2, 1, 2, 0, 0)]

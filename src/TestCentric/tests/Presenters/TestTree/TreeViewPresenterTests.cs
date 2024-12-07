@@ -223,6 +223,20 @@ namespace TestCentric.Gui.Presenters.TestTree
             Assert.That(testSelection.Count(), Is.EqualTo(2));
         }
 
+        [Test]
+        public void OutcomeFilterChanged_ApplyFilter()
+        {
+            // 1. Arrange
+            var selectedItems = new List<string>() { "Passed" };
+            _view.OutcomeFilter.SelectedItems.Returns(selectedItems);
+
+            // 2. Act
+            _view.OutcomeFilter.SelectionChanged += Raise.Event<CommandHandler>();
+
+            // 3. Assert
+            _model.TestCentricTestFilter.Received().OutcomeFilter = selectedItems;
+        }
+
         // TODO: Version 1 Test - Make it work if needed.
         //[Test]
         //public void WhenContextNodeIsNotNull_RunCommandExecutesThatTest()

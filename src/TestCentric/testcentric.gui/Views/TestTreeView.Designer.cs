@@ -31,6 +31,12 @@ namespace TestCentric.Gui.Views
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TestTreeView));
             this.treeView = new System.Windows.Forms.TreeView();
+            this.filterToolStrip = new System.Windows.Forms.ToolStrip();
+            this.filterOutcomeLabel = new System.Windows.Forms.ToolStripLabel();
+            this.filterOutcomeAllButton = new System.Windows.Forms.ToolStripButton();
+            this.filterOutcomePassedButton = new System.Windows.Forms.ToolStripButton();
+            this.filterOutcomeFailedButton = new System.Windows.Forms.ToolStripButton();
+            this.filterOutcomeNotRunButton = new System.Windows.Forms.ToolStripButton();
             this.testTreeContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.runMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,6 +66,64 @@ namespace TestCentric.Gui.Views
             this.treeView.SelectedImageIndex = 0;
             this.treeView.Size = new System.Drawing.Size(191, 246);
             this.treeView.TabIndex = 1;
+            // 
+            // filterOutcomeLabel
+            // 
+            this.filterOutcomeLabel.Name = "filterOutcomeLabel";
+            this.filterOutcomeLabel.Size = new System.Drawing.Size(54, 29);
+            this.filterOutcomeLabel.Text = "Filter:";
+            // 
+            // filterOutcomeAllButton
+            // 
+            this.filterOutcomeAllButton.Name = "filterOutcomeAllButton";
+            this.filterOutcomeAllButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.ImageAndText;
+            this.filterOutcomeAllButton.Image = ((System.Drawing.Image)(resources.GetObject("FilterAllOutcomes.Image")));
+            this.filterOutcomeAllButton.Size = new System.Drawing.Size(70, 29);
+            this.filterOutcomeAllButton.Text = "All";
+            this.filterOutcomeAllButton.Tag = "All";
+            this.filterOutcomeAllButton.ToolTipText = "Show tests with all outcomes";
+            this.filterOutcomeAllButton.CheckOnClick = true;
+            // 
+            // filterOutcomePassedButton
+            // 
+            this.filterOutcomePassedButton.Name = "filterOutcomePassedButton";
+            this.filterOutcomePassedButton.Size = new System.Drawing.Size(70, 29);
+            this.filterOutcomePassedButton.Text = "Passed";
+            this.filterOutcomePassedButton.Tag = "Passed";
+            this.filterOutcomePassedButton.ToolTipText = "Show all passed tests";
+            this.filterOutcomePassedButton.CheckOnClick = true;
+            // 
+            // filterOutcomeFailedButton
+            // 
+            this.filterOutcomeFailedButton.Name = "filterOutcomeFailedButton";
+            this.filterOutcomeFailedButton.Size = new System.Drawing.Size(70, 29);
+            this.filterOutcomeFailedButton.Text = "Failed";
+            this.filterOutcomeFailedButton.Tag = "Failed";
+            this.filterOutcomeFailedButton.ToolTipText = "Show all failed tests";
+            this.filterOutcomeFailedButton.CheckOnClick = true;
+            // 
+            // filterOutcomeNotRunButton
+            // 
+            this.filterOutcomeNotRunButton.Name = "filterOutcomeNotRunButton";
+            this.filterOutcomeNotRunButton.Size = new System.Drawing.Size(70, 29);
+            this.filterOutcomeNotRunButton.Text = "Not Run";
+            this.filterOutcomeNotRunButton.Tag = "Not Run";
+            this.filterOutcomeNotRunButton.ToolTipText = "Show all tests not run yet";
+            this.filterOutcomeNotRunButton.CheckOnClick = true;
+            // 
+            // filterToolStrip
+            // 
+            this.filterToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.filterOutcomeLabel,
+            this.filterOutcomeAllButton,
+            this.filterOutcomePassedButton,
+            this.filterOutcomeFailedButton,
+            this.filterOutcomeNotRunButton,
+            });
+            this.filterToolStrip.Location = new System.Drawing.Point(0, 0);
+            this.filterToolStrip.Name = "filterToolStrip";
+            this.filterToolStrip.Size = new System.Drawing.Size(744, 24);
+            this.filterToolStrip.TabIndex = 0;
             // 
             // testTreeContextMenu
             // 
@@ -166,6 +230,7 @@ namespace TestCentric.Gui.Views
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.treeView);
+            this.Controls.Add(this.filterToolStrip);
             this.Name = "TestTreeView";
             this.Size = new System.Drawing.Size(191, 246);
             this.testTreeContextMenu.ResumeLayout(false);
@@ -177,6 +242,12 @@ namespace TestCentric.Gui.Views
 
         private System.Windows.Forms.TreeView treeView;
         private System.Windows.Forms.ContextMenuStrip testTreeContextMenu;
+        private System.Windows.Forms.ToolStrip filterToolStrip;
+        private System.Windows.Forms.ToolStripLabel filterOutcomeLabel;
+        private System.Windows.Forms.ToolStripButton filterOutcomeAllButton;
+        private System.Windows.Forms.ToolStripButton filterOutcomePassedButton;
+        private System.Windows.Forms.ToolStripButton filterOutcomeFailedButton;
+        private System.Windows.Forms.ToolStripButton filterOutcomeNotRunButton;
         private System.Windows.Forms.ToolStripMenuItem runMenuItem;
         private System.Windows.Forms.ToolStripMenuItem expandAllMenuItem;
         private System.Windows.Forms.ToolStripMenuItem collapseAllMenuItem;

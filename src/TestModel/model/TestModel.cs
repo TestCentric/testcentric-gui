@@ -347,6 +347,7 @@ namespace TestCentric.Gui.Model
             BuildTestIndex();
             MapTestsToPackages();
             AvailableCategories = GetAvailableCategories();
+            TestCentricTestFilter.Init();
 
             ClearResults();
 
