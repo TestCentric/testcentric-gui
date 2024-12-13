@@ -132,22 +132,23 @@ namespace TestCentric.Gui.Model
             Assert.That(allCategories, Contains.Item(CategoryFilter.NoCategory));
 
             var outcomeFilter = testFilter.OutcomeFilter;
-            Assert.That(outcomeFilter.Count, Is.EqualTo(1));
-            Assert.That(outcomeFilter, Contains.Item(OutcomeFilter.AllOutcome));
+            Assert.That(outcomeFilter.Count, Is.EqualTo(0));
 
             Assert.That(testFilter.TextFilter, Is.Empty);
         }
 
         private static object[] FilterByOutcomeTestCases =
-    {
+        {
                 new object[] { new List<string>() { "Passed" },  new List<string>() { "3-1000", "3-1001", "3-1010", "3-1011", "3-1012", "3-1020", "3-1022" } },
                 new object[] { new List<string>() { "Failed" }, new List<string>() { "3-1000", "3-1001", "3-1020", "3-1021" } },
                 new object[] { new List<string>() { OutcomeFilter.NotRunOutcome }, new List<string>() { "3-1000", "3-1001", "3-1030", "3-1031", "3-1032" } },
                 new object[] { new List<string>() { "Passed", OutcomeFilter.NotRunOutcome }, new List<string>() { "3-1000", "3-1001", "3-1010", "3-1011", "3-1012", "3-1020", "3-1022", "3-1030", "3-1031", "3-1032" } },
                 new object[] { new List<string>() { "Passed", "Failed" }, new List<string>() { "3-1000", "3-1001", "3-1010", "3-1011", "3-1012", "3-1020", "3-1022", "3-1020", "3-1021" } },
                 new object[] { new List<string>() { OutcomeFilter.NotRunOutcome, "Failed" }, new List<string>() { "3-1000", "3-1001", "3-1030", "3-1031", "3-1032", "3-1020", "3-1021" } },
-                new object[] { new List<string>() { OutcomeFilter.AllOutcome }, new List<string>() { "3-1000", "3-1001", "3-1010", "3-1011", "3-1012", "3-1020", "3-1021", "3-1022", "3-1030", "3-1031", "3-1032" } },
-            };
+                new object[] { new List<string>() { "Warning"}, new List<string>() { "3-1000", "3-1001", "3-1040", "3-1042"} },
+                new object[] { new List<string>() { OutcomeFilter.AllOutcome }, new List<string>() { "3-1000", "3-1001", "3-1010", "3-1011", "3-1012", "3-1020", "3-1021", "3-1022", "3-1030", "3-1031", "3-1032", "3-1040", "3-1041", "3-1042" } },
+                new object[] { new List<string>(), new List<string>() { "3-1000", "3-1001", "3-1010", "3-1011", "3-1012", "3-1020", "3-1021", "3-1022", "3-1030", "3-1031", "3-1032", "3-1040", "3-1041", "3-1042" } },
+        };
 
         [Test]
         [TestCaseSource(nameof(FilterByOutcomeTestCases))]
@@ -165,7 +166,10 @@ namespace TestCentric.Gui.Model
                             CreateTestcaseXml("3-1022", "TestB", "Passed")) +
                         CreateTestFixtureXml("3-1030", "Fixture_3", "",
                             CreateTestcaseXml("3-1031", "TestA", ""),
-                            CreateTestcaseXml("3-1032", "TestB", "")))));
+                            CreateTestcaseXml("3-1032", "TestB", "")) +
+                        CreateTestFixtureXml("3-1040", "Fixture_4", "",
+                            CreateTestcaseXml("3-1041", "TestA", ""),
+                            CreateTestcaseXml("3-1042", "TestB", "Skipped")))));
             _model.LoadedTests.Returns(testNode);
 
             // Act

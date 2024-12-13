@@ -33,9 +33,9 @@ namespace TestCentric.Gui.Views
             this.treeView = new System.Windows.Forms.TreeView();
             this.filterToolStrip = new System.Windows.Forms.ToolStrip();
             this.filterOutcomeLabel = new System.Windows.Forms.ToolStripLabel();
-            this.filterOutcomeAllButton = new System.Windows.Forms.ToolStripButton();
             this.filterOutcomePassedButton = new System.Windows.Forms.ToolStripButton();
             this.filterOutcomeFailedButton = new System.Windows.Forms.ToolStripButton();
+            this.filterOutcomeWarningButton = new System.Windows.Forms.ToolStripButton();
             this.filterOutcomeNotRunButton = new System.Windows.Forms.ToolStripButton();
             this.testTreeContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.runMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -73,17 +73,6 @@ namespace TestCentric.Gui.Views
             this.filterOutcomeLabel.Size = new System.Drawing.Size(54, 29);
             this.filterOutcomeLabel.Text = "Filter:";
             // 
-            // filterOutcomeAllButton
-            // 
-            this.filterOutcomeAllButton.Name = "filterOutcomeAllButton";
-            this.filterOutcomeAllButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.ImageAndText;
-            this.filterOutcomeAllButton.Image = ((System.Drawing.Image)(resources.GetObject("FilterAllOutcomes.Image")));
-            this.filterOutcomeAllButton.Size = new System.Drawing.Size(70, 29);
-            this.filterOutcomeAllButton.Text = "All";
-            this.filterOutcomeAllButton.Tag = "All";
-            this.filterOutcomeAllButton.ToolTipText = "Show tests with all outcomes";
-            this.filterOutcomeAllButton.CheckOnClick = true;
-            // 
             // filterOutcomePassedButton
             // 
             this.filterOutcomePassedButton.Name = "filterOutcomePassedButton";
@@ -102,6 +91,15 @@ namespace TestCentric.Gui.Views
             this.filterOutcomeFailedButton.ToolTipText = "Show all failed tests";
             this.filterOutcomeFailedButton.CheckOnClick = true;
             // 
+            // filterOutcomeWarningButton
+            // 
+            this.filterOutcomeWarningButton.Name = "filterOutcomeWarningButton";
+            this.filterOutcomeWarningButton.Size = new System.Drawing.Size(70, 29);
+            this.filterOutcomeWarningButton.Text = "Warning";
+            this.filterOutcomeWarningButton.Tag = "Warning";
+            this.filterOutcomeWarningButton.ToolTipText = "Show all inconclusive, skipped or ignored tests";
+            this.filterOutcomeWarningButton.CheckOnClick = true;
+            // 
             // filterOutcomeNotRunButton
             // 
             this.filterOutcomeNotRunButton.Name = "filterOutcomeNotRunButton";
@@ -115,9 +113,9 @@ namespace TestCentric.Gui.Views
             // 
             this.filterToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.filterOutcomeLabel,
-            this.filterOutcomeAllButton,
             this.filterOutcomePassedButton,
             this.filterOutcomeFailedButton,
+            this.filterOutcomeWarningButton,
             this.filterOutcomeNotRunButton,
             });
             this.filterToolStrip.Location = new System.Drawing.Point(0, 0);
@@ -244,9 +242,9 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.ContextMenuStrip testTreeContextMenu;
         private System.Windows.Forms.ToolStrip filterToolStrip;
         private System.Windows.Forms.ToolStripLabel filterOutcomeLabel;
-        private System.Windows.Forms.ToolStripButton filterOutcomeAllButton;
         private System.Windows.Forms.ToolStripButton filterOutcomePassedButton;
         private System.Windows.Forms.ToolStripButton filterOutcomeFailedButton;
+        private System.Windows.Forms.ToolStripButton filterOutcomeWarningButton;
         private System.Windows.Forms.ToolStripButton filterOutcomeNotRunButton;
         private System.Windows.Forms.ToolStripMenuItem runMenuItem;
         private System.Windows.Forms.ToolStripMenuItem expandAllMenuItem;

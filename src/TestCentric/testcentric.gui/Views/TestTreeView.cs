@@ -48,7 +48,7 @@ namespace TestCentric.Gui.Views
             CollapseToFixturesCommand = new CommandMenuElement(collapseToFixturesMenuItem);
             TestPropertiesCommand = new CommandMenuElement(testPropertiesMenuItem);
             ViewAsXmlCommand = new CommandMenuElement(viewAsXmlMenuItem);
-            OutcomeFilter = new MultiCheckedToolStripButtonGroupWithDefaultButton(new[] { filterOutcomeAllButton, filterOutcomePassedButton, filterOutcomeFailedButton, filterOutcomeNotRunButton });
+            OutcomeFilter = new MultiCheckedToolStripButtonGroup(new[] { filterOutcomePassedButton, filterOutcomeFailedButton, filterOutcomeWarningButton, filterOutcomeNotRunButton });
             TreeView = treeView;
 
             LoadOutcomeFilterImages();
@@ -234,6 +234,7 @@ namespace TestCentric.Gui.Views
 
             filterOutcomeFailedButton.Image = LoadAlternateImage("Failure", imageDir);
             filterOutcomePassedButton.Image = LoadAlternateImage("Success", imageDir);
+            filterOutcomeWarningButton.Image = LoadAlternateImage("Ignored", imageDir);
             filterOutcomeNotRunButton.Image = LoadAlternateImage("Skipped", imageDir);
         }
 
