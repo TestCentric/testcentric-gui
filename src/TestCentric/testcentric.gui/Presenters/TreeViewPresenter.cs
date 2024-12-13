@@ -143,6 +143,9 @@ namespace TestCentric.Gui.Presenters
                         if (_model.Settings.Gui.GuiLayout == "Full")
                             ClosePropertiesDisplay();
                         break;
+                    case "TestCentric.Gui.TestTree.ShowFilter":
+                        _view.SetTestFilterVisibility(_model.Settings.Gui.TestTree.ShowFilter);
+                        break;
                 }
             };
 

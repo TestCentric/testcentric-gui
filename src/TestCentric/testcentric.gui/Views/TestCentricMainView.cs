@@ -99,6 +99,7 @@ namespace TestCentric.Gui.Views
         private ToolStripButton forceStopButton;
         private ProgressBarView progressBar;
         private ToolStripButton runAllButton;
+        private ToolStripButton showFilterButton;
         private ToolStripButton runParametersButton;
         private ToolStripButton runFailedButton;
         private ToolStripSeparator toolStripSeparator5;
@@ -178,6 +179,7 @@ namespace TestCentric.Gui.Views
                 "testGrouping",
                 byAssemblyMenuItem, byFixtureMenuItem, byCategoryMenuItem, byOutcomeMenuItem, byDurationMenuItem);
             ShowNamespace = new CheckedToolStripMenuGroup("showNamespace", nunitTreeShowNamespaceMenuItem, nunitTreeHideNamespaceMenuItem);
+            ShowHideFilterButton = new ToolStripButtonElement(showFilterButton);
             RunParametersButton = new ToolStripButtonElement(runParametersButton);
             RunSummaryButton = new CheckBoxElement(runSummaryButton);
 
@@ -228,6 +230,7 @@ namespace TestCentric.Gui.Views
             this.byCategoryMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.byOutcomeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.byDurationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showFilterButton = new System.Windows.Forms.ToolStripButton();
             this.runParametersButton = new System.Windows.Forms.ToolStripButton();
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.fileMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -324,6 +327,7 @@ namespace TestCentric.Gui.Views
             this.forceStopButton,
             this.toolStripSeparator5,
             this.displayFormatButton,
+            this.showFilterButton,
             this.runParametersButton});
             this.toolStrip.Location = new System.Drawing.Point(0, 24);
             this.toolStrip.MinimumSize = new System.Drawing.Size(0, 24);
@@ -490,6 +494,16 @@ namespace TestCentric.Gui.Views
             this.byDurationMenuItem.Size = new System.Drawing.Size(198, 22);
             this.byDurationMenuItem.Tag = "DURATION";
             this.byDurationMenuItem.Text = "By Duration";
+            // 
+            // showFilterButton
+            // 
+            this.showFilterButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.showFilterButton.Image = ((System.Drawing.Image)(resources.GetObject("TestFilterButton.Image")));
+            this.showFilterButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.showFilterButton.Name = "showFilterButton";
+            this.showFilterButton.CheckOnClick = true;
+            this.showFilterButton.Size = new System.Drawing.Size(23, 21);
+            this.showFilterButton.ToolTipText = "Show/Hide filter";
             // 
             // runParametersButton
             // 
@@ -1149,6 +1163,8 @@ namespace TestCentric.Gui.Views
         public ISelection DisplayFormat { get; private set; }
         public ISelection GroupBy { get; private set; }
         public ISelection ShowNamespace { get; private set; }
+
+        public IChecked ShowHideFilterButton { get; private set; }
         public ICommand RunParametersButton { get; private set; }
 
         public IChecked RunSummaryButton { get; private set; }

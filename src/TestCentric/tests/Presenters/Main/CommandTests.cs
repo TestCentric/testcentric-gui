@@ -363,5 +363,19 @@ namespace TestCentric.Gui.Presenters.Main
             // Assert
             Assert.That(_model.Settings.Gui.TestTree.ShowNamespace, Is.EqualTo(expectedShowNamespace));
         }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void ShowFilterChanged_ChangesModelSetting(bool show)
+        {
+            // Arrange
+            _view.ShowHideFilterButton.Checked.Returns(show);
+
+            // Act
+            _view.ShowHideFilterButton.CheckedChanged += Raise.Event<CommandHandler>();
+
+            // Assert
+            Assert.That(_model.Settings.Gui.TestTree.ShowFilter, Is.EqualTo(show));
+        }
     }
 }

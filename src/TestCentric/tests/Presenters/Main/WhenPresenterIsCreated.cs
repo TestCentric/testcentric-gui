@@ -92,5 +92,19 @@ namespace TestCentric.Gui.Presenters.Main
             // 3. Assert
             _view.GroupBy.Received().SelectedItem = groupBy;
         }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void FilterButton_IsInitialzedFromSettings(bool filterIsVisible)
+        {
+            // 1. Arrange
+            _settings.Gui.TestTree.ShowFilter = filterIsVisible;
+
+            // 2. Act
+            _presenter = new TestCentricPresenter(_view, _model, new CommandLineOptions());
+
+            // 3. Assert
+            _view.ShowHideFilterButton.Received().Checked = filterIsVisible;
+        }
     }
 }

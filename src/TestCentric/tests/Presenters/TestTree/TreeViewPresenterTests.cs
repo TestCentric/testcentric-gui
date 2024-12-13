@@ -42,6 +42,18 @@ namespace TestCentric.Gui.Presenters.TestTree
             strategy.Received(2).Reload();
         }
 
+        [TestCase(true)]
+        [TestCase(false)]
+        public void WhenSettingsAreChanged_ShowFilter_FilterVisibilityIsCalled(bool show)
+        {
+
+            // Act
+            _model.Settings.Gui.TestTree.ShowFilter = show;
+
+            // Assert
+            _view.Received().SetTestFilterVisibility(show);
+        }
+
         [TestCase("Default")]
         [TestCase("VisualStudio")]
         public void WhenSettingsAreChanged_AlternateImageSet_NewSettingIsApplied(string imageSet)

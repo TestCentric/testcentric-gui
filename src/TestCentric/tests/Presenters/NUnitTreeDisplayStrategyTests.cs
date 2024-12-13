@@ -69,11 +69,22 @@ namespace TestCentric.Gui.Presenters.TestTree
             return new NUnitTreeDisplayStrategy(_view, _model);
         }
 
-        [Test]
-        public void OnStrategyCreated_OutcomeFilter_IsVisible()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void OnStrategyCreated_OutcomeFilter_IsVisible(bool isVisible)
         {
+            // Arrange
+            var view = Substitute.For<ITestTreeView>();
+            var model = Substitute.For<ITestModel>();
+            var settings = new Fakes.UserSettings();
+            model.Settings.Returns(settings);
+            model.Settings.Gui.TestTree.ShowFilter = isVisible;
+
+            // Act
+            var strategy = new NUnitTreeDisplayStrategy(view, model);
+
             // Assert
-            _view.Received().SetTestFilterVisibility(true);
+            view.Received().SetTestFilterVisibility(isVisible);
         }
 
         [Test]
