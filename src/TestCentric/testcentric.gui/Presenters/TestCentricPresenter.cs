@@ -773,6 +773,7 @@ namespace TestCentric.Gui.Presenters
             _view.DisplayFormatButton.Enabled =
             _view.RunParametersButton.Enabled = testLoaded && !testRunning;
             _view.ShowHideFilterButton.Enabled = testLoaded && _view.DisplayFormat.SelectedItem == "NUNIT_TREE";
+            _view.ShowHideFilterButton.Visible = testLoaded && _view.DisplayFormat.SelectedItem == "NUNIT_TREE";
 
             _view.RunSelectedButton.Enabled = testLoaded && !testRunning && _model.SelectedTests != null && _model.SelectedTests.Any();
 
