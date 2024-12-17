@@ -76,6 +76,7 @@ namespace TestCentric.Gui.Views
             // filterOutcomePassedButton
             // 
             this.filterOutcomePassedButton.Name = "filterOutcomePassedButton";
+            this.filterOutcomePassedButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.filterOutcomePassedButton.Size = new System.Drawing.Size(70, 29);
             this.filterOutcomePassedButton.Text = "Passed";
             this.filterOutcomePassedButton.Tag = "Passed";
@@ -85,6 +86,7 @@ namespace TestCentric.Gui.Views
             // filterOutcomeFailedButton
             // 
             this.filterOutcomeFailedButton.Name = "filterOutcomeFailedButton";
+            this.filterOutcomeFailedButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.filterOutcomeFailedButton.Size = new System.Drawing.Size(70, 29);
             this.filterOutcomeFailedButton.Text = "Failed";
             this.filterOutcomeFailedButton.Tag = "Failed";
@@ -94,6 +96,7 @@ namespace TestCentric.Gui.Views
             // filterOutcomeWarningButton
             // 
             this.filterOutcomeWarningButton.Name = "filterOutcomeWarningButton";
+            this.filterOutcomeWarningButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.filterOutcomeWarningButton.Size = new System.Drawing.Size(70, 29);
             this.filterOutcomeWarningButton.Text = "Warning";
             this.filterOutcomeWarningButton.Tag = "Warning";
@@ -103,6 +106,7 @@ namespace TestCentric.Gui.Views
             // filterOutcomeNotRunButton
             // 
             this.filterOutcomeNotRunButton.Name = "filterOutcomeNotRunButton";
+            this.filterOutcomeNotRunButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.filterOutcomeNotRunButton.Size = new System.Drawing.Size(70, 29);
             this.filterOutcomeNotRunButton.Text = "Not Run";
             this.filterOutcomeNotRunButton.Tag = "Not Run";
@@ -120,6 +124,7 @@ namespace TestCentric.Gui.Views
             });
             this.filterToolStrip.Location = new System.Drawing.Point(0, 0);
             this.filterToolStrip.Name = "filterToolStrip";
+            this.filterToolStrip.Visible = false;
             this.filterToolStrip.Size = new System.Drawing.Size(744, 24);
             this.filterToolStrip.TabIndex = 0;
             // 
