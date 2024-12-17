@@ -51,8 +51,6 @@ namespace TestCentric.Gui.Views
             OutcomeFilter = new MultiCheckedToolStripButtonGroup(new[] { filterOutcomePassedButton, filterOutcomeFailedButton, filterOutcomeWarningButton, filterOutcomeNotRunButton });
             TreeView = treeView;
 
-            LoadOutcomeFilterImages();
-
             // NOTE: We use MouseDown here rather than MouseUp because
             // the menu strip Opening event occurs before MouseUp.
             treeView.MouseDown += (s, e) =>
@@ -212,42 +210,34 @@ namespace TestCentric.Gui.Views
         public void LoadAlternateImages(string imageSet)
         {
             string[] imageNames = { "Skipped", "Inconclusive", "Success", "Ignored", "Failure" };
-
             string imageDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
                 Path.Combine("Images", Path.Combine("Tree", imageSet)));
 
+            // 1. Load all images once
+            IDictionary<string, Image> images = new Dictionary<string, Image>();
+            foreach (string imageName in imageNames)
+                images[imageName] = LoadAlternateImage(imageName, imageDir);
+
+            // 2. Set tree images
             for (int index = 0; index < imageNames.Length; index++)
-                LoadAlternateImage(index, imageNames[index], imageDir);
+            {
+                string imageName = imageNames[index];
+                treeImages.Images[index] = images[imageName];
+            }
+
+            // 3. Set filter outcome toolbar images
+            filterOutcomeFailedButton.Image = images["Failure"];
+            filterOutcomePassedButton.Image = images["Success"];
+            filterOutcomeWarningButton.Image = images["Ignored"];
+            filterOutcomeNotRunButton.Image = images["Skipped"];
+
             this.Invalidate();
             this.Refresh();
-
-            LoadOutcomeFilterImages();
-        }
-
-        private void LoadOutcomeFilterImages()
-        {
-            if (string.IsNullOrEmpty(AlternateImageSet))
-                return;
-
-            string imageDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
-                Path.Combine("Images", Path.Combine("Tree", AlternateImageSet)));
-
-            filterOutcomeFailedButton.Image = LoadAlternateImage("Failure", imageDir);
-            filterOutcomePassedButton.Image = LoadAlternateImage("Success", imageDir);
-            filterOutcomeWarningButton.Image = LoadAlternateImage("Ignored", imageDir);
-            filterOutcomeNotRunButton.Image = LoadAlternateImage("Skipped", imageDir);
         }
 
         #endregion
 
         #region Helper Methods
-
-        private void LoadAlternateImage(int index, string name, string imageDir)
-        {
-            Image image = LoadAlternateImage(name, imageDir);
-            if (image != null)
-                treeImages.Images[index] = image;
-        }
 
         private Image LoadAlternateImage(string name, string imageDir)
         {
