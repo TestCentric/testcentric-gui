@@ -50,6 +50,11 @@ namespace TestCentric.Gui.Views
         TreeNode SelectedNode { get; set; }
         IList<TreeNode> CheckedNodes { get; }
 
+        // Test Filter related properties / methods
+        IMultiSelection OutcomeFilter { get; }
+
+        void SetTestFilterVisibility(bool visible);
+
         // Tree-related Methods
         void Clear();
         void Add(TreeNode treeNode);

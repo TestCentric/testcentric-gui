@@ -42,6 +42,18 @@ namespace TestCentric.Gui.Presenters.TestTree
             strategy.Received(2).Reload();
         }
 
+        [TestCase(true)]
+        [TestCase(false)]
+        public void WhenSettingsAreChanged_ShowFilter_FilterVisibilityIsCalled(bool show)
+        {
+
+            // Act
+            _model.Settings.Gui.TestTree.ShowFilter = show;
+
+            // Assert
+            _view.Received().SetTestFilterVisibility(show);
+        }
+
         [TestCase("Default")]
         [TestCase("VisualStudio")]
         public void WhenSettingsAreChanged_AlternateImageSet_NewSettingIsApplied(string imageSet)
@@ -221,6 +233,20 @@ namespace TestCentric.Gui.Presenters.TestTree
             // 3. Assert
             TestSelection testSelection = _model.SelectedTests;
             Assert.That(testSelection.Count(), Is.EqualTo(2));
+        }
+
+        [Test]
+        public void OutcomeFilterChanged_ApplyFilter()
+        {
+            // 1. Arrange
+            var selectedItems = new List<string>() { "Passed" };
+            _view.OutcomeFilter.SelectedItems.Returns(selectedItems);
+
+            // 2. Act
+            _view.OutcomeFilter.SelectionChanged += Raise.Event<CommandHandler>();
+
+            // 3. Assert
+            _model.TestCentricTestFilter.Received().OutcomeFilter = selectedItems;
         }
 
         // TODO: Version 1 Test - Make it work if needed.

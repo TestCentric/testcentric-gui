@@ -22,7 +22,10 @@ namespace TestCentric.Gui.Presenters
         private IDictionary<TestNode, string> _foldedNodeNames = new Dictionary<TestNode, string>();
 
         public NUnitTreeDisplayStrategy(ITestTreeView view, ITestModel model)
-            : base(view, model) { }
+            : base(view, model) 
+        {
+            _view.SetTestFilterVisibility(model.Settings.Gui.TestTree.ShowFilter);
+        }
 
 
         public override string StrategyID => "NUNIT_TREE";
@@ -45,6 +48,8 @@ namespace TestCentric.Gui.Presenters
                 visualState.ApplyTo(_view.TreeView);
             else
                 SetDefaultInitialExpansion();
+
+            _view.OutcomeFilter.Enabled = true;
         }
 
         protected override VisualState CreateVisualState() => new VisualState("NUNIT_TREE", _settings.Gui.TestTree.ShowNamespace).LoadFrom(_view.TreeView);

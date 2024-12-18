@@ -87,6 +87,7 @@ namespace TestCentric.Gui.Presenters
                     _resultFormats.Add(format);
 
             WireUpEvents();
+            _view.ShowHideFilterButton.Checked = _settings.Gui.TestTree.ShowFilter;
         }
 
         #endregion
@@ -497,6 +498,11 @@ namespace TestCentric.Gui.Presenters
                 _settings.Gui.TestTree.ShowNamespace = _view.ShowNamespace.SelectedIndex == 0;
             };
 
+            _view.ShowHideFilterButton.CheckedChanged += () =>
+            {
+                _settings.Gui.TestTree.ShowFilter = _view.ShowHideFilterButton.Checked;
+            };
+
             _view.GroupBy.SelectionChanged += () =>
             {
                 switch(_view.DisplayFormat.SelectedItem)
@@ -766,6 +772,8 @@ namespace TestCentric.Gui.Presenters
             _view.RunAllButton.Enabled =
             _view.DisplayFormatButton.Enabled =
             _view.RunParametersButton.Enabled = testLoaded && !testRunning;
+            _view.ShowHideFilterButton.Enabled = testLoaded && _view.DisplayFormat.SelectedItem == "NUNIT_TREE";
+            _view.ShowHideFilterButton.Visible = testLoaded && _view.DisplayFormat.SelectedItem == "NUNIT_TREE";
 
             _view.RunSelectedButton.Enabled = testLoaded && !testRunning && _model.SelectedTests != null && _model.SelectedTests.Any();
 

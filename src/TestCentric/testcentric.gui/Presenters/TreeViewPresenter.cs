@@ -143,6 +143,9 @@ namespace TestCentric.Gui.Presenters
                         if (_model.Settings.Gui.GuiLayout == "Full")
                             ClosePropertiesDisplay();
                         break;
+                    case "TestCentric.Gui.TestTree.ShowFilter":
+                        _view.SetTestFilterVisibility(_model.Settings.Gui.TestTree.ShowFilter);
+                        break;
                 }
             };
 
@@ -246,6 +249,12 @@ namespace TestCentric.Gui.Presenters
                     selection.Add(node.Tag as ITestItem);
                 
                 _model.SelectedTests = selection;
+            };
+
+            _view.OutcomeFilter.SelectionChanged += () =>
+            {
+                var filter = _view.OutcomeFilter.SelectedItems;
+                _model.TestCentricTestFilter.OutcomeFilter = filter;
             };
 
             // Node selected in tree

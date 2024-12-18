@@ -56,6 +56,12 @@ namespace TestCentric.Gui.Model.Settings
             set { SaveSetting(nameof(ShowNamespace), value); }
         }
 
+        public bool ShowFilter
+        {
+            get { return GetSetting(nameof(ShowFilter), true); }
+            set { SaveSetting(nameof(ShowFilter), value); }
+        }
+
         public class FixtureListSettings : SettingsGroup
         {
             public FixtureListSettings(ISettings settings, string prefix) : base(settings, prefix + "FixtureList") { }

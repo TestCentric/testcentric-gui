@@ -69,6 +69,24 @@ namespace TestCentric.Gui.Presenters.TestTree
             return new NUnitTreeDisplayStrategy(_view, _model);
         }
 
+        [TestCase(true)]
+        [TestCase(false)]
+        public void OnStrategyCreated_OutcomeFilter_IsVisible(bool isVisible)
+        {
+            // Arrange
+            var view = Substitute.For<ITestTreeView>();
+            var model = Substitute.For<ITestModel>();
+            var settings = new Fakes.UserSettings();
+            model.Settings.Returns(settings);
+            model.Settings.Gui.TestTree.ShowFilter = isVisible;
+
+            // Act
+            var strategy = new NUnitTreeDisplayStrategy(view, model);
+
+            // Assert
+            view.Received().SetTestFilterVisibility(isVisible);
+        }
+
         [Test]
         public void OnTestRunStarting_ResetAllTreeNodeImages_IsInvoked()
         {
@@ -329,6 +347,31 @@ namespace TestCentric.Gui.Presenters.TestTree
             var child2 = treeNode.Nodes[1];
             Assert.That((child2.Tag as TestNode).Id, Is.EqualTo("1-1033"));
             Assert.That(child2.Text, Is.EqualTo("Folder"));
+        }
+
+        [Test]
+        public void OnTestLoaded_OutcomeFilter_IsEnabled()
+        {
+            // Arrange
+            string xml =
+                "<test-suite type='Assembly' id='1-1030' name='Library.Test.dll'>" +
+                "</test-suite>";
+
+            // Act
+            _strategy.OnTestLoaded(new TestNode(xml), null);
+
+            // Assert
+            _view.OutcomeFilter.Received().Enabled = true;
+        }
+
+        [Test]
+        public void OnTestUnloaded_OutcomeFilter_IsDisabled()
+        {
+            // Arrange + Act
+            _strategy.OnTestUnloaded();
+
+            // Assert
+            _view.OutcomeFilter.Received().Enabled = false;
         }
     }
 

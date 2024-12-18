@@ -16,7 +16,7 @@ namespace TestCentric.Gui.Model.Filter
         public const string AllOutcome = "All";
         public const string NotRunOutcome = "Not Run";
 
-        private List<string> _condition = new List<string>() { AllOutcome };
+        private List<string> _condition = new List<string>();
 
         internal OutcomeFilter(ITestModel model)
         {
@@ -36,7 +36,7 @@ namespace TestCentric.Gui.Model.Filter
         public bool IsMatching(TestNode testNode)
         {
             // All kind of outcomes should be displayed (no outcome filtering)
-            if (_condition.Contains(AllOutcome))
+            if (_condition.Contains(AllOutcome) || !_condition.Any())
                 return true;
 
             string outcome = NotRunOutcome;
@@ -48,11 +48,11 @@ namespace TestCentric.Gui.Model.Filter
                 {
                     case TestStatus.Failed:
                     case TestStatus.Passed:
-                    case TestStatus.Inconclusive:
                         outcome = result.Outcome.Status.ToString();
                         break;
+                    case TestStatus.Inconclusive:
                     case TestStatus.Skipped:
-                        outcome = result.Outcome.Label == "Ignored" ? "Ignored" : "Skipped";
+                        outcome = "Warning";
                         break;
                 }
             }
@@ -62,12 +62,12 @@ namespace TestCentric.Gui.Model.Filter
 
         public void Reset()
         {
-            _condition = new List<string>() { AllOutcome };
+            _condition = new List<string>();
         }
 
         public void Init()
         {
-            _condition = new List<string>() { AllOutcome };
+            _condition = new List<string>();
         }
     }
 }

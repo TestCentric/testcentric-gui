@@ -16,6 +16,7 @@ namespace TestCentric.Gui.Presenters.Main
     using Views;
     using Model;
     using NSubstitute.Core.Arguments;
+    using System.Windows.Forms;
 
     public class CommandTests : MainPresenterTestBase
     {
@@ -362,6 +363,50 @@ namespace TestCentric.Gui.Presenters.Main
 
             // Assert
             Assert.That(_model.Settings.Gui.TestTree.ShowNamespace, Is.EqualTo(expectedShowNamespace));
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void ShowFilterChanged_ChangesModelSetting(bool show)
+        {
+            // Arrange
+            _view.ShowHideFilterButton.Checked.Returns(show);
+
+            // Act
+            _view.ShowHideFilterButton.CheckedChanged += Raise.Event<CommandHandler>();
+
+            // Assert
+            Assert.That(_model.Settings.Gui.TestTree.ShowFilter, Is.EqualTo(show));
+        }
+
+        [TestCase("NUNIT_TREE", true)]
+        [TestCase("FIXTURE_List", false)]
+        public void ShowFilterIsEnabled_ForDisplayFormat(string displayFormat, bool expectedIsEnabled)
+        {
+            // Arrange
+            _model.HasTests.Returns(true);
+            _view.DisplayFormat.SelectedItem = displayFormat;
+
+            // Act
+            _model.Events.SelectedTestsChanged += Raise.Event<TestSelectionEventHandler>(new TestSelectionEventArgs(null));
+
+            // Assert
+            Assert.That(_view.ShowHideFilterButton.Enabled, Is.EqualTo(expectedIsEnabled));
+        }
+
+        [TestCase("NUNIT_TREE", true)]
+        [TestCase("FIXTURE_List", false)]
+        public void ShowFilterIsVisible_ForDisplayFormat(string displayFormat, bool expectedIsVisible)
+        {
+            // Arrange
+            _model.HasTests.Returns(true);
+            _view.DisplayFormat.SelectedItem = displayFormat;
+
+            // Act
+            _model.Events.SelectedTestsChanged += Raise.Event<TestSelectionEventHandler>(new TestSelectionEventArgs(null));
+
+            // Assert
+            Assert.That(_view.ShowHideFilterButton.Visible, Is.EqualTo(expectedIsVisible));
         }
     }
 }

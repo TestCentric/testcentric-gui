@@ -48,7 +48,7 @@ namespace TestCentric.Gui.Views
             CollapseToFixturesCommand = new CommandMenuElement(collapseToFixturesMenuItem);
             TestPropertiesCommand = new CommandMenuElement(testPropertiesMenuItem);
             ViewAsXmlCommand = new CommandMenuElement(viewAsXmlMenuItem);
-
+            OutcomeFilter = new MultiCheckedToolStripButtonGroup(new[] { filterOutcomePassedButton, filterOutcomeFailedButton, filterOutcomeWarningButton, filterOutcomeNotRunButton });
             TreeView = treeView;
 
             // NOTE: We use MouseDown here rather than MouseUp because
@@ -124,6 +124,9 @@ namespace TestCentric.Gui.Views
         public ICommand ViewAsXmlCommand { get; private set; }
 
         public TreeView TreeView { get; private set; }
+
+        public IMultiSelection OutcomeFilter { get; private set; }
+
         public TreeNode ContextNode { get; private set; }
         public ContextMenuStrip TreeContextMenu => TreeView.ContextMenuStrip;
 
@@ -199,15 +202,35 @@ namespace TestCentric.Gui.Views
                 _delegate();
         }
 
+        public void SetTestFilterVisibility(bool isVisible)
+        {
+            filterToolStrip.Visible = isVisible;
+        }
+
         public void LoadAlternateImages(string imageSet)
         {
             string[] imageNames = { "Skipped", "Inconclusive", "Success", "Ignored", "Failure" };
-
             string imageDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
                 Path.Combine("Images", Path.Combine("Tree", imageSet)));
 
+            // 1. Load all images once
+            IDictionary<string, Image> images = new Dictionary<string, Image>();
+            foreach (string imageName in imageNames)
+                images[imageName] = LoadAlternateImage(imageName, imageDir);
+
+            // 2. Set tree images
             for (int index = 0; index < imageNames.Length; index++)
-                LoadAlternateImage(index, imageNames[index], imageDir);
+            {
+                string imageName = imageNames[index];
+                treeImages.Images[index] = images[imageName];
+            }
+
+            // 3. Set filter outcome toolbar images
+            filterOutcomeFailedButton.Image = images["Failure"];
+            filterOutcomePassedButton.Image = images["Success"];
+            filterOutcomeWarningButton.Image = images["Ignored"];
+            filterOutcomeNotRunButton.Image = images["Skipped"];
+
             this.Invalidate();
             this.Refresh();
         }
@@ -216,7 +239,7 @@ namespace TestCentric.Gui.Views
 
         #region Helper Methods
 
-        private void LoadAlternateImage(int index, string name, string imageDir)
+        private Image LoadAlternateImage(string name, string imageDir)
         {
             string[] extensions = { ".png", ".jpg" };
 
@@ -225,10 +248,11 @@ namespace TestCentric.Gui.Views
                 string filePath = Path.Combine(imageDir, name + ext);
                 if (File.Exists(filePath))
                 {
-                    treeImages.Images[index] = Image.FromFile(filePath);
-                    break;
+                    return Image.FromFile(filePath);
                 }
             }
+
+            return null;
         }
 
         private IList<TreeNode> GetCheckedNodes()
