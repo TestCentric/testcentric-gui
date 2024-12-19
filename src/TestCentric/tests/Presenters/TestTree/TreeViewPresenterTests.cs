@@ -249,6 +249,19 @@ namespace TestCentric.Gui.Presenters.TestTree
             _model.TestCentricTestFilter.Received().OutcomeFilter = selectedItems;
         }
 
+        [Test]
+        public void TextFilterChanged_ApplyFilter()
+        {
+            // 1. Arrange
+            _view.TextFilter.Text.Returns("TestA");
+
+            // 2. Act
+            _view.TextFilter.SelectionChanged += Raise.Event<CommandHandler>();
+
+            // 3. Assert
+            _model.TestCentricTestFilter.Received().TextFilter = "TestA";
+        }
+
         // TODO: Version 1 Test - Make it work if needed.
         //[Test]
         //public void WhenContextNodeIsNotNull_RunCommandExecutesThatTest()

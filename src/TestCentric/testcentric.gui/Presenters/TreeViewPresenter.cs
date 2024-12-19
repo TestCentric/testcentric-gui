@@ -257,6 +257,12 @@ namespace TestCentric.Gui.Presenters
                 _model.TestCentricTestFilter.OutcomeFilter = filter;
             };
 
+            _view.TextFilter.SelectionChanged += () =>
+            {
+                var text = _view.TextFilter.Text;
+                _model.TestCentricTestFilter.TextFilter = text;
+            };
+
             // Node selected in tree
             //_treeView.SelectedNodesChanged += (nodes) =>
             //{
