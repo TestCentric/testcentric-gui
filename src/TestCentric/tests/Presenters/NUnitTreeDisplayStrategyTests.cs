@@ -133,7 +133,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         }
 
         [Test]
-        public void OnTestFinished_ShowDurationIsInactive_TreeNodeName_IsUpdated()
+        public void OnTestRunFinished_ShowDurationIsInactive_TreeNodeName_IsUpdated()
         {
             // Arrange
             TestNode testNode = new TestNode("<test-case id='1' name='Test1'/>");
@@ -142,8 +142,13 @@ namespace TestCentric.Gui.Presenters.TestTree
             _model.GetResultForTest(testNode.Id).Returns(result);
             _view.InvokeIfRequired(Arg.Do<MethodInvoker>(x => x.Invoke()));
 
+            var nodes = new TreeNode().Nodes;
+            nodes.Add(treeNode);
+            _view.Nodes.Returns(nodes);
+            _view.TreeView.Returns(new TreeView());
+
             // Act
-            _strategy.OnTestFinished(result);
+            _strategy.OnTestRunFinished();
 
             // Assert
             Assert.That(treeNode.Text, Is.EqualTo("Test1"));
@@ -160,8 +165,13 @@ namespace TestCentric.Gui.Presenters.TestTree
             _model.GetResultForTest(testNode.Id).Returns(result);
             _view.InvokeIfRequired(Arg.Do<MethodInvoker>(x => x.Invoke()));
 
+            var nodes = new TreeNode().Nodes;
+            nodes.Add(treeNode);
+            _view.Nodes.Returns(nodes);
+            _view.TreeView.Returns(new TreeView());
+
             // Act
-            _strategy.OnTestFinished(result);
+            _strategy.OnTestRunFinished();
 
             // Assert
             Assert.That(treeNode.Text, Does.Match(@"Test1 \[1[,.]500s\]"));
