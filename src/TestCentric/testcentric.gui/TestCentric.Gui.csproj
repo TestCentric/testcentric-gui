@@ -54,19 +54,19 @@
         <Content Include="Images\Tree\Circles\Success.jpg">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="Images\Tree\Classic\Failure.jpg">
+        <Content Include="Images\Tree\Classic\Failure.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="Images\Tree\Classic\Ignored.jpg">
+        <Content Include="Images\Tree\Classic\Ignored.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="Images\Tree\Classic\Inconclusive.jpg">
+        <Content Include="Images\Tree\Classic\Inconclusive.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="Images\Tree\Classic\Skipped.jpg">
+        <Content Include="Images\Tree\Classic\Skipped.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="Images\Tree\Classic\Success.jpg">
+        <Content Include="Images\Tree\Classic\Success.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
         <Content Include="Images\Tree\Default\Failure.png">
@@ -121,5 +121,5 @@
             <LastGenOutput>Resources.Designer.cs</LastGenOutput>
         </EmbeddedResource>
     </ItemGroup>
-	
+    
 </Project>
