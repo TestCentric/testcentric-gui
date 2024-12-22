@@ -220,13 +220,8 @@ namespace TestCentric.Gui.Views
             // 
             // treeImages
             // 
-            this.treeImages.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("treeImages.ImageStream")));
             this.treeImages.TransparentColor = System.Drawing.Color.Transparent;
-            this.treeImages.Images.SetKeyName(0, "Skipped.png");
-            this.treeImages.Images.SetKeyName(1, "Inconclusive.png");
-            this.treeImages.Images.SetKeyName(2, "Success.png");
-            this.treeImages.Images.SetKeyName(3, "Warning.png");
-            this.treeImages.Images.SetKeyName(4, "Failure.png");
+            this.treeImages.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
             // 
             // TestTreeView
             // 
