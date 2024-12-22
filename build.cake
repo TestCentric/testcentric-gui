@@ -33,8 +33,6 @@ static readonly FilePath[] ENGINE_FILES = {
 static readonly FilePath[] GUI_FILES = {
         "testcentric.exe", "testcentric.exe.config", "nunit.uiexception.dll",
         "TestCentric.Gui.Runner.dll", "TestCentric.Gui.Model.dll", "Mono.Options.dll" };
-static readonly FilePath[] TREE_ICONS_JPG = {
-        "Success.jpg", "Failure.jpg", "Ignored.jpg", "Inconclusive.jpg", "Skipped.jpg" };
 static readonly FilePath[] TREE_ICONS_PNG = {
         "Success.png", "Failure.png", "Ignored.png", "Inconclusive.png", "Skipped.png" };
 
@@ -66,9 +64,9 @@ var nugetPackage = new NuGetPackage(
 				"TestCentric.Metadata.dll", "TestCentric.Extensibility.dll", "TestCentric.Extensibility.Api.dll",
 				"nunit.engine.api.dll", "../../nuget/testcentric.nuget.addins"),
 			new DirectoryContent("tools/Images/Tree/Circles").WithFiles(
-				"Images/Tree/Circles/Success.jpg", "Images/Tree/Circles/Failure.jpg", "Images/Tree/Circles/Ignored.jpg", "Images/Tree/Circles/Inconclusive.jpg", "Images/Tree/Circles/Skipped.jpg"),
+				"Images/Tree/Circles/Success.png", "Images/Tree/Circles/Failure.png", "Images/Tree/Circles/Ignored.png", "Images/Tree/Circles/Inconclusive.png", "Images/Tree/Circles/Skipped.png"),
 			new DirectoryContent("tools/Images/Tree/Classic").WithFiles(
-				"Images/Tree/Classic/Success.jpg", "Images/Tree/Classic/Failure.jpg", "Images/Tree/Classic/Ignored.jpg", "Images/Tree/Classic/Inconclusive.jpg", "Images/Tree/Classic/Skipped.jpg"),
+				"Images/Tree/Classic/Success.png", "Images/Tree/Classic/Failure.png", "Images/Tree/Classic/Ignored.png", "Images/Tree/Classic/Inconclusive.png", "Images/Tree/Classic/Skipped.png"),
 			new DirectoryContent("tools/Images/Tree/Default").WithFiles(
 				"Images/Tree/Default/Success.png", "Images/Tree/Default/Failure.png", "Images/Tree/Default/Ignored.png", "Images/Tree/Default/Inconclusive.png", "Images/Tree/Default/Skipped.png"),
 			new DirectoryContent("tools/Images/Tree/Visual Studio").WithFiles(
@@ -83,8 +81,8 @@ var nugetPackage = new NuGetPackage(
 	checks: new PackageCheck[] {
 		HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "testcentric.png"),
 		HasDirectory("tools").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.nuget.addins"),
-		HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
-		HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
+		HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_PNG),
+		HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_PNG),
 		HasDirectory("tools/Images/Tree/Default").WithFiles(TREE_ICONS_PNG),
 		HasDirectory("tools/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG)
 	},
@@ -105,9 +103,9 @@ var chocolateyPackage = new ChocolateyPackage(
 				"TestCentric.Engine.dll", "TestCentric.Engine.Api.dll", "TestCentric.InternalTrace.dll",
 				"TestCentric.Metadata.dll", "TestCentric.Extensibility.dll", "TestCentric.Extensibility.Api.dll"),
 			new DirectoryContent("tools/Images/Tree/Circles").WithFiles(
-				"Images/Tree/Circles/Success.jpg", "Images/Tree/Circles/Failure.jpg", "Images/Tree/Circles/Ignored.jpg", "Images/Tree/Circles/Inconclusive.jpg", "Images/Tree/Circles/Skipped.jpg"),
+				"Images/Tree/Circles/Success.png", "Images/Tree/Circles/Failure.png", "Images/Tree/Circles/Ignored.png", "Images/Tree/Circles/Inconclusive.png", "Images/Tree/Circles/Skipped.png"),
 			new DirectoryContent("tools/Images/Tree/Classic").WithFiles(
-				"Images/Tree/Classic/Success.jpg", "Images/Tree/Classic/Failure.jpg", "Images/Tree/Classic/Ignored.jpg", "Images/Tree/Classic/Inconclusive.jpg", "Images/Tree/Classic/Skipped.jpg"),
+				"Images/Tree/Classic/Success.png", "Images/Tree/Classic/Failure.png", "Images/Tree/Classic/Ignored.png", "Images/Tree/Classic/Inconclusive.png", "Images/Tree/Classic/Skipped.png"),
 			new DirectoryContent("tools/Images/Tree/Default").WithFiles(
 				"Images/Tree/Default/Success.png", "Images/Tree/Default/Failure.png", "Images/Tree/Default/Ignored.png", "Images/Tree/Default/Inconclusive.png", "Images/Tree/Default/Skipped.png"),
 			new DirectoryContent("tools/Images/Tree/Visual Studio").WithFiles(
@@ -121,8 +119,8 @@ var chocolateyPackage = new ChocolateyPackage(
 	testRunner: new GuiSelfTester(BuildSettings.ChocolateyTestDirectory + "testcentric-gui." + BuildSettings.PackageVersion + "/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
 		HasDirectory("tools").WithFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "VERIFICATION.txt", "testcentric.choco.addins").AndFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.choco.addins"),
-		HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_JPG),
-		HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_JPG),
+		HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_PNG),
+		HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_PNG),
 		HasDirectory("tools/Images/Tree/Default").WithFiles(TREE_ICONS_PNG),
 		HasDirectory("tools/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG),
 	},
