@@ -39,34 +39,34 @@
         <Content Include="Images\SummaryReport.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>-->
-        <Content Include="Images\Tree\Circles\Failure.jpg">
+        <Content Include="Images\Tree\Circles\Failure.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="Images\Tree\Circles\Ignored.jpg">
+        <Content Include="Images\Tree\Circles\Ignored.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="Images\Tree\Circles\Inconclusive.jpg">
+        <Content Include="Images\Tree\Circles\Inconclusive.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="Images\Tree\Circles\Skipped.jpg">
+        <Content Include="Images\Tree\Circles\Skipped.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="Images\Tree\Circles\Success.jpg">
+        <Content Include="Images\Tree\Circles\Success.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="Images\Tree\Classic\Failure.jpg">
+        <Content Include="Images\Tree\Classic\Failure.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="Images\Tree\Classic\Ignored.jpg">
+        <Content Include="Images\Tree\Classic\Ignored.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="Images\Tree\Classic\Inconclusive.jpg">
+        <Content Include="Images\Tree\Classic\Inconclusive.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="Images\Tree\Classic\Skipped.jpg">
+        <Content Include="Images\Tree\Classic\Skipped.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="Images\Tree\Classic\Success.jpg">
+        <Content Include="Images\Tree\Classic\Success.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
         <Content Include="Images\Tree\Default\Failure.png">
@@ -121,5 +121,5 @@
             <LastGenOutput>Resources.Designer.cs</LastGenOutput>
         </EmbeddedResource>
     </ItemGroup>
-	
+    
 </Project>

@@ -219,11 +219,9 @@ namespace TestCentric.Gui.Views
                 images[imageName] = LoadAlternateImage(imageName, imageDir);
 
             // 2. Set tree images
-            for (int index = 0; index < imageNames.Length; index++)
-            {
-                string imageName = imageNames[index];
-                treeImages.Images[index] = images[imageName];
-            }
+            treeImages.Images.Clear();
+            foreach (string imageName in imageNames)
+                treeImages.Images.Add(imageName, images[imageName]);
 
             // 3. Set filter outcome toolbar images
             filterOutcomeFailedButton.Image = images["Failure"];
