@@ -84,18 +84,20 @@ namespace TestCentric.Gui.Presenters
             foreach (TreeNode treeNode in GetTreeNodesForTest(result))
             {
                 _view.SetImageIndex(treeNode, imageIndex);
-                UpdateTreeNodeName(treeNode);
             }
         }
 
         public virtual void OnTestRunStarting()
         {
             _view.ResetAllTreeNodeImages();
-            UpdateTreeNodeNames();
+            if (_settings.Gui.TestTree.ShowTestDuration)
+                _view.InvokeIfRequired(() => UpdateTreeNodeNames());
         }
 
         public virtual void OnTestRunFinished()
         {
+            if (_settings.Gui.TestTree.ShowTestDuration)
+                _view.InvokeIfRequired(() => UpdateTreeNodeNames());
         }
 
         // Called when either the display strategy or the grouping
@@ -205,11 +207,13 @@ namespace TestCentric.Gui.Presenters
 
         private void UpdateTreeNodeNames(TreeNodeCollection nodes)
         {
+            _view.TreeView.BeginUpdate();
             foreach (TreeNode treeNode in nodes)
             {
                 UpdateTreeNodeName(treeNode);
                 UpdateTreeNodeNames(treeNode.Nodes);
             }
+            _view.TreeView.EndUpdate();
         }
 
         private void UpdateTreeNodeName(TreeNode treeNode)
