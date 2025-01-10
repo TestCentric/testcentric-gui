@@ -128,7 +128,7 @@ namespace TestCentric.Gui.Views
 
         public IMultiSelection OutcomeFilter { get; private set; }
 
-        public ISelection TextFilter { get; private set; }
+        public IChanged TextFilter { get; private set; }
 
         public TreeNode ContextNode { get; private set; }
         public ContextMenuStrip TreeContextMenu => TreeView.ContextMenuStrip;

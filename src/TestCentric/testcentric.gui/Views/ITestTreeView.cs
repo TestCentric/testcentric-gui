@@ -53,7 +53,7 @@ namespace TestCentric.Gui.Views
         // Test Filter related properties / methods
         IMultiSelection OutcomeFilter { get; }
 
-        ISelection TextFilter { get; }
+        IChanged TextFilter { get; }
 
         void SetTestFilterVisibility(bool visible);
 

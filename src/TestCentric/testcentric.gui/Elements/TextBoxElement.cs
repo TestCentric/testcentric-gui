@@ -10,15 +10,15 @@ using System.Windows.Forms;
 namespace TestCentric.Gui.Elements
 {
     /// <summary>
-    /// This class implements the ISelection interface for a TextBox control. It provides this additional functionality:
+    /// This class implements the IChanged interface for a TextBox control. It provides this additional functionality:
     /// - show a PlaceHoder text if there's no text input
-    /// - Invoke the SelectionChanged event as soon as no further input is made within a short period of time.
+    /// - Invoke the Changed event as soon as no further input is made within a short period of time.
     /// </summary>
-    public class TextBoxElement : ISelection
+    public class TextBoxElement : IChanged
     {
         private Timer _typingTimer;
 
-        public event CommandHandler SelectionChanged;
+        public event CommandHandler Changed;
 
         public TextBoxElement(Control textBox, string placeHolderText)
         {
@@ -31,18 +31,6 @@ namespace TestCentric.Gui.Elements
 
             // Call LostFocus to set initial text and color
             OnTextBoxLostFocus(null, EventArgs.Empty);
-        }
-
-        public string SelectedItem
-        {
-            get => TextBox.Text;
-            set => TextBox.Text = value;
-        }
-
-        public int SelectedIndex
-        {
-            get => 0;
-            set => throw new NotImplementedException();
         }
 
         public bool Enabled
@@ -70,11 +58,6 @@ namespace TestCentric.Gui.Elements
         private bool IsPlaceHolderTextShown { get; set; }
 
         public void InvokeIfRequired(MethodInvoker _delegate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Refresh()
         {
             throw new NotImplementedException();
         }
@@ -126,8 +109,8 @@ namespace TestCentric.Gui.Elements
 
             // The timer must be stopped!
             timer.Stop();
-            if (SelectionChanged != null)
-                SelectionChanged();
+            if (Changed != null)
+                Changed();
 
             TextBox.Focus();
         }

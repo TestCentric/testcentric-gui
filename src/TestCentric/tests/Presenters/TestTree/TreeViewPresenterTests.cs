@@ -256,7 +256,7 @@ namespace TestCentric.Gui.Presenters.TestTree
             _view.TextFilter.Text.Returns("TestA");
 
             // 2. Act
-            _view.TextFilter.SelectionChanged += Raise.Event<CommandHandler>();
+            _view.TextFilter.Changed += Raise.Event<CommandHandler>();
 
             // 3. Assert
             _model.TestCentricTestFilter.Received().TextFilter = "TestA";
