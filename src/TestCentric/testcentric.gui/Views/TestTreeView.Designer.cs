@@ -1,5 +1,7 @@
 namespace TestCentric.Gui.Views
 {
+    using TestCentric.Gui.Controls;
+
     partial class TestTreeView
     {
         /// <summary> 
@@ -37,6 +39,8 @@ namespace TestCentric.Gui.Views
             this.filterOutcomeFailedButton = new System.Windows.Forms.ToolStripButton();
             this.filterOutcomeWarningButton = new System.Windows.Forms.ToolStripButton();
             this.filterOutcomeNotRunButton = new System.Windows.Forms.ToolStripButton();
+            this.filterTextToolStrip = new System.Windows.Forms.ToolStrip();
+            this.filterTextBox = new StretchToolStripTextBox();
             this.testTreeContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.runMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -127,6 +131,22 @@ namespace TestCentric.Gui.Views
             this.filterToolStrip.Visible = false;
             this.filterToolStrip.Size = new System.Drawing.Size(744, 24);
             this.filterToolStrip.TabIndex = 0;
+            // 
+            // filterTextBox
+            // 
+            this.filterTextBox.Name = "filterTextBox";
+            // 
+            // filterTextToolStrip
+            // 
+            this.filterTextToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.filterTextBox,
+            });
+            this.filterTextToolStrip.Location = new System.Drawing.Point(0, 0);
+            this.filterTextToolStrip.Name = "filterTextToolStrip";
+            this.filterTextToolStrip.Size = new System.Drawing.Size(744, 24);
+            this.filterTextToolStrip.Stretch = true;
+            this.filterTextToolStrip.Visible = false;
+            this.filterTextToolStrip.TabIndex = 1;
             // 
             // testTreeContextMenu
             // 
@@ -228,6 +248,7 @@ namespace TestCentric.Gui.Views
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.treeView);
+            this.Controls.Add(this.filterTextToolStrip);
             this.Controls.Add(this.filterToolStrip);
             this.Name = "TestTreeView";
             this.Size = new System.Drawing.Size(191, 246);
@@ -246,6 +267,8 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.ToolStripButton filterOutcomeFailedButton;
         private System.Windows.Forms.ToolStripButton filterOutcomeWarningButton;
         private System.Windows.Forms.ToolStripButton filterOutcomeNotRunButton;
+        private System.Windows.Forms.ToolStrip filterTextToolStrip;
+        private System.Windows.Forms.ToolStripTextBox filterTextBox;
         private System.Windows.Forms.ToolStripMenuItem runMenuItem;
         private System.Windows.Forms.ToolStripMenuItem expandAllMenuItem;
         private System.Windows.Forms.ToolStripMenuItem collapseAllMenuItem;
