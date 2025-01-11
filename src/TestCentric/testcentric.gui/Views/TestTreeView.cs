@@ -49,7 +49,7 @@ namespace TestCentric.Gui.Views
             TestPropertiesCommand = new CommandMenuElement(testPropertiesMenuItem);
             ViewAsXmlCommand = new CommandMenuElement(viewAsXmlMenuItem);
             OutcomeFilter = new MultiCheckedToolStripButtonGroup(new[] { filterOutcomePassedButton, filterOutcomeFailedButton, filterOutcomeWarningButton, filterOutcomeNotRunButton });
-            TextFilter = new TextBoxElement(filterTextBox.Control, "Filter...");
+            TextFilter = new ToolStripTextBoxElement(filterTextBox, "Filter...");
             TreeView = treeView;
 
             // NOTE: We use MouseDown here rather than MouseUp because

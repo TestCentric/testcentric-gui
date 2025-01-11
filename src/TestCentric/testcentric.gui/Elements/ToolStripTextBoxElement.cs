@@ -10,17 +10,18 @@ using System.Windows.Forms;
 namespace TestCentric.Gui.Elements
 {
     /// <summary>
-    /// This class implements the IChanged interface for a TextBox control. It provides this additional functionality:
+    /// This class implements the IChanged interface for a ToolStripTextBox control. It provides this additional functionality:
     /// - show a PlaceHoder text if there's no text input
     /// - Invoke the Changed event as soon as no further input is made within a short period of time.
     /// </summary>
-    public class TextBoxElement : IChanged
+    public class ToolStripTextBoxElement : ToolStripElement, IChanged
     {
         private Timer _typingTimer;
 
         public event CommandHandler Changed;
 
-        public TextBoxElement(Control textBox, string placeHolderText)
+        public ToolStripTextBoxElement(ToolStripTextBox textBox, string placeHolderText)
+            : base(textBox)
         {
             TextBox = textBox;
             PlaceHolderText = placeHolderText;
@@ -33,34 +34,11 @@ namespace TestCentric.Gui.Elements
             OnTextBoxLostFocus(null, EventArgs.Empty);
         }
 
-        public bool Enabled
-        {
-            get => TextBox.Enabled;
-            set => TextBox.Enabled = value;
-        }
-
-        public bool Visible
-        {
-            get => TextBox.Visible;
-            set => TextBox.Visible = value;
-        }
-
-        public string Text
-        {
-            get => TextBox.Text;
-            set => TextBox.Text = value;
-        }
-
         private string PlaceHolderText { get; set; }
 
-        private Control TextBox { get; }
+        private ToolStripTextBox TextBox { get; }
 
         private bool IsPlaceHolderTextShown { get; set; }
-
-        public void InvokeIfRequired(MethodInvoker _delegate)
-        {
-            throw new NotImplementedException();
-        }
 
         private void OnTextBoxGotFocus(object sender, EventArgs e)
         {
