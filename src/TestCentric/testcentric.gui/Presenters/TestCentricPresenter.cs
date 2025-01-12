@@ -259,6 +259,7 @@ namespace TestCentric.Gui.Presenters
                     case "TestCentric.Gui.TestTree.DisplayFormat":
                         _view.DisplayFormat.SelectedItem = _settings.Gui.TestTree.DisplayFormat;
                         UpdateTreeDisplayMenuItem();
+                        UpdateViewCommands();
                         break;
                     case "TestCentric.Gui.TestTree.TestList.GroupBy":
                         _view.GroupBy.SelectedItem = _settings.Gui.TestTree.TestList.GroupBy;
