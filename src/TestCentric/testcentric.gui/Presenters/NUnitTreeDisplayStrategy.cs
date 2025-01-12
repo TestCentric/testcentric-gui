@@ -50,6 +50,7 @@ namespace TestCentric.Gui.Presenters
                 SetDefaultInitialExpansion();
 
             _view.OutcomeFilter.Enabled = true;
+            _view.TextFilter.Enabled = true;
         }
 
         protected override VisualState CreateVisualState() => new VisualState("NUNIT_TREE", _settings.Gui.TestTree.ShowNamespace).LoadFrom(_view.TreeView);

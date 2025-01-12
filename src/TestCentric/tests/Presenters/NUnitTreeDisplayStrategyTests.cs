@@ -383,6 +383,31 @@ namespace TestCentric.Gui.Presenters.TestTree
             // Assert
             _view.OutcomeFilter.Received().Enabled = false;
         }
+
+        [Test]
+        public void OnTestLoaded_TextFilter_IsEnabled()
+        {
+            // Arrange
+            string xml =
+                "<test-suite type='Assembly' id='1-1030' name='Library.Test.dll'>" +
+                "</test-suite>";
+
+            // Act
+            _strategy.OnTestLoaded(new TestNode(xml), null);
+
+            // Assert
+            _view.TextFilter.Received().Enabled = true;
+        }
+
+        [Test]
+        public void OnTestUnloaded_TextFilter_IsDisabled()
+        {
+            // Arrange + Act
+            _strategy.OnTestUnloaded();
+
+            // Assert
+            _view.TextFilter.Received().Enabled = false;
+        }
     }
 
 
