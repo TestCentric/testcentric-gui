@@ -33,6 +33,11 @@ namespace TestCentric.Gui.Model.Filter
         IEnumerable<string> AllCategories { get; }
 
         /// <summary>
+        /// Checks if any filter is active
+        /// </summary>
+        bool IsActive { get; }
+
+        /// <summary>
         /// Clear all actives filters and reset them to default
         /// </summary>
         void ClearAllFilters();

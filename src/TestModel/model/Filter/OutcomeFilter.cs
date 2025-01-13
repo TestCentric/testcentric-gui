@@ -18,7 +18,7 @@ namespace TestCentric.Gui.Model.Filter
 
         private List<string> _condition = new List<string>();
 
-        internal OutcomeFilter(ITestModel model)
+        public OutcomeFilter(ITestModel model)
         {
             TestModel = model;
         }
@@ -32,6 +32,8 @@ namespace TestCentric.Gui.Model.Filter
             get { return _condition; }
             set { _condition = value.ToList(); }
         }
+
+        public bool IsActive => _condition.Any();
 
         public bool IsMatching(TestNode testNode)
         {
