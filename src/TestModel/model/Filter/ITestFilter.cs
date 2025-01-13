@@ -36,5 +36,10 @@ namespace TestCentric.Gui.Model.Filter
         /// Checks if the testNode matches the filter condition
         /// </summary>
         bool IsMatching(TestNode testNode);
+
+        /// <summary>
+        /// Checks if the filter is active
+        /// </summary>
+        bool IsActive { get; }
     }
 }

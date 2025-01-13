@@ -18,7 +18,7 @@ namespace TestCentric.Gui.Model.Filter
 
         private List<string> _condition = new List<string>();
 
-        internal CategoryFilter(ITestModel model)
+        public CategoryFilter(ITestModel model)
         {
             TestModel = model;
         }
@@ -32,6 +32,8 @@ namespace TestCentric.Gui.Model.Filter
             get { return _condition; }
             set { _condition = value.ToList(); }
         }
+
+        public bool IsActive => AllCategories.Except(_condition).Any();
 
         public IEnumerable<string> AllCategories { get; private set; }
 

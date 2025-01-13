@@ -80,6 +80,35 @@ namespace TestCentric.Gui.Model
             return new TestFilter(sb.ToString());
         }
 
+        /// <summary>
+        /// Creates a TestFilter which contains the IDs of all visible child nodes
+        /// </summary>
+        public static TestFilter MakeVisibleIdFilter(IEnumerable<TestNode> testNodes)
+        {
+            StringBuilder sb = new StringBuilder("<filter><or>");
+
+            foreach (TestNode test in testNodes)
+                MakeVisibleIdFilter(test, sb);
+
+            sb.Append("</or></filter>");
+
+            return new TestFilter(sb.ToString());
+        }
+
+        private static void MakeVisibleIdFilter(TestNode testNode, StringBuilder sb)
+        {
+            // If testNode is not visible, don't add it or any child to filter
+            if (!testNode.IsVisible)
+                return;
+
+            // Add only Id for leaf nodes
+            if (!testNode.IsProject && !testNode.IsSuite && testNode.Children.Count == 0)
+                sb.Append($"<id>{testNode.Id}</id>");
+
+            foreach (TestNode childNode in testNode.Children)
+                MakeVisibleIdFilter(childNode, sb);
+        }
+
         public static TestFilter MakeNotFilter(TestFilter filter)
         {
             return new TestFilter($"<filter><not>{filter.InnerXml}</not></filter>");
