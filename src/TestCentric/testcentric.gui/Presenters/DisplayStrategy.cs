@@ -102,12 +102,13 @@ namespace TestCentric.Gui.Presenters
 
         // Called when either the display strategy or the grouping
         // changes. May need to distinguish these cases.
-        public void Reload()
+        public void Reload(bool applyVisualState = false)
         {
             TestNode testNode = _model.LoadedTests;
             if (testNode != null)
             {
-                OnTestLoaded(testNode, null);
+                VisualState visualState = applyVisualState ? CreateVisualState() : null;
+                OnTestLoaded(testNode, visualState);
 
                 if (_view.Nodes != null) // TODO: Null when mocked
                     foreach (TreeNode treeNode in _view.Nodes)
