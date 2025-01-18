@@ -28,7 +28,7 @@ In the current implementation, there are two separate hierarchies of UI Elements
 
 `IControlElement` is a bit of an anomaly. Unlike other interfaces, it may only be used by elements that are based on Windows Controls. It extends `IViewElement` to add properties `Location`, `Size`, `ClientSize`, `ContextMenu` and `ContextMenuStrip`.
 
-**NOTE:** The `ContextMenu` property returns a Windows `Menu` instance and `ContextMenuStrip` returns a `ToolStripDropDownMenu`, both of these exposingt he underlying Windows implementation. This interface and its use will be reviewed in the future.
+**NOTE:** The `ContextMenu` property returns a Windows `Menu` instance and `ContextMenuStrip` returns a `ToolStripDropDownMenu`, both of these exposing the underlying Windows implementation. This interface and its use will be reviewed in the future.
 
 ### IListBox
 
