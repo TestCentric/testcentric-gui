@@ -74,7 +74,6 @@ var nugetPackage = new NuGetPackage(
 		.WithDependencies(
 			KnownExtensions.Net462PluggableAgent.SetVersion("2.5.1").NuGetPackage,
 			KnownExtensions.Net60PluggableAgent.SetVersion("2.5.1").NuGetPackage,
-			KnownExtensions.Net70PluggableAgent.SetVersion("2.5.1").NuGetPackage,
 			KnownExtensions.Net80PluggableAgent.SetVersion("2.5.1").NuGetPackage
         ),
 	testRunner: new GuiSelfTester(BuildSettings.NuGetTestDirectory + "TestCentric.GuiRunner." + BuildSettings.PackageVersion + "/tools/testcentric.exe"),
@@ -113,7 +112,6 @@ var chocolateyPackage = new ChocolateyPackage(
 		.WithDependencies(
 			KnownExtensions.Net462PluggableAgent.SetVersion("2.5.1").ChocoPackage,
 			KnownExtensions.Net60PluggableAgent.SetVersion("2.5.1").ChocoPackage,
-			KnownExtensions.Net70PluggableAgent.SetVersion("2.5.1").ChocoPackage,
 			KnownExtensions.Net80PluggableAgent.SetVersion("2.5.1").ChocoPackage
         ),
 	testRunner: new GuiSelfTester(BuildSettings.ChocolateyTestDirectory + "testcentric-gui." + BuildSettings.PackageVersion + "/tools/testcentric.exe"),

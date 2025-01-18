@@ -63,7 +63,7 @@ public static void DefinePackageTests()
 
     PackageTests.Add(new PackageTest(1, "Net70Test", "Run mock-assembly.dll under .NET 7.0",
         "net7.0/mock-assembly.dll",
-        MockAssemblyExpectedResult("Net70AgentLauncher")));
+        MockAssemblyExpectedResult("Net80AgentLauncher")));
 
     PackageTests.Add(new PackageTest(1, "Net80Test", "Run mock-assembly.dll under .NET 8.0",
         "net8.0/mock-assembly.dll --trace:Debug",
@@ -99,7 +99,7 @@ public static void DefinePackageTests()
         "net7.0/aspnetcore-test.dll",
         new ExpectedResult("Passed")
         {
-            Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net70AgentLauncher") }
+            Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net80AgentLauncher") }
         }));
 
 	// Windows Forms Tests
@@ -123,7 +123,7 @@ public static void DefinePackageTests()
         "net7.0-windows/windows-forms-test.dll",
         new ExpectedResult("Passed")
         {
-            Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net70AgentLauncher") }
+            Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net80AgentLauncher") }
         }));
 
 	// Multiple assembly tests
