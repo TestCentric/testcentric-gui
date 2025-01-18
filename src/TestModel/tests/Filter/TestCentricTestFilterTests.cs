@@ -9,9 +9,8 @@ using System.Linq;
 using NSubstitute;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
-using TestCentric.Gui.Model.Filter;
 
-namespace TestCentric.Gui.Model
+namespace TestCentric.Gui.Model.Filter
 {
     [TestFixture]
     internal class TestCentricTestFilterTests
@@ -320,7 +319,7 @@ namespace TestCentric.Gui.Model
             // Act
             TestCentricTestFilter testFilter = new TestCentricTestFilter(_model, () => { });
             testFilter.Init();
-            testFilter.CategoryFilter= categoryFilter;
+            testFilter.CategoryFilter = categoryFilter;
 
             // Assert
             foreach (string testId in expectedVisibleNodes)
@@ -383,7 +382,7 @@ namespace TestCentric.Gui.Model
         }
 
         private static object[] FilterByCategoryCategoryAndTextAllInvisibleTestCases =
-{
+        {
             new object[] { new[] { "Category_XY" }, new[] { OutcomeFilter.AllOutcome }, ""},
             new object[] { new[] { "Category_1" }, new[] { "Passed", "Failed" }, "NamespaceXY"},
             new object[] { new[] { "Category_3" }, new[] { OutcomeFilter.NotRunOutcome }, ""},
@@ -426,6 +425,48 @@ namespace TestCentric.Gui.Model
             AssertTestNodeIsInvisible(testNode);
         }
 
+        [Test]
+        public void IsActive_InitFilter_IsFalse()
+        {
+            // Arrange
+            TestCentricTestFilter testFilter = new TestCentricTestFilter(_model, () => { });
+            testFilter.Init();
+
+            // Act
+            bool isActive = testFilter.IsActive;
+
+            // Assert
+            Assert.That(isActive, Is.False);
+        }
+
+        private static object[] IsActiveTestCases =
+{
+            new object[] { new[] { "Category_XY" }, new string[] { }, ""},
+            new object[] { new string[] { }, new[] { "Passed", "Failed" }, ""},
+            new object[] { new string[] { }, new string[] { }, "TestA"},
+        };
+
+        [Test]
+        [TestCaseSource(nameof(IsActiveTestCases))]
+        public void IsActive_FilterIsSet_IsTrue(IList<string> categoryFilter, IList<string> outcomeFilter, string textFilter)
+        {
+            // Arrange
+            var testNode = new TestNode($"<test-case id='1' name='TestA' />");
+            _model.LoadedTests.Returns(testNode);
+
+            TestCentricTestFilter testFilter = new TestCentricTestFilter(_model, () => { });
+            testFilter.Init();
+            testFilter.CategoryFilter = categoryFilter;
+            testFilter.OutcomeFilter = outcomeFilter;
+            testFilter.TextFilter = textFilter;
+
+            // Act
+            bool isActive = testFilter.IsActive;
+
+            // Assert
+            Assert.That(isActive, Is.True);
+        }
+
         private void AssertTestNodeIsInvisible(TestNode testNode)
         {
             Assert.That(testNode.IsVisible, Is.False, $"TestNode {testNode.Id} is not invisible.");
@@ -435,7 +476,7 @@ namespace TestCentric.Gui.Model
 
         private TestNode GetTestNode(TestNode testNode, string testId)
         {
-            if (testNode.Id == testId) 
+            if (testNode.Id == testId)
                 return testNode;
 
             foreach (TestNode child in testNode.Children)

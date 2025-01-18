@@ -680,6 +680,10 @@ namespace TestCentric.Gui.Model
             if (!runSpec.CategoryFilter.IsEmpty)
                 filter = TestFilter.MakeAndFilter(filter, runSpec.CategoryFilter);
 
+            // If a filter is active in the UI, a TestFilter must be created accordingly that contains the ID all visible children of the selected nodes.
+            if (Settings.Gui.TestTree.DisplayFormat == "NUNIT_TREE" && TestCentricTestFilter.IsActive)
+                filter = TestFilter.MakeVisibleIdFilter(runSpec.SelectedTests);
+
             // We need to re-create the test runner because settings such
             // as debugging have already been passed to the test runner.
             // For performance reasons, we only do this if we did run
