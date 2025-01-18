@@ -3,6 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
+using System;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Elements
@@ -10,25 +11,25 @@ namespace TestCentric.Gui.Elements
     /// <summary>
     /// ButtonElement wraps a Button as an ICommand.
     /// </summary>
-    public class ToolStripButtonElement : ToolStripElement, ICommand, IChecked
+    [Obsolete("No longer used", true)]
+    public class ButtonElement : ControlElement, ICommand
     {
-        private ToolStripButton _button;
+        private Button _button;
 
         public event CommandHandler Execute;
-        public event CommandHandler CheckedChanged;
+        //public event CommandHandler CheckedChanged;
 
-        public bool Checked
-        {
-            get { return _button.Checked; }
-            set { InvokeIfRequired(() => _button.Checked = value); }
-        }
+        //public bool Checked
+        //{
+        //    get { return _button.Checked; }
+        //    set { InvokeIfRequired(() => _button.Checked = value); }
+        //}
 
-        public ToolStripButtonElement(ToolStripButton button) : base(button)
+        public ButtonElement(Button button) : base(button)
         {
             _button = button;
 
             button.Click += (s, e) => Execute?.Invoke();
-            button.CheckedChanged += (s, e) => CheckedChanged.Invoke();
         }
     }
 }

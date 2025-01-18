@@ -1,8 +1,9 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
+using System;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Elements
@@ -11,6 +12,7 @@ namespace TestCentric.Gui.Elements
     /// ListBoxElement wraps a ListBox that contains string items
     /// or items that implement ToString() in a useful way.
     /// </summary>
+    [Obsolete("No longer used", true)]
     public class ListBoxElement : ControlElement, IListBox
     {
         private ListBox _listBox;
