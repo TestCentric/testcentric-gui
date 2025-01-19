@@ -360,7 +360,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         }
 
         [Test]
-        public void OnTestLoaded_OutcomeFilter_IsEnabled()
+        public void OnTestLoaded_TestFilters_AreEnabled()
         {
             // Arrange
             string xml =
@@ -371,42 +371,17 @@ namespace TestCentric.Gui.Presenters.TestTree
             _strategy.OnTestLoaded(new TestNode(xml), null);
 
             // Assert
-            _view.OutcomeFilter.Received().Enabled = true;
+            _view.Received().EnableTestFilter(true);
         }
 
         [Test]
-        public void OnTestUnloaded_OutcomeFilter_IsDisabled()
+        public void OnTestUnloaded_TestFilters_AreDisabled()
         {
             // Arrange + Act
             _strategy.OnTestUnloaded();
 
             // Assert
-            _view.OutcomeFilter.Received().Enabled = false;
-        }
-
-        [Test]
-        public void OnTestLoaded_TextFilter_IsEnabled()
-        {
-            // Arrange
-            string xml =
-                "<test-suite type='Assembly' id='1-1030' name='Library.Test.dll'>" +
-                "</test-suite>";
-
-            // Act
-            _strategy.OnTestLoaded(new TestNode(xml), null);
-
-            // Assert
-            _view.TextFilter.Received().Enabled = true;
-        }
-
-        [Test]
-        public void OnTestUnloaded_TextFilter_IsDisabled()
-        {
-            // Arrange + Act
-            _strategy.OnTestUnloaded();
-
-            // Assert
-            _view.TextFilter.Received().Enabled = false;
+            _view.Received().EnableTestFilter(false);
         }
     }
 
