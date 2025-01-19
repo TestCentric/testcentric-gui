@@ -75,7 +75,7 @@ namespace TestCentric.Gui.Presenters
         public void OnTestUnloaded()
         {
             ClearTree();
-            _view.OutcomeFilter.Enabled = false;
+            _view.EnableTestFilter(false);
         }
 
         public virtual void OnTestFinished(ResultNode result)

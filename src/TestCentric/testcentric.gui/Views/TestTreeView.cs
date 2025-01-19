@@ -211,6 +211,12 @@ namespace TestCentric.Gui.Views
             filterTextToolStrip.Visible = isVisible;
         }
 
+        public void EnableTestFilter(bool enable)
+        {
+            filterToolStrip.Enabled = enable;
+            filterTextToolStrip.Enabled = enable;
+        }
+
         public void LoadAlternateImages(string imageSet)
         {
             string[] imageNames = { "Skipped", "Inconclusive", "Success", "Ignored", "Failure" };

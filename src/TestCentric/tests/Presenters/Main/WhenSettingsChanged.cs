@@ -3,6 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
+using NSubstitute;
 using NUnit.Framework;
 
 namespace TestCentric.Gui.Presenters.Main
@@ -18,7 +19,7 @@ namespace TestCentric.Gui.Presenters.Main
             _settings.Gui.TestTree.DisplayFormat = displayFormat;
 
             // 2. Assert
-            _view.DisplayFormat.SelectedItem = displayFormat;
+            Assert.That(_view.DisplayFormat.SelectedItem, Is.EqualTo(displayFormat));
         }
 
         [TestCase("ASSEMBLY")]
@@ -30,7 +31,7 @@ namespace TestCentric.Gui.Presenters.Main
             _settings.Gui.TestTree.FixtureList.GroupBy = groupBy;
 
             // 2. Assert
-            _view.GroupBy.SelectedItem = groupBy;
+            Assert.That(_view.GroupBy.SelectedItem, Is.EqualTo(groupBy));
         }
 
         [TestCase("ASSEMBLY")]
@@ -42,7 +43,7 @@ namespace TestCentric.Gui.Presenters.Main
             _settings.Gui.TestTree.TestList.GroupBy = groupBy;
 
             // 2. Assert
-            _view.GroupBy.SelectedItem = groupBy;
+            Assert.That(_view.GroupBy.SelectedItem, Is.EqualTo(groupBy));
         }
 
         [TestCase(true, 0)]
@@ -53,7 +54,23 @@ namespace TestCentric.Gui.Presenters.Main
             _settings.Gui.TestTree.ShowNamespace = showNamespace;
 
             // 2. Assert
-            _view.ShowNamespace.SelectedIndex = expectedMenuIndex;
+            Assert.That(_view.ShowNamespace.SelectedIndex, Is.EqualTo(expectedMenuIndex));
+        }
+
+        [TestCase("NUNIT_TREE", true)]
+        [TestCase("FIXTURE_LIST", false)]
+        [TestCase("TEST_LIST", false)]
+        public void DisplayFormat_SettingChanged_ShowHideFilterButton_IsUpdated(string displayFormat, bool expectedState)
+        {
+            // 1. Arrange
+            _model.HasTests.Returns(true);
+
+            // 2. Act
+            _settings.Gui.TestTree.DisplayFormat = displayFormat;
+
+            // 3. Assert
+            Assert.That(_view.ShowHideFilterButton.Visible, Is.EqualTo(expectedState));
+            Assert.That(_view.ShowHideFilterButton.Enabled, Is.EqualTo(expectedState));
         }
     }
 }

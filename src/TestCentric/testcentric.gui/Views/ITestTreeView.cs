@@ -57,6 +57,8 @@ namespace TestCentric.Gui.Views
 
         void SetTestFilterVisibility(bool visible);
 
+        void EnableTestFilter(bool enable);
+
         // Tree-related Methods
         void Clear();
         void Add(TreeNode treeNode);
