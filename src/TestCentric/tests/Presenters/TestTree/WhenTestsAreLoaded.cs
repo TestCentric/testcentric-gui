@@ -244,6 +244,18 @@ namespace TestCentric.Gui.Presenters.TestTree
             Assert.That(_model.Settings.Gui.TestTree.FixtureList.GroupBy, Is.EqualTo("DURATION"));     // Assert that fixtureList groupBy was not changed accidently
         }
 
+        [Test]
+        public void TestLoaded_CategoryFilter_IsInitialized()
+        {
+            // Act: load tests
+            TestNode testNode = new TestNode("<test-suite id='1'/>");
+            _model.LoadedTests.Returns(testNode);
+            FireTestLoadedEvent(testNode);
+
+            // Assert
+            _view.CategoryFilter.Received().Init(_model);
+        }
+
         // TODO: Version 1 Test - Make it work if needed.
         //[Test]
         //[Platform(Exclude = "Linux", Reason = "Display issues")]
