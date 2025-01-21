@@ -5,6 +5,7 @@
 
 using NUnit.Framework;
 using NSubstitute;
+using TestCentric.Gui.Model;
 
 namespace TestCentric.Gui.Presenters.TestTree
 {
@@ -13,11 +14,23 @@ namespace TestCentric.Gui.Presenters.TestTree
         [SetUp]
         public void SimulateTestUnload()
         {
+            _settings.Gui.TestTree.DisplayFormat = "NUNIT_TREE";
+
             ClearAllReceivedCalls();
 
             _model.HasTests.Returns(false);
             _model.IsTestRunning.Returns(false);
             FireTestUnloadedEvent();
+        }
+
+        [Test]
+        public void TestUnloaded_CategoryFilter_IsClosed()
+        {
+            // Act: unload tests
+            FireTestUnloadedEvent();
+
+            // Assert
+            _view.CategoryFilter.Received().Close();
         }
 
 #if NYI // Add after implementation of project or package saving

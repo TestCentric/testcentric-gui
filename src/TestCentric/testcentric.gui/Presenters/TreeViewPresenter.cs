@@ -65,6 +65,7 @@ namespace TestCentric.Gui.Presenters
                 Strategy = _treeDisplayStrategyFactory.Create(_treeSettings.DisplayFormat, _view, _model);
 
                 _view.ShowCheckBoxes.Checked = visualStateLoaded ? visualState.ShowCheckBoxes : _treeSettings.ShowCheckBoxes;
+                _view.CategoryFilter.Init(_model);
                 Strategy.OnTestLoaded(ea.Test, visualState);
                 CheckPropertiesDisplay();
                 CheckXmlDisplay();
@@ -81,6 +82,7 @@ namespace TestCentric.Gui.Presenters
             _model.Events.TestUnloaded += (ea) =>
             {
                 Strategy.OnTestUnloaded();
+                _view.CategoryFilter.Close();
             };
 
             _model.Events.TestsUnloading += ea =>
@@ -261,6 +263,11 @@ namespace TestCentric.Gui.Presenters
             {
                 var text = _view.TextFilter.Text;
                 _model.TestCentricTestFilter.TextFilter = text;
+            };
+
+            _view.CategoryFilter.SelectionChanged += () =>
+            {
+                _model.TestCentricTestFilter.CategoryFilter = _view.CategoryFilter.SelectedItems;
             };
 
             // Node selected in tree

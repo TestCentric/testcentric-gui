@@ -55,6 +55,8 @@ namespace TestCentric.Gui.Views
 
         IChanged TextFilter { get; }
 
+        ICategoryFilterSelection CategoryFilter { get; }
+
         void SetTestFilterVisibility(bool visible);
 
         void EnableTestFilter(bool enable);

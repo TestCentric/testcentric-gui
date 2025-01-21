@@ -56,6 +56,10 @@ In the current implementation, there are two separate hierarchies of UI Elements
 
 `IToolTip` is an optional interface, which may be implemented by any element able to get and set its own tooltip text. It provides a single property, `ToolTipText`. It is implemented by our `ToolTipElement` class, making it available to all our tooltip elements.
 
+### ICategoryFilterSelection
+
+`ICategoryFilterSelection` extends `IMultiSelection` to add specific methods for the test category selection.
+
 ## Control Elements
 
 ### ControlElement
@@ -77,6 +81,10 @@ A `ListBoxElement` wraps a Windows `ListBox` control and implements `IListBox`. 
 ### TabSelector
 
 A `TabSelector` element wraps a Windows `TabControl` and implements `ISelection`.
+
+### TextBoxElement
+
+A `TextBoxElement` element wraps a Windows `TextBox` and implements `IChanged`. It shows a placeholder text as long as no text is entered and invokes the Changed event as soon as no further input is made within a short period of time.
 
 ## ToolStripItem Elements
 
@@ -111,6 +119,10 @@ A `ToolStripElement` wraps any Windows `ToolStripItem` and implements `IViewElem
 ### ToolStripButtonElement
 
 `ToolStripButtonElement` wraps a Windows `ToolStripButton` and implements both `IChecked` and `IChanged`.
+
+### ToolStripCategoryFilterButton
+
+`ToolStripCategoryFilterButton` wraps a Windows `ToolStripDropDownButton` and implements `ICategoryFilterSelection` for dedicated test category selection.
 
 ### ToolStripMenuElement
 
