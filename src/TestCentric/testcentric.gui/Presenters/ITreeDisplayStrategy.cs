@@ -23,7 +23,7 @@ namespace TestCentric.Gui.Presenters
         /// <summary>
         /// Reload tree: clear all tree nodes first and rebuild all nodes afterwards
         /// </summary>
-        void Reload();
+        void Reload(bool applyVisualState=false);
 
         /// <summary>
         /// Save the visual state of the tree display strategy into a file

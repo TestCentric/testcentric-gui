@@ -112,7 +112,7 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.TestFilterChanged += (ea) =>
             {
-                Strategy?.Reload();
+                Strategy?.Reload(true);
             };
 
             _model.Events.TestFinished += OnTestFinished;
