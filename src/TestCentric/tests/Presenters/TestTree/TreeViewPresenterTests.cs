@@ -262,6 +262,21 @@ namespace TestCentric.Gui.Presenters.TestTree
             _model.TestCentricTestFilter.Received().TextFilter = "TestA";
         }
 
+        [Test]
+        public void FilterChanged_ReloadTree_IsInvoked()
+        {
+            // 1. Arrange
+            ITreeDisplayStrategy strategy = Substitute.For<ITreeDisplayStrategy>();
+            _treeDisplayStrategyFactory.Create(null, null, null).ReturnsForAnyArgs(strategy);
+            _model.Settings.Gui.TestTree.DisplayFormat = "NUNIT_TREE";
+
+            // 2. Act
+            _model.Events.TestFilterChanged += Raise.Event<TestEventHandler>(new TestEventArgs());
+
+            // 3. Assert
+            strategy.Received().Reload(true);
+        }
+
         // TODO: Version 1 Test - Make it work if needed.
         //[Test]
         //public void WhenContextNodeIsNotNull_RunCommandExecutesThatTest()
