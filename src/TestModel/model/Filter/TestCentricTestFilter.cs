@@ -55,6 +55,8 @@ namespace TestCentric.Gui.Model.Filter
             }
         }
 
+        public bool IsActive => _filters.Any(x => x.IsActive);
+
         public void ClearAllFilters()
         {
             foreach (ITestFilter filter in _filters)
