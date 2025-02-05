@@ -12,7 +12,7 @@ namespace TestCentric.Gui.Model.Filter
     /// <summary>
     /// Filters the TestNodes by matching a text (for example: Namespace, Class name or test method name - filter is case insensitive)
     /// </summary>
-    internal class TextFilter : ITestFilter
+    public class TextFilter : ITestFilter
     {
         private string _condition = string.Empty;
 
@@ -23,6 +23,8 @@ namespace TestCentric.Gui.Model.Filter
             get { return new List<string>() { _condition }; }
             set { _condition = value.FirstOrDefault(); }
         }
+
+        public bool IsActive => string.IsNullOrEmpty( _condition) == false;
 
         public bool IsMatching(TestNode testNode)
         {

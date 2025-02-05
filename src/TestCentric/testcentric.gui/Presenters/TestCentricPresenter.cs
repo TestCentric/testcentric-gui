@@ -988,7 +988,10 @@ namespace TestCentric.Gui.Presenters
             {
                 var test = entry.Value;
                 if (!test.IsSuite && test.Outcome.Status == TestStatus.Failed)
-                    failedTests.Add(test);
+                {
+                    TestNode testNode = _model.GetTestById(test.Id);
+                    failedTests.Add(testNode);
+                }
             }
 
             _model.RunTests(failedTests);
