@@ -41,6 +41,8 @@ namespace TestCentric.Gui.Views
             this.filterOutcomeNotRunButton = new System.Windows.Forms.ToolStripButton();
             this.filterTextToolStrip = new System.Windows.Forms.ToolStrip();
             this.filterTextBox = new StretchToolStripTextBox();
+            this.filterSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.filterByCategory = new System.Windows.Forms.ToolStripDropDownButton();
             this.testTreeContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.runMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -117,6 +119,13 @@ namespace TestCentric.Gui.Views
             this.filterOutcomeNotRunButton.ToolTipText = "Show all tests not run yet";
             this.filterOutcomeNotRunButton.CheckOnClick = true;
             // 
+            // filterByCategory
+            // 
+            this.filterByCategory.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.ImageAndText;
+            this.filterByCategory.Name = "filterByCategory";
+            this.filterByCategory.Text = "Filter by category";
+            this.filterByCategory.ToolTipText = "Filter tests by category";
+            // 
             // filterToolStrip
             // 
             this.filterToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -125,6 +134,8 @@ namespace TestCentric.Gui.Views
             this.filterOutcomeFailedButton,
             this.filterOutcomeWarningButton,
             this.filterOutcomeNotRunButton,
+            this.filterSeparator1,
+            this.filterByCategory,
             });
             this.filterToolStrip.Location = new System.Drawing.Point(0, 0);
             this.filterToolStrip.Name = "filterToolStrip";
@@ -267,6 +278,8 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.ToolStripButton filterOutcomeFailedButton;
         private System.Windows.Forms.ToolStripButton filterOutcomeWarningButton;
         private System.Windows.Forms.ToolStripButton filterOutcomeNotRunButton;
+        private System.Windows.Forms.ToolStripSeparator filterSeparator1;
+        private System.Windows.Forms.ToolStripDropDownButton filterByCategory;
         private System.Windows.Forms.ToolStrip filterTextToolStrip;
         private System.Windows.Forms.ToolStripTextBox filterTextBox;
         private System.Windows.Forms.ToolStripMenuItem runMenuItem;
