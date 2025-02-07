@@ -129,3 +129,7 @@ A `ToolStripElement` wraps any Windows `ToolStripItem` and implements `IViewElem
 `ToolStripMenuElement` wraps a Windows `ToolStripMenuItem`, extending the base class to provide a collection of subordinate Windows menu items.
 
 **NOTE:** This direct exposure of the underlying Windows implementation is contrary to the general intent of UI elements, but is done as a matter of expediency. We will review this in the future.
+
+### ToolStripTextBoxElement
+
+`ToolStripTextBoxElement` wraps a Windows `ToolStripTextBox` and implements `IChanged`. The Changed event is invoked as soon as no further input is made within a short period of time.
