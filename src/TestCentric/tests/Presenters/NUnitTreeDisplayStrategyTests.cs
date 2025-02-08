@@ -178,6 +178,30 @@ namespace TestCentric.Gui.Presenters.TestTree
         }
 
         [Test]
+        public void OnTestFinished_SortByDurationIsActive_Tree_IsSorted()
+        {
+            // Arrange
+            _settings.Gui.TestTree.ShowTestDuration = true;
+            TestNode testNode = new TestNode("<test-case id='1' name='Test1'/>");
+            var treeNode = _strategy.MakeTreeNode(testNode, false);
+            ResultNode result = new ResultNode($"<test-case id='1' result='Passed' duration='1.5'/>");
+            _model.GetResultForTest(testNode.Id).Returns(result);
+            _view.InvokeIfRequired(Arg.Do<MethodInvoker>(x => x.Invoke()));
+            _view.SortCommand.SelectedItem.Returns(TreeViewNodeComparer.Duration);
+
+            var nodes = new TreeNode().Nodes;
+            nodes.Add(treeNode);
+            _view.Nodes.Returns(nodes);
+            _view.TreeView.Returns(new TreeView());
+
+            // Act
+            _strategy.OnTestRunFinished();
+
+            // Assert
+            _view.Received().Sort();
+        }
+
+        [Test]
         public void MakeTreeNode_ShowDurationIsActive_TreeNodeName_ContainsDuration()
         {
             // Arrange

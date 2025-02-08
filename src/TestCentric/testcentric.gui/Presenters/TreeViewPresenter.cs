@@ -4,19 +4,16 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
-using TestCentric.Common;
 
 namespace TestCentric.Gui.Presenters
 {
     using Model;
     using Views;
     using Dialogs;
-    using System.Xml;
-    using System.Drawing;
     using System.IO;
     using TestCentric.Gui.Controls;
+    using System.Collections;
 
     /// <summary>
     /// TreeViewPresenter is the presenter for the TestTreeView
@@ -136,6 +133,7 @@ namespace TestCentric.Gui.Presenters
                     case "TestCentric.Gui.TestTree.TestList.GroupBy":
                     case "TestCentric.Gui.TestTree.FixtureList.GroupBy":
                     case "TestCentric.Gui.TestTree.ShowNamespace":
+                        SortTreeView();
                         Strategy?.Reload();
                         break;
                     case "TestCentric.Gui.TestTree.ShowCheckBoxes":
@@ -171,6 +169,10 @@ namespace TestCentric.Gui.Presenters
                 _treeSettings.ShowTestDuration = _view.ShowTestDuration.Checked;
                 Strategy?.UpdateTreeNodeNames();
             };
+
+            _view.SortCommand.SelectionChanged += () => SortTreeView();
+
+            _view.SortDirectionCommand.SelectionChanged += () => SortTreeView();
 
             _view.RunContextCommand.Execute += () =>
             {
@@ -298,6 +300,18 @@ namespace TestCentric.Gui.Presenters
             //            CloseXmlDisplay();
             //    }
             //};
+        }
+
+        private void SortTreeView()
+        {
+            var sortMode = _view.SortCommand.SelectedItem;
+
+            // Activate 'ShowTestDuration' in case sort by duration is selected
+            if (sortMode == TreeViewNodeComparer.Duration)
+                _view.ShowTestDuration.Checked = true;
+          
+            IComparer comparer = TreeViewNodeComparer.GetComparer(_model, sortMode, _view.SortDirectionCommand.SelectedItem, _treeSettings.ShowNamespace);
+            _view.Sort(comparer);
         }
 
         private void UpdateTreeSettingsFromVisualState(VisualState visualState)

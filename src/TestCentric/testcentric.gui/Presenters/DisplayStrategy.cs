@@ -11,8 +11,6 @@ namespace TestCentric.Gui.Presenters
     using Model;
     using Model.Settings;
     using Views;
-	using Elements;
-    using System.IO;
     using System.Linq;
 
     /// <summary>
@@ -96,6 +94,10 @@ namespace TestCentric.Gui.Presenters
 
         public virtual void OnTestRunFinished()
         {
+            if (_view.SortCommand.SelectedItem == TreeViewNodeComparer.Duration)
+            {
+                _view.InvokeIfRequired(() => _view.Sort());
+            }
             if (_settings.Gui.TestTree.ShowTestDuration)
                 _view.InvokeIfRequired(() => UpdateTreeNodeNames());
         }

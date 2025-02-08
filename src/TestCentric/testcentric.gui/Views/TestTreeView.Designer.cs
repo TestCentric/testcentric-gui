@@ -54,6 +54,14 @@ namespace TestCentric.Gui.Views
             this.showCheckboxesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showTestDurationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.expandAllMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.contextMenuSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.sortByMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sortByNameMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sortByDurationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sortMenuSeparator = new System.Windows.Forms.ToolStripSeparator();
+            this.sortAscendingMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sortDescendingMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.collapseAllMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.collapseToFixturesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.treeImages = new System.Windows.Forms.ImageList(this.components);
@@ -171,11 +179,15 @@ namespace TestCentric.Gui.Views
             this.contextMenuSeparator2,
             this.showCheckboxesMenuItem,
             this.showTestDurationMenuItem,
+            this.contextMenuSeparator3,
+            this.sortByMenuItem,
+            this.contextMenuSeparator4,
             this.expandAllMenuItem,
             this.collapseAllMenuItem,
             this.collapseToFixturesMenuItem});
             this.testTreeContextMenu.Name = "testTreeContextMenu";
             this.testTreeContextMenu.Size = new System.Drawing.Size(181, 236);
+            this.sortByMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { sortByNameMenuItem, sortByDurationMenuItem, sortMenuSeparator, sortAscendingMenuItem, sortDescendingMenuItem });
             // 
             // runMenuItem
             // 
@@ -231,6 +243,59 @@ namespace TestCentric.Gui.Views
             this.showTestDurationMenuItem.Size = new System.Drawing.Size(190, 22);
             this.showTestDurationMenuItem.Text = "Show Test Duration";
             // 
+            // sortByMenuItem
+            // 
+            this.sortByMenuItem.Name = "sortByMenuItem";
+            this.sortByMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.sortByMenuItem.Text = "Sort by ...";
+            // 
+            // sortByNameMenuItem
+            // 
+            this.sortByNameMenuItem.CheckOnClick = true;
+            this.sortByNameMenuItem.Name = "sortByNameMenuItem";
+            this.sortByNameMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.sortByNameMenuItem.Text = "Name";
+            this.sortByNameMenuItem.Tag = "Name";
+            // 
+            // sortByDurationMenuItem
+            // 
+            this.sortByDurationMenuItem.CheckOnClick = true;
+            this.sortByDurationMenuItem.Name = "sortByDurationMenuItem";
+            this.sortByDurationMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.sortByDurationMenuItem.Text = "Duration";
+            this.sortByDurationMenuItem.Tag = "Duration";
+            // 
+            // sortAscendingMenuItem
+            // 
+            this.sortAscendingMenuItem.CheckOnClick = true;
+            this.sortAscendingMenuItem.Name = "sortAscendingMenuItem";
+            this.sortAscendingMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.sortAscendingMenuItem.Text = "Ascending";
+            this.sortAscendingMenuItem.Tag = "Ascending";
+            // 
+            // sortDescendingMenuItem
+            // 
+            this.sortDescendingMenuItem.CheckOnClick = true;
+            this.sortDescendingMenuItem.Name = "sortDescendingMenuItem";
+            this.sortDescendingMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.sortDescendingMenuItem.Text = "Descending";
+            this.sortDescendingMenuItem.Tag = "Descending";
+            // 
+            // sortMenuSeparator
+            // 
+            this.sortMenuSeparator.Name = "sortMenuSeparator";
+            this.sortMenuSeparator.Size = new System.Drawing.Size(187, 6);
+            // 
+            // contextMenuSeparator3
+            // 
+            this.contextMenuSeparator3.Name = "contextMenuSeparator3";
+            this.contextMenuSeparator3.Size = new System.Drawing.Size(187, 6);
+            // 
+            // contextMenuSeparator4
+            // 
+            this.contextMenuSeparator4.Name = "contextMenuSeparator4";
+            this.contextMenuSeparator4.Size = new System.Drawing.Size(187, 6);
+            // 
             // expandAllMenuItem
             // 
             this.expandAllMenuItem.Name = "expandAllMenuItem";
@@ -284,6 +349,12 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.ToolStripTextBox filterTextBox;
         private System.Windows.Forms.ToolStripMenuItem runMenuItem;
         private System.Windows.Forms.ToolStripMenuItem expandAllMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sortByMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sortByNameMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sortByDurationMenuItem;
+        private System.Windows.Forms.ToolStripSeparator sortMenuSeparator;
+        private System.Windows.Forms.ToolStripMenuItem sortAscendingMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sortDescendingMenuItem;
         private System.Windows.Forms.ToolStripMenuItem collapseAllMenuItem;
         private System.Windows.Forms.ToolStripMenuItem collapseToFixturesMenuItem;
         private System.Windows.Forms.ImageList treeImages;
@@ -294,6 +365,8 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.ToolStripSeparator contextMenuSeparator2;
         private System.Windows.Forms.ToolStripMenuItem testPropertiesMenuItem;
         private System.Windows.Forms.ToolStripSeparator contextMenuSeparator1;
+        private System.Windows.Forms.ToolStripSeparator contextMenuSeparator3;
+        private System.Windows.Forms.ToolStripSeparator contextMenuSeparator4;
         private System.Windows.Forms.ToolStripMenuItem viewAsXmlMenuItem;
     }
 }

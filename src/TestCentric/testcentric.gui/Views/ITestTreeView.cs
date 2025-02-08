@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
+    using System.Collections;
     using System.Collections.Generic;
     using Elements;
 
@@ -29,6 +30,9 @@ namespace TestCentric.Gui.Views
         IToolStripMenu ActiveConfiguration { get; }
         IChecked ShowCheckBoxes { get; }
         IChecked ShowTestDuration { get; }
+        ISelection SortCommand { get; }
+        ISelection SortDirectionCommand { get; }
+
         ICommand ExpandAllCommand { get; }
         ICommand CollapseAllCommand { get; }
         ICommand CollapseToFixturesCommand { get; }
@@ -66,6 +70,9 @@ namespace TestCentric.Gui.Views
         void Add(TreeNode treeNode);
         void ExpandAll();
         void CollapseAll();
+
+        void Sort();
+        void Sort(IComparer comparer);
         void SetImageIndex(TreeNode treeNode, int imageIndex);
 
         /// <summary>
