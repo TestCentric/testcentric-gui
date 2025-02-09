@@ -72,7 +72,11 @@ namespace TestCentric.Gui.Presenters
             _model.Events.TestReloaded += (ea) =>
             {
                 EnsureNonRunnableFilesAreVisible(ea.Test);
+
+                // Handle category filter identically to close/load project
                 ResetTestFilterUIElements();
+                _view.CategoryFilter.Close();
+                _view.CategoryFilter.Init(_model);
 
                 Strategy.OnTestLoaded(ea.Test, null);
                 _view.CheckBoxes = _view.ShowCheckBoxes.Checked; // TODO: View should handle this
