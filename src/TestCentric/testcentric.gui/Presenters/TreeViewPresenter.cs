@@ -4,19 +4,16 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
-using TestCentric.Common;
 
 namespace TestCentric.Gui.Presenters
 {
     using Model;
     using Views;
     using Dialogs;
-    using System.Xml;
-    using System.Drawing;
     using System.IO;
     using TestCentric.Gui.Controls;
+    using System.Collections;
 
     /// <summary>
     /// TreeViewPresenter is the presenter for the TestTreeView
@@ -44,6 +41,7 @@ namespace TestCentric.Gui.Presenters
             _view.ShowCheckBoxes.Checked = _view.CheckBoxes = _treeSettings.ShowCheckBoxes;
             _view.ShowTestDuration.Checked = _treeSettings.ShowTestDuration;
             _view.AlternateImageSet = _treeSettings.AlternateImageSet;
+            UpdateTreeViewSortMode();
 
             WireUpEvents();
         }
@@ -172,6 +170,10 @@ namespace TestCentric.Gui.Presenters
                 Strategy?.UpdateTreeNodeNames();
             };
 
+            _view.SortCommand.SelectionChanged += () => UpdateTreeViewSortMode();
+
+            _view.SortDirectionCommand.SelectionChanged += () => UpdateTreeViewSortMode();
+
             _view.RunContextCommand.Execute += () =>
             {
                 if (_view.ContextNode != null)
@@ -298,6 +300,18 @@ namespace TestCentric.Gui.Presenters
             //            CloseXmlDisplay();
             //    }
             //};
+        }
+
+        private void UpdateTreeViewSortMode()
+        {
+            var sortMode = _view.SortCommand.SelectedItem;
+
+            // Activate 'ShowTestDuration' in case sort by duration is selected
+            if (sortMode == TreeViewNodeComparer.Duration)
+                _view.ShowTestDuration.Checked = true;
+          
+            IComparer comparer = TreeViewNodeComparer.GetComparer(_model, sortMode, _view.SortDirectionCommand.SelectedItem);
+            _view.Sort(comparer);
         }
 
         private void UpdateTreeSettingsFromVisualState(VisualState visualState)

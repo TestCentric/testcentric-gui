@@ -29,7 +29,7 @@ namespace TestCentric.Gui.Presenters.TestTree
 
         [TestCase(true)]
         [TestCase(false)]
-        public void WhenSettingsAreChanged_ShowNamespace_StrategyIsReloaed(bool showNamespace)
+        public void WhenSettingsAreChanged_ShowNamespace_StrategyIsReloaded(bool showNamespace)
         {
             ITreeDisplayStrategy strategy = Substitute.For<ITreeDisplayStrategy>();
             _treeDisplayStrategyFactory.Create(null, null, null).ReturnsForAnyArgs(strategy);
@@ -275,6 +275,43 @@ namespace TestCentric.Gui.Presenters.TestTree
 
             // 3. Assert
             strategy.Received().Reload(true);
+        }
+
+        [Test]
+        public void SortChanged_Sort_IsInvoked()
+        {
+            // 1. Arrange
+
+            // 2. Act
+            _view.SortCommand.SelectionChanged += Raise.Event<CommandHandler>();
+
+            // 3. Assert
+            _view.ReceivedWithAnyArgs().Sort(null);
+        }
+
+        [Test]
+        public void SortDirectionChanged_Sort_IsInvoked()
+        {
+            // 1. Arrange
+
+            // 2. Act
+            _view.SortCommand.SelectionChanged += Raise.Event<CommandHandler>();
+
+            // 3. Assert
+            _view.ReceivedWithAnyArgs().Sort(null);
+        }
+
+        [Test]
+        public void SortChanged_ToDuration_ShowDuration_IsSet()
+        {
+            // 1. Arrange
+            _view.SortCommand.SelectedItem.Returns(TreeViewNodeComparer.Duration);
+
+            // 2. Act
+            _view.SortCommand.SelectionChanged += Raise.Event<CommandHandler>();
+
+            // 3. Assert
+            _view.ShowTestDuration.Received().Checked = true;
         }
 
         // TODO: Version 1 Test - Make it work if needed.

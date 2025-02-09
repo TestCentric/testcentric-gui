@@ -11,6 +11,7 @@ using System.Reflection;
 namespace TestCentric.Gui.Views
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using Elements;
 
@@ -48,6 +49,8 @@ namespace TestCentric.Gui.Views
             CollapseToFixturesCommand = new CommandMenuElement(collapseToFixturesMenuItem);
             TestPropertiesCommand = new CommandMenuElement(testPropertiesMenuItem);
             ViewAsXmlCommand = new CommandMenuElement(viewAsXmlMenuItem);
+            SortCommand = new CheckedToolStripMenuGroup("Sort", sortByNameMenuItem, sortByDurationMenuItem);
+            SortDirectionCommand = new CheckedToolStripMenuGroup("SortDirection", sortAscendingMenuItem, sortDescendingMenuItem);
             OutcomeFilter = new MultiCheckedToolStripButtonGroup(new[] { filterOutcomePassedButton, filterOutcomeFailedButton, filterOutcomeWarningButton, filterOutcomeNotRunButton });
             TextFilter = new ToolStripTextBoxElement(filterTextBox, "Filter...");
             CategoryFilter = new ToolStripCategoryFilterButton(filterByCategory);
@@ -119,6 +122,9 @@ namespace TestCentric.Gui.Views
         public IToolStripMenu ActiveConfiguration { get; private set; }
         public IChecked ShowCheckBoxes { get; private set; }
         public IChecked ShowTestDuration { get; private set; }
+
+        public ISelection SortCommand { get; private set; }
+        public ISelection SortDirectionCommand { get; private set; }
         public ICommand ExpandAllCommand { get; private set; }
         public ICommand CollapseAllCommand { get; private set; }
         public ICommand CollapseToFixturesCommand { get; private set; }
@@ -243,6 +249,28 @@ namespace TestCentric.Gui.Views
 
             this.Invalidate();
             this.Refresh();
+        }
+
+        /// <summary>
+        /// Apply the current active TreeViewNodeSorter to sort the tree view
+        /// </summary>
+        public void Sort()
+        {
+            // Restore selected node after tree sorting
+            var selectedNode = treeView.SelectedNode;
+            treeView.Sort();
+            treeView.SelectedNode = selectedNode;
+        }
+
+        /// <summary>
+        /// Set a comparer as the TreeViewNodeSorter to sort the tree view
+        /// </summary>
+        public void Sort(IComparer comparer)
+        {
+            // Restore selected node after tree sorting
+            var selectedNode = treeView.SelectedNode;
+            treeView.TreeViewNodeSorter = comparer;
+            treeView.SelectedNode = selectedNode;
         }
 
         #endregion
