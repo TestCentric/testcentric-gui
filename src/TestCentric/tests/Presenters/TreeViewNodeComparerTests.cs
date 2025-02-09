@@ -14,19 +14,17 @@ namespace TestCentric.Gui.Presenters
     [TestFixture]
     public class TreeViewNodeComparerTests
     {
-        [TestCase(TreeViewNodeComparer.Name, TreeViewNodeComparer.Ascending, false, "NameComparer")]
-        [TestCase(TreeViewNodeComparer.Name, TreeViewNodeComparer.Ascending, true, "FullnameComparer")]
-        [TestCase(TreeViewNodeComparer.Name, TreeViewNodeComparer.Descending, false, "NameComparer")]
-        [TestCase(TreeViewNodeComparer.Name, TreeViewNodeComparer.Descending, true, "FullnameComparer")]
-        [TestCase(TreeViewNodeComparer.Duration, TreeViewNodeComparer.Ascending, false, "DurationComparer")]
-        [TestCase(TreeViewNodeComparer.Duration, TreeViewNodeComparer.Descending, true, "DurationComparer")]
-        public void GetComparer(string sortMode, string sortDirection, bool showNamespace, string expectedComparerName)
+        [TestCase(TreeViewNodeComparer.Name, TreeViewNodeComparer.Ascending, "NameComparer")]
+        [TestCase(TreeViewNodeComparer.Name, TreeViewNodeComparer.Descending, "NameComparer")]
+        [TestCase(TreeViewNodeComparer.Duration, TreeViewNodeComparer.Ascending, "DurationComparer")]
+        [TestCase(TreeViewNodeComparer.Duration, TreeViewNodeComparer.Descending, "DurationComparer")]
+        public void GetComparer(string sortMode, string sortDirection, string expectedComparerName)
         {
             // Arrange
             ITestModel model = Substitute.For<ITestModel>();
 
             // Act
-            IComparer comparer = TreeViewNodeComparer.GetComparer(model, sortMode, sortDirection, showNamespace);
+            IComparer comparer = TreeViewNodeComparer.GetComparer(model, sortMode, sortDirection);
 
             // Assert
             string classname = comparer.GetType().Name;
@@ -46,7 +44,7 @@ namespace TestCentric.Gui.Presenters
 
 
             // Act
-            IComparer comparer = TreeViewNodeComparer.GetComparer(model, TreeViewNodeComparer.Name, TreeViewNodeComparer.Ascending, false);
+            IComparer comparer = TreeViewNodeComparer.GetComparer(model, TreeViewNodeComparer.Name, TreeViewNodeComparer.Ascending);
             int result = comparer.Compare(treeNode1, treeNode2);
 
             // Assert
@@ -66,56 +64,7 @@ namespace TestCentric.Gui.Presenters
 
 
             // Act
-            IComparer comparer = TreeViewNodeComparer.GetComparer(model, TreeViewNodeComparer.Name, TreeViewNodeComparer.Descending, false);
-            int result = comparer.Compare(treeNode1, treeNode2);
-
-            // Assert
-            Assert.That(result, Is.EqualTo(expectedCompareResult));
-        }
-
-        [TestCase("Namespace1.A", "Namespace1.B", -1)]
-        [TestCase("Namespace1.B", "Namespace1.A", 1)]
-        [TestCase("Namespace1.A", "Namespace1.A", 0)]
-        [TestCase("Namespace1.A", "Namespace1.a", 1)]
-        [TestCase("a", "b", -1)]
-        [TestCase("aba", "aaa", 1)]
-        [TestCase("", "", 0)]
-        public void Fullnamecompare_Ascending_ReturnsExpectedResult(string text1, string text2, int expectedCompareResult)
-        {
-            // Arrange
-            ITestModel model = Substitute.For<ITestModel>();
-            TestNode testNode1 = new TestNode($"<test-start fullname='{text1}'/>");
-            TestNode testNode2 = new TestNode($"<test-start fullname='{text2}'/>");
-
-            TreeNode treeNode1 = new TreeNode() { Tag = testNode1 };
-            TreeNode treeNode2 = new TreeNode() { Tag = testNode2 };
-
-            // Act
-            IComparer comparer = TreeViewNodeComparer.GetComparer(model, TreeViewNodeComparer.Name, TreeViewNodeComparer.Ascending, true);
-            int result = comparer.Compare(treeNode1, treeNode2);
-
-            // Assert
-            Assert.That(result, Is.EqualTo(expectedCompareResult));
-        }
-
-        [TestCase("Namespace1.A", "Namespace1.B", 1)]
-        [TestCase("Namespace1.B", "Namespace1.A", -1)]
-        [TestCase("Namespace1.A", "Namespace1.A", 0)]
-        [TestCase("Namespace1.A", "Namespace1.a", -1)]
-        [TestCase("", "", 0)]
-        public void Fullnamecompare_Descending_ReturnsExpectedResult(string text1, string text2, int expectedCompareResult)
-        {
-            // Arrange
-            ITestModel model = Substitute.For<ITestModel>();
-
-            TestNode testNode1 = new TestNode($"<test-start fullname='{text1}'/>");
-            TestNode testNode2 = new TestNode($"<test-start fullname='{text2}'/>");
-
-            TreeNode treeNode1 = new TreeNode() { Tag = testNode1 };
-            TreeNode treeNode2 = new TreeNode() { Tag = testNode2 };
-
-            // Act
-            IComparer comparer = TreeViewNodeComparer.GetComparer(model, TreeViewNodeComparer.Name, TreeViewNodeComparer.Descending, true);
+            IComparer comparer = TreeViewNodeComparer.GetComparer(model, TreeViewNodeComparer.Name, TreeViewNodeComparer.Descending);
             int result = comparer.Compare(treeNode1, treeNode2);
 
             // Assert
@@ -142,7 +91,7 @@ namespace TestCentric.Gui.Presenters
             TreeNode treeNode2 = new TreeNode() { Tag = testNode2 };
 
             // Act
-            IComparer comparer = TreeViewNodeComparer.GetComparer(model, TreeViewNodeComparer.Duration, TreeViewNodeComparer.Ascending, true);
+            IComparer comparer = TreeViewNodeComparer.GetComparer(model, TreeViewNodeComparer.Duration, TreeViewNodeComparer.Ascending);
             int result = comparer.Compare(treeNode1, treeNode2);
 
             // Assert
@@ -169,7 +118,7 @@ namespace TestCentric.Gui.Presenters
             TreeNode treeNode2 = new TreeNode() { Tag = testNode2 };
 
             // Act
-            IComparer comparer = TreeViewNodeComparer.GetComparer(model, TreeViewNodeComparer.Duration, TreeViewNodeComparer.Descending, true);
+            IComparer comparer = TreeViewNodeComparer.GetComparer(model, TreeViewNodeComparer.Duration, TreeViewNodeComparer.Descending);
             int result = comparer.Compare(treeNode1, treeNode2);
 
             // Assert
@@ -192,7 +141,7 @@ namespace TestCentric.Gui.Presenters
             TreeNode treeNode2 = new TreeNode(text2) { Tag = testNode2 };
 
             // Act
-            IComparer comparer = TreeViewNodeComparer.GetComparer(model, TreeViewNodeComparer.Duration, sortDirection, true);
+            IComparer comparer = TreeViewNodeComparer.GetComparer(model, TreeViewNodeComparer.Duration, sortDirection);
             int result = comparer.Compare(treeNode1, treeNode2);
 
             // Assert

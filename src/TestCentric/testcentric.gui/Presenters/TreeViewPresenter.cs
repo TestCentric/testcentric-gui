@@ -41,6 +41,7 @@ namespace TestCentric.Gui.Presenters
             _view.ShowCheckBoxes.Checked = _view.CheckBoxes = _treeSettings.ShowCheckBoxes;
             _view.ShowTestDuration.Checked = _treeSettings.ShowTestDuration;
             _view.AlternateImageSet = _treeSettings.AlternateImageSet;
+            UpdateTreeViewSortMode();
 
             WireUpEvents();
         }
@@ -133,7 +134,6 @@ namespace TestCentric.Gui.Presenters
                     case "TestCentric.Gui.TestTree.TestList.GroupBy":
                     case "TestCentric.Gui.TestTree.FixtureList.GroupBy":
                     case "TestCentric.Gui.TestTree.ShowNamespace":
-                        SortTreeView();
                         Strategy?.Reload();
                         break;
                     case "TestCentric.Gui.TestTree.ShowCheckBoxes":
@@ -170,9 +170,9 @@ namespace TestCentric.Gui.Presenters
                 Strategy?.UpdateTreeNodeNames();
             };
 
-            _view.SortCommand.SelectionChanged += () => SortTreeView();
+            _view.SortCommand.SelectionChanged += () => UpdateTreeViewSortMode();
 
-            _view.SortDirectionCommand.SelectionChanged += () => SortTreeView();
+            _view.SortDirectionCommand.SelectionChanged += () => UpdateTreeViewSortMode();
 
             _view.RunContextCommand.Execute += () =>
             {
@@ -302,7 +302,7 @@ namespace TestCentric.Gui.Presenters
             //};
         }
 
-        private void SortTreeView()
+        private void UpdateTreeViewSortMode()
         {
             var sortMode = _view.SortCommand.SelectedItem;
 
@@ -310,7 +310,7 @@ namespace TestCentric.Gui.Presenters
             if (sortMode == TreeViewNodeComparer.Duration)
                 _view.ShowTestDuration.Checked = true;
           
-            IComparer comparer = TreeViewNodeComparer.GetComparer(_model, sortMode, _view.SortDirectionCommand.SelectedItem, _treeSettings.ShowNamespace);
+            IComparer comparer = TreeViewNodeComparer.GetComparer(_model, sortMode, _view.SortDirectionCommand.SelectedItem);
             _view.Sort(comparer);
         }
 

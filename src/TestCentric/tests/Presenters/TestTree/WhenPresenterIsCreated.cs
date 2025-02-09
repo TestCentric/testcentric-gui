@@ -5,6 +5,7 @@
 
 using NUnit.Framework;
 using NSubstitute;
+using System.Collections;
 
 namespace TestCentric.Gui.Presenters.TestTree
 {
@@ -29,6 +30,12 @@ namespace TestCentric.Gui.Presenters.TestTree
         {
             bool showTestDuration = _settings.Gui.TestTree.ShowTestDuration;
             _view.ShowTestDuration.Received().Checked = showTestDuration;
+        }
+
+        [Test]
+        public void SortingMode_IsUpdated_ToDefaultSorter()
+        {
+            _view.Received().Sort(Arg.Is<IComparer>(c => c.GetType().Name == "NameComparer"));
         }
 
         //[Test]

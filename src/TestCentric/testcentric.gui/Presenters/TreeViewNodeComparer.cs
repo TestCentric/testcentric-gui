@@ -25,53 +25,19 @@ namespace TestCentric.Gui.Presenters
         /// Get a IComparer implementation used to sort the tree nodes
         /// The sortModes are used by the context menu items in their Tag property
         /// </summary>
-        public static IComparer GetComparer(ITestModel model, string sortMode, string sortDirection, bool showNamespaces)
+        public static IComparer GetComparer(ITestModel model, string sortMode, string sortDirection)
         {
             bool ascending = sortDirection == Ascending;
 
-            if (sortMode == Name && !showNamespaces)
-                return new NameComparer(ascending);
             if (sortMode == Duration)
                 return new DurationComparer(model, ascending);
 
-            return new FullnameComparer(ascending);
-        }
-
-        /// <summary>
-        /// The FullnameComparer uses the FullName of the TestNodes (Namespace + class + method name)
-        /// It's indented to provide the same order as provided by NUnit
-        /// </summary>
-        private class FullnameComparer : IComparer
-        {
-            private bool _ascending;
-
-            internal FullnameComparer(bool ascending)
-            {
-                _ascending = ascending;
-            }
-
-            public int Compare(object x, object y)
-            {
-                TreeNode node1 = x as TreeNode;
-                TreeNode node2 = y as TreeNode;
-
-                TestNode testNode1 = node1.Tag as TestNode;
-                TestNode testNode2 = node2.Tag as TestNode;
-
-                if (!_ascending)
-                    Swap(ref testNode1, ref testNode2);
-
-                if (testNode1 == null || testNode2 == null)
-                    return 1;
-
-                return testNode1.FullName.CompareTo(testNode2.FullName);
-            }
+            return new NameComparer(ascending);
         }
 
         /// <summary>
         /// The NameComparer uses the Name of the TestNodes (either Namespace or class or method name)
-        /// If Namespaces are shown in the tree, it will provide the same results as the FullnameComparer
-        /// However if Namespaces are hidden, the NameComparer will sort the class names properly.
+        /// It's invoked by Windows Forms for all nodes of one hierarchy level to provide a proper ordering
         /// </summary>
         private class NameComparer : IComparer
         {

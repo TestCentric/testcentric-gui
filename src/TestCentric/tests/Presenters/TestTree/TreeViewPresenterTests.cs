@@ -44,22 +44,6 @@ namespace TestCentric.Gui.Presenters.TestTree
 
         [TestCase(true)]
         [TestCase(false)]
-        public void WhenSettingsAreChanged_ShowNamespace_Tree_IsSorted(bool showNamespace)
-        {
-            // Arrange
-            ITreeDisplayStrategy strategy = Substitute.For<ITreeDisplayStrategy>();
-            _treeDisplayStrategyFactory.Create(null, null, null).ReturnsForAnyArgs(strategy);
-            _model.Settings.Gui.TestTree.DisplayFormat = "NUNIT_TREE";
-
-            // Act
-            _model.Settings.Gui.TestTree.ShowNamespace = showNamespace;
-
-            // Assert
-            _view.ReceivedWithAnyArgs().Sort(null);
-        }
-
-        [TestCase(true)]
-        [TestCase(false)]
         public void WhenSettingsAreChanged_ShowFilter_FilterVisibilityIsCalled(bool show)
         {
 
