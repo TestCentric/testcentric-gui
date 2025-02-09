@@ -284,9 +284,9 @@ namespace TestCentric.Gui.Model.Filter
 
         private static object[] FilterByCategoryTestCases =
         {
-            new object[] { new[] { "Category_1" },  new List<string>() { "3-1000", "3-1100", "3-1110", "3-1111", "3-1112", "3-1300", "3-1310", "3-1311", "3-1312" } },
-            new object[] { new[] { "Category_1", "Category_2" }, new List<string>() { "3-1100", "3-1000", "3-1110", "3-1111", "3-1112", "3-1200", "3-1211", "3-1300", "3-1311", "3-1312" } },
-            new object[] { new[] { "Category_2" }, new List<string>() { "3-1000", "3-1100", "3-1110", "3-1111", "3-1112", "3-1200", "3-1211", "3-1300", "3-1312" } },
+            new object[] { new[] { "Category_1" },  new List<string>() { "3-1000", "3-1100", "3-1110", "3-1111", "3-1112", "3-1300", "3-1310", "3-1311", "3-1312", "3-1330", "3-1331" } },
+            new object[] { new[] { "Category_1", "Category_2" }, new List<string>() { "3-1100", "3-1000", "3-1110", "3-1111", "3-1112", "3-1200", "3-1210", "3-1211", "3-1300", "3-1310", "3-1311", "3-1312", "3-1330", "3-1331", "3-1332" } },
+            new object[] { new[] { "Category_2" }, new List<string>() { "3-1000", "3-1100", "3-1110", "3-1111", "3-1112", "3-1200", "3-1210", "3-1211", "3-1300", "3-1310", "3-1312", "3-1330", "3-1332" } },
             new object[] { new[] { "Category_3" }, new List<string>() { "3-1000", "3-1300", "3-1320", "3-1321" } },
             new object[] { new[] { "Category_3", CategoryFilter.NoCategory }, new List<string>() { "3-1000", "3-1200", "3-1210", "3-1212", "3-1300", "3-1320", "3-1321", "3-1322" } },
             new object[] { new[] { CategoryFilter.NoCategory }, new List<string>() { "3-1000", "3-1200", "3-1210", "3-1212", "3-1300", "3-1320", "3-1322" } },
@@ -313,7 +313,10 @@ namespace TestCentric.Gui.Model.Filter
                             CreateTestcaseXml("3-1312", "LibraryA.NamespaceC.Fixture_1.TestB", "", new[] { "Category_2" })) +
                         CreateTestFixtureXml("3-1320", "LibraryA.NamespaceC.Fixture_2", "",
                             CreateTestcaseXml("3-1321", "LibraryA.NamespaceC.Fixture_2.TestC", "Failed", new[] { "Category_3" }),
-                            CreateTestcaseXml("3-1322", "LibraryA.NamespaceC.Fixture_2.TestD", "")))));
+                            CreateTestcaseXml("3-1322", "LibraryA.NamespaceC.Fixture_2.TestD", "")) +
+                        CreateTestFixtureXml("3-1330", "LibraryA.NamespaceC.Fixture_3", "",
+                            CreateTestcaseXml("3-1331", "LibraryA.NamespaceC.Fixture_3.TestA", "", new[] { "Category_1" }),
+                            CreateTestcaseXml("3-1332", "LibraryA.NamespaceC.Fixture_3.TestB", "", new[] { "Category_2" })))));
             _model.LoadedTests.Returns(testNode);
 
             // Act
@@ -322,10 +325,11 @@ namespace TestCentric.Gui.Model.Filter
             testFilter.CategoryFilter = categoryFilter;
 
             // Assert
-            foreach (string testId in expectedVisibleNodes)
+            IList<TestNode> nodes = GetAllTestNodes(testNode);
+            foreach (TestNode node in nodes)
             {
-                TestNode node = GetTestNode(testNode, testId);
-                Assert.That(node.IsVisible, Is.True);
+                bool expectedIsVisible = expectedVisibleNodes.Contains(node.Id);
+                Assert.That(node.IsVisible, Is.EqualTo(expectedIsVisible));
             }
         }
 
@@ -487,6 +491,20 @@ namespace TestCentric.Gui.Model.Filter
             }
 
             return null;
+        }
+
+        private IList<TestNode> GetAllTestNodes(TestNode testNode)
+        {
+            List<TestNode> testNodes = new List<TestNode>();
+
+            foreach (TestNode child in testNode.Children)
+            {
+                IList<TestNode> childNodes = GetAllTestNodes(child);
+                testNodes.AddRange(childNodes);
+            }
+
+            testNodes.AddRange(testNode.Children);
+            return testNodes;
         }
 
         private string CreateTestcaseXml(string testId, string testName, string outcome)

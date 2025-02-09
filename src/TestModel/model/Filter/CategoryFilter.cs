@@ -39,7 +39,8 @@ namespace TestCentric.Gui.Model.Filter
 
         public bool IsMatching(TestNode testNode)
         {
-            if (_condition.Any() == false)
+            // Consider test-case nodes only: categories from fixtures are applied to test-cases
+            if (_condition.Any() == false || testNode.IsProject || testNode.IsSuite)
                 return false;
 
             string xpathExpression = "ancestor-or-self::*/properties/property[@name='Category']";
