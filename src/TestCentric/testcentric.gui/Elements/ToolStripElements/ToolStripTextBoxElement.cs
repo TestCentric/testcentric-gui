@@ -25,7 +25,7 @@ namespace TestCentric.Gui.Elements
         {
             TextBox = textBox;
             PlaceHolderText = placeHolderText;
-            TextBox.TextChanged += OnTextChanged;
+            TextBox.KeyUp += OnKeyUp;
 
             TextBox.LostFocus += OnTextBoxLostFocus;
             TextBox.GotFocus += OnTextBoxGotFocus;
@@ -63,7 +63,11 @@ namespace TestCentric.Gui.Elements
             }
         }
 
-        private void OnTextChanged(object sender, EventArgs e)
+        /// <summary>
+        /// Use KeyUp event instead of TextChanged event
+        /// If the Text property is set from client programmatically, a TextChanged event would be triggered => that's not intended
+        /// </summary>
+        private void OnKeyUp(object sender, KeyEventArgs e)
         {
             if (IsPlaceHolderTextShown)
                 return;

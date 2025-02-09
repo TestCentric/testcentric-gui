@@ -33,6 +33,18 @@ namespace TestCentric.Gui.Presenters.TestTree
             _view.CategoryFilter.Received().Close();
         }
 
+        [Test]
+        public void TestUnloaded_TestFilters_AreReset()
+        {
+            // Act: unload tests
+            FireTestUnloadedEvent();
+
+            // Assert
+            _view.TextFilter.Received().Text = "";
+            _view.OutcomeFilter.ReceivedWithAnyArgs().SelectedItems = null;
+            _view.CategoryFilter.ReceivedWithAnyArgs().SelectedItems = null;
+        }
+
 #if NYI // Add after implementation of project or package saving
         [TestCase("NewProjectCommand", true)]
         [TestCase("OpenProjectCommand", true)]

@@ -57,15 +57,18 @@ namespace TestCentric.Gui.Model.Filter
 
         public bool IsActive => _filters.Any(x => x.IsActive);
 
-        public void ClearAllFilters()
+        public void ResetAll(bool suppressFilterChangedEvent = false)
         {
             foreach (ITestFilter filter in _filters)
             {
                 filter.Reset();
             }
 
-            FilterNodes(TestModel.LoadedTests);
-            FireFilterChangedEvent();
+            if (!suppressFilterChangedEvent)
+            {
+                FilterNodes(TestModel.LoadedTests);
+                FireFilterChangedEvent();
+            }
         }
 
         public void Init()

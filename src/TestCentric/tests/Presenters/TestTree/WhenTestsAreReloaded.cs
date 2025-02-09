@@ -13,18 +13,30 @@ namespace TestCentric.Gui.Presenters.TestTree
     public class WhenTestsAreReloaded : TreeViewPresenterTestBase
     {
         [SetUp]
-        public void SimulateTestReload()
+        public void Setup()
         {
             ClearAllReceivedCalls();
 
             _model.HasTests.Returns(true);
             _model.IsTestRunning.Returns(false);
+        }
 
+        [Test]
+        public void TestFilters_IsReset()
+        {
+            // Arrange
+            var project = new TestCentricProject(_model, "dummy.dll");
             TestNode testNode = new TestNode("<test-suite id='1'/>");
             _model.LoadedTests.Returns(testNode);
-            _model.TestCentricProject.Returns(new TestCentricProject(_model, "dummy.dll"));
+            _model.TestCentricProject.Returns(project);
 
+            // Act
             FireTestReloadedEvent(testNode);
+
+            // Assert
+            _view.TextFilter.Received().Text = "";
+            _view.OutcomeFilter.ReceivedWithAnyArgs().SelectedItems = null;
+            _view.CategoryFilter.ReceivedWithAnyArgs().SelectedItems = null;
         }
 
 #if NYI // Add after implementation of project or package saving

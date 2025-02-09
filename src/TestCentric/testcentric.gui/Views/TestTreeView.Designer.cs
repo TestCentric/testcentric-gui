@@ -43,6 +43,7 @@ namespace TestCentric.Gui.Views
             this.filterTextBox = new StretchToolStripTextBox();
             this.filterSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.filterByCategory = new System.Windows.Forms.ToolStripDropDownButton();
+            this.filterResetButton = new System.Windows.Forms.ToolStripButton();
             this.testTreeContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.runMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -134,6 +135,14 @@ namespace TestCentric.Gui.Views
             this.filterByCategory.Text = "Filter by category";
             this.filterByCategory.ToolTipText = "Filter tests by category";
             // 
+            // filterResetButton
+            // 
+            this.filterResetButton.Name = "filterResetButton";
+            this.filterResetButton.Image = ((System.Drawing.Image)(resources.GetObject("ResetFilter.Image")));
+            this.filterResetButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.filterResetButton.Size = new System.Drawing.Size(70, 29);
+            this.filterResetButton.ToolTipText = "Reset all filters";
+            // 
             // filterToolStrip
             // 
             this.filterToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -144,6 +153,7 @@ namespace TestCentric.Gui.Views
             this.filterOutcomeNotRunButton,
             this.filterSeparator1,
             this.filterByCategory,
+            this.filterResetButton,
             });
             this.filterToolStrip.Location = new System.Drawing.Point(0, 0);
             this.filterToolStrip.Name = "filterToolStrip";
@@ -345,6 +355,7 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.ToolStripButton filterOutcomeNotRunButton;
         private System.Windows.Forms.ToolStripSeparator filterSeparator1;
         private System.Windows.Forms.ToolStripDropDownButton filterByCategory;
+        private System.Windows.Forms.ToolStripButton filterResetButton;
         private System.Windows.Forms.ToolStrip filterTextToolStrip;
         private System.Windows.Forms.ToolStripTextBox filterTextBox;
         private System.Windows.Forms.ToolStripMenuItem runMenuItem;

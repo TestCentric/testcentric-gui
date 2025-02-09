@@ -108,7 +108,7 @@ namespace TestCentric.Gui.Model.Filter
         }
 
         [Test]
-        public void ClearFilter_AllFiltersAreReset()
+        public void ResetFilter_AllFiltersAreReset()
         {
             // Arrange
             var testNode = new TestNode($"<test-case id='1' name='TestA' />");
@@ -122,7 +122,7 @@ namespace TestCentric.Gui.Model.Filter
             testFilter.OutcomeFilter = new List<string>() { "Passed" };
 
             // Act
-            testFilter.ClearAllFilters();
+            testFilter.ResetAll();
 
             // Assert
             var allCategories = testFilter.AllCategories;
@@ -134,6 +134,28 @@ namespace TestCentric.Gui.Model.Filter
             Assert.That(outcomeFilter.Count, Is.EqualTo(0));
 
             Assert.That(testFilter.TextFilter, Is.Empty);
+        }
+
+        [Test]
+        public void ResetFilter_InvokeFilterChangedEvent()
+        {
+            // Arrange
+            var testNode = new TestNode($"<test-case id='1' name='TestA' />");
+            _model.LoadedTests.Returns(testNode);
+            _model.AvailableCategories.Returns(new List<string>() { "Feature_1" });
+
+            bool isInvoked = false;
+            TestCentricTestFilter testFilter = new TestCentricTestFilter(_model, () => isInvoked = true);
+            testFilter.Init();
+            testFilter.TextFilter = "TestA";
+            testFilter.CategoryFilter = new List<string>() { "Feature_1" };
+            testFilter.OutcomeFilter = new List<string>() { "Passed" };
+
+            // Act
+            testFilter.ResetAll();
+
+            // Assert
+            Assert.That(isInvoked, Is.True);
         }
 
         private static object[] FilterByOutcomeTestCases =
