@@ -64,6 +64,18 @@ namespace TestCentric.Gui.Dialogs
             checkedListBoxCategory.ResumeLayout();
         }
 
+        internal void UpdateCheckedItems(IEnumerable<string> selectedCategories)
+        {
+            checkedListBoxCategory.SuspendLayout();
+            for (int i = 0; i < checkedListBoxCategory.Items.Count; i++)
+            {
+                string category = checkedListBoxCategory.Items[i].ToString();
+                bool isChecked = selectedCategories.Contains(category);
+                checkedListBoxCategory.SetItemChecked(i, isChecked);
+            }
+            checkedListBoxCategory.ResumeLayout();
+        }
+
         private void OnApplyAndCloseButtonClicked(object sender, EventArgs e)
         {
             ApplyButtonClicked?.Invoke(SelectedCategories);

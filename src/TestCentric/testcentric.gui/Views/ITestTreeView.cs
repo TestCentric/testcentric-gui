@@ -61,6 +61,8 @@ namespace TestCentric.Gui.Views
 
         ICategoryFilterSelection CategoryFilter { get; }
 
+        ICommand ResetFilterCommand { get; }
+
         void SetTestFilterVisibility(bool visible);
 
         void EnableTestFilter(bool enable);

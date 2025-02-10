@@ -73,6 +73,11 @@ namespace TestCentric.Gui.Presenters
             {
                 EnsureNonRunnableFilesAreVisible(ea.Test);
 
+                // Handle category filter identically to close/load project
+                ResetTestFilterUIElements();
+                _view.CategoryFilter.Close();
+                _view.CategoryFilter.Init(_model);
+
                 Strategy.OnTestLoaded(ea.Test, null);
                 _view.CheckBoxes = _view.ShowCheckBoxes.Checked; // TODO: View should handle this
             };
@@ -81,6 +86,7 @@ namespace TestCentric.Gui.Presenters
             {
                 Strategy.OnTestUnloaded();
                 _view.CategoryFilter.Close();
+                ResetTestFilterUIElements();
             };
 
             _model.Events.TestsUnloading += ea =>
@@ -272,6 +278,8 @@ namespace TestCentric.Gui.Presenters
                 _model.TestCentricTestFilter.CategoryFilter = _view.CategoryFilter.SelectedItems;
             };
 
+            _view.ResetFilterCommand.Execute += () => ResetTestFilter();
+
             // Node selected in tree
             //_treeView.SelectedNodesChanged += (nodes) =>
             //{
@@ -302,6 +310,18 @@ namespace TestCentric.Gui.Presenters
             //};
         }
 
+        private void ResetTestFilter()
+        {
+            _model.TestCentricTestFilter.ResetAll();
+            ResetTestFilterUIElements();
+        }
+
+        private void ResetTestFilterUIElements()
+        {
+            _view.TextFilter.Text = "";
+            _view.OutcomeFilter.SelectedItems = _model.TestCentricTestFilter.OutcomeFilter;
+            _view.CategoryFilter.SelectedItems = _model.TestCentricTestFilter.CategoryFilter;
+        }
         private void UpdateTreeViewSortMode()
         {
             var sortMode = _view.SortCommand.SelectedItem;

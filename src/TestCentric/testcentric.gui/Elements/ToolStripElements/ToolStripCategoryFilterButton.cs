@@ -44,6 +44,10 @@ namespace TestCentric.Gui.Elements
             {
                 _selectedItems = value;
                 UpdateFont();
+
+                // If dialog is currently displayed => updated checked items
+                if (_dialog != null)
+                    _dialog.UpdateCheckedItems(_selectedItems);
             }
         }
 
@@ -79,7 +83,8 @@ namespace TestCentric.Gui.Elements
 
             _dialog.ApplyButtonClicked += (selectedItems) =>
             {
-                SelectedItems = selectedItems;
+                _selectedItems = selectedItems;
+                UpdateFont();
                 SelectionChanged?.Invoke();
             };
 
@@ -103,7 +108,7 @@ namespace TestCentric.Gui.Elements
             {
                 // Restore previous position and size of dialog
                 _dialog.Size = _dialogSize;
-                _dialogLocation = _dialog.Location;
+                _dialog.Location = _dialogLocation;
             }
             else
             {

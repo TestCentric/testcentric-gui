@@ -314,6 +314,34 @@ namespace TestCentric.Gui.Presenters.TestTree
             _view.ShowTestDuration.Received().Checked = true;
         }
 
+        [Test]
+        public void ResetFilterCommand_TestCentricTestFilter_AreReset()
+        {
+            // 1. Arrange
+            _view.SortCommand.SelectedItem.Returns(TreeViewNodeComparer.Duration);
+
+            // 2. Act
+            _view.ResetFilterCommand.Execute += Raise.Event<CommandHandler>();
+
+            // 3. Assert
+            _model.TestCentricTestFilter.Received().ResetAll();
+        }
+
+        [Test]
+        public void ResetFilterCommand_Filter_UIElements_AreReset()
+        {
+            // 1. Arrange
+            _view.SortCommand.SelectedItem.Returns(TreeViewNodeComparer.Duration);
+
+            // 2. Act
+            _view.ResetFilterCommand.Execute += Raise.Event<CommandHandler>();
+
+            // 3. Assert
+            _view.TextFilter.Received().Text = "";
+            _view.OutcomeFilter.ReceivedWithAnyArgs().SelectedItems = null;
+            _view.CategoryFilter.ReceivedWithAnyArgs().SelectedItems = null;
+        }
+
         // TODO: Version 1 Test - Make it work if needed.
         //[Test]
         //public void WhenContextNodeIsNotNull_RunCommandExecutesThatTest()

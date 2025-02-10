@@ -410,6 +410,8 @@ namespace TestCentric.Gui.Model
 
             UnloadTestsIgnoringErrors();
             Runner.Dispose();
+            
+            TestCentricTestFilter.ResetAll(true);
             LoadedTests = null;
             AvailableCategories = null;
             ClearResults();
@@ -448,6 +450,7 @@ namespace TestCentric.Gui.Model
             // Discover tests
             LoadedTests = new TestNode(Runner.Explore(Engine.TestFilter.Empty));
             AvailableCategories = GetAvailableCategories();
+            TestCentricTestFilter.Init();
 
             ClearResults();
 #endif

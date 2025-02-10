@@ -40,7 +40,7 @@ namespace TestCentric.Gui.Model.Filter
         /// <summary>
         /// Clear all actives filters and reset them to default
         /// </summary>
-        void ClearAllFilters();
+        void ResetAll(bool suppressFilterChangedEvent = false);
 
         /// <summary>
         /// Init filter after a project is loaded

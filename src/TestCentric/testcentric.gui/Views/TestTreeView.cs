@@ -54,6 +54,7 @@ namespace TestCentric.Gui.Views
             OutcomeFilter = new MultiCheckedToolStripButtonGroup(new[] { filterOutcomePassedButton, filterOutcomeFailedButton, filterOutcomeWarningButton, filterOutcomeNotRunButton });
             TextFilter = new ToolStripTextBoxElement(filterTextBox, "Filter...");
             CategoryFilter = new ToolStripCategoryFilterButton(filterByCategory);
+            ResetFilterCommand = new ToolStripButtonElement(filterResetButton);
             TreeView = treeView;
 
             // NOTE: We use MouseDown here rather than MouseUp because
@@ -135,6 +136,7 @@ namespace TestCentric.Gui.Views
 
         public IMultiSelection OutcomeFilter { get; private set; }
         public ICategoryFilterSelection CategoryFilter { get; private set; }
+        public ICommand ResetFilterCommand { get; private set; }
 
         public IChanged TextFilter { get; private set; }
 
