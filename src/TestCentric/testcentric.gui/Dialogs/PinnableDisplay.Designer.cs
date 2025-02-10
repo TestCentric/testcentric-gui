@@ -36,7 +36,7 @@ namespace TestCentric.Gui.Dialogs
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PinnableDisplay));
-            this.testName = new System.Windows.Forms.Label();
+            this.testName = new TransparentCaptionLabel();
             this.pinButton = new System.Windows.Forms.CheckBox();
             this.exitButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
