@@ -4,13 +4,8 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Dialogs
@@ -75,6 +70,28 @@ namespace TestCentric.Gui.Dialogs
             exitButton.Left = ClientRectangle.Width - exitButton.Width - 4;
             pinButton.Left = exitButton.Left - pinButton.Width - 4;
             testName.Width = pinButton.Left - testName.Left;
+        }
+    }
+
+    /// <summary>
+    /// This Label is displayed in the caption of a pinnable form <see cref="PinnableDisplay"/>
+    /// This form should support the move functionality (click+hold mouse in caption and move around) like any regular form
+    /// To support this functionality it mustn't process the HitTest window message itself, but pass it to beneath form
+    /// </summary>
+    internal class TransparentCaptionLabel : Label
+    {
+        protected override void WndProc(ref Message m)
+        {
+            const int WM_NCHITTEST = 0x84;
+            const int HTTRANSPARENT = -1;
+
+            switch (m.Msg)
+            {
+                case WM_NCHITTEST:
+                    m.Result = (IntPtr)HTTRANSPARENT;
+                    return;
+            }
+            base.WndProc(ref m);
         }
     }
 }
