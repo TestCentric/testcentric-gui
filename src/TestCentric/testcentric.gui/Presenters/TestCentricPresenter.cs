@@ -346,9 +346,8 @@ namespace TestCentric.Gui.Presenters
                         _model.StopTestRun(true);
                     }
 
-                    CloseProject();
-                    //if (CloseProject() == DialogResult.Cancel)
-                    //    e.Cancel = true;
+                    if (CloseProject() == MessageBoxResult.Cancel)
+                        e.Cancel = true;
                 }
 
                 if (!e.Cancel)
@@ -684,15 +683,20 @@ namespace TestCentric.Gui.Presenters
 
         #region Close Methods
 
-        public void CloseProject()
+        public MessageBoxResult CloseProject()
         {
-            if (!_options.Unattended && _model.TestCentricProject.IsDirty &&
-                _view.MessageDisplay.YesNo($"Do you want to save {_model.TestCentricProject.Name}?"))
+            MessageBoxResult messageBoxResult = MessageBoxResult.OK;
+            if (!_options.Unattended && _model.TestCentricProject.IsDirty)
             {
-                SaveProject();
+                messageBoxResult = _view.MessageDisplay.YesNoCancel($"Do you want to save {_model.TestCentricProject.Name}?");
+                if (messageBoxResult == MessageBoxResult.Yes)
+                    SaveProject();
             }
 
-            _model.CloseProject();
+            if (messageBoxResult != MessageBoxResult.Cancel)
+                _model.CloseProject();
+
+            return messageBoxResult;
         }
 
         #endregion
