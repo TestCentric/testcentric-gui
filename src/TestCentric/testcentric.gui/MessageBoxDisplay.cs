@@ -59,6 +59,13 @@ namespace TestCentric.Gui
             return MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes;
         }
 
+        public static MessageBoxResult YesNoCancel(string message, string caption)
+        {
+            DialogResult dialogResult = MessageBox.Show(message, caption, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            return dialogResult == DialogResult.Yes ? MessageBoxResult.Yes : 
+                   dialogResult == DialogResult.No ? MessageBoxResult.No : MessageBoxResult.Cancel;
+        }
+
         public static bool OkCancel(string message)
         {
             return OkCancel(message, DEFAULT_CAPTION);
@@ -86,6 +93,11 @@ namespace TestCentric.Gui
         bool IMessageDisplay.YesNo(string message)
         {
             return YesNo(message, _caption);
+        }
+
+        MessageBoxResult IMessageDisplay.YesNoCancel(string message)
+        {
+            return YesNoCancel(message, _caption);
         }
 
         bool IMessageDisplay.OkCancel(string message)
