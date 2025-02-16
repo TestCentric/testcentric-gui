@@ -653,7 +653,10 @@ namespace TestCentric.Gui.Presenters
         {
             var files = _view.DialogManager.SelectMultipleFiles("New Project", CreateOpenFileFilter());
             if (files.Count > 0)
-                _model.CreateNewProject(files);
+            {
+                _model.CreateNewProject();
+                _model.AddTests(files);
+            }
         }
 
         private void OpenProject()
@@ -708,12 +711,7 @@ namespace TestCentric.Gui.Presenters
             var filesToAdd = _view.DialogManager.SelectMultipleFiles("Add Test Files", CreateOpenFileFilter());
 
             if (filesToAdd.Count > 0)
-            {
-                var files = new List<string>(_model.TestCentricProject.TestFiles);
-                files.AddRange(filesToAdd);
-
-                _model.CreateNewProject(files);
-            }
+                _model.AddTests(filesToAdd);
         }
 
         #endregion

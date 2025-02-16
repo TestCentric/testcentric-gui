@@ -59,7 +59,8 @@ namespace TestCentric.Gui.Presenters.Main
 
             _view.NewProjectCommand.Execute += Raise.Event<CommandHandler>();
 
-            _model.Received().CreateNewProject(files);
+            _model.Received().CreateNewProject();
+            _model.Received().AddTests(files);
         }
 
         [Test]
@@ -100,12 +101,9 @@ namespace TestCentric.Gui.Presenters.Main
             var filesToAdd = new string[] { Path.GetFullPath("/path/to/test.dll") };
             _view.DialogManager.SelectMultipleFiles(null, null).ReturnsForAnyArgs(filesToAdd);
 
-            var allFiles = new List<string>(testFiles);
-            allFiles.AddRange(filesToAdd);
-
             _view.AddTestFilesCommand.Execute += Raise.Event<CommandHandler>();
 
-            _model.Received().CreateNewProject(Arg.Compat.Is<List<string>>(l => l.SequenceEqual(allFiles)));
+            _model.Received().AddTests(filesToAdd);
         }
 
         [Test]
