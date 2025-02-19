@@ -101,6 +101,16 @@ namespace TestCentric.Gui.Model
         // Create a new project containing the provided test files
         TestCentricProject CreateNewProject(IList<string> filenames);
 
+        /// <summary>
+        /// Create a new empty project
+        /// </summary>
+        TestCentricProject CreateNewProject();
+
+        /// <summary>
+        /// Add the test files to the current test project
+        /// </summary>
+        void AddTests(IEnumerable<string> fileNames);
+
         void OpenExistingProject(string filename);
 
         void OpenMostRecentFile();

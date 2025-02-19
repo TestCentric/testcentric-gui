@@ -269,6 +269,27 @@ namespace TestCentric.Gui.Model
             return TestCentricProject;
         }
 
+        public TestCentricProject CreateNewProject()
+        {
+            if (IsProjectLoaded)
+                CloseProject();
+
+            TestCentricProject = new TestCentricProject(this);
+            return TestCentricProject;
+        }
+
+        public void AddTests(IEnumerable<string> fileNames)
+        {
+            if (!IsProjectLoaded)
+                return;
+
+            foreach( string fileName in fileNames)
+                TestCentricProject.AddSubPackage(fileName);
+
+            TestCentricProject.LoadTests();
+            _events.FireTestCentricProjectLoaded();
+        }
+
         public void OpenExistingProject(string projectPath)
         {
             if (IsProjectLoaded)

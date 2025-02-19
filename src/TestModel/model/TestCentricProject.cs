@@ -38,8 +38,7 @@ namespace TestCentric.Gui.Model
             :base(filenames)
         {
             _model = model;
-            TestFiles = filenames;
-            IsDirty = true;
+            TestFiles = new List<string>(filenames);
 
             var engineSettings = _model.Settings.Engine;
             var options = model.Options;
@@ -86,6 +85,8 @@ namespace TestCentric.Gui.Model
                     case ".tcproj":
                         throw new InvalidOperationException("A TestCentric project may not contain another TestCentric project.");
                 }
+
+            IsDirty = false;
         }
 
         public void Load(string path)
@@ -113,6 +114,8 @@ namespace TestCentric.Gui.Model
                     throw new Exception("Unable to deserialize TestProject.", ex);
                 }
             }
+
+            IsDirty = false;
         }
 
         public void SaveAs(string projectPath)
@@ -156,6 +159,7 @@ namespace TestCentric.Gui.Model
         public new void AddSubPackage(string fullName)
         {
             base.AddSubPackage(fullName);
+            TestFiles.Add(fullName);
             IsDirty = true;
         }
         public new void AddSubPackage(TestPackage subPackage)
