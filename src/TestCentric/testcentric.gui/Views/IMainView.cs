@@ -83,7 +83,7 @@ namespace TestCentric.Gui.Views
         IChecked RunSummaryButton { get; }
 
         // SubViews
-        TestTreeView TreeView { get; }
+        ITestTreeView TreeView { get; }
         StatusBarView StatusBarView { get; }
         ProgressBarView ProgressBarView { get; }
         TestPropertiesView TestPropertiesView { get; }

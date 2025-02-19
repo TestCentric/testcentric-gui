@@ -20,6 +20,7 @@ namespace TestCentric.Gui.Presenters
     using Model.Settings;
     using Views;
     using Dialogs;
+    using TestCentric.Gui.Elements;
 
     /// <summary>
     /// TestCentricPresenter does all file opening and closing that
@@ -81,6 +82,7 @@ namespace TestCentric.Gui.Presenters
 
             UpdateViewCommands();
             UpdateTreeDisplayMenuItem();
+            UpdateRunSelectedTestsTooltip();
 
             foreach (string format in _model.ResultFormats)
                 if (format != "cases" && format != "user")
@@ -550,6 +552,8 @@ namespace TestCentric.Gui.Presenters
 
             _view.OpenWorkDirectoryCommand.Execute += () => System.Diagnostics.Process.Start(_model.WorkDirectory);
 
+            _view.TreeView.ShowCheckBoxes.CheckedChanged += () => UpdateRunSelectedTestsTooltip();
+
             _view.ExtensionsCommand.Execute += () =>
             {
                 using (var extensionsDialog = new ExtensionDialog(_model.Services.ExtensionService))
@@ -654,7 +658,7 @@ namespace TestCentric.Gui.Presenters
             var files = _view.DialogManager.SelectMultipleFiles("New Project", CreateOpenFileFilter());
             if (files.Count > 0)
                 _model.CreateNewProject(files);
-        }
+            }
 
         private void OpenProject()
         {
@@ -804,6 +808,14 @@ namespace TestCentric.Gui.Presenters
             _view.RecentFilesMenu.Enabled = !testRunning && !testLoading;
             _view.ExitCommand.Enabled = !testLoading;
             _view.SaveResultsCommand.Enabled = _view.SaveResultsAsMenu.Enabled = !testRunning && !testLoading && hasResults;
+        }
+
+        private void UpdateRunSelectedTestsTooltip()
+        {
+            bool showCheckBoxes = _view.TreeView.ShowCheckBoxes.Checked;
+            IToolTip tooltip = _view.RunSelectedButton as IToolTip;
+            if (tooltip != null)
+                tooltip.ToolTipText = showCheckBoxes ? "Run Checked Tests" : "Run Selected Tests";
         }
 
         private string CreateOpenFileFilter()
