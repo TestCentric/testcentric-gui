@@ -1175,7 +1175,7 @@ namespace TestCentric.Gui.Views
 
         #region Subordinate Views contained in main form
 
-        public TestTreeView TreeView => treeView;
+        public ITestTreeView TreeView => treeView;
 
         public ProgressBarView ProgressBarView => progressBar;
 

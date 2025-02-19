@@ -5,6 +5,7 @@
 
 using NSubstitute;
 using NUnit.Framework;
+using TestCentric.Gui.Elements;
 
 namespace TestCentric.Gui.Presenters.Main
 {
@@ -71,6 +72,23 @@ namespace TestCentric.Gui.Presenters.Main
             // 3. Assert
             Assert.That(_view.ShowHideFilterButton.Visible, Is.EqualTo(expectedState));
             Assert.That(_view.ShowHideFilterButton.Enabled, Is.EqualTo(expectedState));
+        }
+
+        [TestCase(true, "Run Checked Tests")]
+        [TestCase(false, "Run Selected Tests")]
+        public void ShowCheckBoxes_Changed_Tooltip_IsUpdated(bool checkBoxVisible, string expectedTooltip)
+        {
+            // 1. Arrange
+            ICommand runSelectedTestsButton = Substitute.For<ICommand, IToolTip>();
+            _view.RunSelectedButton.Returns(runSelectedTestsButton);
+            _view.TreeView.ShowCheckBoxes.Checked.Returns(checkBoxVisible);
+
+            // 2. Act
+            _presenter = new TestCentricPresenter(_view, _model, new CommandLineOptions());
+            _view.TreeView.ShowCheckBoxes.CheckedChanged += Raise.Event<CommandHandler>();
+
+            // 3. Assert
+            (runSelectedTestsButton as IToolTip).Received().ToolTipText = expectedTooltip;
         }
     }
 }
