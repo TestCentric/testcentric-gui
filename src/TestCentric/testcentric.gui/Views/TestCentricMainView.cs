@@ -972,7 +972,7 @@ namespace TestCentric.Gui.Views
             this.errorTab.Name = "errorTab";
             this.errorTab.Size = new System.Drawing.Size(490, 333);
             this.errorTab.TabIndex = 0;
-            this.errorTab.Text = "Errors and Failures";
+            this.errorTab.Text = "Test Results";
             this.errorTab.UseVisualStyleBackColor = true;
             // 
             // errorsAndFailuresView1

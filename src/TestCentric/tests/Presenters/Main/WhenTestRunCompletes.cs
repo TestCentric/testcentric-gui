@@ -8,6 +8,7 @@ using NUnit.Framework;
 
 namespace TestCentric.Gui.Presenters.Main
 {
+    using System.Windows.Forms;
     using Model;
 
     public class WhenTestRunCompletes : MainPresenterTestBase
@@ -22,6 +23,7 @@ namespace TestCentric.Gui.Presenters.Main
             _model.ResultSummary.Returns(new ResultSummary() { FailureCount = 1 });
             _model.IsTestRunning.Returns(false);
             _model.SelectedTests.Returns(new TestSelection(new[] { new TestNode("<test-case id='1' />") }));
+            _view.ResultTabs.InvokeIfRequired(Arg.Do<MethodInvoker>(x => x.Invoke()));
 
             var resultNode = new ResultNode("<test-run id='XXX' result='Failed' />");
             FireRunFinishedEvent(resultNode);
@@ -60,6 +62,12 @@ namespace TestCentric.Gui.Presenters.Main
         public void RunSummaryIsDisplayed()
         {
             _view.RunSummaryButton.Received().Checked = true;
+        }
+
+        [Test]
+        public void TestResultTabIsDisplay()
+        {
+            _view.ResultTabs.Received().SelectedIndex = 1;
         }
     }
 }
