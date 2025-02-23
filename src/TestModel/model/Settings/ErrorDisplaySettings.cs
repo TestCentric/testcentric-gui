@@ -32,7 +32,7 @@ namespace TestCentric.Gui.Model.Settings
 
         public bool SourceCodeDisplay
         {
-            get { return GetSetting(nameof(SourceCodeDisplay), false); }
+            get { return GetSetting(nameof(SourceCodeDisplay), true); }
             set { SaveSetting(nameof(SourceCodeDisplay), value); }
         }
 
