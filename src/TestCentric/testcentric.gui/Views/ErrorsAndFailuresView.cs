@@ -64,6 +64,10 @@ namespace TestCentric.Gui.Views
         public event EventHandler SourceCodeSplitOrientationChanged;
         public event EventHandler SourceCodeDisplayChanged;
 
+        public TestResultSubView TestResultSubView => testResultSubView;
+
+        public TestOutputSubView TestOutputSubView => testOutputSubView;
+
         public string Header
         {
             get { return header.Text; }
@@ -72,21 +76,18 @@ namespace TestCentric.Gui.Views
 
         public bool EnableToolTips { get; set; }
 
-        public override Font Font
+        public void SetFixedFont(Font font)
         {
-            get { return base.Font; }
-            set
+            if (detailList.Font == font)
+                return;
+
+            InvokeIfRequired(() =>
             {
-                if (value != base.Font)
-                    InvokeIfRequired(() =>
-                    {
-                        base.Font = value;
-                        detailList.Font = value;
-                        stackTraceDisplay.Font = value;
-                        sourceCode.CodeDisplayFont = value;
-                        RefillDetailList();
-                    });
-            }
+                detailList.Font = font;
+                stackTraceDisplay.Font = font;
+                sourceCode.CodeDisplayFont = font;
+                RefillDetailList();
+            });
         }
 
         public int SplitterPosition
@@ -140,6 +141,36 @@ namespace TestCentric.Gui.Views
                         errorBrowser.SelectedDisplay = stackTraceDisplay;
                 });
             }
+        }
+
+        public string Outcome
+        {
+            get { return testResultSubView.Outcome; }
+            set { testResultSubView.Outcome = value; }
+        }
+
+        public string ElapsedTime
+        {
+            get { return testResultSubView.ElapsedTime; }
+            set { testResultSubView.ElapsedTime = value; }
+        }
+
+        public string AssertCount
+        {
+            get { return testResultSubView.AssertCount; }
+            set { testResultSubView.AssertCount = value; }
+        }
+
+        public string Assertions
+        {
+            get { return testResultSubView.Assertions; }
+            set { testResultSubView.Assertions = value; }
+        }
+
+        public string Output
+        {
+            get { return testOutputSubView.Output; }
+            set { testOutputSubView.Output = value; }
         }
 
         public void Clear()

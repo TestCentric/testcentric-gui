@@ -117,7 +117,7 @@ namespace TestCentric.Gui.Presenters
         public void WhenPresenterIsCreated_FontIsSetToDefault()
         {
             var font = _settings.Gui.FixedFont;
-            _view.Received().Font = font;
+            _view.Received().SetFixedFont(font);
         }
 
         [Test]
@@ -164,7 +164,7 @@ namespace TestCentric.Gui.Presenters
             _view.ClearReceivedCalls();
             var newFont = new Font(FontFamily.GenericMonospace, 12.0f);
             _settings.Gui.FixedFont = newFont;
-            _view.Received().Font = newFont;
+            _view.Received().SetFixedFont(newFont);
         }
 
         [Test]
