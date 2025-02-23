@@ -51,6 +51,8 @@ namespace TestCentric.Gui.Views
             {
                 SourceCodeDisplayChanged?.Invoke(this, new EventArgs());
             };
+
+            flowLayoutPanel.Layout += FlowLayoutPanel_Layout;
         }
 
         #endregion
@@ -147,7 +149,6 @@ namespace TestCentric.Gui.Views
                 detailList.Items.Clear();
                 detailList.ContextMenuStrip = null;
                 errorBrowser.StackTraceSource = "";
-                noErrorsMessage.Show();
             });
         }
 
@@ -155,7 +156,6 @@ namespace TestCentric.Gui.Views
         {
             InvokeIfRequired(() =>
             {
-                noErrorsMessage.Hide();
                 InsertTestResultItem(new TestResultItem(status, testName, message, stackTrace));
             });
         }
@@ -296,6 +296,20 @@ namespace TestCentric.Gui.Views
         private void tabSplitter_SplitterMoved(object sender, SplitterEventArgs e)
         {
             SplitterPositionChanged?.Invoke(this, new EventArgs());
+        }
+
+        private void FlowLayoutPanel_Layout(object sender, LayoutEventArgs e)
+        {
+            // Adjust width of all controls 
+            var subViewWidth = flowLayoutPanel.ClientRectangle.Width - testResultSubView.Margin.Left - testResultSubView.Margin.Right;
+            detailList.Width = subViewWidth;
+            testResultSubView.Width = subViewWidth;
+            testOutputSubView.Width = subViewWidth;
+
+            // Adjust height of detaillist view
+            var subViewHeight = flowLayoutPanel.ClientRectangle.Height - 6;
+            int margin = testResultSubView.Margin.Top + testResultSubView.Margin.Bottom + testOutputSubView.Margin.Top + testOutputSubView.Margin.Bottom + detailList.Margin.Top;
+            detailList.Height = Math.Max(100, subViewHeight - testResultSubView.Height - testOutputSubView.Height - margin);
         }
 
         #endregion

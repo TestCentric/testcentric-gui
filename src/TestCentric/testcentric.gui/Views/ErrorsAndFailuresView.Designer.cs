@@ -31,7 +31,6 @@ namespace TestCentric.Gui.Views
         {
             this.components = new System.ComponentModel.Container();
             this.header = new System.Windows.Forms.Label();
-            this.noErrorsMessage = new System.Windows.Forms.Label();
             this.detailList = new System.Windows.Forms.ListBox();
             this.tabSplitter = new System.Windows.Forms.Splitter();
             this.errorBrowser = new NUnit.UiException.Controls.ErrorBrowser();
@@ -39,8 +38,12 @@ namespace TestCentric.Gui.Views
             this.stackTraceDisplay = new NUnit.UiException.Controls.StackTraceDisplay();
             this.detailListContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyDetailMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.flowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.testResultSubView = new TestCentric.Gui.Views.TestResultSubView();
+            this.testOutputSubView = new TestCentric.Gui.Views.TestOutputSubView();
             this.panel1.SuspendLayout();
             this.detailListContextMenuStrip.SuspendLayout();
+            this.flowLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // header
@@ -56,24 +59,34 @@ namespace TestCentric.Gui.Views
             this.header.TabIndex = 0;
             this.header.Text = "Test name goes here";
             // 
-            // noErrorsMessage
+            // testResultSubView
             // 
-            this.noErrorsMessage.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.noErrorsMessage.AutoSize = true;
-            this.noErrorsMessage.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.noErrorsMessage.Location = new System.Drawing.Point(120, 45);
-            this.noErrorsMessage.Name = "noErrorsMessage";
-            this.noErrorsMessage.Size = new System.Drawing.Size(229, 20);
-            this.noErrorsMessage.TabIndex = 1;
-            this.noErrorsMessage.Text = "No Errors, Failures or Warnings";
+            this.testResultSubView.AssertCount = "";
+            this.testResultSubView.Assertions = "";
+            this.testResultSubView.BackColor = System.Drawing.SystemColors.Control;
+            this.testResultSubView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.testResultSubView.ElapsedTime = "";
+            this.testResultSubView.MinimumSize = new System.Drawing.Size(2, 108);
+            this.testResultSubView.Name = "testResultSubView";
+            this.testResultSubView.Outcome = "";
+            this.testResultSubView.Size = new System.Drawing.Size(519, 111);
+            this.testResultSubView.Visible = true;
+            // 
+            // testOutputSubView
+            // 
+            this.testOutputSubView.BackColor = System.Drawing.SystemColors.Control;
+            this.testOutputSubView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.testOutputSubView.MinimumSize = new System.Drawing.Size(2, 70);
+            this.testOutputSubView.Name = "testOutputSubView";
+            this.testOutputSubView.Output = "";
+            this.testOutputSubView.Size = new System.Drawing.Size(519, 72);
+            this.testOutputSubView.Visible = true;
             // 
             // detailList
             // 
-            this.detailList.Dock = System.Windows.Forms.DockStyle.Top;
             this.detailList.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
             this.detailList.Font = new System.Drawing.Font("Courier New", 8F);
             this.detailList.HorizontalScrollbar = true;
-            this.detailList.Location = new System.Drawing.Point(0, 0);
             this.detailList.Name = "detailList";
             this.detailList.ScrollAlwaysVisible = true;
             this.detailList.Size = new System.Drawing.Size(496, 128);
@@ -84,6 +97,20 @@ namespace TestCentric.Gui.Views
             this.detailList.MouseLeave += new System.EventHandler(this.detailList_MouseLeave);
             this.detailList.MouseHover += new System.EventHandler(this.OnMouseHover);
             this.detailList.MouseMove += new System.Windows.Forms.MouseEventHandler(this.detailList_MouseMove);
+            // 
+            // flowLayoutPanel
+            // 
+            this.flowLayoutPanel.BackColor = System.Drawing.SystemColors.Control;
+            this.flowLayoutPanel.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flowLayoutPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.flowLayoutPanel.Location = new System.Drawing.Point(0, 0);
+            this.flowLayoutPanel.Name = "flowLayoutPanel";
+            this.flowLayoutPanel.Size = new System.Drawing.Size(496, 128);
+            this.flowLayoutPanel.Controls.Add(this.testResultSubView);
+            this.flowLayoutPanel.Controls.Add(this.testOutputSubView);
+            this.flowLayoutPanel.Controls.Add(this.detailList);
+            this.flowLayoutPanel.WrapContents = false;
+            this.flowLayoutPanel.AutoScroll = true;
             // 
             // tabSplitter
             // 
@@ -110,7 +137,7 @@ namespace TestCentric.Gui.Views
             // 
             this.panel1.Controls.Add(this.errorBrowser);
             this.panel1.Controls.Add(this.tabSplitter);
-            this.panel1.Controls.Add(this.detailList);
+            this.panel1.Controls.Add(this.flowLayoutPanel);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 18);
             this.panel1.Name = "panel1";
@@ -141,13 +168,13 @@ namespace TestCentric.Gui.Views
             // 
             // ErrorsAndFailuresView
             // 
-            this.Controls.Add(this.noErrorsMessage);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.header);
             this.Name = "ErrorsAndFailuresView";
             this.Size = new System.Drawing.Size(496, 288);
             this.panel1.ResumeLayout(false);
             this.detailListContextMenuStrip.ResumeLayout(false);
+            this.flowLayoutPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -163,6 +190,8 @@ namespace TestCentric.Gui.Views
         public System.Windows.Forms.Splitter tabSplitter;
         private System.Windows.Forms.ContextMenuStrip detailListContextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem copyDetailMenuItem;
-        private System.Windows.Forms.Label noErrorsMessage;
+        private TestCentric.Gui.Views.TestResultSubView testResultSubView;
+        private TestCentric.Gui.Views.TestOutputSubView testOutputSubView;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel;
     }
 }
