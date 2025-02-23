@@ -4,10 +4,8 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Xml;
 
 namespace TestCentric.Gui.Presenters
 {
@@ -65,8 +63,6 @@ namespace TestCentric.Gui.Presenters
 
                     InitializeTestPackageSubView(testNode);
                     InitializeTestPropertiesSubView(testNode);                    
-                    InitializeTestResultSubView(testNode);
-                    InitializeTestOutputSubView(testNode);
 
                     AdjustSubViewHeights();
 
@@ -116,33 +112,6 @@ namespace TestCentric.Gui.Presenters
             _view.RunState = testNode.RunState.ToString();
             _view.SkipReason = GetSkipReason(testNode);
             _view.Properties = GetTestProperties(testNode);
-        }
-
-        private void InitializeTestResultSubView(TestNode testNode)
-        {
-            var resultNode = _model.GetResultForTest(testNode.Id);
-            var visible = resultNode != null;
-
-            if (visible)
-            {
-                _view.Outcome = resultNode.Outcome.ToString();
-                _view.ElapsedTime = resultNode.Duration.ToString("f3");
-                _view.AssertCount = resultNode.AssertCount.ToString();
-                _view.Assertions = GetAssertionResults(resultNode);
-            }
-
-            _view.TestResultSubView.InvokeIfRequired(() => _view.TestResultSubView.Visible = visible);
-        }
-
-        private void InitializeTestOutputSubView(TestNode testNode)
-        {
-            var resultNode = _model.GetResultForTest(testNode.Id);
-            var visible = resultNode != null;
-
-            if (visible)
-                _view.Output = resultNode.Xml.SelectSingleNode("output")?.InnerText;
-
-            _view.TestOutputSubView.InvokeIfRequired(() => _view.TestOutputSubView.Visible = visible);
         }
 
         private void AdjustSubViewHeights()
@@ -218,100 +187,6 @@ namespace TestCentric.Gui.Presenters
                     sb.Append(Environment.NewLine);
                 sb.Append(item);
             }
-            return sb.ToString();
-        }
-
-        // Sometimes, the message may have leading blank lines and/or
-        // may be longer than Windows really wants to display.
-        private string TrimMessage(string message)
-        {
-            if (message != null)
-            {
-                if (message.Length > 64000)
-                    message = message.Substring(0, 64000);
-
-                int start = 0;
-                for (int i = 0; i < message.Length; i++)
-                {
-                    switch (message[i])
-                    {
-                        case ' ':
-                        case '\t':
-                            break;
-                        case '\r':
-                        case '\n':
-                            start = i + 1;
-                            break;
-
-                        default:
-                            return start == 0 ? message : message.Substring(start);
-                    }
-                }
-            }
-
-            return message;
-        }
-
-        private string GetAssertionResults(ResultNode resultNode)
-        {
-            StringBuilder sb;
-            var assertionResults = resultNode.Assertions;
-
-            // If there were no actual assertionresult entries, we fake
-            // one if there is a message to display
-            if (assertionResults.Count == 0)
-            {
-                if (resultNode.Outcome.Status == TestStatus.Failed)
-                {
-                    string status = resultNode.Outcome.Label ?? "Failed";
-                    XmlNode failure = resultNode.Xml.SelectSingleNode("failure");
-                    if (failure != null)
-                        assertionResults.Add(new AssertionResult(failure, status));
-                }
-                else
-                {
-                    string status = resultNode.Outcome.Label ?? "Skipped";
-                    XmlNode reason = resultNode.Xml.SelectSingleNode("reason");
-                    if (reason != null)
-                        assertionResults.Add(new AssertionResult(reason, status));
-                }
-            }
-
-            sb = new StringBuilder();
-            int index = 0;
-            foreach (var assertion in assertionResults)
-            {
-                sb.AppendLine($"{++index}) {assertion.Status.ToUpper()} {assertion.Message}");
-                if (assertion.StackTrace != null)
-                    sb.AppendLine(AdjustStackTrace(assertion.StackTrace));
-
-            }
-
-            return sb.ToString();
-        }
-
-        // Some versions of the framework return the stacktrace
-        // without leading spaces, so we add them if needed.
-        // TODO: Make sure this is valid across various cultures.
-        private const string LEADING_SPACES = "   ";
-
-        private static string AdjustStackTrace(string stackTrace)
-        {
-            // Check if no adjustment needed. We assume that all
-            // lines start the same - either with or without spaces.
-            if (stackTrace.StartsWith(LEADING_SPACES))
-                return stackTrace;
-
-            var sr = new StringReader(stackTrace);
-            var sb = new StringBuilder();
-            string line = sr.ReadLine();
-            while (line != null)
-            {
-                sb.Append(LEADING_SPACES);
-                sb.AppendLine(line);
-                line = sr.ReadLine();
-            }
-
             return sb.ToString();
         }
 
