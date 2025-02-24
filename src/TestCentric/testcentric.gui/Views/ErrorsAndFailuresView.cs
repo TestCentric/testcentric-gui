@@ -64,9 +64,9 @@ namespace TestCentric.Gui.Views
         public event EventHandler SourceCodeSplitOrientationChanged;
         public event EventHandler SourceCodeDisplayChanged;
 
-        public TestResultSubView TestResultSubView => testResultSubView;
+        public ITestResultSubView TestResultSubView => testResultSubView;
 
-        public TestOutputSubView TestOutputSubView => testOutputSubView;
+        public ITestOutputSubView TestOutputSubView => testOutputSubView;
 
         public string Header
         {
@@ -141,36 +141,6 @@ namespace TestCentric.Gui.Views
                         errorBrowser.SelectedDisplay = stackTraceDisplay;
                 });
             }
-        }
-
-        public string Outcome
-        {
-            get { return testResultSubView.Outcome; }
-            set { testResultSubView.Outcome = value; }
-        }
-
-        public string ElapsedTime
-        {
-            get { return testResultSubView.ElapsedTime; }
-            set { testResultSubView.ElapsedTime = value; }
-        }
-
-        public string AssertCount
-        {
-            get { return testResultSubView.AssertCount; }
-            set { testResultSubView.AssertCount = value; }
-        }
-
-        public string Assertions
-        {
-            get { return testResultSubView.Assertions; }
-            set { testResultSubView.Assertions = value; }
-        }
-
-        public string Output
-        {
-            get { return testOutputSubView.Output; }
-            set { testOutputSubView.Output = value; }
         }
 
         public void Clear()

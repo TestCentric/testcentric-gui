@@ -24,14 +24,8 @@ namespace TestCentric.Gui.Views
         Orientation SourceCodeSplitOrientation { get; set; }
         bool SourceCodeDisplay { get; set; }
 
-        TestResultSubView TestResultSubView { get; }
-        TestOutputSubView TestOutputSubView { get; }
-
-        string Outcome { get; set; }
-        string ElapsedTime { get; set; }
-        string AssertCount { get; set; }
-        string Assertions { get; set; }
-        string Output { get; set; }
+        ITestResultSubView TestResultSubView { get; }
+        ITestOutputSubView TestOutputSubView { get; }
 
         void Clear();
         void AddResult(string status, string testName, string message, string stackTrace);

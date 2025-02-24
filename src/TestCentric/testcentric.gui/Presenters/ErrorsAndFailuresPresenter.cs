@@ -168,15 +168,15 @@ namespace TestCentric.Gui.Presenters
 
         private void InitializeTestResultSubView()
         {
-            _view.Outcome = (_selectedResult != null) ? _selectedResult.Outcome.ToString() : "";
-            _view.ElapsedTime = (_selectedResult != null) ? _selectedResult.Duration.ToString("f3") : "";
-            _view.AssertCount = (_selectedResult != null) ? _selectedResult.AssertCount.ToString() : "";
-            _view.Assertions = (_selectedResult != null) ? GetAssertionResults(_selectedResult) : "";
+            _view.TestResultSubView.Outcome = (_selectedResult != null) ? _selectedResult.Outcome.ToString() : "";
+            _view.TestResultSubView.ElapsedTime = (_selectedResult != null) ? _selectedResult.Duration.ToString("f3") : "";
+            _view.TestResultSubView.AssertCount = (_selectedResult != null) ? _selectedResult.AssertCount.ToString() : "";
+            _view.TestResultSubView.Assertions = (_selectedResult != null) ? GetAssertionResults(_selectedResult) : "";
         }
 
         private void InitializeTestOutputSubView()
         {
-            _view.Output = (_selectedResult != null) ? _selectedResult.Xml.SelectSingleNode("output")?.InnerText : "";
+            _view.TestOutputSubView.Output = (_selectedResult != null) ? _selectedResult.Xml.SelectSingleNode("output")?.InnerText : "";
         }
 
         private string GetAssertionResults(ResultNode resultNode)

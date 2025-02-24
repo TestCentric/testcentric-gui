@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
-    public partial class TestResultSubView : TestPropertiesView.SubView
+    public partial class TestResultSubView : TestPropertiesView.SubView, ITestResultSubView
     {
         public TestResultSubView()
         {
