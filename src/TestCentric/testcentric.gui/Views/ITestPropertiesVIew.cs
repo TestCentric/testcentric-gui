@@ -26,18 +26,10 @@ namespace TestCentric.Gui.Views
         string SkipReason { get; set; }
         bool DisplayHiddenProperties { get; }
         string Properties { get; set; }
-        string Outcome { get; set; }
-        string ElapsedTime { get; set; }
-        string AssertCount { get; set; }
-        string Assertions { get; set; }
-        string Output { get; set; }
         string PackageSettings { get; set; }
 
         TestPackageSubView TestPackageSubView { get; }
         TestPropertiesSubView TestPropertiesSubView { get; }
-        TestResultSubView TestResultSubView { get; }
-        TestOutputSubView TestOutputSubView { get; }
-
         TestPropertiesView.SubView[] SubViews { get; }
     }
 }

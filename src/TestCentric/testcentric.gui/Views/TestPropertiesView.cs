@@ -35,8 +35,6 @@ namespace TestCentric.Gui.Views
             header.Width = subViewWidth;
             testPackageSubView.Width = subViewWidth;
             testPropertiesSubView.Width = subViewWidth;
-            testResultSubView.Width = subViewWidth;
-            testOutputSubView.Width = subViewWidth;
         }
 
         public int ClientHeight => ClientRectangle.Height - TestPackageSubView.Top - 40; // Value of 40 allows for non-client areas and spacing
@@ -51,11 +49,7 @@ namespace TestCentric.Gui.Views
 
         public TestPropertiesSubView TestPropertiesSubView => testPropertiesSubView;
 
-        public TestResultSubView TestResultSubView => testResultSubView;
-
-        public TestOutputSubView TestOutputSubView => testOutputSubView;
-
-        public SubView[] SubViews => new SubView[] { TestPackageSubView, TestPropertiesSubView, TestResultSubView, TestOutputSubView }; 
+        public SubView[] SubViews => new SubView[] { TestPackageSubView, TestPropertiesSubView }; 
 
         public string TestType
         {
@@ -108,36 +102,6 @@ namespace TestCentric.Gui.Views
         {
             get { return testPropertiesSubView.Properties; }
             set { testPropertiesSubView.Properties = value; }
-        }
-
-        public string Outcome
-        {
-            get { return testResultSubView.Outcome; }
-            set { testResultSubView.Outcome = value; }
-        }
-
-        public string ElapsedTime
-        {
-            get { return testResultSubView.ElapsedTime; }
-            set { testResultSubView.ElapsedTime = value; }
-        }
-
-        public string AssertCount
-        {
-            get { return testResultSubView.AssertCount; }
-            set { testResultSubView.AssertCount = value; }
-        }
-
-        public string Assertions
-        {
-            get { return testResultSubView.Assertions; }
-            set { testResultSubView.Assertions = value; }
-        }
-
-        public string Output
-        {
-            get { return testOutputSubView.Output; }
-            set { testOutputSubView.Output = value; }
         }
 
         public string PackageSettings

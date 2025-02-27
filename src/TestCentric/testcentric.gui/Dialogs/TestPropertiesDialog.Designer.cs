@@ -39,18 +39,13 @@ namespace TestCentric.Gui.Dialogs
             this.testPropertiesView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.testPropertiesView.AssertCount = "";
-            this.testPropertiesView.Assertions = "";
             this.testPropertiesView.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.testPropertiesView.Categories = "";
             this.testPropertiesView.Description = "";
-            this.testPropertiesView.ElapsedTime = "";
             this.testPropertiesView.FullName = "";
             this.testPropertiesView.Header = "";
             this.testPropertiesView.Location = new System.Drawing.Point(6, 30);
             this.testPropertiesView.Name = "testPropertiesView";
-            this.testPropertiesView.Outcome = "";
-            this.testPropertiesView.Output = "";
             this.testPropertiesView.PackageSettings = "";
             this.testPropertiesView.Properties = "";
             this.testPropertiesView.RunState = "";

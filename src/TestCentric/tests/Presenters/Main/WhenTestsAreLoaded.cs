@@ -8,6 +8,7 @@ using NUnit.Framework;
 
 namespace TestCentric.Gui.Presenters.Main
 {
+    using System.Windows.Forms;
     using Model;
 
     public class WhenTestsAreLoaded : MainPresenterTestBase
@@ -23,6 +24,7 @@ namespace TestCentric.Gui.Presenters.Main
             TestNode testNode = new TestNode("<test-suite id='1'/>");
             _model.LoadedTests.Returns(testNode);
             _model.SelectedTests.Returns(new TestSelection(new[] { testNode }));
+            _view.ResultTabs.InvokeIfRequired(Arg.Do<MethodInvoker>(x => x.Invoke()));
 
             var project = new TestCentricProject(_model, "dummy.dll");
             _model.TestCentricProject.Returns(project);
@@ -57,6 +59,12 @@ namespace TestCentric.Gui.Presenters.Main
         public void CheckElementVisibility(string propName, bool visible)
         {
             ViewElement(propName).Received().Visible = visible;
+        }
+
+        [Test]
+        public void TestPropertiesTabIsDisplay()
+        {
+            _view.ResultTabs.Received().SelectedIndex = 0;
         }
 
 #if NYI

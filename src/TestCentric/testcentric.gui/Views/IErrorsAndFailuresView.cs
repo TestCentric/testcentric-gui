@@ -19,13 +19,16 @@ namespace TestCentric.Gui.Views
         string Header { get; set; }
 
         bool EnableToolTips { get; set; }
-        Font Font { get; set; }
         int SplitterPosition { get; set; }
         float SourceCodeSplitterDistance { get; set; }
         Orientation SourceCodeSplitOrientation { get; set; }
         bool SourceCodeDisplay { get; set; }
 
+        ITestResultSubView TestResultSubView { get; }
+        ITestOutputSubView TestOutputSubView { get; }
+
         void Clear();
         void AddResult(string status, string testName, string message, string stackTrace);
+        void SetFixedFont(Font font);
     }
 }

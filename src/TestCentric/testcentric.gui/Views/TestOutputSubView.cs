@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
-    public partial class TestOutputSubView : TestPropertiesView.SubView
+    public partial class TestOutputSubView : TestPropertiesView.SubView, ITestOutputSubView
     {
         public TestOutputSubView()
         {

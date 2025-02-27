@@ -128,6 +128,7 @@ namespace TestCentric.Gui.Presenters
                 UpdateViewCommands();
 
                 _lastFilesLoaded = _model.TestCentricProject.TestFiles.ToArray();
+                _view.ResultTabs.InvokeIfRequired(() => _view.ResultTabs.SelectedIndex = 0);
             };
 
             _model.Events.TestsUnloading += (TestEventArgse) =>
@@ -210,6 +211,8 @@ namespace TestCentric.Gui.Presenters
 
                 string resultPath = Path.Combine(_model.WorkDirectory, "TestResult.xml");
                 _model.SaveResults(resultPath);
+                _view.ResultTabs.InvokeIfRequired(() => _view.ResultTabs.SelectedIndex = 1);
+
                 //try
                 //{
                 //    _model.SaveResults(resultPath);

@@ -80,9 +80,6 @@ namespace TestCentric.Gui.Dialogs
 
             InitializeTestPackageSubView(_testNode);
             InitializeTestPropertiesSubView(_testNode);
-            InitializeTestResultSubView(_testNode);
-            InitializeTestOutputSubView(_testNode);
-
             AdjustSubViewHeights();
 #endif
 
@@ -140,37 +137,6 @@ namespace TestCentric.Gui.Dialogs
             _view.TestPropertiesSubView.Visible = true;
         }
 
-        private void InitializeTestResultSubView(TestNode testNode)
-        {
-            var resultNode = _model.GetResultForTest(testNode.Id);
-            var visible = resultNode != null;
-
-            if (visible)
-            {
-                _view.Outcome = resultNode.Outcome.ToString();
-                _view.ElapsedTime = resultNode.Duration.ToString("f3");
-                _view.AssertCount = resultNode.AssertCount.ToString();
-                _view.Assertions = GetAssertionResults(resultNode);
-
-                _visibleSubViews.Add(_view.TestResultSubView);
-            }
-
-            _view.TestResultSubView.Visible = visible;
-        }
-
-        private void InitializeTestOutputSubView(TestNode testNode)
-        {
-            var resultNode = _model.GetResultForTest(testNode.Id);
-            var visible = resultNode != null;
-
-            if (visible)
-            {
-                _view.Output = resultNode.Xml.SelectSingleNode("output")?.InnerText;
-                _visibleSubViews.Add(_view.TestOutputSubView);
-            }
-
-            _view.TestOutputSubView.Visible = visible;
-        }
 
         private void AdjustSubViewHeights()
         {

@@ -942,20 +942,15 @@ namespace TestCentric.Gui.Views
             // 
             // propertiesView
             // 
-            this.propertiesView.AssertCount = "";
-            this.propertiesView.Assertions = "";
             this.propertiesView.AutoScroll = true;
             this.propertiesView.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.propertiesView.Categories = "";
             this.propertiesView.Description = "";
             this.propertiesView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.propertiesView.ElapsedTime = "";
             this.propertiesView.FullName = "";
             this.propertiesView.Header = "";
             this.propertiesView.Location = new System.Drawing.Point(0, 0);
             this.propertiesView.Name = "propertiesView";
-            this.propertiesView.Outcome = "";
-            this.propertiesView.Output = "";
             this.propertiesView.PackageSettings = "";
             this.propertiesView.Properties = "";
             this.propertiesView.RunState = "";
@@ -972,7 +967,7 @@ namespace TestCentric.Gui.Views
             this.errorTab.Name = "errorTab";
             this.errorTab.Size = new System.Drawing.Size(490, 333);
             this.errorTab.TabIndex = 0;
-            this.errorTab.Text = "Errors and Failures";
+            this.errorTab.Text = "Test Results";
             this.errorTab.UseVisualStyleBackColor = true;
             // 
             // errorsAndFailuresView1
