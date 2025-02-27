@@ -108,7 +108,16 @@ namespace TestCentric.Gui.Presenters
         [TestCase("Inconclusive", FailureSite.Test, false)]
         public void WhenTestSuiteFinishes_FailuresAndErrorsAreDisplayed(string resultState, FailureSite site, bool shouldDisplay)
         {
-            FireSuiteFinishedEvent("MyTest", resultState, site);
+            FireSuiteFinishedEvent("MyTest", resultState, site, 1);
+
+            VerifyDisplay(shouldDisplay);
+        }
+
+        [TestCase(1, true)]
+        [TestCase(2, false)]
+        public void WhenTestSuiteFinishes_WithFailures_TestCount_FailuresAndErrorsAreDisplayed(int testCount, bool shouldDisplay)
+        {
+            FireSuiteFinishedEvent("MyTest", "Failed", FailureSite.Test, testCount);
 
             VerifyDisplay(shouldDisplay);
         }

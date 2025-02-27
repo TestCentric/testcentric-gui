@@ -132,7 +132,8 @@ namespace TestCentric.Gui.Presenters
                 if (_selectedResult.Assertions.Count > 0)
                     foreach (var assertion in _selectedResult.Assertions)
                         AddResult(testName, assertion);
-                else
+                else if (_selectedResult.TestCount == 1)
+                    // Add result to detail list only for single test cases: avoid displaying general message "One or more child tests had errors"
                     AddResult(_selectedResult);
             }
 

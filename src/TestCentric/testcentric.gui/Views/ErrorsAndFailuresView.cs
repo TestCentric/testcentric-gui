@@ -150,6 +150,9 @@ namespace TestCentric.Gui.Views
                 detailList.Items.Clear();
                 detailList.ContextMenuStrip = null;
                 errorBrowser.StackTraceSource = "";
+
+                detailList.Visible = false;
+                errorBrowser.Visible = false;
             });
         }
 
@@ -158,6 +161,8 @@ namespace TestCentric.Gui.Views
             InvokeIfRequired(() =>
             {
                 InsertTestResultItem(new TestResultItem(status, testName, message, stackTrace));
+                detailList.Visible = true;
+                errorBrowser.Visible = true;
             });
         }
 

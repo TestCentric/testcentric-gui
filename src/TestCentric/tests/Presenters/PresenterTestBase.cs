@@ -13,6 +13,7 @@ using FakeUserSettings = TestCentric.Gui.Fakes.UserSettings;
 
 namespace TestCentric.Gui.Presenters
 {
+    using System.Security.Policy;
     using Elements;
     using Model;
 
@@ -131,9 +132,9 @@ namespace TestCentric.Gui.Presenters
             FireSuiteFinishedEvent(CreateResultNode("test-suite", testName, result, output));
         }
 
-        protected void FireSuiteFinishedEvent(string testName, string result, FailureSite site)
+        protected void FireSuiteFinishedEvent(string testName, string result, FailureSite site, int testCount = 0)
         {
-            FireSuiteFinishedEvent(CreateResultNode("test-suite", testName, result, site));
+            FireSuiteFinishedEvent(CreateResultNode("test-suite", testName, result, site, testCount));
         }
 
         protected void FireSuiteFinishedEvent(ResultNode result)
@@ -146,9 +147,13 @@ namespace TestCentric.Gui.Presenters
             return new ResultNode(CreateResultXml(element, testName, result, output));
         }
 
-        private static ResultNode CreateResultNode(string element, string testName, string result, FailureSite site)
+        private static ResultNode CreateResultNode(string element, string testName, string result, FailureSite site, int testCount = 0)
         {
-            return new ResultNode(CreateResultXml(element, testName, result, site));
+            XmlNode xmlNode = CreateResultXml(element, testName, result, site);
+            if (testCount != 0)
+                xmlNode.AddAttribute("testcasecount", testCount.ToString());
+
+            return new ResultNode(xmlNode);
         }
 
         private static XmlNode CreateResultXml(string element, string testName, string result, FailureSite site)
