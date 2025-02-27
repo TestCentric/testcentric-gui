@@ -107,8 +107,8 @@ namespace TestCentric.Gui.Views
             this.flowLayoutPanel.Name = "flowLayoutPanel";
             this.flowLayoutPanel.Size = new System.Drawing.Size(496, 128);
             this.flowLayoutPanel.Controls.Add(this.testResultSubView);
-            this.flowLayoutPanel.Controls.Add(this.testOutputSubView);
             this.flowLayoutPanel.Controls.Add(this.detailList);
+            this.flowLayoutPanel.Controls.Add(this.testOutputSubView);
             this.flowLayoutPanel.WrapContents = false;
             this.flowLayoutPanel.AutoScroll = true;
             // 

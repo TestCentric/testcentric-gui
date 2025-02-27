@@ -309,8 +309,9 @@ namespace TestCentric.Gui.Views
 
             // Adjust height of detaillist view
             var subViewHeight = flowLayoutPanel.ClientRectangle.Height - 6;
-            int margin = testResultSubView.Margin.Top + testResultSubView.Margin.Bottom + testOutputSubView.Margin.Top + testOutputSubView.Margin.Bottom + detailList.Margin.Top;
-            detailList.Height = Math.Max(100, subViewHeight - testResultSubView.Height - testOutputSubView.Height - margin);
+            int resultViewHeight = testResultSubView.Visible ? testResultSubView.Height + testResultSubView.Margin.Vertical : 0;
+            int outputViewHeight = testOutputSubView.Visible ? testOutputSubView.Height + testOutputSubView.Margin.Vertical : 0;
+            detailList.Height = Math.Max(100, subViewHeight - resultViewHeight - outputViewHeight - detailList.Margin.Top);
         }
 
         #endregion

@@ -221,6 +221,33 @@ namespace TestCentric.Gui.Presenters
             Assert.That(_settings.Gui.ErrorDisplay.SourceCodeDisplay, Is.EqualTo(newSetting));
         }
 
+        [Test]
+        public void WhenTestCaseFinishes_TestContainsOutput_OutputView_IsVisible()
+        {
+            var resultNode = new ResultNode($"<test-case id='1'> <output>Hello world</output> </test-case>");
+            FireTestFinishedEvent(resultNode);
+
+            _view.TestOutputSubView.Received().SetVisibility(true);
+        }
+
+        [Test]
+        public void WhenTestCaseFinishes_TestContainsNoOutput_OutputView_IsHidden()
+        {
+            var resultNode = new ResultNode($"<test-case id='1'>  </test-case>");
+            FireTestFinishedEvent(resultNode);
+
+            _view.TestOutputSubView.Received().SetVisibility(false);
+        }
+
+        [Test]
+        public void WhenTestCaseFinishes_TestContainsOutput_OutputView_ShowsOutput()
+        {
+            var resultNode = new ResultNode($"<test-case id='1'> <output>Hello world</output> </test-case>");
+            FireTestFinishedEvent(resultNode);
+
+            _view.TestOutputSubView.Received().Output = "Hello world";
+        }
+
         private void VerifyDisplay(bool shouldDisplay)
         {
             // NOTE: We only verify that something was sent, not the content

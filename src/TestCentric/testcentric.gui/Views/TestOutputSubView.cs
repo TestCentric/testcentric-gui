@@ -3,10 +3,6 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-using System;
-using System.Drawing;
-using System.Windows.Forms;
-
 namespace TestCentric.Gui.Views
 {
     public partial class TestOutputSubView : TestPropertiesView.SubView, ITestOutputSubView
@@ -22,6 +18,11 @@ namespace TestCentric.Gui.Views
         {
             get { return output.Text; }
             set { this.InvokeIfRequired(() => { output.Text = value; }); }
+        }
+
+        public void SetVisibility(bool visible)
+        {
+            InvokeIfRequired(() => { Visible = visible; });
         }
     }
 }

@@ -176,7 +176,9 @@ namespace TestCentric.Gui.Presenters
 
         private void InitializeTestOutputSubView()
         {
-            _view.TestOutputSubView.Output = (_selectedResult != null) ? _selectedResult.Xml.SelectSingleNode("output")?.InnerText : "";
+            string testOutput = (_selectedResult != null) ? _selectedResult.Xml.SelectSingleNode("output")?.InnerText : "";
+            _view.TestOutputSubView.Output = testOutput;
+            _view.TestOutputSubView.SetVisibility(!string.IsNullOrEmpty(testOutput));
         }
 
         private string GetAssertionResults(ResultNode resultNode)
