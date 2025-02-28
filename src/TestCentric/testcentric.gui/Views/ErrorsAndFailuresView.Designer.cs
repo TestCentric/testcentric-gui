@@ -61,15 +61,10 @@ namespace TestCentric.Gui.Views
             // 
             // testResultSubView
             // 
-            this.testResultSubView.AssertCount = "";
-            this.testResultSubView.Assertions = "";
             this.testResultSubView.BackColor = System.Drawing.SystemColors.Control;
             this.testResultSubView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.testResultSubView.ElapsedTime = "";
-            this.testResultSubView.MinimumSize = new System.Drawing.Size(2, 108);
             this.testResultSubView.Name = "testResultSubView";
-            this.testResultSubView.Outcome = "";
-            this.testResultSubView.Size = new System.Drawing.Size(519, 111);
+            this.testResultSubView.Size = new System.Drawing.Size(519, 140);
             this.testResultSubView.Visible = true;
             // 
             // testOutputSubView

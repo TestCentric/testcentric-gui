@@ -8,9 +8,6 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Presenters
 {
-    using System.IO;
-    using System.Text;
-    using System.Xml;
     using Model;
     using Model.Settings;
     using Views;
@@ -23,8 +20,14 @@ namespace TestCentric.Gui.Presenters
 
         private ITestItem _selectedItem;
         private ResultNode _selectedResult;
+        private ITestResultSubViewPresenter _testSubViewPresenter;
 
-        public ErrorsAndFailuresPresenter(IErrorsAndFailuresView view, ITestModel model)
+        public ErrorsAndFailuresPresenter(IErrorsAndFailuresView view, ITestModel model) :
+            this(view, model, new TestResultSubViewPresenter(view.TestResultSubView, model))
+        {
+        }
+
+        public ErrorsAndFailuresPresenter(IErrorsAndFailuresView view, ITestModel model, ITestResultSubViewPresenter testResultSubViewPresenter)
         {
             _view = view;
             _model = model;
@@ -42,6 +45,8 @@ namespace TestCentric.Gui.Presenters
 
             _view.SourceCodeDisplay = _settings.Gui.ErrorDisplay.SourceCodeDisplay;
 
+            _testSubViewPresenter = testResultSubViewPresenter;
+
             WireUpEvents();
         }
 
@@ -49,15 +54,15 @@ namespace TestCentric.Gui.Presenters
         {
             // Events that arise in the model
 
-            _model.Events.TestLoaded += (e) => _view.Clear();
-            _model.Events.TestUnloaded += (e) => _view.Clear();
+            _model.Events.TestLoaded += (e) => ClearDisplay();
+            _model.Events.TestUnloaded += (e) => ClearDisplay();
             _model.Events.TestReloaded += (e) =>
             {
                 if (_settings.Gui.ClearResultsOnReload)
-                    _view.Clear();
+                    ClearDisplay();
             };
 
-            _model.Events.RunStarting += (e) => _view.Clear();
+            _model.Events.RunStarting += (e) => ClearDisplay();
 
             _model.Events.TestFinished += (TestResultEventArgs e) => OnNewResult(e.Result);
             _model.Events.SuiteFinished += (TestResultEventArgs e) => OnNewResult(e.Result);
@@ -115,7 +120,7 @@ namespace TestCentric.Gui.Presenters
 
         private void UpdateDisplay()
         {
-            _view.Clear();
+            ClearDisplay();
 
             if (_selectedResult != null &&
                 (_selectedResult.Status == TestStatus.Failed || _selectedResult.Status == TestStatus.Warning) &&
@@ -139,6 +144,12 @@ namespace TestCentric.Gui.Presenters
 
             InitializeTestResultSubView();
             InitializeTestOutputSubView();
+        }
+
+        private void ClearDisplay()
+        {
+            _view.Clear();
+            _testSubViewPresenter.Clear();
         }
 
         private void AddResult(string testName, AssertionResult assertion)
@@ -169,10 +180,7 @@ namespace TestCentric.Gui.Presenters
 
         private void InitializeTestResultSubView()
         {
-            _view.TestResultSubView.Outcome = (_selectedResult != null) ? _selectedResult.Outcome.ToString() : "";
-            _view.TestResultSubView.ElapsedTime = (_selectedResult != null) ? _selectedResult.Duration.ToString("f3") : "";
-            _view.TestResultSubView.AssertCount = (_selectedResult != null) ? _selectedResult.AssertCount.ToString() : "";
-            _view.TestResultSubView.Assertions = (_selectedResult != null) ? GetAssertionResults(_selectedResult) : "";
+            _testSubViewPresenter.Update(_selectedItem as TestNode);
         }
 
         private void InitializeTestOutputSubView()
@@ -180,68 +188,6 @@ namespace TestCentric.Gui.Presenters
             string testOutput = (_selectedResult != null) ? _selectedResult.Xml.SelectSingleNode("output")?.InnerText : "";
             _view.TestOutputSubView.Output = testOutput;
             _view.TestOutputSubView.SetVisibility(!string.IsNullOrEmpty(testOutput));
-        }
-
-        private string GetAssertionResults(ResultNode resultNode)
-        {
-            var assertionResults = resultNode.Assertions;
-
-            // If there were no actual assertionresult entries, we fake
-            // one if there is a message to display
-            if (assertionResults.Count == 0)
-            {
-                if (resultNode.Outcome.Status == TestStatus.Failed)
-                {
-                    string status = resultNode.Outcome.Label ?? "Failed";
-                    XmlNode failure = resultNode.Xml.SelectSingleNode("failure");
-                    if (failure != null)
-                        assertionResults.Add(new AssertionResult(failure, status));
-                }
-                else
-                {
-                    string status = resultNode.Outcome.Label ?? "Skipped";
-                    XmlNode reason = resultNode.Xml.SelectSingleNode("reason");
-                    if (reason != null)
-                        assertionResults.Add(new AssertionResult(reason, status));
-                }
-            }
-
-            StringBuilder sb = new StringBuilder();
-            int index = 0;
-            foreach (var assertion in assertionResults)
-            {
-                sb.AppendLine($"{++index}) {assertion.Status.ToUpper()} {assertion.Message}");
-                if (assertion.StackTrace != null)
-                    sb.AppendLine(AdjustStackTrace(assertion.StackTrace));
-
-            }
-
-            return sb.ToString();
-        }
-
-        // Some versions of the framework return the stacktrace
-        // without leading spaces, so we add them if needed.
-        // TODO: Make sure this is valid across various cultures.
-        private const string LEADING_SPACES = "   ";
-
-        private static string AdjustStackTrace(string stackTrace)
-        {
-            // Check if no adjustment needed. We assume that all
-            // lines start the same - either with or without spaces.
-            if (stackTrace.StartsWith(LEADING_SPACES))
-                return stackTrace;
-
-            var sr = new StringReader(stackTrace);
-            var sb = new StringBuilder();
-            string line = sr.ReadLine();
-            while (line != null)
-            {
-                sb.Append(LEADING_SPACES);
-                sb.AppendLine(line);
-                line = sr.ReadLine();
-            }
-
-            return sb.ToString();
         }
     }
 }

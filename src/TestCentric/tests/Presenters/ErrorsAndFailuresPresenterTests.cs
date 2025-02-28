@@ -20,7 +20,8 @@ namespace TestCentric.Gui.Presenters
         [SetUp]
         public void CreatePresenter()
         {
-            new ErrorsAndFailuresPresenter(_view, _model);
+            var testResultPresenter = Substitute.For<ITestResultSubViewPresenter>();
+            new ErrorsAndFailuresPresenter(_view, _model, testResultPresenter);
         }
 
         [Test]
