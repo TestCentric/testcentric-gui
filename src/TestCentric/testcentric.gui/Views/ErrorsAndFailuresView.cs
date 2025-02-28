@@ -151,8 +151,7 @@ namespace TestCentric.Gui.Views
                 detailList.ContextMenuStrip = null;
                 errorBrowser.StackTraceSource = "";
 
-                detailList.Visible = false;
-                errorBrowser.Visible = false;
+                panel1.Visible = false;
             });
         }
 
@@ -161,8 +160,7 @@ namespace TestCentric.Gui.Views
             InvokeIfRequired(() =>
             {
                 InsertTestResultItem(new TestResultItem(status, testName, message, stackTrace));
-                detailList.Visible = true;
-                errorBrowser.Visible = true;
+                panel1.Visible = true;
             });
         }
 
@@ -304,19 +302,23 @@ namespace TestCentric.Gui.Views
             SplitterPositionChanged?.Invoke(this, new EventArgs());
         }
 
+        private void OnTestResultSubViewSizeChanged(object sender, EventArgs e)
+        {
+            // Content and Height of the test result view changed => Place panel1 beneath the result view
+            panel1.Top = testResultSubView.Bottom + testResultSubView.Margin.Bottom + panel1.Margin.Top;
+        }
+
         private void FlowLayoutPanel_Layout(object sender, LayoutEventArgs e)
         {
             // Adjust width of all controls 
             var subViewWidth = flowLayoutPanel.ClientRectangle.Width - testResultSubView.Margin.Left - testResultSubView.Margin.Right;
             detailList.Width = subViewWidth;
-            testResultSubView.Width = subViewWidth;
             testOutputSubView.Width = subViewWidth;
 
             // Adjust height of detaillist view
             var subViewHeight = flowLayoutPanel.ClientRectangle.Height - 6;
-            int resultViewHeight = testResultSubView.Visible ? testResultSubView.Height + testResultSubView.Margin.Vertical : 0;
             int outputViewHeight = testOutputSubView.Visible ? testOutputSubView.Height + testOutputSubView.Margin.Vertical : 0;
-            detailList.Height = Math.Max(100, subViewHeight - resultViewHeight - outputViewHeight - detailList.Margin.Top);
+            detailList.Height = Math.Max(100, subViewHeight - outputViewHeight - detailList.Margin.Top);
         }
 
         #endregion
