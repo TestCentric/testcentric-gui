@@ -78,7 +78,6 @@ namespace TestCentric.Gui.Presenters
             _agentSelectionController = new AgentSelectionController(_model, _view);
 
             _view.Font = _settings.Gui.Font;
-            _view.ResultTabs.SelectedIndex = _settings.Gui.SelectedTab;
 
             UpdateViewCommands();
             UpdateTreeDisplayMenuItem();
@@ -587,11 +586,6 @@ namespace TestCentric.Gui.Presenters
                 {
                     aboutBox.ShowDialog();
                 }
-            };
-
-            _view.ResultTabs.SelectionChanged += () =>
-            {
-                _settings.Gui.SelectedTab = _view.ResultTabs.SelectedIndex;
             };
 
             #endregion

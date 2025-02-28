@@ -113,7 +113,6 @@ namespace TestCentric.Gui.Model.Settings
         {
             new TestCaseData("GuiLayout", "Full", "Mini"),
             new TestCaseData("LoadLastProject", true, false),
-            new TestCaseData("SelectedTab", 0, 1),
             new TestCaseData("InitialSettingsPage", null, "Some.Page"),
             new TestCaseData("ClearResultsOnReload", false, true),
             new TestCaseData("Font", DEFAULT_FONT, TEST_FONT),
