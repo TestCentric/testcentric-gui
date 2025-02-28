@@ -180,7 +180,8 @@ namespace TestCentric.Gui.Presenters
 
         private void InitializeTestResultSubView()
         {
-            _testSubViewPresenter.Update(_selectedItem as TestNode);
+            if (_selectedItem is TestNode testNode)
+                _testSubViewPresenter.Update(testNode);
         }
 
         private void InitializeTestOutputSubView()
