@@ -246,7 +246,6 @@ namespace TestCentric.Gui.Views
             this.duration.Name = "duration";
             this.duration.Size = new System.Drawing.Size(100, 20);
             this.duration.TabIndex = 30;
-            this.duration.Text = "Duration:";
             // 
             // assertCountLabel
             // 

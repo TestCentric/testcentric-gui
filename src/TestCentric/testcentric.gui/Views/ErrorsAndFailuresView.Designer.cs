@@ -57,7 +57,7 @@ namespace TestCentric.Gui.Views
             this.header.Padding = new System.Windows.Forms.Padding(2);
             this.header.Size = new System.Drawing.Size(496, 18);
             this.header.TabIndex = 0;
-            this.header.Text = "Test name goes here";
+            this.header.Text = "Test name";
             // 
             // testResultSubView
             // 
@@ -75,7 +75,7 @@ namespace TestCentric.Gui.Views
             this.testOutputSubView.Name = "testOutputSubView";
             this.testOutputSubView.Output = "";
             this.testOutputSubView.Size = new System.Drawing.Size(519, 72);
-            this.testOutputSubView.Visible = true;
+            this.testOutputSubView.Visible = false;
             // 
             // detailList
             // 
@@ -86,6 +86,7 @@ namespace TestCentric.Gui.Views
             this.detailList.ScrollAlwaysVisible = true;
             this.detailList.Size = new System.Drawing.Size(496, 128);
             this.detailList.TabIndex = 1;
+            this.detailList.Visible = false;
             this.detailList.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.detailList_DrawItem);
             this.detailList.MeasureItem += new System.Windows.Forms.MeasureItemEventHandler(this.detailList_MeasureItem);
             this.detailList.SelectedIndexChanged += new System.EventHandler(this.detailList_SelectedIndexChanged);
@@ -127,6 +128,7 @@ namespace TestCentric.Gui.Views
             this.errorBrowser.Size = new System.Drawing.Size(496, 270);
             this.errorBrowser.StackTraceSource = null;
             this.errorBrowser.TabIndex = 4;
+            this.errorBrowser.Visible = false;
             // 
             // panel1
             // 
