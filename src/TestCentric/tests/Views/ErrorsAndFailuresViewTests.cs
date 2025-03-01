@@ -29,6 +29,7 @@ namespace TestCentric.Gui.Views
         {
             AssertControlExists("header", typeof(Label));
             AssertControlExists("panel1", typeof(Panel));
+            AssertControlExists("testResultSubView", typeof(TestResultSubView));
 
             var panelTester = new ControlTester(_control.Controls["panel1"]);
             panelTester.AssertControlExists("flowLayoutPanel", typeof(FlowLayoutPanel));
@@ -38,7 +39,6 @@ namespace TestCentric.Gui.Views
             var flowLayoutPanelTester = new ControlTester(_control.Controls["panel1"].Controls["flowLayoutPanel"]);
             flowLayoutPanelTester.AssertControlExists("detailList", typeof(ListBox));
             flowLayoutPanelTester.AssertControlExists("testOutputSubView", typeof(TestOutputSubView));
-            flowLayoutPanelTester.AssertControlExists("testResultSubView", typeof(TestResultSubView));
         }
 
         //[Test]

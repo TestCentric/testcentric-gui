@@ -32,7 +32,7 @@ namespace TestCentric.Gui.Model.Settings
 
         public int SplitPosition
         {
-            get { return GetSetting(nameof(SplitPosition), 0); }
+            get { return GetSetting(nameof(SplitPosition), 290); }
             set { SaveSetting(nameof(SplitPosition), value); }
         }
 

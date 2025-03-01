@@ -160,6 +160,7 @@ namespace TestCentric.Gui.Views
             this.filterToolStrip.Visible = false;
             this.filterToolStrip.Size = new System.Drawing.Size(744, 24);
             this.filterToolStrip.TabIndex = 0;
+            this.filterToolStrip.Enabled = false;
             // 
             // filterTextBox
             // 
@@ -175,6 +176,7 @@ namespace TestCentric.Gui.Views
             this.filterTextToolStrip.Size = new System.Drawing.Size(744, 24);
             this.filterTextToolStrip.Stretch = true;
             this.filterTextToolStrip.Visible = false;
+            this.filterTextToolStrip.Enabled = false;
             this.filterTextToolStrip.TabIndex = 1;
             // 
             // testTreeContextMenu

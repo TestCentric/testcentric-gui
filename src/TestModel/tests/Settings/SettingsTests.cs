@@ -113,7 +113,6 @@ namespace TestCentric.Gui.Model.Settings
         {
             new TestCaseData("GuiLayout", "Full", "Mini"),
             new TestCaseData("LoadLastProject", true, false),
-            new TestCaseData("SelectedTab", 0, 1),
             new TestCaseData("InitialSettingsPage", null, "Some.Page"),
             new TestCaseData("ClearResultsOnReload", false, true),
             new TestCaseData("Font", DEFAULT_FONT, TEST_FONT),
@@ -152,7 +151,7 @@ namespace TestCentric.Gui.Model.Settings
                 new TestCaseData("Location", new Point(10, 10), new Point(50, 50)),
                 new TestCaseData("Size", new Size(700, 400), new Size(900, 500)),
                 new TestCaseData("Maximized", false, true),
-                new TestCaseData("SplitPosition", 0, 200)
+                new TestCaseData("SplitPosition", 290, 200)
             };
         }
     }

@@ -58,12 +58,6 @@ namespace TestCentric.Gui.Model.Settings
             set { SaveSetting(nameof(LoadLastProject), value); }
         }
 
-        public int SelectedTab
-        {
-            get { return GetSetting(nameof(SelectedTab), 0); }
-            set { SaveSetting(nameof(SelectedTab), value); }
-        }
-
         public string InitialSettingsPage
         {
             get { return (string)GetSetting(nameof(InitialSettingsPage)); }

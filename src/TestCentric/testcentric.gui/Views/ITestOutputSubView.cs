@@ -8,5 +8,7 @@ namespace TestCentric.Gui.Views
     public interface ITestOutputSubView
     {
         string Output { get; set; }
+
+        void SetVisibility(bool visible);
     }
 }

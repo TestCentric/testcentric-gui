@@ -16,11 +16,13 @@ namespace TestCentric.Gui.Presenters
     public class ErrorsAndFailuresPresenterTests : PresenterTestBase<IErrorsAndFailuresView>
     {
         private static readonly TestNode FAKE_TEST_RUN = new TestNode("<test-suite id='1' testcasecount='1234' />");
+        ITestResultSubViewPresenter _testResultPresenter;
 
         [SetUp]
         public void CreatePresenter()
         {
-            new ErrorsAndFailuresPresenter(_view, _model);
+            _testResultPresenter = Substitute.For<ITestResultSubViewPresenter>();
+            new ErrorsAndFailuresPresenter(_view, _model, _testResultPresenter);
         }
 
         [Test]
@@ -108,7 +110,16 @@ namespace TestCentric.Gui.Presenters
         [TestCase("Inconclusive", FailureSite.Test, false)]
         public void WhenTestSuiteFinishes_FailuresAndErrorsAreDisplayed(string resultState, FailureSite site, bool shouldDisplay)
         {
-            FireSuiteFinishedEvent("MyTest", resultState, site);
+            FireSuiteFinishedEvent("MyTest", resultState, site, 1);
+
+            VerifyDisplay(shouldDisplay);
+        }
+
+        [TestCase(1, true)]
+        [TestCase(2, false)]
+        public void WhenTestSuiteFinishes_WithFailures_TestCount_FailuresAndErrorsAreDisplayed(int testCount, bool shouldDisplay)
+        {
+            FireSuiteFinishedEvent("MyTest", "Failed", FailureSite.Test, testCount);
 
             VerifyDisplay(shouldDisplay);
         }
@@ -219,6 +230,89 @@ namespace TestCentric.Gui.Presenters
             _view.SourceCodeDisplayChanged += Raise.Event<System.EventHandler>(this, new System.EventArgs());
 
             Assert.That(_settings.Gui.ErrorDisplay.SourceCodeDisplay, Is.EqualTo(newSetting));
+        }
+
+        [Test]
+        public void WhenSelectedItemChanged_ToTestItem_TestResultSubView_IsNotUpdated()
+        {
+            ITestItem testItem = Substitute.For<ITestItem>();
+
+            _model.Events.SelectedItemChanged += Raise.Event<TestItemEventHandler>(new TestItemEventArgs(testItem));
+
+            _testResultPresenter.DidNotReceiveWithAnyArgs().Update(null);
+        }
+
+        [Test]
+        public void WhenSelectedItemChanged_ToTestNode_TestResultSubView_IsUpdated()
+        {
+            TestNode testItem = FAKE_TEST_RUN;
+            var resultNode = new ResultNode($"<test-case id='1'/>");
+            _model.GetResultForTest("1").Returns(resultNode);
+
+            _model.Events.SelectedItemChanged += Raise.Event<TestItemEventHandler>(new TestItemEventArgs(testItem));
+
+            _testResultPresenter.Received().Update(testItem);
+        }
+
+        [Test]
+        public void WhenTestCaseFinishes_ForSelectedNode_TestResultSubView_IsUpdated()
+        {
+            // Arrange
+            TestNode testItem = new TestNode("<test-case id='1' name='TestA' />");
+            var resultNode = new ResultNode($"<test-case id='1' name='TestA' />");
+            _model.GetResultForTest("1").Returns(resultNode);
+            _model.Events.SelectedItemChanged += Raise.Event<TestItemEventHandler>(new TestItemEventArgs(testItem));
+            _testResultPresenter.ClearReceivedCalls();
+
+            // Act
+            FireTestFinishedEvent(resultNode);
+
+            // Assert
+            _testResultPresenter.Received().Update(testItem);
+        }
+
+        [Test]
+        public void WhenTestCaseFinishes_ForDifferentSelectedNode_TestResultSubView_IsNotUpdated()
+        {
+            // Arrange
+            TestNode testItem = new TestNode("<test-case id='1' name='TestA' />");
+            var resultNode = new ResultNode($"<test-case id='1' name='TestB' />");
+            _model.GetResultForTest("1").Returns(resultNode);
+            _model.Events.SelectedItemChanged += Raise.Event<TestItemEventHandler>(new TestItemEventArgs(testItem));
+            _testResultPresenter.ClearReceivedCalls();
+
+            // Act
+            FireTestFinishedEvent(resultNode);
+
+            // Assert
+            _testResultPresenter.DidNotReceiveWithAnyArgs().Update(null);
+        }
+
+        [Test]
+        public void WhenTestCaseFinishes_TestContainsOutput_OutputView_IsVisible()
+        {
+            var resultNode = new ResultNode($"<test-case id='1'> <output>Hello world</output> </test-case>");
+            FireTestFinishedEvent(resultNode);
+
+            _view.TestOutputSubView.Received().SetVisibility(true);
+        }
+
+        [Test]
+        public void WhenTestCaseFinishes_TestContainsNoOutput_OutputView_IsHidden()
+        {
+            var resultNode = new ResultNode($"<test-case id='1'>  </test-case>");
+            FireTestFinishedEvent(resultNode);
+
+            _view.TestOutputSubView.Received().SetVisibility(false);
+        }
+
+        [Test]
+        public void WhenTestCaseFinishes_TestContainsOutput_OutputView_ShowsOutput()
+        {
+            var resultNode = new ResultNode($"<test-case id='1'> <output>Hello world</output> </test-case>");
+            FireTestFinishedEvent(resultNode);
+
+            _view.TestOutputSubView.Received().Output = "Hello world";
         }
 
         private void VerifyDisplay(bool shouldDisplay)

@@ -3,7 +3,12 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Reflection;
+using TestCentric.Gui.Model;
+using TestCentric.Gui.Presenters;
 
 namespace TestCentric.Gui.Views
 {
@@ -14,30 +19,109 @@ namespace TestCentric.Gui.Views
             InitializeComponent();
         }
 
-        public override int FullHeight => assertions.Top + HeightNeededForControl(assertions) + 8;
-
-        public string Outcome
+        public void Clear()
         {
-            get { return outcome.Text; }
-            set { this.InvokeIfRequired(() => { outcome.Text = value; }); }
+            InvokeIfRequired(() =>
+            {
+                testCount.Text = "";
+                outcome.Text = "";
+                duration.Text = "";
+                assertCount.Text = "";
+
+                detailSectionFlowLayoutPanel.Visible = false;
+                Height = detailSectionBackgroundPanel.Top - 1;
+            });
         }
 
-        public string ElapsedTime
+
+        public void LoadImages(string imageSet)
         {
-            get { return elapsedTime.Text; }
-            set { this.InvokeIfRequired(() => { elapsedTime.Text = value; }); }
+            string[] imageNames = { "Skipped", "Inconclusive", "Success", "Ignored", "Failure" };
+            string imageDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                Path.Combine("Images", Path.Combine("Tree", imageSet)));
+
+            // 1. Load all images once
+            IDictionary<string, Image> images = new Dictionary<string, Image>();
+            foreach (string imageName in imageNames)
+                images[imageName] = LoadAlternateImage(imageName, imageDir);
+
+            // 2. Update all images in the pictureBoxes
+            passedPictureBox.Image = images["Success"];
+            failedPictureBox.Image = images["Failure"];
+            warningsPictureBox.Image = images["Ignored"];
+            inconclusivePictureBox.Image = images["Inconclusive"];
+            ignoredPictureBox.Image = images["Ignored"];
+            skippedPictureBox.Image = images["Skipped"];
+            notRunPictureBox.Image = images["Skipped"];
         }
 
-        public string AssertCount
+        public void UpdateCaption(TestResultCounts testCounts, ResultNode result)
         {
-            get { return assertCount.Text; }
-            set { this.InvokeIfRequired(() => { assertCount.Text = value; }); }
+            InvokeIfRequired(() =>
+            {
+                testCount.Text = testCounts.TestCount.ToString();
+                outcome.Text = result?.Outcome.ToString();
+                duration.Text = result?.Duration.ToString("f3");
+                assertCount.Text = result?.AssertCount.ToString();
+            });
         }
 
-        public string Assertions
+        public void UpdateDetailSectionVisibility(bool visible)
         {
-            get { return assertions.Text; }
-            set { this.InvokeIfRequired(() => { assertions.Text = value; }); }
+            InvokeIfRequired(() => detailSectionFlowLayoutPanel.Visible = visible);
+        }
+
+        public void ShrinkToCaption()
+        {
+            // Adapt height of view to show only the upper part
+            InvokeIfRequired(() => Height = detailSectionBackgroundPanel.Top - 1);
+        }
+
+        public void UpdateDetailSection(TestResultCounts summary)
+        {
+            InvokeIfRequired(() =>
+            {
+                // 1. Update all output labels with test count
+                passedLabel.Text = $"{summary.PassedCount} Passed";
+                failedLabel.Text = $"{summary.FailedCount} Failed";
+                warningLabel.Text = $"{summary.WarningCount} Warnings";
+                inconclusiveLabel.Text = $"{summary.InconclusiveCount} Inconclusive";
+                ignoredLabel.Text = $"{summary.IgnoreCount} Ignored";
+                skippedLabel.Text = $"{summary.ExplicitCount} Explicit";
+                notRunLabel.Text = $"{summary.NotRunCount} Not Run";
+
+                // 2. Hide all labels + icon with zero test count
+                // FlowLayoutPanel will automatically rearrange rows
+                // AutoSize = true for FlowLayoutPanel so Height is automatically adapted to content
+                detailSectionFlowLayoutPanel.SuspendLayout();
+                passedLabel.Visible = passedPictureBox.Visible = summary.PassedCount > 0;
+                failedLabel.Visible = failedPictureBox.Visible = summary.FailedCount > 0;
+                warningLabel.Visible = warningsPictureBox.Visible = summary.WarningCount > 0;
+                inconclusiveLabel.Visible = inconclusivePictureBox.Visible = summary.InconclusiveCount > 0;
+                ignoredLabel.Visible = ignoredPictureBox.Visible = summary.IgnoreCount > 0;
+                skippedLabel.Visible = skippedPictureBox.Visible = summary.ExplicitCount > 0;
+                notRunLabel.Visible = notRunPictureBox.Visible = summary.NotRunCount > 0;
+                detailSectionFlowLayoutPanel.ResumeLayout();
+
+                // 3. Expand height of view to show detail section
+                Height = detailSectionFlowLayoutPanel.Bottom + 10;
+            });
+        }
+
+        private Image LoadAlternateImage(string name, string imageDir)
+        {
+            string[] extensions = { ".png", ".jpg" };
+
+            foreach (string ext in extensions)
+            {
+                string filePath = Path.Combine(imageDir, name + ext);
+                if (File.Exists(filePath))
+                {
+                    return Image.FromFile(filePath);
+                }
+            }
+
+            return null;
         }
     }
 }
