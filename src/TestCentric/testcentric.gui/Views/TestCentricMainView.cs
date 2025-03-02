@@ -974,7 +974,6 @@ namespace TestCentric.Gui.Views
             // 
             this.errorsAndFailuresView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.errorsAndFailuresView1.EnableToolTips = false;
-            this.errorsAndFailuresView1.Header = "Test name goes here";
             this.errorsAndFailuresView1.Location = new System.Drawing.Point(0, 0);
             this.errorsAndFailuresView1.Name = "errorsAndFailuresView1";
             this.errorsAndFailuresView1.Size = new System.Drawing.Size(490, 333);

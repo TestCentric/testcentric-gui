@@ -57,20 +57,18 @@ namespace TestCentric.Gui.Views
             this.header.Padding = new System.Windows.Forms.Padding(2);
             this.header.Size = new System.Drawing.Size(496, 18);
             this.header.TabIndex = 0;
-            this.header.Text = "Test name goes here";
+            this.header.Text = "Test name";
             // 
             // testResultSubView
             // 
-            this.testResultSubView.AssertCount = "";
-            this.testResultSubView.Assertions = "";
+            this.testResultSubView.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            this.testResultSubView.Location = new System.Drawing.Point(3, 21);
             this.testResultSubView.BackColor = System.Drawing.SystemColors.Control;
             this.testResultSubView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.testResultSubView.ElapsedTime = "";
-            this.testResultSubView.MinimumSize = new System.Drawing.Size(2, 108);
             this.testResultSubView.Name = "testResultSubView";
-            this.testResultSubView.Outcome = "";
-            this.testResultSubView.Size = new System.Drawing.Size(519, 111);
+            this.testResultSubView.Size = new System.Drawing.Size(492, 200);
             this.testResultSubView.Visible = true;
+            this.testResultSubView.SizeChanged += OnTestResultSubViewSizeChanged;
             // 
             // testOutputSubView
             // 
@@ -80,7 +78,7 @@ namespace TestCentric.Gui.Views
             this.testOutputSubView.Name = "testOutputSubView";
             this.testOutputSubView.Output = "";
             this.testOutputSubView.Size = new System.Drawing.Size(519, 72);
-            this.testOutputSubView.Visible = true;
+            this.testOutputSubView.Visible = false;
             // 
             // detailList
             // 
@@ -106,9 +104,8 @@ namespace TestCentric.Gui.Views
             this.flowLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel.Name = "flowLayoutPanel";
             this.flowLayoutPanel.Size = new System.Drawing.Size(496, 128);
-            this.flowLayoutPanel.Controls.Add(this.testResultSubView);
-            this.flowLayoutPanel.Controls.Add(this.testOutputSubView);
             this.flowLayoutPanel.Controls.Add(this.detailList);
+            this.flowLayoutPanel.Controls.Add(this.testOutputSubView);
             this.flowLayoutPanel.WrapContents = false;
             this.flowLayoutPanel.AutoScroll = true;
             // 
@@ -135,14 +132,15 @@ namespace TestCentric.Gui.Views
             // 
             // panel1
             // 
+            this.panel1.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             this.panel1.Controls.Add(this.errorBrowser);
             this.panel1.Controls.Add(this.tabSplitter);
             this.panel1.Controls.Add(this.flowLayoutPanel);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 18);
+            this.panel1.Location = new System.Drawing.Point(0, 120);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(496, 270);
+            this.panel1.Size = new System.Drawing.Size(496, 230);
             this.panel1.TabIndex = 2;
+            this.panel1.Visible = false;
             // 
             // stackTraceDisplay
             // 
@@ -169,6 +167,7 @@ namespace TestCentric.Gui.Views
             // ErrorsAndFailuresView
             // 
             this.Controls.Add(this.panel1);
+            this.Controls.Add(testResultSubView);
             this.Controls.Add(this.header);
             this.Name = "ErrorsAndFailuresView";
             this.Size = new System.Drawing.Size(496, 288);
