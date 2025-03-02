@@ -94,12 +94,12 @@ namespace TestCentric.Gui.Views
             this.detailSectionFlowLayoutPanel.Controls.Add(this.warningsPictureBox);
             this.detailSectionFlowLayoutPanel.Controls.Add(this.warningLabel);
             this.detailSectionFlowLayoutPanel.SetFlowBreak(this.warningLabel, true);
-            this.detailSectionFlowLayoutPanel.Controls.Add(this.inconclusivePictureBox);
-            this.detailSectionFlowLayoutPanel.Controls.Add(this.inconclusiveLabel);
-            this.detailSectionFlowLayoutPanel.SetFlowBreak(this.inconclusiveLabel, true);
             this.detailSectionFlowLayoutPanel.Controls.Add(this.ignoredPictureBox);
             this.detailSectionFlowLayoutPanel.Controls.Add(this.ignoredLabel);
             this.detailSectionFlowLayoutPanel.SetFlowBreak(this.ignoredLabel, true);
+            this.detailSectionFlowLayoutPanel.Controls.Add(this.inconclusivePictureBox);
+            this.detailSectionFlowLayoutPanel.Controls.Add(this.inconclusiveLabel);
+            this.detailSectionFlowLayoutPanel.SetFlowBreak(this.inconclusiveLabel, true);
             this.detailSectionFlowLayoutPanel.Controls.Add(this.skippedPictureBox);
             this.detailSectionFlowLayoutPanel.Controls.Add(this.skippedLabel);
             this.detailSectionFlowLayoutPanel.SetFlowBreak(this.skippedLabel, true);
