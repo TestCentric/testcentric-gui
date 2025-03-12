@@ -54,6 +54,7 @@ namespace TestCentric.Gui.Model.Filter
                         break;
                     case TestStatus.Inconclusive:
                     case TestStatus.Skipped:
+                    case TestStatus.Warning:
                         outcome = "Warning";
                         break;
                 }
