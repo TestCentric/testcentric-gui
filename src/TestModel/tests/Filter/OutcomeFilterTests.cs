@@ -26,6 +26,9 @@ namespace TestCentric.Gui.Model.Filter
 
         [TestCase(new[] { "Passed" }, "Passed")]
         [TestCase(new[] { "Failed", "Passed" }, "Passed")]
+        [TestCase(new[] { "Warning" }, "Warning")]
+        [TestCase(new[] { "Warning" }, "Skipped")]
+        [TestCase(new[] { "Warning" }, "Inconclusive")]
         [TestCase(new string[0] , "Passed")]
         [TestCase(new[] { OutcomeFilter.AllOutcome }, "Passed")]
         public void IsMatching_TestOutcomeMatchesOutcomeFilter_ReturnsTrue(IList<string> outcomeFilter, string testOutcome)
