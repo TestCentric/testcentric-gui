@@ -34,6 +34,7 @@ namespace TestCentric.Gui.Presenters
 
             string imageSet = _model.Settings.Gui.TestTree.AlternateImageSet;
             _view.LoadImages(imageSet);
+            WireUpEvents();
         }
 
         /// <summary>
