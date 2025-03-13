@@ -28,6 +28,7 @@ namespace TestCentric.Gui
         [STAThread]
         public static int Main(string[] args)
         {
+            Application.EnableVisualStyles();
             var options = new CommandLineOptions(args);
 
             if (options.ShowHelp)
