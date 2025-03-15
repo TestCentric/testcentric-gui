@@ -62,5 +62,21 @@ namespace TestCentric.Gui.Model
             // Assert
             Assert.That(projectLoadedCalled, Is.True);
         }
+
+        [Test]
+        public void SaveProject_RecentFiles_ContainsProjectName()
+        {
+            // Arrange
+            var engine = new MockTestEngine();
+            var options = new CommandLineOptions("dummy.dll");
+            var model = TestModel.CreateTestModel(engine, options);
+
+            // Act
+            model.CreateNewProject();
+            model.SaveProject("TestCentric.tcproj");
+
+            // Assert
+            Assert.That(model.RecentFiles.Latest, Is.EqualTo("TestCentric.tcproj"));
+        }
     }
 }

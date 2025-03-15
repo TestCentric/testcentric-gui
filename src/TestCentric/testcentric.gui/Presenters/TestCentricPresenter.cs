@@ -99,15 +99,9 @@ namespace TestCentric.Gui.Presenters
         {
             #region Model Events
 
-            _model.Events.TestCentricProjectLoaded += (TestEventArgs e) =>
-            {
-                _view.Title = $"TestCentric - {_model.TestCentricProject?.FileName ?? "UNNAMED.tcproj"}";
-            };
+            _model.Events.TestCentricProjectLoaded += (TestEventArgs e) => UpdateTitlebar();
 
-            _model.Events.TestCentricProjectUnloaded += (TestEventArgs e) =>
-            {
-                _view.Title = "TestCentric Runner for NUnit";
-            };
+            _model.Events.TestCentricProjectUnloaded += (TestEventArgs e) => UpdateTitlebar();
 
             _model.Events.TestsLoading += (TestFilesLoadingEventArgs e) =>
             {
@@ -675,12 +669,24 @@ namespace TestCentric.Gui.Presenters
                 try
                 {
                     _model.SaveProject(projectPath);
+                    UpdateTitlebar();
                 }
                 catch (Exception exception)
                 {
-                    _view.MessageDisplay.Error("Unable to Save Results\n\n" + MessageBuilder.FromException(exception));
+                    _view.MessageDisplay.Error("Unable to save project\n\n" + MessageBuilder.FromException(exception));
                 }
             }
+        }
+
+        private void UpdateTitlebar()
+        {
+            string title = "TestCentric Runner for NUnit";
+            if (_model.TestCentricProject != null)
+            {
+                title = $"TestCentric - {_model.TestCentricProject.FileName ?? "UNNAMED.tcproj"}";
+
+            }
+            _view.Title = title;
         }
 
         #endregion
