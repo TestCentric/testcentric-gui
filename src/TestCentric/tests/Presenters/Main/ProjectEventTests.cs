@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NSubstitute;
 using NUnit.Framework;
+using TestCentric.Gui.Elements;
 using TestCentric.Gui.Model;
 
 namespace TestCentric.Gui.Presenters.Main
@@ -33,6 +34,24 @@ namespace TestCentric.Gui.Presenters.Main
             FireProjectUnloadedEvent();
 
             _view.Received().Title = "TestCentric Runner for NUnit"; 
+        }
+
+
+        [Test]
+        public void WhenProjectIsSaved_TitleBarIsSet()
+        {
+            // Arrange
+            var project = new TestCentricProject(_model, "dummy.dll");
+            _model.TestCentricProject.Returns(project);
+            _view.DialogManager.GetFileSavePath(null, null, null, null).ReturnsForAnyArgs("TestCentric.tcproj");
+
+            // Act
+            project.SaveAs("TestCentric.tcproj");
+            _view.SaveProjectCommand.Execute += Raise.Event<CommandHandler>();
+
+            // Assert
+            _model.Received().SaveProject("TestCentric.tcproj");
+            _view.Received().Title = "TestCentric - TestCentric.tcproj";
         }
     }
 }
