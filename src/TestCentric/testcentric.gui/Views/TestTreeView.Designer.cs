@@ -50,6 +50,7 @@ namespace TestCentric.Gui.Views
             this.contextMenuSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.testPropertiesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewAsXmlMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.removeTestPackageMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.activeConfigMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.showCheckboxesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -187,6 +188,7 @@ namespace TestCentric.Gui.Views
             this.contextMenuSeparator1,
             this.testPropertiesMenuItem,
             this.viewAsXmlMenuItem,
+            this.removeTestPackageMenuItem,
             this.activeConfigMenuItem,
             this.contextMenuSeparator2,
             this.showCheckboxesMenuItem,
@@ -229,6 +231,12 @@ namespace TestCentric.Gui.Views
             this.viewAsXmlMenuItem.Name = "viewAsXmlMenuItem";
             this.viewAsXmlMenuItem.Size = new System.Drawing.Size(190, 22);
             this.viewAsXmlMenuItem.Text = "View as XML...";
+            // 
+            // removeTestFileMenuItem
+            // 
+            this.removeTestPackageMenuItem.Name = "removeTestFileMenuItem";
+            this.removeTestPackageMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.removeTestPackageMenuItem.Text = "Remove test file";
             // 
             // activeConfigMenuItem
             // 
@@ -381,5 +389,6 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.ToolStripSeparator contextMenuSeparator3;
         private System.Windows.Forms.ToolStripSeparator contextMenuSeparator4;
         private System.Windows.Forms.ToolStripMenuItem viewAsXmlMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem removeTestPackageMenuItem;
     }
 }

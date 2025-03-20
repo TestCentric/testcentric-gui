@@ -49,6 +49,8 @@ namespace TestCentric.Gui.Views
             CollapseToFixturesCommand = new CommandMenuElement(collapseToFixturesMenuItem);
             TestPropertiesCommand = new CommandMenuElement(testPropertiesMenuItem);
             ViewAsXmlCommand = new CommandMenuElement(viewAsXmlMenuItem);
+            RemoveTestPackageCommand = new CommandMenuElement(removeTestPackageMenuItem);
+            TreeViewDeleteKeyCommand = new KeyCommand(treeView, new[] { Keys.Delete, Keys.Back }, null);
             SortCommand = new CheckedToolStripMenuGroup("Sort", sortByNameMenuItem, sortByDurationMenuItem);
             SortDirectionCommand = new CheckedToolStripMenuGroup("SortDirection", sortAscendingMenuItem, sortDescendingMenuItem);
             OutcomeFilter = new MultiCheckedToolStripButtonGroup(new[] { filterOutcomePassedButton, filterOutcomeFailedButton, filterOutcomeWarningButton, filterOutcomeNotRunButton });
@@ -128,6 +130,11 @@ namespace TestCentric.Gui.Views
         public ISelection SortDirectionCommand { get; private set; }
         public ICommand ExpandAllCommand { get; private set; }
         public ICommand CollapseAllCommand { get; private set; }
+
+        public ICommand RemoveTestPackageCommand { get; private set; }
+
+        public IKeyCommand TreeViewDeleteKeyCommand { get; private set; }
+        
         public ICommand CollapseToFixturesCommand { get; private set; }
         public ICommand TestPropertiesCommand { get; private set; }
         public ICommand ViewAsXmlCommand { get; private set; }

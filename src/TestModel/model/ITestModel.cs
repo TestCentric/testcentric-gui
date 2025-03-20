@@ -111,6 +111,12 @@ namespace TestCentric.Gui.Model
         /// </summary>
         void AddTests(IEnumerable<string> fileNames);
 
+        /// <summary>
+        /// Remove a test package from the current test project
+        /// </summary>
+        void RemoveTestPackage(TestPackage subPackage);
+
+
         void OpenExistingProject(string filename);
 
         void OpenMostRecentFile();
