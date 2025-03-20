@@ -38,6 +38,8 @@ namespace TestCentric.Gui.Views
         ICommand CollapseToFixturesCommand { get; }
         ICommand TestPropertiesCommand { get; }
         ICommand ViewAsXmlCommand { get; }
+        ICommand RemoveTestPackageCommand { get; }
+        IKeyCommand TreeViewDeleteKeyCommand { get; }
 
         // Tree Properties
         ContextMenuStrip TreeContextMenu { get; }

@@ -30,6 +30,10 @@ In the current implementation, there are two separate hierarchies of UI Elements
 
 **NOTE:** The `ContextMenu` property returns a Windows `Menu` instance and `ContextMenuStrip` returns a `ToolStripDropDownMenu`, both of these exposing the underlying Windows implementation. This interface and its use will be reviewed in the future.
 
+### IKeyCommand
+
+`IKeyCommand` provide two events `KeyUp` and `KeyDown`. It encapsulate the Window Forms `Keys` enums.
+
 ### IListBox
 
 `IListBox` extends `IControlElement` to provide the properties `Items` and `SelectedItems`, event `DoubleClick` and methods `Add` and `Remove`. It exposed a great deal of the underlying Windows implementation and is no longer used. It is now marked as Obsolete.
@@ -73,6 +77,10 @@ A `ButtonElement` wraps a Windows `Button` control and implements `ICommand`. Th
 ### CheckBoxElement
 
 A `CheckBoxElement` wraps  a Windows `CheckBox` control and implements `IChecked`. Although Windows still uses the term "checked," the visual display may or may not use a check mark.
+
+### KeyCommand
+
+A `KeyCommand` wraps a Windows `Control` and implements `IKeyCommand` to handle keyboard events.
 
 ### ListBoxElement
 

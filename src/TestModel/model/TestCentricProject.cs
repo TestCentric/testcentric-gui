@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 using TestCentric.Engine;
-using TestCentric.Gui.Model.Settings;
 
 namespace TestCentric.Gui.Model
 {
@@ -103,7 +102,6 @@ namespace TestCentric.Gui.Model
 
                     foreach (var subPackage in newPackage.SubPackages)
                     {
-                        TestFiles.Add(subPackage.FullName);
                         AddSubPackage(subPackage.FullName);
                     }
 
@@ -166,6 +164,16 @@ namespace TestCentric.Gui.Model
         {
             base.AddSubPackage(subPackage);
             IsDirty = true;
+        }
+
+        public void RemoveSubPackage(TestPackage subPackage)
+        {
+            if (subPackage != null)
+            {
+                SubPackages.Remove(subPackage);
+                TestFiles.Remove(subPackage.FullName);
+                IsDirty = true;
+            }
         }
 
         public new void AddSetting(string key, object value)

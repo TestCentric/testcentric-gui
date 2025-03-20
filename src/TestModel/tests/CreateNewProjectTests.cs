@@ -152,5 +152,27 @@ namespace TestCentric.Gui.Model
             project.AddSetting("NewSetting", "VALUE");
             Assert.That(project.IsDirty);
         }
+
+        [Test]
+        public void RemoveSubPackage_MakesProjectDirty()
+        {
+            var project = _model.CreateNewProject(new[] { "dummy.dll", "dummy2.dll" });
+            project.SaveAs("temp.tcproj");
+
+            var subPackage = project.SubPackages[0];
+            project.RemoveSubPackage(subPackage);
+            Assert.That(project.IsDirty);
+        }
+
+        [Test]
+        public void RemoveSubPackage_PackagesIsDecreased()
+        {
+            var project = _model.CreateNewProject(new[] { "dummy.dll", "dummy2.dll" });
+            project.SaveAs("temp.tcproj");
+
+            var subPackage = project.SubPackages[0];
+            project.RemoveSubPackage(subPackage);
+            Assert.That(project.SubPackages.Count, Is.EqualTo(1));
+        }
     }
 }

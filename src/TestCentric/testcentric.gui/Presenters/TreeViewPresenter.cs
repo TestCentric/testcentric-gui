@@ -165,6 +165,9 @@ namespace TestCentric.Gui.Presenters
             _view.CollapseAllCommand.Execute += () => _view.CollapseAll();
             _view.ExpandAllCommand.Execute += () => _view.ExpandAll();
             _view.CollapseToFixturesCommand.Execute += () => Strategy.CollapseToFixtures();
+            _view.RemoveTestPackageCommand.Execute += () => RemoveTestPackage();
+            _view.TreeViewDeleteKeyCommand.KeyUp += () => RemoveTestPackage();
+
             _view.ShowCheckBoxes.CheckedChanged += () =>
             {
                 _view.CheckBoxes = _view.ShowCheckBoxes.Checked;
@@ -508,9 +511,27 @@ namespace TestCentric.Gui.Presenters
             var layout = _model.Settings.Gui.GuiLayout;
             _view.TestPropertiesCommand.Visible = layout == "Mini";
 
+            var selectedNode = _view.ContextNode?.Tag as TestNode;
+            _view.RemoveTestPackageCommand.Visible = CanRemovePackageNode(selectedNode);
+
             // If a test is already running, no new test run should be started.
             _view.RunContextCommand.Enabled = _model.HasTests && !_model.IsTestRunning;
             _view.DebugContextCommand.Enabled = _model.HasTests && !_model.IsTestRunning;
+        }
+
+        private void RemoveTestPackage()
+        {
+            var testNode = _view.SelectedNode?.Tag as TestNode;
+            if (CanRemovePackageNode(testNode))
+            {
+                var subPackage = _model.GetPackageForTest(testNode.Id);
+                _model.RemoveTestPackage(subPackage);
+            }
+        }
+
+        private bool CanRemovePackageNode(TestNode testNode)
+        {
+            return _model.HasTests && !_model.IsTestRunning && testNode != null && testNode.IsAssembly && _model.TestCentricProject.SubPackages.Count > 1;
         }
 
         #endregion

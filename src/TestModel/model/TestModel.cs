@@ -290,6 +290,17 @@ namespace TestCentric.Gui.Model
             _events.FireTestCentricProjectLoaded();
         }
 
+        public void RemoveTestPackage(TestPackage subPackage)
+        {
+            if (!IsProjectLoaded || IsTestRunning || subPackage == null || TestCentricProject.SubPackages.Count <= 1)
+                return;
+
+            TestCentricProject.RemoveSubPackage(subPackage);
+
+            TestCentricProject.LoadTests();
+            _events.FireTestCentricProjectLoaded();
+        }
+
         public void OpenExistingProject(string projectPath)
         {
             if (IsProjectLoaded)
