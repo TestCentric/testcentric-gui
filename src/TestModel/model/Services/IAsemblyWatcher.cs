@@ -4,7 +4,7 @@
 // ***********************************************************************
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 
 namespace TestCentric.Gui.Model.Services
 {
@@ -29,7 +29,7 @@ namespace TestCentric.Gui.Model.Services
         /// <param name="delayInMs">The delay in ms.</param>
         /// <param name="assemblies">The assemblies.</param>
 
-        void Setup(int delayInMs, IList assemblies);
+        void Setup(int delayInMs, IList<string> assemblies);
 
 
         /// <summary>
