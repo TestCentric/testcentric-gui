@@ -326,6 +326,7 @@ namespace TestCentric.Gui.Model
         public void SaveProject(string filename)
         {
             TestCentricProject.SaveAs(filename);
+            RecentFiles.Latest = TestCentricProject.ProjectPath;
         }
 
         public void CloseProject()
