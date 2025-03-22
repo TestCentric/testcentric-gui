@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -190,7 +190,7 @@ namespace TestCentric.Gui.Elements
 
         public void InvokeIfRequired(MethodInvoker _delegate)
         {
-            if (ToolStrip.InvokeRequired)
+            if (ToolStrip != null && ToolStrip.InvokeRequired)
                 ToolStrip.BeginInvoke(_delegate);
             else
                 _delegate();
