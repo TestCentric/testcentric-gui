@@ -964,18 +964,10 @@ namespace TestCentric.Gui.Presenters
 
             switch (displayFormat)
             {
-                case "NUNIT_TREE":
-                    _view.GroupBy.Enabled = false;
-                    break;
                 case "TEST_LIST":
-                    _view.GroupBy.Enabled = true;
                     _view.GroupBy.SelectedItem = _settings.Gui.TestTree.TestList.GroupBy;
                     break;
                 case "FIXTURE_LIST":
-                    _view.GroupBy.Enabled = true;
-                    // HACK: Should be handled by the element itself
-                    if (_view.GroupBy is Elements.CheckedToolStripMenuGroup menuGroup)
-                        menuGroup.MenuItems[1].Enabled = false;
                     _view.GroupBy.SelectedItem = _settings.Gui.TestTree.FixtureList.GroupBy;
                     break;
             }
