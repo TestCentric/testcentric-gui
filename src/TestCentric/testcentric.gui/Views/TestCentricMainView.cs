@@ -89,6 +89,7 @@ namespace TestCentric.Gui.Views
         private ToolStripMenuItem testListMenuItem;
         private ToolStripMenuItem nunitTreeShowNamespaceMenuItem;
         private ToolStripSeparator toolStripSeparator13;
+        private ToolStripMenuItem ungroupedMenuItem;
         private ToolStripMenuItem byAssemblyMenuItem;
         private ToolStripMenuItem byFixtureMenuItem;
         private ToolStripMenuItem byCategoryMenuItem;
@@ -176,7 +177,7 @@ namespace TestCentric.Gui.Views
                 nunitTreeMenuItem, fixtureListMenuItem, testListMenuItem);
             GroupBy = new CheckedToolStripMenuGroup(
                 "testGrouping",
-                byAssemblyMenuItem, byFixtureMenuItem, byCategoryMenuItem, byOutcomeMenuItem, byDurationMenuItem);
+                ungroupedMenuItem, byAssemblyMenuItem, byFixtureMenuItem, byCategoryMenuItem, byOutcomeMenuItem, byDurationMenuItem);
             ShowNamespace = new CheckedMenuElement(nunitTreeShowNamespaceMenuItem);
             ShowHideFilterButton = new ToolStripButtonElement(showFilterButton);
             RunParametersButton = new ToolStripButtonElement(runParametersButton);
@@ -223,6 +224,7 @@ namespace TestCentric.Gui.Views
             this.testListMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nunitTreeShowNamespaceMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
+            this.ungroupedMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.byAssemblyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.byFixtureMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.byCategoryMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -401,6 +403,7 @@ namespace TestCentric.Gui.Views
             this.fixtureListMenuItem,
             this.testListMenuItem,
             this.toolStripSeparator13,
+            this.ungroupedMenuItem,
             this.byAssemblyMenuItem,
             this.byFixtureMenuItem,
             this.byCategoryMenuItem,
@@ -448,6 +451,13 @@ namespace TestCentric.Gui.Views
             // 
             this.toolStripSeparator13.Name = "toolStripSeparator13";
             this.toolStripSeparator13.Size = new System.Drawing.Size(195, 6);
+            //
+            // ungroupedMenuItem
+            //
+            this.ungroupedMenuItem.Name = "ungroupedMenuItem";
+            this.ungroupedMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.ungroupedMenuItem.Tag = "UNGROUPED";
+            this.ungroupedMenuItem.Text = "Simple List";
             // 
             // byAssemblyMenuItem
             // 

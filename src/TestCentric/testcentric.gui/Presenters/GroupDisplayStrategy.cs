@@ -167,6 +167,9 @@ namespace TestCentric.Gui.Presenters
         {
             switch (groupBy)
             {
+                default:
+                case "UNGROUPED":
+                    return null;
                 case "OUTCOME":
                     return new OutcomeGrouping(this);
                 case "DURATION":
@@ -175,8 +178,6 @@ namespace TestCentric.Gui.Presenters
                     // Tree display format 'Test_List' should consider categories on test fixtures and test cases
                     return new CategoryGrouping(this, StrategyID == "TEST_LIST");
             }
-
-            return null;
         }
 
         protected void UpdateDisplay()

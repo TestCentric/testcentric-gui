@@ -49,6 +49,11 @@ namespace TestCentric.Gui.Presenters
             switch (groupBy)
             {
                 default:
+                case "UNGROUPED":
+                    foreach (TestNode testCase in GetTestCases(testNode))
+                        _view.Add(MakeTreeNode(testCase, false));
+                    break;
+
                 case "ASSEMBLY":
                     foreach (TestNode assembly in testNode
                         .Select((node) => node.IsSuite && node.Type == "Assembly"))
