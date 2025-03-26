@@ -88,6 +88,7 @@ namespace TestCentric.Gui.Views
         private ToolStripMenuItem fixtureListMenuItem;
         private ToolStripMenuItem testListMenuItem;
         private ToolStripMenuItem nunitTreeShowNamespaceMenuItem;
+        private ToolStripMenuItem ungroupedMenuItem;
         private ToolStripMenuItem byAssemblyMenuItem;
         private ToolStripMenuItem byFixtureMenuItem;
         private ToolStripMenuItem byCategoryMenuItem;
@@ -175,7 +176,7 @@ namespace TestCentric.Gui.Views
                 nunitTreeMenuItem, fixtureListMenuItem, testListMenuItem);
             GroupBy = new CheckedToolStripMenuGroup(
                 "testGrouping",
-                byAssemblyMenuItem, byFixtureMenuItem, byCategoryMenuItem, byOutcomeMenuItem, byDurationMenuItem);
+                ungroupedMenuItem, byAssemblyMenuItem, byFixtureMenuItem, byCategoryMenuItem, byOutcomeMenuItem, byDurationMenuItem);
             ShowNamespace = new CheckedMenuElement(nunitTreeShowNamespaceMenuItem);
             ShowHideFilterButton = new ToolStripButtonElement(showFilterButton);
             RunParametersButton = new ToolStripButtonElement(runParametersButton);
@@ -221,6 +222,7 @@ namespace TestCentric.Gui.Views
             this.fixtureListMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testListMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nunitTreeShowNamespaceMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ungroupedMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.byAssemblyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.byFixtureMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.byCategoryMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -437,6 +439,13 @@ namespace TestCentric.Gui.Views
             this.testListMenuItem.Tag = "TEST_LIST";
             this.testListMenuItem.Text = "Test List";
             this.testListMenuItem.CheckedChanged += DisplayFormatTestListChanged;
+            //
+            // ungroupedMenuItem
+            //
+            this.ungroupedMenuItem.Name = "ungroupedMenuItem";
+            this.ungroupedMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.ungroupedMenuItem.Tag = "UNGROUPED";
+            this.ungroupedMenuItem.Text = "Simple List";
             // 
             // byAssemblyMenuItem
             // 
@@ -1066,7 +1075,7 @@ namespace TestCentric.Gui.Views
             this.fixtureListMenuItem.DropDownItems.Clear();
             if (fixtureListMenuItem.Checked)
             {
-                fixtureListMenuItem.DropDownItems.AddRange(new ToolStripItem[] { byCategoryMenuItem, byOutcomeMenuItem, byDurationMenuItem });
+                fixtureListMenuItem.DropDownItems.AddRange(new ToolStripItem[] { ungroupedMenuItem, byCategoryMenuItem, byOutcomeMenuItem, byDurationMenuItem });
                 if (fixtureListMenuItem.Visible)
                     fixtureListMenuItem.DropDown.Show();
             }
@@ -1077,7 +1086,7 @@ namespace TestCentric.Gui.Views
             this.testListMenuItem.DropDownItems.Clear();
             if (testListMenuItem.Checked)
             {
-                this.testListMenuItem.DropDownItems.AddRange(new ToolStripItem[] { byAssemblyMenuItem, byFixtureMenuItem, byCategoryMenuItem, byOutcomeMenuItem, byDurationMenuItem });
+                this.testListMenuItem.DropDownItems.AddRange(new ToolStripItem[] { ungroupedMenuItem, byAssemblyMenuItem, byFixtureMenuItem, byCategoryMenuItem, byOutcomeMenuItem, byDurationMenuItem });
                 if (testListMenuItem.Visible)
                     this.testListMenuItem.DropDown.Show();
             }
