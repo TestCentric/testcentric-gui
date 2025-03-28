@@ -373,7 +373,7 @@ namespace TestCentric.Gui.Model
 
             ClearResults();
 
-            _assemblyWatcher.Setup(1000, files as IList);
+            _assemblyWatcher.Setup(1000, files);
             _assemblyWatcher.AssemblyChanged += (path) => _events.FireTestChanged();
             _assemblyWatcher.Start();
 

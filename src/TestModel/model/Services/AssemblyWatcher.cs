@@ -4,7 +4,7 @@
 // ***********************************************************************
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Timers;
 
@@ -12,8 +12,8 @@ namespace TestCentric.Gui.Model.Services
 {
     public class AssemblyWatcher : IAsemblyWatcher
     {
-        private FileSystemWatcher[] fileWatchers;
-        private FileInfo[] files;
+        private List<FileSystemWatcher> fileWatchers;
+        private List<FileInfo> files;
 
         protected System.Timers.Timer timer;
         protected string changedAssemblyPath;
@@ -28,23 +28,30 @@ namespace TestCentric.Gui.Model.Services
             Setup(delay, new string[] { assemblyFileName });
         }
 
-        public void Setup(int delay, IList assemblies)
+        public void Setup(int delay, IList<string> assemblies)
         {
 
-            files = new FileInfo[assemblies.Count];
-            fileWatchers = new FileSystemWatcher[assemblies.Count];
+            files = new List<FileInfo>();
+            fileWatchers = new List<FileSystemWatcher>();
 
-            for (int i = 0; i < assemblies.Count; i++)
+            foreach(string assemblyName in assemblies)
             {
+                var fileInfo = new FileInfo(assemblyName);
+                if (!Directory.Exists(fileInfo.DirectoryName))
+                {
+                    continue;
+                }
 
-                files[i] = new FileInfo((string)assemblies[i]);
+                files.Add(fileInfo);
 
-                fileWatchers[i] = new FileSystemWatcher();
-                fileWatchers[i].Path = files[i].DirectoryName;
-                fileWatchers[i].Filter = files[i].Name;
-                fileWatchers[i].NotifyFilter = NotifyFilters.Size | NotifyFilters.LastWrite;
-                fileWatchers[i].Changed += new FileSystemEventHandler(OnChanged);
-                fileWatchers[i].EnableRaisingEvents = false;
+                var fileWatcher = new FileSystemWatcher();
+                fileWatcher.Path = fileInfo.DirectoryName;
+                fileWatcher.Filter = fileInfo.Name;
+                fileWatcher.NotifyFilter = NotifyFilters.Size | NotifyFilters.LastWrite;
+                fileWatcher.Changed += new FileSystemEventHandler(OnChanged);
+                fileWatcher.EnableRaisingEvents = false;
+
+                fileWatchers.Add(fileWatcher);
             }
 
             timer = new System.Timers.Timer(delay);

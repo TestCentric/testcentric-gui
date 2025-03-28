@@ -202,6 +202,10 @@ namespace TestCentric.Gui
 
         public void Save(string fileName)
         {
+            string path = Path.GetDirectoryName(fileName);
+            if (!string.IsNullOrEmpty(path) && !Directory.Exists(path))
+                return;
+
             using (StreamWriter writer = new StreamWriter(fileName))
             {
                 Save(writer);
