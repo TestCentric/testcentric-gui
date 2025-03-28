@@ -14,6 +14,12 @@ namespace TestCentric.Gui.Model
     /// skipped or was inconclusive. The Label provides a more
     /// detailed breakdown for use by client runners.
     /// </summary>
+    /// <remarks>
+    /// This class is modeled after the class of the same name used in NUnit 4,
+    /// but is used for tests run in any supported framework. Instances are
+    /// constructed based on XML reports received through a framework driver 
+    /// in the engine supporting each test framework.
+    /// </remarks>
     public class ResultState
     {
         #region Constructors

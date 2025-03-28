@@ -67,7 +67,7 @@ namespace TestCentric.Gui.Views
             InvokeIfRequired(() => Height = detailSectionBackgroundPanel.Top - 1);
         }
 
-        public void UpdateDetailSection(TestResultCounts summary)
+        public void  UpdateDetailSection(TestResultCounts summary)
         {
             InvokeIfRequired(() =>
             {

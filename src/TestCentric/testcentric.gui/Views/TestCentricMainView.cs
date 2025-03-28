@@ -236,7 +236,6 @@ namespace TestCentric.Gui.Views
             this.fixtureListByDurationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showFilterButton = new System.Windows.Forms.ToolStripButton();
             this.runParametersButton = new System.Windows.Forms.ToolStripButton();
-            this.nunitTreeShowNamespaceMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.fileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.newProjectMenuItem = new System.Windows.Forms.ToolStripMenuItem();
