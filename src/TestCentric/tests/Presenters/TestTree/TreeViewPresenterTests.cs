@@ -342,6 +342,122 @@ namespace TestCentric.Gui.Presenters.TestTree
             _view.CategoryFilter.ReceivedWithAnyArgs().SelectedItems = null;
         }
 
+        [Test]
+        public void RemoveTestPackageCommand_SelectedNode_IsNull_TestPackageIsNotRemoved()
+        {
+            // 1. Arrange
+            _view.SelectedNode.Returns((TreeNode)null);
+
+            // 2. Act
+            _view.RemoveTestPackageCommand.Execute += Raise.Event<CommandHandler>();
+
+            // 3. Assert
+            _model.DidNotReceiveWithAnyArgs().RemoveTestPackage(null);
+        }
+
+        [TestCase(false, false, "TestSuite")]
+        [TestCase(true, false, "TestSuite")]
+        [TestCase(true, false, "TestSuite")]
+        [TestCase(true, false, "Assembly")]
+        public void RemoveTestPackageCommand_NotAllConditionsMeet_TestPackageIsNotRemoved(bool hasTests, bool isTestRunning, string testNodeType)
+        {
+            // 1. Arrange
+            TestNode testNode = new TestNode($"<test-suite id='1' type='{testNodeType}' />");
+            TreeNode treeNode = new TreeNode();
+            treeNode.Tag = testNode; 
+            _view.SelectedNode.Returns(treeNode);
+            _model.HasTests.Returns(hasTests);
+            _model.IsTestRunning.Returns(isTestRunning);
+
+            var project = new TestCentricProject(_model, "dummy.dll");
+            _model.TestCentricProject.Returns(project);
+
+            // 2. Act
+            _view.RemoveTestPackageCommand.Execute += Raise.Event<CommandHandler>();
+
+            // 3. Assert
+            _model.DidNotReceiveWithAnyArgs().RemoveTestPackage(null);
+        }
+
+        [Test]
+        public void RemoveTestPackageCommand_AllConditionsMeet_TestPackageIsRemoved()
+        {
+            // 1. Arrange
+            TestNode testNode = new TestNode($"<test-suite id='1' type='Assembly' />");
+            TreeNode treeNode = new TreeNode();
+            treeNode.Tag = testNode;
+            _view.SelectedNode.Returns(treeNode);
+            _model.HasTests.Returns(true);
+            _model.IsTestRunning.Returns(false);
+
+            var project = new TestCentricProject(_model, new[] { "dummy.dll", "dummy2.dll" });
+            _model.TestCentricProject.Returns(project);
+
+            // 2. Act
+            _view.RemoveTestPackageCommand.Execute += Raise.Event<CommandHandler>();
+
+            // 3. Assert
+            _model.ReceivedWithAnyArgs().RemoveTestPackage(null);
+        }
+
+        [Test]
+        public void WhenContextMenuIsDisplayed_ConextNode_IsNull_RemoveTestPackageCommandContextMenu_IsNotVisible()
+        {
+            // 1. Arrange
+            _view.ContextNode.Returns((TreeNode)null);
+
+            // 2. Act
+            _view.RemoveTestPackageCommand.Execute += Raise.Event<CommandHandler>();
+
+            // 3. Assert
+            Assert.That(_view.RemoveTestPackageCommand.Visible, Is.False);
+        }
+
+        [TestCase(false, false, "TestSuite")]
+        [TestCase(true, false, "TestSuite")]
+        [TestCase(true, false, "TestSuite")]
+        [TestCase(true, false, "Assembly")]
+        public void WhenContextMenuIsDisplayed_RemoveTestPackageCommandContextMenu_IsNotVisible(bool hasTests, bool isTestRunning, string testNodeType)
+        {
+            // 1. Arrange
+            TestNode testNode = new TestNode($"<test-suite id='1' type='{testNodeType}' />");
+            TreeNode treeNode = new TreeNode();
+            treeNode.Tag = testNode;
+            _view.ContextNode.Returns(treeNode);
+            _model.HasTests.Returns(hasTests);
+            _model.IsTestRunning.Returns(isTestRunning);
+
+            var project = new TestCentricProject(_model, "dummy.dll");
+            _model.TestCentricProject.Returns(project);
+
+            // 2. Act
+            _view.RemoveTestPackageCommand.Execute += Raise.Event<CommandHandler>();
+
+            // 3. Assert
+            Assert.That(_view.RemoveTestPackageCommand.Visible, Is.False);
+        }
+
+        [Test]
+        public void WhenContextMenuIsDisplayed_RemoveTestPackageCommandContextMenu_IsVisible()
+        {
+            // 1. Arrange
+            TestNode testNode = new TestNode($"<test-suite id='1' type='Assembly' />");
+            TreeNode treeNode = new TreeNode();
+            treeNode.Tag = testNode;
+            _view.ContextNode.Returns(treeNode);
+            _model.HasTests.Returns(true);
+            _model.IsTestRunning.Returns(false);
+
+            var project = new TestCentricProject(_model, new[] { "dummy.dll", "dummy2.dll" });
+            _model.TestCentricProject.Returns(project);
+
+            // 2. Act
+            _view.ContextMenuOpening += Raise.Event<EventHandler>();
+
+            // 3. Assert
+            Assert.That(_view.RemoveTestPackageCommand.Visible, Is.True);
+        }
+
         // TODO: Version 1 Test - Make it work if needed.
         //[Test]
         //public void WhenContextNodeIsNotNull_RunCommandExecutesThatTest()

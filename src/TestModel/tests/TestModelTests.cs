@@ -64,6 +64,26 @@ namespace TestCentric.Gui.Model
         }
 
         [Test]
+        public void RemoveTestPackage_TestCentricProjectLoadedEvent_IsTriggered()
+        {
+            // Arrange
+            var engine = Substitute.For<TestCentric.Engine.ITestEngine>();
+            var options = new CommandLineOptions("dummy.dll");
+            var model = TestModel.CreateTestModel(engine, options);
+
+            bool projectLoadedCalled = false;
+            model.Events.TestCentricProjectLoaded += (t) => projectLoadedCalled = true;
+
+            // Act
+            model.CreateNewProject(new[] { "Dummy.dll", "Dummy2.dll" });
+            var subPackage = model.TestCentricProject.SubPackages[1];
+            model.RemoveTestPackage(subPackage);
+
+            // Assert
+            Assert.That(projectLoadedCalled, Is.True);
+        }
+      
+        [Test]
         public void SaveProject_RecentFiles_ContainsProjectName()
         {
             // Arrange
