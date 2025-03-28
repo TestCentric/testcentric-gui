@@ -32,7 +32,7 @@ namespace TestCentric.Gui.Presenters.Main
             _settings.Gui.TestTree.FixtureList.GroupBy = groupBy;
 
             // 2. Assert
-            Assert.That(_view.GroupBy.SelectedItem, Is.EqualTo(groupBy));
+            Assert.That(_view.FixtureListGroupBy.SelectedItem, Is.EqualTo(groupBy));
         }
 
         [TestCase("ASSEMBLY")]
@@ -44,18 +44,18 @@ namespace TestCentric.Gui.Presenters.Main
             _settings.Gui.TestTree.TestList.GroupBy = groupBy;
 
             // 2. Assert
-            Assert.That(_view.GroupBy.SelectedItem, Is.EqualTo(groupBy));
+            Assert.That(_view.TestListGroupBy.SelectedItem, Is.EqualTo(groupBy));
         }
 
-        [TestCase(true, 0)]
-        [TestCase(false, 1)]
-        public void ShowNamespace_SettingChanged_MenuItemIsUpdated(bool showNamespace, int expectedMenuIndex)
+        [TestCase(true)]
+        [TestCase(false)]
+        public void ShowNamespace_SettingChanged_MenuItemIsUpdated(bool showNamespace)
         {
             // 1. Act
             _settings.Gui.TestTree.ShowNamespace = showNamespace;
 
             // 2. Assert
-            Assert.That(_view.ShowNamespace.SelectedIndex, Is.EqualTo(expectedMenuIndex));
+            Assert.That(_view.ShowNamespace.Checked, Is.EqualTo(showNamespace));
         }
 
         [TestCase("NUNIT_TREE", true)]

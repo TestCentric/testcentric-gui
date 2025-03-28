@@ -88,13 +88,16 @@ namespace TestCentric.Gui.Views
         private ToolStripMenuItem fixtureListMenuItem;
         private ToolStripMenuItem testListMenuItem;
         private ToolStripMenuItem nunitTreeShowNamespaceMenuItem;
-        private ToolStripMenuItem nunitTreeHideNamespaceMenuItem;
-        private ToolStripSeparator toolStripSeparator13;
-        private ToolStripMenuItem byAssemblyMenuItem;
-        private ToolStripMenuItem byFixtureMenuItem;
-        private ToolStripMenuItem byCategoryMenuItem;
-        private ToolStripMenuItem byOutcomeMenuItem;
-        private ToolStripMenuItem byDurationMenuItem;
+        private ToolStripMenuItem textListUngroupedMenuItem;
+        private ToolStripMenuItem textListByAssemblyMenuItem;
+        private ToolStripMenuItem textListByFixtureMenuItem;
+        private ToolStripMenuItem textListByCategoryMenuItem;
+        private ToolStripMenuItem textListByOutcomeMenuItem;
+        private ToolStripMenuItem textListByDurationMenuItem;
+        private ToolStripMenuItem fixtureListByCategoryMenuItem;
+        private ToolStripMenuItem fixtureListByOutcomeMenuItem;
+        private ToolStripMenuItem fixtureListByDurationMenuItem;
+        private ToolStripMenuItem fixtureListUngroupedMenuItem;
         private ToolStripButton stopRunButton;
         private ToolStripButton forceStopButton;
         private ProgressBarView progressBar;
@@ -175,10 +178,11 @@ namespace TestCentric.Gui.Views
             DisplayFormat = new CheckedToolStripMenuGroup(
                 "displayFormat",
                 nunitTreeMenuItem, fixtureListMenuItem, testListMenuItem);
-            GroupBy = new CheckedToolStripMenuGroup(
-                "testGrouping",
-                byAssemblyMenuItem, byFixtureMenuItem, byCategoryMenuItem, byOutcomeMenuItem, byDurationMenuItem);
-            ShowNamespace = new CheckedToolStripMenuGroup("showNamespace", nunitTreeShowNamespaceMenuItem, nunitTreeHideNamespaceMenuItem);
+            TestListGroupBy = new CheckedToolStripMenuGroup(
+                "TestListGroupBy",
+                textListUngroupedMenuItem, textListByAssemblyMenuItem, textListByFixtureMenuItem, textListByCategoryMenuItem, textListByOutcomeMenuItem, textListByDurationMenuItem);
+            FixtureListGroupBy = new CheckedToolStripMenuGroup("FixtureListGroupBy", fixtureListUngroupedMenuItem, fixtureListByCategoryMenuItem, fixtureListByOutcomeMenuItem, fixtureListByDurationMenuItem);
+            ShowNamespace = new CheckedMenuElement(nunitTreeShowNamespaceMenuItem);
             ShowHideFilterButton = new ToolStripButtonElement(showFilterButton);
             RunParametersButton = new ToolStripButtonElement(runParametersButton);
             RunSummaryButton = new CheckBoxElement(runSummaryButton);
@@ -223,13 +227,16 @@ namespace TestCentric.Gui.Views
             this.fixtureListMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.testListMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nunitTreeShowNamespaceMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.nunitTreeHideNamespaceMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
-            this.byAssemblyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.byFixtureMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.byCategoryMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.byOutcomeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.byDurationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.textListUngroupedMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fixtureListUngroupedMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.textListByAssemblyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.textListByFixtureMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.textListByCategoryMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.textListByOutcomeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.textListByDurationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fixtureListByCategoryMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fixtureListByOutcomeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fixtureListByDurationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showFilterButton = new System.Windows.Forms.ToolStripButton();
             this.runParametersButton = new System.Windows.Forms.ToolStripButton();
             this.mainMenu = new System.Windows.Forms.MenuStrip();
@@ -401,36 +408,22 @@ namespace TestCentric.Gui.Views
             this.displayFormatButton.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.nunitTreeMenuItem,
             this.fixtureListMenuItem,
-            this.testListMenuItem,
-            this.toolStripSeparator13,
-            this.byAssemblyMenuItem,
-            this.byFixtureMenuItem,
-            this.byCategoryMenuItem,
-            this.byOutcomeMenuItem,
-            this.byDurationMenuItem});
+            this.testListMenuItem});
             this.displayFormatButton.Image = ((System.Drawing.Image)(resources.GetObject("displayFormatButton.Image")));
             this.displayFormatButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.displayFormatButton.Name = "displayFormatButton";
             this.displayFormatButton.Size = new System.Drawing.Size(29, 21);
             this.displayFormatButton.Text = "Display";
             this.displayFormatButton.ToolTipText = "Tree Display Format";
-
+            this.displayFormatButton.DropDown.Closing += DisplayFormatDropDown_Closing;
             // 
             // nunitTreeShowNamespaceMenuItem
             // 
-            this.nunitTreeShowNamespaceMenuItem.Name = "NUNIT_TREE_SHOW_NAMESPACE";
+            this.nunitTreeShowNamespaceMenuItem.Name = "nunitTreeShowNamespaceMenuItem";
             this.nunitTreeShowNamespaceMenuItem.Size = new System.Drawing.Size(198, 22);
             this.nunitTreeShowNamespaceMenuItem.Tag = "NUNIT_TREE_SHOW_NAMESPACE";
             this.nunitTreeShowNamespaceMenuItem.Text = "Show Namespace";
-
-            // 
-            // nunitTreeHideNamespaceMenuItem
-            // 
-            this.nunitTreeHideNamespaceMenuItem.Name = "NUNIT_TREE_HIDE_NAMESPACE";
-            this.nunitTreeHideNamespaceMenuItem.Size = new System.Drawing.Size(198, 22);
-            this.nunitTreeHideNamespaceMenuItem.Tag = "NUNIT_TREE_HIDE_NAMESPACE";
-            this.nunitTreeHideNamespaceMenuItem.Text = "Hide Namespace";
-
+            this.nunitTreeShowNamespaceMenuItem.Visible = false;
             // 
             // nunitTreeMenuItem
             // 
@@ -438,8 +431,8 @@ namespace TestCentric.Gui.Views
             this.nunitTreeMenuItem.Size = new System.Drawing.Size(198, 22);
             this.nunitTreeMenuItem.Tag = "NUNIT_TREE";
             this.nunitTreeMenuItem.Text = "NUnit Tree";
-            nunitTreeMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { nunitTreeShowNamespaceMenuItem, nunitTreeHideNamespaceMenuItem });
-
+            this.nunitTreeMenuItem.DropDownItems.AddRange(new ToolStripItem[] { nunitTreeShowNamespaceMenuItem });
+            this.nunitTreeMenuItem.CheckedChanged += DisplayFormatNUnitTreeChanged;
             // 
             // fixtureListMenuItem
             // 
@@ -447,6 +440,8 @@ namespace TestCentric.Gui.Views
             this.fixtureListMenuItem.Size = new System.Drawing.Size(198, 22);
             this.fixtureListMenuItem.Tag = "FIXTURE_LIST";
             this.fixtureListMenuItem.Text = "Fixture List";
+            this.fixtureListMenuItem.DropDownItems.AddRange(new ToolStripItem[] { fixtureListUngroupedMenuItem, fixtureListByCategoryMenuItem, fixtureListByOutcomeMenuItem, fixtureListByDurationMenuItem });
+            this.fixtureListMenuItem.CheckedChanged += DisplayFormatFixtureListChanged;
             // 
             // testListMenuItem
             // 
@@ -454,46 +449,88 @@ namespace TestCentric.Gui.Views
             this.testListMenuItem.Size = new System.Drawing.Size(198, 22);
             this.testListMenuItem.Tag = "TEST_LIST";
             this.testListMenuItem.Text = "Test List";
+            this.testListMenuItem.DropDownItems.AddRange(new ToolStripItem[] { textListUngroupedMenuItem, textListByAssemblyMenuItem, textListByFixtureMenuItem, textListByCategoryMenuItem, textListByOutcomeMenuItem, textListByDurationMenuItem });
+            this.testListMenuItem.CheckedChanged += DisplayFormatTestListChanged;
+            //
+            // textListUngroupedMenuItem
+            //
+            this.textListUngroupedMenuItem.Name = "textListUngroupedMenuItem";
+            this.textListUngroupedMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.textListUngroupedMenuItem.Tag = "UNGROUPED";
+            this.textListUngroupedMenuItem.Text = "Simple List";
+            this.textListUngroupedMenuItem.Visible = false;
             // 
-            // toolStripSeparator13
+            // textListByAssemblyMenuItem
             // 
-            this.toolStripSeparator13.Name = "toolStripSeparator13";
-            this.toolStripSeparator13.Size = new System.Drawing.Size(195, 6);
+            this.textListByAssemblyMenuItem.Name = "textListByAssemblyMenuItem";
+            this.textListByAssemblyMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.textListByAssemblyMenuItem.Tag = "ASSEMBLY";
+            this.textListByAssemblyMenuItem.Text = "By Assembly";
+            this.textListByAssemblyMenuItem.Visible = false;
             // 
-            // byAssemblyMenuItem
+            // textListByFixtureMenuItem
             // 
-            this.byAssemblyMenuItem.Name = "byAssemblyMenuItem";
-            this.byAssemblyMenuItem.Size = new System.Drawing.Size(198, 22);
-            this.byAssemblyMenuItem.Tag = "ASSEMBLY";
-            this.byAssemblyMenuItem.Text = "By Assembly";
+            this.textListByFixtureMenuItem.Name = "textListByFixtureMenuItem";
+            this.textListByFixtureMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.textListByFixtureMenuItem.Tag = "FIXTURE";
+            this.textListByFixtureMenuItem.Text = "By Fixture";
+            this.textListByFixtureMenuItem.Visible = false;
             // 
-            // byFixtureMenuItem
+            // textListByCategoryMenuItem
             // 
-            this.byFixtureMenuItem.Name = "byFixtureMenuItem";
-            this.byFixtureMenuItem.Size = new System.Drawing.Size(198, 22);
-            this.byFixtureMenuItem.Tag = "FIXTURE";
-            this.byFixtureMenuItem.Text = "By Fixture";
+            this.textListByCategoryMenuItem.Name = "textListByCategoryMenuItem";
+            this.textListByCategoryMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.textListByCategoryMenuItem.Tag = "CATEGORY";
+            this.textListByCategoryMenuItem.Text = "By Category";
+            this.textListByCategoryMenuItem.Visible = false;
             // 
-            // byCategoryMenuItem
+            // textListByOutcomeMenuItem
             // 
-            this.byCategoryMenuItem.Name = "byCategoryMenuItem";
-            this.byCategoryMenuItem.Size = new System.Drawing.Size(198, 22);
-            this.byCategoryMenuItem.Tag = "CATEGORY";
-            this.byCategoryMenuItem.Text = "By Category";
+            this.textListByOutcomeMenuItem.Name = "textListByOutcomeMenuItem";
+            this.textListByOutcomeMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.textListByOutcomeMenuItem.Tag = "OUTCOME";
+            this.textListByOutcomeMenuItem.Text = "By Outcome";
+            this.textListByOutcomeMenuItem.Visible = false;
             // 
-            // byOutcomeMenuItem
+            // textListByDurationMenuItem
             // 
-            this.byOutcomeMenuItem.Name = "byOutcomeMenuItem";
-            this.byOutcomeMenuItem.Size = new System.Drawing.Size(198, 22);
-            this.byOutcomeMenuItem.Tag = "OUTCOME";
-            this.byOutcomeMenuItem.Text = "By Outcome";
+            this.textListByDurationMenuItem.Name = "textListByDurationMenuItem";
+            this.textListByDurationMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.textListByDurationMenuItem.Tag = "DURATION";
+            this.textListByDurationMenuItem.Text = "By Duration";
+            this.textListByDurationMenuItem.Visible = false;
+            //
+            // fixtureListUngroupedMenuItem
+            //
+            this.fixtureListUngroupedMenuItem.Name = "fixtureListUngroupedMenuItem";
+            this.fixtureListUngroupedMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.fixtureListUngroupedMenuItem.Tag = "UNGROUPED";
+            this.fixtureListUngroupedMenuItem.Text = "Simple List";
+            this.fixtureListUngroupedMenuItem.Visible = false;
             // 
-            // byDurationMenuItem
+            // fixtureListByCategoryMenuItem
             // 
-            this.byDurationMenuItem.Name = "byDurationMenuItem";
-            this.byDurationMenuItem.Size = new System.Drawing.Size(198, 22);
-            this.byDurationMenuItem.Tag = "DURATION";
-            this.byDurationMenuItem.Text = "By Duration";
+            this.fixtureListByCategoryMenuItem.Name = "fixtureListByCategoryMenuItem";
+            this.fixtureListByCategoryMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.fixtureListByCategoryMenuItem.Tag = "CATEGORY";
+            this.fixtureListByCategoryMenuItem.Text = "By Category";
+            this.fixtureListByCategoryMenuItem.Visible = false;
+            // 
+            // fixtureListByOutcomeMenuItem
+            // 
+            this.fixtureListByOutcomeMenuItem.Name = "fixtureListByOutcomeMenuItem";
+            this.fixtureListByOutcomeMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.fixtureListByOutcomeMenuItem.Tag = "OUTCOME";
+            this.fixtureListByOutcomeMenuItem.Text = "By Outcome";
+            this.fixtureListByOutcomeMenuItem.Visible = false;
+            // 
+            // fixtureListByDurationMenuItem
+            // 
+            this.fixtureListByDurationMenuItem.Name = "fixtureListByDurationMenuItem";
+            this.fixtureListByDurationMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.fixtureListByDurationMenuItem.Tag = "DURATION";
+            this.fixtureListByDurationMenuItem.Text = "By Duration";
+            this.fixtureListByDurationMenuItem.Visible = false;
             // 
             // showFilterButton
             // 
@@ -1069,9 +1106,34 @@ namespace TestCentric.Gui.Views
 
         private void DisplayFormatDropDown_Closing(object sender, ToolStripDropDownClosingEventArgs e)
         {
-            e.Cancel =
-                e.CloseReason == ToolStripDropDownCloseReason.ItemClicked ||
-                e.CloseReason == ToolStripDropDownCloseReason.AppFocusChange;
+            e.Cancel = e.CloseReason == ToolStripDropDownCloseReason.ItemClicked;
+        }
+
+        private void DisplayFormatNUnitTreeChanged(object sender, EventArgs e)
+        {
+            nunitTreeShowNamespaceMenuItem.Visible = nunitTreeMenuItem.Checked;
+            if (nunitTreeMenuItem.Checked && nunitTreeMenuItem.Visible)
+                this.nunitTreeMenuItem.DropDown.Show();
+        }
+
+        private void DisplayFormatFixtureListChanged(object sender, EventArgs e)
+        {
+            fixtureListUngroupedMenuItem.Visible = fixtureListByCategoryMenuItem.Visible = fixtureListByOutcomeMenuItem.Visible = fixtureListByDurationMenuItem.Visible = fixtureListMenuItem.Checked;
+            if (fixtureListMenuItem.Checked && fixtureListMenuItem.Visible)
+                fixtureListMenuItem.DropDown.Show();
+        }
+
+        private void DisplayFormatTestListChanged(object sender, EventArgs e)
+        {
+            textListUngroupedMenuItem.Visible =
+            textListByAssemblyMenuItem.Visible =
+            textListByFixtureMenuItem.Visible =
+            textListByCategoryMenuItem.Visible =
+            textListByOutcomeMenuItem.Visible =
+            textListByDurationMenuItem.Visible = testListMenuItem.Checked;
+
+            if (testListMenuItem.Checked && testListMenuItem.Visible)
+                this.testListMenuItem.DropDown.Show();
         }
 
         #endregion
@@ -1155,8 +1217,11 @@ namespace TestCentric.Gui.Views
 
         public IViewElement DisplayFormatButton { get; private set; }
         public ISelection DisplayFormat { get; private set; }
-        public ISelection GroupBy { get; private set; }
-        public ISelection ShowNamespace { get; private set; }
+        public ISelection TestListGroupBy { get; private set; }
+
+        public ISelection FixtureListGroupBy { get; private set; }
+
+        public IChecked ShowNamespace { get; private set; }
 
         public IChecked ShowHideFilterButton { get; private set; }
         public ICommand RunParametersButton { get; private set; }

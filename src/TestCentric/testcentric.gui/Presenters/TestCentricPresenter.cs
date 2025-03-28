@@ -99,15 +99,9 @@ namespace TestCentric.Gui.Presenters
         {
             #region Model Events
 
-            _model.Events.TestCentricProjectLoaded += (TestEventArgs e) =>
-            {
-                _view.Title = $"TestCentric - {_model.TestCentricProject?.FileName ?? "UNNAMED.tcproj"}";
-            };
+            _model.Events.TestCentricProjectLoaded += (TestEventArgs e) => UpdateTitlebar();
 
-            _model.Events.TestCentricProjectUnloaded += (TestEventArgs e) =>
-            {
-                _view.Title = "TestCentric Runner for NUnit";
-            };
+            _model.Events.TestCentricProjectUnloaded += (TestEventArgs e) => UpdateTitlebar();
 
             _model.Events.TestsLoading += (TestFilesLoadingEventArgs e) =>
             {
@@ -266,13 +260,13 @@ namespace TestCentric.Gui.Presenters
                         UpdateViewCommands();
                         break;
                     case "TestCentric.Gui.TestTree.TestList.GroupBy":
-                        _view.GroupBy.SelectedItem = _settings.Gui.TestTree.TestList.GroupBy;
+                        _view.TestListGroupBy.SelectedItem = _settings.Gui.TestTree.TestList.GroupBy;
                         break;
                     case "TestCentric.Gui.TestTree.FixtureList.GroupBy":
-                        _view.GroupBy.SelectedItem = _settings.Gui.TestTree.FixtureList.GroupBy;
+                        _view.FixtureListGroupBy.SelectedItem = _settings.Gui.TestTree.FixtureList.GroupBy;
                         break;
                     case "TestCentric.Gui.TestTree.ShowNamespace":
-                        _view.ShowNamespace.SelectedIndex = _settings.Gui.TestTree.ShowNamespace ? 0 : 1;
+                        _view.ShowNamespace.Checked = _settings.Gui.TestTree.ShowNamespace;
                         break;
                 }
             };
@@ -497,9 +491,9 @@ namespace TestCentric.Gui.Presenters
                 _settings.Gui.TestTree.DisplayFormat = _view.DisplayFormat.SelectedItem;
             };
 
-            _view.ShowNamespace.SelectionChanged += () =>
+            _view.ShowNamespace.CheckedChanged += () =>
             {
-                _settings.Gui.TestTree.ShowNamespace = _view.ShowNamespace.SelectedIndex == 0;
+                _settings.Gui.TestTree.ShowNamespace = _view.ShowNamespace.Checked;
             };
 
             _view.ShowHideFilterButton.CheckedChanged += () =>
@@ -507,17 +501,14 @@ namespace TestCentric.Gui.Presenters
                 _settings.Gui.TestTree.ShowFilter = _view.ShowHideFilterButton.Checked;
             };
 
-            _view.GroupBy.SelectionChanged += () =>
+            _view.TestListGroupBy.SelectionChanged += () =>
             {
-                switch(_view.DisplayFormat.SelectedItem)
-                {
-                    case "TEST_LIST":
-                        _settings.Gui.TestTree.TestList.GroupBy = _view.GroupBy.SelectedItem;
-                        break;
-                    case "FIXTURE_LIST":
-                        _settings.Gui.TestTree.FixtureList.GroupBy = _view.GroupBy.SelectedItem;
-                        break;
-                }
+                _settings.Gui.TestTree.TestList.GroupBy = _view.TestListGroupBy.SelectedItem;
+            };
+
+            _view.FixtureListGroupBy.SelectionChanged += () =>
+            {
+                _settings.Gui.TestTree.FixtureList.GroupBy = _view.FixtureListGroupBy.SelectedItem;
             };
 
             _view.StopRunButton.Execute += ExecuteNormalStop;
@@ -675,12 +666,24 @@ namespace TestCentric.Gui.Presenters
                 try
                 {
                     _model.SaveProject(projectPath);
+                    UpdateTitlebar();
                 }
                 catch (Exception exception)
                 {
-                    _view.MessageDisplay.Error("Unable to Save Results\n\n" + MessageBuilder.FromException(exception));
+                    _view.MessageDisplay.Error("Unable to save project\n\n" + MessageBuilder.FromException(exception));
                 }
             }
+        }
+
+        private void UpdateTitlebar()
+        {
+            string title = "TestCentric Runner for NUnit";
+            if (_model.TestCentricProject != null)
+            {
+                title = $"TestCentric - {_model.TestCentricProject.FileName ?? "UNNAMED.tcproj"}";
+
+            }
+            _view.Title = title;
         }
 
         #endregion
@@ -958,23 +961,15 @@ namespace TestCentric.Gui.Presenters
 
             switch (displayFormat)
             {
-                case "NUNIT_TREE":
-                    _view.GroupBy.Enabled = false;
-                    break;
                 case "TEST_LIST":
-                    _view.GroupBy.Enabled = true;
-                    _view.GroupBy.SelectedItem = _settings.Gui.TestTree.TestList.GroupBy;
+                    _view.TestListGroupBy.SelectedItem = _settings.Gui.TestTree.TestList.GroupBy;
                     break;
                 case "FIXTURE_LIST":
-                    _view.GroupBy.Enabled = true;
-                    // HACK: Should be handled by the element itself
-                    if (_view.GroupBy is Elements.CheckedToolStripMenuGroup menuGroup)
-                        menuGroup.MenuItems[1].Enabled = false;
-                    _view.GroupBy.SelectedItem = _settings.Gui.TestTree.FixtureList.GroupBy;
+                    _view.FixtureListGroupBy.SelectedItem = _settings.Gui.TestTree.FixtureList.GroupBy;
                     break;
             }
 
-            _view.ShowNamespace.SelectedIndex = _settings.Gui.TestTree.ShowNamespace ? 0 : 1;
+            _view.ShowNamespace.Checked = _settings.Gui.TestTree.ShowNamespace;
             _view.ShowNamespace.Enabled = displayFormat == "NUNIT_TREE";
         }
 

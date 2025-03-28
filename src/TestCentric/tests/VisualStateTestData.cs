@@ -41,6 +41,13 @@ namespace TestCentric.Gui
                 case "FIXTURE_LIST":
                     switch (Grouping)
                     {
+                        case "UNGROUPED":
+                            return CreateTreeView(
+                                true,
+                                TN("MyFixture", TN("Test1"), TN("Test2"), TN("Test3")),
+                                TN("FixtureA", TN("Test4"), TN("Test5")),
+                                TN("FixtureB", TN("Test6")));
+
                         case "ASSEMBLY":
                             return CreateTreeView(
                                 true,
@@ -74,6 +81,11 @@ namespace TestCentric.Gui
                 case "TEST_LIST":
                     switch (Grouping)
                     {
+                        case "UNGROUPED":
+                            return CreateTreeView(
+                                true,
+                                TN("Test1"), TN("Test2"), TN("Test3"), TN("Test4"), TN("Test5"), TN("Test6"));
+
                         case "ASSEMBLY":
                             return CreateTreeView(
                                 true,
@@ -150,6 +162,16 @@ namespace TestCentric.Gui
                 case "FIXTURE_LIST":
                     switch (Grouping)
                     {
+                        case "UNGROUPED":
+                            return CreateVisualState(
+                                DisplayStrategy,
+                                true,
+                                VTN("MyFixture", EXP,
+                                    VTN("Test1", CHK),
+                                    VTN("Test2", SEL),
+                                    VTN("Test3", CHK)),
+                                    VTN("FixtureA", EXP + CHK));
+
                         case "ASSEMBLY":
                             return CreateVisualState(
                                 DisplayStrategy,
@@ -192,6 +214,14 @@ namespace TestCentric.Gui
                 case "TEST_LIST":
                     switch (Grouping)
                     {
+                        case "UNGROUPED":
+                            return CreateVisualState(
+                                DisplayStrategy,
+                                true,
+                                VTN("Test1", CHK),
+                                VTN("Test2", SEL),
+                                VTN("Test3", CHK));
+
                         case "ASSEMBLY":
                             return CreateVisualState(
                                 DisplayStrategy,
@@ -249,6 +279,7 @@ namespace TestCentric.Gui
                 case "FIXTURE_LIST":
                     switch (Grouping)
                     {
+                        case "UNGROUPED":
                         case "ASSEMBLY":
                         case "FIXTURE":
                         case "CATEGORY":
@@ -280,6 +311,7 @@ namespace TestCentric.Gui
                 case "TEST_LIST":
                     switch (Grouping)
                     {
+                        case "UNGROUPED":
                         case "ASSEMBLY":
                         case "FIXTURE":
                         case "CATEGORY":

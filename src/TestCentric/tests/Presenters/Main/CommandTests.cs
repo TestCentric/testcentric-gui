@@ -283,15 +283,27 @@ namespace TestCentric.Gui.Presenters.Main
         //}
 
         [Test]
-        public void GroupByChange_ChangesModelSetting()
+        public void TestListGroupByChange_ChangesModelSetting()
         {
             _view.DisplayFormat.SelectedItem.Returns("TEST_LIST");
-            _view.GroupBy.SelectedItem.Returns("OUTCOME");
-            _view.GroupBy.SelectionChanged += Raise.Event<CommandHandler>();
+            _view.TestListGroupBy.SelectedItem.Returns("OUTCOME");
+            _view.TestListGroupBy.SelectionChanged += Raise.Event<CommandHandler>();
 
             // FakeSettings saves the setting so we can check if it was set
             var setting = (string)_model.Settings.GetSetting("Gui.TestTree.TestList.GroupBy");
             Assert.That(setting, Is.EqualTo("OUTCOME"));
+        }
+
+        [Test]
+        public void FixtureListGroupByChange_ChangesModelSetting()
+        {
+            _view.DisplayFormat.SelectedItem.Returns("FIXTURE_LIST");
+            _view.FixtureListGroupBy.SelectedItem.Returns("CATEGORY");
+            _view.FixtureListGroupBy.SelectionChanged += Raise.Event<CommandHandler>();
+
+            // FakeSettings saves the setting so we can check if it was set
+            var setting = (string)_model.Settings.GetSetting("Gui.TestTree.FixtureList.GroupBy");
+            Assert.That(setting, Is.EqualTo("CATEGORY"));
         }
 
         [Test]
@@ -349,18 +361,18 @@ namespace TestCentric.Gui.Presenters.Main
             Assert.That(_view.RunSelectedButton.Enabled, Is.True);
         }
 
-        [TestCase(0, true)]
-        [TestCase(1, false)]
-        public void ShowNamespaceChanged_ChangesModelSetting(int selectedMenuItem, bool expectedShowNamespace)
+        [TestCase(true)]
+        [TestCase(false)]
+        public void ShowNamespaceChanged_ChangesModelSetting(bool showNamespace)
         {
             // Arrange
-            _view.ShowNamespace.SelectedIndex.Returns(selectedMenuItem);
+            _view.ShowNamespace.Checked .Returns(showNamespace);
 
             // Act
-            _view.ShowNamespace.SelectionChanged += Raise.Event<CommandHandler>();
+            _view.ShowNamespace.CheckedChanged += Raise.Event<CommandHandler>();
 
             // Assert
-            Assert.That(_model.Settings.Gui.TestTree.ShowNamespace, Is.EqualTo(expectedShowNamespace));
+            Assert.That(_model.Settings.Gui.TestTree.ShowNamespace, Is.EqualTo(showNamespace));
         }
 
         [TestCase(true)]

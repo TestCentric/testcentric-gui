@@ -337,6 +337,7 @@ namespace TestCentric.Gui.Model
         public void SaveProject(string filename)
         {
             TestCentricProject.SaveAs(filename);
+            RecentFiles.Latest = TestCentricProject.ProjectPath;
         }
 
         public void CloseProject()
@@ -383,7 +384,7 @@ namespace TestCentric.Gui.Model
 
             ClearResults();
 
-            _assemblyWatcher.Setup(1000, files as IList);
+            _assemblyWatcher.Setup(1000, files);
             _assemblyWatcher.AssemblyChanged += (path) => _events.FireTestChanged();
             _assemblyWatcher.Start();
 
