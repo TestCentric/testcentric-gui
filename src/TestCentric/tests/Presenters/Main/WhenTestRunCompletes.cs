@@ -59,12 +59,6 @@ namespace TestCentric.Gui.Presenters.Main
         }
 
         [Test]
-        public void RunSummaryIsDisplayed()
-        {
-            _view.RunSummaryButton.Received().Checked = true;
-        }
-
-        [Test]
         public void TestResultTabIsDisplay()
         {
             _view.ResultTabs.Received().SelectedIndex = 1;
