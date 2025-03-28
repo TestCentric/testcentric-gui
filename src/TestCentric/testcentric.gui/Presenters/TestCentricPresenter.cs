@@ -260,10 +260,10 @@ namespace TestCentric.Gui.Presenters
                         UpdateViewCommands();
                         break;
                     case "TestCentric.Gui.TestTree.TestList.GroupBy":
-                        _view.GroupBy.SelectedItem = _settings.Gui.TestTree.TestList.GroupBy;
+                        _view.TestListGroupBy.SelectedItem = _settings.Gui.TestTree.TestList.GroupBy;
                         break;
                     case "TestCentric.Gui.TestTree.FixtureList.GroupBy":
-                        _view.GroupBy.SelectedItem = _settings.Gui.TestTree.FixtureList.GroupBy;
+                        _view.FixtureListGroupBy.SelectedItem = _settings.Gui.TestTree.FixtureList.GroupBy;
                         break;
                     case "TestCentric.Gui.TestTree.ShowNamespace":
                         _view.ShowNamespace.Checked = _settings.Gui.TestTree.ShowNamespace;
@@ -501,17 +501,14 @@ namespace TestCentric.Gui.Presenters
                 _settings.Gui.TestTree.ShowFilter = _view.ShowHideFilterButton.Checked;
             };
 
-            _view.GroupBy.SelectionChanged += () =>
+            _view.TestListGroupBy.SelectionChanged += () =>
             {
-                switch(_view.DisplayFormat.SelectedItem)
-                {
-                    case "TEST_LIST":
-                        _settings.Gui.TestTree.TestList.GroupBy = _view.GroupBy.SelectedItem;
-                        break;
-                    case "FIXTURE_LIST":
-                        _settings.Gui.TestTree.FixtureList.GroupBy = _view.GroupBy.SelectedItem;
-                        break;
-                }
+                _settings.Gui.TestTree.TestList.GroupBy = _view.TestListGroupBy.SelectedItem;
+            };
+
+            _view.FixtureListGroupBy.SelectionChanged += () =>
+            {
+                _settings.Gui.TestTree.FixtureList.GroupBy = _view.FixtureListGroupBy.SelectedItem;
             };
 
             _view.StopRunButton.Execute += ExecuteNormalStop;
@@ -964,19 +961,11 @@ namespace TestCentric.Gui.Presenters
 
             switch (displayFormat)
             {
-                case "NUNIT_TREE":
-                    _view.GroupBy.Enabled = false;
-                    break;
                 case "TEST_LIST":
-                    _view.GroupBy.Enabled = true;
-                    _view.GroupBy.SelectedItem = _settings.Gui.TestTree.TestList.GroupBy;
+                    _view.TestListGroupBy.SelectedItem = _settings.Gui.TestTree.TestList.GroupBy;
                     break;
                 case "FIXTURE_LIST":
-                    _view.GroupBy.Enabled = true;
-                    // HACK: Should be handled by the element itself
-                    if (_view.GroupBy is Elements.CheckedToolStripMenuGroup menuGroup)
-                        menuGroup.MenuItems[1].Enabled = false;
-                    _view.GroupBy.SelectedItem = _settings.Gui.TestTree.FixtureList.GroupBy;
+                    _view.FixtureListGroupBy.SelectedItem = _settings.Gui.TestTree.FixtureList.GroupBy;
                     break;
             }
 

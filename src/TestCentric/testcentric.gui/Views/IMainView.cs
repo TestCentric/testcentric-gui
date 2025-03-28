@@ -75,7 +75,10 @@ namespace TestCentric.Gui.Views
 
         IViewElement DisplayFormatButton { get; }
         ISelection DisplayFormat { get; }
-        ISelection GroupBy { get; }
+        ISelection TestListGroupBy { get; }
+
+        ISelection FixtureListGroupBy { get; }
+
         IChecked ShowNamespace { get; }
         IChecked ShowHideFilterButton { get; }
         ICommand RunParametersButton { get; }

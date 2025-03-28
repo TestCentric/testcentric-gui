@@ -65,7 +65,7 @@ namespace TestCentric.Gui.Presenters.Main
         [TestCase("ASSEMBLY")]
         [TestCase("CATEGORY")]
         [TestCase("OUTCOME")]
-        public void CheckMenu_GroupBy_SelectedItem_FixtureList_IsInitialzedFromSettings(string groupBy)
+        public void CheckMenu_FixtureListGroupBy_SelectedItem_FixtureList_IsInitialzedFromSettings(string groupBy)
         {
             // 1. Arrange
             _settings.Gui.TestTree.DisplayFormat = "FIXTURE_LIST";
@@ -75,13 +75,13 @@ namespace TestCentric.Gui.Presenters.Main
             _presenter = new TestCentricPresenter(_view, _model, new CommandLineOptions());
 
             // 3. Assert
-            _view.GroupBy.Received().SelectedItem = groupBy;
+            _view.FixtureListGroupBy.Received().SelectedItem = groupBy;
         }
 
         [TestCase("ASSEMBLY")]
         [TestCase("CATEGORY")]
         [TestCase("OUTCOME")]
-        public void CheckMenu_GroupBy_SelectedItem_TestList_IsInitialzedFromSettings(string groupBy)
+        public void CheckMenu_TestListGroupBy_SelectedItem_TestList_IsInitialzedFromSettings(string groupBy)
         {
             // 1. Arrange
             _settings.Gui.TestTree.DisplayFormat = "TEST_LIST";
@@ -91,7 +91,7 @@ namespace TestCentric.Gui.Presenters.Main
             _presenter = new TestCentricPresenter(_view, _model, new CommandLineOptions());
 
             // 3. Assert
-            _view.GroupBy.Received().SelectedItem = groupBy;
+            _view.TestListGroupBy.Received().SelectedItem = groupBy;
         }
 
         [TestCase(true)]

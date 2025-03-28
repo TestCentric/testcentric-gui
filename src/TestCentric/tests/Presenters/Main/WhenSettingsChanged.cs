@@ -32,7 +32,7 @@ namespace TestCentric.Gui.Presenters.Main
             _settings.Gui.TestTree.FixtureList.GroupBy = groupBy;
 
             // 2. Assert
-            Assert.That(_view.GroupBy.SelectedItem, Is.EqualTo(groupBy));
+            Assert.That(_view.FixtureListGroupBy.SelectedItem, Is.EqualTo(groupBy));
         }
 
         [TestCase("ASSEMBLY")]
@@ -44,7 +44,7 @@ namespace TestCentric.Gui.Presenters.Main
             _settings.Gui.TestTree.TestList.GroupBy = groupBy;
 
             // 2. Assert
-            Assert.That(_view.GroupBy.SelectedItem, Is.EqualTo(groupBy));
+            Assert.That(_view.TestListGroupBy.SelectedItem, Is.EqualTo(groupBy));
         }
 
         [TestCase(true)]
