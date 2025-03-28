@@ -83,8 +83,6 @@ namespace TestCentric.Gui.Views
         IChecked ShowHideFilterButton { get; }
         ICommand RunParametersButton { get; }
 
-        IChecked RunSummaryButton { get; }
-
         // SubViews
         ITestTreeView TreeView { get; }
         StatusBarView StatusBarView { get; }
@@ -95,8 +93,6 @@ namespace TestCentric.Gui.Views
 
         // Dialog Manager
         IDialogManager DialogManager { get; }
-
-        IRunSummaryDisplay RunSummaryDisplay { get; }
 
         // Methods used by Presenter
         void Configure(bool useFullGui);

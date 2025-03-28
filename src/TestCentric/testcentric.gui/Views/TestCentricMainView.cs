@@ -107,8 +107,6 @@ namespace TestCentric.Gui.Views
         private ToolStripButton runFailedButton;
         private ToolStripSeparator toolStripSeparator5;
         private ToolStripButton rerunButton;
-        private CheckBox runSummaryButton;
-        private RunSummaryDisplay runSummaryDisplay;
         private ToolStripMenuItem newProjectMenuItem;
         private ToolStripMenuItem openProjectMenuItem;
         private ToolStripMenuItem saveProjectMenuItem;
@@ -185,7 +183,6 @@ namespace TestCentric.Gui.Views
             ShowNamespace = new CheckedMenuElement(nunitTreeShowNamespaceMenuItem);
             ShowHideFilterButton = new ToolStripButtonElement(showFilterButton);
             RunParametersButton = new ToolStripButtonElement(runParametersButton);
-            RunSummaryButton = new CheckBoxElement(runSummaryButton);
 
             DialogManager = new DialogManager();
         }
@@ -239,6 +236,7 @@ namespace TestCentric.Gui.Views
             this.fixtureListByDurationMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showFilterButton = new System.Windows.Forms.ToolStripButton();
             this.runParametersButton = new System.Windows.Forms.ToolStripButton();
+            this.nunitTreeShowNamespaceMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.fileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.newProjectMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -288,8 +286,6 @@ namespace TestCentric.Gui.Views
             this.treeSplitter = new System.Windows.Forms.Splitter();
             this.rightPanel = new System.Windows.Forms.Panel();
             this.progressPanel = new System.Windows.Forms.Panel();
-            this.runSummaryDisplay = new TestCentric.Gui.Controls.RunSummaryDisplay();
-            this.runSummaryButton = new System.Windows.Forms.CheckBox();
             this.progressBar = new TestCentric.Gui.Views.ProgressBarView();
             this.resultTabs = new System.Windows.Forms.TabControl();
             this.propertiesTab = new System.Windows.Forms.TabPage();
@@ -428,7 +424,7 @@ namespace TestCentric.Gui.Views
             // nunitTreeMenuItem
             // 
             this.nunitTreeMenuItem.Name = "nunitTreeMenuItem";
-            this.nunitTreeMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.nunitTreeMenuItem.Size = new System.Drawing.Size(141, 22);
             this.nunitTreeMenuItem.Tag = "NUNIT_TREE";
             this.nunitTreeMenuItem.Text = "NUnit Tree";
             this.nunitTreeMenuItem.DropDownItems.AddRange(new ToolStripItem[] { nunitTreeShowNamespaceMenuItem });
@@ -437,7 +433,7 @@ namespace TestCentric.Gui.Views
             // fixtureListMenuItem
             // 
             this.fixtureListMenuItem.Name = "fixtureListMenuItem";
-            this.fixtureListMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.fixtureListMenuItem.Size = new System.Drawing.Size(141, 22);
             this.fixtureListMenuItem.Tag = "FIXTURE_LIST";
             this.fixtureListMenuItem.Text = "Fixture List";
             this.fixtureListMenuItem.DropDownItems.AddRange(new ToolStripItem[] { fixtureListUngroupedMenuItem, fixtureListByCategoryMenuItem, fixtureListByOutcomeMenuItem, fixtureListByDurationMenuItem });
@@ -446,7 +442,7 @@ namespace TestCentric.Gui.Views
             // testListMenuItem
             // 
             this.testListMenuItem.Name = "testListMenuItem";
-            this.testListMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.testListMenuItem.Size = new System.Drawing.Size(141, 22);
             this.testListMenuItem.Tag = "TEST_LIST";
             this.testListMenuItem.Text = "Test List";
             this.testListMenuItem.DropDownItems.AddRange(new ToolStripItem[] { textListUngroupedMenuItem, textListByAssemblyMenuItem, textListByFixtureMenuItem, textListByCategoryMenuItem, textListByOutcomeMenuItem, textListByDurationMenuItem });
@@ -534,11 +530,11 @@ namespace TestCentric.Gui.Views
             // 
             // showFilterButton
             // 
+            this.showFilterButton.CheckOnClick = true;
             this.showFilterButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.showFilterButton.Image = ((System.Drawing.Image)(resources.GetObject("TestFilterButton.Image")));
+            this.showFilterButton.Image = ((System.Drawing.Image)(resources.GetObject("showFilterButton.Image")));
             this.showFilterButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.showFilterButton.Name = "showFilterButton";
-            this.showFilterButton.CheckOnClick = true;
             this.showFilterButton.Size = new System.Drawing.Size(23, 21);
             this.showFilterButton.ToolTipText = "Show/Hide filter";
             // 
@@ -550,6 +546,13 @@ namespace TestCentric.Gui.Views
             this.runParametersButton.Name = "runParametersButton";
             this.runParametersButton.Size = new System.Drawing.Size(23, 21);
             this.runParametersButton.ToolTipText = "Test Run Parameters";
+            // 
+            // nunitTreeShowNamespaceMenuItem
+            // 
+            this.nunitTreeShowNamespaceMenuItem.Name = "nunitTreeShowNamespaceMenuItem";
+            this.nunitTreeShowNamespaceMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.nunitTreeShowNamespaceMenuItem.Tag = "NUNIT_TREE_SHOW_NAMESPACE";
+            this.nunitTreeShowNamespaceMenuItem.Text = "Show Namespace";
             // 
             // mainMenu
             // 
@@ -858,7 +861,7 @@ namespace TestCentric.Gui.Views
             // 
             this.testCentricHelpMenuItem.Name = "testCentricHelpMenuItem";
             this.testCentricHelpMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F1;
-            this.testCentricHelpMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.testCentricHelpMenuItem.Size = new System.Drawing.Size(177, 22);
             this.testCentricHelpMenuItem.Text = "TestCentric ...";
             // 
             // nunitHelpMenuItem
@@ -866,18 +869,18 @@ namespace TestCentric.Gui.Views
             this.nunitHelpMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.nunitHelpMenuItem.Name = "nunitHelpMenuItem";
             this.nunitHelpMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F1)));
-            this.nunitHelpMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.nunitHelpMenuItem.Size = new System.Drawing.Size(177, 22);
             this.nunitHelpMenuItem.Text = "NUnit ...";
             // 
             // helpMenuSeparator1
             // 
             this.helpMenuSeparator1.Name = "helpMenuSeparator1";
-            this.helpMenuSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.helpMenuSeparator1.Size = new System.Drawing.Size(174, 6);
             // 
             // aboutMenuItem
             // 
             this.aboutMenuItem.Name = "aboutMenuItem";
-            this.aboutMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aboutMenuItem.Size = new System.Drawing.Size(177, 22);
             this.aboutMenuItem.Text = "&About TestCentric...";
             // 
             // treeSplitter
@@ -904,40 +907,12 @@ namespace TestCentric.Gui.Views
             // 
             this.progressPanel.AutoSize = true;
             this.progressPanel.BackColor = System.Drawing.SystemColors.Control;
-            this.progressPanel.Controls.Add(this.runSummaryDisplay);
-            this.progressPanel.Controls.Add(this.runSummaryButton);
             this.progressPanel.Controls.Add(this.progressBar);
             this.progressPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.progressPanel.Location = new System.Drawing.Point(0, 0);
             this.progressPanel.Name = "progressPanel";
-            this.progressPanel.Size = new System.Drawing.Size(498, 107);
+            this.progressPanel.Size = new System.Drawing.Size(498, 29);
             this.progressPanel.TabIndex = 3;
-            // 
-            // runSummaryDisplay
-            // 
-            this.runSummaryDisplay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.runSummaryDisplay.BackColor = System.Drawing.Color.LightYellow;
-            this.runSummaryDisplay.Location = new System.Drawing.Point(3, 28);
-            this.runSummaryDisplay.Name = "runSummaryDisplay";
-            this.runSummaryDisplay.Size = new System.Drawing.Size(488, 76);
-            this.runSummaryDisplay.TabIndex = 5;
-            this.runSummaryDisplay.Visible = false;
-            // 
-            // runSummaryButton
-            // 
-            this.runSummaryButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.runSummaryButton.Appearance = System.Windows.Forms.Appearance.Button;
-            this.runSummaryButton.FlatAppearance.BorderSize = 0;
-            this.runSummaryButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.runSummaryButton.Image = ((System.Drawing.Image)(resources.GetObject("runSummaryButton.Image")));
-            this.runSummaryButton.Location = new System.Drawing.Point(472, 4);
-            this.runSummaryButton.Name = "runSummaryButton";
-            this.runSummaryButton.Size = new System.Drawing.Size(19, 19);
-            this.runSummaryButton.TabIndex = 4;
-            this.toolTip.SetToolTip(this.runSummaryButton, "Display Run Summary");
-            this.runSummaryButton.UseVisualStyleBackColor = true;
-            this.runSummaryButton.CheckedChanged += new System.EventHandler(this.runSummaryButton_CheckedChanged);
             // 
             // progressBar
             // 
@@ -950,7 +925,7 @@ namespace TestCentric.Gui.Views
             this.progressBar.Location = new System.Drawing.Point(0, 2);
             this.progressBar.Name = "progressBar";
             this.progressBar.Progress = 0;
-            this.progressBar.Size = new System.Drawing.Size(471, 24);
+            this.progressBar.Size = new System.Drawing.Size(498, 24);
             this.progressBar.Status = TestCentric.Gui.Views.ProgressBarStatus.Success;
             this.progressBar.TabIndex = 3;
             // 
@@ -1011,6 +986,7 @@ namespace TestCentric.Gui.Views
             // 
             this.errorsAndFailuresView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.errorsAndFailuresView1.EnableToolTips = false;
+            this.errorsAndFailuresView1.Header = "Test name";
             this.errorsAndFailuresView1.Location = new System.Drawing.Point(0, 0);
             this.errorsAndFailuresView1.Name = "errorsAndFailuresView1";
             this.errorsAndFailuresView1.Size = new System.Drawing.Size(490, 333);
@@ -1225,11 +1201,7 @@ namespace TestCentric.Gui.Views
         public IChecked ShowHideFilterButton { get; private set; }
         public ICommand RunParametersButton { get; private set; }
 
-        public IChecked RunSummaryButton { get; private set; }
-
         public IDialogManager DialogManager { get; }
-
-        public IRunSummaryDisplay RunSummaryDisplay => runSummaryDisplay;
 
         #region Subordinate Views contained in main form
 
@@ -1292,10 +1264,5 @@ namespace TestCentric.Gui.Views
 
         #endregion
 
-        private void runSummaryButton_CheckedChanged(object sender, EventArgs e)
-        {
-            toolTip.SetToolTip(runSummaryButton, runSummaryButton.Checked ? "Hide Run Summary" : "Display Run Summary");
-        }
     }
 }
-
