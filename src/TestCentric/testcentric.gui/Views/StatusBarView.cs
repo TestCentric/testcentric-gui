@@ -10,93 +10,73 @@ namespace TestCentric.Gui.Views
 {
     public partial class StatusBarView : UserControlView, IStatusBarView
     {
-        private ToolTip _resultSummaryToolTip;
-
         public StatusBarView()
         {
             InitializeComponent();
-            _resultSummaryToolTip = new ToolTip()
-            {
-                IsBalloon = true,
-                UseAnimation = true,
-                UseFading = true,
-            };
         }
 
         public void Initialize(int testCount)
         {
             InvokeIfRequired(() =>
             {
-                testCountPanel.Text = "Tests : " + testCount.ToString();
-                testCountPanel.Visible = true;
-                testsRunPanel.Visible = false;
-                passedPanel.Visible = false;
-                failedPanel.Visible = false;
-                warningsPanel.Visible = false;
-                inconclusivePanel.Visible = false;
-                timePanel.Visible = false;
+                foreach (ToolStripStatusLabel panel in statusStrip1.Controls)
+                    panel.Visible = false;
             });
         }
 
-        public void DisplayText(string text)
+        public override string Text
         {
-            InvokeIfRequired(() =>
-            {
-                StatusLabel.Text = text;
-            });
+            set { StatusLabel.Text = value; }
         }
 
-        public void DisplayTestsRun(int count)
+        public int Passed
         {
-            InvokeIfRequired(() =>
-            {
-                testsRunPanel.Text = "Run : " + count.ToString();
-                testsRunPanel.Visible = true;
-            });
+            set { UpdateCounter(passedPanel, value); }
         }
 
-        public void DisplayPassed(int count)
+        public int Failed
         {
-            InvokeIfRequired(() =>
-            {
-                passedPanel.Text = "Passed : " + count.ToString();
-                passedPanel.Visible = true;
-            });
+            set { UpdateCounter(failedPanel, value); }
         }
 
-        public void DisplayFailed(int count)
+        public int Warnings
         {
-            InvokeIfRequired(() =>
-            {
-                failedPanel.Text = "Failed : " + count.ToString();
-                failedPanel.Visible = true;
-            });
+            set { UpdateCounter(warningsPanel, value); }
         }
 
-        public void DisplayWarnings(int count)
+        public int Inconclusive
         {
-            InvokeIfRequired(() =>
-            {
-                warningsPanel.Text = "Warnings : " + count.ToString();
-                warningsPanel.Visible = true;
-            });
+            set { UpdateCounter(inconclusivePanel, value); }
         }
 
-        public void DisplayInconclusive(int count)
+        public int Ignored
         {
-            InvokeIfRequired(() =>
-            {
-                inconclusivePanel.Text = "Inconclusive : " + count.ToString();
-                inconclusivePanel.Visible = true;
-            });
+            set { UpdateCounter(ignoredPanel, value); }
         }
 
-        public void DisplayDuration(double duration)
+        public int Skipped
+        {
+            set { UpdateCounter(skippedPanel, value); }
+        }
+
+        public double Duration
+        {
+            set 
+            {
+                InvokeIfRequired(() =>
+                {
+                    timePanel.Text = $"{value.ToString("F3")} sec";
+                    timePanel.Visible = true;
+                });
+            }
+        }
+
+        private void UpdateCounter(ToolStripStatusLabel panel, int count)
         {
             InvokeIfRequired(() =>
             {
-                timePanel.Text = $"Duration : {duration.ToString("F3")}s";
-                timePanel.Visible = true;
+                panel.Text = count.ToString();
+                panel.Visible = true;
             });
         }
 

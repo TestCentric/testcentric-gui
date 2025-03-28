@@ -20,12 +20,14 @@ namespace TestCentric.Gui.Presenters
         private IStatusBarView _view;
         private ITestModel _model;
 
-        // Counters are maintained presenter for display by the view.
-        private int _testsRun;
+        // Counters are maintained by presenter and passed to the view for display.
         private int _passedCount;
         private int _failedCount;
         private int _warningCount;
         private int _inconclusiveCount;
+        private int _skippedCount;
+        private int _ignoredCount;
+        private int _explicitCount;
 
         private Dictionary<string, TreeNode> _nodeIndex = new Dictionary<string, TreeNode>();
 
@@ -44,7 +46,7 @@ namespace TestCentric.Gui.Presenters
                 ClearCounters();
 
                 _view.Initialize(ea.Test.TestCount);
-                _view.DisplayText(ea.Test.TestCount > 0 ? "Ready" : "");
+                _view.Text = ea.Test.TestCount > 0 ? "Ready" : "";
             };
 
             _model.Events.TestReloaded += (ea) =>
@@ -52,7 +54,7 @@ namespace TestCentric.Gui.Presenters
                 ClearCounters();
 
                 _view.Initialize(ea.Test.TestCount);
-                _view.DisplayText("Reloaded");
+                _view.Text = "Reloaded";
             };
 
             _model.Events.TestUnloaded += (ea) =>
@@ -60,7 +62,7 @@ namespace TestCentric.Gui.Presenters
                 ClearCounters();
 
                 _view.Initialize(0);
-                _view.DisplayText("Unloaded");
+                _view.Text = "Unloaded";
             };
 
             _model.Events.RunStarting += (ea) =>
@@ -68,42 +70,41 @@ namespace TestCentric.Gui.Presenters
                 ClearCounters();
 
                 _view.Initialize(ea.TestCount);
-                _view.DisplayTestsRun(0);
-                _view.DisplayPassed(0);
-                _view.DisplayFailed(0);
-                _view.DisplayWarnings(0);
-                _view.DisplayInconclusive(0);
-                _view.DisplayDuration(0.0);
             };
 
             _model.Events.RunFinished += (ea) =>
             {
-                _view.DisplayText("Completed");
-                _view.DisplayDuration(ea.Result.Duration);
+                _view.Text = "Completed";
+                _view.Duration = ea.Result.Duration;
             };
 
             _model.Events.TestStarting += (ea) =>
             {
-                _view.DisplayText(ea.Test.FullName);
+                _view.Text = ea.Test.FullName;
             };
 
             _model.Events.TestFinished += (ea) =>
             {
-                _view.DisplayTestsRun(++_testsRun);
-
-                switch (ea.Result.Outcome.Status)
+                var outcome = ea.Result.Outcome;
+                switch (outcome.Status)
                 {
                     case TestStatus.Passed:
-                        _view.DisplayPassed(++_passedCount);
+                        _view.Passed = ++_passedCount;
                         break;
                     case TestStatus.Failed:
-                        _view.DisplayFailed(++_failedCount);
+                        _view.Failed = ++_failedCount;
                         break;
                     case TestStatus.Warning:
-                        _view.DisplayWarnings(++_warningCount);
+                        _view.Warnings = ++_warningCount;
                         break;
                     case TestStatus.Inconclusive:
-                        _view.DisplayInconclusive(++_inconclusiveCount);
+                        _view.Inconclusive = ++_inconclusiveCount;
+                        break;
+                    case TestStatus.Skipped:
+                        if (outcome.Label == "Ignored")
+                            _view.Ignored = ++_ignoredCount;
+                        else
+                            _view.Skipped = ++_skippedCount;
                         break;
                 }
             };
@@ -111,7 +112,13 @@ namespace TestCentric.Gui.Presenters
 
         private void ClearCounters()
         {
-            _testsRun = _passedCount = _failedCount = _warningCount = _inconclusiveCount = 0;
+            _passedCount = 
+            _failedCount = 
+            _warningCount = 
+            _inconclusiveCount = 
+            _skippedCount = 
+            _ignoredCount =
+            _explicitCount = 0;
         }
     }
 }

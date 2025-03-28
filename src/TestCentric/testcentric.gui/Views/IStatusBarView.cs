@@ -10,12 +10,13 @@ namespace TestCentric.Gui.Views
     {
         void Initialize(int count);
 
-        void DisplayText(string text);
-        void DisplayTestsRun(int count);
-        void DisplayPassed(int count);
-        void DisplayFailed(int count);
-        void DisplayWarnings(int count);
-        void DisplayInconclusive(int count);
-        void DisplayDuration(double time);
+        string Text { get; set; }
+        int Passed { set; }
+        int Failed { set; }
+        int Warnings { set; }
+        int Inconclusive { set; }
+        int Ignored { set; }
+        int Skipped { set; }
+        double Duration { set; }
     }
 }
