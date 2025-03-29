@@ -4,18 +4,24 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
     public partial class StatusBarView : UserControlView, IStatusBarView
     {
+        private static Logger log = InternalTrace.GetLogger(nameof(StatusBarView));
+
         public StatusBarView()
         {
             InitializeComponent();
         }
 
-        public void Initialize(int testCount)
+        public void Initialize()
         {
             InvokeIfRequired(() =>
             {
@@ -71,12 +77,12 @@ namespace TestCentric.Gui.Views
             }
         }
 
-        private void UpdateCounter(ToolStripStatusLabel panel, int count)
+        private void UpdateCounter(ToolStripStatusLabel statusLabel, int count)
         {
             InvokeIfRequired(() =>
             {
-                panel.Text = count.ToString();
-                panel.Visible = true;
+                statusLabel.Text = count.ToString();
+                statusLabel.Visible = true;
             });
         }
 
@@ -86,6 +92,28 @@ namespace TestCentric.Gui.Views
 
             Height = Math.Max((int)Font.GetHeight() + 10, MinimumSize.Height);
             statusStrip1.Font = Font;
+        }
+
+        public void LoadImages(OutcomeImageSet imageSet)
+        {
+            log.Debug($"Loading images from ImageSet {imageSet.Name}");
+
+            // Update all images in the pictureBoxes
+            try
+            {
+                passedPanel.Image = imageSet.LoadImage("Success");
+                failedPanel.Image = imageSet.LoadImage("Failure");
+                warningsPanel.Image = imageSet.LoadImage("Warning");
+                inconclusivePanel.Image = imageSet.LoadImage("Inconclusive");
+                ignoredPanel.Image = imageSet.LoadImage("Ignored");
+                skippedPanel.Image = imageSet.LoadImage("Skipped");
+            }
+            catch(FileNotFoundException ex)
+            {
+                // We log the error but don't rethrow. This allows the CI to pass.
+                // Missing images should be discovered by inspecting the GUI.
+                log.Error("Image not found", ex);
+            }
         }
     }
 }

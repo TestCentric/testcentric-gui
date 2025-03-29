@@ -24,7 +24,7 @@ namespace TestCentric.Gui.Presenters
         {
             FireTestLoadedEvent(new TestNode("<test-run id='2' testcasecount='123' />"));
 
-            _view.Received().Initialize(123);
+            _view.Received().Initialize();
             _view.Received().Text = "Ready";
         }
 
@@ -33,7 +33,7 @@ namespace TestCentric.Gui.Presenters
         {
             FireTestReloadedEvent(new TestNode("<test-run id='2' testcasecount='123' />"));
 
-            _view.Received().Initialize(123);
+            _view.Received().Initialize();
             _view.Received().Text = "Reloaded";
         }
 
@@ -42,7 +42,7 @@ namespace TestCentric.Gui.Presenters
         {
             FireTestUnloadedEvent();
 
-            _view.Received().Initialize(0);
+            _view.Received().Initialize();
             _view.Received().Text = "Unloaded";
         }
 
@@ -51,7 +51,7 @@ namespace TestCentric.Gui.Presenters
         {
             FireRunStartingEvent(1234);
 
-            _view.Received().Initialize(1234);
+            _view.Received().Initialize();
         }
 
         [Test]

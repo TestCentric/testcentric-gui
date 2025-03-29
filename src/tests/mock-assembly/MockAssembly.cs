@@ -55,6 +55,7 @@ namespace TestCentric.Tests
 
             public static int Errors = MockTestFixture.Errors;
             public static int Failures = MockTestFixture.Failures;
+            public static int Warnings = MockTestFixture.Warnings;
 
             public static int Categories = MockTestFixture.Categories;
 
@@ -75,7 +76,7 @@ namespace TestCentric.Tests
         [Category("FixtureCategory")]
         public class MockTestFixture
         {
-            public static readonly int Tests = 12;
+            public static readonly int Tests = 13;
             public static readonly int Suites = 1;
 
             public static readonly int Ignored = 1;
@@ -87,6 +88,7 @@ namespace TestCentric.Tests
 
             public static readonly int Failures = 1;
             public static readonly int Errors = 1;
+            public static readonly int Warnings = 1;
 
             public static readonly int Categories = 5;
             public static readonly int MockCategoryTests = 2;
@@ -116,6 +118,12 @@ namespace TestCentric.Tests
             public void FailingTest()
             {
                 Assert.Fail("Intentional failure");
+            }
+
+            [Test]
+            public void WarningTest()
+            {
+                Assert.Warn("Consider yourself warned!");
             }
 
             [Test, Property("TargetMethod", "SomeClassName"), Property("Size", 5), Property("TargetType", "SomeType"), Property("Priority", "3"), Property("User", "Somebody")]

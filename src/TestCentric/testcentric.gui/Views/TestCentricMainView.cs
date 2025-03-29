@@ -28,7 +28,7 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.Panel testPanel;
         private TestCentric.Gui.Views.TestTreeView treeView;
         private TabControl resultTabs;
-        private StatusBarView statusBar;
+        private TestCentric.Gui.Views.StatusBarView statusBar;
         private TestPropertiesView propertiesView;
 
         private System.Windows.Forms.ToolTip toolTip;
@@ -1206,11 +1206,11 @@ namespace TestCentric.Gui.Views
 
         public ITestTreeView TreeView => treeView;
 
-        public ProgressBarView ProgressBarView => progressBar;
+        public IProgressBarView ProgressBarView => progressBar;
 
-        public StatusBarView StatusBarView => statusBar;
+        public IStatusBarView StatusBarView => statusBar;
 
-        public TestPropertiesView TestPropertiesView => propertiesView;
+        public ITestPropertiesView TestPropertiesView => propertiesView;
 
         public ITestResultSubView TestResultSubView => errorsAndFailuresView1.TestResultSubView;
 

@@ -79,8 +79,6 @@ namespace TestCentric.Gui.Presenters
 
             _view.Font = _settings.Gui.Font;
 
-            _view.TreeView.OutcomeImages = ImageSetManager.LoadImageSet(_model.Settings.Gui.TestTree.AlternateImageSet);
-
             UpdateViewCommands();
             UpdateTreeDisplayMenuItem();
             UpdateRunSelectedTestsTooltip();
@@ -200,6 +198,7 @@ namespace TestCentric.Gui.Presenters
                 UpdateViewCommands();
 
                 string resultPath = Path.Combine(_model.WorkDirectory, "TestResult.xml");
+                log.Debug($"Saving result to {resultPath}");
                 _model.SaveResults(resultPath);
                 _view.ResultTabs.InvokeIfRequired(() => _view.ResultTabs.SelectedIndex = 1);
 

@@ -8,8 +8,9 @@ namespace TestCentric.Gui.Views
     // Interface is used by presenter and tests
     public interface IStatusBarView
     {
-        void Initialize(int count);
+        void Initialize();
 
+        bool Visible { get; set; }
         string Text { get; set; }
         int Passed { set; }
         int Failed { set; }
@@ -18,5 +19,7 @@ namespace TestCentric.Gui.Views
         int Ignored { set; }
         int Skipped { set; }
         double Duration { set; }
+
+        void LoadImages(OutcomeImageSet imageSet);
     }
 }

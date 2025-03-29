@@ -14,9 +14,6 @@ using TestCentric.Engine;
 
 namespace TestCentric.Gui
 {
-    /// <summary>
-    /// An ImageSet holds a group of images used as icons in various parts of the GUI.
-    /// </summary>
     public class OutcomeImageSet
     {
         private static readonly string[] REQUIRED_FILES = new[] {
@@ -47,6 +44,8 @@ namespace TestCentric.Gui
         // Counter used for testing
         public int LoadCount { get; private set; } = 0;
 
+        private Dictionary<string, Image> _images = new Dictionary<string, Image>();
+
         public Image LoadImage(string imgName)
         {
             if (_images.ContainsKey(imgName))
@@ -56,7 +55,5 @@ namespace TestCentric.Gui
             
             return _images[imgName] = Image.FromFile(Path.Combine(_imageSetDir, imgName + ".png"));
         }
-
-        private Dictionary<string, Image> _images = new Dictionary<string, Image>();
     }
 }

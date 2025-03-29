@@ -33,6 +33,10 @@ namespace TestCentric.Gui.Presenters
             _settings = new Fakes.UserSettings();
             _model.Settings.Returns(_settings);
 
+            Assert.That(_mainView.TreeView, Is.Not.Null);
+            Assert.That(_mainView.TestResultSubView, Is.Not.Null);
+            Assert.That(_mainView.StatusBarView, Is.Not.Null);
+
             _manager = new ImageSetManager(_model, _mainView);
         }
 
@@ -66,15 +70,21 @@ namespace TestCentric.Gui.Presenters
         }
 
         [Test]
-        public void WhenManagerIsCreated_TreeView_ImageSetIsSet()
+        public void WhenManagerIsCreated_TreeViewImagesAreSet()
         {
             _mainView.TreeView.Received().OutcomeImages = Arg.Is<OutcomeImageSet>((set) => set.Name == "Default");
         }
 
         [Test]
-        public void WhenManagerIsCreated_TestResult_ImageSetIsSet()
+        public void WhenManagerIsCreated_TestResultImagesAreSet()
         {
             _mainView.TestResultSubView.Received().LoadImages(Arg.Is<OutcomeImageSet>((set) => set.Name == "Default"));
+        }
+
+        [Test]
+        public void WhenManagerIsCreated_StatusBarImagesAreSet()
+        {
+            _mainView.StatusBarView.Received().LoadImages(Arg.Is<OutcomeImageSet>((set) => set.Name == "Default"));
         }
 
         [Test]
@@ -101,6 +111,19 @@ namespace TestCentric.Gui.Presenters
             Assert.That(_manager.CurrentImageSet.Name, Is.EqualTo(newImageSet));
 
             _mainView.TestResultSubView.Received().LoadImages(Arg.Is<OutcomeImageSet>((set) => set.Name == newImageSet));
+        }
+
+        [Test]
+        public void WhenImageSetChanges_StatusBarImagesAreSet()
+        {
+            _mainView.StatusBarView.ClearReceivedCalls();
+            string newImageSet = "Visual Studio";
+            _settings.Gui.TestTree.AlternateImageSet = newImageSet;
+
+            Raise.Event<Model.Settings.SettingsEventHandler>(this, "Gui.TestTree.AlternateImageSet");
+            Assert.That(_manager.CurrentImageSet.Name, Is.EqualTo(newImageSet));
+
+            _mainView.StatusBarView.Received().LoadImages(Arg.Is<OutcomeImageSet>((set) => set.Name == newImageSet));
         }
     }
 }

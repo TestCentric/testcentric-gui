@@ -34,10 +34,10 @@ namespace TestCentric.Gui.Views
             this.passedPanel = new System.Windows.Forms.ToolStripStatusLabel();
             this.failedPanel = new System.Windows.Forms.ToolStripStatusLabel();
             this.warningsPanel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.ignoredPanel = new System.Windows.Forms.ToolStripStatusLabel();
             this.inconclusivePanel = new System.Windows.Forms.ToolStripStatusLabel();
             this.skippedPanel = new System.Windows.Forms.ToolStripStatusLabel();
             this.timePanel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.ignoredPanel = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -61,7 +61,7 @@ namespace TestCentric.Gui.Views
             // StatusLabel
             // 
             this.StatusLabel.Name = "StatusLabel";
-            this.StatusLabel.Size = new System.Drawing.Size(215, 20);
+            this.StatusLabel.Size = new System.Drawing.Size(258, 20);
             this.StatusLabel.Spring = true;
             this.StatusLabel.Text = "Ready";
             this.StatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -98,6 +98,16 @@ namespace TestCentric.Gui.Views
             this.warningsPanel.Text = "0";
             this.warningsPanel.Visible = false;
             // 
+            // ignoredPanel
+            // 
+            this.ignoredPanel.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.ignoredPanel.BorderStyle = System.Windows.Forms.Border3DStyle.Etched;
+            this.ignoredPanel.Image = ((System.Drawing.Image)(resources.GetObject("ignoredPanel.Image")));
+            this.ignoredPanel.Name = "ignoredPanel";
+            this.ignoredPanel.Size = new System.Drawing.Size(33, 20);
+            this.ignoredPanel.Text = "0";
+            this.ignoredPanel.Visible = false;
+            // 
             // inconclusivePanel
             // 
             this.inconclusivePanel.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
@@ -110,9 +120,11 @@ namespace TestCentric.Gui.Views
             // 
             // skippedPanel
             // 
+            this.skippedPanel.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
+            this.skippedPanel.BorderStyle = System.Windows.Forms.Border3DStyle.Etched;
             this.skippedPanel.Image = ((System.Drawing.Image)(resources.GetObject("skippedPanel.Image")));
             this.skippedPanel.Name = "skippedPanel";
-            this.skippedPanel.Size = new System.Drawing.Size(29, 20);
+            this.skippedPanel.Size = new System.Drawing.Size(33, 20);
             this.skippedPanel.Text = "0";
             this.skippedPanel.Visible = false;
             // 
@@ -126,14 +138,6 @@ namespace TestCentric.Gui.Views
             this.timePanel.Text = "Time : 0.0";
             this.timePanel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.timePanel.Visible = false;
-            // 
-            // ignoredPanel
-            // 
-            this.ignoredPanel.Image = ((System.Drawing.Image)(resources.GetObject("ignoredPanel.Image")));
-            this.ignoredPanel.Name = "ignoredPanel";
-            this.ignoredPanel.Size = new System.Drawing.Size(29, 20);
-            this.ignoredPanel.Text = "0";
-            this.ignoredPanel.Visible = false;
             // 
             // StatusBarView
             // 

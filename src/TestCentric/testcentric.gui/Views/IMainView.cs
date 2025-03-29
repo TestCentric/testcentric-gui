@@ -83,11 +83,11 @@ namespace TestCentric.Gui.Views
         IChecked ShowHideFilterButton { get; }
         ICommand RunParametersButton { get; }
 
-        // SubViews
+        // SubViews accessible from the main view or presenter
         ITestTreeView TreeView { get; }
-        StatusBarView StatusBarView { get; }
-        ProgressBarView ProgressBarView { get; }
-        TestPropertiesView TestPropertiesView { get; }
+        IStatusBarView StatusBarView { get; }
+        IProgressBarView ProgressBarView { get; }
+        ITestPropertiesView TestPropertiesView { get; }
         ITestResultSubView TestResultSubView { get; }
         IMessageDisplay MessageDisplay { get; }
 

@@ -9,6 +9,7 @@ using System.Windows.Forms;
 namespace TestCentric.Gui.Presenters
 {
     using Model;
+    using Model.Settings;
     using Views;
 
     /// <summary>
@@ -45,7 +46,7 @@ namespace TestCentric.Gui.Presenters
             {
                 ClearCounters();
 
-                _view.Initialize(ea.Test.TestCount);
+                _view.Initialize();
                 _view.Text = ea.Test.TestCount > 0 ? "Ready" : "";
             };
 
@@ -53,7 +54,7 @@ namespace TestCentric.Gui.Presenters
             {
                 ClearCounters();
 
-                _view.Initialize(ea.Test.TestCount);
+                _view.Initialize();
                 _view.Text = "Reloaded";
             };
 
@@ -61,7 +62,7 @@ namespace TestCentric.Gui.Presenters
             {
                 ClearCounters();
 
-                _view.Initialize(0);
+                _view.Initialize();
                 _view.Text = "Unloaded";
             };
 
@@ -69,7 +70,7 @@ namespace TestCentric.Gui.Presenters
             {
                 ClearCounters();
 
-                _view.Initialize(ea.TestCount);
+                _view.Initialize();
             };
 
             _model.Events.RunFinished += (ea) =>

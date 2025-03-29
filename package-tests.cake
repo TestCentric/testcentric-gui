@@ -13,7 +13,7 @@ public static void DefinePackageTests()
     // Tests of single assemblies targeting each runtime we support
 
     PackageTests.Add(new PackageTest(1, "Net462Test", "Run net462 mock-assembly.dll under .NET 4.6.2",
-        "net462/mock-assembly.dll",
+        "net462/mock-assembly.dll --trace:Debug",
         MockAssemblyExpectedResult("Net462AgentLauncher")));
 
     PackageTests.Add(new PackageTest(1, "Net462X86Test", "Run net462 mock-assembly-x86.dll under .NET 4.6.2",
@@ -38,19 +38,6 @@ public static void DefinePackageTests()
             "netcoreapp3.1/mock-assembly.dll",
             MockAssemblyExpectedResult("Net60AgentLauncher")));
     }
-
-    //    PackageTests.Add(new PackageTest(1, "NetCore11Test", "Run mock-assembly.dll targeting .NET Core 1.1",
-    //        "netcoreapp1.1/mock-assembly.dll",
-    //        new ExpectedResult("Failed")
-    //        {
-    //Total = 41,
-    //Passed = 22,
-    //Failed = 7,
-    //Warnings = 0,
-    //Inconclusive = 5,
-    //Skipped = 7,
-    //Assemblies = new[] { new ExpectedAssemblyResult("mock-assembly.dll", "netcore-1.1") }
-    //        }));
 
     if (BuildSettings.IsLocalBuild)
         PackageTests.Add(new PackageTest(1, "Net50Test", "Run mock-assembly.dll under .NET 5.0",
@@ -92,41 +79,41 @@ public static void DefinePackageTests()
         "net6.0/aspnetcore-test.dll",
         new ExpectedResult("Passed")
         {
-            Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net60AgentLauncher") }
+            Assemblies = new[] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net60AgentLauncher") }
         }));
 
     PackageTests.Add(new PackageTest(1, "AspNetCore70Test", "Run test using AspNetCore under .NET 7.0",
         "net7.0/aspnetcore-test.dll",
         new ExpectedResult("Passed")
         {
-            Assemblies = new [] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net80AgentLauncher") }
+            Assemblies = new[] { new ExpectedAssemblyResult("aspnetcore-test.dll", "Net80AgentLauncher") }
         }));
 
-	// Windows Forms Tests
+    // Windows Forms Tests
 
     if (BuildSettings.IsLocalBuild)
         PackageTests.Add(new PackageTest(1, "Net50WindowsFormsTest", "Run test using windows forms under .NET 5.0",
             "net5.0-windows/windows-forms-test.dll",
             new ExpectedResult("Passed")
             {
-                Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net60AgentLauncher") }
+                Assemblies = new[] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net60AgentLauncher") }
             }));
 
     PackageTests.Add(new PackageTest(1, "Net60WindowsFormsTest", "Run test using windows forms under .NET 6.0",
         "net6.0-windows/windows-forms-test.dll",
         new ExpectedResult("Passed")
         {
-            Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net60AgentLauncher") }
+            Assemblies = new[] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net60AgentLauncher") }
         }));
 
     PackageTests.Add(new PackageTest(1, "Net70WindowsFormsTest", "Run test using windows forms under .NET 7.0",
         "net7.0-windows/windows-forms-test.dll",
         new ExpectedResult("Passed")
         {
-            Assemblies = new [] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net80AgentLauncher") }
+            Assemblies = new[] { new ExpectedAssemblyResult("windows-forms-test.dll", "Net80AgentLauncher") }
         }));
 
-	// Multiple assembly tests
+    // Multiple assembly tests
 
     PackageTests.Add(new PackageTest(1, "Net462PlusNet35Test", "Run .NET 4.6.2 and .NET 3.5 builds of mock-assembly.dll together",
         "net462/mock-assembly.dll net35/mock-assembly.dll",
@@ -136,7 +123,7 @@ public static void DefinePackageTests()
         "net462/mock-assembly.dll net6.0/mock-assembly.dll",
         MockAssemblyExpectedResult("Net462AgentLauncher", "Net60AgentLauncher")));
 
-	// TODO: Suppress V2 tests until driver is working
+    // TODO: Suppress V2 tests until driver is working
     //PackageTests.Add(new PackageTest(1, "NUnitV2Test", "Run mock-assembly.dll built for NUnit V2",
     //	"v2-tests/mock-assembly.dll",
     //	new ExpectedResult("Failed")
@@ -173,10 +160,10 @@ public static void DefinePackageTests()
 
         return new ExpectedResult("Failed")
         {
-            Total = 41 * ncopies,
+            Total = 42 * ncopies,
             Passed = 22 * ncopies,
             Failed = 7 * ncopies,
-            Warnings = 0 * ncopies,
+            Warnings = 1 * ncopies,
             Inconclusive = 5 * ncopies,
             Skipped = 7 * ncopies,
             Assemblies = assemblies
