@@ -18,7 +18,7 @@ namespace TestCentric.Gui.Dialogs
         {
             TreeBasedSettingsDialog.Display(presenter, model,
             new GuiSettingsPage("General"),
-            new TreeSettingsPage("Tree Display"),
+            new TreeSettingsPage("Tree Display", presenter.ImageSetManager),
             new AdvancedLoaderSettingsPage("Assembly Load Settings"),
             new AssemblyReloadSettingsPage("Automatic Reload"),
             new ProjectEditorSettingsPage("Project Editor"));

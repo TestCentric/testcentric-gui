@@ -18,7 +18,7 @@ namespace TestCentric.Gui.Views
         /// <summary>
         /// Load test outcome images 'Passed', 'Failed'...
         /// </summary>
-        void LoadImages(string imageSet);
+        void LoadImages(OutcomeImageSet imageSet);
 
         /// <summary>
         /// View is separated in two section: Caption and detail section

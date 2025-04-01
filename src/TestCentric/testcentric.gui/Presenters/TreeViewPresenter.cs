@@ -40,7 +40,7 @@ namespace TestCentric.Gui.Presenters
 
             _view.ShowCheckBoxes.Checked = _view.CheckBoxes = _treeSettings.ShowCheckBoxes;
             _view.ShowTestDuration.Checked = _treeSettings.ShowTestDuration;
-            _view.AlternateImageSet = _treeSettings.AlternateImageSet;
+
             UpdateTreeViewSortMode();
 
             WireUpEvents();
@@ -128,15 +128,11 @@ namespace TestCentric.Gui.Presenters
             {
                 switch (e.SettingName)
                 {
-                    case "TestCentric.Gui.TestTree.AlternateImageSet":
-                        _view.AlternateImageSet = _treeSettings.AlternateImageSet;
-                        break;
                     case "TestCentric.Gui.TestTree.DisplayFormat":
-                        {
-                            Strategy = _treeDisplayStrategyFactory.Create(_treeSettings.DisplayFormat, _view, _model);
-                            Strategy.Reload();
-                            break;
-                        }
+                        Strategy = _treeDisplayStrategyFactory.Create(_treeSettings.DisplayFormat, _view, _model);
+                        Strategy.Reload();
+                        break;
+
                     case "TestCentric.Gui.TestTree.TestList.GroupBy":
                     case "TestCentric.Gui.TestTree.FixtureList.GroupBy":
                     case "TestCentric.Gui.TestTree.ShowNamespace":
@@ -145,10 +141,12 @@ namespace TestCentric.Gui.Presenters
                     case "TestCentric.Gui.TestTree.ShowCheckBoxes":
                         _view.ShowCheckBoxes.Checked = _treeSettings.ShowCheckBoxes;
                         break;
+
                     case "TestCentric.Gui.GuiLayout":
                         if (_model.Settings.Gui.GuiLayout == "Full")
                             ClosePropertiesDisplay();
                         break;
+
                     case "TestCentric.Gui.TestTree.ShowFilter":
                         _view.SetTestFilterVisibility(_model.Settings.Gui.TestTree.ShowFilter);
                         break;

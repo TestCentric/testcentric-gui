@@ -16,22 +16,6 @@ namespace TestCentric.Gui.Presenters
     public class TestResultSubViewPresenterTests
     {
         [Test]
-        public void Constructor_CallsLoadImages()
-        {
-            // 1. Arrange
-            ITestResultSubView view = Substitute.For<ITestResultSubView>();
-            ITestModel model = Substitute.For<ITestModel>();
-            var settings = new FakeUserSettings();
-            model.Settings.Returns(settings);
-
-            // 2. Act
-            TestResultSubViewPresenter presenter = new TestResultSubViewPresenter(view, model);
-
-            // 3. Assert
-            view.Received().LoadImages(model.Settings.Gui.TestTree.AlternateImageSet);
-        }
-
-        [Test]
         public void Clear_ClearsView()
         {
             // 1. Arrange
@@ -92,23 +76,6 @@ namespace TestCentric.Gui.Presenters
             view.DidNotReceive().ShrinkToCaption();
 
             view.Received().UpdateDetailSection(Arg.Any<TestResultCounts>());
-        }
-
-        [Test]
-        public void SettingsChanged_AlternateImageSet_LoadImagesIsCalled()
-        {
-            // 1. Arrange
-            ITestResultSubView view = Substitute.For<ITestResultSubView>();
-            ITestModel model = Substitute.For<ITestModel>();
-            var settings = new FakeUserSettings();
-            model.Settings.Returns(settings);
-
-            // 2. Act
-            TestResultSubViewPresenter presenter = new TestResultSubViewPresenter(view, model);
-            settings.Gui.TestTree.AlternateImageSet = "Classic";
-
-            // 3. Assert
-            view.Received().LoadImages("Classic");
         }
     }
 }

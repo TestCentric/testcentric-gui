@@ -6,18 +6,12 @@
 using NUnit.Framework;
 using NSubstitute;
 using System.Collections;
+using NSubstitute.Core.Arguments;
 
 namespace TestCentric.Gui.Presenters.TestTree
 {
     public class WhenPresenterIsCreated : TreeViewPresenterTestBase
     {
-        [Test]
-        public void AlternateImageSetIsSet()
-        {
-            string imageSet = _settings.Gui.TestTree.AlternateImageSet;
-            _view.Received().AlternateImageSet = imageSet;
-        }
-
         [Test]
         public void ShowCheckBoxesIsSet()
         {
