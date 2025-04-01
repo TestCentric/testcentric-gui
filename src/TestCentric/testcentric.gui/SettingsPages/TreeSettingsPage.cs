@@ -7,6 +7,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using TestCentric.Gui.Presenters;
 
 namespace TestCentric.Gui.SettingsPages
 {
@@ -30,11 +31,14 @@ namespace TestCentric.Gui.SettingsPages
         private static readonly string[] imageExtensions = { ".png", ".jpg" };
 
         private static string treeImageDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.Combine("Images", "Tree"));
+        private ImageSetManager _imageSetManager;
 
-        public TreeSettingsPage(string key) : base(key)
+        public TreeSettingsPage(string key, ImageSetManager imageSetManager) : base(key)
         {
             // This call is required by the Windows Form Designer.
             InitializeComponent();
+
+            _imageSetManager = imageSetManager;
         }
 
         private bool IsValidImageSet(string dir)
@@ -256,18 +260,10 @@ namespace TestCentric.Gui.SettingsPages
             initialDisplayComboBox.SelectedIndex = Settings.Gui.TestTree.InitialTreeDisplay;
             showCheckBoxesCheckBox.Checked = Settings.Gui.TestTree.ShowCheckBoxes;
 
-            string[] altDirs = Directory.Exists(treeImageDir)
-                ? Directory.GetDirectories(treeImageDir)
-                : new string[0];
+            foreach (string imageSetName in _imageSetManager.ImageSets.Keys)
+                imageSetListBox.Items.Add(imageSetName);
 
-            foreach (string altDir in altDirs)
-            {
-                if (IsValidImageSet(altDir))
-                    imageSetListBox.Items.Add(Path.GetFileName(altDir));
-            }
-            string imageSet = Settings.Gui.TestTree.AlternateImageSet;
-            if (imageSetListBox.Items.Contains(imageSet))
-                imageSetListBox.SelectedItem = imageSet;
+            imageSetListBox.SelectedItem = _imageSetManager.CurrentImageSet.Name;
         }
 
         public override void ApplySettings()
@@ -281,34 +277,14 @@ namespace TestCentric.Gui.SettingsPages
 
         private void imageSetListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string imageSet = imageSetListBox.SelectedItem as string;
+            string imageSetName = imageSetListBox.SelectedItem as string;
+            OutcomeImageSet imageSet = _imageSetManager.LoadImageSet(imageSetName);
 
-            if (imageSet != null)
-                DisplayImageSet(imageSet);
-        }
-
-        private void DisplayImageSet(string imageSet)
-        {
-            string imageSetDir = Path.Combine(treeImageDir, imageSet);
-
-            DisplayImage(imageSetDir, "Success", successImage);
-            DisplayImage(imageSetDir, "Failure", failureImage);
-            DisplayImage(imageSetDir, "Ignored", ignoredImage);
-            DisplayImage(imageSetDir, "Inconclusive", inconclusiveImage);
-            DisplayImage(imageSetDir, "Skipped", skippedImage);
-        }
-
-        private void DisplayImage(string imageDir, string filename, PictureBox box)
-        {
-            foreach (string ext in imageExtensions)
-            {
-                string filePath = Path.Combine(imageDir, filename + ext);
-                if (File.Exists(filePath))
-                {
-                    box.Load(filePath);
-                    break;
-                }
-            }
+            successImage.Image = imageSet.LoadImage("Success");
+            failureImage.Image = imageSet.LoadImage("Failure");
+            ignoredImage.Image = imageSet.LoadImage("Ignored");
+            inconclusiveImage.Image = imageSet.LoadImage("Inconclusive");
+            skippedImage.Image = imageSet.LoadImage("Skipped");
         }
     }
 }

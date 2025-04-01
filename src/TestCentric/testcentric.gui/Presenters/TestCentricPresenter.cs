@@ -76,8 +76,11 @@ namespace TestCentric.Gui.Presenters
             _settings = _model.Settings;
 
             _agentSelectionController = new AgentSelectionController(_model, _view);
+            ImageSetManager = new ImageSetManager(_model, _view);
 
             _view.Font = _settings.Gui.Font;
+
+            _view.TreeView.OutcomeImages = ImageSetManager.LoadImageSet(_model.Settings.Gui.TestTree.AlternateImageSet);
 
             UpdateViewCommands();
             UpdateTreeDisplayMenuItem();
@@ -637,7 +640,13 @@ namespace TestCentric.Gui.Presenters
 
         #endregion
 
-        #region Public Methods
+        #region Public Properties and Methods
+
+        #region Properties
+
+        public ImageSetManager ImageSetManager { get; }
+
+        #endregion
 
         #region Project Management
 

@@ -46,7 +46,7 @@ namespace TestCentric.Gui.Views
 
         bool CheckBoxes { get; set; }
 
-        string AlternateImageSet { get; set; }
+        OutcomeImageSet OutcomeImages { get; set; }
         int VisibleNodeCount { get; }
         TreeNode TopNode { get; set; }
 

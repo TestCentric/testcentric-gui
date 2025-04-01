@@ -54,15 +54,6 @@ namespace TestCentric.Gui.Presenters.TestTree
             _view.Received().SetTestFilterVisibility(show);
         }
 
-        [TestCase("Default")]
-        [TestCase("VisualStudio")]
-        public void WhenSettingsAreChanged_AlternateImageSet_NewSettingIsApplied(string imageSet)
-        {
-            _model.Settings.Gui.TestTree.AlternateImageSet = imageSet;
-
-            Assert.That(_view.AlternateImageSet, Is.EqualTo(imageSet));
-        }
-
         [TestCase(false)]
         [TestCase(true)]
         public void WhenContextMenu_ShowTestDuration_IsClicked_SettingsIsUpdated(bool showTestDuration)
@@ -401,7 +392,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         }
 
         [Test]
-        public void WhenContextMenuIsDisplayed_ConextNode_IsNull_RemoveTestPackageCommandContextMenu_IsNotVisible()
+        public void WhenContextMenuIsDisplayed_ContextNode_IsNull_RemoveTestPackageCommandContextMenu_IsNotVisible()
         {
             // 1. Arrange
             _view.ContextNode.Returns((TreeNode)null);

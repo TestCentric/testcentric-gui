@@ -34,25 +34,15 @@ namespace TestCentric.Gui.Views
         }
 
 
-        public void LoadImages(string imageSet)
+        public void LoadImages(OutcomeImageSet imageSet)
         {
-            string[] imageNames = { "Skipped", "Inconclusive", "Success", "Ignored", "Failure" };
-            string imageDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
-                Path.Combine("Images", Path.Combine("Tree", imageSet)));
-
-            // 1. Load all images once
-            IDictionary<string, Image> images = new Dictionary<string, Image>();
-            foreach (string imageName in imageNames)
-                images[imageName] = LoadAlternateImage(imageName, imageDir);
-
-            // 2. Update all images in the pictureBoxes
-            passedPictureBox.Image = images["Success"];
-            failedPictureBox.Image = images["Failure"];
-            warningsPictureBox.Image = images["Ignored"];
-            inconclusivePictureBox.Image = images["Inconclusive"];
-            ignoredPictureBox.Image = images["Ignored"];
-            skippedPictureBox.Image = images["Skipped"];
-            notRunPictureBox.Image = images["Skipped"];
+            passedPictureBox.Image = imageSet.LoadImage("Success");
+            failedPictureBox.Image = imageSet.LoadImage("Failure");
+            warningsPictureBox.Image = imageSet.LoadImage("Ignored");
+            inconclusivePictureBox.Image = imageSet.LoadImage("Inconclusive");
+            ignoredPictureBox.Image = imageSet.LoadImage("Ignored");
+            skippedPictureBox.Image = imageSet.LoadImage("Skipped");
+            notRunPictureBox.Image = imageSet.LoadImage("Skipped");
         }
 
         public void UpdateCaption(TestResultCounts testCounts, ResultNode result)

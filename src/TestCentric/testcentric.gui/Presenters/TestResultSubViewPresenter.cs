@@ -31,10 +31,6 @@ namespace TestCentric.Gui.Presenters
         {
             _view = view;
             _model = model;
-
-            string imageSet = _model.Settings.Gui.TestTree.AlternateImageSet;
-            _view.LoadImages(imageSet);
-            WireUpEvents();
         }
 
         /// <summary>
@@ -63,15 +59,6 @@ namespace TestCentric.Gui.Presenters
             }
 
             _view.UpdateDetailSection(summary);
-        }
-
-        private void WireUpEvents()
-        {
-            _model.Settings.Changed += (object sender, SettingsEventArgs e) =>
-            {
-                if (e.SettingName == "TestCentric.Gui.TestTree.AlternateImageSet")
-                    _view.LoadImages(_model.Settings.Gui.TestTree.AlternateImageSet);
-            };
         }
     }
 }

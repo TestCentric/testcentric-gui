@@ -90,6 +90,7 @@ namespace TestCentric.Gui.Views
         StatusBarView StatusBarView { get; }
         ProgressBarView ProgressBarView { get; }
         TestPropertiesView TestPropertiesView { get; }
+        ITestResultSubView TestResultSubView { get; }
         IMessageDisplay MessageDisplay { get; }
 
         // Dialog Manager

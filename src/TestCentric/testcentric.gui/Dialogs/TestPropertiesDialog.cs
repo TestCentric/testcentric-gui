@@ -6,7 +6,7 @@
 // TODO: Code using TestPropertiesPresenter currently fails. It would be nice
 // to make it work as it saves about 100 lines of partially duplicated code.
 // Presenter fails when opening the dialog for the second time.
-//#define USING_PRESENTER
+#define USING_PRESENTER
 
 using System;
 using System.ComponentModel;

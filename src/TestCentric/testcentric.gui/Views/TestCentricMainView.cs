@@ -113,7 +113,7 @@ namespace TestCentric.Gui.Views
         private ToolStripMenuItem openProjectMenuItem;
         private ToolStripMenuItem saveProjectMenuItem;
         private ToolStripSeparator toolStripSeparator6;
-        private TextOutputView textOutputView1;
+        private TextOutputView textOutputView;
 
         #endregion
 
@@ -297,7 +297,7 @@ namespace TestCentric.Gui.Views
             this.errorTab = new System.Windows.Forms.TabPage();
             this.errorsAndFailuresView1 = new TestCentric.Gui.Views.ErrorsAndFailuresView();
             this.outputTab = new System.Windows.Forms.TabPage();
-            this.textOutputView1 = new TestCentric.Gui.Views.TextOutputView();
+            this.textOutputView = new TestCentric.Gui.Views.TextOutputView();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.leftPanel = new System.Windows.Forms.Panel();
             this.testPanel = new System.Windows.Forms.Panel();
@@ -1022,7 +1022,7 @@ namespace TestCentric.Gui.Views
             // 
             // outputTab
             // 
-            this.outputTab.Controls.Add(this.textOutputView1);
+            this.outputTab.Controls.Add(this.textOutputView);
             this.outputTab.Location = new System.Drawing.Point(4, 4);
             this.outputTab.Name = "outputTab";
             this.outputTab.Size = new System.Drawing.Size(490, 333);
@@ -1032,12 +1032,12 @@ namespace TestCentric.Gui.Views
             // 
             // textOutputView1
             // 
-            this.textOutputView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textOutputView1.Location = new System.Drawing.Point(0, 0);
-            this.textOutputView1.Name = "textOutputView1";
-            this.textOutputView1.Size = new System.Drawing.Size(490, 333);
-            this.textOutputView1.TabIndex = 0;
-            this.textOutputView1.WordWrap = true;
+            this.textOutputView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textOutputView.Location = new System.Drawing.Point(0, 0);
+            this.textOutputView.Name = "textOutputView1";
+            this.textOutputView.Size = new System.Drawing.Size(490, 333);
+            this.textOutputView.TabIndex = 0;
+            this.textOutputView.WordWrap = true;
             // 
             // leftPanel
             // 
@@ -1060,7 +1060,6 @@ namespace TestCentric.Gui.Views
             // treeView
             // 
             this.treeView.AllowDrop = true;
-            this.treeView.AlternateImageSet = null;
             this.treeView.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.treeView.CheckBoxes = false;
             this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1242,9 +1241,11 @@ namespace TestCentric.Gui.Views
 
         public TestPropertiesView TestPropertiesView => propertiesView;
 
+        public ITestResultSubView TestResultSubView => errorsAndFailuresView1.TestResultSubView;
+
         public ErrorsAndFailuresView ErrorsAndFailuresView { get { return errorsAndFailuresView1; } }
 
-        public ITextOutputView TextOutputView { get { return textOutputView1; } }
+        public ITextOutputView TextOutputView { get { return textOutputView; } }
 
         #endregion
 
