@@ -66,7 +66,6 @@ namespace TestCentric.Gui.Presenters
 
         #region Constructor
 
-        // TODO: Use an interface for view
         public TestCentricPresenter(IMainView view, ITestModel model, CommandLineOptions options)
         {
             _view = view;
@@ -79,8 +78,6 @@ namespace TestCentric.Gui.Presenters
             ImageSetManager = new ImageSetManager(_model, _view);
 
             _view.Font = _settings.Gui.Font;
-
-            _view.TreeView.OutcomeImages = ImageSetManager.LoadImageSet(_model.Settings.Gui.TestTree.AlternateImageSet);
 
             UpdateViewCommands();
             UpdateTreeDisplayMenuItem();
@@ -131,7 +128,6 @@ namespace TestCentric.Gui.Presenters
             {
                 UpdateViewCommands();
 
-                _view.RunSummaryDisplay.Hide();
                 BeginLongRunningOperation("Unloading...");
             };
 
@@ -146,7 +142,6 @@ namespace TestCentric.Gui.Presenters
             {
                 UpdateViewCommands();
 
-                _view.RunSummaryDisplay.Hide();
                 BeginLongRunningOperation("Reloading...");
             };
 
@@ -190,9 +185,6 @@ namespace TestCentric.Gui.Presenters
             {
                 _stopRequested = _forcedStopRequested = false;
                 UpdateViewCommands();
-
-                // Hide the run summary
-                _view.RunSummaryButton.Checked = false;
             };
 
             _model.Events.RunFinished += (TestResultEventArgs e) => OnRunFinished(e.Result);
@@ -206,24 +198,9 @@ namespace TestCentric.Gui.Presenters
                 UpdateViewCommands();
 
                 string resultPath = Path.Combine(_model.WorkDirectory, "TestResult.xml");
+                log.Debug($"Saving result to {resultPath}");
                 _model.SaveResults(resultPath);
                 _view.ResultTabs.InvokeIfRequired(() => _view.ResultTabs.SelectedIndex = 1);
-
-                //try
-                //{
-                //    _model.SaveResults(resultPath);
-                //    //log.Debug("Saved result to {0}", resultPath);
-                //}
-                //catch (Exception ex)
-                //{
-                //    //log.Warning("Unable to save result to {0}\n{1}", resultPath, ex.ToString());
-                //}
-
-                //if (e.Result.Outcome.Status == TestStatus.Failed)
-                //    _treeView.Activate();
-
-                // Display the run summary
-                _view.RunSummaryButton.Checked = true;
 
                 // If we were running unattended, it's time to close
                 if (_options.Unattended)
@@ -304,17 +281,6 @@ namespace TestCentric.Gui.Presenters
                 else if (_settings.Gui.LoadLastProject && !_options.NoLoad)
                     _model.OpenMostRecentFile();
 
-                //if ( guiOptions.include != null || guiOptions.exclude != null)
-                //{
-                //    testTree.ClearSelectedCategories();
-                //    bool exclude = guiOptions.include == null;
-                //    string[] categories = exclude
-                //        ? guiOptions.exclude.Split(',')
-                //        : guiOptions.include.Split(',');
-                //    if ( categories.Length > 0 )
-                //        testTree.SelectCategories( categories, exclude );
-                //}
-
                 // Run loaded test automatically if called for
                 if (_model.HasTests && _options.RunAllTests)
                 {
@@ -371,11 +337,6 @@ namespace TestCentric.Gui.Presenters
                 _view.RunAsX86.Enabled = isPackageLoaded && !isTestRunning;
 
                 _view.RecentFilesMenu.Enabled = !isTestRunning;
-
-                //if (!isTestRunning)
-                //{
-                //    _recentProjectsMenuHandler.Load();
-                //}
             };
 
             _view.NewProjectCommand.Execute += () => NewProject();
@@ -518,19 +479,6 @@ namespace TestCentric.Gui.Presenters
             _view.ForceStopButton.Execute += ExecuteForcedStop;
 
             _view.RunParametersButton.Execute += DisplayTestParametersDialog;
-
-            _view.RunSummaryButton.CheckedChanged += () =>
-            {
-                if (_view.RunSummaryButton.Checked)
-                {
-                    var report = ResultSummaryReporter.WriteSummaryReport(_model.ResultSummary);
-                    _view.RunSummaryDisplay.Display(report);
-                }
-                else
-                {
-                    _view.RunSummaryDisplay.Hide();
-                }
-            };
 
             _view.ToolsMenu.Popup += () =>
             {
@@ -802,8 +750,6 @@ namespace TestCentric.Gui.Presenters
             _view.ForceStopButton.Enabled = displayForcedStop && !_forcedStopRequested;
             _view.StopRunButton.Visible = !displayForcedStop;
             _view.StopRunButton.Enabled = testRunning && !_stopRequested;
-
-            _view.RunSummaryButton.Enabled = testLoaded && !testRunning && hasResults;
 
             _view.NewProjectCommand.Enabled = !testLoading && !testRunning;
             _view.OpenProjectCommand.Enabled = !testLoading && !testRunning;

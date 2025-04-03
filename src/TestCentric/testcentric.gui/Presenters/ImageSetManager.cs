@@ -18,6 +18,7 @@ namespace TestCentric.Gui.Presenters
 {
     public class ImageSetManager
     {
+        private static readonly Logger log = InternalTrace.GetLogger(typeof(ImageSetManager));
         private static readonly string BASE_DIR = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.Combine("Images", "Tree"));
 
         private ITestModel _model;
@@ -56,10 +57,11 @@ namespace TestCentric.Gui.Presenters
         // TODO: Use an event-oriented approach and let views pull
         // changes as they need it, provided it doesn't duplicate
         // too much code.
-        private void UpdateViews(OutcomeImageSet imgSet)
+        private void UpdateViews(OutcomeImageSet imageSet)
         {
-            _view.TreeView.OutcomeImages = imgSet;
-            _view.TestResultSubView.LoadImages(imgSet);
+            _view.TreeView.OutcomeImages = imageSet;
+            _view.TestResultSubView.LoadImages(imageSet);
+            _view.StatusBarView.LoadImages(imageSet);
         }
 
         public IDictionary<string, OutcomeImageSet> ImageSets { get; } = new Dictionary<string, OutcomeImageSet>();

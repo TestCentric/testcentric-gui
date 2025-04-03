@@ -1,4 +1,4 @@
-﻿// ***********************************************************************
+// ***********************************************************************
 // Copyright (c) Charlie Poole and TestCentric contributors.
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
@@ -24,8 +24,8 @@ namespace TestCentric.Gui.Presenters
         {
             FireTestLoadedEvent(new TestNode("<test-run id='2' testcasecount='123' />"));
 
-            _view.Received().Initialize(123);
-            _view.Received().DisplayText("Ready");
+            _view.Received().Initialize();
+            _view.Received().Text = "Ready";
         }
 
         [Test]
@@ -33,8 +33,8 @@ namespace TestCentric.Gui.Presenters
         {
             FireTestReloadedEvent(new TestNode("<test-run id='2' testcasecount='123' />"));
 
-            _view.Received().Initialize(123);
-            _view.Received().DisplayText("Reloaded");
+            _view.Received().Initialize();
+            _view.Received().Text = "Reloaded";
         }
 
         [Test]
@@ -42,8 +42,8 @@ namespace TestCentric.Gui.Presenters
         {
             FireTestUnloadedEvent();
 
-            _view.Received().Initialize(0);
-            _view.Received().DisplayText("Unloaded");
+            _view.Received().Initialize();
+            _view.Received().Text = "Unloaded";
         }
 
         [Test]
@@ -51,13 +51,7 @@ namespace TestCentric.Gui.Presenters
         {
             FireRunStartingEvent(1234);
 
-            _view.Received().Initialize(1234);
-            _view.Received().DisplayTestsRun(0);
-            _view.Received().DisplayPassed(0);
-            _view.Received().DisplayFailed(0);
-            _view.Received().DisplayWarnings(0);
-            _view.Received().DisplayInconclusive(0);
-            _view.Received().DisplayDuration(0.0);
+            _view.Received().Initialize();
         }
 
         [Test]
@@ -65,7 +59,7 @@ namespace TestCentric.Gui.Presenters
         {
             FireTestStartingEvent("TestName");
 
-            _view.Received().DisplayText("TestName");
+            _view.Received().Text = "TestName";
         }
 
         [Test]
@@ -78,12 +72,9 @@ namespace TestCentric.Gui.Presenters
 
             Received.InOrder(() =>
             {
-                _view.DisplayTestsRun(1);
-                _view.DisplayPassed(1);
-                _view.DisplayTestsRun(2);
-                _view.DisplayPassed(2);
-                _view.DisplayTestsRun(3);
-                _view.DisplayPassed(3);
+                _view.Passed = 1;
+                _view.Passed = 2;
+                _view.Passed = 3;
             });
         }
 
@@ -97,12 +88,9 @@ namespace TestCentric.Gui.Presenters
 
             Received.InOrder(() =>
             {
-                _view.DisplayTestsRun(1);
-                _view.DisplayWarnings(1);
-                _view.DisplayTestsRun(2);
-                _view.DisplayWarnings(2);
-                _view.DisplayTestsRun(3);
-                _view.DisplayWarnings(3);
+                _view.Warnings = 1;
+                _view.Warnings = 2;
+                _view.Warnings = 3;
             });
         }
 
@@ -116,12 +104,9 @@ namespace TestCentric.Gui.Presenters
 
             Received.InOrder(() =>
             {
-                _view.DisplayTestsRun(1);
-                _view.DisplayInconclusive(1);
-                _view.DisplayTestsRun(2);
-                _view.DisplayInconclusive(2);
-                _view.DisplayTestsRun(3);
-                _view.DisplayInconclusive(3);
+                _view.Inconclusive = 1;
+                _view.Inconclusive = 2;
+                _view.Inconclusive = 3;
             });
         }
 
@@ -135,12 +120,9 @@ namespace TestCentric.Gui.Presenters
 
             Received.InOrder(() =>
             {
-                _view.DisplayTestsRun(1);
-                _view.DisplayFailed(1);
-                _view.DisplayTestsRun(2);
-                _view.DisplayFailed(2);
-                _view.DisplayTestsRun(3);
-                _view.DisplayFailed(3);
+                _view.Failed = 1;
+                _view.Failed = 2;
+                _view.Failed = 3;
             });
         }
 
@@ -150,8 +132,8 @@ namespace TestCentric.Gui.Presenters
             var result = new ResultNode("<test-run duration='1.234' />");
             FireRunFinishedEvent(result);
 
-            _view.Received().DisplayText("Completed");
-            _view.Received().DisplayDuration(1.234);
+            _view.Received().Text = "Completed";
+            _view.Received().Duration = 1.234;
         }
     }
 }

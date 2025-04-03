@@ -49,11 +49,5 @@ namespace TestCentric.Gui.Presenters.Main
         {
             ViewElement(propName).Received().Visible = visible;
         }
-
-        [Test]
-        public void RunSummaryIsHidden()
-        {
-            _view.RunSummaryButton.Received().Checked = false;
-        }
     }
 }

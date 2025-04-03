@@ -1,7 +1,7 @@
 // NOTE: This must match what is actually referenced by
 // the GUI test model project. Hopefully, this is a temporary
 // fix, which we can get rid of in the future.
-const string REF_ENGINE_VERSION = "2.0.0-dev00023";
+const string REF_ENGINE_VERSION = "2.0.0-dev00008";
 
 // Load the recipe
 #load nuget:?package=TestCentric.Cake.Recipe&version=1.3.3
@@ -64,13 +64,13 @@ var nugetPackage = new NuGetPackage(
 				"TestCentric.Metadata.dll", "TestCentric.Extensibility.dll", "TestCentric.Extensibility.Api.dll",
 				"nunit.engine.api.dll", "../../nuget/testcentric.nuget.addins"),
 			new DirectoryContent("tools/Images/Tree/Circles").WithFiles(
-				"Images/Tree/Circles/Success.png", "Images/Tree/Circles/Failure.png", "Images/Tree/Circles/Ignored.png", "Images/Tree/Circles/Inconclusive.png", "Images/Tree/Circles/Skipped.png"),
+				"Images/Tree/Circles/Success.png", "Images/Tree/Circles/Failure.png", "Images/Tree/Circles/Warning.png", "Images/Tree/Circles/Ignored.png", "Images/Tree/Circles/Inconclusive.png", "Images/Tree/Circles/Skipped.png"),
 			new DirectoryContent("tools/Images/Tree/Classic").WithFiles(
-				"Images/Tree/Classic/Success.png", "Images/Tree/Classic/Failure.png", "Images/Tree/Classic/Ignored.png", "Images/Tree/Classic/Inconclusive.png", "Images/Tree/Classic/Skipped.png"),
+				"Images/Tree/Classic/Success.png", "Images/Tree/Classic/Failure.png", "Images/Tree/Classic/Warning.png", "Images/Tree/Classic/Ignored.png", "Images/Tree/Classic/Inconclusive.png", "Images/Tree/Classic/Skipped.png"),
 			new DirectoryContent("tools/Images/Tree/Default").WithFiles(
-				"Images/Tree/Default/Success.png", "Images/Tree/Default/Failure.png", "Images/Tree/Default/Ignored.png", "Images/Tree/Default/Inconclusive.png", "Images/Tree/Default/Skipped.png"),
+				"Images/Tree/Default/Success.png", "Images/Tree/Default/Failure.png", "Images/Tree/Default/Warning.png", "Images/Tree/Default/Ignored.png", "Images/Tree/Default/Inconclusive.png", "Images/Tree/Default/Skipped.png"),
 			new DirectoryContent("tools/Images/Tree/Visual Studio").WithFiles(
-				"Images/Tree/Visual Studio/Success.png", "Images/Tree/Visual Studio/Failure.png", "Images/Tree/Visual Studio/Ignored.png", "Images/Tree/Visual Studio/Inconclusive.png", "Images/Tree/Visual Studio/Skipped.png") )
+				"Images/Tree/Visual Studio/Success.png", "Images/Tree/Visual Studio/Failure.png", "Images/Tree/Visual Studio/Warning.png", "Images/Tree/Visual Studio/Ignored.png", "Images/Tree/Visual Studio/Inconclusive.png", "Images/Tree/Visual Studio/Skipped.png") )
 		.WithDependencies(
 			KnownExtensions.Net462PluggableAgent.SetVersion("2.5.1").NuGetPackage,
 			KnownExtensions.Net60PluggableAgent.SetVersion("2.5.1").NuGetPackage,
@@ -101,15 +101,15 @@ var chocolateyPackage = new ChocolateyPackage(
 				"nunit.uiexception.dll", "TestCentric.Gui.Model.dll", "Mono.Options.dll", "nunit.engine.api.dll",
 				"TestCentric.Engine.dll", "TestCentric.Engine.Api.dll", "TestCentric.InternalTrace.dll",
 				"TestCentric.Metadata.dll", "TestCentric.Extensibility.dll", "TestCentric.Extensibility.Api.dll"),
-			new DirectoryContent("tools/Images/Tree/Circles").WithFiles(
-				"Images/Tree/Circles/Success.png", "Images/Tree/Circles/Failure.png", "Images/Tree/Circles/Ignored.png", "Images/Tree/Circles/Inconclusive.png", "Images/Tree/Circles/Skipped.png"),
-			new DirectoryContent("tools/Images/Tree/Classic").WithFiles(
-				"Images/Tree/Classic/Success.png", "Images/Tree/Classic/Failure.png", "Images/Tree/Classic/Ignored.png", "Images/Tree/Classic/Inconclusive.png", "Images/Tree/Classic/Skipped.png"),
-			new DirectoryContent("tools/Images/Tree/Default").WithFiles(
-				"Images/Tree/Default/Success.png", "Images/Tree/Default/Failure.png", "Images/Tree/Default/Ignored.png", "Images/Tree/Default/Inconclusive.png", "Images/Tree/Default/Skipped.png"),
-			new DirectoryContent("tools/Images/Tree/Visual Studio").WithFiles(
-				"Images/Tree/Visual Studio/Success.png", "Images/Tree/Visual Studio/Failure.png", "Images/Tree/Visual Studio/Ignored.png", "Images/Tree/Visual Studio/Inconclusive.png", "Images/Tree/Visual Studio/Skipped.png") )
-		.WithDependencies(
+            new DirectoryContent("tools/Images/Tree/Circles").WithFiles(
+                "Images/Tree/Circles/Success.png", "Images/Tree/Circles/Failure.png", "Images/Tree/Circles/Warning.png", "Images/Tree/Circles/Ignored.png", "Images/Tree/Circles/Inconclusive.png", "Images/Tree/Circles/Skipped.png"),
+            new DirectoryContent("tools/Images/Tree/Classic").WithFiles(
+                "Images/Tree/Classic/Success.png", "Images/Tree/Classic/Failure.png", "Images/Tree/Classic/Warning.png", "Images/Tree/Classic/Ignored.png", "Images/Tree/Classic/Inconclusive.png", "Images/Tree/Classic/Skipped.png"),
+            new DirectoryContent("tools/Images/Tree/Default").WithFiles(
+                "Images/Tree/Default/Success.png", "Images/Tree/Default/Failure.png", "Images/Tree/Default/Warning.png", "Images/Tree/Default/Ignored.png", "Images/Tree/Default/Inconclusive.png", "Images/Tree/Default/Skipped.png"),
+            new DirectoryContent("tools/Images/Tree/Visual Studio").WithFiles(
+                "Images/Tree/Visual Studio/Success.png", "Images/Tree/Visual Studio/Failure.png", "Images/Tree/Visual Studio/Warning.png", "Images/Tree/Visual Studio/Ignored.png", "Images/Tree/Visual Studio/Inconclusive.png", "Images/Tree/Visual Studio/Skipped.png"))
+        .WithDependencies(
 			KnownExtensions.Net462PluggableAgent.SetVersion("2.5.1").ChocoPackage,
 			KnownExtensions.Net60PluggableAgent.SetVersion("2.5.1").ChocoPackage,
 			KnownExtensions.Net80PluggableAgent.SetVersion("2.5.1").ChocoPackage

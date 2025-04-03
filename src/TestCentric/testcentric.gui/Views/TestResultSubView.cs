@@ -38,7 +38,7 @@ namespace TestCentric.Gui.Views
         {
             passedPictureBox.Image = imageSet.LoadImage("Success");
             failedPictureBox.Image = imageSet.LoadImage("Failure");
-            warningsPictureBox.Image = imageSet.LoadImage("Ignored");
+            warningsPictureBox.Image = imageSet.LoadImage("Warning");
             inconclusivePictureBox.Image = imageSet.LoadImage("Inconclusive");
             ignoredPictureBox.Image = imageSet.LoadImage("Ignored");
             skippedPictureBox.Image = imageSet.LoadImage("Skipped");
@@ -67,7 +67,7 @@ namespace TestCentric.Gui.Views
             InvokeIfRequired(() => Height = detailSectionBackgroundPanel.Top - 1);
         }
 
-        public void UpdateDetailSection(TestResultCounts summary)
+        public void  UpdateDetailSection(TestResultCounts summary)
         {
             InvokeIfRequired(() =>
             {

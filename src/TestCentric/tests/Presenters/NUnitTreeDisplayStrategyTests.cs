@@ -116,14 +116,25 @@ namespace TestCentric.Gui.Presenters.TestTree
         [TestCase("Skipped", 0)]
         [TestCase("Inconclusive", 1)]
         [TestCase("Passed", 2)]
-        [TestCase("Warning", 3)]
-        [TestCase("Failed", 4)]
+        [TestCase("Skipped:Ignored", 3)]
+        [TestCase("Warning", 4)]
+        [TestCase("Failed", 5)]
         public void OnTestFinished_TreeNodeImage_IsUpdated(string testResult, int expectedImageIndex)
         {
+            int colon = testResult.IndexOf(':');
+            string label = null;
+            if (colon != -1) 
+            {
+                label = testResult.Substring(colon + 1);
+                testResult = testResult.Substring(0, colon); 
+            }
+
             // Arrange
             TestNode testNode = new TestNode("<test-case id='1' />");
             var treeNode = _strategy.MakeTreeNode(testNode, false);
-            ResultNode result = new ResultNode($"<test-case id='1' result='{testResult}'/>");
+            ResultNode result = label != null
+                ? new ResultNode($"<test-case id='1' result='{testResult}' label='{label}' />")
+                : new ResultNode($"<test-case id='1' result='{testResult}'/>");
 
             // Act
             _strategy.OnTestFinished(result);

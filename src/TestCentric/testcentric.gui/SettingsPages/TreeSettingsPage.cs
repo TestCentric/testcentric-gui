@@ -22,6 +22,7 @@ namespace TestCentric.Gui.SettingsPages
         private Label label6;
         private PictureBox successImage;
         private PictureBox failureImage;
+        private PictureBox warningImage;
         private PictureBox ignoredImage;
         private PictureBox inconclusiveImage;
         private PictureBox skippedImage;
@@ -29,8 +30,6 @@ namespace TestCentric.Gui.SettingsPages
         private Label label4;
         private ListBox imageSetListBox;
         private static readonly string[] imageExtensions = { ".png", ".jpg" };
-
-        private static string treeImageDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.Combine("Images", "Tree"));
         private ImageSetManager _imageSetManager;
 
         public TreeSettingsPage(string key, ImageSetManager imageSetManager) : base(key)
@@ -39,16 +38,6 @@ namespace TestCentric.Gui.SettingsPages
             InitializeComponent();
 
             _imageSetManager = imageSetManager;
-        }
-
-        private bool IsValidImageSet(string dir)
-        {
-            foreach (var file in Directory.EnumerateFiles(dir))
-            {
-                if (imageExtensions.Contains(Path.GetExtension(file)))
-                    return true;
-            }
-            return false;
         }
 
         /// <summary>
@@ -83,6 +72,7 @@ namespace TestCentric.Gui.SettingsPages
             this.label6 = new System.Windows.Forms.Label();
             this.successImage = new System.Windows.Forms.PictureBox();
             this.failureImage = new System.Windows.Forms.PictureBox();
+            this.warningImage = new System.Windows.Forms.PictureBox();
             this.ignoredImage = new System.Windows.Forms.PictureBox();
             this.inconclusiveImage = new System.Windows.Forms.PictureBox();
             this.skippedImage = new System.Windows.Forms.PictureBox();
@@ -90,6 +80,7 @@ namespace TestCentric.Gui.SettingsPages
             this.imageSetListBox = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.successImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.failureImage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.warningImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ignoredImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.inconclusiveImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.skippedImage)).BeginInit();
@@ -133,7 +124,7 @@ namespace TestCentric.Gui.SettingsPages
             "Expand",
             "Collapse",
             "HideTests"});
-            this.initialDisplayComboBox.Location = new System.Drawing.Point(236, 24);
+            this.initialDisplayComboBox.Location = new System.Drawing.Point(270, 24);
             this.initialDisplayComboBox.Name = "initialDisplayComboBox";
             this.helpProvider1.SetShowHelp(this.initialDisplayComboBox, true);
             this.initialDisplayComboBox.Size = new System.Drawing.Size(168, 21);
@@ -156,7 +147,7 @@ namespace TestCentric.Gui.SettingsPages
             this.label6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label6.Location = new System.Drawing.Point(66, 81);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(137, 36);
+            this.label6.Size = new System.Drawing.Size(164, 36);
             this.label6.TabIndex = 47;
             // 
             // successImage
@@ -179,6 +170,16 @@ namespace TestCentric.Gui.SettingsPages
             this.failureImage.TabIndex = 49;
             this.failureImage.TabStop = false;
             // 
+            // warningImage
+            // 
+            this.warningImage.Image = ((System.Drawing.Image)(resources.GetObject("warningImage.Image")));
+            this.warningImage.Location = new System.Drawing.Point(153, 92);
+            this.warningImage.Name = "warningImage";
+            this.warningImage.Size = new System.Drawing.Size(16, 16);
+            this.warningImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.warningImage.TabIndex = 50;
+            this.warningImage.TabStop = false;
+            // 
             // ignoredImage
             // 
             this.ignoredImage.Image = ((System.Drawing.Image)(resources.GetObject("ignoredImage.Image")));
@@ -193,7 +194,7 @@ namespace TestCentric.Gui.SettingsPages
             // 
             this.inconclusiveImage.Enabled = false;
             this.inconclusiveImage.Image = ((System.Drawing.Image)(resources.GetObject("inconclusiveImage.Image")));
-            this.inconclusiveImage.Location = new System.Drawing.Point(152, 92);
+            this.inconclusiveImage.Location = new System.Drawing.Point(178, 92);
             this.inconclusiveImage.Name = "inconclusiveImage";
             this.inconclusiveImage.Size = new System.Drawing.Size(16, 16);
             this.inconclusiveImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -203,7 +204,7 @@ namespace TestCentric.Gui.SettingsPages
             // skippedImage
             // 
             this.skippedImage.Image = ((System.Drawing.Image)(resources.GetObject("skippedImage.Image")));
-            this.skippedImage.Location = new System.Drawing.Point(177, 92);
+            this.skippedImage.Location = new System.Drawing.Point(203, 92);
             this.skippedImage.Name = "skippedImage";
             this.skippedImage.Size = new System.Drawing.Size(16, 16);
             this.skippedImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -222,7 +223,7 @@ namespace TestCentric.Gui.SettingsPages
             // imageSetListBox
             // 
             this.imageSetListBox.FormattingEnabled = true;
-            this.imageSetListBox.Location = new System.Drawing.Point(236, 61);
+            this.imageSetListBox.Location = new System.Drawing.Point(270, 61);
             this.imageSetListBox.Name = "imageSetListBox";
             this.imageSetListBox.Size = new System.Drawing.Size(168, 56);
             this.imageSetListBox.TabIndex = 54;
@@ -235,6 +236,7 @@ namespace TestCentric.Gui.SettingsPages
             this.Controls.Add(this.skippedImage);
             this.Controls.Add(this.inconclusiveImage);
             this.Controls.Add(this.ignoredImage);
+            this.Controls.Add(this.warningImage);
             this.Controls.Add(this.failureImage);
             this.Controls.Add(this.successImage);
             this.Controls.Add(this.label6);
@@ -246,6 +248,7 @@ namespace TestCentric.Gui.SettingsPages
             this.Name = "TreeSettingsPage";
             ((System.ComponentModel.ISupportInitialize)(this.successImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.failureImage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.warningImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ignoredImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.inconclusiveImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.skippedImage)).EndInit();

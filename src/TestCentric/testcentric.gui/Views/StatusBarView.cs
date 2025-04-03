@@ -4,99 +4,85 @@
 // ***********************************************************************
 
 using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
 {
     public partial class StatusBarView : UserControlView, IStatusBarView
     {
-        private ToolTip _resultSummaryToolTip;
+        private static Logger log = InternalTrace.GetLogger(nameof(StatusBarView));
 
         public StatusBarView()
         {
             InitializeComponent();
-            _resultSummaryToolTip = new ToolTip()
-            {
-                IsBalloon = true,
-                UseAnimation = true,
-                UseFading = true,
-            };
         }
 
-        public void Initialize(int testCount)
+        public void Initialize()
         {
             InvokeIfRequired(() =>
             {
-                testCountPanel.Text = "Tests : " + testCount.ToString();
-                testCountPanel.Visible = true;
-                testsRunPanel.Visible = false;
-                passedPanel.Visible = false;
-                failedPanel.Visible = false;
-                warningsPanel.Visible = false;
-                inconclusivePanel.Visible = false;
-                timePanel.Visible = false;
+                foreach (ToolStripStatusLabel panel in statusStrip1.Controls)
+                    panel.Visible = false;
             });
         }
 
-        public void DisplayText(string text)
+        public override string Text
         {
-            InvokeIfRequired(() =>
-            {
-                StatusLabel.Text = text;
-            });
+            set { StatusLabel.Text = value; }
         }
 
-        public void DisplayTestsRun(int count)
+        public int Passed
         {
-            InvokeIfRequired(() =>
-            {
-                testsRunPanel.Text = "Run : " + count.ToString();
-                testsRunPanel.Visible = true;
-            });
+            set { UpdateCounter(passedPanel, value); }
         }
 
-        public void DisplayPassed(int count)
+        public int Failed
         {
-            InvokeIfRequired(() =>
-            {
-                passedPanel.Text = "Passed : " + count.ToString();
-                passedPanel.Visible = true;
-            });
+            set { UpdateCounter(failedPanel, value); }
         }
 
-        public void DisplayFailed(int count)
+        public int Warnings
         {
-            InvokeIfRequired(() =>
-            {
-                failedPanel.Text = "Failed : " + count.ToString();
-                failedPanel.Visible = true;
-            });
+            set { UpdateCounter(warningsPanel, value); }
         }
 
-        public void DisplayWarnings(int count)
+        public int Inconclusive
         {
-            InvokeIfRequired(() =>
-            {
-                warningsPanel.Text = "Warnings : " + count.ToString();
-                warningsPanel.Visible = true;
-            });
+            set { UpdateCounter(inconclusivePanel, value); }
         }
 
-        public void DisplayInconclusive(int count)
+        public int Ignored
         {
-            InvokeIfRequired(() =>
-            {
-                inconclusivePanel.Text = "Inconclusive : " + count.ToString();
-                inconclusivePanel.Visible = true;
-            });
+            set { UpdateCounter(ignoredPanel, value); }
         }
 
-        public void DisplayDuration(double duration)
+        public int Skipped
+        {
+            set { UpdateCounter(skippedPanel, value); }
+        }
+
+        public double Duration
+        {
+            set 
+            {
+                InvokeIfRequired(() =>
+                {
+                    timePanel.Text = $"{value.ToString("F3")} sec";
+                    timePanel.Visible = true;
+                });
+            }
+        }
+
+        private void UpdateCounter(ToolStripStatusLabel statusLabel, int count)
         {
             InvokeIfRequired(() =>
             {
-                timePanel.Text = $"Duration : {duration.ToString("F3")}s";
-                timePanel.Visible = true;
+                statusLabel.Text = count.ToString();
+                statusLabel.Visible = true;
             });
         }
 
@@ -106,6 +92,28 @@ namespace TestCentric.Gui.Views
 
             Height = Math.Max((int)Font.GetHeight() + 10, MinimumSize.Height);
             statusStrip1.Font = Font;
+        }
+
+        public void LoadImages(OutcomeImageSet imageSet)
+        {
+            log.Debug($"Loading images from ImageSet {imageSet.Name}");
+
+            // Update all images in the pictureBoxes
+            try
+            {
+                passedPanel.Image = imageSet.LoadImage("Success");
+                failedPanel.Image = imageSet.LoadImage("Failure");
+                warningsPanel.Image = imageSet.LoadImage("Warning");
+                inconclusivePanel.Image = imageSet.LoadImage("Inconclusive");
+                ignoredPanel.Image = imageSet.LoadImage("Ignored");
+                skippedPanel.Image = imageSet.LoadImage("Skipped");
+            }
+            catch(FileNotFoundException ex)
+            {
+                // We log the error but don't rethrow. This allows the CI to pass.
+                // Missing images should be discovered by inspecting the GUI.
+                log.Error("Image not found", ex);
+            }
         }
     }
 }

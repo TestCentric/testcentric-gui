@@ -49,12 +49,6 @@ namespace TestCentric.Gui
             }
         }
 
-        //public static void Initialize(string logName)
-        //{
-        //    int lev = (int) new System.Diagnostics.TraceSwitch("NTrace", "NUnit internal trace").Level;
-        //    Initialize(logName, (InternalTraceLevel)lev);
-        //}
-
         public static void Initialize(string logName, InternalTraceLevel level)
         {
             if (!initialized)

@@ -91,9 +91,11 @@ namespace TestCentric.Gui.Model
                 ? (InternalTraceLevel)Enum.Parse(typeof(InternalTraceLevel), options.InternalTraceLevel)
                 : InternalTraceLevel.Off;
 
-            var logFile = $"InternalTrace.{Process.GetCurrentProcess().Id}.log";
+            var logFile = $"InternalTrace.{Process.GetCurrentProcess().Id}.gui.log";
             if (options.WorkDirectory != null)
                 logFile = Path.Combine(options.WorkDirectory, logFile);
+
+            InternalTrace.Initialize(logFile, traceLevel);
 
             testEngine.InternalTraceLevel = traceLevel;
             if (options.WorkDirectory != null)
@@ -705,6 +707,7 @@ namespace TestCentric.Gui.Model
         // All Test running eventually comes down to this method
         private void RunTests(TestRunSpecification runSpec)
         {
+            log.Debug("RunningTests");
             if (runSpec == null)
                 throw new ArgumentNullException(nameof(runSpec));
             if (_lastTestRun == null)
@@ -754,6 +757,7 @@ namespace TestCentric.Gui.Model
                 ReloadTests();
             }
 
+            log.Debug("Executing RunAsync");
             Runner.RunAsync(_events, filter.AsNUnitFilter());
         }
 

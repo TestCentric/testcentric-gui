@@ -244,7 +244,7 @@ namespace TestCentric.Gui.Presenters
                 case TestStatus.Skipped:
                 default:
                     return outcome.Label == "Ignored"
-                        ? TestTreeView.WarningIndex
+                        ? TestTreeView.IgnoredIndex
                         : TestTreeView.SkippedIndex;
             }
         }

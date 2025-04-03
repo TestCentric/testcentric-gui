@@ -22,7 +22,7 @@ namespace TestCentric.Gui.Presenters
 
         private ITestItem _selectedItem;
 
-        public TestPropertiesPresenter(TestPropertiesView view, ITestModel model)
+        public TestPropertiesPresenter(ITestPropertiesView view, ITestModel model)
         {
             _view = view;
             _model = model;

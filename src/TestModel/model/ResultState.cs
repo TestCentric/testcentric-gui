@@ -14,6 +14,12 @@ namespace TestCentric.Gui.Model
     /// skipped or was inconclusive. The Label provides a more
     /// detailed breakdown for use by client runners.
     /// </summary>
+    /// <remarks>
+    /// This class is modeled after the class of the same name used in NUnit 4,
+    /// but is used for tests run in any supported framework. Instances are
+    /// constructed based on XML reports received through a framework driver 
+    /// in the engine supporting each test framework.
+    /// </remarks>
     public class ResultState
     {
         #region Constructors
@@ -164,9 +170,14 @@ namespace TestCentric.Gui.Model
             return new ResultState(this.Status, this.Label, site);
         }
 
+        /// <summary>
+        /// Get the image name to be used for tree nodes that represent this result
+        /// </summary>
+        public string ImageName => string.IsNullOrEmpty(Label) ? $"{Status}" : $"{Status}:{Label}";
+
         #endregion
 
-        #region Equals Override
+        #region Overrides
 
         /// <summary>
         /// Determines whether the specified <see cref="System.Object" />, is equal to this instance.
@@ -194,7 +205,6 @@ namespace TestCentric.Gui.Model
             return (int)Status << 8 + (int)Site ^ Label.GetHashCode();
         }
 
-        #endregion
 
         /// <summary>
         /// Returns a <see cref="System.String"/> that represents this instance.
@@ -213,6 +223,8 @@ namespace TestCentric.Gui.Model
 
             return sb.ToString();
         }
+
+        #endregion
     }
 
     /// <summary>
