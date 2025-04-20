@@ -233,13 +233,13 @@ namespace TestCentric.Gui.Presenters
         }
 
         [Test]
-        public void WhenSelectedItemChanged_ToTestItem_TestResultSubView_IsNotUpdated()
+        public void WhenSelectedItemChanged_ToTestItem_TestResultSubView_IsUpdated()
         {
             ITestItem testItem = Substitute.For<ITestItem>();
 
             _model.Events.SelectedItemChanged += Raise.Event<TestItemEventHandler>(new TestItemEventArgs(testItem));
 
-            _testResultPresenter.DidNotReceiveWithAnyArgs().Update(null);
+            _testResultPresenter.Received().Update(testItem);
         }
 
         [Test]
@@ -314,6 +314,44 @@ namespace TestCentric.Gui.Presenters
 
             _view.TestOutputSubView.Received().Output = "Hello world";
         }
+
+        [Test]
+        public void WhenTestRunFinishes_SelectedNodeIsGroup_TestResultSubView_IsUpdated()
+        {
+            // Arrange
+            TestNode testItem = new TestNode("<test-case id='1' name='TestA' />");
+            var resultNode = new ResultNode($"<test-case id='1' name='TestA' />");
+            _model.GetResultForTest("1").Returns(resultNode);
+
+            TestGroup testGroup = new TestGroup("TestGroup") { testItem };
+            _model.Events.SelectedItemChanged += Raise.Event<TestItemEventHandler>(new TestItemEventArgs(testGroup));
+            _testResultPresenter.ClearReceivedCalls();
+
+            // Act
+            FireRunFinishedEvent(resultNode);
+
+            // Assert
+            _testResultPresenter.Received().Update(testGroup);
+        }
+
+        [Test]
+        public void WhenTestRunFinishes_SelectedNodeIsTestNode_TestResultSubView_IsNotUpdated()
+        {
+            // Arrange
+            TestNode testItem = new TestNode("<test-case id='1' name='TestA' />");
+            var resultNode = new ResultNode($"<test-case id='1' name='TestA' />");
+            _model.GetResultForTest("1").Returns(resultNode);
+            _model.Events.SelectedItemChanged += Raise.Event<TestItemEventHandler>(new TestItemEventArgs(testItem));
+            _testResultPresenter.ClearReceivedCalls();
+
+            // Act
+            FireRunFinishedEvent(resultNode);
+
+            // Assert
+            _testResultPresenter.DidNotReceiveWithAnyArgs().Update(testItem);
+        }
+
+
 
         private void VerifyDisplay(bool shouldDisplay)
         {

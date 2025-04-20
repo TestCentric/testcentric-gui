@@ -50,7 +50,7 @@ namespace TestCentric.Gui.Presenters
             presenter.Update(testNode);
 
             // 3. Assert
-            view.Received().UpdateCaption(Arg.Any<TestResultCounts>(), resultNode);
+            view.Received().UpdateCaption(Arg.Any<TestResultCounts>(), Model.ResultState.Success);
             view.Received().UpdateDetailSectionVisibility(false);
             view.Received().ShrinkToCaption();
         }

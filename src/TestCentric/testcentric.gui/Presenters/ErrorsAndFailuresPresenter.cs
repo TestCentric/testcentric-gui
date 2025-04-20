@@ -66,6 +66,11 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.TestFinished += (TestResultEventArgs e) => OnNewResult(e.Result);
             _model.Events.SuiteFinished += (TestResultEventArgs e) => OnNewResult(e.Result);
+            _model.Events.RunFinished += (TestResultEventArgs e) =>
+            {
+                if (_selectedItem is TestGroup)
+                    InitializeTestResultSubView();
+            };
 
             _model.Events.SelectedItemChanged += (TestItemEventArgs e) =>
             {
@@ -180,8 +185,7 @@ namespace TestCentric.Gui.Presenters
 
         private void InitializeTestResultSubView()
         {
-            if (_selectedItem is TestNode testNode)
-                _testSubViewPresenter.Update(testNode);
+            _testSubViewPresenter.Update(_selectedItem);
         }
 
         private void InitializeTestOutputSubView()

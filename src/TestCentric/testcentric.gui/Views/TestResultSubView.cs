@@ -45,14 +45,14 @@ namespace TestCentric.Gui.Views
             notRunPictureBox.Image = imageSet.LoadImage("Skipped");
         }
 
-        public void UpdateCaption(TestResultCounts testCounts, ResultNode result)
+        public void UpdateCaption(TestResultCounts testCounts, ResultState resultState)
         {
             InvokeIfRequired(() =>
             {
                 testCount.Text = testCounts.TestCount.ToString();
-                outcome.Text = result?.Outcome.ToString();
-                duration.Text = result?.Duration.ToString("f3");
-                assertCount.Text = result?.AssertCount.ToString();
+                outcome.Text = resultState?.ToString();
+                duration.Text = testCounts.Duration.ToString("f3");
+                assertCount.Text = testCounts.AssertCount.ToString();
             });
         }
 
@@ -96,22 +96,6 @@ namespace TestCentric.Gui.Views
                 // 3. Expand height of view to show detail section
                 Height = detailSectionFlowLayoutPanel.Bottom + 10;
             });
-        }
-
-        private Image LoadAlternateImage(string name, string imageDir)
-        {
-            string[] extensions = { ".png", ".jpg" };
-
-            foreach (string ext in extensions)
-            {
-                string filePath = Path.Combine(imageDir, name + ext);
-                if (File.Exists(filePath))
-                {
-                    return Image.FromFile(filePath);
-                }
-            }
-
-            return null;
         }
     }
 }
