@@ -169,6 +169,7 @@ namespace TestCentric.Gui.Views
             this.Controls.Add(this.panel1);
             this.Controls.Add(testResultSubView);
             this.Controls.Add(this.header);
+            this.BackColor = System.Drawing.SystemColors.Control;
             this.Name = "ErrorsAndFailuresView";
             this.Size = new System.Drawing.Size(496, 288);
             this.panel1.ResumeLayout(false);

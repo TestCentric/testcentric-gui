@@ -154,5 +154,90 @@ namespace TestCentric.Gui.Presenters
             Assert.That(resultCounts.NotRunCount, Is.EqualTo(0));
             Assert.That(resultCounts.TestCount, Is.EqualTo(3));
         }
+
+        [Test]
+        public void TestGroupNode_WithoutResult_ReturnsExpectedCount()
+        {
+            // 1. Arrange
+            TestNode testNode = new TestNode("<test-case id='1' />");
+            TestGroup testGroup = new TestGroup("TestGroup") { testNode };
+            ITestModel model = Substitute.For<ITestModel>();
+            model.GetResultForTest("1").Returns((ResultNode)null);
+
+            // 2. Act
+            TestResultCounts resultCounts = TestResultCounts.GetResultCounts(model, testGroup);
+
+            // 3. Assert
+            Assert.That(resultCounts.IgnoreCount, Is.EqualTo(0));
+            Assert.That(resultCounts.ExplicitCount, Is.EqualTo(0));
+
+            Assert.That(resultCounts.PassedCount, Is.EqualTo(0));
+            Assert.That(resultCounts.FailedCount, Is.EqualTo(0));
+            Assert.That(resultCounts.WarningCount, Is.EqualTo(0));
+            Assert.That(resultCounts.InconclusiveCount, Is.EqualTo(0));
+            Assert.That(resultCounts.NotRunCount, Is.EqualTo(1));
+            Assert.That(resultCounts.TestCount, Is.EqualTo(1));
+            Assert.That(resultCounts.AssertCount, Is.EqualTo(0));
+            Assert.That(resultCounts.Duration, Is.EqualTo(0.0).Within(0.001));
+        }
+
+        [Test]
+        public void TestGroupNode_WithoutChildNodes_ReturnsExpectedCount()
+        {
+            // 1. Arrange
+            TestGroup testGroup = new TestGroup("TestGroup");
+            ITestModel model = Substitute.For<ITestModel>();
+
+            // 2. Act
+            TestResultCounts resultCounts = TestResultCounts.GetResultCounts(model, testGroup);
+
+            // 3. Assert
+            Assert.That(resultCounts.IgnoreCount, Is.EqualTo(0));
+            Assert.That(resultCounts.ExplicitCount, Is.EqualTo(0));
+
+            Assert.That(resultCounts.PassedCount, Is.EqualTo(0));
+            Assert.That(resultCounts.FailedCount, Is.EqualTo(0));
+            Assert.That(resultCounts.WarningCount, Is.EqualTo(0));
+            Assert.That(resultCounts.InconclusiveCount, Is.EqualTo(0));
+            Assert.That(resultCounts.NotRunCount, Is.EqualTo(0));
+            Assert.That(resultCounts.TestCount, Is.EqualTo(0));
+            Assert.That(resultCounts.AssertCount, Is.EqualTo(0));
+            Assert.That(resultCounts.Duration, Is.EqualTo(0.0).Within(0.001));
+        }
+
+        [Test]
+        public void TestGroupNode_WithOutcome_ReturnsExpectedCount()
+        {
+            // 1. Arrange
+            TestNode testNode1 = new TestNode("<test-case id='1' />");
+            ResultNode resultNode1 = new ResultNode($"<test-case id='1' result='Passed' asserts='2' duration='1.0'/>");
+
+            TestNode testNode2 = new TestNode("<test-case id='2' />");
+            ResultNode resultNode2 = new ResultNode($"<test-case id='2' result='Failed' asserts='3' duration='1.0'/>");
+
+            ITestModel model = Substitute.For<ITestModel>();
+            model.GetResultForTest("1").Returns(resultNode1);
+            model.GetResultForTest("2").Returns(resultNode2);
+
+            TestGroup testGroup = new TestGroup("TestGroup") { testNode1, testNode2 };
+
+            // 2. Act
+            TestResultCounts resultCounts = TestResultCounts.GetResultCounts(model, testGroup);
+
+            // 3. Assert
+            Assert.That(resultCounts.PassedCount, Is.EqualTo(1));
+            Assert.That(resultCounts.FailedCount, Is.EqualTo(1));
+            Assert.That(resultCounts.WarningCount, Is.EqualTo(0));
+            Assert.That(resultCounts.InconclusiveCount, Is.EqualTo(0));
+
+            Assert.That(resultCounts.IgnoreCount, Is.EqualTo(0));
+            Assert.That(resultCounts.ExplicitCount, Is.EqualTo(0));
+            Assert.That(resultCounts.NotRunCount, Is.EqualTo(0));
+            Assert.That(resultCounts.TestCount, Is.EqualTo(2));
+
+            Assert.That(resultCounts.AssertCount, Is.EqualTo(5));
+            Assert.That(resultCounts.Duration, Is.EqualTo(2.0).Within(0.001));
+
+        }
     }
 }

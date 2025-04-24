@@ -28,6 +28,9 @@ namespace TestCentric.Gui.Presenters
 
         public int TestCount => FailedCount + PassedCount + WarningCount + NotRunCount + InconclusiveCount + IgnoreCount + ExplicitCount;
 
+        public int AssertCount { get; set; }
+
+        public double Duration { get; set; }
 
         private void Add(TestResultCounts summary)
         {
@@ -38,12 +41,36 @@ namespace TestCentric.Gui.Presenters
             InconclusiveCount += summary.InconclusiveCount;
             IgnoreCount += summary.IgnoreCount;
             ExplicitCount += summary.ExplicitCount;
+            AssertCount += summary.AssertCount;
+            Duration += summary.Duration;
         }
 
-        public static TestResultCounts GetResultCounts(ITestModel model, TestNode testNode)
+        public static TestResultCounts GetResultCounts(ITestModel model, ITestItem testItem)
+        {
+            if (testItem is TestNode testNode)
+                return GetResultCounts(model, testNode);
+
+            if (testItem is TestGroup testGroup)
+                return GetResultCounts(model, testGroup);
+
+            return new TestResultCounts();
+        }
+
+        private static TestResultCounts GetResultCounts(ITestModel model, TestGroup testGroup)
         {
             TestResultCounts testCounts = new TestResultCounts();
+            foreach (TestNode testNode in testGroup)
+            {
+                TestResultCounts c = GetResultCounts(model, testNode);
+                testCounts.Add(c);
+            }
 
+            return testCounts;
+        }
+
+        private static TestResultCounts GetResultCounts(ITestModel model, TestNode testNode)
+        {
+            TestResultCounts testCounts = new TestResultCounts();
             ResultNode result = model.GetResultForTest(testNode.Id);
 
             // Only consider outcome from test cases; and check if testNode is filtered out
@@ -63,6 +90,9 @@ namespace TestCentric.Gui.Presenters
                         testCounts.IgnoreCount++;
                     else if (result.Outcome.Status == TestStatus.Skipped && result.Label == "Explicit")
                         testCounts.ExplicitCount++;
+
+                    testCounts.AssertCount += result.AssertCount;
+                    testCounts.Duration += result.Duration;
                 }
                 else
                     testCounts.NotRunCount = 1;

@@ -24,7 +24,7 @@ namespace TestCentric.Gui.Views
         /// View is separated in two section: Caption and detail section
         /// Caption section contain the overall outcome, duration and test + assertion count
         /// </summary>
-        void UpdateCaption(TestResultCounts testCounts, ResultNode result);
+        void UpdateCaption(TestResultCounts testCounts, ResultState resultState);
 
         /// <summary>
         /// View is separated in two section: Caption and detail section

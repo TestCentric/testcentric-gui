@@ -17,9 +17,9 @@ namespace TestCentric.Gui.Presenters
         void Clear();
 
         /// <summary>
-        /// Update test result sub view to display result of testnode
+        /// Update test result sub view to display result of testnode/testGroup
         /// </summary>
-        void Update(TestNode testNode);
+        void Update(ITestItem testItem);
     }
 
     public class TestResultSubViewPresenter : ITestResultSubViewPresenter
@@ -42,15 +42,27 @@ namespace TestCentric.Gui.Presenters
         }
 
         /// <summary>
-        /// Update test result sub view to display result of testnode
+        /// Update test result sub view to display result of testnode/testGroup
         /// </summary>
-        public void Update(TestNode testNode)
+        public void Update(ITestItem testItem)
         {
-            TestResultCounts summary = TestResultCounts.GetResultCounts(_model, testNode);
-            ResultNode result = _model.GetResultForTest(testNode.Id);
-            _view.UpdateCaption(summary, result);
+            TestResultCounts summary = TestResultCounts.GetResultCounts(_model, testItem);
 
-            bool detailSectionVisible = testNode.IsAssembly || testNode.IsProject || testNode.IsSuite;
+            bool detailSectionVisible = false;
+            ResultState overallOutcome = null;
+            if (testItem is TestNode testNode)
+            {
+                ResultNode result = _model.GetResultForTest(testNode.Id);
+                overallOutcome = result?.Outcome;
+                detailSectionVisible = testNode.IsAssembly || testNode.IsProject || testNode.IsSuite;
+            }
+            else if (testItem is TestGroup testGroup)
+            {
+                overallOutcome = GetGroupOutcome(testGroup);
+                detailSectionVisible = true;
+            }
+
+            _view.UpdateCaption(summary, overallOutcome);
             _view.UpdateDetailSectionVisibility(detailSectionVisible);
             if (!detailSectionVisible)
             {
@@ -60,5 +72,31 @@ namespace TestCentric.Gui.Presenters
 
             _view.UpdateDetailSection(summary);
         }
+
+        private ResultState GetGroupOutcome(TestGroup testGroup)
+        {
+            ResultState state = null;
+            foreach(TestNode testNode in testGroup)
+            {
+                ResultNode result = _model.GetResultForTest(testNode.Id);
+                if (result == null)
+                    continue;
+
+                if (result.Outcome.Status == TestStatus.Failed)
+                    return ResultState.Failure;
+
+                if (result.Outcome.Status == TestStatus.Warning)
+                    state = ResultState.Warning;
+
+                if (result.Outcome.Status == TestStatus.Skipped && state?.Status != TestStatus.Warning)
+                    state = result.Outcome.Label == "Ignored" ? ResultState.Ignored : ResultState.Skipped;
+
+                if (result.Outcome.Status == TestStatus.Passed && state == null)
+                    state = ResultState.Success;
+            }
+
+            return state;
+        }
     }
+
 }
