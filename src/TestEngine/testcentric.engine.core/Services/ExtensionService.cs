@@ -338,6 +338,13 @@ namespace TestCentric.Engine.Services
                 {
                     var candidate = new ExtensionAssembly(filePath, fromWildCard);
 
+                    if (!CanLoadTargetFramework(Assembly.GetEntryAssembly(), candidate))
+                    {
+                        log.Debug("  Unable to load this assembly");
+                        return;
+                    }
+
+
                     for (int i = 0; i < _assemblies.Count; i++)
                     {
                         var assembly = _assemblies[i];
