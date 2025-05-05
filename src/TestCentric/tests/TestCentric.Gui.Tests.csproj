@@ -32,9 +32,9 @@
         <PackageReference Include="NSubstitute" Version="5.3.0" />
 		<PackageReference Include="NUnit" Version="4.1.0" />
 		<PackageReference Include="NUnitLite" Version="4.1.0" />
-		<PackageReference Include="NUnit.Extension.NUnitProjectLoader" Version="3.6.0" />
+		<PackageReference Include="NUnit.Extension.NUnitProjectLoader" Version="3.8.0" />
         <PackageReference Include="NUnit.Extension.NUnitV2Driver" Version="3.8.0" />
-        <PackageReference Include="NUnit.Extension.NUnitV2ResultWriter" Version="3.6.0" />
+        <PackageReference Include="NUnit.Extension.NUnitV2ResultWriter" Version="3.8.0" />
         <PackageReference Include="NUnit.Extension.VSProjectLoader" Version="3.8.0" />
 		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.6.0" />
 	</ItemGroup>
