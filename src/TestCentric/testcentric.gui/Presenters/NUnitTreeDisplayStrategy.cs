@@ -52,7 +52,7 @@ namespace TestCentric.Gui.Presenters
             _view.EnableTestFilter(true);
         }
 
-        protected override VisualState CreateVisualState() => new VisualState("NUNIT_TREE", _settings.Gui.TestTree.ShowNamespace).LoadFrom(_view.TreeView);
+        protected override VisualState CreateVisualState() => new VisualState("NUNIT_TREE", _settings.Gui.TestTree.NUnitGroupBy, _settings.Gui.TestTree.ShowNamespace).LoadFrom(_view.TreeView);
 
         protected override string GetTreeNodeName(TestNode testNode)
         {

@@ -126,6 +126,34 @@ namespace TestCentric.Gui.Presenters.TestTree
             Assert.That(visualState.GroupBy, Is.EqualTo(groupBy));
         }
 
+        [TestCase("UNGROUPED")]
+        [TestCase("CATEGORY")]
+        [TestCase("OUTCOME")]
+        [TestCase("DURATION")]
+        public void WhenTestRunStarts_NUnitTree_CurrentGroupBy_IsSaved_InVisualFile(string groupBy)
+        {
+            // Arrange
+            _settings.Gui.TestTree.DisplayFormat = "NUNIT_TREE";
+            _settings.Gui.TestTree.NUnitGroupBy = groupBy;
+
+            var tv = new TreeView();
+            _view.TreeView.Returns(tv);
+
+            var project = new TestCentricProject(_model, TestFileName);
+            _model.TestCentricProject.Returns(project);
+            TestNode testNode = new TestNode("<test-suite id='1'/>");
+            _model.LoadedTests.Returns(testNode);
+            FireTestLoadedEvent(testNode);
+
+            // Act
+            FireRunStartingEvent(1234);
+
+            // Assert
+            string fileName = VisualState.GetVisualStateFileName(TestFileName);
+            VisualState visualState = VisualState.LoadFrom(fileName);
+            Assert.That(visualState.GroupBy, Is.EqualTo(groupBy));
+        }
+
         // TODO: Version 1 Test - Make it work if needed.
         //[Test]
         //public void WhenTestRunStarts_ResultsAreCleared()

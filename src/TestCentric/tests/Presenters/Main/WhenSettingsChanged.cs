@@ -23,6 +23,19 @@ namespace TestCentric.Gui.Presenters.Main
             Assert.That(_view.DisplayFormat.SelectedItem, Is.EqualTo(displayFormat));
         }
 
+        [TestCase("UNGROUPED")]
+        [TestCase("CATEGORY")]
+        [TestCase("OUTCOME")]
+        [TestCase("DURATION")]
+        public void NUnitTreeGroupBy_SettingChanged_MenuItemIsUpdated(string groupBy)
+        {
+            // 1. Act
+            _settings.Gui.TestTree.NUnitGroupBy = groupBy;
+
+            // 2. Assert
+            Assert.That(_view.NUnitGroupBy.SelectedItem, Is.EqualTo(groupBy));
+        }
+
         [TestCase("ASSEMBLY")]
         [TestCase("CATEGORY")]
         [TestCase("OUTCOME")]
