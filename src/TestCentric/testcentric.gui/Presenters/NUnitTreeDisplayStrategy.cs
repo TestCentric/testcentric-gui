@@ -11,15 +11,17 @@ namespace TestCentric.Gui.Presenters
     using System.Collections.Generic;
     using System.Linq;
     using Model;
+    using TestCentric.Gui.Presenters.NUnitGrouping;
     using Views;
 
     /// <summary>
     /// NUnitTreeDisplayStrategy is used to display a the tests
     /// in the traditional NUnit tree format.
     /// </summary>
-    public class NUnitTreeDisplayStrategy : DisplayStrategy
+    public class NUnitTreeDisplayStrategy : DisplayStrategy, INUnitTreeDisplayStrategy
     {
         private IDictionary<TestNode, string> _foldedNodeNames = new Dictionary<TestNode, string>();
+        private INUnitGrouping _grouping;
 
         public NUnitTreeDisplayStrategy(ITestTreeView view, ITestModel model)
             : base(view, model) 
@@ -40,9 +42,23 @@ namespace TestCentric.Gui.Presenters
             ClearTree();
             _foldedNodeNames.Clear();
 
-            foreach (var topLevelNode in testNode.Children)
-                if (topLevelNode.IsVisible)
-                    _view.Add(CreateNUnitTreeNode(null, topLevelNode));
+            switch (_model.Settings.Gui.TestTree.NUnitGroupBy)
+            {
+                case "CATEGORY": _grouping = new NUnitGrouping.CategoryGrouping(this, _model, _view); break;
+                case "OUTCOME": _grouping = new NUnitGrouping.OutcomeGrouping(this, _model, _view); break;
+                case "DURATION": _grouping = new NUnitGrouping.DurationGrouping(this, _model, _view); break;
+                default: _grouping = null; break;
+            }
+
+            if (_grouping != null)
+                _grouping.CreateTree(testNode);
+
+            else
+            {
+                foreach (var topLevelNode in testNode.Children)
+                    if (topLevelNode.IsVisible)
+                        _view.Add(CreateNUnitTreeNode(null, topLevelNode));
+            }
 
             if (visualState != null)
                 visualState.ApplyTo(_view.TreeView);
@@ -97,12 +113,23 @@ namespace TestCentric.Gui.Presenters
         /// Check if a tree node type should be shown or omitted
         /// Currently we support only omitting the namespace nodes
         /// </summary>
-        private bool ShowTreeNodeType(TestNode testNode)
+        public bool ShowTreeNodeType(TestNode testNode)
         {
             if (IsNamespaceNode(testNode))
                 return _settings.Gui.TestTree.ShowNamespace;
 
             return true;
+        }
+
+        /// <summary>
+        /// Creates a new tree node for one TestNode or TestGroup
+        /// </summary>
+        public TreeNode MakeTreeNode(ITestItem testItem)
+        {
+            if (testItem is TestGroup testGroup)
+                return MakeTreeNode(testGroup, false);
+            else
+                return MakeTreeNode(testItem as TestNode, false);
         }
 
         private string GetFoldedNamespaceName(IList<TestNode> foldedNamespaces)
