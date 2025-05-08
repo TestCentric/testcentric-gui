@@ -16,6 +16,7 @@ using TestCentric.Engine.Services;
 namespace TestCentric.Gui.Model
 {
     using System.Runtime.InteropServices;
+    using System.Threading.Tasks;
     using Services;
     using Settings;
     using TestCentric.Gui.Model.Filter;
@@ -545,7 +546,8 @@ namespace TestCentric.Gui.Model
 
         public void StopTestRun(bool force)
         {
-            Runner.StopRun(force);
+            // Async to avoid blocking the main thread for incoming test events in between
+            Task.Run(() => Runner.StopRun(force));
         }
 
         public void SaveResults(string filePath, string format = "nunit3")
