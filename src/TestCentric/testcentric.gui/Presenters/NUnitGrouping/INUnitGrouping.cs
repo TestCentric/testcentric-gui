@@ -26,5 +26,10 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
         /// Returns the path of tree nodes from the root tree node (group) to the leaf tree node (test case)
         /// </summary>
         IList<TreeNode> CreateTreeNodes(TestNode testNode, string groupName);
+
+        /// <summary>
+        /// Called when one test case is finished
+        /// </summary>
+        void OnTestFinished(ResultNode result);
     }
 }

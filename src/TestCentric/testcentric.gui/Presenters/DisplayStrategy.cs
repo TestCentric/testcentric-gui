@@ -298,6 +298,17 @@ namespace TestCentric.Gui.Presenters
             return treeNodes;
         }
 
+        /// <summary>
+        /// Removes one tree node from the tree
+        /// </summary>
+        public void RemoveTreeNode(TreeNode treeNode)
+        {
+            if (treeNode.Tag is TestNode testNode && _nodeIndex.TryGetValue(testNode.Id, out List<TreeNode> treeNodeList))
+                treeNodeList.Remove(treeNode);
+
+            treeNode.Remove();
+        }
+
         public ResultNode GetResultForTest(TestNode testNode)
         {
             return _model.GetResultForTest(testNode.Id);

@@ -28,11 +28,13 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
             _model = Substitute.For<ITestModel>();
             _strategy = Substitute.For<INUnitTreeDisplayStrategy>();
             _view = Substitute.For<ITestTreeView>();
+            _view.InvokeIfRequired(Arg.Do<MethodInvoker>(x => x.Invoke()));
 
             var treeView = new TreeView();
             _view.TreeView.Returns(treeView);
 
             _strategy.ShowTreeNodeType(null).ReturnsForAnyArgs(true);
+            _strategy.RemoveTreeNode(Arg.Do<TreeNode>(t => t.Remove()));
 
             // We can't construct a TreeNodeCollection, so we need to fake it
             _createNodes = new TreeNode().Nodes;
@@ -113,6 +115,200 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
             AssertTreeNodeGroup(_createNodes[1].Nodes[0].Nodes[0], "NamespaceA", 1, 1);
             AssertTreeNodeGroup(_createNodes[1].Nodes[0].Nodes[0].Nodes[0], "Fixture_1", 1, 1);
             AssertTestCase(_createNodes[1].Nodes[0].Nodes[0].Nodes[0].Nodes[0], "TestB");
+        }
+
+
+        [Test]
+        public void OnTestFinished_Regroups_TreeNodes()
+        {
+            // Arrange
+            TestNode rootTestNode = new TestNode(
+                CreateTestSuiteXml("3-1000", "LibraryA", "",
+                    CreateTestSuiteXml("3-1001", "NamespaceA", "",
+                        CreateTestFixtureXml("3-1010", "Fixture_1", "",
+                            CreateTestcaseXml("3-1011", "TestA", ""),
+                            CreateTestcaseXml("3-1012", "TestB", ""))),
+                    CreateTestSuiteXml("3-2001", "NamespaceB", "",
+                        CreateTestFixtureXml("3-2010", "Fixture_2", "",
+                            CreateTestcaseXml("3-2011", "TestA", ""),
+                            CreateTestcaseXml("3-2012", "TestB", "")))));
+
+            
+            // Create initial tree with all nodes in group 'Not run'
+            var grouping = new OutcomeGrouping(_strategy, _model, _view);
+            grouping.CreateTree(rootTestNode);
+
+            TreeNode treeNode = GetCreatedTreeNode(_createNodes, "3-1011");
+            TestNode testNode = treeNode.Tag as TestNode;
+            ResultNode resultNode = new ResultNode($"<test-case id='3-1011' result='Passed'/>");
+            _model.GetTestById("3-1011").Returns(testNode);
+            _model.GetResultForTest("3-1011").Returns(resultNode);
+            _strategy.GetTreeNodesForTest(treeNode.Tag as TestNode).ReturnsForAnyArgs(new List<TreeNode>() { treeNode });
+
+            // Act
+            grouping.OnTestFinished(resultNode);
+
+            // Assert tree nodes
+            Assert.That(_createNodes.Count, Is.EqualTo(2));
+            AssertTreeNodeGroup(_createNodes[0], "Not run", 3, 1);
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0], "LibraryA", 3, 2);
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0].Nodes[0], "NamespaceA", 1, 1);
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0].Nodes[0].Nodes[0], "Fixture_1", 1, 1);
+            AssertTestCase(_createNodes[0].Nodes[0].Nodes[0].Nodes[0].Nodes[0], "TestB");
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0].Nodes[1], "NamespaceB", 2, 1);
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0].Nodes[1].Nodes[0], "Fixture_2", 2, 2);
+            AssertTestCase(_createNodes[0].Nodes[0].Nodes[1].Nodes[0].Nodes[0], "TestA");
+            AssertTestCase(_createNodes[0].Nodes[0].Nodes[1].Nodes[0].Nodes[1], "TestB");
+
+            AssertTreeNodeGroup(_createNodes[1], "Passed", 1, 1);
+            AssertTreeNodeGroup(_createNodes[1].Nodes[0], "LibraryA", 1, 1);
+            AssertTreeNodeGroup(_createNodes[1].Nodes[0].Nodes[0], "NamespaceA", 1, 1);
+            AssertTreeNodeGroup(_createNodes[1].Nodes[0].Nodes[0].Nodes[0], "Fixture_1", 1, 1);
+            AssertTestCase(_createNodes[1].Nodes[0].Nodes[0].Nodes[0].Nodes[0], "TestA");
+        }
+
+        [Test]
+        public void OnTestFinished_MultipleTimes_Regroups_TreeNodes()
+        {
+            // Arrange
+            TestNode rootTestNode = new TestNode(
+                CreateTestSuiteXml("3-1000", "LibraryA", "",
+                    CreateTestSuiteXml("3-1001", "NamespaceA", "",
+                        CreateTestFixtureXml("3-1010", "Fixture_1", "",
+                            CreateTestcaseXml("3-1011", "TestA", ""),
+                            CreateTestcaseXml("3-1012", "TestB", ""))),
+                    CreateTestSuiteXml("3-2001", "NamespaceB", "",
+                        CreateTestFixtureXml("3-2010", "Fixture_2", "",
+                            CreateTestcaseXml("3-2011", "TestA", ""),
+                            CreateTestcaseXml("3-2012", "TestB", "")))));
+
+
+            // Create initial tree with all nodes in group 'Not run'
+            var grouping = new OutcomeGrouping(_strategy, _model, _view);
+            grouping.CreateTree(rootTestNode);
+
+            // Act
+            ResultNode resultNode = CreateAndPrepareResultNode("3-1011", "Failed");
+            grouping.OnTestFinished(resultNode);
+
+            // Assert tree nodes
+            Assert.That(_createNodes.Count, Is.EqualTo(2));
+            AssertTreeNodeGroup(_createNodes[0], "Not run", 3, 1);
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0], "LibraryA", 3, 2);
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0].Nodes[0], "NamespaceA", 1, 1);
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0].Nodes[0].Nodes[0], "Fixture_1", 1, 1);
+            AssertTestCase(_createNodes[0].Nodes[0].Nodes[0].Nodes[0].Nodes[0], "TestB");
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0].Nodes[1], "NamespaceB", 2, 1);
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0].Nodes[1].Nodes[0], "Fixture_2", 2, 2);
+            AssertTestCase(_createNodes[0].Nodes[0].Nodes[1].Nodes[0].Nodes[0], "TestA");
+            AssertTestCase(_createNodes[0].Nodes[0].Nodes[1].Nodes[0].Nodes[1], "TestB");
+
+            AssertTreeNodeGroup(_createNodes[1], "Failed", 1, 1);
+            AssertTreeNodeGroup(_createNodes[1].Nodes[0], "LibraryA", 1, 1);
+            AssertTreeNodeGroup(_createNodes[1].Nodes[0].Nodes[0], "NamespaceA", 1, 1);
+            AssertTreeNodeGroup(_createNodes[1].Nodes[0].Nodes[0].Nodes[0], "Fixture_1", 1, 1);
+            AssertTestCase(_createNodes[1].Nodes[0].Nodes[0].Nodes[0].Nodes[0], "TestA");
+
+            // Act
+            resultNode = CreateAndPrepareResultNode("3-1012", "Passed");
+            grouping.OnTestFinished(resultNode);
+
+            // Assert tree nodes
+            Assert.That(_createNodes.Count, Is.EqualTo(3));
+            AssertTreeNodeGroup(_createNodes[0], "Not run", 2, 1);
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0].Nodes[0], "NamespaceB", 2, 1);
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0].Nodes[0].Nodes[0], "Fixture_2", 2, 2);
+            AssertTestCase(_createNodes[0].Nodes[0].Nodes[0].Nodes[0].Nodes[0], "TestA");
+            AssertTestCase(_createNodes[0].Nodes[0].Nodes[0].Nodes[0].Nodes[1], "TestB");
+
+            AssertTreeNodeGroup(_createNodes[1], "Failed", 1, 1);
+            AssertTreeNodeGroup(_createNodes[1].Nodes[0], "LibraryA", 1, 1);
+            AssertTreeNodeGroup(_createNodes[1].Nodes[0].Nodes[0], "NamespaceA", 1, 1);
+            AssertTreeNodeGroup(_createNodes[1].Nodes[0].Nodes[0].Nodes[0], "Fixture_1", 1, 1);
+            AssertTestCase(_createNodes[1].Nodes[0].Nodes[0].Nodes[0].Nodes[0], "TestA");
+
+            AssertTreeNodeGroup(_createNodes[2], "Passed", 1, 1);
+            AssertTreeNodeGroup(_createNodes[2].Nodes[0], "LibraryA", 1, 1);
+            AssertTreeNodeGroup(_createNodes[2].Nodes[0].Nodes[0], "NamespaceA", 1, 1);
+            AssertTreeNodeGroup(_createNodes[2].Nodes[0].Nodes[0].Nodes[0], "Fixture_1", 1, 1);
+            AssertTestCase(_createNodes[2].Nodes[0].Nodes[0].Nodes[0].Nodes[0], "TestB");
+
+            // Act
+            resultNode = CreateAndPrepareResultNode("3-2011", "Passed");
+            grouping.OnTestFinished(resultNode);
+
+            // Assert tree nodes
+            Assert.That(_createNodes.Count, Is.EqualTo(3));
+            AssertTreeNodeGroup(_createNodes[0], "Not run", 1, 1);
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0].Nodes[0], "NamespaceB", 1, 1);
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0].Nodes[0].Nodes[0], "Fixture_2", 1, 1);
+            AssertTestCase(_createNodes[0].Nodes[0].Nodes[0].Nodes[0].Nodes[0], "TestB");
+
+            AssertTreeNodeGroup(_createNodes[1], "Failed", 1, 1);
+            AssertTreeNodeGroup(_createNodes[1].Nodes[0], "LibraryA", 1, 1);
+            AssertTreeNodeGroup(_createNodes[1].Nodes[0].Nodes[0], "NamespaceA", 1, 1);
+            AssertTreeNodeGroup(_createNodes[1].Nodes[0].Nodes[0].Nodes[0], "Fixture_1", 1, 1);
+            AssertTestCase(_createNodes[1].Nodes[0].Nodes[0].Nodes[0].Nodes[0], "TestA");
+
+            AssertTreeNodeGroup(_createNodes[2], "Passed", 2, 1);
+            AssertTreeNodeGroup(_createNodes[2].Nodes[0], "LibraryA", 2, 2);
+            AssertTreeNodeGroup(_createNodes[2].Nodes[0].Nodes[0], "NamespaceA", 1, 1);
+            AssertTreeNodeGroup(_createNodes[2].Nodes[0].Nodes[0].Nodes[0], "Fixture_1", 1, 1);
+            AssertTestCase(_createNodes[2].Nodes[0].Nodes[0].Nodes[0].Nodes[0], "TestB");
+            AssertTreeNodeGroup(_createNodes[2].Nodes[0].Nodes[1], "NamespaceB", 1, 1);
+            AssertTreeNodeGroup(_createNodes[2].Nodes[0].Nodes[1].Nodes[0], "Fixture_2", 1, 1);
+            AssertTestCase(_createNodes[2].Nodes[0].Nodes[1].Nodes[0].Nodes[0], "TestA");
+
+            // Act
+            resultNode = CreateAndPrepareResultNode("3-2012", "Failed");
+            grouping.OnTestFinished(resultNode);
+
+            // Assert tree nodes
+            Assert.That(_createNodes.Count, Is.EqualTo(2));
+            AssertTreeNodeGroup(_createNodes[0], "Failed", 2, 1);
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0], "LibraryA", 2, 2);
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0].Nodes[0], "NamespaceA", 1, 1);
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0].Nodes[0].Nodes[0], "Fixture_1", 1, 1);
+            AssertTestCase(_createNodes[0].Nodes[0].Nodes[0].Nodes[0].Nodes[0], "TestA");
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0].Nodes[1], "NamespaceB", 1, 1);
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0].Nodes[1].Nodes[0], "Fixture_2", 1, 1);
+            AssertTestCase(_createNodes[0].Nodes[0].Nodes[1].Nodes[0].Nodes[0], "TestB");
+
+            AssertTreeNodeGroup(_createNodes[1], "Passed", 2, 1);
+            AssertTreeNodeGroup(_createNodes[1].Nodes[0], "LibraryA", 2, 2);
+            AssertTreeNodeGroup(_createNodes[1].Nodes[0].Nodes[0], "NamespaceA", 1, 1);
+            AssertTreeNodeGroup(_createNodes[1].Nodes[0].Nodes[0].Nodes[0], "Fixture_1", 1, 1);
+            AssertTestCase(_createNodes[1].Nodes[0].Nodes[0].Nodes[0].Nodes[0], "TestB");
+            AssertTreeNodeGroup(_createNodes[1].Nodes[0].Nodes[1], "NamespaceB", 1, 1);
+            AssertTreeNodeGroup(_createNodes[1].Nodes[0].Nodes[1].Nodes[0], "Fixture_2", 1, 1);
+            AssertTestCase(_createNodes[1].Nodes[0].Nodes[1].Nodes[0].Nodes[0], "TestA");
+        }
+
+        private ResultNode CreateAndPrepareResultNode(string nodeId, string outcome)
+        {
+            TreeNode treeNode = GetCreatedTreeNode(_createNodes, nodeId);
+            TestNode testNode = treeNode.Tag as TestNode;
+            ResultNode resultNode = new ResultNode($"<test-case id='{nodeId}' result='{outcome}'/>");
+            _model.GetTestById(nodeId).Returns(testNode);
+            _model.GetResultForTest(nodeId).Returns(resultNode);
+            _strategy.GetTreeNodesForTest(treeNode.Tag as TestNode).ReturnsForAnyArgs(new List<TreeNode>() { treeNode });
+            return resultNode;
+        }
+
+        private TreeNode GetCreatedTreeNode(TreeNodeCollection treeNodes, string nodeId)
+        {
+            foreach (TreeNode treeNode in treeNodes)
+            {
+                if (treeNode.Tag is TestNode testNode && testNode.Id == nodeId)
+                    return treeNode;
+
+                TreeNode n = GetCreatedTreeNode(treeNode.Nodes, nodeId);
+                if (n != null) 
+                    return n;
+            }
+
+
+            return null;
         }
 
         private void AssertTestCase(TreeNode treeNode, string expectedName)

@@ -57,7 +57,7 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
             }
 
             // 3. Update tree node names
-            UpdateTreeNodeNames();
+            TreeNodeNameHandler.UpdateTreeNodeNames(TreeView.Nodes);
 
             TreeView.TreeView.EndUpdate();
         }
@@ -82,6 +82,26 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
         public virtual IList<string> GetGroupNames(TestNode testNode)
         {
             return new List<string>();
+        }
+
+        /// <summary>
+        /// Called when one test case is finished
+        /// </summary>
+        public void OnTestFinished(ResultNode result)
+        {
+            if (!result.IsSuite)
+            {
+                if (SupportsRegrouping)
+                    TreeView.InvokeIfRequired(() => ReGroup(result));
+            }
+        }
+
+        private void ReGroup(ResultNode resultNode)
+        {
+            TestNode testNode = Model.GetTestById(resultNode.Id);
+
+            ReGrouping r = new ReGrouping(TreeView, Strategy, this);
+            r.Regroup(testNode);
         }
 
         /// <summary>
@@ -176,24 +196,6 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
             foreach (TreeNode treeNode in treeNodes)
                 if (treeNode.Tag is TestGroup testGroup)
                     testGroup.Add(testNode);
-        }
-
-        private void UpdateTreeNodeNames()
-        {
-            foreach (TreeNode treeNode in TreeView.Nodes)
-                UpdateTreeNodeNames(treeNode);
-        }
-
-        private void UpdateTreeNodeNames(TreeNode treeNode)
-        {
-            if (treeNode.Tag is TestGroup testGroup)
-            {
-                string groupName = $"{testGroup.Name} ({testGroup.Count()})";
-                treeNode.Text = groupName;
-            }
-
-            foreach (TreeNode child in treeNode.Nodes)
-                UpdateTreeNodeNames(child);
         }
     }
 }

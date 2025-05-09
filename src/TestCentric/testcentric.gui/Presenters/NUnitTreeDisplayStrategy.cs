@@ -68,6 +68,13 @@ namespace TestCentric.Gui.Presenters
             _view.EnableTestFilter(true);
         }
 
+        public override void OnTestFinished(ResultNode result)
+        {
+            base.OnTestFinished(result);
+            _grouping?.OnTestFinished(result);
+        }
+
+
         protected override VisualState CreateVisualState() => new VisualState("NUNIT_TREE", _settings.Gui.TestTree.NUnitGroupBy, _settings.Gui.TestTree.ShowNamespace).LoadFrom(_view.TreeView);
 
         protected override string GetTreeNodeName(TestNode testNode)
