@@ -270,17 +270,16 @@ namespace TestCentric.Gui.Presenters.Main
             _model.Received().RunTests(Arg.Any<TestSelection>());
         }
 
-        //// TODO: No longer a setting, replace with change to VisualState
-        //[Test]
-        //public void DisplayFormatChange_ChangesModelSetting()
-        //{
-        //    _view.DisplayFormat.SelectedItem.Returns("TEST_LIST");
-        //    _view.DisplayFormat.SelectionChanged += Raise.Event<CommandHandler>();
+        [Test]
+        public void DisplayFormatChange_ChangesModelSetting()
+        {
+            _view.DisplayFormat.SelectedItem.Returns("TEST_LIST");
+            _view.DisplayFormat.SelectionChanged += Raise.Event<CommandHandler>();
 
-        //    // FakeSettings saves the setting so we can check if it was set
-        //    var setting = (string)_model.Settings.GetSetting("Gui.TestTree.DisplayFormat");
-        //    Assert.That(setting, Is.EqualTo("TEST_LIST"));
-        //}
+            // FakeSettings saves the setting so we can check if it was set
+            var setting = (string)_model.Settings.GetSetting("Gui.TestTree.DisplayFormat");
+            Assert.That(setting, Is.EqualTo("TEST_LIST"));
+        }
 
         [Test]
         public void TestListGroupByChange_ChangesModelSetting()
@@ -303,6 +302,18 @@ namespace TestCentric.Gui.Presenters.Main
 
             // FakeSettings saves the setting so we can check if it was set
             var setting = (string)_model.Settings.GetSetting("Gui.TestTree.FixtureList.GroupBy");
+            Assert.That(setting, Is.EqualTo("CATEGORY"));
+        }
+
+        [Test]
+        public void NUnitTreeGroupByChange_ChangesModelSetting()
+        {
+            _view.DisplayFormat.SelectedItem.Returns("NUNIT_TREE");
+            _view.NUnitGroupBy.SelectedItem.Returns("CATEGORY");
+            _view.NUnitGroupBy.SelectionChanged += Raise.Event<CommandHandler>();
+
+            // FakeSettings saves the setting so we can check if it was set
+            var setting = (string)_model.Settings.GetSetting("Gui.TestTree.NUnitGroupBy");
             Assert.That(setting, Is.EqualTo("CATEGORY"));
         }
 

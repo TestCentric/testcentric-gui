@@ -66,7 +66,7 @@ namespace TestCentric.Gui.Presenters
         /// </summary>
         public abstract void OnTestLoaded(TestNode testNode, VisualState visualState);
 
-        public void SaveVisualState() => CreateVisualState().Save(VisualState.GetVisualStateFileName(_model.TestCentricProject.TestFiles[0]));
+        public void SaveVisualState() => _view.InvokeIfRequired(() => CreateVisualState().Save(VisualState.GetVisualStateFileName(_model.TestCentricProject.TestFiles[0])));
 
         protected abstract VisualState CreateVisualState();
 
@@ -296,6 +296,17 @@ namespace TestCentric.Gui.Presenters
                 treeNodes = new List<TreeNode>();
 
             return treeNodes;
+        }
+
+        /// <summary>
+        /// Removes one tree node from the tree
+        /// </summary>
+        public void RemoveTreeNode(TreeNode treeNode)
+        {
+            if (treeNode.Tag is TestNode testNode && _nodeIndex.TryGetValue(testNode.Id, out List<TreeNode> treeNodeList))
+                treeNodeList.Remove(treeNode);
+
+            treeNode.Remove();
         }
 
         public ResultNode GetResultForTest(TestNode testNode)

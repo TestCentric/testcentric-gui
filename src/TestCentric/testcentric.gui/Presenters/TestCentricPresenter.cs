@@ -239,6 +239,9 @@ namespace TestCentric.Gui.Presenters
                         UpdateTreeDisplayMenuItem();
                         UpdateViewCommands();
                         break;
+                    case "TestCentric.Gui.TestTree.NUnitGroupBy":
+                        _view.NUnitGroupBy.SelectedItem = _settings.Gui.TestTree.NUnitGroupBy;
+                        break;
                     case "TestCentric.Gui.TestTree.TestList.GroupBy":
                         _view.TestListGroupBy.SelectedItem = _settings.Gui.TestTree.TestList.GroupBy;
                         break;
@@ -463,6 +466,11 @@ namespace TestCentric.Gui.Presenters
             _view.ShowHideFilterButton.CheckedChanged += () =>
             {
                 _settings.Gui.TestTree.ShowFilter = _view.ShowHideFilterButton.Checked;
+            };
+
+            _view.NUnitGroupBy.SelectionChanged += () =>
+            {
+                _settings.Gui.TestTree.NUnitGroupBy = _view.NUnitGroupBy.SelectedItem;
             };
 
             _view.TestListGroupBy.SelectionChanged += () =>
@@ -916,6 +924,9 @@ namespace TestCentric.Gui.Presenters
 
             switch (displayFormat)
             {
+                case "NUNIT_TREE":
+                    _view.NUnitGroupBy.SelectedItem = _settings.Gui.TestTree.NUnitGroupBy;
+                    break;
                 case "TEST_LIST":
                     _view.TestListGroupBy.SelectedItem = _settings.Gui.TestTree.TestList.GroupBy;
                     break;
