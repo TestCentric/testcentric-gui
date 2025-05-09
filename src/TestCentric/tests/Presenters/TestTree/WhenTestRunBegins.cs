@@ -77,6 +77,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         public void WhenTestRunStarts_CurrentDisplayFormat_IsSaved_InVisualFile(string displayFormat)
         {
             // Arrange
+            _view.InvokeIfRequired(Arg.Do<MethodInvoker>(x => x.Invoke()));
             _settings.Gui.TestTree.DisplayFormat = displayFormat;
             var tv = new TreeView();
             _view.TreeView.Returns(tv);
@@ -105,6 +106,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         public void WhenTestRunStarts_CurrentGroupBy_IsSaved_InVisualFile(string groupBy)
         {
             // Arrange
+            _view.InvokeIfRequired(Arg.Do<MethodInvoker>(x => x.Invoke()));
             _settings.Gui.TestTree.DisplayFormat = "FIXTURE_LIST";
             _settings.Gui.TestTree.FixtureList.GroupBy = groupBy;
 
@@ -133,6 +135,7 @@ namespace TestCentric.Gui.Presenters.TestTree
         public void WhenTestRunStarts_NUnitTree_CurrentGroupBy_IsSaved_InVisualFile(string groupBy)
         {
             // Arrange
+            _view.InvokeIfRequired(Arg.Do<MethodInvoker>(x => x.Invoke()));
             _settings.Gui.TestTree.DisplayFormat = "NUNIT_TREE";
             _settings.Gui.TestTree.NUnitGroupBy = groupBy;
 
