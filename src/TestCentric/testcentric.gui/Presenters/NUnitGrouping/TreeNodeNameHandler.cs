@@ -9,9 +9,9 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Presenters.NUnitGrouping
 {
-    internal class TreeNodeNameHandler
+    public class TreeNodeNameHandler
     {
-        internal static void UpdateTreeNodeNames(TreeNodeCollection nodes)
+        public static void UpdateTreeNodeNames(TreeNodeCollection nodes)
         {
             foreach (TreeNode treeNode in nodes)
             {
@@ -20,13 +20,13 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
             }
         }
 
-        internal static void UpdateTreeNodeNames(IEnumerable<TreeNode> nodes)
+        public static void UpdateTreeNodeNames(IEnumerable<TreeNode> nodes)
         {
             foreach (TreeNode treeNode in nodes)
                 UpdateTreeNodeName(treeNode);
         }
 
-        internal static void UpdateTreeNodeName(TreeNode treeNode)
+        public static void UpdateTreeNodeName(TreeNode treeNode)
         {
             if (treeNode.Tag is TestGroup testGroup)
             {

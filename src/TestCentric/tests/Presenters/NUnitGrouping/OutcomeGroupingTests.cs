@@ -284,6 +284,96 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
             AssertTestCase(_createNodes[1].Nodes[0].Nodes[1].Nodes[0].Nodes[0], "TestA");
         }
 
+        [Test]
+        public void CreateTree_AllNodesInSameOutcome_NamespaceNodes_AreFolded()
+        {
+            // Arrange
+            TestNode testNode = new TestNode(
+                CreateTestSuiteXml("3-1000", "LibraryA", "",
+                    CreateTestSuiteXml("3-1001", "Test", "",
+                        CreateTestSuiteXml("3-2001", "NamespaceA", "",
+                            CreateTestSuiteXml("3-2005", "FolderA", "",
+                                CreateTestFixtureXml("3-2010", "Fixture_1", "",
+                                    CreateTestcaseXml("3-2011", "TestA", "Passed"),
+                                    CreateTestcaseXml("3-2012", "TestB", "Passed")))),
+                        CreateTestSuiteXml("3-3001", "NamespaceB", "",
+                            CreateTestSuiteXml("3-3005", "Folder1", "",
+                                CreateTestFixtureXml("3-3010", "Fixture_2", "",
+                                    CreateTestcaseXml("3-3011", "TestA", "Passed"))),
+                            CreateTestSuiteXml("3-3020", "Folder2", "",
+                                CreateTestSuiteXml("3-3025", "Folder3", "",
+                                    CreateTestFixtureXml("3-3026", "Fixture_3", "",
+                                        CreateTestcaseXml("3-3027", "TestB", "Passed"))))))));
+
+            // Act
+            var grouping = new OutcomeGrouping(_strategy, _model, _view);
+            grouping.CreateTree(testNode);
+
+            // Assert tree nodes
+            Assert.That(_createNodes.Count, Is.EqualTo(1));
+            AssertTreeNodeGroup(_createNodes[0], "Passed", 4, 1);
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0], "LibraryA.Test", 4, 2);
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0].Nodes[0], "NamespaceA.FolderA", 2, 1);
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0].Nodes[0].Nodes[0], "Fixture_1", 2, 2);
+            AssertTestCase(_createNodes[0].Nodes[0].Nodes[0].Nodes[0].Nodes[0], "TestA");
+            AssertTestCase(_createNodes[0].Nodes[0].Nodes[0].Nodes[0].Nodes[1], "TestB");
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0].Nodes[1], "NamespaceB", 2, 2);
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0].Nodes[1].Nodes[0], "Folder1", 1, 1);
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0].Nodes[1].Nodes[0].Nodes[0], "Fixture_2", 1, 1);
+            AssertTestCase(_createNodes[0].Nodes[0].Nodes[1].Nodes[0].Nodes[0].Nodes[0], "TestA");
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0].Nodes[1].Nodes[1], "Folder2.Folder3", 1, 1);
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0].Nodes[1].Nodes[1].Nodes[0], "Fixture_3", 1, 1);
+            AssertTestCase(_createNodes[0].Nodes[0].Nodes[1].Nodes[1].Nodes[0].Nodes[0], "TestB");
+        }
+
+        [Test]
+        public void CreateTree_AllNodesInDifferentOutcomes_NamespaceNodes_AreFolded()
+        {
+            // Arrange
+            TestNode testNode = new TestNode(
+                CreateTestSuiteXml("3-1000", "LibraryA", "",
+                    CreateTestSuiteXml("3-1001", "Test", "",
+                        CreateTestSuiteXml("3-2001", "NamespaceA", "",
+                            CreateTestSuiteXml("3-2005", "FolderA", "",
+                                CreateTestFixtureXml("3-2010", "Fixture_1", "",
+                                    CreateTestcaseXml("3-2011", "TestA", "Passed"),
+                                    CreateTestcaseXml("3-2012", "TestB", "Failed")))),
+                        CreateTestSuiteXml("3-3001", "NamespaceB", "",
+                            CreateTestSuiteXml("3-3005", "Folder1", "",
+                                CreateTestFixtureXml("3-3010", "Fixture_2", "",
+                                    CreateTestcaseXml("3-3011", "TestA", "Passed"))),
+                            CreateTestSuiteXml("3-3020", "Folder2", "",
+                                CreateTestSuiteXml("3-3025", "Folder3", "",
+                                    CreateTestFixtureXml("3-3026", "Fixture_3", "",
+                                        CreateTestcaseXml("3-3027", "TestB", "Failed"))))))));
+
+            // Act
+            var grouping = new OutcomeGrouping(_strategy, _model, _view);
+            grouping.CreateTree(testNode);
+
+            // Assert tree nodes
+            Assert.That(_createNodes.Count, Is.EqualTo(2));
+            AssertTreeNodeGroup(_createNodes[0], "Passed", 2, 1);
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0], "LibraryA.Test", 2, 2);
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0].Nodes[0], "NamespaceA.FolderA", 1, 1);
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0].Nodes[0].Nodes[0], "Fixture_1", 1, 1);
+            AssertTestCase(_createNodes[0].Nodes[0].Nodes[0].Nodes[0].Nodes[0], "TestA");
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0].Nodes[1], "NamespaceB", 1, 1);
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0].Nodes[1].Nodes[0], "Folder1", 1, 1);
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0].Nodes[1].Nodes[0].Nodes[0], "Fixture_2", 1, 1);
+            AssertTestCase(_createNodes[0].Nodes[0].Nodes[1].Nodes[0].Nodes[0].Nodes[0], "TestA");
+
+            AssertTreeNodeGroup(_createNodes[1], "Failed", 2, 1);
+            AssertTreeNodeGroup(_createNodes[1].Nodes[0], "LibraryA.Test", 2, 2);
+            AssertTreeNodeGroup(_createNodes[1].Nodes[0].Nodes[0], "NamespaceA.FolderA",1, 1);
+            AssertTreeNodeGroup(_createNodes[1].Nodes[0].Nodes[0].Nodes[0], "Fixture_1", 1, 1);
+            AssertTestCase(_createNodes[1].Nodes[0].Nodes[0].Nodes[0].Nodes[0], "TestB");
+            AssertTreeNodeGroup(_createNodes[1].Nodes[0].Nodes[1], "NamespaceB", 1, 1);
+            AssertTreeNodeGroup(_createNodes[1].Nodes[0].Nodes[1].Nodes[0], "Folder2.Folder3", 1, 1);
+            AssertTreeNodeGroup(_createNodes[1].Nodes[0].Nodes[1].Nodes[0].Nodes[0], "Fixture_3", 1, 1);
+            AssertTestCase(_createNodes[1].Nodes[0].Nodes[1].Nodes[0].Nodes[0].Nodes[0], "TestB");
+        }
+
         private ResultNode CreateAndPrepareResultNode(string nodeId, string outcome)
         {
             TreeNode treeNode = GetCreatedTreeNode(_createNodes, nodeId);

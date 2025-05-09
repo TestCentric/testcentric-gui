@@ -151,6 +151,13 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
                     continue;
 
                 string name = testNode.Name;
+                // Check if namespace nodes must be folded into one single tree node
+                if (FoldNamespaceNodesHandler.IsNamespaceNode(testNode))
+                {
+                    IList<TestNode> foldedNodes = FoldNamespaceNodesHandler.FoldNamespaceNodes(testNode);
+                    name = FoldNamespaceNodesHandler.GetFoldedNamespaceName(foldedNodes);
+                    i += foldedNodes.Count - 1;
+                }
 
                 // Try to get child TreeNode => create not exists create TreeNode
                 TreeNode childNode = TryGetChildNode(parentTreeNode, name);

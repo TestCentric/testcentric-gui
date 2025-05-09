@@ -92,12 +92,12 @@ namespace TestCentric.Gui.Presenters
 
             if (ShowTreeNodeType(testNode))
             {
-                if (IsNamespaceNode(testNode))
+                if (FoldNamespaceNodesHandler.IsNamespaceNode(testNode))
                 {
                     // Get list of all namespace nodes which can be folded
                     // And get name of folded namespaces and store in dictionary for later usage
-                    IList<TestNode> foldedNodes = FoldNamespaceNodes(testNode);
-                    _foldedNodeNames[foldedNodes.First()] = GetFoldedNamespaceName(foldedNodes);
+                    IList<TestNode> foldedNodes = FoldNamespaceNodesHandler.FoldNamespaceNodes(testNode);
+                    _foldedNodeNames[foldedNodes.First()] = FoldNamespaceNodesHandler.GetFoldedNamespaceName(foldedNodes);
 
                     treeNode = MakeTreeNode(foldedNodes.First(), false);    // Create TreeNode representing the first node
                     testNode = foldedNodes.Last();                          // But proceed building up tree with last node
@@ -122,7 +122,7 @@ namespace TestCentric.Gui.Presenters
         /// </summary>
         public bool ShowTreeNodeType(TestNode testNode)
         {
-            if (IsNamespaceNode(testNode))
+            if (FoldNamespaceNodesHandler.IsNamespaceNode(testNode))
                 return _settings.Gui.TestTree.ShowNamespace;
 
             return true;
@@ -137,34 +137,6 @@ namespace TestCentric.Gui.Presenters
                 return MakeTreeNode(testGroup, false);
             else
                 return MakeTreeNode(testItem as TestNode, false);
-        }
-
-        private string GetFoldedNamespaceName(IList<TestNode> foldedNamespaces)
-        {
-            var namespaceNames = foldedNamespaces.Select(x => x.Name);
-            return String.Join(".", namespaceNames);
-        }
-
-        private IList<TestNode> FoldNamespaceNodes(TestNode testNode)
-        {
-            if (!IsNamespaceNode(testNode))
-            {
-                return new List<TestNode>();
-            }
-
-            // If a namespace node only contains one child item which is also a namespace node, we can fold them.
-            List<TestNode> namespaceNodes = new List<TestNode>() { testNode };
-            if (testNode.Children.Count == 1 && IsNamespaceNode(testNode.Children[0]))
-            { 
-                namespaceNodes.AddRange(FoldNamespaceNodes(testNode.Children[0]));
-            }
-
-            return namespaceNodes;
-        }
-
-        private bool IsNamespaceNode(TestNode testNode)
-        {
-            return testNode.IsSuite && (testNode.Type == "TestSuite" || testNode.Type == "SetUpFixture");
         }
 
         private void SetDefaultInitialExpansion()
