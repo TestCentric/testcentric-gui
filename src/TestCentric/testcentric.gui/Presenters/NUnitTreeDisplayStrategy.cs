@@ -74,6 +74,11 @@ namespace TestCentric.Gui.Presenters
             _grouping?.OnTestFinished(result);
         }
 
+        public override void OnTestRunFinished()
+        {
+            base.OnTestRunFinished();
+            _grouping?.OnTestRunFinished();
+        }
 
         protected override VisualState CreateVisualState() => new VisualState("NUNIT_TREE", _settings.Gui.TestTree.NUnitGroupBy, _settings.Gui.TestTree.ShowNamespace).LoadFrom(_view.TreeView);
 
@@ -129,14 +134,28 @@ namespace TestCentric.Gui.Presenters
         }
 
         /// <summary>
-        /// Creates a new tree node for one TestNode or TestGroup
+        /// Creates a new tree node for a TestNode
         /// </summary>
-        public TreeNode MakeTreeNode(ITestItem testItem)
+        public TreeNode MakeTreeNode(TestNode testNode)
         {
-            if (testItem is TestGroup testGroup)
-                return MakeTreeNode(testGroup, false);
-            else
-                return MakeTreeNode(testItem as TestNode, false);
+            TreeNode treeNode = MakeTreeNode(testNode, false);
+            ResultNode resultNode = _model.GetResultForTest(testNode.Id);
+            if (resultNode != null)
+                _view.SetImageIndex(treeNode, DisplayStrategy.CalcImageIndex(resultNode.Outcome));
+
+            return treeNode;
+        }
+
+        /// <summary>
+        /// Creates a new tree node for a TestGroup which is associated to a TestNode
+        /// </summary>
+        public TreeNode MakeTreeNode(TestGroup testGroup, TestNode testNode)
+        {
+            TreeNode treeNode = MakeTreeNode(testGroup, false);
+            if (testNode != null)
+                AddTestNodeMapping(testNode, treeNode);
+
+            return treeNode;
         }
 
         private void SetDefaultInitialExpansion()

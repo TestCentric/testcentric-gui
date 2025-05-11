@@ -12,9 +12,14 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
     public interface INUnitTreeDisplayStrategy
     {
         /// <summary>
-        /// Creates a new tree node for one TestNode or TestGroup
+        /// Creates a new tree node for a TestNode
         /// </summary>
-        TreeNode MakeTreeNode(ITestItem item);
+        TreeNode MakeTreeNode(TestNode testNode);
+
+        /// <summary>
+        /// Creates a new tree node for a TestGroup which is associated to a TestNode
+        /// </summary>
+        TreeNode MakeTreeNode(TestGroup testGroup, TestNode testNode);
 
         /// <summary>
         /// Removes one tree node from the tree

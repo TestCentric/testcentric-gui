@@ -56,8 +56,9 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
                     CreateTreeNodes(testNode, groupName);
             }
 
-            // 3. Update tree node names
+            // 3. Update tree node names and images
             TreeNodeNameHandler.UpdateTreeNodeNames(TreeView.Nodes);
+            TreeNodeImageHandler.SetTreeNodeImages(TreeView, TreeView.Nodes.OfType<TreeNode>(), true);
 
             TreeView.TreeView.EndUpdate();
         }
@@ -94,6 +95,14 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
                 if (SupportsRegrouping)
                     TreeView.InvokeIfRequired(() => ReGroup(result));
             }
+            else
+                TreeNodeImageHandler.SetTreeNodeImages(TreeView, Strategy.GetTreeNodesForTest(result), false);
+        }
+
+        public void OnTestRunFinished()
+        {
+            // The images of the top group tree nodes (for example 'CategoryA' or 'Slow') cannot be set during a test run
+            TreeNodeImageHandler.SetTreeNodeImages(TreeView, TreeView.Nodes.OfType<TreeNode>(), false);
         }
 
         private void ReGroup(ResultNode resultNode)
@@ -115,7 +124,7 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
                     return treeNode;
 
             // TreeNode doesn't exist => create it
-            TreeNode groupTreeNode = Strategy.MakeTreeNode(new TestGroup(groupName));
+            TreeNode groupTreeNode = Strategy.MakeTreeNode(new TestGroup(groupName), null);
             TreeView.Add(groupTreeNode);
             return groupTreeNode;
         }
@@ -183,19 +192,9 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
 
         private TreeNode CreateTreeNode(TreeNode parentTreeNode, TestNode testNode, string name)
         {
-            ITestItem testItem = GetTestNodeForTreeItem(testNode, name);
-            TreeNode treeNode = Strategy.MakeTreeNode(testItem);
+            TreeNode treeNode = !testNode.IsSuite ? Strategy.MakeTreeNode(testNode) : Strategy.MakeTreeNode(new TestGroup(name), testNode);
             parentTreeNode?.Nodes.Add(treeNode);
             return treeNode;
-        }
-
-        private ITestItem GetTestNodeForTreeItem(TestNode testNode, string name)
-        {
-            if (!testNode.IsSuite)
-                return testNode;
-
-            TestGroup testGroup = new TestGroup(name);
-            return testGroup;
         }
 
         private void AddTestNodeToTestsGroups(IList<TreeNode> treeNodes, TestNode testNode)

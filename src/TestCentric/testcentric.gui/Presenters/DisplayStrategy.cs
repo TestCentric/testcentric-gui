@@ -151,7 +151,7 @@ namespace TestCentric.Gui.Presenters
             switch (testNode.RunState)
             {
                 case RunState.Ignored:
-                    imageIndex = TestTreeView.WarningIndex;
+                    imageIndex = TestTreeView.IgnoredIndex;
                     break;
                 case RunState.NotRunnable:
                     imageIndex = TestTreeView.FailureIndex;
@@ -160,21 +160,22 @@ namespace TestCentric.Gui.Presenters
 
             treeNode.ImageIndex = treeNode.SelectedImageIndex = imageIndex;
 
-            string id = testNode.Id;
-            if (_nodeIndex.ContainsKey(id))
-                _nodeIndex[id].Add(treeNode);
-            else
-            {
-                var list = new List<TreeNode>();
-                list.Add(treeNode);
-                _nodeIndex.Add(id, list);
-            }
+            AddTestNodeMapping(testNode, treeNode);
 
             if (recursive)
                 foreach (TestNode childNode in testNode.Children)
                     treeNode.Nodes.Add(MakeTreeNode(childNode, true));
 
             return treeNode;
+        }
+
+        protected void AddTestNodeMapping(TestNode testNode, TreeNode treeNode)
+        {
+            string id = testNode.Id;
+            if (_nodeIndex.ContainsKey(id))
+                _nodeIndex[id].Add(treeNode);
+            else
+                _nodeIndex.Add(id, new List<TreeNode> { treeNode });
         }
 
         public string GroupDisplayName(TestGroup group)
