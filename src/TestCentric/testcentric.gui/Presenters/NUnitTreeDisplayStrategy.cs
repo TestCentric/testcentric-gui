@@ -11,15 +11,17 @@ namespace TestCentric.Gui.Presenters
     using System.Collections.Generic;
     using System.Linq;
     using Model;
+    using TestCentric.Gui.Presenters.NUnitGrouping;
     using Views;
 
     /// <summary>
     /// NUnitTreeDisplayStrategy is used to display a the tests
     /// in the traditional NUnit tree format.
     /// </summary>
-    public class NUnitTreeDisplayStrategy : DisplayStrategy
+    public class NUnitTreeDisplayStrategy : DisplayStrategy, INUnitTreeDisplayStrategy
     {
         private IDictionary<TestNode, string> _foldedNodeNames = new Dictionary<TestNode, string>();
+        private INUnitGrouping _grouping;
 
         public NUnitTreeDisplayStrategy(ITestTreeView view, ITestModel model)
             : base(view, model) 
@@ -40,9 +42,23 @@ namespace TestCentric.Gui.Presenters
             ClearTree();
             _foldedNodeNames.Clear();
 
-            foreach (var topLevelNode in testNode.Children)
-                if (topLevelNode.IsVisible)
-                    _view.Add(CreateNUnitTreeNode(null, topLevelNode));
+            switch (_model.Settings.Gui.TestTree.NUnitGroupBy)
+            {
+                case "CATEGORY": _grouping = new NUnitGrouping.CategoryGrouping(this, _model, _view); break;
+                case "OUTCOME": _grouping = new NUnitGrouping.OutcomeGrouping(this, _model, _view); break;
+                case "DURATION": _grouping = new NUnitGrouping.DurationGrouping(this, _model, _view); break;
+                default: _grouping = null; break;
+            }
+
+            if (_grouping != null)
+                _grouping.CreateTree(testNode);
+
+            else
+            {
+                foreach (var topLevelNode in testNode.Children)
+                    if (topLevelNode.IsVisible)
+                        _view.Add(CreateNUnitTreeNode(null, topLevelNode));
+            }
 
             if (visualState != null)
                 visualState.ApplyTo(_view.TreeView);
@@ -52,7 +68,19 @@ namespace TestCentric.Gui.Presenters
             _view.EnableTestFilter(true);
         }
 
-        protected override VisualState CreateVisualState() => new VisualState("NUNIT_TREE", _settings.Gui.TestTree.ShowNamespace).LoadFrom(_view.TreeView);
+        public override void OnTestFinished(ResultNode result)
+        {
+            base.OnTestFinished(result);
+            _grouping?.OnTestFinished(result);
+        }
+
+        public override void OnTestRunFinished()
+        {
+            base.OnTestRunFinished();
+            _grouping?.OnTestRunFinished();
+        }
+
+        protected override VisualState CreateVisualState() => new VisualState("NUNIT_TREE", _settings.Gui.TestTree.NUnitGroupBy, _settings.Gui.TestTree.ShowNamespace).LoadFrom(_view.TreeView);
 
         protected override string GetTreeNodeName(TestNode testNode)
         {
@@ -69,12 +97,12 @@ namespace TestCentric.Gui.Presenters
 
             if (ShowTreeNodeType(testNode))
             {
-                if (IsNamespaceNode(testNode))
+                if (FoldNamespaceNodesHandler.IsNamespaceNode(testNode))
                 {
                     // Get list of all namespace nodes which can be folded
                     // And get name of folded namespaces and store in dictionary for later usage
-                    IList<TestNode> foldedNodes = FoldNamespaceNodes(testNode);
-                    _foldedNodeNames[foldedNodes.First()] = GetFoldedNamespaceName(foldedNodes);
+                    IList<TestNode> foldedNodes = FoldNamespaceNodesHandler.FoldNamespaceNodes(testNode);
+                    _foldedNodeNames[foldedNodes.First()] = FoldNamespaceNodesHandler.GetFoldedNamespaceName(foldedNodes);
 
                     treeNode = MakeTreeNode(foldedNodes.First(), false);    // Create TreeNode representing the first node
                     testNode = foldedNodes.Last();                          // But proceed building up tree with last node
@@ -97,40 +125,37 @@ namespace TestCentric.Gui.Presenters
         /// Check if a tree node type should be shown or omitted
         /// Currently we support only omitting the namespace nodes
         /// </summary>
-        private bool ShowTreeNodeType(TestNode testNode)
+        public bool ShowTreeNodeType(TestNode testNode)
         {
-            if (IsNamespaceNode(testNode))
+            if (FoldNamespaceNodesHandler.IsNamespaceNode(testNode))
                 return _settings.Gui.TestTree.ShowNamespace;
 
             return true;
         }
 
-        private string GetFoldedNamespaceName(IList<TestNode> foldedNamespaces)
+        /// <summary>
+        /// Creates a new tree node for a TestNode
+        /// </summary>
+        public TreeNode MakeTreeNode(TestNode testNode)
         {
-            var namespaceNames = foldedNamespaces.Select(x => x.Name);
-            return String.Join(".", namespaceNames);
+            TreeNode treeNode = MakeTreeNode(testNode, false);
+            ResultNode resultNode = _model.GetResultForTest(testNode.Id);
+            if (resultNode != null)
+                _view.SetImageIndex(treeNode, DisplayStrategy.CalcImageIndex(resultNode.Outcome));
+
+            return treeNode;
         }
 
-        private IList<TestNode> FoldNamespaceNodes(TestNode testNode)
+        /// <summary>
+        /// Creates a new tree node for a TestGroup which is associated to a TestNode
+        /// </summary>
+        public TreeNode MakeTreeNode(TestGroup testGroup, TestNode testNode)
         {
-            if (!IsNamespaceNode(testNode))
-            {
-                return new List<TestNode>();
-            }
+            TreeNode treeNode = MakeTreeNode(testGroup, false);
+            if (testNode != null)
+                AddTestNodeMapping(testNode, treeNode);
 
-            // If a namespace node only contains one child item which is also a namespace node, we can fold them.
-            List<TestNode> namespaceNodes = new List<TestNode>() { testNode };
-            if (testNode.Children.Count == 1 && IsNamespaceNode(testNode.Children[0]))
-            { 
-                namespaceNodes.AddRange(FoldNamespaceNodes(testNode.Children[0]));
-            }
-
-            return namespaceNodes;
-        }
-
-        private bool IsNamespaceNode(TestNode testNode)
-        {
-            return testNode.IsSuite && (testNode.Type == "TestSuite" || testNode.Type == "SetUpFixture");
+            return treeNode;
         }
 
         private void SetDefaultInitialExpansion()
