@@ -14,9 +14,11 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
 {
     /// <summary>
     /// Class is responsible for regrouping treeNodes from one group to another group
-    /// It's getting invoked whenever a test case is finished. 
-    /// If a regrouping is required, the logic will remove the TestNode from all TestGroups along the path.
-    /// If a TestGroup contains no TestNodes anymore, the associated TreeNode can be removed.
+    /// A bulk processing approach is used to improve the treeview performance.
+    /// This class is getting invoked whenever the bulk processing is triggered, and receives a list of test nodes to be regrouped. 
+    /// 1. The regroup logic will remove the TestNode from all TestGroups along the current path.
+    /// 2. If a test group no longer contains any test nodes, the associated tree node can be removed.
+    /// 3. The test node is inserted into the new group building up a new tree path.
     /// </summary>
     internal class ReGrouping
     {
@@ -35,37 +37,62 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
 
         /// <summary>
         /// Move the TreeNode path of a TestNode to a new group
-        /// This method is intended to be called as soon as a Test finished: the TestNode is representing a test case, 
-        /// which means the associated TreeNode is a leaf node of the tree.
+        /// This method gets a list of TestNodes either representing test cases or test suites. 
         /// </summary>
-        public void Regroup(TestNode testNode)
+        public void Regroup(IList<TestNode> testNodes)
+        {
+            TreeView.TreeView.BeginUpdate();
+
+            var treeNodes = new List<TreeNode>();
+            foreach (TestNode testNode in testNodes)
+            {
+                // Finish of test suites (Fixture/Namespace...) requires that all pending regroup operations are executed first, finally the image icon of the test suite can be updated
+                if (testNode.IsSuite)
+                {
+                    TreeNodeImageHandler.SetTreeNodeImages(TreeView, Strategy.GetTreeNodesForTest(testNode), false);
+                    continue;
+                }
+
+                TreeNode treeNode = GetTreeNode(testNode);
+
+                // 1. Determine new group
+                string newGroupName = Grouping.GetGroupNames(testNode).First();
+
+                // 2. Remove TestCase from groups and remove TreeNodes if required
+                IList<TreeNode> oldTreeNodes = UpdateOrRemoveTreeNodesInPath(treeNode, testNode);
+                treeNodes.AddRange(oldTreeNodes);
+
+                // 3. Create new TreeNode path
+                IList <TreeNode> newTreeNodes = Grouping.CreateTreeNodes(testNode, newGroupName);
+                TreeView.SetImageIndex(newTreeNodes.Last(), treeNode.ImageIndex);
+                treeNodes.AddRange(newTreeNodes);
+
+                // 4. Expand newly created treeNodes
+                ExpandTreeNodes(newTreeNodes);
+            }
+
+            // 5. Update all tree node names to reflect changed number of containing tests in TestGroups
+            TreeNodeNameHandler.UpdateTreeNodeNames(treeNodes.Distinct());
+
+            TreeView.TreeView.EndUpdate();
+        }
+
+        /// <summary>
+        /// Checks if a TestNode will be grouped into a different group than the current one
+        /// </summary>
+        public bool IsRegroupRequired(TestNode testNode)
+        {
+            TreeNode treeNode = GetTreeNode(testNode);
+            string newGroupName = Grouping.GetGroupNames(testNode).First();
+            string oldGroupName = GetOldGroupName(treeNode);
+            return oldGroupName != newGroupName;
+        }
+
+        private TreeNode GetTreeNode(TestNode testNode)
         {
             // Currently there's only one single TreeNode associated to a TestNode
             // Only 'category grouping' will have multiple associated TreeNodes, but that grouping doesn't require regrouping
-            TreeNode treeNode = Strategy.GetTreeNodesForTest(testNode).FirstOrDefault();
-            Regroup(testNode, treeNode);
-        }
-
-        private void Regroup(TestNode testNode, TreeNode treeNode)
-        {
-            // 1. Check if TestNode is assigned to a new group 
-            string newGroupName = Grouping.GetGroupNames(testNode).First();
-            string oldGroupName = GetOldGroupName(treeNode);
-            if (oldGroupName == newGroupName)
-                return;
-
-            // 2. Remove TestCase from groups and remove TreeNodes if required
-            IList<TreeNode> oldTreeNodes = UpdateOrRemoveTreeNodesInPath(treeNode, testNode);
-
-            // 3. Create new TreeNode path
-            IList<TreeNode> newTreeNodes = Grouping.CreateTreeNodes(testNode, newGroupName);
-            TreeView.SetImageIndex(newTreeNodes.Last(), treeNode.ImageIndex);
-
-            // 4. Update all tree node names to reflect changed number of containing tests in TestGroups
-            TreeNodeNameHandler.UpdateTreeNodeNames(oldTreeNodes.Concat(newTreeNodes));
-
-            // 5. Expand newly created treeNodes
-            ExpandTreeNodes(newTreeNodes);
+            return Strategy.GetTreeNodesForTest(testNode).FirstOrDefault();
         }
 
         private string GetOldGroupName(TreeNode treeNode)
@@ -99,7 +126,7 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
             if (treeNode.Tag is TestGroup testGroup)
             {
                 testGroup.RemoveId(testNode.Id);
-                if (testGroup.Count() == 0)
+                if (!testGroup.Any())
                     treeNode.Remove();
             }
         }
@@ -119,8 +146,7 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
 
         private void ExpandTreeNodes(IList<TreeNode> newTreeNodes)
         {
-            foreach (TreeNode node in newTreeNodes)
-                node.Expand();
+            newTreeNodes.FirstOrDefault()?.Expand();
         }
     }
 }

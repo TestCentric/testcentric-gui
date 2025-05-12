@@ -19,11 +19,16 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
     /// </summary>
     public class GroupingBase : INUnitGrouping
     {
+        private RegroupTestEventQueue _regroupQueue;
+
         public GroupingBase(INUnitTreeDisplayStrategy strategy, ITestModel model, ITestTreeView view)
         {
             Strategy = strategy;
             TreeView = view;
             Model = model;
+
+            var regrouping = new ReGrouping(view, Strategy, this);
+            _regroupQueue = new RegroupTestEventQueue(regrouping);
         }
 
         protected ITestModel Model { get; }
@@ -90,27 +95,33 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
         /// </summary>
         public void OnTestFinished(ResultNode result)
         {
-            if (!result.IsSuite)
+            if (SupportsRegrouping && _regroupQueue.IsQueueRequired(result))
             {
-                if (SupportsRegrouping)
-                    TreeView.InvokeIfRequired(() => ReGroup(result));
+                TestNode testNode = Model.GetTestById(result.Id);
+                TreeView.InvokeIfRequired(() => _regroupQueue.AddToQueue(testNode));
+                return;
             }
-            else
+
+            if (result.IsSuite)
                 TreeNodeImageHandler.SetTreeNodeImages(TreeView, Strategy.GetTreeNodesForTest(result), false);
+        }
+
+        /// <summary>
+        /// Method is intended to be called only from test code, so that the test code doesn't need to deal with the regroup Timer
+        /// </summary>
+        public void OnTestFinishedWithoutRegroupTimer(ResultNode result)
+        {
+            OnTestFinished(result);
+            _regroupQueue.ForceStopTimer();
         }
 
         public void OnTestRunFinished()
         {
+            // Force executing of any pending regroup operations
+            TreeView.InvokeIfRequired(() => _regroupQueue.ForceStopTimer());
+
             // The images of the top group tree nodes (for example 'CategoryA' or 'Slow') cannot be set during a test run
             TreeNodeImageHandler.SetTreeNodeImages(TreeView, TreeView.Nodes.OfType<TreeNode>(), false);
-        }
-
-        private void ReGroup(ResultNode resultNode)
-        {
-            TestNode testNode = Model.GetTestById(resultNode.Id);
-
-            ReGrouping r = new ReGrouping(TreeView, Strategy, this);
-            r.Regroup(testNode);
         }
 
         /// <summary>

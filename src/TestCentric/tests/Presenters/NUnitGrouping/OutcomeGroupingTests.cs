@@ -147,7 +147,7 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
             _strategy.GetTreeNodesForTest(treeNode.Tag as TestNode).ReturnsForAnyArgs(new List<TreeNode>() { treeNode });
 
             // Act
-            grouping.OnTestFinished(resultNode);
+            grouping.OnTestFinishedWithoutRegroupTimer(resultNode);
 
             // Assert tree nodes
             Assert.That(_createNodes.Count, Is.EqualTo(2));
@@ -190,7 +190,7 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
 
             // Act
             ResultNode resultNode = CreateAndPrepareResultNode("3-1011", "Failed");
-            grouping.OnTestFinished(resultNode);
+            grouping.OnTestFinishedWithoutRegroupTimer(resultNode);
 
             // Assert tree nodes
             Assert.That(_createNodes.Count, Is.EqualTo(2));
@@ -212,7 +212,7 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
 
             // Act
             resultNode = CreateAndPrepareResultNode("3-1012", "Passed");
-            grouping.OnTestFinished(resultNode);
+            grouping.OnTestFinishedWithoutRegroupTimer(resultNode);
 
             // Assert tree nodes
             Assert.That(_createNodes.Count, Is.EqualTo(3));
@@ -236,7 +236,7 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
 
             // Act
             resultNode = CreateAndPrepareResultNode("3-2011", "Passed");
-            grouping.OnTestFinished(resultNode);
+            grouping.OnTestFinishedWithoutRegroupTimer(resultNode);
 
             // Assert tree nodes
             Assert.That(_createNodes.Count, Is.EqualTo(3));
@@ -262,7 +262,7 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
 
             // Act
             resultNode = CreateAndPrepareResultNode("3-2012", "Failed");
-            grouping.OnTestFinished(resultNode);
+            grouping.OnTestFinishedWithoutRegroupTimer(resultNode);
 
             // Assert tree nodes
             Assert.That(_createNodes.Count, Is.EqualTo(2));
