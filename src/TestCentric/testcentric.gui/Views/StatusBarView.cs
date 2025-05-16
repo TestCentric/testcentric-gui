@@ -23,8 +23,9 @@ namespace TestCentric.Gui.Views
         {
             InvokeIfRequired(() =>
             {
-                foreach (ToolStripStatusLabel panel in statusStrip1.Controls)
-                    panel.Visible = false;
+                foreach (ToolStripStatusLabel panel in statusStrip1.Items)
+                    if (panel != StatusLabel)
+                        panel.Visible = false;
             });
         }
 

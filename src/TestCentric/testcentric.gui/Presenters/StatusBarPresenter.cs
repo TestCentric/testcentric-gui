@@ -28,7 +28,6 @@ namespace TestCentric.Gui.Presenters
         private int _inconclusiveCount;
         private int _skippedCount;
         private int _ignoredCount;
-        private int _explicitCount;
 
         private Dictionary<string, TreeNode> _nodeIndex = new Dictionary<string, TreeNode>();
 
@@ -113,13 +112,12 @@ namespace TestCentric.Gui.Presenters
 
         private void ClearCounters()
         {
-            _passedCount = 
-            _failedCount = 
-            _warningCount = 
-            _inconclusiveCount = 
-            _skippedCount = 
-            _ignoredCount =
-            _explicitCount = 0;
+            _passedCount =
+            _failedCount =
+            _warningCount =
+            _inconclusiveCount =
+            _skippedCount =
+            _ignoredCount = 0;
         }
     }
 }
