@@ -195,7 +195,7 @@ namespace TestCentric.Gui.Presenters
             _view.TreeNodeDoubleClick += (treeNode) =>
             {
                 var testNode = treeNode.Tag as TestNode;
-                if (testNode != null && testNode.Type == "TestCase")
+                if (testNode != null && testNode.Type == "TestCase" && !_model.IsTestRunning)
                     _model.RunTests(testNode);
             };
 

@@ -63,6 +63,14 @@ namespace TestCentric.Gui.Presenters.TestTree
         }
 
         [Test]
+        public void DoubleClickOnTestCase_ATestIsRunning_DoesNotRunTest()
+        {
+            _model.IsTestRunning.Returns(true);
+            _view.TreeNodeDoubleClick += Raise.Event<TreeNodeActionHandler>(TEST_CASE_TREE_NODE);
+            _model.DidNotReceive().RunTests(Arg.Is(TEST_CASE_NODE));
+        }
+
+        [Test]
         public void DoubleClickOnTestSuiteDoesNotRunTest()
         {
             _view.TreeNodeDoubleClick += Raise.Event<TreeNodeActionHandler>(TEST_SUITE_TREE_NODE);
