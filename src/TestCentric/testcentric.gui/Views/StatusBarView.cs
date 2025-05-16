@@ -4,10 +4,8 @@
 // ***********************************************************************
 
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Reflection;
 using System.Windows.Forms;
 
 namespace TestCentric.Gui.Views
@@ -32,7 +30,7 @@ namespace TestCentric.Gui.Views
 
         public override string Text
         {
-            set { StatusLabel.Text = value; }
+            set { InvokeIfRequired(() => StatusLabel.Text = value); }
         }
 
         public int Passed
