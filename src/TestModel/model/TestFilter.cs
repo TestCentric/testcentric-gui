@@ -3,6 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -88,25 +89,33 @@ namespace TestCentric.Gui.Model
             StringBuilder sb = new StringBuilder("<filter><or>");
 
             foreach (TestNode test in testNodes)
-                MakeVisibleIdFilter(test, sb);
+                MakeVisibleIdFilter(test, sb, t => testNodes.Contains(t));
 
             sb.Append("</or></filter>");
 
             return new TestFilter(sb.ToString());
         }
 
-        private static void MakeVisibleIdFilter(TestNode testNode, StringBuilder sb)
+        private static void MakeVisibleIdFilter(TestNode testNode, StringBuilder sb, Func<TestNode, bool> isTestNodeSelected)
         {
             // If testNode is not visible, don't add it or any child to filter
             if (!testNode.IsVisible)
                 return;
 
             // Add only Id for leaf nodes
-            if (!testNode.IsProject && !testNode.IsSuite && testNode.Children.Count == 0)
+            if (!testNode.IsProject && !testNode.IsSuite && IsExplicitTestSelected(testNode, isTestNodeSelected) && testNode.Children.Count == 0)
                 sb.Append($"<id>{testNode.Id}</id>");
 
             foreach (TestNode childNode in testNode.Children)
-                MakeVisibleIdFilter(childNode, sb);
+                MakeVisibleIdFilter(childNode, sb, isTestNodeSelected);
+        }
+
+        private static bool IsExplicitTestSelected(TestNode testNode, Func<TestNode, bool> isTestNodeSelected)
+        {
+            if (testNode.RunState != RunState.Explicit)
+                return true;
+
+            return isTestNodeSelected(testNode);
         }
 
         public static TestFilter MakeNotFilter(TestFilter filter)

@@ -61,7 +61,7 @@ namespace TestCentric.Gui.Model
         private static object[] MakeVisibleIdFilter =
 {
             new object[] { new[] { "3-1000", "3-1100", "3-1110", "3-1111" }, new[] { "3-1111" }, new[] { "3-1000", "3-1100", "3-1110", "3-1112" } },
-            new object[] { new[] { "3-1000", "3-1200", "3-1210", "3-1211", "3-1212" }, new[] { "3-1211", "3-1211" }, new[] { "3-1000", "3-1100", "3-1111", "3-1112", "3-1210" } },
+            new object[] { new[] { "3-1000", "3-1200", "3-1210", "3-1211", "3-1212" }, new[] { "3-1211", "3-1212" }, new[] { "3-1000", "3-1100", "3-1111", "3-1112", "3-1210" } },
             new object[] { new[] { "3-1000", "3-1300", "3-1310", "3-1312", "3-1320", "3-1322" }, new[] { "3-1312", "3-1322" }, new[] { "3-1000", "3-1300", "3-1310", "3-1311", "3-1321" } },
             new object[] { new[] { "3-1000", "3-1300", "3-1320", "3-1322" }, new[] { "3-1322" }, new[] { "3-1000", "3-1300", "3-1310", "3-1311", "3-1312", "3-1321" } },
         };
@@ -104,6 +104,95 @@ namespace TestCentric.Gui.Model
                 Assert.That(xmlText, Does.Not.Contain($"{id}"));
         }
 
+        private static object[] MakeVisibleIdFilter2 =
+{
+            new object[] { new[] { "3-1000", "3-1100", "3-1110", "3-1111", "3-1112" }, new[] { "3-1112" }, new[] { "3-1000", "3-1100", "3-1110" } },
+            new object[] { new[] { "3-1000", "3-1200", "3-1210", "3-1211", "3-1212" }, new List<string>(), new[] { "3-1000", "3-1100", "3-1111", "3-1112", "3-1210", "3-1211", "3-1212" } },
+        };
+
+        [Test]
+        [TestCaseSource(nameof(MakeVisibleIdFilter2))]
+        public void MakeVisibleIdFilter_WithExplicitTests_ReturnsFilter(IList<string> visibleNodeIds, IList<string> expectedIds, IList<string> expectedIdsNotInFilter)
+        {
+            // Arrange
+            TestNode testNode = new TestNode(
+                CreateTestSuiteXml("3-1000",
+                    CreateTestSuiteXml("3-1100",
+                        CreateTestFixtureXml("3-1110",
+                            CreateTestcaseXmlWithRunState("3-1111", "Explicit"),
+                            CreateTestcaseXml("3-1112"))) +
+                    CreateTestSuiteXml("3-1200",
+                        CreateTestFixtureXml("3-1210",
+                            CreateTestcaseXmlWithRunState("3-1211", "Explicit"),
+                            CreateTestcaseXmlWithRunState("3-1212", "Explicit")))));
+
+            SetVisibleNodes(testNode, visibleNodeIds);
+
+            // Act
+            TestFilter filter = TestFilter.MakeVisibleIdFilter(new[] { testNode });
+
+            // Assert
+            string xmlText = filter.XmlText;
+
+            foreach (string id in expectedIds)
+                Assert.That(xmlText, Does.Contain($"<id>{id}</id>"));
+
+            foreach (string id in expectedIdsNotInFilter)
+                Assert.That(xmlText, Does.Not.Contain($"{id}"));
+        }
+
+        [Test]
+        public void MakeVisibleIdFilter_TestFixture_WithExplicitTests_ReturnsFilter()
+        {
+            // Arrange
+            TestNode testNode1 = new TestNode(
+                        CreateTestFixtureXml("3-1000",
+                            CreateTestcaseXmlWithRunState("3-1001", "Explicit"),
+                            CreateTestcaseXml("3-1002")));
+
+            TestNode testNode2 = new TestNode(
+                        CreateTestFixtureXml("3-2000",
+                            CreateTestcaseXmlWithRunState("3-2001", "Explicit"),
+                            CreateTestcaseXml("3-2002")));
+
+            SetVisibleNodes(testNode1, new[] { "3-1000", "3-1001", "3-1002", "3-2000", "3-2001", "3-2002" });
+
+            // Act
+            TestFilter filter = TestFilter.MakeVisibleIdFilter(new[] { testNode1, testNode2 });
+
+            // Assert
+            string xmlText = filter.XmlText;
+
+            var expectedIds = new[] { "3-1002", "3-2002" };
+            foreach (string id in expectedIds)
+                Assert.That(xmlText, Does.Contain($"<id>{id}</id>"));
+
+            var expectedIdsNotInFilter = new[] { "3-1001", "3-2001"};
+            foreach (string id in expectedIdsNotInFilter)
+                Assert.That(xmlText, Does.Not.Contain($"{id}"));
+        }
+
+        [Test]
+        public void MakeVisibleIdFilter_TestCases_WithExplicitTests_ReturnsFilter()
+        {
+            // Arrange
+            TestNode testNode1 = new TestNode(CreateTestcaseXmlWithRunState("3-1000", "Explicit"));
+            TestNode testNode2 = new TestNode(CreateTestcaseXmlWithRunState("3-1001", "Explicit"));
+            TestNode testNode3 = new TestNode(CreateTestcaseXmlWithRunState("3-1002", "Runnable"));
+
+            SetVisibleNodes(testNode1, new[] { "3-1000", "3-1001", "3-1002" });
+
+            // Act
+            TestFilter filter = TestFilter.MakeVisibleIdFilter(new[] { testNode1, testNode2, testNode3 });
+
+            // Assert
+            string xmlText = filter.XmlText;
+
+            var expectedIds = new[] { "3-1000", "3-1001", "3-1002" };
+            foreach (string id in expectedIds)
+                Assert.That(xmlText, Does.Contain($"<id>{id}</id>"));
+        }
+
         private void SetVisibleNodes(TestNode testNode, IList<string> visibleNodeIds)
         {
             testNode.IsVisible = visibleNodeIds.Contains(testNode.Id);
@@ -115,6 +204,12 @@ namespace TestCentric.Gui.Model
         private string CreateTestcaseXml(string testId)
         {
             string str = $"<test-case id='{testId}' /> ";
+            return str;
+        }
+
+        private string CreateTestcaseXmlWithRunState(string testId, string runstate)
+        {
+            string str = $"<test-case id='{testId}' runstate='{runstate}' /> ";
             return str;
         }
 
