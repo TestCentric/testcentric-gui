@@ -57,22 +57,22 @@
         <Content Include="Images\Tree\Circles\Success.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="Images\Tree\Default\Failure.png">
+        <Content Include="Images\Tree\Classic\Failure.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="Images\Tree\Default\Warning.png">
+        <Content Include="Images\Tree\Classic\Warning.png">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="Images\Tree\Default\Ignored.png">
+        <Content Include="Images\Tree\Classic\Ignored.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="Images\Tree\Default\Inconclusive.png">
+        <Content Include="Images\Tree\Classic\Inconclusive.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="Images\Tree\Default\Skipped.png">
+        <Content Include="Images\Tree\Classic\Skipped.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="Images\Tree\Default\Success.png">
+        <Content Include="Images\Tree\Classic\Success.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
         <Content Include="Images\Tree\Visual Studio\Failure.png">

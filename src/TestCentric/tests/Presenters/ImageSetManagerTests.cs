@@ -41,7 +41,7 @@ namespace TestCentric.Gui.Presenters
         }
 
         [TestCase("Circles")]
-        [TestCase("Default")]
+        [TestCase("Classic")]
         [TestCase("Visual Studio")]
         public void AllImageSetsAreFound(string name)
         {
@@ -51,7 +51,7 @@ namespace TestCentric.Gui.Presenters
         [Test]
         public void DefaultImageSetIsDefault()
         {
-            Assert.That(_manager.CurrentImageSet.Name, Is.EqualTo("Default"));
+            Assert.That(_manager.CurrentImageSet.Name, Is.EqualTo("Classic"));
         }
 
         [Test]
@@ -71,19 +71,19 @@ namespace TestCentric.Gui.Presenters
         [Test]
         public void WhenManagerIsCreated_TreeViewImagesAreSet()
         {
-            _mainView.TreeView.Received().OutcomeImages = Arg.Is<OutcomeImageSet>((set) => set.Name == "Default");
+            _mainView.TreeView.Received().OutcomeImages = Arg.Is<OutcomeImageSet>((set) => set.Name == "Classic");
         }
 
         [Test]
         public void WhenManagerIsCreated_TestResultImagesAreSet()
         {
-            _mainView.TestResultSubView.Received().LoadImages(Arg.Is<OutcomeImageSet>((set) => set.Name == "Default"));
+            _mainView.TestResultSubView.Received().LoadImages(Arg.Is<OutcomeImageSet>((set) => set.Name == "Classic"));
         }
 
         [Test]
         public void WhenManagerIsCreated_StatusBarImagesAreSet()
         {
-            _mainView.StatusBarView.Received().LoadImages(Arg.Is<OutcomeImageSet>((set) => set.Name == "Default"));
+            _mainView.StatusBarView.Received().LoadImages(Arg.Is<OutcomeImageSet>((set) => set.Name == "Classic"));
         }
 
         [Test]

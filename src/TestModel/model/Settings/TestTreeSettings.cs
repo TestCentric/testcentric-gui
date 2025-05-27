@@ -28,7 +28,7 @@ namespace TestCentric.Gui.Model.Settings
 
         public string AlternateImageSet
         {
-            get { return GetSetting(nameof(AlternateImageSet), "Default"); }
+            get { return GetSetting(nameof(AlternateImageSet), "Classic"); }
             set { SaveSetting(nameof(AlternateImageSet), value); }
         }
 

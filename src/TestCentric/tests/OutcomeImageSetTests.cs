@@ -12,7 +12,7 @@ namespace TestCentric.Gui
     public class OutcomeImageSetTests
     {
         private static readonly string DEFAULT_IMAGE_SET_DIR = 
-            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images", "Tree", "Default");
+            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images", "Tree", "Classic");
 
         private readonly OutcomeImageSet DefaultImageSet;
 

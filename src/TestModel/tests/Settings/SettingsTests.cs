@@ -207,7 +207,7 @@ namespace TestCentric.Gui.Model.Settings
         public static TestCaseData[] TestCases = new TestCaseData[]
         {
             new TestCaseData("InitialTreeDisplay", 0, 2),
-            new TestCaseData("AlternateImageSet", "Default", "Custom"),
+            new TestCaseData("AlternateImageSet", "Classic", "Custom"),
             new TestCaseData("ShowCheckBoxes", false, true)
         };
     }
