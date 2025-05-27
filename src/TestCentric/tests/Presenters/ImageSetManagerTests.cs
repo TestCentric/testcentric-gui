@@ -41,7 +41,6 @@ namespace TestCentric.Gui.Presenters
         }
 
         [TestCase("Circles")]
-        [TestCase("Classic")]
         [TestCase("Default")]
         [TestCase("Visual Studio")]
         public void AllImageSetsAreFound(string name)
