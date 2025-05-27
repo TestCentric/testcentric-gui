@@ -288,6 +288,7 @@ namespace TestCentric.Gui.SettingsPages
             ignoredImage.Image = imageSet.LoadImage("Ignored");
             inconclusiveImage.Image = imageSet.LoadImage("Inconclusive");
             skippedImage.Image = imageSet.LoadImage("Skipped");
+            warningImage.Image = imageSet.LoadImage("Warning");
         }
     }
 }
