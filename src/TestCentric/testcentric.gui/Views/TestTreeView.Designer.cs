@@ -1,6 +1,7 @@
 namespace TestCentric.Gui.Views
 {
     using TestCentric.Gui.Controls;
+    using TestCentric.Gui.Properties;
 
     partial class TestTreeView
     {
@@ -31,6 +32,7 @@ namespace TestCentric.Gui.Views
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TestTreeView));
             this.treeView = new System.Windows.Forms.TreeView();
             this.testTreeContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.runMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -328,6 +330,7 @@ namespace TestCentric.Gui.Views
             // filterResetButton
             // 
             this.filterResetButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.filterResetButton.Image = ((System.Drawing.Image)(resources.GetObject("ResetFilter.Image")));
             this.filterResetButton.Name = "filterResetButton";
             this.filterResetButton.Size = new System.Drawing.Size(23, 4);
             this.filterResetButton.ToolTipText = "Reset all filters";
