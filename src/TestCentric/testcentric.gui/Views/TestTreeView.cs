@@ -242,7 +242,7 @@ namespace TestCentric.Gui.Views
             // Set filter outcome toolbar images
             filterOutcomeFailedButton.Image = imageSet.LoadImage("Failure");
             filterOutcomePassedButton.Image = imageSet.LoadImage("Success");
-            filterOutcomeWarningButton.Image = imageSet.LoadImage("Ignored");
+            filterOutcomeWarningButton.Image = imageSet.LoadImage("Warning");
             filterOutcomeNotRunButton.Image = imageSet.LoadImage("Skipped");
 
             this.Invalidate();
