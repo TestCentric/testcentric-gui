@@ -67,8 +67,6 @@ var nugetPackage = new NuGetPackage(
 				"Images/Tree/Circles/Success.png", "Images/Tree/Circles/Failure.png", "Images/Tree/Circles/Warning.png", "Images/Tree/Circles/Ignored.png", "Images/Tree/Circles/Inconclusive.png", "Images/Tree/Circles/Skipped.png"),
 			new DirectoryContent("tools/Images/Tree/Classic").WithFiles(
 				"Images/Tree/Classic/Success.png", "Images/Tree/Classic/Failure.png", "Images/Tree/Classic/Warning.png", "Images/Tree/Classic/Ignored.png", "Images/Tree/Classic/Inconclusive.png", "Images/Tree/Classic/Skipped.png"),
-			new DirectoryContent("tools/Images/Tree/Default").WithFiles(
-				"Images/Tree/Default/Success.png", "Images/Tree/Default/Failure.png", "Images/Tree/Default/Warning.png", "Images/Tree/Default/Ignored.png", "Images/Tree/Default/Inconclusive.png", "Images/Tree/Default/Skipped.png"),
 			new DirectoryContent("tools/Images/Tree/Visual Studio").WithFiles(
 				"Images/Tree/Visual Studio/Success.png", "Images/Tree/Visual Studio/Failure.png", "Images/Tree/Visual Studio/Warning.png", "Images/Tree/Visual Studio/Ignored.png", "Images/Tree/Visual Studio/Inconclusive.png", "Images/Tree/Visual Studio/Skipped.png") )
 		.WithDependencies(
@@ -82,7 +80,6 @@ var nugetPackage = new NuGetPackage(
 		HasDirectory("tools").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.nuget.addins"),
 		HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_PNG),
 		HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_PNG),
-		HasDirectory("tools/Images/Tree/Default").WithFiles(TREE_ICONS_PNG),
 		HasDirectory("tools/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG)
 	},
 	tests: PackageTests
@@ -105,8 +102,6 @@ var chocolateyPackage = new ChocolateyPackage(
                 "Images/Tree/Circles/Success.png", "Images/Tree/Circles/Failure.png", "Images/Tree/Circles/Warning.png", "Images/Tree/Circles/Ignored.png", "Images/Tree/Circles/Inconclusive.png", "Images/Tree/Circles/Skipped.png"),
             new DirectoryContent("tools/Images/Tree/Classic").WithFiles(
                 "Images/Tree/Classic/Success.png", "Images/Tree/Classic/Failure.png", "Images/Tree/Classic/Warning.png", "Images/Tree/Classic/Ignored.png", "Images/Tree/Classic/Inconclusive.png", "Images/Tree/Classic/Skipped.png"),
-            new DirectoryContent("tools/Images/Tree/Default").WithFiles(
-                "Images/Tree/Default/Success.png", "Images/Tree/Default/Failure.png", "Images/Tree/Default/Warning.png", "Images/Tree/Default/Ignored.png", "Images/Tree/Default/Inconclusive.png", "Images/Tree/Default/Skipped.png"),
             new DirectoryContent("tools/Images/Tree/Visual Studio").WithFiles(
                 "Images/Tree/Visual Studio/Success.png", "Images/Tree/Visual Studio/Failure.png", "Images/Tree/Visual Studio/Warning.png", "Images/Tree/Visual Studio/Ignored.png", "Images/Tree/Visual Studio/Inconclusive.png", "Images/Tree/Visual Studio/Skipped.png"))
         .WithDependencies(
@@ -119,7 +114,6 @@ var chocolateyPackage = new ChocolateyPackage(
 		HasDirectory("tools").WithFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "VERIFICATION.txt", "testcentric.choco.addins").AndFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.choco.addins"),
 		HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_PNG),
 		HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_PNG),
-		HasDirectory("tools/Images/Tree/Default").WithFiles(TREE_ICONS_PNG),
 		HasDirectory("tools/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG),
 	},
 	tests: PackageTests

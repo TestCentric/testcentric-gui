@@ -207,9 +207,20 @@ namespace TestCentric.Gui.Model.Settings
         public static TestCaseData[] TestCases = new TestCaseData[]
         {
             new TestCaseData("InitialTreeDisplay", 0, 2),
-            new TestCaseData("AlternateImageSet", "Default", "Custom"),
+            new TestCaseData("AlternateImageSet", "Classic", "Custom"),
             new TestCaseData("ShowCheckBoxes", false, true)
         };
+
+        [Test]
+        public void OutdatedImageSetName_IsUpdated_ToNewDefaultImageSet()
+        {
+            // Set outdated image set name
+            SettingsGroup.AlternateImageSet = "Default";
+
+            // Get image set name
+            string imageSet = SettingsGroup.AlternateImageSet;
+            Assert.That(imageSet, Is.EqualTo("Classic"));
+        }
     }
 
     public class TextOutputSettingsTests : SettingsTests<TextOutputSettings>

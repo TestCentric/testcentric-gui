@@ -28,7 +28,19 @@ namespace TestCentric.Gui.Model.Settings
 
         public string AlternateImageSet
         {
-            get { return GetSetting(nameof(AlternateImageSet), "Default"); }
+            get 
+            {
+                // Image set 'Default' is removed:
+                // If Image set 'Default' is still present in settings, use the new default image set 'Classic' instead
+                string imageSet = GetSetting(nameof(AlternateImageSet), "Classic");
+                if (imageSet == "Default")
+                {
+                    imageSet = "Classic";
+                    AlternateImageSet = imageSet;
+                }
+
+                return imageSet;
+            }
             set { SaveSetting(nameof(AlternateImageSet), value); }
         }
 
