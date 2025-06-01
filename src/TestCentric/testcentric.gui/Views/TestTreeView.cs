@@ -199,20 +199,6 @@ namespace TestCentric.Gui.Views
         public void SetImageIndex(TreeNode treeNode, int imageIndex) =>
             InvokeIfRequired(() => treeNode.ImageIndex = treeNode.SelectedImageIndex = imageIndex);
 
-        public void ResetAllTreeNodeImages()
-        {
-            InvokeIfRequired(() => ResetAllTreeNodeImages(treeView.Nodes));
-        }
-
-        private void ResetAllTreeNodeImages(TreeNodeCollection treeNodes)
-        {
-            foreach (TreeNode treeNode in treeNodes)
-            {
-                treeNode.ImageIndex = treeNode.SelectedImageIndex = InitIndex;
-                ResetAllTreeNodeImages(treeNode.Nodes);
-            }
-        }
-
         public void InvokeIfRequired(MethodInvoker _delegate)
         {
             if (treeView.InvokeRequired)

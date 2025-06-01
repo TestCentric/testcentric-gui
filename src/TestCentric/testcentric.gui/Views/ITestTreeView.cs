@@ -80,11 +80,6 @@ namespace TestCentric.Gui.Views
         void SetImageIndex(TreeNode treeNode, int imageIndex);
 
         /// <summary>
-        /// Reset the image of all tree nodes to the initial state
-        /// </summary>
-        void ResetAllTreeNodeImages();
-
-        /// <summary>
         /// Invoke a delegate if necessary, otherwise just call it
         /// </summary>
         void InvokeIfRequired(MethodInvoker _delegate);
