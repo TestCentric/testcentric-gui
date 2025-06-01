@@ -25,6 +25,9 @@
         <Content Include="..\..\..\testcentric.ico">
             <Link>testcentric.ico</Link>
         </Content>
+        <Content Include="Images\Tree\Circles\Running.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
 		<!--
 		<Content Include="Images\DebugTests.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -57,6 +60,9 @@
         <Content Include="Images\Tree\Circles\Success.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+        <Content Include="Images\Tree\Classic\Running.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
         <Content Include="Images\Tree\Classic\Failure.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
@@ -74,6 +80,9 @@
         </Content>
         <Content Include="Images\Tree\Classic\Success.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Visual Studio\Running.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
         <Content Include="Images\Tree\Visual Studio\Failure.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

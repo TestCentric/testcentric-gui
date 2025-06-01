@@ -43,18 +43,13 @@ namespace TestCentric.Gui.Presenters
             _view.InvokeIfRequired(() => _grouping?.OnTestFinished(result));
         }
 
-        /// <summary>
-        /// Reset all tree node images when a test run starts (also the image index of group nodes which a managed by the grouping)
-        /// </summary>
-        public override void OnTestRunStarting()
-        {
-            base.OnTestRunStarting();
-            _view.InvokeIfRequired(() => _grouping?.OnTestRunStarting());
-        }
-
         public override void OnTestRunFinished()
         {
-            _view.InvokeIfRequired(() => _grouping?.OnTestRunFinished());
+            _view.InvokeIfRequired(() =>
+            {
+                _grouping?.OnTestRunFinished();
+                ResetTestRunningIcons(_view.Nodes);
+            });
         }
 
         // TODO: Move this to TestGroup? Would need access to results.
@@ -137,6 +132,8 @@ namespace TestCentric.Gui.Presenters
                 if (newGroup.Count() == 1)
                 {
                     _view.Clear();
+                    newParent.ImageIndex = newParent.SelectedImageIndex = TestTreeView.RunningIndex;
+
                     TreeNode topNode = null;
                     foreach (var group in _grouping.Groups)
                         if (group.Count() > 0)

@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Presenters
 {
+    using System.Linq;
     using Model;
     using Views;
 
@@ -58,15 +59,6 @@ namespace TestCentric.Gui.Presenters
         public virtual void OnTestFinished(ResultNode result)
         {
             // Override to take any necessary action
-        }
-
-        public void OnTestRunStarting()
-        {
-            foreach (TestGroup testGroup in Groups)
-            {
-                testGroup.ImageIndex = 0;
-                testGroup.TreeNode.ImageIndex = testGroup.TreeNode.SelectedImageIndex = 0;
-            }
         }
 
         public void OnTestRunFinished()

@@ -87,7 +87,11 @@ namespace TestCentric.Gui.Presenters
 
         public virtual void OnTestRunStarting()
         {
-            _view.ResetAllTreeNodeImages();
+            _view.InvokeIfRequired(() =>
+            {
+                SetTestRunningIcons(_view.Nodes);
+            });
+
             if (_settings.Gui.TestTree.ShowTestDuration)
                 _view.InvokeIfRequired(() => UpdateTreeNodeNames());
         }
@@ -100,6 +104,11 @@ namespace TestCentric.Gui.Presenters
             }
             if (_settings.Gui.TestTree.ShowTestDuration)
                 _view.InvokeIfRequired(() => UpdateTreeNodeNames());
+
+            _view.InvokeIfRequired(() =>
+            {
+                ResetTestRunningIcons(_view.Nodes);
+            });
         }
 
         // Called when either the display strategy or the grouping
@@ -262,6 +271,36 @@ namespace TestCentric.Gui.Presenters
 
             foreach (TreeNode childNode in treeNode.Nodes)
                 ApplyResultsToTree(childNode);
+        }
+
+        private void SetTestRunningIcons(TreeNodeCollection treeNodes)
+        {
+            foreach (TreeNode treeNode in treeNodes)
+            {
+                SetTestRunningIcons(treeNode.Nodes);
+
+                bool anyChildNodeRunning = treeNode.Nodes.OfType<TreeNode>().Any(t => t.ImageIndex == TestTreeView.RunningIndex);
+                int imageIndex = anyChildNodeRunning ? TestTreeView.RunningIndex : TestTreeView.InitIndex;
+
+                if (imageIndex != TestTreeView.RunningIndex && treeNode.Tag is TestNode testNode && _model.IsInTestRun(testNode))
+                {
+                    imageIndex = TestTreeView.RunningIndex;
+                }
+
+                _view.SetImageIndex(treeNode, imageIndex);
+            }
+        }
+
+        protected void ResetTestRunningIcons(TreeNodeCollection treeNodes)
+        {
+            // Only required for exceptional use case 'force stop test run'
+            foreach (TreeNode treeNode in treeNodes)
+            {
+                if (treeNode.ImageIndex == TestTreeView.RunningIndex)
+                    _view.SetImageIndex(treeNode, TestTreeView.SkippedIndex);
+
+                ResetTestRunningIcons(treeNode.Nodes);
+            }
         }
 
         public void CollapseToFixtures()
