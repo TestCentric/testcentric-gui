@@ -23,15 +23,16 @@ namespace TestCentric.Gui.Views
         /// indices are correct. These are ordered so that the higher values 
         /// are those that propagate upwards in the tree.
         /// </summary>
-        private static readonly string[] IMAGE_NAMES = { "Skipped", "Inconclusive", "Success", "Ignored", "Warning", "Failure" };
+        private static readonly string[] IMAGE_NAMES = { "Skipped", "Running", "Inconclusive", "Success", "Ignored", "Warning", "Failure" };
 
         public const int InitIndex = 0;
         public const int SkippedIndex = 0;
-        public const int InconclusiveIndex = 1;
-        public const int SuccessIndex = 2;
-        public const int IgnoredIndex = 3;
-        public const int WarningIndex = 4;
-        public const int FailureIndex = 5;
+        public const int RunningIndex = 1;
+        public const int InconclusiveIndex = 2;
+        public const int SuccessIndex = 3;
+        public const int IgnoredIndex = 4;
+        public const int WarningIndex = 5;
+        public const int FailureIndex = 6;
 
         public event TreeNodeActionHandler SelectedNodeChanged;
         public event TreeNodeActionHandler AfterCheck;
@@ -197,20 +198,6 @@ namespace TestCentric.Gui.Views
         public void CollapseAll() => InvokeIfRequired(() => treeView.CollapseAll());
         public void SetImageIndex(TreeNode treeNode, int imageIndex) =>
             InvokeIfRequired(() => treeNode.ImageIndex = treeNode.SelectedImageIndex = imageIndex);
-
-        public void ResetAllTreeNodeImages()
-        {
-            InvokeIfRequired(() => ResetAllTreeNodeImages(treeView.Nodes));
-        }
-
-        private void ResetAllTreeNodeImages(TreeNodeCollection treeNodes)
-        {
-            foreach (TreeNode treeNode in treeNodes)
-            {
-                treeNode.ImageIndex = treeNode.SelectedImageIndex = InitIndex;
-                ResetAllTreeNodeImages(treeNode.Nodes);
-            }
-        }
 
         public void InvokeIfRequired(MethodInvoker _delegate)
         {

@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using NSubstitute;
 using NUnit.Framework;
 using TestCentric.Gui.Model;
+using TestCentric.Gui.Views;
 
 namespace TestCentric.Gui.Presenters.TestTree
 {
@@ -32,23 +33,49 @@ namespace TestCentric.Gui.Presenters.TestTree
         }
 
         [Test]
-        public void WhenTestRunStarts_TreeNodeImagesAreReset()
+        public void WhenTestRunStarts_TreeNodeImageIconsAreSet()
         {
             // Arrange
             var tv = new TreeView();
+            _view.InvokeIfRequired(Arg.Do<MethodInvoker>(x => x.Invoke()));
             _view.TreeView.Returns(tv);
+
+            TestNode testNode1 = new TestNode("<test-suite id='1'/>");
+            TestNode testNode2 = new TestNode("<test-suite id='2'/>");
+            TestNode testNode3 = new TestNode("<test-suite id='3'/>");
+            TestNode testNode4 = new TestNode("<test-suite id='4'/>");
+
+
+            // We can't construct a TreeNodeCollection, so we fake it
+            TreeNodeCollection nodes = new TreeNode().Nodes;
+            TreeNode treeNode1 = new TreeNode("TestA") { Tag = testNode1 };
+            TreeNode treeNode2 = new TreeNode("TestB") { Tag = testNode2 };
+            TreeNode treeNode3 = new TreeNode("TestC") { Tag = testNode3 };
+            TreeNode treeNode4 = new TreeNode("TestD") { Tag = testNode4 };
+
+            treeNode1.Nodes.Add(treeNode2);
+            nodes.AddRange(new[] { treeNode1, treeNode3, treeNode4 } );
+            _view.Nodes.Returns(nodes);
+            _view.When(v => v.SetImageIndex(Arg.Any<TreeNode>(), Arg.Any<int>()))
+                .Do(a => a.ArgAt<TreeNode>(0).ImageIndex = a.ArgAt<int>(1));
 
             var project = new TestCentricProject(_model, TestFileName);
             _model.TestCentricProject.Returns(project);
-            TestNode testNode = new TestNode("<test-suite id='1'/>");
-            _model.LoadedTests.Returns(testNode);
-            FireTestLoadedEvent(testNode);
+            _model.LoadedTests.Returns(testNode1);
+            _model.IsInTestRun(testNode2).Returns(true);
+            _model.IsInTestRun(testNode4).Returns(true);
+
+            FireTestLoadedEvent(testNode1);
 
             // Act
             FireRunStartingEvent(1234);
 
             // Assert
-            _view.Received().ResetAllTreeNodeImages();
+            _view.Received().SetImageIndex(treeNode1, TestTreeView.RunningIndex);
+            _view.Received().SetImageIndex(treeNode2, TestTreeView.RunningIndex);
+            _view.Received().SetImageIndex(treeNode4, TestTreeView.RunningIndex);
+
+            _view.Received().SetImageIndex(treeNode3, TestTreeView.SkippedIndex);
         }
 
         [Test]

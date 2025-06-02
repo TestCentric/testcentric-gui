@@ -94,6 +94,11 @@ namespace TestCentric.Gui.Model
         /// </summary>
         ITestCentricTestFilter TestCentricTestFilter { get; }
 
+        /// <summary>
+        /// Checks if the testNode is executed in the current test run
+        /// </summary>
+        bool IsInTestRun(TestNode testNode);
+
         #endregion
 
         #region Methods

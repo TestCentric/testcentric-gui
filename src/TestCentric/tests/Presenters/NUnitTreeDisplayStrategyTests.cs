@@ -88,16 +88,6 @@ namespace TestCentric.Gui.Presenters.TestTree
         }
 
         [Test]
-        public void OnTestRunStarting_ResetAllTreeNodeImages_IsInvoked()
-        {
-            // Act
-            _strategy.OnTestRunStarting();
-
-            // Assert
-            _view.Received().ResetAllTreeNodeImages();
-        }
-
-        [Test]
         public void OnTestRunStarting_UpdateTreeNodeNames_IsInvoked()
         {
             // Assert
@@ -114,11 +104,11 @@ namespace TestCentric.Gui.Presenters.TestTree
         }
 
         [TestCase("Skipped", 0)]
-        [TestCase("Inconclusive", 1)]
-        [TestCase("Passed", 2)]
-        [TestCase("Skipped:Ignored", 3)]
-        [TestCase("Warning", 4)]
-        [TestCase("Failed", 5)]
+        [TestCase("Inconclusive", TestTreeView.InconclusiveIndex)]
+        [TestCase("Passed", TestTreeView.SuccessIndex)]
+        [TestCase("Skipped:Ignored", TestTreeView.IgnoredIndex)]
+        [TestCase("Warning", TestTreeView.WarningIndex)]
+        [TestCase("Failed", TestTreeView.FailureIndex)]
         public void OnTestFinished_TreeNodeImage_IsUpdated(string testResult, int expectedImageIndex)
         {
             int colon = testResult.IndexOf(':');
@@ -141,6 +131,35 @@ namespace TestCentric.Gui.Presenters.TestTree
 
             // Assert
             _view.Received().SetImageIndex(treeNode, expectedImageIndex);
+        }
+
+        [Test]
+        public void OnTestRunFinished_AllRunningIcons_AreReset()
+        {
+            // Arrange
+            var testNode = new TestNode($"<test-suite type='TestFixture' id='1' name='FixtureA'> <test-case id='2' name='TestA'/> <test-case id='3' name='TestB'/> </test-suite>");
+            var treeNodeRoot = _strategy.MakeTreeNode(testNode, true);
+            var treeNodeTest1 = treeNodeRoot.Nodes[0];
+            var treeNodeTest2 = treeNodeRoot.Nodes[1];
+
+            treeNodeRoot.ImageIndex = TestTreeView.RunningIndex;
+            treeNodeTest1.ImageIndex = TestTreeView.RunningIndex;
+            treeNodeTest2.ImageIndex = TestTreeView.RunningIndex;
+
+            _view.InvokeIfRequired(Arg.Do<MethodInvoker>(x => x.Invoke()));
+
+            var nodes = new TreeNode().Nodes;
+            nodes.Add(treeNodeRoot);
+            _view.Nodes.Returns(nodes);
+            _view.TreeView.Returns(new TreeView());
+
+            // Act
+            _strategy.OnTestRunFinished();
+
+            // Assert
+            _view.Received().SetImageIndex(treeNodeRoot, TestTreeView.InitIndex);
+            _view.Received().SetImageIndex(treeNodeTest1, TestTreeView.InitIndex);
+            _view.Received().SetImageIndex(treeNodeTest2, TestTreeView.InitIndex);
         }
 
         [Test]

@@ -220,6 +220,9 @@ namespace TestCentric.Gui.Model
 
         private class TestRunSpecification
         {
+            HashSet<TestNode> testNodes = new HashSet<TestNode>();
+
+
             public static TestRunSpecification Empty = new TestRunSpecification(new TestSelection(), null, false);
 
             // The selected tests to run (ITestItem may be a TestSelection or a TestNode
@@ -245,6 +248,26 @@ namespace TestCentric.Gui.Model
                 SelectedTests = new TestSelection { testNode };
                 CategoryFilter = filter;
                 DebuggingRequested = debuggingRequested;
+            }
+
+            public bool ContainTest(TestNode testNode)
+            {
+                // Get list of testNodes only once
+                if (testNodes.Count == 0)
+                {
+                    GetTestNodes(SelectedTests);
+                }
+
+                return testNodes.Contains(testNode);
+            }
+
+            private void GetTestNodes(IEnumerable<TestNode> selectedTests)
+            {
+                foreach (TestNode testNode in selectedTests)
+                {
+                    testNodes.Add(testNode);
+                    GetTestNodes(testNode.Children);
+                }
             }
         }
 
@@ -582,6 +605,16 @@ namespace TestCentric.Gui.Model
             }
 
             return null;
+        }
+
+        public bool IsInTestRun(TestNode testNode)
+        {
+            if (_lastTestRun == null)
+            {
+                return false;
+            }
+
+            return _lastTestRun.ContainTest(testNode);
         }
 
         public IDictionary<string, object> GetPackageSettingsForTest(string id)
