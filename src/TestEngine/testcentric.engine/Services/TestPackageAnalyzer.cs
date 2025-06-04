@@ -100,55 +100,56 @@ namespace TestCentric.Engine.Services
             Guard.ArgumentNotNull(package, nameof(package));
             Guard.ArgumentValid(package.IsAssemblyPackage, "ApplyImageSettings called for non-assembly", nameof(package));
 
-            var assembly = AssemblyDefinition.ReadAssembly(package.FullName);
-
-            var targetVersion = assembly.GetRuntimeVersion();
-            if (targetVersion.Major > 0)
+            using (var assembly = AssemblyDefinition.ReadAssembly(package.FullName))
             {
-                log.Debug($"Assembly {package.FullName} uses version {targetVersion}");
-                package.Settings[EnginePackageSettings.ImageRuntimeVersion] = targetVersion;
-            }
-
-            var frameworkName = assembly.GetFrameworkName();
-            if (!string.IsNullOrEmpty(frameworkName))
-            {
-                log.Debug($"Assembly {package.FullName} targets {frameworkName}");
-                // This takes care of an old issue with Roslyn
-                if (frameworkName == ".NETPortable,Version=v5.0")
+                var targetVersion = assembly.GetRuntimeVersion();
+                if (targetVersion.Major > 0)
                 {
-                    frameworkName = ".NETStandard,Version=v1.0";
-                    log.Debug($"Using {frameworkName} instead");
+                    log.Debug($"Assembly {package.FullName} uses version {targetVersion}");
+                    package.Settings[EnginePackageSettings.ImageRuntimeVersion] = targetVersion;
                 }
-                package.Settings[EnginePackageSettings.ImageTargetFrameworkName] = frameworkName;
-            }
 
-            package.Settings[EnginePackageSettings.ImageRequiresX86] = assembly.RequiresX86();
-            if (assembly.RequiresX86())
-            {
-                log.Debug($"Assembly {package.FullName} will be run x86");
-                package.Settings[EnginePackageSettings.RunAsX86] = true;
-            }
+                var frameworkName = assembly.GetFrameworkName();
+                if (!string.IsNullOrEmpty(frameworkName))
+                {
+                    log.Debug($"Assembly {package.FullName} targets {frameworkName}");
+                    // This takes care of an old issue with Roslyn
+                    if (frameworkName == ".NETPortable,Version=v5.0")
+                    {
+                        frameworkName = ".NETStandard,Version=v1.0";
+                        log.Debug($"Using {frameworkName} instead");
+                    }
+                    package.Settings[EnginePackageSettings.ImageTargetFrameworkName] = frameworkName;
+                }
 
-            bool requiresAssemblyResolver = assembly.HasAttribute("NUnit.Framework.TestAssemblyDirectoryResolveAttribute");
-            package.Settings[EnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver] = requiresAssemblyResolver;
-            if (requiresAssemblyResolver)
-            {
-                log.Debug($"Assembly {package.FullName} requires default app domain assembly resolver");
-            }
+                package.Settings[EnginePackageSettings.ImageRequiresX86] = assembly.RequiresX86();
+                if (assembly.RequiresX86())
+                {
+                    log.Debug($"Assembly {package.FullName} will be run x86");
+                    package.Settings[EnginePackageSettings.RunAsX86] = true;
+                }
 
-            bool nonTestAssembly = assembly.HasAttribute("NUnit.Framework.NonTestAssemblyAttribute");
-            if (nonTestAssembly)
-            {
-                log.Debug($"Assembly {package.FullName} has NonTestAssemblyAttribute");
-                package.Settings[EnginePackageSettings.ImageNonTestAssemblyAttribute] = true;
-            }
+                bool requiresAssemblyResolver = assembly.HasAttribute("NUnit.Framework.TestAssemblyDirectoryResolveAttribute");
+                package.Settings[EnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver] = requiresAssemblyResolver;
+                if (requiresAssemblyResolver)
+                {
+                    log.Debug($"Assembly {package.FullName} requires default app domain assembly resolver");
+                }
 
-            var testFrameworkReference = _testFrameworkService.GetFrameworkReference(package.FullName);
-            if (testFrameworkReference != null)
-            {
-                package.Settings[EnginePackageSettings.ImageTestFrameworkReference] = testFrameworkReference.FrameworkReference.FullName;
-                if (testFrameworkReference.FrameworkDriver != null)
-                    package.Settings[EnginePackageSettings.ImageFrameworkDriverReference] = testFrameworkReference.FrameworkDriver;
+                bool nonTestAssembly = assembly.HasAttribute("NUnit.Framework.NonTestAssemblyAttribute");
+                if (nonTestAssembly)
+                {
+                    log.Debug($"Assembly {package.FullName} has NonTestAssemblyAttribute");
+                    package.Settings[EnginePackageSettings.ImageNonTestAssemblyAttribute] = true;
+                }
+
+                var testFrameworkReference = _testFrameworkService.GetFrameworkReference(package.FullName);
+                if (testFrameworkReference != null)
+                {
+                    package.Settings[EnginePackageSettings.ImageTestFrameworkReference] = testFrameworkReference.FrameworkReference.FullName;
+                    if (testFrameworkReference.FrameworkDriver != null)
+                        package.Settings[EnginePackageSettings.ImageFrameworkDriverReference] = testFrameworkReference.FrameworkDriver;
+                }
             }
         }
     }

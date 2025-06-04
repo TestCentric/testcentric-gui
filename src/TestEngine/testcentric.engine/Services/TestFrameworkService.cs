@@ -44,15 +44,17 @@ namespace TestCentric.Engine.Services
 
         private AssemblyName FindReferencedTestFramework(string assemblyName)
         {
-            var assembly = AssemblyDefinition.ReadAssembly(assemblyName);
+            using (var assembly = AssemblyDefinition.ReadAssembly(assemblyName))
+            {
 
-            foreach (var reference in assembly.MainModule.AssemblyReferences)
-                foreach (string name in KnownFrameworks)
-                    if (reference.Name == name)
-                    {
-                        log.Debug($"Assembly {assemblyName} uses test framework {name}, version {reference.Version}");
-                        return new AssemblyName(reference.FullName);
-                    }
+                foreach (var reference in assembly.MainModule.AssemblyReferences)
+                    foreach (string name in KnownFrameworks)
+                        if (reference.Name == name)
+                        {
+                            log.Debug($"Assembly {assemblyName} uses test framework {name}, version {reference.Version}");
+                            return new AssemblyName(reference.FullName);
+                        }
+            }
 
             return null;
         }
