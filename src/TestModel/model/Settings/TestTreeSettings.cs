@@ -68,6 +68,12 @@ namespace TestCentric.Gui.Model.Settings
             set { SaveSetting(nameof(ShowNamespace), value); }
         }
 
+        public string NUnitGroupBy
+        {
+            get { return GetSetting(nameof(NUnitGroupBy), "UNGROUPED"); }
+            set { SaveSetting(nameof(NUnitGroupBy), value); }
+        }
+
         public bool ShowFilter
         {
             get { return GetSetting(nameof(ShowFilter), true); }

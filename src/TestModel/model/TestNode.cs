@@ -84,6 +84,8 @@ namespace TestCentric.Gui.Model
         public int TestCount => IsSuite ? GetAttribute("testcasecount", 0) : 1;
         public RunState RunState => GetRunState();
 
+        public TestNode Parent { get; private set; }
+
         private List<TestNode> _children;
         public IList<TestNode> Children
         {
@@ -94,7 +96,7 @@ namespace TestCentric.Gui.Model
                     _children = new List<TestNode>();
                     foreach (XmlNode node in Xml.ChildNodes)
                         if (node.Name == "test-case" || node.Name == "test-suite")
-                            _children.Add(new TestNode(node));
+                            _children.Add(new TestNode(node) { Parent = this });
                 }
 
                 return _children;

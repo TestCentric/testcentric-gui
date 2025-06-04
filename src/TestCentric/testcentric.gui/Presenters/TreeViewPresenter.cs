@@ -133,6 +133,7 @@ namespace TestCentric.Gui.Presenters
                         Strategy.Reload();
                         break;
 
+                    case "TestCentric.Gui.TestTree.NUnitGroupBy":
                     case "TestCentric.Gui.TestTree.TestList.GroupBy":
                     case "TestCentric.Gui.TestTree.FixtureList.GroupBy":
                     case "TestCentric.Gui.TestTree.ShowNamespace":
@@ -338,7 +339,11 @@ namespace TestCentric.Gui.Presenters
         private void UpdateTreeSettingsFromVisualState(VisualState visualState)
         {
             _treeSettings.DisplayFormat = visualState.DisplayStrategy;
-            if (visualState.DisplayStrategy == "TEST_LIST")
+            if (visualState.DisplayStrategy == "NUNIT_TREE")
+            {
+                _treeSettings.NUnitGroupBy = visualState.GroupBy;
+            }
+            else if (visualState.DisplayStrategy == "TEST_LIST")
             {
                 _treeSettings.TestList.GroupBy = visualState.GroupBy;
             }

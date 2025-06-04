@@ -30,9 +30,10 @@ namespace TestCentric.Gui
             DisplayStrategy = strategyID;
         }
 
-        public VisualState(string strategyID, bool showNamespace)
+        public VisualState(string strategyID, string groupID, bool showNamespace)
         {
             DisplayStrategy = strategyID;
+            GroupBy = groupID;
             ShowNamespace = showNamespace;
         }
 

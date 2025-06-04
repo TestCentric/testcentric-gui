@@ -66,7 +66,7 @@ namespace TestCentric.Gui.Presenters
         /// </summary>
         public abstract void OnTestLoaded(TestNode testNode, VisualState visualState);
 
-        public void SaveVisualState() => CreateVisualState().Save(VisualState.GetVisualStateFileName(_model.TestCentricProject.TestFiles[0]));
+        public void SaveVisualState() => _view.InvokeIfRequired(() => CreateVisualState().Save(VisualState.GetVisualStateFileName(_model.TestCentricProject.TestFiles[0])));
 
         protected abstract VisualState CreateVisualState();
 
@@ -160,7 +160,7 @@ namespace TestCentric.Gui.Presenters
             switch (testNode.RunState)
             {
                 case RunState.Ignored:
-                    imageIndex = TestTreeView.WarningIndex;
+                    imageIndex = TestTreeView.IgnoredIndex;
                     break;
                 case RunState.NotRunnable:
                     imageIndex = TestTreeView.FailureIndex;
@@ -169,21 +169,22 @@ namespace TestCentric.Gui.Presenters
 
             treeNode.ImageIndex = treeNode.SelectedImageIndex = imageIndex;
 
-            string id = testNode.Id;
-            if (_nodeIndex.ContainsKey(id))
-                _nodeIndex[id].Add(treeNode);
-            else
-            {
-                var list = new List<TreeNode>();
-                list.Add(treeNode);
-                _nodeIndex.Add(id, list);
-            }
+            AddTestNodeMapping(testNode, treeNode);
 
             if (recursive)
                 foreach (TestNode childNode in testNode.Children)
                     treeNode.Nodes.Add(MakeTreeNode(childNode, true));
 
             return treeNode;
+        }
+
+        protected void AddTestNodeMapping(TestNode testNode, TreeNode treeNode)
+        {
+            string id = testNode.Id;
+            if (_nodeIndex.ContainsKey(id))
+                _nodeIndex[id].Add(treeNode);
+            else
+                _nodeIndex.Add(id, new List<TreeNode> { treeNode });
         }
 
         public string GroupDisplayName(TestGroup group)
@@ -335,6 +336,17 @@ namespace TestCentric.Gui.Presenters
                 treeNodes = new List<TreeNode>();
 
             return treeNodes;
+        }
+
+        /// <summary>
+        /// Removes one tree node from the tree
+        /// </summary>
+        public void RemoveTreeNode(TreeNode treeNode)
+        {
+            if (treeNode.Tag is TestNode testNode && _nodeIndex.TryGetValue(testNode.Id, out List<TreeNode> treeNodeList))
+                treeNodeList.Remove(treeNode);
+
+            treeNode.Remove();
         }
 
         public ResultNode GetResultForTest(TestNode testNode)
