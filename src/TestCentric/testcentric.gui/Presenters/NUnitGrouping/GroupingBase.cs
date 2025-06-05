@@ -62,8 +62,12 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
             }
 
             // 3. Update tree node names and images
-            TreeNodeNameHandler.UpdateTreeNodeNames(TreeView.Nodes);
+            TreeNodeDurationHandler.SetGroupDurations(Model, TreeView.Nodes.OfType<TreeNode>());
+            Strategy.UpdateTreeNodeNames();
             TreeNodeImageHandler.SetTreeNodeImages(TreeView, TreeView.Nodes.OfType<TreeNode>(), true);
+
+            if (Model.Settings.Gui.TestTree.ShowTestDuration)
+                TreeView.Sort();
 
             TreeView.TreeView.EndUpdate();
         }
@@ -115,6 +119,11 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
             _regroupQueue.ForceStopTimer();
         }
 
+        public void OnTestRunStarting()
+        {
+            TreeNodeDurationHandler.ClearGroupDurations(TreeView.Nodes.OfType<TreeNode>());
+        }
+
         public void OnTestRunFinished()
         {
             // Force executing of any pending regroup operations
@@ -122,6 +131,8 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
 
             // The images of the top group tree nodes (for example 'CategoryA' or 'Slow') cannot be set during a test run
             TreeNodeImageHandler.SetTreeNodeImages(TreeView, TreeView.Nodes.OfType<TreeNode>(), false);
+
+            TreeNodeDurationHandler.SetGroupDurations(Model, TreeView.Nodes.OfType<TreeNode>());
         }
 
         /// <summary>

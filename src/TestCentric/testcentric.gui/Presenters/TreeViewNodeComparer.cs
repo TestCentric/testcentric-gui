@@ -86,6 +86,22 @@ namespace TestCentric.Gui.Presenters
                 if (!_ascending)
                     Swap(ref node1, ref node2);
 
+                TestGroup testGroup1 = node1?.Tag as TestGroup;
+                TestGroup testGroup2 = node2?.Tag as TestGroup;
+                if (testGroup1 != null && testGroup2 != null)
+                {
+                    if (testGroup1.Duration.HasValue && testGroup2.Duration.HasValue)
+                        return testGroup1.Duration.Value.CompareTo(testGroup2.Duration.Value);
+
+                    if (testGroup1.Duration.HasValue && !testGroup2.Duration.HasValue)
+                        return 1;
+
+                    if (!testGroup1.Duration.HasValue && testGroup2.Duration.HasValue)
+                        return -1;
+
+                    return node1.Text.CompareTo(node2.Text);
+                }
+
                 TestNode testNode1 = node1?.Tag as TestNode;
                 TestNode testNode2 = node2?.Tag as TestNode;
 

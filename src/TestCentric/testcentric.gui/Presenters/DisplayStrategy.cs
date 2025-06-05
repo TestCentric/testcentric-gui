@@ -229,13 +229,25 @@ namespace TestCentric.Gui.Presenters
             _view.TreeView.EndUpdate();
         }
 
+        public void UpdateTreeNodeNames(IEnumerable<TreeNode> treeNodes)
+        {
+            foreach (TreeNode treeNode in treeNodes)
+                UpdateTreeNodeName(treeNode);
+        }
+
         private void UpdateTreeNodeName(TreeNode treeNode)
         {
-            TestNode testNode = treeNode.Tag as TestNode;           // Update for TestFixture or Testcase nodes only
-            if (testNode == null)
-                return;
+            string treeNodeName = "";
+            TestNode testNode = treeNode.Tag as TestNode; 
+            if (testNode != null)
+                treeNodeName = GetTreeNodeDisplayName(testNode);
+            else if (treeNode.Tag is TestGroup testGroup)
+            {
+                treeNodeName = GroupDisplayName(testGroup);
+                if (_settings.Gui.TestTree.ShowTestDuration && testGroup.Duration.HasValue)
+                    treeNodeName += $" [{testGroup.Duration.Value:0.000}s]";
+            }
 
-            string treeNodeName = GetTreeNodeDisplayName(testNode);
             _view.InvokeIfRequired(() => treeNode.Text = treeNodeName);
         }
 

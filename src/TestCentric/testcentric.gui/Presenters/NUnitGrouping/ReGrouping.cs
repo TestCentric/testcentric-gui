@@ -72,7 +72,7 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
             }
 
             // 5. Update all tree node names to reflect changed number of containing tests in TestGroups
-            TreeNodeNameHandler.UpdateTreeNodeNames(treeNodes.Distinct());
+            Strategy.UpdateTreeNodeNames(treeNodes.Distinct());
 
             TreeView.TreeView.EndUpdate();
         }

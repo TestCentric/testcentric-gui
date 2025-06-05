@@ -74,10 +74,16 @@ namespace TestCentric.Gui.Presenters
             _grouping?.OnTestFinished(result);
         }
 
+        public override void OnTestRunStarting()
+        {
+            _grouping?.OnTestRunStarting();
+            base.OnTestRunStarting();
+        }
+
         public override void OnTestRunFinished()
         {
-            base.OnTestRunFinished();
             _grouping?.OnTestRunFinished();
+            base.OnTestRunFinished();
         }
 
         protected override VisualState CreateVisualState() => new VisualState("NUNIT_TREE", _settings.Gui.TestTree.NUnitGroupBy, _settings.Gui.TestTree.ShowNamespace).LoadFrom(_view.TreeView);
