@@ -37,5 +37,10 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
         /// In common there'll be only one single tree node, only for category grouping multiple tree nodes might exists
         /// </summary>
         List<TreeNode> GetTreeNodesForTest(TestNode testNode);
+
+        void UpdateTreeNodeNames();
+
+        void UpdateTreeNodeNames(IEnumerable<TreeNode> treeNodes);
+
     }
 }

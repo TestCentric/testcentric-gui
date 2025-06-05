@@ -29,6 +29,7 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
             _strategy = Substitute.For<INUnitTreeDisplayStrategy>();
             _view = Substitute.For<ITestTreeView>();
             _view.InvokeIfRequired(Arg.Do<MethodInvoker>(x => x.Invoke()));
+            _model.Settings.Returns(new Fakes.UserSettings());
 
             var treeView = new TreeView();
             _view.TreeView.Returns(treeView);

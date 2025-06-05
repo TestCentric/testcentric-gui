@@ -147,5 +147,72 @@ namespace TestCentric.Gui.Presenters
             // Assert
             Assert.That(result, Is.EqualTo(expectedCompareResult));
         }
+
+        [TestCase(2, 4, -1)]
+        [TestCase(0.5, 0.8, -1)]
+        [TestCase(0.8, 1.2, -1)]
+        [TestCase(0.8, 0.5, 1)]
+        [TestCase(0.8, 0.8, 0)]
+        public void Durationcompare_Ascending_Groups_ReturnsExpectedResult(double duration1, double duration2, int expectedCompareResult)
+        {
+            // Arrange
+            TestGroup testGroup1 = new TestGroup("Group_1") { Duration = duration1 };
+            TestGroup testGroup2 = new TestGroup("Group_2") { Duration = duration2 };
+            ITestModel model = Substitute.For<ITestModel>();
+
+            TreeNode treeNode1 = new TreeNode() { Tag = testGroup1 };
+            TreeNode treeNode2 = new TreeNode() { Tag = testGroup2 };
+
+            // Act
+            IComparer comparer = TreeViewNodeComparer.GetComparer(model, TreeViewNodeComparer.Duration, TreeViewNodeComparer.Ascending);
+            int result = comparer.Compare(treeNode1, treeNode2);
+
+            // Assert
+            Assert.That(result, Is.EqualTo(expectedCompareResult));
+        }
+
+        [TestCase(2, 4, 1)]
+        [TestCase(0.5, 0.8, 1)]
+        [TestCase(0.8, 1.2, 1)]
+        [TestCase(0.8, 0.5, -1)]
+        [TestCase(0.8, 0.8, 0)]
+        public void Durationcompare_Descending_Groups_ReturnsExpectedResult(double duration1, double duration2, int expectedCompareResult)
+        {
+            // Arrange
+            TestGroup testGroup1 = new TestGroup("Group_1") { Duration = duration1 };
+            TestGroup testGroup2 = new TestGroup("Group_2") { Duration = duration2 };
+            ITestModel model = Substitute.For<ITestModel>();
+
+            TreeNode treeNode1 = new TreeNode() { Tag = testGroup1 };
+            TreeNode treeNode2 = new TreeNode() { Tag = testGroup2 };
+
+            // Act
+            IComparer comparer = TreeViewNodeComparer.GetComparer(model, TreeViewNodeComparer.Duration, TreeViewNodeComparer.Descending);
+            int result = comparer.Compare(treeNode1, treeNode2);
+
+            // Assert
+            Assert.That(result, Is.EqualTo(expectedCompareResult));
+        }
+
+        [TestCase("TestA", "TestB", TreeViewNodeComparer.Ascending, -1)]
+        [TestCase("TestA", "TestB", TreeViewNodeComparer.Descending, 1)]
+        [TestCase("TestA", "TestA", TreeViewNodeComparer.Descending, 0)]
+        public void Durationcompare_NoTestResultAvailable_Groups_ReturnsExpectedResult(string groupName1, string groupName2, string sortDirection, int expectedCompareResult)
+        {
+            // Arrange
+            TestGroup testGroup1 = new TestGroup(groupName1);
+            TestGroup testGroup2 = new TestGroup(groupName2);
+            ITestModel model = Substitute.For<ITestModel>();
+
+            TreeNode treeNode1 = new TreeNode(groupName1) { Tag = testGroup1 };
+            TreeNode treeNode2 = new TreeNode(groupName2) { Tag = testGroup2 };
+
+            // Act
+            IComparer comparer = TreeViewNodeComparer.GetComparer(model, TreeViewNodeComparer.Duration, sortDirection);
+            int result = comparer.Compare(treeNode1, treeNode2);
+
+            // Assert
+            Assert.That(result, Is.EqualTo(expectedCompareResult));
+        }
     }
 }

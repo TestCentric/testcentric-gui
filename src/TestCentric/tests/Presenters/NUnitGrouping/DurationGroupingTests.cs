@@ -28,6 +28,7 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
             _strategy = Substitute.For<INUnitTreeDisplayStrategy>();
             _view = Substitute.For<ITestTreeView>();
             _view.InvokeIfRequired(Arg.Do<MethodInvoker>(x => x.Invoke()));
+            _model.Settings.Returns(new Fakes.UserSettings());
 
             var treeView = new TreeView();
             _view.TreeView.Returns(treeView);
@@ -113,6 +114,38 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
             AssertTreeNodeGroup(_createNodes[1].Nodes[0].Nodes[0].Nodes[0], "Fixture_2", 2, 2);
             AssertTestCase(_createNodes[1].Nodes[0].Nodes[0].Nodes[0].Nodes[0], "TestA");
             AssertTestCase(_createNodes[1].Nodes[0].Nodes[0].Nodes[0].Nodes[1], "TestB");
+        }
+
+        [Test]
+        public void CreateTree_TestsWithDifferentDurations_AllTestGroups_HaveDuration()
+        {
+            // Arrange
+            TestNode testNode = new TestNode(
+                CreateTestSuiteXml("3-1000", "LibraryA", "2.0",
+                    CreateTestSuiteXml("3-1001", "NamespaceA", "1.5",
+                        CreateTestFixtureXml("3-1010", "Fixture_1", "1.5",
+                            CreateTestcaseXml("3-1011", "TestA", "0.7"),
+                            CreateTestcaseXml("3-1012", "TestB", "0.8"))),
+                    CreateTestSuiteXml("3-2001", "NamespaceB", "0.5",
+                        CreateTestFixtureXml("3-2010", "Fixture_2", "0.5",
+                            CreateTestcaseXml("3-2011", "TestA", "0.25"),
+                            CreateTestcaseXml("3-2012", "TestB", "0.25")))));
+
+            // Act
+            var grouping = new DurationGrouping(_strategy, _model, _view);
+            grouping.CreateTree(testNode);
+
+            // Assert tree nodes
+            Assert.That(_createNodes.Count, Is.EqualTo(2));
+            AssertTestGroupDuration(_createNodes[0], 1.5);
+            AssertTestGroupDuration(_createNodes[0].Nodes[0], 1.5);
+            AssertTestGroupDuration(_createNodes[0].Nodes[0].Nodes[0], 1.5);
+            AssertTestGroupDuration(_createNodes[0].Nodes[0].Nodes[0].Nodes[0], 1.5);
+
+            AssertTestGroupDuration(_createNodes[1], 0.5);
+            AssertTestGroupDuration(_createNodes[1].Nodes[0], 0.5);
+            AssertTestGroupDuration(_createNodes[1].Nodes[0].Nodes[0], 0.5);
+            AssertTestGroupDuration(_createNodes[1].Nodes[0].Nodes[0].Nodes[0], 0.5);
         }
 
         [Test]
@@ -361,6 +394,12 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
             var group = treeNode.Tag as TestGroup;
             Assert.That(group.Name, Is.EqualTo(expectedGroupName));
             Assert.That(group.Count, Is.EqualTo(expectedGroupCount));
+        }
+
+        private void AssertTestGroupDuration(TreeNode treeNode, double expectedDuration)
+        {
+            var group = treeNode.Tag as TestGroup;
+            Assert.That(group.Duration.Value, Is.EqualTo(expectedDuration).Within(0.01));
         }
 
         private string CreateTestcaseXml(string testId, string testName, string duration)

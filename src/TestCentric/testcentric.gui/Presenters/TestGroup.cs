@@ -37,6 +37,8 @@ namespace TestCentric.Gui.Presenters
 
         public int ImageIndex { get; set; }
 
+        public double? Duration { get; set; }
+
         public TreeNode TreeNode { get; set; }
 
         #endregion

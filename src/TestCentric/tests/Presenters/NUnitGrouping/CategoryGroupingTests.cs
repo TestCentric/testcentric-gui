@@ -25,6 +25,7 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
         public void Setup()
         {
             _model = Substitute.For<ITestModel>();
+            _model.Settings.Returns(new Fakes.UserSettings());
             _strategy = Substitute.For<INUnitTreeDisplayStrategy>();
             _view = Substitute.For<ITestTreeView>();
 

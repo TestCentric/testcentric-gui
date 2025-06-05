@@ -36,5 +36,10 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
         /// Called when the entire test run is finished
         /// </summary>
         void OnTestRunFinished();
+
+        /// <summary>
+        /// Called when the entire test run is starting
+        /// </summary>
+        void OnTestRunStarting();
     }
 }
