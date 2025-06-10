@@ -62,12 +62,12 @@ namespace TestCentric.Gui.Presenters
                 var result = GetResultForTest(testNode);
                 if (result != null)
                 {
-                    var imageIndex = CalcImageIndex(result.Outcome);
+                    var imageIndex = CalcImageIndex(result);
 
                     if (imageIndex == TestTreeView.FailureIndex)
                         return TestTreeView.FailureIndex; // Early return - can't get any worse!
 
-                    if (imageIndex >= TestTreeView.SuccessIndex) // Only those values propagate
+                    if (imageIndex >= TestTreeView.SuccessIndex_NotLatestRun) // Only those values propagate
                         groupIndex = Math.Max(groupIndex, imageIndex);
                 }
             }

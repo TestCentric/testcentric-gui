@@ -138,7 +138,7 @@ namespace TestCentric.Gui.Presenters
         [TestCase("Warning", "Passed", "Passed", TestTreeView.WarningIndex)]
         [TestCase("Passed", "Passed", "Warning", TestTreeView.WarningIndex)]
         [TestCase("Passed", "Passed", "Inconclusive", TestTreeView.SuccessIndex)]
-        [TestCase("Inconclusive", "Inconclusive", "Inconclusive", -1)]
+        [TestCase("Inconclusive", "Inconclusive", "Inconclusive", TestTreeView.InconclusiveIndex)]
         [TestCase("Skipped", "Skipped", "Skipped", -1)]
         [TestCase("Failed", "Skipped", "Skipped", TestTreeView.FailureIndex)]
         [TestCase("Skipped", "Passed", "Skipped", TestTreeView.SuccessIndex)]

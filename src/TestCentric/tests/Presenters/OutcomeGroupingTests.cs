@@ -75,6 +75,40 @@ namespace TestCentric.Gui.Presenters
         }
 
         [Test]
+        [TestCase("Passed", "", "Passed", true, TestTreeView.SuccessIndex)]
+        [TestCase("Passed", "", "Passed", false, TestTreeView.SuccessIndex_NotLatestRun)]
+        [TestCase("Failed", "", "Failed", true, TestTreeView.FailureIndex)]
+        [TestCase("Failed", "", "Failed", false, TestTreeView.FailureIndex_NotLatestRun)]
+        [TestCase("Skipped", "Ignored", "Ignored", true, TestTreeView.IgnoredIndex)]
+        [TestCase("Skipped", "Ignored", "Ignored", false, TestTreeView.IgnoredIndex_NotLatestRun)]
+        [TestCase("Inconclusive", "", "Inconclusive", true, TestTreeView.InconclusiveIndex)]
+
+        public void Load_TreeeNodeIcon_IsSet(string resultState, string outcomeLabel, string expectedGroupName, bool isLatestRun, int expectedImageIndex)
+        {
+            // 1. Arrange
+            ITestTreeView treeView = Substitute.For<ITestTreeView>();
+            ITestModel model = Substitute.For<ITestModel>();
+            GroupDisplayStrategy strategy = Substitute.For<GroupDisplayStrategy>(treeView, model);
+            model.HasResults.Returns(true);
+
+            var resultNode = new ResultNode($"<test-case id='1' result='{resultState}' label='{outcomeLabel}'/>");
+            resultNode.IsLatestRun = isLatestRun;
+
+            var testNode = new TestNode($"<test-case id='1' />");
+            var tests = new List<TestNode> { testNode };
+
+            model.GetResultForTest("1").Returns(resultNode);
+
+            // 2. Act
+            OutcomeGrouping grouping = new OutcomeGrouping(strategy);
+            grouping.Load(tests);
+
+            // 3. Assert
+            var expectedGroup = grouping.Groups.FirstOrDefault(g => g.Name == expectedGroupName);
+            Assert.That(expectedGroup.ImageIndex, Is.EqualTo(expectedImageIndex));
+        }
+
+        [Test]
         public void Load_NoResultExistsForTestNode_TestNodeIsInsideNotRunGroup()
         {
             // 1. Arrange

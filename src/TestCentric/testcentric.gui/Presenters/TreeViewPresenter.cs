@@ -105,7 +105,6 @@ namespace TestCentric.Gui.Presenters
                 // or user terminates cancels the run.
                 Strategy.SaveVisualState();
 
-                _model.ClearResults();
                 Strategy.OnTestRunStarting();
                 CheckPropertiesDisplay();
                 CheckXmlDisplay();

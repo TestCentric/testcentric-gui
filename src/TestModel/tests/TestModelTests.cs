@@ -180,5 +180,35 @@ namespace TestCentric.Gui.Model
             Assert.That(isRunning1, Is.True);
             Assert.That(isRunning2, Is.True);
         }
+
+        [Test]
+        public void TestRun_AllPreviousTestResults_IsLatestRun_IsFalse()
+        {
+            // Arrange
+            var xmlNode = XmlHelper.CreateXmlNode($"<test-case id='1' name='TestA' />");
+            var testNode = new TestNode(xmlNode);
+
+            var runner = Substitute.For<TestCentric.Engine.ITestRunner>();
+            runner.Explore(null).ReturnsForAnyArgs(xmlNode);
+            var engine = Substitute.For<TestCentric.Engine.ITestEngine>();
+            engine.GetRunner(null).ReturnsForAnyArgs(runner);
+            var options = new CommandLineOptions("dummy.dll");
+            var model = TestModel.CreateTestModel(engine, options);
+
+            model.CreateNewProject();
+            model.LoadTests(new[] { "dummy.dll" });
+
+            ResultNode resultNode1 = new ResultNode("<test-case id='1' />");
+            ResultNode resultNode2 = new ResultNode("<test-case id='2' />");
+            model.Results.Add("1", resultNode1);
+            model.Results.Add("2", resultNode2);
+
+            // Act
+            model.RunTests(testNode);
+
+            // Assert
+            Assert.That(resultNode1.IsLatestRun, Is.False);
+            Assert.That(resultNode2.IsLatestRun, Is.False);
+        }
     }
 }

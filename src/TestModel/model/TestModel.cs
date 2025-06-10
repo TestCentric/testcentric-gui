@@ -782,6 +782,9 @@ namespace TestCentric.Gui.Model
 
             _lastTestRun = runSpec;
 
+            foreach (ResultNode resultNode in this.Results.Values)
+                resultNode.IsLatestRun = false;
+
             // TODO: Does this belong here? Maybe need to do before creating the run specification.
             if (Settings.Engine.ReloadOnRun)
             {
