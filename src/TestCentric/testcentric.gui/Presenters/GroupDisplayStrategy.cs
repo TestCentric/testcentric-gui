@@ -57,12 +57,13 @@ namespace TestCentric.Gui.Presenters
         {
             var groupIndex = -1;
 
+            bool isLatestRun = group.Any(t => _model.IsInTestRun(t));
             foreach (var testNode in group)
             {
                 var result = GetResultForTest(testNode);
                 if (result != null)
                 {
-                    var imageIndex = CalcImageIndex(result);
+                    var imageIndex = CalcImageIndex(result, isLatestRun);
 
                     if (imageIndex == TestTreeView.FailureIndex)
                         return TestTreeView.FailureIndex; // Early return - can't get any worse!
@@ -112,7 +113,9 @@ namespace TestCentric.Gui.Presenters
             {
                 oldGroup.RemoveId(result.Id);
                 // TODO: Insert in order
-                newGroup.Add(result);
+
+                TestNode testNode = _model.GetTestById(result.Id);
+                newGroup.Add(testNode);
 
                 // Remove test from tree
                 treeNode.Remove();

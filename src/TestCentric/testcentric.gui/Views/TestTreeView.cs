@@ -52,6 +52,7 @@ namespace TestCentric.Gui.Views
 
             RunContextCommand = new CommandMenuElement(this.runMenuItem);
             DebugContextCommand = new CommandMenuElement(this.debugMenuItem);
+            ClearResultsContextCommand = new CommandMenuElement(this.clearResultsMenuItem);
             ActiveConfiguration = new PopupMenuElement(this.activeConfigMenuItem);
             ShowCheckBoxes = new CheckedMenuElement(showCheckboxesMenuItem);
             ShowTestDuration = new CheckedMenuElement(showTestDurationMenuItem);
@@ -133,6 +134,7 @@ namespace TestCentric.Gui.Views
 
         public ICommand RunContextCommand { get; private set; }
         public ICommand DebugContextCommand { get; private set; }
+        public ICommand ClearResultsContextCommand { get; private set; }
         public IToolStripMenu ActiveConfiguration { get; private set; }
         public IChecked ShowCheckBoxes { get; private set; }
         public IChecked ShowTestDuration { get; private set; }

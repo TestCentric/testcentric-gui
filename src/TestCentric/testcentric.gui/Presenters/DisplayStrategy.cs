@@ -253,7 +253,11 @@ namespace TestCentric.Gui.Presenters
 
         public static int CalcImageIndex(ResultNode resultNode)
         {
-            bool latestRun = resultNode.IsLatestRun;
+            return CalcImageIndex(resultNode, resultNode.IsLatestRun);
+        }
+
+        public static int CalcImageIndex(ResultNode resultNode, bool latestRun)
+        {
             switch (resultNode.Outcome.Status)
             {
                 case TestStatus.Inconclusive:
