@@ -128,6 +128,23 @@ namespace TestCentric.Gui.Presenters.TestTree
             Assert.That(_view.DebugContextCommand.Enabled, Is.EqualTo(expectedEnabled));
         }
 
+        [TestCase(true, true, false)]
+        [TestCase(true, false, true)]
+        [TestCase(false, false, false)]
+        [TestCase(false, true, false)]
+        public void WhenContextMenuIsDisplayed_ClearResultCommand_EnabledState_IsUpdated(bool hasTests, bool isTestRunning, bool expectedEnabled)
+        {
+            // 1. Arrange
+            _model.HasResults.Returns(hasTests);
+            _model.IsTestRunning.Returns(isTestRunning);
+
+            // 2. Act
+            _view.ContextMenuOpening += Raise.Event<EventHandler>();
+
+            // 3. Assert
+            Assert.That(_view.ClearResultsContextCommand.Enabled, Is.EqualTo(expectedEnabled));
+        }
+
         [Test]
         public void TreeCheckBoxClicked_NoNodeSelected_SelectedTestsInModel_AreEmpty()
         {
@@ -331,6 +348,36 @@ namespace TestCentric.Gui.Presenters.TestTree
             _view.TextFilter.Received().Text = "";
             _view.OutcomeFilter.ReceivedWithAnyArgs().SelectedItems = null;
             _view.CategoryFilter.ReceivedWithAnyArgs().SelectedItems = null;
+        }
+
+        [Test]
+        public void ClearResultsCommand_Executed_ClearResults()
+        {
+            // 1. Arrange
+            ITreeDisplayStrategy strategy = Substitute.For<ITreeDisplayStrategy>();
+            _treeDisplayStrategyFactory.Create(null, null, null).ReturnsForAnyArgs(strategy);
+            _model.Settings.Gui.TestTree.DisplayFormat = "NUNIT_TREE";
+
+            // 2. Act
+            _view.ClearResultsContextCommand.Execute += Raise.Event<CommandHandler>();
+
+            // 3. Assert
+            _model.Received().ClearResults();
+        }
+
+        [Test]
+        public void ClearResultsCommand_Executed_ReloadTree()
+        {
+            // 1. Arrange
+            ITreeDisplayStrategy strategy = Substitute.For<ITreeDisplayStrategy>();
+            _treeDisplayStrategyFactory.Create(null, null, null).ReturnsForAnyArgs(strategy);
+            _model.Settings.Gui.TestTree.DisplayFormat = "NUNIT_TREE";
+
+            // 2. Act
+            _view.ClearResultsContextCommand.Execute += Raise.Event<CommandHandler>();
+
+            // 3. Assert
+            strategy.Received().Reload();
         }
 
         [Test]

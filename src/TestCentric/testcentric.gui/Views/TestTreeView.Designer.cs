@@ -37,6 +37,7 @@ namespace TestCentric.Gui.Views
             this.testTreeContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.runMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearResultsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.testPropertiesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewAsXmlMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -91,6 +92,7 @@ namespace TestCentric.Gui.Views
             this.testTreeContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.runMenuItem,
             this.debugMenuItem,
+            this.clearResultsMenuItem,
             this.contextMenuSeparator1,
             this.testPropertiesMenuItem,
             this.viewAsXmlMenuItem,
@@ -119,6 +121,12 @@ namespace TestCentric.Gui.Views
             this.debugMenuItem.Name = "debugMenuItem";
             this.debugMenuItem.Size = new System.Drawing.Size(175, 22);
             this.debugMenuItem.Text = "Debug";
+            // 
+            // clearResultsMenuItem
+            // 
+            this.clearResultsMenuItem.Name = "clearResultsMenuItem";
+            this.clearResultsMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.clearResultsMenuItem.Text = "Clear test results";
             // 
             // contextMenuSeparator1
             // 
@@ -400,6 +408,7 @@ namespace TestCentric.Gui.Views
         private System.Windows.Forms.ToolStripMenuItem showCheckboxesMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showTestDurationMenuItem;
         private System.Windows.Forms.ToolStripMenuItem debugMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem clearResultsMenuItem;
         private System.Windows.Forms.ToolStripMenuItem activeConfigMenuItem;
         private System.Windows.Forms.ToolStripSeparator contextMenuSeparator2;
         private System.Windows.Forms.ToolStripMenuItem testPropertiesMenuItem;

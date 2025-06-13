@@ -27,6 +27,7 @@ namespace TestCentric.Gui.Views
         // Commands
         ICommand RunContextCommand { get; }
         ICommand DebugContextCommand { get; }
+        ICommand ClearResultsContextCommand { get; }
         IToolStripMenu ActiveConfiguration { get; }
         IChecked ShowCheckBoxes { get; }
         IChecked ShowTestDuration { get; }

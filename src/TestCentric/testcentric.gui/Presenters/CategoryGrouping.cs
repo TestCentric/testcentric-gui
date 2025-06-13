@@ -37,10 +37,6 @@ namespace TestCentric.Gui.Presenters
             // Additional groups are added dynamically.
 
             base.Load(tests);
-
-            if (_displayStrategy.HasResults)
-                foreach (var group in Groups)
-                    group.ImageIndex = _displayStrategy.CalcImageIndexForGroup(group);
         }
 
         public override TestGroup[] SelectGroups(TestNode testNode)

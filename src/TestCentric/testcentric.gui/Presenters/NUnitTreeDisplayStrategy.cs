@@ -147,7 +147,7 @@ namespace TestCentric.Gui.Presenters
             TreeNode treeNode = MakeTreeNode(testNode, false);
             ResultNode resultNode = _model.GetResultForTest(testNode.Id);
             if (resultNode != null)
-                _view.SetImageIndex(treeNode, DisplayStrategy.CalcImageIndex(resultNode.Outcome));
+                _view.SetImageIndex(treeNode, DisplayStrategy.CalcImageIndex(resultNode));
 
             return treeNode;
         }

@@ -207,7 +207,7 @@ namespace TestCentric.Gui.Model
 
                 case "test-suite":
                     resultNode = new ResultNode(xmlNode);
-                    _model.Results[resultNode.Id] = resultNode;
+                    resultNode = _model.AddResult(resultNode);
 
                     CheckForProjectFinish(resultNode);
 

@@ -57,17 +57,18 @@ namespace TestCentric.Gui.Presenters
         {
             var groupIndex = -1;
 
+            bool isLatestRun = group.Any(t => _model.IsInTestRun(t));
             foreach (var testNode in group)
             {
                 var result = GetResultForTest(testNode);
                 if (result != null)
                 {
-                    var imageIndex = CalcImageIndex(result.Outcome);
+                    var imageIndex = CalcImageIndex(result, isLatestRun);
 
                     if (imageIndex == TestTreeView.FailureIndex)
                         return TestTreeView.FailureIndex; // Early return - can't get any worse!
 
-                    if (imageIndex >= TestTreeView.SuccessIndex) // Only those values propagate
+                    if (imageIndex >= TestTreeView.SuccessIndex_NotLatestRun) // Only those values propagate
                         groupIndex = Math.Max(groupIndex, imageIndex);
                 }
             }
@@ -112,7 +113,9 @@ namespace TestCentric.Gui.Presenters
             {
                 oldGroup.RemoveId(result.Id);
                 // TODO: Insert in order
-                newGroup.Add(result);
+
+                TestNode testNode = _model.GetTestById(result.Id);
+                newGroup.Add(testNode);
 
                 // Remove test from tree
                 treeNode.Remove();

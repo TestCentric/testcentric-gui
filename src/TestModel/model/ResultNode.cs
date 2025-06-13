@@ -27,6 +27,8 @@ namespace TestCentric.Gui.Model
             Duration = duration != null
                 ? double.Parse(duration, CultureInfo.InvariantCulture)
                 : 0.0;
+
+            IsLatestRun = true;
         }
 
         public ResultNode(string xmlText) : this(XmlHelper.CreateXmlNode(xmlText)) { }
@@ -41,6 +43,11 @@ namespace TestCentric.Gui.Model
         public ResultState Outcome { get; }
         public int AssertCount { get; }
         public double Duration { get; }
+
+        /// <summary>
+        /// Flag indicating if result is from latest or any previous test run
+        /// </summary>
+        public bool IsLatestRun { get; set; }
 
         public string Message
         {

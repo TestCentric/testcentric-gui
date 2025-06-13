@@ -20,5 +20,13 @@ namespace TestCentric.Gui.Model
             };
             Assert.DoesNotThrow(newResultNode);
         }
+
+        [Test]
+        public void IsLatestRun_NewResultNode_IsTrue()
+        {
+            var resultNode = new ResultNode("<test-case id='1'/>");
+            
+            Assert.That(resultNode.IsLatestRun, Is.True);
+        }
     }
 }

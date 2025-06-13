@@ -24,7 +24,7 @@ namespace TestCentric.Gui.Presenters
             // Predefine all TestGroups and TreeNodes
             Groups.Add(new TestGroup("Failed", TestTreeView.FailureIndex));
             Groups.Add(new TestGroup("Passed", TestTreeView.SuccessIndex));
-            Groups.Add(new TestGroup("Ignored", TestTreeView.WarningIndex));
+            Groups.Add(new TestGroup("Ignored", TestTreeView.IgnoredIndex));
             Groups.Add(new TestGroup("Inconclusive", TestTreeView.InconclusiveIndex));
             Groups.Add(new TestGroup("Skipped", TestTreeView.SkippedIndex));
             Groups.Add(new TestGroup("Not Run", TestTreeView.InitIndex));

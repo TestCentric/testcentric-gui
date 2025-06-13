@@ -25,6 +25,21 @@
         <Content Include="..\..\..\testcentric.ico">
             <Link>testcentric.ico</Link>
         </Content>
+        <Content Include="Images\Tree\Circles\Failure_NotLatestRun.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Circles\Ignored_NotLatestRun.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Circles\Inconclusive_NotLatestRun.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Circles\Success_NotLatestRun.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Circles\Warning_NotLatestRun.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
         <Content Include="Images\Tree\Circles\Running.png">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
@@ -60,6 +75,21 @@
         <Content Include="Images\Tree\Circles\Success.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+        <Content Include="Images\Tree\Classic\Failure_NotLatestRun.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Classic\Ignored_NotLatestRun.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Classic\Inconclusive_NotLatestRun.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Classic\Success_NotLatestRun.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Classic\Warning_NotLatestRun.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
         <Content Include="Images\Tree\Classic\Running.png">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
@@ -80,6 +110,21 @@
         </Content>
         <Content Include="Images\Tree\Classic\Success.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Visual Studio\Failure_NotLatestRun.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Visual Studio\Ignored_NotLatestRun.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Visual Studio\Inconclusive_NotLatestRun.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Visual Studio\Success_NotLatestRun.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Images\Tree\Visual Studio\Warning_NotLatestRun.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
         <Content Include="Images\Tree\Visual Studio\Running.png">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

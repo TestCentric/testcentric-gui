@@ -35,10 +35,6 @@ namespace TestCentric.Gui.Presenters
             Groups.Add(new TestGroup("Not Run"));
 
             base.Load(tests);
-
-            if (_displayStrategy.HasResults)
-                foreach (var group in Groups)
-                    group.ImageIndex = _displayStrategy.CalcImageIndexForGroup(group);
         }
 
         /// <summary>
