@@ -608,6 +608,50 @@ namespace TestCentric.Gui.Model
             return null;
         }
 
+        /// <summary>
+        /// If a test result for a test suite is already present, either the old or new test
+        /// result can be stored in the result dictionary:
+        /// As we want an accumulated view of all previous test runs, we store the result
+        /// with the 'worst' outcome.
+        /// </summary>
+        public ResultNode AddResult(ResultNode resultNode)
+        {
+            if (resultNode.IsSuite &&
+                Results.TryGetValue(resultNode.Id, out ResultNode oldResult) &&
+                KeepOldResult(resultNode, oldResult))
+                resultNode = oldResult;
+
+            resultNode.IsLatestRun = true;
+            Results[resultNode.Id] = resultNode;
+
+            return resultNode;
+        }
+
+        private bool KeepOldResult(ResultNode newResult, ResultNode oldResult)
+        {
+            int oldOutcome = GetOutcome(oldResult);
+            int newOutcome = GetOutcome(newResult);
+            return oldOutcome > newOutcome;
+        }
+
+        private int GetOutcome(ResultNode resultNode)
+        {
+            switch (resultNode.Outcome.Status)
+            {
+                case TestStatus.Inconclusive:
+                    return 1;
+                case TestStatus.Passed:
+                    return 2;
+                case TestStatus.Warning:
+                    return 4;
+                case TestStatus.Failed:
+                    return 5;
+                case TestStatus.Skipped:
+                default:
+                    return resultNode.Outcome.Label == "Ignored" ? 3 : 0;
+            }
+        }
+
         public bool IsInTestRun(TestNode testNode)
         {
             if (_lastTestRun == null)
@@ -781,6 +825,9 @@ namespace TestCentric.Gui.Model
             }
 
             _lastTestRun = runSpec;
+
+            foreach (ResultNode resultNode in this.Results.Values)
+                resultNode.IsLatestRun = false;
 
             // TODO: Does this belong here? Maybe need to do before creating the run specification.
             if (Settings.Engine.ReloadOnRun)

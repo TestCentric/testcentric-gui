@@ -50,6 +50,10 @@ namespace TestCentric.Gui.Presenters
             foreach (TestNode testNode in tests)
                 foreach (var group in SelectGroups(testNode))
                     group.Add(testNode);
+
+            if (_displayStrategy.HasResults)
+                foreach (var group in Groups)
+                    group.ImageIndex = _displayStrategy.CalcImageIndexForGroup(group);
         }
 
         /// <summary>

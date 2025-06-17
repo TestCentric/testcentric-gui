@@ -941,7 +941,6 @@ namespace TestCentric.Gui.Presenters
 
         private void RunAllTests()
         {
-            _model.ClearResults();
             var allTests = _model.LoadedTests;
             _model.RunTests(allTests);
         }

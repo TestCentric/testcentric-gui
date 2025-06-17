@@ -23,16 +23,23 @@ namespace TestCentric.Gui.Views
         /// indices are correct. These are ordered so that the higher values 
         /// are those that propagate upwards in the tree.
         /// </summary>
-        private static readonly string[] IMAGE_NAMES = { "Skipped", "Running", "Inconclusive", "Success", "Ignored", "Warning", "Failure" };
+        private static readonly string[] IMAGE_NAMES = { "Skipped", "Running",
+            "Inconclusive_NotLatestRun", "Success_NotLatestRun", "Ignored_NotLatestRun", "Warning_NotLatestRun", "Failure_NotLatestRun", 
+            "Inconclusive", "Success", "Ignored", "Warning", "Failure" };
 
         public const int InitIndex = 0;
         public const int SkippedIndex = 0;
         public const int RunningIndex = 1;
-        public const int InconclusiveIndex = 2;
-        public const int SuccessIndex = 3;
-        public const int IgnoredIndex = 4;
-        public const int WarningIndex = 5;
-        public const int FailureIndex = 6;
+        public const int InconclusiveIndex_NotLatestRun = 2;
+        public const int SuccessIndex_NotLatestRun = 3;
+        public const int IgnoredIndex_NotLatestRun = 4;
+        public const int WarningIndex_NotLatestRun = 5;
+        public const int FailureIndex_NotLatestRun = 6;
+        public const int InconclusiveIndex = 7;
+        public const int SuccessIndex = 8;
+        public const int IgnoredIndex = 9;
+        public const int WarningIndex = 10;
+        public const int FailureIndex = 11;
 
         public event TreeNodeActionHandler SelectedNodeChanged;
         public event TreeNodeActionHandler AfterCheck;
@@ -45,6 +52,7 @@ namespace TestCentric.Gui.Views
 
             RunContextCommand = new CommandMenuElement(this.runMenuItem);
             DebugContextCommand = new CommandMenuElement(this.debugMenuItem);
+            ClearResultsContextCommand = new CommandMenuElement(this.clearResultsMenuItem);
             ActiveConfiguration = new PopupMenuElement(this.activeConfigMenuItem);
             ShowCheckBoxes = new CheckedMenuElement(showCheckboxesMenuItem);
             ShowTestDuration = new CheckedMenuElement(showTestDurationMenuItem);
@@ -126,6 +134,7 @@ namespace TestCentric.Gui.Views
 
         public ICommand RunContextCommand { get; private set; }
         public ICommand DebugContextCommand { get; private set; }
+        public ICommand ClearResultsContextCommand { get; private set; }
         public IToolStripMenu ActiveConfiguration { get; private set; }
         public IChecked ShowCheckBoxes { get; private set; }
         public IChecked ShowTestDuration { get; private set; }

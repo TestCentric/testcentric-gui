@@ -78,7 +78,7 @@ namespace TestCentric.Gui.Presenters
 
         public virtual void OnTestFinished(ResultNode result)
         {
-            int imageIndex = CalcImageIndex(result.Outcome);
+            int imageIndex = CalcImageIndex(result);
             foreach (TreeNode treeNode in GetTreeNodesForTest(result))
             {
                 _view.SetImageIndex(treeNode, imageIndex);
@@ -89,7 +89,7 @@ namespace TestCentric.Gui.Presenters
         {
             _view.InvokeIfRequired(() =>
             {
-                SetTestRunningIcons(_view.Nodes);
+                UpdateTreeIconsOnRunStart(_view.Nodes);
             });
 
             if (_settings.Gui.TestTree.ShowTestDuration)
@@ -251,22 +251,27 @@ namespace TestCentric.Gui.Presenters
             _view.InvokeIfRequired(() => treeNode.Text = treeNodeName);
         }
 
-        public static int CalcImageIndex(ResultState outcome)
+        public static int CalcImageIndex(ResultNode resultNode)
         {
-            switch (outcome.Status)
+            return CalcImageIndex(resultNode, resultNode.IsLatestRun);
+        }
+
+        public static int CalcImageIndex(ResultNode resultNode, bool latestRun)
+        {
+            switch (resultNode.Outcome.Status)
             {
                 case TestStatus.Inconclusive:
-                    return TestTreeView.InconclusiveIndex;
+                    return latestRun ? TestTreeView.InconclusiveIndex : TestTreeView.InconclusiveIndex_NotLatestRun;
                 case TestStatus.Passed:
-                    return TestTreeView.SuccessIndex;
+                    return latestRun ? TestTreeView.SuccessIndex : TestTreeView.SuccessIndex_NotLatestRun;
                 case TestStatus.Failed:
-                    return TestTreeView.FailureIndex;
+                    return latestRun ? TestTreeView.FailureIndex : TestTreeView.FailureIndex_NotLatestRun;
                 case TestStatus.Warning:
-                    return TestTreeView.WarningIndex;
+                    return latestRun ? TestTreeView.WarningIndex : TestTreeView.WarningIndex_NotLatestRun;
                 case TestStatus.Skipped:
                 default:
-                    return outcome.Label == "Ignored"
-                        ? TestTreeView.IgnoredIndex
+                    return resultNode.Outcome.Label == "Ignored"
+                        ? latestRun ? TestTreeView.IgnoredIndex : TestTreeView.IgnoredIndex_NotLatestRun
                         : TestTreeView.SkippedIndex;
             }
         }
@@ -279,29 +284,47 @@ namespace TestCentric.Gui.Presenters
             {
                 ResultNode resultNode = GetResultForTest(testNode);
                 if (resultNode != null)
-                    treeNode.ImageIndex = treeNode.SelectedImageIndex = CalcImageIndex(resultNode.Outcome);
+                    treeNode.ImageIndex = treeNode.SelectedImageIndex = CalcImageIndex(resultNode);
             }
 
             foreach (TreeNode childNode in treeNode.Nodes)
                 ApplyResultsToTree(childNode);
         }
 
-        private void SetTestRunningIcons(TreeNodeCollection treeNodes)
+        private void UpdateTreeIconsOnRunStart(TreeNodeCollection treeNodes)
         {
             foreach (TreeNode treeNode in treeNodes)
             {
-                SetTestRunningIcons(treeNode.Nodes);
+                UpdateTreeIconsOnRunStart(treeNode.Nodes);
 
                 bool anyChildNodeRunning = treeNode.Nodes.OfType<TreeNode>().Any(t => t.ImageIndex == TestTreeView.RunningIndex);
-                int imageIndex = anyChildNodeRunning ? TestTreeView.RunningIndex : TestTreeView.InitIndex;
+                int imageIndex = treeNode.ImageIndex;
 
-                if (imageIndex != TestTreeView.RunningIndex && treeNode.Tag is TestNode testNode && _model.IsInTestRun(testNode))
-                {
+                if (anyChildNodeRunning || treeNode.Tag is TestNode testNode && _model.IsInTestRun(testNode))
                     imageIndex = TestTreeView.RunningIndex;
-                }
+                else
+                    imageIndex = UpdateTreeIconToPreviousRun(treeNode.ImageIndex);
 
                 _view.SetImageIndex(treeNode, imageIndex);
             }
+        }
+
+        private int UpdateTreeIconToPreviousRun(int imageIndex)
+        {
+            switch (imageIndex)
+            {
+                case TestTreeView.InconclusiveIndex:
+                    return TestTreeView.InconclusiveIndex_NotLatestRun;
+                case TestTreeView.SuccessIndex:
+                    return TestTreeView.SuccessIndex_NotLatestRun;
+                case TestTreeView.WarningIndex:
+                    return TestTreeView.WarningIndex_NotLatestRun;
+                case TestTreeView.FailureIndex:
+                    return TestTreeView.FailureIndex_NotLatestRun;
+                case TestTreeView.IgnoredIndex:
+                    return TestTreeView.IgnoredIndex_NotLatestRun;
+            }
+            return imageIndex;
         }
 
         protected void ResetTestRunningIcons(TreeNodeCollection treeNodes)
