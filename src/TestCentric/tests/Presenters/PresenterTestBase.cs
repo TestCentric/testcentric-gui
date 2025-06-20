@@ -89,6 +89,11 @@ namespace TestCentric.Gui.Presenters
             _model.Events.TestsUnloading += Raise.Event<TestEventHandler>(new TestEventArgs());
         }
 
+        protected void FireTestAssemblyChangedEvent()
+        {
+            _model.Events.TestChanged += Raise.Event<TestEventHandler>(new TestEventArgs());
+        }
+
         protected void FireRunStartingEvent(int testCount)
         {
             _model.Events.RunStarting += Raise.Event<RunStartingEventHandler>(new RunStartingEventArgs(testCount));
