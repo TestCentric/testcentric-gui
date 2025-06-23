@@ -53,5 +53,31 @@ namespace TestCentric.Gui.Presenters.Main
             _model.Received().SaveProject("TestCentric.tcproj");
             _view.Received().Title = "TestCentric - TestCentric.tcproj";
         }
+
+        [Test]
+        public void WhenTestAssemblyChanged_ReloadOnChangeEnabled_ReloadTests()
+        {
+            // Arrange
+            _settings.Engine.ReloadOnChange = true;
+
+            // Act
+            FireTestAssemblyChangedEvent();
+
+            // Assert
+            _model.Received().ReloadTests();
+        }
+
+        [Test]
+        public void WhenTestAssemblyChanged_ReloadOnChangeDisabled_NotReloadTests()
+        {
+            // Arrange
+            _settings.Engine.ReloadOnChange = false;
+
+            // Act
+            FireTestAssemblyChangedEvent();
+
+            // Assert
+            _model.DidNotReceive().ReloadTests();
+        }
     }
 }

@@ -181,6 +181,12 @@ namespace TestCentric.Gui.Presenters
                 }
             };
 
+            _model.Events.TestChanged += (e) =>
+            {
+                if (_settings.Engine.ReloadOnChange)
+                    _model.ReloadTests();
+            };
+
             _model.Events.RunStarting += (RunStartingEventArgs e) =>
             {
                 _stopRequested = _forcedStopRequested = false;
