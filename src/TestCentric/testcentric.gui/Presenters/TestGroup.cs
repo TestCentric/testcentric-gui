@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Presenters
 {
+    using System;
     using Model;
 
     /// <summary>
@@ -54,6 +55,19 @@ namespace TestCentric.Gui.Presenters
             sb.Append("</or></filter>");
 
             return new TestFilter(sb.ToString());
+        }
+
+        /// <summary>
+        /// Add a testNode to the TestGroup and apply the testNode result to the result state of the group
+        /// </summary>
+        public void Add(TestNode testNode, ResultNode resultNode)
+        {
+            Add(testNode);
+            if (resultNode != null)
+            {
+                int imageIndex = DisplayStrategy.CalcImageIndex(resultNode);
+                ImageIndex = Math.Max(imageIndex, ImageIndex);
+            }
         }
     }
 }

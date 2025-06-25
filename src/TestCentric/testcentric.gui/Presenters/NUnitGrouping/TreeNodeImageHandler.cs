@@ -7,6 +7,8 @@ using System.Windows.Forms;
 using System;
 using TestCentric.Gui.Views;
 using System.Collections.Generic;
+using System.Linq;
+using TestCentric.Gui.Model;
 
 namespace TestCentric.Gui.Presenters.NUnitGrouping
 {
@@ -15,28 +17,23 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
     /// </summary>
     public class TreeNodeImageHandler
     {
-        public static void SetTreeNodeImages(ITestTreeView treeView, IEnumerable<TreeNode> treeNodes, bool recursive)
+        public static void SetTreeNodeImages(ITestTreeView treeView, IEnumerable<TestGroup> groups)
         {
-            foreach (TreeNode treeNode in treeNodes)
-            {
-                SetTreeNodeImage(treeView, treeNode, recursive);
-            }
+            foreach (TestGroup group in groups)
+                treeView.SetImageIndex(group.TreeNode, group.ImageIndex);
         }
 
-        private static void SetTreeNodeImage(ITestTreeView treeView, TreeNode treeNode, bool recursive)
+        public static void OnTestFinished(ResultNode result, IList<TestGroup> groups, ITestTreeView treeView)
         {
-            int imageIndex = TestTreeView.InitIndex;
-            foreach (TreeNode childNode in treeNode.Nodes)
+            if (!result.IsSuite)
             {
-                if (recursive && childNode.ImageIndex <= TestTreeView.InitIndex)
-                    SetTreeNodeImage(treeView, childNode, recursive);
-
-                // Ignore index is set to a TreeNode when created => don't propagate up automatically on loading tree
-                if (!recursive || childNode.ImageIndex != TestTreeView.IgnoredIndex)
-                    imageIndex = Math.Max(imageIndex, childNode.ImageIndex);
-            }
-
-            treeView.SetImageIndex(treeNode, imageIndex);
+                int imageIndex = DisplayStrategy.CalcImageIndex(result);
+                foreach (TestGroup group in groups)
+                    group.ImageIndex = Math.Max(imageIndex, group.ImageIndex);
+            } 
+            else
+                foreach (TestGroup group in groups)
+                    treeView.SetImageIndex(group.TreeNode, group.ImageIndex);
         }
     }
 }

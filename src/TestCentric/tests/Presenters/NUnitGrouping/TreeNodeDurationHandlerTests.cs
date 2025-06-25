@@ -3,7 +3,6 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-using System.Windows.Forms;
 using NSubstitute;
 using NUnit.Framework;
 using TestCentric.Gui.Model;
@@ -20,13 +19,8 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
             TestGroup testGroup2 = new TestGroup("Group_2") { Duration = 0.5 };
             TestGroup testGroup3 = new TestGroup("Group_3") { Duration = 0.5 };
 
-            TreeNode treeNode1 = new TreeNode() { Tag = testGroup1 };
-            TreeNode treeNode2 = new TreeNode() { Tag = testGroup2 };
-            TreeNode treeNode3 = new TreeNode() { Tag = testGroup3 };
-            treeNode2.Nodes.Add(treeNode3);
-
             // Act
-            TreeNodeDurationHandler.ClearGroupDurations(new[] { treeNode1, treeNode2 });
+            TreeNodeDurationHandler.ClearGroupDurations(new[] { testGroup1, testGroup2, testGroup3 });
 
             // Assert
 
@@ -41,6 +35,7 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
             ITestModel model = Substitute.For<ITestModel>();
             TestNode testNode1 = new TestNode($"<test-start id='1'/>");
             TestNode testNode2 = new TestNode($"<test-start id='2'/>");
+            TestNode testNode3 = new TestNode($"<test-start id='3'/>");
             var resultNode1 = new ResultNode($"<test-case id='1' duration='1'/>");
             var resultNode2 = new ResultNode($"<test-case id='2' duration='2'/>");
             model.GetResultForTest("1").Returns(resultNode1);
@@ -54,14 +49,10 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
             testGroup2.Add(testNode2);
             testGroup3.Add(testNode1);
             testGroup3.Add(testNode2);
-
-            TreeNode treeNode1 = new TreeNode() { Tag = testGroup1 };
-            TreeNode treeNode2 = new TreeNode() { Tag = testGroup2 };
-            TreeNode treeNode3 = new TreeNode() { Tag = testGroup3 };
-            treeNode2.Nodes.Add(treeNode3);
+            testGroup3.Add(testNode3);
 
             // Act
-            TreeNodeDurationHandler.SetGroupDurations(model, new[] { treeNode1, treeNode2 });
+            TreeNodeDurationHandler.SetGroupDurations(model, new[] { testGroup1, testGroup2, testGroup3 });
 
             // Assert
 

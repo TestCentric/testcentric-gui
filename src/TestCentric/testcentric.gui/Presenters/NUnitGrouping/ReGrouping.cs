@@ -46,12 +46,8 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
             var treeNodes = new List<TreeNode>();
             foreach (TestNode testNode in testNodes)
             {
-                // Finish of test suites (Fixture/Namespace...) requires that all pending regroup operations are executed first, finally the image icon of the test suite can be updated
                 if (testNode.IsSuite)
-                {
-                    TreeNodeImageHandler.SetTreeNodeImages(TreeView, Strategy.GetTreeNodesForTest(testNode), false);
                     continue;
-                }
 
                 TreeNode treeNode = GetTreeNode(testNode);
 
@@ -64,15 +60,16 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
 
                 // 3. Create new TreeNode path
                 IList <TreeNode> newTreeNodes = Grouping.CreateTreeNodes(testNode, newGroupName);
-                TreeView.SetImageIndex(newTreeNodes.Last(), treeNode.ImageIndex);
                 treeNodes.AddRange(newTreeNodes);
 
                 // 4. Expand newly created treeNodes
                 ExpandTreeNodes(newTreeNodes);
             }
 
-            // 5. Update all tree node names to reflect changed number of containing tests in TestGroups
-            Strategy.UpdateTreeNodeNames(treeNodes.Distinct());
+            // 5. Update all tree nodes to reflect changed number of containing tests in group
+            IList<TestGroup> groups = treeNodes.Select(t => t.Tag).OfType<TestGroup>().Distinct().ToList();
+            Strategy.UpdateTreeNodeNames(groups);
+            TreeNodeImageHandler.SetTreeNodeImages(TreeView, groups);
 
             TreeView.TreeView.EndUpdate();
         }
@@ -109,26 +106,16 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
         private IList<TreeNode> UpdateOrRemoveTreeNodesInPath(TreeNode treeNode, TestNode testNode)
         {
             IList<TreeNode> treeNodes = GetTreeNodePath(treeNode);
-            foreach (TreeNode node in treeNodes)
-                UpdateOrRemoveTreeNode(node, testNode);
+
+            // Remove leaf tree node associated with test case
+            Strategy.RemoveTreeNode(treeNode);
+
+            // Update all tree nodes and groups along the tree node path
+            IList<TestGroup> groups = treeNodes.Select(t => t.Tag).OfType<TestGroup>().ToList();
+            foreach (TestGroup group in groups)
+                Grouping.RemoveTestFromGroup(group, testNode);
 
             return treeNodes;
-        }
-
-        private void UpdateOrRemoveTreeNode(TreeNode treeNode, TestNode testNode)
-        {
-            // Remove tree node
-            if (treeNode.Tag is TestNode treeNodeTestNode && treeNodeTestNode.Id == testNode.Id)
-                Strategy.RemoveTreeNode(treeNode);
-
-            // TreeNode is associated with a TestGroup (inner tree node) => Remove testNode from group
-            // If TestGroup has no TestNodes anymore, remove the TreeNode
-            if (treeNode.Tag is TestGroup testGroup)
-            {
-                testGroup.RemoveId(testNode.Id);
-                if (!testGroup.Any())
-                    treeNode.Remove();
-            }
         }
 
         private IList<TreeNode> GetTreeNodePath(TreeNode treeNode)

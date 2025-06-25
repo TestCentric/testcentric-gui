@@ -28,6 +28,12 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
         IList<TreeNode> CreateTreeNodes(TestNode testNode, string groupName);
 
         /// <summary>
+        /// Remove test from TestGroup.
+        /// If no test remains in group, the group and the associated tree node is deleted
+        /// </summary>
+        void RemoveTestFromGroup(TestGroup testGroup, TestNode testNode);
+
+        /// <summary>
         /// Called when one test case is finished
         /// </summary>
         void OnTestFinished(ResultNode result);

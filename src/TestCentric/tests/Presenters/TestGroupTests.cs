@@ -10,6 +10,7 @@ using NUnit.Framework;
 namespace TestCentric.Gui.Presenters
 {
     using Model;
+    using TestCentric.Gui.Views;
 
     public class TestGroupTests
     {
@@ -51,6 +52,30 @@ namespace TestCentric.Gui.Presenters
             foreach (XmlNode child in filter.ChildNodes)
                 ids.Add(child.InnerText);
             Assert.That(ids, Is.EqualTo(new string[] { "1", "3" }));
+        }
+
+        [TestCase(TestTreeView.InitIndex, "Passed", TestTreeView.SuccessIndex)]
+        [TestCase(TestTreeView.InitIndex, "Failed", TestTreeView.FailureIndex)]
+        [TestCase(TestTreeView.SkippedIndex, "Warning", TestTreeView.WarningIndex)]
+        [TestCase(TestTreeView.SuccessIndex, "Failed", TestTreeView.FailureIndex)]
+        [TestCase(TestTreeView.SuccessIndex, "Warning", TestTreeView.WarningIndex)]
+        [TestCase(TestTreeView.WarningIndex, "Failed", TestTreeView.FailureIndex)]
+        [TestCase(TestTreeView.InconclusiveIndex, "Passed", TestTreeView.SuccessIndex)]
+        [TestCase(TestTreeView.IgnoredIndex, "Passed", TestTreeView.IgnoredIndex)]
+        [TestCase(TestTreeView.FailureIndex, "Passed", TestTreeView.FailureIndex)]
+        public void AddTestWithResult(int imageIndex, string outcome, int expectedImageIndex)
+        {
+            // Arrange
+            var group = new TestGroup("TestGroup", imageIndex);
+            var testNode = MakeTestNode("1", "Tom", "Runnable");
+            var resultNode = new ResultNode($"<test-case id='1' result='{outcome}'/>");
+
+            // Act
+            group.Add(testNode, resultNode);
+
+            // Assert
+            Assert.That(group.ImageIndex, Is.EqualTo(expectedImageIndex));
+
         }
 
         private TestNode MakeTestNode(string id, string name, string runState)

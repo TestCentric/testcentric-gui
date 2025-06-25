@@ -17,51 +17,28 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
     /// </summary>
     public class TreeNodeDurationHandler
     {
-        public static void ClearGroupDurations(IEnumerable<TreeNode> treeNodes)
+        public static void ClearGroupDurations(IEnumerable<TestGroup> groups)
         {
-            foreach (TreeNode treeNode in treeNodes)
-            {
-                ClearGroupDuration(treeNode);
-                ClearGroupDurations(treeNode.Nodes.OfType<TreeNode>());
-            }
+            foreach (TestGroup group in groups)
+                group.Duration = null;
         }
 
-        private static void ClearGroupDuration(TreeNode treeNode)
+        public static void SetGroupDurations(ITestModel model, IList<TestGroup> groups)
         {
-            if (treeNode.Tag is TestGroup testGroup)
-                testGroup.Duration = null;
-
-        }
-
-        public static void SetGroupDurations(ITestModel model, IEnumerable<TreeNode> treeNodes)
-        {
-            foreach (TreeNode treeNode in treeNodes)
+            foreach (TestGroup group in groups)
             {
-                SetGroupDurations(model, treeNode.Nodes.OfType<TreeNode>());
-                SetGroupDuration(model, treeNode);
-            }
-        }
-
-        private static void SetGroupDuration(ITestModel model, TreeNode treeNode)
-        {
-            TestGroup testGroup = treeNode.Tag as TestGroup;
-            if (testGroup == null)
-                return;
-
-            double duration = 0;
-            bool childHasResult = false;
-            foreach (TestNode testNode in testGroup)
-            {
-                ResultNode childResult = model.GetResultForTest(testNode.Id);
-                if (childResult != null)
+                foreach (TestNode testNode in group)
                 {
-                    duration += childResult.Duration;
-                    childHasResult = true;
+                    ResultNode result = model.GetResultForTest(testNode.Id);
+                    if (result == null)
+                        continue;
+
+                    if (!group.Duration.HasValue)
+                        group.Duration = 0;
+
+                    group.Duration += result.Duration;
                 }
             }
-
-            if (childHasResult)
-                testGroup.Duration = duration;
         }
     }
 }

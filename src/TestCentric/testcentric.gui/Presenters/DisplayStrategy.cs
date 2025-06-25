@@ -141,6 +141,7 @@ namespace TestCentric.Gui.Presenters
         {
             TreeNode treeNode = new TreeNode(GroupDisplayName(group), group.ImageIndex, group.ImageIndex);
             treeNode.Tag = group;
+            group.TreeNode = treeNode;
 
             if (recursive)
                 foreach (TestNode test in group)
@@ -229,10 +230,10 @@ namespace TestCentric.Gui.Presenters
             _view.TreeView.EndUpdate();
         }
 
-        public void UpdateTreeNodeNames(IEnumerable<TreeNode> treeNodes)
+        public void UpdateTreeNodeNames(IEnumerable<TestGroup> groups)
         {
-            foreach (TreeNode treeNode in treeNodes)
-                UpdateTreeNodeName(treeNode);
+            foreach (TestGroup group in groups)
+                UpdateTreeNodeName(group.TreeNode);
         }
 
         private void UpdateTreeNodeName(TreeNode treeNode)
@@ -303,7 +304,11 @@ namespace TestCentric.Gui.Presenters
                 if (anyChildNodeRunning || treeNode.Tag is TestNode testNode && _model.IsInTestRun(testNode))
                     imageIndex = TestTreeView.RunningIndex;
                 else
+                {
                     imageIndex = UpdateTreeIconToPreviousRun(treeNode.ImageIndex);
+                    if (treeNode.Tag is TestGroup testGroup)
+                        testGroup.ImageIndex = imageIndex;
+                }
 
                 _view.SetImageIndex(treeNode, imageIndex);
             }

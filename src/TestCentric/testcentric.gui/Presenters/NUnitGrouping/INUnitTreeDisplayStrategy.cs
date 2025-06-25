@@ -17,9 +17,9 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
         TreeNode MakeTreeNode(TestNode testNode);
 
         /// <summary>
-        /// Creates a new tree node for a TestGroup which is associated to a TestNode
+        /// Creates a new tree node for a TestGroup
         /// </summary>
-        TreeNode MakeTreeNode(TestGroup testGroup, TestNode testNode);
+        TreeNode MakeTreeNode(TestGroup testGroup);
 
         /// <summary>
         /// Removes one tree node from the tree
@@ -38,9 +38,15 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
         /// </summary>
         List<TreeNode> GetTreeNodesForTest(TestNode testNode);
 
+        /// <summary>
+        /// Update the name of all tree nodes
+        /// </summary>
         void UpdateTreeNodeNames();
 
-        void UpdateTreeNodeNames(IEnumerable<TreeNode> treeNodes);
+        /// <summary>
+        /// Update the name of all groups
+        /// </summary>
+        void UpdateTreeNodeNames(IEnumerable<TestGroup> groups);
 
     }
 }
