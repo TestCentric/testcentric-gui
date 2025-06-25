@@ -153,15 +153,11 @@ namespace TestCentric.Gui.Presenters
         }
 
         /// <summary>
-        /// Creates a new tree node for a TestGroup which is associated to a TestNode
+        /// Creates a new tree node for a TestGroup
         /// </summary>
-        public TreeNode MakeTreeNode(TestGroup testGroup, TestNode testNode)
+        public TreeNode MakeTreeNode(TestGroup testGroup)
         {
-            TreeNode treeNode = MakeTreeNode(testGroup, false);
-            if (testNode != null)
-                AddTestNodeMapping(testNode, treeNode);
-
-            return treeNode;
+            return MakeTreeNode(testGroup, false);
         }
 
         private void SetDefaultInitialExpansion()

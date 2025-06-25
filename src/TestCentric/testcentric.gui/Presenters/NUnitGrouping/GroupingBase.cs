@@ -21,6 +21,13 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
     {
         private RegroupTestEventQueue _regroupQueue;
 
+        // Mapping listing all groups in which a TestNode is included
+        private IDictionary<TestNode, IList<TestGroup>> _testToGroupMap = new Dictionary<TestNode, IList<TestGroup>>();
+        // List of all root groups (outcome, duration or category groups)
+        private IList<TestGroup> _rootGroups = new List<TestGroup>();
+        // list of all groups (include also root groups)
+        private IList<TestGroup> _groups = new List<TestGroup>();
+
         public GroupingBase(INUnitTreeDisplayStrategy strategy, ITestModel model, ITestTreeView view)
         {
             Strategy = strategy;
@@ -62,9 +69,9 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
             }
 
             // 3. Update tree node names and images
-            TreeNodeDurationHandler.SetGroupDurations(Model, TreeView.Nodes.OfType<TreeNode>());
+            TreeNodeDurationHandler.SetGroupDurations(Model, _groups);
             Strategy.UpdateTreeNodeNames();
-            TreeNodeImageHandler.SetTreeNodeImages(TreeView, TreeView.Nodes.OfType<TreeNode>(), true);
+            TreeNodeImageHandler.SetTreeNodeImages(TreeView, _groups);
 
             if (Model.Settings.Gui.TestTree.ShowTestDuration)
                 TreeView.Sort();
@@ -78,10 +85,10 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
         /// </summary>
         public IList<TreeNode> CreateTreeNodes(TestNode testNode, string groupName)
         {
-            TreeNode parentNode = GetOrCreateGroupTreeNode(groupName);
+            TreeNode parentNode = GetOrCreateRootTreeNode(groupName);
             IList<TestNode> path = GetTestNodePath(testNode);
             IList<TreeNode> treeNodes = CreateTreeNodes(parentNode, path);
-            AddTestNodeToTestsGroups(treeNodes, testNode);
+            AddTestToGroups(treeNodes, testNode);
             return treeNodes;
         }
 
@@ -106,8 +113,10 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
                 return;
             }
 
-            if (result.IsSuite)
-                TreeNodeImageHandler.SetTreeNodeImages(TreeView, Strategy.GetTreeNodesForTest(result), false);
+            // Update ImageIndex of all groups containing finished test
+            TestNode node = Model.GetTestById(result.Id);
+            if (_testToGroupMap.TryGetValue(node, out IList<TestGroup> groups))
+                TreeNodeImageHandler.OnTestFinished(result, groups, TreeView);
         }
 
         /// <summary>
@@ -121,7 +130,7 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
 
         public void OnTestRunStarting()
         {
-            TreeNodeDurationHandler.ClearGroupDurations(TreeView.Nodes.OfType<TreeNode>());
+            TreeNodeDurationHandler.ClearGroupDurations(_groups);
         }
 
         public void OnTestRunFinished()
@@ -129,24 +138,27 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
             // Force executing of any pending regroup operations
             TreeView.InvokeIfRequired(() => _regroupQueue.ForceStopTimer());
 
-            // The images of the top group tree nodes (for example 'CategoryA' or 'Slow') cannot be set during a test run
-            TreeNodeImageHandler.SetTreeNodeImages(TreeView, TreeView.Nodes.OfType<TreeNode>(), false);
-
-            TreeNodeDurationHandler.SetGroupDurations(Model, TreeView.Nodes.OfType<TreeNode>());
+            // The images of the root group tree nodes (for example 'CategoryA' or 'Slow') cannot be set during a test run
+            TreeNodeImageHandler.SetTreeNodeImages(TreeView, _rootGroups);
+            TreeNodeDurationHandler.SetGroupDurations(Model, _groups);
         }
 
         /// <summary>
         /// Check if a root tree node for the groupName already exists
         /// If not, create new TreeNode
         /// </summary>
-        private TreeNode GetOrCreateGroupTreeNode(string groupName)
+        private TreeNode GetOrCreateRootTreeNode(string groupName)
         {
-            foreach (TreeNode treeNode in TreeView.Nodes)
-                if (treeNode.Tag is TestGroup testGroup && testGroup.Name == groupName)
-                    return treeNode;
+            foreach (TestGroup rootGroup in _rootGroups)
+                if (rootGroup.Name == groupName)
+                    return rootGroup.TreeNode;
 
             // TreeNode doesn't exist => create it
-            TreeNode groupTreeNode = Strategy.MakeTreeNode(new TestGroup(groupName), null);
+            var group = new TestGroup(groupName);
+
+            _rootGroups.Add(group);
+            _groups.Add(group);
+            TreeNode groupTreeNode = Strategy.MakeTreeNode(group);
             TreeView.Add(groupTreeNode);
             return groupTreeNode;
         }
@@ -214,16 +226,52 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
 
         private TreeNode CreateTreeNode(TreeNode parentTreeNode, TestNode testNode, string name)
         {
-            TreeNode treeNode = !testNode.IsSuite ? Strategy.MakeTreeNode(testNode) : Strategy.MakeTreeNode(new TestGroup(name), testNode);
+            TreeNode treeNode = !testNode.IsSuite ? Strategy.MakeTreeNode(testNode) : Strategy.MakeTreeNode(new TestGroup(name));
             parentTreeNode?.Nodes.Add(treeNode);
+
+            if (treeNode.Tag is TestGroup g)
+            {
+                _groups.Add(g);
+                AddTestToGroupMapping(testNode, g);
+            }
+
             return treeNode;
         }
 
-        private void AddTestNodeToTestsGroups(IList<TreeNode> treeNodes, TestNode testNode)
+        private void AddTestToGroups(IList<TreeNode> treeNodes, TestNode testNode)
         {
-            foreach (TreeNode treeNode in treeNodes)
-                if (treeNode.Tag is TestGroup testGroup)
-                    testGroup.Add(testNode);
+            ResultNode resultNode = Model.GetResultForTest(testNode.Id);
+
+            IList<TestGroup> testGroups = treeNodes.Select(t => t.Tag).OfType<TestGroup>().ToList();
+            foreach (TestGroup testGroup in testGroups)
+            {
+                testGroup.Add(testNode, resultNode);
+                AddTestToGroupMapping(testNode, testGroup);
+            }
+        }
+
+        private void AddTestToGroupMapping(TestNode testNode, TestGroup testGroup)
+        {
+            if (_testToGroupMap.TryGetValue(testNode, out IList<TestGroup> groups))
+                groups.Add(testGroup);
+            else
+                _testToGroupMap[testNode] = new List<TestGroup>() { testGroup };
+        }
+
+        public void RemoveTestFromGroup(TestGroup testGroup, TestNode testNode)
+        {
+            // TreeNode is associated with a TestGroup (inner tree node) => Remove testNode from group
+            // If TestGroup has no TestNodes anymore, remove the TreeNode
+            testGroup.RemoveId(testNode.Id);
+            if (_testToGroupMap.TryGetValue(testNode, out var groups))
+                groups.Remove(testGroup);
+
+            if (!testGroup.Any())
+            {
+                _groups.Remove(testGroup);
+                _rootGroups.Remove(testGroup);
+                testGroup.TreeNode.Remove();
+            }
         }
     }
 }

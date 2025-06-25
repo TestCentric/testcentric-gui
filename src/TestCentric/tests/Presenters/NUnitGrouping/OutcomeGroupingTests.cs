@@ -39,8 +39,13 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
 
             // We can't construct a TreeNodeCollection, so we need to fake it
             _createNodes = new TreeNode().Nodes;
-            _strategy.MakeTreeNode(null).ReturnsForAnyArgs(x => new TreeNode(x.ArgAt<TestNode>(0).Name) { Tag = x.ArgAt<TestNode>(0) });
-            _strategy.MakeTreeNode(null, null).ReturnsForAnyArgs(x => new TreeNode(x.ArgAt<TestGroup>(0).Name) { Tag = x.ArgAt<TestGroup>(0) });
+            _strategy.MakeTreeNode(Arg.Any<TestNode>()).ReturnsForAnyArgs(x => new TreeNode(x.ArgAt<TestNode>(0).Name) { Tag = x.ArgAt<TestNode>(0) });
+            _strategy.MakeTreeNode(Arg.Any<TestGroup>()).ReturnsForAnyArgs(x => {
+                var testGroup = x.ArgAt<TestGroup>(0);
+                var treeNode = new TreeNode(testGroup.Name) { Tag = testGroup };
+                testGroup.TreeNode = treeNode;
+                return treeNode;
+            });
             _view.When(t => t.Add(Arg.Any<TreeNode>())).Do(x => _createNodes.Add(x.ArgAt<TreeNode>(0)));
             _view.Nodes.Returns(x => _createNodes);
         }
