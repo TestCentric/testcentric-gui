@@ -56,6 +56,45 @@ namespace TestCentric.Gui.Presenters.TestTree
             _view.CategoryFilter.Received().Init(_model);
         }
 
+        [Test]
+        public void VisualState_IsAppliedToTree()
+        {
+            // Arrange
+            ITreeDisplayStrategy strategy = Substitute.For<ITreeDisplayStrategy>();
+            _treeDisplayStrategyFactory.Create(null, null, null).ReturnsForAnyArgs(strategy);
+
+            var project = new TestCentricProject(_model, "dummy.dll");
+            TestNode testNode = new TestNode("<test-suite id='1'/>");
+            _model.LoadedTests.Returns(testNode);
+            _model.TestCentricProject.Returns(project);
+
+            // Act
+            FireTestReloadedEvent(testNode);
+
+            // Assert
+            strategy.Received().OnTestLoaded(testNode, null);
+        }
+
+        [Test]
+        public void Reloading_VisualState_IsSaved()
+        {
+            // Arrange
+            ITreeDisplayStrategy strategy = Substitute.For<ITreeDisplayStrategy>();
+            _treeDisplayStrategyFactory.Create(null, null, null).ReturnsForAnyArgs(strategy);
+
+            var project = new TestCentricProject(_model, "dummy.dll");
+            TestNode testNode = new TestNode("<test-suite id='1'/>");
+            _model.LoadedTests.Returns(testNode);
+            _model.TestCentricProject.Returns(project);
+            FireTestLoadedEvent(testNode);
+
+            // Act
+            FireTestsReloadingEvent();
+
+            // Assert
+            strategy.Received().SaveVisualState();
+        }
+
 #if NYI // Add after implementation of project or package saving
         [TestCase("NewProjectCommand", true)]
         [TestCase("OpenProjectCommand", true)]
