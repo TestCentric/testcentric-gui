@@ -78,7 +78,8 @@ namespace TestCentric.Gui.Presenters
                 _view.CategoryFilter.Close();
                 _view.CategoryFilter.Init(_model);
 
-                Strategy.OnTestLoaded(ea.Test, null);
+                TryLoadVisualState(out VisualState visualState);
+                Strategy.OnTestLoaded(ea.Test, visualState);
                 _view.CheckBoxes = _view.ShowCheckBoxes.Checked; // TODO: View should handle this
             };
 
