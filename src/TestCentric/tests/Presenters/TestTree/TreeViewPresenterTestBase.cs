@@ -28,6 +28,7 @@ namespace TestCentric.Gui.Presenters.TestTree
 
             // Make it look like the view loaded
             _view.Load += Raise.Event<System.EventHandler>(_view, new System.EventArgs());
+            _view.InvokeIfRequired(Arg.Do<MethodInvoker>(x => x.Invoke()));
 
             // We can't construct a TreeNodeCollection, so we fake it
             var nodes = new TreeNode().Nodes;

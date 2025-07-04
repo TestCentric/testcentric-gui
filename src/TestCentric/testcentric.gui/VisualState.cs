@@ -13,6 +13,8 @@ using System.Xml.Schema;
 using System.Xml;
 using System.Xml.Linq;
 using TestCentric.Gui.Controls;
+using TestCentric.Gui.Model;
+using TestCentric.Gui.Presenters;
 
 namespace TestCentric.Gui
 {
@@ -103,7 +105,7 @@ namespace TestCentric.Gui
 
                 var visualNode = new VisualTreeNode()
                 {
-                    Name = treeNode.Text,
+                    Name = GetName(treeNode),
                     Expanded = treeNode.IsExpanded,
                     Checked = treeNode.Checked,
                     Selected = isSelectedNode,
@@ -151,7 +153,8 @@ namespace TestCentric.Gui
             {
                 foreach (TreeNode treeNode in treeNodes)
                 {
-                    if (treeNode.Text == visualNode.Name || treeNode.Text == "Not Run")
+                    string name = GetName(treeNode);
+                    if (name == visualNode.Name || treeNode.Text == "Not Run")
                     {
                         ApplyVisualNodeToTreeNode(visualNode, treeNode);
                         break;
@@ -415,6 +418,16 @@ namespace TestCentric.Gui
         }
 
         #endregion
+
+        private static string GetName(TreeNode treeNode)
+        {
+            if (treeNode.Tag is TestNode testNode)
+                return testNode.Name;
+            else if (treeNode.Tag is TestGroup testGroup)
+                return testGroup.Name;
+
+            return treeNode.Text;
+        }
 
         #endregion
     }

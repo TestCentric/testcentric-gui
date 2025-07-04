@@ -71,16 +71,19 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.TestReloaded += (ea) =>
             {
-                EnsureNonRunnableFilesAreVisible(ea.Test);
+                _view.InvokeIfRequired(() =>
+                {
+                    EnsureNonRunnableFilesAreVisible(ea.Test);
 
-                // Handle category filter identically to close/load project
-                ResetTestFilterUIElements();
-                _view.CategoryFilter.Close();
-                _view.CategoryFilter.Init(_model);
+                    // Handle category filter identically to close/load project
+                    ResetTestFilterUIElements();
+                    _view.CategoryFilter.Close();
+                    _view.CategoryFilter.Init(_model);
 
-                TryLoadVisualState(out VisualState visualState);
-                Strategy.OnTestLoaded(ea.Test, visualState);
-                _view.CheckBoxes = _view.ShowCheckBoxes.Checked; // TODO: View should handle this
+                    TryLoadVisualState(out VisualState visualState);
+                    Strategy.OnTestLoaded(ea.Test, visualState);
+                    _view.CheckBoxes = _view.ShowCheckBoxes.Checked; // TODO: View should handle this
+                });
             };
 
             _model.Events.TestUnloaded += (ea) =>
