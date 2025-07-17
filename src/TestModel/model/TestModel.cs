@@ -829,17 +829,6 @@ namespace TestCentric.Gui.Model
             foreach (ResultNode resultNode in this.Results.Values)
                 resultNode.IsLatestRun = false;
 
-            // TODO: Does this belong here? Maybe need to do before creating the run specification.
-            if (Settings.Engine.ReloadOnRun)
-            {
-                // TODO: reinstate when engine Reload works. Currently
-                // we simulate it with Unload + Load, so the results
-                // are always cleared.
-                //if (Settings.Gui.ClearResultsOnReload)
-                //    ClearResults();
-                ReloadTests();
-            }
-
             log.Debug("Executing RunAsync");
             Runner.RunAsync(_events, filter.AsNUnitFilter());
         }

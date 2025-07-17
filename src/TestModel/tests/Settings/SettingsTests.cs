@@ -63,9 +63,7 @@ namespace TestCentric.Gui.Model.Settings
         {
             new TestCaseData("ShadowCopyFiles", true, false),
             new TestCaseData("Agents", 0, 8),
-            new TestCaseData("ReloadOnChange", true, false),
             new TestCaseData("RerunOnChange", false, true),
-            new TestCaseData("ReloadOnRun", false, true),
             new TestCaseData("SetPrincipalPolicy", false, true),
             new TestCaseData("PrincipalPolicy", nameof(PrincipalPolicy.UnauthenticatedPrincipal), nameof(PrincipalPolicy.WindowsPrincipal))
         };
