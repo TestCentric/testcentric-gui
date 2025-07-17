@@ -191,4 +191,35 @@ namespace TestCentric.Engine.Api
             return sb.ToString();
         }
     }
+
+    public class AddAndRemoveTestPackageTests
+    {
+        [Test]
+        public void AddSubPackage()
+        {
+            var package = new TestPackage("test.dll");
+            Assert.That(package.SubPackages.Count, Is.EqualTo(1));
+            package.AddSubPackage("another.dll");
+            Assert.That(package.SubPackages.Count, Is.EqualTo(2));
+            Assert.That(package.SubPackages[1].Name, Is.EqualTo("another.dll"));
+        }
+
+        [Test]
+        public void RemoveSubPackage()
+        {
+            var package = new TestPackage(new[] { "test1.dll", "test2.dll" });
+            package.SubPackages.Remove(package.SubPackages[0]);
+            Assert.That(package.SubPackages.Count, Is.EqualTo(1));
+            Assert.That(package.SubPackages[0].Name, Is.EqualTo("test2.dll"));
+        }
+
+        [Test]
+        public void RemoveSubPackageAt()
+        {
+            var package = new TestPackage(new[] { "test1.dll", "test2.dll" });
+            package.SubPackages.RemoveAt(0);
+            Assert.That(package.SubPackages.Count, Is.EqualTo(1));
+            Assert.That(package.SubPackages[0].Name, Is.EqualTo("test2.dll"));
+        }
+    }
 }
