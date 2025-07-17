@@ -15,12 +15,13 @@ using TestCentric.Common;
 
 namespace TestCentric.Gui.Presenters
 {
+    using Dialogs;
     using Model;
     using Model.Services;
     using Model.Settings;
-    using Views;
-    using Dialogs;
+    using TestCentric.Gui.Controls;
     using TestCentric.Gui.Elements;
+    using Views;
 
     /// <summary>
     /// TestCentricPresenter does all file opening and closing that
@@ -183,8 +184,7 @@ namespace TestCentric.Gui.Presenters
 
             _model.Events.TestChanged += (e) =>
             {
-                if (_settings.Engine.ReloadOnChange)
-                    _model.ReloadTests();
+                _model.ReloadTests();
             };
 
             _model.Events.RunStarting += (RunStartingEventArgs e) =>
@@ -904,7 +904,7 @@ namespace TestCentric.Gui.Presenters
         private void BeginLongRunningOperation(string text)
         {
             _longRunningOperation = new LongRunningOperationDisplay();
-            _longRunningOperation.Display(text);
+            _view.ResultTabs.InvokeIfRequired(() => _longRunningOperation.Display(text));
         }
 
         private void UpdateLongRunningOperation(string text)
