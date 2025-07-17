@@ -109,8 +109,8 @@ namespace TestCentric.Engine.Services
                     package.Settings[EnginePackageSettings.ImageRuntimeVersion] = targetVersion;
                 }
 
-                var frameworkName = assembly.GetFrameworkName();
-                if (!string.IsNullOrEmpty(frameworkName))
+                string frameworkName;
+                if (assembly.TryGetFrameworkName(out frameworkName))
                 {
                     log.Debug($"Assembly {package.FullName} targets {frameworkName}");
                     // This takes care of an old issue with Roslyn
