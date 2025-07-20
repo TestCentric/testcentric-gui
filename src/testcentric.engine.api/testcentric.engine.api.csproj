@@ -9,6 +9,7 @@
 		<OutputPath>..\..\bin\$(Configuration)</OutputPath>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<CheckEolTargetFramework>false</CheckEolTargetFramework>
+		<LangVersion>12</LangVersion>
 	</PropertyGroup>
 
 	<PropertyGroup>
