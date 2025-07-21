@@ -18,6 +18,18 @@ namespace NUnit.Common
     /// </summary>
     public static class SettingDefinitions
     {
+        // Missing
+        // TargetRuntimeFramework
+
+        /// <summary>
+        /// Identify previously supported settings, which are no longer supported,
+        /// so that appropriate action may be taken.
+        /// </summary>
+        /// <param name="settingName"></param>
+        /// <returns></returns>
+        public static bool IsObsoleteSetting(string settingName) =>
+            settingName == "ProcessModel" || settingName == "DomainUsage";
+
         #region Settings Used by the Engine
 
         /// <summary>
@@ -45,6 +57,11 @@ namespace NUnit.Common
         /// Path to the config file to use in running the tests.
         /// </summary>
         public static SettingDefinition<string> ConfigurationFile { get; } = new(nameof(ConfigurationFile), string.Empty);
+
+        /// <summary>
+        /// A list of the available configs for this project.
+        /// </summary>
+        public static SettingDefinition<string> ConfigNames { get; } = new(nameof(ConfigNames), string.Empty);
 
         ///// <summary>
         ///// Flag (bool) indicating whether tests are being debugged.
@@ -230,6 +247,22 @@ namespace NUnit.Common
         /// The full name of the test framework referenced by the assembly
         /// </summary>
         public static SettingDefinition<string> ImageTestFrameworkReference { get; } = new(nameof(ImageTestFrameworkReference), string.Empty);
+
+        /// <summary>
+        /// The AssemblyQualifiedName of the framework driver to be used.
+        /// </summary>
+        public static SettingDefinition<string> ImageFrameworkDriverReference { get; } = new(nameof(ImageFrameworkDriverReference), string.Empty);
+        
+        /// <summary>
+        /// True if the NUnit.Framework.NonTestAssemblyAttribute is present
+        /// </summary>
+        public static SettingDefinition<bool> ImageNonTestAssemblyAttribute { get; } = new(nameof(ImageNonTestAssemblyAttribute), false);
+
+        /// <summary>
+        /// Indicates the Target runtime selected for use by the engine,
+        /// based on the requested runtime and assembly metadata.
+        /// </summary>
+        public static SettingDefinition<string> TargetRuntimeFramework { get; } = new(nameof(TargetRuntimeFramework), string.Empty);
 
         #endregion
 

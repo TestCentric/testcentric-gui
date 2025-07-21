@@ -3,6 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
+using NUnit.Engine;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -128,7 +129,7 @@ namespace TestCentric.Engine
         /// <summary>
         /// Gets the settings dictionary for this package.
         /// </summary>
-        public IDictionary<string, object> Settings { get; } = new Dictionary<string, object>();
+        public PackageSettings Settings { get; } = new PackageSettings();
 
         #endregion
 
@@ -143,8 +144,8 @@ namespace TestCentric.Engine
         {
             SubPackages.Add(subPackage);
 
-            foreach (var key in Settings.Keys)
-                subPackage.Settings[key] = Settings[key];
+            foreach (var setting in Settings)
+                subPackage.AddSetting(setting);
 
         }
 
@@ -164,8 +165,7 @@ namespace TestCentric.Engine
         /// <summary>
         /// Add a setting to a package and all of its subpackages.
         /// </summary>
-        /// <param name="name">The name of the setting</param>
-        /// <param name="value">The value of the setting</param>
+        /// <param name="setting">The setting to be added</param>
         /// <remarks>
         /// Once a package is created, subpackages may have been created
         /// as well. If you add a setting directly to the Settings dictionary
@@ -173,24 +173,62 @@ namespace TestCentric.Engine
         /// used when the settings are intended to be reflected to all the
         /// subpackages under the package.
         /// </remarks>
-        public void AddSetting(string name, object value)
+        public void AddSetting(PackageSetting setting)
         {
-            Settings[name] = value;
+            Settings.Add(setting);
             foreach (var subPackage in SubPackages)
-                subPackage.AddSetting(name, value);
+                subPackage.AddSetting(setting);
         }
 
         /// <summary>
-        /// Return the value of a setting or a default.
+        /// Create and add a custom string setting to a package and all of its subpackages.
         /// </summary>
-        /// <param name="name">The name of the setting</param>
-        /// <param name="defaultSetting">The default value</param>
-        /// <returns></returns>
-        public T GetSetting<T>(string name, T defaultSetting)
+        /// <param name="name">The name of the setting.</param>
+        /// <param name="value">The corresponding value to set.</param>
+        /// <remarks>
+        /// Once a package is created, subpackages may have been created
+        /// as well. If you add a setting directly to the Settings dictionary
+        /// of the package, the subpackages are not updated. This method is
+        /// used when the settings are intended to be reflected to all the
+        /// subpackages under the package.
+        /// </remarks>
+        public void AddSetting(string name, string value)
         {
-            return Settings.ContainsKey(name)
-                ? (T)Settings[name]
-                : defaultSetting;
+            AddSetting(new PackageSetting<string>(name, value));
+        }
+
+        /// <summary>
+        /// Create and add a custom boolean setting to a package and all of its subpackages.
+        /// </summary>
+        /// <param name="name">The name of the setting.</param>
+        /// <param name="value">The corresponding value to set.</param>
+        /// <remarks>
+        /// Once a package is created, subpackages may have been created
+        /// as well. If you add a setting directly to the Settings dictionary
+        /// of the package, the subpackages are not updated. This method is
+        /// used when the settings are intended to be reflected to all the
+        /// subpackages under the package.
+        /// </remarks>
+        public void AddSetting(string name, bool value)
+        {
+            AddSetting(new PackageSetting<bool>(name, value));
+        }
+
+        /// <summary>
+        /// Create and add a custom int setting to a package and all of its subpackages.
+        /// </summary>
+        /// <param name="name">The name of the setting.</param>
+        /// <param name="value">The corresponding value to set.</param>
+        /// <remarks>
+        /// Once a package is created, subpackages may have been created
+        /// as well. If you add a setting directly to the Settings dictionary
+        /// of the package, the subpackages are not updated. This method is
+        /// used when the settings are intended to be reflected to all the
+        /// subpackages under the package.
+        /// </remarks>
+        public void AddSetting(string name, int value)
+        {
+            AddSetting(new PackageSetting<int>(name, value));
         }
 
         public delegate bool SelectorDelegate(TestPackage p);
@@ -293,8 +331,8 @@ namespace TestCentric.Engine
                 {
                     xmlWriter.WriteStartElement("Settings");
 
-                    foreach (var pair in Settings)
-                        xmlWriter.WriteAttributeString(pair.Key, pair.Value.ToString());
+                    foreach (var setting in Settings)
+                        xmlWriter.WriteAttributeString(setting.Name, setting.Value.ToString());
 
                     xmlWriter.WriteEndElement();
                 }

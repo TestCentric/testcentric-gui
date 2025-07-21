@@ -53,5 +53,27 @@ namespace NUnit.Engine
         /// Get the setting value
         /// </summary>
         public new T Value { get; }
+
+        public override string ToString()
+        {
+            return Value is string
+                ? $"{Name}=\"{Value}\""
+                : $"{Name}={Value}";
+        }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as PackageSetting<T>;
+            if (other == null || other.Name != Name)
+                return false;
+            return Value.Equals(other.Value);
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = Name.GetHashCode();
+            hash ^= Value.GetHashCode();
+            return hash;
+        }
     }
 }

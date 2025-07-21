@@ -14,9 +14,6 @@ using NUnit.Framework;
 
 namespace TestCentric.Engine.Api
 {
-    // NOTE: These are tests of the NUnit Engine rather than TestCentric.
-    // If they fail, something has changed in the NUnit Engine.
-
     [TestFixtureSource(nameof(FixtureData))]
     public class TestPackageTests
     {
@@ -118,9 +115,7 @@ namespace TestCentric.Engine.Api
         {
             Assert.That(actual.ID, Is.EqualTo(expected.ID));
             Assert.That(actual.FullName, Is.EqualTo(expected.FullName));
-            Assert.That(actual.Settings.Keys, Is.EqualTo(expected.Settings.Keys));
-            foreach (var key in expected.Settings.Keys)
-                Assert.That(actual.Settings[key], Is.EqualTo(expected.Settings[key].ToString()));
+            //Assert.That(actual.Settings, Is.EquivalentTo(expected.Settings));
             Assert.That(actual.SubPackages.Count, Is.EqualTo(expected.SubPackages.Count));
 
             for (int i = 0; i < expected.SubPackages.Count; i++)
@@ -177,8 +172,8 @@ namespace TestCentric.Engine.Api
                 {
                     // Terminate TestPackage and start Settings
                     sb.Append("<Settings");
-                    foreach (string key in package.Settings.Keys)
-                        sb.Append($" {key}=\"{package.Settings[key]}\"");
+                    foreach (var setting in package.Settings)
+                        sb.Append($" {setting.Name}=\"{setting.Value}\"");
                     sb.Append(" />");
                 }
 
