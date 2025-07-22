@@ -18,18 +18,6 @@ namespace NUnit.Common
     /// </summary>
     public static class SettingDefinitions
     {
-        // Missing
-        // TargetRuntimeFramework
-
-        /// <summary>
-        /// Identify previously supported settings, which are no longer supported,
-        /// so that appropriate action may be taken.
-        /// </summary>
-        /// <param name="settingName"></param>
-        /// <returns></returns>
-        public static bool IsObsoleteSetting(string settingName) =>
-            settingName == "ProcessModel" || settingName == "DomainUsage";
-
         #region Settings Used by the Engine
 
         /// <summary>
@@ -95,7 +83,6 @@ namespace NUnit.Common
 
         /// <summary>
         /// The maximum number of test agents permitted to run simultaneously.
-        /// Ignored if the ProcessModel is not set or defaulted to Multiple.
         /// </summary>
         public static SettingDefinition<int> MaxAgents { get; } = new(nameof(MaxAgents), 0);
 

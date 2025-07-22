@@ -48,7 +48,7 @@ namespace NUnit.Engine
         public T GetValueOrDefault<T>(SettingDefinition<T> definition)
             where T : notnull
         {
-            if (_settings.TryGetValue(definition.Name, out PackageSetting? unTypedSetting))
+            if (_settings.TryGetValue(definition.Name, out PackageSetting unTypedSetting))
                 if (unTypedSetting is PackageSetting<T> typedSetting && typedSetting is not null)
                     return typedSetting.Value;
 
