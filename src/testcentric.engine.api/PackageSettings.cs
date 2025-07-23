@@ -112,5 +112,15 @@ namespace NUnit.Engine
         {
             Set(new PackageSetting<T>(name, value));
         }
+
+        public void Remove (SettingDefinition setting)
+        {
+            _settings.Remove(setting.Name);
+        }
+
+        public void Remove (string settingName)
+        {
+            _settings.Remove(settingName);
+        }
     }
 }
