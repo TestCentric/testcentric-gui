@@ -3,6 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
+using NUnit.Common;
 using System;
 using System.Collections.Generic;
 using TestCentric.Engine.Internal;
@@ -13,9 +14,6 @@ namespace TestCentric.Engine.Runners
     /// <summary>
     /// AggregatingTestRunner runs tests using multiple
     /// subordinate runners and combines the results.
-    /// The individual runners may be run in parallel
-    /// if a derived class sets the LevelOfParallelism
-    /// property in its constructor.
     /// </summary>
     public class AggregatingTestRunner : AbstractTestRunner
     {
@@ -30,18 +28,9 @@ namespace TestCentric.Engine.Runners
 
         private readonly ITestRunnerFactory _testRunnerFactory;
 
-        // Public for testing purposes
-        public int LevelOfParallelism
-        {
-            get
-            {
-                var maxAgents = TestPackage.GetSetting(EnginePackageSettings.MaxAgents, Environment.ProcessorCount);
-                return Math.Min(maxAgents, TestPackage.Select(p => !p.HasSubPackages).Count);
-            }
-        }
-
-        // Exposed for use by tests
         public IList<ITestEngineRunner> Runners { get; }
+
+        public int LevelOfParallelism { get; }
 
         public AggregatingTestRunner(IServiceLocator services, TestPackage package) : base(package)
         {
@@ -50,9 +39,12 @@ namespace TestCentric.Engine.Runners
             _packageList = new List<TestPackage>(package.Select(p => !p.HasSubPackages));
             Runners = new List<ITestEngineRunner>();
             foreach (var subPackage in _packageList)
-            {
                 Runners.Add(_testRunnerFactory.MakeTestRunner(subPackage));
-            }
+
+            var maxAgentSetting = TestPackage.Settings.GetValueOrDefault(SettingDefinitions.MaxAgents);
+            LevelOfParallelism = maxAgentSetting > 0
+                ? Math.Min(maxAgentSetting, _packageList.Count)
+                : _packageList.Count;
         }
 
         /// <summary>
@@ -124,7 +116,7 @@ namespace TestCentric.Engine.Runners
         {
             var results = new List<TestEngineResult>();
 
-            bool disposeRunners = TestPackage.GetSetting(EnginePackageSettings.DisposeRunners, false);
+            bool disposeRunners = TestPackage.Settings.GetValueOrDefault(SettingDefinitions.DisposeRunners);
 
             if (LevelOfParallelism <= 1)
             {

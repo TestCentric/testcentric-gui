@@ -3,6 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
+using NUnit.Common;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -75,7 +76,7 @@ namespace TestCentric.Engine.TestBed
             }
 
             if (!string.IsNullOrEmpty(options.RequestedRuntime))
-                package.AddSetting(EnginePackageSettings.RequestedRuntimeFramework, options.RequestedRuntime);
+                package.AddSetting(SettingDefinitions.RequestedRuntimeFramework.WithValue(options.RequestedRuntime));
 
             var runner = TestEngine.GetRunner(package);
 

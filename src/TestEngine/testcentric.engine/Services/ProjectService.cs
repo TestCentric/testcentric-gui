@@ -3,6 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
+using NUnit.Common;
 using System.Collections.Generic;
 using System.IO;
 using TestCentric.Engine.Extensibility;
@@ -52,7 +53,7 @@ namespace TestCentric.Engine.Services
             IProject project = LoadFrom(path);
             Guard.ArgumentValid(project != null, "Unable to load project " + path, "package");
 
-            string activeConfig = package.GetSetting(EnginePackageSettings.ActiveConfig, (string)null); // Need RunnerSetting
+            string activeConfig = package.Settings.GetValueOrDefault(SettingDefinitions.ActiveConfig); // Need RunnerSetting
             if (activeConfig == null)
                 activeConfig = project.ActiveConfigName;
             else
@@ -61,23 +62,17 @@ namespace TestCentric.Engine.Services
             TestPackage tempPackage = project.GetTestPackage(activeConfig);
 
             // Add info about the configurations to the project package
-            tempPackage.Settings[EnginePackageSettings.ActiveConfig] = activeConfig;
-            tempPackage.Settings[EnginePackageSettings.ConfigNames] = new List<string>(project.ConfigNames).ToArray();
+            tempPackage.AddSetting(SettingDefinitions.ActiveConfig.WithValue(activeConfig));
+            tempPackage.AddSetting(SettingDefinitions.ConfigNames.WithValue(new List<string>(project.ConfigNames).ToArray()));
 
             // The original package held overrides, so don't change them, but
             // do apply any settings specified within the project itself.
-            foreach (string key in tempPackage.Settings.Keys)
+            foreach (var setting in tempPackage.Settings)
             {
-                // If an obsolete setting is returned from an older version of
-                // a project loader extension, we ignore it entirely.
-                // TODO: Give a warning message
-                if (EnginePackageSettings.IsObsoleteSetting(key))
+                if (package.Settings.HasSetting(setting.Name)) // Don't override settings from command line
                     continue;
 
-                if (package.Settings.ContainsKey(key)) // Don't override settings from command line
-                    continue;
-
-                package.Settings[key] = tempPackage.Settings[key];
+                package.Settings.Add(setting);
             }
 
             foreach (var subPackage in tempPackage.SubPackages)
@@ -86,11 +81,11 @@ namespace TestCentric.Engine.Services
             // If no config file is specified (by user or by the project loader) check
             // to see if one exists in same directory as the package. If so, we
             // use it. If not, each assembly will use its own config, if present.
-            if (!package.Settings.ContainsKey(EnginePackageSettings.ConfigurationFile))
+            if (!package.Settings.HasSetting(SettingDefinitions.ConfigurationFile))
             {
                 var packageConfig = Path.ChangeExtension(path, ".config");
                 if (File.Exists(packageConfig))
-                    package.Settings[EnginePackageSettings.ConfigurationFile] = packageConfig;
+                    package.Settings.Add(SettingDefinitions.ConfigurationFile.WithValue(packageConfig));
             }
         }
 

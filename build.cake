@@ -208,13 +208,13 @@ BuildSettings.Packages.Add(new NuGetPackage(
 			"testcentric.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll", "TestCentric.InternalTrace.dll",
 			"testcentric.engine.pdb", "test-bed.exe", "test-bed.exe.config",
 			"test-bed.addins", "testcentric.nuget.addins")
-	},
-	tests: packageTests,
-	preloadedExtensions: new [] {
-        KnownExtensions.Net462PluggableAgent.SetVersion("2.5.1").NuGetPackage,
-        KnownExtensions.Net60PluggableAgent.SetVersion("2.5.1").NuGetPackage,
-        KnownExtensions.Net70PluggableAgent.SetVersion("2.5.1").NuGetPackage,
-        KnownExtensions.Net80PluggableAgent.SetVersion("2.5.1").NuGetPackage }
+	}//,
+//	tests: packageTests,
+//  preloadedExtensions: new[] {
+//      KnownExtensions.Net462PluggableAgent.SetVersion("2.5.2").NuGetPackage }
+//      KnownExtensions.Net60PluggableAgent.SetVersion("2.5.1").NuGetPackage,
+//      KnownExtensions.Net70PluggableAgent.SetVersion("2.5.1").NuGetPackage,
+//      KnownExtensions.Net80PluggableAgent.SetVersion("2.5.3").NuGetPackage }
 ));
 
 //////////////////////////////////////////////////////////////////////

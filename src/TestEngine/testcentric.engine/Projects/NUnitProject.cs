@@ -86,6 +86,7 @@ namespace TestCentric.Engine.Projects
             return TestPackage;
         }
 
+        // TODO: THIS should allow for all types of settings
         public TestPackage GetTestPackage(string configName)
         {
             if (configName == null)
@@ -98,7 +99,7 @@ namespace TestCentric.Engine.Projects
         {
             var package = new TestPackage(nunitPackage.SubPackages.Select(p => p.FullName).ToArray());
             foreach (var setting in nunitPackage.Settings)
-                package.AddSetting(setting.Key, setting.Value);
+                package.Settings.Add(setting.Key, (string)setting.Value);
 
             return package;
         }

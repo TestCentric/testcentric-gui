@@ -15,6 +15,7 @@ using TestCentric.Engine.Internal;
 using TestCentric.Engine.Communication.Transports.Remoting;
 using TestCentric.Engine.Communication.Transports.Tcp;
 using System.Runtime.Versioning;
+using NUnit.Common;
 
 namespace TestCentric.Engine.Services
 {
@@ -139,7 +140,7 @@ namespace TestCentric.Engine.Services
         public ITestAgent GetAgent(TestPackage package)
         {
             // Target Runtime must be specified by this point
-            string runtimeSetting = package.GetSetting(EnginePackageSettings.TargetRuntimeFramework, "");
+            string runtimeSetting = package.Settings.GetValueOrDefault(SettingDefinitions.TargetRuntimeFramework);
             Guard.OperationValid(runtimeSetting.Length > 0, "LaunchAgentProcess called with no runtime specified");
 
             var targetRuntime = RuntimeFramework.Parse(runtimeSetting);
@@ -160,8 +161,8 @@ namespace TestCentric.Engine.Services
             const int pollTime = 200;
 
             // Increase the timeout to give time to attach a debugger
-            bool debug = package.GetSetting(EnginePackageSettings.DebugAgent, false) ||
-                         package.GetSetting(EnginePackageSettings.PauseBeforeRun, false);
+            bool debug = package.Settings.GetValueOrDefault(SettingDefinitions.DebugAgent) ||
+                         package.Settings.GetValueOrDefault(SettingDefinitions.PauseBeforeRun);
 
             int waitTime = debug ? DEBUG_TIMEOUT : NORMAL_TIMEOUT;
 
@@ -326,7 +327,7 @@ namespace TestCentric.Engine.Services
         private Process CreateAgentProcess(Guid agentId, string agencyUrl, TestPackage package)
         {
             // Check to see if a specific agent was selected
-            string requestedAgentName = package.GetSetting(EnginePackageSettings.RequestedAgentName, "DEFAULT");
+            string requestedAgentName = package.Settings.GetValueOrDefault(SettingDefinitions.RequestedAgentName);
 
             foreach (var launcher in _launchers)
             {
@@ -335,7 +336,7 @@ namespace TestCentric.Engine.Services
                 if (launcherName == requestedAgentName || requestedAgentName == "DEFAULT" && launcher.CanCreateProcess(package))
                 {
                     log.Info($"Selected launcher {launcherName}");
-                    package.AddSetting(EnginePackageSettings.SelectedAgentName, launcherName);
+                    package.AddSetting(SettingDefinitions.SelectedAgentName.WithValue(launcherName));
                     return launcher.CreateProcess(agentId, agencyUrl, package);
                 }
             }

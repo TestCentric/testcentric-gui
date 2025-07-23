@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Microsoft.Win32;
+using NUnit.Common;
 using TestCentric.Engine.Services.RuntimeLocators;
 
 namespace TestCentric.Engine.Services
@@ -235,7 +236,7 @@ namespace TestCentric.Engine.Services
             // Examine the provided settings
             log.Debug("Current framework is " + CurrentFramework);
 
-            string requestedFrameworkSetting = package.GetSetting(EnginePackageSettings.RequestedRuntimeFramework, "");
+            string requestedFrameworkSetting = package.Settings.GetValueOrDefault(SettingDefinitions.RequestedRuntimeFramework);
 
             if (requestedFrameworkSetting.Length > 0)
             {
@@ -248,13 +249,13 @@ namespace TestCentric.Engine.Services
                 if (!IsAvailable(requestedFramework))
                     throw new EngineException("Requested framework is not available: " + requestedFrameworkSetting);
 
-                package.Settings[EnginePackageSettings.TargetRuntimeFramework] = requestedFrameworkSetting;
+                package.Settings.Add(SettingDefinitions.TargetRuntimeFramework.WithValue(requestedFrameworkSetting));
                 return requestedFramework;
             }
 
             log.Debug($"No specific framework requested for {package.Name}");
 
-            string imageTargetFrameworkNameSetting = package.GetSetting(EnginePackageSettings.ImageTargetFrameworkName, "");
+            string imageTargetFrameworkNameSetting = package.Settings.GetValueOrDefault(SettingDefinitions.ImageTargetFrameworkName);
 
             RuntimeFramework targetFramework;
 
@@ -265,7 +266,7 @@ namespace TestCentric.Engine.Services
             }
             else
             {
-                var runtimeVersion = package.GetSetting(EnginePackageSettings.ImageRuntimeVersion, CurrentFramework.FrameworkVersion);
+                var runtimeVersion = new Version(package.Settings.GetValueOrDefault(SettingDefinitions.ImageRuntimeVersion));
                 var targetVersion = new Version(runtimeVersion.Major, runtimeVersion.Minor);
                 targetFramework = new RuntimeFramework(_currentFramework.Runtime, targetVersion);
             }
@@ -284,7 +285,7 @@ namespace TestCentric.Engine.Services
                 }
             }
 
-            package.Settings[EnginePackageSettings.TargetRuntimeFramework] = targetFramework.ToString();
+            package.Settings.Add(SettingDefinitions.TargetRuntimeFramework.WithValue(targetFramework.ToString()));
 
             log.Debug($"Test will use {targetFramework} for {package.Name}");
             return targetFramework;
