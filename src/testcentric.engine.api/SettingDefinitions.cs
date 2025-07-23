@@ -3,12 +3,11 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-using NUnit.Engine;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace NUnit.Common
+namespace TestCentric.Engine
 {
     /// <summary>
     /// Static class holding SettingDefinitions for all standard package settings
