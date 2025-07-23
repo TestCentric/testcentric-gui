@@ -3,10 +3,8 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-using System.Collections.Generic;
 using NUnit.Framework;
 using NSubstitute;
-using NUnit.Common;
 
 #if !NETCOREAPP2_1
 namespace TestCentric.Engine.Services

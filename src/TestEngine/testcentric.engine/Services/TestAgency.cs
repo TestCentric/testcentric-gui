@@ -15,7 +15,6 @@ using TestCentric.Engine.Internal;
 using TestCentric.Engine.Communication.Transports.Remoting;
 using TestCentric.Engine.Communication.Transports.Tcp;
 using System.Runtime.Versioning;
-using NUnit.Common;
 
 namespace TestCentric.Engine.Services
 {

@@ -3,7 +3,6 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-using NUnit.Common;
 using System;
 using System.IO;
 using System.Threading.Tasks;

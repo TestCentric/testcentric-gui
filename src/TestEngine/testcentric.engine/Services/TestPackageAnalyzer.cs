@@ -8,7 +8,6 @@ using System.IO;
 using System.Text;
 using TestCentric.Metadata;
 using TestCentric.Engine.Internal;
-using NUnit.Common;
 
 namespace TestCentric.Engine.Services
 {

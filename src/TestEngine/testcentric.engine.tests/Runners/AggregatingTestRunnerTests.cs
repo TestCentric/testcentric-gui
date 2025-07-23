@@ -4,8 +4,6 @@
 // ***********************************************************************
 
 #if !NETCOREAPP2_1
-using System;
-using NUnit.Common;
 using NUnit.Framework;
 using TestCentric.Engine.Services;
 using TestCentric.Engine.Services.Fakes;

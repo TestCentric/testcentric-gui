@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Microsoft.Win32;
-using NUnit.Common;
 using TestCentric.Engine.Services.RuntimeLocators;
 
 namespace TestCentric.Engine.Services
