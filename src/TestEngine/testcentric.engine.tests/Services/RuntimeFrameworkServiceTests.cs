@@ -71,12 +71,12 @@ namespace TestCentric.Engine.Services
         public void EngineOptionPreferredOverImageTarget(string framework, int majorVersion, int minorVersion, string requested)
         {
             var package = new TestPackage("test");
-            package.AddSetting(EnginePackageSettings.ImageTargetFrameworkName, framework);
-            package.AddSetting(EnginePackageSettings.ImageRuntimeVersion, new Version(majorVersion, minorVersion));
-            package.AddSetting(EnginePackageSettings.RequestedRuntimeFramework, requested);
+            package.AddSetting(SettingDefinitions.ImageTargetFrameworkName.WithValue(framework));
+            package.AddSetting(SettingDefinitions.ImageRuntimeVersion.WithValue(new Version(majorVersion, minorVersion)));
+            package.AddSetting(SettingDefinitions.RequestedRuntimeFramework.WithValue(requested));
 
             _runtimeService.SelectRuntimeFramework(package);
-            Assert.That(package.GetSetting<string>(EnginePackageSettings.TargetRuntimeFramework, null), Is.EqualTo(requested));
+            Assert.That(package.Settings.GetValueOrDefault(SettingDefinitions.TargetRuntimeFramework), Is.EqualTo(requested));
         }
 
         //[Test, Platform(Exclude ="Linux")]

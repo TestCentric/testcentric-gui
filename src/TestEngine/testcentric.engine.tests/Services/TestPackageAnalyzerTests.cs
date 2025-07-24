@@ -3,7 +3,6 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-using System.Collections.Generic;
 using NUnit.Framework;
 using NSubstitute;
 
@@ -58,48 +57,28 @@ namespace TestCentric.Engine.Services
         [Test]
         public void RequestedFrameworkInvalid()
         {
-            _package.AddSetting(EnginePackageSettings.RequestedRuntimeFramework, INVALID_RUNTIME);
+            _package.AddSetting(SettingDefinitions.RequestedRuntimeFramework.WithValue(INVALID_RUNTIME));
 
             var exception = Assert.Throws<EngineException>(() => Validate());
 
             CheckMessageContent(exception.Message, $"The requested framework {INVALID_RUNTIME} is unknown or not available.");
         }
 
-        [TestCase("ProcessModel")]
-        [TestCase("DomainUsage")]
-        [TestCase("ProcessModel", "DomainUsage")]
-        public void ObsoletePackageSetting(params string[] settings)
-        {
-            foreach (var setting in settings)
-                _package.AddSetting(setting, "something"); // Test doesn't use the value
-
-            var exception = Assert.Throws<EngineException>(() => Validate());
-
-            var errors = new List<string>();
-            foreach (var setting in settings)
-                errors.Add($"The {setting} setting is no longer supported.");
-            CheckMessageContent(exception.Message, errors.ToArray());
-        }
-
         [Test]
         public void AllPossibleErrors()
         {
-            _package.AddSetting(EnginePackageSettings.RequestedRuntimeFramework, INVALID_RUNTIME);
-            _package.AddSetting("ProcessModel", "something"); // Test doesn't use the value
-            _package.AddSetting("DomainUsage", "something"); // Test doesn't use the value
+            _package.AddSetting(SettingDefinitions.RequestedRuntimeFramework.WithValue(INVALID_RUNTIME));
 
             var exception = Assert.Throws<EngineException>(() => Validate());
 
             CheckMessageContent(exception.Message,
-                $"The requested framework {INVALID_RUNTIME} is unknown or not available.",
-                "The ProcessModel setting is no longer supported.",
-                "The DomainUsage setting is no longer supported.");
+                $"The requested framework {INVALID_RUNTIME} is unknown or not available.");
         }
 
         [Test]
         public void RequestedFrameworkValid()
         {
-            _package.AddSetting(EnginePackageSettings.RequestedRuntimeFramework, VALID_RUNTIME);
+            _package.AddSetting(SettingDefinitions.RequestedRuntimeFramework.WithValue(VALID_RUNTIME));
             Assert.That(() => Validate(), Throws.Nothing);
         }
 

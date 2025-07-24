@@ -43,24 +43,14 @@ namespace TestCentric.Engine.Services
         {
             var sb = new StringBuilder();
 
-            var frameworkSetting = package.GetSetting(EnginePackageSettings.RequestedRuntimeFramework, "");
-            var runAsX86 = package.GetSetting(EnginePackageSettings.RunAsX86, false);
+            var frameworkSetting = package.Settings.GetValueOrDefault(SettingDefinitions.RequestedRuntimeFramework);
+            var runAsX86 = package.Settings.GetValueOrDefault(SettingDefinitions.RunAsX86);
 
             if (frameworkSetting.Length > 0)
             {
                 // Check requested framework is actually available
                 if (!_runtimeService.IsAvailable(frameworkSetting))
                     sb.Append($"\n* The requested framework {frameworkSetting} is unknown or not available.\n");
-            }
-
-            // At this point, any unsupported settings in the TestPackage were
-            // put there by the user, so we consider the package invalid. This
-            // will be checked again as each project package is expanded and
-            // treated as a warning in that case.
-            foreach (string setting in package.Settings.Keys)
-            {
-                if (EnginePackageSettings.IsObsoleteSetting(setting))
-                    sb.Append($"\n* The {setting} setting is no longer supported.\n");
             }
 
             if (sb.Length > 0)
@@ -106,7 +96,7 @@ namespace TestCentric.Engine.Services
                 if (targetVersion.Major > 0)
                 {
                     log.Debug($"Assembly {package.FullName} uses version {targetVersion}");
-                    package.Settings[EnginePackageSettings.ImageRuntimeVersion] = targetVersion;
+                    package.Settings.Add(SettingDefinitions.ImageRuntimeVersion.WithValue(targetVersion));
                 }
 
                 string frameworkName;
@@ -119,18 +109,18 @@ namespace TestCentric.Engine.Services
                         frameworkName = ".NETStandard,Version=v1.0";
                         log.Debug($"Using {frameworkName} instead");
                     }
-                    package.Settings[EnginePackageSettings.ImageTargetFrameworkName] = frameworkName;
+                    package.Settings.Add(SettingDefinitions.ImageTargetFrameworkName.WithValue(frameworkName));
                 }
 
-                package.Settings[EnginePackageSettings.ImageRequiresX86] = assembly.RequiresX86();
+                package.Settings.Add(SettingDefinitions.ImageRequiresX86.WithValue(assembly.RequiresX86()));
                 if (assembly.RequiresX86())
                 {
                     log.Debug($"Assembly {package.FullName} will be run x86");
-                    package.Settings[EnginePackageSettings.RunAsX86] = true;
+                    package.Settings.Add(SettingDefinitions.RunAsX86.WithValue(true));
                 }
 
                 bool requiresAssemblyResolver = assembly.HasAttribute("NUnit.Framework.TestAssemblyDirectoryResolveAttribute");
-                package.Settings[EnginePackageSettings.ImageRequiresDefaultAppDomainAssemblyResolver] = requiresAssemblyResolver;
+                package.Settings.Add(SettingDefinitions.ImageRequiresDefaultAppDomainAssemblyResolver.WithValue(requiresAssemblyResolver));
                 if (requiresAssemblyResolver)
                 {
                     log.Debug($"Assembly {package.FullName} requires default app domain assembly resolver");
@@ -140,15 +130,15 @@ namespace TestCentric.Engine.Services
                 if (nonTestAssembly)
                 {
                     log.Debug($"Assembly {package.FullName} has NonTestAssemblyAttribute");
-                    package.Settings[EnginePackageSettings.ImageNonTestAssemblyAttribute] = true;
+                    package.Settings.Add(SettingDefinitions.ImageNonTestAssemblyAttribute.WithValue(true));
                 }
 
                 var testFrameworkReference = _testFrameworkService.GetFrameworkReference(package.FullName);
                 if (testFrameworkReference != null)
                 {
-                    package.Settings[EnginePackageSettings.ImageTestFrameworkReference] = testFrameworkReference.FrameworkReference.FullName;
+                    package.Settings.Add(SettingDefinitions.ImageTestFrameworkReference.WithValue(testFrameworkReference.FrameworkReference.FullName));
                     if (testFrameworkReference.FrameworkDriver != null)
-                        package.Settings[EnginePackageSettings.ImageFrameworkDriverReference] = testFrameworkReference.FrameworkDriver;
+                        package.Settings.Add(SettingDefinitions.ImageFrameworkDriverReference.WithValue(testFrameworkReference.FrameworkDriver));
                 }
             }
         }

@@ -75,7 +75,7 @@ namespace TestCentric.Engine.TestBed
             }
 
             if (!string.IsNullOrEmpty(options.RequestedRuntime))
-                package.AddSetting(EnginePackageSettings.RequestedRuntimeFramework, options.RequestedRuntime);
+                package.AddSetting(SettingDefinitions.RequestedRuntimeFramework.WithValue(options.RequestedRuntime));
 
             var runner = TestEngine.GetRunner(package);
 
