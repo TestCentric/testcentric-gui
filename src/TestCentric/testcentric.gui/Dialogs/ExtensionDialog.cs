@@ -53,11 +53,6 @@ namespace TestCentric.Gui.Dialogs
             // Required for Windows Form Designer support
             //
             InitializeComponent();
-
-            //
-            // TODO: Add any constructor code after InitializeComponent call
-            //
-            extensionListView.Resize += (s, e) => { extensionListView.Columns[0].Width = extensionListView.Width - 75; };
         }
 
         /// <summary>
@@ -327,6 +322,7 @@ namespace TestCentric.Gui.Dialogs
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Engine Extensions";
             this.Load += new System.EventHandler(this.ExtensionDialog_Load);
+            this.ResizeEnd += ExtensionDialog_ResizeEnd;
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -349,6 +345,11 @@ namespace TestCentric.Gui.Dialogs
                 if (extensionPointsListBox.Items.Count > 0)
                     extensionPointsListBox.SelectedIndex = 0;
             }
+        }
+
+        private void ExtensionDialog_ResizeEnd(object sender, EventArgs e)
+        {
+            extensionNameColumn.Width = extensionListView.Width - 75;
         }
 
         private void button1_Click(object sender, System.EventArgs e)
