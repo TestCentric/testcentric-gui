@@ -18,7 +18,6 @@ namespace TestCentric.Gui.Presenters.Main
             FireTestsLoadingEvent(new[] { "test.dll" });
         }
 
-        [TestCase("NewProjectCommand", false)]
         [TestCase("OpenProjectCommand", false)]
         [TestCase("SaveProjectCommand", false)]
 

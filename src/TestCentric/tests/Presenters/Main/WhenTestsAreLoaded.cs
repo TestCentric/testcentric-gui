@@ -31,7 +31,6 @@ namespace TestCentric.Gui.Presenters.Main
             FireTestLoadedEvent(testNode);
         }
 
-        [TestCase("NewProjectCommand", true)]
         [TestCase("OpenProjectCommand", true)]
         [TestCase("SaveProjectCommand", true)]
 

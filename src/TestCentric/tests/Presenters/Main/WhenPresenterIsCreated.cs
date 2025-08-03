@@ -11,14 +11,6 @@ namespace TestCentric.Gui.Presenters.Main
 {
     public class WhenPresenterIsCreated : MainPresenterTestBase
     {
-#if NYI // Add after implementation of project or package saving
-        [TestCase("NewProjectCommand", true)]
-        [TestCase("OpenProjectCommand", true)]
-		[TestCase("SaveCommand", false)]
-        [TestCase("SaveAsCommand", false)]
-#endif
-
-        [TestCase("NewProjectCommand", true)]
         [TestCase("OpenProjectCommand", true)]
         [TestCase("SaveProjectCommand", false)]
         [TestCase("CloseProjectCommand", false)]

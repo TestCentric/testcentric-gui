@@ -27,48 +27,52 @@ namespace TestCentric.Gui.Presenters.Main
         // they can't be tested directly. This could be fixed if the
         // presenter asked the view to open dialogs.
 
-        //[Test]
-        //public void NewProjectCommand_CallsNewProject()
-        //{
-        //    View.NewProjectCommand.Execute += Raise.Event<CommandHandler>();
-        //    // This is NYI, change when we implement it
-        //    Model.DidNotReceive().NewProject();
-        //}
-
-        [TestCase(false, false, "Assemblies (*.dll,*.exe)|*.dll;*.exe|All Files (*.*)|*.*")]
-        [TestCase(true, false, "Projects & Assemblies (*.nunit,*.dll,*.exe)|*.nunit;*.dll;*.exe|NUnit Projects (*.nunit)|*.nunit|Assemblies (*.dll,*.exe)|*.dll;*.exe|All Files (*.*)|*.*")]
-        [TestCase(false, true, "Projects & Assemblies (*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln,*.dll,*.exe)|*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln;*.dll;*.exe|Visual Studio Projects (*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln)|*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln|Assemblies (*.dll,*.exe)|*.dll;*.exe|All Files (*.*)|*.*")]
-        [TestCase(true, true, "Projects & Assemblies (*.nunit,*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln,*.dll,*.exe)|*.nunit;*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln;*.dll;*.exe|NUnit Projects (*.nunit)|*.nunit|Visual Studio Projects (*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln)|*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln|Assemblies (*.dll,*.exe)|*.dll;*.exe|All Files (*.*)|*.*")]
-        public void OpenCommand_DisplaysDialogCorrectly(bool nunitSupport, bool vsSupport, string filter)
+        [TestCase(false, false, "Projects & Assemblies (*.tcproj,*.dll,*.exe)|*.tcproj;*.dll;*.exe|TestCentric Projects (*.tcproj)|*.tcproj|Assemblies (*.dll,*.exe)|*.dll;*.exe|All Files (*.*)|*.*")]
+        [TestCase(true, false, "Projects & Assemblies (*.nunit,*.tcproj,*.dll,*.exe)|*.nunit;*.tcproj;*.dll;*.exe|NUnit Projects (*.nunit)|*.nunit|TestCentric Projects (*.tcproj)|*.tcproj|Assemblies (*.dll,*.exe)|*.dll;*.exe|All Files (*.*)|*.*")]
+        [TestCase(false, true, "Projects & Assemblies (*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln,*.tcproj,*.dll,*.exe)|*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln;*.tcproj;*.dll;*.exe|Visual Studio Projects (*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln)|*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln|TestCentric Projects (*.tcproj)|*.tcproj|Assemblies (*.dll,*.exe)|*.dll;*.exe|All Files (*.*)|*.*")]
+        [TestCase(true, true, "Projects & Assemblies (*.nunit,*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln,*.tcproj,*.dll,*.exe)|*.nunit;*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln;*.tcproj;*.dll;*.exe|NUnit Projects (*.nunit)|*.nunit|Visual Studio Projects (*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln)|*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln|TestCentric Projects (*.tcproj)|*.tcproj|Assemblies (*.dll,*.exe)|*.dll;*.exe|All Files (*.*)|*.*")]
+        public void OpenProjectCommand_DisplaysDialogCorrectly(bool nunitSupport, bool vsSupport, string filter)
         {
             // Return no files so model is not called
             _view.DialogManager.SelectMultipleFiles(null, null).ReturnsForAnyArgs(NO_FILES_SELECTED);
             _model.NUnitProjectSupport.Returns(nunitSupport);
             _model.VisualStudioSupport.Returns(vsSupport);
 
-            _view.NewProjectCommand.Execute += Raise.Event<CommandHandler>();
+            _view.OpenProjectCommand.Execute += Raise.Event<CommandHandler>();
 
             _view.DialogManager.Received().SelectMultipleFiles("New Project", filter);
         }
 
         [Test]
-        public void OpenCommand_FileSelected_LoadsTests()
+        public void OpenProjectCommand_FileSelected_LoadsTests()
         {
             var files = new string[] { Path.GetFullPath("/path/to/test.dll") };
             _view.DialogManager.SelectMultipleFiles(null, null).ReturnsForAnyArgs(files);
 
-            _view.NewProjectCommand.Execute += Raise.Event<CommandHandler>();
+            _view.OpenProjectCommand.Execute += Raise.Event<CommandHandler>();
 
-            _model.Received().CreateNewProject();
-            _model.Received().AddTests(files);
+            _model.Received().CreateNewProject(files);
         }
 
         [Test]
-        public void NewProjectCommand_NoFileSelected_DoesNotCreateProject()
+        [TestCase("TestCentricProject.tcproj")]
+        [TestCase("TestCentricProject.TCPROJ")]
+        public void OpenProjectCommand_TestCentricProjectFileSelected_LoadsProject(string projectname)
+        {
+            var files = new string[] { Path.GetFullPath(projectname) };
+            _view.DialogManager.SelectMultipleFiles(null, null).ReturnsForAnyArgs(files);
+
+            _view.OpenProjectCommand.Execute += Raise.Event<CommandHandler>();
+
+            _model.Received().OpenExistingProject(files[0]);
+        }
+
+        [Test]
+        public void OpenProjectCommand_NoFileSelected_DoesNotCreateProject()
         {
             _view.DialogManager.SelectMultipleFiles(null, null).ReturnsForAnyArgs(NO_FILES_SELECTED);
 
-            _view.NewProjectCommand.Execute += Raise.Event<CommandHandler>();
+            _view.OpenProjectCommand.Execute += Raise.Event<CommandHandler>();
 
             _model.DidNotReceiveWithAnyArgs().CreateNewProject(null);
         }

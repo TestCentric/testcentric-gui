@@ -44,12 +44,5 @@ namespace TestCentric.Gui.Presenters.TestTree
             _view.OutcomeFilter.ReceivedWithAnyArgs().SelectedItems = null;
             _view.CategoryFilter.ReceivedWithAnyArgs().SelectedItems = null;
         }
-
-#if NYI // Add after implementation of project or package saving
-        [TestCase("NewProjectCommand", true)]
-        [TestCase("OpenProjectCommand", true)]
-        [TestCase("SaveCommand", true)]
-        [TestCase("SaveAsCommand", true)
-#endif
     }
 }

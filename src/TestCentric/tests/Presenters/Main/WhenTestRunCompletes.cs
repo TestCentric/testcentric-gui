@@ -29,7 +29,6 @@ namespace TestCentric.Gui.Presenters.Main
             FireRunFinishedEvent(resultNode);
         }
 
-        [TestCase("NewProjectCommand", true)]
         [TestCase("OpenProjectCommand", true)]
         [TestCase("SaveProjectCommand", true)]
         [TestCase("CloseProjectCommand", true)]
