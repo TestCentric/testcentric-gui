@@ -9,7 +9,7 @@
         <DebugType>Full</DebugType>
         <OutputPath>..\..\..\bin\$(Configuration)\engine-tests\</OutputPath>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-      </PropertyGroup>
+     </PropertyGroup>
 
     <!-- Properties used in generating AssemblyInfo.cs for this project -->
     <PropertyGroup>
