@@ -9,6 +9,7 @@
 		<OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<LangVersion>12</LangVersion>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -44,9 +45,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="TestCentric.Engine.Api" Version="2.0.0-dev00006" />
+		<PackageReference Include="TestCentric.Engine.Api" Version="2.0.0-dev00009" />
 		<PackageReference Include ="NUnit.Engine.Api" Version="3.18.3.0" />
-		<PackageReference Include="TestCentric.Extensibility" Version="3.1.0" />
+		<PackageReference Include="TestCentric.Extensibility" Version="3.2.0" />
 		<PackageReference Include="TestCentric.Metadata" Version="3.0.4" />
 		<PackageReference Include="TestCentric.InternalTrace" Version="1.2.1" />
 	</ItemGroup>

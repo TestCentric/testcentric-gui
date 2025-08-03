@@ -96,9 +96,13 @@ namespace TestCentric.Engine.Services
         {
             try
             {
-                _extensionManager = new ExtensionManager("/TestCentric/Engine/TypeExtensions/");
+                _extensionManager = new ExtensionManager()
+                {
+                    TypeExtensionPath = "/TestCentric/Engine/TypeExtensions/",
+                    PackagePrefixes = ["TestCentric.Extension.", "NUnit.Extension."]
+                };
                 _extensionManager.FindExtensionPoints(ENGINE_ASSEMBLY, ENGINE_API_ASSEMBLY);
-                _extensionManager.FindExtensions(ENGINE_DIRECTORY);
+                ((ExtensionManager)_extensionManager).FindExtensionAssemblies(ENGINE_ASSEMBLY);
                 Status = ServiceStatus.Started;
             }
             catch
