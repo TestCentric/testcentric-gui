@@ -94,12 +94,5 @@ namespace TestCentric.Gui.Presenters.TestTree
             // Assert
             strategy.Received().SaveVisualState();
         }
-
-#if NYI // Add after implementation of project or package saving
-        [TestCase("NewProjectCommand", true)]
-        [TestCase("OpenProjectCommand", true)]
-        [TestCase("SaveCommand", true)]
-        [TestCase("SaveAsCommand", true)
-#endif
     }
 }

@@ -21,7 +21,6 @@ namespace TestCentric.Gui.Presenters.Main
             FireRunStartingEvent(1234);
         }
 
-        [TestCase("NewProjectCommand", false)]
         [TestCase("OpenProjectCommand", false)]
         [TestCase("SaveProjectCommand", false)]
         [TestCase("CloseProjectCommand", false)]

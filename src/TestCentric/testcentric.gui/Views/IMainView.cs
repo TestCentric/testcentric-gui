@@ -29,7 +29,6 @@ namespace TestCentric.Gui.Views
 
         // File Menu Items
         IPopup FileMenu { get; }
-        ICommand NewProjectCommand { get; }
         ICommand OpenProjectCommand { get; }
         ICommand SaveProjectCommand { get; }
 

@@ -112,7 +112,6 @@ namespace TestCentric.Gui.Views
         private ToolStripButton runFailedButton;
         private ToolStripSeparator toolStripSeparator5;
         private ToolStripButton rerunButton;
-        private ToolStripMenuItem newProjectMenuItem;
         private ToolStripMenuItem openProjectMenuItem;
         private ToolStripMenuItem saveProjectMenuItem;
         private ToolStripSeparator toolStripSeparator6;
@@ -136,7 +135,6 @@ namespace TestCentric.Gui.Views
 
             // Initialize File Menu Commands
             FileMenu = new PopupMenuElement(fileMenu);
-            NewProjectCommand = new CommandMenuElement(newProjectMenuItem);
             OpenProjectCommand = new CommandMenuElement(openProjectMenuItem);
             SaveProjectCommand = new CommandMenuElement(saveProjectMenuItem);
             CloseProjectCommand = new CommandMenuElement(closeMenuItem);
@@ -251,7 +249,6 @@ namespace TestCentric.Gui.Views
             this.runParametersButton = new System.Windows.Forms.ToolStripButton();
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.fileMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.newProjectMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openProjectMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveProjectMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -617,7 +614,6 @@ namespace TestCentric.Gui.Views
             // fileMenu
             // 
             this.fileMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.newProjectMenuItem,
             this.openProjectMenuItem,
             this.saveProjectMenuItem,
             this.closeMenuItem,
@@ -636,29 +632,23 @@ namespace TestCentric.Gui.Views
             this.fileMenu.Size = new System.Drawing.Size(37, 20);
             this.fileMenu.Text = "&File";
             // 
-            // newProjectMenuItem
-            // 
-            this.newProjectMenuItem.Name = "newProjectMenuItem";
-            this.newProjectMenuItem.Size = new System.Drawing.Size(187, 22);
-            this.newProjectMenuItem.Text = "Create &New Project";
-            // 
             // openProjectMenuItem
             // 
             this.openProjectMenuItem.Name = "openProjectMenuItem";
             this.openProjectMenuItem.Size = new System.Drawing.Size(187, 22);
-            this.openProjectMenuItem.Text = "&Open Existing Project";
+            this.openProjectMenuItem.Text = "&Open";
             // 
             // saveProjectMenuItem
             // 
             this.saveProjectMenuItem.Name = "saveProjectMenuItem";
             this.saveProjectMenuItem.Size = new System.Drawing.Size(187, 22);
-            this.saveProjectMenuItem.Text = "&Save Project";
+            this.saveProjectMenuItem.Text = "&Save";
             // 
             // closeMenuItem
             // 
             this.closeMenuItem.Name = "closeMenuItem";
             this.closeMenuItem.Size = new System.Drawing.Size(187, 22);
-            this.closeMenuItem.Text = "&Close Project";
+            this.closeMenuItem.Text = "&Close";
             // 
             // toolStripSeparator6
             // 
@@ -1200,7 +1190,6 @@ namespace TestCentric.Gui.Views
 
         // File Menu Items
         public IPopup FileMenu { get; }
-        public ICommand NewProjectCommand { get; }
         public ICommand OpenProjectCommand { get; }
         public ICommand SaveProjectCommand { get; }
         public ICommand CloseProjectCommand { get; }

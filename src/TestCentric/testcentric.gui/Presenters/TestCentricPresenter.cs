@@ -335,7 +335,6 @@ namespace TestCentric.Gui.Presenters
                 bool isPackageLoaded = _model.IsProjectLoaded;
                 bool isTestRunning = _model.IsTestRunning;
 
-                _view.NewProjectCommand.Enabled = !isTestRunning;
                 _view.OpenProjectCommand.Enabled = !isTestRunning;
                 _view.CloseProjectCommand.Enabled = isPackageLoaded && !isTestRunning;
 
@@ -348,7 +347,6 @@ namespace TestCentric.Gui.Presenters
                 _view.RecentFilesMenu.Enabled = !isTestRunning;
             };
 
-            _view.NewProjectCommand.Execute += () => NewProject();
             _view.OpenProjectCommand.Execute += () => OpenProject();
             _view.SaveProjectCommand.Execute += () => SaveProject();
 
@@ -612,21 +610,17 @@ namespace TestCentric.Gui.Presenters
 
         #region Project Management
 
-        private void NewProject()
-        {
-            var files = _view.DialogManager.SelectMultipleFiles("New Project", CreateOpenFileFilter());
-            if (files.Count > 0)
-            {
-                _model.CreateNewProject();
-                _model.AddTests(files);
-            }
-        }
-
         private void OpenProject()
         {
-            var projectPath = _view.DialogManager.GetFileOpenPath("Open TestCentric Project", "TestCentric Project (*.tcproj) | *.tcproj");
-            if (projectPath != null)
-                _model.OpenExistingProject(projectPath);
+            var files = _view.DialogManager.SelectMultipleFiles("New Project", CreateOpenFileFilter(true));
+            if (files.Count == 1  && files[0].EndsWith("tcproj", StringComparison.CurrentCultureIgnoreCase))
+            {
+                _model.OpenExistingProject(files[0]);
+            }
+            else if (files.Count > 0)
+            {
+                _model.CreateNewProject(files);
+            }
         }
 
         private void SaveProject()
@@ -765,7 +759,6 @@ namespace TestCentric.Gui.Presenters
             _view.StopRunButton.Visible = !displayForcedStop;
             _view.StopRunButton.Enabled = testRunning && !_stopRequested;
 
-            _view.NewProjectCommand.Enabled = !testLoading && !testRunning;
             _view.OpenProjectCommand.Enabled = !testLoading && !testRunning;
             _view.SaveProjectCommand.Enabled = testLoaded && !testRunning;
 
@@ -785,18 +778,30 @@ namespace TestCentric.Gui.Presenters
                 tooltip.ToolTipText = showCheckBoxes ? "Run Checked Tests" : "Run Selected Tests";
         }
 
-        private string CreateOpenFileFilter()
+        private string CreateOpenFileFilter(bool testCentricProject = false)
         {
             StringBuilder sb = new StringBuilder();
             bool nunit = _model.NUnitProjectSupport;
             bool vs = _model.VisualStudioSupport;
 
-            if (nunit && vs)
-                sb.Append("Projects & Assemblies (*.nunit,*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln,*.dll,*.exe)|*.nunit;*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln;*.dll;*.exe|");
-            else if (nunit)
-                sb.Append("Projects & Assemblies (*.nunit,*.dll,*.exe)|*.nunit;*.dll;*.exe|");
-            else if (vs)
-                sb.Append("Projects & Assemblies (*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln,*.dll,*.exe)|*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln;*.dll;*.exe|");
+            if (nunit || vs || testCentricProject)
+            {
+                List<string> supportedSuffix = new List<string>();
+                if (nunit)
+                    supportedSuffix.Add("*.nunit");
+                if (vs)
+                    supportedSuffix.AddRange(new[] { "*.csproj", "*.fsproj", "*.vbproj", "*.vjsproj", "*.vcproj", "*.sln" });
+                if (testCentricProject)
+                    supportedSuffix.Add("*.tcproj");
+
+                supportedSuffix.AddRange(new[] { "*.dll", "*.exe" });
+
+                var description = string.Join(",", supportedSuffix);
+                var filter = string.Join(";", supportedSuffix);
+
+                string str = $"Projects & Assemblies ({description})|{filter}|";
+                sb.Append(str);
+            }
 
             if (nunit)
                 sb.Append("NUnit Projects (*.nunit)|*.nunit|");
@@ -804,8 +809,10 @@ namespace TestCentric.Gui.Presenters
             if (vs)
                 sb.Append("Visual Studio Projects (*.csproj,*.fsproj,*.vbproj,*.vjsproj,*.vcproj,*.sln)|*.csproj;*.fsproj;*.vbproj;*.vjsproj;*.vcproj;*.sln|");
 
-            sb.Append("Assemblies (*.dll,*.exe)|*.dll;*.exe|");
+            if (testCentricProject)
+                sb.Append("TestCentric Projects (*.tcproj)|*.tcproj|");
 
+            sb.Append("Assemblies (*.dll,*.exe)|*.dll;*.exe|");
             sb.Append("All Files (*.*)|*.*");
 
             return sb.ToString();
