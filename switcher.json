@@ -1,0 +1,10 @@
+{
+  "solution": "testcentric-engine.sln",
+  "solutionFolder": null,
+  "mappings": {
+    "TestCentric.Engine.Api": "../TestCentric.Engine.Api/src/TestCentric.Engine.Api/TestCentric.Engine.Api.csproj",
+    "TestCentric.Extensibility.Api": "../TestCentric.Extensibility/src/testcentric.extensibility.api/TestCentric.Extensibility.Api.csproj",
+    "TestCentric.Extensibility": "../TestCentric.Extensibility/src/testcentric.extensibility/TestCentric.Extensibility.csproj"
+  },
+  "removeProjects": true
+}
