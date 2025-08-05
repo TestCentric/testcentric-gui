@@ -36,17 +36,14 @@ namespace TestCentric.Engine.Services
         private readonly List<IAgentLauncher> _launchers = new List<IAgentLauncher>();
 
         // Transports used for various target runtimes
-        private TestAgencyRemotingTransport _remotingTransport; // .NET Framework
         private TestAgencyTcpTransport _tcpTransport; // .NET Standard 2.0
 
-        internal virtual string RemotingUrl => _remotingTransport.ServerUrl;
         internal virtual string TcpEndPoint => _tcpTransport.ServerUrl;
 
         public TestAgency() : this("TestAgency", 0) { }
 
         public TestAgency(string uri, int port )
         {
-            _remotingTransport = new TestAgencyRemotingTransport(this, uri, port);
             _tcpTransport = new TestAgencyTcpTransport(this, port);
         }
 
@@ -144,7 +141,7 @@ namespace TestCentric.Engine.Services
 
             var targetRuntime = RuntimeFramework.Parse(runtimeSetting);
             var agentId = Guid.NewGuid();
-            string agencyUrl = targetRuntime.FrameworkName.Identifier == ".NETFramework" ? RemotingUrl : TcpEndPoint;
+            string agencyUrl = TcpEndPoint;
             var agentProcess = CreateAgentProcess(agentId, agencyUrl, package);
 
             agentProcess.Exited += (sender, e) => OnAgentExit((Process)sender);
@@ -270,7 +267,6 @@ namespace TestCentric.Engine.Services
         {
             try
             {
-                _remotingTransport.Stop();
                 _tcpTransport.Stop();
             }
             finally
@@ -298,7 +294,6 @@ namespace TestCentric.Engine.Services
                 //    return CompareLaunchers(launcher1, launcher2);
                 //});
 
-                _remotingTransport.Start();
                 _tcpTransport.Start();
 
                 Status = ServiceStatus.Started;
