@@ -266,7 +266,7 @@ namespace TestCentric.Gui
             // GroupBy is null for NUnitTree strategy, otherwise required
             if (GroupBy == null && strategy != "NUNIT_TREE") GroupBy = "ASSEMBLY";
             ShowCheckBoxes = reader.GetAttribute("ShowCheckBoxes") == "True";
-            ShowNamespace = reader.GetAttribute("ShowNamespace") == "True";
+            ShowNamespace = reader.GetAttribute("ShowNamespace") != "False";
 
             while (reader.Read())
             {
@@ -381,8 +381,8 @@ namespace TestCentric.Gui
                 writer.WriteAttributeString("GroupBy", GroupBy);
             if (ShowCheckBoxes)
                 writer.WriteAttributeString("ShowCheckBoxes", "True");
-            if (ShowNamespace)
-                writer.WriteAttributeString("ShowNamespace", "True");
+            if (!ShowNamespace)
+                writer.WriteAttributeString("ShowNamespace", "False");
 
             WriteVisualTreeNodes(Nodes);
 
