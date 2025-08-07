@@ -37,7 +37,7 @@ namespace TestCentric.Gui
                 "</Nodes>\r\n" +
             "</VisualState>";
 
-        //[Test]
+        [Test]
         public void CanDeserializeVersion1VisualState()
         {
             var reader = new StringReader(V1_XML);
@@ -45,6 +45,8 @@ namespace TestCentric.Gui
             var vs = VisualState.LoadFrom(reader);
 
             Assert.That(vs.DisplayStrategy, Is.EqualTo("NUNIT_TREE"));
+            Assert.That(vs.ShowCheckBoxes, Is.EqualTo(false));
+            Assert.That(vs.ShowNamespace, Is.EqualTo(true));
         }
 
         [TestCaseSource(typeof(VisualStateSerializationData))]
@@ -68,7 +70,7 @@ namespace TestCentric.Gui
                 Assert.That(docElement.Name, Is.EqualTo("VisualState"));
                 Assert.That(docElement.GetAttribute("DisplayStrategy"), Is.EqualTo(vs.DisplayStrategy));
                 Assert.That(docElement.GetAttribute("ShowCheckBoxes"), Is.EqualTo(vs.ShowCheckBoxes ? "True" : ""));
-                Assert.That(docElement.GetAttribute("ShowNamespace"), Is.EqualTo(vs.ShowNamespace ? "True" : ""));
+                Assert.That(docElement.GetAttribute("ShowNamespace"), Is.EqualTo(!vs.ShowNamespace ? "False" : ""));
                 Assert.That(firstChild.Name, Is.EqualTo("Nodes"));
                 Assert.That(topNodes.Count, Is.EqualTo(vs.Nodes.Count));
                 for (int i = 0; i < topNodes.Count; i++)
@@ -154,7 +156,15 @@ namespace TestCentric.Gui
                         null,
                         checkBoxes: true,
                         showNamespace: true))
-                    .SetName("NUnitTree_EmptyWithTwoAttributes)");
+                    .SetName("NUnitTree_Empty_ShowNamespaceIsTrue)");
+
+                yield return new TestCaseData(
+                    VisualStateTestData.CreateVisualState(
+                        "NUNIT_TREE",
+                        null,
+                        checkBoxes: true,
+                        showNamespace: false))
+                    .SetName("NUnitTree_Empty_ShowNamespaceIsFalse)");
 
                 yield return new TestCaseData(
                     VisualStateTestData.CreateVisualState(
