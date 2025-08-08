@@ -21,11 +21,30 @@ namespace TestCentric.Engine.Services
     {
         static readonly Logger log = InternalTrace.GetLogger(typeof(ExtensionService));
 
+        private const string ENGINE_TYPE_EXTENSION_PATH = "/TestCentric/Engine/TypeExtensions/";
+
         static readonly Assembly ENGINE_ASSEMBLY = Assembly.GetExecutingAssembly();
         static readonly Assembly ENGINE_API_ASSEMBLY = typeof(ITestEngine).Assembly;
         static readonly string ENGINE_DIRECTORY = Path.GetDirectoryName(AssemblyHelper.GetAssemblyPath(ENGINE_ASSEMBLY));
 
-        private ExtensionManager _extensionManager;
+        private static readonly bool RUNNING_UNDER_CHOCOLATEY =
+            File.Exists(Path.Combine(ENGINE_DIRECTORY, "VERIFICATION.txt"));
+        private static readonly string[] PACKAGE_PREFIXES = RUNNING_UNDER_CHOCOLATEY
+            ? ["testcentric-extension-", "nunit-extension-"]
+            : ["TestCentric.Extension.", "NUnit.Extension."];
+
+        // The Extension Manager is available internally to allow direct
+        // access to ExtensionPoints and ExtensionNodes.
+        internal readonly ExtensionManager _extensionManager;
+
+        public ExtensionService()
+        {
+            _extensionManager = new ExtensionManager
+            {
+                TypeExtensionPath = ENGINE_TYPE_EXTENSION_PATH,
+                PackagePrefixes = PACKAGE_PREFIXES
+            };
+        }
 
         #region IExtensionService Implementation
 
@@ -97,11 +116,6 @@ namespace TestCentric.Engine.Services
         {
             try
             {
-                _extensionManager = new ExtensionManager()
-                {
-                    TypeExtensionPath = "/TestCentric/Engine/TypeExtensions/",
-                    PackagePrefixes = ["TestCentric.Extension.", "NUnit.Extension."]
-                };
                 _extensionManager.FindExtensionPoints(ENGINE_ASSEMBLY, ENGINE_API_ASSEMBLY);
                 ((ExtensionManager)_extensionManager).FindExtensionAssemblies(ENGINE_ASSEMBLY);
                 Status = ServiceStatus.Started;
