@@ -32,7 +32,7 @@ var packageTests = new List<PackageTest>();
 // Tests of single assemblies targeting each runtime we support
 
 packageTests.Add(new PackageTest(1, "Net462Test", "Run mock-assembly.dll targeting .NET 4.6.2",
-    "engine-tests/net462/mock-assembly.dll --trace:Debug",
+    "engine-tests/net462/mock-assembly.dll",
     MockAssemblyExpectedResult("Net462AgentLauncher")));
 
 packageTests.Add(new PackageTest(1, "Net35Test", "Run mock-assembly.dll targeting .NET 3.5",
@@ -58,9 +58,9 @@ packageTests.Add(new PackageTest(1, "Net60Test", "Run mock-assembly.dll targetin
     "engine-tests/net6.0/mock-assembly.dll",
     MockAssemblyExpectedResult("Net60AgentLauncher")));
 
-//packageTests.Add(new PackageTest(1, "Net70Test", "Run mock-assembly.dll targeting .NET 7.0",
-//    "engine-tests/net7.0/mock-assembly.dll",
-//    MockAssemblyExpectedResult("Net70AgentLauncher")));
+packageTests.Add(new PackageTest(1, "Net70Test", "Run mock-assembly.dll targeting .NET 7.0",
+    "engine-tests/net7.0/mock-assembly.dll",
+    MockAssemblyExpectedResult("Net80AgentLauncher")));
 
 packageTests.Add(new PackageTest(1, "Net80Test", "Run mock-assembly.dll targeting .NET 8.0",
     "engine-tests/net8.0/mock-assembly.dll",
@@ -211,7 +211,7 @@ BuildSettings.Packages.Add(new NuGetPackage(
 	},
     tests: packageTests,
     preloadedExtensions: new[] {
-        KnownExtensions.Net462PluggableAgent.SetVersion("2.6.0-dev00007").NuGetPackage,
+        KnownExtensions.Net462PluggableAgent.SetVersion("2.6.0-dev00010").NuGetPackage,
         KnownExtensions.Net60PluggableAgent.SetVersion("2.5.3-dev00003").NuGetPackage,
         //KnownExtensions.Net70PluggableAgent.SetVersion("2.5.1").NuGetPackage,
         KnownExtensions.Net80PluggableAgent.SetVersion("2.5.4-dev00001").NuGetPackage }

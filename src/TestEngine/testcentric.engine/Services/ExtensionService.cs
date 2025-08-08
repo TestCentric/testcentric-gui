@@ -25,7 +25,7 @@ namespace TestCentric.Engine.Services
         static readonly Assembly ENGINE_API_ASSEMBLY = typeof(ITestEngine).Assembly;
         static readonly string ENGINE_DIRECTORY = Path.GetDirectoryName(AssemblyHelper.GetAssemblyPath(ENGINE_ASSEMBLY));
 
-        private IExtensionManager _extensionManager;
+        private ExtensionManager _extensionManager;
 
         #region IExtensionService Implementation
 
@@ -85,7 +85,8 @@ namespace TestCentric.Engine.Services
 
         public IEnumerable<T> GetExtensions<T>()
         {
-            return _extensionManager.GetExtensions<T>();
+            foreach (var node in _extensionManager.GetExtensionNodes<T>())
+                yield return (T)node.ExtensionObject;
         }
 
         #endregion

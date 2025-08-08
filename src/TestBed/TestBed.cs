@@ -5,6 +5,7 @@
 
 using System;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Xml;
 using TestCentric.Engine.Services;
@@ -24,12 +25,13 @@ namespace TestCentric.Engine.TestBed
 
         static void Main(string[] args)
         {
-            Console.WriteLine("TestCentric Engine Test Runner");
+            var attr = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+
+            Console.WriteLine("TestCentric Engine Test Bed");
             Console.WriteLine();
 
             Console.WriteLine("Test Environment");
-            Console.WriteLine($"   OS Version: {Environment.OSVersion.VersionString}");
-            Console.WriteLine($"  CLR Version: {Environment.Version}");
+            Console.WriteLine($"  Engine Version: {attr.InformationalVersion}");
             Console.WriteLine();
 
             CommandLineOptions options = null;
