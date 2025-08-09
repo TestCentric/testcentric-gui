@@ -88,11 +88,11 @@ namespace TestCentric.Gui.Presenters
             if (visible)
             {
                 var sb = new StringBuilder();
-                foreach (var key in packageSettings.Keys)
+                foreach (var setting in packageSettings)
                 {
                     if (sb.Length > 0)
                         sb.Append(Environment.NewLine);
-                    sb.Append($"{key} = {packageSettings[key]}");
+                    sb.Append($"{setting.Name} = {setting.Value}");
                 }
 
                 _view.TestPackageSubView.PackageSettings = sb.ToString();

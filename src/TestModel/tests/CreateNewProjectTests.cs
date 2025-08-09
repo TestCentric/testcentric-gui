@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using NUnit.Framework;
-using TestCentric.Common;
 using TestCentric.Gui.Model.Fakes;
 using TestCentric.Engine;
 
@@ -41,16 +40,16 @@ namespace TestCentric.Gui.Model
         }
 
         // TODO: Remove? Use and test fluent methods?
-        [TestCase(EnginePackageSettings.RequestedRuntimeFramework, "net-2.0")]
-        [TestCase(EnginePackageSettings.MaxAgents, 8)]
-        [TestCase(EnginePackageSettings.ShadowCopyFiles, false)]
+        [TestCase(nameof(SettingDefinitions.RequestedRuntimeFramework), "net-2.0")]
+        [TestCase(nameof(SettingDefinitions.MaxAgents), 8)]
+        [TestCase(nameof(SettingDefinitions.ShadowCopyFiles), false)]
         public void PackageReflectsPackageSettings(string key, object value)
         {
             var package = _model.CreateNewProject(new[] { "my.dll" });
             package.AddSetting(key, value);
 
-            Assert.That(package.Settings.ContainsKey(key));
-            Assert.That(package.Settings[key], Is.EqualTo(value));
+            Assert.That(package.Settings.HasSetting(key));
+            Assert.That(package.Settings.GetSetting(key), Is.EqualTo(value));
         }
 
         // TODO: Remove? Use and test fluent methods?
@@ -65,8 +64,8 @@ namespace TestCentric.Gui.Model
             var package = _model.CreateNewProject(new[] { "my.dll" });
             package.AddSetting("TestParametersDictionary", testParms);
 
-            Assert.That(package.Settings.ContainsKey("TestParametersDictionary"));
-            var parms = package.Settings["TestParametersDictionary"] as IDictionary<string, string>;
+            Assert.That(package.Settings.HasSetting("TestParametersDictionary"));
+            var parms = package.Settings.GetSetting("TestParametersDictionary") as IDictionary<string, string>;
             Assert.That(parms, Is.Not.Null);
 
             Assert.That(parms, Contains.Key("parm1"));
@@ -97,17 +96,17 @@ namespace TestCentric.Gui.Model
         public void PackageForSolutionFileHasSkipNonTestAssemblies(string files)
         {
             _model.CreateNewProject(files.Split(','));
-            string skipKey = EnginePackageSettings.SkipNonTestAssemblies;
+            string skipKey = SettingDefinitions.SkipNonTestAssemblies.Name;
 
             foreach (var subpackage in _model.TestCentricProject.SubPackages)
             {
                 if (subpackage.Name.EndsWith(".sln"))
                 {
-                    Assert.That(subpackage.Settings, Does.ContainKey(skipKey));
-                    Assert.That(subpackage.Settings[skipKey], Is.True);
+                    Assert.That(subpackage.Settings.HasSetting(skipKey));
+                    Assert.That(subpackage.Settings.GetSetting(skipKey), Is.True);
                 }
                 else
-                    Assert.That(subpackage.Settings, Does.Not.ContainKey(skipKey));
+                    Assert.That(subpackage.Settings.HasSetting(skipKey), Is.False);
             }
         }
 

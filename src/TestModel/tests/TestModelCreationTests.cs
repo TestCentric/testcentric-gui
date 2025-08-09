@@ -3,10 +3,8 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-using System.Collections.Generic;
 using NUnit.Framework;
 using TestCentric.Gui.Model.Fakes;
-using TestCentric.Common;
 using TestCentric.Engine;
 
 namespace TestCentric.Gui.Model
@@ -39,8 +37,8 @@ namespace TestCentric.Gui.Model
             var project = model.CreateNewProject(options.InputFiles);
             var checker = new PackageSettingsChecker(project.Settings);
 
-            checker.CheckSetting(options.MaxAgents, EnginePackageSettings.MaxAgents);
-            checker.CheckSetting(options.RunAsX86, EnginePackageSettings.RunAsX86);
+            checker.CheckSetting(options.MaxAgents, SettingDefinitions.MaxAgents.Name);
+            checker.CheckSetting(options.RunAsX86, SettingDefinitions.RunAsX86.Name);
 
             if (options.TestParameters.Count > 0)
             {
@@ -49,26 +47,26 @@ namespace TestCentric.Gui.Model
                 foreach (string key in options.TestParameters.Keys)
                     parms[index++] = $"{key}={options.TestParameters[key]}";
 
-                checker.CheckSetting(options.TestParameters, "TestParametersDictionary");
-                checker.CheckSetting(string.Join(";", parms), "TestParameters");
+                checker.CheckSetting(options.TestParameters, SettingDefinitions.TestParametersDictionary.Name);
+                checker.CheckSetting(string.Join(";", parms), SettingDefinitions.TestParameters.Name);
             }
         }
 
         private class PackageSettingsChecker
         {
-            private IDictionary<string, object> _settings;
+           PackageSettings _settings;
 
-            public PackageSettingsChecker(IDictionary<string, object> settings)
+            public PackageSettingsChecker(PackageSettings settings)
             {
                 _settings = settings;
             }
 
             public void CheckSetting(bool option, string key)
             {
-                if (option || _settings.ContainsKey(key))
+                if (option || _settings.HasSetting(key))
                 {
-                    Assert.That(_settings, Contains.Key(key));
-                    Assert.That(_settings[key], Is.EqualTo(option));
+                    //Assert.That(_settings, Contains.Key(key));
+                    Assert.That(_settings.GetSetting(key), Is.EqualTo(option));
                 }
             }
 
@@ -76,11 +74,11 @@ namespace TestCentric.Gui.Model
             {
                 if (option != null)
                 {
-                    Assert.That(_settings, Contains.Key(key));
-                    Assert.That(_settings[key], Is.EqualTo(option));
+                    Assert.That(_settings.HasSetting(key));
+                    Assert.That(_settings.GetSetting(key), Is.EqualTo(option));
                 }
                 else
-                    Assert.That(_settings, Does.Not.ContainKey(key));
+                    Assert.That(_settings.HasSetting(key), Is.False);
             }
         }
     }

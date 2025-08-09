@@ -1,0 +1,9 @@
+{
+  "solution": "testcentric-gui.sln",
+  "solutionFolder": null,
+  "mappings": {
+    "TestCentric.Engine": "../testcentric-engine/src/TestEngine/testcentric.engine/testcentric.engine.csproj",
+    "TestCentric.Engine.Api": "../TestCentric.Engine.Api/src/TestCentric.Engine.Api/TestCentric.Engine.Api.csproj"
+  },
+  "removeProjects": true
+}

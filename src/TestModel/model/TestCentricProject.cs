@@ -43,26 +43,26 @@ namespace TestCentric.Gui.Model
             var options = model.Options;
 
             if (engineSettings.Agents > 0)
-                AddSetting(EnginePackageSettings.MaxAgents, engineSettings.Agents);
+                AddSetting(SettingDefinitions.MaxAgents.WithValue(engineSettings.Agents));
             if (engineSettings.SetPrincipalPolicy)
-                AddSetting(EnginePackageSettings.PrincipalPolicy, engineSettings.PrincipalPolicy);
-            AddSetting(EnginePackageSettings.ShadowCopyFiles, engineSettings.ShadowCopyFiles);
+                AddSetting(SettingDefinitions.PrincipalPolicy.WithValue(engineSettings.PrincipalPolicy));
+            AddSetting(SettingDefinitions.ShadowCopyFiles.WithValue(engineSettings.ShadowCopyFiles));
 
             if (options != null) // Happens when we test
             {
-                AddSetting(EnginePackageSettings.InternalTraceLevel, options.InternalTraceLevel ?? "Off");
+                AddSetting(SettingDefinitions.InternalTraceLevel.WithValue(options.InternalTraceLevel ?? "Off"));
                 if (options.WorkDirectory != null)
-                    AddSetting(EnginePackageSettings.WorkDirectory, options.WorkDirectory);
+                    AddSetting(SettingDefinitions.WorkDirectory.WithValue(options.WorkDirectory));
                 if (options.MaxAgents >= 0)
-                    Settings[EnginePackageSettings.MaxAgents] = options.MaxAgents;
+                    AddSetting(SettingDefinitions.MaxAgents.WithValue(options.MaxAgents));
                 if (options.RunAsX86)
-                    AddSetting(EnginePackageSettings.RunAsX86, true);
+                    AddSetting(SettingDefinitions.RunAsX86.WithValue(true));
                 if (options.DebugAgent)
-                    AddSetting(EnginePackageSettings.DebugAgent, true);
+                    AddSetting(SettingDefinitions.DebugAgent.WithValue(true));
                 if (options.SimulateUnloadError)
-                    AddSetting(EnginePackageSettings.SimulateUnloadError, true);
+                    AddSetting(SettingDefinitions.SimulateUnloadError.WithValue(true));
                 if (options.SimulateUnloadTimeout)
-                    AddSetting(EnginePackageSettings.SimulateUnloadTimeout, true);
+                    AddSetting(SettingDefinitions.SimulateUnloadTimeout.WithValue(true));
                 if (options.TestParameters.Count > 0)
                 {
                     string[] parms = new string[options.TestParameters.Count];
@@ -79,7 +79,7 @@ namespace TestCentric.Gui.Model
                 switch(Path.GetExtension(subpackage.Name))
                 {
                     case ".sln":
-                        subpackage.AddSetting(EnginePackageSettings.SkipNonTestAssemblies, true);
+                        subpackage.AddSetting(SettingDefinitions.SkipNonTestAssemblies.WithValue(true));
                         break;
                     case ".tcproj":
                         throw new InvalidOperationException("A TestCentric project may not contain another TestCentric project.");
@@ -176,9 +176,9 @@ namespace TestCentric.Gui.Model
             }
         }
 
-        public new void AddSetting(string key, object value)
+        public void AddSetting(string key, object value)
         {
-            base.AddSetting(key, value);
+            Settings.Set(key, value);
             IsDirty = true;
         }
     }

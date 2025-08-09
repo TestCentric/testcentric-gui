@@ -3,10 +3,8 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-using System.Collections.Generic;
 using System.Windows.Forms;
-using System.Linq;
-using TestCentric.Common;
+using TestCentric.Engine;
 using TestCentric.Gui.Model;
 using TestCentric.Gui.Views;
 
@@ -45,7 +43,7 @@ namespace TestCentric.Gui.Presenters
             agentMenu.MenuItems.Add(defaultMenuItem);
 
             var agentsToEnable = _model.GetAgentsForPackage(_model.TestCentricProject);
-            var selectedAgentName = _model.TestCentricProject.GetSetting(EnginePackageSettings.SelectedAgentName, "DEFAULT");
+            var selectedAgentName = _model.TestCentricProject.Settings.GetValueOrDefault(SettingDefinitions.SelectedAgentName);
             
             foreach (var agentName in _model.AvailableAgents)
             {
@@ -71,9 +69,9 @@ namespace TestCentric.Gui.Presenters
                         item.Checked = true;
                         
                         if (item.Tag == null || item.Tag as string == "DEFAULT")
-                            packageSettings.Remove(EnginePackageSettings.SelectedAgentName);
+                            packageSettings.Remove(SettingDefinitions.SelectedAgentName);
                         else
-                            packageSettings[EnginePackageSettings.SelectedAgentName] = item.Tag;
+                            packageSettings.Set(SettingDefinitions.SelectedAgentName.WithValue(item.Tag));
 
                         // Even though the _model has a Reload method, we cannot use it because Reload
                         // does not re-create the Engine.  Since we just changed a setting, we must
@@ -86,7 +84,7 @@ namespace TestCentric.Gui.Presenters
             if (!isItemChecked)
             {
                 defaultMenuItem.Checked = true;
-                packageSettings.Remove(EnginePackageSettings.SelectedAgentName);
+                packageSettings.Remove(SettingDefinitions.SelectedAgentName);
             }
         }
     }

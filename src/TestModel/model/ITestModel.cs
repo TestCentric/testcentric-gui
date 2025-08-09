@@ -162,7 +162,7 @@ namespace TestCentric.Gui.Model
 
         // Get the TestPackage represented by a test,if available
         TestPackage GetPackageForTest(string id);
-        IDictionary<string, object> GetPackageSettingsForTest(string id);
+        PackageSettings GetPackageSettingsForTest(string id);
 
         // Get Agents available for a package
         IList<string> GetAgentsForPackage(TestPackage package);

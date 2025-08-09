@@ -10,10 +10,11 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui
 {
-    using Model;
-    using Views;
-    using Presenters;
+    using System.Diagnostics;
     using System.Linq;
+    using Model;
+    using Presenters;
+    using Views;
 
     /// <summary>
     /// Class to manage application startup.
