@@ -9,16 +9,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-    using System.Xml.Serialization;
-using TestCentric.Engine;
-using TestCentric.Engine.Services;
 
 namespace TestCentric.Gui.Model
 {
-    using System.Runtime.InteropServices;
     using System.Threading.Tasks;
+    //using NUnit.Engine;
     using Services;
     using Settings;
+    using TestCentric.Engine;
+    using TestCentric.Engine.Services;
     using TestCentric.Gui.Model.Filter;
 
     public class TestModel : ITestModel
@@ -63,13 +62,13 @@ namespace TestCentric.Gui.Model
             AvailableAgents = new List<string>(
                 Services.TestAgentService.GetAvailableAgents().Select((a) => a.AgentName));
 
-            foreach (var node in Services.ExtensionService.GetExtensionNodes(PROJECT_LOADER_EXTENSION_PATH))
-            {
-                if (node.TypeName == NUNIT_PROJECT_LOADER)
-                    NUnitProjectSupport = true;
-                else if (node.TypeName == VISUAL_STUDIO_PROJECT_LOADER)
-                    VisualStudioSupport = true;
-            }
+            //foreach (var node in Services.ExtensionService.GetExtensionNodes(PROJECT_LOADER_EXTENSION_PATH))
+            //{
+            //    if (node.TypeName == NUNIT_PROJECT_LOADER)
+            //        NUnitProjectSupport = true;
+            //    else if (node.TypeName == VISUAL_STUDIO_PROJECT_LOADER)
+            //        VisualStudioSupport = true;
+            //}
         }
 
         public static ITestModel CreateTestModel(CommandLineOptions options)
@@ -522,7 +521,7 @@ namespace TestCentric.Gui.Model
         {
             //var originalSubPackages = new List<TestPackage>(package.SubPackages);
             //package.SubPackages.Clear();
-            package.Settings[EnginePackageSettings.ActiveConfig] = config;
+            package.AddSetting(SettingDefinitions.DebugTests.WithValue(config));
 
             //foreach (var subPackage in package.SubPackages)
             //    foreach (var original in originalSubPackages)
@@ -662,10 +661,11 @@ namespace TestCentric.Gui.Model
             return _lastTestRun.ContainTest(testNode);
         }
 
-        public IDictionary<string, object> GetPackageSettingsForTest(string id)
+        public PackageSettings GetPackageSettingsForTest(string id)
         {
             return GetPackageForTest(id)?.Settings;
         }
+
         public TestPackage GetPackageForTest(string id)
         {
             return _packageMap.ContainsKey(id) 
@@ -811,7 +811,7 @@ namespace TestCentric.Gui.Model
             {
                 foreach (var subPackage in TestCentricProject.SubPackages)
                 {
-                    subPackage.Settings["DebugTests"] = runSpec.DebuggingRequested;
+                    subPackage.AddSetting(SettingDefinitions.DebugTests.WithValue(runSpec.DebuggingRequested));
                 }
 
                 Runner = TestEngine.GetRunner(TestCentricProject);

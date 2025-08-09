@@ -6,7 +6,7 @@
 using System;
 using System.Security.Principal;
 using System.Windows.Forms;
-using TestCentric.Common;
+using TestCentric.Engine;
 
 namespace TestCentric.Gui.SettingsPages
 {
@@ -258,19 +258,19 @@ namespace TestCentric.Gui.SettingsPages
             int numAgents = numberOfAgentsCheckBox.Checked
                 ? (int)numberOfAgentsUpDown.Value : 0;
             if (numAgents != Settings.Engine.Agents)
-                PackageSettingChanges[EnginePackageSettings.MaxAgents] = numAgents;
+                PackageSettingChanges[SettingDefinitions.MaxAgents.Name] = numAgents;
             Settings.Engine.Agents = numAgents;
 
             bool shadowCopyFiles = !disableShadowCopyCheckBox.Checked;
             if (shadowCopyFiles != Settings.Engine.ShadowCopyFiles)
-                PackageSettingChanges[EnginePackageSettings.ShadowCopyFiles] = shadowCopyFiles;
+                PackageSettingChanges[SettingDefinitions.ShadowCopyFiles.Name] = shadowCopyFiles;
             Settings.Engine.ShadowCopyFiles = shadowCopyFiles;
 
             string principalPolicy = principalPolicyCheckBox.Checked
                 ? (string)principalPolicyListBox.SelectedItem
                 : nameof(PrincipalPolicy.UnauthenticatedPrincipal);
             if (principalPolicy != Settings.Engine.PrincipalPolicy)
-                PackageSettingChanges[EnginePackageSettings.PrincipalPolicy] = principalPolicy;
+                PackageSettingChanges[SettingDefinitions.PrincipalPolicy.Name] = principalPolicy;
             Settings.Engine.PrincipalPolicy = principalPolicy;
 
             Settings.Engine.SetPrincipalPolicy = principalPolicyCheckBox.Checked;

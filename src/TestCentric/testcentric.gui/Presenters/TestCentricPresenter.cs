@@ -9,9 +9,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Windows.Forms;
-using TestCentric.Common;
 
 namespace TestCentric.Gui.Presenters
 {
@@ -19,6 +17,7 @@ namespace TestCentric.Gui.Presenters
     using Model;
     using Model.Services;
     using Model.Settings;
+    using TestCentric.Engine;
     using TestCentric.Gui.Controls;
     using TestCentric.Gui.Elements;
     using Views;
@@ -363,7 +362,7 @@ namespace TestCentric.Gui.Presenters
 
             _view.RunAsX86.CheckedChanged += () =>
             {
-                var key = EnginePackageSettings.RunAsX86;
+                var key = SettingDefinitions.RunAsX86.Name;
                 if (_view.RunAsX86.Checked)
                     ChangePackageSettingAndReload(key, true);
                 else
@@ -586,9 +585,9 @@ namespace TestCentric.Gui.Presenters
                 dlg.Font = _settings.Gui.Font;
                 dlg.StartPosition = FormStartPosition.CenterParent;
 
-                if (_model.TestCentricProject.Settings.ContainsKey("TestParametersDictionary"))
+                if (_model.TestCentricProject.Settings.HasSetting("TestParametersDictionary"))
                 {
-                    var testParms = _model.TestCentricProject  .Settings["TestParametersDictionary"] as IDictionary<string, string>;
+                    var testParms = _model.TestCentricProject.Settings.GetSetting("TestParametersDictionary") as IDictionary<string, string>;
                     foreach (string key in testParms.Keys)
                         dlg.Parameters.Add(key, testParms[key]);
                 }
@@ -828,7 +827,7 @@ namespace TestCentric.Gui.Presenters
             if (setting == null || setting as string == "DEFAULT")
                 settings.Remove(key);
             else
-                settings[key] = setting;
+                settings.Set(key, setting);
 
             // Even though the _model has a Reload method, we cannot use it because Reload
             // does not re-create the Engine.  Since we just changed a setting, we must

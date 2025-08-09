@@ -101,11 +101,18 @@ namespace TestCentric.Gui.Model.Fakes
 
         public IEnumerable<string> GetValues(string name)
         {
-            return new string[0];
+            return Array.Empty<string>();
+        }
+
+        public object CreateExtensionObject(params object[] args)
+        {
+            throw new NotImplementedException();
         }
 
         public string AssemblyPath { get; }
 
         public Version AssemblyVersion { get; }
+
+        public object ExtensionObject { get; }
     }
 }
