@@ -13,6 +13,7 @@ using System.Windows.Forms;
 
 namespace TestCentric.Gui.Presenters
 {
+    using System.Reflection;
     using Dialogs;
     using Model;
     using Model.Services;
@@ -281,10 +282,12 @@ namespace TestCentric.Gui.Presenters
             {
                 Application.DoEvents();
 
+                var agentNodes = _model.Services.ExtensionService.GetExtensionNodes("/TestCentric/Engine/TypeExtensions/IAgentLauncher");
+
                 // Create an unnamed TestCentricProject and load test specified on command line
                 if (_options.InputFiles.Count == 1)
                     _model.OpenExistingFile(_options.InputFiles[0]);
-                else if (_options.InputFiles.Count >1)
+                else if (_options.InputFiles.Count > 1)
                     _model.CreateNewProject(_options.InputFiles);
                 else if (_settings.Gui.LoadLastProject && !_options.NoLoad)
                     _model.OpenMostRecentFile();

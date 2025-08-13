@@ -76,6 +76,11 @@ namespace TestCentric.Gui
             return MessageBox.Show(message, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.OK;
         }
 
+        public static bool OkCancel(Form owner, string message, string caption)
+        {
+            return MessageBox.Show(owner, message, caption, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.OK;
+        }
+
         #endregion
 
         #region IMessageDisplay Implementation

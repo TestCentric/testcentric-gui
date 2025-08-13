@@ -4,10 +4,10 @@ Package Name                      | Latest<br>Release | Latest<br>Dev Release | 
 --------------------------------- | :---------------: | :-------------------: | :-------------:
 **TestCentric.Cake.Recipe**       | 1.3.3
 **TestCentric.GuiRunner**         | 2.0.0-beta7       | 2.0.0-dev00680        | 2.0.0-beta8
-**TestCentric.Engine**            | 2.0.0-beta7       | 2.0.0-dev00010        | 2.0.0-beta8
+**TestCentric.Engine**            | 2.0.0-beta7       | 2.0.0-dev00011        | 2.0.0-beta8
 **TestCentric.Agent.Core**        | 2.1.1             | 2.2.0-dev00011        | 2.2.0
 **TestCentric.Engine.Api**        | 2.0.0-beta7       | 2.0.0-dev00009        | 2.0.0-beta8
-**TestCentric.Extensibility**     | 3.2.0             | 4.0.0-dev00002        | 4.0.0
+**TestCentric.Extensibility**     | 3.2.0             | 4.0.0-dev00004        | 4.0.0
 **TestCentric.Extensibility.Api** |   "               |   "                   |   "
 **TestCentric.Metadata**          | 3.0.4
 **TestCentric.InternalTrace**     | 1.2.1
