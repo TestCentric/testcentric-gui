@@ -89,7 +89,11 @@ namespace TestCentric.Gui.Model.Fakes
 
         public string Description { get; }
 
-        public bool Enabled { get; }
+        public bool Enabled { get; set; }
+
+        public ExtensionStatus Status { get; }
+
+        public Exception Exception { get; }
 
         public string Path { get; }
 
@@ -102,11 +106,6 @@ namespace TestCentric.Gui.Model.Fakes
         public IEnumerable<string> GetValues(string name)
         {
             return Array.Empty<string>();
-        }
-
-        public object CreateExtensionObject(params object[] args)
-        {
-            throw new NotImplementedException();
         }
 
         public string AssemblyPath { get; }

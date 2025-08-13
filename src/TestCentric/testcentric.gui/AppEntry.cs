@@ -58,21 +58,27 @@ namespace TestCentric.Gui
             {
                 model = TestModel.CreateTestModel(options);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                MessageDisplay.Error(ex.Message);
+                MessageDisplay.Error(ex.ToString());
                 return 3;
             }
 
-            if (model.Services.ExtensionService.GetExtensionNodes("/TestCentric/Engine/TypeExtensions/IAgentLauncher").Count() == 0)
+            var loadedAgents = model.Services.ExtensionService.GetExtensionNodes("/TestCentric/Engine/TypeExtensions/IAgentLauncher")
+                .Where(n => n.Status == Extensibility.ExtensionStatus.Loaded);
+
+            if (loadedAgents.Count() == 0)
             {
                 if (!MessageDisplay.OkCancel(
-                    "Either the GUI was installed without any agents or all the installed agents have been deleted.\r\n\r\n" +
-                    "You must install at least one agent in order to be able to load or run tests.\r\n\r\n" +
-                    "Install agents using the same source (i.e. nuget or choolatey) from which you installed the GUI itself.\r\n\r\n" +
+                    "Either the GUI was installed without any agents or the installed agents have been deleted. " +
+                    "Some agents may have encountered errors in loading.\r\n\r\n" +
+                    "You must install at least one agent in order to be able to load or run tests. " +
+                    "Install agents using the same source (i.e. nuget or chocolatey) from which you installed the GUI itself." +
                     "You should select agents which match the target platforms you are using for development.\r\n\r\n" +
                     "Click 'OK' to continue with extremely limited functionality, 'Cancel' to exit."))
-                return 4;
+                {
+                    return 4;
+                }
             }
 
             log.Info("Constructing Form");
