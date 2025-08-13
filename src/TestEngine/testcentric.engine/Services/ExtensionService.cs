@@ -3,6 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -51,43 +52,27 @@ namespace TestCentric.Engine.Services
         /// <summary>
         /// Gets an enumeration of all ExtensionPoints in the engine.
         /// </summary>
-        public IEnumerable<IExtensionPoint> ExtensionPoints
-        {
-            get { return _extensionManager.ExtensionPoints; }
-        }
+        public IEnumerable<IExtensionPoint> ExtensionPoints => _extensionManager.ExtensionPoints;
 
         /// <summary>
         /// Gets an enumeration of all installed Extensions.
         /// </summary>
-        public IEnumerable<IExtensionNode> Extensions
-        {
-            get { return _extensionManager.Extensions; }
-        }
+        public IEnumerable<IExtensionNode> Extensions => _extensionManager.Extensions;
 
         /// <summary>
         /// Get an ExtensionPoint based on its unique identifying path.
         /// </summary>
-        IExtensionPoint IExtensionService.GetExtensionPoint(string path)
-        {
-            return _extensionManager.GetExtensionPoint(path);
-        }
+        IExtensionPoint IExtensionService.GetExtensionPoint(string path) => _extensionManager.GetExtensionPoint(path);
 
         /// <summary>
         /// Get an enumeration of ExtensionNodes based on their identifying path.
         /// </summary>
-        IEnumerable<IExtensionNode> IExtensionService.GetExtensionNodes(string path)
-        {
-            foreach (var node in _extensionManager.GetExtensionNodes(path))
-                yield return node;
-        }
+        IEnumerable<IExtensionNode> IExtensionService.GetExtensionNodes(string path) => _extensionManager.GetExtensionNodes(path);
 
         /// <summary>
         /// Enable or disable an extension
         /// </summary>
-        public void EnableExtension(string typeName, bool enabled)
-        {
-            _extensionManager.EnableExtension(typeName, enabled);
-        }
+        public void EnableExtension(string typeName, bool enabled) => _extensionManager.EnableExtension(typeName, enabled);
 
         #endregion
 
@@ -103,9 +88,17 @@ namespace TestCentric.Engine.Services
         }
 
         public IEnumerable<T> GetExtensions<T>()
+            where T : class
         {
+            var exceptions = new List<Exception>();
+
             foreach (var node in _extensionManager.GetExtensionNodes<T>())
-                yield return (T)node.ExtensionObject;
+            {
+                T extension = (T)node.ExtensionObject;
+
+                if (extension is not null)
+                    yield return extension;
+            }
         }
 
         #endregion
