@@ -19,7 +19,7 @@
         <ProjectReference Include="..\TestModel\TestCentric.Gui.Model.csproj" />
         <ProjectReference Include="..\TestCentric.Gui\TestCentric.Gui.csproj" />
         <ProjectReference Include="..\NUnit.UiException\NUnit.UiException.csproj" />
-        <ProjectReference Include="..\TestData\mock-assembly\mock-assembly.csproj" />
+        <ProjectReference Include="..\..\TestData\mock-assembly\mock-assembly.csproj" />
     </ItemGroup>
     
 	<ItemGroup>

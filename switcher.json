@@ -1,11 +1,9 @@
 {
-  "solution": "testcentric-gui.sln",
+  "solution": "TestCentricGuiRunner.sln",
   "solutionFolder": null,
   "mappings": {
-    "TestCentric.Engine": "../testcentric-engine/src/TestEngine/testcentric.engine/testcentric.engine.csproj",
-    "TestCentric.Engine.Api": "../TestCentric.Engine.Api/src/TestCentric.Engine.Api/TestCentric.Engine.Api.csproj",
-    "TestCentric.Extensibility": "../TestCentric.Extensibility/src/testcentric.extensibility/TestCentric.Extensibility.csproj",
-    "TestCentric.Extensibility.Api": "../TestCentric.Extensibility/src/testcentric.extensibility.api/TestCentric.Extensibility.Api.csproj"
+    "TestCentric.Extensibility": "../TestCentric.Extensibility/src/Testcentric.Extensibility/TestCentric.Extensibility.csproj",
+    "TestCentric.Extensibility.Api": "../TestCentric.Extensibility/src/TestCentric.Extensibility.api/TestCentric.Extensibility.Api.csproj"
   },
   "removeProjects": true
 }

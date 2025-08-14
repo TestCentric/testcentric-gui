@@ -26,8 +26,6 @@ BuildSettings.Initialize(
 // COMMON DEFINITIONS USED IN BOTH PACKAGES
 //////////////////////////////////////////////////////////////////////
 
-DefinePackageTests();
-
 static readonly FilePath[] ENGINE_FILES = {
         "testcentric.engine.dll", "testcentric.engine.api.dll", "testcentric.metadata.dll"};
 static readonly FilePath[] GUI_FILES = {
@@ -88,7 +86,7 @@ var nugetPackage = new NuGetPackage(
 		HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_PNG),
 		HasDirectory("tools/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG)
 	},
-	tests: PackageTests
+	tests: PackageTests.GuiTests
 );
 
 var chocolateyPackage = new ChocolateyPackage(
@@ -128,11 +126,39 @@ var chocolateyPackage = new ChocolateyPackage(
 		HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_PNG),
 		HasDirectory("tools/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG),
 	},
-	tests: PackageTests
+	tests: PackageTests.GuiTests
+);
+
+var enginePackage = new NuGetPackage(
+    id: "TestCentric.Engine",
+    //source: "src/TestEngine/testcentric.engine/testcentric.engine.csproj",
+    description: "This package provides the TestCentric Engine, used by runner applications to load and excute NUnit tests.",
+    packageContent: new PackageContent(
+        new FilePath[] { "../../LICENSE.txt", "../../testcentric.png" },
+        new DirectoryContent("lib").WithFiles(
+            "testcentric.engine.dll", "testcentric.engine.api.dll", "nunit.engine.api.dll",
+            "testcentric.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll", "TestCentric.InternalTrace.dll",
+            "testcentric.engine.pdb", "test-bed.exe", "test-bed.exe.config",
+            "test-bed.addins", "../../testcentric.nuget.addins")),
+    testRunner: new TestCentricEngineTestBed(),
+    checks: new PackageCheck[] {
+        HasFiles("LICENSE.txt", "testcentric.png"),
+        HasDirectory("lib").WithFiles(
+            "testcentric.engine.dll", "testcentric.engine.api.dll", "nunit.engine.api.dll",
+            "testcentric.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll", "TestCentric.InternalTrace.dll",
+            "testcentric.engine.pdb", "test-bed.exe", "test-bed.exe.config",
+            "test-bed.addins", "testcentric.nuget.addins")
+    },
+    tests: PackageTests.EngineTests,
+    preloadedExtensions: new[] {
+        KnownExtensions.Net462PluggableAgent.SetVersion("2.6.0-dev00011").NuGetPackage,
+        KnownExtensions.Net60PluggableAgent.SetVersion("2.5.3-dev00004").NuGetPackage,
+        KnownExtensions.Net80PluggableAgent.SetVersion("2.5.4-dev00002").NuGetPackage }
 );
 
 BuildSettings.Packages.Add(nugetPackage);
 BuildSettings.Packages.Add(chocolateyPackage);
+BuildSettings.Packages.Add(enginePackage);
 
 //////////////////////////////////////////////////////////////////////
 // PACKAGE TEST RUNNER
@@ -140,29 +166,52 @@ BuildSettings.Packages.Add(chocolateyPackage);
 
 public class GuiSelfTester : TestRunner, IPackageTestRunner
 {
+    private FilePath _executablePath;
+
+    // NOTE: When constructed as an argument to BuildSettings.Initialize(),
+    // the executable path is not yet known and should not be provided.
+    public GuiSelfTester(string executablePath = null)
+    {
+        _executablePath = executablePath;
+    }
+
+    public int RunPackageTest(string arguments)
+    {
+        if (!arguments.Contains(" --run"))
+            arguments += " --run";
+        if (!arguments.Contains(" --unattended"))
+            arguments += " --unattended";
+        if (!arguments.Contains(" --full-gui"))
+            arguments += " --full-gui";
+
+        if (_executablePath == null)
+            _executablePath = BuildSettings.OutputDirectory + "testcentric.exe";
+
+        Console.WriteLine($"Running {_executablePath} with arguments {arguments}");
+        return base.RunTest(_executablePath, arguments);
+    }
+}
+
+//////////////////////////////////////////////////////////////////////
+// TEST BED RUNNER
+//////////////////////////////////////////////////////////////////////
+
+public class TestCentricEngineTestBed : TestRunner, IPackageTestRunner
+{
 	private FilePath _executablePath;
 
-	// NOTE: When constructed as an argument to BuildSettings.Initialize(),
-	// the executable path is not yet known and should not be provided.
-	public GuiSelfTester(string executablePath = null)
+	public TestCentricEngineTestBed()
 	{
-		_executablePath = executablePath;
+		_executablePath = BuildSettings.NuGetTestDirectory + "TestCentric.Engine." + BuildSettings.PackageVersion + "/lib/test-bed.exe";
 	}
 
 	public int RunPackageTest(string arguments)
 	{
-		if (!arguments.Contains(" --run"))
-			arguments += " --run";
-		if (!arguments.Contains(" --unattended"))
-			arguments += " --unattended";
-		if (!arguments.Contains(" --full-gui"))
-			arguments += " --full-gui";
-
-		if (_executablePath == null)
-			_executablePath = BuildSettings.OutputDirectory + "testcentric.exe";
-
-		Console.WriteLine($"Running {_executablePath} with arguments {arguments}");
-		return base.RunTest(_executablePath, arguments);
+		return BuildSettings.Context.StartProcess(_executablePath, new ProcessSettings()
+		{
+			Arguments = arguments,
+			WorkingDirectory = BuildSettings.OutputDirectory
+		});
 	}
 }
 

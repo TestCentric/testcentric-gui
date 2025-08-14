@@ -1,0 +1,18 @@
+<Project>
+
+  <PropertyGroup>
+    <OutputPath>..\bin\$(Configuration)\</OutputPath>  
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <LangVersion>7</LangVersion>
+    <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
+  </PropertyGroup>
+
+  <!-- Common properties used in generating AssemblyInfo.cs. -->
+  <!-- See individual project files for other properties. -->
+  <PropertyGroup>
+    <Company>The TestCentric Project</Company>
+    <Copyright>Copyright (c) Charlie Poole and TestCentric contributors</Copyright>
+    <Product>TestCentric Engine</Product>
+  </PropertyGroup>
+  
+</Project>
