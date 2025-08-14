@@ -17,7 +17,7 @@ const string REF_ENGINE_VERSION = "2.0.0-dev00011";
 BuildSettings.Initialize(
 	context: Context,
 	title: "TestCentric.GuiRunner",
-	solutionFile: "testcentric-gui.sln",
+	solutionFile: "TestCentricRunner.sln",
 	githubRepository: "testcentric-gui",
 	exemptFiles: new [] { "Resource.cs", "TextCode.cs" }
 );
