@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 BuildSettings.Initialize(
 	Context,
 	"TestCentric.Engine",
-	solutionFile: "testcentric-engine.sln",
+	solutionFile: "TestCentric.Engine.sln",
 	githubRepository: "testcentric-engine"
 );
 

@@ -5,7 +5,7 @@
         <RootNamespace>TestCentric.Engine.TestBed</RootNamespace>
         <AssemblyName>test-bed</AssemblyName>
         <TargetFramework>net462</TargetFramework>
-        <OutputPath>..\..\bin\$(Configuration)\</OutputPath>
+        <OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     </PropertyGroup>
@@ -20,7 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\TestEngine\testcentric.engine\testcentric.engine.csproj" />
+        <ProjectReference Include="..\TestCentric.Engine\TestCentric.Engine.csproj" />
     </ItemGroup>
 
 </Project>

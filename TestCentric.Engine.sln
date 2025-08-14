@@ -29,15 +29,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mock-assembly", "src\TestEn
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "notest-assembly", "src\TestEngine\notest-assembly\notest-assembly.csproj", "{79429F2F-F2AC-4829-97F4-B55FDD037D9D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testcentric.engine", "src\TestEngine\testcentric.engine\testcentric.engine.csproj", "{0BF010FE-FA9D-4131-A832-E88C12A131DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestCentric.Engine", "src\TestEngine\TestCentric.Engine\TestCentric.Engine.csproj", "{0BF010FE-FA9D-4131-A832-E88C12A131DD}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestBed", "TestBed", "{13AD1B51-4961-4ED5-8D22-6BF50F2EBECF}"
-	ProjectSection(SolutionItems) = preProject
-		src\TestBed\test-bed.addins = src\TestBed\test-bed.addins
-		src\TestBed\TestProject.nunit = src\TestBed\TestProject.nunit
-	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "test-engine-test-bed", "src\TestBed\test-engine-test-bed.csproj", "{CD4C6A60-FA53-42A0-97D5-A0415FB19128}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestCentric.Engine.TestBed", "src\TestEngine\TestBed\TestCentric.Engine.TestBed.csproj", "{CD4C6A60-FA53-42A0-97D5-A0415FB19128}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "hung-tests", "src\TestEngine\hung-tests\hung-tests.csproj", "{CE239574-9291-41D8-8D82-2B605714DD6C}"
 EndProject
@@ -47,7 +41,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "aspnetcore-test", "src\Test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "windows-forms-test", "src\TestEngine\windows-forms-test\windows-forms-test.csproj", "{81412379-ABD5-4079-A32A-1C887FA74674}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testcentric.engine.tests", "src\TestEngine\testcentric.engine.tests\testcentric.engine.tests.csproj", "{5C9826A6-4A5C-4CE4-9BCE-4C4DB091EECB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestCentric.Engine.Tests", "src\TestEngine\TestCentric.Engine.Tests\TestCentric.Engine.Tests.csproj", "{5C9826A6-4A5C-4CE4-9BCE-4C4DB091EECB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{5EF03E03-77C4-4CF0-8FBA-E07025257A1A}"
 	ProjectSection(SolutionItems) = preProject
@@ -185,8 +179,8 @@ Global
 		{4A110EEC-7C79-4B44-9F6C-38259366076D} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
 		{79429F2F-F2AC-4829-97F4-B55FDD037D9D} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
 		{0BF010FE-FA9D-4131-A832-E88C12A131DD} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
-		{CD4C6A60-FA53-42A0-97D5-A0415FB19128} = {13AD1B51-4961-4ED5-8D22-6BF50F2EBECF}
-		{CE239574-9291-41D8-8D82-2B605714DD6C} = {13AD1B51-4961-4ED5-8D22-6BF50F2EBECF}
+		{CD4C6A60-FA53-42A0-97D5-A0415FB19128} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
+		{CE239574-9291-41D8-8D82-2B605714DD6C} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
 		{B6D3AEAE-ECDA-4047-A9BA-CC6DA3EBEDF8} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
 		{6100F27F-D346-4F18-841E-EEA2BD2CC08E} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
 		{81412379-ABD5-4079-A32A-1C887FA74674} = {EA14AF63-0F5D-4938-9C87-6EC67A961DB3}
