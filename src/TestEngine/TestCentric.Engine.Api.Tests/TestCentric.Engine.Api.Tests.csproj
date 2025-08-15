@@ -5,7 +5,7 @@
 		<TargetFrameworks>net35;net462;net6.0</TargetFrameworks>
 		<CheckEolTargetFramework>false</CheckEolTargetFramework>
 		<OutputType>Exe</OutputType>
-		<OutputPath>..\..\bin\$(Configuration)\</OutputPath>
+		<OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
 	</PropertyGroup>
 
 	<ItemGroup>

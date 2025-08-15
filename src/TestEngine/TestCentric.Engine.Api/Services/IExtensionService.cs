@@ -19,7 +19,7 @@ namespace TestCentric.Engine.Services
         IEnumerable<IExtensionPoint> ExtensionPoints { get; }
 
         /// <summary>
-        /// Gets an enumeration of all installed Extensions.
+        /// Gets an enumeration of all installed ExtensionNodes.
         /// </summary>
         IEnumerable<IExtensionNode> Extensions { get; }
 

@@ -4,9 +4,9 @@
 		<RootNamespace>TestCentric.Engine</RootNamespace>
 		<TargetFrameworks>net20;net462;netstandard2.0</TargetFrameworks>
 		<SignAssembly>true</SignAssembly>
-		<AssemblyOriginatorKeyFile>..\testcentric.snk</AssemblyOriginatorKeyFile>
+		<AssemblyOriginatorKeyFile>..\..\testcentric.snk</AssemblyOriginatorKeyFile>
 		<DebugType>Full</DebugType>
-		<OutputPath>..\..\bin\$(Configuration)</OutputPath>
+		<OutputPath>..\..\..\bin\$(Configuration)</OutputPath>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<CheckEolTargetFramework>false</CheckEolTargetFramework>
 		<LangVersion>12</LangVersion>
