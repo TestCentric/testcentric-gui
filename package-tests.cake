@@ -1,6 +1,6 @@
 public static class PackageTests
 {
-    // Tests run for the each packageb
+    // Tests run for the each package
     public static List<PackageTest> GuiTests = new List<PackageTest>();
     public static List<PackageTest> EngineTests = new List<PackageTest>();
 
@@ -16,7 +16,7 @@ public static class PackageTests
         // Tests of single assemblies targeting each runtime we support
 
         GuiAndEngineTests.Add(new PackageTest(1, "Net462Test", "Run net462 mock-assembly.dll under .NET 4.6.2",
-            "net462/mock-assembly.dll",
+            "net462/mock-assembly.dll --trace:Debug",
             MockAssemblyExpectedResult("Net462AgentLauncher")));
 
         GuiAndEngineTests.Add(new PackageTest(1, "Net35Test", "Run net35 mock-assembly.dll under .NET 4.6.2",

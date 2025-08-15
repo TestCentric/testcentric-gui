@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<RootNamespace>TestCentric.Engine</RootNamespace>
+		<TargetFrameworks>net35;net462;net6.0</TargetFrameworks>
+		<CheckEolTargetFramework>false</CheckEolTargetFramework>
+		<OutputType>Exe</OutputType>
+		<OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
+	</PropertyGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)'=='net35'">
+		<PackageReference Include="NUnit" Version="3.14.0" />
+		<PackageReference Include="NUnitLite" Version="3.14.0" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)'!='net35'">
+		<PackageReference Include="NUnit" Version="4.1.0" />
+		<PackageReference Include="NUnitLite" Version="4.1.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\TestCentric.Engine.Api\TestCentric.Engine.Api.csproj" />
+	</ItemGroup>
+
+</Project>

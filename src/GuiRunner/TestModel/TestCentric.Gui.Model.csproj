@@ -15,11 +15,11 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\TestEngine\TestCentric.Engine\TestCentric.Engine.csproj" />
+		<ProjectReference Include="..\..\TestEngine\TestCentric.Engine.Api\TestCentric.Engine.Api.csproj" />
 	</ItemGroup>
 	
     <ItemGroup>
         <PackageReference Include="Mono.Options" Version="6.12.0.148" />
-        <PackageReference Include="TestCentric.Engine.Api" Version="2.0.0-dev00009" />
         <PackageReference Include="TestCentric.Extensibility" Version="4.0.0-dev00004" />
         <PackageReference Include="TestCentric.InternalTrace" Version="1.2.1" />
     </ItemGroup>

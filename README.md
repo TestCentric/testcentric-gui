@@ -1,26 +1,24 @@
-# TestCentric Runner for NUnit - Version 1.0
+# TestCentric Runner  - Version 2.0
 
 [![Build status](https://ci.appveyor.com/api/projects/status/i7ymql47e8bo2rel/branch/main?svg=true)](https://ci.appveyor.com/project/CharliePoole/testcentric-gui/branch/main)
 
-The **TestCentric Runner for NUnit** (aka **TestCentric**) is a GUI runner aimed at eventually supporting a range of .NET testing frameworks. In the version 1.0 release, we are concentrating on support of `NUnit` tests.
+The **TestCentric Runner** (aka **TestCentric**) is a GUI runner aimed that allows you to run `NUnit` test, but also aimed at supporting additional .NET testing frameworks in the future.
+
+The **TestCentric Test Engine** is included with the GUI and is also available as an independent package.
 
 ## Features
-
-The initial release is based on the layout and feature set of the of the original NUnit GUI, with the internals modified so as to run NUnit 3 tests. See [CHANGES](./CHANGES.txt) for a list of the most important changes. See [ROADMAP](./ROADMAP.md) for info about future plans.
 
 ## Getting Started
 
 ### Prerequisites
 
-**TestCentric** requires .NET 4.5 or later in order to function. Your projects whose tests will run under **TestCentric** should already have some version of the NUnit framework installed.
+**TestCentric** requires .NET 4.6.2 or later in order to function. Your projects whose tests will run under **TestCentric** should already have some version of the NUnit framework installed.
 
 ### Installation
 
-**TestCentric** is released in two package formats, **zip** and **chocolatey**, both available from the [GitHub project](https://github.com/TestCentric/testcentric-gui/releases) site. The **chocolatey** package is also available at [chocolatey.org](https://chocolatey.org/packages/testcentric-gui).
+**TestCentric** is released in two package formats, **nuget** and **chocolatey**, both available from the [GitHub project](https://github.com/TestCentric/testcentric-gui/releases) site. The **nuget** package is also available at [nuget.org](https://www.nuget.org/packages/TestCentric.GuiRunner) and the **chocolatey** package is available at [chocolatey.org](https://chocolatey.org/packages/testcentric-gui).
 
 The **chocolatey** package provides the best user experience and is the recommended way to install **TestCentric**. Follow the directions at [chocolatey.org](https://chocolatey.org/packages/testcentric-gui) or see the [INSTALL](./INSTALL.md) document. If you wish to install any NUnit engine extensions for use with the GUI, simply install them using `choco.exe` in the same way as the GUI.
-
-To use the **zip** distribution, you should simply unzip the contents into a convenient directory and create your own shortcut to `testcentric.exe`. To use it from the command-line, place the install directory on your path. See the [INSTALL](./INSTALL.md) document for details, including installation of pre-release versions of **TestCentric**.
 
 ## Versioning
 
@@ -30,4 +28,4 @@ To use the **zip** distribution, you should simply unzip the contents into a con
 
 **TestCentric** is an Open Source software, released under the MIT / X11 license. See [LICENSE](./LICENSE.txt) for a copy of the license.
 
-**TestCentric** bundles a modified copy of the NUnit test engine, which is also licensed under the MIT / X11 license. In addition, the first version of the GUI is based in part on the NUnit 2.x GUI runner, released under the NUnit license. See [NOTICES](./NOTICES.txt) for copyright information.
+The **TestCentric Engine** is based on the NUnit test engine, which is also licensed under the MIT / X11 license. See [NOTICES](./NOTICES.txt) for copyright information.

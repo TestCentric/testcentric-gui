@@ -49,7 +49,7 @@ private const string GUI_DESCRIPTION =
 // DEFINE PACKAGES
 //////////////////////////////////////////////////////////////////////
 
-var nugetPackage = new NuGetPackage(
+var NuGetGuiPackage = new NuGetPackage(
 	id: "TestCentric.GuiRunner",
 	description: GUI_DESCRIPTION,
 	packageContent: new PackageContent()
@@ -89,7 +89,7 @@ var nugetPackage = new NuGetPackage(
 	tests: PackageTests.GuiTests
 );
 
-var chocolateyPackage = new ChocolateyPackage(
+var ChocolateyGuiPackage = new ChocolateyPackage(
 	id: "testcentric-gui",
 	description: GUI_DESCRIPTION,
 	packageContent: new PackageContent()
@@ -129,7 +129,7 @@ var chocolateyPackage = new ChocolateyPackage(
 	tests: PackageTests.GuiTests
 );
 
-var enginePackage = new NuGetPackage(
+var EnginePackage = new NuGetPackage(
     id: "TestCentric.Engine",
     //source: "src/TestEngine/testcentric.engine/testcentric.engine.csproj",
     description: "This package provides the TestCentric Engine, used by runner applications to load and excute NUnit tests.",
@@ -156,9 +156,23 @@ var enginePackage = new NuGetPackage(
         KnownExtensions.Net80PluggableAgent.SetVersion("2.5.4-dev00002").NuGetPackage }
 );
 
-BuildSettings.Packages.Add(nugetPackage);
-BuildSettings.Packages.Add(chocolateyPackage);
-BuildSettings.Packages.Add(enginePackage);
+var EngineApiPackage = new NuGetPackage(
+    id: "TestCentric.Engine.Api",
+    title: "TestCentric Engine Api Assembly",
+    description: "This package includes the testcentric.agent.api assembly, containing the interfaces used in creating pluggable agents.",
+    basePath: "bin/" + BuildSettings.Configuration,
+    source: "nuget/TestCentric.Engine.Api.nuspec",
+    checks: new PackageCheck[] {
+        HasFiles("LICENSE.txt", "testcentric.png"),
+        HasDirectory("lib/net20").WithFiles("TestCentric.Engine.Api.dll"),
+        HasDirectory("lib/net462").WithFiles("TestCentric.Engine.Api.dll"),
+        HasDirectory("lib/netstandard2.0").WithFiles("Testcentric.Engine.Api.dll")
+    });
+
+BuildSettings.Packages.Add(NuGetGuiPackage);
+BuildSettings.Packages.Add(ChocolateyGuiPackage);
+BuildSettings.Packages.Add(EnginePackage);
+//BuildSettings.Packages.Add(EngineApiPackage);
 
 //////////////////////////////////////////////////////////////////////
 // PACKAGE TEST RUNNER
@@ -223,14 +237,14 @@ Task("PackageNuGet")
 	.IsDependentOn("Build")
 	.Does(() =>
 	{
-		nugetPackage.BuildVerifyAndTest();
+		NuGetGuiPackage.BuildVerifyAndTest();
 	});
 
 Task("PackageChocolatey")
 	.IsDependentOn("Build")
 	.Does(() =>
 	{
-		chocolateyPackage.BuildVerifyAndTest();
+		ChocolateyGuiPackage.BuildVerifyAndTest();
 	});
 
 //////////////////////////////////////////////////////////////////////
