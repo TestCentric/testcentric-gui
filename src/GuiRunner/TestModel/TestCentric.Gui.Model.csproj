@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	
     <PropertyGroup>
         <RootNamespace>TestCentric.Gui.Model</RootNamespace>
@@ -15,8 +15,8 @@
 	
     <ItemGroup>
 		<PackageReference Include="Mono.Options" Version="6.12.0.148" />
-		<PackageReference Include="TestCentric.Extensibility" Version="4.0.0-dev00004" />
-		<PackageReference Include="TestCentric.InternalTrace" Version="1.2.1" />
+		<PackageReference Include="TestCentric.Extensibility" Version="$(ExtensibilityVersion)" />
+		<PackageReference Include="TestCentric.InternalTrace" Version="$(InternalTraceVersion)" />
 	</ItemGroup>
 	
 </Project>

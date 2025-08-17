@@ -29,10 +29,9 @@
 	</ItemGroup>
 	
     <ItemGroup>
-        <PackageReference Include="NUnit.Engine.Api" Version="3.18.3.0" />
-        <PackageReference Include="TestCentric.Metadata" Version="3.0.4" />
-        <PackageReference Include="TestCentric.InternalTrace" Version="1.2.1" />
-	    <PackageReference Include="TestCentric.Extensibility" Version="4.0.0-dev00004" />
+        <PackageReference Include="TestCentric.Metadata" Version="$(MetadataVersion)" />
+        <PackageReference Include="TestCentric.InternalTrace" Version="$(InternalTraceVersion)" />
+	    <PackageReference Include="TestCentric.Extensibility" Version="$(ExtensibilityVersion)" />
     </ItemGroup>
 	
 </Project>

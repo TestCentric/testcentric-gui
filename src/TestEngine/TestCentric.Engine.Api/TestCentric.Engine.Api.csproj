@@ -27,8 +27,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="TestCentric.Extensibility.Api" Version="4.0.0-dev00004" />
-		<PackageReference Include="TestCentric.InternalTrace" Version="1.2.1" />
+		<PackageReference Include="TestCentric.Extensibility.Api" Version="$(ExtensibilityVersion)" />
+		<PackageReference Include="TestCentric.InternalTrace" Version="$(InternalTraceVersion)" />
 	</ItemGroup>
 
 </Project>

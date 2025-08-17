@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 	
 	<PropertyGroup>
 		<RootNamespace>TestCentric.Gui</RootNamespace>
@@ -18,9 +18,9 @@
     </ItemGroup>
        
 	<ItemGroup>
-		<PackageReference Include="NSubstitute" Version="5.3.0" />
-		<PackageReference Include="NUnit" Version="4.1.0" />
-		<PackageReference Include="NUnitLite" Version="4.1.0" />
+		<PackageReference Include="NSubstitute" Version="$(NSubstituteVersion)" />
+		<PackageReference Include="NUnit" Version="$(NUnitVersion)" />
+		<PackageReference Include="NUnitLite" Version="$(NUnitVersion)" />
 	</ItemGroup>
 	
 </Project>
