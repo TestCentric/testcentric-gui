@@ -4,39 +4,23 @@
 		<RootNamespace>TestCentric.Gui</RootNamespace>
 		<AssemblyName>TestCentric.Gui.Tests</AssemblyName>
 		<OutputType>Exe</OutputType>
+		<UseWindowsForms>true</UseWindowsForms>
 		<TargetFramework>net462</TargetFramework>
-		<OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
         <AssemblyTitle>TestCentric GUI Tests</AssemblyTitle>
     </PropertyGroup>
 	
-	<ItemGroup>
-		<Reference Include="System.Windows.Forms" />
-	</ItemGroup>
-    
 	<ItemGroup>
         <ProjectReference Include="..\TestModel\TestCentric.Gui.Model.csproj" />
         <ProjectReference Include="..\TestCentric.Gui\TestCentric.Gui.csproj" />
         <ProjectReference Include="..\NUnit.UiException\NUnit.UiException.csproj" />
         <ProjectReference Include="..\..\TestData\mock-assembly\mock-assembly.csproj" />
     </ItemGroup>
-    
+       
 	<ItemGroup>
-        <None Include="TestCentric.Gui.Tests.addins">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-    </ItemGroup>
-    
-	<ItemGroup>
-        <PackageReference Include="NSubstitute" Version="5.3.0" />
+		<PackageReference Include="NSubstitute" Version="5.3.0" />
 		<PackageReference Include="NUnit" Version="4.1.0" />
 		<PackageReference Include="NUnitLite" Version="4.1.0" />
-		<PackageReference Include="NUnit.Extension.NUnitProjectLoader" Version="3.8.0" />
-        <PackageReference Include="NUnit.Extension.NUnitV2Driver" Version="3.8.0" />
-        <PackageReference Include="NUnit.Extension.NUnitV2ResultWriter" Version="3.8.0" />
-        <PackageReference Include="NUnit.Extension.VSProjectLoader" Version="3.8.0" />
-		<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.6.0" />
 	</ItemGroup>
 	
 </Project>

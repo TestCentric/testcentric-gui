@@ -4,17 +4,11 @@
         <RootNamespace>TestCentric.Engine</RootNamespace>
         <TargetFrameworks>net462</TargetFrameworks>
         <OutputType>Exe</OutputType>
-        <SignAssembly>true</SignAssembly>
-        <AssemblyOriginatorKeyFile>..\..\testcentric.snk</AssemblyOriginatorKeyFile>
-        <DebugType>Full</DebugType>
-        <OutputPath>..\..\..\bin\$(Configuration)\engine-tests\</OutputPath>
-        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
      </PropertyGroup>
 
     <!-- Properties used in generating AssemblyInfo.cs for this project -->
     <PropertyGroup>
         <AssemblyTitle>TestCentric Engine Tests</AssemblyTitle>
-        <Version Condition="'$(Version)'==''">2.0.0-IDE</Version>
         <PlatformTarget>AnyCPU</PlatformTarget>
     </PropertyGroup>
 	

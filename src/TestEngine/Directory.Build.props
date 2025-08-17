@@ -1,18 +1,12 @@
+<!-- Directory.Build.props for TestCentric Engine -->
 <Project>
 
-  <PropertyGroup>
-    <OutputPath>..\bin\$(Configuration)\</OutputPath>  
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <LangVersion>7</LangVersion>
-    <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
-  </PropertyGroup>
+    <Import Project="$(MSBuildThisFileDirectory)../Directory.Build.props" />
 
-  <!-- Common properties used in generating AssemblyInfo.cs. -->
-  <!-- See individual project files for other properties. -->
-  <PropertyGroup>
-    <Company>The TestCentric Project</Company>
-    <Copyright>Copyright (c) Charlie Poole and TestCentric contributors</Copyright>
-    <Product>TestCentric Engine</Product>
-  </PropertyGroup>
-  
+	<PropertyGroup>
+		<!-- Signing Assemblies -->
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\..\testcentric.snk</AssemblyOriginatorKeyFile>
+	</PropertyGroup>
+	
 </Project>

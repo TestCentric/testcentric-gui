@@ -4,9 +4,7 @@
         <RootNamespace>NUnit.UiException.Tests</RootNamespace>
 	    <OutputType>Exe</OutputType>
 	    <TargetFramework>net462</TargetFramework>
-        <OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     </PropertyGroup>
     
 	<ItemGroup>
@@ -25,9 +23,8 @@
     
 	<ItemGroup>
         <PackageReference Include="NSubstitute" Version="5.3.0" />
-	    <PackageReference Include="NUnit" Version="4.1.0" />
-	    <PackageReference Include="NUnitLite" Version="4.1.0" />
-	    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.6.0" />
+		<PackageReference Include="NUnit" Version="4.1.0" />
+		<PackageReference Include="NUnitLite" Version="4.1.0" />
     </ItemGroup>
 	
 </Project>

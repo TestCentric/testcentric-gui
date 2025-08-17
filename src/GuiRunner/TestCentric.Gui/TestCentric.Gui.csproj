@@ -4,18 +4,12 @@
 		<RootNamespace>TestCentric.Gui</RootNamespace>
 		<AssemblyName>TestCentric.Gui.Runner</AssemblyName>
 		<TargetFramework>net462</TargetFramework>
-		<OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
         <AssemblyTitle>TestCentric Runner</AssemblyTitle>
         <Description>TestCentric GUI Implementation</Description>
         <UseWindowsForms>true</UseWindowsForms>
     </PropertyGroup>
 	
-	<ItemGroup>
-		<Reference Include="System.Windows.Forms" />
-	</ItemGroup>
-    
 	<ItemGroup>
         <ProjectReference Include="..\TestModel\TestCentric.Gui.Model.csproj" />
         <ProjectReference Include="..\NUnit.UiException\NUnit.UiException.csproj" />

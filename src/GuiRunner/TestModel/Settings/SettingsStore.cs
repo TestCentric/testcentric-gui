@@ -26,6 +26,7 @@ namespace TestCentric.Gui.Model.Settings
 
         private string _settingsFile;
         private bool _writeable;
+        private object _myLock;
 
         /// <summary>
         /// Construct a SettingsStore without a backing file - used for testing.
@@ -41,6 +42,7 @@ namespace TestCentric.Gui.Model.Settings
         {
             _settingsFile = Path.GetFullPath(settingsFile);
             _writeable = writeable;
+            _myLock = new object();
         }
 
         public void LoadSettings()
@@ -83,52 +85,55 @@ namespace TestCentric.Gui.Model.Settings
             if (!_writeable || _settings.Keys.Count <= 0)
                 return;
 
-            try
+            lock (_myLock)
             {
-                string dirPath = Path.GetDirectoryName(_settingsFile);
-                if (!Directory.Exists(dirPath))
-                    Directory.CreateDirectory(dirPath);
-
-                var stream = new MemoryStream();
-                using (var writer = new XmlTextWriter(stream, Encoding.UTF8))
+                try
                 {
-                    writer.Formatting = Formatting.Indented;
+                    string dirPath = Path.GetDirectoryName(_settingsFile);
+                    if (!Directory.Exists(dirPath))
+                        Directory.CreateDirectory(dirPath);
 
-                    writer.WriteProcessingInstruction("xml", "version=\"1.0\"");
-                    writer.WriteStartElement("NUnitSettings");
-                    writer.WriteStartElement("Settings");
-
-                    List<string> keys = new List<string>(_settings.Keys);
-                    keys.Sort();
-
-                    foreach (string name in keys)
+                    var stream = new MemoryStream();
+                    using (var writer = new XmlTextWriter(stream, Encoding.UTF8))
                     {
-                        object val = GetSetting(name);
-                        if (val != null)
+                        writer.Formatting = Formatting.Indented;
+
+                        writer.WriteProcessingInstruction("xml", "version=\"1.0\"");
+                        writer.WriteStartElement("NUnitSettings");
+                        writer.WriteStartElement("Settings");
+
+                        List<string> keys = new List<string>(_settings.Keys);
+                        keys.Sort();
+
+                        foreach (string name in keys)
                         {
-                            writer.WriteStartElement("Setting");
-                            writer.WriteAttributeString("name", name);
-                            writer.WriteAttributeString("value",
-                                TypeDescriptor.GetConverter(val).ConvertToInvariantString(val));
-                            writer.WriteEndElement();
+                            object val = GetSetting(name);
+                            if (val != null)
+                            {
+                                writer.WriteStartElement("Setting");
+                                writer.WriteAttributeString("name", name);
+                                writer.WriteAttributeString("value",
+                                    TypeDescriptor.GetConverter(val).ConvertToInvariantString(val));
+                                writer.WriteEndElement();
+                            }
                         }
+
+                        writer.WriteEndElement();
+                        writer.WriteEndElement();
+                        writer.Flush();
+
+                        var reader = new StreamReader(stream, Encoding.UTF8, true);
+                        stream.Seek(0, SeekOrigin.Begin);
+                        var contents = reader.ReadToEnd();
+                        File.WriteAllText(_settingsFile, contents, Encoding.UTF8);
                     }
-
-                    writer.WriteEndElement();
-                    writer.WriteEndElement();
-                    writer.Flush();
-
-                    var reader = new StreamReader(stream, Encoding.UTF8, true);
-                    stream.Seek(0, SeekOrigin.Begin);
-                    var contents = reader.ReadToEnd();
-                    File.WriteAllText(_settingsFile, contents, Encoding.UTF8);
                 }
-            }
-            catch (Exception)
-            {
-                // So we won't try this again
-                _writeable = false;
-                throw;
+                catch (Exception)
+                {
+                    // So we won't try this again
+                    _writeable = false;
+                    throw;
+                }
             }
         }
 

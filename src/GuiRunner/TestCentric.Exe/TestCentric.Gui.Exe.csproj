@@ -7,16 +7,8 @@
 		<TargetFramework>net462</TargetFramework>
 		<OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
         <AssemblyTitle>TestCentric Runner</AssemblyTitle>
         <Description>GUI Runner Executable</Description>
-    </PropertyGroup>
-	
-	<ItemGroup>
-		<Reference Include="System.Windows.Forms" />
-	</ItemGroup>
-    
-	<PropertyGroup>
         <ApplicationIcon>..\..\..\testcentric.ico</ApplicationIcon>
     </PropertyGroup>
     

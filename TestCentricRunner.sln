@@ -85,6 +85,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GuiRunner", "GuiRunner", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestEngine", "TestEngine", "{1A305405-5A4D-4383-94C2-7A319AD68994}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCentric.Engine", "src\TestEngine\testcentric.engine\TestCentric.Engine.csproj", "{E9112529-59C4-A3B1-54C8-603F5FBA417A}"
 EndProject
