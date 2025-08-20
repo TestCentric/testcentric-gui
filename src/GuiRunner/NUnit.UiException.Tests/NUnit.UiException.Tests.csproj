@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    
+	<PropertyGroup>
+        <RootNamespace>NUnit.UiException.Tests</RootNamespace>
+	    <OutputType>Exe</OutputType>
+	    <TargetFramework>net462</TargetFramework>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    </PropertyGroup>
+    
+	<ItemGroup>
+        <Reference Include="System.Windows.Forms" />
+    </ItemGroup>
+    
+	<ItemGroup>
+        <ProjectReference Include="..\NUnit.UiException\NUnit.UiException.csproj" />
+    </ItemGroup>
+    
+	<ItemGroup>
+        <EmbeddedResource Include="data\Basic.cs" />
+        <EmbeddedResource Include="data\HelloWorld.txt" />
+        <EmbeddedResource Include="data\TextCode.txt" />
+    </ItemGroup>
+    
+	<ItemGroup>
+        <PackageReference Include="NSubstitute" Version="$(NSubstituteVersion)" />
+		<PackageReference Include="NUnit" Version="[$(NUnitVersion)]" />
+		<PackageReference Include="NUnitLite" Version="$(NUnitVersion)" />
+    </ItemGroup>
+	
+</Project>

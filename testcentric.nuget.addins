@@ -1,0 +1,6 @@
+# nuget v2 layout
+../../TestCentric.Extension.*/**/tools/
+../../NUnit.Extension.*/**/tools/
+# nuget v3 layout
+../../../TestCentric.Extension.*/**/tools/
+../../../NUnit.Extension.*/**/tools/

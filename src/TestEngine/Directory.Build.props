@@ -1,0 +1,12 @@
+<!-- Directory.Build.props for TestCentric Engine -->
+<Project>
+
+    <Import Project="$(MSBuildThisFileDirectory)../Directory.Build.props" />
+
+	<PropertyGroup>
+		<!-- Signing Assemblies -->
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\..\testcentric.snk</AssemblyOriginatorKeyFile>
+	</PropertyGroup>
+	
+</Project>

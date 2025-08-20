@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	
+	<PropertyGroup>
+		<RootNamespace>TestCentric.Gui</RootNamespace>
+		<AssemblyName>TestCentric.Gui.Tests</AssemblyName>
+		<OutputType>Exe</OutputType>
+		<UseWindowsForms>true</UseWindowsForms>
+		<TargetFramework>net462</TargetFramework>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AssemblyTitle>TestCentric GUI Tests</AssemblyTitle>
+    </PropertyGroup>
+	
+	<ItemGroup>
+        <ProjectReference Include="..\TestModel\TestCentric.Gui.Model.csproj" />
+        <ProjectReference Include="..\TestCentric.Gui\TestCentric.Gui.csproj" />
+        <ProjectReference Include="..\NUnit.UiException\NUnit.UiException.csproj" />
+        <ProjectReference Include="..\..\TestData\mock-assembly\mock-assembly.csproj" />
+    </ItemGroup>
+       
+	<ItemGroup>
+		<PackageReference Include="NSubstitute" Version="$(NSubstituteVersion)" />
+		<PackageReference Include="NUnit" Version="$(NUnitVersion)" />
+		<PackageReference Include="NUnitLite" Version="$(NUnitVersion)" />
+	</ItemGroup>
+	
+</Project>

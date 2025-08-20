@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<RootNamespace>TestCentric.Gui</RootNamespace>
+		<AssemblyName>testcentric</AssemblyName>
+		<TargetFramework>net462</TargetFramework>
+		<OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <AssemblyTitle>TestCentric Runner</AssemblyTitle>
+        <Description>GUI Runner Executable</Description>
+        <ApplicationIcon>..\..\..\testcentric.ico</ApplicationIcon>
+    </PropertyGroup>
+    
+	<ItemGroup>
+        <ProjectReference Include="..\TestCentric.Gui\TestCentric.Gui.csproj" />
+    </ItemGroup>
+    
+	<ItemGroup>
+        <Content Include="..\..\testcentric.ico">
+            <Link>testcentric.ico</Link>
+        </Content>
+    </ItemGroup>
+	
+</Project>

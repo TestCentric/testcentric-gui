@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<RootNamespace>NUnit.Tests</RootNamespace>
+		<TargetFrameworks>net35;net462;netcoreapp2.1;netcoreapp3.1;net5.0;net6.0;net7.0</TargetFrameworks>
+		<OutputPath>..\..\..\bin\$(Configuration)\</OutputPath>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<CheckEolTargetFramework>false</CheckEolTargetFramework>
+		<NugetAudit>false</NugetAudit>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="NUnit" Version="$(NUnitVersion)" />
+	</ItemGroup>
+
+</Project>

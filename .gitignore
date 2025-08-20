@@ -121,9 +121,6 @@ TestResult.xml
 # Package Directory
 package
 
-# Temporary Directory for Engine Installation
-tempEngineInstall
-
 # Tools pulled from nuget
 tools
 !tools/packages.config

@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	
+    <PropertyGroup>
+        <RootNamespace>NUnit.UiException</RootNamespace>
+        <TargetFramework>net462</TargetFramework>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<UseWindowsForms>true</UseWindowsForms>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <Compile Remove="data\TextCode.cs" />
+    </ItemGroup>
+	
+</Project>

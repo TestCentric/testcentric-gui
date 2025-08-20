@@ -11,6 +11,7 @@ updates:
       interval: "weekly"
     ignore:
       - dependency-name: NUnit
-      - dependency-name: NUnitLite
+      - dependency-name: NUnit.*
       - dependency-name: NUnit.Extension.*
+      - dependency-name: NUnitLite
       - dependency-name: TestCentric.*
