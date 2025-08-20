@@ -172,7 +172,7 @@ var EngineApiPackage = new NuGetPackage(
 BuildSettings.Packages.Add(NuGetGuiPackage);
 BuildSettings.Packages.Add(ChocolateyGuiPackage);
 BuildSettings.Packages.Add(EnginePackage);
-//BuildSettings.Packages.Add(EngineApiPackage);
+BuildSettings.Packages.Add(EngineApiPackage);
 
 //////////////////////////////////////////////////////////////////////
 // PACKAGE TEST RUNNER
