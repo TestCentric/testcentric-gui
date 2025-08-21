@@ -3,7 +3,7 @@
 Package Name                      | Latest<br>Release | Latest<br>Dev Release | Next<br>Release
 --------------------------------- | :-----------: | :-------------------: | :-------------:
 **TestCentric.Cake.Recipe**       | 1.3.3
-**TestCentric.GuiRunner**         | 2.0.0-beta7   | 2.0.0-dev01646  | 2.0.0-beta8
+**TestCentric.GuiRunner**         | 2.0.0-beta7   | 2.0.0-dev01647  | 2.0.0-beta8
 **TestCentric.Engine**            |   "           |   "             |   "
 **TestCentric.Engine.Api**        |   "           |   "             |   "
 **TestCentric.Agent.Core**        | 2.1.1         | 2.2.0-dev00011  | 2.2.0
