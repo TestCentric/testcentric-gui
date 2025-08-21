@@ -102,7 +102,15 @@ namespace TestCentric.Gui.Views
 
             treeView.AfterSelect += (s, e) => SelectedNodeChanged?.Invoke(e.Node);
 
-            treeView.AfterCheck += (s, e) => AfterCheck?.Invoke(e.Node);
+            treeView.AfterCheck += (s, e) =>
+            {
+                // Update checked state of all child nodes if action is triggered by user
+                // But not if triggered programmatically. For example while restoring VisualState or while setting child nodes
+                if (e.Action == TreeViewAction.ByMouse || e.Action == TreeViewAction.ByKeyboard)
+                    SetCheckedStateOfChildNodes(e.Node, e.Node.Checked);
+
+                AfterCheck?.Invoke(e.Node);
+            };
         }
 
         #region Properties
@@ -270,6 +278,15 @@ namespace TestCentric.Gui.Views
         #endregion
 
         #region Helper Methods
+
+        private void SetCheckedStateOfChildNodes(TreeNode node, bool isChecked)
+        {
+            foreach (TreeNode childNode in node.Nodes)
+            {
+                childNode.Checked = node.Checked;
+                SetCheckedStateOfChildNodes(childNode, isChecked);
+            }
+        }
 
         private IList<TreeNode> GetCheckedNodes()
         {
