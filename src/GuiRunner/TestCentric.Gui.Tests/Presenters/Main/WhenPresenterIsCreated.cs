@@ -48,7 +48,7 @@ namespace TestCentric.Gui.Presenters.Main
             _settings.Gui.TestTree.DisplayFormat = displayFormat;
 
             // 2. Act
-            _presenter = new TestCentricPresenter(_view, _model, new CommandLineOptions());
+            _presenter = new TestCentricPresenter(_view, _model, new GuiOptions());
 
             // 3. Assert
             _view.DisplayFormat.Received().SelectedItem = displayFormat;
@@ -65,7 +65,7 @@ namespace TestCentric.Gui.Presenters.Main
             _settings.Gui.TestTree.NUnitGroupBy = groupBy;
 
             // 2. Act
-            _presenter = new TestCentricPresenter(_view, _model, new CommandLineOptions());
+            _presenter = new TestCentricPresenter(_view, _model, new GuiOptions());
 
             // 3. Assert
             _view.NUnitGroupBy.Received().SelectedItem = groupBy;
@@ -81,7 +81,7 @@ namespace TestCentric.Gui.Presenters.Main
             _settings.Gui.TestTree.FixtureList.GroupBy = groupBy;
 
             // 2. Act
-            _presenter = new TestCentricPresenter(_view, _model, new CommandLineOptions());
+            _presenter = new TestCentricPresenter(_view, _model, new GuiOptions());
 
             // 3. Assert
             _view.FixtureListGroupBy.Received().SelectedItem = groupBy;
@@ -97,7 +97,7 @@ namespace TestCentric.Gui.Presenters.Main
             _settings.Gui.TestTree.TestList.GroupBy = groupBy;
 
             // 2. Act
-            _presenter = new TestCentricPresenter(_view, _model, new CommandLineOptions());
+            _presenter = new TestCentricPresenter(_view, _model, new GuiOptions());
 
             // 3. Assert
             _view.TestListGroupBy.Received().SelectedItem = groupBy;
@@ -111,7 +111,7 @@ namespace TestCentric.Gui.Presenters.Main
             _settings.Gui.TestTree.ShowFilter = filterIsVisible;
 
             // 2. Act
-            _presenter = new TestCentricPresenter(_view, _model, new CommandLineOptions());
+            _presenter = new TestCentricPresenter(_view, _model, new GuiOptions());
 
             // 3. Assert
             _view.ShowHideFilterButton.Received().Checked = filterIsVisible;
@@ -127,7 +127,7 @@ namespace TestCentric.Gui.Presenters.Main
             _view.TreeView.ShowCheckBoxes.Checked.Returns(checkBoxVisible);
 
             // 2. Act
-            _presenter = new TestCentricPresenter(_view, _model, new CommandLineOptions());
+            _presenter = new TestCentricPresenter(_view, _model, new GuiOptions());
 
             // 3. Assert
             (runSelectedTestsButton as IToolTip).Received().ToolTipText = expectedTooltip;

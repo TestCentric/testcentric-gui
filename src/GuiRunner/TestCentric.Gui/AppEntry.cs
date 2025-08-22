@@ -30,7 +30,7 @@ namespace TestCentric.Gui
         public static int Main(string[] args)
         {
             Application.EnableVisualStyles();
-            var options = new CommandLineOptions(args);
+            var options = new GuiOptions(args);
 
             if (options.ShowHelp)
             {
@@ -114,7 +114,7 @@ namespace TestCentric.Gui
             return 0;
         }
 
-        private static string GetHelpText(CommandLineOptions options)
+        private static string GetHelpText(GuiOptions options)
         {
             StringWriter writer = new StringWriter();
 
@@ -129,7 +129,7 @@ namespace TestCentric.Gui
             writer.WriteLine("   --noload option is specified");
             writer.WriteLine();
             writer.WriteLine("Options:");
-            options.WriteOptionDescriptions(writer);
+            //options.WriteOptionDescriptions(writer);
 
             return writer.GetStringBuilder().ToString();
         }

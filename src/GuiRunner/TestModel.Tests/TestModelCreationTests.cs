@@ -26,7 +26,7 @@ namespace TestCentric.Gui.Model
         public void CreateTestModel(params string[] args)
         {
             ITestEngine engine = new MockTestEngine();
-            var options = new CommandLineOptions(args);
+            var options = new GuiOptions(args);
             var model = TestModel.CreateTestModel(engine, options);
 
             Assert.That(model, Is.Not.Null, "Unable to create TestModel");

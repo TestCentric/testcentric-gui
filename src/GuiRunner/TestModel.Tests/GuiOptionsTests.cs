@@ -6,20 +6,19 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using NUnit.Framework;
 
 namespace TestCentric.Gui.Tests
 {
     [TestFixture]
-    public class CommandLineTests
+    public class GuiOptionsTests
     {
         [TestCase]
         [TestCase("tests.dll")]
         [TestCase("one.dll", "two.dll", "three.dll")]
         public void InputFiles(params string[] files)
         {
-            var options = new CommandLineOptions(files);
+            var options = new GuiOptions(files);
 
             Assert.That(options.InputFiles.Count, Is.EqualTo(files.Length));
             for (int i = 0; i < files.Length; i++)
@@ -38,7 +37,7 @@ namespace TestCentric.Gui.Tests
         public void DefaultOptionValues(string propertyName, object val)
         {
             var property = GetPropertyInfo(propertyName);
-            var options = new CommandLineOptions();
+            var options = new GuiOptions();
 
             Assert.That(property.GetValue(options, null), Is.EqualTo(val));
         }
@@ -65,7 +64,7 @@ namespace TestCentric.Gui.Tests
         public void ValidOptionsAreRecognized(string propertyName, string option, object expected = null)
         {
             var property = GetPropertyInfo(propertyName);
-            var options = new CommandLineOptions(option);
+            var options = new GuiOptions(option);
 
             if (expected == null)
             {
@@ -80,7 +79,7 @@ namespace TestCentric.Gui.Tests
         [Test]
         public void SingleTestParameter()
         {
-            var options = new CommandLineOptions("--param:X=5");
+            var options = new GuiOptions("--param:X=5");
             Assert.That(options.ErrorMessages, Is.Empty);
             Assert.That(options.TestParameters, Is.EqualTo(new Dictionary<string, string>() { { "X", "5" } }));
             Assert.That(options.TestParameters["X"], Is.EqualTo("5"));
@@ -89,7 +88,7 @@ namespace TestCentric.Gui.Tests
         [Test]
         public void MultipleTestParameters()
         {
-            var options = new CommandLineOptions("--param:X=5", "-p:Y=7");
+            var options = new GuiOptions("--param:X=5", "-p:Y=7");
             Assert.That(options.ErrorMessages, Is.Empty);
             Assert.That(options.TestParameters, Is.EqualTo(new Dictionary<string, string>() { { "X", "5" }, { "Y", "7" } }));
             Assert.That(options.TestParameters["X"], Is.EqualTo("5"));
@@ -99,29 +98,20 @@ namespace TestCentric.Gui.Tests
         [TestCase("--agents")]
         [TestCase("--trace")]
         [TestCase("--param")]
-        public void InvalidOptionsAreDetectedByMonoOptions(string option)
-        {
-            // We would prefer to handle all errors ourselves so
-            // this will eventually change. The test documents
-            // the current behavior.
-            Assert.Throws<Mono.Options.OptionException>(
-                () => new CommandLineOptions(option));
-        }
-
         [TestCase("--assembly:nunit.tests.dll")]
         [TestCase("--garbage")]
         [TestCase("--agents:XYZ")]
         [TestCase("--trace:Something")]
         public void InvalidOptionsAreDetected(string option)
         {
-            var options = new CommandLineOptions(option);
+            var options = new GuiOptions(option);
             Assert.That(options.Validate(), Is.False);
             Assert.That(options.ErrorMessages.Count, Is.EqualTo(1));
         }
 
         private static PropertyInfo GetPropertyInfo(string propertyName)
         {
-            PropertyInfo property = typeof(CommandLineOptions).GetProperty(propertyName);
+            PropertyInfo property = typeof(GuiOptions).GetProperty(propertyName);
             Assert.That(property, Is.Not.Null, $"The property '{propertyName}' is not defined");
             return property;
         }

@@ -19,7 +19,7 @@ namespace TestCentric.Gui.Presenters.Main
         [SetUp]
         public void CreatePresenter()
         {
-            _presenter = new TestCentricPresenter(_view, _model, new CommandLineOptions());
+            _presenter = new TestCentricPresenter(_view, _model, new GuiOptions());
         }
 
         [TearDown]
