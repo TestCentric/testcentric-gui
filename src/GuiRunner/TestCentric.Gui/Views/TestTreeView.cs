@@ -3,10 +3,7 @@
 // Licensed under the MIT License. See LICENSE file in root directory.
 // ***********************************************************************
 
-using System.Drawing;
 using System.Windows.Forms;
-using System.IO;
-using System.Reflection;
 
 namespace TestCentric.Gui.Views
 {
@@ -46,6 +43,7 @@ namespace TestCentric.Gui.Views
         public event TreeNodeActionHandler TreeNodeDoubleClick;
         public event EventHandler ContextMenuOpening;
 
+        private bool _suppressAfterCheckEvent = false;
         public TestTreeView()
         {
             InitializeComponent();
@@ -102,7 +100,22 @@ namespace TestCentric.Gui.Views
 
             treeView.AfterSelect += (s, e) => SelectedNodeChanged?.Invoke(e.Node);
 
-            treeView.AfterCheck += (s, e) => AfterCheck?.Invoke(e.Node);
+            treeView.AfterCheck += (s, e) =>
+            {
+                if (_suppressAfterCheckEvent)
+                    return;
+
+                // Update checked state of all child nodes if action is triggered by user
+                // But not if triggered programmatically. For example while restoring VisualState or while setting child nodes
+                if (e.Action == TreeViewAction.ByMouse || e.Action == TreeViewAction.ByKeyboard)
+                {
+                    _suppressAfterCheckEvent = true;
+                    SetCheckedStateOfChildNodes(e.Node, e.Node.Checked);
+                    _suppressAfterCheckEvent = false;
+                }
+
+                AfterCheck?.Invoke(e.Node);
+            };
         }
 
         #region Properties
@@ -270,6 +283,15 @@ namespace TestCentric.Gui.Views
         #endregion
 
         #region Helper Methods
+
+        private void SetCheckedStateOfChildNodes(TreeNode node, bool isChecked)
+        {
+            foreach (TreeNode childNode in node.Nodes)
+            {
+                childNode.Checked = node.Checked;
+                SetCheckedStateOfChildNodes(childNode, isChecked);
+            }
+        }
 
         private IList<TreeNode> GetCheckedNodes()
         {
