@@ -6,6 +6,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Text.RegularExpressions;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace TestCentric.Gui
 {
@@ -14,9 +19,11 @@ namespace TestCentric.Gui
     /// It inherits from the Mono.Options OptionSet class and provides a 
     /// central location for defining and parsing options.
     /// </summary>
-    public class GuiOptions : Dictionary<string, Option>
+    public class GuiOptions
     {
-        private bool validated;
+        private bool _validated;
+        private List<Option> _options = new List<Option>();
+        private Dictionary<string, Option> _optionIndex = new Dictionary<string, Option>();
 
         #region Constructor
 
@@ -72,7 +79,7 @@ namespace TestCentric.Gui
                     InternalTraceLevel = v;
                 });
 
-            Add("param|p", "Followed by a key-value pair separated by an equals sign. Test code can access the value by name. This option may be repeated.", true,
+            Add("param|p", "Followed by a {KEY-VALUE PAIR} separated by an equals sign. Test code can access the value by name. This option may be repeated.", true,
                 v =>
                 {
                     if (CheckRequiredValue(v, "--param"))
@@ -105,8 +112,9 @@ namespace TestCentric.Gui
             void Add(string pattern, string description, bool requiresValue, Action<string> action)
             {
                 var option = new Option(pattern, description, requiresValue, action);
+                _options.Add(option);
                 foreach (string alias in option.Aliases)
-                    base.Add(alias, option);
+                    _optionIndex.Add(alias, option);
             }
         }
 
@@ -157,7 +165,7 @@ namespace TestCentric.Gui
                 opt = opt.Substring(0, delim);
             }
 
-            if (TryGetValue(opt, out option))
+            if (_optionIndex.TryGetValue(opt, out option))
             {
                 value = val;
                 return true;
@@ -220,32 +228,34 @@ namespace TestCentric.Gui
 
         public bool Validate()
         {
-            if (!validated)
+            if (!_validated)
             {
                 // Additional Checks here
 
-                validated = true;
+                _validated = true;
             }
 
             return ErrorMessages.Count == 0;
+        
         }
 
         public string GetHelpText()
         {
             var writer = new StringWriter();
+
             writer.WriteLine("TESTCENTRIC [inputfiles] [options]");
             writer.WriteLine();
             writer.WriteLine("Starts the TestCentric Runner, optionally loading and running a set of NUnit tests. You may specify any combination of assemblies and supported project files as arguments.");
             writer.WriteLine();
             writer.WriteLine("InputFiles:");
-            writer.WriteLine("   One or more assemblies or test projects of a recognized type.");
-            writer.WriteLine("   If no input files are given, the tests contained in the most");
-            writer.WriteLine("   recently used project or assembly are loaded, unless the");
-            writer.WriteLine("   --noload option is specified");
+            writer.WriteLine();
+            writer.WriteLine("One or more assemblies or test projects of a recognized type. If no input files are given, the tests contained in the most recently used project or assembly are loaded, unless the --noload option is specified");
             writer.WriteLine();
             writer.WriteLine("Options:");
+            writer.WriteLine();
 
-            //WriteOptionDescriptions(writer);
+            foreach (var option in _options)
+                writer.WriteLine(option.HelpText);
 
             return writer.ToString();
         }
@@ -270,24 +280,10 @@ namespace TestCentric.Gui
             return false;
         }
 
-        private bool CheckRequiredInt(string val, string option, out int result)
-        {
-            // We have to return something even though the val will 
-            // be ignored if an error is reported. The -1 val seems
-            // like a safe bet in case it isn't ignored due to a bug.
-            result = -1;
-
-            if (int.TryParse(val, out result))
-                return true;
-
-            ErrorMessages.Add("An int value was expected for option '{0}' but a value of '{1}' was used");
-            return false;
-        }
-
         #endregion
     }
 
-    public class Option
+    internal class Option
     {
         public Option(string aliases, string description, bool requiresValue, Action<string> action)
         {
@@ -301,16 +297,26 @@ namespace TestCentric.Gui
         public bool RequiresValue { get; }
         public string Description { get; }
         public Action<string> Action { get; }
+        public string HelpText
+        {
+            get
+            {
+                string indent = new string(' ', 20);
+                var sb = new StringBuilder();
+
+                sb.Append($"{string.Join(", ", Aliases.Select(a => (a.Length == 1 ? "-" : "--") + a))}");
+                if (RequiresValue)
+                {
+                    var match = Regex.Match(Description, "\\{(.*?)\\}");
+                    var valueName = match.Success
+                        ? match.Groups[1].Value : "VALUE";
+                    sb.Append($"={valueName}");
+                }
+                sb.AppendLine();
+                sb.AppendLine($"{Description.Replace("{", "").Replace("}", "")}");
+
+                return sb.ToString();
+            }
+        }
     }
-
-    //public class Option<T> : Option
-    //{
-    //    public Action<T> Action;
-
-    //    public Option(string name, string description, Action<T> action)
-    //        : base(name, description)
-    //    {
-    //        Action = action;
-    //    }
-    //}
 }

@@ -76,10 +76,11 @@ namespace TestCentric.Gui.Tests
             Assert.That(property.GetValue(options, null), Is.EqualTo(expected));
         }
 
-        [Test]
-        public void SingleTestParameter()
+        [TestCase("--param:X=5")]
+        [TestCase("-p:X=5")]
+        public void SingleTestParameter(string option)
         {
-            var options = new GuiOptions("--param:X=5");
+            var options = new GuiOptions(option);
             Assert.That(options.ErrorMessages, Is.Empty);
             Assert.That(options.TestParameters, Is.EqualTo(new Dictionary<string, string>() { { "X", "5" } }));
             Assert.That(options.TestParameters["X"], Is.EqualTo("5"));
