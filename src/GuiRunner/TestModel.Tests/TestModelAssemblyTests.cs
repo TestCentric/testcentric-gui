@@ -5,6 +5,7 @@
 
 using System.IO;
 using NUnit.Framework;
+using TestCentric.Engine;
 using TestCentric.Tests.Assemblies;
 
 namespace TestCentric.Gui.Model
@@ -19,10 +20,7 @@ namespace TestCentric.Gui.Model
         [SetUp]
         public void CreateTestModel()
         {
-            var engine = TestEngineActivator.CreateInstance();
-            Assert.That(engine, Is.Not.Null, "Unable to create engine instance for testing");
-
-            _model = new TestModel(engine);
+            _model = new TestModel(new TestEngine());
             var mockAssemblyPath = Path.Combine(TestContext.CurrentContext.TestDirectory, MOCK_ASSEMBLY);
             Assert.That(File.Exists(mockAssemblyPath));
             _model.CreateNewProject(new[] { mockAssemblyPath }).LoadTests();
