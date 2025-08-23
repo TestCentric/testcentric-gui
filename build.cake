@@ -30,7 +30,7 @@ static readonly FilePath[] ENGINE_FILES = {
         "testcentric.engine.dll", "testcentric.engine.api.dll", "testcentric.metadata.dll"};
 static readonly FilePath[] GUI_FILES = {
         "testcentric.exe", "testcentric.exe.config", "nunit.uiexception.dll",
-        "TestCentric.Gui.Runner.dll", "TestCentric.Gui.Model.dll", "Mono.Options.dll" };
+        "TestCentric.Gui.Runner.dll", "TestCentric.Gui.Model.dll" };
 static readonly FilePath[] TREE_ICONS_PNG = {
         "Success.png", "Failure.png", "Warning.png", "Ignored.png", "Inconclusive.png", "Running.png", "Success_NotLatestRun.png", "Failure_NotLatestRun.png", "Warning_NotLatestRun.png", "Ignored_NotLatestRun.png", "Inconclusive_NotLatestRun.png", "Skipped.png" };
 
@@ -57,7 +57,7 @@ var NuGetGuiPackage = new NuGetPackage(
 		.WithDirectories(
 			new DirectoryContent("tools").WithFiles(
 				"testcentric.exe", "testcentric.exe.config", "TestCentric.Gui.Runner.dll",
-				"nunit.uiexception.dll", "TestCentric.Gui.Model.dll", "Mono.Options.dll",
+				"nunit.uiexception.dll", "TestCentric.Gui.Model.dll",
 				"TestCentric.Engine.dll", "TestCentric.Engine.Api.dll", "TestCentric.InternalTrace.dll",
 				"TestCentric.Metadata.dll", "TestCentric.Extensibility.dll", "TestCentric.Extensibility.Api.dll",
 				"nunit.engine.api.dll", "../../nuget/testcentric.nuget.addins"),
@@ -99,7 +99,7 @@ var ChocolateyGuiPackage = new ChocolateyPackage(
 				"../../choco/VERIFICATION.txt", "../../choco/testcentric.choco.addins",
 				"../../choco/testcentric-agent.exe.ignore",	"../../choco/testcentric-agent-x86.exe.ignore",
 				"testcentric.exe", "testcentric.exe.config", "TestCentric.Gui.Runner.dll",
-				"nunit.uiexception.dll", "TestCentric.Gui.Model.dll", "Mono.Options.dll", "nunit.engine.api.dll",
+				"nunit.uiexception.dll", "TestCentric.Gui.Model.dll", "nunit.engine.api.dll",
 				"TestCentric.Engine.dll", "TestCentric.Engine.Api.dll", "TestCentric.InternalTrace.dll",
 				"TestCentric.Metadata.dll", "TestCentric.Extensibility.dll", "TestCentric.Extensibility.Api.dll"),
             new DirectoryContent("tools/Images/Tree/Circles").WithFiles(

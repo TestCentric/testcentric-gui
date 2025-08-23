@@ -14,6 +14,7 @@ namespace TestCentric.Gui
     using System.Linq;
     using Model;
     using Presenters;
+    using TestCentric.Gui.Dialogs;
     using Views;
 
     /// <summary>
@@ -30,14 +31,14 @@ namespace TestCentric.Gui
         public static int Main(string[] args)
         {
             Application.EnableVisualStyles();
-            var options = new CommandLineOptions(args);
+            var options = new GuiOptions(args);
 
             if (options.ShowHelp)
             {
                 // TODO: We would need to have a custom message box
                 // in order to use a fixed font and display the options
                 // so that the values all line up.
-                MessageDisplay.Info(GetHelpText(options));
+                MessageDisplay.Info(options.GetHelpText());
                 return 0;
             }
 
@@ -114,7 +115,7 @@ namespace TestCentric.Gui
             return 0;
         }
 
-        private static string GetHelpText(CommandLineOptions options)
+        private static string GetHelpText(GuiOptions options)
         {
             StringWriter writer = new StringWriter();
 
@@ -129,7 +130,8 @@ namespace TestCentric.Gui
             writer.WriteLine("   --noload option is specified");
             writer.WriteLine();
             writer.WriteLine("Options:");
-            options.WriteOptionDescriptions(writer);
+
+            //options.WriteOptionDescriptions(writer);
 
             return writer.GetStringBuilder().ToString();
         }

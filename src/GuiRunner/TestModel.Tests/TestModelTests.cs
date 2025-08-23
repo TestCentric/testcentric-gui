@@ -17,7 +17,7 @@ namespace TestCentric.Gui.Model
         {
             // Arrange
             var engine = new MockTestEngine();
-            var options = new CommandLineOptions("dummy.dll");
+            var options = new GuiOptions("dummy.dll");
             var model = TestModel.CreateTestModel(engine, options);
 
             // Act
@@ -32,7 +32,7 @@ namespace TestCentric.Gui.Model
         {
             // Arrange
             var engine = new MockTestEngine();
-            var options = new CommandLineOptions("dummy.dll");
+            var options = new GuiOptions("dummy.dll");
             var model = TestModel.CreateTestModel(engine, options);
 
             // Act
@@ -48,7 +48,7 @@ namespace TestCentric.Gui.Model
         {
             // Arrange
             var engine = new MockTestEngine();
-            var options = new CommandLineOptions("dummy.dll");
+            var options = new GuiOptions("dummy.dll");
             var model = TestModel.CreateTestModel(engine, options);
 
             bool projectLoadedCalled = false;
@@ -67,7 +67,7 @@ namespace TestCentric.Gui.Model
         {
             // Arrange
             var engine = Substitute.For<TestCentric.Engine.ITestEngine>();
-            var options = new CommandLineOptions("dummy.dll");
+            var options = new GuiOptions("dummy.dll");
             var model = TestModel.CreateTestModel(engine, options);
 
             bool projectLoadedCalled = false;
@@ -87,7 +87,7 @@ namespace TestCentric.Gui.Model
         {
             // Arrange
             var engine = new MockTestEngine();
-            var options = new CommandLineOptions("dummy.dll");
+            var options = new GuiOptions("dummy.dll");
             var model = TestModel.CreateTestModel(engine, options);
 
             // Act
@@ -109,7 +109,7 @@ namespace TestCentric.Gui.Model
             runner.Explore(null).ReturnsForAnyArgs(xmlNode);
             var engine = Substitute.For<TestCentric.Engine.ITestEngine>();
             engine.GetRunner(null).ReturnsForAnyArgs(runner);
-            var options = new CommandLineOptions("dummy.dll");
+            var options = new GuiOptions("dummy.dll");
             var model = TestModel.CreateTestModel(engine, options);
 
             model.CreateNewProject();
@@ -134,7 +134,7 @@ namespace TestCentric.Gui.Model
             runner.Explore(null).ReturnsForAnyArgs(xmlNode);
             var engine = Substitute.For<TestCentric.Engine.ITestEngine>();
             engine.GetRunner(null).ReturnsForAnyArgs(runner);
-            var options = new CommandLineOptions("dummy.dll");
+            var options = new GuiOptions("dummy.dll");
             var model = TestModel.CreateTestModel(engine, options);
 
             model.CreateNewProject();
@@ -165,7 +165,7 @@ namespace TestCentric.Gui.Model
             runner.Explore(null).ReturnsForAnyArgs(xmlNode);
             var engine = Substitute.For<TestCentric.Engine.ITestEngine>();
             engine.GetRunner(null).ReturnsForAnyArgs(runner);
-            var options = new CommandLineOptions("dummy.dll");
+            var options = new GuiOptions("dummy.dll");
             var model = TestModel.CreateTestModel(engine, options);
 
             model.CreateNewProject();
@@ -192,7 +192,7 @@ namespace TestCentric.Gui.Model
             runner.Explore(null).ReturnsForAnyArgs(xmlNode);
             var engine = Substitute.For<TestCentric.Engine.ITestEngine>();
             engine.GetRunner(null).ReturnsForAnyArgs(runner);
-            var options = new CommandLineOptions("dummy.dll");
+            var options = new GuiOptions("dummy.dll");
             var model = TestModel.CreateTestModel(engine, options);
 
             model.CreateNewProject();
@@ -239,7 +239,7 @@ namespace TestCentric.Gui.Model
             ResultNode oldResult = new ResultNode($"<test-suite id='1' result='{oldOutcome}' label='{oldLabel}' />");
 
             var engine = Substitute.For<TestCentric.Engine.ITestEngine>();
-            var options = new CommandLineOptions("dummy.dll");
+            var options = new GuiOptions("dummy.dll");
             var model = TestModel.CreateTestModel(engine, options) as TestModel;
 
             model.AddResult(oldResult);
@@ -266,7 +266,7 @@ namespace TestCentric.Gui.Model
             ResultNode oldResult = new ResultNode($"<test-suite id='1' result='{oldOutcome}' label='{oldLabel}' />");
 
             var engine = Substitute.For<TestCentric.Engine.ITestEngine>();
-            var options = new CommandLineOptions("dummy.dll");
+            var options = new GuiOptions("dummy.dll");
             var model = TestModel.CreateTestModel(engine, options) as TestModel;
 
             model.AddResult(oldResult);

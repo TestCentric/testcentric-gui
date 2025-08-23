@@ -47,7 +47,7 @@ namespace TestCentric.Gui.Presenters
 
         private readonly ITestModel _model;
 
-        private readonly CommandLineOptions _options;
+        private readonly GuiOptions _options;
 
         private readonly UserSettings _settings;
 
@@ -67,7 +67,7 @@ namespace TestCentric.Gui.Presenters
 
         #region Constructor
 
-        public TestCentricPresenter(IMainView view, ITestModel model, CommandLineOptions options)
+        public TestCentricPresenter(IMainView view, ITestModel model, GuiOptions options)
         {
             _view = view;
             _model = model;

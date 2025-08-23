@@ -16,10 +16,8 @@
         <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
         <!-- Signing Assemblies -->
-		<!-- TODO: Because the Mono.Options package is not signed, we can't sign
-		assemblies globally for now. Need to replace this package. -->
-        <!--<SignAssembly>true</SignAssembly>
-        <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\testcentric.snk</AssemblyOriginatorKeyFile>-->
+        <SignAssembly>true</SignAssembly>
+        <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)\testcentric.snk</AssemblyOriginatorKeyFile>
         <!-- Debugging -->
         <DebugType>portable</DebugType>
         <DebugSymbols>true</DebugSymbols>

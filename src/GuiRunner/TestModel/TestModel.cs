@@ -43,10 +43,10 @@ namespace TestCentric.Gui.Model
 
         #region Constructor and Creation
 
-        public TestModel(ITestEngine testEngine, CommandLineOptions options = null)
+        public TestModel(ITestEngine testEngine, GuiOptions options = null)
         {
             TestEngine = testEngine;
-            Options = options ?? new CommandLineOptions();
+            Options = options ?? new GuiOptions();
 
             _settingsService = new SettingsService(true);
             _events = new TestEventDispatcher(this);
@@ -71,7 +71,7 @@ namespace TestCentric.Gui.Model
             //}
         }
 
-        public static ITestModel CreateTestModel(CommandLineOptions options)
+        public static ITestModel CreateTestModel(GuiOptions options)
         {
             var engine = TestEngineActivator.CreateInstance();
             if (engine == null)
@@ -81,7 +81,7 @@ namespace TestCentric.Gui.Model
         }
 
         // Public for testing
-        public static ITestModel CreateTestModel(ITestEngine testEngine, CommandLineOptions options)
+        public static ITestModel CreateTestModel(ITestEngine testEngine, GuiOptions options)
         {
             // Currently the InternalTraceLevel can only be set from the command-line.
             // We can't use user settings to provide a default because the settings
@@ -111,7 +111,7 @@ namespace TestCentric.Gui.Model
         #region General Properties
 
         // Command-line options
-        public CommandLineOptions Options { get; }
+        public GuiOptions Options { get; }
 
         // Work Directory
         public string WorkDirectory { get { return TestEngine.WorkDirectory; } }

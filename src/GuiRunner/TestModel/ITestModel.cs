@@ -17,7 +17,7 @@ namespace TestCentric.Gui.Model
     {
         #region General Properties
 
-        CommandLineOptions Options { get; }
+        GuiOptions Options { get; }
 
         // Work Directory
         string WorkDirectory { get; }
