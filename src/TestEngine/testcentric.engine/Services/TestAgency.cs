@@ -9,12 +9,13 @@ using System.Linq;
 using System.Threading;
 using System.Diagnostics;
 using System.Net.Sockets;
+using System.Runtime.Versioning;
 using TestCentric.Engine.Agents;
 using TestCentric.Engine.Extensibility;
 using TestCentric.Engine.Internal;
 using TestCentric.Engine.Communication.Transports.Remoting;
 using TestCentric.Engine.Communication.Transports.Tcp;
-using System.Runtime.Versioning;
+using TestCentric.Extensibility;
 
 namespace TestCentric.Engine.Services
 {
@@ -33,7 +34,7 @@ namespace TestCentric.Engine.Services
 
         private ExtensionService _extensionService;
 
-        private readonly List<IAgentLauncher> _launchers = new List<IAgentLauncher>();
+        private readonly List<IExtensionNode> _launcherNodes = new List<IExtensionNode>();
 
         // Transports used for various target runtimes
         private TestAgencyTcpTransport _tcpTransport; // .NET Standard 2.0
@@ -56,8 +57,8 @@ namespace TestCentric.Engine.Services
         {
             var agents = new List<TestAgentInfo>();
 
-            foreach (var launcher in _launchers)
-                agents.Add(launcher.AgentInfo);
+            foreach (var node in _launcherNodes)
+                agents.Add(InstantiateAgentLauncher(node).AgentInfo);
 
             return agents;
         }
@@ -66,7 +67,7 @@ namespace TestCentric.Engine.Services
         /// Gets a list containing <see cref="TestAgentInfo"/> for any available agents,
         /// which are able to handle the specified package.
         /// </summary>
-        /// <param name="package">A Testpackage</param>
+        /// <param name="package">A TestPackage</param>
         /// <returns>
         /// A list of suitable agents for running the package or an empty
         /// list if no agent is available for the package.
@@ -84,9 +85,12 @@ namespace TestCentric.Engine.Services
             {
                 // Collect names of agents that work for each assembly
                 var agentsForAssembly = new List<string>();
-                foreach (var launcher in _launchers)
+                foreach (var node in _launcherNodes)
+                {
+                    var launcher = InstantiateAgentLauncher(node);
                     if (launcher.CanCreateProcess(assemblyPackage))
                         agentsForAssembly.Add(launcher.AgentInfo.AgentName);
+                }
 
                 // Remove agents from final result if they don't work for this assembly
                 for (int index = validAgentNames.Count - 1; index >= 0; index--)
@@ -119,9 +123,12 @@ namespace TestCentric.Engine.Services
         /// <param name="package">A TestPackage</param>
         public bool IsAgentAvailable(TestPackage package)
         {
-            foreach (var launcher in _launchers)
+            foreach (var node in _launcherNodes)
+            {
+                var launcher = InstantiateAgentLauncher(node);
                 if (launcher.CanCreateProcess(package))
                     return true;
+            }
 
             return false;
         }
@@ -281,10 +288,10 @@ namespace TestCentric.Engine.Services
 
             try
             {
-                // Add pluggable agent extensions
+                // Add nodes for pluggable agent extensions
                 if (_extensionService != null)
-                    foreach (IAgentLauncher launcher in _extensionService.GetExtensions<IAgentLauncher>())
-                        _launchers.Add(launcher);
+                    foreach (var launcherNode in _extensionService.GetExtensionNodes<IAgentLauncher>())
+                        _launcherNodes.Add(launcherNode);
 
                 // TODO: Sorting is temporarily suppressed until agents can be fixed.
                 // The call to GetLogger in the static constructor causes an exception.
@@ -339,8 +346,9 @@ namespace TestCentric.Engine.Services
             }
             else
             {
-                foreach (var launcher in _launchers)
+                foreach (var node in _launcherNodes)
                 {
+                    var launcher = InstantiateAgentLauncher(node);
                     var launcherName = launcher.GetType().Name;
 
                     if (launcher.CanCreateProcess(package))
@@ -357,11 +365,16 @@ namespace TestCentric.Engine.Services
 
         private IAgentLauncher GetLauncherByName(string name)
         {
-            foreach (var launcher in _launchers)
-                if (launcher.GetType().Name == name)
-                    return launcher;
+            foreach (var node in _launcherNodes)
+                if (node.TypeName == name)
+                    return InstantiateAgentLauncher(node);
 
             return null;
+        }
+
+        private IAgentLauncher InstantiateAgentLauncher(IExtensionNode node)
+        {
+            return (IAgentLauncher)node.ExtensionObject;
         }
 
         //private IAgentLauncher GetBestLauncher(TestPackage package)
