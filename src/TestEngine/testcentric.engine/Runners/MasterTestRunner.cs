@@ -261,9 +261,9 @@ namespace TestCentric.Engine.Runners
         /// </summary>
         private void UnloadPackage()
         {
-            LoadResult = null;
             if (_engineRunner != null)
                 _engineRunner.Unload();
+            LoadResult = null;
         }
 
         /// <summary>

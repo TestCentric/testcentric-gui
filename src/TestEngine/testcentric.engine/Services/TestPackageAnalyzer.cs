@@ -84,6 +84,10 @@ namespace TestCentric.Engine.Services
         /// Use metadata to get information about an assembly and
         /// apply it to the package using special internal keywords.
         /// </summary>
+        /// <remarks>
+        /// We use Set rather than Add for these settings since we 
+        /// may be reloading an existing package.
+        /// </remarks>
         /// <param name="package"></param>
         public void ApplyImageSettings(TestPackage package)
         {
@@ -96,7 +100,7 @@ namespace TestCentric.Engine.Services
                 if (targetVersion.Major > 0)
                 {
                     log.Debug($"Assembly {package.FullName} uses version {targetVersion}");
-                    package.Settings.Add(SettingDefinitions.ImageRuntimeVersion.WithValue(targetVersion));
+                    package.Settings.Set(SettingDefinitions.ImageRuntimeVersion.WithValue(targetVersion));
                 }
 
                 string frameworkName;
@@ -109,18 +113,18 @@ namespace TestCentric.Engine.Services
                         frameworkName = ".NETStandard,Version=v1.0";
                         log.Debug($"Using {frameworkName} instead");
                     }
-                    package.Settings.Add(SettingDefinitions.ImageTargetFrameworkName.WithValue(frameworkName));
+                    package.Settings.Set(SettingDefinitions.ImageTargetFrameworkName.WithValue(frameworkName));
                 }
 
-                package.Settings.Add(SettingDefinitions.ImageRequiresX86.WithValue(assembly.RequiresX86()));
+                package.Settings.Set(SettingDefinitions.ImageRequiresX86.WithValue(assembly.RequiresX86()));
                 if (assembly.RequiresX86())
                 {
                     log.Debug($"Assembly {package.FullName} will be run x86");
-                    package.Settings.Add(SettingDefinitions.RunAsX86.WithValue(true));
+                    package.Settings.Set(SettingDefinitions.RunAsX86.WithValue(true));
                 }
 
                 bool requiresAssemblyResolver = assembly.HasAttribute("NUnit.Framework.TestAssemblyDirectoryResolveAttribute");
-                package.Settings.Add(SettingDefinitions.ImageRequiresDefaultAppDomainAssemblyResolver.WithValue(requiresAssemblyResolver));
+                package.Settings.Set(SettingDefinitions.ImageRequiresDefaultAppDomainAssemblyResolver.WithValue(requiresAssemblyResolver));
                 if (requiresAssemblyResolver)
                 {
                     log.Debug($"Assembly {package.FullName} requires default app domain assembly resolver");
@@ -130,15 +134,15 @@ namespace TestCentric.Engine.Services
                 if (nonTestAssembly)
                 {
                     log.Debug($"Assembly {package.FullName} has NonTestAssemblyAttribute");
-                    package.Settings.Add(SettingDefinitions.ImageNonTestAssemblyAttribute.WithValue(true));
+                    package.Settings.Set(SettingDefinitions.ImageNonTestAssemblyAttribute.WithValue(true));
                 }
 
                 var testFrameworkReference = _testFrameworkService.GetFrameworkReference(package.FullName);
                 if (testFrameworkReference != null)
                 {
-                    package.Settings.Add(SettingDefinitions.ImageTestFrameworkReference.WithValue(testFrameworkReference.FrameworkReference.FullName));
+                    package.Settings.Set(SettingDefinitions.ImageTestFrameworkReference.WithValue(testFrameworkReference.FrameworkReference.FullName));
                     if (testFrameworkReference.FrameworkDriver != null)
-                        package.Settings.Add(SettingDefinitions.ImageFrameworkDriverReference.WithValue(testFrameworkReference.FrameworkDriver));
+                        package.Settings.Set(SettingDefinitions.ImageFrameworkDriverReference.WithValue(testFrameworkReference.FrameworkDriver));
                 }
             }
         }
