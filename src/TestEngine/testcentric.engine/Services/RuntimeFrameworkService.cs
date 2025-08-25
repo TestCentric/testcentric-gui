@@ -248,7 +248,7 @@ namespace TestCentric.Engine.Services
                 if (!IsAvailable(requestedFramework))
                     throw new EngineException("Requested framework is not available: " + requestedFrameworkSetting);
 
-                package.Settings.Add(SettingDefinitions.TargetRuntimeFramework.WithValue(requestedFrameworkSetting));
+                package.Settings.Set(SettingDefinitions.TargetRuntimeFramework.WithValue(requestedFrameworkSetting));
                 return requestedFramework;
             }
 
@@ -284,7 +284,7 @@ namespace TestCentric.Engine.Services
                 }
             }
 
-            package.Settings.Add(SettingDefinitions.TargetRuntimeFramework.WithValue(targetFramework.ToString()));
+            package.Settings.Set(SettingDefinitions.TargetRuntimeFramework.WithValue(targetFramework.ToString()));
 
             log.Debug($"Test will use {targetFramework} for {package.Name}");
             return targetFramework;

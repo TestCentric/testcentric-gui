@@ -331,7 +331,7 @@ namespace TestCentric.Engine.Services
                 if (launcher.CanCreateProcess(package))
                 {
                     log.Info($"Selected launcher {requestedAgent}");
-                    package.AddSetting(SettingDefinitions.SelectedAgentName.WithValue(requestedAgent));
+                    package.Settings.Set(SettingDefinitions.SelectedAgentName.WithValue(requestedAgent));
                     return launcher.CreateProcess(agentId, agencyUrl, package);
                 }
 
@@ -346,7 +346,7 @@ namespace TestCentric.Engine.Services
                     if (launcher.CanCreateProcess(package))
                     {
                         log.Info($"Selected launcher {launcherName}");
-                        package.AddSetting(SettingDefinitions.SelectedAgentName.WithValue(launcherName));
+                        package.Settings.Set(SettingDefinitions.SelectedAgentName.WithValue(launcherName));
                         return launcher.CreateProcess(agentId, agencyUrl, package);
                     }
                 }

@@ -61,7 +61,7 @@ namespace TestCentric.Engine.Communication.Transports.Tcp
                 client.Client.Send(new Guid().ToByteArray());
             }
 
-            Thread.Sleep(1); // Allow the connection events to run
+            Thread.Sleep(500); // Allow the connection events to run
             Assert.That(_serverConnections.Count, Is.EqualTo(num), $"Should have received {num} connection events");
 
             for (int i = 0; i < num; i++)

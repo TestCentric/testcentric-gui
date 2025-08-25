@@ -496,7 +496,7 @@ namespace TestCentric.Gui.Model
             // NOTE: The `ITestRunner.Reload` method supported by the engine
             // has some problems, so we simulate Unload+Load. See issue #328.
 
-                // Replace Runner in case settings changed
+            // Replace Runner in case settings changed
             UnloadTestsIgnoringErrors();
             Runner.Dispose();
             Runner = TestEngine.GetRunner(TestCentricProject);
