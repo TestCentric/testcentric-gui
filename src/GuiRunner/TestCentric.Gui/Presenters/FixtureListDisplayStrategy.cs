@@ -81,6 +81,7 @@ namespace TestCentric.Gui.Presenters
             }
 
             visualState?.ApplyTo(_view.TreeView);
+            ApplyResultsToTree();
         }
 
         #endregion

@@ -33,6 +33,16 @@ namespace TestCentric.Gui.Model
 
         public ResultNode(string xmlText) : this(XmlHelper.CreateXmlNode(xmlText)) { }
 
+        /// <summary>
+        /// Creates a ResultNode from an existing XmlNode, but replacing the ID
+        /// </summary>
+        public static ResultNode Create(XmlNode xmlNode, string newId)
+        {
+            var attribute = xmlNode.Attributes["id"];
+            attribute.Value = newId;
+            return new ResultNode(xmlNode) { IsLatestRun = false };
+        }
+
         #endregion
 
         #region Public Properties
