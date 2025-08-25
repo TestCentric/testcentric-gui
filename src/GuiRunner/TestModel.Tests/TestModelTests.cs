@@ -9,6 +9,10 @@ using TestCentric.Gui.Model.Fakes;
 
 namespace TestCentric.Gui.Model
 {
+    using System.Xml;
+    using NUnit.Common;
+    using TestCentric.Engine;
+
     [TestFixture]
     public class TestModelTests
     {
@@ -278,6 +282,45 @@ namespace TestCentric.Gui.Model
             // Assert
             ResultNode expectedResult = returnsOldResult ? oldResult : newResult;
             Assert.That(addedResult, Is.EqualTo(expectedResult));
+        }
+
+        [Test]
+        public void Reload()
+        {
+            // Arrange
+            var engine = Substitute.For<ITestEngine>();
+            var options = new GuiOptions("dummy.dll");
+            var model = TestModel.CreateTestModel(engine, options) as TestModel;
+
+            var runner = Substitute.For<ITestRunner>();
+            string xmlOriginal = "<test-run id='1'>" +
+                                 "<test-case id='2' fullname='Assembly.Folder1.TestA'/>" +
+                                 "<test-case id='3' fullname='Assembly.Folder1.TestB'/>" +
+                                 "</test-run>";
+            string xmlReload = "<test-run id='1'>" +
+                               "<test-case id='2' fullname='Assembly.Folder1.TestB'/>" +
+                               "</test-run>";
+
+            XmlNode xmlNode1 = XmlHelper.CreateXmlNode(xmlOriginal);
+            XmlNode xmlNode2 = XmlHelper.CreateXmlNode(xmlReload);
+
+            runner.Explore(null).ReturnsForAnyArgs(xmlNode1, xmlNode2);
+            engine.GetRunner(null).ReturnsForAnyArgs(runner);
+            model.CreateNewProject(new[] { "MyFile.dll" });
+
+            var resultXml = "<test-case id='3' fullname='Assembly.Folder1.TestB' result='Passed'/>";
+            model.Results.Add("3", new ResultNode(resultXml));
+
+            // Act
+            model.ReloadTests();
+
+            // Assert
+            var r = model.GetResultForTest("2");
+
+            Assert.That(r, Is.Not.Null);
+            Assert.That(r.Id, Is.EqualTo("2"));
+            Assert.That(r.Outcome.Status, Is.EqualTo(TestStatus.Passed));
+            Assert.That(r.IsLatestRun, Is.False);
         }
     }
 }

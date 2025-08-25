@@ -65,6 +65,7 @@ namespace TestCentric.Gui.Presenters
             else
                 SetDefaultInitialExpansion();
 
+            ApplyResultsToTree();
             _view.EnableTestFilter(true);
         }
 

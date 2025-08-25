@@ -507,7 +507,7 @@ namespace TestCentric.Gui.Model
             BuildTestIndex();
             TestCentricTestFilter.Init();
 
-            ClearResults();
+            RestoreTestResults();
 #endif
 
             _events.FireTestReloaded(LoadedTests);
@@ -673,6 +673,40 @@ namespace TestCentric.Gui.Model
         {
             Results.Clear();
             ResultSummary = null;
+        }
+
+        private void RestoreTestResults()
+        {
+            // Get all existing test results
+            List<ResultNode> oldResults = Results.Values.ToList();
+            Results.Clear();
+
+            // Search for TestFullName in all nodes
+            foreach (ResultNode oldResult in oldResults)
+            {
+                TestNode testNode = TryGetTestNode(LoadedTests, oldResult.FullName);
+                if (testNode != null)
+                {
+                    // Create new result: keep result content, but use current test ID
+                    ResultNode newResult = ResultNode.Create(oldResult.Xml, testNode.Id);
+                    Results.Add(testNode.Id, newResult);
+                }
+            }
+        }
+
+        private TestNode TryGetTestNode(TestNode testNode, string fullName)
+        {
+            if (testNode.FullName == fullName)
+                return testNode;
+
+            foreach (var childNode in testNode.Children)
+            {
+                var foundNode = TryGetTestNode(childNode, fullName);
+                if (foundNode != null)
+                    return foundNode;
+            }
+
+            return null;
         }
 
         public void SelectCategories(IList<string> categories, bool exclude)

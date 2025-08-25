@@ -120,10 +120,7 @@ namespace TestCentric.Gui.Presenters
             {
                 VisualState visualState = applyVisualState ? CreateVisualState() : null;
                 OnTestLoaded(testNode, visualState);
-
-                if (_view.Nodes != null) // TODO: Null when mocked
-                    foreach (TreeNode treeNode in _view.Nodes)
-                        ApplyResultsToTree(treeNode);
+                ApplyResultsToTree();
             }
         }
 
@@ -275,6 +272,15 @@ namespace TestCentric.Gui.Presenters
                         ? latestRun ? TestTreeView.IgnoredIndex : TestTreeView.IgnoredIndex_NotLatestRun
                         : TestTreeView.SkippedIndex;
             }
+        }
+
+        protected void ApplyResultsToTree()
+        {
+            if (!_model.HasResults || _view.Nodes == null)
+                return;
+
+            foreach (TreeNode treeNode in _view.Nodes)
+                ApplyResultsToTree(treeNode);
         }
 
         private void ApplyResultsToTree(TreeNode treeNode)
