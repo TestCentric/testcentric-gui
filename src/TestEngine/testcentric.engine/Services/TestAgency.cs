@@ -9,12 +9,13 @@ using System.Linq;
 using System.Threading;
 using System.Diagnostics;
 using System.Net.Sockets;
+using System.Runtime.Versioning;
 using TestCentric.Engine.Agents;
 using TestCentric.Engine.Extensibility;
 using TestCentric.Engine.Internal;
 using TestCentric.Engine.Communication.Transports.Remoting;
 using TestCentric.Engine.Communication.Transports.Tcp;
-using System.Runtime.Versioning;
+using TestCentric.Extensibility;
 
 namespace TestCentric.Engine.Services
 {
@@ -33,7 +34,7 @@ namespace TestCentric.Engine.Services
 
         private ExtensionService _extensionService;
 
-        private readonly List<IAgentLauncher> _launchers = new List<IAgentLauncher>();
+        private readonly List<IExtensionNode> _launcherNodes = new List<IExtensionNode>();
 
         // Transports used for various target runtimes
         private TestAgencyTcpTransport _tcpTransport; // .NET Standard 2.0
@@ -56,8 +57,15 @@ namespace TestCentric.Engine.Services
         {
             var agents = new List<TestAgentInfo>();
 
-            foreach (var launcher in _launchers)
-                agents.Add(launcher.AgentInfo);
+            foreach (var node in _launcherNodes)
+            {
+                var runtimes = node.GetValues("TargetFramework");
+                if (runtimes.Count() > 0)
+                    agents.Add(new TestAgentInfo(
+                        GetAgentName(node),
+                        TestAgentType.LocalProcess,
+                        runtimes.First()));
+            }
 
             return agents;
         }
@@ -66,7 +74,7 @@ namespace TestCentric.Engine.Services
         /// Gets a list containing <see cref="TestAgentInfo"/> for any available agents,
         /// which are able to handle the specified package.
         /// </summary>
-        /// <param name="package">A Testpackage</param>
+        /// <param name="package">A TestPackage</param>
         /// <returns>
         /// A list of suitable agents for running the package or an empty
         /// list if no agent is available for the package.
@@ -84,9 +92,11 @@ namespace TestCentric.Engine.Services
             {
                 // Collect names of agents that work for each assembly
                 var agentsForAssembly = new List<string>();
-                foreach (var launcher in _launchers)
-                    if (launcher.CanCreateProcess(assemblyPackage))
-                        agentsForAssembly.Add(launcher.AgentInfo.AgentName);
+                foreach (var node in _launcherNodes)
+                {
+                    if (CanCreateAgent(node, assemblyPackage))
+                        agentsForAssembly.Add(GetAgentName(node));
+                }
 
                 // Remove agents from final result if they don't work for this assembly
                 for (int index = validAgentNames.Count - 1; index >= 0; index--)
@@ -119,9 +129,11 @@ namespace TestCentric.Engine.Services
         /// <param name="package">A TestPackage</param>
         public bool IsAgentAvailable(TestPackage package)
         {
-            foreach (var launcher in _launchers)
-                if (launcher.CanCreateProcess(package))
+            foreach (var node in _launcherNodes)
+            {
+                if (CanCreateAgent(node, package))
                     return true;
+            }
 
             return false;
         }
@@ -281,10 +293,10 @@ namespace TestCentric.Engine.Services
 
             try
             {
-                // Add pluggable agent extensions
+                // Add nodes for pluggable agent extensions
                 if (_extensionService != null)
-                    foreach (IAgentLauncher launcher in _extensionService.GetExtensions<IAgentLauncher>())
-                        _launchers.Add(launcher);
+                    foreach (var launcherNode in _extensionService.GetExtensionNodes<IAgentLauncher>())
+                        _launcherNodes.Add(launcherNode);
 
                 // TODO: Sorting is temporarily suppressed until agents can be fixed.
                 // The call to GetLogger in the static constructor causes an exception.
@@ -339,12 +351,12 @@ namespace TestCentric.Engine.Services
             }
             else
             {
-                foreach (var launcher in _launchers)
+                foreach (var node in _launcherNodes)
                 {
-                    var launcherName = launcher.GetType().Name;
-
-                    if (launcher.CanCreateProcess(package))
+                    if (CanCreateAgent(node, package))
                     {
+                        var launcher = GetLauncherInstance(node);
+                        var launcherName = launcher.GetType().Name;
                         log.Info($"Selected launcher {launcherName}");
                         package.Settings.Set(SettingDefinitions.SelectedAgentName.WithValue(launcherName));
                         return launcher.CreateProcess(agentId, agencyUrl, package);
@@ -357,12 +369,45 @@ namespace TestCentric.Engine.Services
 
         private IAgentLauncher GetLauncherByName(string name)
         {
-            foreach (var launcher in _launchers)
-                if (launcher.GetType().Name == name)
-                    return launcher;
+            foreach (var node in _launcherNodes)
+                if (GetAgentName(node) == name)
+                    return GetLauncherInstance(node);
 
             return null;
         }
+
+        private bool CanCreateAgent(IExtensionNode node, TestPackage package)
+        {
+            var runtimes = node.GetValues("TargetFramework");
+
+            if (runtimes.Count() > 0)
+            {
+                var agentTarget = new FrameworkName(runtimes.First());
+                log.Debug($"Agent {node.TypeName} targets {agentTarget}");
+                var packageTargetSetting = 
+                    package.Settings.GetValueOrDefault(SettingDefinitions.ImageTargetFrameworkName);
+
+                if (!string.IsNullOrEmpty(packageTargetSetting))
+                {
+                    var packageTarget = new FrameworkName(packageTargetSetting);
+                    return agentTarget.Identifier == packageTarget.Identifier
+                        && agentTarget.Version.Major >= packageTarget.Version.Major;
+                }
+
+                var packageRuntimeVersion =
+                    package.Settings.GetValueOrDefault(SettingDefinitions.ImageRuntimeVersion);
+                if (!string.IsNullOrEmpty(packageRuntimeVersion))
+                    return agentTarget.Identifier == FrameworkIdentifiers.NetFramework &&
+                        new Version(packageRuntimeVersion).Major <= agentTarget.Version.Major;
+            }
+
+            return false;
+        }
+
+        private IAgentLauncher GetLauncherInstance(IExtensionNode node)
+            => (IAgentLauncher)node.ExtensionObject;
+
+        private string GetAgentName(IExtensionNode node) => node.TypeName;
 
         //private IAgentLauncher GetBestLauncher(TestPackage package)
         //{

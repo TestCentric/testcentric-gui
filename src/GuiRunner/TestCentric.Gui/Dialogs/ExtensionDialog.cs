@@ -384,8 +384,8 @@ namespace TestCentric.Gui.Dialogs
                             extension.Status.ToString(),
                             extension.Enabled ? "Yes" : "No" });
 
-                    if (extension.Status == ExtensionStatus.Error)
-                        item.ToolTipText = BuildExceptionMessage(extension.Exception);
+                    //if (extension.Status == ExtensionStatus.Error)
+                    //    item.ToolTipText = BuildExceptionMessage(extension.Exception);
 
                     extensionListView.Items.Add(item);
                 }

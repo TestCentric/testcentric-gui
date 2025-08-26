@@ -1,37 +1,30 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-	<PropertyGroup>
-        <RootNamespace>TestCentric.Engine</RootNamespace>
-        <TargetFrameworks>net462</TargetFrameworks>
-        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    </PropertyGroup>
-	
-    <PropertyGroup>
-        <PackageId>TestCentric.Engine</PackageId>
-        <Title>TestCentric Engine</Title>
-		<Description>The TestCentric Engine loads and runs NUnit and (with extensions) other types of tests.</Description>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageIcon>testcentric.png</PackageIcon>
-        <PackageOutputPath>..\..\package</PackageOutputPath>
-    </PropertyGroup>
-	
-    <ItemGroup>
-        <None Include="..\..\..\README.md" Pack="true" PackagePath="\" Link="README.md" />
-    </ItemGroup>
-	
-    <ItemGroup Condition="'$(TargetFramework)'=='net462'">
-        <Reference Include="System.Runtime.Remoting" />
-        <Reference Include="System.Web" />
-    </ItemGroup>
-	
-	<ItemGroup>
-		<ProjectReference Include="..\TestCentric.Engine.Api\TestCentric.Engine.Api.csproj" />
-	</ItemGroup>
-	
-    <ItemGroup>
-        <PackageReference Include="TestCentric.Metadata" Version="$(MetadataVersion)" />
-        <PackageReference Include="TestCentric.InternalTrace" Version="$(InternalTraceVersion)" />
-	    <PackageReference Include="TestCentric.Extensibility" Version="$(ExtensibilityVersion)" />
-    </ItemGroup>
-	
+  <PropertyGroup>
+    <RootNamespace>TestCentric.Engine</RootNamespace>
+    <TargetFrameworks>net462</TargetFrameworks>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PackageId>TestCentric.Engine</PackageId>
+    <Title>TestCentric Engine</Title>
+    <Description>The TestCentric Engine loads and runs NUnit and (with extensions) other types of tests.</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>testcentric.png</PackageIcon>
+    <PackageOutputPath>..\..\package</PackageOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\..\..\README.md" Pack="true" PackagePath="\" Link="README.md" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='net462'">
+    <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Web" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TestCentric.Engine.Api\TestCentric.Engine.Api.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="TestCentric.Extensibility" Version="4.0.0-dev00004" />
+    <PackageReference Include="TestCentric.Metadata" Version="$(MetadataVersion)" />
+    <PackageReference Include="TestCentric.InternalTrace" Version="$(InternalTraceVersion)" />
+  </ItemGroup>
 </Project>

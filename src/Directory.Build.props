@@ -23,7 +23,7 @@
         <DebugType>portable</DebugType>
         <DebugSymbols>true</DebugSymbols>
         <!-- Commonly Used Package Versions -->
-		<ExtensibilityVersion>4.0.0-dev00004</ExtensibilityVersion>
+		<ExtensibilityVersion>4.0.0-dev00005</ExtensibilityVersion>
 		<MetadataVersion>3.0.4</MetadataVersion>
 		<InternalTraceVersion>1.2.1</InternalTraceVersion>
         <!-- Informational Settings -->

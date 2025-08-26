@@ -1,26 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  
-	<PropertyGroup>
-        <RootNamespace>TestCentric.Gui.Model</RootNamespace>
-        <AssemblyName>TestCentric.Gui.Model.Tests</AssemblyName>
-        <OutputType>Exe</OutputType>
-		<UseWindowsForms>true</UseWindowsForms>
-        <TargetFramework>net462</TargetFramework>
-        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    </PropertyGroup>
-	
-    <ItemGroup>
-        <ProjectReference Include="..\..\TestData\mock-assembly\mock-assembly.csproj" />
-        <ProjectReference Include="..\TestModel\TestCentric.Gui.Model.csproj" />
-	    <ProjectReference Include="..\..\TestEngine\TestCentric.Engine.Api\TestCentric.Engine.Api.csproj" />
-    </ItemGroup>
-	
-    <ItemGroup>
-	    <PackageReference Include="NSubstitute" Version="$(NSubstituteVersion)" />
-	    <PackageReference Include="NUnit" Version="$(NUnitVersion)" />
-	    <PackageReference Include="NUnitLite" Version="$(NUnitVersion)" />
-	    <PackageReference Include="TestCentric.Extensibility" Version="$(ExtensibilityVersion)" />
-	    <PackageReference Include="TestCentric.InternalTrace" Version="$(InternalTraceVersion)" />
-    </ItemGroup>
-	
+  <PropertyGroup>
+    <RootNamespace>TestCentric.Gui.Model</RootNamespace>
+    <AssemblyName>TestCentric.Gui.Model.Tests</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <UseWindowsForms>true</UseWindowsForms>
+    <TargetFramework>net462</TargetFramework>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\TestData\mock-assembly\mock-assembly.csproj" />
+    <ProjectReference Include="..\TestModel\TestCentric.Gui.Model.csproj" />
+    <ProjectReference Include="..\..\TestEngine\TestCentric.Engine.Api\TestCentric.Engine.Api.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NSubstitute" Version="$(NSubstituteVersion)" />
+    <PackageReference Include="NUnit" Version="$(NUnitVersion)" />
+    <PackageReference Include="NUnitLite" Version="$(NUnitVersion)" />
+    <PackageReference Include="TestCentric.Extensibility" Version="4.0.0-dev00004" />
+    <PackageReference Include="TestCentric.InternalTrace" Version="$(InternalTraceVersion)" />
+  </ItemGroup>
 </Project>
