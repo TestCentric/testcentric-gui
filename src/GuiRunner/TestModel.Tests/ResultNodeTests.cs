@@ -22,6 +22,22 @@ namespace TestCentric.Gui.Model
         }
 
         [Test]
+        public void CreateResultNode_FromOldResult()
+        {
+            // Act
+            var resultNode = new ResultNode("<test-case id='1' fullname='Assembly.Folder1.TestB' result='Passed'/>");
+
+            // Arrange
+            ResultNode newResultNode = ResultNode.Create(resultNode.Xml, "100");
+
+            // Assert
+            Assert.That(newResultNode.Id, Is.EqualTo("100"));
+            Assert.That(newResultNode.FullName, Is.EqualTo(resultNode.FullName));
+            Assert.That(newResultNode.Status, Is.EqualTo(resultNode.Status));
+            Assert.That(newResultNode.IsLatestRun, Is.EqualTo(false));
+        }
+
+        [Test]
         public void IsLatestRun_NewResultNode_IsTrue()
         {
             var resultNode = new ResultNode("<test-case id='1'/>");
