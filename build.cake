@@ -60,7 +60,7 @@ var NuGetGuiPackage = new NuGetPackage(
 				"nunit.uiexception.dll", "TestCentric.Gui.Model.dll",
 				"TestCentric.Engine.dll", "TestCentric.Engine.Api.dll", "TestCentric.InternalTrace.dll",
 				"TestCentric.Metadata.dll", "TestCentric.Extensibility.dll", "TestCentric.Extensibility.Api.dll",
-				"nunit.engine.api.dll", "../../nuget/testcentric.nuget.addins"),
+				"nunit.engine.api.dll"),
 			new DirectoryContent("tools/Images/Tree/Circles").WithFiles(
 				"Images/Tree/Circles/Success.png", "Images/Tree/Circles/Failure.png", "Images/Tree/Circles/Warning.png", "Images/Tree/Circles/Ignored.png", "Images/Tree/Circles/Inconclusive.png", 
 				"Images/Tree/Circles/Success_NotLatestRun.png", "Images/Tree/Circles/Failure_NotLatestRun.png", "Images/Tree/Circles/Warning_NotLatestRun.png", "Images/Tree/Circles/Ignored_NotLatestRun.png", "Images/Tree/Circles/Inconclusive_NotLatestRun.png", 
@@ -75,13 +75,12 @@ var NuGetGuiPackage = new NuGetPackage(
 				"Images/Tree/Visual Studio/Running.png",  "Images/Tree/Visual Studio/Skipped.png") )
 		.WithDependencies(
             KnownExtensions.Net462PluggableAgent.NuGetPackage.LatestDevBuild,
-            KnownExtensions.Net60PluggableAgent.NuGetPackage.LatestDevBuild,
             KnownExtensions.Net80PluggableAgent.NuGetPackage.LatestDevBuild
         ),
 	testRunner: new GuiSelfTester(BuildSettings.NuGetTestDirectory + "TestCentric.GuiRunner." + BuildSettings.PackageVersion + "/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
 		HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "testcentric.png"),
-		HasDirectory("tools").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.nuget.addins"),
+		HasDirectory("tools").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES),
 		HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_PNG),
 		HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_PNG),
 		HasDirectory("tools/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG)
@@ -96,7 +95,7 @@ var ChocolateyGuiPackage = new ChocolateyPackage(
 		.WithDirectories(
 			new DirectoryContent("tools").WithFiles(
 				"../../LICENSE.txt", "../../NOTICES.txt", "../../CHANGES.txt", "../../testcentric.png",
-				"../../choco/VERIFICATION.txt", "../../choco/testcentric.choco.addins",
+				"../../choco/VERIFICATION.txt",
 				"../../choco/testcentric-agent.exe.ignore",	"../../choco/testcentric-agent-x86.exe.ignore",
 				"testcentric.exe", "testcentric.exe.config", "TestCentric.Gui.Runner.dll",
 				"nunit.uiexception.dll", "TestCentric.Gui.Model.dll", "nunit.engine.api.dll",
@@ -116,12 +115,11 @@ var ChocolateyGuiPackage = new ChocolateyPackage(
 				"Images/Tree/Visual Studio/Running.png", "Images/Tree/Visual Studio/Skipped.png"))
         .WithDependencies(
 			KnownExtensions.Net462PluggableAgent.ChocoPackage.LatestDevBuild,
-			KnownExtensions.Net60PluggableAgent.ChocoPackage.LatestDevBuild,
 			KnownExtensions.Net80PluggableAgent.ChocoPackage.LatestDevBuild
         ),
 	testRunner: new GuiSelfTester(BuildSettings.ChocolateyTestDirectory + "testcentric-gui." + BuildSettings.PackageVersion + "/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
-		HasDirectory("tools").WithFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "VERIFICATION.txt", "testcentric.choco.addins").AndFiles(GUI_FILES).AndFiles(ENGINE_FILES).AndFile("testcentric.choco.addins"),
+		HasDirectory("tools").WithFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "VERIFICATION.txt").AndFiles(GUI_FILES).AndFiles(ENGINE_FILES),
 		HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_PNG),
 		HasDirectory("tools/Images/Tree/Classic").WithFiles(TREE_ICONS_PNG),
 		HasDirectory("tools/Images/Tree/Visual Studio").WithFiles(TREE_ICONS_PNG),
@@ -138,16 +136,14 @@ var EnginePackage = new NuGetPackage(
         new DirectoryContent("lib").WithFiles(
             "testcentric.engine.dll", "testcentric.engine.api.dll", "nunit.engine.api.dll",
             "testcentric.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll", "TestCentric.InternalTrace.dll",
-            "testcentric.engine.pdb", "test-bed.exe", "test-bed.exe.config",
-            "test-bed.addins", "../../testcentric.nuget.addins")),
+            "testcentric.engine.pdb", "test-bed.exe", "test-bed.exe.config")),
     testRunner: new TestCentricEngineTestBed(),
     checks: new PackageCheck[] {
         HasFiles("LICENSE.txt", "testcentric.png"),
         HasDirectory("lib").WithFiles(
             "testcentric.engine.dll", "testcentric.engine.api.dll", "nunit.engine.api.dll",
             "testcentric.metadata.dll", "testcentric.extensibility.dll", "testcentric.extensibility.api.dll", "TestCentric.InternalTrace.dll",
-            "testcentric.engine.pdb", "test-bed.exe", "test-bed.exe.config",
-            "test-bed.addins", "testcentric.nuget.addins")
+            "testcentric.engine.pdb", "test-bed.exe", "test-bed.exe.config")
     },
     tests: PackageTests.EngineTests,
     preloadedExtensions: new[] {
