@@ -4,18 +4,17 @@
 // ***********************************************************************
 
 using System;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using TestCentric.Gui.Model;
+using TestCentric.Gui.Presenters;
+using TestCentric.Gui.Views;
 
 namespace TestCentric.Gui
 {
-    using System.Diagnostics;
-    using System.Linq;
-    using Model;
-    using Presenters;
-    using TestCentric.Gui.Dialogs;
-    using Views;
 
     /// <summary>
     /// Class to manage application startup.
@@ -65,10 +64,9 @@ namespace TestCentric.Gui
                 return 3;
             }
 
-            var loadedAgents = model.Services.ExtensionService.GetExtensionNodes("/TestCentric/Engine/TypeExtensions/IAgentLauncher")
-                .Where(n => n.Status == Extensibility.ExtensionStatus.Loaded);
-
-            if (loadedAgents.Count() == 0)
+            var installedAgents = model.Services.ExtensionService.GetExtensionNodes("/TestCentric/Engine/TypeExtensions/IAgentLauncher");
+                
+            if (installedAgents.Count() == 0)
             {
                 if (!MessageDisplay.OkCancel(
                     "Either the GUI was installed without any agents or the installed agents have been deleted. " +

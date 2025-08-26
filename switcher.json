@@ -1,5 +1,5 @@
 {
-  "solution": "TestCentricGuiRunner.sln",
+  "solution": "TestCentricRunner.sln",
   "solutionFolder": null,
   "mappings": {
     "TestCentric.Extensibility": "../TestCentric.Extensibility/src/Testcentric.Extensibility/TestCentric.Extensibility.csproj",

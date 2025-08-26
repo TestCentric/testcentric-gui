@@ -58,7 +58,14 @@ namespace TestCentric.Engine.Services
             var agents = new List<TestAgentInfo>();
 
             foreach (var node in _launcherNodes)
-                agents.Add(InstantiateAgentLauncher(node).AgentInfo);
+            {
+                var runtimes = node.GetValues("TargetFramework");
+                if (runtimes.Count() > 0)
+                    agents.Add(new TestAgentInfo(
+                        GetAgentName(node),
+                        TestAgentType.LocalProcess,
+                        runtimes.First()));
+            }
 
             return agents;
         }
@@ -87,9 +94,8 @@ namespace TestCentric.Engine.Services
                 var agentsForAssembly = new List<string>();
                 foreach (var node in _launcherNodes)
                 {
-                    var launcher = InstantiateAgentLauncher(node);
-                    if (launcher.CanCreateProcess(assemblyPackage))
-                        agentsForAssembly.Add(launcher.AgentInfo.AgentName);
+                    if (CanCreateAgent(node, assemblyPackage))
+                        agentsForAssembly.Add(GetAgentName(node));
                 }
 
                 // Remove agents from final result if they don't work for this assembly
@@ -125,8 +131,7 @@ namespace TestCentric.Engine.Services
         {
             foreach (var node in _launcherNodes)
             {
-                var launcher = InstantiateAgentLauncher(node);
-                if (launcher.CanCreateProcess(package))
+                if (CanCreateAgent(node, package))
                     return true;
             }
 
@@ -348,11 +353,10 @@ namespace TestCentric.Engine.Services
             {
                 foreach (var node in _launcherNodes)
                 {
-                    var launcher = InstantiateAgentLauncher(node);
-                    var launcherName = launcher.GetType().Name;
-
-                    if (launcher.CanCreateProcess(package))
+                    if (CanCreateAgent(node, package))
                     {
+                        var launcher = GetLauncherInstance(node);
+                        var launcherName = launcher.GetType().Name;
                         log.Info($"Selected launcher {launcherName}");
                         package.Settings.Set(SettingDefinitions.SelectedAgentName.WithValue(launcherName));
                         return launcher.CreateProcess(agentId, agencyUrl, package);
@@ -366,16 +370,44 @@ namespace TestCentric.Engine.Services
         private IAgentLauncher GetLauncherByName(string name)
         {
             foreach (var node in _launcherNodes)
-                if (node.TypeName == name)
-                    return InstantiateAgentLauncher(node);
+                if (GetAgentName(node) == name)
+                    return GetLauncherInstance(node);
 
             return null;
         }
 
-        private IAgentLauncher InstantiateAgentLauncher(IExtensionNode node)
+        private bool CanCreateAgent(IExtensionNode node, TestPackage package)
         {
-            return (IAgentLauncher)node.ExtensionObject;
+            var runtimes = node.GetValues("TargetFramework");
+
+            if (runtimes.Count() > 0)
+            {
+                var agentTarget = new FrameworkName(runtimes.First());
+                log.Debug($"Agent {node.TypeName} targets {agentTarget}");
+                var packageTargetSetting = 
+                    package.Settings.GetValueOrDefault(SettingDefinitions.ImageTargetFrameworkName);
+
+                if (!string.IsNullOrEmpty(packageTargetSetting))
+                {
+                    var packageTarget = new FrameworkName(packageTargetSetting);
+                    return agentTarget.Identifier == packageTarget.Identifier
+                        && agentTarget.Version.Major >= packageTarget.Version.Major;
+                }
+
+                var packageRuntimeVersion =
+                    package.Settings.GetValueOrDefault(SettingDefinitions.ImageRuntimeVersion);
+                if (!string.IsNullOrEmpty(packageRuntimeVersion))
+                    return agentTarget.Identifier == FrameworkIdentifiers.NetFramework &&
+                        new Version(packageRuntimeVersion).Major <= agentTarget.Version.Major;
+            }
+
+            return false;
         }
+
+        private IAgentLauncher GetLauncherInstance(IExtensionNode node)
+            => (IAgentLauncher)node.ExtensionObject;
+
+        private string GetAgentName(IExtensionNode node) => node.TypeName;
 
         //private IAgentLauncher GetBestLauncher(TestPackage package)
         //{

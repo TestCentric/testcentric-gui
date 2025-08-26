@@ -74,9 +74,9 @@ var NuGetGuiPackage = new NuGetPackage(
 				"Images/Tree/Visual Studio/Success_NotLatestRun.png", "Images/Tree/Visual Studio/Failure_NotLatestRun.png", "Images/Tree/Visual Studio/Warning_NotLatestRun.png", "Images/Tree/Visual Studio/Ignored_NotLatestRun.png", "Images/Tree/Visual Studio/Inconclusive_NotLatestRun.png", 
 				"Images/Tree/Visual Studio/Running.png",  "Images/Tree/Visual Studio/Skipped.png") )
 		.WithDependencies(
-			KnownExtensions.Net462PluggableAgent.SetVersion("2.6.0-dev00013").NuGetPackage,
-			KnownExtensions.Net60PluggableAgent.SetVersion("2.5.3-dev00005").NuGetPackage,
-			KnownExtensions.Net80PluggableAgent.SetVersion("2.5.4-dev00003").NuGetPackage
+            KnownExtensions.Net462PluggableAgent.SetVersion("2.6.0-dev00016").NuGetPackage,
+            KnownExtensions.Net60PluggableAgent.SetVersion("2.5.3-dev00008").NuGetPackage,
+            KnownExtensions.Net80PluggableAgent.SetVersion("2.5.4-dev00006").NuGetPackage
         ),
 	testRunner: new GuiSelfTester(BuildSettings.NuGetTestDirectory + "TestCentric.GuiRunner." + BuildSettings.PackageVersion + "/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
@@ -115,9 +115,9 @@ var ChocolateyGuiPackage = new ChocolateyPackage(
 				"Images/Tree/Visual Studio/Success_NotLatestRun.png", "Images/Tree/Visual Studio/Failure_NotLatestRun.png", "Images/Tree/Visual Studio/Warning_NotLatestRun.png", "Images/Tree/Visual Studio/Ignored_NotLatestRun.png", "Images/Tree/Visual Studio/Inconclusive_NotLatestRun.png", 
 				"Images/Tree/Visual Studio/Running.png", "Images/Tree/Visual Studio/Skipped.png"))
         .WithDependencies(
-			KnownExtensions.Net462PluggableAgent.SetVersion("2.6.0-dev00013").ChocoPackage,
-			KnownExtensions.Net60PluggableAgent.SetVersion("2.5.3-dev00005").ChocoPackage,
-			KnownExtensions.Net80PluggableAgent.SetVersion("2.5.4-dev00003").ChocoPackage
+			KnownExtensions.Net462PluggableAgent.SetVersion("2.6.0-dev00016").ChocoPackage,
+			KnownExtensions.Net60PluggableAgent.SetVersion("2.5.3-dev00008").ChocoPackage,
+			KnownExtensions.Net80PluggableAgent.SetVersion("2.5.4-dev00006").ChocoPackage
         ),
 	testRunner: new GuiSelfTester(BuildSettings.ChocolateyTestDirectory + "testcentric-gui." + BuildSettings.PackageVersion + "/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
