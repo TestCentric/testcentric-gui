@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
+using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Xml;
 
@@ -89,44 +90,14 @@ namespace TestCentric.Gui.Model.Settings
             {
                 try
                 {
-                    string dirPath = Path.GetDirectoryName(_settingsFile);
-                    if (!Directory.Exists(dirPath))
-                        Directory.CreateDirectory(dirPath);
+                    var contents = CreateSettingContents();
 
-                    var stream = new MemoryStream();
-                    using (var writer = new XmlTextWriter(stream, Encoding.UTF8))
-                    {
-                        writer.Formatting = Formatting.Indented;
+                    // Ensure that the contents are readable before writing.
+                    // Remove comments on next two lines to debug file corruption issues.
+                    //XmlDocument doc = new XmlDocument();
+                    //doc.LoadXml(contents);
 
-                        writer.WriteProcessingInstruction("xml", "version=\"1.0\"");
-                        writer.WriteStartElement("NUnitSettings");
-                        writer.WriteStartElement("Settings");
-
-                        List<string> keys = new List<string>(_settings.Keys);
-                        keys.Sort();
-
-                        foreach (string name in keys)
-                        {
-                            object val = GetSetting(name);
-                            if (val != null)
-                            {
-                                writer.WriteStartElement("Setting");
-                                writer.WriteAttributeString("name", name);
-                                writer.WriteAttributeString("value",
-                                    TypeDescriptor.GetConverter(val).ConvertToInvariantString(val));
-                                writer.WriteEndElement();
-                            }
-                        }
-
-                        writer.WriteEndElement();
-                        writer.WriteEndElement();
-                        writer.Flush();
-
-                        var reader = new StreamReader(stream, Encoding.UTF8, true);
-                        stream.Seek(0, SeekOrigin.Begin);
-                        var contents = reader.ReadToEnd();
-                        File.WriteAllText(_settingsFile, contents, Encoding.UTF8);
-                    }
+                    WriteSettingsToFile(contents);
                 }
                 catch (Exception)
                 {
@@ -135,6 +106,53 @@ namespace TestCentric.Gui.Model.Settings
                     throw;
                 }
             }
+        }
+
+        private string CreateSettingContents()
+        {
+            var stream = new MemoryStream();
+            using (var writer = new XmlTextWriter(stream, Encoding.UTF8))
+            {
+                writer.Formatting = Formatting.Indented;
+
+                writer.WriteProcessingInstruction("xml", "version=\"1.0\"");
+                writer.WriteStartElement("NUnitSettings");
+                writer.WriteStartElement("Settings");
+
+                List<string> keys = new List<string>(_settings.Keys);
+                keys.Sort();
+
+                foreach (string name in keys)
+                {
+                    object val = GetSetting(name);
+                    if (val != null)
+                    {
+                        writer.WriteStartElement("Setting");
+                        writer.WriteAttributeString("name", name);
+                        writer.WriteAttributeString("value",
+                            TypeDescriptor.GetConverter(val).ConvertToInvariantString(val));
+                        writer.WriteEndElement();
+                    }
+                }
+
+                writer.WriteEndElement();
+                writer.WriteEndElement();
+                writer.Flush();
+
+                var reader = new StreamReader(stream, Encoding.UTF8, true);
+                stream.Seek(0, SeekOrigin.Begin);
+
+                return reader.ReadToEnd();
+            }
+        }
+
+        private void WriteSettingsToFile(string contents)
+        {
+            string dirPath = Path.GetDirectoryName(_settingsFile);
+            if (!Directory.Exists(dirPath))
+                Directory.CreateDirectory(dirPath);
+
+            File.WriteAllText(_settingsFile, contents, Encoding.UTF8);
         }
 
         #region ISettings Implementation
