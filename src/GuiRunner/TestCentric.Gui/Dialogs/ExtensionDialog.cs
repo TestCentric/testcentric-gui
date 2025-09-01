@@ -13,7 +13,7 @@ using TestCentric.Extensibility;
 namespace TestCentric.Gui.Dialogs
 {
     /// <summary>
-    /// Summary description for AddinDialog.
+    /// Summary description for ExtensionDialog.
     /// </summary>
     public class ExtensionDialog : System.Windows.Forms.Form
     {
