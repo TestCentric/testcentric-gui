@@ -33,7 +33,7 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
             foreach (XmlNode node in testNode.Xml.SelectNodes(xpathExpression))
             {
                 var groupName = node.Attributes["value"].Value;
-                if (!string.IsNullOrEmpty(groupName))
+                if (!string.IsNullOrEmpty(groupName) && !categories.Contains(groupName))
                     categories.Add(groupName);
             }
 
