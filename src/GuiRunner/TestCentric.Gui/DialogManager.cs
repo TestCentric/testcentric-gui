@@ -18,7 +18,6 @@ namespace TestCentric.Gui.Views
             OpenFileDialog dlg = CreateOpenFileDialog(title, filter);
 
             dlg.Multiselect = true;
-
             return dlg.ShowDialog() == DialogResult.OK
                 ? dlg.FileNames
                 : new string[0];

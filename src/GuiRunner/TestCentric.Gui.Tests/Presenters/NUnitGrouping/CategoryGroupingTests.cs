@@ -334,6 +334,30 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
             AssertTestCase(_createNodes[1].Nodes[0].Nodes[1].Nodes[0].Nodes[0], "TestB");
         }
 
+        [Test]
+        public void CreateTree_SameCategory_DefinedMultipleTimes_AllTreeNodes_AreCreated()
+        {
+            // Arrange
+            TestNode testNode = new TestNode(
+                CreateTestSuiteXml("3-1000", "LibraryA",
+                    CreateTestSuiteXml("3-1001", "NamespaceA",
+                        CreateTestFixtureXml("3-1010", "Fixture_1", new List<string>() { "CategoryA", "CategoryA" },
+                            CreateTestcaseXml("3-1011", "TestA", "CategoryA"),
+                            CreateTestcaseXml("3-1012", "TestB", "")))));
+
+            // Act
+            var grouping = new CategoryGrouping(_strategy, _model, _view);
+            grouping.CreateTree(testNode);
+
+            // Assert tree nodes
+            Assert.That(_createNodes.Count, Is.EqualTo(1));
+            AssertTreeNodeGroup(_createNodes[0], "CategoryA", 2, 1);
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0], "LibraryA.NamespaceA", 2, 1);
+            AssertTreeNodeGroup(_createNodes[0].Nodes[0].Nodes[0], "Fixture_1", 2, 2);
+            AssertTestCase(_createNodes[0].Nodes[0].Nodes[0].Nodes[0], "TestA");
+            AssertTestCase(_createNodes[0].Nodes[0].Nodes[0].Nodes[1], "TestB");
+        }
+
         private void AssertTestCase(TreeNode treeNode, string expectedName)
         {
             Assert.That(treeNode.Nodes.Count, Is.EqualTo(0));
