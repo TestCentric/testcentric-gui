@@ -113,6 +113,8 @@ namespace TestCentric.Gui.Views
         private ToolStripSeparator toolStripSeparator5;
         private ToolStripButton rerunButton;
         private ToolStripMenuItem openProjectMenuItem;
+        private ToolStripMenuItem openTestCentricProjectMenuItem;
+        private ToolStripMenuItem openTestAssemblyMenuItem;
         private ToolStripMenuItem saveProjectMenuItem;
         private ToolStripSeparator toolStripSeparator6;
         private TextOutputView textOutputView;
@@ -136,6 +138,9 @@ namespace TestCentric.Gui.Views
             // Initialize File Menu Commands
             FileMenu = new PopupMenuElement(fileMenu);
             OpenProjectCommand = new CommandMenuElement(openProjectMenuItem);
+            OpenTestCentricProjectCommand = new CommandMenuElement(openTestCentricProjectMenuItem);
+            OpenTestAssemblyCommand = new CommandMenuElement(openTestAssemblyMenuItem);
+
             SaveProjectCommand = new CommandMenuElement(saveProjectMenuItem);
             CloseProjectCommand = new CommandMenuElement(closeMenuItem);
             AddTestFilesCommand = new CommandMenuElement(addTestFileMenuItem);
@@ -250,6 +255,8 @@ namespace TestCentric.Gui.Views
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.fileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.openProjectMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openTestCentricProjectMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openTestAssemblyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveProjectMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
@@ -637,6 +644,22 @@ namespace TestCentric.Gui.Views
             this.openProjectMenuItem.Name = "openProjectMenuItem";
             this.openProjectMenuItem.Size = new System.Drawing.Size(187, 22);
             this.openProjectMenuItem.Text = "&Open";
+            this.openProjectMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                this.openTestCentricProjectMenuItem,
+                this.openTestAssemblyMenuItem
+            });
+            // 
+            // openTestCentricProjectMenuItem
+            // 
+            this.openTestCentricProjectMenuItem.Name = "openTestCentricProjectMenuItem";
+            this.openTestCentricProjectMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.openTestCentricProjectMenuItem.Text = "TestCentric project...";
+            // 
+            // openTestAssemblyMenuItem
+            // 
+            this.openTestAssemblyMenuItem.Name = "openTestAssemblyMenuItem";
+            this.openTestAssemblyMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.openTestAssemblyMenuItem.Text = "Assembly...";
             // 
             // saveProjectMenuItem
             // 
@@ -954,7 +977,7 @@ namespace TestCentric.Gui.Views
             // 
             // progressBar
             // 
-            this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBar.BackColor = System.Drawing.Color.Transparent;
             this.progressBar.CausesValidation = false;
@@ -1180,7 +1203,7 @@ namespace TestCentric.Gui.Views
         }
 
         public int SplitterPosition
-        { 
+        {
             get { return treeSplitter.SplitPosition; }
             set { treeSplitter.SplitPosition = value; }
         }
@@ -1191,6 +1214,9 @@ namespace TestCentric.Gui.Views
         // File Menu Items
         public IPopup FileMenu { get; }
         public ICommand OpenProjectCommand { get; }
+
+        public ICommand OpenTestCentricProjectCommand { get; }
+        public ICommand OpenTestAssemblyCommand { get; }
         public ICommand SaveProjectCommand { get; }
         public ICommand CloseProjectCommand { get; }
         public ICommand AddTestFilesCommand { get; }

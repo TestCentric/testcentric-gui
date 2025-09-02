@@ -165,7 +165,7 @@ namespace TestCentric.Gui.Presenters
                 var msg = e.Exception.Message;
                 bool isNetStandardError =
                     e.Exception.Message == "Unrecognized Target Framework Identifier: .NETStandard";
-                
+
                 if (!isNetStandardError)
                 {
                     _view.MessageDisplay.Error(e.Exception.Message);
@@ -337,7 +337,7 @@ namespace TestCentric.Gui.Presenters
                 bool isPackageLoaded = _model.IsProjectLoaded;
                 bool isTestRunning = _model.IsTestRunning;
 
-                _view.OpenProjectCommand.Enabled = !isTestRunning;
+                _view.OpenProjectCommand.Enabled = _view.OpenTestCentricProjectCommand.Enabled = _view.OpenTestAssemblyCommand.Enabled = !isTestRunning;
                 _view.CloseProjectCommand.Enabled = isPackageLoaded && !isTestRunning;
 
                 _view.ReloadTestsCommand.Enabled = isPackageLoaded && !isTestRunning;
@@ -349,12 +349,14 @@ namespace TestCentric.Gui.Presenters
                 _view.RecentFilesMenu.Enabled = !isTestRunning;
             };
 
-            _view.OpenProjectCommand.Execute += () => OpenProject();
-            _view.SaveProjectCommand.Execute += () => SaveProject();
+            _view.OpenTestCentricProjectCommand.Execute += OpenTestCentricProject;
+            _view.OpenTestAssemblyCommand.Execute += OpenTestAssembly;
+
+            _view.SaveProjectCommand.Execute += SaveProject;
 
             _view.CloseProjectCommand.Execute += () => CloseProject();
-            _view.AddTestFilesCommand.Execute += () => AddTestFiles();
-            _view.ReloadTestsCommand.Execute += () => ReloadTests();
+            _view.AddTestFilesCommand.Execute += AddTestFiles;
+            _view.ReloadTestsCommand.Execute += ReloadTests;
 
             _view.SelectAgentMenu.Popup += () =>
             {
@@ -612,17 +614,20 @@ namespace TestCentric.Gui.Presenters
 
         #region Project Management
 
-        private void OpenProject()
+        private void OpenTestCentricProject()
         {
-            var files = _view.DialogManager.SelectMultipleFiles("New Project", CreateOpenFileFilter(true));
-            if (files.Count == 1  && files[0].EndsWith("tcproj", StringComparison.CurrentCultureIgnoreCase))
-            {
-                _model.OpenExistingProject(files[0]);
-            }
-            else if (files.Count > 0)
-            {
+            var filter = "TestCentric Projects (*.tcproj)|*.tcproj";
+
+            string file = _view.DialogManager.GetFileOpenPath("Existing Project", filter);
+            if (!string.IsNullOrEmpty(file))
+                _model.OpenExistingProject(file);
+        }
+
+        private void OpenTestAssembly()
+        {
+            IList<string> files = _view.DialogManager.SelectMultipleFiles("New Project", CreateOpenFileFilter());
+            if (files.Any())
                 _model.CreateNewProject(files);
-            }
         }
 
         private void SaveProject()
@@ -761,7 +766,7 @@ namespace TestCentric.Gui.Presenters
             _view.StopRunButton.Visible = !displayForcedStop;
             _view.StopRunButton.Enabled = testRunning && !_stopRequested;
 
-            _view.OpenProjectCommand.Enabled = !testLoading && !testRunning;
+            _view.OpenProjectCommand.Enabled = _view.OpenTestCentricProjectCommand.Enabled = _view.OpenTestAssemblyCommand.Enabled = !testLoading && !testRunning;
             _view.SaveProjectCommand.Enabled = testLoaded && !testRunning;
 
             _view.CloseProjectCommand.Enabled = testLoaded & !testRunning;
@@ -883,7 +888,7 @@ namespace TestCentric.Gui.Presenters
 
             if (useFullGui)
                 _view.SplitterPosition = _settings.Gui.MainForm.SplitPosition;
-            
+
             _view.StatusBarView.Visible = useFullGui && _settings.Gui.MainForm.ShowStatusBar;
         }
 
@@ -931,7 +936,7 @@ namespace TestCentric.Gui.Presenters
         }
 
         private void UpdateTreeDisplayMenuItem()
-        { 
+        {
             // Get current display format from settings
             string displayFormat = _settings.Gui.TestTree.DisplayFormat;
 

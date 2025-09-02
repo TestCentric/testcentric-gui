@@ -30,6 +30,11 @@ namespace TestCentric.Gui.Views
         // File Menu Items
         IPopup FileMenu { get; }
         ICommand OpenProjectCommand { get; }
+
+        ICommand OpenTestCentricProjectCommand { get; }
+
+        ICommand OpenTestAssemblyCommand { get; }
+
         ICommand SaveProjectCommand { get; }
 
         ICommand CloseProjectCommand { get; }
