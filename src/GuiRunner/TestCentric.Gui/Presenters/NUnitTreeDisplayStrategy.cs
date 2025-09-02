@@ -27,6 +27,7 @@ namespace TestCentric.Gui.Presenters
             : base(view, model) 
         {
             _view.SetTestFilterVisibility(model.Settings.Gui.TestTree.ShowFilter);
+            _view.CollapseToFixturesCommand.Enabled = true;
         }
 
 

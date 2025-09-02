@@ -44,6 +44,8 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
 
         protected INUnitTreeDisplayStrategy Strategy { get; }
 
+        protected string CurrentRootGroupName { get; set; }
+
         /// <summary>
         /// Derived classes might set this value, if test cases might need to be regrouped after a test run
         /// For example duration or outcome grouping
@@ -149,12 +151,13 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
         /// </summary>
         private TreeNode GetOrCreateRootTreeNode(string groupName)
         {
+            CurrentRootGroupName = groupName;
             foreach (TestGroup rootGroup in _rootGroups)
                 if (rootGroup.Name == groupName)
                     return rootGroup.TreeNode;
 
             // TreeNode doesn't exist => create it
-            var group = new TestGroup(groupName);
+            TestGroup group = CreateTestGroup(groupName, Model.LoadedTests);
 
             _rootGroups.Add(group);
             _groups.Add(group);
@@ -226,7 +229,7 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
 
         private TreeNode CreateTreeNode(TreeNode parentTreeNode, TestNode testNode, string name)
         {
-            TreeNode treeNode = !testNode.IsSuite ? Strategy.MakeTreeNode(testNode) : Strategy.MakeTreeNode(new TestGroup(name));
+            TreeNode treeNode = !testNode.IsSuite ? Strategy.MakeTreeNode(testNode) : Strategy.MakeTreeNode(CreateTestGroup(name, testNode));
             parentTreeNode?.Nodes.Add(treeNode);
 
             if (treeNode.Tag is TestGroup g)
@@ -236,6 +239,11 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
             }
 
             return treeNode;
+        }
+
+        protected virtual TestGroup CreateTestGroup(string name, TestNode testNode)
+        {
+            return new GroupingTestGroup(testNode, name);
         }
 
         private void AddTestToGroups(IList<TreeNode> treeNodes, TestNode testNode)

@@ -42,5 +42,11 @@ namespace TestCentric.Gui.Presenters.NUnitGrouping
 
             return categories;
         }
+
+        /// <inheritdoc />
+        protected override TestGroup CreateTestGroup(string name, TestNode testNode)
+        {
+            return new CategoryGroupingTestGroup(testNode, CurrentRootGroupName, name);
+        }
     }
 }

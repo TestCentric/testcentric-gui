@@ -12,6 +12,7 @@ namespace TestCentric.Gui.Presenters
     using Model.Settings;
     using Views;
     using System.Linq;
+    using TestCentric.Gui.Presenters.NUnitGrouping;
 
     /// <summary>
     /// DisplayStrategy is the abstract base for the various
@@ -352,14 +353,21 @@ namespace TestCentric.Gui.Presenters
 
         public void CollapseToFixtures()
         {
+            _view.TreeView.BeginUpdate();
+
             if (_view.Nodes != null) // TODO: Null when mocked
                 foreach (TreeNode treeNode in _view.Nodes)
                     CollapseToFixtures(treeNode);
+
+            _view.TreeView.EndUpdate();
         }
 
         protected void CollapseToFixtures(TreeNode treeNode)
         {
-            var testNode = treeNode.Tag as TestNode;
+            TestNode testNode = treeNode.Tag as TestNode;
+            if (testNode == null && treeNode.Tag is GroupingTestGroup group)
+                testNode = group.AssociatedTestNode;
+
             if (testNode != null && testNode.Type == "TestFixture")
                 treeNode.Collapse();
             else if (testNode == null || testNode.IsSuite)

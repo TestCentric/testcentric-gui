@@ -287,10 +287,10 @@ namespace TestCentric.Gui.Presenters.TestTree
             // Arrange
             _settings.Gui.TestTree.ShowNamespace = false;
             string xml =
-                "<test-suite type='Assembly' id='1-1030' name='Library.Test.dll'>" +
+                "<test-run> <test-suite type='Assembly' id='1-1030' name='Library.Test.dll'>" +
                     "<test-suite type='TestSuite' id='1-1031' name='Library'>" +
                     "</test-suite>" +
-                "</test-suite>";
+                "</test-suite> </test-run>";
 
             // Act
             _strategy.OnTestLoaded(new TestNode(xml), null);
@@ -436,6 +436,44 @@ namespace TestCentric.Gui.Presenters.TestTree
 
             // Assert
             _view.Received().EnableTestFilter(false);
+        }
+
+        [Test]
+        public void CollapseToFixtures_AllFixtureNodes_AreShown()
+        {
+            // Arrange
+            var treeView = new TreeView();
+            _view.TreeView.Returns(treeView);
+
+            var rootNode = _view.Nodes[0];
+            var fixtureNode1 = CreateTreeNode("<test-suite type='TestFixture' id='2' name='FixtureA'/>");
+            var fixtureNode2 = CreateTreeNode("<test-suite type='TestFixture' id='3' name='FixtureB'/>");
+            rootNode.Nodes.AddRange(new []{ fixtureNode1, fixtureNode2 });
+
+            var testcase1 = CreateTreeNode("<test-case id='10' name='Test1'/>");
+            var testcase2 = CreateTreeNode("<test-case id='20' name='Test2'/>");
+            fixtureNode1.Nodes.AddRange(new[] { testcase1, testcase2 });
+
+            var testcase3 = CreateTreeNode("<test-case id='30' name='Test3'/>");
+            var testcase4 = CreateTreeNode("<test-case id='40' name='Test4'/>");
+            fixtureNode2.Nodes.AddRange(new[] { testcase3, testcase4 });
+
+            rootNode.ExpandAll();
+
+            // Act
+            _strategy.CollapseToFixtures();
+
+            // Assert
+            Assert.That(rootNode.IsExpanded, Is.EqualTo(true));
+            Assert.That(fixtureNode1.IsExpanded, Is.EqualTo(false));
+            Assert.That(fixtureNode2.IsExpanded, Is.EqualTo(false));
+        }
+
+        TreeNode CreateTreeNode(string testNodeXml)
+        {
+            var testNode = new TestNode(testNodeXml);
+            return new TreeNode() { Tag = testNode };
+
         }
     }
 
