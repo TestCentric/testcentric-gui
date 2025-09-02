@@ -60,12 +60,15 @@ namespace TestCentric.Gui.Presenters
                         _view.Add(CreateNUnitTreeNode(null, topLevelNode));
             }
 
+            _view.TreeView?.BeginUpdate();
             if (visualState != null)
                 visualState.ApplyTo(_view.TreeView);
             else
                 SetDefaultInitialExpansion();
 
             ApplyResultsToTree();
+            _view.TreeView?.EndUpdate();
+
             _view.EnableTestFilter(true);
         }
 
