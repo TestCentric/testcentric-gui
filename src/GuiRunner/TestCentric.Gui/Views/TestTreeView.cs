@@ -216,7 +216,13 @@ namespace TestCentric.Gui.Views
             treeView.EndUpdate();
             treeView.Select();
         });
-        public void ExpandAll() => InvokeIfRequired(() => treeView.ExpandAll());
+
+        public void ExpandAll() => InvokeIfRequired(() =>
+        {
+             treeView.BeginUpdate();
+             treeView.ExpandAll();
+             treeView.EndUpdate();
+        }); 
         public void CollapseAll() => InvokeIfRequired(() => treeView.CollapseAll());
         public void SetImageIndex(TreeNode treeNode, int imageIndex) =>
             InvokeIfRequired(() => treeNode.ImageIndex = treeNode.SelectedImageIndex = imageIndex);
