@@ -1,5 +1,5 @@
 // Load the recipe
-#load nuget:?package=TestCentric.Cake.Recipe&version=1.4.1-dev00002
+#load nuget:?package=TestCentric.Cake.Recipe&version=1.4.1-dev00003
 // Comment out above line and uncomment below for local tests of recipe changes
 //#load ../TestCentric.Cake.Recipe/recipe/*.cake
 
@@ -72,7 +72,7 @@ var NuGetGuiPackage = new NuGetPackage(
             KnownExtensions.Net462PluggableAgent.NuGetPackage.LatestDevBuild,
             KnownExtensions.Net80PluggableAgent.NuGetPackage.LatestDevBuild
         ),
-	testRunner: new GuiSelfTester(BuildSettings.NuGetTestDirectory + "TestCentric.GuiRunner." + BuildSettings.PackageVersion + "/tools/testcentric.exe"),
+    testRunner: new GuiSelfTester(BuildSettings.PackageTestDirectory + "TestCentric.GuiRunner/TestCentric.GuiRunner." + BuildSettings.PackageVersion + "/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
 		HasFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "testcentric.png"),
 		HasDirectory("tools").WithFiles(GUI_FILES).AndFiles(ENGINE_FILES),
@@ -112,7 +112,7 @@ var ChocolateyGuiPackage = new ChocolateyPackage(
 			KnownExtensions.Net462PluggableAgent.ChocoPackage.LatestDevBuild,
 			KnownExtensions.Net80PluggableAgent.ChocoPackage.LatestDevBuild
         ),
-	testRunner: new GuiSelfTester(BuildSettings.ChocolateyTestDirectory + "testcentric-gui." + BuildSettings.PackageVersion + "/tools/testcentric.exe"),
+    testRunner: new GuiSelfTester(BuildSettings.PackageTestDirectory + "testcentric-gui/testcentric-gui." + BuildSettings.PackageVersion + "/tools/testcentric.exe"),
 	checks: new PackageCheck[] {
 		HasDirectory("tools").WithFiles("CHANGES.txt", "LICENSE.txt", "NOTICES.txt", "VERIFICATION.txt").AndFiles(GUI_FILES).AndFiles(ENGINE_FILES),
 		HasDirectory("tools/Images/Tree/Circles").WithFiles(TREE_ICONS_PNG),
@@ -142,9 +142,8 @@ var EnginePackage = new NuGetPackage(
     },
     tests: PackageTests.EngineTests,
     preloadedExtensions: new[] {
-        KnownExtensions.Net462PluggableAgent.SetVersion("2.6.0-dev00011").NuGetPackage,
-        KnownExtensions.Net60PluggableAgent.SetVersion("2.5.3-dev00004").NuGetPackage,
-        KnownExtensions.Net80PluggableAgent.SetVersion("2.5.4-dev00002").NuGetPackage }
+		KnownExtensions.Net462PluggableAgent.NuGetPackage.LatestDevBuild,
+		KnownExtensions.Net80PluggableAgent.NuGetPackage.LatestDevBuild }
 );
 
 var EngineApiPackage = new NuGetPackage(
@@ -207,7 +206,7 @@ public class TestCentricEngineTestBed : TestRunner, IPackageTestRunner
 
 	public TestCentricEngineTestBed()
 	{
-		_executablePath = BuildSettings.NuGetTestDirectory + "TestCentric.Engine." + BuildSettings.PackageVersion + "/lib/test-bed.exe";
+		_executablePath = BuildSettings.PackageTestDirectory + "TestCentric.Engine/TestCentric.Engine." + BuildSettings.PackageVersion + "/lib/test-bed.exe";
 	}
 
 	public int RunPackageTest(string arguments)
